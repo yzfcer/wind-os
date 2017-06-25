@@ -1,0 +1,155 @@
+/****************************************Copyright (c)**************************************************
+**                                       清  风  海  岸
+**
+**                                       yzfcer@163.com
+**
+**--------------文件信息--------------------------------------------------------------------------------
+**文   件   名: wind_os_hwif.c
+**创   建   人: 周江村
+**最后修改日期: 2012.09.26
+**描        述: wind os的CPU体系相关的代码
+**              
+**--------------历史版本信息----------------------------------------------------------------------------
+** 创建人: 周江村
+** 版  本: v1.0
+** 日　期: 2012.09.26
+** 描　述: 原始版本
+**
+**--------------当前版本修订----------------------------------------------------------------------------
+** 修改人: 周江村
+** 日　期: 2012.10.20
+** 描　述: 
+**
+**------------------------------------------------------------------------------------------------------
+*******************************************************************************************************/
+
+#include "wind_config.h"
+#include "wind_types.h"
+#include "wind_os_hwif.h"
+#include "wind_debug.h"
+#include "misc.h"
+#include "usart1.h"
+void wind_target_init(void)
+{
+
+}
+
+void wind_std_port_init(void)
+{
+    uart1_init(115200);
+    return;
+}
+
+void wind_std_output(u8_t *str,u16_t len)
+{
+    uart1_send_chars(str,len);
+    return;
+}
+
+
+
+
+static sreg_t ssr[100];
+static s32_t sreg_idx = 0;
+void wind_close_interrupt(void)
+{
+    sreg_t cpu_sr;
+    cpu_sr = wind_save_sr();
+    ssr[sreg_idx++] = cpu_sr;
+}
+
+void wind_open_interrupt(void)
+{
+    sreg_t cpu_sr;
+    if(sreg_idx > 0)
+			sreg_idx --;
+    cpu_sr = ssr[sreg_idx];
+    //
+    //    sreg_idx = sreg_idx;
+    wind_restore_sr(cpu_sr);
+}
+
+
+pstack_t wind_stk_init(thread_run_f pfunc,void *pdata, pstack_t pstkbt)
+{
+    pstack_t stk;
+    stk = pstkbt;                            /* Load stack pointer                                 */
+
+#if (__FPU_PRESENT==1)&&(__FPU_USED==1)	
+    *(--stk) = (u32_t)0x00000000L; //No Name Register  
+    *(--stk) = (u32_t)0x00001000L; //FPSCR
+    *(--stk) = (u32_t)0x00000015L; //s15
+    *(--stk) = (u32_t)0x00000014L; //s14
+    *(--stk) = (u32_t)0x00000013L; //s13
+    *(--stk) = (u32_t)0x00000012L; //s12
+    *(--stk) = (u32_t)0x00000011L; //s11
+    *(--stk) = (u32_t)0x00000010L; //s10
+    *(--stk) = (u32_t)0x00000009L; //s9
+    *(--stk) = (u32_t)0x00000008L; //s8
+    *(--stk) = (u32_t)0x00000007L; //s7
+    *(--stk) = (u32_t)0x00000006L; //s6
+    *(--stk) = (u32_t)0x00000005L; //s5
+    *(--stk) = (u32_t)0x00000004L; //s4
+    *(--stk) = (u32_t)0x00000003L; //s3
+    *(--stk) = (u32_t)0x00000002L; //s2
+    *(--stk) = (u32_t)0x00000001L; //s1
+    *(--stk) = (u32_t)0x00000000L; //s0
+#endif
+                                         /* Registers stacked as if auto-saved on exception    */
+    *(stk)    = (u32_t)0x01000000L;             /* xPSR                                               */
+    *(--stk)  = (u32_t)pfunc;                    /* Entry Point                                        */
+    *(--stk)  = (u32_t)NULL;//OS_TaskReturn;           /* R14 (LR) (init value will cause fault if ever used)*/
+    *(--stk)  = (u32_t)0x12121212L;             /* R12                                                */
+    *(--stk)  = (u32_t)0x03030303L;             /* R3                                                 */
+    *(--stk)  = (u32_t)0x02020202L;             /* R2                                                 */
+    *(--stk)  = (u32_t)0x01010101L;             /* R1                                                 */
+    *(--stk)  = (u32_t)pdata;                   /* R0 : argument                                      */
+
+#if (__FPU_PRESENT==1)&&(__FPU_USED==1)	
+    *(--stk) = (u32_t)0x00000031L; //s31
+    *(--stk) = (u32_t)0x00000030L; //s30
+    *(--stk) = (u32_t)0x00000029L; //s29
+    *(--stk) = (u32_t)0x00000028L; //s28
+    *(--stk) = (u32_t)0x00000027L; //s27
+    *(--stk) = (u32_t)0x00000026L; //s26	
+    *(--stk) = (u32_t)0x00000025L; //s25
+    *(--stk) = (u32_t)0x00000024L; //s24
+    *(--stk) = (u32_t)0x00000023L; //s23
+    *(--stk) = (u32_t)0x00000022L; //s22
+    *(--stk) = (u32_t)0x00000021L; //s21
+    *(--stk) = (u32_t)0x00000020L; //s20
+    *(--stk) = (u32_t)0x00000019L; //s19
+    *(--stk) = (u32_t)0x00000018L; //s18
+    *(--stk) = (u32_t)0x00000017L; //s17
+    *(--stk) = (u32_t)0x00000016L; //s16
+#endif
+
+                                        /* Remaining registers saved on process stack         */
+    *(--stk)  = (u32_t)0x11111111L;             /* R11                                                */
+    *(--stk)  = (u32_t)0x10101010L;             /* R10                                                */
+    *(--stk)  = (u32_t)0x09090909L;             /* R9                                                 */
+    *(--stk)  = (u32_t)0x08080808L;             /* R8                                                 */
+    *(--stk)  = (u32_t)0x07070707L;             /* R7                                                 */
+    *(--stk)  = (u32_t)0x06060606L;             /* R6                                                 */
+    *(--stk)  = (u32_t)0x05050505L;             /* R5                                                 */
+    *(--stk)  = (u32_t)0x04040404L;             /* R4                                                 */
+
+    return (stk);
+}
+
+void wind_tick_init(void)
+{
+	u32_t reload;
+ 	SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK_Div8);
+	//fac_us=SYSCLK/8;		//不论是否使用ucos,fac_us都需要使用
+	    
+	reload=SYSCLK/8;		//每秒钟的计数次数 单位为K	   
+	reload*=1000000/WIND_TICK_PER_SEC;//根据OS_TICKS_PER_SEC设定溢出时间
+	//reload为24位寄存器,最大值:16777216,在168M下,约合0.7989s左右	
+	//fac_ms=1000/WIND_TICK_PER_SEC;//代表ucos可以延时的最少单位	   
+	SysTick->CTRL|=SysTick_CTRL_TICKINT_Msk;   	//开启SYSTICK中断
+	SysTick->LOAD=reload; 	//每1/OS_TICKS_PER_SEC秒中断一次	
+	SysTick->CTRL|=SysTick_CTRL_ENABLE_Msk;   	//开启SYSTICK
+
+}
+
