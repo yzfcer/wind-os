@@ -83,6 +83,7 @@ void wind_corevar_init(void)
     g_core.pcblist = NULL;
     g_core.ttmerlist = NULL;
     g_core.usrprocen = B_FALSE;
+    g_core.is_incore = B_FALSE;
     g_core.run_falg = B_FALSE;
     g_core.ticks_cnt = 0;
 }

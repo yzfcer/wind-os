@@ -32,11 +32,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-typedef struct 
-{
-    char *name;
-    err_t (*init)(void);
-}init_step_s;
 
 
 #if WIND_REALTIME_CORE_SUPPORT > 0

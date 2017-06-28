@@ -32,7 +32,7 @@ extern "C" {
 #include "wind_console.h"
 #include "wind_assert.h"
 #include "wind_string.h"
-
+#include "wind_thread.h"
 
 /***********************************************宏定义*************************************************/
 #define WIND_CMD_MAX_LEN 512//一个命令的最大长度
@@ -102,7 +102,9 @@ void console_framework_init(console_s *ctlobj);
 cmd_s *wind_get_cmdlist(void);
 s32_t is_string_equal(char *dest,char *src);
 err_t wind_cmd_register(cmd_global_s *cgl,cmd_s *cmd,int cnt);
-err_t consoleProc(s32_t argc,char **argv);
+//err_t consoleProc(s32_t argc,char **argv);
+pthread_s lunch_console(void);
+
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

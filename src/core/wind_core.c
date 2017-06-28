@@ -51,11 +51,8 @@
 
 
 
-#define CTRL_STK_SIZE 2048
 
 volatile s8_t gwind_int_cnt = 0;//全局的中断计数值
-//volatile int gwind_close_sw_cnt = 0;
-static stack_t ctrlstk[CTRL_STK_SIZE];//主任务堆栈
 
 extern err_t wind_time_init(void);
 extern err_t wind_main(void);
@@ -85,6 +82,12 @@ bool_t wind_thread_isopen()
     return g_core.usrprocen;
 }
 
+void wind_enter_core(void)
+{
+
+}
+void wind_exit_core(void);
+
 void wind_enter_int(void)
 {
     if(RUN_FLAG == B_FALSE)
@@ -92,7 +95,6 @@ void wind_enter_int(void)
         WIND_ERROR("enter not rd\r\n");
         return;
     }
-    //WIND_INFO("in\r\n");
     if(gwind_int_cnt < 255)
         gwind_int_cnt ++;
     return;
@@ -138,10 +140,9 @@ void wind_update_curPCB()
     s16_t cnt,high = -1,hprio = 32767;
     pthread_s pthread;
     pnode_s pnode = g_core.pcblist;
-    //for(cnt = 0;cnt < WIND_THREAD_MAX_NUM;cnt ++)
     wind_close_interrupt();
     while(pnode)
-    {    
+    {
         
         pthread = (pthread_s)(pnode->obj);
         if((pthread->used) && (pthread->proc_status == PROC_STATUS_READY))
@@ -176,10 +177,7 @@ void wind_thread_dispatch(void)
 
 #endif
 
-init_step_s g_wind_init[] = 
-{
-    {NULL,NULL}
-};
+
 
 
 
@@ -358,9 +356,7 @@ static err_t wind_entry(s16_t argc,s8_t **argv)
     
        
 #if WIND_CONSOLE_SUPPORT > 0
-        g_core.pctrl = wind_thread_create("console",PRIO_LOW,consoleProc,
-                   0,NULL,ctrlstk,CTRL_STK_SIZE);
-        wind_thread_changeprio(g_core.pctrl,32760);
+    g_core.pctrl = lunch_console();
 #endif
 
     wind_thread_showlist(g_core.pcblist);

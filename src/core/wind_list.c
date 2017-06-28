@@ -33,7 +33,7 @@
 #include "wind_assert.h"
 
 
-//malloc a node from the node pool
+
 pnode_s wind_node_malloc(core_type type)
 {
     pnode_s pnode;
@@ -42,15 +42,17 @@ pnode_s wind_node_malloc(core_type type)
     pnode->used = B_TRUE;
     pnode->type = type;
     pnode->next = NULL;
+    //pnode->prev = NULL;
     return pnode;
 }
 
-//free a node space
+
 err_t wind_node_free(pnode_s node)
 {
     err_t err;
     WIND_ASSERT_RETURN(node != NULL,ERR_NULL_POINTER);
     node->next = NULL;
+    //node->prev = NULL;
     node->obj = NULL;
     node->used = B_FALSE;    
     err = wind_core_free(STAT_NODE,node);
@@ -67,25 +69,17 @@ static err_t core_list_insert(pnode_s *list,pnode_s node,bool_t minus)
         wind_open_interrupt();
         return ERR_INVALID_PARAM;
     }
-    /*if(minus)
-    {
-        pnode = *list;
-        while(pnode)
-        {
-            WIND_DEBUG("pnode->key1 = %d\r\n",pnode->key);
-            pnode = pnode->next;
-        }
-    }*/
 
     node->minus = minus;
     if((*list) == NULL)
     {
         *list = node;
         node->next = NULL;
+        //node->prev = NULL;
         wind_open_interrupt();
         return ERR_OK;
     }
-    pnode = NULL;    
+    pnode = NULL;
     pnode1 = *list;
     while (pnode1)
     {
@@ -93,7 +87,6 @@ static err_t core_list_insert(pnode_s *list,pnode_s node,bool_t minus)
         {
             if(minus)
             {
-                //WIND_DEBUG("pnode1->key=%d,node->key=%d\r\n",pnode1->key,node->key);
                 node->key -= pnode1->key;//这里对键值做减法处理，主要是方便一些延时操作
             }
             pnode = pnode1;
@@ -117,13 +110,7 @@ static err_t core_list_insert(pnode_s *list,pnode_s node,bool_t minus)
     }
     if(minus)
     {
-        
-        //while(pnode1)
-        //{
-            pnode1->key -= node->key;
-        //    pnode1 = pnode1->next;
-        //}
-
+        pnode1->key -= node->key;
     }
     wind_open_interrupt();
     return ERR_OK;
@@ -131,13 +118,13 @@ static err_t core_list_insert(pnode_s *list,pnode_s node,bool_t minus)
 
 
 
-//insert a node to the list and sorted by its key
+
 err_t wind_list_insert(pnode_s *list,pnode_s node)
 {
     return core_list_insert(list,node,B_FALSE);
 }
 
-//insert a node to the end of a list
+
 err_t wind_list_inserttoend(pnode_s *list,pnode_s node)
 {
     pnode_s pnode;
@@ -162,7 +149,7 @@ err_t wind_list_inserttoend(pnode_s *list,pnode_s node)
     return ERR_OK;
 }
 
-//insert a node to the head of a list
+
 err_t wind_list_inserttohead(pnode_s *list,pnode_s node)
 {
     pnode_s pnode = NULL;
@@ -172,7 +159,6 @@ err_t wind_list_inserttohead(pnode_s *list,pnode_s node)
         wind_open_interrupt();
         return ERR_INVALID_PARAM;
     }
-    //pnode->next = *list;
     node->next = *list;
     *list = node;
     wind_open_interrupt();
@@ -184,7 +170,7 @@ err_t wind_list_insert_with_minus(pnode_s *list,pnode_s node)
 {
     return core_list_insert(list,node,B_TRUE);
 }
-//find a node from the list by its obj
+
 pnode_s wind_list_search(pnode_s *list,void *obj)
 {
     pnode_s pnode;
@@ -210,7 +196,7 @@ pnode_s wind_list_search(pnode_s *list,void *obj)
     return NULL;
 }
 
-//remove a node from the list
+
 pnode_s wind_list_remove(pnode_s *list,pnode_s node)
 {
     pnode_s pnode = NULL,pnode1 = NULL;
@@ -232,7 +218,6 @@ pnode_s wind_list_remove(pnode_s *list,pnode_s node)
         if(node->minus)
             node->next->key += node->key;
         *list = (*list)->next;
-        //wind_node_free(node);
         wind_open_interrupt();
         return node;
     }
@@ -260,6 +245,7 @@ void printlist(pnode_s node)
         cnt ++;
     }
 }
+
 /*
 pnode_s list;
 void listtest()

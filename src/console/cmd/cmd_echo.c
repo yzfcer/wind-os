@@ -65,6 +65,7 @@ void register_cmd_echo(console_s *ctrl)
 {
     wind_cmd_register(&ctrl->cmd_list,g_cmd_echo,sizeof(g_cmd_echo)/sizeof(cmd_s));
 }
+
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

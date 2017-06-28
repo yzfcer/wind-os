@@ -392,13 +392,12 @@ void console_framework_init(console_s *ctlobj)
     g_cmd_global = cgl;
     show_cmd_list();
 }
-err_t wind_cmd_register(cmd_global_s *cgl,cmd_s 	*cmd,int cnt)
+err_t wind_cmd_register(cmd_global_s *cgl,cmd_s *cmd,int cnt)
 {
     int i;
     cmd_global_s *cg = cgl;
 
     WIND_ASSERT_RETURN(cmd != NULL,ERR_NULL_POINTER);
-    //WIND_DEBUG("register cmd 0x%x,cnt %d.\r\n",cmd,cnt);
     for(i = 0;i < cnt;i ++)
     {
         if(cg->tail == NULL)
@@ -492,6 +491,19 @@ err_t consoleProc(s32_t argc,char **argv)
     }
     return 0;
 }
+
+#define CTRL_STK_SIZE 2048
+static stack_t ctrlstk[CTRL_STK_SIZE];//Ö÷ÈÎÎñ¶ÑÕ»
+pthread_s lunch_console(void)
+{
+    pthread_s pthr = wind_thread_create("console",PRIO_LOW,consoleProc,
+               0,NULL,ctrlstk,CTRL_STK_SIZE);
+    wind_thread_changeprio(pthr,32760);
+    return pthr;
+}
+
+
+
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus
