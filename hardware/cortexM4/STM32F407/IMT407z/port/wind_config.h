@@ -41,6 +41,7 @@
 
 #define WIND_REALTIME_CORE_SUPPORT 1 //是否支持实时内核，即抢占式切换
 
+
 #define WIND_DAEMON_SUPPORT 1    //是否支持守护线程
 
 #define WIND_QUEUE_SUPPORT 1   //是否支持队列

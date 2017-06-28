@@ -48,16 +48,18 @@ typedef enum __core_type
 } core_type;
 
 
+typedef struct __wind_node node_s,*pnode_s;
 
-typedef struct __wind_node
+struct __wind_node
 {
     core_type type;
     bool_t used;
     bool_t minus;
     s32_t key;
     void *obj;
-    struct __wind_node *next;    
-}node_s,*pnode_s;
+    pnode_s next;
+    pnode_s prev;
+};
 
 pnode_s wind_node_malloc(core_type type);
 err_t wind_node_free(pnode_s node);

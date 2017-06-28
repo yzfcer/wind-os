@@ -28,7 +28,7 @@
 #include "wind_rtc.h"
 #include "wind_os_hwif.h"
 #include "wind_err.h"
-#include "S3C2440addr.h"
+//#include "S3C2440addr.h"
 #include "wind_debug.h"
 #if WIND_RTC_SUPPORT > 0
 datetime_s G_DATETIME;//当前日期和时间
