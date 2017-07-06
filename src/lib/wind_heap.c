@@ -62,7 +62,7 @@
 #include "wind_assert.h"
 
 #if WIND_HEAP_SUPPORT > 0
-pnode_s gwind_heaplist = NULL;//所有内存块的入口
+list_s gwind_heaplist = {NULL,NULL,0};//所有内存块的入口
 //内存堆的空间块的保存的位置
 memheap_s gwind_heap[HEAP_BLOCK_CNT];
 #define WIND_HEAP_DEBUG(...)
@@ -87,13 +87,8 @@ static err_t wind_heap_reg(pmemheap_s mhp)
     pnode = wind_node_malloc(CORE_TYPE_HEAP);
     WIND_ASSERT_RETURN(pnode != NULL,ERR_NULL_POINTER);
     wind_close_interrupt();
-    pnode->minus = 0;
-    pnode->key = 0;
-    pnode->obj = mhp;
-    pnode->next = NULL;
+    wind_node_bindobj(pnode,CORE_TYPE_HEAP,0,mhp);
     wind_list_inserttoend(&gwind_heaplist,pnode);
-    //wind_list_inserttohead(&gwind_heaplist,pnode);
-    //WIND_HEAP_DEBUG("gwind_heaplist->obj:0x%x\r\n",gwind_heaplist->obj);
     wind_open_interrupt();
     return ERR_OK;
 }
@@ -512,7 +507,8 @@ void *wind_hmalloc(u32_t size)
 {
     void *ptr = NULL;
     pmemheap_s heap;
-    pnode_s pnode = gwind_heaplist;
+    plist_s list = &gwind_heaplist;
+    pnode_s pnode = list->head;
     if(!pnode)
     {
         WIND_HEAP_DEBUG("NULL pnode in heap\r\n");
@@ -596,7 +592,7 @@ void wind_heap_showinfo(void)
     pnode_s pnode;
     pmemheap_s heap;
     wind_printf("heap list:\r\n");
-    pnode = gwind_heaplist;
+    pnode = gwind_heaplist.head;
     while(pnode)
     {
         heap = (pmemheap_s)pnode->obj;

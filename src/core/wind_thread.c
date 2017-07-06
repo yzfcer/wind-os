@@ -102,7 +102,7 @@ pthread_s get_pcb_byname(s8_t *name)
     pthread_s pthread;
     pnode_s pnode;
     WIND_ASSERT_RETURN(name != NULL,NULL);
-    pnode = g_core.pcblist;
+    pnode = g_core.pcblist.head;
     while(pnode)
     {
         pthread = (pthread_s)pnode->obj;
@@ -158,7 +158,7 @@ pthread_s wind_get_proc_byname(s8_t *name)
     pnode_s pnode;
     WIND_ASSERT_RETURN(name != NULL,NULL);
     wind_close_interrupt();
-    pnode = g_core.pcblist;
+    pnode = g_core.pcblist.head;
     while(pnode)
     {
         pthread = (pthread_s)pnode->obj;
@@ -224,21 +224,17 @@ pthread_s wind_thread_create(const s8_t *name,
     pthread->private_heap = NULL;//wind_heap_alloc_default(PRIVATE_HEAP_SIZE);
 #endif
     
-    //wind_close_interrupt();
     pnode = wind_node_malloc(CORE_TYPE_PCB);
-    //WIND_DEBUG("OK,pnode = %d\r\n",pnode);
+    //WIND_ASSERT_RETURN(pnode != NULL,NULL);
     if(pnode == NULL)
     {
+        WIND_WARN("warn:node is not enough\r\n");
         pthread->proc_status = PROC_STATUS_DEAD;
         pthread->cause = CAUSE_COM;
-        //wind_open_interrupt();
-        WIND_WARN("warn:node is not enough\r\n");
+        pcb_free(pthread);
         return NULL;
     }
-    
-    pnode->key = pthread->prio;
-    pnode->obj = pthread;
-    pnode->next = NULL;
+    wind_node_bindobj(pnode,CORE_TYPE_PCB,pthread->prio,pthread);
     wind_list_insert(&g_core.pcblist,pnode);
     WIND_DEBUG("pthread->name:%s\r\n",pthread->name);
     WIND_DEBUG("pthread->pstk:0x%x\r\n",pthread->pstk);
@@ -253,7 +249,6 @@ pthread_s wind_thread_create(const s8_t *name,
 
 err_t wind_thread_changeprio(pthread_s pthread,s16_t prio)
 {
-    //pthread_s pthread;
     pnode_s node;
     
     s16_t minlim = 0,maxlim = 32767;
@@ -268,7 +263,6 @@ err_t wind_thread_changeprio(pthread_s pthread,s16_t prio)
     wind_close_interrupt();
     WIND_DEBUG("change prio %s:%d\r\n",pthread->name,prio);
     node = wind_list_search(&g_core.pcblist,pthread);
-    WIND_ASSERT_TODO(node != NULL,wind_open_interrupt(),ERR_NULL_POINTER);
     node->key = prio;
     pthread->prio = prio;
     wind_list_remove(&g_core.pcblist,node);
@@ -375,12 +369,12 @@ err_t wind_thread_exit(err_t exitcode)
     pthread = wind_get_cur_proc();
     WIND_INFO("proc %s exit with code %d\r\n",pthread->name,exitcode);
     wind_thread_kill(pthread);
-    wind_thread_showlist(g_core.pcblist);
+    wind_thread_showlist(g_core.pcblist.head);
     wind_thread_dispatch();
     return ERR_OK;
 }
 
-pnode_s procsleeplist = NULL;//sleeping process list
+list_s procsleeplist = {NULL,NULL,0};//sleeping process list
 
 //睡眠一段时间,不能在中断中调用这个函数
 err_t wind_thread_sleep(u32_t ms)
@@ -394,31 +388,20 @@ err_t wind_thread_sleep(u32_t ms)
     //WIND_DEBUG("sleep.......\r\n");
     if(0 == stcnt)
         stcnt = 1;
-    wind_close_interrupt();
-    pthread = wind_get_cur_proc();
-    pnode = wind_node_malloc(CORE_TYPE_PCB);
-    if(NULL == pnode)
-    {
-        //WIND_ERROR("err.......\r\n");
-        wind_open_interrupt();
-        return ERR_NULL_POINTER;
-    }
     //wind_close_interrupt();
-    pnode->key = stcnt;
-    //WIND_DEBUG("sleep tisks :%d\r\n",stcnt);
-    pnode->obj = pthread;
-    pnode->next = NULL;
-    //pthread->sleepticks = stcnt;
+    pthread = wind_get_cur_proc();
     pthread->proc_status = PROC_STATUS_SUSPEND;
     pthread->cause = CAUSE_SLEEP;
-    //WIND_DEBUG("sleep here sleepticks\r\n");
+    pnode = wind_node_malloc(CORE_TYPE_PCB);
+    WIND_ASSERT_RETURN(pnode != NULL,ERR_NULL_POINTER);
+    wind_node_bindobj(pnode,CORE_TYPE_PCB,stcnt,pthread);
     wind_list_insert_with_minus(&procsleeplist,pnode);
-    pnode = procsleeplist;
+    pnode = procsleeplist.head;
     while(pnode)
     {
         if(pnode->key < 0)
         {
-            wind_thread_showlist(procsleeplist);
+            wind_thread_showlist(procsleeplist.head);
             WIND_ERROR("sleep err\r\n");
             break;
         }
@@ -433,9 +416,9 @@ void wind_wakeup(void)
 {
     pnode_s pnode = NULL;
     pthread_s pthread = NULL;
-    if((RUN_FLAG == B_TRUE) && (procsleeplist != NULL))
+    if((RUN_FLAG == B_TRUE) && (procsleeplist.head != NULL))
     {        
-        pnode = procsleeplist;
+        pnode = wind_list_remove(&procsleeplist,procsleeplist.head);
         //update the list of sleeping process
         if(pnode->key > 0)
             pnode->key --;
@@ -452,7 +435,7 @@ void wind_wakeup(void)
                 wind_node_free(pnode);
                 if(pnode->key < 0)
                 {
-                    wind_thread_showlist(procsleeplist);
+                    wind_thread_showlist(procsleeplist.head);
                     WIND_DEBUG("proc %s key < 0......%d\r\n",pthread->name,pnode->key);
                 }
             }

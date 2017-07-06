@@ -40,7 +40,7 @@ typedef struct _wind_lock
     const char *name;
     bool_t used;         //是否有效的标志
     bool_t locked;     //当前的信号量的值
-    pnode_s waitlist;  //等待线程队列
+    list_s waitlist;  //等待线程队列
 }lock_s,*plock_s;
 
 //err_t wind_lock_init(void);

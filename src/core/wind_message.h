@@ -53,7 +53,7 @@ typedef struct __mbox_s
     int num;//消息的数量
     bool_t used;
     bool_t valid;//邮箱是否可用
-    pnode_s msgq;//消息队列
+    list_s msgq;//消息队列
     pthread_s owner;
 }mbox_s, *pmbox_s;
 

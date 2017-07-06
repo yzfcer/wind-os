@@ -66,8 +66,8 @@ typedef struct __core_var_s
     WIND_MPOOL(stk1024,WIND_STK1024_MAX_NUM,1024 * sizeof(stack_t));
     WIND_MPOOL(stk2048,WIND_STK2048_MAX_NUM,2048 * sizeof(stack_t));
     
-    pnode_s pcblist;
-    pnode_s ttmerlist;
+    list_s pcblist;
+    list_s ttmerlist;
     s16_t pcbcnt;//线程计数器
     u32_t idle_cnt;//空闲计算器
     bool_t usrprocen;/*用户线程允许创建的标志 */

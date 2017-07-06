@@ -37,9 +37,8 @@
 #if WIND_SEM_SUPPORT > 0
 
 
-//extern pthread_s wind_get_cur_proc(void);
 extern void wind_thread_dispatch(void);
-extern pnode_s procsleeplist;//sleeping process list
+extern list_s procsleeplist;
 
 static psem_s sem_malloc()
 {
@@ -60,7 +59,7 @@ psem_s wind_sem_create(const char *name,u16_t semValue)
     psem->name = name;
     psem->used = B_TRUE;
     psem->sem_num = semValue;
-    psem->waitlist = NULL;
+    wind_list_init(&psem->waitlist);
     wind_open_interrupt();
     return psem;
 }
@@ -73,15 +72,14 @@ err_t wind_sem_post(psem_s psem)
     pthread_s pthread;
     WIND_ASSERT_RETURN(psem != NULL,ERR_NULL_POINTER);
     wind_close_interrupt();
-    if(psem->waitlist == NULL)
+    if(psem->waitlist.head == NULL)
     {
         if(psem->sem_num < 65535)
             psem->sem_num ++;
         wind_open_interrupt();
         return ERR_OK;
     }
-    pnode = psem->waitlist;
-    psem->waitlist = pnode->next;
+    pnode = wind_list_remove(&psem->waitlist,psem->waitlist.head);
     pthread = (pthread_s)pnode->obj;
     pthread->proc_status = PROC_STATUS_READY;
     pthread->cause = CAUSE_SEM;
@@ -95,7 +93,8 @@ err_t wind_sem_post(psem_s psem)
 err_t wind_sem_fetch(psem_s psem,u32_t timeout)
 {
     s16_t index;
-    pnode_s pnode,pnode1;
+    pnode_s pnode;
+    pnode_s pnode1;
     s32_t ticks;
     pthread_s pthread;
     WIND_ASSERT_RETURN(psem != NULL,ERR_NULL_POINTER);
@@ -112,6 +111,7 @@ err_t wind_sem_fetch(psem_s psem,u32_t timeout)
     pnode = wind_node_malloc(CORE_TYPE_PCB);
     WIND_ASSERT_RETURN(pnode != NULL,ERR_NULL_POINTER);
     pnode1 = wind_node_malloc(CORE_TYPE_PCB);
+    WIND_ASSERT_RETURN(pnode1 != NULL,ERR_NULL_POINTER);
     if(pnode1 == NULL)
     {
         wind_node_free(pnode);
@@ -123,10 +123,9 @@ err_t wind_sem_fetch(psem_s psem,u32_t timeout)
     pthread = wind_get_cur_proc();
     pthread->proc_status = PROC_STATUS_SUSPEND;
     pthread->cause = CAUSE_SEM;
-    pnode->obj = pthread;
-    pnode->key = pthread->prio;
-    pnode1->obj = pthread;
-    pnode1->key = ticks;
+
+    wind_node_bindobj(pnode,CORE_TYPE_PCB,pthread->prio,pthread);
+    wind_node_bindobj(pnode1,CORE_TYPE_PCB,ticks,pthread);
     wind_close_interrupt();
     wind_list_insert_with_minus(&psem->waitlist,pnode);
     wind_list_insert_with_minus(&procsleeplist,pnode1);
@@ -154,7 +153,7 @@ err_t wind_sem_tryfree(psem_s psem)
 {
     WIND_ASSERT_RETURN(psem != NULL,ERR_NULL_POINTER);
     wind_close_interrupt();
-    if(psem->waitlist != NULL)
+    if(psem->waitlist.head != NULL)
     {
         wind_open_interrupt();
         return ERR_COMMAN;
@@ -172,13 +171,15 @@ err_t wind_sem_free(psem_s psem)
     pthread_s pthread;
     WIND_ASSERT_RETURN(psem != NULL,ERR_NULL_POINTER);
     wind_close_interrupt();
-    while(psem->waitlist)
+    
+    while(psem->waitlist.head)
     {
-        pnode = psem->waitlist;
+        pnode = wind_list_remove(&psem->waitlist,psem->waitlist.head);
         pthread = (pthread_s)pnode->obj;
         pthread->proc_status = PROC_STATUS_READY;
         pthread->cause = CAUSE_SEM;
         wind_node_free(pnode);
+        pnode = psem->waitlist.head;
     }
     psem->used = B_FALSE;
     psem->name = NULL;

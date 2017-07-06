@@ -57,7 +57,7 @@ static err_t wind_thread_output(pthread_s pthread)
 
 err_t cmd_proc_show_list_main(s32_t argc,char **argv)
 {
-    pnode_s node = g_core.pcblist;
+    pnode_s node = g_core.pcblist.head;
     pthread_s pthread;
     
     WIND_DEBUG("\r\n\r\nprocess list as following:\r\n");

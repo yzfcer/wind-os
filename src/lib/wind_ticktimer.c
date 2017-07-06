@@ -90,18 +90,12 @@ pttimer_s wind_ttimer_create(u32_t ticks,void (*timercallback)(void),bool_t run)
     wind_open_interrupt();
     WIND_INFO("wind_ttimer_create OK\r\n");
 
-    //wind_close_interrupt();
     ttimer->count = ticks;
     ttimer->inittick = ticks;
     ttimer->running = run;
-    
     ttimer->timercallback = timercallback;
-    pnode->key = ticks;
-    pnode->obj = ttimer;
-    pnode->next = NULL;
-    wind_close_interrupt();    
+    wind_node_bindobj(pnode,CORE_TYPE_TTIMER,ticks,ttimer);
     wind_list_insert(&g_core.ttmerlist,pnode);
-    wind_open_interrupt();
     return ttimer; 
 }
 
@@ -160,7 +154,7 @@ err_t wind_ttimer_setticks(pttimer_s pttimer,u32_t ticks)
 extern void ticktimerhandler(void)
 {
     pttimer_s pttmr;
-    pnode_s tmpttimerlist = g_core.ttmerlist;
+    pnode_s tmpttimerlist = g_core.ttmerlist.head;
     while(tmpttimerlist)
     {
         //WIND_DEBUG("ticktimerhandler\r\n");

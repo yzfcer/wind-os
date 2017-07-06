@@ -59,7 +59,7 @@ err_t cmd_show_main(s32_t argc,char **argv)
     }
     else if(is_string_equal(argv[0],"proc"))
     {
-        pnode = g_core.pcblist;
+        pnode = g_core.pcblist.head;
         if(is_string_equal(argv[0],"all"))
         {
             CONSOLE_OUT("proc list as following:\r\n");

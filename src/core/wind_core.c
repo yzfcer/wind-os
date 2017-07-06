@@ -139,7 +139,7 @@ void wind_update_curPCB()
 {
     s16_t cnt,high = -1,hprio = 32767;
     pthread_s pthread;
-    pnode_s pnode = g_core.pcblist;
+    pnode_s pnode = g_core.pcblist.head;
     wind_close_interrupt();
     while(pnode)
     {
@@ -248,7 +248,7 @@ static u32_t core_get_ticks_of_idle(u32_t ms)
     pnode_s node;
     u32_t cnts;
     pthread_s pproc = wind_get_cur_proc();
-    node = g_core.pcblist;
+    node = g_core.pcblist.head;
     g_core.idle_cnt = 0;
     WIND_DEBUG("RUN_FLAG=%d\r\n",RUN_FLAG);
     //WIND_DEBUG("static ticks idle\r\n");
@@ -268,7 +268,7 @@ static u32_t core_get_ticks_of_idle(u32_t ms)
     //wind_heap_showinfo();
     wind_thread_sleep(ms);
     cnts = g_core.idle_cnt;
-    node = g_core.pcblist;
+    node = g_core.pcblist.head;
     while(node)
     {
         pthread = (pthread_s)node->obj;
@@ -359,7 +359,7 @@ static err_t wind_entry(s16_t argc,s8_t **argv)
     g_core.pctrl = lunch_console();
 #endif
 
-    wind_thread_showlist(g_core.pcblist);
+    wind_thread_showlist(g_core.pcblist.head);
     WIND_INFO("Running main proc...\r\n");
     wind_main();
     while(1)

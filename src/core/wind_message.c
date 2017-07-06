@@ -34,7 +34,7 @@
 #include "wind_err.h"
 #include "wind_assert.h"
 #if WIND_MESSAGE_SUPPORT > 0
-extern pnode_s procsleeplist;
+extern list_s procsleeplist;
 extern void wind_thread_dispatch(void);
 
 static pmsg_s msg_malloc(void)
@@ -119,7 +119,7 @@ pmbox_s wind_mbox_create(const char *name)
     pmbox->used = B_TRUE;
     pmbox->owner = wind_get_cur_proc();
     pmbox->num = 0;
-    pmbox->msgq = NULL;
+    wind_list_init(&pmbox->msgq);
     pmbox->valid = B_TRUE;
     return pmbox;
 }
@@ -136,7 +136,7 @@ err_t wind_mbox_destroy(pmbox_s pmbox)
     pmbox->valid = B_FALSE;
     pmbox->owner = NULL;
     pmbox->name = NULL;
-    err = mbox_delete_msgs(pmbox->msgq);
+    err = mbox_delete_msgs(pmbox->msgq.head);
     WIND_ASSERT_RETURN(err == ERR_OK,err);
     wind_core_free(STAT_MBOX,pmbox);
     wind_open_interrupt();
@@ -153,19 +153,15 @@ err_t wind_mbox_post(pmbox_s mbox,pmsg_s pmsg)
     WIND_ASSERT_RETURN(mbox->valid,ERR_COMMAN);
     WIND_ASSERT_RETURN(mbox->owner,ERR_COMMAN);
     
-    //wind_close_interrupt();
     pmsg->validtime = WIND_TICK_PER_SEC * 3;
-
     pnode = wind_node_malloc(CORE_TYPE_MSG);
-    pnode->used = B_TRUE;
-    pnode->minus = B_FALSE;
-    pnode->obj = pmsg;
+    WIND_ASSERT_RETURN(pnode != NULL,ERR_NULL_POINTER);
+    wind_node_bindobj(pnode,CORE_TYPE_MSG,0,pmsg);
     wind_list_inserttoend(&mbox->msgq,pnode);
     pthread = mbox->owner;
     pthread->cause = CAUSE_MSG;
     pthread->proc_status = PROC_STATUS_READY;
     wind_thread_dispatch();//切换线程
-    //wind_open_interrupt();
     return ERR_OK;
 }
 
@@ -185,10 +181,10 @@ err_t wind_mbox_fetch(pmbox_s mbox,pmsg_s *pmsg,u32_t timeout)
     WIND_ASSERT_RETURN(mbox->owner == pthread,ERR_COMMAN);
     
     //如果邮箱中有消息，就直接返回消息
-    if(mbox->msgq != NULL)
+    
+    if(mbox->msgq.head != NULL)
     {
-        pnode = mbox->msgq;
-        wind_list_remove(&mbox->msgq,pnode);
+        pnode = wind_list_remove(&mbox->msgq,mbox->msgq.head);
         *pmsg = (pmsg_s)pnode->obj;
         wind_node_free(pnode);
         return ERR_OK;
@@ -202,13 +198,8 @@ err_t wind_mbox_fetch(pmbox_s mbox,pmsg_s *pmsg,u32_t timeout)
     pthread->cause = CAUSE_MSG;
     
     pnode = wind_node_malloc(CORE_TYPE_PCB);
-    if(pnode == NULL)
-    {
-        pthread->proc_status = PROC_STATUS_READY;
-        return ERR_NULL_POINTER;
-    }
-    pnode->obj = pthread;
-    pnode->key = ticks;
+    WIND_ASSERT_RETURN(pnode != NULL,ERR_NULL_POINTER);
+    wind_node_bindobj(pnode,CORE_TYPE_PCB,ticks,pthread);
     wind_list_insert_with_minus(&procsleeplist,pnode);
     wind_thread_dispatch();
 
@@ -216,13 +207,12 @@ err_t wind_mbox_fetch(pmbox_s mbox,pmsg_s *pmsg,u32_t timeout)
     if(pthread->cause == CAUSE_MSG)
     {
         //几乎不会发生邮箱为空的情况
-        if(mbox->msgq == NULL)
+        if(mbox->msgq.head == NULL)
         {
             pthread->proc_status = PROC_STATUS_READY;
             return ERR_NULL_POINTER;
         }
-        pnode = mbox->msgq;
-        wind_list_remove(&mbox->msgq,pnode);
+        pnode = wind_list_remove(&mbox->msgq,mbox->msgq.head);
         *pmsg = (pmsg_s)pnode->obj;
         wind_node_free(pnode);
         err = ERR_OK;

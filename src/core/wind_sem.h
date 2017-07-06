@@ -42,7 +42,7 @@ typedef struct _wind_sem
     bool_t used;         //是否有效的标志
     u16_t sem_num;     //当前的信号量的值
     //u16_t tot_sem_num; //初始化的信号量的值
-    pnode_s waitlist;  //等待线程队列
+    list_s waitlist;  //等待线程队列
 }sem_s,*psem_s;
 
 

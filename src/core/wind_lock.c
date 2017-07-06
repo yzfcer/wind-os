@@ -65,7 +65,7 @@ plock_s wind_lock_create(const char *name)
         return NULL;
     }
     plock->locked = B_FALSE;
-    plock->waitlist = NULL;
+    wind_list_init(&plock->waitlist);
     wind_open_interrupt();
     return plock;
 }
@@ -91,13 +91,13 @@ err_t wind_lock_free(plock_s plock)
     pthread_s pthread;
     WIND_ASSERT_RETURN(plock != NULL,ERR_NULL_POINTER);
     wind_close_interrupt();
-    while(plock->waitlist != NULL)
+    while(plock->waitlist.head != NULL)
     {
-        pnode = plock->waitlist;
-        plock->waitlist = pnode->next;
+        pnode = plock->waitlist.head;
+        wind_list_remove(&plock->waitlist,pnode);
         pthread = (pthread_s)pnode->obj;
-        pthread->proc_status = PROC_STATUS_SUSPEND;
-        pthread->cause = CAUSE_LOCK;    
+        pthread->proc_status = PROC_STATUS_READY;
+        pthread->cause = CAUSE_LOCK;
         wind_node_free(pnode);
     }
     plock->used = B_FALSE;
@@ -122,14 +122,11 @@ err_t wind_lock_close(plock_s plock)
         return ERR_OK; //信号量有效，直接返回效，
     }
     pnode = wind_node_malloc(CORE_TYPE_SEM);
-    WIND_ASSERT_TODO(pnode != NULL,wind_open_interrupt(),ERR_NULL_POINTER);
-    
+    WIND_ASSERT_RETURN(pnode != NULL,ERR_NULL_POINTER);
     pthread = wind_get_cur_proc();
-    pnode->obj = pthread;
-    pnode->next = NULL;
-    pnode->key = pthread->prio;
     pthread->proc_status = PROC_STATUS_SUSPEND;
     pthread->cause = CAUSE_LOCK;
+    wind_node_bindobj(pnode,CORE_TYPE_PCB,pthread->prio,pthread);
     wind_list_insert(&plock->waitlist,pnode);
     wind_thread_dispatch();
     wind_open_interrupt();
@@ -144,15 +141,15 @@ err_t wind_lock_open(plock_s plock)
     WIND_ASSERT_RETURN(plock != NULL,ERR_NULL_POINTER);
     wind_close_interrupt();
     WIND_ASSERT_TODO(plock->locked,wind_open_interrupt(),ERR_OK);
-    if (plock->waitlist == NULL)
+    if (plock->waitlist.head == NULL)
     {
         plock->locked = B_FALSE;
         wind_open_interrupt();
         return ERR_OK; //信号量有效，直接返回效，
     }
-    pnode = plock->waitlist;
-    plock->waitlist = pnode->next;
+    pnode = wind_list_remove(&plock->waitlist,plock->waitlist.head);
     pthread = (pthread_s)pnode->obj;
+    
     pthread->proc_status = PROC_STATUS_READY;
     pthread->cause = CAUSE_LOCK;
     wind_node_free(pnode);
