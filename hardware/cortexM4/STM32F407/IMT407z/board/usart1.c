@@ -2,30 +2,10 @@
 #include "string.h"
 #include "stdlib.h"  
 #include "led.h" 
-//#include "beep.h" 
-
-/*********************************************************************************
-*************************MCU启明 STM32F407核心开发板******************************
-**********************************************************************************
-* 文件名称: usart1.c                                                             *
-* 文件简述：USART1使用                                                           *
-* 创建日期：2015.03.06                                                           *
-* 版    本：V1.0                                                                 *
-* 作    者：Clever                                                               *
-* 说    明：利用串口调试助手经过USART1控制LED亮灭与蜂鸣器响闭                    * 
-**********************************************************************************
-*********************************************************************************/	
 
 u8_t receive_str[USART1_REC_NUM];     //接收缓存数组,最大USART_REC_LEN个字节 
 u8_t uart_byte_count=0;
 
-/****************************************************************************
-* 名    称: void uart1_init(u32_t bound)
-* 功    能：USART1初始化
-* 入口参数：bound：波特率
-* 返回参数：无
-* 说    明： 
-****************************************************************************/
 void uart1_init(u32_t baud)
 {   //GPIO端口设置
     GPIO_InitTypeDef GPIO_InitStructure;
@@ -72,40 +52,32 @@ void uart1_send_char(u8_t ch)
     USART1->DR = (u8_t) ch;
 }
 
-/****************************************************************************
-* 名    称: void uart1_send_chars(u8_t *str, u16_t strlen)
-* 功    能：串口1发送一字符串
-* 入口参数：*str：发送的字符串
-            strlen：字符串长度
-* 返回参数：无
-* 说    明： 
-****************************************************************************/
 void uart1_send_chars(u8_t *str, u16_t strlen)
 { 
     u16_t k= 0 ; 
     do 
-    { uart1_send_char(*(str + k)); k++; }   //循环发送,直到发送完毕   
+    { uart1_send_char(*(str + k)); k++; }   
     while (k < strlen); 
 }
 
-//串口1中断服务程序
-void USART1_IRQHandler(void)  
+
+void USART1_IRQHandler(void)
 {
 	u8_t rec_data;
-	if(USART_GetITStatus(USART1, USART_IT_RXNE) != RESET)  //接收中断 
+	if(USART_GetITStatus(USART1, USART_IT_RXNE) != RESET)
 		{
-				rec_data =(u8_t)USART_ReceiveData(USART1);         //(USART1->DR) 读取接收到的数据
-        if(rec_data=='S')		  	                         //如果是S，表示是命令信息的起始位
+				rec_data =(u8_t)USART_ReceiveData(USART1);
+        if(rec_data=='S')
 				{
 					uart_byte_count=0x01; 
 				}
 
-			else if(rec_data=='E')		                         //如果E，表示是命令信息传送的结束位
+			else if(rec_data=='E')
 				{
-					if(strcmp("Light_led1",(char *)receive_str)==0)        LED1=0;	//点亮LED1
-					else if(strcmp("Close_led1",(char *)receive_str)==0)   LED1=1;	//关灭LED1
-					//else if(strcmp("Open_beep",(char *)receive_str)==0)    BEEP=1; 	//蜂鸣器响
-					//else if(strcmp("Close_beep",(char *)receive_str)==0)   BEEP=0; 	//蜂鸣器不响
+					if(strcmp("Light_led1",(char *)receive_str)==0)        LED1=0;	
+					else if(strcmp("Close_led1",(char *)receive_str)==0)   LED1=1;	
+					//else if(strcmp("Open_beep",(char *)receive_str)==0)    BEEP=1; 	
+					//else if(strcmp("Close_beep",(char *)receive_str)==0)   BEEP=0; 	
 					
 					for(uart_byte_count=0;uart_byte_count<32;uart_byte_count++)receive_str[uart_byte_count]=0x00;
 					uart_byte_count=0;    

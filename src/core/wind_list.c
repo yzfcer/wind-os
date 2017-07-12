@@ -73,9 +73,11 @@ void wind_node_bindobj(pnode_s node,core_type type,s32_t key,void *obj)
 static void insert_to_head(plist_s list,pnode_s node)
 {
     node->prev = NULL;
-    node->next = list->tail;
+    node->next = list->head;
     list->head = node;
-    if(list->cnt == 0)
+    if(node->next != NULL)
+        node->next->prev = node;
+    else
         list->tail = node;
     list->cnt ++;
 }
@@ -85,7 +87,9 @@ static void insert_to_tail(plist_s list,pnode_s node)
     node->prev = list->tail;
     node->next = NULL;
     list->tail = node;
-    if(list->cnt == 0)
+    if(node->prev != NULL)
+        node->prev->next = node;
+    else
         list->head = node;
     list->cnt ++;
 }
@@ -94,7 +98,10 @@ static void insert_behind(plist_s list,pnode_s node,pnode_s dest)
 {
     node->prev = dest;
     node->next = dest->next;
-    dest->next->prev = node;
+    if(dest->next == NULL)
+        list->tail = node;
+    else
+        dest->next->prev = node;
     dest->next = node;
     list->cnt ++;
 }
@@ -102,21 +109,23 @@ static void insert_behind(plist_s list,pnode_s node,pnode_s dest)
 static void remove_head(plist_s list,pnode_s node)
 {
     list->cnt --;
-    list->head = node->next;
-    if(list->cnt == 0)
+    if(node->next != NULL)
+        node->next->prev = NULL;
+    else
         list->tail = NULL;
+    list->head = node->next;
     node->prev = NULL;
     node->next = NULL;
-    if((node->minus)&&(list->head != NULL))
-        list->head->key += node->key;
 }
 
 static void remove_tail(plist_s list,pnode_s node)
 {
     list->cnt --;
-    list->tail = node->prev;
-    if(list->cnt == 0)
+    if(node->prev != NULL)
+        node->prev->next = NULL;
+    else
         list->head = NULL;
+    list->tail = node->prev;
     node->prev = NULL;
     node->next = NULL;
 }
@@ -124,14 +133,17 @@ static void remove_tail(plist_s list,pnode_s node)
 static void remove_behind(plist_s list,pnode_s node,pnode_s dest)
 {
     list->cnt --;
+    if(node->next != NULL)
+        node->next->prev = dest;
+    else
+        list->tail = dest;
     dest->next = node->next;
-    node->next->prev = dest;
     node->prev = NULL;
     node->next = NULL;
 }
 
 
-static err_t core_list_insert(plist_s list,pnode_s node,bool_t minus)
+static err_t list_insert(plist_s list,pnode_s node,bool_t minus)
 {
     pnode_s pnode = NULL;
     wind_close_interrupt();
@@ -185,7 +197,7 @@ err_t wind_list_init(plist_s list)
 
 err_t wind_list_insert(plist_s list,pnode_s node)
 {
-    return core_list_insert(list,node,B_FALSE);
+    return list_insert(list,node,B_FALSE);
 }
 
 
@@ -219,7 +231,7 @@ err_t wind_list_inserttohead(plist_s list,pnode_s node)
 //插入一个元素，但插入的位置每向后移动一个元素，就需要减去它前面的元素的键值
 err_t wind_list_insert_with_minus(plist_s list,pnode_s node)
 {
-    return core_list_insert(list,node,B_TRUE);
+    return list_insert(list,node,B_TRUE);
 }
 
 pnode_s wind_list_search(plist_s list,void *obj)
@@ -257,8 +269,12 @@ pnode_s wind_list_remove(plist_s list,pnode_s node)
         wind_open_interrupt();
         return NULL;
     }
+    if((node->minus)&&(node->next != NULL))
+        node->next->key += node->key;
     if(list->head == node)
+    {
         remove_head(list,node);
+    }
     else if(list->tail == node)
         remove_tail(list,node);
     else
@@ -267,42 +283,40 @@ pnode_s wind_list_remove(plist_s list,pnode_s node)
     return pnode;
 }
 
-void printlist(plist_s list)
+void wind_list_print(plist_s list)
 {
     int cnt = 0;
     pnode_s pnode = list->head;
     while(pnode)
     {
-        WIND_DEBUG("node %d type %d\r\n",cnt,pnode->type);
-        WIND_DEBUG("node %d key %d\r\n",cnt,pnode->key);
-        WIND_DEBUG("node %d obj %d\r\n",cnt,pnode->obj);
+        wind_printf("node %d type %d\r\n",cnt,pnode->type);
+        wind_printf("node %d key %d\r\n",cnt,pnode->key);
+        wind_printf("node %d obj %d\r\n",cnt,pnode->obj);
+        wind_printf("\r\n");
         pnode = pnode->next;
         cnt ++;
     }
 }
 
 
-list_s list = {NULL,NULL,0};
-void listtest()
+list_s test_list = {NULL,NULL,0};
+void listtest(void)
 {
     pnode_s node;
     int cnt;
     for(cnt = 0;cnt < 4;cnt ++)
     {
         node = wind_node_malloc(2);
-        //WIND_ASSERT_RETURN(node != NULL,ERR_NULL_POINTER);
         if(node == NULL)
             return;
-        wind_node_bindobj(node,CORE_TYPE_NONE,cnt,(void *)cnt);
-        wind_list_insert(&list,node);
+        wind_node_bindobj(node,CORE_TYPE_NONE,cnt,(void *)(cnt+20));
+        wind_list_insert(&test_list,node);
     }
-    printlist(&list);
-    for(cnt = 0;cnt < 4;cnt ++)
-    {
-        wind_list_remove(&list,list.head);
-    }
+    wind_list_print(&test_list);
+    wind_list_remove(&test_list,test_list.head);
+    wind_list_remove(&test_list,test_list.tail);
     
-    printlist(&list);
+    wind_list_print(&test_list);
     
 }
 

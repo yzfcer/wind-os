@@ -49,14 +49,14 @@
 static pthread_s pcb_malloc(prio_e priolevel)
 {
     pthread_s pthread;
-    s16_t cnt,priolim = 0;
+    //s16_t cnt,priolim = 0;
 
     WIND_ASSERT_RETURN(priolevel < PRIO_SYS_LOW && priolevel > PRIO_ZERO,NULL);
     pthread = wind_core_alloc(STAT_PROC);
     WIND_ASSERT_RETURN(pthread != NULL,NULL);
-    if(wind_thread_isopen())
-        priolim = WIND_THREAD_PRIO_MIN_LIM;
-    pthread->used = 1;
+    //if(wind_thread_isopen())
+    //    priolim = WIND_THREAD_PRIO_MIN_LIM;
+    pthread->used = B_TRUE;
     pthread->prio = (priolevel - 1) * 10000 + g_core.pcbcnt;
     g_core.pcbcnt ++;
     WIND_DEBUG("alloc pthread->prio:%d\r\n",pthread->prio);
@@ -220,6 +220,7 @@ pthread_s wind_thread_create(const s8_t *name,
     pthread->pstk = tmpstk;
     pthread->proc_status = PROC_STATUS_READY;
     pthread->cause = CAUSE_COM;
+    pthread->sleep_ticks = 0;
 #if WIND_HEAP_SUPPORT > 0 && WIND_PRIVATE_HEAP_SUPPORT > 0
     pthread->private_heap = NULL;//wind_heap_alloc_default(PRIVATE_HEAP_SIZE);
 #endif
@@ -382,13 +383,9 @@ err_t wind_thread_sleep(u32_t ms)
     u16_t stcnt;
     pthread_s pthread = NULL;
     pnode_s pnode = NULL;
-    s16_t cnt = 0;
-    err_t err = 0;
     stcnt = ms * WIND_TICK_PER_SEC / 1000;
-    //WIND_DEBUG("sleep.......\r\n");
     if(0 == stcnt)
         stcnt = 1;
-    //wind_close_interrupt();
     pthread = wind_get_cur_proc();
     pthread->proc_status = PROC_STATUS_SUSPEND;
     pthread->cause = CAUSE_SLEEP;
@@ -412,7 +409,7 @@ err_t wind_thread_sleep(u32_t ms)
     return ERR_OK;
 }
 
-void wind_wakeup(void)
+void wind_thread_wakeup(void)
 {
     pnode_s pnode = NULL;
     pthread_s pthread = NULL;

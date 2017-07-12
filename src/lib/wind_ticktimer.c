@@ -157,20 +157,16 @@ extern void ticktimerhandler(void)
     pnode_s tmpttimerlist = g_core.ttmerlist.head;
     while(tmpttimerlist)
     {
-        //WIND_DEBUG("ticktimerhandler\r\n");
         pttmr = (pttimer_s)(tmpttimerlist->obj);
-        //WIND_DEBUG("pttmr = %d,%d\r\n",pttmr,pttmr->tick);    
         if(pttmr->count > 0)
             pttmr->count --;
         if(pttmr->count == 0 && pttmr->running)
         {
             pttmr->timercallback();
-            
             pttmr->count = pttmr->inittick;
         }
         tmpttimerlist = tmpttimerlist->next;
     }
-    //WIND_DEBUG("timerhandler tick=%d\r\n",pttmr->tick);
 }
 #endif //#if WIND_TTIMER_SUPPORT > 0
 

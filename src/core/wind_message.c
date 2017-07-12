@@ -197,10 +197,10 @@ err_t wind_mbox_fetch(pmbox_s mbox,pmsg_s *pmsg,u32_t timeout)
     pthread->proc_status = PROC_STATUS_SUSPEND;
     pthread->cause = CAUSE_MSG;
     
-    pnode = wind_node_malloc(CORE_TYPE_PCB);
-    WIND_ASSERT_RETURN(pnode != NULL,ERR_NULL_POINTER);
-    wind_node_bindobj(pnode,CORE_TYPE_PCB,ticks,pthread);
-    wind_list_insert_with_minus(&procsleeplist,pnode);
+    //pnode = wind_node_malloc(CORE_TYPE_PCB);
+    //WIND_ASSERT_RETURN(pnode != NULL,ERR_NULL_POINTER);
+    //wind_node_bindobj(pnode,CORE_TYPE_PCB,ticks,pthread);
+    //wind_list_insert_with_minus(&procsleeplist,pnode);
     wind_thread_dispatch();
 
     

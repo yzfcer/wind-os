@@ -37,7 +37,7 @@
 static u32_t g_wind_time_ms_cnt = 0;//毫秒计时
 
 
-//extern void wind_update_curPCB(void);
+//extern void wind_update_curthread(void);
 //extern void wind_interrupt_switch(void);
 
 
@@ -63,7 +63,7 @@ void wind_tick_callback(void)
     #endif
     wind_close_interrupt();
     TICKS_CNT ++;//更新tick计数器
-    wind_wakeup();
+    wind_thread_wakeup();
     wind_open_interrupt();
 }
 

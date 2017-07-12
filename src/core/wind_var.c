@@ -39,9 +39,10 @@ core_var_s g_core;
 volatile bool_t gwind_start_flag = B_FALSE;
 pthread_s gwind_cur_pcb = NULL;//当前线程PCB指针
 pthread_s gwind_high_pcb = NULL;//最高优先级PCB指针
+
 void wind_corepool_init(void)
 {
-    wind_mpool_create("pcb_pool",g_core.pcb,sizeof(g_core.pcb),sizeof(pcb_s));
+    wind_mpool_create("pcb_pool",g_core.pcb,sizeof(g_core.pcb),sizeof(thread_s));
     wind_mpool_show("pcb",g_core.pcb);
     wind_mpool_create("node_pool",g_core.node,sizeof(g_core.node),sizeof(node_s));
 #if WIND_PIPE_SUPPORT > 0

@@ -35,6 +35,7 @@ stack_t appstk[20][512];
 
 err_t wind_main()
 {
+    extern void listtest(void);
 #if 0
 	//int i = 0;
     //for(i = 0;i < 1;i ++)
@@ -47,5 +48,7 @@ err_t wind_main()
                         512);
 #endif
     WIND_INFO("enter wind main.\r\n");
+    listtest();
+
     return 0;
 }

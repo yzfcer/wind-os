@@ -82,7 +82,7 @@ err_t wind_sem_post(psem_s psem)
     pnode = wind_list_remove(&psem->waitlist,psem->waitlist.head);
     pthread = (pthread_s)pnode->obj;
     pthread->proc_status = PROC_STATUS_READY;
-    pthread->cause = CAUSE_SEM;
+    pthread->cause = CAUSE_NONE;
     wind_node_free(pnode);
     wind_open_interrupt();
     wind_thread_dispatch();
@@ -107,33 +107,24 @@ err_t wind_sem_fetch(psem_s psem,u32_t timeout)
         return ERR_OK; //信号量有效，直接返回效，
     }
     wind_open_interrupt();
-    //申请两个节点
     pnode = wind_node_malloc(CORE_TYPE_PCB);
     WIND_ASSERT_RETURN(pnode != NULL,ERR_NULL_POINTER);
-    pnode1 = wind_node_malloc(CORE_TYPE_PCB);
-    WIND_ASSERT_RETURN(pnode1 != NULL,ERR_NULL_POINTER);
-    if(pnode1 == NULL)
-    {
-        wind_node_free(pnode);
-        return ERR_NULL_POINTER;
-    }
     ticks = timeout * WIND_TICK_PER_SEC / 1000;
     if(ticks == 0)
         ticks = 1;
     pthread = wind_get_cur_proc();
     pthread->proc_status = PROC_STATUS_SUSPEND;
     pthread->cause = CAUSE_SEM;
+    pthread->sleep_ticks = ticks;
 
     wind_node_bindobj(pnode,CORE_TYPE_PCB,pthread->prio,pthread);
-    wind_node_bindobj(pnode1,CORE_TYPE_PCB,ticks,pthread);
     wind_close_interrupt();
     wind_list_insert_with_minus(&psem->waitlist,pnode);
-    wind_list_insert_with_minus(&procsleeplist,pnode1);
     wind_thread_dispatch();
     if(pthread->cause == CAUSE_SEM)
     {
-        wind_list_remove(&procsleeplist,pnode1);
-        wind_node_free(pnode1);
+        //wind_list_remove(&procsleeplist,pnode1);
+        //wind_node_free(pnode1);
     }
     else if(pthread->cause == CAUSE_SLEEP)
     {

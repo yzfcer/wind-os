@@ -59,7 +59,7 @@ static err_t wind_softint_proc(s16_t argc,s8_t **argv)
     while(1)
     {
         wind_close_interrupt();
-        softint_ppcb->proc_status = PROC_STATUS_SLEEP;
+        softint_ppcb->proc_status = PROC_STATUS_SUSPEND;
         softint_ppcb->cause = CAUSE_COM;
         wind_open_interrupt();
         wind_thread_dispatch();

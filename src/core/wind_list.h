@@ -72,6 +72,7 @@ struct __wind_list
 
 pnode_s wind_node_malloc(core_type type);
 err_t wind_node_free(pnode_s node);
+void wind_node_bindobj(pnode_s node,core_type type,s32_t key,void *obj);
 
 err_t wind_list_init(plist_s list);
 err_t wind_list_insert(plist_s list,pnode_s node);
@@ -81,7 +82,7 @@ err_t wind_list_insert_with_minus(plist_s list,pnode_s node);
 pnode_s wind_list_remove(plist_s list,pnode_s node);
 pnode_s wind_list_search(plist_s list,void *obj);
 
-void printlist(plist_s list);
+void wind_list_print(plist_s list);
 #ifdef __cplusplus
 }
 #endif

@@ -41,7 +41,7 @@ extern "C" {
 #endif
 typedef struct __core_var_s
 {
-    WIND_MPOOL(pcb,WIND_THREAD_MAX_NUM,sizeof(pcb_s));
+    WIND_MPOOL(pcb,WIND_THREAD_MAX_NUM,sizeof(thread_s));
     WIND_MPOOL(node,WIND_NODE_MAX_NUM,sizeof(node_s));
 #if WIND_PIPE_SUPPORT > 0
     WIND_MPOOL(pipe,WIND_PIPE_MAX_NUM,sizeof(pipe_s));
@@ -75,7 +75,8 @@ typedef struct __core_var_s
     
     u32_t g_wind_cpu_usage;
     pthread_s pmain,pidle,pstat,pctrl,pdaemon;
-    
+
+
     u32_t idle_cnt_per_sec;//在一段时间内的idle任务的计数值
     volatile bool_t run_falg;//多线程调度开始的标志
     u32_t ticks_cnt;//tick计时

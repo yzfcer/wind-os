@@ -58,6 +58,7 @@ typedef enum __proc_status
 
 typedef enum __suscause
 {
+    CAUSE_NONE = 0,
     CAUSE_COM,
     CAUSE_SLEEP,
     CAUSE_SEM,
@@ -79,41 +80,45 @@ typedef enum __procevt_e
 }procevt_e;
 
 
-struct _pcb_s;
-typedef struct __procCB_s
+struct _thread_s;
+typedef struct __threadcb_s
 {
     //void (*proc_created)(struct _pcb_s *pthread);
-    void (*start)(struct _pcb_s *pthread);
-    void (*suspend)(struct _pcb_s *pthread);
-    void (*resume)(struct _pcb_s *pthread);
-    void (*dead)(struct _pcb_s *pthread);
-}procCB_s;
+    void (*start)(struct _thread_s *pthread);
+    void (*suspend)(struct _thread_s *pthread);
+    void (*resume)(struct _thread_s *pthread);
+    void (*dead)(struct _thread_s *pthread);
+}threadcb_s;
 #endif 
 
 
 //线程控制PCB
-typedef struct _pcb_s
+typedef struct _thread_s
 {
-    pstack_t pstk;//注意pstk这个参数要放在第一个位置上，不能挪动
+    pstack_t pstk;
     pstack_t pstktop;
+    u16_t stksize;
+    
     err_t (*procfunc)(s32_t argc,s8_t **argv);
     s16_t argc;
     s8_t **argv;
-    struct _pcb_s *parent;
-    char name[PROCESS_NAME_LEN];//;//
+    
+    struct _thread_s *parent;
+    char name[PROCESS_NAME_LEN];//
     bool_t used;
     s16_t prio;
+    
     s8_t proc_status;
-    u16_t stksize;
+    s32_t sleep_ticks;
     suscause_e cause;//导致状态变化的原因
 #if WIND_THREAD_CALLBACK_SUPPORT > 0
-    procCB_s cb;
+    threadcb_s cb;
 #endif
 
 #if WIND_HEAP_SUPPORT > 0 && WIND_PRIVATE_HEAP_SUPPORT > 0
     void *private_heap;
 #endif
-}pcb_s,*pthread_s;
+}thread_s,*pthread_s;
 
 
 //获取当前的线程PCB
@@ -141,6 +146,8 @@ err_t wind_thread_kill(pthread_s pthread);
 err_t wind_thread_killN(s8_t *name);
 s8_t *wind_thread_get_curname(void);
 err_t wind_thread_exit(err_t exitcode);
+void wind_thread_wakeup(void);
+err_t wind_thread_sleep(u32_t ms);
 
 #if WIND_THREAD_CALLBACK_SUPPORT > 0
 err_t wind_thread_callback_register(pthread_s pthread,procevt_e id,void(*cb)(pthread_s));
