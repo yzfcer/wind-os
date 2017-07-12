@@ -392,7 +392,8 @@ err_t wind_thread_sleep(u32_t ms)
     pnode = wind_node_malloc(CORE_TYPE_PCB);
     WIND_ASSERT_RETURN(pnode != NULL,ERR_NULL_POINTER);
     wind_node_bindobj(pnode,CORE_TYPE_PCB,stcnt,pthread);
-    wind_list_insert_with_minus(&procsleeplist,pnode);
+    //wind_list_insert_with_minus(&procsleeplist,pnode);
+    wind_list_insert(&procsleeplist,pnode);
     pnode = procsleeplist.head;
     while(pnode)
     {
@@ -413,31 +414,20 @@ void wind_thread_wakeup(void)
 {
     pnode_s pnode = NULL;
     pthread_s pthread = NULL;
-    if((RUN_FLAG == B_TRUE) && (procsleeplist.head != NULL))
+    pnode = procsleeplist.head;
+    while(RUN_FLAG && (pnode != NULL))
     {        
-        pnode = wind_list_remove(&procsleeplist,procsleeplist.head);
-        //update the list of sleeping process
         if(pnode->key > 0)
             pnode->key --;
-        pthread = (pthread_s)pnode->obj;
-        while(pnode && (pnode->key <= 0))
+        if(pnode->key <= 0)
         {
             pthread = (pthread_s)pnode->obj;
-            if(pthread->proc_status == PROC_STATUS_SUSPEND)
-            {
-                pthread->proc_status = PROC_STATUS_READY;
-                pthread->cause = CAUSE_SLEEP;
-                //WIND_DEBUG("%s wake\r\n",pthread->name);
-                wind_list_remove(&procsleeplist,pnode);
-                wind_node_free(pnode);
-                if(pnode->key < 0)
-                {
-                    wind_thread_showlist(procsleeplist.head);
-                    WIND_DEBUG("proc %s key < 0......%d\r\n",pthread->name,pnode->key);
-                }
-            }
-            pnode = pnode->next;
+            pthread->proc_status = PROC_STATUS_READY;
+            pthread->cause = CAUSE_SLEEP;
+            wind_list_remove(&procsleeplist,pnode);
+            wind_node_free(pnode);
         }
+        pnode = pnode->next;
     }
 }
 

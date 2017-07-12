@@ -34,7 +34,7 @@
 #include "wind_err.h"
 #include "wind_assert.h"
 #if WIND_MESSAGE_SUPPORT > 0
-extern list_s procsleeplist;
+//extern list_s procsleeplist;
 extern void wind_thread_dispatch(void);
 
 static pmsg_s msg_malloc(void)

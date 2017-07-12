@@ -119,12 +119,13 @@ err_t wind_sem_fetch(psem_s psem,u32_t timeout)
 
     wind_node_bindobj(pnode,CORE_TYPE_PCB,pthread->prio,pthread);
     wind_close_interrupt();
-    wind_list_insert_with_minus(&psem->waitlist,pnode);
+    //wind_list_insert_with_minus(&psem->waitlist,pnode);
+    wind_list_insert(&psem->waitlist,pnode);
     wind_thread_dispatch();
     if(pthread->cause == CAUSE_SEM)
     {
-        //wind_list_remove(&procsleeplist,pnode1);
-        //wind_node_free(pnode1);
+        wind_list_remove(&procsleeplist,pnode1);
+        wind_node_free(pnode1);
     }
     else if(pthread->cause == CAUSE_SLEEP)
     {

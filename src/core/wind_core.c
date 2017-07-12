@@ -210,17 +210,6 @@ void wind_init()
 //*******************************daemon***********************************************
 #if WIND_DAEMON_SUPPORT > 0
 #define DAEMON_STK_SIZE 512
-void daemon_test(void)
-{
-    s32_t i;
-    int ret = 0;
-    for(i = 0;i < 100000;i ++)
-    {
-        ret += (663487456758+i)/1554428587;
-    }
-    
-}
-extern err_t wind_hook_daemon(void);
 static stack_t daemonstk[DAEMON_STK_SIZE];//Ö÷ÈÎÎñ¶ÑÕ»
 static err_t daemon_proc(s16_t argc,s8_t **argv)
 {
@@ -230,8 +219,6 @@ static err_t daemon_proc(s16_t argc,s8_t **argv)
     argc = 0;
     while(1)
     {
-        //WIND_INFO("daemon process:%d!\r\n",dmcnt);
-        daemon_test();
         wind_thread_sleep(50);
         dmcnt ++;
     }
@@ -251,7 +238,6 @@ static u32_t core_get_ticks_of_idle(u32_t ms)
     node = g_core.pcblist.head;
     g_core.idle_cnt = 0;
     WIND_DEBUG("RUN_FLAG=%d\r\n",RUN_FLAG);
-    //WIND_DEBUG("static ticks idle\r\n");
     while(node)
     {
         pthread = (pthread_s)node->obj;
@@ -264,8 +250,6 @@ static u32_t core_get_ticks_of_idle(u32_t ms)
         node = node->next;
     }
     
-    //wind_thread_showlist(g_core.pcblist);
-    //wind_heap_showinfo();
     wind_thread_sleep(ms);
     cnts = g_core.idle_cnt;
     node = g_core.pcblist.head;
@@ -279,8 +263,6 @@ static u32_t core_get_ticks_of_idle(u32_t ms)
         }
         node = node->next;
     }
-    //wind_thread_showlist(g_core.pcblist);
-    //wind_heap_showinfo();
     return cnts;
 }
 
@@ -295,18 +277,17 @@ static err_t stati_proc(s16_t argc,s8_t **argv)
     argc = 0;
     //wind_heap_showinfo();
     wind_thread_sleep(3000);
-    IDLE_CNT_PER_SEC = core_get_ticks_of_idle(2000);
+    IDLE_CNT_PER_SEC = core_get_ticks_of_idle(5000);
     wind_printf("idle cnt:%d\r\n",IDLE_CNT_PER_SEC);
-    //wind_heap_showinfo();
     while(1)
     {
         statcnt = g_core.idle_cnt;
-        wind_thread_sleep(2000);
+        wind_thread_sleep(5000);
         //wind_heap_showinfo();
         statcnt = g_core.idle_cnt - statcnt;
-        wind_printf("run cnt:%d\r\n",statcnt);
+        //wind_printf("run cnt:%d\r\n",statcnt);
         WIND_CPU_USAGE = (IDLE_CNT_PER_SEC - statcnt) * 100 / IDLE_CNT_PER_SEC;
-        wind_printf("cpu usage:%d%%\r\n",WIND_CPU_USAGE);
+        wind_printf("cpu:%d%%\r\n",WIND_CPU_USAGE);
     }
     return ERR_OK;
 }

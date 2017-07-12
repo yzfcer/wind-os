@@ -178,7 +178,9 @@ static err_t list_insert(plist_s list,pnode_s node,bool_t minus)
     if(pnode == NULL)
         insert_to_tail(list,node);
     else
+    {
         insert_behind(list,node,pnode->prev);
+    }
     wind_open_interrupt();
     return ERR_OK;
 }
