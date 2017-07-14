@@ -60,20 +60,20 @@ typedef struct __cmd_global
 {
     cmd_s *head;
     cmd_s *tail;
-    u32_t cnt;
+    w_uint32_t cnt;
 }cmd_global_s;
 
 //得到分解后的参数列表
 typedef struct __cmd_param_s
 {
-    u32_t cnt;
+    w_uint32_t cnt;
     char * param[CMD_PARAM_CNT];
 }cmd_param_s;
 typedef struct __console_s
 {
     char cmdstr[WIND_CMD_MAX_LEN];//命令的缓存区
     char buf[WIND_CMD_MAX_LEN];//接收的数据缓存区
-    u32_t index;//命令的下一个字符下标
+    w_uint32_t index;//命令的下一个字符下标
     cslstat_e stat;//当前的解析状态
     char user[WIND_CTL_USRNAME_LEN];//用户名
     char pwd[WIND_CTL_PWD_LEN];//密码的值
@@ -96,13 +96,13 @@ void register_cmd_test(console_s *ctrl);
 
 
 //输出命令列表
-err_t wind_output_cmdlist(void);
+w_err_t wind_output_cmdlist(void);
 
 void console_framework_init(console_s *ctlobj);
 cmd_s *wind_get_cmdlist(void);
-s32_t is_string_equal(char *dest,char *src);
-err_t wind_cmd_register(cmd_global_s *cgl,cmd_s *cmd,int cnt);
-//err_t consoleProc(s32_t argc,char **argv);
+w_int32_t is_string_equal(char *dest,char *src);
+w_err_t wind_cmd_register(cmd_global_s *cgl,cmd_s *cmd,int cnt);
+//w_err_t consoleProc(w_int32_t argc,char **argv);
 pthread_s lunch_console(void);
 
 #ifdef __cplusplus

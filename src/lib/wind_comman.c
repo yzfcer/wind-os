@@ -25,11 +25,11 @@
 #include "wind_types.h"
 #include "wind_comman.h"
 //把字符串转换成带符号整数
-s32_t wind_convert_str2s32_t(s8_t *str)
+w_int32_t wind_convert_str2s32_t(w_int8_t *str)
 {
-    bool_t flag = 0;
-    u8_t i = 0;
-    s32_t num = 0;
+    w_bool_t flag = 0;
+    w_uint8_t i = 0;
+    w_int32_t num = 0;
     if(str[0] == '-')
     {
         flag = B_TRUE;
@@ -51,10 +51,10 @@ s32_t wind_convert_str2s32_t(s8_t *str)
 }
 
 //把字符串转换成无符号整数
-u32_t wind_convert_str2u32_t(s8_t *str)
+w_uint32_t wind_convert_str2u32_t(w_int8_t *str)
 {
-    u32_t num = 0;
-    u8_t i = 0;
+    w_uint32_t num = 0;
+    w_uint8_t i = 0;
     while(1)
     {
         if(str[i] <= '9' && str[i] >= '0')

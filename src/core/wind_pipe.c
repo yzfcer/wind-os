@@ -45,10 +45,10 @@
 
 
 
-ppipe_s wind_pipe_create(const char *name,void *inbuf,u32_t inlen,void *outbuf,u32_t outlen)
+ppipe_s wind_pipe_create(const char *name,void *inbuf,w_uint32_t inlen,void *outbuf,w_uint32_t outlen)
 {
     ppipe_s ppipe;
-    err_t err;
+    w_err_t err;
     WIND_ASSERT_RETURN((inbuf != NULL) || (outbuf != NULL),NULL);
     if(inbuf != NULL)
     {
@@ -87,7 +87,7 @@ ppipe_s wind_pipe_create(const char *name,void *inbuf,u32_t inlen,void *outbuf,u
 }
 
 
-err_t wind_pipe_connect(ppipe_s ppipe)
+w_err_t wind_pipe_connect(ppipe_s ppipe)
 {
     pthread_s pthread = NULL;
     WIND_ASSERT_RETURN(ppipe != NULL,ERR_NULL_POINTER);
@@ -100,10 +100,10 @@ err_t wind_pipe_connect(ppipe_s ppipe)
 }
 
 
-s16_t wind_pipe_read(ppipe_s ppipe,s8_t *str,s16_t len)
+w_int16_t wind_pipe_read(ppipe_s ppipe,w_int8_t *str,w_int16_t len)
 {
     pthread_s pthread;
-    s16_t cnt = -1;
+    w_int16_t cnt = -1;
     WIND_ASSERT_RETURN(ppipe != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(str != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(len > 0,ERR_INVALID_PARAM);
@@ -124,10 +124,10 @@ s16_t wind_pipe_read(ppipe_s ppipe,s8_t *str,s16_t len)
     return cnt;
 }
 
-s16_t wind_pipe_write(ppipe_s ppipe,s8_t *str,s16_t len)
+w_int16_t wind_pipe_write(ppipe_s ppipe,w_int8_t *str,w_int16_t len)
 {
     pthread_s pthread;
-    s16_t cnt = -1;
+    w_int16_t cnt = -1;
     WIND_ASSERT_RETURN(ppipe != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(ppipe->magic == WIND_PIPE_MAGIC,ERR_INVALID_PARAM);
     WIND_ASSERT_RETURN(str != NULL,ERR_NULL_POINTER);
@@ -147,11 +147,9 @@ s16_t wind_pipe_write(ppipe_s ppipe,s8_t *str,s16_t len)
     return cnt;
 }
 
-err_t wind_pipe_free(ppipe_s ppipe)
+w_err_t wind_pipe_free(ppipe_s ppipe)
 {
     pthread_s pthread;
-    s16_t cnt;
-    
     WIND_ASSERT_RETURN(ppipe != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(ppipe->magic == WIND_PIPE_MAGIC,ERR_INVALID_PARAM);
     pthread = wind_get_cur_proc();

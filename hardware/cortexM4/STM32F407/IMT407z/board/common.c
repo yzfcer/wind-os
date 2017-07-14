@@ -14,16 +14,16 @@
 *********************************************************************************/	  
 
 /****************************************************************************
-* 名    称: void GPIO_group_OUT(_gpio_group *group,u16_t outdata)
+* 名    称: void GPIO_group_OUT(_gpio_group *group,w_uint16_t outdata)
 * 功    能：使用随意16个IO口组成一个16位并行输出口
 * 入口参数：*group： 任意16个IO口为元素的结构体指针
             outdata: 16位输出数值
 * 返回参数：无
 * 说    明：outdata从高位开始赋值
 ****************************************************************************/
-void GPIO_group_OUT(_gpio_group *group,u16_t outdata)
+void GPIO_group_OUT(_gpio_group *group,w_uint16_t outdata)
 {
-  u8_t t;
+  w_uint8_t t;
 	for(t=0;t<16;t++)
     {               
         if((outdata&0x8000)>>15)  
@@ -74,7 +74,7 @@ void GPIO_group_OUT(_gpio_group *group,u16_t outdata)
 	  }
 }
 /****************************************************************************
-* 名    称: void GPIO_bits_OUT(GPIO_TypeDef* GPIOx, u8_t start_bit, u8_t bit_size,u16_t outdata)
+* 名    称: void GPIO_bits_OUT(GPIO_TypeDef* GPIOx, w_uint8_t start_bit, w_uint8_t bit_size,w_uint16_t outdata)
 * 功    能：位段操作实现，同一IO口的几位并行输出操作
 * 入口参数：* GPIOx：  对应的IO口
 *           start_bit: 并行输出的起始位
@@ -84,10 +84,10 @@ void GPIO_group_OUT(_gpio_group *group,u16_t outdata)
             bit_size:  1~16 
             bit_size<=16-start_bit
 ****************************************************************************/
-void GPIO_bits_OUT(GPIO_TypeDef* GPIOx, u8_t start_bit, u8_t bit_size,u16_t outdata)
+void GPIO_bits_OUT(GPIO_TypeDef* GPIOx, w_uint8_t start_bit, w_uint8_t bit_size,w_uint16_t outdata)
 {
-  u8_t i=0;
-	u16_t bu1=0;u16_t middata=1;
+  w_uint8_t i=0;
+	w_uint16_t bu1=0;w_uint16_t middata=1;
 
 	if( bit_size>(16-start_bit) ) 
      bit_size=16-start_bit;
@@ -128,7 +128,7 @@ __asm void INTX_ENABLE(void)
 }
 //设置栈顶地址
 //addr:栈顶地址
-__asm void MSR_MSP(u32_t addr) 
+__asm void MSR_MSP(w_uint32_t addr) 
 {
 	MSR MSP, r0 			//set Main Stack value
 	BX r14
@@ -136,8 +136,8 @@ __asm void MSR_MSP(u32_t addr)
 
 //利用系统滴答定时，编写的延时函数
 
-static u8_t  fac_us=0; //us延时倍乘数			   
-static u16_t fac_ms=0; //ms延时倍乘数,在ucos下,代表每个节拍的ms数
+static w_uint8_t  fac_us=0; //us延时倍乘数			   
+static w_uint16_t fac_ms=0; //ms延时倍乘数,在ucos下,代表每个节拍的ms数
 
 
 			   
@@ -148,7 +148,7 @@ static u16_t fac_ms=0; //ms延时倍乘数,在ucos下,代表每个节拍的ms数
 void delay_init(void)
 {
 #ifdef OS_CRITICAL_METHOD 	//如果OS_CRITICAL_METHOD定义了,说明使用ucosII了.
-	u32_t reload;
+	w_uint32_t reload;
 #endif
  	SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK_Div8);
 	fac_us=SYSCLK/8;		//不论是否使用ucos,fac_us都需要使用
@@ -162,7 +162,7 @@ void delay_init(void)
 	SysTick->LOAD=reload; 	//每1/OS_TICKS_PER_SEC秒中断一次	
 	SysTick->CTRL|=SysTick_CTRL_ENABLE_Msk;   	//开启SYSTICK
 #else
-	fac_ms=(u16_t)fac_us*1000;//非ucos下,代表每个ms需要的systick时钟数   
+	fac_ms=(w_uint16_t)fac_us*1000;//非ucos下,代表每个ms需要的systick时钟数   
 #endif
 }								    
 
@@ -170,11 +170,11 @@ void delay_init(void)
 #ifdef OS_CRITICAL_METHOD 	//如果OS_CRITICAL_METHOD定义了,说明使用ucosII了.
 //延时nus
 //nus:要延时的us数.		    								   
-void delay_us(u32_t nus)
+void delay_us(w_uint32_t nus)
 {		
-	u32_t ticks;
-	u32_t told,tnow,tcnt=0;
-	u32_t reload=SysTick->LOAD;	//LOAD的值	    	 
+	w_uint32_t ticks;
+	w_uint32_t told,tnow,tcnt=0;
+	w_uint32_t reload=SysTick->LOAD;	//LOAD的值	    	 
 	ticks=nus*fac_us; 			//需要的节拍数	  		 
 	tcnt=0;
 	OSSchedLock();				//阻止ucos调度，防止打断us延时
@@ -194,7 +194,7 @@ void delay_us(u32_t nus)
 }
 //延时nms
 //nms:要延时的ms数
-void delay_ms(u16_t nms)
+void delay_ms(w_uint16_t nms)
 {	
 		if(OSRunning==OS_TRUE&&OSLockNesting==0)//如果os已经在跑了	   
 	{		  
@@ -204,15 +204,15 @@ void delay_ms(u16_t nms)
 		}
 		nms%=fac_ms;				//ucos已经无法提供这么小的延时了,采用普通方式延时    
 	}
-	delay_us((u32_t)(nms*1000));		//普通方式延时 
+	delay_us((w_uint32_t)(nms*1000));		//普通方式延时 
 }
 #else  //不用ucos时
 //延时nus
 //nus为要延时的us数.	
 //注意:nus的值,不要大于798915us
-void delay_us(u32_t nus)
+void delay_us(w_uint32_t nus)
 {		
-	u32_t temp;	    	 
+	w_uint32_t temp;	    	 
 	SysTick->LOAD=nus*fac_us; //时间加载	  		 
 	SysTick->VAL=0x00;        //清空计数器
 	SysTick->CTRL|=SysTick_CTRL_ENABLE_Msk ;          //开始倒数 
@@ -230,10 +230,10 @@ void delay_us(u32_t nus)
 //nms<=0xffffff*8*1000/SYSCLK
 //SYSCLK单位为Hz,nms单位为ms
 //对168M条件下,nms<=798ms 
-void delay_xms(u16_t nms)
+void delay_xms(w_uint16_t nms)
 {	 		  	  
-	u32_t temp;		   
-	SysTick->LOAD=(u32_t)nms*fac_ms;//时间加载(SysTick->LOAD为24bit)
+	w_uint32_t temp;		   
+	SysTick->LOAD=(w_uint32_t)nms*fac_ms;//时间加载(SysTick->LOAD为24bit)
 	SysTick->VAL =0x00;           //清空计数器
 	SysTick->CTRL|=SysTick_CTRL_ENABLE_Msk ;          //开始倒数  
 	do
@@ -246,11 +246,11 @@ void delay_xms(u16_t nms)
 } 
 //延时nms 
 //nms:0~65535
-void delay_ms(u16_t nms)
+void delay_ms(w_uint16_t nms)
 {	 	 
-	u8_t repeat=nms/540;	//这里用540,是考虑到某些客户可能超频使用,
+	w_uint8_t repeat=nms/540;	//这里用540,是考虑到某些客户可能超频使用,
 						//比如超频到248M的时候,delay_xms最大只能延时541ms左右了
-	u16_t remain=nms%540;
+	w_uint16_t remain=nms%540;
 	while(repeat)
 	{
 		delay_xms(540);

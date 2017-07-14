@@ -35,7 +35,7 @@ extern "C" {
 
 
 /********************************************内部函数定义*********************************************/
-static err_t wind_thread_output(pthread_s pthread)
+static w_err_t wind_thread_output(pthread_s pthread)
 {
     WIND_ASSERT_RETURN(pthread != NULL,ERR_NULL_POINTER);
     wind_printf("proc name:%s\r\n",pthread->name);
@@ -55,7 +55,7 @@ static err_t wind_thread_output(pthread_s pthread)
 /********************************************全局函数定义**********************************************/
 
 
-err_t cmd_proc_show_list_main(s32_t argc,char **argv)
+w_err_t cmd_proc_show_list_main(w_int32_t argc,char **argv)
 {
     pnode_s node = g_core.pcblist.head;
     pthread_s pthread;
@@ -70,7 +70,7 @@ err_t cmd_proc_show_list_main(s32_t argc,char **argv)
     return ERR_OK;
 }
 
-err_t cmd_proc_show_obj_main(s32_t argc,char **argv)
+w_err_t cmd_proc_show_obj_main(w_int32_t argc,char **argv)
 {
     pthread_s pthread = wind_get_proc_byname(argv[0]);
     WIND_ASSERT_RETURN(pthread != NULL,ERR_NULL_POINTER);

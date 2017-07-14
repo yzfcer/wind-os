@@ -29,9 +29,9 @@
 #ifdef c_plusplus__
 extern {
 #endif
-#define MEM_B(addr) (*((u8_t *)(addr)))//从给定的地址上获取一个字节
-#define MEM_W(addr) (*((u16_t *)(addr)))//从给定的地址上获取一个字
-#define MEM_DW(addr) (*(u32_t *)(addr))//从给定的地址上获取一个双字
+#define MEM_B(addr) (*((w_uint8_t *)(addr)))//从给定的地址上获取一个字节
+#define MEM_W(addr) (*((w_uint16_t *)(addr)))//从给定的地址上获取一个字
+#define MEM_DW(addr) (*(w_uint32_t *)(addr))//从给定的地址上获取一个双字
 
 #define MAX(x, y) (((x) > (y))?(x):(y))
 #define MAX3(x, y, z) MAX(MAX(x,y),z)
@@ -49,25 +49,25 @@ extern {
             
 
 //获得结构体中一个字段的偏移量
-#define FPOS( type, field ) ((u32_t) &((type *)0)->field)
+#define FPOS( type, field ) ((w_uint32_t) &((type *)0)->field)
 //得到一个结构体中的某个字段的长度
 #define FSIZ(type,field) sizeof(((type *)0)->field)
 
 //按照LSB格式把两个字节转化为一个u16_t
-#define FLIPW( ray ) ( (((u16_t) (ray)[0]) * 256) + (ray)[1] )
+#define FLIPW( ray ) ( (((w_uint16_t) (ray)[0]) * 256) + (ray)[1] )
 
 //按照LSB格式把一个u16_t转化为两个字节
 #define FLOPW( ray, val ) \
 (ray)[0] = ((val) / 256); \
 (ray)[1] = ((val) & 0xFF)
 
-//得到一个变量的地址（u16_t宽度）
-#define B_PTR( var ) ( (u8_t *) (void *) &(var) )
-#define W_PTR( var ) ( (u16_t *) (void *) &(var) )
+//得到一个变量的地址（w_uint16_t宽度）
+#define B_PTR( var ) ( (w_uint8_t *) (void *) &(var) )
+#define W_PTR( var ) ( (w_uint16_t *) (void *) &(var) )
 
 //得到一个字的高位和低位字节
-#define WORD_LO(x) ((u8_t) ((u16_t)(x) & 0xff))
-#define WORD_HI(x) ((u8_t) ((u16_t)(x) >> 8))
+#define WORD_LO(x) ((w_uint8_t) ((w_uint16_t)(x) & 0xff))
+#define WORD_HI(x) ((w_uint8_t) ((w_uint16_t)(x) >> 8))
 
 //返回一个比X大的最接近的8的倍数
 #define RND8( x ) ((((x) + 7) / 8 ) * 8 )
@@ -95,7 +95,7 @@ extern {
 
 //返回一个无符号数n尾的值MOD_BY_POWER_OF_TWO(X,n)=X%(2^n)
 #define MOD_BY_POWER_OF_TWO( val, mod_by ) \
-((u32_t)(val) & (u32_t)((mod_by)-1))
+((w_uint32_t)(val) & (w_uint32_t)((mod_by)-1))
 
 
 #ifdef _DEBUG

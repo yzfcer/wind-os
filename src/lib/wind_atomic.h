@@ -41,7 +41,7 @@ extern "C" {
 /*********************************************结构体定义***********************************************/
 typedef struct __atomic_t
 {
-    volatile u32_t value;
+    volatile w_uint32_t value;
 }atomic_t;
 
 /********************************************全局变量申明**********************************************/
@@ -52,11 +52,11 @@ typedef struct __atomic_t
 void atomic_inc(atomic_t atom);
 void atomic_dec(atomic_t atom);
 
-void atomic_add(atomic_t atom,u32_t va);
-void atomic_minus(atomic_t atom,u32_t va);
+void atomic_add(atomic_t atom,w_uint32_t va);
+void atomic_minus(atomic_t atom,w_uint32_t va);
 
-void atomic_set(atomic_t atom,u32_t value);
-void atomic_get(atomic_t atom,u32_t *value);
+void atomic_set(atomic_t atom,w_uint32_t value);
+void atomic_get(atomic_t atom,w_uint32_t *value);
 
 
 

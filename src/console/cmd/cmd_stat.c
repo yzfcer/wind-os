@@ -34,9 +34,9 @@
 
 
 
-static void core_stat_convert_num(s8_t *buf,u32_t num)
+static void core_stat_convert_num(w_int8_t *buf,w_uint32_t num)
 {
-    u8_t i = 0;
+    w_uint8_t i = 0;
     if(num >= 10000)
         buf[i++] = (num/10000)%10 + '0';
     if(num >= 1000)
@@ -47,10 +47,10 @@ static void core_stat_convert_num(s8_t *buf,u32_t num)
         buf[i++] = (num/10)%10 + '0';
     buf[i++] = num%10 + '0';
 }
-static void core_output_srcusage(u16_t opt)
+static void core_output_srcusage(w_uint16_t opt)
 {
-    s8_t str[STAT_NAME_LEN + 33];
-    s16_t i,len;
+    w_int8_t str[STAT_NAME_LEN + 33];
+    w_int16_t i,len;
     wind_memset(str,' ',STAT_NAME_LEN + 33);
     str[STAT_NAME_LEN + 32] = 0;
     len = wind_strlen(G_STAT[opt].name);
@@ -63,10 +63,10 @@ static void core_output_srcusage(u16_t opt)
     core_stat_convert_num(&str[STAT_NAME_LEN + 24],G_STAT[opt].err);
     wind_printf("%s\r\n",str);
 }
-static void core_stat_show_proc(u16_t opt)
+static void core_stat_show_proc(w_uint16_t opt)
 {
-    s8_t str[STAT_NAME_LEN + 33];
-    s16_t i;
+    w_int8_t str[STAT_NAME_LEN + 33];
+    w_int16_t i;
     wind_memset(str,0,STAT_NAME_LEN + 33);
     //str[STAT_NAME_LEN + 24] = 0;
     wind_memcpy(str,"source",6);
@@ -98,13 +98,13 @@ static void core_stat_show_proc(u16_t opt)
 
 
 
-err_t cmd_stat_show_mpool_main(s32_t argc,char **argv)
+w_err_t cmd_stat_show_mpool_main(w_int32_t argc,char **argv)
 {
     core_stat_show_proc(0xffff);
     return ERR_OK;
 }
 
-err_t cmd_stat_show_cpuusage_main(s32_t argc,char **argv)
+w_err_t cmd_stat_show_cpuusage_main(w_int32_t argc,char **argv)
 {
     wind_printf("cpu usage persage:%%%d\r\n",WIND_CPU_USAGE);
     return ERR_OK;    

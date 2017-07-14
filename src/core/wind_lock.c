@@ -71,7 +71,7 @@ plock_s wind_lock_create(const char *name)
 }
 
 //试图释放一个互斥锁，如果有线程被阻塞，则释放将终止
-err_t wind_lock_tryfree(plock_s plock)
+w_err_t wind_lock_tryfree(plock_s plock)
 {
 
     WIND_ASSERT_RETURN(plock != NULL,ERR_NULL_POINTER);
@@ -84,7 +84,7 @@ err_t wind_lock_tryfree(plock_s plock)
 }
 
 //强制性释放互斥锁，并把所有的被该互斥锁阻塞的线程全部激活
-err_t wind_lock_free(plock_s plock)
+w_err_t wind_lock_free(plock_s plock)
 {
     //plock_s plock;
     pnode_s pnode;
@@ -108,7 +108,7 @@ err_t wind_lock_free(plock_s plock)
 }
 
 //试图锁定一个互斥锁，如果已经被锁定，则线程将被挂起
-err_t wind_lock_close(plock_s plock)
+w_err_t wind_lock_close(plock_s plock)
 {
     pnode_s pnode;
     pthread_s pthread;
@@ -134,7 +134,7 @@ err_t wind_lock_close(plock_s plock)
 }
 
 //试图打开一个互斥锁，如果有线程被阻塞，则优先激活线程
-err_t wind_lock_open(plock_s plock)
+w_err_t wind_lock_open(plock_s plock)
 {
     pnode_s pnode;
     pthread_s pthread;

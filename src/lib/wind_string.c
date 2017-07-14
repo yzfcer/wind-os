@@ -34,7 +34,7 @@ char* wind_strcpy(char *dest,const char *src)
     return tmp;
 }
 
-char* wind_strncpy(char *dest,const char *src,u32_t count)
+char* wind_strncpy(char *dest,const char *src,w_uint32_t count)
 {
     char *tmp = dest;
 
@@ -58,7 +58,7 @@ char * wind_strcat(char * dest, const char * src)
 }
 
 
-char* wind_strncat(char *dest, const char *src, u32_t count)
+char* wind_strncat(char *dest, const char *src, w_uint32_t count)
 {
     char *tmp = dest;
 
@@ -76,7 +76,7 @@ char* wind_strncat(char *dest, const char *src, u32_t count)
     return tmp;
 }
 
-s32_t wind_strcmp(const char *cs,const char *ct)
+w_int32_t wind_strcmp(const char *cs,const char *ct)
 {
     char __res;
     while (1) {
@@ -86,7 +86,7 @@ s32_t wind_strcmp(const char *cs,const char *ct)
     return __res;
 }
 
-s32_t wind_strncmp(const char* cs,const char * ct,u32_t count)
+w_int32_t wind_strncmp(const char* cs,const char * ct,w_uint32_t count)
 {
     char __res = 0;
 
@@ -118,7 +118,7 @@ char * wind_strrchr(const char * s, int c)
 }
 
 
-s16_t wind_strlen(const char *s)
+w_int16_t wind_strlen(const char *s)
 {
     const char *sc;
 
@@ -126,7 +126,7 @@ s16_t wind_strlen(const char *s)
     return sc - s;
 }
 
-u32_t wind_strnlen(const char * s, u32_t count)
+w_uint32_t wind_strnlen(const char * s, w_uint32_t count)
 {
     const char *sc;
 
@@ -135,11 +135,11 @@ u32_t wind_strnlen(const char * s, u32_t count)
 }
 
 
-u32_t wind_strspn(const char *s, const char *accept)
+w_uint32_t wind_strspn(const char *s, const char *accept)
 {
     const char *p;
     const char *a;
-    u32_t count = 0;
+    w_uint32_t count = 0;
 
     for (p = s; *p != '\0'; ++p) {
         for (a = accept; *a != '\0'; ++a) {
@@ -169,7 +169,7 @@ char * wind_strpbrk(const char * cs,const char * ct)
 
 
 
-void * wind_memset(void * s,char c,u32_t count)
+void * wind_memset(void * s,char c,w_uint32_t count)
 {
     char *xs = (char *) s;
 
@@ -189,7 +189,7 @@ char * wind_bcopy(const char * src, char * dest, int count)
     return dest;
 }
 
-void * wind_memcpy(void * dest,const void *src,u32_t count)
+void * wind_memcpy(void * dest,const void *src,w_uint32_t count)
 {
     char *tmp = (char *) dest, *s = (char *) src;
 
@@ -200,7 +200,7 @@ void * wind_memcpy(void * dest,const void *src,u32_t count)
 }
 
 
-void * wind_memmove(void * dest,const void *src,u32_t count)
+void * wind_memmove(void * dest,const void *src,w_uint32_t count)
 {
     char *tmp, *s;
 
@@ -222,9 +222,9 @@ void * wind_memmove(void * dest,const void *src,u32_t count)
     return dest;
 }
 
-int wind_memcmp(const void * cs,const void * ct,u32_t count)
+int wind_memcmp(const void * cs,const void * ct,w_uint32_t count)
 {
-    const u8_t *su1, *su2;
+    const w_uint8_t *su1, *su2;
     signed char res = 0;
 
     for( su1 = cs, su2 = ct; 0 < count; ++su1, ++su2, count--)
@@ -236,9 +236,9 @@ int wind_memcmp(const void * cs,const void * ct,u32_t count)
 /*
  * find the first occurrence of byte 'c', or 1 past the area if none
  */
-void * wind_memscan(void * addr, int c, u32_t size)
+void * wind_memscan(void * addr, int c, w_uint32_t size)
 {
-    u8_t * p = (u8_t *) addr;
+    w_uint8_t * p = (w_uint8_t *) addr;
 
     while (size) {
         if (*p == c)

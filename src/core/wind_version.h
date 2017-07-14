@@ -31,9 +31,9 @@ extern "C" {
 #endif
 #define WIND_CORE_VERSION "1.0.22"
 
-const s8_t *wind_get_core_version_info(void);
+const w_int8_t *wind_get_core_version_info(void);
 
-const s8_t *wind_get_core_version(void);
+const w_int8_t *wind_get_core_version(void);
 
 void wind_output_product_info(void);
 

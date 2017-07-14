@@ -36,7 +36,7 @@ extern "C" {
 console_s g_ctrl[WIND_CONSOLE_COUNT];
 cmd_global_s *g_cmd_global;
 //临时使用的数据读取函数
-static err_t core_get_cmd_ch(s8_t *ch)
+static w_err_t core_get_cmd_ch(w_int8_t *ch)
 {
     //*ch = uart_getchar();
     //wind_getchar(ch);
@@ -56,9 +56,9 @@ static void show_cmd_list(void)
     }
 }
 
-static s32_t stringlenth(char *str)
+static w_int32_t stringlenth(char *str)
 {
-    s32_t i;
+    w_int32_t i;
     for(i = 0;i < 65535;i ++)
     {
         if(str[i] == 0)
@@ -75,7 +75,7 @@ char* stringcopy(char *dest,const char *src)
     return tmp;
 }
 
-void * memoryset(void * s,char c,u32_t count)
+void * memoryset(void * s,char c,w_uint32_t count)
 {
     char *xs = (char *) s;
 
@@ -88,7 +88,7 @@ void * memoryset(void * s,char c,u32_t count)
 //把大写字母转换成小写
 static void wind_cmd_tolower(char *cmdstr)
 {
-    u16_t i = 0;
+    w_uint16_t i = 0;
     while((cmdstr[i] != ' ') && (cmdstr[i] != 0))
     {
         if((cmdstr[i] >= 'A') && (cmdstr[i] <= 'Z'))
@@ -97,7 +97,7 @@ static void wind_cmd_tolower(char *cmdstr)
     }
 }
 
-s32_t is_match_cmd(char *cmdstr,char*cmd)
+w_int32_t is_match_cmd(char *cmdstr,char*cmd)
 {
     int i;
     int len = stringlenth(cmd);
@@ -108,9 +108,9 @@ s32_t is_match_cmd(char *cmdstr,char*cmd)
     }
     return 1;
 }
-s32_t is_string_equal(char *dest,char *src)
+w_int32_t is_string_equal(char *dest,char *src)
 {
-    s32_t i = 0;
+    w_int32_t i = 0;
     WIND_DEBUG("%S<->%S\r\n",dest,src);
     do
     {
@@ -124,10 +124,10 @@ s32_t is_string_equal(char *dest,char *src)
 }
 
 #if 0
-static s32_t console_read(char *buf,s32_t len)
+static w_int32_t console_read(char *buf,w_int32_t len)
 {
     char buff[512];
-    s32_t lenth,i;
+    w_int32_t lenth,i;
     wind_memset(buff,0,512);
     lenth = stringlenth(buff);
     for(i = 0;i < lenth;i ++)
@@ -136,7 +136,7 @@ static s32_t console_read(char *buf,s32_t len)
     return i;
 }
 #else
-static s32_t console_read(char *buf,s32_t len)
+static w_int32_t console_read(char *buf,w_int32_t len)
 {
     core_get_cmd_ch(buf);
     return 1;
@@ -163,7 +163,7 @@ static void wind_console_echoback(console_s *ctrl,char ch)
         CONSOLE_OUT("%c",ch);
 }
 
-static s32_t is_valid_ch(char ch)
+static w_int32_t is_valid_ch(char ch)
 {
     if((ch >= 0x20) && (ch <= 0x7e))
         return 1;
@@ -174,9 +174,9 @@ static s32_t is_valid_ch(char ch)
     return 0;
 }
 
-static init_console_stat(console_s *ctlobj,s32_t flag)
+static init_console_stat(console_s *ctlobj,w_int32_t flag)
 {
-    s32_t i;
+    w_int32_t i;
     for(i = 0;i < WIND_CMD_MAX_LEN;i++)
         ctlobj->cmdstr[i] = 0;    
     for(i = 0;i < WIND_CMD_MAX_LEN;i++)
@@ -205,7 +205,7 @@ int find_param_end(char *str,int offset,int len)
 }
 static void get_param(console_s *ctrl,char *cmd)
 {
-    s32_t len,strlen,i,offset;
+    w_int32_t len,strlen,i,offset;
     cmd_param_s *param = &ctrl->param;
     for(i = 0;i < CMD_PARAM_CNT;i ++)
     {
@@ -235,9 +235,9 @@ static void get_param(console_s *ctrl,char *cmd)
     }
 }
 //检查用户名是否正确
-static err_t wind_check_user(char *user)
+static w_err_t wind_check_user(char *user)
 {
-    err_t err;
+    w_err_t err;
     err = is_string_equal(user,"root");
     if(err == 0)
     {
@@ -249,9 +249,9 @@ static err_t wind_check_user(char *user)
         return ERR_COMMAN;
 }
 
-static err_t wind_check_pwd(char *pwd)
+static w_err_t wind_check_pwd(char *pwd)
 {
-    err_t err;
+    w_err_t err;
     err = is_string_equal(pwd,"wind");
     if(err)
         return ERR_OK;
@@ -276,10 +276,10 @@ cmd_s *get_matched_cmd(console_s *ctrl)
     return NULL;
 }
 //分析命令字符串
-err_t wind_decode_cmd(console_s *ctrl)
+w_err_t wind_decode_cmd(console_s *ctrl)
 {
-    u16_t len,i;
-    err_t err;
+    w_uint16_t len,i;
+    w_err_t err;
     cmd_param_s *param;
     cmd_s *pcmd;// = ctrl->cmd_list.head;
     param = &ctrl->param;
@@ -392,7 +392,7 @@ void console_framework_init(console_s *ctlobj)
     g_cmd_global = cgl;
     show_cmd_list();
 }
-err_t wind_cmd_register(cmd_global_s *cgl,cmd_s *cmd,int cnt)
+w_err_t wind_cmd_register(cmd_global_s *cgl,cmd_s *cmd,int cnt)
 {
     int i;
     cmd_global_s *cg = cgl;
@@ -423,11 +423,11 @@ cmd_s *wind_get_cmdlist(void)
     return g_cmd_global->head;
 }
 
-err_t consoleProc(s32_t argc,char **argv)
+w_err_t consoleProc(w_int32_t argc,char **argv)
 {
-    s32_t len;
+    w_int32_t len;
     console_s *ctrl;
-    s32_t i;
+    w_int32_t i;
     char ch;
 
     if(argc >= WIND_CONSOLE_COUNT)
@@ -493,7 +493,7 @@ err_t consoleProc(s32_t argc,char **argv)
 }
 
 #define CTRL_STK_SIZE 2048
-static stack_t ctrlstk[CTRL_STK_SIZE];//主任务堆栈
+static w_stack_t ctrlstk[CTRL_STK_SIZE];//主任务堆栈
 pthread_s lunch_console(void)
 {
     pthread_s pthr = wind_thread_create("console",PRIO_LOW,consoleProc,

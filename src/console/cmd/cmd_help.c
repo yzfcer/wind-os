@@ -49,7 +49,7 @@ static const char * const help_details[] =
 
 /********************************************全局函数定义**********************************************/
 
-static err_t cmd_help_main(s32_t argc,char **argv)
+static w_err_t cmd_help_main(w_int32_t argc,char **argv)
 {
     cmd_s *cmdlist = wind_get_cmdlist();
     if(argc < 1)

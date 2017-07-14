@@ -28,16 +28,16 @@
 #include "wind_stack.h"
 #include "wind_os_hwif.h"
 
-static u32_t _empty_num = 0;
-static u32_t write_full_num = 0;
+static w_uint32_t _empty_num = 0;
+static w_uint32_t write_full_num = 0;
 
-static err_t defaultreadempty(pstack_s pstk,void *data)
+static w_err_t defaultreadempty(pstack_s pstk,void *data)
 {
     pstk->emptycnt ++;
     return STACK_EMPTY;
 }
 
-static err_t defaultwritefull(pstack_s pstk,void *data)
+static w_err_t defaultwritefull(pstack_s pstk,void *data)
 {
     pstk->fullcnt ++;
     return STACK_FULL;
@@ -63,11 +63,11 @@ static err_t defaultwritefull(pstack_s pstk,void *data)
 **------------------------------------------------------------------------------------------------------
 ********************************************************************************************************/
 
-err_t wind_stack_create(void *Buf,
-                          u32_t lenth,
-                          u16_t DataWid,
-                          err_t (* ReadEmpty)(pstack_s pstk),
-                          err_t (* WriteFull)(pstack_s pstk)
+w_err_t wind_stack_create(void *Buf,
+                          w_uint32_t lenth,
+                          w_uint16_t DataWid,
+                          w_err_t (* ReadEmpty)(pstack_s pstk),
+                          w_err_t (* WriteFull)(pstack_s pstk)
                           )
 {
     pstack_s pstk;
@@ -85,7 +85,7 @@ err_t wind_stack_create(void *Buf,
         else
             pstk->WriteFull = defaultwritefull;
          // 计算堆栈可以存储的数据数目     
-        pstk->MaxData = (lenth - (u32_t)(((pstack_s)0)->Buf)) / sizeof(STACK_DATA_TYPE);
+        pstk->MaxData = (lenth - (w_uint32_t)(((pstack_s)0)->Buf)) / sizeof(STACK_DATA_TYPE);
                                        
         pstk->Top = pstk->Buf + pstk->MaxData;               // 计算数据缓冲的结束地址 
         pstk->Out = pstk->Buf;
@@ -122,13 +122,13 @@ err_t wind_stack_create(void *Buf,
 ** 日　期:
 **------------------------------------------------------------------------------------------------------
 ********************************************************************************************************/
-err_t wind_stack_read(void *Buf,void *Ret)
+w_err_t wind_stack_read(void *Buf,void *Ret)
 {
-    err_t err;
-    s8_t i;
+    w_err_t err;
+    w_int8_t i;
     pstack_s pstk;
-    //u8_t *pEnd;
-    u8_t *ret = (u8_t *)Ret;
+    //w_uint8_t *pEnd;
+    w_uint8_t *ret = (w_uint8_t *)Ret;
     err = STACK_ERR;
     if (Buf != NULL)                                            /* 堆栈是否有效 */
     {                                                           /* 有效 */
@@ -182,13 +182,13 @@ err_t wind_stack_read(void *Buf,void *Ret)
 
 #if EN_STACK_WRITE > 0
 
-err_t wind_stack_write(void *Buf, void *Data)
+w_err_t wind_stack_write(void *Buf, void *Data)
 {
-    err_t err;
-    s8_t i;
+    w_err_t err;
+    w_int8_t i;
     pstack_s pstk;
-    //u8_t *pEnd;
-    u8_t *data = (u8_t *)Data;
+    //w_uint8_t *pEnd;
+    w_uint8_t *data = (w_uint8_t *)Data;
     err = STACK_ERR;
     if (Buf != NULL)                                                    /* 堆栈是否有效 */
     {
@@ -242,9 +242,9 @@ err_t wind_stack_write(void *Buf, void *Data)
 
 #if EN_STACK_NDATA > 0
 
-u16_t wind_stack_datalen(void *Buf)
+w_uint16_t wind_stack_datalen(void *Buf)
 {
-    u16_t temp;
+    w_uint16_t temp;
     temp = 0;                                                   /* 堆栈无效返回0 */
     if (Buf != NULL)
     {
@@ -278,9 +278,9 @@ u16_t wind_stack_datalen(void *Buf)
 
 #if EN_stack_sIZE 
 
-u16_t wind_stack_size(void *Buf)
+w_uint16_t wind_stack_size(void *Buf)
 {
-    u16_t temp;
+    w_uint16_t temp;
     temp = 0;                                                   /* 堆栈无效返回0 */
     if (Buf != NULL)
     {

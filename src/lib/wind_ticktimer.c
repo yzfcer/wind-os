@@ -45,7 +45,7 @@ static pttimer_s ttimer_malloc(void)
     pttimer->running = B_FALSE;
     return pttimer;
 }
-err_t ttimer_free(pttimer_s ttimer)
+w_err_t ttimer_free(pttimer_s ttimer)
 {
     if(ttimer == NULL)
         return ERR_NULL_POINTER;
@@ -61,7 +61,7 @@ err_t ttimer_free(pttimer_s ttimer)
 }
 
 
-pttimer_s wind_ttimer_create(u32_t ticks,void (*timercallback)(void),bool_t run)
+pttimer_s wind_ttimer_create(w_uint32_t ticks,void (*timercallback)(void),w_bool_t run)
 {
     pttimer_s ttimer;
     pnode_s pnode;
@@ -99,7 +99,7 @@ pttimer_s wind_ttimer_create(u32_t ticks,void (*timercallback)(void),bool_t run)
     return ttimer; 
 }
 
-err_t wind_ttimer_start(pttimer_s pttimer)
+w_err_t wind_ttimer_start(pttimer_s pttimer)
 {
     if(pttimer == NULL)
         return ERR_NULL_POINTER;
@@ -110,7 +110,7 @@ err_t wind_ttimer_start(pttimer_s pttimer)
     return ERR_OK;
 }
 
-err_t wind_ttimer_stop(pttimer_s pttimer)
+w_err_t wind_ttimer_stop(pttimer_s pttimer)
 {
     if(pttimer == NULL)
         return ERR_NULL_POINTER;
@@ -120,7 +120,7 @@ err_t wind_ttimer_stop(pttimer_s pttimer)
     return ERR_OK;
 }
 
-err_t wind_ttimer_free(pttimer_s pttimer)
+w_err_t wind_ttimer_free(pttimer_s pttimer)
 {
     pnode_s pnode;
     if(pttimer == NULL)
@@ -141,7 +141,7 @@ err_t wind_ttimer_free(pttimer_s pttimer)
     return ERR_OK;
 }
 
-err_t wind_ttimer_setticks(pttimer_s pttimer,u32_t ticks)
+w_err_t wind_ttimer_setticks(pttimer_s pttimer,w_uint32_t ticks)
 {
     if(pttimer == NULL)
         return ERR_NULL_POINTER;

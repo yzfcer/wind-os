@@ -45,28 +45,28 @@ typedef struct __pool_s
 //内存池的头部信息结构体
 typedef struct __mpoolHead_s
 {
-    u32_t magic;//内存池被成功建立的标志
+    w_uint32_t magic;//内存池被成功建立的标志
     void *head;//内存池的头部位置
     const char *name;
-    u32_t len;//内存池的实际可用空间大小
-    u32_t itemsize;//每个块的大小
-    u32_t num;//分成的内存块的数量
-    u32_t used;//已经使用的内存块的数量
+    w_uint32_t len;//内存池的实际可用空间大小
+    w_uint32_t itemsize;//每个块的大小
+    w_uint32_t num;//分成的内存块的数量
+    w_uint32_t used;//已经使用的内存块的数量
     ppool_s free;//空闲块的指针
     ppool_s last;//最后一个空闲块的指针
 }mpoolHead_s,*pmpoolHead_s;
 
 #define WIND_MPOOL_ALIGN(x) ((((x)+3)/4)*4)
 //定义内存池的方法
-#define WIND_MPOOL(pool,num,size) u8_t pool[sizeof(mpoolHead_s) + num * (WIND_MPOOL_ALIGN(size) + sizeof(u32_t))]
+#define WIND_MPOOL(pool,num,size) w_uint8_t pool[sizeof(mpoolHead_s) + num * (WIND_MPOOL_ALIGN(size) + sizeof(w_uint32_t))]
 
-err_t wind_mpool_show(s8_t *name,void *pool);
+w_err_t wind_mpool_show(w_int8_t *name,void *pool);
 
-err_t wind_mpool_create(const char *name,void *mem,u32_t msize,u32_t itemsize);
+w_err_t wind_mpool_create(const char *name,void *mem,w_uint32_t msize,w_uint32_t itemsize);
 
 void *wind_mpool_alloc(void *mem);
 
-err_t wind_mpool_free(void *mem,void *block);
+w_err_t wind_mpool_free(void *mem,void *block);
 
 
 #ifdef __cplusplus

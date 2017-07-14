@@ -42,7 +42,7 @@ extern "C" {
 
 
 /********************************************全局函数定义**********************************************/
-static err_t cmd_echo_main(s32_t argc,char **argv)
+static w_err_t cmd_echo_main(w_int32_t argc,char **argv)
 {
     char *str;
     if(argc < 1)

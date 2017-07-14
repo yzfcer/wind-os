@@ -26,22 +26,22 @@
 #include "wind_types.h"
 #include "wind_version.h"
 #include "wind_debug.h"
-const s8_t versioninfo[] = \
+const w_int8_t versioninfo[] = \
 "yzfcer@163.com,thank you for your support!\r\n";
 
-u8_t *g_wind_logo[4] = 
+w_uint8_t *g_wind_logo[4] = 
 {
     " _    __    _",
     " \\\\  //\\\\  // ",
     "  \\\\//  \\\\//  ",
     "   \\/    \\/   "   
 };
-const s8_t *wind_get_core_version_info(void)
+const w_int8_t *wind_get_core_version_info(void)
 {
     return versioninfo;
 }
 
-const s8_t *wind_get_core_version(void)
+const w_int8_t *wind_get_core_version(void)
 {
     return WIND_CORE_VERSION;
 }
@@ -56,7 +56,7 @@ static void output_logo(void)
 
 void wind_output_product_info(void)
 {
-    const s8_t *str;
+    const w_int8_t *str;
     WIND_INFO("\r\n\r\nwind_os version:%s\r\n",wind_get_core_version());
     output_logo();
     WIND_INFO("core created on:%s @ chengdu,sichuan province,china.\r\n",__DATE__);

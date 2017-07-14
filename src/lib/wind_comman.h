@@ -27,9 +27,9 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-s32_t wind_convert_str2s32_t(s8_t *str);
+w_int32_t wind_convert_str2s32_t(w_int8_t *str);
 
-u32_t wind_convert_str2u32_t(s8_t *str);
+w_uint32_t wind_convert_str2u32_t(w_int8_t *str);
 
 
 

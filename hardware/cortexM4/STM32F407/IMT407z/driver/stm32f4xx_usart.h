@@ -56,7 +56,7 @@ typedef struct
   uint32_t USART_BaudRate;            /*!< This member configures the USART communication baud rate.
                                            The baud rate is computed using the following formula:
                                             - IntegerDivider = ((PCLKx) / (8 * (OVR8+1) * (USART_InitStruct->USART_BaudRate)))
-                                            - FractionalDivider = ((IntegerDivider - ((u32_t) IntegerDivider)) * 8 * (OVR8+1)) + 0.5 
+                                            - FractionalDivider = ((IntegerDivider - ((w_uint32_t) IntegerDivider)) * 8 * (OVR8+1)) + 0.5 
                                            Where OVR8 is the "oversampling by 8 mode" configuration bit in the CR1 register. */
 
   uint16_t USART_WordLength;          /*!< Specifies the number of data bits transmitted or received in a frame.

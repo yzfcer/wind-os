@@ -51,10 +51,10 @@ extern "C" {
 
 
 /********************************************全局函数申明**********************************************/
-void *wind_privateheap_alloc(u32_t size);
-//void *wind_private_calloc(u32_t blk,u32_t blksize);
+void *wind_privateheap_alloc(w_uint32_t size);
+//void *wind_private_calloc(w_uint32_t blk,w_uint32_t blksize);
 
-err_t wind_privateheap_free(void *ptr);
+w_err_t wind_privateheap_free(void *ptr);
 
 
 #endif//#if WIND_HEAP_SUPPORT > 0 && WIND_PRIVATE_HEAP_SUPPORT > 0

@@ -38,7 +38,7 @@ extern "C" {
 #define WIND_DEBUG_OUT_EN 0 //允许调试信息输出
 
 
-//void wind_printf(const s8_t *string,...);
+//void wind_printf(const w_int8_t *string,...);
 int wind_printf(const char *fmt, ...);
 //WIND_DEBUG
 #if WIND_DEBUG_OUT_EN

@@ -32,8 +32,8 @@
 #include "wind_debug.h"
 #if WIND_RTC_SUPPORT > 0
 datetime_s G_DATETIME;//当前日期和时间
-u8_t g_half_day = DAY_AM;//当前是上午还是下午
-static u8_t g_daysofmonth[12] = {31,28,31,30,31,30,31,31,30,31,30,31};
+w_uint8_t g_half_day = DAY_AM;//当前是上午还是下午
+static w_uint8_t g_daysofmonth[12] = {31,28,31,30,31,30,31,31,30,31,30,31};
 
 //-------------------------------------------------------------------------------------
 
@@ -101,7 +101,7 @@ static void hwrtc_get_datetime(void)
 }
 //-------------------------------------------------------------------------------------
 
-static u8_t is_leap(u16_t year)
+static w_uint8_t is_leap(w_uint16_t year)
 {
     if(year & 0x03)
         return ERR_OK;
@@ -111,7 +111,7 @@ static u8_t is_leap(u16_t year)
         return 1;
 }
 
-void wind_set_date(u16_t year,u8_t month,u8_t day)
+void wind_set_date(w_uint16_t year,w_uint8_t month,w_uint8_t day)
 {
     datetime_s *dt;
     dt = &G_DATETIME;
@@ -128,7 +128,7 @@ void wind_set_date(u16_t year,u8_t month,u8_t day)
     hwrtc_set_date();
 }
 
-void wind_set_time(u8_t hour,u8_t minute,u8_t second,u16_t msecond)
+void wind_set_time(w_uint8_t hour,w_uint8_t minute,w_uint8_t second,w_uint16_t msecond)
 {
     datetime_s *dt;
     dt = &G_DATETIME;
@@ -144,7 +144,7 @@ void wind_set_time(u8_t hour,u8_t minute,u8_t second,u16_t msecond)
     hwrtc_set_time();
 }
 
-void wind_set_datetime(u16_t year,u8_t month,u8_t day,u8_t hour,u8_t minute,u8_t second,u16_t msecond,week_e week,u8_t half_day)
+void wind_set_datetime(w_uint16_t year,w_uint8_t month,w_uint8_t day,w_uint8_t hour,w_uint8_t minute,w_uint8_t second,w_uint16_t msecond,week_e week,w_uint8_t half_day)
 {
     datetime_s *dt;
     dt = &G_DATETIME;
@@ -183,7 +183,7 @@ void wind_datetime_init(void)
 {
     //wind_set_datetime(2013,10,19,23,34,35,0,5,1);
 }
-err_t wind_copy_datetime(pdatetime_s desdt,pdatetime_s srcdt)
+w_err_t wind_copy_datetime(pdatetime_s desdt,pdatetime_s srcdt)
 {
     if(!desdt || !srcdt)
         return ERR_INVALID_PARAM;
@@ -202,7 +202,7 @@ err_t wind_copy_datetime(pdatetime_s desdt,pdatetime_s srcdt)
 
 void wind_second_inc(void)
 {
-    u8_t dayofmonth;
+    w_uint8_t dayofmonth;
     datetime_s *dt;
     dt = &G_DATETIME;
     wind_close_interrupt();

@@ -38,19 +38,19 @@ extern "C" {
 typedef struct tagTicktimer
 {
     //HANDLE handler;
-    bool_t used;
-    bool_t running;
-    u32_t count;
-    u32_t inittick;
+    w_bool_t used;
+    w_bool_t running;
+    w_uint32_t count;
+    w_uint32_t inittick;
     void (*timercallback)(void);
 }ttimer_s,*pttimer_s;
 
-err_t wind_ttimer_init(void);
-pttimer_s wind_ttimer_create(u32_t ticks,void (*timercallback)(void),bool_t run);
-err_t wind_ttimer_start(pttimer_s pttimer);
-err_t wind_ttimer_stop(pttimer_s pttimer);
-err_t wind_ttimer_free(pttimer_s pttimer);
-err_t wind_ttimer_setticks(pttimer_s pttimer,u32_t ticks);
+w_err_t wind_ttimer_init(void);
+pttimer_s wind_ttimer_create(w_uint32_t ticks,void (*timercallback)(void),w_bool_t run);
+w_err_t wind_ttimer_start(pttimer_s pttimer);
+w_err_t wind_ttimer_stop(pttimer_s pttimer);
+w_err_t wind_ttimer_free(pttimer_s pttimer);
+w_err_t wind_ttimer_setticks(pttimer_s pttimer,w_uint32_t ticks);
 extern void ticktimerhandler(void);//定时器入口
 
 

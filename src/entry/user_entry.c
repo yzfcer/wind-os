@@ -31,9 +31,9 @@
 */
 #include "wind_core_inc.h"
 //#include "apptest.h"
-stack_t appstk[20][512];
+w_stack_t appstk[20][512];
 
-err_t wind_main()
+w_err_t wind_main()
 {
     extern void listtest(void);
 #if 0

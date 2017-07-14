@@ -39,7 +39,7 @@
 #include "wind_assert.h"
 #include "wind_heap.h"
 //用来表示
-//bool_t wind_tick_init_flag = false;
+//w_bool_t wind_tick_init_flag = false;
 
 #define WIND_THREAD_PRIO_MIN_LIM 100//优先级的最小值
 #define WIND_THREAD_PRIO_MAX_LIM 30000//优先级的最大值
@@ -49,7 +49,7 @@
 static pthread_s pcb_malloc(prio_e priolevel)
 {
     pthread_s pthread;
-    //s16_t cnt,priolim = 0;
+    //w_int16_t cnt,priolim = 0;
 
     WIND_ASSERT_RETURN(priolevel < PRIO_SYS_LOW && priolevel > PRIO_ZERO,NULL);
     pthread = wind_core_alloc(STAT_PROC);
@@ -63,7 +63,7 @@ static pthread_s pcb_malloc(prio_e priolevel)
     return pthread;
 }
 
-err_t pcb_free(pthread_s pthread)
+w_err_t pcb_free(pthread_s pthread)
 {
     WIND_ASSERT_RETURN(pthread != NULL,ERR_NULL_POINTER);
     pthread->used = B_FALSE;
@@ -80,7 +80,7 @@ err_t pcb_free(pthread_s pthread)
     return wind_core_free(STAT_PROC,pthread);
 }
 
-err_t wind_thread_distroy(pthread_s pthread)
+w_err_t wind_thread_distroy(pthread_s pthread)
 {
     WIND_ASSERT_RETURN(pthread != NULL,ERR_NULL_POINTER);
     wind_close_interrupt();
@@ -97,7 +97,7 @@ err_t wind_thread_distroy(pthread_s pthread)
 }
 
 
-pthread_s get_pcb_byname(s8_t *name)
+pthread_s get_pcb_byname(w_int8_t *name)
 {
     pthread_s pthread;
     pnode_s pnode;
@@ -116,7 +116,7 @@ pthread_s get_pcb_byname(s8_t *name)
 
 static void thread_entry(void *args)
 {
-    err_t err;
+    w_err_t err;
     pthread_s pthread;
     //这里添加了tick的初始化时是因为在调试过程中遇到了暂时不能解决的问题，
     //以后tick的初始化还是应该放在框架代码内
@@ -134,7 +134,7 @@ static void thread_entry(void *args)
 
 //**********************************************extern functions******************************
 
-err_t wind_thread_getname(pthread_s pthread,s8_t *name)
+w_err_t wind_thread_getname(pthread_s pthread,w_int8_t *name)
 {
     //pthread_s pthread;
     //pthread = get_pcb_byhandler(handler);
@@ -152,7 +152,7 @@ pthread_s wind_get_cur_proc()
 }
 
 //这个函数不一定能找到实际的线程，因为无法保证所有的线程的线程名都不一样。
-pthread_s wind_get_proc_byname(s8_t *name)
+pthread_s wind_get_proc_byname(w_int8_t *name)
 {
     pthread_s pthread = NULL;
     pnode_s pnode;
@@ -174,7 +174,7 @@ pthread_s wind_get_proc_byname(s8_t *name)
 }
 
 
-s8_t *wind_thread_get_curname(void)
+w_int8_t *wind_thread_get_curname(void)
 {
     pthread_s pthread;
     pthread = wind_get_cur_proc();
@@ -183,15 +183,15 @@ s8_t *wind_thread_get_curname(void)
 
 
 //创建一个线程
-pthread_s wind_thread_create(const s8_t *name,
+pthread_s wind_thread_create(const w_int8_t *name,
                    prio_e priolevel,
-                   err_t (*procfunc)(s32_t argc,s8_t **argv),
-                   s16_t argc,
-                   s8_t **argv,
+                   w_err_t (*procfunc)(w_int32_t argc,w_int8_t **argv),
+                   w_int16_t argc,
+                   w_int8_t **argv,
                    pstack_t pstk,
-                   u16_t stksize)
+                   w_uint16_t stksize)
 {
-    u16_t i;
+    w_uint16_t i;
     pthread_s pthread;
     pstack_t tmpstk;
     pnode_s pnode;
@@ -248,11 +248,11 @@ pthread_s wind_thread_create(const s8_t *name,
     
 }
 
-err_t wind_thread_changeprio(pthread_s pthread,s16_t prio)
+w_err_t wind_thread_changeprio(pthread_s pthread,w_int16_t prio)
 {
     pnode_s node;
     
-    s16_t minlim = 0,maxlim = 32767;
+    w_int16_t minlim = 0,maxlim = 32767;
     WIND_ASSERT_RETURN(pthread != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN((prio >= minlim) && (prio <= maxlim),ERR_PARAM_OVERFLOW);
     if(wind_thread_isopen())
@@ -273,7 +273,7 @@ err_t wind_thread_changeprio(pthread_s pthread,s16_t prio)
 }
 
 
-err_t wind_thread_start(pthread_s pthread)
+w_err_t wind_thread_start(pthread_s pthread)
 {
     //pthread_s pthread;
     WIND_ASSERT_RETURN(pthread != NULL,ERR_NULL_POINTER);
@@ -290,7 +290,7 @@ err_t wind_thread_start(pthread_s pthread)
 }
 
 
-err_t wind_thread_suspend(pthread_s pthread)
+w_err_t wind_thread_suspend(pthread_s pthread)
 {
     //pthread_s pthread;
     WIND_ASSERT_RETURN(pthread != NULL,ERR_NULL_POINTER);
@@ -308,7 +308,7 @@ err_t wind_thread_suspend(pthread_s pthread)
 
 
 
-err_t wind_thread_resume(pthread_s pthread)
+w_err_t wind_thread_resume(pthread_s pthread)
 {
     WIND_ASSERT_RETURN(pthread != NULL,ERR_NULL_POINTER);
     
@@ -325,7 +325,7 @@ err_t wind_thread_resume(pthread_s pthread)
 }
 
 
-err_t wind_thread_kill(pthread_s pthread)
+w_err_t wind_thread_kill(pthread_s pthread)
 {
     //pthread_s pthread;
     pnode_s node;
@@ -350,9 +350,9 @@ err_t wind_thread_kill(pthread_s pthread)
 
 
 //根据线程的名称来销毁线程
-err_t wind_thread_killN(s8_t *name)
+w_err_t wind_thread_killN(w_int8_t *name)
 {
-    err_t err;
+    w_err_t err;
     pthread_s pthread;
     WIND_ASSERT_RETURN(name != NULL,ERR_NULL_POINTER);
     pthread = wind_get_proc_byname(name);
@@ -363,7 +363,7 @@ err_t wind_thread_killN(s8_t *name)
 
 
 //退出线程，在对应的线程中调用
-err_t wind_thread_exit(err_t exitcode)
+w_err_t wind_thread_exit(w_err_t exitcode)
 {
     //HANDLE hproc;
     pthread_s pthread;
@@ -378,9 +378,9 @@ err_t wind_thread_exit(err_t exitcode)
 list_s procsleeplist = {NULL,NULL,0};//sleeping process list
 
 //睡眠一段时间,不能在中断中调用这个函数
-err_t wind_thread_sleep(u32_t ms)
+w_err_t wind_thread_sleep(w_uint32_t ms)
 {
-    u16_t stcnt;
+    w_uint16_t stcnt;
     pthread_s pthread = NULL;
     pnode_s pnode = NULL;
     stcnt = ms * WIND_TICK_PER_SEC / 1000;
@@ -432,7 +432,7 @@ void wind_thread_wakeup(void)
 }
 
 #if WIND_THREAD_CALLBACK_SUPPORT > 0
-err_t wind_thread_callback_register(pthread_s pthread,procevt_e id,void(*cb)(pthread_s))
+w_err_t wind_thread_callback_register(pthread_s pthread,procevt_e id,void(*cb)(pthread_s))
 {
     WIND_ASSERT_RETURN(pthread != NULL,ERR_NULL_POINTER);
 
@@ -462,7 +462,7 @@ err_t wind_thread_callback_register(pthread_s pthread,procevt_e id,void(*cb)(pth
 #endif
 
 
-static err_t wind_thread_output(pthread_s pthread)
+static w_err_t wind_thread_output(pthread_s pthread)
 {
     WIND_ASSERT_RETURN(pthread != NULL,ERR_NULL_POINTER);
     wind_printf("thread name:%s\r\n",pthread->name);
@@ -474,7 +474,7 @@ static err_t wind_thread_output(pthread_s pthread)
 }
 
 //调试时用到的函数，打印当前的系统中的线程的信息
-err_t wind_thread_showlist(pnode_s nodes)
+w_err_t wind_thread_showlist(pnode_s nodes)
 {
     pnode_s node = nodes;
     pthread_s pthread;

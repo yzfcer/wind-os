@@ -34,7 +34,7 @@
 #include "wind_softint.h"
 #include "wind_heap.h"
 
-err_t cmd_testsoftint_main(s32_t argc,char **argv)
+w_err_t cmd_testsoftint_main(w_int32_t argc,char **argv)
 {
 #if WIND_SOFTINT_SUPPORT > 0
     if(is_string_equal(argv[0],"softint"))
@@ -46,7 +46,7 @@ err_t cmd_testsoftint_main(s32_t argc,char **argv)
     return ERR_OK;
 }
 
-err_t cmd_testheap_main(s32_t argc,char **argv)
+w_err_t cmd_testheap_main(w_int32_t argc,char **argv)
 {
 #if WIND_HEAP_SUPPORT > 0
     if(is_string_equal(argv[0],"heap"))

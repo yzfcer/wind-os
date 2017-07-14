@@ -32,7 +32,7 @@
 //#define wind_queue_lock(lock_type) if(lock_type == LOCK_TYPE_GLOBAL) \wind_close_interrupt();
 //#define wind_queue_unlock(lock_type) wind_open_interrupt()
 
-static u32_t wind_queue_lock(queue_s *q)
+static w_uint32_t wind_queue_lock(queue_s *q)
 {
     if(q->lock_type == LOCK_TYPE_NONE)
         return 0;
@@ -78,9 +78,9 @@ static void wind_queue_unlock(queue_s *q)
 **------------------------------------------------------------------------------------------------------
 ********************************************************************************************************/
 
-err_t wind_queue_create(void *mem,
-                          u32_t size,
-                          u16_t data_wid,
+w_err_t wind_queue_create(void *mem,
+                          w_uint32_t size,
+                          w_uint16_t data_wid,
                           lock_type_e lock_type
                           )
 {
@@ -95,7 +95,7 @@ err_t wind_queue_create(void *mem,
     if(lock_type == LOCK_TYPE_GLOBAL)
     {
 #if WIND_LOCK_SUPPORT > 0
-        q->lock_type = (s32_t)lock_type;
+        q->lock_type = (w_int32_t)lock_type;
         q->lock = wind_lock_create("queue");
         WIND_ASSERT_RETURN(q->lock != NULL,ERR_NULL_POINTER);
 #else
@@ -109,7 +109,7 @@ err_t wind_queue_create(void *mem,
     q->count = 0;
     
     // 计算队列可以存储的数据数目 
-    q->capacity = (size - (u32_t)(((queue_s *)0)->buf)) / q->data_wid;
+    q->capacity = (size - (w_uint32_t)(((queue_s *)0)->buf)) / q->data_wid;
     
     // 计算数据缓冲的结束地址
     q->end = q->buf + q->capacity * q->data_wid;               
@@ -136,12 +136,12 @@ err_t wind_queue_create(void *mem,
 ** 日　期:
 **------------------------------------------------------------------------------------------------------
 ********************************************************************************************************/
-s32_t wind_queue_read(void *queue,void *buf,u32_t len)
+w_int32_t wind_queue_read(void *queue,void *buf,w_uint32_t len)
 {
-    u32_t i;
+    w_uint32_t i;
     queue_s *q;
-    u8_t *buff;
-    u32_t lenth;
+    w_uint8_t *buff;
+    w_uint32_t lenth;
     
     WIND_ASSERT_RETURN(buf != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(queue != NULL,ERR_NULL_POINTER);
@@ -188,12 +188,12 @@ s32_t wind_queue_read(void *queue,void *buf,u32_t len)
 ********************************************************************************************************/
 
 
-s32_t wind_queue_write(void *queue,void *buf,u32_t len)
+w_int32_t wind_queue_write(void *queue,void *buf,w_uint32_t len)
 {
-    u32_t i;
+    w_uint32_t i;
     queue_s *q;
-    u8_t *buff;
-    u32_t lenth;
+    w_uint8_t *buff;
+    w_uint32_t lenth;
     
     WIND_ASSERT_RETURN(buf != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(queue != NULL,ERR_NULL_POINTER);
@@ -244,9 +244,9 @@ s32_t wind_queue_write(void *queue,void *buf,u32_t len)
 
 #if EN_QUEUE_NDATA > 0
 
-u32_t wind_queue_datalen(void *queue)
+w_uint32_t wind_queue_datalen(void *queue)
 {
-    u32_t temp;
+    w_uint32_t temp;
     queue_s *q;
     WIND_ASSERT_RETURN(queue != NULL,ERR_NULL_POINTER);
     q = (queue_s *)queue;
@@ -281,9 +281,9 @@ u32_t wind_queue_datalen(void *queue)
 
 #if EN_QUEUE_SIZE 
 
-u32_t wind_queue_capacity(void *queue)
+w_uint32_t wind_queue_capacity(void *queue)
 {
-    u16_t temp;
+    w_uint16_t temp;
     queue_s *q;
     WIND_ASSERT_RETURN(queue != NULL,ERR_NULL_POINTER);
     q = (queue_s *)queue;
@@ -313,7 +313,7 @@ u32_t wind_queue_capacity(void *queue)
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
 
-err_t wind_queue_flush(void *queue)
+w_err_t wind_queue_flush(void *queue)
 {
     queue_s *q;
     WIND_ASSERT_RETURN(queue != NULL,ERR_NULL_POINTER);
@@ -328,10 +328,10 @@ err_t wind_queue_flush(void *queue)
     return ERR_OK;
 }
 
-err_t wind_queue_destory(void *queue)
+w_err_t wind_queue_destory(void *queue)
 {
     queue_s *q;
-    err_t err;
+    w_err_t err;
     WIND_ASSERT_RETURN(queue != NULL,ERR_NULL_POINTER);
 
     q = (queue_s *)queue;

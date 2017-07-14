@@ -59,11 +59,11 @@ typedef enum __stat_e
 #define STAT_NAME_LEN 12
 typedef struct __stat_s
 {
-    s8_t name[STAT_NAME_LEN];
-    u32_t tot;
-    u32_t used;
-    u32_t max;
-    u32_t err;
+    w_int8_t name[STAT_NAME_LEN];
+    w_uint32_t tot;
+    w_uint32_t used;
+    w_uint32_t max;
+    w_uint32_t err;
 }stat_s,*pstat_s;
 
 extern stat_s G_STAT[STAT_CNT];

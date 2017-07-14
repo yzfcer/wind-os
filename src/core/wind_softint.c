@@ -38,20 +38,20 @@
 extern pthread_s wind_get_cur_proc(void);
 extern void wind_thread_dispatch(void);
 //软中断线程的堆栈
-static stack_t softint_stk[WIND_SOFTINT_STK_LEN];
-static u16_t softint_index = 0;
+static w_stack_t softint_stk[WIND_SOFTINT_STK_LEN];
+static w_uint16_t softint_index = 0;
 static pthread_s softint_ppcb = NULL;
 //static HANDLE softint_handle = -1;
 softinthandler_f wind_soft_vectors[WIND_SOFTINT_MAX_NUM];
 //初始化软中断的一些相关参数
 void wind_softint_init(void)
 {
-    wind_memset(softint_stk,0,WIND_SOFTINT_STK_LEN * sizeof(stack_t));
+    wind_memset(softint_stk,0,WIND_SOFTINT_STK_LEN * sizeof(w_stack_t));
 }
-static err_t wind_softint_proc(s16_t argc,s8_t **argv)
+static w_err_t wind_softint_proc(w_int16_t argc,w_int8_t **argv)
 {
-    err_t err = -1;
-    s32_t i;
+    w_err_t err = -1;
+    w_int32_t i;
     for(i = 0;i < WIND_SOFTINT_MAX_NUM;i ++)
     {
         wind_soft_vectors[i] = NULL;
@@ -76,7 +76,7 @@ static err_t wind_softint_proc(s16_t argc,s8_t **argv)
 HANDLE wind_softint_reg(softinthandler_f func)
 {
     HANDLE hint = -1;
-    s16_t i;
+    w_int16_t i;
     for(i = 0;i < WIND_SOFTINT_MAX_NUM;i ++)
     {
         if(wind_soft_vectors[i] == func)
@@ -97,7 +97,7 @@ HANDLE wind_softint_reg(softinthandler_f func)
 }
 
 //取消一个软中断的注册
-err_t wind_softint_unreg(HANDLE hint)
+w_err_t wind_softint_unreg(HANDLE hint)
 {
     if(hint < 0 || hint >= WIND_SOFTINT_MAX_NUM)
         return ERR_PARAM_OVERFLOW;
@@ -116,7 +116,7 @@ void wind_soft_int(HANDLE handler)
 }
 
 //创建软件中断线程
-err_t wind_create_softint_proc(void)
+w_err_t wind_create_softint_proc(void)
 {
     softint_ppcb = wind_thread_create("softint",PRIO_HIGH,wind_softint_proc,
                 0,NULL,softint_stk,WIND_SOFTINT_STK_LEN);
@@ -132,7 +132,7 @@ void softint_output(void)
     WIND_STD_OUT("wind softint test---OK\r\n");
 }
 
-err_t wind_softint_test(void)
+w_err_t wind_softint_test(void)
 {
     HANDLE h;
     h = wind_softint_reg(softint_output);

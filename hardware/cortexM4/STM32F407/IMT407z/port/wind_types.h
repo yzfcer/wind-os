@@ -28,41 +28,45 @@
 extern "C" {
 #endif
 
-#ifndef u8_t
-typedef unsigned char u8_t;
+#ifndef w_uint8_t
+typedef unsigned char w_uint8_t;
 #endif
 
-#ifndef u16_t
-typedef unsigned int u16_t;
+#ifndef w_uint16_t
+typedef unsigned int w_uint16_t;
 #endif
 
-#ifndef u32_t
-typedef unsigned long u32_t; 
+#ifndef w_uint32_t
+typedef unsigned long w_uint32_t; 
 #endif
 
-#ifndef u64_t
-typedef unsigned long long u64_t; 
+#ifndef w_uint64_t
+typedef unsigned long long w_uint64_t; 
 #endif
 
-#ifndef s8_t
-typedef char s8_t; 
+#ifndef w_int8_t
+typedef char w_int8_t; 
 #endif
 
-#ifndef s16_t
-typedef int s16_t; 
+#ifndef w_int16_t
+typedef int w_int16_t; 
 #endif
 
-#ifndef s32_t
-typedef long s32_t; 
+#ifndef w_int32_t
+typedef long w_int32_t; 
 #endif
 
-#ifndef s64_t
-typedef signed long long s64_t; 
+#ifndef w_int64_t
+typedef long long w_int64_t; 
 #endif
 
 
-#ifndef fp32_t
-typedef float fp32_t;
+#ifndef w_fp32_t
+typedef float w_fp32_t;
+#endif
+
+#ifndef w_fp64_t
+typedef float w_fp64_t;
 #endif
 
 //#ifndef 
@@ -71,36 +75,28 @@ typedef float fp32_t;
 #define NULL ((void *)0)
 #endif
 
-#ifndef bool_t
-typedef enum __bool_t
+#ifndef w_bool_t
+typedef enum __w_bool_t
 {
     B_FALSE = 0,
     B_TRUE = 1
-} bool_t;
-
-#ifndef TRUE 
-#define TRUE 1
-#endif
-#ifndef FALSE
-#define FALSE 0
-#endif
-
+} w_bool_t;
 #endif
 
 
-#ifndef err_t
-typedef s16_t err_t;
+#ifndef w_err_t
+typedef w_int16_t w_err_t;
 #endif
 
 
-#ifndef stack_t  //堆栈宽度的定义
-typedef u32_t stack_t;//,*pstack_t;
-typedef u32_t *pstack_t;
+#ifndef w_stack_t  //堆栈宽度的定义
+typedef w_uint32_t w_stack_t;//,*pstack_t;
+typedef w_uint32_t *pstack_t;
 #endif
 
 
 #ifndef HANDLE 
-typedef s16_t HANDLE;
+typedef w_int16_t HANDLE;
 #endif
 
 typedef enum __lock_type_e
@@ -113,29 +109,7 @@ typedef enum __lock_type_e
 
 
 
-// #else  //TYPEDEF_OK
-// #define u8_t unsigned char 
-// #define u16_t unsigned short
-// #define u32_t unsigned int
-// #define s8_t char
-// #define s16_t short
-// #define s32_t int
-// #define bool_t unsigned char
-// #define true 1
-// #define false 0
-// #define err_t s16_t
-// #define HANDLE s16_t
-// #define stack_t unsigned int
-// #define pstack_t unsigned int *
-// #ifndef NULL
-// #define NULL (void*)0
-// #endif
 
-// #ifndef extern
-// #define extern
-// #endif  //extern
-// 
-// #endif //TYPEDEF_OK
 
 
 #ifdef __cplusplus

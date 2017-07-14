@@ -50,7 +50,7 @@ meminfo_s g_mem_for_allcoc[] =
     }
 };
 
-err_t wind_mem_init(u8_t ix,u32_t base,u32_t lenth)
+w_err_t wind_mem_init(w_uint8_t ix,w_uint32_t base,w_uint32_t lenth)
 {
     WIND_ASSERT_RETURN((lenth > 0),ERR_COMMAN);
     g_mem_for_allcoc[ix].base = base;
@@ -63,15 +63,15 @@ err_t wind_mem_init(u8_t ix,u32_t base,u32_t lenth)
 }
 
 //从已经回收的空间中找到一块
-static void *core_get_free_space(u32_t size)
+static void *core_get_free_space(w_uint32_t size)
 {
     return NULL;
 }
 
 //分配一个连续的空间，如果分配成功，就会返回空间指针，失败返回NULL
-void *wind_malloc(u32_t size)
+void *wind_malloc(w_uint32_t size)
 {
-    u32_t si;
+    w_uint32_t si;
     void *p;
     pmemhead_s phead;
 #if MEM_ALIGN_4
@@ -104,9 +104,9 @@ void *wind_malloc(u32_t size)
 }
 
 //分配一个二维数组指针，但分配的空间不能直接作为一维指针使用
-void **wind_calloc(u32_t block,u32_t size)
+void **wind_calloc(w_uint32_t block,w_uint32_t size)
 {
-    u32_t si,i,base;
+    w_uint32_t si,i,base;
     void **p;
 #if MEM_ALIGN_4
     si = (size + 3) & 0xfffffffc;
@@ -116,7 +116,7 @@ void **wind_calloc(u32_t block,u32_t size)
     p = (void **)wind_malloc(block * sizeof(void *) + block * si);
     if(p == NULL)
         return NULL;
-    base = block * sizeof(void *) + (u32_t)p;
+    base = block * sizeof(void *) + (w_uint32_t)p;
     for(i = 0;i < block;i ++)
     {
         p[i] = (void *)(base + si * i);
@@ -126,9 +126,9 @@ void **wind_calloc(u32_t block,u32_t size)
 
 
 //分配一个三维数组指针，但分配的空间不能直接作为一维指针使用
-void ***wind_talloc(u32_t num,u32_t block,u32_t size)
+void ***wind_talloc(w_uint32_t num,w_uint32_t block,w_uint32_t size)
 {
-    u32_t si,i,j,base;
+    w_uint32_t si,i,j,base;
     
     void ***p;
 #if MEM_ALIGN_4
@@ -139,7 +139,7 @@ void ***wind_talloc(u32_t num,u32_t block,u32_t size)
     p = (void ***)wind_malloc(num * sizeof(void **) + num * block * sizeof(void *) + num * block * si);
     if(p == NULL)
         return NULL;
-    base = num * sizeof(void **) + num * block * sizeof(void *) + (u32_t)p;
+    base = num * sizeof(void **) + num * block * sizeof(void *) + (w_uint32_t)p;
     for(i = 0;i < num;i ++)
     {
         p[i] = (void **)(base + num * sizeof(void **) + i * block * sizeof(void *));
@@ -155,10 +155,10 @@ void ***wind_talloc(u32_t num,u32_t block,u32_t size)
 void wind_free(void *p)
 {
     pmemhead_s phead,ph1,ph2;
-    if(p == NULL || (u32_t)p < g_mem_for_allcoc[0].base 
-        || (u32_t)p > (g_mem_for_allcoc[0].base + g_mem_for_allcoc[0].lenth))
+    if(p == NULL || (w_uint32_t)p < g_mem_for_allcoc[0].base 
+        || (w_uint32_t)p > (g_mem_for_allcoc[0].base + g_mem_for_allcoc[0].lenth))
         return;
-    phead = (pmemhead_s)(((u32_t)p) - sizeof(memhead_s));
+    phead = (pmemhead_s)(((w_uint32_t)p) - sizeof(memhead_s));
     wind_close_interrupt();
     if(g_mem_for_allcoc[0].pfree == NULL)
     {
@@ -200,14 +200,14 @@ void wind_free(void *p)
         if(ph2 != NULL)
             ph2->pre = phead;
         //合并相邻的内存块
-        if(ph1->lenth + sizeof(memhead_s) + (u32_t)ph1 == (u32_t)phead)
+        if(ph1->lenth + sizeof(memhead_s) + (w_uint32_t)ph1 == (w_uint32_t)phead)
         {
             ph1->lenth += (phead->lenth + sizeof(memhead_s));
             ph1->next = ph2;
             ph2->pre = ph1;
             phead = ph1;
         }
-        if(ph2 && (phead->lenth + sizeof(memhead_s) + (u32_t)phead == (u32_t)ph2))
+        if(ph2 && (phead->lenth + sizeof(memhead_s) + (w_uint32_t)phead == (w_uint32_t)ph2))
         {
             phead->lenth += (ph2->lenth + sizeof(memhead_s));
             phead->next = ph2->next;

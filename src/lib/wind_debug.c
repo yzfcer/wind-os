@@ -30,13 +30,13 @@
 #include "wind_types.h"
 #include "wind_debug.h"
 
-static const s8_t * const hexlist = "0123456789abcdef";
-extern void wind_std_output(u8_t *str,u16_t len);
+static const w_int8_t * const hexlist = "0123456789abcdef";
+extern void wind_std_output(w_uint8_t *str,w_uint16_t len);
 #if 0
-int wind_printf(const s8_t *string,...)
+int wind_printf(const w_int8_t *string,...)
 {
-    u16_t index, value, pos, cnt, base, ulNeg;
-    s8_t *pcStr, pcBuf[16], chfill;
+    w_uint16_t index, value, pos, cnt, base, ulNeg;
+    w_int8_t *pcStr, pcBuf[16], chfill;
     va_list vaArgP;
     
     if(string == NULL)
@@ -46,7 +46,7 @@ int wind_printf(const s8_t *string,...)
     while(*string)
     {
         for(index = 0; (string[index] != '%') && (string[index] != '\0');index++);
-            wind_std_output((u8_t *)string, index);
+            wind_std_output((w_uint8_t *)string, index);
         string += index;
         if(*string == '%')
         {
@@ -77,13 +77,13 @@ again:
                 }
             case 'c':
                 {
-                    value = va_arg(vaArgP, u16_t);
-                    wind_std_output((u8_t *)(&value), 1);
+                    value = va_arg(vaArgP, w_uint16_t);
+                    wind_std_output((w_uint8_t *)(&value), 1);
                     break;
                 }
             case 'd':
                 {
-                    value = va_arg(vaArgP, u16_t);
+                    value = va_arg(vaArgP, w_uint16_t);
                     pos = 0;
                     if((long)value < 0)
                     {
@@ -99,20 +99,20 @@ again:
                 }
             case 's':
                 {
-                    pcStr = va_arg(vaArgP, s8_t *);
+                    pcStr = va_arg(vaArgP, w_int8_t *);
                     for(index = 0; pcStr[index] != '\0'; index++);
-                    wind_std_output((u8_t *)pcStr, index);
+                    wind_std_output((w_uint8_t *)pcStr, index);
                     if(cnt > index)
                     {
                         cnt -= index;
                         while(cnt--)
-                            wind_std_output((u8_t *)" ", 1);
+                            wind_std_output((w_uint8_t *)" ", 1);
                     }
                     break;
                 }
             case 'u':
                 {
-                    value = va_arg(vaArgP, u16_t);
+                    value = va_arg(vaArgP, w_uint16_t);
                     pos = 0;
                     base = 10;
                     ulNeg = 0;
@@ -122,7 +122,7 @@ again:
             case 'X':
             case 'p':
                 {
-                    value = va_arg(vaArgP, u16_t);
+                    value = va_arg(vaArgP, w_uint16_t);
                     pos = 0;
                     base = 16;
                     ulNeg = 0;
@@ -148,15 +148,15 @@ convert:
                         pcBuf[pos++] = '-';
                     for(; index; index /= base)
                         pcBuf[pos++] = hexlist[(value / index) % base];
-                    wind_std_output((u8_t *)pcBuf, pos);
+                    wind_std_output((w_uint8_t *)pcBuf, pos);
                     break;
                 }
             case '%':
-                    wind_std_output((u8_t *)string - 1, 1);
+                    wind_std_output((w_uint8_t *)string - 1, 1);
                     //wind_std_output("%",1);
                     break;
             default:
-                    wind_std_output((u8_t *)"ERROR", 5);
+                    wind_std_output((w_uint8_t *)"ERROR", 5);
                     break;
             }
         }
@@ -187,7 +187,7 @@ int wind_printf(const char *fmt, ...)
     n = vsprintf(sprint_buf, fmt, args);
     sprint_buf[n] = 0;
     va_end(args);
-    wind_std_output((u8_t *)sprint_buf, n);
+    wind_std_output((w_uint8_t *)sprint_buf, n);
     wind_open_interrupt();
     return n; 
 }

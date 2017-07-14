@@ -48,9 +48,9 @@ pnode_s wind_node_malloc(core_type type)
 }
 
 
-err_t wind_node_free(pnode_s node)
+w_err_t wind_node_free(pnode_s node)
 {
-    err_t err;
+    w_err_t err;
     WIND_ASSERT_RETURN(node != NULL,ERR_NULL_POINTER);
     node->next = NULL;
     node->prev = NULL;
@@ -62,7 +62,7 @@ err_t wind_node_free(pnode_s node)
     return err;
 }
 
-void wind_node_bindobj(pnode_s node,core_type type,s32_t key,void *obj)
+void wind_node_bindobj(pnode_s node,core_type type,w_int32_t key,void *obj)
 {
     node->type = type;
     node->key = key;
@@ -143,7 +143,7 @@ static void remove_behind(plist_s list,pnode_s node,pnode_s dest)
 }
 
 
-static err_t list_insert(plist_s list,pnode_s node,bool_t minus)
+static w_err_t list_insert(plist_s list,pnode_s node,w_bool_t minus)
 {
     pnode_s pnode = NULL;
     wind_close_interrupt();
@@ -187,7 +187,7 @@ static err_t list_insert(plist_s list,pnode_s node,bool_t minus)
 
 
 
-err_t wind_list_init(plist_s list)
+w_err_t wind_list_init(plist_s list)
 {
     if(list == NULL)
         return ERR_INVALID_PARAM;
@@ -197,13 +197,13 @@ err_t wind_list_init(plist_s list)
     return ERR_OK;
 }
 
-err_t wind_list_insert(plist_s list,pnode_s node)
+w_err_t wind_list_insert(plist_s list,pnode_s node)
 {
     return list_insert(list,node,B_FALSE);
 }
 
 
-err_t wind_list_inserttoend(plist_s list,pnode_s node)
+w_err_t wind_list_inserttoend(plist_s list,pnode_s node)
 {
     wind_close_interrupt();
     if(list == NULL || node == NULL)
@@ -217,7 +217,7 @@ err_t wind_list_inserttoend(plist_s list,pnode_s node)
 }
 
 
-err_t wind_list_inserttohead(plist_s list,pnode_s node)
+w_err_t wind_list_inserttohead(plist_s list,pnode_s node)
 {
     wind_close_interrupt();
     if(list == NULL || node == NULL)
@@ -231,7 +231,7 @@ err_t wind_list_inserttohead(plist_s list,pnode_s node)
 }
 
 //插入一个元素，但插入的位置每向后移动一个元素，就需要减去它前面的元素的键值
-err_t wind_list_insert_with_minus(plist_s list,pnode_s node)
+w_err_t wind_list_insert_with_minus(plist_s list,pnode_s node)
 {
     return list_insert(list,node,B_TRUE);
 }

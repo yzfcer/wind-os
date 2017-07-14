@@ -32,10 +32,10 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-u32_t wind_get_time_count(void);
-err_t wind_thread_sleep(u32_t ms);
-//err_t wind_waitqueue_add(pthread_s pthread);
-//err_t wind_waitqueue_remove(pthread_s pthread);
+w_uint32_t wind_get_time_count(void);
+w_err_t wind_thread_sleep(w_uint32_t ms);
+//w_err_t wind_waitqueue_add(pthread_s pthread);
+//w_err_t wind_waitqueue_remove(pthread_s pthread);
 
 #ifdef __cplusplus
 }

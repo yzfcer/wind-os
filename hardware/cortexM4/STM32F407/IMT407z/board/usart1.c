@@ -3,10 +3,10 @@
 #include "stdlib.h"  
 #include "led.h" 
 
-u8_t receive_str[USART1_REC_NUM];     //接收缓存数组,最大USART_REC_LEN个字节 
-u8_t uart_byte_count=0;
+w_uint8_t receive_str[USART1_REC_NUM];     //接收缓存数组,最大USART_REC_LEN个字节 
+w_uint8_t uart_byte_count=0;
 
-void uart1_init(u32_t baud)
+void uart1_init(w_uint32_t baud)
 {   //GPIO端口设置
     GPIO_InitTypeDef GPIO_InitStructure;
     USART_InitTypeDef USART_InitStructure;
@@ -46,15 +46,15 @@ void uart1_init(u32_t baud)
 }
 
 //串口1发送一个字符
-void uart1_send_char(u8_t ch)
+void uart1_send_char(w_uint8_t ch)
 {      
 	while((USART1->SR&0x40)==0);  
-    USART1->DR = (u8_t) ch;
+    USART1->DR = (w_uint8_t) ch;
 }
 
-void uart1_send_chars(u8_t *str, u16_t strlen)
+void uart1_send_chars(w_uint8_t *str, w_uint16_t strlen)
 { 
-    u16_t k= 0 ; 
+    w_uint16_t k= 0 ; 
     do 
     { uart1_send_char(*(str + k)); k++; }   
     while (k < strlen); 
@@ -63,10 +63,10 @@ void uart1_send_chars(u8_t *str, u16_t strlen)
 
 void USART1_IRQHandler(void)
 {
-	u8_t rec_data;
+	w_uint8_t rec_data;
 	if(USART_GetITStatus(USART1, USART_IT_RXNE) != RESET)
 		{
-				rec_data =(u8_t)USART_ReceiveData(USART1);
+				rec_data =(w_uint8_t)USART_ReceiveData(USART1);
         if(rec_data=='S')
 				{
 					uart_byte_count=0x01; 

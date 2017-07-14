@@ -38,17 +38,17 @@ typedef struct _wind_lock
 {
     //HANDLE handler;    //互斥锁句柄
     const char *name;
-    bool_t used;         //是否有效的标志
-    bool_t locked;     //当前的信号量的值
+    w_bool_t used;         //是否有效的标志
+    w_bool_t locked;     //当前的信号量的值
     list_s waitlist;  //等待线程队列
 }lock_s,*plock_s;
 
-//err_t wind_lock_init(void);
+//w_err_t wind_lock_init(void);
 plock_s wind_lock_create(const char *name);
-err_t wind_lock_tryfree(plock_s plock);
-err_t wind_lock_free(plock_s plock);
-err_t wind_lock_close(plock_s plock);
-err_t wind_lock_open(plock_s plock);
+w_err_t wind_lock_tryfree(plock_s plock);
+w_err_t wind_lock_free(plock_s plock);
+w_err_t wind_lock_close(plock_s plock);
+w_err_t wind_lock_open(plock_s plock);
 
 
 #endif //WIND_LOCK_SUPPORT > 0

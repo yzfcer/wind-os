@@ -35,7 +35,7 @@
 
 #include "console_framework.h"
 
-err_t wind_output_cmdlist(void)
+w_err_t wind_output_cmdlist(void)
 {
     pcmd_s clist = wind_get_cmdlist();
     while(clist)
@@ -47,7 +47,7 @@ err_t wind_output_cmdlist(void)
 }
 
 
-err_t cmd_show_main(s32_t argc,char **argv)
+w_err_t cmd_show_main(w_int32_t argc,char **argv)
 {
     pnode_s pnode;
     pthread_s pthread;

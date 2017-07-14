@@ -48,9 +48,9 @@ extern "C" {
 
 
 /********************************************全局函数定义**********************************************/
-err_t wind_privateheap_create(u32_t size)
+w_err_t wind_privateheap_create(w_uint32_t size)
 {
-    err_t err;
+    w_err_t err;
     void *start;
     pthread_s pthread;
     pmemheap_s mhp;
@@ -60,7 +60,7 @@ err_t wind_privateheap_create(u32_t size)
     WIND_ASSERT_RETURN(mhp != NULL,ERR_NULL_POINTER);
     //mhp = (pmemheap_s)
     pthread->private_heap = mhp;
-    start = (void*)((u32_t)mhp + sizeof(memheap_s));
+    start = (void*)((w_uint32_t)mhp + sizeof(memheap_s));
     err = wind_heap_init(mhp,"pri heap",start,size);
     if(err != ERR_OK)
     {
@@ -71,10 +71,10 @@ err_t wind_privateheap_create(u32_t size)
     return ERR_OK;
 }
 
-void *wind_privateheap_alloc(u32_t size)
+void *wind_privateheap_alloc(w_uint32_t size)
 {
     void *p;
-    err_t err;
+    w_err_t err;
     pthread_s pthread;
     pthread = wind_get_cur_proc();
     WIND_ASSERT_RETURN(pthread != NULL,NULL);
@@ -88,9 +88,9 @@ void *wind_privateheap_alloc(u32_t size)
     return p;
 }
 
-err_t wind_privateheap_free(void *ptr)
+w_err_t wind_privateheap_free(void *ptr)
 {
-    err_t err;
+    w_err_t err;
     WIND_ASSERT_RETURN(ptr != NULL,ERR_NULL_POINTER);
     err = wind_heap_free((void *) ptr);
     return err;    

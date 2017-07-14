@@ -5,22 +5,22 @@
 
 typedef struct
 {
-	u16_t data0:1;
-	u16_t data1:1;
-	u16_t data2:1;
-	u16_t data3:1;
-	u16_t data4:1;
-	u16_t data5:1;
-	u16_t data6:1;
-	u16_t data7:1;
-	u16_t data8:1;
-	u16_t data9:1;
-	u16_t data10:1;
-	u16_t data11:1;
-	u16_t data12:1;	
-	u16_t data13:1;
-	u16_t data14:1;
-	u16_t data15:1;	
+	w_uint16_t data0:1;
+	w_uint16_t data1:1;
+	w_uint16_t data2:1;
+	w_uint16_t data3:1;
+	w_uint16_t data4:1;
+	w_uint16_t data5:1;
+	w_uint16_t data6:1;
+	w_uint16_t data7:1;
+	w_uint16_t data8:1;
+	w_uint16_t data9:1;
+	w_uint16_t data10:1;
+	w_uint16_t data11:1;
+	w_uint16_t data12:1;	
+	w_uint16_t data13:1;
+	w_uint16_t data14:1;
+	w_uint16_t data15:1;	
 }_gpio_group;
 
 //位带操作,实现51类似的GPIO控制功能
@@ -85,14 +85,14 @@ typedef struct
 void WFI_SET(void);		   //执行WFI指令
 void INTX_DISABLE(void); //关闭所有中断
 void INTX_ENABLE(void);	 //开启所有中断
-void MSR_MSP(u32_t addr);	 //设置堆栈地址 
+void MSR_MSP(w_uint32_t addr);	 //设置堆栈地址 
 
-void GPIO_group_OUT(_gpio_group *group,u16_t outdata);
-void GPIO_bits_OUT(GPIO_TypeDef* GPIOx, u8_t start_bit, u8_t bit_size,u16_t outdata);
+void GPIO_group_OUT(_gpio_group *group,w_uint16_t outdata);
+void GPIO_bits_OUT(GPIO_TypeDef* GPIOx, w_uint8_t start_bit, w_uint8_t bit_size,w_uint16_t outdata);
 	
 void delay_init(void);
-void delay_ms(u16_t nms);
-void delay_us(u32_t nus);
+void delay_ms(w_uint16_t nms);
+void delay_us(w_uint32_t nus);
 
 #endif
 

@@ -2,7 +2,7 @@
 #include "wind_types.h"
 #include "wind_err.h"
 
-s8_t *core_errset[] = 
+w_int8_t *core_errset[] = 
 {
     "OK.\r\n",
     "null pointer was found.\r\n",

@@ -34,21 +34,21 @@
 #include "wind_err.h"
 #include "wind_time.h"
 #include "wind_var.h"
-static u32_t g_wind_time_ms_cnt = 0;//毫秒计时
+static w_uint32_t g_wind_time_ms_cnt = 0;//毫秒计时
 
 
 //extern void wind_update_curthread(void);
 //extern void wind_interrupt_switch(void);
 
 
-err_t wind_time_init()
+w_err_t wind_time_init()
 {
     WIND_INFO("sleep list initializing...\r\n");
     return ERR_OK;
 }
 
 //获取毫秒计时
-u32_t wind_get_time_count(void)
+w_uint32_t wind_get_time_count(void)
 {
     return g_wind_time_ms_cnt;
 }
@@ -56,8 +56,6 @@ u32_t wind_get_time_count(void)
 //tick中断调用的函数
 void wind_tick_callback(void)
 {
-    s16_t cnt;
-    u8_t flag = 0;
     #if WIND_TTIMER_SUPPORT > 0
     ticktimerhandler();//首先处理定时中断的事情
     #endif

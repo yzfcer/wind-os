@@ -48,7 +48,7 @@ extern "C" {
 //#define Q_WRITE_FRONT_MODE  2                           /* 操作成功                                     */
 
 #ifndef STACK_DATA_TYPE
-#define STACK_DATA_TYPE     u8_t
+#define STACK_DATA_TYPE     w_uint8_t
 #endif
 
 //__packed
@@ -57,33 +57,33 @@ typedef struct __stack_s{
     STACK_DATA_TYPE     *Out;                   /* 指向数据输出位置         */
     STACK_DATA_TYPE     *In;                    /* 指向数据输入位置         */      
     STACK_DATA_TYPE     *Top;                    /* 指向Buf的结束位置        */
-    u16_t              NData;                  /* 队列中数据个数           */
-    u16_t              MaxData;                /* 队列中允许存储的数据个数 */
-    u8_t                DataWid;                /* 元素的数据宽度 */  
-    u32_t              emptycnt;
-    u32_t              fullcnt;
-    err_t               (* ReadEmpty)(struct __stack_s *pstk,void *data);     /* 读空处理函数             */
-    err_t               (* WriteFull)(struct __stack_s *pstk,void *data);        /* 写满处理函数             */
+    w_uint16_t              NData;                  /* 队列中数据个数           */
+    w_uint16_t              MaxData;                /* 队列中允许存储的数据个数 */
+    w_uint8_t                DataWid;                /* 元素的数据宽度 */  
+    w_uint32_t              emptycnt;
+    w_uint32_t              fullcnt;
+    w_err_t               (* ReadEmpty)(struct __stack_s *pstk,void *data);     /* 读空处理函数             */
+    w_err_t               (* WriteFull)(struct __stack_s *pstk,void *data);        /* 写满处理函数             */
     STACK_DATA_TYPE     Buf[1];                 /* 存储数据的空间           */
 } stack_s,*pstack_s;
 
 
 //#ifndef IN_STACK
-err_t wind_stack_create(void *Buf,
-                          u32_t SizeOfBuf,
-                          u16_t DataWid,
-                          err_t (* ReadEmpty)(),
-                          err_t (* WriteFull)()
+w_err_t wind_stack_create(void *Buf,
+                          w_uint32_t SizeOfBuf,
+                          w_uint16_t DataWid,
+                          w_err_t (* ReadEmpty)(),
+                          w_err_t (* WriteFull)()
                           );
 
 
-err_t wind_stack_read(void *Buf,void *Ret);
+w_err_t wind_stack_read(void *Buf,void *Ret);
 
-err_t wind_stack_write(void *Buf, void *Data);
+w_err_t wind_stack_write(void *Buf, void *Data);
 
-u16_t wind_stack_datalen(void *Buf);
+w_uint16_t wind_stack_datalen(void *Buf);
 
-u16_t wind_stack_size(void *Buf);
+w_uint16_t wind_stack_size(void *Buf);
 
 void wind_stack_flush(void *Buf);
 //#endif //IN_STACK

@@ -43,15 +43,15 @@ typedef enum __usrprio_e
 typedef struct __user_s
 {
     struct __user_s *next;
-    s8_t name[WIND_USER_NAME_LEN];
-    s8_t pwd[WIND_USER_PWD_LEN];
+    w_int8_t name[WIND_USER_NAME_LEN];
+    w_int8_t pwd[WIND_USER_PWD_LEN];
     usrprio_e prio;
 } user_s;
 
 
-HANDLE wind_user_create(s8_t *name,s8_t *pwd,usrprio_e prio);
-err_t wind_user_insert(HANDLE husr);
-err_t wind_user_remove(HANDLE husr);
+HANDLE wind_user_create(w_int8_t *name,w_int8_t *pwd,usrprio_e prio);
+w_err_t wind_user_insert(HANDLE husr);
+w_err_t wind_user_remove(HANDLE husr);
 
 
 

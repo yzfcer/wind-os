@@ -50,7 +50,7 @@ extern "C" {
 
 #define WIND_HEAP_ALIGN(size,N) ((size + N -1) / N * N)
 #define WIND_HEAP_SIZE         WIND_HEAP_ALIGN(sizeof(heapitem_s), WIND_HEAP_ALIGN_SIZE)
-#define MEMITEM_SIZE(item)      ((u32_t)item->next - (u32_t)item - WIND_HEAP_SIZE)
+#define MEMITEM_SIZE(item)      ((w_uint32_t)item->next - (w_uint32_t)item - WIND_HEAP_SIZE)
 
 
 //内存块的块数的定义，如果系统存在多个不连续的内存区，则应该在下面添加定义
@@ -74,7 +74,7 @@ typedef enum __HeapBlock_e
 
 typedef struct __heapitem_s
 {
-    u32_t magic;                      /**< magic number for memheap */
+    w_uint32_t magic;                      /**< magic number for memheap */
     struct __memheap *pool_ptr;                   /**< point of pool */
 
     struct __heapitem_s *next;                       /**< next memheap item */
@@ -87,11 +87,11 @@ typedef struct __heapitem_s
 
 typedef struct __memheap
 {
-    s8_t name[WIND_HEAP_NAME_LEN];
+    w_int8_t name[WIND_HEAP_NAME_LEN];
     void *start_addr;                 /**< pool start address and size */
-    u32_t pool_size;                  /**< pool size */
-    u32_t available_size;             /**< available size */
-    u32_t max_used_size;              /**< maximum allocated size */
+    w_uint32_t pool_size;                  /**< pool size */
+    w_uint32_t available_size;             /**< available size */
+    w_uint32_t max_used_size;              /**< maximum allocated size */
 
     pheapitem_s block_list;                 /**< used block list */
     pheapitem_s free_list;                  /**< free block list */
@@ -99,25 +99,25 @@ typedef struct __memheap
     plock_s plock;                       /**< semaphore lock */
 }memheap_s,*pmemheap_s;
 
-err_t wind_heap_init(pmemheap_s mhp,
+w_err_t wind_heap_init(pmemheap_s mhp,
                          const char *name,
                          void *start_addr,
-                         u32_t size);
+                         w_uint32_t size);
 
 void wind_heap_block_init(void);
 
-void *wind_heap_alloc(pmemheap_s heap, u32_t size);
-void *wind_heap_alloc_default(u32_t size);
+void *wind_heap_alloc(pmemheap_s heap, w_uint32_t size);
+void *wind_heap_alloc_default(w_uint32_t size);
 
-void *wind_heap_realloc(pmemheap_s heap, void* ptr, u32_t newsize);
+void *wind_heap_realloc(pmemheap_s heap, void* ptr, w_uint32_t newsize);
 
-err_t wind_heap_free(void *ptr);
+w_err_t wind_heap_free(void *ptr);
 
-void *wind_hmalloc(u32_t size);
+void *wind_hmalloc(w_uint32_t size);
 
-err_t wind_hfree(void *rmem);
+w_err_t wind_hfree(void *rmem);
 
-void *wind_hcalloc(u32_t count, u32_t size);
+void *wind_hcalloc(w_uint32_t count, w_uint32_t size);
 
 void wind_heap_showinfo(void);
 

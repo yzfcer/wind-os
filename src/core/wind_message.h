@@ -40,10 +40,10 @@ extern "C" {
 typedef struct _wind_message
 {
     const char *name;
-    bool_t used;
-    u16_t validtime;
-    u16_t msgNO;
-    u16_t param;
+    w_bool_t used;
+    w_uint16_t validtime;
+    w_uint16_t msgNO;
+    w_uint16_t param;
     void *lparam;
 }msg_s, *pmsg_s; 
 
@@ -51,21 +51,21 @@ typedef struct __mbox_s
 {
     const char *name;
     int num;//消息的数量
-    bool_t used;
-    bool_t valid;//邮箱是否可用
+    w_bool_t used;
+    w_bool_t valid;//邮箱是否可用
     list_s msgq;//消息队列
     pthread_s owner;
 }mbox_s, *pmbox_s;
 
 
-pmsg_s wind_message_create(const char *name,u16_t msgNo,u16_t param,void *lparam);
-err_t wind_message_destroy(pmsg_s pmsg);
+pmsg_s wind_message_create(const char *name,w_uint16_t msgNo,w_uint16_t param,void *lparam);
+w_err_t wind_message_destroy(pmsg_s pmsg);
 
 pmbox_s wind_mbox_create(const char *name);
-err_t wind_mbox_destroy(pmbox_s pmbox);
+w_err_t wind_mbox_destroy(pmbox_s pmbox);
 
-err_t wind_mbox_post(pmbox_s mbox,pmsg_s pmsg);
-err_t wind_mbox_fetch(pmbox_s mbox,pmsg_s *pmsg,u32_t timeout);
+w_err_t wind_mbox_post(pmbox_s mbox,pmsg_s pmsg);
+w_err_t wind_mbox_fetch(pmbox_s mbox,pmsg_s *pmsg,w_uint32_t timeout);
 /**/
 #endif //WIND_MESSAGE_SUPPORT
 

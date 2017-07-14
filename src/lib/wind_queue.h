@@ -41,40 +41,40 @@ extern "C"{
 //#pragma pack(1)
 typedef struct __queue_s
 {
-    u32_t magic;
-    u8_t *rd;// 指向数据输出位置         
-    u8_t *wr; // 指向数据输入位置        
-    u8_t *end;// 指向buf的结束位置       
-    u32_t count;// 队列中数据个数          
-    u32_t capacity;// 队列中允许存储的数据个数 
-    u32_t  data_wid; // 元素的数据宽度
-    s32_t lock_type;
+    w_uint32_t magic;
+    w_uint8_t *rd;// 指向数据输出位置         
+    w_uint8_t *wr; // 指向数据输入位置        
+    w_uint8_t *end;// 指向buf的结束位置       
+    w_uint32_t count;// 队列中数据个数          
+    w_uint32_t capacity;// 队列中允许存储的数据个数 
+    w_uint32_t  data_wid; // 元素的数据宽度
+    w_int32_t lock_type;
 #if WIND_LOCK_SUPPORT > 0
     plock_s lock;
 #endif
-    u8_t buf[4]; // 存储数据的空间          
+    w_uint8_t buf[4]; // 存储数据的空间          
 } queue_s,*pqueue_s;
 
 
 
-err_t wind_queue_create(void *mem,
-                          u32_t size,
-                          u16_t data_wid,
+w_err_t wind_queue_create(void *mem,
+                          w_uint32_t size,
+                          w_uint16_t data_wid,
                           lock_type_e lock_type
                           );
 
 
-s32_t wind_queue_read(void *queue,void *buf,u32_t len);
+w_int32_t wind_queue_read(void *queue,void *buf,w_uint32_t len);
 
-s32_t wind_queue_write(void *queue,void *buf,u32_t len);
+w_int32_t wind_queue_write(void *queue,void *buf,w_uint32_t len);
 
-u32_t wind_queue_datalen(void *queue);
+w_uint32_t wind_queue_datalen(void *queue);
 
-u32_t wind_queue_capacity(void *queue);
+w_uint32_t wind_queue_capacity(void *queue);
 
-err_t wind_queue_flush(void *queue);
+w_err_t wind_queue_flush(void *queue);
 
-err_t wind_queue_destory(void *queue);
+w_err_t wind_queue_destory(void *queue);
 
 #endif//#if WIND_QUEUE_SUPPORT
 

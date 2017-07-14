@@ -42,7 +42,7 @@ static pmsg_s msg_malloc(void)
     return (pmsg_s)wind_core_alloc(STAT_MESSAGE);
 }
 
-static err_t msg_free(pmsg_s msg)
+static w_err_t msg_free(pmsg_s msg)
 {
     return wind_core_free(STAT_MESSAGE,(void *)msg);
 }
@@ -52,7 +52,7 @@ static pmbox_s mbox_malloc(void)
     return (pmbox_s)wind_core_alloc(STAT_MBOX);
 }
 
-static err_t mbox_free(pmbox_s mbox)
+static w_err_t mbox_free(pmbox_s mbox)
 {
     return wind_core_free(STAT_MBOX,(void *)mbox);
 }
@@ -60,7 +60,7 @@ static err_t mbox_free(pmbox_s mbox)
 //********************************************internal functions******************************
 
 
-static err_t mbox_delete_msgs(pnode_s list)
+static w_err_t mbox_delete_msgs(pnode_s list)
 {
     pnode_s pnode = list,pnode1;
     WIND_ASSERT_RETURN(list != NULL,ERR_NULL_POINTER);
@@ -81,7 +81,7 @@ static err_t mbox_delete_msgs(pnode_s list)
 //**********************************************extern functions******************************
 
 //创建一个消息，并返回消息
-pmsg_s wind_message_create(const char *name,u16_t msgNo,u16_t param,void *lparam)
+pmsg_s wind_message_create(const char *name,w_uint16_t msgNo,w_uint16_t param,void *lparam)
 {
     pmsg_s pmsg;
     pmsg = wind_core_alloc(STAT_MESSAGE);
@@ -97,9 +97,9 @@ pmsg_s wind_message_create(const char *name,u16_t msgNo,u16_t param,void *lparam
     return pmsg;
 }
 
-err_t wind_message_destroy(pmsg_s pmsg)
+w_err_t wind_message_destroy(pmsg_s pmsg)
 {
-    err_t err;
+    w_err_t err;
     WIND_ASSERT_RETURN(pmsg != NULL,ERR_NULL_POINTER);
     pmsg->used = B_FALSE;
     pmsg->name = NULL;
@@ -124,10 +124,10 @@ pmbox_s wind_mbox_create(const char *name)
     return pmbox;
 }
 
-err_t wind_mbox_destroy(pmbox_s pmbox)
+w_err_t wind_mbox_destroy(pmbox_s pmbox)
 {
     
-    err_t err;
+    w_err_t err;
     pthread_s pthread;
     WIND_ASSERT_RETURN(pmbox != NULL,ERR_NULL_POINTER);
     pthread = wind_get_cur_proc();
@@ -143,7 +143,7 @@ err_t wind_mbox_destroy(pmbox_s pmbox)
     return ERR_OK;
 }
 
-err_t wind_mbox_post(pmbox_s mbox,pmsg_s pmsg)
+w_err_t wind_mbox_post(pmbox_s mbox,pmsg_s pmsg)
 {
 
     pnode_s pnode;
@@ -166,11 +166,11 @@ err_t wind_mbox_post(pmbox_s mbox,pmsg_s pmsg)
 }
 
 
-err_t wind_mbox_fetch(pmbox_s mbox,pmsg_s *pmsg,u32_t timeout)
+w_err_t wind_mbox_fetch(pmbox_s mbox,pmsg_s *pmsg,w_uint32_t timeout)
 {
-    s16_t cnt;
-    err_t err;
-    u32_t ticks;
+    w_int16_t cnt;
+    w_err_t err;
+    w_uint32_t ticks;
     pnode_s pnode;
     pthread_s pthread;
     WIND_ASSERT_RETURN(mbox != NULL,ERR_NULL_POINTER);

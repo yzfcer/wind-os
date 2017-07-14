@@ -50,7 +50,7 @@ static psem_s sem_malloc()
 }
 
 
-psem_s wind_sem_create(const char *name,u16_t semValue)
+psem_s wind_sem_create(const char *name,w_uint16_t semValue)
 {
     psem_s psem;
     psem = sem_malloc();
@@ -66,7 +66,7 @@ psem_s wind_sem_create(const char *name,u16_t semValue)
 
 
 
-err_t wind_sem_post(psem_s psem)
+w_err_t wind_sem_post(psem_s psem)
 {
     pnode_s pnode;
     pthread_s pthread;
@@ -90,12 +90,11 @@ err_t wind_sem_post(psem_s psem)
 }
 
 
-err_t wind_sem_fetch(psem_s psem,u32_t timeout)
+w_err_t wind_sem_fetch(psem_s psem,w_uint32_t timeout)
 {
-    s16_t index;
     pnode_s pnode;
     pnode_s pnode1;
-    s32_t ticks;
+    w_int32_t ticks;
     pthread_s pthread;
     WIND_ASSERT_RETURN(psem != NULL,ERR_NULL_POINTER);
 
@@ -141,7 +140,7 @@ err_t wind_sem_fetch(psem_s psem,u32_t timeout)
 
 
 //试图释放一个信号量，如果有线程被阻塞，则释放将终止
-err_t wind_sem_tryfree(psem_s psem)
+w_err_t wind_sem_tryfree(psem_s psem)
 {
     WIND_ASSERT_RETURN(psem != NULL,ERR_NULL_POINTER);
     wind_close_interrupt();
@@ -156,9 +155,9 @@ err_t wind_sem_tryfree(psem_s psem)
     wind_open_interrupt();
     return ERR_OK;
 }
-err_t wind_sem_free(psem_s psem)
+w_err_t wind_sem_free(psem_s psem)
 {
-    err_t err;
+    w_err_t err;
     pnode_s pnode;
     pthread_s pthread;
     WIND_ASSERT_RETURN(psem != NULL,ERR_NULL_POINTER);
@@ -180,7 +179,7 @@ err_t wind_sem_free(psem_s psem)
     return err;    
 }
 
-err_t wind_sem_test(void)
+w_err_t wind_sem_test(void)
 {
     psem_s psem = wind_sem_create("semtest",1);
     WIND_ASSERT_RETURN(psem != NULL,ERR_NULL_POINTER);

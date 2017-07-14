@@ -16,8 +16,8 @@
 
 #define ERR_INVALID_HANDLER -1 //ÎÞÐ§µÄ¾ä±ú
 
-extern s8_t *wind_err_set[];
-#define WIND_FUNC_NAME(name) s8_t funcname = x
+extern w_int8_t *wind_err_set[];
+#define WIND_FUNC_NAME(name) w_int8_t funcname = x
 #define WIND_ERR(i) WIND_ERROR("%s:%s",funcname,wind_err_set[i])
 
 #endif

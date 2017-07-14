@@ -41,17 +41,17 @@ extern "C" {
 
 typedef struct __time_s
 {
-    u8_t hour;
-    u8_t minute;
-    u8_t second;
-    u16_t msecond;
+    w_uint8_t hour;
+    w_uint8_t minute;
+    w_uint8_t second;
+    w_uint16_t msecond;
 }time_s,*ptime_s;
 
 typedef struct __date_s
 {
-    u16_t year;
-    u8_t month;
-    u8_t day;
+    w_uint16_t year;
+    w_uint8_t month;
+    w_uint8_t day;
 }date_s,*pdate_s;
 
 typedef enum __week_e
@@ -72,13 +72,13 @@ typedef struct __datetime_s
     week_e week;
 } datetime_s,*pdatetime_s;
 
-void wind_set_date(u16_t year,u8_t month,u8_t day);
-void wind_set_time(u8_t hour,u8_t minute,u8_t second,u16_t msecond);
-void wind_set_datetime(u16_t year,u8_t month,u8_t day,u8_t hour,u8_t minute,u8_t second,u16_t msecond,week_e week,u8_t half_day);
+void wind_set_date(w_uint16_t year,w_uint8_t month,w_uint8_t day);
+void wind_set_time(w_uint8_t hour,w_uint8_t minute,w_uint8_t second,w_uint16_t msecond);
+void wind_set_datetime(w_uint16_t year,w_uint8_t month,w_uint8_t day,w_uint8_t hour,w_uint8_t minute,w_uint8_t second,w_uint16_t msecond,week_e week,w_uint8_t half_day);
 pdate_s wind_get_date(void);
 ptime_s wind_get_time(void);
 pdatetime_s wind_get_datetime(void);
-err_t wind_copy_datetime(pdatetime_s desdt,pdatetime_s srcdt);
+w_err_t wind_copy_datetime(pdatetime_s desdt,pdatetime_s srcdt);
 void wind_datetime_init(void);
 void wind_second_inc(void);
 void wind_msecond_inc(void); 

@@ -39,7 +39,7 @@
 
 extern datetime_s G_DATETIME;//当前日期和时间
 
-err_t cmd_setdate_main(s32_t argc,char **argv)
+w_err_t cmd_setdate_main(w_int32_t argc,char **argv)
 {
     
     //pdate_s pd;
@@ -57,11 +57,11 @@ err_t cmd_setdate_main(s32_t argc,char **argv)
     return ERR_OK;
 }
 
-err_t cmd_settime_main(s32_t argc,char **argv)
+w_err_t cmd_settime_main(w_int32_t argc,char **argv)
 {
     //ptime_s pt;
     datetime_s *dt;
-    s8_t *cmdstr;
+    w_int8_t *cmdstr;
     
     dt = &G_DATETIME;
     if(wind_strlen(cmdstr) >= 15)
@@ -76,7 +76,7 @@ err_t cmd_settime_main(s32_t argc,char **argv)
     return ERR_OK;
 }
 
-err_t cmd_showdatetime_main(s32_t argc,char **argv)
+w_err_t cmd_showdatetime_main(w_int32_t argc,char **argv)
 {
     
     pdate_s pd;

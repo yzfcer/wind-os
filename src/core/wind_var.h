@@ -60,30 +60,30 @@ typedef struct __core_var_s
     WIND_MPOOL(lock,WIND_LOCK_NUM,sizeof(lock_s));
 #endif
     //定义一些堆栈以便创建程序在时使用
-    WIND_MPOOL(stk128,WIND_STK128_MAX_NUM,128 * sizeof(stack_t));
-    WIND_MPOOL(stk256,WIND_STK256_MAX_NUM,256 * sizeof(stack_t));
-    WIND_MPOOL(stk512,WIND_STK512_MAX_NUM,512 * sizeof(stack_t));
-    WIND_MPOOL(stk1024,WIND_STK1024_MAX_NUM,1024 * sizeof(stack_t));
-    WIND_MPOOL(stk2048,WIND_STK2048_MAX_NUM,2048 * sizeof(stack_t));
+    WIND_MPOOL(stk128,WIND_STK128_MAX_NUM,128 * sizeof(w_stack_t));
+    WIND_MPOOL(stk256,WIND_STK256_MAX_NUM,256 * sizeof(w_stack_t));
+    WIND_MPOOL(stk512,WIND_STK512_MAX_NUM,512 * sizeof(w_stack_t));
+    WIND_MPOOL(stk1024,WIND_STK1024_MAX_NUM,1024 * sizeof(w_stack_t));
+    WIND_MPOOL(stk2048,WIND_STK2048_MAX_NUM,2048 * sizeof(w_stack_t));
     
     list_s pcblist;
     list_s ttmerlist;
-    s16_t pcbcnt;//线程计数器
-    u32_t idle_cnt;//空闲计算器
-    bool_t usrprocen;/*用户线程允许创建的标志 */
-    bool_t is_incore;
+    w_int16_t pcbcnt;//线程计数器
+    w_uint32_t idle_cnt;//空闲计算器
+    w_bool_t usrprocen;/*用户线程允许创建的标志 */
+    w_bool_t is_incore;
     
-    u32_t g_wind_cpu_usage;
+    w_uint32_t g_wind_cpu_usage;
     pthread_s pmain,pidle,pstat,pctrl,pdaemon;
 
 
-    u32_t idle_cnt_per_sec;//在一段时间内的idle任务的计数值
-    volatile bool_t run_falg;//多线程调度开始的标志
-    u32_t ticks_cnt;//tick计时
+    w_uint32_t idle_cnt_per_sec;//在一段时间内的idle任务的计数值
+    volatile w_bool_t run_falg;//多线程调度开始的标志
+    w_uint32_t ticks_cnt;//tick计时
 
 }core_var_s;
 extern core_var_s g_core;//内核相关的参数集
-extern volatile bool_t gwind_start_flag;//开始调度的标志
+extern volatile w_bool_t gwind_start_flag;//开始调度的标志
 extern pthread_s gwind_cur_pcb;//当前的
 extern pthread_s gwind_high_pcb;//最高优先级PCB指针
 
@@ -91,11 +91,11 @@ void wind_corevar_init(void);
 
 void *wind_core_alloc(stat_e type);
 
-err_t wind_core_free(stat_e type,void *block);
+w_err_t wind_core_free(stat_e type,void *block);
 
-pstack_t wind_stack_alloc(u32_t size);
+pstack_t wind_stack_alloc(w_uint32_t size);
 
-err_t wind_stack_free(pstack_t pstack);
+w_err_t wind_stack_free(pstack_t pstack);
 
 //CPU的总体占用率
 #define WIND_CPU_USAGE (g_core.g_wind_cpu_usage)

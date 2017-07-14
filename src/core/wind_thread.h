@@ -97,19 +97,19 @@ typedef struct _thread_s
 {
     pstack_t pstk;
     pstack_t pstktop;
-    u16_t stksize;
+    w_uint16_t stksize;
     
-    err_t (*procfunc)(s32_t argc,s8_t **argv);
-    s16_t argc;
-    s8_t **argv;
+    w_err_t (*procfunc)(w_int32_t argc,w_int8_t **argv);
+    w_int16_t argc;
+    w_int8_t **argv;
     
     struct _thread_s *parent;
     char name[PROCESS_NAME_LEN];//
-    bool_t used;
-    s16_t prio;
+    w_bool_t used;
+    w_int16_t prio;
     
-    s8_t proc_status;
-    s32_t sleep_ticks;
+    w_int8_t proc_status;
+    w_int32_t sleep_ticks;
     suscause_e cause;//导致状态变化的原因
 #if WIND_THREAD_CALLBACK_SUPPORT > 0
     threadcb_s cb;
@@ -124,35 +124,35 @@ typedef struct _thread_s
 //获取当前的线程PCB
 pthread_s wind_get_cur_proc(void);
 //打开外部任务创建
-bool_t wind_thread_isopen(void);
+w_bool_t wind_thread_isopen(void);
 
-err_t wind_thread_getname(pthread_s pthread,s8_t *name);
-pthread_s wind_get_proc_byname(s8_t *name);
-//err_t wind_thread_get_super_permission(void);
-pthread_s get_pcb_byname(s8_t *name);
+w_err_t wind_thread_getname(pthread_s pthread,w_int8_t *name);
+pthread_s wind_get_proc_byname(w_int8_t *name);
+//w_err_t wind_thread_get_super_permission(void);
+pthread_s get_pcb_byname(w_int8_t *name);
 //这个函数将会支持消息驱动模式，但暂时还能不能支持，因为一些支撑代码还没有建立
-pthread_s wind_thread_create(const s8_t *name,
+pthread_s wind_thread_create(const w_int8_t *name,
                    prio_e priolevel,
-                   err_t (*procfunc)(s32_t argc,s8_t **argv),
-                   s16_t argc,
-                   s8_t **argv,
+                   w_err_t (*procfunc)(w_int32_t argc,w_int8_t **argv),
+                   w_int16_t argc,
+                   w_int8_t **argv,
                    pstack_t psck,
-                   u16_t stksize);
-err_t wind_thread_changeprio(pthread_s pthread,s16_t prio);
-err_t wind_thread_start(pthread_s pthread);
-err_t wind_thread_suspend(pthread_s pthread);
-err_t wind_thread_resume(pthread_s pthread);
-err_t wind_thread_kill(pthread_s pthread);
-err_t wind_thread_killN(s8_t *name);
-s8_t *wind_thread_get_curname(void);
-err_t wind_thread_exit(err_t exitcode);
+                   w_uint16_t stksize);
+w_err_t wind_thread_changeprio(pthread_s pthread,w_int16_t prio);
+w_err_t wind_thread_start(pthread_s pthread);
+w_err_t wind_thread_suspend(pthread_s pthread);
+w_err_t wind_thread_resume(pthread_s pthread);
+w_err_t wind_thread_kill(pthread_s pthread);
+w_err_t wind_thread_killN(w_int8_t *name);
+w_int8_t *wind_thread_get_curname(void);
+w_err_t wind_thread_exit(w_err_t exitcode);
 void wind_thread_wakeup(void);
-err_t wind_thread_sleep(u32_t ms);
+w_err_t wind_thread_sleep(w_uint32_t ms);
 
 #if WIND_THREAD_CALLBACK_SUPPORT > 0
-err_t wind_thread_callback_register(pthread_s pthread,procevt_e id,void(*cb)(pthread_s));
+w_err_t wind_thread_callback_register(pthread_s pthread,procevt_e id,void(*cb)(pthread_s));
 #endif
-err_t wind_thread_showlist(pnode_s nodes);
+w_err_t wind_thread_showlist(pnode_s nodes);
 
 #if WIND_THREAD_MAX_NUM > PCB_NUM_LIMIT
 #error "PCB_MAX_NUM should not be a number larger than PCB_NUM_LIMIT!"

@@ -41,26 +41,26 @@ extern "C" {
 typedef struct __chdev_s
 {
     struct __chdev_s *next;
-    s8_t name[12];
+    wint8_t name[12];
     HANDLE hdev;
     bool_t sole;//是否独占设备的标志
     bool_t opened;//设备是否打开的标志
     HANDLE lock;//设备互斥锁的句柄
     err_t (*open)(void *param);//打开一个设备，一般是初始化
-    err_t (*ioctl)(u8_t com,void *param);//配置设备的参数，针对不同的设备可自定义
-    u16_t (*write)(u8_t *buf,u16_t len);//向设备写一个系列字节
-    u16_t (*read)(u8_t *buf,u16_t len);//从设备读取一系列字节
+    err_t (*ioctl)(wuint8_t com,void *param);//配置设备的参数，针对不同的设备可自定义
+    u16_t (*write)(wuint8_t *buf,wuint16_t len);//向设备写一个系列字节
+    u16_t (*read)(wuint8_t *buf,wuint16_t len);//从设备读取一系列字节
     err_t (*close)(void);//关闭一个设备，打开的逆操作
 }chdev_s,*pchdev_s;
 
 void wind_insert_chdev(pchdev_s dev);
 err_t wind_remove_chdev(pchdev_s dev);
 
-HANDLE wind_chdev_get(s8_t name);
+HANDLE wind_chdev_get(wint8_t name);
 err_t wind_chdev_open(HANDLE hdev,bool_t sole,void *param);
-err_t wind_chdev_ioctr(HANDLE hdev,u8_t com,void *param);
-u16_t wind_chdev_read(HANDLE hdev,u8_t *buf,u16_t len);
-u16_t wind_chdev_write(HANDLE hdev,u8_t *buf,u16_t len);
+err_t wind_chdev_ioctr(HANDLE hdev,wuint8_t com,void *param);
+wuint16_t wind_chdev_read(HANDLE hdev,wuint8_t *buf,wuint16_t len);
+wuint16_t wind_chdev_write(HANDLE hdev,wuint8_t *buf,wuint16_t len);
 err_t wind_chdev_close(HANDLE hdev);
 
 #ifdef __cplusplus

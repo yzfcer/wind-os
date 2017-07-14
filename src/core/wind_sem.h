@@ -39,20 +39,20 @@ extern "C" {
 typedef struct _wind_sem
 {
     const char *name;
-    bool_t used;         //是否有效的标志
-    u16_t sem_num;     //当前的信号量的值
-    //u16_t tot_sem_num; //初始化的信号量的值
+    w_bool_t used;         //是否有效的标志
+    w_uint16_t sem_num;     //当前的信号量的值
+    //w_uint16_t tot_sem_num; //初始化的信号量的值
     list_s waitlist;  //等待线程队列
 }sem_s,*psem_s;
 
 
 
-psem_s wind_sem_create(const char *name,u16_t semValue);
-err_t wind_sem_post(psem_s psem);
-err_t wind_sem_fetch(psem_s psem,u32_t timeout);
-err_t wind_sem_tryfree(psem_s psem);
-err_t wind_sem_free(psem_s psem);
-err_t wind_sem_test(void);
+psem_s wind_sem_create(const char *name,w_uint16_t semValue);
+w_err_t wind_sem_post(psem_s psem);
+w_err_t wind_sem_fetch(psem_s psem,w_uint32_t timeout);
+w_err_t wind_sem_tryfree(psem_s psem);
+w_err_t wind_sem_free(psem_s psem);
+w_err_t wind_sem_test(void);
 
 #endif
 #ifdef __cplusplus

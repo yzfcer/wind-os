@@ -58,21 +58,21 @@ void atomic_dec(atomic_t atom)
     wind_open_interrupt();
 }
 
-void atomic_add(atomic_t atom,u32_t va)
+void atomic_add(atomic_t atom,w_uint32_t va)
 {
     wind_close_interrupt();
     atom.value += va;
     wind_open_interrupt();
 }
 
-void atomic_minus(atomic_t atom,u32_t value)
+void atomic_minus(atomic_t atom,w_uint32_t value)
 {
     wind_close_interrupt();
     atom.value -= value;
     wind_open_interrupt();
 }
 
-void atomic_set(atomic_t atom,u32_t value)
+void atomic_set(atomic_t atom,w_uint32_t value)
 {
     wind_close_interrupt();
     atom.value -= value;
@@ -80,7 +80,7 @@ void atomic_set(atomic_t atom,u32_t value)
 
 }
 
-void atomic_get(atomic_t atom,u32_t *value)
+void atomic_get(atomic_t atom,w_uint32_t *value)
 {
     wind_close_interrupt();
     *value = atom.value;

@@ -52,16 +52,16 @@
 
 
 
-volatile s8_t gwind_int_cnt = 0;//全局的中断计数值
+volatile w_int8_t gwind_int_cnt = 0;//全局的中断计数值
 
-extern err_t wind_time_init(void);
-extern err_t wind_main(void);
+extern w_err_t wind_time_init(void);
+extern w_err_t wind_main(void);
 extern void wind_thread_switch(void);
 extern void wind_interrupt_switch(void);
 extern void wind_start_switch(void);
-extern err_t wind_thread_showlist(pnode_s nodes);
+extern w_err_t wind_thread_showlist(pnode_s nodes);
 extern void listtest(void);
-extern err_t consoleProc(s32_t argc,char **argv);
+extern w_err_t consoleProc(w_int32_t argc,char **argv);
 
 //wind core data section --- end
 
@@ -77,7 +77,7 @@ static void wind_thread_open()
 }
 
 //查看是否允许创建用户线程
-bool_t wind_thread_isopen()
+w_bool_t wind_thread_isopen()
 {
     return g_core.usrprocen;
 }
@@ -137,7 +137,7 @@ static void wind_run()
 
 void wind_update_curPCB()
 {
-    s16_t cnt,high = -1,hprio = 32767;
+    w_int16_t cnt,high = -1,hprio = 32767;
     pthread_s pthread;
     pnode_s pnode = g_core.pcblist.head;
     wind_close_interrupt();
@@ -210,12 +210,12 @@ void wind_init()
 //*******************************daemon***********************************************
 #if WIND_DAEMON_SUPPORT > 0
 #define DAEMON_STK_SIZE 512
-static stack_t daemonstk[DAEMON_STK_SIZE];//主任务堆栈
-static err_t daemon_proc(s16_t argc,s8_t **argv)
+static w_stack_t daemonstk[DAEMON_STK_SIZE];//主任务堆栈
+static w_err_t daemon_proc(w_int16_t argc,w_int8_t **argv)
 {
-    err_t err;
+    w_err_t err;
 
-    u32_t dmcnt = 0;
+    w_uint32_t dmcnt = 0;
     argc = 0;
     while(1)
     {
@@ -229,11 +229,11 @@ static err_t daemon_proc(s16_t argc,s8_t **argv)
 
 
 //****************************static***********************************************
-static u32_t core_get_ticks_of_idle(u32_t ms)
+static w_uint32_t core_get_ticks_of_idle(w_uint32_t ms)
 {
     pthread_s pthread;
     pnode_s node;
-    u32_t cnts;
+    w_uint32_t cnts;
     pthread_s pproc = wind_get_cur_proc();
     node = g_core.pcblist.head;
     g_core.idle_cnt = 0;
@@ -269,11 +269,11 @@ static u32_t core_get_ticks_of_idle(u32_t ms)
 //主线程函数
 //统计线程函数
 #define STATI_STK_SIZE 1024
-static stack_t statisstk[STATI_STK_SIZE];//统计任务堆栈
-static err_t stati_proc(s16_t argc,s8_t **argv)
+static w_stack_t statisstk[STATI_STK_SIZE];//统计任务堆栈
+static w_err_t stati_proc(w_int16_t argc,w_int8_t **argv)
 {
     
-    u32_t statcnt = 0,i = 3;
+    w_uint32_t statcnt = 0,i = 3;
     argc = 0;
     //wind_heap_showinfo();
     wind_thread_sleep(3000);
@@ -295,10 +295,10 @@ static err_t stati_proc(s16_t argc,s8_t **argv)
 
 //****************************idle_proc***********************************************
 #define IDLE_STK_SIZE 256
-static stack_t idlestk[IDLE_STK_SIZE];//空闲任务堆栈
+static w_stack_t idlestk[IDLE_STK_SIZE];//空闲任务堆栈
 //空闲线程函数
 //extern void wind_sem_test(void);
-static err_t idle_proc(s16_t argc,s8_t **argv)
+static w_err_t idle_proc(w_int16_t argc,w_int8_t **argv)
 {    
     //wind_sem_test();
     while(1)
@@ -314,8 +314,8 @@ static err_t idle_proc(s16_t argc,s8_t **argv)
 
 //****************************wind_entry***********************************************
 #define MAIN_STK_SIZE 512
-static stack_t mainstk[MAIN_STK_SIZE];//主任务堆栈
-static err_t wind_entry(s16_t argc,s8_t **argv)
+static w_stack_t mainstk[MAIN_STK_SIZE];//主任务堆栈
+static w_err_t wind_entry(w_int16_t argc,w_int8_t **argv)
 {   
     wind_tick_init();
     WIND_INFO("tick init\r\n");

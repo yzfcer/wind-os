@@ -36,7 +36,7 @@
 #include "wind_var.h"
 #include "wind_assert.h"
 core_var_s g_core;
-volatile bool_t gwind_start_flag = B_FALSE;
+volatile w_bool_t gwind_start_flag = B_FALSE;
 pthread_s gwind_cur_pcb = NULL;//当前线程PCB指针
 pthread_s gwind_high_pcb = NULL;//最高优先级PCB指针
 
@@ -68,11 +68,11 @@ void wind_corepool_init(void)
     wind_mpool_create("lock_pool",g_core.lock,sizeof(g_core.lock),sizeof(lock_s));
     wind_mpool_show("lock",g_core.lock);
 #endif
-    wind_mpool_create("stk128_pool",g_core.stk128,sizeof(g_core.stk128),128 * sizeof(stack_t));
-    wind_mpool_create("stk256_pool",g_core.stk256,sizeof(g_core.stk256),256 * sizeof(stack_t));
-    wind_mpool_create("stk512_pool",g_core.stk512,sizeof(g_core.stk512),512 * sizeof(stack_t));
-    wind_mpool_create("stk1024_pool",g_core.stk1024,sizeof(g_core.stk1024),1024 * sizeof(stack_t));
-    wind_mpool_create("stk2048_pool",g_core.stk2048,sizeof(g_core.stk2048),2048 * sizeof(stack_t));
+    wind_mpool_create("stk128_pool",g_core.stk128,sizeof(g_core.stk128),128 * sizeof(w_stack_t));
+    wind_mpool_create("stk256_pool",g_core.stk256,sizeof(g_core.stk256),256 * sizeof(w_stack_t));
+    wind_mpool_create("stk512_pool",g_core.stk512,sizeof(g_core.stk512),512 * sizeof(w_stack_t));
+    wind_mpool_create("stk1024_pool",g_core.stk1024,sizeof(g_core.stk1024),1024 * sizeof(w_stack_t));
+    wind_mpool_create("stk2048_pool",g_core.stk2048,sizeof(g_core.stk2048),2048 * sizeof(w_stack_t));
 }
 
 void wind_corevar_init(void)
@@ -134,9 +134,9 @@ void *wind_core_alloc(stat_e type)
     return p;
 }
 
-err_t wind_core_free(stat_e type,void *block)
+w_err_t wind_core_free(stat_e type,void *block)
 {
-    err_t err;
+    w_err_t err;
     WIND_ASSERT_RETURN(block != NULL,ERR_NULL_POINTER);
     switch(type)
     {
@@ -183,9 +183,9 @@ err_t wind_core_free(stat_e type,void *block)
 }
 
 //申请一个线程堆栈
-pstack_t wind_stack_alloc(u32_t size)
+pstack_t wind_stack_alloc(w_uint32_t size)
 {
-    u16_t stksize;
+    w_uint16_t stksize;
     pstack_t pstk;
     if(size == 0)
         return NULL;
@@ -224,18 +224,18 @@ pstack_t wind_stack_alloc(u32_t size)
 }
 
 //释放一个线程堆栈
-err_t wind_stack_free(pstack_t pstack)
+w_err_t wind_stack_free(pstack_t pstack)
 {
     WIND_ASSERT_RETURN(pstack != NULL,ERR_NULL_POINTER);
-    if((u32_t)pstack < (u32_t)g_core.stk128)
+    if((w_uint32_t)pstack < (w_uint32_t)g_core.stk128)
         return ERR_COMMAN;
-    else if((u32_t)pstack < (u32_t)g_core.stk256)
+    else if((w_uint32_t)pstack < (w_uint32_t)g_core.stk256)
         return wind_mpool_free(g_core.stk128,pstack);
-    else if((u32_t)pstack < (u32_t)g_core.stk512)
+    else if((w_uint32_t)pstack < (w_uint32_t)g_core.stk512)
         return wind_mpool_free(g_core.stk256,pstack);
-    else if((u32_t)pstack < (u32_t)g_core.stk1024)
+    else if((w_uint32_t)pstack < (w_uint32_t)g_core.stk1024)
         return wind_mpool_free(g_core.stk512,pstack);
-    else if((u32_t)pstack < (u32_t)g_core.stk2048)
+    else if((w_uint32_t)pstack < (w_uint32_t)g_core.stk2048)
         return wind_mpool_free(g_core.stk1024,pstack);
     else
         return wind_mpool_free(g_core.stk2048,pstack);
