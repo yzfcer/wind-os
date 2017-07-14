@@ -55,7 +55,7 @@
 volatile w_int8_t gwind_int_cnt = 0;//全局的中断计数值
 
 extern w_err_t wind_time_init(void);
-extern w_err_t wind_main(void);
+
 extern void wind_thread_switch(void);
 extern void wind_interrupt_switch(void);
 extern void wind_start_switch(void);
@@ -137,7 +137,6 @@ static void wind_run()
 
 void wind_update_curPCB()
 {
-    w_int16_t cnt,high = -1,hprio = 32767;
     pthread_s pthread;
     pnode_s pnode = g_core.pcblist.head;
     wind_close_interrupt();
@@ -184,7 +183,6 @@ void wind_thread_dispatch(void)
 //操作系统初始化
 void wind_init()
 {
-    
     g_core.usrprocen = B_FALSE;
     wind_target_init();//目标机运行环境初始化
     wind_std_port_init();//调试端口初始化
@@ -207,158 +205,16 @@ void wind_init()
 }
 
 
-//*******************************daemon***********************************************
-#if WIND_DAEMON_SUPPORT > 0
-#define DAEMON_STK_SIZE 512
-static w_stack_t daemonstk[DAEMON_STK_SIZE];//主任务堆栈
-static w_err_t daemon_proc(w_int16_t argc,w_int8_t **argv)
-{
-    w_err_t err;
-
-    w_uint32_t dmcnt = 0;
-    argc = 0;
-    while(1)
-    {
-        wind_thread_sleep(50);
-        dmcnt ++;
-    }
-    return ERR_OK;
-}
-#endif //WIND_DAEMON_SUPPORT
-//*******************************daemon***********************************************
-
-
-//****************************static***********************************************
-static w_uint32_t core_get_ticks_of_idle(w_uint32_t ms)
-{
-    pthread_s pthread;
-    pnode_s node;
-    w_uint32_t cnts;
-    pthread_s pproc = wind_get_cur_proc();
-    node = g_core.pcblist.head;
-    g_core.idle_cnt = 0;
-    WIND_DEBUG("RUN_FLAG=%d\r\n",RUN_FLAG);
-    while(node)
-    {
-        pthread = (pthread_s)node->obj;
-        if((pthread != pproc) && (pthread->prio != 32767))
-        {
-            pthread->proc_status = PROC_STATUS_SUSPEND;
-            pthread->cause = CAUSE_COM;
-            
-        }
-        node = node->next;
-    }
-    
-    wind_thread_sleep(ms);
-    cnts = g_core.idle_cnt;
-    node = g_core.pcblist.head;
-    while(node)
-    {
-        pthread = (pthread_s)node->obj;
-        if((pthread != pproc) && (pthread->prio != 32767))
-        {
-            pthread->proc_status = PROC_STATUS_READY;
-            pthread->cause = CAUSE_COM;
-        }
-        node = node->next;
-    }
-    return cnts;
-}
-
-//主线程函数
-//统计线程函数
-#define STATI_STK_SIZE 1024
-static w_stack_t statisstk[STATI_STK_SIZE];//统计任务堆栈
-static w_err_t stati_proc(w_int16_t argc,w_int8_t **argv)
-{
-    
-    w_uint32_t statcnt = 0,i = 3;
-    argc = 0;
-    //wind_heap_showinfo();
-    wind_thread_sleep(3000);
-    IDLE_CNT_PER_SEC = core_get_ticks_of_idle(5000);
-    wind_printf("idle cnt:%d\r\n",IDLE_CNT_PER_SEC);
-    while(1)
-    {
-        statcnt = g_core.idle_cnt;
-        wind_thread_sleep(5000);
-        //wind_heap_showinfo();
-        statcnt = g_core.idle_cnt - statcnt;
-        //wind_printf("run cnt:%d\r\n",statcnt);
-        WIND_CPU_USAGE = (IDLE_CNT_PER_SEC - statcnt) * 100 / IDLE_CNT_PER_SEC;
-        wind_printf("cpu:%d%%\r\n",WIND_CPU_USAGE);
-    }
-    return ERR_OK;
-}
-//****************************static***********************************************
-
-//****************************idle_proc***********************************************
-#define IDLE_STK_SIZE 256
-static w_stack_t idlestk[IDLE_STK_SIZE];//空闲任务堆栈
-//空闲线程函数
-//extern void wind_sem_test(void);
-static w_err_t idle_proc(w_int16_t argc,w_int8_t **argv)
-{    
-    //wind_sem_test();
-    while(1)
-    {
-        g_core.idle_cnt ++;
-    }
-    return ERR_OK;
-}
-
-//****************************idle_proc***********************************************
-
-
 
 //****************************wind_entry***********************************************
-#define MAIN_STK_SIZE 512
-static w_stack_t mainstk[MAIN_STK_SIZE];//主任务堆栈
-static w_err_t wind_entry(w_int16_t argc,w_int8_t **argv)
-{   
-    wind_tick_init();
-    WIND_INFO("tick init\r\n");
-    
-#if WIND_SOFTINT_SUPPORT > 0    
-        wind_create_softint_proc();
-#endif
-        g_core.pstat = wind_thread_create("statistics",PRIO_HIGH,stati_proc,
-                         0,NULL,statisstk,STATI_STK_SIZE);
-#if WIND_DAEMON_SUPPORT > 0
-        g_core.pdaemon = wind_thread_create("daemon",PRIO_HIGH,daemon_proc,
-                         0,NULL,daemonstk,DAEMON_STK_SIZE);
-#endif
-        //创建空闲线程
-        g_core.pidle = wind_thread_create("idle",PRIO_LOW,idle_proc,
-                        0,NULL,idlestk,IDLE_STK_SIZE);
-        wind_thread_changeprio(g_core.pidle,32767);
-        
-    
-       
-#if WIND_CONSOLE_SUPPORT > 0
-    g_core.pctrl = lunch_console();
-#endif
-
-    wind_thread_showlist(g_core.pcblist.head);
-    WIND_INFO("Running main proc...\r\n");
-    wind_main();
-    while(1)
-        wind_thread_sleep(1000);
-    return ERR_OK;
-}
-
-//****************************wind_entry***********************************************
+int create_init_thread(void);
 
 int wind_os_lunch(void)
 {
-    
     wind_close_interrupt();
     wind_init();//系统初始化
-
     //创建用户主程序的入口线程
-    g_core.pmain = wind_thread_create("entry",PRIO_HIGH,wind_entry,
-                    0,NULL,mainstk,MAIN_STK_SIZE);
+    create_init_thread();
     wind_thread_open();//在系统初始化之前，不允许开放
     //需要在这里启动线程调度
     WIND_INFO("wind is ready for running!\r\n");

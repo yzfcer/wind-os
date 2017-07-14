@@ -103,7 +103,7 @@ cmd_s *wind_get_cmdlist(void);
 w_int32_t is_string_equal(char *dest,char *src);
 w_err_t wind_cmd_register(cmd_global_s *cgl,cmd_s *cmd,int cnt);
 //w_err_t consoleProc(w_int32_t argc,char **argv);
-pthread_s lunch_console(void);
+void create_console_thread(void);
 
 #ifdef __cplusplus
 }

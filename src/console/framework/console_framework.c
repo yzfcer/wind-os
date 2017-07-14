@@ -30,6 +30,7 @@ extern "C" {
 #include "wind_config.h"
 #include "wind_debug.h"
 #include "wind_time.h"
+#include "wind_var.h"
 
 /********************************************内部变量定义**********************************************/
 
@@ -494,12 +495,11 @@ w_err_t consoleProc(w_int32_t argc,char **argv)
 
 #define CTRL_STK_SIZE 2048
 static w_stack_t ctrlstk[CTRL_STK_SIZE];//主任务堆栈
-pthread_s lunch_console(void)
+void create_console_thread(void)
 {
-    pthread_s pthr = wind_thread_create("console",PRIO_LOW,consoleProc,
+    g_core.pctrl = wind_thread_create("console",PRIO_LOW,consoleProc,
                0,NULL,ctrlstk,CTRL_STK_SIZE);
-    wind_thread_changeprio(pthr,32760);
-    return pthr;
+    wind_thread_changeprio(g_core.pctrl,32760);
 }
 
 

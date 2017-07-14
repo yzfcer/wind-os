@@ -853,7 +853,29 @@
           <GroupName>os_api</GroupName>
         </Group>
         <Group>
-          <GroupName>os_app</GroupName>
+          <GroupName>os_sysapp</GroupName>
+          <Files>
+            <File>
+              <FileName>daemon_thread.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\sysapp\daemon_thread.c</FilePath>
+            </File>
+            <File>
+              <FileName>idle_thread.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\sysapp\idle_thread.c</FilePath>
+            </File>
+            <File>
+              <FileName>init_thread.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\sysapp\init_thread.c</FilePath>
+            </File>
+            <File>
+              <FileName>stati_thread.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\sysapp\stati_thread.c</FilePath>
+            </File>
+          </Files>
         </Group>
         <Group>
           <GroupName>os_console_framework</GroupName>
