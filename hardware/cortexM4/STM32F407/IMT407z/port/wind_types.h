@@ -69,7 +69,6 @@ typedef float w_fp32_t;
 typedef float w_fp64_t;
 #endif
 
-//#ifndef 
 
 #ifndef NULL
 #define NULL ((void *)0)
