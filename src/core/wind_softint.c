@@ -118,6 +118,7 @@ void wind_soft_int(HANDLE handler)
 //创建软件中断线程
 w_err_t wind_create_softint_proc(void)
 {
+    WIND_INFO("create soft interrupt thread.\r\n");
     softint_ppcb = wind_thread_create("softint",PRIO_HIGH,wind_softint_proc,
                 0,NULL,softint_stk,WIND_SOFTINT_STK_LEN);
                 wind_thread_changeprio(softint_ppcb,0);

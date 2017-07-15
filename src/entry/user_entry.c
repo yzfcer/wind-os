@@ -48,7 +48,7 @@ w_err_t wind_main()
                         512);
 #endif
     WIND_INFO("enter wind main.\r\n");
-    listtest();
+    //listtest();
 
     return 0;
 }

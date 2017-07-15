@@ -50,7 +50,7 @@
 
 #define WIND_MEM_SUPPORT 1   //是否支持内存管理
 
-#define WIND_TTIMER_SUPPORT 1  //是否支持tick精度的定时器
+#define WIND_TTIMER_SUPPORT 0  //是否支持tick精度的定时器
 
 #define WIND_RTC_SUPPORT 0  //是否支持实时时间
 
@@ -69,7 +69,7 @@
 
 #define WIND_THREAD_MAX_NUM 40 //需要的线程总数,建议根据需要来定义
 
-#define WIND_TICK_PER_SEC 200 //一秒钟所经历的的时间街节拍
+#define WIND_TICK_PER_SEC 1000 //一秒钟所经历的的时间街节拍
 
 #define HARD_STACK_SIZE 40 //为硬件堆栈保留的空间大小，在某些硬件里可以不需要
 

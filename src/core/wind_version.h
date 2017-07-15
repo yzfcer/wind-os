@@ -35,7 +35,7 @@ const w_int8_t *wind_get_core_version_info(void);
 
 const w_int8_t *wind_get_core_version(void);
 
-void wind_output_product_info(void);
+void wind_print_os_info(void);
 
 
 

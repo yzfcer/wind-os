@@ -54,7 +54,7 @@ static void output_logo(void)
     }
 }
 
-void wind_output_product_info(void)
+void wind_print_os_info(void)
 {
     const w_int8_t *str;
     WIND_INFO("\r\n\r\nwind_os version:%s\r\n",wind_get_core_version());

@@ -59,10 +59,10 @@ void wind_tick_callback(void)
     #if WIND_TTIMER_SUPPORT > 0
     ticktimerhandler();//首先处理定时中断的事情
     #endif
-    wind_close_interrupt();
+    //wind_close_interrupt();
     TICKS_CNT ++;//更新tick计数器
     wind_thread_wakeup();
-    wind_open_interrupt();
+    //wind_open_interrupt();
 }
 
 void wind_tick_isr(void)

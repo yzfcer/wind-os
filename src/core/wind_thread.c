@@ -422,10 +422,14 @@ void wind_thread_wakeup(void)
         if(pnode->key <= 0)
         {
             pthread = (pthread_s)pnode->obj;
-            pthread->proc_status = PROC_STATUS_READY;
-            pthread->cause = CAUSE_SLEEP;
-            wind_list_remove(&procsleeplist,pnode);
-            wind_node_free(pnode);
+            if(pthread->proc_status != PROC_STATUS_READY)
+            {
+                //wind_printf("%s wake\r\n",pthread->name);
+                pthread->proc_status = PROC_STATUS_READY;
+                pthread->cause = CAUSE_SLEEP;
+                wind_list_remove(&procsleeplist,pnode);
+                wind_node_free(pnode);
+            }
         }
         pnode = pnode->next;
     }

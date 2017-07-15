@@ -62,10 +62,8 @@ void wind_open_interrupt(void)
 {
     sreg_t cpu_sr;
     if(sreg_idx > 0)
-			sreg_idx --;
+        sreg_idx --;
     cpu_sr = ssr[sreg_idx];
-    //
-    //    sreg_idx = sreg_idx;
     wind_restore_sr(cpu_sr);
 }
 

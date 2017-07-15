@@ -69,18 +69,19 @@ typedef struct __core_var_s
     list_s pcblist;
     list_s ttmerlist;
     w_int16_t pcbcnt;//线程计数器
-    w_uint32_t idle_cnt;//空闲计算器
-    w_bool_t usrprocen;/*用户线程允许创建的标志 */
-    w_bool_t is_incore;
-    
-    w_uint32_t g_wind_cpu_usage;
-    pthread_s pmain,pidle,pstat,pctrl,pdaemon;
-
-
-    w_uint32_t idle_cnt_per_sec;//在一段时间内的idle任务的计数值
     volatile w_bool_t run_falg;//多线程调度开始的标志
+    w_bool_t usrprocen;/*用户线程允许创建的标志 */
+    
+    volatile w_uint32_t idle_cnt;//空闲计算器
     w_uint32_t ticks_cnt;//tick计时
-
+    w_uint32_t idle_cnt_max;//在一段时间内的idle任务的计数值
+    w_uint32_t cpu_usage;
+    
+    pthread_s pmain;
+    pthread_s pidle;
+    pthread_s pstat;
+    pthread_s pctrl;
+    pthread_s pdaemon;
 }core_var_s;
 extern core_var_s g_core;//内核相关的参数集
 extern volatile w_bool_t gwind_start_flag;//开始调度的标志
@@ -98,9 +99,9 @@ pstack_t wind_stack_alloc(w_uint32_t size);
 w_err_t wind_stack_free(pstack_t pstack);
 
 //CPU的总体占用率
-#define WIND_CPU_USAGE (g_core.g_wind_cpu_usage)
+#define WIND_CPU_USAGE (g_core.cpu_usage)
 
-#define IDLE_CNT_PER_SEC (g_core.idle_cnt_per_sec)
+#define IDLE_CNT_PER_SEC (g_core.idle_cnt_max)
 
 #define RUN_FLAG (gwind_start_flag)
 

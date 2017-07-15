@@ -186,7 +186,7 @@ void wind_init()
     g_core.usrprocen = B_FALSE;
     wind_target_init();//目标机运行环境初始化
     wind_std_port_init();//调试端口初始化
-    wind_output_product_info();
+    wind_print_os_info();
     
 #if WIND_STAT_SUPPORT > 0
     wind_stat_init();
@@ -211,12 +211,10 @@ int create_init_thread(void);
 
 int wind_os_lunch(void)
 {
-    wind_close_interrupt();
-    wind_init();//系统初始化
-    //创建用户主程序的入口线程
+    //wind_close_interrupt();
+    wind_init();
     create_init_thread();
-    wind_thread_open();//在系统初始化之前，不允许开放
-    //需要在这里启动线程调度
+    wind_thread_open();
     WIND_INFO("wind is ready for running!\r\n");
     wind_thread_open();
     wind_run();

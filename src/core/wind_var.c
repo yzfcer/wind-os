@@ -78,16 +78,16 @@ void wind_corepool_init(void)
 void wind_corevar_init(void)
 {
     wind_corepool_init();
-    g_core.g_wind_cpu_usage = 0;
+    g_core.cpu_usage = 0;
     g_core.idle_cnt = 0;
     g_core.pcbcnt = 0;
-    wind_list_init(&g_core.pcblist);
-    wind_list_init(&g_core.ttmerlist);
     g_core.usrprocen = B_FALSE;
-    g_core.is_incore = B_FALSE;
     g_core.run_falg = B_FALSE;
     g_core.ticks_cnt = 0;
+    wind_list_init(&g_core.pcblist);
+    wind_list_init(&g_core.ttmerlist);
 }
+
 void *wind_core_alloc(stat_e type)
 {
     void *p;

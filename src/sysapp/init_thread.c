@@ -12,24 +12,34 @@ void create_console_thread(void);
 extern w_err_t wind_main(void);
 static w_stack_t mainstk[MAIN_STK_SIZE];
 
+static void set_idle_cnt(void)
+{
+    wind_thread_sleep(500);
+    IDLE_CNT_PER_SEC = g_core.idle_cnt;
+    wind_thread_sleep(1000);
+    IDLE_CNT_PER_SEC = g_core.idle_cnt - IDLE_CNT_PER_SEC;
+    wind_printf("idle:%d\r\n",g_core.idle_cnt);
+    wind_printf("idle count:%d\r\n",IDLE_CNT_PER_SEC);
+}
+
 static w_err_t init_thread(w_int16_t argc,w_int8_t **argv)
 {   
+    w_int32_t i;
     wind_tick_init();
     WIND_INFO("create sys thread:\r\n");
+    create_idle_thread();
+    set_idle_cnt();
 #if WIND_SOFTINT_SUPPORT > 0    
     wind_create_softint_proc();
 #endif
     create_stati_thread();
     create_daemon_thread();
-    create_idle_thread();
 #if WIND_CONSOLE_SUPPORT > 0
     create_console_thread();
 #endif
-    wind_thread_showlist(g_core.pcblist.head);
+    //wind_thread_showlist(g_core.pcblist.head);
     
     wind_main();
-    //while(1)
-    //    wind_thread_sleep(1000);
     return ERR_OK;
 }
 
