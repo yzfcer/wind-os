@@ -308,7 +308,7 @@ void listtest(void)
     int cnt;
     for(cnt = 0;cnt < 4;cnt ++)
     {
-        node = wind_node_malloc(2);
+        node = wind_node_malloc(CORE_TYPE_NONE);
         if(node == NULL)
             return;
         wind_node_bindobj(node,CORE_TYPE_NONE,cnt,(void *)(cnt+20));

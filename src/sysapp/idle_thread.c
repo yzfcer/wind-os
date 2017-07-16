@@ -4,13 +4,13 @@
 
 #define IDLE_STK_SIZE 256
 static w_stack_t idlestk[IDLE_STK_SIZE];//ø’œ–»ŒŒÒ∂—’ª
-static w_err_t idle_thread(w_int16_t argc,w_int8_t **argv)
+static w_err_t idle_thread(w_int32_t argc,w_int8_t **argv)
 {    
     while(1)
     {
         g_core.idle_cnt ++;
     }
-    return ERR_OK;
+    //return ERR_OK;
 }
 
 

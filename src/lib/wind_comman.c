@@ -27,7 +27,7 @@
 //把字符串转换成带符号整数
 w_int32_t wind_convert_str2s32_t(w_int8_t *str)
 {
-    w_bool_t flag = 0;
+    w_bool_t flag = B_FALSE;
     w_uint8_t i = 0;
     w_int32_t num = 0;
     if(str[0] == '-')

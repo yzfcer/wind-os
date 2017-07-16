@@ -2,6 +2,7 @@
 #include "wind_var.h"
 #include "wind_thread.h"
 
+#if 0
 static w_uint32_t core_get_ticks_of_idle(w_uint32_t ms)
 {
     pthread_s pthread;
@@ -23,7 +24,6 @@ static w_uint32_t core_get_ticks_of_idle(w_uint32_t ms)
         node = node->next;
     }
     wind_open_interrupt();
-    
     cnts = g_core.idle_cnt;
     wind_thread_sleep(ms);
     cnts = g_core.idle_cnt - cnts;
@@ -41,16 +41,15 @@ static w_uint32_t core_get_ticks_of_idle(w_uint32_t ms)
     }
     return cnts;
 }
-
+#endif
 
 #define STATI_STK_SIZE 1024
 static w_stack_t statisstk[STATI_STK_SIZE];
-static w_err_t stati_proc(w_int16_t argc,w_int8_t **argv)
+static w_err_t stati_proc(w_int32_t argc,w_int8_t **argv)
 {
     
     w_uint32_t statcnt = 0;
     w_uint32_t stati_ms = 1000;
-    argc = 0;
     while(1)
     {
         statcnt = g_core.idle_cnt;
@@ -63,7 +62,7 @@ static w_err_t stati_proc(w_int16_t argc,w_int8_t **argv)
         else
             wind_printf("\r\ncpu:%d%%\r\n",WIND_CPU_USAGE);
     }
-    return ERR_OK;
+    //return ERR_OK;
 }
 
 void create_stati_thread(void)

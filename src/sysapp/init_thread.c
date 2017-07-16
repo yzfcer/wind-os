@@ -22,9 +22,8 @@ static void set_idle_cnt(void)
     wind_printf("idle count:%d\r\n",IDLE_CNT_PER_SEC);
 }
 
-static w_err_t init_thread(w_int16_t argc,w_int8_t **argv)
+static w_err_t init_thread(w_int32_t argc,w_int8_t **argv)
 {   
-    w_int32_t i;
     wind_tick_init();
     WIND_INFO("create sys thread:\r\n");
     create_idle_thread();
@@ -47,5 +46,5 @@ int create_init_thread(void)
 {
     g_core.pmain = wind_thread_create("entry",PRIO_HIGH,init_thread,
                         0,NULL,mainstk,MAIN_STK_SIZE);
-
+    return ERR_OK;
 }

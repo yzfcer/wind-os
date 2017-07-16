@@ -30,7 +30,7 @@
 #include "wind_types.h"
 #include "wind_debug.h"
 
-static const w_int8_t * const hexlist = "0123456789abcdef";
+//static const w_int8_t * const hexlist = "0123456789abcdef";
 extern void wind_std_output(w_uint8_t *str,w_uint16_t len);
 #if 0
 int wind_printf(const w_int8_t *string,...)

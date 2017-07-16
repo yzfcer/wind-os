@@ -86,6 +86,7 @@ void * memoryset(void * s,char c,w_uint32_t count)
     return s;
 }
 
+#if 0
 //把大写字母转换成小写
 static void wind_cmd_tolower(char *cmdstr)
 {
@@ -97,6 +98,7 @@ static void wind_cmd_tolower(char *cmdstr)
         i ++;
     }
 }
+#endif
 
 w_int32_t is_match_cmd(char *cmdstr,char*cmd)
 {
@@ -490,7 +492,7 @@ w_err_t consoleProc(w_int32_t argc,char **argv)
         }
         wind_thread_sleep(50);
     }
-    return 0;
+    //return 0;
 }
 
 #define CTRL_STK_SIZE 2048

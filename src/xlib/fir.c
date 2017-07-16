@@ -255,61 +255,61 @@ int fir_test(void)
         h2[ii] = h2[ii + NTAPS] = h[ii];
     }
     /* test FIR algorithms */
-    WIND_DEBUG("Testing fir_basic:\n ");
+    wind_printf("Testing fir_basic:\n ");
     clear(NTAPS, z);
     for (ii = 0; ii < IMP_SIZE; ii++) 
     {
         output = fir_basic(imp[ii], NTAPS, h, z);
-        //WIND_DEBUG("%f ", (double) output);
+        wind_printf("%f ", (double) output);
     }
-    WIND_DEBUG("\n\n");
-    WIND_DEBUG("Testing fir_shuffle:\n ");
+    wind_printf("\n\n");
+    wind_printf("Testing fir_shuffle:\n ");
     clear(NTAPS, z);
     state = 0;
     for (ii = 0; ii < IMP_SIZE; ii++) 
     {
         output = fir_shuffle(imp[ii], NTAPS, h, z);
-        //WIND_DEBUG("%f ", (double) output);
+        wind_printf("%f ", (double) output);
     }
-    WIND_DEBUG("\n\n");
-    WIND_DEBUG("Testing fir_circular:\n ");
+    wind_printf("\n\n");
+    wind_printf("Testing fir_circular:\n ");
     clear(NTAPS, z);
     state = 0;
     for (ii = 0; ii < IMP_SIZE; ii++) 
     {
         output = fir_circular(imp[ii], NTAPS, h, z, &state);
-        //WIND_DEBUG("%f ", (double) output);
+        wind_printf("%f ", (double) output);
     }
-    WIND_DEBUG("\n\n");
-    WIND_DEBUG("Testing fir_split:\n ");
+    wind_printf("\n\n");
+    wind_printf("Testing fir_split:\n ");
     clear(NTAPS, z);
     state = 0;
     for (ii = 0; ii < IMP_SIZE; ii++) 
     {
         output = fir_split(imp[ii], NTAPS, h, z, &state);
-        //WIND_DEBUG("%f ", (double) output);
+        wind_printf("%f ", (double) output);
     }
-    WIND_DEBUG("\n\n");
-    WIND_DEBUG("Testing fir_double_z:\n ");
+    wind_printf("\n\n");
+    wind_printf("Testing fir_double_z:\n ");
     clear(2 * NTAPS, z);
     state = 0;
     for (ii = 0; ii < IMP_SIZE; ii++) 
     {
 
         output = fir_double_z(imp[ii], NTAPS, h, z, &state);
-        //WIND_DEBUG("%f ", (double) output);
+        wind_printf("%f ", (double) output);
     }
-    WIND_DEBUG("\n\n");
-    WIND_DEBUG("Testing fir_double_h:\n ");
+    wind_printf("\n\n");
+    wind_printf("Testing fir_double_h:\n ");
     clear(NTAPS, z);
     state = 0;
     for (ii = 0; ii < IMP_SIZE; ii++) 
     {
         output = fir_double_h(imp[ii], NTAPS, h2, z, &state);
-        //WIND_DEBUG("%f ", (double) output);
+        wind_printf("%f ", (double) output);
     }
 #ifdef FIR_DEBUG__
-    WIND_DEBUG("\n\nHit any key to continue.");
+    wind_printf("\n\nHit any key to continue.");
     getch();
 #endif
     return 0;

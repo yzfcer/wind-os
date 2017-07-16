@@ -67,11 +67,18 @@ ppipe_s wind_pipe_create(const char *name,void *inbuf,w_uint32_t inlen,void *out
     {
         ppipe->in = inbuf;
         err = wind_queue_create(inbuf,inlen,1,LOCK_TYPE_AREA);
+        if(ERR_OK != err)
+            return NULL;
     }
     if(inbuf != NULL)
     {
         ppipe->out = outbuf;
         err = wind_queue_create(outbuf,outlen,1,LOCK_TYPE_AREA);
+        if(ERR_OK != err)
+        {
+            wind_queue_destory(inbuf);
+            return NULL;
+        }
     }
     ppipe->name = name;
     ppipe->inlen= inlen;

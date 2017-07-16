@@ -25,7 +25,7 @@ extern "C" {
 
 /*********************************************头文件定义***********************************************/
 #include "RBTree.h"
-
+#include "wind_debug.h"
 #ifndef NULL 
 #define NULL (void*)0
 #endif
@@ -304,7 +304,7 @@ int rbt_delete_fixup(RBTreeNode_S **root, RBTreeNode_S *node)
 
 int _rb_delete(RBTreeNode_S **root, RBTreeNode_S *dnode)
 {   
-    RBTreeNode_S *parent = NULL, *next = NULL, *refer = NULL;    /* 查找dnode的后继结点next */    
+    RBTreeNode_S *next = NULL, *refer = NULL;    /* 查找dnode的后继结点next */    
 
     if((nil == dnode->left) || (nil == dnode->right))   
     {   
@@ -536,7 +536,7 @@ void rbTreeMidTranverse(RBTree_S *tree,rbTreeAccess access,void *arg)
 
 void Access(RBTreeNode_S *node,void *arg)
 {
-    printf("%d ",node->key);
+    wind_printf("%d ",node->key);
 }
 
 RBTree_S tree;
@@ -552,22 +552,22 @@ void rbTreetest(void)
         tnode[i].key = i+1;
         rbTreeInsert(&tree,&tnode[i]);
     }
-    printf("#################################--0---\r\n"); 
+    wind_printf("#################################--0---\r\n"); 
     rbTreeMidTranverse(&tree,Access,0);
 
-    printf("#################################--1---\r\n"); 
+    wind_printf("#################################--1---\r\n"); 
     rbTreeDelete(&tree,&tnode[3]);
     rbTreeMidTranverse(&tree,Access,0);
 
-    printf("#################################--2---\r\n"); 
+    wind_printf("#################################--2---\r\n"); 
     rbTreeDelete(&tree,&tnode[7]);
     rbTreeMidTranverse(&tree,Access,0);
 
-    printf("#################################--3---\r\n"); 
+    wind_printf("#################################--3---\r\n"); 
     rbTreeDelete(&tree,&tnode[8]);
     rbTreeMidTranverse(&tree,Access,0);
 
-    printf("#################################--4---\r\n"); 
+    wind_printf("#################################--4---\r\n"); 
     rbTreeDelete(&tree,&tnode[15]);
     rbTreeMidTranverse(&tree,Access,0);    
 }

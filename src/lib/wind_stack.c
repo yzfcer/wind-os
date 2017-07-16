@@ -28,8 +28,6 @@
 #include "wind_stack.h"
 #include "wind_os_hwif.h"
 
-static w_uint32_t _empty_num = 0;
-static w_uint32_t write_full_num = 0;
 
 static w_err_t defaultreadempty(pstack_s pstk,void *data)
 {
@@ -66,8 +64,8 @@ static w_err_t defaultwritefull(pstack_s pstk,void *data)
 w_err_t wind_stack_create(void *Buf,
                           w_uint32_t lenth,
                           w_uint16_t DataWid,
-                          w_err_t (* ReadEmpty)(pstack_s pstk),
-                          w_err_t (* WriteFull)(pstack_s pstk)
+                          w_err_t (* ReadEmpty)(pstack_s pstk,void *data),
+                          w_err_t (* WriteFull)(pstack_s pstk,void *data)
                           )
 {
     pstack_s pstk;

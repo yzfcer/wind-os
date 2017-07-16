@@ -68,9 +68,9 @@ w_int32_t wind_queue_read(void *queue,void *buf,w_uint32_t len);
 
 w_int32_t wind_queue_write(void *queue,void *buf,w_uint32_t len);
 
-w_uint32_t wind_queue_datalen(void *queue);
+w_int32_t wind_queue_datalen(void *queue);
 
-w_uint32_t wind_queue_capacity(void *queue);
+w_int32_t wind_queue_capacity(void *queue);
 
 w_err_t wind_queue_flush(void *queue);
 

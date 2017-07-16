@@ -62,11 +62,13 @@ w_err_t wind_mem_init(w_uint8_t ix,w_uint32_t base,w_uint32_t lenth)
     
 }
 
+#if 0
 //从已经回收的空间中找到一块
 static void *core_get_free_space(w_uint32_t size)
 {
     return NULL;
 }
+#endif
 
 //分配一个连续的空间，如果分配成功，就会返回空间指针，失败返回NULL
 void *wind_malloc(w_uint32_t size)

@@ -34,18 +34,17 @@ w_err_t wind_mpool_show(w_int8_t *name,void *pool)
     pmpoolHead_s pm = pool;
     WIND_ASSERT_RETURN(name != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(pool != NULL,ERR_NULL_POINTER);    
-    WIND_MPOOL_DEBUG("pool name:%s\r\n",name);
-    WIND_MPOOL_DEBUG("pool head:%d\r\n",pm->head);
-    WIND_MPOOL_DEBUG("pool lenth:%d\r\n",pm->len);
-    WIND_MPOOL_DEBUG("pool num:%d\r\n",pm->num);
-    WIND_MPOOL_DEBUG("pool itemsize:%d\r\n\r\n",pm->itemsize);
+    wind_printf("pool name:%s\r\n",name);
+    wind_printf("pool head:%d\r\n",pm->head);
+    wind_printf("pool lenth:%d\r\n",pm->len);
+    wind_printf("pool num:%d\r\n",pm->num);
+    wind_printf("pool itemsize:%d\r\n\r\n",pm->itemsize);
     return ERR_OK;
 }
 w_err_t wind_mpool_create(const char *name,void *mem,w_uint32_t msize,w_uint32_t itemsize)
 {
     w_uint32_t i,si;
     ppool_s head;
-    //void *phd;
     pmpoolHead_s pm;
     WIND_ASSERT_RETURN(mem != NULL,ERR_NULL_POINTER);
     si = itemsize < sizeof(ppool_s)?sizeof(ppool_s):itemsize;

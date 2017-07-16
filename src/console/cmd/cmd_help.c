@@ -31,13 +31,14 @@ extern "C" {
 
 
 /********************************************内部变量定义**********************************************/
+	#if 0
 static const char * const help_str = "help [opt]:to show some helping infomation\r\n";
 static const char * const help_details[] = 
 {
     "help:to show list of commands\r\n",
     "help [cmd]:to get more info of the command\r\n"
 };
-
+#endif
 
 /********************************************内部函数定义*********************************************/
 

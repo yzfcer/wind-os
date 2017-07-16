@@ -168,7 +168,6 @@ w_err_t wind_mbox_post(pmbox_s mbox,pmsg_s pmsg)
 
 w_err_t wind_mbox_fetch(pmbox_s mbox,pmsg_s *pmsg,w_uint32_t timeout)
 {
-    w_int16_t cnt;
     w_err_t err;
     w_uint32_t ticks;
     pnode_s pnode;
