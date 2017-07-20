@@ -61,7 +61,7 @@ extern void wind_interrupt_switch(void);
 extern void wind_start_switch(void);
 extern w_err_t wind_thread_showlist(pnode_s nodes);
 extern void listtest(void);
-extern w_err_t consoleProc(w_int32_t argc,char **argv);
+extern w_err_t console_proc(w_int32_t argc,char **argv);
 
 //wind core data section --- end
 
@@ -198,7 +198,7 @@ void wind_init()
     wind_time_init();//时间初始化
 #if WIND_RTC_SUPPORT > 0
     //WIND_INFO("system time initializing...\r\n");
-    //wind_datetime_init();
+    wind_datetime_init();
 #endif
     WIND_INFO("initialization completed!\r\n");
     
@@ -211,7 +211,6 @@ int create_init_thread(void);
 
 int wind_os_lunch(void)
 {
-    //wind_close_interrupt();
     wind_init();
     create_init_thread();
     wind_thread_open();

@@ -37,7 +37,7 @@
 w_err_t cmd_testsoftint_main(w_int32_t argc,char **argv)
 {
 #if WIND_SOFTINT_SUPPORT > 0
-    if(is_string_equal(argv[0],"softint"))
+    if(0 == wind_strcmp(argv[0],"softint"))
     {
         wind_softint_test();
         return ERR_OK;
@@ -49,7 +49,7 @@ w_err_t cmd_testsoftint_main(w_int32_t argc,char **argv)
 w_err_t cmd_testheap_main(w_int32_t argc,char **argv)
 {
 #if WIND_HEAP_SUPPORT > 0
-    if(is_string_equal(argv[0],"heap"))
+    if(0 == wind_strcmp(argv[0],"heap"))
     {
         //wind_heap_test();
         CONSOLE_OUT("heaptest not support yet\r\n");

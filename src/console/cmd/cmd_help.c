@@ -65,7 +65,7 @@ static w_err_t cmd_help_main(w_int32_t argc,char **argv)
     }
     while(cmdlist)
     {
-        if(is_string_equal(argv[0],cmdlist->cmd))
+        if(wind_strcmp(argv[0],cmdlist->cmd) == 0)
         {
             CONSOLE_OUT("%s : %s\r\n",cmdlist->cmd,cmdlist->helpdetails);
             break;

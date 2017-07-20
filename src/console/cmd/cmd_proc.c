@@ -81,11 +81,11 @@ w_err_t cmd_proc_show_obj_main(w_int32_t argc,char **argv)
 cmd_s g_cmd_proc[] = 
 {
     {
-        NULL,"proc show list","To show all the proc struct.",
+        NULL,"proc showlist","To show all the proc struct.",
         "",cmd_proc_show_list_main
     },
     {
-        NULL,"proc show obj","To show a proc struct by name.",
+        NULL,"proc showobj","To show a proc struct by name.",
         "proc show obj <name>,name is a proc name provided by creator.",
         cmd_proc_show_obj_main
     }

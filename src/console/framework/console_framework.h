@@ -33,7 +33,7 @@ extern "C" {
 #include "wind_assert.h"
 #include "wind_string.h"
 #include "wind_thread.h"
-
+#include "cmd_history.h"
 /***********************************************宏定义*************************************************/
 #define WIND_CMD_MAX_LEN 512//一个命令的最大长度
 #define WIND_CMD_NAME_LEN 12//一个命令标示的最大长度
@@ -41,7 +41,7 @@ extern "C" {
 #define WIND_CTL_USRNAME_LEN 20//用户名的长度
 #define WIND_CTL_PWD_LEN 20//密码的最大长度
 #define WIND_CONSOLE_COUNT 1//支持的控制套终端的数量
-#define CONSOLE_OUT(...) wind_printf(__VA_ARGS__)
+#define CONSOLE_OUT(fmt,...) wind_printf(fmt,##__VA_ARGS__)
 
 
 /**********************************************枚举定义************************************************/
@@ -55,30 +55,40 @@ extern "C" {
 
 
 
-//全局的test suite列表
-typedef struct __cmd_global
+//全局的cmd列表
+typedef struct __cmd_list
 {
     cmd_s *head;
     cmd_s *tail;
     w_uint32_t cnt;
-}cmd_global_s;
+}cmd_list_s;
+
+
 
 //得到分解后的参数列表
 typedef struct __cmd_param_s
 {
-    w_uint32_t cnt;
-    char * param[CMD_PARAM_CNT];
+    w_uint32_t argc;
+    char * argv[CMD_PARAM_CNT];
 }cmd_param_s;
+typedef struct 
+{
+    w_err_t (*read_char)(char *ch);
+    w_int32_t (*printf)(const char *fmt,...);
+}console_ops;
+
+
 typedef struct __console_s
 {
-    char cmdstr[WIND_CMD_MAX_LEN];//命令的缓存区
-    char buf[WIND_CMD_MAX_LEN];//接收的数据缓存区
-    w_uint32_t index;//命令的下一个字符下标
     cslstat_e stat;//当前的解析状态
+    w_uint32_t index;//命令的下一个字符下标
+    char buf[WIND_CMD_MAX_LEN];//接收的数据缓存区
     char user[WIND_CTL_USRNAME_LEN];//用户名
     char pwd[WIND_CTL_PWD_LEN];//密码的值
+    cmd_his_s his;
     cmd_param_s param;
-    cmd_global_s cmd_list;
+    cmd_list_s cmd_list;
+    console_ops ops;
 }console_s;
 /********************************************全局变量申明**********************************************/
 
@@ -100,9 +110,8 @@ w_err_t wind_output_cmdlist(void);
 
 void console_framework_init(console_s *ctlobj);
 cmd_s *wind_get_cmdlist(void);
-w_int32_t is_string_equal(char *dest,char *src);
-w_err_t wind_cmd_register(cmd_global_s *cgl,cmd_s *cmd,int cnt);
-//w_err_t consoleProc(w_int32_t argc,char **argv);
+w_err_t wind_cmd_register(cmd_list_s *cgl,cmd_s *cmd,int cnt);
+//w_err_t console_proc(w_int32_t argc,char **argv);
 void create_console_thread(void);
 
 #ifdef __cplusplus

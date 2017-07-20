@@ -204,7 +204,7 @@ pthread_s wind_thread_create(const w_int8_t *name,
     
     pthread = pcb_malloc(priolevel);
     WIND_ASSERT_RETURN(pthread != NULL,NULL);
-    WIND_DEBUG("pcb addr:0x%x\r\n",pthread);
+    //WIND_DEBUG("pcb addr:0x%x\r\n",pthread);
     wind_strcpy(pthread->name,name);
     
     pthread->parent = wind_get_cur_proc();
@@ -370,7 +370,7 @@ w_err_t wind_thread_exit(w_err_t exitcode)
     pthread = wind_get_cur_proc();
     WIND_INFO("proc %s exit with code %d\r\n",pthread->name,exitcode);
     wind_thread_kill(pthread);
-    wind_thread_showlist(g_core.pcblist.head);
+    //wind_thread_showlist(g_core.pcblist.head);
     wind_thread_dispatch();
     return ERR_OK;
 }

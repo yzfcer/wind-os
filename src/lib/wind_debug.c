@@ -31,7 +31,7 @@
 #include "wind_debug.h"
 
 //static const w_int8_t * const hexlist = "0123456789abcdef";
-extern void wind_std_output(w_uint8_t *str,w_uint16_t len);
+extern void wind_std_output(w_uint8_t *str,w_int32_t len);
 #if 0
 int wind_printf(const w_int8_t *string,...)
 {
@@ -177,12 +177,11 @@ convert:
 #define LARGE    64        /* use 'ABCDEF' instead of 'abcdef' */ 
 static char sprint_buf[1024];
 int wind_vsprintf(char *buf, const char *fmt, va_list args) ;
-int wind_printf(const char *fmt, ...) 
+w_int32_t wind_printf(const char *fmt, ...) 
 { 
     va_list args; 
-    int n;
+    w_int32_t n;
     wind_close_interrupt();
-    
     va_start(args, fmt);
     n = vsprintf(sprint_buf, fmt, args);
     sprint_buf[n] = 0;

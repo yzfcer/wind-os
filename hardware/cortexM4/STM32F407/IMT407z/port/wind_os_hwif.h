@@ -33,13 +33,15 @@
 extern "C" {
 #endif
 void wind_target_init(void);
+
 void wind_std_port_init(void);
-void wind_std_output(w_uint8_t *str,w_uint16_t len);
+w_err_t wind_std_input(w_uint8_t ch,w_int32_t len);
+void wind_std_output(w_uint8_t *str,w_int32_t len);
 
 //SREG，CPU状态寄存器对应的数据位宽，当关闭中断时需要保存这个寄存器
 typedef unsigned int sreg_t;
-extern sreg_t  wind_save_sr(void);
-void   wind_restore_sr(sreg_t cpu_sr);
+//extern sreg_t  wind_save_sr(void);
+//void   wind_restore_sr(sreg_t cpu_sr);
 void wind_close_interrupt(void);
 void wind_open_interrupt(void);
 

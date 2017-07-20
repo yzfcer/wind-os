@@ -39,7 +39,7 @@ extern "C" {
 
 
 //void wind_printf(const w_int8_t *string,...);
-int wind_printf(const char *fmt, ...);
+w_int32_t wind_printf(const char *fmt, ...);
 //WIND_DEBUG
 #if WIND_DEBUG_OUT_EN
 #define WIND_DEBUG(fmt,...) do{wind_printf("debug:"fmt" [%s,%d]\r\n",##__VA_ARGS__,__FILE__,__LINE__);wind_printf("[%s,%d]\r\n",__FILE__,__LINE__);}while(0)
@@ -49,23 +49,23 @@ int wind_printf(const char *fmt, ...);
 
 //WIND_INFO
 #if WIND_INFO_OUT_EN
-#define WIND_INFO(...) do{wind_printf(__VA_ARGS__);}while(0)
+#define WIND_INFO(fmt,...) do{wind_printf(fmt,##__VA_ARGS__);}while(0)
 #else 
-#define WIND_INFO(...) 
+#define WIND_INFO(fmt,...) 
 #endif
 
 //WIND_WARN
 #if WIND_WARN_OUT_EN
-#define WIND_WARN(...) do{wind_printf(__VA_ARGS__);wind_printf("[%s,%d]\r\n",__FILE__,__LINE__);}while(0)
+#define WIND_WARN(fmt,...) do{wind_printf(fmt,##__VA_ARGS__);wind_printf("[%s,%d]\r\n",__FILE__,__LINE__);}while(0)
 #else 
-#define WIND_WARN(...)
+#define WIND_WARN(fmt,...)
 #endif
 
 //WIND_ERROR
 #if WIND_ERROR_OUT_EN
-#define WIND_ERROR(...) do{wind_printf(__VA_ARGS__);wind_printf("[%s,%d]\r\n",__FILE__,__LINE__);}while(0)
+#define WIND_ERROR(fmt,...) do{wind_printf(fmt,##__VA_ARGS__);wind_printf("[%s,%d]\r\n",__FILE__,__LINE__);}while(0)
 #else 
-#define WIND_ERROR(...)
+#define WIND_ERROR(fmt,...)
 #endif
 
 

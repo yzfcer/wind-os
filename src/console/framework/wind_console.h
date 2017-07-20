@@ -58,9 +58,9 @@ typedef struct __cmd_s
     struct __cmd_s *next;
     char* cmd;//命令的名称
     char *helpinfo;//简要帮助信息
-    w_int8_t *helpdetails;//详细的帮助说明
+    char *helpdetails;//详细的帮助说明
     
-    w_err_t (*cmdFunc)(w_int32_t argc,char **argv);//命令的入口函数
+    w_err_t (*execute)(w_int32_t argc,char **argv);//命令的入口函数
     
 }cmd_s,*pcmd_s;
 

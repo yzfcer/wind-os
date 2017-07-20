@@ -34,18 +34,24 @@ void wind_target_init(void)
 
 }
 
+
 void wind_std_port_init(void)
 {
     uart1_init(115200);
     return;
 }
 
-void wind_std_output(w_uint8_t *str,w_uint16_t len)
+void wind_std_output(w_uint8_t *str,w_int32_t len)
 {
     uart1_send_chars(str,len);
     return;
 }
 
+w_err_t wind_std_input(w_uint8_t ch,w_int32_t len)
+{
+    //uart1_send_chars(str,len);
+    return;
+}
 
 
 
@@ -140,7 +146,7 @@ void wind_tick_init(void)
 	w_uint32_t reload;
  	SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK_Div8);
 	//fac_us=SYSCLK/8;		//不论是否使用ucos,fac_us都需要使用
-	    
+
 	reload=SYSCLK/8;		//每秒钟的计数次数 单位为K	   
 	reload*=1000000/WIND_TICK_PER_SEC;//根据OS_TICKS_PER_SEC设定溢出时间
 	//reload为24位寄存器,最大值:16777216,在168M下,约合0.7989s左右	

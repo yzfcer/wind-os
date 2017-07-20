@@ -52,15 +52,15 @@ w_err_t cmd_show_main(w_int32_t argc,char **argv)
     pnode_s pnode;
     pthread_s pthread;
 
-    if(is_string_equal(argv[0],"-c"))
+    if(0 == wind_strcmp(argv[0],"-c"))
     {
         CONSOLE_OUT("cpu usage persage:%%%d\r\n",WIND_CPU_USAGE);
         return ERR_OK;
     }
-    else if(is_string_equal(argv[0],"proc"))
+    else if(0 == wind_strcmp(argv[0],"proc"))
     {
         pnode = g_core.pcblist.head;
-        if(is_string_equal(argv[0],"all"))
+        if(0 == wind_strcmp(argv[0],"all"))
         {
             CONSOLE_OUT("proc list as following:\r\n");
             while(pnode)
@@ -76,7 +76,7 @@ w_err_t cmd_show_main(w_int32_t argc,char **argv)
             while(pnode)
             {
                 pthread = (pthread_s)pnode->obj;
-                if(is_string_equal(argv[1],pthread->name))
+                if(0 == wind_strcmp(argv[1],pthread->name))
                 {
                     CONSOLE_OUT("proc:%s\r\n",pthread->name);
                     CONSOLE_OUT("stacksize:%d\r\n",pthread->stksize);

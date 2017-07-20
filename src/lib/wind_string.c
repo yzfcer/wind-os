@@ -121,7 +121,6 @@ char * wind_strrchr(const char * s, int c)
 w_int16_t wind_strlen(const char *s)
 {
     const char *sc;
-
     for (sc = s; *sc != '\0'; ++sc);
     return sc - s;
 }

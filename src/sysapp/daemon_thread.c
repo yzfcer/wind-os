@@ -25,7 +25,6 @@ static w_err_t daemon_proc(w_int32_t argc,w_int8_t **argv)
         wind_thread_sleep(10);
         test();
     }
-    //return ERR_OK;
 }
 
 void create_daemon_thread(void)
