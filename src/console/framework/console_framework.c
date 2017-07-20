@@ -42,8 +42,9 @@ cmd_list_s *g_cmd_global;
 /********************************************内部函数定义*********************************************/
 static w_err_t core_get_cmd_ch(w_int8_t *ch)
 {
-    *ch = 0;
-    return ERR_COMMAN;
+    w_int32_t len;
+    len = wind_std_input((w_uint8_t *)ch,1);
+    return len > 0?ERR_OK:ERR_COMMAN;
 }
 
 static void show_cmd_list(void)
@@ -75,12 +76,17 @@ static void wind_console_prehandle(console_s *ctrl,char ch)
         CONSOLE_OUT("%c",ch);
 }
 
+static void console_clear_buf(console_s *ctrl)
+{
+    wind_memset(ctrl->buf,0,WIND_CMD_MAX_LEN);
+}
 
 static w_int32_t console_read_line(console_s *ctrl,w_int32_t len)
 {
     w_err_t err;
     w_int32_t idx = 0;
     char ch;
+    console_clear_buf(ctrl);
     while(1)
     {
         err = core_get_cmd_ch(&ch);
@@ -89,10 +95,10 @@ static w_int32_t console_read_line(console_s *ctrl,w_int32_t len)
         else
         {
             wind_console_prehandle(ctrl,ch);
-            if((ctrl->stat != CSLSTAT_PWD) || (ch == '\n'))
-                ctrl->ops.printf(&ch,1);
+            //if((ctrl->stat != CSLSTAT_PWD) || (ch == 0x0D))
+            //    ctrl->ops.printf(&ch,1);
             ctrl->buf[idx] = ch;
-            if(ch == '\n')
+            if(ch == 0x0D)
             {
                 ctrl->buf[idx] = 0;
                 return idx;
@@ -220,7 +226,7 @@ static w_int32_t get_string(char *str,w_int32_t idx,char ** arg)
     if(str[i] == 0)
         return -1;
     *arg = &str[i];
-    while(str[i] && (str[i] == ' '))
+    while(str[i] && (str[i] != ' '))
         i ++;
     str[i] = 0;
     return 0;
@@ -291,7 +297,7 @@ w_err_t console_proc(w_int32_t argc,char **argv)
     while(1)
     {
         len = console_read_line(ctrl,WIND_CMD_MAX_LEN);
-        if(len > 0)
+        if(len >= 0)
         {
             switch(ctrl->stat)
             {
@@ -300,24 +306,35 @@ w_err_t console_proc(w_int32_t argc,char **argv)
                     if(err != ERR_OK)
                         CONSOLE_OUT("\r\nlogin:");
                     else
+                    {
                         ctrl->stat = CSLSTAT_PWD;
+                        CONSOLE_OUT("\r\npasswd:");
+                    }
                     break;
                 case CSLSTAT_PWD:
                     err = check_user_pwd(ctrl);
                     if(err != ERR_OK)
+                    {
+                        ctrl->stat = CSLSTAT_USER;
                         CONSOLE_OUT("\r\nlogin:");
+                    }
                     else
+                    {
                         ctrl->stat = CSLSTAT_APP;
+                        CONSOLE_OUT("\r\n%s@wind-os>",ctrl->user);
+                    }
+                        
                     break;
                 case CSLSTAT_APP:
-                    CONSOLE_OUT("%s@wind-os>");
                     cmd_history_append(&ctrl->his,ctrl->buf);
                     execute_cmd(ctrl);
                     if(wind_strcmp(ctrl->buf,"exit") == 0)
                     {
+                        ctrl->stat = CSLSTAT_USER;
                         CONSOLE_OUT("\r\nlogin:");
-                        ctrl->stat = CSLSTAT_APP;
                     }
+                    else
+                        CONSOLE_OUT("\r\n%s@wind-os>",ctrl->user);
                     break;
                 default:
                     CONSOLE_OUT("\r\nlogin:");

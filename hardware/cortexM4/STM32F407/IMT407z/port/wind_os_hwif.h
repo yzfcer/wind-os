@@ -35,21 +35,15 @@ extern "C" {
 void wind_target_init(void);
 
 void wind_std_port_init(void);
-w_err_t wind_std_input(w_uint8_t ch,w_int32_t len);
-void wind_std_output(w_uint8_t *str,w_int32_t len);
+w_int32_t wind_std_input(w_uint8_t *str,w_int32_t len);
+w_int32_t wind_std_output(w_uint8_t *str,w_int32_t len);
 
-//SREG，CPU状态寄存器对应的数据位宽，当关闭中断时需要保存这个寄存器
-typedef unsigned int sreg_t;
-//extern sreg_t  wind_save_sr(void);
-//void   wind_restore_sr(sreg_t cpu_sr);
 void wind_close_interrupt(void);
 void wind_open_interrupt(void);
 
 typedef  void (*thread_run_f)(void *pargs);
 //线程堆栈的初始化入口，移植需要重新实现
 pstack_t wind_stk_init(thread_run_f pfunc,void *pdata, pstack_t pstkbt);
-
-
 
 
 #ifdef __cplusplus

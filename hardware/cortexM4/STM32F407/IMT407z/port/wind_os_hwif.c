@@ -35,26 +35,71 @@ void wind_target_init(void)
 }
 
 
+#define UART_RCV_BUFLEN 256
+typedef struct
+{
+    w_int32_t size;
+    w_int32_t wridx;
+    w_int32_t rdidx;
+    char buf[UART_RCV_BUFLEN];
+}usrt_buf_s;
+usrt_buf_s uartbuf;
+static void uartbuf_init(void)
+{
+    w_int32_t i;
+    uartbuf.size = UART_RCV_BUFLEN;
+    uartbuf.wridx = 0;
+    uartbuf.rdidx = 0;
+    for(i = 0;i < uartbuf.size;i ++)
+        uartbuf.buf[i] = 0;
+}
+
+
+void wind_stdin(char data)
+{
+    uartbuf.buf[uartbuf.wridx] = data;
+    uartbuf.wridx ++;
+    if(uartbuf.wridx >= uartbuf.size)
+        uartbuf.wridx = 0;
+
+}
+
 void wind_std_port_init(void)
 {
+    uartbuf_init();
     uart1_init(115200);
-    return;
 }
 
-void wind_std_output(w_uint8_t *str,w_int32_t len)
+w_int32_t wind_std_input(w_uint8_t *buf,w_int32_t len)
+{
+    w_int32_t i;
+    for(i = 0;i < len;i ++)
+    {
+        if(uartbuf.rdidx != uartbuf.wridx)
+        {
+            buf[i] = uartbuf.buf[uartbuf.rdidx];
+            uartbuf.rdidx ++;
+            if(uartbuf.rdidx >= uartbuf.size)
+                uartbuf.rdidx = 0;
+        }
+        else
+            break;
+    }
+    return i;
+}
+
+w_int32_t wind_std_output(w_uint8_t *str,w_int32_t len)
 {
     uart1_send_chars(str,len);
-    return;
-}
-
-w_err_t wind_std_input(w_uint8_t ch,w_int32_t len)
-{
-    //uart1_send_chars(str,len);
-    return;
+    return len;
 }
 
 
 
+//SREG，CPU状态寄存器对应的数据位宽，当关闭中断时需要保存这个寄存器
+typedef unsigned int sreg_t;
+extern sreg_t  wind_save_sr(void);
+extern void   wind_restore_sr(sreg_t cpu_sr);
 static sreg_t ssr[100];
 static w_int32_t sreg_idx = 0;
 void wind_close_interrupt(void)

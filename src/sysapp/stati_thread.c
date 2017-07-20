@@ -56,11 +56,11 @@ static w_err_t stati_proc(w_int32_t argc,w_int8_t **argv)
         wind_thread_sleep(stati_ms);
         statcnt = g_core.idle_cnt - statcnt;
         WIND_CPU_USAGE = (IDLE_CNT_PER_SEC - statcnt) * 100 / IDLE_CNT_PER_SEC;
-        wind_printf("idle cnt:%d/%d\r\n",statcnt,IDLE_CNT_PER_SEC);
-        if(statcnt >= IDLE_CNT_PER_SEC)
-            wind_printf("\r\ncpu:%d.%d%%\r\n",0,0);
-        else
-            wind_printf("\r\ncpu:%d%%\r\n",WIND_CPU_USAGE);
+        //wind_printf("idle cnt:%d/%d\r\n",statcnt,IDLE_CNT_PER_SEC);
+        //if(statcnt >= IDLE_CNT_PER_SEC)
+        //    wind_printf("\r\ncpu:%d.%d%%\r\n",0,0);
+        //else
+        //    wind_printf("\r\ncpu:%d%%\r\n",WIND_CPU_USAGE);
     }
     //return ERR_OK;
 }
