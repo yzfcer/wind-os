@@ -287,17 +287,17 @@ pnode_s wind_list_remove(plist_s list,pnode_s node)
 
 void wind_list_print(plist_s list)
 {
-    int cnt = 0;
     pnode_s pnode = list->head;
+    wind_printf("-------------------------------------------\r\n");
+    wind_printf("%-10s %-8s %-10s\r\n","type","key","objaddr");
+    wind_printf("-------------------------------------------\r\n");
     while(pnode)
     {
-        wind_printf("node %d type %d\r\n",cnt,pnode->type);
-        wind_printf("node %d key %d\r\n",cnt,pnode->key);
-        wind_printf("node %d obj %d\r\n",cnt,pnode->obj);
-        wind_printf("\r\n");
+        wind_printf("%-10d %-8d 0x%08x\r\n",
+            pnode->type,pnode->key,pnode->obj);
         pnode = pnode->next;
-        cnt ++;
     }
+    wind_printf("-------------------------------------------\r\n");
 }
 
 

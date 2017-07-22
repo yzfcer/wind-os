@@ -34,7 +34,7 @@
 extern "C" {
 #endif
 
-#define PCB_NUM_LIMIT 32767 //线程总数的上限值
+#define PCB_NUM_LIMIT 512 //线程总数的上限值
 #define PROCESS_NAME_LEN 20 //线程名的最大长度，包括 '\0'
 
 //线程的优先等级，
@@ -49,12 +49,17 @@ typedef enum _PRIOLEVEL
 //线程状态列表
 typedef enum __proc_status
 {
-    PROC_STATUS_READY = 1,//就绪状态
-    PROC_STATUS_SUSPEND,//阻塞状态，可以通过定时器唤醒
-    PROC_STATUS_SLEEP,//休眠状态，程序将不能通过定时器唤醒，而需要手动唤醒
-    PROC_STATUS_DEAD,//死亡状态，将永远不会被唤醒
-    PROC_STATUS_UNKNOWN//未知状态
-}proc_status_e;
+    THREAD_STATUS_UNKNOWN = 0,//未知状态
+    THREAD_STATUS_READY = 1,//就绪状态
+    THREAD_STATUS_SUSPEND,//阻塞状态，可以通过定时器唤醒
+    THREAD_STATUS_SLEEP,//休眠状态，程序将不能通过定时器唤醒，而需要手动唤醒
+    THREAD_STATUS_DEAD,//死亡状态，将永远不会被唤醒
+    
+}thread_stat_e;
+
+
+
+
 
 typedef enum __suscause
 {
@@ -108,7 +113,7 @@ typedef struct _thread_s
     w_bool_t used;
     w_int16_t prio;
     
-    w_int8_t proc_status;
+    thread_stat_e runstat;
     w_int32_t sleep_ticks;
     suscause_e cause;//导致状态变化的原因
 #if WIND_THREAD_CALLBACK_SUPPORT > 0
@@ -121,16 +126,8 @@ typedef struct _thread_s
 }thread_s,*pthread_s;
 
 
-//获取当前的线程PCB
-pthread_s wind_get_cur_proc(void);
-//打开外部任务创建
-w_bool_t wind_thread_isopen(void);
 
-w_err_t wind_thread_getname(pthread_s pthread,w_int8_t *name);
-pthread_s wind_get_proc_byname(w_int8_t *name);
-//w_err_t wind_thread_get_super_permission(void);
-pthread_s get_pcb_byname(w_int8_t *name);
-//这个函数将会支持消息驱动模式，但暂时还能不能支持，因为一些支撑代码还没有建立
+
 pthread_s wind_thread_create(const w_int8_t *name,
                    prio_e priolevel,
                    w_err_t (*procfunc)(w_int32_t argc,w_int8_t **argv),
@@ -143,24 +140,34 @@ w_err_t wind_thread_start(pthread_s pthread);
 w_err_t wind_thread_suspend(pthread_s pthread);
 w_err_t wind_thread_resume(pthread_s pthread);
 w_err_t wind_thread_kill(pthread_s pthread);
-w_err_t wind_thread_killN(w_int8_t *name);
-w_int8_t *wind_thread_get_curname(void);
-w_err_t wind_thread_exit(w_err_t exitcode);
-void wind_thread_wakeup(void);
-w_err_t wind_thread_sleep(w_uint32_t ms);
+w_err_t wind_thread_killbyname(w_int8_t *name);
 
+
+w_bool_t  wind_thread_isopen(void);
+w_err_t   wind_thread_getname(pthread_s pthread,w_int8_t *name);
+pthread_s wind_thread_get_byname(w_int8_t *name);
+w_int8_t* wind_thread_curname(void);
+pthread_s wind_thread_current(void);
+w_int8_t* wind_thread_status(thread_stat_e stat);
+
+w_err_t wind_thread_sleep(w_uint32_t ms);
+void    wind_thread_wakeup(void);
+w_err_t wind_thread_exit(w_err_t exitcode);
+
+w_err_t wind_thread_print(pnode_s nodes);
 #if WIND_THREAD_CALLBACK_SUPPORT > 0
 w_err_t wind_thread_callback_register(pthread_s pthread,procevt_e id,void(*cb)(pthread_s));
 #endif
-w_err_t wind_thread_showlist(pnode_s nodes);
+
+
 
 #if WIND_THREAD_MAX_NUM > PCB_NUM_LIMIT
 #error "PCB_MAX_NUM should not be a number larger than PCB_NUM_LIMIT!"
-#endif //PCB_MAX_NUM > PCB_NUM_LIMIT
+#endif //#if PCB_MAX_NUM > PCB_NUM_LIMIT
 
 #if WIND_THREAD_MAX_NUM < 8
 #error "WIND_THREAD_MAX_NUM should not be a number smaller than 8,as operation system reserves some processes!"
-#endif
+#endif //#if WIND_THREAD_MAX_NUM < 8
 
 
 #ifdef __cplusplus

@@ -41,7 +41,7 @@ static w_err_t wind_thread_output(pthread_s pthread)
     wind_printf("proc name:%s\r\n",pthread->name);
     wind_printf("proc stack:%d\r\n",pthread->pstk);
     wind_printf("proc prio:0x%x\r\n\r\n",pthread->prio);
-    wind_printf("proc state:%d\r\n",pthread->proc_status);
+    wind_printf("proc state:%d\r\n",pthread->runstat);
     wind_printf("proc stack size:%d\r\n",pthread->stksize);
     return ERR_OK;
 }
@@ -72,7 +72,7 @@ w_err_t cmd_proc_show_list_main(w_int32_t argc,char **argv)
 
 w_err_t cmd_proc_show_obj_main(w_int32_t argc,char **argv)
 {
-    pthread_s pthread = wind_get_proc_byname(argv[0]);
+    pthread_s pthread = wind_thread_get_byname(argv[0]);
     WIND_ASSERT_RETURN(pthread != NULL,ERR_NULL_POINTER);
     return wind_thread_output(pthread);
 }

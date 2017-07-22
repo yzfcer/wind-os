@@ -35,7 +35,7 @@
 #include "wind_assert.h"
 
 #if WIND_SOFTINT_SUPPORT > 0
-extern pthread_s wind_get_cur_proc(void);
+extern pthread_s wind_thread_current(void);
 extern void wind_thread_dispatch(void);
 //软中断线程的堆栈
 static w_stack_t softint_stk[WIND_SOFTINT_STK_LEN];
@@ -59,7 +59,7 @@ static w_err_t wind_softint_proc(w_int16_t argc,w_int8_t **argv)
     while(1)
     {
         wind_close_interrupt();
-        softint_ppcb->proc_status = PROC_STATUS_SUSPEND;
+        softint_ppcb->runstat = THREAD_STATUS_SUSPEND;
         softint_ppcb->cause = CAUSE_COM;
         wind_open_interrupt();
         wind_thread_dispatch();
@@ -110,7 +110,7 @@ void wind_soft_int(HANDLE handler)
 {
     wind_close_interrupt();
     softint_index = handler;
-    softint_ppcb->proc_status = PROC_STATUS_READY;
+    softint_ppcb->runstat = THREAD_STATUS_READY;
     wind_open_interrupt();
     wind_thread_dispatch();
 }

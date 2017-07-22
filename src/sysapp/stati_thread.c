@@ -8,7 +8,7 @@ static w_uint32_t core_get_ticks_of_idle(w_uint32_t ms)
     pthread_s pthread;
     pnode_s node;
     w_uint32_t cnts;
-    pthread_s pproc = wind_get_cur_proc();
+    pthread_s pproc = wind_thread_current();
     wind_close_interrupt();
     node = g_core.pcblist.head;
     
@@ -18,7 +18,7 @@ static w_uint32_t core_get_ticks_of_idle(w_uint32_t ms)
         pthread = (pthread_s)node->obj;
         if((pthread != pproc) && (pthread->prio != 32767))
         {
-            pthread->proc_status = PROC_STATUS_SUSPEND;
+            pthread->proc_status = THREAD_STATUS_SUSPEND;
             pthread->cause = CAUSE_COM;
         }
         node = node->next;
@@ -34,7 +34,7 @@ static w_uint32_t core_get_ticks_of_idle(w_uint32_t ms)
         pthread = (pthread_s)node->obj;
         if((pthread != pproc) && (pthread->prio != 32767))
         {
-            pthread->proc_status = PROC_STATUS_READY;
+            pthread->proc_status = THREAD_STATUS_READY;
             pthread->cause = CAUSE_COM;
         }
         node = node->next;

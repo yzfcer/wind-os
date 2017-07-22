@@ -52,7 +52,7 @@ w_err_t cmd_testheap_main(w_int32_t argc,char **argv)
     if(0 == wind_strcmp(argv[0],"heap"))
     {
         //wind_heap_test();
-        CONSOLE_OUT("heaptest not support yet\r\n");
+        CONSOLE_PRINTF("heaptest not support yet\r\n");
         return ERR_OK;
     }
 #endif

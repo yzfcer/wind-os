@@ -55,10 +55,10 @@ static w_err_t cmd_help_main(w_int32_t argc,char **argv)
     cmd_s *cmdlist = wind_get_cmdlist();
     if(argc < 1)
     {
-        CONSOLE_OUT("\r\ncommand list as following:\r\n");
+        CONSOLE_PRINTF("\r\ncommand list as following:\r\n");
         while(cmdlist)
         {
-            CONSOLE_OUT("%s : %s\r\n",cmdlist->cmd,cmdlist->helpdetails);
+            CONSOLE_PRINTF("%s : %s\r\n",cmdlist->cmd,cmdlist->helpdetails);
             cmdlist = cmdlist->next;
         }
         return ERR_OK;
@@ -67,7 +67,7 @@ static w_err_t cmd_help_main(w_int32_t argc,char **argv)
     {
         if(wind_strcmp(argv[0],cmdlist->cmd) == 0)
         {
-            CONSOLE_OUT("%s : %s\r\n",cmdlist->cmd,cmdlist->helpdetails);
+            CONSOLE_PRINTF("%s : %s\r\n",cmdlist->cmd,cmdlist->helpdetails);
             break;
         }
         cmdlist = cmdlist->next;

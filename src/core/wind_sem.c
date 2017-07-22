@@ -81,7 +81,7 @@ w_err_t wind_sem_post(psem_s psem)
     }
     pnode = wind_list_remove(&psem->waitlist,psem->waitlist.head);
     pthread = (pthread_s)pnode->obj;
-    pthread->proc_status = PROC_STATUS_READY;
+    pthread->runstat = THREAD_STATUS_READY;
     pthread->cause = CAUSE_NONE;
     wind_node_free(pnode);
     wind_open_interrupt();
@@ -111,8 +111,8 @@ w_err_t wind_sem_fetch(psem_s psem,w_uint32_t timeout)
     ticks = timeout * WIND_TICK_PER_SEC / 1000;
     if(ticks == 0)
         ticks = 1;
-    pthread = wind_get_cur_proc();
-    pthread->proc_status = PROC_STATUS_SUSPEND;
+    pthread = wind_thread_current();
+    pthread->runstat = THREAD_STATUS_SUSPEND;
     pthread->cause = CAUSE_SEM;
     pthread->sleep_ticks = ticks;
 
@@ -167,7 +167,7 @@ w_err_t wind_sem_free(psem_s psem)
     {
         pnode = wind_list_remove(&psem->waitlist,psem->waitlist.head);
         pthread = (pthread_s)pnode->obj;
-        pthread->proc_status = PROC_STATUS_READY;
+        pthread->runstat = THREAD_STATUS_READY;
         pthread->cause = CAUSE_SEM;
         wind_node_free(pnode);
         pnode = psem->waitlist.head;

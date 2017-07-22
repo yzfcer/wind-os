@@ -43,30 +43,30 @@ pthread_s gwind_high_pcb = NULL;//最高优先级PCB指针
 void wind_corepool_init(void)
 {
     wind_mpool_create("pcb_pool",g_core.pcb,sizeof(g_core.pcb),sizeof(thread_s));
-    wind_mpool_show("pcb",g_core.pcb);
+    wind_mpool_print("pcb",g_core.pcb);
     wind_mpool_create("node_pool",g_core.node,sizeof(g_core.node),sizeof(node_s));
 #if WIND_PIPE_SUPPORT > 0
     wind_mpool_create("pipe_pool",g_core.pipe,sizeof(g_core.pipe),sizeof(pipe_s));
-    wind_mpool_show("pipe",g_core.pipe);
+    wind_mpool_print("pipe",g_core.pipe);
     
 #endif
 #if WIND_MESSAGE_SUPPORT > 0
     wind_mpool_create("msg_pool",g_core.msg,sizeof(g_core.msg),sizeof(msg_s));
-    wind_mpool_show("msg",g_core.msg);
+    wind_mpool_print("msg",g_core.msg);
     wind_mpool_create("mbox_pool",g_core.mbox,sizeof(g_core.mbox),sizeof(mbox_s));
-    wind_mpool_show("mbox",g_core.mbox);
+    wind_mpool_print("mbox",g_core.mbox);
 #endif
 #if WIND_SEM_SUPPORT > 0
     wind_mpool_create("sem_pool",g_core.sem,sizeof(g_core.sem),sizeof(sem_s));
-    wind_mpool_show("sem",g_core.sem);
+    wind_mpool_print("sem",g_core.sem);
 #endif
 #if WIND_TTIMER_SUPPORT > 0
     wind_mpool_create("ttimer_pool",g_core.ttimer,sizeof(g_core.ttimer),sizeof(ttimer_s));
-    wind_mpool_show("ttimer",g_core.ttimer);
+    wind_mpool_print("ttimer",g_core.ttimer);
 #endif
 #if WIND_LOCK_SUPPORT > 0
     wind_mpool_create("lock_pool",g_core.lock,sizeof(g_core.lock),sizeof(lock_s));
-    wind_mpool_show("lock",g_core.lock);
+    wind_mpool_print("lock",g_core.lock);
 #endif
     wind_mpool_create("stk128_pool",g_core.stk128,sizeof(g_core.stk128),128 * sizeof(w_stack_t));
     wind_mpool_create("stk256_pool",g_core.stk256,sizeof(g_core.stk256),256 * sizeof(w_stack_t));

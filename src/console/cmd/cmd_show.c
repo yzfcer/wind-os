@@ -40,7 +40,7 @@ w_err_t wind_output_cmdlist(void)
     pcmd_s clist = wind_get_cmdlist();
     while(clist)
     {
-        CONSOLE_OUT("cmd list:%s\r\n",clist->cmd);
+        CONSOLE_PRINTF("cmd list:%s\r\n",clist->cmd);
         clist = clist->next;
     }
     return 0;
@@ -54,7 +54,7 @@ w_err_t cmd_show_main(w_int32_t argc,char **argv)
 
     if(0 == wind_strcmp(argv[0],"-c"))
     {
-        CONSOLE_OUT("cpu usage persage:%%%d\r\n",WIND_CPU_USAGE);
+        CONSOLE_PRINTF("cpu usage persage:%%%d\r\n",WIND_CPU_USAGE);
         return ERR_OK;
     }
     else if(0 == wind_strcmp(argv[0],"proc"))
@@ -62,11 +62,11 @@ w_err_t cmd_show_main(w_int32_t argc,char **argv)
         pnode = g_core.pcblist.head;
         if(0 == wind_strcmp(argv[0],"all"))
         {
-            CONSOLE_OUT("proc list as following:\r\n");
+            CONSOLE_PRINTF("proc list as following:\r\n");
             while(pnode)
             {
                 pthread = (pthread_s)pnode->obj;
-                CONSOLE_OUT("%s--prio:%d\r\n",pthread->name,pthread->prio);
+                CONSOLE_PRINTF("%s--prio:%d\r\n",pthread->name,pthread->prio);
                 pnode = pnode->next;
             }
             
@@ -78,25 +78,25 @@ w_err_t cmd_show_main(w_int32_t argc,char **argv)
                 pthread = (pthread_s)pnode->obj;
                 if(0 == wind_strcmp(argv[1],pthread->name))
                 {
-                    CONSOLE_OUT("proc:%s\r\n",pthread->name);
-                    CONSOLE_OUT("stacksize:%d\r\n",pthread->stksize);
-                    CONSOLE_OUT("prio:%d\r\n",pthread->prio);
-                    switch(pthread->proc_status)
+                    CONSOLE_PRINTF("proc:%s\r\n",pthread->name);
+                    CONSOLE_PRINTF("stacksize:%d\r\n",pthread->stksize);
+                    CONSOLE_PRINTF("prio:%d\r\n",pthread->prio);
+                    switch(pthread->runstat)
                     {
-                    case PROC_STATUS_READY:
-                        CONSOLE_OUT("status:ready\r\n",pthread->stksize);
+                    case THREAD_STATUS_READY:
+                        CONSOLE_PRINTF("status:ready\r\n",pthread->stksize);
                         break;
-                    case PROC_STATUS_SUSPEND:
-                        CONSOLE_OUT("status:suspend\r\n",pthread->stksize);
+                    case THREAD_STATUS_SUSPEND:
+                        CONSOLE_PRINTF("status:suspend\r\n",pthread->stksize);
                         break;
-                    case PROC_STATUS_SLEEP:
-                        CONSOLE_OUT("status:sleep\r\n",pthread->stksize);
+                    case THREAD_STATUS_SLEEP:
+                        CONSOLE_PRINTF("status:sleep\r\n",pthread->stksize);
                         break;
-                    case PROC_STATUS_DEAD:
-                        CONSOLE_OUT("status:dead\r\n",pthread->stksize);
+                    case THREAD_STATUS_DEAD:
+                        CONSOLE_PRINTF("status:dead\r\n",pthread->stksize);
                         break;
                     default:
-                        CONSOLE_OUT("status:unknown\r\n",pthread->stksize);
+                        CONSOLE_PRINTF("status:unknown\r\n",pthread->stksize);
                         break;
                     }
                 }

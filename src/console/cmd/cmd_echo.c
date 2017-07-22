@@ -48,7 +48,7 @@ static w_err_t cmd_echo_main(w_int32_t argc,char **argv)
     if(argc < 1)
         return ERR_COMMAN;
     str = argv[0];
-    CONSOLE_OUT("%s",str);
+    CONSOLE_PRINTF("%s",str);
     return ERR_OK;
 }
 

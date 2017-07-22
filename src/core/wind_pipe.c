@@ -84,7 +84,7 @@ ppipe_s wind_pipe_create(const char *name,void *inbuf,w_uint32_t inlen,void *out
     ppipe->inlen= inlen;
     ppipe->outlen= outlen;
     //设定当前的线程句柄
-    ppipe->owner = wind_get_cur_proc();
+    ppipe->owner = wind_thread_current();
     ppipe->client = NULL;
     ppipe->used = B_TRUE;
     ppipe->magic = WIND_PIPE_MAGIC;
@@ -99,7 +99,7 @@ w_err_t wind_pipe_connect(ppipe_s ppipe)
     pthread_s pthread = NULL;
     WIND_ASSERT_RETURN(ppipe != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(ppipe->magic == WIND_PIPE_MAGIC,ERR_INVALID_PARAM);
-    pthread = wind_get_cur_proc();
+    pthread = wind_thread_current();
     WIND_ASSERT_RETURN(pthread != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(ppipe->client == NULL,ERR_COMMAN);
     ppipe->client = pthread;
@@ -117,7 +117,7 @@ w_int16_t wind_pipe_read(ppipe_s ppipe,w_int8_t *str,w_int16_t len)
     WIND_ASSERT_RETURN(ppipe->magic == WIND_PIPE_MAGIC,ERR_INVALID_PARAM);
     
     wind_close_interrupt();
-    pthread = wind_get_cur_proc();
+    pthread = wind_thread_current();
     WIND_ASSERT_TODO(pthread != NULL,wind_open_interrupt(),ERR_COMMAN);
     if(pthread == ppipe->client)
     {
@@ -140,7 +140,7 @@ w_int16_t wind_pipe_write(ppipe_s ppipe,w_int8_t *str,w_int16_t len)
     WIND_ASSERT_RETURN(str != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(len > 0,ERR_INVALID_PARAM);
     wind_close_interrupt();
-    pthread = wind_get_cur_proc();
+    pthread = wind_thread_current();
     WIND_ASSERT_TODO(pthread != NULL,wind_open_interrupt(),ERR_COMMAN);
     if(pthread == ppipe->client)
     {
@@ -159,7 +159,7 @@ w_err_t wind_pipe_free(ppipe_s ppipe)
     pthread_s pthread;
     WIND_ASSERT_RETURN(ppipe != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(ppipe->magic == WIND_PIPE_MAGIC,ERR_INVALID_PARAM);
-    pthread = wind_get_cur_proc();
+    pthread = wind_thread_current();
     WIND_ASSERT_RETURN(pthread == ppipe->owner,ERR_COMMAN);
     wind_close_interrupt();
     ppipe->magic = 0;

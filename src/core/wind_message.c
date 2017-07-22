@@ -117,7 +117,7 @@ pmbox_s wind_mbox_create(const char *name)
 
     pmbox->name = name;
     pmbox->used = B_TRUE;
-    pmbox->owner = wind_get_cur_proc();
+    pmbox->owner = wind_thread_current();
     pmbox->num = 0;
     wind_list_init(&pmbox->msgq);
     pmbox->valid = B_TRUE;
@@ -130,7 +130,7 @@ w_err_t wind_mbox_destroy(pmbox_s pmbox)
     w_err_t err;
     pthread_s pthread;
     WIND_ASSERT_RETURN(pmbox != NULL,ERR_NULL_POINTER);
-    pthread = wind_get_cur_proc();
+    pthread = wind_thread_current();
     WIND_ASSERT_RETURN(pthread == pmbox->owner,ERR_COMMAN);
     wind_close_interrupt();
     pmbox->valid = B_FALSE;
@@ -160,7 +160,7 @@ w_err_t wind_mbox_post(pmbox_s mbox,pmsg_s pmsg)
     wind_list_inserttoend(&mbox->msgq,pnode);
     pthread = mbox->owner;
     pthread->cause = CAUSE_MSG;
-    pthread->proc_status = PROC_STATUS_READY;
+    pthread->runstat = THREAD_STATUS_READY;
     wind_thread_dispatch();//切换线程
     return ERR_OK;
 }
@@ -176,7 +176,7 @@ w_err_t wind_mbox_fetch(pmbox_s mbox,pmsg_s *pmsg,w_uint32_t timeout)
     WIND_ASSERT_RETURN(pmsg != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(mbox->valid,ERR_COMMAN);
     WIND_ASSERT_RETURN(mbox->owner,ERR_COMMAN);
-    pthread = wind_get_cur_proc();
+    pthread = wind_thread_current();
     WIND_ASSERT_RETURN(mbox->owner == pthread,ERR_COMMAN);
     
     //如果邮箱中有消息，就直接返回消息
@@ -193,7 +193,7 @@ w_err_t wind_mbox_fetch(pmbox_s mbox,pmsg_s *pmsg,w_uint32_t timeout)
     if(ticks == 0)
         ticks = 1;
     pthread = mbox->owner;
-    pthread->proc_status = PROC_STATUS_SUSPEND;
+    pthread->runstat = THREAD_STATUS_SUSPEND;
     pthread->cause = CAUSE_MSG;
     
     //pnode = wind_node_malloc(CORE_TYPE_PCB);
@@ -208,7 +208,7 @@ w_err_t wind_mbox_fetch(pmbox_s mbox,pmsg_s *pmsg,w_uint32_t timeout)
         //几乎不会发生邮箱为空的情况
         if(mbox->msgq.head == NULL)
         {
-            pthread->proc_status = PROC_STATUS_READY;
+            pthread->runstat = THREAD_STATUS_READY;
             return ERR_NULL_POINTER;
         }
         pnode = wind_list_remove(&mbox->msgq,mbox->msgq.head);
