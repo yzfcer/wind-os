@@ -111,7 +111,7 @@ static void wind_run()
 void wind_update_curthread()
 {
     pthread_s pthread;
-    pnode_s pnode = g_core.pcblist.head;
+    pnode_s pnode = g_core.threadlist.head;
     wind_close_interrupt();
     while(pnode)
     {

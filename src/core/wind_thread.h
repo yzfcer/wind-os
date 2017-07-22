@@ -35,7 +35,7 @@ extern "C" {
 #endif
 
 #define PCB_NUM_LIMIT 512 //线程总数的上限值
-#define PROCESS_NAME_LEN 20 //线程名的最大长度，包括 '\0'
+#define THREAD_NAME_LEN 20 //线程名的最大长度，包括 '\0'
 
 //线程的优先等级，
 typedef enum _PRIOLEVEL
@@ -109,7 +109,7 @@ typedef struct _thread_s
     w_int8_t **argv;
     
     struct _thread_s *parent;
-    char name[PROCESS_NAME_LEN];//
+    char name[THREAD_NAME_LEN];//
     w_bool_t used;
     w_int16_t prio;
     

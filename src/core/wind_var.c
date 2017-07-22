@@ -84,7 +84,8 @@ void wind_corevar_init(void)
     g_core.usrprocen = B_FALSE;
     g_core.run_falg = B_FALSE;
     g_core.ticks_cnt = 0;
-    wind_list_init(&g_core.pcblist);
+    wind_list_init(&g_core.threadlist);
+    wind_list_init(&g_core.semlist);
     wind_list_init(&g_core.ttmerlist);
 }
 

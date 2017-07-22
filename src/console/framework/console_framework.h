@@ -41,7 +41,6 @@ extern "C" {
 #define WIND_CTL_USRNAME_LEN 20//用户名的长度
 #define WIND_CTL_PWD_LEN 20//密码的最大长度
 #define WIND_CONSOLE_COUNT 1//支持的控制套终端的数量
-#define CONSOLE_PRINTF(fmt,...) wind_printf(fmt,##__VA_ARGS__)
 
 
 /**********************************************枚举定义************************************************/

@@ -10,7 +10,7 @@ static w_uint32_t core_get_ticks_of_idle(w_uint32_t ms)
     w_uint32_t cnts;
     pthread_s pproc = wind_thread_current();
     wind_close_interrupt();
-    node = g_core.pcblist.head;
+    node = g_core.threadlist.head;
     
     WIND_DEBUG("RUN_FLAG=%d\r\n",RUN_FLAG);
     while(node)
@@ -28,7 +28,7 @@ static w_uint32_t core_get_ticks_of_idle(w_uint32_t ms)
     wind_thread_sleep(ms);
     cnts = g_core.idle_cnt - cnts;
     
-    node = g_core.pcblist.head;
+    node = g_core.threadlist.head;
     while(node)
     {
         pthread = (pthread_s)node->obj;

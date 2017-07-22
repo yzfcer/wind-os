@@ -941,11 +941,6 @@
               <FilePath>..\..\..\..\..\src\console\cmd\cmd_proc.c</FilePath>
             </File>
             <File>
-              <FileName>cmd_show.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\console\cmd\cmd_show.c</FilePath>
-            </File>
-            <File>
               <FileName>cmd_stat.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\console\cmd\cmd_stat.c</FilePath>
@@ -959,6 +954,11 @@
               <FileName>cmd_user.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\console\cmd\cmd_user.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_coreobj.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\console\cmd\cmd_coreobj.c</FilePath>
             </File>
           </Files>
         </Group>

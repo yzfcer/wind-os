@@ -68,7 +68,7 @@ w_err_t pcb_free(pthread_s pthread)
     WIND_ASSERT_RETURN(pthread != NULL,ERR_NULL_POINTER);
     pthread->used = B_FALSE;
     pthread->parent = NULL;
-    wind_memset(pthread->name,0,PROCESS_NAME_LEN);
+    wind_memset(pthread->name,0,THREAD_NAME_LEN);
     //pthread->name = NULL;
     pthread->prio = -1;
     pthread->runstat = THREAD_STATUS_UNKNOWN;
@@ -157,7 +157,7 @@ pthread_s wind_thread_get_byname(w_int8_t *name)
     pnode_s pnode;
     WIND_ASSERT_RETURN(name != NULL,NULL);
     wind_close_interrupt();
-    pnode = g_core.pcblist.head;
+    pnode = g_core.threadlist.head;
     while(pnode)
     {
         pthread = (pthread_s)pnode->obj;
@@ -235,7 +235,7 @@ pthread_s wind_thread_create(const w_int8_t *name,
         return NULL;
     }
     wind_node_bindobj(pnode,CORE_TYPE_PCB,pthread->prio,pthread);
-    wind_list_insert(&g_core.pcblist,pnode);
+    wind_list_insert(&g_core.threadlist,pnode);
     WIND_DEBUG("pthread->name:%s\r\n",pthread->name);
     WIND_DEBUG("pthread->pstk:0x%x\r\n",pthread->pstk);
     WIND_DEBUG("pthread->runstat:%d\r\n",pthread->runstat);
@@ -262,11 +262,11 @@ w_err_t wind_thread_changeprio(pthread_s pthread,w_int16_t prio)
 
     wind_close_interrupt();
     WIND_DEBUG("change prio %s:%d\r\n",pthread->name,prio);
-    node = wind_list_search(&g_core.pcblist,pthread);
+    node = wind_list_search(&g_core.threadlist,pthread);
     node->key = prio;
     pthread->prio = prio;
-    wind_list_remove(&g_core.pcblist,node);
-    wind_list_insert(&g_core.pcblist,node);
+    wind_list_remove(&g_core.threadlist,node);
+    wind_list_insert(&g_core.threadlist,node);
     wind_open_interrupt();
     return ERR_OK;
 }
@@ -331,13 +331,13 @@ w_err_t wind_thread_kill(pthread_s pthread)
     extern void wind_thread_dispatch(void);
     WIND_ASSERT_RETURN(pthread != NULL,ERR_NULL_POINTER);
     wind_close_interrupt();
-    node = wind_list_search(&g_core.pcblist,pthread);
+    node = wind_list_search(&g_core.threadlist,pthread);
     WIND_ASSERT_TODO(node != NULL,wind_open_interrupt(),ERR_NULL_POINTER);
 #if WIND_THREAD_CALLBACK_SUPPORT > 0
     if(pthread->cb.dead != NULL)
         pthread->cb.dead(pthread);
 #endif
-    wind_list_remove(&g_core.pcblist,node);
+    wind_list_remove(&g_core.threadlist,node);
     wind_node_free(node);
     wind_thread_distroy(pthread);
     wind_open_interrupt();

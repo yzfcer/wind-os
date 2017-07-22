@@ -4,20 +4,20 @@
 **                                       yzfcer@163.com
 **
 **--------------文件信息--------------------------------------------------------------------------------
-**文   件   名: wind_test.c
+**文   件   名: wind_echo.c
 **创   建   人: 周江村
-**最后修改日期: 2013.11.06
-**描        述: 系统的控制台命令test处理函数，提供一些系统内核测试的命令的响应函数
+**最后修改日期: 2013.10.19
+**描        述: 系统的控制台命令show处理函数，输出一些系统内部信息
 **              
 **--------------历史版本信息----------------------------------------------------------------------------
 ** 创建人: 周江村
 ** 版  本: v1.0
-** 日　期: 2013.11.06
+** 日　期: 2013.10.19
 ** 描　述: 原始版本
 **
 **--------------当前版本修订----------------------------------------------------------------------------
 ** 修改人: 周江村
-** 日　期: 2013.11.06
+** 日　期: 2013.10.19
 ** 描　述: 
 **
 **------------------------------------------------------------------------------------------------------
@@ -31,50 +31,59 @@
 #include "wind_string.h"
 #include "wind_thread.h"
 #include "wind_list.h"
-#include "wind_softint.h"
-#include "wind_heap.h"
+#include "wind_var.h"
 
-w_err_t cmd_testsoftint_main(w_int32_t argc,char **argv)
+#include "console_framework.h"
+cmd_s g_cmd_coreobj[];
+w_err_t wind_output_cmdlist(void)
 {
-#if WIND_SOFTINT_SUPPORT > 0
-    if(0 == wind_strcmp(argv[0],"softint"))
+    pcmd_s clist = wind_get_cmdlist();
+    while(clist)
     {
-        wind_softint_test();
-        return ERR_OK;
+        wind_printf("cmd list:%s\r\n",clist->cmd);
+        clist = clist->next;
     }
-#endif
-    return ERR_OK;
+    return 0;
 }
 
-w_err_t cmd_testheap_main(w_int32_t argc,char **argv)
+
+w_err_t cmd_coreobj_main(w_int32_t argc,char **argv)
 {
-#if WIND_HEAP_SUPPORT > 0
-    if(0 == wind_strcmp(argv[0],"heap"))
+    pnode_s pnode;
+    cmd_s *cmd = g_cmd_coreobj;
+    
+    if(argc < 2)
     {
-        //wind_heap_test();
-        wind_printf("heaptest not support yet\r\n");
+        wind_printf(cmd->helpdetails);
         return ERR_OK;
     }
-#endif
+    else if(0 == wind_strcmp(argv[1],"thread"))
+    {
+        pnode = g_core.threadlist.head;
+        wind_thread_print(pnode);
+        return ERR_OK;
+    }
+    else if(0 == wind_strcmp(argv[1],"sem"))
+    {
+        return ERR_COMMAN;
+    }
     return ERR_COMMAN;
 }
 
-cmd_s g_cmd_test[] =
+
+cmd_s g_cmd_coreobj[] = 
 {
     {
-        NULL,"test softint","to test soft interrupt module.",
-        "",cmd_testsoftint_main,        
-    },
-    {
-        NULL,"test heap","to test to allocate memory from the system memory heap.",
-        "",cmd_testheap_main,
+        NULL,
+        "coreobj",
+        "show core objects infomation.",
+        "coreobj thread:to show thread infomation",
+        cmd_coreobj_main
     }
 };
 
-void register_cmd_test(console_s *ctrl)
+void register_cmd_show(console_s *ctrl)
 {
-    wind_cmd_register(&ctrl->cmd_list,g_cmd_test,sizeof(g_cmd_test)/sizeof(cmd_s));
+    wind_cmd_register(&ctrl->cmd_list,g_cmd_coreobj,sizeof(g_cmd_coreobj)/sizeof(cmd_s));
 }
 
-
-//#endif

@@ -65,15 +65,15 @@ static void wind_console_prehandle(console_s *ctrl,char ch)
         return;
     else if((ch == WVK_BACKSPACE) && (ctrl->index > 0))
     {
-        CONSOLE_PRINTF("%c",WVK_DEL);
+        wind_printf("%c",WVK_DEL);
         return;
     }
     if(ch == 0x0d)
     {
-        CONSOLE_PRINTF("\r\n");
+        wind_printf("\r\n");
     }
     else
-        CONSOLE_PRINTF("%c",ch);
+        wind_printf("%c",ch);
 }
 
 static void console_clear_buf(console_s *ctrl)
@@ -226,7 +226,7 @@ static w_int32_t get_string(char *str,w_int32_t idx,char ** arg)
     while(str[i] && (str[i] != ' '))
         i ++;
     str[i] = 0;
-    return 0;
+    return i + 1;
 }
 
 static w_err_t spit_cmd(console_s * ctrl)
@@ -290,7 +290,7 @@ w_err_t console_proc(w_int32_t argc,char **argv)
     ctrl = &g_ctrl[argc];
     cmd_history_init(&ctrl->his);
     init_console_stat(ctrl);
-    CONSOLE_PRINTF("\r\nlogin:");
+    wind_printf("\r\nlogin:");
     while(1)
     {
         len = console_read_line(ctrl,WIND_CMD_MAX_LEN);
@@ -301,11 +301,11 @@ w_err_t console_proc(w_int32_t argc,char **argv)
                 case CSLSTAT_USER:
                     err = check_user_name(ctrl);
                     if(err != ERR_OK)
-                        CONSOLE_PRINTF("\r\nlogin:");
+                        wind_printf("\r\nlogin:");
                     else
                     {
                         ctrl->stat = CSLSTAT_PWD;
-                        CONSOLE_PRINTF("\r\npasswd:");
+                        wind_printf("\r\npasswd:");
                     }
                     break;
                 case CSLSTAT_PWD:
@@ -313,12 +313,12 @@ w_err_t console_proc(w_int32_t argc,char **argv)
                     if(err != ERR_OK)
                     {
                         ctrl->stat = CSLSTAT_USER;
-                        CONSOLE_PRINTF("\r\nlogin:");
+                        wind_printf("\r\nlogin:");
                     }
                     else
                     {
                         ctrl->stat = CSLSTAT_APP;
-                        CONSOLE_PRINTF("\r\n%s@wind-os>",ctrl->user);
+                        wind_printf("\r\n%s@wind-os>",ctrl->user);
                     }
                         
                     break;
@@ -328,13 +328,13 @@ w_err_t console_proc(w_int32_t argc,char **argv)
                     if(wind_strcmp(ctrl->buf,"exit") == 0)
                     {
                         ctrl->stat = CSLSTAT_USER;
-                        CONSOLE_PRINTF("\r\nlogin:");
+                        wind_printf("\r\nlogin:");
                     }
                     else
-                        CONSOLE_PRINTF("\r\n%s@wind-os>",ctrl->user);
+                        wind_printf("\r\n%s@wind-os>",ctrl->user);
                     break;
                 default:
-                    CONSOLE_PRINTF("\r\nlogin:");
+                    wind_printf("\r\nlogin:");
                     ctrl->stat = CSLSTAT_APP;
                     break;
             }
@@ -377,12 +377,12 @@ for(i = 0;i < len;i ++)
                 wind_decode_cmd(ctrl);
                 memoryset(ctrl->cmdstr,0,WIND_CMD_MAX_LEN);
                 if(ctrl->stat == CSLSTAT_CMD)
-                    CONSOLE_PRINTF("%s@wind_os/GT2440>#:",ctrl->user);
+                    wind_printf("%s@wind_os/GT2440>#:",ctrl->user);
                 ctrl->index = 0;
         }
         if(ctrl->index>= WIND_CMD_MAX_LEN)
         {
-            CONSOLE_PRINTF("\r\nERROR:command is too long\r\n");
+            wind_printf("\r\nERROR:command is too long\r\n");
             memoryset(ctrl->cmdstr,0,WIND_CMD_MAX_LEN);
             ctrl->index = 0;
         }

@@ -51,7 +51,7 @@ w_err_t cmd_setdate_main(w_int32_t argc,char **argv)
         wind_set_date(wind_convert_str2u32_t(&argv[0][0]),
                         wind_convert_str2u32_t(&argv[0][4]),
                         wind_convert_str2u32_t(&argv[0][7]));
-        CONSOLE_PRINTF("system date:%d/%d/%d\r\n",dt->date.year,
+        wind_printf("system date:%d/%d/%d\r\n",dt->date.year,
         dt->date.month,dt->date.day);
     }    
     return ERR_OK;
@@ -69,7 +69,7 @@ w_err_t cmd_settime_main(w_int32_t argc,char **argv)
         wind_set_time(wind_convert_str2u32_t(&(argv[0][0])),
                         wind_convert_str2u32_t(&(argv[0][3])),
                         wind_convert_str2u32_t(&(argv[0][6])),0);
-        CONSOLE_PRINTF("system time:%d:%d:%d  %d\r\n",dt->time.hour,
+        wind_printf("system time:%d:%d:%d  %d\r\n",dt->time.hour,
         dt->time.minute,dt->time.second,dt->time.msecond);
     }
     
@@ -84,7 +84,7 @@ w_err_t cmd_showdatetime_main(w_int32_t argc,char **argv)
 
     //dt = &G_DATETIME;
     pd = wind_get_date();
-    CONSOLE_PRINTF("system datetime:%d/%d/%d \r\n",pd->year,
+    wind_printf("system datetime:%d/%d/%d \r\n",pd->year,
     pd->month,pd->day);
   
     return ERR_OK;

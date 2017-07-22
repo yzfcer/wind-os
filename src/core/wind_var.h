@@ -66,7 +66,8 @@ typedef struct __core_var_s
     WIND_MPOOL(stk1024,WIND_STK1024_MAX_NUM,1024 * sizeof(w_stack_t));
     WIND_MPOOL(stk2048,WIND_STK2048_MAX_NUM,2048 * sizeof(w_stack_t));
     
-    list_s pcblist;
+    list_s threadlist;
+    list_s semlist;
     list_s ttmerlist;
     w_int16_t pcbcnt;//线程计数器
     volatile w_bool_t run_falg;//多线程调度开始的标志
