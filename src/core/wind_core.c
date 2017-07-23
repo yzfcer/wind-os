@@ -36,6 +36,7 @@
 
 
 volatile w_int8_t gwind_int_cnt = 0;//全局的中断计数值
+volatile w_int8_t gwind_core_cnt = 0;//全局的禁止切换计数值
 
 extern w_err_t wind_time_init(void);
 
@@ -56,12 +57,15 @@ w_bool_t wind_thread_isopen()
     return g_core.usrprocen;
 }
 
-void wind_enter_core(void)
+void wind_disable_switch(void)
 {
-
+    gwind_core_cnt ++;
 }
-void wind_exit_core(void)
+
+void wind_enable_switch(void)
 {
+    if(gwind_core_cnt > 0)
+        gwind_core_cnt --;
 }
 
 void wind_enter_int(void)
@@ -76,6 +80,11 @@ void wind_enter_int(void)
     return;
 }
 
+static w_bool_t is_switch_enable(void)
+{
+    return gwind_core_cnt>0?B_FALSE:B_TRUE;
+}
+
 void wind_update_curthread(void);
 void wind_exit_int(void)
 {
@@ -88,7 +97,7 @@ void wind_exit_int(void)
     wind_close_interrupt();
     if(gwind_int_cnt > 0)
         gwind_int_cnt --;
-    if(gwind_int_cnt == 0)
+    if((gwind_int_cnt == 0) && is_switch_enable())
     {
         wind_update_curthread();
         if(HIGH_PROC != gwind_cur_pcb)
@@ -134,6 +143,11 @@ void wind_thread_dispatch(void)
     if(RUN_FLAG == B_FALSE)
         return;
     wind_close_interrupt();
+    if(!is_switch_enable())
+    {
+        wind_open_interrupt();
+        return;
+    }
     wind_update_curthread();
 
     if(HIGH_PROC != gwind_cur_pcb)

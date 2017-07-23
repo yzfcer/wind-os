@@ -30,6 +30,7 @@
 #include "wind_mem.h"
 #include "wind_string.h"
 #include "wind_thread.h"
+#include "wind_sem.h"
 #include "wind_list.h"
 #include "wind_var.h"
 
@@ -65,6 +66,8 @@ w_err_t cmd_coreobj_main(w_int32_t argc,char **argv)
     }
     else if(0 == wind_strcmp(argv[1],"sem"))
     {
+        pnode = g_core.semlist.head;
+        wind_sem_print(pnode);
         return ERR_COMMAN;
     }
     return ERR_COMMAN;

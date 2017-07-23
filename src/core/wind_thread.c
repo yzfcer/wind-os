@@ -302,7 +302,7 @@ w_err_t wind_thread_suspend(pthread_s pthread)
     pthread->runstat = THREAD_STATUS_SUSPEND;
     pthread->cause = CAUSE_COM;
     wind_open_interrupt();
-    return ERR_OK;//wind_enter_core(wind_pro_suspend,(void *)pthread);
+    return ERR_OK;//wind_disable_switch(wind_pro_suspend,(void *)pthread);
 }
 
 
@@ -319,8 +319,8 @@ w_err_t wind_thread_resume(pthread_s pthread)
     pthread->runstat = THREAD_STATUS_READY;
     pthread->cause = CAUSE_COM;
     wind_open_interrupt();
-    return ERR_OK;//wind_enter_core(wind_pro_suspend,(void *)pthread);
-    //return wind_enter_core(wind_pro_start,(void *)pthread);
+    return ERR_OK;//wind_disable_switch(wind_pro_suspend,(void *)pthread);
+    //return wind_disable_switch(wind_pro_start,(void *)pthread);
 }
 
 
@@ -342,8 +342,8 @@ w_err_t wind_thread_kill(pthread_s pthread)
     wind_thread_distroy(pthread);
     wind_open_interrupt();
     wind_thread_dispatch();
-    return ERR_OK;//wind_enter_core(wind_pro_suspend,(void *)pthread);
-    //return wind_enter_core(wind_pro_kill,(void *)pthread);
+    return ERR_OK;//wind_disable_switch(wind_pro_suspend,(void *)pthread);
+    //return wind_disable_switch(wind_pro_kill,(void *)pthread);
 }
 
 

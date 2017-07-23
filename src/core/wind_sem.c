@@ -26,7 +26,7 @@
 #include "wind_types.h"
 #include "wind_thread.h"
 #include "wind_sem.h"
-//#include "wind_time.h"
+#include "wind_list.h"
 //#include "wind_os_hwif.h"
 #include "wind_list.h"
 #include "wind_err.h"
@@ -51,23 +51,28 @@ static psem_s sem_malloc()
 }
 
 
-psem_s wind_sem_create(const char *name,w_uint16_t semValue)
+psem_s wind_sem_create(const char *name,w_uint16_t sem_value)
 {
     psem_s psem;
     pnode_s pnode;
     psem = sem_malloc();
     WIND_ASSERT_RETURN(psem != NULL,NULL);
-    //psem->name = name;
     wind_memset(psem->name,0,SEM_NAME_LEN);
     wind_strcpy(psem->name,name);
     psem->used = B_TRUE;
-    psem->sem_num = semValue;
-    //wind_close_interrupt();
+    psem->sem_num = sem_value;
+    psem->sem_tot = sem_value;
     wind_list_init(&psem->waitlist);
-    
+    pnode = wind_core_alloc(STAT_NODE);
+    if(pnode == NULL)
+    {
+        psem->used = B_FALSE;
+        psem->name[0] = 0;
+        wind_core_free(STAT_SEM,psem);
+        return NULL;  
+    }
     wind_node_bindobj(pnode,CORE_TYPE_SEM,0,psem);
     wind_list_inserttoend(&g_core.semlist,pnode);
-    //wind_open_interrupt();
     return psem;
 }
 
@@ -81,15 +86,15 @@ w_err_t wind_sem_post(psem_s psem)
     wind_close_interrupt();
     if(psem->waitlist.head == NULL)
     {
-        if(psem->sem_num < 65535)
+        if(psem->sem_num < psem->sem_tot)
             psem->sem_num ++;
         wind_open_interrupt();
         return ERR_OK;
     }
     wind_open_interrupt();
-    
     pnode = wind_list_remove(&psem->waitlist,psem->waitlist.head);
     pthread = (pthread_s)pnode->obj;
+
     pthread->runstat = THREAD_STATUS_READY;
     pthread->cause = CAUSE_NONE;
     wind_node_free(pnode);
@@ -156,12 +161,10 @@ w_err_t wind_sem_tryfree(psem_s psem)
         wind_open_interrupt();
         return ERR_COMMAN;
     }
-    psem->used = B_FALSE;
-    psem->name[0] = 0;
-    wind_core_free(STAT_SEM,psem);
     wind_open_interrupt();
-    return ERR_OK;
+    return wind_sem_free(psem);
 }
+
 w_err_t wind_sem_free(psem_s psem)
 {
     w_err_t err;
@@ -179,12 +182,42 @@ w_err_t wind_sem_free(psem_s psem)
         wind_node_free(pnode);
         pnode = psem->waitlist.head;
     }
+    pnode = wind_list_search(&g_core.semlist,psem);
+    if(pnode == NULL)
+    {
+        wind_open_interrupt();
+        return ERR_NULL_POINTER;
+    }
+    wind_list_remove(&g_core.semlist,pnode);
+    wind_node_free(pnode);
     psem->used = B_FALSE;
     psem->name[0] = 0;
     wind_core_free(STAT_SEM,psem);
     wind_open_interrupt();
     return err;    
 }
+
+w_err_t wind_sem_print(pnode_s nodes)
+{
+    pnode_s pnode = nodes;
+    psem_s psem;
+    WIND_ASSERT_RETURN(nodes != NULL,ERR_NULL_POINTER);
+    wind_printf("\r\n\r\nsem list as following:\r\n");
+    wind_printf("----------------------------------------------\r\n");
+    wind_printf("%-16s %-8s %-10s\r\n","sem","sem_tot","sem_num");
+    wind_printf("----------------------------------------------\r\n");
+    
+    while(pnode)
+    {
+        psem = (psem_s)pnode->obj;
+        wind_printf("%-16s %-8d %-10d\r\n",
+            psem->name,psem->sem_tot,psem->sem_num);
+        pnode = pnode->next;
+    }
+    wind_printf("----------------------------------------------\r\n");
+    return ERR_OK;
+}
+
 
 w_err_t wind_sem_test(void)
 {

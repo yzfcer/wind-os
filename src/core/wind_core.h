@@ -40,8 +40,8 @@ void wind_thread_dispatch(void);
 #define wind_thread_dispatch() 
 #endif
 
-void wind_enter_core(void);
-void wind_exit_core(void);
+void wind_disable_switch(void);
+void wind_enable_switch(void);
 
 void wind_enter_int(void);
 void wind_exit_int(void);

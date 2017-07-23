@@ -41,7 +41,9 @@ typedef struct _wind_sem
 {
     char name[SEM_NAME_LEN];
     w_bool_t used;         //是否有效的标志
+    w_uint16_t sem_tot;
     w_uint16_t sem_num;     //当前的信号量的值
+    
     w_uint16_t tot_sem_num; //初始化的信号量的值
     list_s waitlist;  //等待线程队列
 }sem_s,*psem_s;
