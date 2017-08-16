@@ -101,6 +101,7 @@ void register_cmd_proc(console_s *ctrl);
 void register_cmd_show(console_s *ctrl);
 void register_cmd_stat(console_s *ctrl);
 void register_cmd_test(console_s *ctrl);
+void register_cmd_mem(console_s *ctrl);
 
 
 

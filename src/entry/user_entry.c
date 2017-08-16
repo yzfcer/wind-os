@@ -32,7 +32,7 @@
 #include "wind_core_inc.h"
 w_stack_t appstk[20][512];
 
-w_err_t wind_main()
+w_err_t wind_main(void)
 {
     psem_s psem = wind_sem_create("sem_test",12);
     WIND_INFO("enter wind main.\r\n");

@@ -90,6 +90,7 @@ cmd_s g_cmd_proc[] =
         cmd_proc_show_obj_main
     }
 };
+
 void register_cmd_proc(console_s *ctrl)
 {
     wind_cmd_register(&ctrl->cmd_list,g_cmd_proc,sizeof(g_cmd_proc)/sizeof(cmd_s));

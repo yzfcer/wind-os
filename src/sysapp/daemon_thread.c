@@ -2,7 +2,7 @@
 #include "wind_var.h"
 #include "wind_thread.h"
 #include "wind_debug.h"
-#define DAEMON_STK_SIZE 512
+#define DAEMON_STK_SIZE 256
 static w_stack_t daemonstk[DAEMON_STK_SIZE];
 
 
@@ -13,6 +13,7 @@ static int test(void)
     {
         ret += ((2436647*376*i)/5467);
     }
+    wind_thread_sleep(10);
     return ret;
 }
 
@@ -22,7 +23,7 @@ static w_err_t daemon_proc(w_int32_t argc,w_int8_t **argv)
     (void)argc;
     while(1)
     {
-        wind_thread_sleep(10);
+        
         test();
     }
 }

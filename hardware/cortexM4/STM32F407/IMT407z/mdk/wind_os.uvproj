@@ -960,6 +960,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\console\cmd\cmd_coreobj.c</FilePath>
             </File>
+            <File>
+              <FileName>cmd_mem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\console\cmd\cmd_mem.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

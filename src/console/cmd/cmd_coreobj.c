@@ -60,14 +60,14 @@ w_err_t cmd_coreobj_main(w_int32_t argc,char **argv)
     }
     else if(0 == wind_strcmp(argv[1],"thread"))
     {
-        pnode = g_core.threadlist.head;
-        wind_thread_print(pnode);
+        //pnode = g_core.threadlist.head;
+        wind_thread_print(&g_core.threadlist);
         return ERR_OK;
     }
     else if(0 == wind_strcmp(argv[1],"sem"))
     {
-        pnode = g_core.semlist.head;
-        wind_sem_print(pnode);
+        //pnode = g_core.semlist.head;
+        wind_sem_print(&g_core.semlist);
         return ERR_COMMAN;
     }
     return ERR_COMMAN;

@@ -2,7 +2,7 @@
 #include "wind_var.h"
 #include "wind_thread.h"
 
-#define IDLE_STK_SIZE 256
+#define IDLE_STK_SIZE 64
 static w_stack_t idlestk[IDLE_STK_SIZE];//ø’œ–»ŒŒÒ∂—’ª
 static w_err_t idle_thread(w_int32_t argc,w_int8_t **argv)
 {    

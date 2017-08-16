@@ -43,7 +43,7 @@ static w_uint32_t core_get_ticks_of_idle(w_uint32_t ms)
 }
 #endif
 
-#define STATI_STK_SIZE 1024
+#define STATI_STK_SIZE 256
 static w_stack_t statisstk[STATI_STK_SIZE];
 static w_err_t stati_proc(w_int32_t argc,w_int8_t **argv)
 {

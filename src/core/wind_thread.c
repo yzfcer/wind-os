@@ -398,7 +398,7 @@ w_err_t wind_thread_sleep(w_uint32_t ms)
     {
         if(pnode->key < 0)
         {
-            wind_thread_print(procsleeplist.head);
+            wind_thread_print(&procsleeplist);
             WIND_ERROR("sleep err\r\n");
             break;
         }
@@ -466,12 +466,14 @@ w_err_t wind_thread_callback_register(pthread_s pthread,procevt_e id,void(*cb)(p
 
 
 //调试时用到的函数，打印当前的系统中的线程的信息
-w_err_t wind_thread_print(pnode_s nodes)
+w_err_t wind_thread_print(plist_s list)
 {
-    pnode_s pnode = nodes;
+    pnode_s pnode;
     pthread_s pthread;
     char *stat;
-    WIND_ASSERT_RETURN(nodes != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(list != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(list->head != NULL,ERR_NULL_POINTER);
+    pnode = list->head;
     wind_printf("\r\n\r\nthread list as following:\r\n");
     wind_printf("----------------------------------------------\r\n");
     wind_printf("%-16s %-8s %-10s\r\n","thread","prio","state");

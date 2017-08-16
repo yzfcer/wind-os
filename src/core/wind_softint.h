@@ -34,7 +34,7 @@ extern "C" {
 #endif
 
 #if WIND_SOFTINT_SUPPORT > 0
-#define WIND_SOFTINT_STK_LEN 512 //软中断线程的堆栈深度
+#define WIND_SOFTINT_STK_LEN 256 //软中断线程的堆栈深度
 typedef void (*softinthandler_f)(void);
 
 void wind_softint_init(void);

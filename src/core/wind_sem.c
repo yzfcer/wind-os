@@ -46,7 +46,6 @@ static psem_s sem_malloc()
     psem_s psem;
     psem = wind_core_alloc(STAT_SEM);
     WIND_ASSERT_RETURN(psem != NULL,NULL);
-    psem->used = B_TRUE;
     return psem;
 }
 
@@ -66,8 +65,6 @@ psem_s wind_sem_create(const char *name,w_uint16_t sem_value)
     pnode = wind_core_alloc(STAT_NODE);
     if(pnode == NULL)
     {
-        psem->used = B_FALSE;
-        psem->name[0] = 0;
         wind_core_free(STAT_SEM,psem);
         return NULL;  
     }
@@ -94,7 +91,6 @@ w_err_t wind_sem_post(psem_s psem)
     wind_open_interrupt();
     pnode = wind_list_remove(&psem->waitlist,psem->waitlist.head);
     pthread = (pthread_s)pnode->obj;
-
     pthread->runstat = THREAD_STATUS_READY;
     pthread->cause = CAUSE_NONE;
     wind_node_free(pnode);
@@ -128,10 +124,10 @@ w_err_t wind_sem_fetch(psem_s psem,w_uint32_t timeout)
     pthread->runstat = THREAD_STATUS_SUSPEND;
     pthread->cause = CAUSE_SEM;
     pthread->sleep_ticks = ticks;
-
     wind_node_bindobj(pnode,CORE_TYPE_PCB,pthread->prio,pthread);
-    wind_close_interrupt();
     wind_list_insert(&psem->waitlist,pnode);
+    
+    wind_close_interrupt();
     wind_thread_dispatch();
     if(pthread->cause == CAUSE_SEM)
     {
@@ -190,18 +186,18 @@ w_err_t wind_sem_free(psem_s psem)
     }
     wind_list_remove(&g_core.semlist,pnode);
     wind_node_free(pnode);
-    psem->used = B_FALSE;
-    psem->name[0] = 0;
     wind_core_free(STAT_SEM,psem);
     wind_open_interrupt();
     return err;    
 }
 
-w_err_t wind_sem_print(pnode_s nodes)
+w_err_t wind_sem_print(plist_s list)
 {
-    pnode_s pnode = nodes;
+    pnode_s pnode;
     psem_s psem;
-    WIND_ASSERT_RETURN(nodes != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(list != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(list->head != NULL,ERR_NULL_POINTER);
+    pnode = list->head;
     wind_printf("\r\n\r\nsem list as following:\r\n");
     wind_printf("----------------------------------------------\r\n");
     wind_printf("%-16s %-8s %-10s\r\n","sem","sem_tot","sem_num");
@@ -219,16 +215,6 @@ w_err_t wind_sem_print(pnode_s nodes)
 }
 
 
-w_err_t wind_sem_test(void)
-{
-    psem_s psem = wind_sem_create("semtest",1);
-    WIND_ASSERT_RETURN(psem != NULL,ERR_NULL_POINTER);
-    WIND_ERROR("wind_sem:%d\r\n",psem);
-    wind_sem_fetch(psem,1000);
-    wind_sem_post(psem);
-    wind_sem_free(psem);
-    return ERR_OK;
-}
 
 #endif
 

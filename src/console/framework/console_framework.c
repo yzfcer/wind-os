@@ -160,6 +160,7 @@ void console_framework_init(console_s *ctrl)
     register_cmd_show(ctrl);
     register_cmd_stat(ctrl);
     register_cmd_test(ctrl);
+    register_cmd_mem(ctrl);
     g_cmd_global = cgl;
     show_cmd_list();
 }
@@ -391,7 +392,7 @@ for(i = 0;i < len;i ++)
 
 #endif
 
-#define CTRL_STK_SIZE 1024
+#define CTRL_STK_SIZE 256
 static w_stack_t ctrlstk[CTRL_STK_SIZE];//Ö÷ÈÎÎñ¶ÑÕ»
 void create_console_thread(void)
 {

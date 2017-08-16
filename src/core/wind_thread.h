@@ -154,7 +154,7 @@ w_err_t wind_thread_sleep(w_uint32_t ms);
 void    wind_thread_wakeup(void);
 w_err_t wind_thread_exit(w_err_t exitcode);
 
-w_err_t wind_thread_print(pnode_s nodes);
+w_err_t wind_thread_print(plist_s list);
 #if WIND_THREAD_CALLBACK_SUPPORT > 0
 w_err_t wind_thread_callback_register(pthread_s pthread,procevt_e id,void(*cb)(pthread_s));
 #endif
