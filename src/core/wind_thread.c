@@ -241,6 +241,7 @@ pthread_s wind_thread_create(const w_int8_t *name,
     WIND_DEBUG("pthread->runstat:%d\r\n",pthread->runstat);
     WIND_DEBUG("pthread->prio:%d\r\n",pthread->prio);
     WIND_DEBUG("pthread->stksize:%d\r\n\r\n",pthread->stksize);
+    //wind_printf("thread:%p,%p,%p\r\n",pthread,&pthread->pstk,pthread->pstk);
 
     //wind_open_interrupt();
     return pthread;
@@ -274,7 +275,6 @@ w_err_t wind_thread_changeprio(pthread_s pthread,w_int16_t prio)
 
 w_err_t wind_thread_start(pthread_s pthread)
 {
-    //pthread_s pthread;
     WIND_ASSERT_RETURN(pthread != NULL,ERR_NULL_POINTER);
     wind_close_interrupt();   
 #if WIND_THREAD_CALLBACK_SUPPORT > 0
@@ -291,9 +291,7 @@ w_err_t wind_thread_start(pthread_s pthread)
 
 w_err_t wind_thread_suspend(pthread_s pthread)
 {
-    //pthread_s pthread;
     WIND_ASSERT_RETURN(pthread != NULL,ERR_NULL_POINTER);
-    
     wind_close_interrupt();
 #if WIND_THREAD_CALLBACK_SUPPORT > 0
     if(pthread->cb.suspend != NULL)
@@ -319,14 +317,12 @@ w_err_t wind_thread_resume(pthread_s pthread)
     pthread->runstat = THREAD_STATUS_READY;
     pthread->cause = CAUSE_COM;
     wind_open_interrupt();
-    return ERR_OK;//wind_disable_switch(wind_pro_suspend,(void *)pthread);
-    //return wind_disable_switch(wind_pro_start,(void *)pthread);
+    return ERR_OK;
 }
 
 
 w_err_t wind_thread_kill(pthread_s pthread)
 {
-    //pthread_s pthread;
     pnode_s node;
     extern void wind_thread_dispatch(void);
     WIND_ASSERT_RETURN(pthread != NULL,ERR_NULL_POINTER);
@@ -342,8 +338,7 @@ w_err_t wind_thread_kill(pthread_s pthread)
     wind_thread_distroy(pthread);
     wind_open_interrupt();
     wind_thread_dispatch();
-    return ERR_OK;//wind_disable_switch(wind_pro_suspend,(void *)pthread);
-    //return wind_disable_switch(wind_pro_kill,(void *)pthread);
+    return ERR_OK;
 }
 
 
@@ -364,12 +359,10 @@ w_err_t wind_thread_killbyname(w_int8_t *name)
 //退出线程，在对应的线程中调用
 w_err_t wind_thread_exit(w_err_t exitcode)
 {
-    //HANDLE hproc;
     pthread_s pthread;
     pthread = wind_thread_current();
     WIND_INFO("proc %s exit with code %d\r\n",pthread->name,exitcode);
     wind_thread_kill(pthread);
-    //wind_thread_print(g_core.pcblist.head);
     wind_thread_dispatch();
     return ERR_OK;
 }
@@ -391,7 +384,6 @@ w_err_t wind_thread_sleep(w_uint32_t ms)
     pnode = wind_node_malloc(CORE_TYPE_PCB);
     WIND_ASSERT_RETURN(pnode != NULL,ERR_NULL_POINTER);
     wind_node_bindobj(pnode,CORE_TYPE_PCB,stcnt,pthread);
-    //wind_list_insert_with_minus(&procsleeplist,pnode);
     wind_list_insert(&procsleeplist,pnode);
     pnode = procsleeplist.head;
     while(pnode)
@@ -423,7 +415,6 @@ void wind_thread_wakeup(void)
             pthread = (pthread_s)pnode->obj;
             if(pthread->runstat != THREAD_STATUS_READY)
             {
-                //wind_printf("%s wake\r\n",pthread->name);
                 pthread->runstat = THREAD_STATUS_READY;
                 pthread->cause = CAUSE_SLEEP;
                 wind_list_remove(&procsleeplist,pnode);

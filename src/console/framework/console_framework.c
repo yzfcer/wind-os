@@ -52,39 +52,73 @@ static void show_cmd_list(void)
     cmd_s *cmd = g_cmd_global->head;
     while(cmd)
     {
-        WIND_INFO("%s : %s\r\n",cmd->cmd,cmd->helpinfo);
+        wind_printf("%s : %s\r\n",cmd->cmd,cmd->helpinfo);
         cmd = cmd->next;
     }
 }
 
-static void wind_console_prehandle(console_s *ctrl,char ch)
+static w_bool_t insert_ch(console_s *ctrl,char ch,w_int32_t len)
 {
-    if(ctrl->stat == CSLSTAT_PWD)
-        return;
-    else if((ch == WVK_BACKSPACE) && (ctrl->index == 0))
-        return;
-    else if((ch == WVK_BACKSPACE) && (ctrl->index > 0))
+    ctrl->buf[ctrl->index] = ch;
+    ctrl->index ++;
+    if(ctrl->index >= len)
     {
-        wind_printf("%c",WVK_DEL);
-        return;
+        ctrl->index --;
+        ctrl->buf[ctrl->index] = 0;
+        return B_TRUE;
     }
-    if(ch == 0x0d)
+    return B_FALSE;
+}
+
+static w_bool_t console_prehandle_char(console_s *ctrl,char ch,w_int32_t len)
+{
+    w_bool_t ret = insert_ch(ctrl,ch,len);
+    //wind_printf("%20x\r\n",ch);
+    if(B_TRUE == ret)
+        return B_TRUE;
+    if(ctrl->stat == CSLSTAT_PWD)
     {
+        if(ch == 0x0d)
+        {
+            ctrl->index --;
+            ctrl->buf[ctrl->index] = 0;
+            return B_TRUE;
+        }
+        return B_FALSE;
+    }
+    else if(ch == WVK_DEL)
+    {
+        ctrl->index --;
+        if(ctrl->index > 0)
+        {
+            ctrl->index --;
+            wind_printf("%c",WVK_DEL);
+        }
+        return B_FALSE;
+    }
+    else if(ch == 0x0d)
+    {
+        ctrl->index --;
+        ctrl->buf[ctrl->index] = 0;
         wind_printf("\r\n");
+        return B_TRUE;
     }
     else
+    {
         wind_printf("%c",ch);
+        return B_FALSE;
+    }
 }
 
 static void console_clear_buf(console_s *ctrl)
 {
+    ctrl->index = 0;
     wind_memset(ctrl->buf,0,WIND_CMD_MAX_LEN);
 }
 
 static w_int32_t console_read_line(console_s *ctrl,w_int32_t len)
 {
     w_err_t err;
-    w_int32_t idx = 0;
     char ch;
     console_clear_buf(ctrl);
     while(1)
@@ -94,28 +128,11 @@ static w_int32_t console_read_line(console_s *ctrl,w_int32_t len)
             wind_thread_sleep(20);
         else
         {
-            wind_console_prehandle(ctrl,ch);
-            ctrl->buf[idx] = ch;
-            if(ch == 0x0D)
-            {
-                ctrl->buf[idx] = 0;
-                return idx;
-            }
-            else
-            {
-                idx ++;
-                if(idx >= len)
-                {
-                    ctrl->buf[idx- 1] = 0;
-                    return idx -1;
-                }
-            }
+            if(console_prehandle_char(ctrl,ch,len))
+                return ctrl->index;
         }
     }
 }
-
-
-
 
 
 static void init_console_stat(console_s *ctrl)
@@ -285,7 +302,6 @@ w_err_t console_proc(w_int32_t argc,char **argv)
     w_int32_t len;
     console_s *ctrl;
     w_err_t err;
-
     if(argc >= WIND_CONSOLE_COUNT)
         return ERR_COMMAN;
     ctrl = &g_ctrl[argc];
@@ -356,7 +372,7 @@ for(i = 0;i < len;i ++)
             ctrl->index = 0;
             break;
         }
-        wind_console_prehandle(ctrl,ch);
+        console_prehandle_char(ctrl,ch);
         if(ch == WVK_BACKSPACE)
         {
             ctrl->cmdstr[ctrl->index] = 0;

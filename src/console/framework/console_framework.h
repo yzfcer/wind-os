@@ -80,7 +80,7 @@ typedef struct
 typedef struct __console_s
 {
     cslstat_e stat;//当前的解析状态
-    w_uint32_t index;//命令的下一个字符下标
+    w_int32_t index;//命令的下一个字符下标
     char buf[WIND_CMD_MAX_LEN];//接收的数据缓存区
     char user[WIND_CTL_USRNAME_LEN];//用户名
     char pwd[WIND_CTL_PWD_LEN];//密码的值

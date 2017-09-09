@@ -50,7 +50,6 @@ w_err_t wind_output_cmdlist(void)
 
 w_err_t cmd_coreobj_main(w_int32_t argc,char **argv)
 {
-    pnode_s pnode;
     cmd_s *cmd = g_cmd_coreobj;
     
     if(argc < 2)
@@ -60,13 +59,11 @@ w_err_t cmd_coreobj_main(w_int32_t argc,char **argv)
     }
     else if(0 == wind_strcmp(argv[1],"thread"))
     {
-        //pnode = g_core.threadlist.head;
         wind_thread_print(&g_core.threadlist);
         return ERR_OK;
     }
     else if(0 == wind_strcmp(argv[1],"sem"))
     {
-        //pnode = g_core.semlist.head;
         wind_sem_print(&g_core.semlist);
         return ERR_COMMAN;
     }
@@ -78,9 +75,9 @@ cmd_s g_cmd_coreobj[] =
 {
     {
         NULL,
-        "coreobj",
+        "list",
         "show core objects infomation.",
-        "coreobj thread:to show thread infomation",
+        "list thread:to show thread infomation",
         cmd_coreobj_main
     }
 };

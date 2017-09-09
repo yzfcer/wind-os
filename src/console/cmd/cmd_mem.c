@@ -168,7 +168,7 @@ cmd_s g_cmd_mem[] =
         "mem",
         "show memory data values.",
         "mem <start> <lenth>:to show thread infomation.\r\n\
-         mem stack <threadname>:to show thread stack infomation.\r\n",
+mem stack <threadname>:to show thread stack infomation.\r\n",
         cmd_mem_main
     }
 };

@@ -127,7 +127,7 @@ void wind_update_curthread()
         pthread = (pthread_s)(pnode->obj);
         if((pthread->used) && (pthread->runstat == THREAD_STATUS_READY))
         {
-            HIGH_PROC = pthread;
+            HIGH_PROC = (pthread_s)(&pthread->pstk);
             break;
         }
         pnode = pnode->next;
