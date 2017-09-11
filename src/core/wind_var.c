@@ -43,36 +43,25 @@ pthread_s gwind_high_pcb = NULL;//最高优先级PCB指针
 void wind_corepool_init(void)
 {
     wind_mpool_create("pcb_pool",g_core.pcb,sizeof(g_core.pcb),sizeof(thread_s));
-    //wind_mpool_print("pcb",g_core.pcb);
     wind_mpool_create("node_pool",g_core.node,sizeof(g_core.node),sizeof(node_s));
 #if WIND_PIPE_SUPPORT > 0
     wind_mpool_create("pipe_pool",g_core.pipe,sizeof(g_core.pipe),sizeof(pipe_s));
-    //wind_mpool_print("pipe",g_core.pipe);
     
 #endif
 #if WIND_MESSAGE_SUPPORT > 0
     wind_mpool_create("msg_pool",g_core.msg,sizeof(g_core.msg),sizeof(msg_s));
-    //wind_mpool_print("msg",g_core.msg);
     wind_mpool_create("mbox_pool",g_core.mbox,sizeof(g_core.mbox),sizeof(mbox_s));
-    //wind_mpool_print("mbox",g_core.mbox);
 #endif
 #if WIND_SEM_SUPPORT > 0
     wind_mpool_create("sem_pool",g_core.sem,sizeof(g_core.sem),sizeof(sem_s));
-    //wind_mpool_print("sem",g_core.sem);
 #endif
 #if WIND_TTIMER_SUPPORT > 0
     wind_mpool_create("ttimer_pool",g_core.ttimer,sizeof(g_core.ttimer),sizeof(ttimer_s));
-    //wind_mpool_print("ttimer",g_core.ttimer);
 #endif
 #if WIND_LOCK_SUPPORT > 0
     wind_mpool_create("lock_pool",g_core.lock,sizeof(g_core.lock),sizeof(lock_s));
-    //wind_mpool_print("lock",g_core.lock);
 #endif
-    wind_mpool_create("stk128_pool",g_core.stk128,sizeof(g_core.stk128),128 * sizeof(w_stack_t));
-    wind_mpool_create("stk256_pool",g_core.stk256,sizeof(g_core.stk256),256 * sizeof(w_stack_t));
-    wind_mpool_create("stk512_pool",g_core.stk512,sizeof(g_core.stk512),512 * sizeof(w_stack_t));
-    wind_mpool_create("stk1024_pool",g_core.stk1024,sizeof(g_core.stk1024),1024 * sizeof(w_stack_t));
-    wind_mpool_create("stk2048_pool",g_core.stk2048,sizeof(g_core.stk2048),2048 * sizeof(w_stack_t));
+    wind_mpool_create("stkbuf_pool",g_core.stkbuf,sizeof(g_core.stkbuf),2048 * sizeof(w_stack_t));
 }
 void print_core_pool(void)
 {
@@ -194,34 +183,9 @@ pstack_t wind_stack_alloc(w_uint32_t size)
     pstack_t pstk;
     if(size == 0)
         return NULL;
-    stksize = (size + 127) >> 7;
-    if(stksize <= 1)
-    {
-        pstk = wind_mpool_alloc(g_core.stk128);
-        if(pstk)
-            return pstk;
-    }
-    if(stksize <= 2)
-    {
-        pstk = wind_mpool_alloc(g_core.stk256);
-        if(pstk)
-            return pstk;
-    }
-    if(stksize <= 4)
-    {
-        pstk = wind_mpool_alloc(g_core.stk512);
-        if(pstk)
-            return pstk;
-    }
-    if(stksize <= 8)
-    {
-        pstk = wind_mpool_alloc(g_core.stk1024);
-        if(pstk)
-            return pstk;
-    }
     if(stksize <= 16)
     {
-        pstk = wind_mpool_alloc(g_core.stk2048);
+        pstk = wind_mpool_alloc(g_core.stkbuf);
         if(pstk)
             return pstk;
     }
@@ -232,16 +196,5 @@ pstack_t wind_stack_alloc(w_uint32_t size)
 w_err_t wind_stack_free(pstack_t pstack)
 {
     WIND_ASSERT_RETURN(pstack != NULL,ERR_NULL_POINTER);
-    if((w_uint32_t)pstack < (w_uint32_t)g_core.stk128)
-        return ERR_COMMAN;
-    else if((w_uint32_t)pstack < (w_uint32_t)g_core.stk256)
-        return wind_mpool_free(g_core.stk128,pstack);
-    else if((w_uint32_t)pstack < (w_uint32_t)g_core.stk512)
-        return wind_mpool_free(g_core.stk256,pstack);
-    else if((w_uint32_t)pstack < (w_uint32_t)g_core.stk1024)
-        return wind_mpool_free(g_core.stk512,pstack);
-    else if((w_uint32_t)pstack < (w_uint32_t)g_core.stk2048)
-        return wind_mpool_free(g_core.stk1024,pstack);
-    else
-        return wind_mpool_free(g_core.stk2048,pstack);
+        return wind_mpool_free(g_core.stkbuf,pstack);
 }

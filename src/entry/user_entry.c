@@ -30,12 +30,12 @@
 没有创建，则用户程序将不会再次被执行到。因为wind_main函数只会被系统调用一次
 */
 #include "wind_core_inc.h"
-w_stack_t appstk[20][512];
+#include "test_framework.h"
 
 w_err_t wind_main(void)
 {
     psem_s psem = wind_sem_create("sem_test",12);
     WIND_INFO("enter wind main.\r\n");
-
+    cut_test_start("*","*");
     return 0;
 }
