@@ -96,16 +96,6 @@ typedef struct __console_s
 
 /********************************************全局函数申明**********************************************/
 
-void register_cmd_echo(console_s *ctrl);
-void register_cmd_help(console_s *ctrl);
-void register_cmd_proc(console_s *ctrl);
-void register_all_cmd(console_s *ctrl);
-void register_cmd_stat(console_s *ctrl);
-void register_cmd_test(console_s *ctrl);
-void register_cmd_mem(console_s *ctrl);
-
-
-
 //输出命令列表
 w_err_t wind_output_cmdlist(void);
 

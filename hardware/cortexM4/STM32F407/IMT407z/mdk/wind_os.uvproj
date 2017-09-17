@@ -1083,16 +1083,6 @@
               <FileType>5</FileType>
               <FilePath>..\..\..\..\..\src\lib\wind_string.h</FilePath>
             </File>
-            <File>
-              <FileName>wind_ticktimer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\lib\wind_ticktimer.c</FilePath>
-            </File>
-            <File>
-              <FileName>wind_ticktimer.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\lib\wind_ticktimer.h</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
@@ -1302,6 +1292,16 @@
               <FileName>wind_version.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\..\..\..\src\core\wind_version.h</FilePath>
+            </File>
+            <File>
+              <FileName>wind_timer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\core\wind_timer.c</FilePath>
+            </File>
+            <File>
+              <FileName>wind_timer.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\core\wind_timer.h</FilePath>
             </File>
           </Files>
         </Group>

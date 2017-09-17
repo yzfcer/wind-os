@@ -33,12 +33,11 @@
 #include "wind_softint.h"
 #include "wind_var.h"
 #include "wind_heap.h"
+#include "wind_time.h"
 
 
 volatile w_int8_t gwind_int_cnt = 0;//全局的中断计数值
 volatile w_int8_t gwind_core_cnt = 0;//全局的禁止切换计数值
-
-extern w_err_t wind_time_init(void);
 
 extern void wind_thread_switch(void);
 extern void wind_interrupt_switch(void);

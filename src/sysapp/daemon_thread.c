@@ -18,7 +18,7 @@ static int test(void)
 }
 
 
-static w_err_t daemon_proc(w_int32_t argc,w_int8_t **argv)
+static w_err_t daemon_thread(w_int32_t argc,w_int8_t **argv)
 {
     (void)argc;
     while(1)
@@ -31,7 +31,7 @@ static w_err_t daemon_proc(w_int32_t argc,w_int8_t **argv)
 void create_daemon_thread(void)
 {
 
-    g_core.pdaemon = wind_thread_create("daemon",PRIO_HIGH,daemon_proc,
+    g_core.pdaemon = wind_thread_create("daemon",PRIO_HIGH,daemon_thread,
                      0,NULL,daemonstk,DAEMON_STK_SIZE);
 }
 

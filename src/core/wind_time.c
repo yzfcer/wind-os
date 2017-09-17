@@ -22,28 +22,19 @@
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
-
-#include "wind_config.h"
 #include "wind_type.h"
 #include "wind_os_hwif.h"
 #include "wind_debug.h"
 #include "wind_thread.h"
 #include "wind_core.h"
-#include "wind_list.h"
-#include "wind_ticktimer.h"
-#include "wind_err.h"
 #include "wind_time.h"
 #include "wind_var.h"
 static w_uint32_t g_wind_time_ms_cnt = 0;//毫秒计时
 
-
-//extern void wind_update_curthread(void);
-//extern void wind_interrupt_switch(void);
-
-
-w_err_t wind_time_init()
+w_err_t wind_time_init(void)
 {
     WIND_INFO("sleep list initializing...\r\n");
+    g_wind_time_ms_cnt = 0;
     return ERR_OK;
 }
 
@@ -56,18 +47,13 @@ w_uint32_t wind_get_time_count(void)
 //tick中断调用的函数
 void wind_tick_callback(void)
 {
-    #if WIND_TTIMER_SUPPORT > 0
-    ticktimerhandler();//首先处理定时中断的事情
-    #endif
-    //wind_close_interrupt();
     TICKS_CNT ++;//更新tick计数器
     wind_thread_wakeup();
-    //wind_open_interrupt();
 }
 
 void wind_tick_isr(void)
 {				   
-    wind_enter_int();	
+    wind_enter_int();
     wind_tick_callback();
     wind_exit_int();       
 }

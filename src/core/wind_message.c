@@ -73,7 +73,7 @@ static w_err_t mbox_delete_msgs(pnode_s list)
         pnode = pnode1;
         pnode1 = pnode->next;
     }
-    return ERR_OK;    
+    return ERR_OK;
 }
 //********************************************internal functions******************************
 

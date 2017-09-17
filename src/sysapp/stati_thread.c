@@ -45,7 +45,7 @@ static w_uint32_t core_get_ticks_of_idle(w_uint32_t ms)
 
 #define STATI_STK_SIZE 256
 static w_stack_t statisstk[STATI_STK_SIZE];
-static w_err_t stati_proc(w_int32_t argc,w_int8_t **argv)
+static w_err_t stati_thread(w_int32_t argc,w_int8_t **argv)
 {
     
     w_uint32_t statcnt = 0;
@@ -56,18 +56,13 @@ static w_err_t stati_proc(w_int32_t argc,w_int8_t **argv)
         wind_thread_sleep(stati_ms);
         statcnt = g_core.idle_cnt - statcnt;
         WIND_CPU_USAGE = (IDLE_CNT_PER_SEC - statcnt) * 100 / IDLE_CNT_PER_SEC;
-        //wind_printf("idle cnt:%d/%d\r\n",statcnt,IDLE_CNT_PER_SEC);
-        //if(statcnt >= IDLE_CNT_PER_SEC)
-        //    wind_printf("\r\ncpu:%d.%d%%\r\n",0,0);
-        //else
-        //    wind_printf("\r\ncpu:%d%%\r\n",WIND_CPU_USAGE);
     }
-    //return ERR_OK;
+
 }
 
 void create_stati_thread(void)
 {
-    g_core.pstat = wind_thread_create("statistics",PRIO_HIGH,stati_proc,
+    g_core.pstat = wind_thread_create("statistics",PRIO_HIGH,stati_thread,
                      0,NULL,statisstk,STATI_STK_SIZE);
 }
 

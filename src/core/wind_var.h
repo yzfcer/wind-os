@@ -33,7 +33,7 @@
 #include "wind_message.h"
 #include "wind_sem.h"
 #include "wind_lock.h"
-#include "wind_ticktimer.h"
+#include "wind_timer.h"
 #include "wind_stat.h"
 #include "wind_mpool.h"
 #ifdef __cplusplus
@@ -79,6 +79,7 @@ typedef struct __core_var_s
     pthread_s pstat;
     pthread_s pctrl;
     pthread_s pdaemon;
+    pthread_s ptimer;
 }core_var_s;
 extern core_var_s g_core;//内核相关的参数集
 extern volatile w_bool_t gwind_start_flag;//开始调度的标志

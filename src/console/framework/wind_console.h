@@ -28,6 +28,7 @@
 #include "wind_config.h"
 #include "wind_type.h"
 #include "wind_debug.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif

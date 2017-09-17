@@ -4,7 +4,7 @@
 **                                       yzfcer@163.com
 **
 **--------------文件信息--------------------------------------------------------------------------------
-**文   件   名: wind_ticktimer.h
+**文   件   名: wind_timer.h
 **创   建   人: 周江村
 **最后修改日期: 2012.09.26
 **描        述: wind os的以tick为精度的代定时器的代码
@@ -26,91 +26,94 @@
 #include "wind_config.h"
 #include "wind_type.h"
 #include "wind_config.h"
-#include "wind_ticktimer.h"
+#include "wind_timer.h"
 #include "wind_list.h"
 #include "wind_debug.h"
 #include "wind_err.h"
 #include "wind_stat.h"
 #include "wind_var.h"
 #if WIND_TTIMER_SUPPORT > 0
-static pttimer_s ttimer_malloc(void)
+static ptimer_s ttimer_malloc(void)
 {
-    pttimer_s pttimer;
-    pttimer = wind_core_alloc(STAT_TTIMER);
-    if(pttimer == NULL)
+    ptimer_s timer;
+    timer = wind_core_alloc(STAT_TTIMER);
+    if(timer == NULL)
     {
         return NULL;
     }
-    pttimer->used = B_TRUE;
-    pttimer->running = B_FALSE;
-    return pttimer;
+    timer->used = B_TRUE;
+    timer->running = B_FALSE;
+    return timer;
 }
-w_err_t ttimer_free(pttimer_s ttimer)
+w_err_t ttimer_free(ptimer_s timer)
 {
-    if(ttimer == NULL)
+    if(timer == NULL)
         return ERR_NULL_POINTER;
     wind_close_interrupt();
     
-    ttimer->running = B_FALSE;
-    ttimer->used = B_FALSE;
-    ttimer->count = 0;
-    ttimer->inittick = 0;
-    ttimer->timercallback = NULL;
+    timer->running = B_FALSE;
+    timer->used = B_FALSE;
+    timer->count = 0;
+    timer->init_count = 0;
+    timer->timercallback = NULL;
     wind_open_interrupt();
     return ERR_OK;
 }
 
 
-pttimer_s wind_ttimer_create(w_uint32_t ticks,void (*timercallback)(void),w_bool_t run)
+ptimer_s wind_timer_create(w_uint32_t t_ms,softtimer_fn func,void *arg,w_bool_t run)
 {
-    pttimer_s ttimer;
+    ptimer_s timer;
     pnode_s pnode;
-    WIND_INFO("creating tick timer:%d ms\r\n",ticks);
+    w_int32_t count = t_ms / 10;
+    if(count <= 0)
+        count = 1;
+    WIND_INFO("creating tick timer:%d ms\r\n",t_ms);
     if(timercallback == NULL)
     {
-        WIND_ERROR("wind_ttimer_create err 1\r\n");
+        WIND_ERROR("wind_timer_create err 1\r\n");
         return NULL;
     }
     wind_close_interrupt();
-    ttimer = ttimer_malloc();
-    if(!ttimer)
+    timer = ttimer_malloc();
+    if(!timer)
     {
         wind_open_interrupt();
-        WIND_ERROR("wind_ttimer_create err 2\r\n");
+        WIND_ERROR("wind_timer_create err 2\r\n");
         return NULL;
     }
     pnode = wind_node_malloc(CORE_TYPE_TTIMER);
     if(!pnode)
     {
-        wind_ttimer_free(ttimer);
+        wind_timer_free(timer);
         wind_open_interrupt();
-        WIND_ERROR("wind_ttimer_create err 3\r\n");
+        WIND_ERROR("wind_timer_create err 3\r\n");
         return NULL;
     }
     wind_open_interrupt();
-    WIND_INFO("wind_ttimer_create OK\r\n");
+    WIND_INFO("wind_timer_create OK\r\n");
 
-    ttimer->count = ticks;
-    ttimer->inittick = ticks;
-    ttimer->running = run;
-    ttimer->timercallback = timercallback;
-    wind_node_bindobj(pnode,CORE_TYPE_TTIMER,ticks,ttimer);
+    timer->count = count;
+    timer->init_count = count;
+    timer->running = run;
+    timer->arg = arg;
+    timer->handle = func;
+    wind_node_bindobj(pnode,CORE_TYPE_TTIMER,t_ms,timer);
     wind_list_insert(&g_core.ttmerlist,pnode);
-    return ttimer; 
+    return timer; 
 }
 
-w_err_t wind_ttimer_start(pttimer_s pttimer)
+w_err_t wind_timer_start(ptimer_s pttimer)
 {
     if(pttimer == NULL)
         return ERR_NULL_POINTER;
-    //pttmr = ttimer_search(htimer);
     if(!pttimer->used)
         return ERR_COMMAN;
     pttimer->running = B_TRUE;
     return ERR_OK;
 }
 
-w_err_t wind_ttimer_stop(pttimer_s pttimer)
+w_err_t wind_timer_stop(ptimer_s pttimer)
 {
     if(pttimer == NULL)
         return ERR_NULL_POINTER;
@@ -120,7 +123,7 @@ w_err_t wind_ttimer_stop(pttimer_s pttimer)
     return ERR_OK;
 }
 
-w_err_t wind_ttimer_free(pttimer_s pttimer)
+w_err_t wind_timer_free(ptimer_s pttimer)
 {
     pnode_s pnode;
     if(pttimer == NULL)
@@ -141,7 +144,7 @@ w_err_t wind_ttimer_free(pttimer_s pttimer)
     return ERR_OK;
 }
 
-w_err_t wind_ttimer_setticks(pttimer_s pttimer,w_uint32_t ticks)
+w_err_t wind_timer_setticks(ptimer_s pttimer,w_uint32_t ticks)
 {
     if(pttimer == NULL)
         return ERR_NULL_POINTER;
@@ -151,19 +154,19 @@ w_err_t wind_ttimer_setticks(pttimer_s pttimer,w_uint32_t ticks)
     return ERR_OK;
 }
 
-extern void ticktimerhandler(void)
+extern void wind_timer_handler(void)
 {
-    pttimer_s pttmr;
+    ptimer_s ptmr;
     pnode_s tmpttimerlist = g_core.ttmerlist.head;
     while(tmpttimerlist)
     {
-        pttmr = (pttimer_s)(tmpttimerlist->obj);
-        if(pttmr->count > 0)
-            pttmr->count --;
-        if(pttmr->count == 0 && pttmr->running)
+        ptmr = (ptimer_s)(tmpttimerlist->obj);
+        if(ptmr->count > 0)
+            ptmr->count --;
+        if(ptmr->count == 0 && ptmr->running)
         {
-            pttmr->timercallback();
-            pttmr->count = pttmr->inittick;
+            ptmr->timercallback();
+            ptmr->count = ptmr->init_count;
         }
         tmpttimerlist = tmpttimerlist->next;
     }

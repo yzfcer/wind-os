@@ -27,15 +27,12 @@
 #define WIND_TIME_H__
 
 #include "wind_type.h"
-#include "wind_thread.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+w_err_t wind_time_init(void);
 w_uint32_t wind_get_time_count(void);
-w_err_t wind_thread_sleep(w_uint32_t ms);
-//w_err_t wind_waitqueue_add(pthread_s pthread);
-//w_err_t wind_waitqueue_remove(pthread_s pthread);
 
 #ifdef __cplusplus
 }

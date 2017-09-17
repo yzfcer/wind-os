@@ -30,7 +30,7 @@
 #include "wind_message.h"
 #include "wind_sem.h"
 #include "wind_lock.h"
-#include "wind_ticktimer.h"
+#include "wind_timer.h"
 #include "wind_err.h"
 #include "wind_mpool.h"
 #include "wind_var.h"

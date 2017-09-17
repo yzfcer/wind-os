@@ -172,14 +172,6 @@ void console_framework_init(console_s *ctrl)
     cgl->head = NULL;
     cgl->tail = NULL;
     cgl->cnt = 0;
-    #if 0
-    register_cmd_echo(ctrl);
-    register_cmd_help(ctrl);
-    register_cmd_proc(ctrl);
-    register_cmd_stat(ctrl);
-    register_cmd_test(ctrl);
-    register_cmd_mem(ctrl);
-    #endif
     register_all_cmd(ctrl);
     g_cmd_global = cgl;
     show_cmd_list();
@@ -307,7 +299,7 @@ static w_err_t execute_cmd(console_s * ctrl)
 }
 
 
-w_err_t console_proc(w_int32_t argc,char **argv)
+w_err_t console_thread(w_int32_t argc,char **argv)
 {
     w_int32_t len;
     console_s *ctrl;
@@ -370,59 +362,13 @@ w_err_t console_proc(w_int32_t argc,char **argv)
     
 }
 
-#if 0
-for(i = 0;i < len;i ++)
-{
-    do
-    {
-        ch = ctrl->buf[i];
-        if(!is_valid_ch(ch))
-        {
-            memoryset(ctrl->cmdstr,0,WIND_CMD_MAX_LEN);
-            ctrl->index = 0;
-            break;
-        }
-        console_prehandle_char(ctrl,ch);
-        if(ch == WVK_BACKSPACE)
-        {
-            ctrl->cmdstr[ctrl->index] = 0;
-            if(ctrl->index > 0)
-            {
-                ctrl->index --;
-            }
-        }
-        else
-        {
-            ctrl->cmdstr[ctrl->index ++] = ch;
-        }
 
-        if((ch == '\n') || (ch == '\r'))
-        {
-            ctrl->cmdstr[ctrl->index - 1] = 0;
-            ctrl->index --;
-
-                wind_decode_cmd(ctrl);
-                memoryset(ctrl->cmdstr,0,WIND_CMD_MAX_LEN);
-                if(ctrl->stat == CSLSTAT_CMD)
-                    wind_printf("%s@wind_os/GT2440>#:",ctrl->user);
-                ctrl->index = 0;
-        }
-        if(ctrl->index>= WIND_CMD_MAX_LEN)
-        {
-            wind_printf("\r\nERROR:command is too long\r\n");
-            memoryset(ctrl->cmdstr,0,WIND_CMD_MAX_LEN);
-            ctrl->index = 0;
-        }
-    }while(0);
-}
-
-#endif
 
 #define CTRL_STK_SIZE 256
 static w_stack_t ctrlstk[CTRL_STK_SIZE];//Ö÷ÈÎÎñ¶ÑÕ»
 void create_console_thread(void)
 {
-    g_core.pctrl = wind_thread_create("console",PRIO_LOW,console_proc,
+    g_core.pctrl = wind_thread_create("console",PRIO_LOW,console_thread,
                0,NULL,ctrlstk,CTRL_STK_SIZE);
     wind_thread_changeprio(g_core.pctrl,32760);
 }
