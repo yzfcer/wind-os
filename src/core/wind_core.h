@@ -26,7 +26,7 @@
 #ifndef WIND_CORE_H__
 #define WIND_CORE_H__
 #include "wind_config.h"
-#include "wind_types.h"
+#include "wind_type.h"
 #include "wind_thread.h"
 
 #ifdef __cplusplus
@@ -40,8 +40,8 @@ void wind_thread_dispatch(void);
 #define wind_thread_dispatch() 
 #endif
 
-void wind_enter_core(void);
-void wind_exit_core(void);
+void wind_disable_switch(void);
+void wind_enable_switch(void);
 
 void wind_enter_int(void);
 void wind_exit_int(void);

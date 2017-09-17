@@ -24,12 +24,12 @@
 *******************************************************************************************************/
 
 #include "wind_config.h"
-#include "wind_types.h"
+#include "wind_type.h"
 #include "wind_err.h"
 #include "wind_mpool.h"
 #include "wind_assert.h"
 
-w_err_t wind_mpool_show(w_int8_t *name,void *pool)
+w_err_t wind_mpool_print(w_int8_t *name,void *pool)
 {
     pmpoolHead_s pm = pool;
     WIND_ASSERT_RETURN(name != NULL,ERR_NULL_POINTER);
@@ -160,7 +160,7 @@ void wind_mpool_test(void)
     void *p1,*p2;
     int i;
     wind_mpool_create("testpool",mpooltest,sizeof(mpooltest),8);
-    wind_mpool_show("testpool",mpooltest);
+    wind_mpool_print("testpool",mpooltest);
     for(i = 0;i < 20;i ++)
     {
         p1 = wind_mpool_alloc(mpooltest);

@@ -26,7 +26,7 @@
 #ifndef WIND_TIME_H__
 #define WIND_TIME_H__
 
-#include "wind_types.h"
+#include "wind_type.h"
 #include "wind_thread.h"
 
 #ifdef __cplusplus

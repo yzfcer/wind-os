@@ -23,7 +23,7 @@
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
 #include "wind_config.h"
-#include "wind_types.h"
+#include "wind_type.h"
 #include "wind_thread.h"
 #include "wind_lock.h"
 #include "wind_os_hwif.h"
@@ -35,7 +35,7 @@
 #include "wind_assert.h"
 #if WIND_LOCK_SUPPORT > 0
 
-extern pthread_s wind_get_cur_proc(void);
+extern pthread_s wind_thread_current(void);
 extern void wind_thread_dispatch(void);
 
 static plock_s lock_malloc()
@@ -96,7 +96,7 @@ w_err_t wind_lock_free(plock_s plock)
         pnode = plock->waitlist.head;
         wind_list_remove(&plock->waitlist,pnode);
         pthread = (pthread_s)pnode->obj;
-        pthread->proc_status = PROC_STATUS_READY;
+        pthread->runstat = THREAD_STATUS_READY;
         pthread->cause = CAUSE_LOCK;
         wind_node_free(pnode);
     }
@@ -123,8 +123,8 @@ w_err_t wind_lock_close(plock_s plock)
     }
     pnode = wind_node_malloc(CORE_TYPE_SEM);
     WIND_ASSERT_RETURN(pnode != NULL,ERR_NULL_POINTER);
-    pthread = wind_get_cur_proc();
-    pthread->proc_status = PROC_STATUS_SUSPEND;
+    pthread = wind_thread_current();
+    pthread->runstat = THREAD_STATUS_SUSPEND;
     pthread->cause = CAUSE_LOCK;
     wind_node_bindobj(pnode,CORE_TYPE_PCB,pthread->prio,pthread);
     wind_list_insert(&plock->waitlist,pnode);
@@ -150,7 +150,7 @@ w_err_t wind_lock_open(plock_s plock)
     pnode = wind_list_remove(&plock->waitlist,plock->waitlist.head);
     pthread = (pthread_s)pnode->obj;
     
-    pthread->proc_status = PROC_STATUS_READY;
+    pthread->runstat = THREAD_STATUS_READY;
     pthread->cause = CAUSE_LOCK;
     wind_node_free(pnode);
     wind_open_interrupt();

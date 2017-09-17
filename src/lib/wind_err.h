@@ -1,7 +1,7 @@
 #ifndef WIND_ERR_H__
 #define WIND_ERR_H__
 #include "wind_config.h"
-#include "wind_types.h"
+#include "wind_type.h"
 #include "wind_os_hwif.h"
 #include "wind_debug.h"
 

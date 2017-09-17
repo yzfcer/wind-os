@@ -1,6 +1,6 @@
 #ifndef CMD_HISTORY_H__
 #define CMD_HISTORY_H__
-#include "wind_types.h"
+#include "wind_type.h"
 #define CMD_HISTORY_COUNT 10
 #define CMD_HSIBUF_LENTH 256
 struct __cmd_his_s;

@@ -50,7 +50,7 @@
 
 #define WIND_MEM_SUPPORT 1   //是否支持内存管理
 
-#define WIND_TTIMER_SUPPORT 0  //是否支持tick精度的定时器
+#define WIND_TIMER_SUPPORT 0  //是否支持tick精度的定时器
 
 #define WIND_RTC_SUPPORT 0  //是否支持实时时间
 
@@ -89,15 +89,8 @@
 
 #define WIND_SOFTINT_MAX_NUM 32 //软中断向量表的长度
 
-#define WIND_STK128_MAX_NUM 5 //128个单位的堆栈的数量
-
-#define WIND_STK256_MAX_NUM 5//256个单位的堆栈的数量
-
-#define WIND_STK512_MAX_NUM 5//512个单位的堆栈的数量
-
-#define WIND_STK1024_MAX_NUM 5//1024个单位的堆栈的数量
-
-#define WIND_STK2048_MAX_NUM 5//2048个单位的堆栈的数量
+#define WIND_STK_MAX_NUM 10//堆栈的数量
+#define WINS_STK_SIZE 512
 
 
 #endif

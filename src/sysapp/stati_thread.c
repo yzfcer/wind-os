@@ -1,4 +1,4 @@
-#include "wind_types.h"
+#include "wind_type.h"
 #include "wind_var.h"
 #include "wind_thread.h"
 
@@ -8,9 +8,9 @@ static w_uint32_t core_get_ticks_of_idle(w_uint32_t ms)
     pthread_s pthread;
     pnode_s node;
     w_uint32_t cnts;
-    pthread_s pproc = wind_get_cur_proc();
+    pthread_s pproc = wind_thread_current();
     wind_close_interrupt();
-    node = g_core.pcblist.head;
+    node = g_core.threadlist.head;
     
     WIND_DEBUG("RUN_FLAG=%d\r\n",RUN_FLAG);
     while(node)
@@ -18,7 +18,7 @@ static w_uint32_t core_get_ticks_of_idle(w_uint32_t ms)
         pthread = (pthread_s)node->obj;
         if((pthread != pproc) && (pthread->prio != 32767))
         {
-            pthread->proc_status = PROC_STATUS_SUSPEND;
+            pthread->proc_status = THREAD_STATUS_SUSPEND;
             pthread->cause = CAUSE_COM;
         }
         node = node->next;
@@ -28,13 +28,13 @@ static w_uint32_t core_get_ticks_of_idle(w_uint32_t ms)
     wind_thread_sleep(ms);
     cnts = g_core.idle_cnt - cnts;
     
-    node = g_core.pcblist.head;
+    node = g_core.threadlist.head;
     while(node)
     {
         pthread = (pthread_s)node->obj;
         if((pthread != pproc) && (pthread->prio != 32767))
         {
-            pthread->proc_status = PROC_STATUS_READY;
+            pthread->proc_status = THREAD_STATUS_READY;
             pthread->cause = CAUSE_COM;
         }
         node = node->next;
@@ -43,7 +43,7 @@ static w_uint32_t core_get_ticks_of_idle(w_uint32_t ms)
 }
 #endif
 
-#define STATI_STK_SIZE 1024
+#define STATI_STK_SIZE 256
 static w_stack_t statisstk[STATI_STK_SIZE];
 static w_err_t stati_proc(w_int32_t argc,w_int8_t **argv)
 {

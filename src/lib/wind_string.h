@@ -27,7 +27,7 @@
 #define WIND_STRING_H_
 
 
-#include "wind_types.h"
+#include "wind_type.h"
 
 #ifdef __cplusplus
 extern "C" {

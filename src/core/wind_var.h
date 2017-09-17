@@ -26,7 +26,7 @@
 #define WIND_VAR_H__
 
 #include "wind_config.h"
-#include "wind_types.h"
+#include "wind_type.h"
 #include "wind_thread.h"
 #include "wind_list.h"
 #include "wind_pipe.h"
@@ -60,13 +60,10 @@ typedef struct __core_var_s
     WIND_MPOOL(lock,WIND_LOCK_NUM,sizeof(lock_s));
 #endif
     //定义一些堆栈以便创建程序在时使用
-    WIND_MPOOL(stk128,WIND_STK128_MAX_NUM,128 * sizeof(w_stack_t));
-    WIND_MPOOL(stk256,WIND_STK256_MAX_NUM,256 * sizeof(w_stack_t));
-    WIND_MPOOL(stk512,WIND_STK512_MAX_NUM,512 * sizeof(w_stack_t));
-    WIND_MPOOL(stk1024,WIND_STK1024_MAX_NUM,1024 * sizeof(w_stack_t));
-    WIND_MPOOL(stk2048,WIND_STK2048_MAX_NUM,2048 * sizeof(w_stack_t));
+    WIND_MPOOL(stkbuf,WIND_STK_MAX_NUM,WINS_STK_SIZE * sizeof(w_stack_t));
     
-    list_s pcblist;
+    list_s threadlist;
+    list_s semlist;
     list_s ttmerlist;
     w_int16_t pcbcnt;//线程计数器
     volatile w_bool_t run_falg;//多线程调度开始的标志

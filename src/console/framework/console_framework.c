@@ -25,7 +25,7 @@ extern "C" {
 
 /*********************************************头文件定义***********************************************/
 #include "wind_config.h"
-#include "wind_types.h"
+#include "wind_type.h"
 #include "console_framework.h"
 #include "wind_config.h"
 #include "wind_debug.h"
@@ -52,39 +52,74 @@ static void show_cmd_list(void)
     cmd_s *cmd = g_cmd_global->head;
     while(cmd)
     {
-        WIND_INFO("%s : %s\r\n",cmd->cmd,cmd->helpinfo);
+        wind_printf("%s : ",cmd->cmd);
+        cmd->showdisc();
         cmd = cmd->next;
     }
 }
 
-static void wind_console_prehandle(console_s *ctrl,char ch)
+static w_bool_t insert_ch(console_s *ctrl,char ch,w_int32_t len)
 {
-    if(ctrl->stat == CSLSTAT_PWD)
-        return;
-    else if((ch == WVK_BACKSPACE) && (ctrl->index == 0))
-        return;
-    else if((ch == WVK_BACKSPACE) && (ctrl->index > 0))
+    ctrl->buf[ctrl->index] = ch;
+    ctrl->index ++;
+    if(ctrl->index >= len)
     {
-        CONSOLE_OUT("%c",WVK_DEL);
-        return;
+        ctrl->index --;
+        ctrl->buf[ctrl->index] = 0;
+        return B_TRUE;
     }
-    if(ch == 0x0d)
+    return B_FALSE;
+}
+
+static w_bool_t console_prehandle_char(console_s *ctrl,char ch,w_int32_t len)
+{
+    w_bool_t ret = insert_ch(ctrl,ch,len);
+    //wind_printf("%20x\r\n",ch);
+    if(B_TRUE == ret)
+        return B_TRUE;
+    if(ctrl->stat == CSLSTAT_PWD)
     {
-        CONSOLE_OUT("\r\n");
+        if(ch == 0x0d)
+        {
+            ctrl->index --;
+            ctrl->buf[ctrl->index] = 0;
+            return B_TRUE;
+        }
+        return B_FALSE;
+    }
+    else if(ch == WVK_DEL)
+    {
+        ctrl->index --;
+        if(ctrl->index > 0)
+        {
+            ctrl->index --;
+            wind_printf("%c",WVK_DEL);
+        }
+        return B_FALSE;
+    }
+    else if(ch == 0x0d)
+    {
+        ctrl->index --;
+        ctrl->buf[ctrl->index] = 0;
+        wind_printf("\r\n");
+        return B_TRUE;
     }
     else
-        CONSOLE_OUT("%c",ch);
+    {
+        wind_printf("%c",ch);
+        return B_FALSE;
+    }
 }
 
 static void console_clear_buf(console_s *ctrl)
 {
+    ctrl->index = 0;
     wind_memset(ctrl->buf,0,WIND_CMD_MAX_LEN);
 }
 
 static w_int32_t console_read_line(console_s *ctrl,w_int32_t len)
 {
     w_err_t err;
-    w_int32_t idx = 0;
     char ch;
     console_clear_buf(ctrl);
     while(1)
@@ -94,30 +129,11 @@ static w_int32_t console_read_line(console_s *ctrl,w_int32_t len)
             wind_thread_sleep(20);
         else
         {
-            wind_console_prehandle(ctrl,ch);
-            //if((ctrl->stat != CSLSTAT_PWD) || (ch == 0x0D))
-            //    ctrl->ops.printf(&ch,1);
-            ctrl->buf[idx] = ch;
-            if(ch == 0x0D)
-            {
-                ctrl->buf[idx] = 0;
-                return idx;
-            }
-            else
-            {
-                idx ++;
-                if(idx >= len)
-                {
-                    ctrl->buf[idx- 1] = 0;
-                    return idx -1;
-                }
-            }
+            if(console_prehandle_char(ctrl,ch,len))
+                return ctrl->index;
         }
     }
 }
-
-
-
 
 
 static void init_console_stat(console_s *ctrl)
@@ -156,12 +172,15 @@ void console_framework_init(console_s *ctrl)
     cgl->head = NULL;
     cgl->tail = NULL;
     cgl->cnt = 0;
+    #if 0
     register_cmd_echo(ctrl);
     register_cmd_help(ctrl);
     register_cmd_proc(ctrl);
-    register_cmd_show(ctrl);
     register_cmd_stat(ctrl);
     register_cmd_test(ctrl);
+    register_cmd_mem(ctrl);
+    #endif
+    register_all_cmd(ctrl);
     g_cmd_global = cgl;
     show_cmd_list();
 }
@@ -211,7 +230,6 @@ static w_err_t check_user_pwd(console_s *ctrl)
 {
     if(wind_strcmp(ctrl->user,"root") != 0)
         return ERR_COMMAN;
-    wind_strcpy(ctrl->user,ctrl->buf);
     if(wind_strcmp(ctrl->buf,"wind") != 0)
         return ERR_COMMAN;
     wind_strcpy(ctrl->pwd,ctrl->buf);
@@ -229,7 +247,7 @@ static w_int32_t get_string(char *str,w_int32_t idx,char ** arg)
     while(str[i] && (str[i] != ' '))
         i ++;
     str[i] = 0;
-    return 0;
+    return i + 1;
 }
 
 static w_err_t spit_cmd(console_s * ctrl)
@@ -272,11 +290,18 @@ static w_err_t execute_cmd(console_s * ctrl)
     err = spit_cmd(ctrl);
     if(err < 0)
         return err;
+    if(wind_strcmp(ctrl->param.argv[0],"?") == 0)
+    {
+        show_cmd_list();
+        return ERR_OK;
+    }
     cmd = get_matched_cmd(ctrl);
     if(cmd == NULL)
         return ERR_COMMAN;
-    if(ctrl->param.argc == 1)
-        ctrl->ops.printf(cmd->helpdetails);
+    if(wind_strcmp(ctrl->param.argv[1],"?") == 0)
+    {
+        cmd->showusage();
+    }
     cmd->execute(ctrl->param.argc,ctrl->param.argv);
     return ERR_OK;
 }
@@ -287,13 +312,12 @@ w_err_t console_proc(w_int32_t argc,char **argv)
     w_int32_t len;
     console_s *ctrl;
     w_err_t err;
-
     if(argc >= WIND_CONSOLE_COUNT)
         return ERR_COMMAN;
     ctrl = &g_ctrl[argc];
     cmd_history_init(&ctrl->his);
     init_console_stat(ctrl);
-    CONSOLE_OUT("\r\nlogin:");
+    wind_printf("\r\nlogin:");
     while(1)
     {
         len = console_read_line(ctrl,WIND_CMD_MAX_LEN);
@@ -304,11 +328,11 @@ w_err_t console_proc(w_int32_t argc,char **argv)
                 case CSLSTAT_USER:
                     err = check_user_name(ctrl);
                     if(err != ERR_OK)
-                        CONSOLE_OUT("\r\nlogin:");
+                        wind_printf("\r\nlogin:");
                     else
                     {
                         ctrl->stat = CSLSTAT_PWD;
-                        CONSOLE_OUT("\r\npasswd:");
+                        wind_printf("\r\npasswd:");
                     }
                     break;
                 case CSLSTAT_PWD:
@@ -316,12 +340,12 @@ w_err_t console_proc(w_int32_t argc,char **argv)
                     if(err != ERR_OK)
                     {
                         ctrl->stat = CSLSTAT_USER;
-                        CONSOLE_OUT("\r\nlogin:");
+                        wind_printf("\r\nlogin:");
                     }
                     else
                     {
                         ctrl->stat = CSLSTAT_APP;
-                        CONSOLE_OUT("\r\n%s@wind-os>",ctrl->user);
+                        wind_printf("\r\n%s@wind-os>",ctrl->user);
                     }
                         
                     break;
@@ -331,13 +355,13 @@ w_err_t console_proc(w_int32_t argc,char **argv)
                     if(wind_strcmp(ctrl->buf,"exit") == 0)
                     {
                         ctrl->stat = CSLSTAT_USER;
-                        CONSOLE_OUT("\r\nlogin:");
+                        wind_printf("\r\nlogin:");
                     }
                     else
-                        CONSOLE_OUT("\r\n%s@wind-os>",ctrl->user);
+                        wind_printf("\r\n%s@wind-os>",ctrl->user);
                     break;
                 default:
-                    CONSOLE_OUT("\r\nlogin:");
+                    wind_printf("\r\nlogin:");
                     ctrl->stat = CSLSTAT_APP;
                     break;
             }
@@ -358,7 +382,7 @@ for(i = 0;i < len;i ++)
             ctrl->index = 0;
             break;
         }
-        wind_console_prehandle(ctrl,ch);
+        console_prehandle_char(ctrl,ch);
         if(ch == WVK_BACKSPACE)
         {
             ctrl->cmdstr[ctrl->index] = 0;
@@ -380,12 +404,12 @@ for(i = 0;i < len;i ++)
                 wind_decode_cmd(ctrl);
                 memoryset(ctrl->cmdstr,0,WIND_CMD_MAX_LEN);
                 if(ctrl->stat == CSLSTAT_CMD)
-                    CONSOLE_OUT("%s@wind_os/GT2440>#:",ctrl->user);
+                    wind_printf("%s@wind_os/GT2440>#:",ctrl->user);
                 ctrl->index = 0;
         }
         if(ctrl->index>= WIND_CMD_MAX_LEN)
         {
-            CONSOLE_OUT("\r\nERROR:command is too long\r\n");
+            wind_printf("\r\nERROR:command is too long\r\n");
             memoryset(ctrl->cmdstr,0,WIND_CMD_MAX_LEN);
             ctrl->index = 0;
         }
@@ -394,7 +418,7 @@ for(i = 0;i < len;i ++)
 
 #endif
 
-#define CTRL_STK_SIZE 1024
+#define CTRL_STK_SIZE 256
 static w_stack_t ctrlstk[CTRL_STK_SIZE];//主任务堆栈
 void create_console_thread(void)
 {

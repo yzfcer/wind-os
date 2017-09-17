@@ -42,29 +42,27 @@ extern "C" {
 
 
 /********************************************全局函数定义**********************************************/
-static w_err_t cmd_echo_main(w_int32_t argc,char **argv)
+static void cmd_showdisc(void)
+{
+    wind_printf("to display echo string that you input.\r\n");
+}
+
+static void cmd_showusage(void)
+{
+    wind_printf("echo <str>:to show str on your std displaying device.\r\n");
+}
+
+static w_err_t cmd_main(w_int32_t argc,char **argv)
 {
     char *str;
     if(argc < 1)
         return ERR_COMMAN;
     str = argv[0];
-    CONSOLE_OUT("%s",str);
+    wind_printf("%s",str);
     return ERR_OK;
 }
 
-cmd_s g_cmd_echo[] = 
-{
-    {
-        NULL, "echo", "to display echo string that you input.",
-        "echo <str>:to show str on your std displaying device.",
-        cmd_echo_main
-    },
-};
-
-void register_cmd_echo(console_s *ctrl)
-{
-    wind_cmd_register(&ctrl->cmd_list,g_cmd_echo,sizeof(g_cmd_echo)/sizeof(cmd_s));
-}
+CMD_DEF(echo);
 
 #ifdef __cplusplus
 }

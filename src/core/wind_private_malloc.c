@@ -22,7 +22,7 @@
 
 /*********************************************头文件定义***********************************************/
 #include "wind_config.h"
-#include "wind_types.h"
+#include "wind_type.h"
 #include "wind_err.h"
 #include "wind_heap.h"
 #include "wind_thread.h"
@@ -54,7 +54,7 @@ w_err_t wind_privateheap_create(w_uint32_t size)
     void *start;
     pthread_s pthread;
     pmemheap_s mhp;
-    pthread = wind_get_cur_proc();
+    pthread = wind_thread_current();
     WIND_ASSERT_RETURN((pthread != NULL),ERR_NULL_POINTER);
     mhp = (pmemheap_s)wind_heap_alloc_default(size);
     WIND_ASSERT_RETURN(mhp != NULL,ERR_NULL_POINTER);
@@ -76,7 +76,7 @@ void *wind_privateheap_alloc(w_uint32_t size)
     void *p;
     w_err_t err;
     pthread_s pthread;
-    pthread = wind_get_cur_proc();
+    pthread = wind_thread_current();
     WIND_ASSERT_RETURN(pthread != NULL,NULL);
     WIND_ASSERT_RETURN(pthread->private_heap != NULL,NULL);
     if(pthread->private_heap == NULL)

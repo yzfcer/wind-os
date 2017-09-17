@@ -26,7 +26,7 @@
 #define WIND_LOCK_H__
 
 #include "wind_config.h"
-#include "wind_types.h"
+#include "wind_type.h"
 #include "wind_list.h"
 
 #ifdef __cplusplus

@@ -124,7 +124,7 @@ PendSV_Handler
     SUBS    R0, R0, #0x20                                       ; Save remaining regs r4-11 on process stack
     STM     R0, {R4-R11}
 
-    LDR     R1, =gwind_cur_pcb                                       ; gwind_cur_pcb->OSTCBStkPtr = SP;
+    LDR     R1, =gwind_cur_pcb                                       ; gwind_cur_pcb = SP;
     LDR     R1, [R1]
     STR     R0, [R1]                                            ; R0 is SP of process being switched out
 

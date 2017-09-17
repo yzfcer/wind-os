@@ -28,7 +28,7 @@
 
 
 #include "wind_config.h"
-#include "wind_types.h"
+#include "wind_type.h"
 #include "wind_lock.h"
 #include "wind_err.h"
 

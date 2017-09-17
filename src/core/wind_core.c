@@ -23,51 +23,26 @@
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
 
+#include "wind_type.h"
 #include "wind_config.h"
-#include "wind_types.h"
 #include "wind_os_hwif.h"
 
 #include "wind_version.h"
 #include "wind_thread.h"
-#include "wind_sem.h"
-#include "wind_time.h"
-#include "wind_pipe.h"
-#include "wind_message.h"
 #include "wind_core.h"
-#include "wind_list.h"
-#include "wind_stat.h"
 #include "wind_softint.h"
 #include "wind_var.h"
-
-#include "wind_string.h"
-#include "wind_debug.h"
-#include "wind_ticktimer.h"
-#include "wind_err.h"
-#include "wind_rtc.h"
 #include "wind_heap.h"
-
-#include "console_framework.h"
-
-
-
 
 
 volatile w_int8_t gwind_int_cnt = 0;//全局的中断计数值
+volatile w_int8_t gwind_core_cnt = 0;//全局的禁止切换计数值
 
 extern w_err_t wind_time_init(void);
 
 extern void wind_thread_switch(void);
 extern void wind_interrupt_switch(void);
 extern void wind_start_switch(void);
-extern w_err_t wind_thread_showlist(pnode_s nodes);
-extern void listtest(void);
-extern w_err_t console_proc(w_int32_t argc,char **argv);
-
-//wind core data section --- end
-
-
-
-
 
 
 //允许创建用户线程
@@ -82,11 +57,16 @@ w_bool_t wind_thread_isopen()
     return g_core.usrprocen;
 }
 
-void wind_enter_core(void)
+void wind_disable_switch(void)
 {
-
+    gwind_core_cnt ++;
 }
-void wind_exit_core(void);
+
+void wind_enable_switch(void)
+{
+    if(gwind_core_cnt > 0)
+        gwind_core_cnt --;
+}
 
 void wind_enter_int(void)
 {
@@ -100,7 +80,12 @@ void wind_enter_int(void)
     return;
 }
 
-void wind_update_curPCB(void);
+static w_bool_t is_switch_enable(void)
+{
+    return gwind_core_cnt>0?B_FALSE:B_TRUE;
+}
+
+void wind_update_curthread(void);
 void wind_exit_int(void)
 {
     if(RUN_FLAG == B_FALSE)
@@ -112,9 +97,9 @@ void wind_exit_int(void)
     wind_close_interrupt();
     if(gwind_int_cnt > 0)
         gwind_int_cnt --;
-    if(gwind_int_cnt == 0)
+    if((gwind_int_cnt == 0) && is_switch_enable())
     {
-        wind_update_curPCB();
+        wind_update_curthread();
         if(HIGH_PROC != gwind_cur_pcb)
         {
             wind_interrupt_switch();
@@ -124,47 +109,46 @@ void wind_exit_int(void)
 }
 
 
-
-
-
 //系统调度开始启动运行
 static void wind_run()
 {
-    wind_update_curPCB();
+    wind_update_curthread();
     gwind_cur_pcb = HIGH_PROC;
     wind_start_switch();
 }
 
-void wind_update_curPCB()
+void wind_update_curthread()
 {
     pthread_s pthread;
-    pnode_s pnode = g_core.pcblist.head;
+    pnode_s pnode = g_core.threadlist.head;
     wind_close_interrupt();
     while(pnode)
     {
-        
         pthread = (pthread_s)(pnode->obj);
-        if((pthread->used) && (pthread->proc_status == PROC_STATUS_READY))
+        if((pthread->used) && (pthread->runstat == THREAD_STATUS_READY))
         {
-            HIGH_PROC = pthread;
+            HIGH_PROC = (pthread_s)(&pthread->pstk);
             break;
         }
         pnode = pnode->next;
-        
     }
     wind_open_interrupt();
 }
+
+
 //在线程中切换到高优先级的线程
-
-
 #if WIND_REALTIME_CORE_SUPPORT > 0
 void wind_thread_dispatch(void)
 {
     if(RUN_FLAG == B_FALSE)
         return;
     wind_close_interrupt();
-    //WIND_DEBUG("wind_update_curPCB\r\n");
-    wind_update_curPCB();
+    if(!is_switch_enable())
+    {
+        wind_open_interrupt();
+        return;
+    }
+    wind_update_curthread();
 
     if(HIGH_PROC != gwind_cur_pcb)
     {
@@ -173,7 +157,6 @@ void wind_thread_dispatch(void)
     }
     wind_open_interrupt();
 }
-
 #endif
 
 

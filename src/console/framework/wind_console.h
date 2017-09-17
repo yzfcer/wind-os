@@ -26,7 +26,7 @@
 #ifndef WIND_CONSOLE_H__
 #define WIND_CONSOLE_H__
 #include "wind_config.h"
-#include "wind_types.h"
+#include "wind_type.h"
 #include "wind_debug.h"
 #ifdef __cplusplus
 extern "C" {
@@ -39,8 +39,6 @@ extern "C" {
 #define WIND_CTL_USRNAME_LEN 20//用户名的长度
 #define WIND_CTL_PWD_LEN 20//密码的最大长度
 #define WIND_CONSOLE_COUNT 1//支持的控制套终端的数量
-//#define WIND_CTL_OUT(...) WIND_STD_OUT(__VA_ARGS__)
-#define WIND_CTL_GET(pch) core_get_cmd_ch(pch)
 
 
 
@@ -57,12 +55,20 @@ typedef struct __cmd_s
 {
     struct __cmd_s *next;
     char* cmd;//命令的名称
-    char *helpinfo;//简要帮助信息
-    char *helpdetails;//详细的帮助说明
-    
+    void (*showdisc)(void);//简要功能说明
+    void (*showusage)(void);//详细的帮助说明
     w_err_t (*execute)(w_int32_t argc,char **argv);//命令的入口函数
-    
 }cmd_s,*pcmd_s;
+
+#define CMD_DECLARE(CMD) extern cmd_s g_cmd_##CMD
+
+#define COMMAND(CMD) &g_cmd_##CMD
+
+#define CMD_DEF(CMD) \
+cmd_s g_cmd_##CMD = { \
+NULL,#CMD,cmd_showdisc,\
+cmd_showusage,cmd_main}
+
 
 
 #endif//ifndef WIND_CONSOLE_H__

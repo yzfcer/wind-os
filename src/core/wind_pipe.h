@@ -27,7 +27,7 @@
 
 #include "wind_queue.h"
 #include "wind_config.h"
-#include "wind_types.h"
+#include "wind_type.h"
 #include "wind_thread.h"
 
 #ifdef __cplusplus

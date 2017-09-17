@@ -24,7 +24,7 @@
 *******************************************************************************************************/
 #ifndef WIND_STAT_H__
 #define WIND_STAT_H__
-#include "wind_types.h"
+#include "wind_type.h"
 #include "wind_config.h"
 
 

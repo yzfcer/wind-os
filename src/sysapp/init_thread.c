@@ -1,8 +1,8 @@
-#include "wind_types.h"
+#include "wind_type.h"
 #include "wind_var.h"
 #include "wind_thread.h"
 
-#define MAIN_STK_SIZE 512
+#define MAIN_STK_SIZE 256
 void wind_tick_init(void);
 void create_stati_thread(void);
 void create_daemon_thread(void);
@@ -36,7 +36,7 @@ static w_err_t init_thread(w_int32_t argc,w_int8_t **argv)
 #if WIND_CONSOLE_SUPPORT > 0
     create_console_thread();
 #endif
-    wind_thread_showlist(g_core.pcblist.head);
+    wind_thread_print(&g_core.threadlist);
     
     wind_main();
     return ERR_OK;

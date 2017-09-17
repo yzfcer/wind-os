@@ -24,7 +24,7 @@
 *******************************************************************************************************/
 
 #include "wind_config.h"
-#include "wind_types.h"
+#include "wind_type.h"
 #include "wind_config.h"
 #include "wind_ticktimer.h"
 #include "wind_list.h"

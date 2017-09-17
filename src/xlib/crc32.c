@@ -1,4 +1,4 @@
-#include "wind_types.h"
+#include "wind_type.h"
 w_uint32_t crc32_table[256];
 void wind_create_crc32tb(void)
 {

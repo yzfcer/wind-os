@@ -1,4 +1,4 @@
-#include "wind_types.h"
+#include "wind_type.h"
 #include "crc16.h"
 #if CRC_SUPPORT_EN 
 w_uint16_t code crc_tab_ccitt[256]={/* CRC ×Ö½ÚÓàÊ½±í */  

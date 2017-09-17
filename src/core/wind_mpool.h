@@ -27,7 +27,7 @@
 #define WIND_MPOOL_H__
 
 #include "wind_config.h"
-#include "wind_types.h"
+#include "wind_type.h"
 #include "wind_debug.h"
 
 #ifdef __cplusplus
@@ -60,7 +60,7 @@ typedef struct __mpoolHead_s
 //定义内存池的方法
 #define WIND_MPOOL(pool,num,size) w_uint8_t pool[sizeof(mpoolHead_s) + num * (WIND_MPOOL_ALIGN(size) + sizeof(w_uint32_t))]
 
-w_err_t wind_mpool_show(w_int8_t *name,void *pool);
+w_err_t wind_mpool_print(w_int8_t *name,void *pool);
 
 w_err_t wind_mpool_create(const char *name,void *mem,w_uint32_t msize,w_uint32_t itemsize);
 

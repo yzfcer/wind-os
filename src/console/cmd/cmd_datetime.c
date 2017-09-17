@@ -23,11 +23,11 @@
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
 #ifdef __cplusplus
-    extern "C" {
+extern "C" {
 #endif // #ifdef __cplusplus
 
 #include "wind_config.h"
-#include "wind_types.h"
+#include "wind_type.h"
 #include "console_framework.h"
 #include "wind_err.h"
 #include "wind_string.h"
@@ -37,80 +37,85 @@
 #include "wind_comman.h"
 #if WIND_RTC_SUPPORT > 0
 
-extern datetime_s G_DATETIME;//当前日期和时间
-
-w_err_t cmd_setdate_main(w_int32_t argc,char **argv)
+static extern datetime_s G_DATETIME;//当前日期和时间
+static w_err_t cmd_set_datetime(w_int32_t argc,char **argv)
 {
-    
-    //pdate_s pd;
     datetime_s *dt;
-
-    dt = &G_DATETIME;
-    if(wind_strlen(argv[0]) >= 10)
+    if(argc < 4)
     {
-        wind_set_date(wind_convert_str2u32_t(&argv[0][0]),
-                        wind_convert_str2u32_t(&argv[0][4]),
-                        wind_convert_str2u32_t(&argv[0][7]));
-        CONSOLE_OUT("system date:%d/%d/%d\r\n",dt->date.year,
-        dt->date.month,dt->date.day);
-    }    
-    return ERR_OK;
-}
-
-w_err_t cmd_settime_main(w_int32_t argc,char **argv)
-{
-    //ptime_s pt;
-    datetime_s *dt;
-    w_int8_t *cmdstr;
-    
-    dt = &G_DATETIME;
-    if(wind_strlen(cmdstr) >= 15)
-    {
-        wind_set_time(wind_convert_str2u32_t(&(argv[0][0])),
-                        wind_convert_str2u32_t(&(argv[0][3])),
-                        wind_convert_str2u32_t(&(argv[0][6])),0);
-        CONSOLE_OUT("system time:%d:%d:%d  %d\r\n",dt->time.hour,
-        dt->time.minute,dt->time.second,dt->time.msecond);
+        wind_printf("error:parameter is NOT enough.\r\n");
+        return ERR_INVALID_PARAM;
     }
+    if(wind_strlen(argv[2]) < 10)
+    {
+        wind_printf("date format error.\r\n");
+        return ERR_INVALID_PARAM;
+    }
+    if(wind_strlen(argv[3]) < 8)
+    {
+        wind_printf("time format error.\r\n");
+        return ERR_INVALID_PARAM;
+    }    
+    wind_set_date(wind_convert_str2u32_t(&argv[2][0]),
+                    wind_convert_str2u32_t(&argv[2][4]),
+                    wind_convert_str2u32_t(&argv[2][7]));
     
+    wind_set_time(wind_convert_str2u32_t(&(argv[3][0])),
+                    wind_convert_str2u32_t(&(argv[3][3])),
+                    wind_convert_str2u32_t(&(argv[3][6])),0);
+    
+    dt = &G_DATETIME;
+    wind_printf("system date:%d/%d/%d %d:%d:%d  %d\r\n",dt->date.year,
+                dt->date.month,dt->date.day,dt->time.hour,
+                dt->time.minute,dt->time.second,dt->time.msecond);
     return ERR_OK;
 }
 
-w_err_t cmd_showdatetime_main(w_int32_t argc,char **argv)
-{
-    
-    pdate_s pd;
-    //datetime_s *dt;
 
-    //dt = &G_DATETIME;
-    pd = wind_get_date();
-    CONSOLE_OUT("system datetime:%d/%d/%d \r\n",pd->year,
-    pd->month,pd->day);
-  
+static w_err_t cmd_showdatetime(w_int32_t argc,char **argv)
+{
+    dt = &G_DATETIME;
+    wind_printf("system date:%d/%d/%d %d:%d:%d  %d\r\n",dt->date.year,
+                dt->date.month,dt->date.day,dt->time.hour,
+                dt->time.minute,dt->time.second,dt->time.msecond);
     return ERR_OK;
 }
 
-
-
-cmd_s g_cmd_datetime[] =
+static void cmd_showdisc(void)
 {
-    {
-        NULL,"datetime set date","to set the system date info.",
-        "system date format:YYYY/MM/DD",
-        cmd_setdate_main,
-    },
+    wind_printf("to set or show system date and time.\r\n");
+}
 
+static void cmd_showusage(void)
+{
+    wind_printf("datetime set <datetime>:to set the system date infomation.format:YYYY/MM/DD HH:mm:SS\r\n");
+    wind_printf("datetime show:to show the system date and time infomation.\r\n");
+}
+
+static w_err_t cmd_main(w_int32_t argc,char **argv)
+{
+    if(argc < 2)
     {
-        NULL,"datetime set time","to set the system time info.",
-        "system time format:HH:mm:SS",
-        cmd_settime_main,
-    }, 
-    
+        cmd_showusage();
+        return ERR_OK;
+    }
+    if(wind_strcmp(argv[1],"set") == 0)
     {
-        NULL,"datetime show detail","to show the system date info.",
-        "",cmd_showdatetime_main,
-    },
-};
+        return cmd_set_datetime(argc,argv);
+    }
+    else if(wind_strcmp(argv[1],"show") == 0)
+    {
+        return cmd_showdatetime(argc,argv);
+    }
+    else
+    {
+        wind_printf("datetime:format error.\r\n");
+        return ERR_COMMAN;
+    }
+}
+
+CMD_DEF(datetime);
+
 
 #endif
 

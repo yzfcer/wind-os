@@ -26,7 +26,7 @@ extern "C" {
 
 /*********************************************头文件定义***********************************************/
 #include "wind_config.h"
-#include "wind_types.h"
+#include "wind_type.h"
 #include "wind_err.h"
 #include "wind_key.h"
 #include "wind_console.h"
@@ -41,7 +41,6 @@ extern "C" {
 #define WIND_CTL_USRNAME_LEN 20//用户名的长度
 #define WIND_CTL_PWD_LEN 20//密码的最大长度
 #define WIND_CONSOLE_COUNT 1//支持的控制套终端的数量
-#define CONSOLE_OUT(fmt,...) wind_printf(fmt,##__VA_ARGS__)
 
 
 /**********************************************枚举定义************************************************/
@@ -71,9 +70,10 @@ typedef struct __cmd_param_s
     w_uint32_t argc;
     char * argv[CMD_PARAM_CNT];
 }cmd_param_s;
+
 typedef struct 
 {
-    w_err_t (*read_char)(char *ch);
+    w_err_t (*getchar)(char *ch);
     w_int32_t (*printf)(const char *fmt,...);
 }console_ops;
 
@@ -81,7 +81,7 @@ typedef struct
 typedef struct __console_s
 {
     cslstat_e stat;//当前的解析状态
-    w_uint32_t index;//命令的下一个字符下标
+    w_int32_t index;//命令的下一个字符下标
     char buf[WIND_CMD_MAX_LEN];//接收的数据缓存区
     char user[WIND_CTL_USRNAME_LEN];//用户名
     char pwd[WIND_CTL_PWD_LEN];//密码的值
@@ -99,9 +99,10 @@ typedef struct __console_s
 void register_cmd_echo(console_s *ctrl);
 void register_cmd_help(console_s *ctrl);
 void register_cmd_proc(console_s *ctrl);
-void register_cmd_show(console_s *ctrl);
+void register_all_cmd(console_s *ctrl);
 void register_cmd_stat(console_s *ctrl);
 void register_cmd_test(console_s *ctrl);
+void register_cmd_mem(console_s *ctrl);
 
 
 
@@ -111,7 +112,6 @@ w_err_t wind_output_cmdlist(void);
 void console_framework_init(console_s *ctlobj);
 cmd_s *wind_get_cmdlist(void);
 w_err_t wind_cmd_register(cmd_list_s *cgl,cmd_s *cmd,int cnt);
-//w_err_t console_proc(w_int32_t argc,char **argv);
 void create_console_thread(void);
 
 #ifdef __cplusplus

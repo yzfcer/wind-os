@@ -23,7 +23,7 @@
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
 #include "wind_config.h"
-#include "wind_types.h"
+#include "wind_type.h"
 #include "console_framework.h"
 #include "wind_err.h"
 #include "wind_debug.h"
@@ -31,8 +31,6 @@
 #include "wind_string.h"
 #include "wind_stat.h"
 #include "wind_var.h"
-
-
 
 static void core_stat_convert_num(w_int8_t *buf,w_uint32_t num)
 {
@@ -47,6 +45,7 @@ static void core_stat_convert_num(w_int8_t *buf,w_uint32_t num)
         buf[i++] = (num/10)%10 + '0';
     buf[i++] = num%10 + '0';
 }
+
 static void core_output_srcusage(w_uint16_t opt)
 {
     w_int8_t str[STAT_NAME_LEN + 33];
@@ -106,27 +105,39 @@ w_err_t cmd_stat_show_mpool_main(w_int32_t argc,char **argv)
 
 w_err_t cmd_stat_show_cpuusage_main(w_int32_t argc,char **argv)
 {
-    wind_printf("cpu usage persage:%%%d\r\n",WIND_CPU_USAGE);
+    wind_printf("cpu usage persage:%d%%\r\n",WIND_CPU_USAGE);
     return ERR_OK;    
 }
 
 
-
-cmd_s g_cmd_stat[] = 
+static void cmd_showdisc(void)
 {
-    {
-        NULL,"stat show mpool","to show mpools usage info.",
-        "",cmd_stat_show_mpool_main
-    },
-    {
-        NULL,"stat show cpuusage","to show current cpu usage persent.",
-        "",cmd_stat_show_cpuusage_main
-    }
-};
-
-void register_cmd_stat(console_s *ctrl)
-{
-    wind_cmd_register(&ctrl->cmd_list,g_cmd_stat,sizeof(g_cmd_stat)/sizeof(cmd_s));
+    wind_printf("show some statistics infomation.\r\n");
 }
 
+static void cmd_showusage(void)
+{
+    wind_printf("stati showpool:to show system pools usage info.\r\n");
+    wind_printf("stati cpuusage:to show current cpu usage persent.\r\n");
+}
+
+static w_err_t cmd_main(w_int32_t argc,char **argv)
+{
+    if(argc < 2)
+    {
+        cmd_showusage();
+        return ERR_OK;
+    }
+    if(0 == wind_strcmp(argv[1],"showpool"))
+    {
+        return cmd_stat_show_mpool_main(argc,argv);
+    }
+    else if(0 == wind_strcmp(argv[1],"cpuusage"))
+    {
+        return cmd_stat_show_cpuusage_main(argc,argv);
+    }
+    return ERR_COMMAN;
+}
+
+CMD_DEF(stati);
 
