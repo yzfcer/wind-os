@@ -364,7 +364,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F40_41xxx,USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\board;..\driver;..\port;..\start;..\..\..\..\..\src\api;..\..\..\..\..\src\app;..\..\..\..\..\src\console\framework;..\..\..\..\..\src\core;..\..\..\..\..\src\driver;..\..\..\..\..\src\entry;..\..\..\..\..\src\lib;..\..\..\..\..\src\xlib;..\..\..\..\..\src\console\cmd</IncludePath>
+              <IncludePath>..\board;..\driver;..\port;..\start;..\..\..\..\..\src\api;..\..\..\..\..\src\app;..\..\..\..\..\src\console\framework;..\..\..\..\..\src\core;..\..\..\..\..\src\driver;..\..\..\..\..\src\entry;..\..\..\..\..\src\lib;..\..\..\..\..\src\xlib;..\..\..\..\..\src\console\cmd;..\..\..\..\..\src\test\framework;..\..\..\..\..\src\test\port;..\..\..\..\..\src\test\case</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -878,7 +878,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>os_console_framework</GroupName>
+          <GroupName>console_framework</GroupName>
           <Files>
             <File>
               <FileName>console_framework.c</FileName>
@@ -918,12 +918,12 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>os_console_cmd</GroupName>
+          <GroupName>console_cmd</GroupName>
           <Files>
             <File>
-              <FileName>cmd_datetime.c</FileName>
+              <FileName>cmd_list.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\console\cmd\cmd_datetime.c</FilePath>
+              <FilePath>..\..\..\..\..\src\console\cmd\cmd_list.c</FilePath>
             </File>
             <File>
               <FileName>cmd_echo.c</FileName>
@@ -931,24 +931,14 @@
               <FilePath>..\..\..\..\..\src\console\cmd\cmd_echo.c</FilePath>
             </File>
             <File>
-              <FileName>cmd_help.c</FileName>
+              <FileName>cmd_datetime.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\console\cmd\cmd_help.c</FilePath>
+              <FilePath>..\..\..\..\..\src\console\cmd\cmd_datetime.c</FilePath>
             </File>
             <File>
-              <FileName>cmd_proc.c</FileName>
+              <FileName>cmd_mem.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\console\cmd\cmd_proc.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_show.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\console\cmd\cmd_show.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_stat.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\console\cmd\cmd_stat.c</FilePath>
+              <FilePath>..\..\..\..\..\src\console\cmd\cmd_mem.c</FilePath>
             </File>
             <File>
               <FileName>cmd_test.c</FileName>
@@ -959,6 +949,11 @@
               <FileName>cmd_user.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\console\cmd\cmd_user.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_stati.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\console\cmd\cmd_stati.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1307,6 +1302,71 @@
               <FileName>wind_version.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\..\..\..\src\core\wind_version.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>test_framwwork</GroupName>
+          <Files>
+            <File>
+              <FileName>cut.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\test\framework\cut.h</FilePath>
+            </File>
+            <File>
+              <FileName>test_framework.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\test\framework\test_framework.c</FilePath>
+            </File>
+            <File>
+              <FileName>test_framework.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\test\framework\test_framework.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>test_port</GroupName>
+          <Files>
+            <File>
+              <FileName>test_port.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\test\port\test_port.c</FilePath>
+            </File>
+            <File>
+              <FileName>test_port.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\test\port\test_port.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>test_case</GroupName>
+          <Files>
+            <File>
+              <FileName>test_mode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\test\testcase\test_mode.c</FilePath>
+            </File>
+            <File>
+              <FileName>test_mode1.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\test\testcase\test_mode1.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>console_port</GroupName>
+          <Files>
+            <File>
+              <FileName>console_port.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\console\port\console_port.c</FilePath>
+            </File>
+            <File>
+              <FileName>console_port.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\console\port\console_port.h</FilePath>
             </File>
           </Files>
         </Group>
