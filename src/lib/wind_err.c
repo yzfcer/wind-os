@@ -1,5 +1,5 @@
 #include "wind_config.h"
-#include "wind_types.h"
+#include "wind_type.h"
 #include "wind_err.h"
 
 w_int8_t *core_errset[] = 

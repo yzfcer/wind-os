@@ -25,7 +25,7 @@
 #ifndef INTER_PROCRESS_H__
 #define INTER_PROCRESS_H__
 
-#include "wind_types.h"
+#include "wind_type.h"
 #ifdef c_plusplus__
 extern {
 #endif

@@ -24,7 +24,7 @@
 *******************************************************************************************************/
 
 //#include "wind_core_inc.h"
-#include "wind_types.h"
+#include "wind_type.h"
 #include "wind_stack.h"
 #include "wind_os_hwif.h"
 

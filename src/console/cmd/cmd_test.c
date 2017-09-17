@@ -23,7 +23,7 @@
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
 #include "wind_config.h"
-#include "wind_types.h"
+#include "wind_type.h"
 #include "console_framework.h"
 #include "wind_err.h"
 #include "wind_debug.h"
@@ -59,22 +59,35 @@ w_err_t cmd_testheap_main(w_int32_t argc,char **argv)
     return ERR_COMMAN;
 }
 
-cmd_s g_cmd_test[] =
+static void cmd_showdisc(void)
 {
-    {
-        NULL,"test softint","to test soft interrupt module.",
-        "",cmd_testsoftint_main,        
-    },
-    {
-        NULL,"test heap","to test to allocate memory from the system memory heap.",
-        "",cmd_testheap_main,
-    }
-};
-
-void register_cmd_test(console_s *ctrl)
-{
-    wind_cmd_register(&ctrl->cmd_list,g_cmd_test,sizeof(g_cmd_test)/sizeof(cmd_s));
+    wind_printf("to test some test cases.\r\n");
 }
 
+static void cmd_showusage(void)
+{
+    wind_printf("test softint:to test soft interrupt module.");
+    wind_printf("test heap","to test to allocate memory from the system memory heap.");
+}
+
+static w_err_t cmd_main(w_int32_t argc,char **argv)
+{
+    if(argc < 2)
+    {
+        cmd_showusage();
+        return ERR_OK;
+    }
+    else if(0 == wind_strcmp(argv[1],"softint"))
+    {
+        return cmd_testsoftint_main(argc,argv);
+    }
+    else if(0 == wind_strcmp(argv[1],"heap"))
+    {
+        return cmd_testheap_main(argc,argv);
+    }
+    return  ERR_COMMAN;
+}
+
+CMD_DEF(test);
 
 //#endif

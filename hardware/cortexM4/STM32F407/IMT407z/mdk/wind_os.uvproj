@@ -878,7 +878,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>os_console_framework</GroupName>
+          <GroupName>console_framework</GroupName>
           <Files>
             <File>
               <FileName>console_framework.c</FileName>
@@ -918,12 +918,12 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>os_console_cmd</GroupName>
+          <GroupName>console_cmd</GroupName>
           <Files>
             <File>
-              <FileName>cmd_datetime.c</FileName>
+              <FileName>cmd_list.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\console\cmd\cmd_datetime.c</FilePath>
+              <FilePath>..\..\..\..\..\src\console\cmd\cmd_list.c</FilePath>
             </File>
             <File>
               <FileName>cmd_echo.c</FileName>
@@ -931,19 +931,14 @@
               <FilePath>..\..\..\..\..\src\console\cmd\cmd_echo.c</FilePath>
             </File>
             <File>
-              <FileName>cmd_help.c</FileName>
+              <FileName>cmd_datetime.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\console\cmd\cmd_help.c</FilePath>
+              <FilePath>..\..\..\..\..\src\console\cmd\cmd_datetime.c</FilePath>
             </File>
             <File>
-              <FileName>cmd_proc.c</FileName>
+              <FileName>cmd_mem.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\console\cmd\cmd_proc.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_stat.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\console\cmd\cmd_stat.c</FilePath>
+              <FilePath>..\..\..\..\..\src\console\cmd\cmd_mem.c</FilePath>
             </File>
             <File>
               <FileName>cmd_test.c</FileName>
@@ -956,14 +951,9 @@
               <FilePath>..\..\..\..\..\src\console\cmd\cmd_user.c</FilePath>
             </File>
             <File>
-              <FileName>cmd_coreobj.c</FileName>
+              <FileName>cmd_stati.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\console\cmd\cmd_coreobj.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_mem.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\console\cmd\cmd_mem.c</FilePath>
+              <FilePath>..\..\..\..\..\src\console\cmd\cmd_stati.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1362,6 +1352,21 @@
               <FileName>test_mode1.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\test\testcase\test_mode1.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>console_port</GroupName>
+          <Files>
+            <File>
+              <FileName>console_port.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\console\port\console_port.c</FilePath>
+            </File>
+            <File>
+              <FileName>console_port.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\console\port\console_port.h</FilePath>
             </File>
           </Files>
         </Group>

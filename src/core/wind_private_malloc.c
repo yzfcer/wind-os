@@ -22,7 +22,7 @@
 
 /*********************************************头文件定义***********************************************/
 #include "wind_config.h"
-#include "wind_types.h"
+#include "wind_type.h"
 #include "wind_err.h"
 #include "wind_heap.h"
 #include "wind_thread.h"

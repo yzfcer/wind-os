@@ -23,7 +23,7 @@
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
 #include "wind_config.h"
-#include "wind_types.h"
+#include "wind_type.h"
 #include "console_framework.h"
 #include "wind_err.h"
 #include "wind_debug.h"
@@ -35,26 +35,23 @@
 #include "wind_var.h"
 
 #include "console_framework.h"
-cmd_s g_cmd_coreobj[];
-w_err_t wind_output_cmdlist(void)
+
+static void cmd_showdisc(void)
 {
-    pcmd_s clist = wind_get_cmdlist();
-    while(clist)
-    {
-        wind_printf("cmd list:%s\r\n",clist->cmd);
-        clist = clist->next;
-    }
-    return 0;
+    wind_printf("show core objects infomation.\r\n");
 }
 
-
-w_err_t cmd_coreobj_main(w_int32_t argc,char **argv)
+static void cmd_showusage(void)
 {
-    cmd_s *cmd = g_cmd_coreobj;
-    
+    wind_printf("list thread:to show thread infomation.\r\n");
+    wind_printf("list sem:to show sem infomation.\r\n");
+}
+
+static w_err_t cmd_main(w_int32_t argc,char **argv)
+{
     if(argc < 2)
     {
-        wind_printf(cmd->helpdetails);
+        cmd_showusage();
         return ERR_OK;
     }
     else if(0 == wind_strcmp(argv[1],"thread"))
@@ -70,20 +67,5 @@ w_err_t cmd_coreobj_main(w_int32_t argc,char **argv)
     return ERR_COMMAN;
 }
 
-
-cmd_s g_cmd_coreobj[] = 
-{
-    {
-        NULL,
-        "list",
-        "show core objects infomation.",
-        "list thread:to show thread infomation",
-        cmd_coreobj_main
-    }
-};
-
-void register_cmd_show(console_s *ctrl)
-{
-    wind_cmd_register(&ctrl->cmd_list,g_cmd_coreobj,sizeof(g_cmd_coreobj)/sizeof(cmd_s));
-}
+CMD_DEF(list);
 

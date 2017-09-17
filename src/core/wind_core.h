@@ -26,7 +26,7 @@
 #ifndef WIND_CORE_H__
 #define WIND_CORE_H__
 #include "wind_config.h"
-#include "wind_types.h"
+#include "wind_type.h"
 #include "wind_thread.h"
 
 #ifdef __cplusplus

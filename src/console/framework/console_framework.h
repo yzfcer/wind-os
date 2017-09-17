@@ -26,7 +26,7 @@ extern "C" {
 
 /*********************************************头文件定义***********************************************/
 #include "wind_config.h"
-#include "wind_types.h"
+#include "wind_type.h"
 #include "wind_err.h"
 #include "wind_key.h"
 #include "wind_console.h"
@@ -70,9 +70,10 @@ typedef struct __cmd_param_s
     w_uint32_t argc;
     char * argv[CMD_PARAM_CNT];
 }cmd_param_s;
+
 typedef struct 
 {
-    w_err_t (*read_char)(char *ch);
+    w_err_t (*getchar)(char *ch);
     w_int32_t (*printf)(const char *fmt,...);
 }console_ops;
 
@@ -98,7 +99,7 @@ typedef struct __console_s
 void register_cmd_echo(console_s *ctrl);
 void register_cmd_help(console_s *ctrl);
 void register_cmd_proc(console_s *ctrl);
-void register_cmd_show(console_s *ctrl);
+void register_all_cmd(console_s *ctrl);
 void register_cmd_stat(console_s *ctrl);
 void register_cmd_test(console_s *ctrl);
 void register_cmd_mem(console_s *ctrl);
@@ -111,7 +112,6 @@ w_err_t wind_output_cmdlist(void);
 void console_framework_init(console_s *ctlobj);
 cmd_s *wind_get_cmdlist(void);
 w_err_t wind_cmd_register(cmd_list_s *cgl,cmd_s *cmd,int cnt);
-//w_err_t console_proc(w_int32_t argc,char **argv);
 void create_console_thread(void);
 
 #ifdef __cplusplus

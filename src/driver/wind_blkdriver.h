@@ -23,7 +23,7 @@
 
 /*********************************************头文件定义***********************************************/
 #include "port/wind_config.h"
-#include "port/wind_types.h"
+#include "port/wind_type.h"
 #ifdef __cplusplus
 extern "C" {
 #endif

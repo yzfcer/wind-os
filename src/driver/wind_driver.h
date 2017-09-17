@@ -26,7 +26,7 @@
 #define WIND_DRIVER_H__
 
 #include "port/wind_config.h"
-#include "port/wind_types.h"
+#include "port/wind_type.h"
 #include "driver/wind_driver.h"
 #include "core/wind_lock.h"
 

@@ -23,7 +23,7 @@
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
 #include "wind_config.h"
-#include "wind_types.h"
+#include "wind_type.h"
 #include "console_framework.h"
 #include "wind_err.h"
 #include "wind_debug.h"
@@ -35,12 +35,12 @@
 #include "wind_var.h"
 
 #include "console_framework.h"
-cmd_s g_cmd_mem[];
 
-static w_bool_t str2int(const char *str,w_int32_t *value)
+
+static w_bool_t str2int(const char *str,w_uint32_t *value)
 {
     w_uint32_t temp = 0;
-    const char *ptr = str;  //ptr保存str字符串开头
+    //const char *ptr = str;  //ptr保存str字符串开头
     while(*str != 0)
     {
         if ((*str < '0') || (*str > '9'))  //如果当前字符不是数字
@@ -52,10 +52,10 @@ static w_bool_t str2int(const char *str,w_int32_t *value)
     return B_TRUE;
 }
 
-static w_bool_t strh2int(const char *str,w_int32_t *value)
+static w_bool_t strh2int(const char *str,w_uint32_t *value)
 {
     w_uint32_t temp = 0;
-    const char *ptr = str;  //ptr保存str字符串开头
+    //const char *ptr = str;  //ptr保存str字符串开头
     while(*str != 0)
     {
         if ((*str >= '0') && (*str <= '9'))  
@@ -85,7 +85,7 @@ static w_bool_t get_num(char *str,w_uint32_t *value)
         
 }
 
-static print_mem(w_uint32_t start,w_uint32_t len)
+static void print_mem(w_uint32_t start,w_uint32_t len)
 {
     w_uint32_t i,va;
     start = ((start >> 2) << 2);
@@ -103,7 +103,7 @@ static print_mem(w_uint32_t start,w_uint32_t len)
     wind_printf("\r\n");
 }
 
-static w_bool_t display_mem(char **argv)
+static w_err_t display_mem(char **argv)
 {
     w_uint32_t start,len;
     if(!get_num(argv[1],&start))
@@ -118,7 +118,7 @@ static w_bool_t display_mem(char **argv)
     return ERR_OK;
 }
 
-static w_bool_t display_stack(char **argv)
+static w_err_t display_stack(char **argv)
 {
     w_uint32_t start,len;
     pthread_s thr;
@@ -142,39 +142,32 @@ static w_bool_t display_stack(char **argv)
 }
 
 
-w_err_t cmd_mem_main(w_int32_t argc,char **argv)
+
+static void cmd_showdisc(void)
 {
-    pnode_s pnode;
-    cmd_s *cmd = g_cmd_mem;
-    w_uint32_t start,len,i,va;
-    if(argc < 3)
+    wind_printf("show memory data values.\r\n");
+}
+
+static void cmd_showusage(void)
+{
+    wind_printf("mem <start> <lenth>:to show thread infomation.\r\n");
+    wind_printf("mem stack <threadname>:to show thread stack infomation.\r\n");
+}
+
+static w_err_t cmd_main(w_int32_t argc,char **argv)
+{
+    if(argc < 2)
     {
-        wind_printf(cmd->helpdetails);
+        cmd_showusage();
         return ERR_OK;
     }
     if(display_mem(argv) == ERR_OK)
         return ERR_OK;
     else if(display_stack(argv) == ERR_OK)
         return ERR_OK;
-    wind_printf("command [%s] format error.",argv[0]);
+    wind_printf("command [%s] format error.\r\n",argv[0]);
     return ERR_COMMAN;
 }
 
-
-cmd_s g_cmd_mem[] = 
-{
-    {
-        NULL,
-        "mem",
-        "show memory data values.",
-        "mem <start> <lenth>:to show thread infomation.\r\n\
-mem stack <threadname>:to show thread stack infomation.\r\n",
-        cmd_mem_main
-    }
-};
-
-void register_cmd_mem(console_s *ctrl)
-{
-    wind_cmd_register(&ctrl->cmd_list,g_cmd_mem,sizeof(g_cmd_mem)/sizeof(cmd_s));
-}
+CMD_DEF(mem);
 

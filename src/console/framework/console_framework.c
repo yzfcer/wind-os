@@ -25,7 +25,7 @@ extern "C" {
 
 /*********************************************头文件定义***********************************************/
 #include "wind_config.h"
-#include "wind_types.h"
+#include "wind_type.h"
 #include "console_framework.h"
 #include "wind_config.h"
 #include "wind_debug.h"
@@ -52,7 +52,8 @@ static void show_cmd_list(void)
     cmd_s *cmd = g_cmd_global->head;
     while(cmd)
     {
-        wind_printf("%s : %s\r\n",cmd->cmd,cmd->helpinfo);
+        wind_printf("%s : ",cmd->cmd);
+        cmd->showdisc();
         cmd = cmd->next;
     }
 }
@@ -171,13 +172,15 @@ void console_framework_init(console_s *ctrl)
     cgl->head = NULL;
     cgl->tail = NULL;
     cgl->cnt = 0;
+    #if 0
     register_cmd_echo(ctrl);
     register_cmd_help(ctrl);
     register_cmd_proc(ctrl);
-    register_cmd_show(ctrl);
     register_cmd_stat(ctrl);
     register_cmd_test(ctrl);
     register_cmd_mem(ctrl);
+    #endif
+    register_all_cmd(ctrl);
     g_cmd_global = cgl;
     show_cmd_list();
 }
@@ -287,11 +290,18 @@ static w_err_t execute_cmd(console_s * ctrl)
     err = spit_cmd(ctrl);
     if(err < 0)
         return err;
+    if(wind_strcmp(ctrl->param.argv[0],"?") == 0)
+    {
+        show_cmd_list();
+        return ERR_OK;
+    }
     cmd = get_matched_cmd(ctrl);
     if(cmd == NULL)
         return ERR_COMMAN;
-    if(ctrl->param.argc == 1)
-        ctrl->ops.printf(cmd->helpdetails);
+    if(wind_strcmp(ctrl->param.argv[1],"?") == 0)
+    {
+        cmd->showusage();
+    }
     cmd->execute(ctrl->param.argc,ctrl->param.argv);
     return ERR_OK;
 }

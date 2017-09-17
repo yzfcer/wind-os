@@ -1,6 +1,6 @@
 #ifndef WIND_CRC16_H__
 #define WIND_CRC16_H__
-#include "wind_types.h"
+#include "wind_type.h"
 
 #ifdef __cplusplus
 extern "C" {

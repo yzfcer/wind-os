@@ -47,7 +47,7 @@ extern void test_suite_err(unsigned line);
 #endif
 #define err_t ut_uint32_t
 #define ERR_OK 0
-#define ERR_COMMAN 1
+#define ERR_COMMAN -1
 #define WIND_ASSERT_RETURN(x,y)
 #define TEST_STDOUT test_printf
 

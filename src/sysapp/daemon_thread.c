@@ -1,4 +1,4 @@
-#include "wind_types.h"
+#include "wind_type.h"
 #include "wind_var.h"
 #include "wind_thread.h"
 #include "wind_debug.h"

@@ -26,7 +26,7 @@
 #define WIND_VAR_H__
 
 #include "wind_config.h"
-#include "wind_types.h"
+#include "wind_type.h"
 #include "wind_thread.h"
 #include "wind_list.h"
 #include "wind_pipe.h"

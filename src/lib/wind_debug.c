@@ -27,7 +27,7 @@
 //#include <stdlib.h>
 #include <stdarg.h>
 #include "wind_config.h"
-#include "wind_types.h"
+#include "wind_type.h"
 #include "wind_debug.h"
 
 //static const w_int8_t * const hexlist = "0123456789abcdef";

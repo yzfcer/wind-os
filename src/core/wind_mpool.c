@@ -24,7 +24,7 @@
 *******************************************************************************************************/
 
 #include "wind_config.h"
-#include "wind_types.h"
+#include "wind_type.h"
 #include "wind_err.h"
 #include "wind_mpool.h"
 #include "wind_assert.h"
