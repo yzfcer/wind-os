@@ -8,6 +8,7 @@ void create_stati_thread(void);
 void create_daemon_thread(void);
 void create_idle_thread(void);
 void create_console_thread(void);
+void create_timer_thread(void);
 
 extern w_err_t wind_main(void);
 static w_stack_t mainstk[MAIN_STK_SIZE];
@@ -30,6 +31,9 @@ static w_err_t init_thread(w_int32_t argc,w_int8_t **argv)
     set_idle_cnt();
 #if WIND_SOFTINT_SUPPORT > 0    
     wind_create_softint_proc();
+#endif
+#if WIND_TIMER_SUPPORT
+    create_timer_thread();
 #endif
     create_stati_thread();
     create_daemon_thread();

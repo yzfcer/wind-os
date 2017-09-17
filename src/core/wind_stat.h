@@ -50,8 +50,8 @@ typedef enum __stat_e
     STAT_MESSAGE,
     STAT_MBOX,
 #endif
-#if WIND_TTIMER_SUPPORT > 0
-    STAT_TTIMER,
+#if WIND_TIMER_SUPPORT > 0
+    STAT_TIMER,
 #endif
     STAT_CNT
 }stat_e;

@@ -103,6 +103,7 @@ void console_framework_init(console_s *ctlobj);
 cmd_s *wind_get_cmdlist(void);
 w_err_t wind_cmd_register(cmd_list_s *cgl,cmd_s *cmd,int cnt);
 void create_console_thread(void);
+void register_all_cmd(console_s *ctrl);
 
 #ifdef __cplusplus
 }

@@ -56,6 +56,8 @@ static w_err_t stati_thread(w_int32_t argc,w_int8_t **argv)
         wind_thread_sleep(stati_ms);
         statcnt = g_core.idle_cnt - statcnt;
         WIND_CPU_USAGE = (IDLE_CNT_PER_SEC - statcnt) * 100 / IDLE_CNT_PER_SEC;
+        if(WIND_CPU_USAGE > 100)
+            WIND_CPU_USAGE = 0;
     }
 
 }

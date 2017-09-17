@@ -56,9 +56,9 @@ void wind_stat_init(void)
     G_STAT[STAT_MBOX].tot = WIND_MBOX_MAX_NUM;
     wind_memcpy(G_STAT[STAT_MBOX].name,"mbox",4);
 #endif
-#if WIND_TTIMER_SUPPORT > 0
-    G_STAT[STAT_TTIMER].tot = WIND_TTIMER_MAX_NUM;
-    wind_memcpy(G_STAT[STAT_TTIMER].name,"ttimer",6);
+#if WIND_TIMER_SUPPORT > 0
+    G_STAT[STAT_TIMER].tot = WIND_TTIMER_MAX_NUM;
+    wind_memcpy(G_STAT[STAT_TIMER].name,"ttimer",6);
 #endif
 }
 

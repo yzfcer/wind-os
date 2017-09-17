@@ -22,21 +22,19 @@
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
-
 #include "wind_config.h"
 #include "wind_type.h"
-#include "wind_config.h"
 #include "wind_timer.h"
 #include "wind_list.h"
 #include "wind_debug.h"
 #include "wind_err.h"
 #include "wind_stat.h"
 #include "wind_var.h"
-#if WIND_TTIMER_SUPPORT > 0
+#if WIND_TIMER_SUPPORT
 static ptimer_s ttimer_malloc(void)
 {
     ptimer_s timer;
-    timer = wind_core_alloc(STAT_TTIMER);
+    timer = wind_core_alloc(STAT_TIMER);
     if(timer == NULL)
     {
         return NULL;
@@ -55,7 +53,7 @@ w_err_t ttimer_free(ptimer_s timer)
     timer->used = B_FALSE;
     timer->count = 0;
     timer->init_count = 0;
-    timer->timercallback = NULL;
+    timer->handle = NULL;
     wind_open_interrupt();
     return ERR_OK;
 }
@@ -65,11 +63,11 @@ ptimer_s wind_timer_create(w_uint32_t t_ms,softtimer_fn func,void *arg,w_bool_t 
 {
     ptimer_s timer;
     pnode_s pnode;
-    w_int32_t count = t_ms / 10;
+    w_int32_t count = t_ms / TIMER_PERIOD;
     if(count <= 0)
         count = 1;
     WIND_INFO("creating tick timer:%d ms\r\n",t_ms);
-    if(timercallback == NULL)
+    if(func == NULL)
     {
         WIND_ERROR("wind_timer_create err 1\r\n");
         return NULL;
@@ -144,17 +142,20 @@ w_err_t wind_timer_free(ptimer_s pttimer)
     return ERR_OK;
 }
 
-w_err_t wind_timer_setticks(ptimer_s pttimer,w_uint32_t ticks)
+w_err_t wind_timer_set_period(ptimer_s pttimer,w_uint32_t t_ms)
 {
+    w_int32_t count = t_ms / TIMER_PERIOD;
+    if(count <= 0)
+        count = 1;
     if(pttimer == NULL)
         return ERR_NULL_POINTER;
     if(!pttimer->used)
         return ERR_COMMAN;
-    pttimer->count = ticks;
+    pttimer->count = count;
     return ERR_OK;
 }
 
-extern void wind_timer_handler(void)
+void wind_timer_event(void)
 {
     ptimer_s ptmr;
     pnode_s tmpttimerlist = g_core.ttmerlist.head;
@@ -165,14 +166,12 @@ extern void wind_timer_handler(void)
             ptmr->count --;
         if(ptmr->count == 0 && ptmr->running)
         {
-            ptmr->timercallback();
+            ptmr->handle(ptmr->arg);
             ptmr->count = ptmr->init_count;
         }
         tmpttimerlist = tmpttimerlist->next;
     }
 }
-#endif //#if WIND_TTIMER_SUPPORT > 0
-
-
+#endif //#if WIND_TIMER_SUPPORT > 0
 
 

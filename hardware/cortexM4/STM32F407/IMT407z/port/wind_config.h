@@ -50,7 +50,7 @@
 
 #define WIND_MEM_SUPPORT 1   //是否支持内存管理
 
-#define WIND_TIMER_SUPPORT 0  //是否支持tick精度的定时器
+#define WIND_TIMER_SUPPORT 1  //是否支持tick精度的定时器
 
 #define WIND_RTC_SUPPORT 0  //是否支持实时时间
 

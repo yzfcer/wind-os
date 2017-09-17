@@ -53,7 +53,7 @@ typedef struct __core_var_s
 #if WIND_SEM_SUPPORT > 0
     WIND_MPOOL(sem,WIND_SEM_MAX_NUM,sizeof(sem_s));
 #endif
-#if WIND_TTIMER_SUPPORT > 0
+#if WIND_TIMER_SUPPORT > 0
     WIND_MPOOL(ttimer,WIND_TTIMER_MAX_NUM,sizeof(ttimer_s));
 #endif
 #if WIND_LOCK_SUPPORT > 0

@@ -875,6 +875,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\sysapp\stati_thread.c</FilePath>
             </File>
+            <File>
+              <FileName>timer_thread.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\sysapp\timer_thread.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
