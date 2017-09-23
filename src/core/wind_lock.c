@@ -91,9 +91,9 @@ w_err_t wind_lock_free(plock_s plock)
     pthread_s pthread;
     WIND_ASSERT_RETURN(plock != NULL,ERR_NULL_POINTER);
     wind_close_interrupt();
-    while(plock->waitlist.head != NULL)
+    while(list_head(&plock->waitlist) != NULL)
     {
-        pnode = plock->waitlist.head;
+        pnode = list_head(&plock->waitlist);
         wind_list_remove(&plock->waitlist,pnode);
         pthread = (pthread_s)pnode->obj;
         pthread->runstat = THREAD_STATUS_READY;
@@ -141,13 +141,13 @@ w_err_t wind_lock_open(plock_s plock)
     WIND_ASSERT_RETURN(plock != NULL,ERR_NULL_POINTER);
     wind_close_interrupt();
     WIND_ASSERT_TODO(plock->locked,wind_open_interrupt(),ERR_OK);
-    if (plock->waitlist.head == NULL)
+    if (list_head(&plock->waitlist) == NULL)
     {
         plock->locked = B_FALSE;
         wind_open_interrupt();
         return ERR_OK; //信号量有效，直接返回效，
     }
-    pnode = wind_list_remove(&plock->waitlist,plock->waitlist.head);
+    pnode = wind_list_remove(&plock->waitlist,list_head(&plock->waitlist));
     pthread = (pthread_s)pnode->obj;
     
     pthread->runstat = THREAD_STATUS_READY;

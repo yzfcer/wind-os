@@ -119,7 +119,7 @@ static void wind_run()
 void wind_update_curthread()
 {
     pthread_s pthread;
-    pnode_s pnode = g_core.threadlist.head;
+    pnode_s pnode = list_head(&g_core.threadlist);
     wind_close_interrupt();
     while(pnode)
     {

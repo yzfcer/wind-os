@@ -48,21 +48,29 @@ extern void test_suite_err(unsigned line);
 #define err_t ut_uint32_t
 #define ERR_OK 0
 #define ERR_COMMAN -1
-#define WIND_ASSERT_RETURN(x,y)
+#define TEST_ASSERT_RETURN(x,y)
 #define TEST_STDOUT test_printf
 
 /*********************************************结构体定义***********************************************/
+//全局的test suite列表
+typedef struct __test_case_s test_case_s;
+typedef struct __test_suite_s test_suite_s;
+typedef struct __suite_list_s suite_list_s;
+typedef struct __test_stati_s test_stati_s;
+typedef struct __fail_info_s fail_info_s;
+typedef struct __stati_info_s stati_info_s;
+
 //测试用例结构
-typedef struct 
+struct __test_case_s
 {
     char name[TEST_CASE_NAME_LEN];
     void (*setup)(void);
     void (*teardown)(void);
     void (*test)(void);
-}test_case_s;
+};
 
 //测试套结构
-typedef struct __test_suite_s
+struct __test_suite_s
 {
     char name[TEST_SUITE_NAME_LEN];
     ut_uint32_t case_cnt;//测试用例的数量
@@ -71,18 +79,27 @@ typedef struct __test_suite_s
     void (*setup)(void);
     void (*teardown)(void);
     struct __test_suite_s *next;
-}test_suite_s;
+};
 
-//全局的test suite列表
-typedef struct __test_suite_global
+
+struct __suite_list_s
 {
     test_suite_s *head;
     test_suite_s *tail;
     ut_uint32_t cnt;
-}suite_list_s;
+};
+
+//执行失败的信息
+struct __fail_info_s
+{
+    test_suite_s *suite;
+    test_case_s *tcase;
+    ut_uint32_t line;
+    fail_info_s *next;
+};
 
 //用例执行结果统计信息
-typedef struct __test_stati_s
+struct __test_stati_s
 {
     ut_uint32_t tot_suite;
     ut_uint32_t tot_case;
@@ -90,20 +107,13 @@ typedef struct __test_stati_s
     ut_uint32_t failed_suite;
     ut_uint32_t passed_case;
     ut_uint32_t failed_case;
-}test_stati_s;
-
-//执行失败的信息
-typedef struct __fail_info_s
-{
-    test_suite_s *suite;
-    test_case_s *tcase;
-    ut_uint32_t line;
-    struct __fail_info_s *next;
-}fail_info_s;
+    fail_info_s fail_obj[TEST_FAIL_LIST_CNT];
+};
 
 
 
-typedef struct __test_info_s
+
+struct __stati_info_s
 {
     test_stati_s stat;
     fail_info_s *faillist;
@@ -114,7 +124,7 @@ typedef struct __test_info_s
     test_case_s *tcase;
     ut_uint32_t case_err;
     ut_uint32_t suite_err;
-}stati_info_s;
+};
 
 /********************************************全局变量申明**********************************************/
 

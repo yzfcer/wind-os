@@ -176,7 +176,18 @@ void console_framework_init(console_s *ctrl)
     g_cmd_global = cgl;
     show_cmd_list();
 }
-
+w_bool_t is_in_list(cmd_list_s *list,cmd_s *cmd)
+{
+    w_int32_t i;
+    cmd_s *c = list->head;
+    for(i = 0;i < list->cnt;i ++)
+    {
+        if(c == cmd)
+            return B_TRUE;
+        c = c->next;
+    }
+    return B_FALSE;
+}
 w_err_t wind_cmd_register(cmd_list_s *cgl,cmd_s *cmd,int cnt)
 {
     int i;
@@ -185,6 +196,8 @@ w_err_t wind_cmd_register(cmd_list_s *cgl,cmd_s *cmd,int cnt)
     WIND_ASSERT_RETURN(cmd != NULL,ERR_NULL_POINTER);
     for(i = 0;i < cnt;i ++)
     {
+        if(is_in_list(cg,&cmd[i]))
+            continue;
         if(cg->tail == NULL)
         {
             cmd[i].next = NULL;
@@ -309,6 +322,7 @@ w_err_t console_thread(w_int32_t argc,char **argv)
     ctrl = &g_ctrl[argc];
     cmd_history_init(&ctrl->his);
     init_console_stat(ctrl);
+    test_init(ctrl);
     wind_printf("\r\nlogin:");
     while(1)
     {

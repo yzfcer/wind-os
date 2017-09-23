@@ -33,6 +33,9 @@
 #include "wind_list.h"
 #include "wind_softint.h"
 #include "wind_heap.h"
+#include "cut.h"
+
+#include "test_framework.h"
 
 w_err_t cmd_testsoftint_main(w_int32_t argc,char **argv)
 {
@@ -51,7 +54,6 @@ w_err_t cmd_testheap_main(w_int32_t argc,char **argv)
 #if WIND_HEAP_SUPPORT > 0
     if(0 == wind_strcmp(argv[0],"heap"))
     {
-        //wind_heap_test();
         wind_printf("heaptest not support yet\r\n");
         return ERR_OK;
     }
@@ -85,9 +87,23 @@ static w_err_t cmd_main(w_int32_t argc,char **argv)
     {
         return cmd_testheap_main(argc,argv);
     }
+    else if(0 == wind_strcmp(argv[1],"show"))
+    {
+        show_test_suites();
+    }
+    else if(argc >= 3)
+    {
+        cut_test_start(argv[1],argv[2]);
+    }
     return  ERR_COMMAN;
 }
 
 CMD_DEF(test);
+
+void test_init(console_s *ctrl)
+{
+    wind_cmd_register(&ctrl->cmd_list,COMMAND(test),1);
+}
+
 
 //#endif

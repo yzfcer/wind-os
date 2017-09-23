@@ -29,9 +29,9 @@
 #include "wind_mpool.h"
 #include "wind_assert.h"
 
-w_err_t wind_mpool_print(w_int8_t *name,void *pool)
+w_err_t wind_pool_print(w_int8_t *name,void *pool)
 {
-    pmpoolHead_s pm = pool;
+    ppool_head_s pm = pool;
     WIND_ASSERT_RETURN(name != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(pool != NULL,ERR_NULL_POINTER);    
     wind_printf("pool name:%s\r\n",name);
@@ -41,26 +41,26 @@ w_err_t wind_mpool_print(w_int8_t *name,void *pool)
     wind_printf("pool itemsize:%d\r\n\r\n",pm->itemsize);
     return ERR_OK;
 }
-w_err_t wind_mpool_create(const char *name,void *mem,w_uint32_t msize,w_uint32_t itemsize)
+w_err_t wind_pool_create(const char *name,void *mem,w_uint32_t msize,w_uint32_t itemsize)
 {
     w_uint32_t i,si;
     ppool_s head;
-    pmpoolHead_s pm;
+    ppool_head_s pm;
     WIND_ASSERT_RETURN(mem != NULL,ERR_NULL_POINTER);
     si = itemsize < sizeof(ppool_s)?sizeof(ppool_s):itemsize;
     if((si & 0x03) != 0)
     {
         si = (((si + 3) >> 2) << 2);
     }
-    if(msize < sizeof(mpoolHead_s) + si)
+    if(msize < sizeof(pool_head_s) + si)
         return -1;
-    WIND_MPOOL_DEBUG("mpool:%d,%d,%d,%d\r\n",mem,msize,itemsize,sizeof(mpoolHead_s));
-    pm = (pmpoolHead_s)mem;
-    head = (ppool_s)(sizeof(mpoolHead_s) + (w_uint32_t)mem);
+    WIND_MPOOL_DEBUG("mpool:%d,%d,%d,%d\r\n",mem,msize,itemsize,sizeof(pool_head_s));
+    pm = (ppool_head_s)mem;
+    head = (ppool_s)(sizeof(pool_head_s) + (w_uint32_t)mem);
     pm->head = head;
     pm->name = name;
     //WIND_MPOOL_DEBUG("pm:0x%x,pm->head:0x%x\r\n",pm,pm->head);
-    pm->len = msize - sizeof(mpoolHead_s);
+    pm->len = msize - sizeof(pool_head_s);
     pm->itemsize = si + sizeof(w_uint32_t);
     pm->num = pm->len / pm->itemsize;
     pm->used = 0;
@@ -84,13 +84,13 @@ w_err_t wind_mpool_create(const char *name,void *mem,w_uint32_t msize,w_uint32_t
 }
 
 
-void *wind_mpool_alloc(void *mem)
+void *wind_pool_alloc(void *mem)
 {
-    pmpoolHead_s pm;
+    ppool_head_s pm;
     void *p;
     ppool_s head;
     WIND_ASSERT_RETURN(mem != NULL,NULL);
-    pm = (pmpoolHead_s)mem;
+    pm = (ppool_head_s)mem;
     if(pm->magic != WIND_MPOOL_MAGIC)
     {
         WIND_ERROR("mpool alloc magic err\r\n");
@@ -117,15 +117,15 @@ void *wind_mpool_alloc(void *mem)
     return p;    
 }
 
-w_err_t wind_mpool_free(void *mem,void *block)
+w_err_t wind_pool_free(void *mem,void *block)
 {
-    pmpoolHead_s pm;
+    ppool_head_s pm;
     //void *p;
     ppool_s pp;
     
     WIND_ASSERT_RETURN(mem != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(block != NULL,ERR_NULL_POINTER);    
-    pm = (pmpoolHead_s)mem;
+    pm = (ppool_head_s)mem;
     WIND_ASSERT_RETURN(pm->magic == WIND_MPOOL_MAGIC,pm->magic != WIND_MPOOL_MAGIC);
     pp = (ppool_s)(((w_uint32_t)block) - sizeof(w_uint32_t));
     //WIND_MPOOL_DEBUG("pp:%d\r\n",pp);
@@ -159,19 +159,19 @@ void wind_mpool_test(void)
 {
     void *p1,*p2;
     int i;
-    wind_mpool_create("testpool",mpooltest,sizeof(mpooltest),8);
-    wind_mpool_print("testpool",mpooltest);
+    wind_pool_create("testpool",mpooltest,sizeof(mpooltest),8);
+    wind_pool_print("testpool",mpooltest);
     for(i = 0;i < 20;i ++)
     {
-        p1 = wind_mpool_alloc(mpooltest);
+        p1 = wind_pool_alloc(mpooltest);
         WIND_MPOOL_DEBUG("mpool alloc p1:%d\r\n",p1);
-        p2 = wind_mpool_alloc(mpooltest);
+        p2 = wind_pool_alloc(mpooltest);
         WIND_MPOOL_DEBUG("mpool alloc p2:%d\r\n",p2);
-        wind_mpool_free(mpooltest,p1);
+        wind_pool_free(mpooltest,p1);
         WIND_MPOOL_DEBUG("mpool free p1\r\n",p1);
-        wind_mpool_free(mpooltest,p2);
+        wind_pool_free(mpooltest,p2);
         WIND_MPOOL_DEBUG("mpool free p2\r\n",p2);
-        wind_mpool_free(mpooltest,p2);
+        wind_pool_free(mpooltest,p2);
     }
 }
 

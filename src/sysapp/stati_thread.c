@@ -2,46 +2,6 @@
 #include "wind_var.h"
 #include "wind_thread.h"
 
-#if 0
-static w_uint32_t core_get_ticks_of_idle(w_uint32_t ms)
-{
-    pthread_s pthread;
-    pnode_s node;
-    w_uint32_t cnts;
-    pthread_s pproc = wind_thread_current();
-    wind_close_interrupt();
-    node = g_core.threadlist.head;
-    
-    WIND_DEBUG("RUN_FLAG=%d\r\n",RUN_FLAG);
-    while(node)
-    {
-        pthread = (pthread_s)node->obj;
-        if((pthread != pproc) && (pthread->prio != 32767))
-        {
-            pthread->proc_status = THREAD_STATUS_SUSPEND;
-            pthread->cause = CAUSE_COM;
-        }
-        node = node->next;
-    }
-    wind_open_interrupt();
-    cnts = g_core.idle_cnt;
-    wind_thread_sleep(ms);
-    cnts = g_core.idle_cnt - cnts;
-    
-    node = g_core.threadlist.head;
-    while(node)
-    {
-        pthread = (pthread_s)node->obj;
-        if((pthread != pproc) && (pthread->prio != 32767))
-        {
-            pthread->proc_status = THREAD_STATUS_READY;
-            pthread->cause = CAUSE_COM;
-        }
-        node = node->next;
-    }
-    return cnts;
-}
-#endif
 
 #define STATI_STK_SIZE 256
 static w_stack_t statisstk[STATI_STK_SIZE];

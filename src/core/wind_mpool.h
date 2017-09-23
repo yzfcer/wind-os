@@ -54,19 +54,19 @@ typedef struct __mpoolHead_s
     w_uint32_t used;//已经使用的内存块的数量
     ppool_s free;//空闲块的指针
     ppool_s last;//最后一个空闲块的指针
-}mpoolHead_s,*pmpoolHead_s;
+}pool_head_s,*ppool_head_s;
 
 #define WIND_MPOOL_ALIGN(x) ((((x)+3)/4)*4)
 //定义内存池的方法
-#define WIND_MPOOL(pool,num,size) w_uint8_t pool[sizeof(mpoolHead_s) + num * (WIND_MPOOL_ALIGN(size) + sizeof(w_uint32_t))]
+#define WIND_MPOOL(pool,num,size) w_uint8_t pool[sizeof(pool_head_s) + num * (WIND_MPOOL_ALIGN(size) + sizeof(w_uint32_t))]
 
-w_err_t wind_mpool_print(w_int8_t *name,void *pool);
+w_err_t wind_pool_print(w_int8_t *name,void *pool);
 
-w_err_t wind_mpool_create(const char *name,void *mem,w_uint32_t msize,w_uint32_t itemsize);
+w_err_t wind_pool_create(const char *name,void *mem,w_uint32_t msize,w_uint32_t itemsize);
 
-void *wind_mpool_alloc(void *mem);
+void *wind_pool_alloc(void *mem);
 
-w_err_t wind_mpool_free(void *mem,void *block);
+w_err_t wind_pool_free(void *mem,void *block);
 
 
 #ifdef __cplusplus

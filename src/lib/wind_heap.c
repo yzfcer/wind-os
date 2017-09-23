@@ -508,7 +508,7 @@ void *wind_hmalloc(w_uint32_t size)
     void *ptr = NULL;
     pmemheap_s heap;
     plist_s list = &gwind_heaplist;
-    pnode_s pnode = list->head;
+    pnode_s pnode = list_head(list);
     if(!pnode)
     {
         WIND_HEAP_DEBUG("NULL pnode in heap\r\n");
@@ -592,7 +592,7 @@ void wind_heap_showinfo(void)
     pnode_s pnode;
     pmemheap_s heap;
     wind_printf("heap list:\r\n");
-    pnode = gwind_heaplist.head;
+    pnode = list_head(&gwind_heaplist);
     while(pnode)
     {
         heap = (pmemheap_s)pnode->obj;

@@ -46,69 +46,75 @@ static ut_int32_t stringlenth(char *str)
 }
 
 /********************************************全局变量定义**********************************************/
-suite_list_s suite_list;
+static suite_list_s suite_list;
 stati_info_s stati_info;
-fail_info_s g_fail_obj[TEST_FAIL_LIST_CNT];
-ut_uint32_t fail_index;
+//fail_info_s g_fail_obj[TEST_FAIL_LIST_CNT];
 
 /********************************************全局函数定义**********************************************/
-void stati_info_init(stati_info_s *sti)
+static void test_stati_init(test_stati_s *tst)
 {
-    ut_uint32_t i;
+    int i;
     fail_info_s *fail;
-
-    sti->case_err = 0;
-    sti->suite_err = 0;
+    tst->tot_suite = 0;
+    tst->tot_case = 0;
+    tst->failed_case = 0;
+    tst->passed_case = 0;
+    tst->failed_suite = 0;
+    tst->passed_suite = 0;
     
-    sti->stat.failed_case = 0;
-    sti->stat.passed_case = 0;
-    sti->stat.failed_suite = 0;
-    sti->stat.passed_suite = 0;
-    
-    sti->faillist = NULL;
-    sti->lastfail = NULL;
-    sti->failcnt = 0;
-    fail_index = 0;
     for(i = 0;i < TEST_FAIL_LIST_CNT;i ++)
     {
-        fail = &g_fail_obj[i];
+        fail = &tst->fail_obj[i];
         fail->line = 0;
         fail->next = NULL;
         fail->suite = NULL;
         fail->tcase = NULL;
     }
 }
+
+static void stati_info_init(stati_info_s *sti)
+{
+    test_stati_init(&sti->stat);
+    
+    sti->faillist = NULL;
+    sti->lastfail = NULL;
+    sti->failcnt = 0;
+    sti->suite = NULL;
+    sti->tcase = NULL;
+    sti->case_err = 0;
+    sti->suite_err = 0;
+    
+}
+
 void test_framework_init(void)
 {
     stati_info_s *sti;
-    suite_list_s *tsg = &suite_list;
+    suite_list_s *tsl = &suite_list;
 
+    tsl->head = NULL;
+    tsl->tail = NULL;
+    tsl->cnt = 0;
+    
     sti = &stati_info;
-    tsg->head = NULL;
-    tsg->tail = NULL;
-    tsg->cnt = 0;
     stati_info_init(sti);
 }
 
 err_t test_suite_register(test_suite_s *test_suite)
 {
-    suite_list_s *tsg = &suite_list;
-    stati_info_s *sti;
-
-    WIND_ASSERT_RETURN(test_suite == NULL,ERR_NULL_POINTER);
-    sti = &stati_info;
-    if(tsg->tail == NULL)
+    suite_list_s *tsl = &suite_list;
+    TEST_ASSERT_RETURN(test_suite == NULL,ERR_NULL_POINTER);
+    if(tsl->tail == NULL)
     {
-        tsg->tail = test_suite;
-        tsg->head = test_suite;
+        tsl->tail = test_suite;
+        tsl->head = test_suite;
     }
     else
     {
-        tsg->tail->next = test_suite;
-        tsg->tail = test_suite;
+        tsl->tail->next = test_suite;
+        tsl->tail = test_suite;
     }
     test_suite->next = NULL;
-    tsg->cnt ++;
+    tsl->cnt ++;
     return ERR_OK;
 }
 
@@ -117,11 +123,11 @@ void save_fail_info(ut_uint32_t line)
     stati_info_s *sti;
     fail_info_s *fail;
     sti = &stati_info;
-    if(fail_index >= TEST_FAIL_LIST_CNT)
+    if(sti->failcnt >= TEST_FAIL_LIST_CNT)
     {
         return;
     }
-    fail = &g_fail_obj[fail_index ++];
+    fail = &sti->stat.fail_obj[sti->failcnt ++];//&g_fail_obj[sti->failcnt ++];
     fail->suite = sti->suite;
     fail->tcase = sti->tcase;
     fail->line = line;
@@ -136,19 +142,13 @@ void save_fail_info(ut_uint32_t line)
         sti->lastfail = fail;
     }
     fail->next = NULL;
-    sti->failcnt ++;
+    //sti->failcnt ++;
 }
 
 void test_suite_err(ut_uint32_t line)
 {
-    test_suite_s *ts;
-    test_case_s *tc;
     stati_info_s *sti;
-
     sti = &stati_info;
-    ts = sti->suite;
-    tc = sti->tcase;
-
     sti->suite_err ++;
     sti->case_err ++;
     save_fail_info(line);
@@ -365,15 +365,25 @@ ut_int32_t is_match_str(char *str,char *filter)
         return do_match_all(str,filter,len1,len2);
     }
 }
+void show_test_cases(test_suite_s *ts)
+{
+    int i;
+    for(i = 0;i < ts->case_cnt;i ++)
+    {
+        TEST_STDOUT("|   |-----%s\r\n",ts->tcase[i].name);
+    }
+}
+
 void show_test_suites(void)
 {
-    ut_uint32_t i,j = 0;
+    ut_uint32_t i;
     test_suite_s *ts;
     TEST_STDOUT("\r\nTest Suites List As Following:\r\n");
     ts = suite_list.head;
     for(i = 0;i < suite_list.cnt;i ++)
     {
-        TEST_STDOUT("%d--%s\r\n", 1+j ++,ts->name);
+        TEST_STDOUT("|---%s\r\n",ts->name);
+        show_test_cases(ts);
         ts = ts->next;
     }
 }

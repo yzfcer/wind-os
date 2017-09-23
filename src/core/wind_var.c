@@ -42,26 +42,26 @@ pthread_s gwind_high_pcb = NULL;//最高优先级PCB指针
 
 void wind_corepool_init(void)
 {
-    wind_mpool_create("pcb_pool",g_core.pcb,sizeof(g_core.pcb),sizeof(thread_s));
-    wind_mpool_create("node_pool",g_core.node,sizeof(g_core.node),sizeof(node_s));
+    wind_pool_create("pcb_pool",g_core.pcb,sizeof(g_core.pcb),sizeof(thread_s));
+    wind_pool_create("node_pool",g_core.node,sizeof(g_core.node),sizeof(node_s));
 #if WIND_PIPE_SUPPORT > 0
-    wind_mpool_create("pipe_pool",g_core.pipe,sizeof(g_core.pipe),sizeof(pipe_s));
+    wind_pool_create("pipe_pool",g_core.pipe,sizeof(g_core.pipe),sizeof(pipe_s));
     
 #endif
 #if WIND_MESSAGE_SUPPORT > 0
-    wind_mpool_create("msg_pool",g_core.msg,sizeof(g_core.msg),sizeof(msg_s));
-    wind_mpool_create("mbox_pool",g_core.mbox,sizeof(g_core.mbox),sizeof(mbox_s));
+    wind_pool_create("msg_pool",g_core.msg,sizeof(g_core.msg),sizeof(msg_s));
+    wind_pool_create("mbox_pool",g_core.mbox,sizeof(g_core.mbox),sizeof(mbox_s));
 #endif
 #if WIND_SEM_SUPPORT > 0
-    wind_mpool_create("sem_pool",g_core.sem,sizeof(g_core.sem),sizeof(sem_s));
+    wind_pool_create("sem_pool",g_core.sem,sizeof(g_core.sem),sizeof(sem_s));
 #endif
 #if WIND_TIMER_SUPPORT > 0
-    wind_mpool_create("ttimer_pool",g_core.ttimer,sizeof(g_core.ttimer),sizeof(ttimer_s));
+    wind_pool_create("ttimer_pool",g_core.ttimer,sizeof(g_core.ttimer),sizeof(ttimer_s));
 #endif
 #if WIND_LOCK_SUPPORT > 0
-    wind_mpool_create("lock_pool",g_core.lock,sizeof(g_core.lock),sizeof(lock_s));
+    wind_pool_create("lock_pool",g_core.lock,sizeof(g_core.lock),sizeof(lock_s));
 #endif
-    wind_mpool_create("stkbuf_pool",g_core.stkbuf,sizeof(g_core.stkbuf),2048 * sizeof(w_stack_t));
+    wind_pool_create("stkbuf_pool",g_core.stkbuf,sizeof(g_core.stkbuf),2048 * sizeof(w_stack_t));
 }
 void print_core_pool(void)
 {
@@ -88,34 +88,34 @@ void *wind_core_alloc(stat_e type)
     switch(type)
     {
     case STAT_PROC:
-        p = wind_mpool_alloc(g_core.pcb);
+        p = wind_pool_alloc(g_core.pcb);
         break;
     case STAT_NODE:
-        p = wind_mpool_alloc(g_core.node);
+        p = wind_pool_alloc(g_core.node);
         break;
 #if WIND_LOCK_SUPPORT > 0
     case STAT_LOCK:
-        p = wind_mpool_alloc(g_core.lock);
+        p = wind_pool_alloc(g_core.lock);
         break;
 #endif
 #if WIND_SEM_SUPPORT > 0
     case STAT_SEM:
-        p = wind_mpool_alloc(g_core.sem);
+        p = wind_pool_alloc(g_core.sem);
         break;
 #endif
 #if WIND_PIPE_SUPPORT > 0
     case STAT_PIPE:
-        p = wind_mpool_alloc(g_core.pipe);
+        p = wind_pool_alloc(g_core.pipe);
         break;
 #endif
 #if WIND_MESSAGE_SUPPORT > 0
     case STAT_MESSAGE:
-        p = wind_mpool_alloc(g_core.msg);
+        p = wind_pool_alloc(g_core.msg);
         break;
 #endif
 #if WIND_TIMER_SUPPORT > 0
     case STAT_TIMER:
-        p = wind_mpool_alloc(g_core.ttimer);
+        p = wind_pool_alloc(g_core.ttimer);
         break;
 #endif
     default:p = NULL;
@@ -135,34 +135,34 @@ w_err_t wind_core_free(stat_e type,void *block)
     switch(type)
     {
     case STAT_PROC:
-        err = wind_mpool_free(g_core.pcb,block);
+        err = wind_pool_free(g_core.pcb,block);
         break;
     case STAT_NODE:
-        err = wind_mpool_free(g_core.node,block);
+        err = wind_pool_free(g_core.node,block);
         break;
 #if WIND_LOCK_SUPPORT > 0
     case STAT_LOCK:
-        err = wind_mpool_free(g_core.lock,block);
+        err = wind_pool_free(g_core.lock,block);
         break;
 #endif
 #if WIND_SEM_SUPPORT > 0
     case STAT_SEM:
-        err = wind_mpool_free(g_core.sem,block);
+        err = wind_pool_free(g_core.sem,block);
         break;
 #endif
 #if WIND_PIPE_SUPPORT > 0
     case STAT_PIPE:
-        err = wind_mpool_free(g_core.pipe,block);
+        err = wind_pool_free(g_core.pipe,block);
         break;
 #endif
 #if WIND_MESSAGE_SUPPORT > 0
     case STAT_MESSAGE:
-        err = wind_mpool_free(g_core.msg,block);
+        err = wind_pool_free(g_core.msg,block);
         break;
 #endif
 #if WIND_TIMER_SUPPORT > 0
     case STAT_TIMER:
-        err = wind_mpool_free(g_core.ttimer,block);
+        err = wind_pool_free(g_core.ttimer,block);
         break;
 #endif
     default:
@@ -185,7 +185,7 @@ pstack_t wind_stack_alloc(w_uint32_t size)
         return NULL;
     if(stksize <= 16)
     {
-        pstk = wind_mpool_alloc(g_core.stkbuf);
+        pstk = wind_pool_alloc(g_core.stkbuf);
         if(pstk)
             return pstk;
     }
@@ -196,5 +196,5 @@ pstack_t wind_stack_alloc(w_uint32_t size)
 w_err_t wind_stack_free(pstack_t pstack)
 {
     WIND_ASSERT_RETURN(pstack != NULL,ERR_NULL_POINTER);
-        return wind_mpool_free(g_core.stkbuf,pstack);
+        return wind_pool_free(g_core.stkbuf,pstack);
 }

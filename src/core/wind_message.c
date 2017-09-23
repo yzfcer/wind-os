@@ -126,7 +126,6 @@ pmbox_s wind_mbox_create(const char *name)
 
 w_err_t wind_mbox_destroy(pmbox_s pmbox)
 {
-    
     w_err_t err;
     pthread_s pthread;
     WIND_ASSERT_RETURN(pmbox != NULL,ERR_NULL_POINTER);
@@ -136,7 +135,7 @@ w_err_t wind_mbox_destroy(pmbox_s pmbox)
     pmbox->valid = B_FALSE;
     pmbox->owner = NULL;
     pmbox->name = NULL;
-    err = mbox_delete_msgs(pmbox->msgq.head);
+    err = mbox_delete_msgs(list_head(&pmbox->msgq));
     WIND_ASSERT_RETURN(err == ERR_OK,err);
     wind_core_free(STAT_MBOX,pmbox);
     wind_open_interrupt();
@@ -145,7 +144,6 @@ w_err_t wind_mbox_destroy(pmbox_s pmbox)
 
 w_err_t wind_mbox_post(pmbox_s mbox,pmsg_s pmsg)
 {
-
     pnode_s pnode;
     pthread_s pthread;
     WIND_ASSERT_RETURN(mbox != NULL,ERR_NULL_POINTER);
@@ -181,9 +179,9 @@ w_err_t wind_mbox_fetch(pmbox_s mbox,pmsg_s *pmsg,w_uint32_t timeout)
     
     //如果邮箱中有消息，就直接返回消息
     
-    if(mbox->msgq.head != NULL)
+    if(list_head(&mbox->msgq) != NULL)
     {
-        pnode = wind_list_remove(&mbox->msgq,mbox->msgq.head);
+        pnode = wind_list_remove(&mbox->msgq,list_head(&mbox->msgq));
         *pmsg = (pmsg_s)pnode->obj;
         wind_node_free(pnode);
         return ERR_OK;
@@ -206,12 +204,12 @@ w_err_t wind_mbox_fetch(pmbox_s mbox,pmsg_s *pmsg,w_uint32_t timeout)
     if(pthread->cause == CAUSE_MSG)
     {
         //几乎不会发生邮箱为空的情况
-        if(mbox->msgq.head == NULL)
+        if(list_head(&mbox->msgq) == NULL)
         {
             pthread->runstat = THREAD_STATUS_READY;
             return ERR_NULL_POINTER;
         }
-        pnode = wind_list_remove(&mbox->msgq,mbox->msgq.head);
+        pnode = wind_list_remove(&mbox->msgq,list_head(&mbox->msgq));
         *pmsg = (pmsg_s)pnode->obj;
         wind_node_free(pnode);
         err = ERR_OK;
