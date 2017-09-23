@@ -36,6 +36,7 @@
 
 #include "console_framework.h"
 
+
 static void cmd_showdisc(void)
 {
     wind_printf("show core objects infomation.\r\n");
