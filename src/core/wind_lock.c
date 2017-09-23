@@ -30,7 +30,7 @@
 
 #include "wind_list.h"
 #include "wind_err.h"
-#include "wind_stat.h"
+#include "wind_stati.h"
 #include "wind_var.h"
 #include "wind_assert.h"
 #if WIND_LOCK_SUPPORT > 0

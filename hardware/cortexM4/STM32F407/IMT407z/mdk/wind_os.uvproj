@@ -1244,11 +1244,6 @@
               <FilePath>..\..\..\..\..\src\core\wind_softint.h</FilePath>
             </File>
             <File>
-              <FileName>wind_stat.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\core\wind_stat.c</FilePath>
-            </File>
-            <File>
               <FileName>wind_stat.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\..\..\..\src\core\wind_stat.h</FilePath>
@@ -1302,6 +1297,11 @@
               <FileName>wind_timer.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\..\..\..\src\core\wind_timer.h</FilePath>
+            </File>
+            <File>
+              <FileName>wind_stati.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\core\wind_stati.c</FilePath>
             </File>
           </Files>
         </Group>

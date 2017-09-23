@@ -28,7 +28,7 @@
 #include "wind_list.h"
 #include "wind_debug.h"
 #include "wind_err.h"
-#include "wind_stat.h"
+#include "wind_stati.h"
 #include "wind_var.h"
 #if WIND_TIMER_SUPPORT
 static ptimer_s ttimer_malloc(void)

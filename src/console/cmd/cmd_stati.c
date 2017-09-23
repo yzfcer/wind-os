@@ -29,7 +29,7 @@
 #include "wind_debug.h"
 #include "wind_mem.h"
 #include "wind_string.h"
-#include "wind_stat.h"
+#include "wind_stati.h"
 #include "wind_var.h"
 
 static void core_stat_convert_num(w_int8_t *buf,w_uint32_t num)

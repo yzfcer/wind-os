@@ -33,7 +33,7 @@
 #include "wind_debug.h"
 #include "wind_string.h"
 #include "wind_err.h"
-#include "wind_stat.h"
+#include "wind_stati.h"
 #include "wind_mpool.h"
 #include "wind_var.h"
 #include "wind_assert.h"

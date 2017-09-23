@@ -28,7 +28,7 @@
 #include "wind_os_hwif.h"
 #include "wind_core.h"
 #include "wind_err.h"
-#include "wind_stat.h"
+#include "wind_stati.h"
 #include "wind_var.h"
 #include "wind_assert.h"
 #if WIND_PIPE_SUPPORT > 0

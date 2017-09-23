@@ -34,7 +34,7 @@
 #include "wind_sem.h"
 #include "wind_lock.h"
 #include "wind_timer.h"
-#include "wind_stat.h"
+#include "wind_stati.h"
 #include "wind_mpool.h"
 #ifdef __cplusplus
 extern "C" {
