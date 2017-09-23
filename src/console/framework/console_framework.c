@@ -52,7 +52,7 @@ static void show_cmd_list(void)
     cmd_s *cmd = g_cmd_global->head;
     while(cmd)
     {
-        wind_printf("%s : ",cmd->cmd);
+        console_printf("%s : ",cmd->cmd);
         cmd->showdisc();
         cmd = cmd->next;
     }
@@ -74,7 +74,7 @@ static w_bool_t insert_ch(console_s *ctrl,char ch,w_int32_t len)
 static w_bool_t console_prehandle_char(console_s *ctrl,char ch,w_int32_t len)
 {
     w_bool_t ret = insert_ch(ctrl,ch,len);
-    //wind_printf("%20x\r\n",ch);
+    //console_printf("%20x\r\n",ch);
     if(B_TRUE == ret)
         return B_TRUE;
     if(ctrl->stat == CSLSTAT_PWD)
@@ -93,7 +93,7 @@ static w_bool_t console_prehandle_char(console_s *ctrl,char ch,w_int32_t len)
         if(ctrl->index > 0)
         {
             ctrl->index --;
-            wind_printf("%c",WVK_DEL);
+            console_printf("%c",WVK_DEL);
         }
         return B_FALSE;
     }
@@ -101,12 +101,12 @@ static w_bool_t console_prehandle_char(console_s *ctrl,char ch,w_int32_t len)
     {
         ctrl->index --;
         ctrl->buf[ctrl->index] = 0;
-        wind_printf("\r\n");
+        console_printf("\r\n");
         return B_TRUE;
     }
     else
     {
-        wind_printf("%c",ch);
+        console_printf("%c",ch);
         return B_FALSE;
     }
 }
@@ -145,7 +145,7 @@ static void init_console_stat(console_s *ctrl)
     wind_memset(ctrl->pwd,0,WIND_CTL_PWD_LEN);
     cmd_history_init(&ctrl->his);
     console_framework_init(ctrl);
-    ctrl->ops.printf = wind_printf;
+    ctrl->ops.printf = console_printf;
 }
 
 int find_param_end(char *str,int offset,int len)
@@ -323,7 +323,7 @@ w_err_t console_thread(w_int32_t argc,char **argv)
     cmd_history_init(&ctrl->his);
     init_console_stat(ctrl);
     test_init(ctrl);
-    wind_printf("\r\nlogin:");
+    console_printf("\r\nlogin:");
     while(1)
     {
         len = console_read_line(ctrl,WIND_CMD_MAX_LEN);
@@ -334,11 +334,11 @@ w_err_t console_thread(w_int32_t argc,char **argv)
                 case CSLSTAT_USER:
                     err = check_user_name(ctrl);
                     if(err != ERR_OK)
-                        wind_printf("\r\nlogin:");
+                        console_printf("\r\nlogin:");
                     else
                     {
                         ctrl->stat = CSLSTAT_PWD;
-                        wind_printf("\r\npasswd:");
+                        console_printf("\r\npasswd:");
                     }
                     break;
                 case CSLSTAT_PWD:
@@ -346,12 +346,12 @@ w_err_t console_thread(w_int32_t argc,char **argv)
                     if(err != ERR_OK)
                     {
                         ctrl->stat = CSLSTAT_USER;
-                        wind_printf("\r\nlogin:");
+                        console_printf("\r\nlogin:");
                     }
                     else
                     {
                         ctrl->stat = CSLSTAT_APP;
-                        wind_printf("\r\n%s@wind-os>",ctrl->user);
+                        console_printf("\r\n%s@wind-os>",ctrl->user);
                     }
                         
                     break;
@@ -361,13 +361,13 @@ w_err_t console_thread(w_int32_t argc,char **argv)
                     if(wind_strcmp(ctrl->buf,"exit") == 0)
                     {
                         ctrl->stat = CSLSTAT_USER;
-                        wind_printf("\r\nlogin:");
+                        console_printf("\r\nlogin:");
                     }
                     else
-                        wind_printf("\r\n%s@wind-os>",ctrl->user);
+                        console_printf("\r\n%s@wind-os>",ctrl->user);
                     break;
                 default:
-                    wind_printf("\r\nlogin:");
+                    console_printf("\r\nlogin:");
                     ctrl->stat = CSLSTAT_APP;
                     break;
             }

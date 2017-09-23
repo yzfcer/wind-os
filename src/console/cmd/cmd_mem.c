@@ -90,17 +90,17 @@ static void print_mem(w_uint32_t start,w_uint32_t len)
     w_uint32_t i,va;
     start = ((start >> 2) << 2);
     len = ((len + 3) >> 2);
-    wind_printf("memory 0x%0x %d\r\n",start,len);
+    console_printf("memory 0x%0x %d\r\n",start,len);
     for(i = 0;i < len;i ++)
     {
         if((i & 0x03) == 0)
-            wind_printf("0x%08x:  ",start+i*4);
+            console_printf("0x%08x:  ",start+i*4);
         va = *(w_uint32_t*)((void*)(start+i*4));
-        wind_printf("%08x ",va);
+        console_printf("%08x ",va);
         if(((i+1) & 0x03) == 0)
-            wind_printf("\r\n");
+            console_printf("\r\n");
     }
-    wind_printf("\r\n");
+    console_printf("\r\n");
 }
 
 static w_err_t display_mem(char **argv)
@@ -133,7 +133,7 @@ static w_err_t display_stack(char **argv)
     }
     start = (w_uint32_t)thr->pstk;
     len = ((w_uint32_t)thr->pstktop + thr->stksize*sizeof(w_stack_t) - (w_uint32_t)thr->pstk);
-    wind_printf("stack start 0x%08x,size %d,cur 0x%08x,end 0x%08x\r\n",
+    console_printf("stack start 0x%08x,size %d,cur 0x%08x,end 0x%08x\r\n",
                 (w_uint32_t)thr->pstktop,thr->stksize,(w_uint32_t)thr->pstk,
                 (w_uint32_t)thr->pstktop + thr->stksize*sizeof(w_stack_t));
     if(len <= 4096)
@@ -145,13 +145,13 @@ static w_err_t display_stack(char **argv)
 
 static void cmd_showdisc(void)
 {
-    wind_printf("show memory data values.\r\n");
+    console_printf("show memory data values.\r\n");
 }
 
 static void cmd_showusage(void)
 {
-    wind_printf("mem <start> <lenth>:to show thread infomation.\r\n");
-    wind_printf("mem stack <threadname>:to show thread stack infomation.\r\n");
+    console_printf("mem <start> <lenth>:to show thread infomation.\r\n");
+    console_printf("mem stack <threadname>:to show thread stack infomation.\r\n");
 }
 
 static w_err_t cmd_main(w_int32_t argc,char **argv)
@@ -165,7 +165,7 @@ static w_err_t cmd_main(w_int32_t argc,char **argv)
         return ERR_OK;
     else if(display_stack(argv) == ERR_OK)
         return ERR_OK;
-    wind_printf("command [%s] format error.\r\n",argv[0]);
+    console_printf("command [%s] format error.\r\n",argv[0]);
     return ERR_COMMAN;
 }
 

@@ -49,7 +49,7 @@ extern void test_suite_err(unsigned line);
 #define ERR_OK 0
 #define ERR_COMMAN -1
 #define TEST_ASSERT_RETURN(x,y)
-#define TEST_STDOUT test_printf
+#define test_printf test_printf
 
 /*********************************************结构体定义***********************************************/
 //全局的test suite列表

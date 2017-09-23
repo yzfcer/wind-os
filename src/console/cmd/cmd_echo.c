@@ -44,12 +44,12 @@ extern "C" {
 /********************************************全局函数定义**********************************************/
 static void cmd_showdisc(void)
 {
-    wind_printf("to display echo string that you input.\r\n");
+    console_printf("to display echo string that you input.\r\n");
 }
 
 static void cmd_showusage(void)
 {
-    wind_printf("echo <str>:to show str on your std displaying device.\r\n");
+    console_printf("echo <str>:to show str on your std displaying device.\r\n");
 }
 
 static w_err_t cmd_main(w_int32_t argc,char **argv)
@@ -58,7 +58,7 @@ static w_err_t cmd_main(w_int32_t argc,char **argv)
     if(argc < 1)
         return ERR_COMMAN;
     str = argv[0];
-    wind_printf("%s",str);
+    console_printf("%s",str);
     return ERR_OK;
 }
 

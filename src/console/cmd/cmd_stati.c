@@ -60,7 +60,7 @@ static void core_output_srcusage(w_uint16_t opt)
     core_stat_convert_num(&str[STAT_NAME_LEN + 8],G_STAT[opt].used);
     core_stat_convert_num(&str[STAT_NAME_LEN + 16],G_STAT[opt].max);
     core_stat_convert_num(&str[STAT_NAME_LEN + 24],G_STAT[opt].err);
-    wind_printf("%s\r\n",str);
+    console_printf("%s\r\n",str);
 }
 static void core_stat_show_proc(w_uint16_t opt)
 {
@@ -78,7 +78,7 @@ static void core_stat_show_proc(w_uint16_t opt)
         if(str[i] == 0)
             str[i] = ' ';
     }
-    wind_printf("\r\n%s\r\n",str);
+    console_printf("\r\n%s\r\n",str);
     
     
     if(opt != 0xffff)
@@ -105,20 +105,20 @@ w_err_t cmd_stat_show_mpool_main(w_int32_t argc,char **argv)
 
 w_err_t cmd_stat_show_cpuusage_main(w_int32_t argc,char **argv)
 {
-    wind_printf("cpu usage persage:%d%%\r\n",WIND_CPU_USAGE);
+    console_printf("cpu usage persage:%d%%\r\n",WIND_CPU_USAGE);
     return ERR_OK;    
 }
 
 
 static void cmd_showdisc(void)
 {
-    wind_printf("show some statistics infomation.\r\n");
+    console_printf("show some statistics infomation.\r\n");
 }
 
 static void cmd_showusage(void)
 {
-    wind_printf("stati showpool:to show system pools usage info.\r\n");
-    wind_printf("stati cpuusage:to show current cpu usage persent.\r\n");
+    console_printf("stati showpool:to show system pools usage info.\r\n");
+    console_printf("stati cpuusage:to show current cpu usage persent.\r\n");
 }
 
 static w_err_t cmd_main(w_int32_t argc,char **argv)

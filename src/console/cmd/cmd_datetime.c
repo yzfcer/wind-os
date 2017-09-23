@@ -43,17 +43,17 @@ static w_err_t cmd_set_datetime(w_int32_t argc,char **argv)
     datetime_s *dt;
     if(argc < 4)
     {
-        wind_printf("error:parameter is NOT enough.\r\n");
+        console_printf("error:parameter is NOT enough.\r\n");
         return ERR_INVALID_PARAM;
     }
     if(wind_strlen(argv[2]) < 10)
     {
-        wind_printf("date format error.\r\n");
+        console_printf("date format error.\r\n");
         return ERR_INVALID_PARAM;
     }
     if(wind_strlen(argv[3]) < 8)
     {
-        wind_printf("time format error.\r\n");
+        console_printf("time format error.\r\n");
         return ERR_INVALID_PARAM;
     }    
     wind_set_date(wind_convert_str2u32_t(&argv[2][0]),
@@ -65,7 +65,7 @@ static w_err_t cmd_set_datetime(w_int32_t argc,char **argv)
                     wind_convert_str2u32_t(&(argv[3][6])),0);
     
     dt = &G_DATETIME;
-    wind_printf("system date:%d/%d/%d %d:%d:%d  %d\r\n",dt->date.year,
+    console_printf("system date:%d/%d/%d %d:%d:%d  %d\r\n",dt->date.year,
                 dt->date.month,dt->date.day,dt->time.hour,
                 dt->time.minute,dt->time.second,dt->time.msecond);
     return ERR_OK;
@@ -75,7 +75,7 @@ static w_err_t cmd_set_datetime(w_int32_t argc,char **argv)
 static w_err_t cmd_showdatetime(w_int32_t argc,char **argv)
 {
     dt = &G_DATETIME;
-    wind_printf("system date:%d/%d/%d %d:%d:%d  %d\r\n",dt->date.year,
+    console_printf("system date:%d/%d/%d %d:%d:%d  %d\r\n",dt->date.year,
                 dt->date.month,dt->date.day,dt->time.hour,
                 dt->time.minute,dt->time.second,dt->time.msecond);
     return ERR_OK;
@@ -83,13 +83,13 @@ static w_err_t cmd_showdatetime(w_int32_t argc,char **argv)
 
 static void cmd_showdisc(void)
 {
-    wind_printf("to set or show system date and time.\r\n");
+    console_printf("to set or show system date and time.\r\n");
 }
 
 static void cmd_showusage(void)
 {
-    wind_printf("datetime set <datetime>:to set the system date infomation.format:YYYY/MM/DD HH:mm:SS\r\n");
-    wind_printf("datetime show:to show the system date and time infomation.\r\n");
+    console_printf("datetime set <datetime>:to set the system date infomation.format:YYYY/MM/DD HH:mm:SS\r\n");
+    console_printf("datetime show:to show the system date and time infomation.\r\n");
 }
 
 static w_err_t cmd_main(w_int32_t argc,char **argv)
@@ -109,7 +109,7 @@ static w_err_t cmd_main(w_int32_t argc,char **argv)
     }
     else
     {
-        wind_printf("datetime:format error.\r\n");
+        console_printf("datetime:format error.\r\n");
         return ERR_COMMAN;
     }
 }

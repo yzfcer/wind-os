@@ -39,13 +39,13 @@
 
 static void cmd_showdisc(void)
 {
-    wind_printf("show core objects infomation.\r\n");
+    console_printf("show core objects infomation.\r\n");
 }
 
 static void cmd_showusage(void)
 {
-    wind_printf("list thread:to show thread infomation.\r\n");
-    wind_printf("list sem:to show sem infomation.\r\n");
+    console_printf("list thread:to show thread infomation.\r\n");
+    console_printf("list sem:to show sem infomation.\r\n");
 }
 
 static w_err_t cmd_main(w_int32_t argc,char **argv)
