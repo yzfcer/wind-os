@@ -21,7 +21,7 @@ struct __dlist_s
 #define DNODE_INIT(dnode) {dnode.prev = NULL;dnode.next = NULL;}
 #define DLIST_INIT(dlist) {dlist.head = NULL;dlist.tail = NULL;}
 #define FIND(type,e) ((w_uint32_t)&(((type*)0)->e))
-#define DLIST_OBJ(ptr,type,e) (void*)(((char*)(ptr))-FIND(type,e))
+#define DLIST_OBJ(ptr,type,e) (void*)(((char*)(ptr))-((w_uint32_t)&(((type*)0)->e)))
 // 获取链表头部节点
 static __INLINE__ 
 pdnode_s dlist_head(pdlist_s dlist) 

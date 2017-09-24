@@ -194,7 +194,6 @@ w_err_t wind_sem_print(pdlist_s list)
     dnode = dlist_head(&g_core.semlist);
     while(dnode)
     {
-        //w_uint32_t offset = FIND(sem_s,semnode);
         psem = (psem_s)DLIST_OBJ(dnode,sem_s,semnode);
         wind_printf("%-16s %-8d %-10d\r\n",
             psem->name,psem->sem_tot,psem->sem_num);

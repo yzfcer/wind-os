@@ -49,9 +49,11 @@ extern {
             
 
 //获得结构体中一个字段的偏移量
-#define FPOS( type, field ) ((w_uint32_t) &((type *)0)->field)
+#define MBR_POS(type, mbr) ((w_uint32_t)&(((type*)0)->mbr))
 //得到一个结构体中的某个字段的长度
-#define FSIZ(type,field) sizeof(((type *)0)->field)
+#define MBR_SIZE(type,mbr) sizeof(((type *)0)->mbr)
+//根据字段地址找到结构地址
+#define OBJ_FROM_MBR(ptr,type,mbr) (void*)(((char*)(ptr))-((w_uint32_t)&(((type*)0)->mbr)))
 
 //按照LSB格式把两个字节转化为一个u16_t
 #define FLIPW( ray ) ( (((w_uint16_t) (ray)[0]) * 256) + (ray)[1] )

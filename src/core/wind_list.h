@@ -73,8 +73,8 @@ void wind_node_bindobj(pnode_s node,core_type type,w_int32_t key,void *obj);
 static __INLINE__ pnode_s list_head(plist_s list) {return list->head;}
 static __INLINE__ pnode_s list_tail(plist_s list) {return list->tail;}
 static __INLINE__ w_int32_t list_count(plist_s list) {return list->cnt;}
-static __INLINE__ pnode_s next_node(pnode_s node) {return node->next;}
-static __INLINE__ pnode_s prev_node(pnode_s node) {return node->prev;}
+static __INLINE__ pnode_s node_next(pnode_s node) {return node->next;}
+static __INLINE__ pnode_s node_prev(pnode_s node) {return node->prev;}
 
 w_err_t wind_list_init(plist_s list);
 w_err_t wind_list_insert(plist_s list,pnode_s node);
