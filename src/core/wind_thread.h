@@ -36,6 +36,7 @@ extern "C" {
 
 #define PCB_NUM_LIMIT 512 //线程总数的上限值
 #define THREAD_NAME_LEN 20 //线程名的最大长度，包括 '\0'
+#define THREAD_FROM_STACK(ptr,type,mbr) (void*)(((char*)(ptr))-((w_uint32_t)&(((type*)0)->mbr)))
 
 //线程的优先等级，
 typedef enum _PRIOLEVEL
@@ -49,7 +50,7 @@ typedef enum _PRIOLEVEL
 //线程状态列表
 typedef enum __proc_status
 {
-    THREAD_STATUS_UNKNOWN = 0,//未知状态
+    THREAD_STATUS_INIT = 0,//初始化状态
     THREAD_STATUS_READY = 1,//就绪状态
     THREAD_STATUS_SUSPEND,//阻塞状态，可以通过定时器唤醒
     THREAD_STATUS_SLEEP,//休眠状态，程序将不能通过定时器唤醒，而需要手动唤醒
@@ -100,9 +101,9 @@ typedef struct __threadcb_s
 //线程控制PCB
 typedef struct _thread_s
 {
-    pstack_t pstk;
     pstack_t pstktop;
     w_uint16_t stksize;
+    pstack_t pstk;
     
     w_err_t (*procfunc)(w_int32_t argc,w_int8_t **argv);
     w_int16_t argc;

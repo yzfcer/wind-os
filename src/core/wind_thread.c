@@ -38,8 +38,8 @@
 #include "wind_var.h"
 #include "wind_assert.h"
 #include "wind_heap.h"
+#include "wind_macro.h"
 //用来表示
-//w_bool_t wind_tick_init_flag = false;
 
 #define WIND_THREAD_PRIO_MIN_LIM 100//优先级的最小值
 #define WIND_THREAD_PRIO_MAX_LIM 30000//优先级的最大值
@@ -49,13 +49,9 @@
 static pthread_s pcb_malloc(prio_e priolevel)
 {
     pthread_s pthread;
-    //w_int16_t cnt,priolim = 0;
-
     WIND_ASSERT_RETURN(priolevel < PRIO_SYS_LOW && priolevel > PRIO_ZERO,NULL);
     pthread = wind_core_alloc(STAT_PROC);
     WIND_ASSERT_RETURN(pthread != NULL,NULL);
-    //if(wind_thread_isopen())
-    //    priolim = WIND_THREAD_PRIO_MIN_LIM;
     pthread->used = B_TRUE;
     pthread->prio = (priolevel - 1) * 10000 + g_core.pcbcnt;
     g_core.pcbcnt ++;
@@ -69,13 +65,11 @@ w_err_t pcb_free(pthread_s pthread)
     pthread->used = B_FALSE;
     pthread->parent = NULL;
     wind_memset(pthread->name,0,THREAD_NAME_LEN);
-    //pthread->name = NULL;
     pthread->prio = -1;
-    pthread->runstat = THREAD_STATUS_UNKNOWN;
+    pthread->runstat = THREAD_STATUS_INIT;
     pthread->cause = CAUSE_COM;
     pthread->pstk = NULL;
     pthread->stksize = 0;
-    //pthread->superpermflag = false;
     WIND_DEBUG("minus:%d,%d\r\n",G_STAT[STAT_PROC].used,G_STAT[STAT_PROC].max);
     return wind_core_free(STAT_PROC,pthread);
 }
@@ -100,9 +94,6 @@ static void thread_entry(void *args)
 {
     w_err_t err;
     pthread_s pthread;
-    //这里添加了tick的初始化时是因为在调试过程中遇到了暂时不能解决的问题，
-    //以后tick的初始化还是应该放在框架代码内
-
     pthread = wind_thread_current();
     WIND_INFO("begin to run procesess:%s\r\n",pthread->name);
     if(pthread != NULL)
@@ -118,19 +109,15 @@ static void thread_entry(void *args)
 
 w_err_t wind_thread_getname(pthread_s pthread,w_int8_t *name)
 {
-    //pthread_s pthread;
-    //pthread = get_pcb_byhandler(handler);
-
     WIND_ASSERT_RETURN(pthread != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(name != NULL,ERR_NULL_POINTER);
     wind_strcpy(name,pthread->name);
-    //pthread->name = name;
     return ERR_OK;
 }
 
 pthread_s wind_thread_current()
 {
-    return gwind_cur_pcb;
+    return THREAD_FROM_STACK(gwind_cur_stack,thread_s,pstk);
 }
 
 w_int8_t* wind_thread_status(thread_stat_e stat)
@@ -203,7 +190,6 @@ pthread_s wind_thread_create(const w_int8_t *name,
     
     pthread = pcb_malloc(priolevel);
     WIND_ASSERT_RETURN(pthread != NULL,NULL);
-    //WIND_DEBUG("pcb addr:0x%x\r\n",pthread);
     wind_strcpy(pthread->name,name);
     
     pthread->parent = wind_thread_current();
@@ -221,11 +207,10 @@ pthread_s wind_thread_create(const w_int8_t *name,
     pthread->cause = CAUSE_COM;
     pthread->sleep_ticks = 0;
 #if WIND_HEAP_SUPPORT > 0 && WIND_PRIVATE_HEAP_SUPPORT > 0
-    pthread->private_heap = NULL;//wind_heap_alloc_default(PRIVATE_HEAP_SIZE);
+    pthread->private_heap = NULL;
 #endif
     
     pnode = wind_node_malloc(CORE_TYPE_PCB);
-    //WIND_ASSERT_RETURN(pnode != NULL,NULL);
     if(pnode == NULL)
     {
         WIND_WARN("warn:node is not enough\r\n");
@@ -241,9 +226,6 @@ pthread_s wind_thread_create(const w_int8_t *name,
     WIND_DEBUG("pthread->runstat:%d\r\n",pthread->runstat);
     WIND_DEBUG("pthread->prio:%d\r\n",pthread->prio);
     WIND_DEBUG("pthread->stksize:%d\r\n\r\n",pthread->stksize);
-    //wind_printf("thread:%p,%p,%p\r\n",pthread,&pthread->pstk,pthread->pstk);
-
-    //wind_open_interrupt();
     return pthread;
     
 }
@@ -300,7 +282,7 @@ w_err_t wind_thread_suspend(pthread_s pthread)
     pthread->runstat = THREAD_STATUS_SUSPEND;
     pthread->cause = CAUSE_COM;
     wind_open_interrupt();
-    return ERR_OK;//wind_disable_switch(wind_pro_suspend,(void *)pthread);
+    return ERR_OK;
 }
 
 

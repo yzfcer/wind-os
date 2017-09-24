@@ -99,7 +99,7 @@ void wind_exit_int(void)
     if((gwind_int_cnt == 0) && is_switch_enable())
     {
         wind_update_curthread();
-        if(HIGH_PROC != gwind_cur_pcb)
+        if(gwind_high_stack != gwind_cur_stack)
         {
             wind_interrupt_switch();
         }
@@ -112,7 +112,7 @@ void wind_exit_int(void)
 static void wind_run()
 {
     wind_update_curthread();
-    gwind_cur_pcb = HIGH_PROC;
+    gwind_cur_stack = gwind_high_stack;
     wind_start_switch();
 }
 
@@ -126,7 +126,7 @@ void wind_update_curthread()
         pthread = (pthread_s)(pnode->obj);
         if((pthread->used) && (pthread->runstat == THREAD_STATUS_READY))
         {
-            HIGH_PROC = (pthread_s)(&pthread->pstk);
+            gwind_high_stack = &pthread->pstk;
             break;
         }
         pnode = pnode->next;
@@ -149,7 +149,7 @@ void wind_thread_dispatch(void)
     }
     wind_update_curthread();
 
-    if(HIGH_PROC != gwind_cur_pcb)
+    if(gwind_high_stack != gwind_cur_stack)
     {
         wind_open_interrupt();
         wind_thread_switch();
@@ -179,7 +179,6 @@ void wind_init()
 #endif
     wind_time_init();//时间初始化
 #if WIND_RTC_SUPPORT > 0
-    //WIND_INFO("system time initializing...\r\n");
     wind_datetime_init();
 #endif
     WIND_INFO("initialization completed!\r\n");

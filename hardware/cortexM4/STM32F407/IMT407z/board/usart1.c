@@ -44,8 +44,8 @@ void uart1_init(w_uint32_t baud)
 
 //串口1发送一个字符
 void uart1_send_char(w_uint8_t ch)
-{      
-	while((USART1->SR&0x40)==0);  
+{
+	while((USART1->SR&0x40)==0);
     USART1->DR = (w_uint8_t) ch;
 }
 

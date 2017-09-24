@@ -38,9 +38,9 @@
 #include "wind_assert.h"
 core_var_s g_core;
 volatile w_bool_t gwind_start_flag = B_FALSE;
-pthread_s gwind_cur_pcb = NULL;//当前线程PCB指针
-pthread_s gwind_high_pcb = NULL;//最高优先级PCB指针
 
+pstack_t *gwind_high_stack;
+pstack_t *gwind_cur_stack;
 void wind_corepool_init(void)
 {
     wind_pool_create("pcb_pool",g_core.pcb,sizeof(g_core.pcb),sizeof(thread_s));

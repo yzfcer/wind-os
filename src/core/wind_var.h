@@ -84,8 +84,9 @@ typedef struct __core_var_s
 }core_var_s;
 extern core_var_s g_core;//内核相关的参数集
 extern volatile w_bool_t gwind_start_flag;//开始调度的标志
-extern pthread_s gwind_cur_pcb;//当前的
-extern pthread_s gwind_high_pcb;//最高优先级PCB指针
+
+extern pstack_t *gwind_high_stack;
+extern pstack_t *gwind_cur_stack;
 
 void wind_corevar_init(void);
 
@@ -106,7 +107,7 @@ w_err_t wind_stack_free(pstack_t pstack);
 
 #define TICKS_CNT (g_core.ticks_cnt)
 
-#define HIGH_PROC (gwind_high_pcb)
+
 #ifdef __cplusplus
 }
 #endif

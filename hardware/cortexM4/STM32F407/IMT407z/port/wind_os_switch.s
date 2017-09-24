@@ -1,13 +1,13 @@
 	IMPORT  gwind_start_flag 
-	IMPORT  gwind_cur_pcb
-	IMPORT  gwind_high_pcb
+	IMPORT  gwind_cur_stack
+	IMPORT  gwind_high_stack
 	;IMPORT  wind_sw_hook
 	   
 	EXPORT  wind_start_switch               
 	EXPORT  wind_thread_switch
 	EXPORT  wind_interrupt_switch
 	EXPORT  wind_save_sr 
-	EXPORT  wind_restore_sr       
+	EXPORT  wind_restore_sr
 	EXPORT  PendSV_Handler
         	
      
@@ -124,7 +124,7 @@ PendSV_Handler
     SUBS    R0, R0, #0x20                                       ; Save remaining regs r4-11 on process stack
     STM     R0, {R4-R11}
 
-    LDR     R1, =gwind_cur_pcb                                       ; gwind_cur_pcb = SP;
+    LDR     R1, =gwind_cur_stack                                       ; gwind_cur_stack = SP;
     LDR     R1, [R1]
     STR     R0, [R1]                                            ; R0 is SP of process being switched out
 
@@ -140,12 +140,12 @@ PendSV_Handler_Nosave
     ;LDRB    R2, [R1]
     ;STRB    R2, [R0]
 
-    LDR     R0, =gwind_cur_pcb                                       ; gwind_cur_pcb  = gwind_high_pcb;
-    LDR     R1, =gwind_high_pcb
+    LDR     R0, =gwind_cur_stack                                       ; gwind_cur_stack  = gwind_high_stack;
+    LDR     R1, =gwind_high_stack
     LDR     R2, [R1]
     STR     R2, [R0]
 
-    LDR     R0, [R2]                                            ; R0 is new process SP; SP = gwind_high_pcb->OSTCBStkPtr;
+    LDR     R0, [R2]                                            ; R0 is new process SP; SP = gwind_high_stack->OSTCBStkPtr;
     LDM     R0, {R4-R11}                                        ; Restore r4-11 from new process stack
     ADDS    R0, R0, #0x20
 

@@ -1303,6 +1303,16 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\core\wind_stati.c</FilePath>
             </File>
+            <File>
+              <FileName>dlist.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\core\dlist.c</FilePath>
+            </File>
+            <File>
+              <FileName>dlist.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\core\dlist.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
