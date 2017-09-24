@@ -27,11 +27,9 @@ extern "C" {
 #include "wind_config.h"
 #include "wind_type.h"
 #include "console_framework.h"
-#include "wind_config.h"
 #include "wind_debug.h"
-#include "wind_time.h"
 #include "wind_var.h"
-
+#include "wind_cmd.h"
 /********************************************内部变量定义**********************************************/
 
 console_s g_ctrl[WIND_CONSOLE_COUNT];
@@ -145,7 +143,7 @@ static void init_console_stat(console_s *ctrl)
     wind_memset(ctrl->pwd,0,WIND_CTL_PWD_LEN);
     cmd_history_init(&ctrl->his);
     console_framework_init(ctrl);
-    ctrl->ops.printf = console_printf;
+    //ctrl->ops.printf = console_printf;
 }
 
 int find_param_end(char *str,int offset,int len)

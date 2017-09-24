@@ -24,7 +24,6 @@
 *******************************************************************************************************/
 #include "wind_config.h"
 #include "wind_type.h"
-#include "console_framework.h"
 #include "wind_err.h"
 #include "wind_debug.h"
 #include "wind_mem.h"
@@ -33,8 +32,7 @@
 #include "wind_sem.h"
 #include "wind_list.h"
 #include "wind_var.h"
-
-#include "console_framework.h"
+#include "wind_cmd.h"
 
 
 static w_bool_t str2int(const char *str,w_uint32_t *value)

@@ -33,9 +33,7 @@
 #include "wind_sem.h"
 #include "wind_list.h"
 #include "wind_var.h"
-
-#include "console_framework.h"
-
+#include "wind_cmd.h"
 
 static void cmd_showdisc(void)
 {

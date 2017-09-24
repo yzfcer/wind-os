@@ -1,5 +1,6 @@
 #include "wind_type.h"
-#include "console_framework.h"
+//#include "console_framework.h"
+#include "wind_cmd.h"
 CMD_DECLARE(list);
 CMD_DECLARE(echo);
 //CMD_DECLARE(datetime);

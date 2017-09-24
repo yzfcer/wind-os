@@ -28,13 +28,14 @@ extern "C" {
 
 #include "wind_config.h"
 #include "wind_type.h"
-#include "console_framework.h"
 #include "wind_err.h"
 #include "wind_string.h"
 #include "wind_mem.h"
 #include "wind_debug.h"
 #include "wind_rtc.h"
 #include "wind_comman.h"
+//#include "console_framework.h"
+#include "wind_cmd.h"
 #if WIND_RTC_SUPPORT > 0
 
 static extern datetime_s G_DATETIME;//当前日期和时间

@@ -24,13 +24,14 @@
 *******************************************************************************************************/
 #include "wind_config.h"
 #include "wind_type.h"
-#include "console_framework.h"
 #include "wind_err.h"
 #include "wind_debug.h"
 #include "wind_mem.h"
 #include "wind_string.h"
 #include "wind_stati.h"
 #include "wind_var.h"
+
+#include "wind_cmd.h"
 
 static void core_stat_convert_num(w_int8_t *buf,w_uint32_t num)
 {

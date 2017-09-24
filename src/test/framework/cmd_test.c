@@ -24,7 +24,6 @@
 *******************************************************************************************************/
 #include "wind_config.h"
 #include "wind_type.h"
-#include "console_framework.h"
 #include "wind_err.h"
 #include "wind_debug.h"
 #include "wind_mem.h"
@@ -35,6 +34,7 @@
 #include "wind_heap.h"
 #include "cut.h"
 
+#include "wind_cmd.h"
 #include "test_framework.h"
 
 w_err_t cmd_testsoftint_main(w_int32_t argc,char **argv)

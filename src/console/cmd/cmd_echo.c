@@ -24,7 +24,7 @@ extern "C" {
 
 
 /*********************************************头文件定义***********************************************/
-#include "console_framework.h"
+#include "wind_cmd.h"
 
 
 
@@ -57,7 +57,7 @@ static w_err_t cmd_main(w_int32_t argc,char **argv)
     char *str;
     if(argc < 1)
         return ERR_COMMAN;
-    str = argv[0];
+    str = argv[1];
     console_printf("%s",str);
     return ERR_OK;
 }

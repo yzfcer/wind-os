@@ -157,5 +157,30 @@ w_err_t wind_lock_open(plock_s plock)
     return ERR_OK;    
 }
 
+#if 0
+w_err_t wind_lock_print(plist_s list)
+{
+    pnode_s pnode;
+    psem_s psem;
+    WIND_ASSERT_RETURN(list != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(list->head != NULL,ERR_NULL_POINTER);
+    pnode = list->head;
+    wind_printf("\r\n\r\nlock list as following:\r\n");
+    wind_printf("----------------------------------------------\r\n");
+    wind_printf("%-16s %-8s %-10s\r\n","sem","sem_tot","sem_num");
+    wind_printf("----------------------------------------------\r\n");
+    
+    while(pnode)
+    {
+        psem = (psem_s)pnode->obj;
+        wind_printf("%-16s %-8d %-10d\r\n",
+            psem->name,psem->sem_tot,psem->sem_num);
+        pnode = pnode->next;
+    }
+    wind_printf("----------------------------------------------\r\n");
+    return ERR_OK;
+}
+#endif
+
 #endif //WIND_LOCK_SUPPORT > 0
 

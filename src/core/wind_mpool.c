@@ -103,7 +103,6 @@ void *wind_pool_alloc(void *mem)
         WIND_ERROR("mpool empty\r\n");
         return NULL;
     }
-    //WIND_MPOOL_DEBUG("pm->head:%d\r\n",pm->head);
     head = pm->free;
     p = head;
     pm->free = head->next;

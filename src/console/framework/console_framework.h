@@ -29,18 +29,20 @@ extern "C" {
 #include "wind_type.h"
 #include "wind_err.h"
 #include "wind_key.h"
-#include "wind_console.h"
 #include "wind_assert.h"
 #include "wind_string.h"
 #include "wind_thread.h"
 #include "cmd_history.h"
+
+
 /***********************************************宏定义*************************************************/
 #define WIND_CMD_MAX_LEN 512//一个命令的最大长度
 #define WIND_CMD_NAME_LEN 12//一个命令标示的最大长度
-#define CMD_PARAM_CNT 10
 #define WIND_CTL_USRNAME_LEN 20//用户名的长度
 #define WIND_CTL_PWD_LEN 20//密码的最大长度
 #define WIND_CONSOLE_COUNT 1//支持的控制套终端的数量
+#define CMD_PARAM_CNT 10
+
 
 
 /**********************************************枚举定义************************************************/
@@ -51,6 +53,22 @@ extern "C" {
 
 /*********************************************结构体定义***********************************************/
 
+typedef enum __cslstat_e
+{
+    CSLSTAT_USER,//需要输入用户名
+    CSLSTAT_PWD,//需要输入密码
+    CSLSTAT_CMD,//在命令行模式
+    CSLSTAT_APP //运行于应用程序模式
+} cslstat_e;
+
+typedef struct __cmd_s
+{
+    struct __cmd_s *next;
+    char* cmd;//命令的名称
+    void (*showdisc)(void);//简要功能说明
+    void (*showusage)(void);//详细的帮助说明
+    w_err_t (*execute)(w_int32_t argc,char **argv);//命令的入口函数
+}cmd_s,*pcmd_s;
 
 
 
@@ -90,6 +108,8 @@ typedef struct __console_s
     cmd_list_s cmd_list;
     console_ops ops;
 }console_s;
+
+
 /********************************************全局变量申明**********************************************/
 
 
@@ -97,12 +117,12 @@ typedef struct __console_s
 /********************************************全局函数申明**********************************************/
 
 //输出命令列表
+void console_framework_init(console_s *ctlobj);
+void create_console_thread(void);
+cmd_s *wind_get_cmdlist(void);
 w_err_t wind_output_cmdlist(void);
 
-void console_framework_init(console_s *ctlobj);
-cmd_s *wind_get_cmdlist(void);
 w_err_t wind_cmd_register(cmd_list_s *cgl,cmd_s *cmd,int cnt);
-void create_console_thread(void);
 void register_all_cmd(console_s *ctrl);
 extern void test_init(console_s *ctrl);
 

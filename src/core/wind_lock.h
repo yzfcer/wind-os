@@ -49,6 +49,7 @@ w_err_t wind_lock_tryfree(plock_s plock);
 w_err_t wind_lock_free(plock_s plock);
 w_err_t wind_lock_close(plock_s plock);
 w_err_t wind_lock_open(plock_s plock);
+w_err_t wind_lock_print(plist_s list);
 
 
 #endif //WIND_LOCK_SUPPORT > 0
