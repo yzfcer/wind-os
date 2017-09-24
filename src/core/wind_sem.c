@@ -27,7 +27,7 @@
 #include "wind_thread.h"
 #include "wind_sem.h"
 #include "wind_list.h"
-//#include "wind_os_hwif.h"
+#include "dlist.h"
 #include "wind_list.h"
 #include "wind_err.h"
 #include "wind_stati.h"
@@ -53,23 +53,19 @@ static psem_s sem_malloc()
 psem_s wind_sem_create(const char *name,w_uint16_t sem_value)
 {
     psem_s psem;
-    pnode_s pnode;
     psem = sem_malloc();
     WIND_ASSERT_RETURN(psem != NULL,NULL);
+    DNODE_INIT(psem->semnode);
     wind_memset(psem->name,0,SEM_NAME_LEN);
     wind_strcpy(psem->name,name);
     psem->used = B_TRUE;
     psem->sem_num = sem_value;
     psem->sem_tot = sem_value;
     wind_list_init(&psem->waitlist);
-    pnode = wind_core_alloc(STAT_NODE);
-    if(pnode == NULL)
-    {
-        wind_core_free(STAT_SEM,psem);
-        return NULL;  
-    }
-    wind_node_bindobj(pnode,CORE_TYPE_SEM,0,psem);
-    wind_list_inserttoend(&g_core.semlist,pnode);
+
+    wind_close_interrupt();
+    dlist_insert_tail(&g_core.semlist,&psem->semnode);
+    wind_open_interrupt();
     return psem;
 }
 
@@ -178,37 +174,31 @@ w_err_t wind_sem_free(psem_s psem)
         wind_node_free(pnode);
         pnode = psem->waitlist.head;
     }
-    pnode = wind_list_search(&g_core.semlist,psem);
-    if(pnode == NULL)
-    {
-        wind_open_interrupt();
-        return ERR_NULL_POINTER;
-    }
-    wind_list_remove(&g_core.semlist,pnode);
-    wind_node_free(pnode);
+    
+    dlist_remove(&g_core.semlist,&psem->semnode);
     wind_core_free(STAT_SEM,psem);
     wind_open_interrupt();
     return err;    
 }
 
-w_err_t wind_sem_print(plist_s list)
+w_err_t wind_sem_print(pdlist_s list)
 {
-    pnode_s pnode;
+    pdnode_s dnode;
     psem_s psem;
     WIND_ASSERT_RETURN(list != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(list->head != NULL,ERR_NULL_POINTER);
-    pnode = list->head;
     wind_printf("\r\n\r\nsem list as following:\r\n");
     wind_printf("----------------------------------------------\r\n");
     wind_printf("%-16s %-8s %-10s\r\n","sem","sem_tot","sem_num");
     wind_printf("----------------------------------------------\r\n");
-    
-    while(pnode)
+    dnode = dlist_head(&g_core.semlist);
+    while(dnode)
     {
-        psem = (psem_s)pnode->obj;
+        //w_uint32_t offset = FIND(sem_s,semnode);
+        psem = (psem_s)DLIST_OBJ(dnode,sem_s,semnode);
         wind_printf("%-16s %-8d %-10d\r\n",
             psem->name,psem->sem_tot,psem->sem_num);
-        pnode = pnode->next;
+        dnode = dnode_next(dnode);
     }
     wind_printf("----------------------------------------------\r\n");
     return ERR_OK;

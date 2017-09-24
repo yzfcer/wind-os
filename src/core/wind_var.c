@@ -26,6 +26,7 @@
 #include "wind_type.h"
 #include "wind_thread.h"
 #include "wind_list.h"
+#include "dlist.h"
 #include "wind_pipe.h"
 #include "wind_message.h"
 #include "wind_sem.h"
@@ -78,7 +79,7 @@ void wind_corevar_init(void)
     g_core.ticks_cnt = 0;
     wind_corepool_init();
     wind_list_init(&g_core.threadlist);
-    wind_list_init(&g_core.semlist);
+    DLIST_INIT(g_core.semlist);
     wind_list_init(&g_core.ttmerlist);
 }
 

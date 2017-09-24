@@ -33,7 +33,9 @@
 
 w_err_t wind_main(void)
 {
-    psem_s psem = wind_sem_create("sem_test",12);
+    psem_s psem = wind_sem_create("sem1",12);
+    psem_s psem1 = wind_sem_create("sem2",4);
+    psem_s psem2 = wind_sem_create("sem3",6);
     WIND_INFO("enter wind main.\r\n");
     return 0;
 }

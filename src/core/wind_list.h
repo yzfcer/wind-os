@@ -31,9 +31,6 @@
 extern "C"{
 #endif
 
-#ifndef __INLINE__
-#define __INLINE__ 
-#endif
 
 typedef enum __core_type
 {

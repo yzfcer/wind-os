@@ -29,6 +29,7 @@
 #include "wind_type.h"
 #include "wind_thread.h"
 #include "wind_list.h"
+#include "dlist.h"
 #include "wind_pipe.h"
 #include "wind_message.h"
 #include "wind_sem.h"
@@ -63,7 +64,7 @@ typedef struct __core_var_s
     WIND_MPOOL(stkbuf,WIND_STK_MAX_NUM,WINS_STK_SIZE * sizeof(w_stack_t));
     
     list_s threadlist;
-    list_s semlist;
+    dlist_s semlist;
     list_s ttmerlist;
     w_int16_t pcbcnt;//线程计数器
     volatile w_bool_t run_falg;//多线程调度开始的标志

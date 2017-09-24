@@ -28,7 +28,8 @@
 
 #include "wind_config.h"
 #include "wind_type.h"
-//#include "wind_list.h"
+#include "wind_list.h"
+#include "dlist.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -40,6 +41,7 @@ extern "C" {
 typedef struct _wind_sem
 {
     char name[SEM_NAME_LEN];
+    dnode_s semnode;
     w_bool_t used;         //是否有效的标志
     w_uint16_t sem_tot;    //初始化的信号量的值
     w_uint16_t sem_num;    //当前的信号量的值
@@ -53,7 +55,7 @@ w_err_t wind_sem_post(psem_s psem);
 w_err_t wind_sem_fetch(psem_s psem,w_uint32_t timeout);
 w_err_t wind_sem_tryfree(psem_s psem);
 w_err_t wind_sem_free(psem_s psem);
-w_err_t wind_sem_print(plist_s list);
+w_err_t wind_sem_print(pdlist_s list);
 
 #endif
 #ifdef __cplusplus
