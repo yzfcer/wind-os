@@ -165,7 +165,7 @@ w_err_t wind_thread_callback_register(pthread_s pthread,procevt_e id,void(*cb)(p
 #endif //#if PCB_MAX_NUM > PCB_NUM_LIMIT
 
 #if WIND_THREAD_MAX_NUM < 8
-#error "WIND_THREAD_MAX_NUM should not be a number smaller than 8,as operation system reserves some processes!"
+#error "WIND_THREAD_MAX_NUM should not be a number smaller than 8,as operation system reserves some threads!"
 #endif //#if WIND_THREAD_MAX_NUM < 8
 
 

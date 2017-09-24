@@ -95,7 +95,7 @@ static void thread_entry(void *args)
     w_err_t err;
     pthread_s pthread;
     pthread = wind_thread_current();
-    WIND_INFO("begin to run procesess:%s\r\n",pthread->name);
+    WIND_INFO("begin to run thread:%s\r\n",pthread->name);
     if(pthread != NULL)
     {
         err = pthread->procfunc(pthread->argc,pthread->argv);
@@ -182,7 +182,7 @@ pthread_s wind_thread_create(const w_int8_t *name,
     pstack_t tmpstk;
     pnode_s pnode;
 
-    WIND_INFO("Creating process:%s\r\n",name);
+    WIND_INFO("creating thread:%s\r\n",name);
     WIND_ASSERT_RETURN(name != NULL,NULL);
     WIND_ASSERT_RETURN(procfunc != NULL,NULL);
     WIND_ASSERT_RETURN(pstk != NULL,NULL);
@@ -349,7 +349,7 @@ w_err_t wind_thread_exit(w_err_t exitcode)
     return ERR_OK;
 }
 
-list_s procsleeplist = {NULL,NULL,0};//sleeping process list
+list_s threadsleeplist = {NULL,NULL,0};//sleeping thread list
 
 //睡眠一段时间,不能在中断中调用这个函数
 w_err_t wind_thread_sleep(w_uint32_t ms)
@@ -366,13 +366,13 @@ w_err_t wind_thread_sleep(w_uint32_t ms)
     pnode = wind_node_malloc(CORE_TYPE_PCB);
     WIND_ASSERT_RETURN(pnode != NULL,ERR_NULL_POINTER);
     wind_node_bindobj(pnode,CORE_TYPE_PCB,stcnt,pthread);
-    wind_list_insert(&procsleeplist,pnode);
-    pnode = procsleeplist.head;
+    wind_list_insert(&threadsleeplist,pnode);
+    pnode = threadsleeplist.head;
     while(pnode)
     {
         if(pnode->key < 0)
         {
-            wind_thread_print(&procsleeplist);
+            wind_thread_print(&threadsleeplist);
             WIND_ERROR("sleep err\r\n");
             break;
         }
@@ -387,7 +387,7 @@ void wind_thread_wakeup(void)
 {
     pnode_s pnode = NULL;
     pthread_s pthread = NULL;
-    pnode = procsleeplist.head;
+    pnode = threadsleeplist.head;
     while(RUN_FLAG && (pnode != NULL))
     {        
         if(pnode->key > 0)
@@ -399,7 +399,7 @@ void wind_thread_wakeup(void)
             {
                 pthread->runstat = THREAD_STATUS_READY;
                 pthread->cause = CAUSE_SLEEP;
-                wind_list_remove(&procsleeplist,pnode);
+                wind_list_remove(&threadsleeplist,pnode);
                 wind_node_free(pnode);
             }
         }

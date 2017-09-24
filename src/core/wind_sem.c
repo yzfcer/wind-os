@@ -39,7 +39,7 @@
 
 
 extern void wind_thread_dispatch(void);
-extern list_s procsleeplist;
+extern list_s threadsleeplist;
 
 static psem_s sem_malloc()
 {
@@ -127,7 +127,7 @@ w_err_t wind_sem_fetch(psem_s psem,w_uint32_t timeout)
     wind_thread_dispatch();
     if(pthread->cause == CAUSE_SEM)
     {
-        wind_list_remove(&procsleeplist,pnode1);
+        wind_list_remove(&threadsleeplist,pnode1);
         wind_node_free(pnode1);
     }
     else if(pthread->cause == CAUSE_SLEEP)
