@@ -24,7 +24,7 @@ struct __dlist_s
 #define DLIST_OBJ(ptr,type,e) (void*)(((char*)(ptr))-((w_uint32_t)&(((type*)0)->e)))
 // 获取链表头部节点
 static __INLINE__ 
-pdnode_s dlist_head(pdlist_s dlist) 
+pdnode_s dlist_head(pdlist_s dlist)
 {
     return dlist->head;
 }

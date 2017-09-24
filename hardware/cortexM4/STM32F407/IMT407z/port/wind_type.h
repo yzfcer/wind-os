@@ -70,7 +70,7 @@ typedef float w_fp64_t;
 #endif
 
 #ifndef __INLINE__
-#define __INLINE__
+#define __INLINE__ 
 #endif
 
 

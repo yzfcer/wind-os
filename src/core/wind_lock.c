@@ -56,7 +56,6 @@ static plock_s lock_malloc()
 plock_s wind_lock_create(const char *name)
 {
     plock_s plock;
-    wind_close_interrupt();
     plock = lock_malloc();
     DNODE_INIT(plock->locknode);
     plock->name = name;
@@ -67,6 +66,7 @@ plock_s wind_lock_create(const char *name)
     }
     plock->locked = B_FALSE;
     wind_list_init(&plock->waitlist);
+    wind_close_interrupt();
     dlist_insert_tail(&g_core.locklist,&plock->locknode);
     wind_open_interrupt();
     return plock;
@@ -79,8 +79,7 @@ w_err_t wind_lock_tryfree(plock_s plock)
     WIND_ASSERT_RETURN(plock != NULL,ERR_NULL_POINTER);
     wind_close_interrupt();
     WIND_ASSERT_TODO(plock->locked == B_FALSE,wind_open_interrupt(),ERR_COMMAN);
-    plock->used = B_FALSE;
-    plock->name = NULL;
+    wind_lock_free(plock);
     wind_open_interrupt();
     return ERR_OK;    
 }

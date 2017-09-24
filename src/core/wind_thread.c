@@ -117,7 +117,7 @@ w_err_t wind_thread_getname(pthread_s pthread,w_int8_t *name)
 
 pthread_s wind_thread_current()
 {
-    return THREAD_FROM_STACK(gwind_cur_stack,thread_s,pstk);
+    return THREAD_FROM_MEMBER(gwind_cur_stack,thread_s,pstk);
 }
 
 w_int8_t* wind_thread_status(thread_stat_e stat)

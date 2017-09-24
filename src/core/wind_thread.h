@@ -29,6 +29,7 @@
 #include "wind_config.h"
 #include "wind_type.h"
 #include "wind_list.h"
+#include "dlist.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -36,7 +37,7 @@ extern "C" {
 
 #define PCB_NUM_LIMIT 512 //线程总数的上限值
 #define THREAD_NAME_LEN 20 //线程名的最大长度，包括 '\0'
-#define THREAD_FROM_STACK(ptr,type,mbr) (void*)(((char*)(ptr))-((w_uint32_t)&(((type*)0)->mbr)))
+#define THREAD_FROM_MEMBER(ptr,type,mbr) (void*)(((char*)(ptr))-((w_uint32_t)&(((type*)0)->mbr)))
 
 //线程的优先等级，
 typedef enum _PRIOLEVEL
@@ -57,10 +58,6 @@ typedef enum __proc_status
     THREAD_STATUS_DEAD,//死亡状态，将永远不会被唤醒
     
 }thread_stat_e;
-
-
-
-
 
 typedef enum __suscause
 {
@@ -101,9 +98,10 @@ typedef struct __threadcb_s
 //线程控制PCB
 typedef struct _thread_s
 {
+    dnode_s thrnode;
+    pstack_t pstk;
     pstack_t pstktop;
     w_uint16_t stksize;
-    pstack_t pstk;
     
     w_err_t (*procfunc)(w_int32_t argc,w_int8_t **argv);
     w_int16_t argc;

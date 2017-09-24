@@ -191,7 +191,7 @@ w_err_t wind_sem_print(pdlist_s list)
     wind_printf("----------------------------------------------\r\n");
     wind_printf("%-16s %-8s %-10s\r\n","sem","sem_tot","sem_num");
     wind_printf("----------------------------------------------\r\n");
-    dnode = dlist_head(&g_core.semlist);
+    dnode = dlist_head(list);
     while(dnode)
     {
         psem = (psem_s)DLIST_OBJ(dnode,sem_s,semnode);
