@@ -257,7 +257,7 @@ int rbt_delete_fixup(RBTreeNode_S **root, RBTreeNode_S *node)
             }        
         }      
         else      
-        {         
+        {
             brother = parent->left;           
             /* Case 1: 兄弟结点为红色:  以parent为支点, 右旋处理 */         
             if(rbt_is_red(brother))        

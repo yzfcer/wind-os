@@ -80,6 +80,7 @@ void wind_corevar_init(void)
     wind_corepool_init();
     wind_list_init(&g_core.threadlist);
     DLIST_INIT(g_core.semlist);
+    DLIST_INIT(g_core.locklist);
     wind_list_init(&g_core.ttmerlist);
 }
 

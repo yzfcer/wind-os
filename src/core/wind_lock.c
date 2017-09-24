@@ -58,6 +58,7 @@ plock_s wind_lock_create(const char *name)
     plock_s plock;
     wind_close_interrupt();
     plock = lock_malloc();
+    DNODE_INIT(plock->locknode);
     plock->name = name;
     if(plock == NULL)
     {
@@ -66,6 +67,7 @@ plock_s wind_lock_create(const char *name)
     }
     plock->locked = B_FALSE;
     wind_list_init(&plock->waitlist);
+    dlist_insert_tail(&g_core.locklist,&plock->locknode);
     wind_open_interrupt();
     return plock;
 }
@@ -100,6 +102,7 @@ w_err_t wind_lock_free(plock_s plock)
         pthread->cause = CAUSE_LOCK;
         wind_node_free(pnode);
     }
+    dlist_remove(&g_core.locklist,&plock->locknode);
     plock->used = B_FALSE;
     plock->name = NULL;
     wind_core_free(STAT_LOCK,plock);
@@ -157,30 +160,29 @@ w_err_t wind_lock_open(plock_s plock)
     return ERR_OK;    
 }
 
-#if 0
-w_err_t wind_lock_print(plist_s list)
+
+w_err_t wind_lock_print(pdlist_s list)
 {
-    pnode_s pnode;
-    psem_s psem;
+    pdnode_s dnode;
+    plock_s plock;
     WIND_ASSERT_RETURN(list != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(list->head != NULL,ERR_NULL_POINTER);
-    pnode = list->head;
     wind_printf("\r\n\r\nlock list as following:\r\n");
-    wind_printf("----------------------------------------------\r\n");
-    wind_printf("%-16s %-8s %-10s\r\n","sem","sem_tot","sem_num");
-    wind_printf("----------------------------------------------\r\n");
-    
-    while(pnode)
+    wind_printf("--------------------------------------\r\n");
+    wind_printf("%-16s %-8s\r\n","lock","status");
+    wind_printf("--------------------------------------\r\n");
+    dnode = dlist_head(list);
+    while(dnode)
     {
-        psem = (psem_s)pnode->obj;
-        wind_printf("%-16s %-8d %-10d\r\n",
-            psem->name,psem->sem_tot,psem->sem_num);
-        pnode = pnode->next;
+        plock = (plock_s)DLIST_OBJ(dnode,lock_s,locknode);
+        wind_printf("%-16s %-8s\r\n",
+            plock->name,plock->locked?"lock":"unlock");
+        dnode = dnode_next(dnode);
     }
-    wind_printf("----------------------------------------------\r\n");
+    wind_printf("--------------------------------------\r\n");
     return ERR_OK;
 }
-#endif
+
 
 #endif //WIND_LOCK_SUPPORT > 0
 

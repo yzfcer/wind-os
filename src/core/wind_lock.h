@@ -28,6 +28,7 @@
 #include "wind_config.h"
 #include "wind_type.h"
 #include "wind_list.h"
+#include "dlist.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -36,7 +37,7 @@ extern "C" {
 
 typedef struct _wind_lock
 {
-    //HANDLE handler;    //互斥锁句柄
+    dnode_s locknode;
     const char *name;
     w_bool_t used;         //是否有效的标志
     w_bool_t locked;     //当前的信号量的值
@@ -49,7 +50,7 @@ w_err_t wind_lock_tryfree(plock_s plock);
 w_err_t wind_lock_free(plock_s plock);
 w_err_t wind_lock_close(plock_s plock);
 w_err_t wind_lock_open(plock_s plock);
-w_err_t wind_lock_print(plist_s list);
+w_err_t wind_lock_print(pdlist_s list);
 
 
 #endif //WIND_LOCK_SUPPORT > 0

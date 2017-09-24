@@ -65,6 +65,7 @@ typedef struct __core_var_s
     
     list_s threadlist;
     dlist_s semlist;
+    dlist_s locklist;
     list_s ttmerlist;
     w_int16_t pcbcnt;//线程计数器
     volatile w_bool_t run_falg;//多线程调度开始的标志
@@ -74,7 +75,8 @@ typedef struct __core_var_s
     w_uint32_t ticks_cnt;//tick计时
     w_uint32_t idle_cnt_max;//在一段时间内的idle任务的计数值
     w_uint32_t cpu_usage;
-    
+
+    //线程引用对象
     pthread_s pmain;
     pthread_s pidle;
     pthread_s pstat;
