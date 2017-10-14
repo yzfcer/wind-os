@@ -9,5 +9,4 @@ w_int8_t *core_errset[] =
     "parameter is out of the range.\r\n",
     "no enough space.\r\n",
     "invalid handler.\r\n"
-    
 };

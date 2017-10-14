@@ -24,44 +24,38 @@
 *******************************************************************************************************/
 #include "wind_config.h"
 #include "wind_type.h"
-#include "wind_thread.h"
-#include "wind_lock.h"
-#include "wind_os_hwif.h"
 #include "wind_err.h"
+#include "wind_lock.h"
+#include "wind_thread.h"
+#include "wind_os_hwif.h"
 #include "wind_stati.h"
 #include "wind_var.h"
 #include "wind_assert.h"
 #if WIND_LOCK_SUPPORT > 0
-
 extern pthread_s wind_thread_current(void);
 extern void wind_thread_dispatch(void);
 
-static plock_s lock_malloc()
+static plock_s lock_malloc(void)
 {
-    plock_s plock;
-    plock = wind_core_alloc(STAT_LOCK);
-    if(plock == NULL)
-    {
-        return NULL;;
-    }
-    plock->used = B_TRUE;
-    return plock;
+    return wind_core_alloc(STAT_LOCK);
 }
 
-
-
+static w_err_t lock_free(void *lock)
+{
+    return wind_core_free(STAT_LOCK,lock);
+}
 
 plock_s wind_lock_create(const char *name)
 {
     plock_s plock;
     plock = lock_malloc();
-    DNODE_INIT(plock->locknode);
-    plock->name = name;
     if(plock == NULL)
     {
         wind_open_interrupt();
         return NULL;
     }
+    DNODE_INIT(plock->locknode);
+    plock->name = name;
     plock->locked = B_FALSE;
     DLIST_INIT(plock->waitlist);
     wind_close_interrupt();
@@ -73,7 +67,6 @@ plock_s wind_lock_create(const char *name)
 //试图释放一个互斥锁，如果有线程被阻塞，则释放将终止
 w_err_t wind_lock_tryfree(plock_s plock)
 {
-
     WIND_ASSERT_RETURN(plock != NULL,ERR_NULL_POINTER);
     wind_close_interrupt();
     WIND_ASSERT_TODO(plock->locked == B_FALSE,wind_open_interrupt(),ERR_COMMAN);
@@ -100,7 +93,7 @@ w_err_t wind_lock_free(plock_s plock)
     dlist_remove(&g_core.locklist,&plock->locknode);
     plock->used = B_FALSE;
     plock->name = NULL;
-    wind_core_free(STAT_LOCK,plock);
+    lock_free(plock);
     wind_open_interrupt();
     return ERR_OK;
 }
@@ -116,7 +109,7 @@ w_err_t wind_lock_close(plock_s plock)
     {
         plock->locked = B_TRUE;
         wind_open_interrupt();
-        return ERR_OK; //信号量有效，直接返回效，
+        return ERR_OK; 
     }
     pthread = wind_thread_current();
     pthread->runstat = THREAD_STATUS_SUSPEND;
