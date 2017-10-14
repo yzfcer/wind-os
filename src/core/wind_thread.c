@@ -197,7 +197,7 @@ void insert_thread(pdlist_s list,pthread_s thread)
             dlist_insert_head(&g_core.threadlist,&thread->validthr);
     }
         
-    wind_thread_print(&g_core.threadlist);
+    //wind_thread_print(&g_core.threadlist);
     wind_open_interrupt();
 }
 

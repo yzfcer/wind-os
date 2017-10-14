@@ -40,7 +40,7 @@ static w_err_t init_thread(w_int32_t argc,w_int8_t **argv)
 #if WIND_CONSOLE_SUPPORT > 0
     create_console_thread();
 #endif
-    wind_thread_print(&g_core.threadlist);
+    //wind_thread_print(&g_core.threadlist);
     
     wind_main();
     return ERR_OK;

@@ -82,6 +82,7 @@ void wind_corevar_init(void)
     DLIST_INIT(g_core.sleeplist);
     DLIST_INIT(g_core.semlist);
     DLIST_INIT(g_core.locklist);
+    DLIST_INIT(g_core.mboxlist);
     wind_list_init(&g_core.ttmerlist);
 }
 

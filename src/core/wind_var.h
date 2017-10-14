@@ -67,6 +67,8 @@ typedef struct __core_var_s
     dlist_s sleeplist;
     dlist_s semlist;
     dlist_s locklist;
+    dlist_s mboxlist;
+    
     list_s ttmerlist;
     w_int16_t pcbcnt;//线程计数器
     volatile w_bool_t run_falg;//多线程调度开始的标志

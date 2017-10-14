@@ -36,15 +36,11 @@
 #include "wind_assert.h"
 #include "wind_string.h"
 #if WIND_SEM_SUPPORT > 0
-
-
 extern void wind_thread_dispatch(void);
-
 static psem_s sem_malloc()
 {
     psem_s psem;
     psem = wind_core_alloc(STAT_SEM);
-    WIND_ASSERT_RETURN(psem != NULL,NULL);
     return psem;
 }
 
@@ -67,14 +63,13 @@ psem_s wind_sem_create(const char *name,w_uint16_t sem_value)
     return psem;
 }
 
-
-
 w_err_t wind_sem_post(psem_s psem)
 {
     pdnode_s pnode;
     pthread_s pthread;
     WIND_ASSERT_RETURN(psem != NULL,ERR_NULL_POINTER);
     wind_close_interrupt();
+    //无阻塞的线程，减少信号量后直接返回
     pnode = dlist_head(&psem->waitlist);
     if(pnode == NULL)
     {
@@ -83,6 +78,8 @@ w_err_t wind_sem_post(psem_s psem)
         wind_open_interrupt();
         return ERR_OK;
     }
+    
+    //激活被阻塞的线程，从睡眠队列移除,触发线程切换
     dlist_remove(&psem->waitlist,pnode);
     pthread = DLIST_OBJ(pnode,thread_s,suspendthr);
     dlist_remove(&g_core.sleeplist,&pthread->sleepthr);
@@ -103,26 +100,32 @@ w_err_t wind_sem_fetch(psem_s psem,w_uint32_t timeout)
     if(ticks == 0)
         ticks = 1;
 
+    //信号量有效，直接返回
     wind_close_interrupt();
     if (psem->sem_num > 0)
     {
         psem->sem_num --;
         wind_open_interrupt();
-        return ERR_OK; //信号量有效，直接返回效，
+        return ERR_OK; 
     }
+
+    //将当前线程加入睡眠和阻塞队列，触发线程切换
     pthread = wind_thread_current();
     pthread->runstat = THREAD_STATUS_SUSPEND;
     pthread->cause = CAUSE_SEM;
     pthread->sleep_ticks = ticks;
     dlist_insert_tail(&g_core.sleeplist,&pthread->sleepthr);
-    dlist_insert_tail(&psem->waitlist,&pthread->suspendthr);
+    dlist_insert_tail(&psem->waitlist,&pthread->sleepthr);
     wind_open_interrupt();
     wind_thread_dispatch();
+
+    //如果是被信号唤醒的
     wind_close_interrupt();
     if(pthread->cause == CAUSE_SEM)
     {
-        //dlist_remove(&g_core.sleeplist,&pthread->sleepthr);
+        
     }
+    //如果是超时唤醒的，则移除出睡眠队列
     else if(pthread->cause == CAUSE_SLEEP)
     {
         dlist_remove(&psem->waitlist,&pthread->suspendthr);
@@ -194,8 +197,6 @@ w_err_t wind_sem_print(pdlist_s list)
     wind_printf("----------------------------------------------\r\n");
     return ERR_OK;
 }
-
-
 
 #endif
 

@@ -30,6 +30,7 @@
 #include "wind_config.h"
 #include "wind_type.h"
 #include "wind_lock.h"
+#include "dlist.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -65,38 +66,34 @@ typedef enum __HeapBlock_e
 #define HEAD1_LENTH (800*1024)
 
 
-
-
-
-
-
-//struct __memheap;
-
-typedef struct __heapitem_s
+typedef struct __heapitem_s heapitem_s,*pheapitem_s;
+typedef struct __memheap_s memheap_s,*pmemheap_s;
+struct __heapitem_s
 {
-    w_uint32_t magic;                      /**< magic number for memheap */
-    struct __memheap *pool_ptr;                   /**< point of pool */
+    w_uint32_t magic;
+    memheap_s *pool_ptr;
 
-    struct __heapitem_s *next;                       /**< next memheap item */
-    struct __heapitem_s *prev;                       /**< prev memheap item */
+    heapitem_s *next;
+    heapitem_s *prev;
 
-    struct __heapitem_s *next_free;                  /**< next free memheap item */
-    struct __heapitem_s *prev_free;                  /**< prev free memheap item */
-}heapitem_s,*pheapitem_s;
+    heapitem_s *next_free;
+    heapitem_s *prev_free; 
+};//heapitem_s,*pheapitem_s;
 
 
-typedef struct __memheap
+typedef struct __memheap_s
 {
     w_int8_t name[WIND_HEAP_NAME_LEN];
-    void *start_addr;                 /**< pool start address and size */
-    w_uint32_t pool_size;                  /**< pool size */
-    w_uint32_t available_size;             /**< available size */
-    w_uint32_t max_used_size;              /**< maximum allocated size */
+    dnode_s mnode;
+    void *base; 
+    w_uint32_t pool_size;
+    w_uint32_t available_size;
+    w_uint32_t max_used_size;
 
-    pheapitem_s block_list;                 /**< used block list */
-    pheapitem_s free_list;                  /**< free block list */
-    heapitem_s free_header;                /**< free block list header */
-    plock_s plock;                       /**< semaphore lock */
+    pheapitem_s block_list;
+    pheapitem_s free_list;
+    heapitem_s free_header;
+    plock_s plock; 
 }memheap_s,*pmemheap_s;
 
 w_err_t wind_heap_init(pmemheap_s mhp,

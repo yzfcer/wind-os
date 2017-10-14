@@ -40,28 +40,30 @@ extern "C" {
 typedef struct _wind_message
 {
     const char *name;
+    dnode_s msgnode;
     w_bool_t used;
-    w_uint16_t validtime;
-    w_uint16_t msgNO;
-    w_uint16_t param;
-    void *lparam;
+    w_uint16_t msg_id;
+    w_uint16_t msg_len;
+    void *msg_arg;
 }msg_s, *pmsg_s; 
 
 typedef struct __mbox_s
 {
     const char *name;
+    dnode_s mboxnode;
+    dlist_s msglist;//消息队列
     int num;//消息的数量
     w_bool_t used;
     w_bool_t valid;//邮箱是否可用
-    list_s msgq;//消息队列
     pthread_s owner;
+    pthread_s waiter;
 }mbox_s, *pmbox_s;
 
 
 pmsg_s wind_message_create(const char *name,w_uint16_t msgNo,w_uint16_t param,void *lparam);
 w_err_t wind_message_destroy(pmsg_s pmsg);
 
-pmbox_s wind_mbox_create(const char *name);
+pmbox_s wind_mbox_create(const char *name,pthread_s owner);
 w_err_t wind_mbox_destroy(pmbox_s pmbox);
 
 w_err_t wind_mbox_post(pmbox_s mbox,pmsg_s pmsg);

@@ -53,10 +53,9 @@ typedef enum __proc_status
 {
     THREAD_STATUS_INIT = 0,//初始化状态
     THREAD_STATUS_READY = 1,//就绪状态
-    THREAD_STATUS_SUSPEND,//阻塞状态，可以通过定时器唤醒
-    THREAD_STATUS_SLEEP,//休眠状态，程序将不能通过定时器唤醒，而需要手动唤醒
-    THREAD_STATUS_DEAD,//死亡状态，将永远不会被唤醒
-    
+    THREAD_STATUS_SUSPEND,//阻塞状态
+    THREAD_STATUS_SLEEP,//休眠状态
+    THREAD_STATUS_DEAD,//死亡状态，将永远不会被唤醒和调度
 }thread_stat_e;
 
 typedef enum __suscause
@@ -155,6 +154,7 @@ w_err_t wind_thread_sleep(w_uint32_t ms);
 void    wind_thread_wakeup(void);
 w_err_t wind_thread_exit(w_err_t exitcode);
 
+void insert_thread(pdlist_s list,pthread_s thread);
 w_err_t wind_thread_print(pdlist_s list);
 #if WIND_THREAD_CALLBACK_SUPPORT > 0
 w_err_t wind_thread_callback_register(pthread_s pthread,procevt_e id,void(*cb)(pthread_s));
