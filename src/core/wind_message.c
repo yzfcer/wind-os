@@ -28,7 +28,6 @@
 #include "wind_os_hwif.h"
 #include "wind_message.h"
 #include "wind_core.h"
-#include "wind_list.h"
 #include "wind_stati.h"
 #include "wind_var.h"
 #include "wind_err.h"

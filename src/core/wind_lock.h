@@ -27,7 +27,6 @@
 
 #include "wind_config.h"
 #include "wind_type.h"
-#include "wind_list.h"
 #include "dlist.h"
 
 #ifdef __cplusplus
@@ -41,7 +40,7 @@ typedef struct _wind_lock
     const char *name;
     w_bool_t used;         //是否有效的标志
     w_bool_t locked;     //当前的信号量的值
-    list_s waitlist;  //等待线程队列
+    dlist_s waitlist;  //等待线程队列
 }lock_s,*plock_s;
 
 //w_err_t wind_lock_init(void);

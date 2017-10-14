@@ -36,7 +36,6 @@ extern "C" {
 typedef enum __stat_e
 {
     STAT_PROC,
-    STAT_NODE,
 #if WIND_LOCK_SUPPORT > 0
     STAT_LOCK,
 #endif

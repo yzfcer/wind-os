@@ -28,7 +28,6 @@
 #include "wind_config.h"
 #include "wind_type.h"
 #include "wind_thread.h"
-#include "wind_list.h"
 #include "dlist.h"
 #include "wind_pipe.h"
 #include "wind_message.h"
@@ -43,7 +42,7 @@ extern "C" {
 typedef struct __core_var_s
 {
     WIND_MPOOL(pcb,WIND_THREAD_MAX_NUM,sizeof(thread_s));
-    WIND_MPOOL(node,WIND_NODE_MAX_NUM,sizeof(node_s));
+    //WIND_MPOOL(node,WIND_NODE_MAX_NUM,sizeof(node_s));
 #if WIND_PIPE_SUPPORT > 0
     WIND_MPOOL(pipe,WIND_PIPE_MAX_NUM,sizeof(pipe_s));
 #endif
@@ -69,7 +68,7 @@ typedef struct __core_var_s
     dlist_s locklist;
     dlist_s mboxlist;
     
-    list_s ttmerlist;
+    dlist_s ttmerlist;
     w_int16_t pcbcnt;//线程计数器
     volatile w_bool_t run_falg;//多线程调度开始的标志
     w_bool_t usrprocen;/*用户线程允许创建的标志 */

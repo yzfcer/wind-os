@@ -36,8 +36,6 @@ void wind_stat_init(void)
     wind_memset(G_STAT,0,sizeof(G_STAT));
     G_STAT[STAT_PROC].tot = WIND_THREAD_MAX_NUM;
     wind_memcpy(G_STAT[STAT_PROC].name,"proc",4);
-    G_STAT[STAT_NODE].tot = WIND_NODE_MAX_NUM;
-    wind_memcpy(G_STAT[STAT_NODE].name,"node",4);
 #if WIND_LOCK_SUPPORT > 0
     G_STAT[STAT_LOCK].tot = WIND_LOCK_NUM;
     wind_memcpy(G_STAT[STAT_LOCK].name,"lock",4);

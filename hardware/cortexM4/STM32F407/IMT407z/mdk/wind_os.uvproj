@@ -1154,16 +1154,6 @@
               <FilePath>..\..\..\..\..\src\core\wind_flag.h</FilePath>
             </File>
             <File>
-              <FileName>wind_list.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\core\wind_list.c</FilePath>
-            </File>
-            <File>
-              <FileName>wind_list.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\core\wind_list.h</FilePath>
-            </File>
-            <File>
               <FileName>wind_lock.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\core\wind_lock.c</FilePath>

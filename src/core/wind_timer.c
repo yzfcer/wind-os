@@ -25,7 +25,6 @@
 #include "wind_config.h"
 #include "wind_type.h"
 #include "wind_timer.h"
-#include "wind_list.h"
 #include "wind_debug.h"
 #include "wind_err.h"
 #include "wind_stati.h"
@@ -62,7 +61,7 @@ w_err_t ttimer_free(ptimer_s timer)
 ptimer_s wind_timer_create(w_uint32_t t_ms,softtimer_fn func,void *arg,w_bool_t run)
 {
     ptimer_s timer;
-    pnode_s pnode;
+    pdnode_s pnode;
     w_int32_t count = t_ms / TIMER_PERIOD;
     if(count <= 0)
         count = 1;
@@ -80,24 +79,19 @@ ptimer_s wind_timer_create(w_uint32_t t_ms,softtimer_fn func,void *arg,w_bool_t 
         WIND_ERROR("wind_timer_create err 2\r\n");
         return NULL;
     }
-    pnode = wind_node_malloc(CORE_TYPE_TTIMER);
-    if(!pnode)
-    {
-        wind_timer_free(timer);
-        wind_open_interrupt();
-        WIND_ERROR("wind_timer_create err 3\r\n");
-        return NULL;
-    }
+
     wind_open_interrupt();
     WIND_INFO("wind_timer_create OK\r\n");
+    DNODE_INIT(timer->tmrnode);
 
     timer->count = count;
     timer->init_count = count;
     timer->running = run;
     timer->arg = arg;
     timer->handle = func;
-    wind_node_bindobj(pnode,CORE_TYPE_TTIMER,t_ms,timer);
-    wind_list_insert(&g_core.ttmerlist,pnode);
+    //wind_node_bindobj(pnode,CORE_TYPE_TTIMER,t_ms,timer);
+    //wind_list_insert(&g_core.ttmerlist,pnode);
+    dlist_insert_tail(&g_core.ttmerlist,pnode);
     return timer; 
 }
 
@@ -123,20 +117,12 @@ w_err_t wind_timer_stop(ptimer_s pttimer)
 
 w_err_t wind_timer_free(ptimer_s pttimer)
 {
-    pnode_s pnode;
     if(pttimer == NULL)
         return ERR_NULL_POINTER;
     if(!pttimer->used)
         return ERR_COMMAN;
-    wind_close_interrupt();    
-    pnode = wind_list_search(&g_core.ttmerlist,pttimer);
-    if(pnode == NULL)
-    {
-        wind_open_interrupt();    
-        return ERR_INVALID_PARAM;
-    }    
-    wind_list_remove(&g_core.ttmerlist,pnode);
-    wind_node_free(pnode);
+    wind_close_interrupt();
+    dlist_remove(&g_core.ttmerlist,&pttimer->tmrnode);
     ttimer_free(pttimer);
     wind_open_interrupt();
     return ERR_OK;
@@ -158,10 +144,10 @@ w_err_t wind_timer_set_period(ptimer_s pttimer,w_uint32_t t_ms)
 void wind_timer_event(void)
 {
     ptimer_s ptmr;
-    pnode_s tmpttimerlist = g_core.ttmerlist.head;
-    while(tmpttimerlist)
+    pdnode_s pdnode = dlist_head(&g_core.ttmerlist);
+    while(pdnode)
     {
-        ptmr = (ptimer_s)(tmpttimerlist->obj);
+        ptmr = DLIST_OBJ(pdnode,ttimer_s,tmrnode);
         if(ptmr->count > 0)
             ptmr->count --;
         if(ptmr->count == 0 && ptmr->running)
@@ -169,7 +155,8 @@ void wind_timer_event(void)
             ptmr->handle(ptmr->arg);
             ptmr->count = ptmr->init_count;
         }
-        tmpttimerlist = tmpttimerlist->next;
+        //tmpttimerlist = tmpttimerlist->next;
+        pdnode = dnode_next(pdnode);
     }
 }
 #endif //#if WIND_TIMER_SUPPORT > 0

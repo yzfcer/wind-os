@@ -27,8 +27,6 @@
 #include "wind_thread.h"
 #include "wind_lock.h"
 #include "wind_os_hwif.h"
-
-#include "wind_list.h"
 #include "wind_err.h"
 #include "wind_stati.h"
 #include "wind_var.h"
@@ -65,7 +63,7 @@ plock_s wind_lock_create(const char *name)
         return NULL;
     }
     plock->locked = B_FALSE;
-    wind_list_init(&plock->waitlist);
+    DLIST_INIT(plock->waitlist);
     wind_close_interrupt();
     dlist_insert_tail(&g_core.locklist,&plock->locknode);
     wind_open_interrupt();
@@ -87,19 +85,17 @@ w_err_t wind_lock_tryfree(plock_s plock)
 //强制性释放互斥锁，并把所有的被该互斥锁阻塞的线程全部激活
 w_err_t wind_lock_free(plock_s plock)
 {
-    //plock_s plock;
-    pnode_s pnode;
+    pdnode_s pnode;
     pthread_s pthread;
     WIND_ASSERT_RETURN(plock != NULL,ERR_NULL_POINTER);
     wind_close_interrupt();
-    while(list_head(&plock->waitlist) != NULL)
+    pnode = dlist_head(&plock->waitlist);
+    while(pnode)
     {
-        pnode = list_head(&plock->waitlist);
-        wind_list_remove(&plock->waitlist,pnode);
-        pthread = (pthread_s)pnode->obj;
+        dlist_remove(&plock->waitlist,pnode);
+        pthread = DLIST_OBJ(pnode,thread_s,suspendthr);
         pthread->runstat = THREAD_STATUS_READY;
         pthread->cause = CAUSE_LOCK;
-        wind_node_free(pnode);
     }
     dlist_remove(&g_core.locklist,&plock->locknode);
     plock->used = B_FALSE;
@@ -112,7 +108,6 @@ w_err_t wind_lock_free(plock_s plock)
 //试图锁定一个互斥锁，如果已经被锁定，则线程将被挂起
 w_err_t wind_lock_close(plock_s plock)
 {
-    pnode_s pnode;
     pthread_s pthread;
     WIND_ASSERT_RETURN(plock != NULL,ERR_NULL_POINTER);
     wind_close_interrupt();
@@ -123,38 +118,35 @@ w_err_t wind_lock_close(plock_s plock)
         wind_open_interrupt();
         return ERR_OK; //信号量有效，直接返回效，
     }
-    pnode = wind_node_malloc(CORE_TYPE_SEM);
-    WIND_ASSERT_RETURN(pnode != NULL,ERR_NULL_POINTER);
     pthread = wind_thread_current();
     pthread->runstat = THREAD_STATUS_SUSPEND;
     pthread->cause = CAUSE_LOCK;
-    wind_node_bindobj(pnode,CORE_TYPE_PCB,pthread->prio,pthread);
-    wind_list_insert(&plock->waitlist,pnode);
-    wind_thread_dispatch();
+    dlist_insert_tail(&plock->waitlist,&pthread->suspendthr);
     wind_open_interrupt();
+    wind_thread_dispatch();
     return ERR_OK;
 }
 
 //试图打开一个互斥锁，如果有线程被阻塞，则优先激活线程
 w_err_t wind_lock_open(plock_s plock)
 {
-    pnode_s pnode;
+    pdnode_s pnode;
     pthread_s pthread;
     WIND_ASSERT_RETURN(plock != NULL,ERR_NULL_POINTER);
     wind_close_interrupt();
     WIND_ASSERT_TODO(plock->locked,wind_open_interrupt(),ERR_OK);
-    if (list_head(&plock->waitlist) == NULL)
+    pnode = dlist_head(&plock->waitlist);
+    if (pnode == NULL)
     {
         plock->locked = B_FALSE;
         wind_open_interrupt();
         return ERR_OK; //信号量有效，直接返回效，
     }
-    pnode = wind_list_remove(&plock->waitlist,list_head(&plock->waitlist));
-    pthread = (pthread_s)pnode->obj;
+    dlist_remove_head(&plock->waitlist);
+    pthread = DLIST_OBJ(pnode,thread_s,suspendthr);
     
     pthread->runstat = THREAD_STATUS_READY;
     pthread->cause = CAUSE_LOCK;
-    wind_node_free(pnode);
     wind_open_interrupt();
     return ERR_OK;    
 }

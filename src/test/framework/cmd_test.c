@@ -29,7 +29,6 @@
 #include "wind_mem.h"
 #include "wind_string.h"
 #include "wind_thread.h"
-#include "wind_list.h"
 #include "wind_softint.h"
 #include "wind_heap.h"
 #include "cut.h"

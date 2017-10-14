@@ -25,7 +25,6 @@
 #include "wind_config.h"
 #include "wind_type.h"
 #include "wind_thread.h"
-#include "wind_list.h"
 #include "dlist.h"
 #include "wind_pipe.h"
 #include "wind_message.h"
@@ -44,7 +43,6 @@ pstack_t *gwind_cur_stack;
 void wind_corepool_init(void)
 {
     wind_pool_create("pcb_pool",g_core.pcb,sizeof(g_core.pcb),sizeof(thread_s));
-    wind_pool_create("node_pool",g_core.node,sizeof(g_core.node),sizeof(node_s));
 #if WIND_PIPE_SUPPORT > 0
     wind_pool_create("pipe_pool",g_core.pipe,sizeof(g_core.pipe),sizeof(pipe_s));
     
@@ -83,7 +81,7 @@ void wind_corevar_init(void)
     DLIST_INIT(g_core.semlist);
     DLIST_INIT(g_core.locklist);
     DLIST_INIT(g_core.mboxlist);
-    wind_list_init(&g_core.ttmerlist);
+    DLIST_INIT(g_core.ttmerlist);
 }
 
 void *wind_core_alloc(stat_e type)
@@ -93,9 +91,6 @@ void *wind_core_alloc(stat_e type)
     {
     case STAT_PROC:
         p = wind_pool_alloc(g_core.pcb);
-        break;
-    case STAT_NODE:
-        p = wind_pool_alloc(g_core.node);
         break;
 #if WIND_LOCK_SUPPORT > 0
     case STAT_LOCK:
@@ -140,9 +135,6 @@ w_err_t wind_core_free(stat_e type,void *block)
     {
     case STAT_PROC:
         err = wind_pool_free(g_core.pcb,block);
-        break;
-    case STAT_NODE:
-        err = wind_pool_free(g_core.node,block);
         break;
 #if WIND_LOCK_SUPPORT > 0
     case STAT_LOCK:

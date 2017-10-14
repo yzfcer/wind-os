@@ -28,7 +28,7 @@
 #include "wind_config.h"
 #include "wind_type.h"
 #include "wind_os_hwif.h"
-
+#include "dlist.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -38,6 +38,7 @@ extern "C" {
 typedef void (*softtimer_fn)(void *arg);
 typedef struct tagTicktimer
 {
+    dnode_s tmrnode;
     w_bool_t used;
     w_bool_t running;
     w_uint32_t count;

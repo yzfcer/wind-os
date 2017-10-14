@@ -28,7 +28,6 @@
 
 #include "wind_config.h"
 #include "wind_type.h"
-#include "wind_list.h"
 #include "wind_thread.h"
 
 #ifdef __cplusplus

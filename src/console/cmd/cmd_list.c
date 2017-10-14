@@ -32,7 +32,6 @@
 #include "wind_thread.h"
 #include "wind_sem.h"
 #include "wind_lock.h"
-#include "wind_list.h"
 #include "wind_var.h"
 #include "wind_cmd.h"
 
