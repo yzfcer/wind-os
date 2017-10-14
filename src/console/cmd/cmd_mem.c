@@ -129,11 +129,11 @@ static w_err_t display_stack(char **argv)
     {
         return ERR_COMMAN;
     }
-    start = (w_uint32_t)thr->pstk;
-    len = ((w_uint32_t)thr->pstktop + thr->stksize*sizeof(w_stack_t) - (w_uint32_t)thr->pstk);
+    start = (w_uint32_t)thr->stack;
+    len = ((w_uint32_t)thr->stack_top + thr->stksize*sizeof(w_stack_t) - (w_uint32_t)thr->stack);
     console_printf("stack start 0x%08x,size %d,cur 0x%08x,end 0x%08x\r\n",
-                (w_uint32_t)thr->pstktop,thr->stksize,(w_uint32_t)thr->pstk,
-                (w_uint32_t)thr->pstktop + thr->stksize*sizeof(w_stack_t));
+                (w_uint32_t)thr->stack_top,thr->stksize,(w_uint32_t)thr->stack,
+                (w_uint32_t)thr->stack_top + thr->stksize*sizeof(w_stack_t));
     if(len <= 4096)
         print_mem(start,len);
     return ERR_OK;

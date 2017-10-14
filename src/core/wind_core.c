@@ -84,9 +84,30 @@ static w_bool_t is_switch_enable(void)
     return gwind_core_cnt>0?B_FALSE:B_TRUE;
 }
 
-void wind_update_curthread(void);
+static pthread_s wind_search_highthread(void)
+{
+    pthread_s pthread = NULL;
+    pdnode_s pnode = dlist_head(&g_core.threadlist);
+    wind_close_interrupt();
+    while(pnode)
+    {
+        pthread = DLIST_OBJ(pnode,thread_s,validthr);
+        if((pthread->used) && (pthread->runstat == THREAD_STATUS_READY))
+        {
+            //gwind_high_stack = &pthread->pstk;
+            wind_open_interrupt();
+            return pthread;
+            //break;
+        }
+        pnode = dnode_next(pnode);
+    }
+    wind_open_interrupt();
+    WIND_ERROR("core NOT find valid thread!");
+    return NULL;
+}
 void wind_exit_int(void)
 {
+    pthread_s pthr;
     if(RUN_FLAG == B_FALSE)
     {
         WIND_ERROR("exit not rd %d\r\n",RUN_FLAG);
@@ -98,7 +119,8 @@ void wind_exit_int(void)
         gwind_int_cnt --;
     if((gwind_int_cnt == 0) && is_switch_enable())
     {
-        wind_update_curthread();
+        pthr = wind_search_highthread();
+        gwind_high_stack = &pthr->stack;
         if(gwind_high_stack != gwind_cur_stack)
         {
             wind_interrupt_switch();
@@ -111,34 +133,21 @@ void wind_exit_int(void)
 //系统调度开始启动运行
 static void wind_run()
 {
-    wind_update_curthread();
+    pthread_s pthr;
+    pthr = wind_search_highthread();
+    gwind_high_stack = &pthr->stack;
     gwind_cur_stack = gwind_high_stack;
     wind_start_switch();
 }
 
-void wind_update_curthread()
-{
-    pthread_s pthread;
-    pnode_s pnode = list_head(&g_core.threadlist);
-    wind_close_interrupt();
-    while(pnode)
-    {
-        pthread = (pthread_s)(pnode->obj);
-        if((pthread->used) && (pthread->runstat == THREAD_STATUS_READY))
-        {
-            gwind_high_stack = &pthread->pstk;
-            break;
-        }
-        pnode = pnode->next;
-    }
-    wind_open_interrupt();
-}
+
 
 
 //在线程中切换到高优先级的线程
 #if WIND_REALTIME_CORE_SUPPORT > 0
 void wind_thread_dispatch(void)
 {
+    pthread_s pthr;
     if(RUN_FLAG == B_FALSE)
         return;
     wind_close_interrupt();
@@ -147,8 +156,8 @@ void wind_thread_dispatch(void)
         wind_open_interrupt();
         return;
     }
-    wind_update_curthread();
-
+    pthr = wind_search_highthread();
+    gwind_high_stack = &pthr->stack;
     if(gwind_high_stack != gwind_cur_stack)
     {
         wind_open_interrupt();

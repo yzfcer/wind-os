@@ -63,7 +63,8 @@ typedef struct __core_var_s
     //定义一些堆栈以便创建程序在时使用
     WIND_MPOOL(stkbuf,WIND_STK_MAX_NUM,WINS_STK_SIZE * sizeof(w_stack_t));
     
-    list_s threadlist;
+    dlist_s threadlist;
+    dlist_s sleeplist;
     dlist_s semlist;
     dlist_s locklist;
     list_s ttmerlist;

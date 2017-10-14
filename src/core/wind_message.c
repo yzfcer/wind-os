@@ -34,7 +34,6 @@
 #include "wind_err.h"
 #include "wind_assert.h"
 #if WIND_MESSAGE_SUPPORT > 0
-//extern list_s threadsleeplist;
 extern void wind_thread_dispatch(void);
 
 static pmsg_s msg_malloc(void)
@@ -194,13 +193,7 @@ w_err_t wind_mbox_fetch(pmbox_s mbox,pmsg_s *pmsg,w_uint32_t timeout)
     pthread->runstat = THREAD_STATUS_SUSPEND;
     pthread->cause = CAUSE_MSG;
     
-    //pnode = wind_node_malloc(CORE_TYPE_PCB);
-    //WIND_ASSERT_RETURN(pnode != NULL,ERR_NULL_POINTER);
-    //wind_node_bindobj(pnode,CORE_TYPE_PCB,ticks,pthread);
-    //wind_list_insert_with_minus(&threadsleeplist,pnode);
     wind_thread_dispatch();
-
-    
     if(pthread->cause == CAUSE_MSG)
     {
         //几乎不会发生邮箱为空的情况

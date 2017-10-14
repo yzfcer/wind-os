@@ -27,16 +27,16 @@ void dlist_insert_tail(pdlist_s dlist,pdnode_s node)
 }
 
 // 在指定节点后插入一个节点
-void dlist_insert(pdlist_s dlist,pdnode_s lpAfter,pdnode_s node) 
+void dlist_insert(pdlist_s dlist,pdnode_s prenode,pdnode_s node) 
 {
-    if(lpAfter) {
-        if(lpAfter->next)
-            lpAfter->next->prev = node;
+    if(prenode) {
+        if(prenode->next)
+            prenode->next->prev = node;
         else
             dlist->tail = node;
-        node->prev = lpAfter;
-        node->next = lpAfter->next;
-        lpAfter->next = node;
+        node->prev = prenode;
+        node->next = prenode->next;
+        prenode->next = node;
     } else {
         dlist_insert_head(dlist, node);
     }
@@ -94,9 +94,9 @@ pdnode_s dlist_remove(pdlist_s dlist,pdnode_s node)
 w_bool_t dlist_is_empty(pdlist_s dlist) 
 {
     if(dlist->head || dlist->tail)
-     return B_FALSE;
+        return B_FALSE;
     else
-     return B_TRUE;
+        return B_TRUE;
 }
 
 // 获取链表中的节点数

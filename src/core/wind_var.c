@@ -78,7 +78,8 @@ void wind_corevar_init(void)
     g_core.run_falg = B_FALSE;
     g_core.ticks_cnt = 0;
     wind_corepool_init();
-    wind_list_init(&g_core.threadlist);
+    DLIST_INIT(g_core.threadlist);
+    DLIST_INIT(g_core.sleeplist);
     DLIST_INIT(g_core.semlist);
     DLIST_INIT(g_core.locklist);
     wind_list_init(&g_core.ttmerlist);

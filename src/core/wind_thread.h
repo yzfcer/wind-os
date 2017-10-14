@@ -98,9 +98,11 @@ typedef struct __threadcb_s
 //Ïß³Ì¿ØÖÆPCB
 typedef struct _thread_s
 {
-    dnode_s thrnode;
-    pstack_t pstk;
-    pstack_t pstktop;
+    dnode_s validthr;
+    dnode_s suspendthr;
+    dnode_s sleepthr;
+    pstack_t stack;
+    pstack_t stack_top;
     w_uint16_t stksize;
     
     w_err_t (*procfunc)(w_int32_t argc,w_int8_t **argv);
@@ -153,7 +155,7 @@ w_err_t wind_thread_sleep(w_uint32_t ms);
 void    wind_thread_wakeup(void);
 w_err_t wind_thread_exit(w_err_t exitcode);
 
-w_err_t wind_thread_print(plist_s list);
+w_err_t wind_thread_print(pdlist_s list);
 #if WIND_THREAD_CALLBACK_SUPPORT > 0
 w_err_t wind_thread_callback_register(pthread_s pthread,procevt_e id,void(*cb)(pthread_s));
 #endif
