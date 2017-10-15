@@ -79,17 +79,19 @@ w_err_t wind_heap_init(pmemheap_s mhp,
     WIND_ASSERT_RETURN(name != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(base != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(err == ERR_OK,ERR_COMMAN);
+    
     DNODE_INIT(mhp->mnode);
     wind_memset(mhp->name,0,WIND_HEAP_NAME_LEN);
     wind_memcpy(mhp->name,name,WIND_HEAP_NAME_LEN - 1);
-    mhp->base = base;
-    mhp->pool_size = WIND_HEAP_ALIGN(size, WIND_HEAP_ALIGN_SIZE);//
-    mhp->available_size = mhp->pool_size - (2 * WIND_HEAP_SIZE);
-    mhp->max_used_size = mhp->pool_size - mhp->available_size;
+    mhp->addr = base;
+    mhp->size = WIND_HEAP_ALIGN(size, WIND_HEAP_ALIGN_SIZE);//
+    mhp->rest = mhp->size - (2 * WIND_HEAP_SIZE);
+    mhp->max_used = mhp->size - mhp->rest;
 
     item = &(mhp->free_header);
+    
     item->magic = WIND_HEAP_MAGIC;
-    item->pool_ptr = mhp;
+    item->pheap = mhp;
     item->next = NULL;
     item->prev = NULL;
     item->next_free = item;
@@ -99,18 +101,14 @@ w_err_t wind_heap_init(pmemheap_s mhp,
 
     item = (pheapitem_s )base;
     item->magic = WIND_HEAP_MAGIC;
-    item->pool_ptr = mhp;
+    item->pheap = mhp;
     item->next = NULL;
     item->prev = NULL;
     item->next_free = item;
     item->prev_free = item;
 
-    item->next = (pheapitem_s)((w_uint8_t *)item + mhp->available_size + WIND_HEAP_SIZE);
+    item->next = (pheapitem_s)((w_uint8_t *)item + mhp->rest + WIND_HEAP_SIZE);
     item->prev = item->next;
-
-    mhp->block_list = item;
-
-
     item->next_free = mhp->free_list->next_free;
     item->prev_free = mhp->free_list;
     mhp->free_list->next_free->prev_free = item;
@@ -120,7 +118,7 @@ w_err_t wind_heap_init(pmemheap_s mhp,
     item = item->next;
 
     item->magic = WIND_HEAP_MAGIC | WIND_HEAP_USED;
-    item->pool_ptr = mhp;
+    item->pheap = mhp;
     item->next = (pheapitem_s )base;
     item->prev = (pheapitem_s )base;
 
@@ -135,7 +133,7 @@ w_err_t wind_heap_init(pmemheap_s mhp,
 
 
 //堆可自由分配的内存空间进行初始化
-void wind_heap_block_init(void)
+void wind_heaps_init(void)
 {
     WIND_INFO("memory heap initializing...\r\n");
     wind_heap_init(&gwind_heap[0],
@@ -171,10 +169,10 @@ void *wind_heap_alloc(pmemheap_s heap, w_uint32_t size)
         size = WIND_HEAP_MINIALLOC;
     
     WIND_HEAP_DEBUG("allocate %d on heap\r\n",size);
-    WIND_HEAP_DEBUG("pool_size:0x%x\r\n",heap->pool_size);
-    WIND_HEAP_DEBUG("available_size:0x%x\r\n",heap->available_size);
+    WIND_HEAP_DEBUG("pool_size:0x%x\r\n",heap->size);
+    WIND_HEAP_DEBUG("available_size:0x%x\r\n",heap->rest);
     
-    if (size < heap->available_size)
+    if (size < heap->rest)
     {
 
         free_size = 0;
@@ -214,7 +212,7 @@ void *wind_heap_alloc(pmemheap_s heap, w_uint32_t size)
                 new_ptr->magic = WIND_HEAP_MAGIC;
 
 
-                new_ptr->pool_ptr = heap;
+                new_ptr->pheap = heap;
 
 
                 new_ptr->prev          = header_ptr;
@@ -233,18 +231,18 @@ void *wind_heap_alloc(pmemheap_s heap, w_uint32_t size)
                 new_ptr->prev_free = heap->free_list;
                 heap->free_list->next_free->prev_free = new_ptr;
                 heap->free_list->next_free            = new_ptr;
-                heap->available_size = heap->available_size -
+                heap->rest = heap->rest -
                                        size -
                                        WIND_HEAP_SIZE;
-                if (heap->pool_size - heap->available_size > heap->max_used_size)
-                    heap->max_used_size = heap->pool_size - heap->available_size;
+                if (heap->size - heap->rest > heap->max_used)
+                    heap->max_used = heap->size - heap->rest;
             }
             else
             {
 
-                heap->available_size = heap->available_size - free_size;
-                if (heap->pool_size - heap->available_size > heap->max_used_size)
-                    heap->max_used_size = heap->pool_size - heap->available_size;
+                heap->rest = heap->rest - free_size;
+                if (heap->size - heap->rest > heap->max_used)
+                    heap->max_used = heap->size - heap->rest;
 
 
 
@@ -327,7 +325,7 @@ void *wind_heap_realloc(pmemheap_s heap, void* ptr, w_uint32_t newsize)
 
     new_ptr->magic = WIND_HEAP_MAGIC;
 
-    new_ptr->pool_ptr = heap;
+    new_ptr->pheap = heap;
 
 
     new_ptr->prev           = header_ptr;
@@ -342,7 +340,7 @@ void *wind_heap_realloc(pmemheap_s heap, void* ptr, w_uint32_t newsize)
 
 
         free_ptr = new_ptr->next;
-        heap->available_size = heap->available_size - MEMITEM_SIZE(free_ptr);
+        heap->rest = heap->rest - MEMITEM_SIZE(free_ptr);
 
 
 
@@ -360,7 +358,7 @@ void *wind_heap_realloc(pmemheap_s heap, void* ptr, w_uint32_t newsize)
     heap->free_list->next_free->prev_free = new_ptr;
     heap->free_list->next_free              = new_ptr;
 
-    heap->available_size = heap->available_size + MEMITEM_SIZE(new_ptr);
+    heap->rest = heap->rest + MEMITEM_SIZE(new_ptr);
 
 
     wind_lock_open(heap->plock);
@@ -382,7 +380,7 @@ w_err_t wind_heap_free(void *ptr)
     header_ptr    = (pheapitem_s )((w_uint8_t *)ptr - WIND_HEAP_SIZE);
 
 
-    heap = header_ptr->pool_ptr;
+    heap = header_ptr->pheap;
 
 
     result = wind_lock_close(heap->plock);
@@ -395,13 +393,13 @@ w_err_t wind_heap_free(void *ptr)
 
     header_ptr->magic &= ~WIND_HEAP_USED;
 
-    heap->available_size = heap->available_size + MEMITEM_SIZE(header_ptr);
+    heap->rest = heap->rest + MEMITEM_SIZE(header_ptr);
 
 
     if (!WIND_HEAP_IS_USED(header_ptr->prev))
     {
 
-        heap->available_size = heap->available_size + WIND_HEAP_SIZE;
+        heap->rest = heap->rest + WIND_HEAP_SIZE;
 
 
         (header_ptr->prev)->next = header_ptr->next;
@@ -417,7 +415,7 @@ w_err_t wind_heap_free(void *ptr)
     if (!WIND_HEAP_IS_USED(header_ptr->next))
     {
 
-        heap->available_size = heap->available_size + WIND_HEAP_SIZE;
+        heap->rest = heap->rest + WIND_HEAP_SIZE;
 
 
         new_ptr = header_ptr->next;
@@ -464,8 +462,8 @@ void *wind_hmalloc(w_uint32_t size)
     {
         heap = DLIST_OBJ(pnode,memheap_s,mnode);
         WIND_HEAP_DEBUG("malloc in heap:0x%x\r\n",heap);
-        WIND_HEAP_DEBUG("pool_size:0x%x\r\n",heap->pool_size);
-        WIND_HEAP_DEBUG("available_size:0x%x\r\n",heap->available_size);
+        WIND_HEAP_DEBUG("pool_size:0x%x\r\n",heap->size);
+        WIND_HEAP_DEBUG("available_size:0x%x\r\n",heap->rest);
         ptr = wind_heap_alloc(heap, size);
         if(ptr)
         {
@@ -498,7 +496,7 @@ void *wind_hrealloc(void *rmem, w_uint32_t newsize)
         return wind_hmalloc(newsize);
     phead = (pheapitem_s )((w_uint8_t *)rmem - WIND_HEAP_SIZE);
 
-    pnew = wind_heap_realloc(phead->pool_ptr, rmem, newsize);
+    pnew = wind_heap_realloc(phead->pheap, rmem, newsize);
     if (pnew == NULL && newsize != 0)
     {
 
@@ -540,8 +538,8 @@ void wind_heap_showinfo(void)
     {
         heap = DLIST_OBJ(pnode,memheap_s,mnode);
         wind_printf("name:%s\r\n",heap->name);
-        wind_printf("start:0x%x\r\n",heap->base);
-        wind_printf("size:0x%x\r\n",heap->pool_size);
+        wind_printf("start:0x%x\r\n",heap->addr);
+        wind_printf("size:0x%x\r\n",heap->size);
         pnode = dnode_next(pnode);
     }
 }

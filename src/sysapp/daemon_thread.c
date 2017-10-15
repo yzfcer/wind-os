@@ -23,7 +23,6 @@ static w_err_t daemon_thread(w_int32_t argc,w_int8_t **argv)
     (void)argc;
     while(1)
     {
-        //wind_thread_sleep(10);
         test();
     }
 }

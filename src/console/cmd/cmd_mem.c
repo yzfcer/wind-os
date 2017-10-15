@@ -117,7 +117,7 @@ static w_err_t display_mem(char **argv)
 
 static w_err_t display_stack(char **argv)
 {
-    w_uint32_t start,len;
+    w_uint32_t start,len,end,used;
     pthread_s thr;
     if(wind_strcmp(argv[1],"stack") != 0)
     {
@@ -130,9 +130,10 @@ static w_err_t display_stack(char **argv)
     }
     start = (w_uint32_t)thr->stack;
     len = ((w_uint32_t)thr->stack_top + thr->stksize*sizeof(w_stack_t) - (w_uint32_t)thr->stack);
-    console_printf("stack start 0x%08x,size %d,cur 0x%08x,end 0x%08x\r\n",
-                (w_uint32_t)thr->stack_top,thr->stksize,(w_uint32_t)thr->stack,
-                (w_uint32_t)thr->stack_top + thr->stksize*sizeof(w_stack_t));
+    end = (w_uint32_t)thr->stack_top + thr->stksize*sizeof(w_stack_t);
+    used =((w_uint32_t)thr->stack_top + len - (w_uint32_t)thr->stack)/sizeof(pstack_t);
+    console_printf("stack start 0x%08x,size %d,used %d,cur 0x%08x,end 0x%08x\r\n",
+                (w_uint32_t)thr->stack_top,thr->stksize,used,(w_uint32_t)thr->stack,end);
     if(len <= 4096)
         print_mem(start,len);
     return ERR_OK;

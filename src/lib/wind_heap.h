@@ -18,8 +18,7 @@
 **--------------当前版本修订----------------------------------------------------------------------------
 ** 修改人: 
 ** 日　期: 2013.11.03,初步测试通过
-** 描　述: 关于内存堆的分配算法，主要是抑制了RT-thread系统的内存堆管理函数，为了能与wind_os实现兼容，对
-**         启动的函数做了一定程度上的修改，包括堆空间的初始化，临界区保护等功能
+** 描　述: 
 **
 ** 备  注：不要在中断服务例程中分配或释放动态内存块
 **------------------------------------------------------------------------------------------------------
@@ -71,29 +70,25 @@ typedef struct __memheap_s memheap_s,*pmemheap_s;
 struct __heapitem_s
 {
     w_uint32_t magic;
-    memheap_s *pool_ptr;
-
+    memheap_s *pheap;
     heapitem_s *next;
     heapitem_s *prev;
-
     heapitem_s *next_free;
-    heapitem_s *prev_free; 
-};//heapitem_s,*pheapitem_s;
+    heapitem_s *prev_free;
+};
 
 
 typedef struct __memheap_s
 {
     w_int8_t name[WIND_HEAP_NAME_LEN];
+    plock_s plock; 
     dnode_s mnode;
-    void *base; 
-    w_uint32_t pool_size;
-    w_uint32_t available_size;
-    w_uint32_t max_used_size;
-
-    pheapitem_s block_list;
+    void *addr; 
+    w_uint32_t size;
+    w_uint32_t rest;
+    w_uint32_t max_used;
     pheapitem_s free_list;
     heapitem_s free_header;
-    plock_s plock; 
 }memheap_s,*pmemheap_s;
 
 w_err_t wind_heap_init(pmemheap_s mhp,
@@ -101,7 +96,7 @@ w_err_t wind_heap_init(pmemheap_s mhp,
                          void *start_addr,
                          w_uint32_t size);
 
-void wind_heap_block_init(void);
+void wind_heaps_init(void);
 
 void *wind_heap_alloc(pmemheap_s heap, w_uint32_t size);
 void *wind_heap_alloc_default(w_uint32_t size);

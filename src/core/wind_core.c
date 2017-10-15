@@ -184,7 +184,7 @@ void wind_init()
 #endif
     wind_corevar_init();
 #if WIND_HEAP_SUPPORT > 0
-    wind_heap_block_init();
+    wind_heaps_init();
 #endif
     wind_time_init();//时间初始化
 #if WIND_RTC_SUPPORT > 0
