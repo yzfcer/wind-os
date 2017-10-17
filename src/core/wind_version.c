@@ -60,6 +60,7 @@ void wind_print_os_info(void)
     WIND_INFO("\r\n\r\nwind_os version:%s\r\n",wind_get_core_version());
     output_logo();
     WIND_INFO("core created on:%s @ chengdu,sichuan province,china.\r\n",__DATE__);
+    WIND_INFO("wind init start\r\n",__DATE__);
     str = wind_get_core_version_info();
     WIND_INFO(str);
     WIND_INFO("core is built at %s %s\r\n",__TIME__,__DATE__);
