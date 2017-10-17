@@ -119,9 +119,9 @@ void wind_open_interrupt(void)
 }
 
 
-pstack_t wind_stk_init(thread_run_f pfunc,void *pdata, pstack_t pstkbt)
+w_pstack_t wind_stk_init(thread_run_f pfunc,void *pdata, w_pstack_t pstkbt)
 {
-    pstack_t stk;
+    w_pstack_t stk;
     stk = pstkbt;                            /* Load stack pointer                                 */
 
 #if (__FPU_PRESENT==1)&&(__FPU_USED==1)	

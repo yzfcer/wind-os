@@ -89,8 +89,8 @@ typedef struct __core_var_s
 extern core_var_s g_core;//内核相关的参数集
 extern volatile w_bool_t gwind_start_flag;//开始调度的标志
 
-extern pstack_t *gwind_high_stack;
-extern pstack_t *gwind_cur_stack;
+extern w_pstack_t *gwind_high_stack;
+extern w_pstack_t *gwind_cur_stack;
 
 void wind_corevar_init(void);
 
@@ -98,9 +98,9 @@ void *wind_core_alloc(stat_e type);
 
 w_err_t wind_core_free(stat_e type,void *block);
 
-pstack_t wind_stack_alloc(w_uint32_t size);
+w_pstack_t wind_stack_alloc(w_uint32_t size);
 
-w_err_t wind_stack_free(pstack_t pstack);
+w_err_t wind_stack_free(w_pstack_t pstack);
 
 //CPU的总体占用率
 #define WIND_CPU_USAGE (g_core.cpu_usage)

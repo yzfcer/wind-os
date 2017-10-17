@@ -206,12 +206,12 @@ pthread_s wind_thread_create(const w_int8_t *name,
                    w_err_t (*procfunc)(w_int32_t argc,w_int8_t **argv),
                    w_int16_t argc,
                    w_int8_t **argv,
-                   pstack_t pstk,
+                   w_pstack_t pstk,
                    w_uint16_t stksize)
 {
     w_uint16_t i;
     pthread_s pthread;
-    pstack_t tmpstk;
+    w_pstack_t tmpstk;
 
     WIND_INFO("creating thread:%s\r\n",name);
     WIND_ASSERT_RETURN(name != NULL,NULL);

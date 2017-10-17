@@ -117,7 +117,7 @@ static w_err_t display_mem(char **argv)
 
 static w_err_t display_stack(char **argv)
 {
-    w_uint32_t start,len,end,used;
+    w_uint32_t start,end,cur,len,used;
     pthread_s thr;
     if(wind_strcmp(argv[1],"stack") != 0)
     {
@@ -128,14 +128,19 @@ static w_err_t display_stack(char **argv)
     {
         return ERR_COMMAN;
     }
-    start = (w_uint32_t)thr->stack;
-    len = ((w_uint32_t)thr->stack_top + thr->stksize*sizeof(w_stack_t) - (w_uint32_t)thr->stack);
-    end = (w_uint32_t)thr->stack_top + thr->stksize*sizeof(w_stack_t);
-    used =((w_uint32_t)thr->stack_top + len - (w_uint32_t)thr->stack)/sizeof(pstack_t);
-    console_printf("stack start 0x%08x,size %d,used %d,cur 0x%08x,end 0x%08x\r\n",
-                (w_uint32_t)thr->stack_top,thr->stksize,used,(w_uint32_t)thr->stack,end);
+    start = (w_uint32_t)thr->stack_top;
+    end = start + thr->stksize*sizeof(w_stack_t);
+    cur = (w_uint32_t)thr->stack;
+    len = (end - cur) + 4;
+    used = (end - cur) / sizeof(w_pstack_t) + 1;
+    
+    console_printf("stack start :0x%08X\r\n",start);
+    console_printf("stack end   :0x%08X\r\n",end);
+    console_printf("stack cur   :0x%08X\r\n",cur);
+    console_printf("stack size  :%d\r\n",thr->stksize);
+    console_printf("stack used  :%d\r\n",used);
     if(len <= 4096)
-        print_mem(start,len);
+        print_mem(cur,len);
     return ERR_OK;
 }
 

@@ -38,8 +38,8 @@
 core_var_s g_core;
 volatile w_bool_t gwind_start_flag = B_FALSE;
 
-pstack_t *gwind_high_stack;
-pstack_t *gwind_cur_stack;
+w_pstack_t *gwind_high_stack;
+w_pstack_t *gwind_cur_stack;
 void wind_corepool_init(void)
 {
     wind_pool_create("pcb_pool",g_core.pcb,sizeof(g_core.pcb),sizeof(thread_s));
@@ -173,10 +173,10 @@ w_err_t wind_core_free(stat_e type,void *block)
 }
 
 //申请一个线程堆栈
-pstack_t wind_stack_alloc(w_uint32_t size)
+w_pstack_t wind_stack_alloc(w_uint32_t size)
 {
     w_uint16_t stksize;
-    pstack_t pstk;
+    w_pstack_t pstk;
     if(size == 0)
         return NULL;
     if(stksize <= 16)
@@ -189,7 +189,7 @@ pstack_t wind_stack_alloc(w_uint32_t size)
 }
 
 //释放一个线程堆栈
-w_err_t wind_stack_free(pstack_t pstack)
+w_err_t wind_stack_free(w_pstack_t pstack)
 {
     WIND_ASSERT_RETURN(pstack != NULL,ERR_NULL_POINTER);
         return wind_pool_free(g_core.stkbuf,pstack);

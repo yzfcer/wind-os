@@ -99,9 +99,9 @@ typedef struct _thread_s
     dnode_s validthr;
     dnode_s suspendthr;
     dnode_s sleepthr;
-    pstack_t stack;
-    pstack_t stack_top;
-    w_uint16_t stksize;
+    w_pstack_t stack;//堆栈指针
+    w_pstack_t stack_top;//栈顶指针
+    w_uint16_t stksize;//堆栈大小，以栈宽度技术
     
     w_err_t (*procfunc)(w_int32_t argc,w_int8_t **argv);
     w_int16_t argc;
@@ -132,7 +132,7 @@ pthread_s wind_thread_create(const w_int8_t *name,
                    w_err_t (*procfunc)(w_int32_t argc,w_int8_t **argv),
                    w_int16_t argc,
                    w_int8_t **argv,
-                   pstack_t psck,
+                   w_pstack_t psck,
                    w_uint16_t stksize);
 w_err_t wind_thread_changeprio(pthread_s pthread,w_int16_t prio);
 w_err_t wind_thread_start(pthread_s pthread);
