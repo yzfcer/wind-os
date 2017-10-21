@@ -43,22 +43,29 @@
 #define WIND_THREAD_PRIO_MIN_LIM 100//优先级的最小值
 #define WIND_THREAD_PRIO_MAX_LIM 30000//优先级的最大值
 
+static w_uint16_t get_prio(prio_e priolevel)
+{
+    static w_uint16_t pcbcnt = 0;
+    w_uint16_t prio;
+    pcbcnt ++;
+    if(pcbcnt >= 10000)
+        pcbcnt = 0;
+    prio = (priolevel - 1) * 10000 + pcbcnt;
+    return prio;
+}
 
 //********************************************internal functions******************************
-static pthread_s pcb_malloc(prio_e priolevel)
+static pthread_s pcb_malloc(void)
 {
-    pthread_s pthread;
-    WIND_ASSERT_RETURN(priolevel < PRIO_SYS_LOW && priolevel > PRIO_ZERO,NULL);
+    pthread_s pthread;    
     pthread = wind_core_alloc(STAT_PROC);
     WIND_ASSERT_RETURN(pthread != NULL,NULL);
     pthread->used = B_TRUE;
-    pthread->prio = (priolevel - 1) * 10000 + g_core.pcbcnt;
-    g_core.pcbcnt ++;
     WIND_DEBUG("alloc pthread->prio:%d\r\n",pthread->prio);
     return pthread;
 }
 
-w_err_t pcb_free(pthread_s pthread)
+static w_err_t pcb_free(pthread_s pthread)
 {
     WIND_ASSERT_RETURN(pthread != NULL,ERR_NULL_POINTER);
     pthread->used = B_FALSE;
@@ -183,10 +190,11 @@ pthread_s wind_thread_create(const w_int8_t *name,
     WIND_ASSERT_RETURN(procfunc != NULL,NULL);
     WIND_ASSERT_RETURN(pstk != NULL,NULL);
     WIND_ASSERT_RETURN(stksize > 0,NULL);
-    
-    pthread = pcb_malloc(priolevel);
+    WIND_ASSERT_RETURN(priolevel < PRIO_SYS_LOW && priolevel > PRIO_ZERO,NULL);
+    pthread = pcb_malloc();
     WIND_ASSERT_RETURN(pthread != NULL,NULL);
     wind_strcpy(pthread->name,name);
+    pthread->prio = get_prio(priolevel);
     PRIO_DNODE_INIT(pthread->validthr);
     PRIO_DNODE_INIT(pthread->suspendthr);
     PRIO_DNODE_INIT(pthread->sleepthr);
