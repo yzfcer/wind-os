@@ -86,7 +86,7 @@ w_err_t wind_lock_free(plock_s plock)
     foreach_node(pnode,&plock->waitlist)
     {
         dlist_remove(&plock->waitlist,pnode);
-        pthread = DLIST_OBJ(pnode,thread_s,suspendthr);
+        pthread = DLIST_OBJ(pnode,thread_s,suspendthr.node);
         pthread->runstat = THREAD_STATUS_READY;
         pthread->cause = CAUSE_LOCK;
     }
@@ -138,7 +138,7 @@ w_err_t wind_lock_open(plock_s plock)
         return ERR_OK; //信号量有效，直接返回效，
     }
     dlist_remove_head(&plock->waitlist);
-    pthread = DLIST_OBJ(pnode,thread_s,suspendthr);
+    pthread = DLIST_OBJ(pnode,thread_s,suspendthr.node);
     
     pthread->runstat = THREAD_STATUS_READY;
     pthread->cause = CAUSE_LOCK;
@@ -159,7 +159,7 @@ w_err_t wind_lock_print(pdlist_s list)
     wind_printf("--------------------------------------\r\n");
     foreach_node(dnode,list)
     {
-        plock = (plock_s)DLIST_OBJ(dnode,lock_s,locknode);
+        plock = (plock_s)DLIST_OBJ(dnode,lock_s,locknode.node);
         wind_printf("%-16s %-8s\r\n",
             plock->name,plock->locked?"lock":"unlock");
     }

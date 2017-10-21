@@ -126,7 +126,6 @@ pmbox_s wind_mbox_create(const char *name,pthread_s owner)
     return pmbox;
 }
 
-//
 w_err_t wind_mbox_destroy(pmbox_s pmbox)
 {
     w_err_t err;

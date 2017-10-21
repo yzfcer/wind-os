@@ -33,7 +33,8 @@ struct __dlist_s
 #define PRIO_DNODE_INIT(prionode) {prionode.node.prev = NULL;prionode.node.next = NULL;prionode.prio = 0;}
 #define DLIST_INIT(dlist) {dlist.head = NULL;dlist.tail = NULL;}
 #define FIND(type,e) ((w_uint32_t)&(((type*)0)->e))
-#define DLIST_OBJ(ptr,type,mbr) (void*)(((char*)(ptr))-((w_uint32_t)&(((type*)0)->mbr)))
+#define DLIST_OBJ(ptr,type,mbrnode) (void*)(((char*)(ptr))-((w_uint32_t)&(((type*)0)->mbrnode)))
+#define PRI_DLIST_OBJ(ptr,type,mbrnode) (void*)(((char*)(ptr))-((w_uint32_t)&(((type*)0)->mbrnode.node)))
 
 #define foreach_node(node,list) for(node = dlist_head(list);node != NULL;node = dnode_next(node))
 //#define foreach_prionode(node,list) for(node = prilist_head(list);node != NULL;node = prinode_next(node.node))
@@ -66,35 +67,6 @@ pdnode_s dnode_prev(pdnode_s node)
     return node->prev;
 }
 
-#if 0
-//获取链表头部节点
-static __INLINE__ 
-pprinode_s prilist_head(pdlist_s dlist)
-{
-    return DLIST_OBJ(dlist->head,prinode_s,node);
-}
-
-// 获取链表尾部节点
-static __INLINE__ 
-pprinode_s prilist_tail(pdlist_s dlist)
-{
-    return DLIST_OBJ(dlist->tail,prinode_s,node);
-}
-
-// 获取给定节点的下一个节点
-static __INLINE__ 
-pprinode_s prinode_next(pprinode_s node) 
-{
-    return DLIST_OBJ(node->node.next,prinode_s,node);
-}
-
-// 获取给定节点的上一个节点
-static __INLINE__
-pdnode_s prinode_prev(pdnode_s node)
-{
-    return DLIST_OBJ(node->node.prev,prinode_s,node);
-}
-#endif
 
 // 在链表头部插入一个节点
 void dlist_insert_head(pdlist_s dlist,pdnode_s node);
@@ -126,6 +98,6 @@ pdlist_s dlist_combine(pdlist_s dlist1,pdlist_s dlist2);
 void dlist_insert_prio(pdlist_s dlist,pprinode_s prinode,w_uint32_t prio);
 
 // 从链表中删除给定带优先级节点
-pprinode_s dlist_remove_prio(pdlist_s dlist,pprinode_s node);
+pprinode_s dlist_remove_prio(pdlist_s dlist,pprinode_s prinode);
 
 #endif//__dlist_s_H__
