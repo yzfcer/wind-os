@@ -43,125 +43,56 @@
 
 //**********************************************extern functions******************************
 
-
-
-ppipe_s wind_pipe_create(const char *name,void *inbuf,w_uint32_t inlen,void *outbuf,w_uint32_t outlen)
+ppipe_s wind_pipe_create(const char *name,void *buff,w_uint32_t buflen)
 {
     ppipe_s ppipe;
     w_err_t err;
-    WIND_ASSERT_RETURN((inbuf != NULL) || (outbuf != NULL),NULL);
-    if(inbuf != NULL)
-    {
-        WIND_ASSERT_RETURN(inlen > 0,NULL);
-    }
-    if(outbuf != NULL)
-    {
-        WIND_ASSERT_RETURN(outlen > 0,NULL);
-    }
+    WIND_ASSERT_RETURN((buff != NULL),NULL);
+    WIND_ASSERT_RETURN(buflen > 0,NULL);
     
-    wind_close_interrupt();
     ppipe = wind_core_alloc(STAT_PIPE);
-    
-    WIND_ASSERT_TODO(ppipe != NULL,wind_open_interrupt(),NULL);
-    if(inbuf != NULL)
-    {
-        ppipe->in = inbuf;
-        err = wind_queue_create(inbuf,inlen,1,LOCK_TYPE_AREA);
-        if(ERR_OK != err)
-            return NULL;
-    }
-    if(inbuf != NULL)
-    {
-        ppipe->out = outbuf;
-        err = wind_queue_create(outbuf,outlen,1,LOCK_TYPE_AREA);
-        if(ERR_OK != err)
-        {
-            wind_queue_destory(inbuf);
-            return NULL;
-        }
-    }
-    ppipe->name = name;
-    ppipe->inlen= inlen;
-    ppipe->outlen= outlen;
-    //设定当前的线程句柄
-    ppipe->owner = wind_thread_current();
-    ppipe->client = NULL;
-    ppipe->used = B_TRUE;
+    WIND_ASSERT_RETURN(ppipe != NULL,NULL);
     ppipe->magic = WIND_PIPE_MAGIC;
-    wind_open_interrupt();
-    
+    ppipe->name = name;
+    ppipe->buflen = buflen;
+    ppipe->used = B_TRUE;
+    ppipe->buff = buff;
+    err = wind_queue_create(buff,buflen,1,LOCK_TYPE_AREA);
+    if(ERR_OK != err)
+    {
+        wind_core_free(STAT_PIPE,ppipe);
+        return NULL;
+    }
     return ppipe;
-}
-
-
-w_err_t wind_pipe_connect(ppipe_s ppipe)
-{
-    pthread_s pthread = NULL;
-    WIND_ASSERT_RETURN(ppipe != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(ppipe->magic == WIND_PIPE_MAGIC,ERR_INVALID_PARAM);
-    pthread = wind_thread_current();
-    WIND_ASSERT_RETURN(pthread != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(ppipe->client == NULL,ERR_COMMAN);
-    ppipe->client = pthread;
-    return ERR_OK;
 }
 
 
 w_int16_t wind_pipe_read(ppipe_s ppipe,w_int8_t *str,w_int16_t len)
 {
-    pthread_s pthread;
     w_int16_t cnt = -1;
     WIND_ASSERT_RETURN(ppipe != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(str != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(len > 0,ERR_INVALID_PARAM);
     WIND_ASSERT_RETURN(ppipe->magic == WIND_PIPE_MAGIC,ERR_INVALID_PARAM);
-    
-    wind_close_interrupt();
-    pthread = wind_thread_current();
-    WIND_ASSERT_TODO(pthread != NULL,wind_open_interrupt(),ERR_COMMAN);
-    if(pthread == ppipe->client)
-    {
-        cnt = wind_queue_read(ppipe->out,str,len);
-    }
-    else if(pthread == ppipe->owner)
-    {
-        cnt = wind_queue_read(ppipe->in,str,len);
-    }
-    wind_open_interrupt();
+    cnt = wind_queue_read(ppipe->buff,str,len);
     return cnt;
 }
 
 w_int16_t wind_pipe_write(ppipe_s ppipe,w_int8_t *str,w_int16_t len)
 {
-    pthread_s pthread;
     w_int16_t cnt = -1;
     WIND_ASSERT_RETURN(ppipe != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(ppipe->magic == WIND_PIPE_MAGIC,ERR_INVALID_PARAM);
     WIND_ASSERT_RETURN(str != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(len > 0,ERR_INVALID_PARAM);
-    wind_close_interrupt();
-    pthread = wind_thread_current();
-    WIND_ASSERT_TODO(pthread != NULL,wind_open_interrupt(),ERR_COMMAN);
-    if(pthread == ppipe->client)
-    {
-        cnt = wind_queue_write(ppipe->in,str,len);
-    }
-    else if(pthread == ppipe->owner)
-    {
-        cnt = wind_queue_write(ppipe->out,str,len);
-    }
-    wind_open_interrupt();
+    cnt = wind_queue_write(ppipe->buff,str,len);
     return cnt;
 }
 
 w_err_t wind_pipe_free(ppipe_s ppipe)
 {
-    pthread_s pthread;
     WIND_ASSERT_RETURN(ppipe != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(ppipe->magic == WIND_PIPE_MAGIC,ERR_INVALID_PARAM);
-    pthread = wind_thread_current();
-    WIND_ASSERT_RETURN(pthread == ppipe->owner,ERR_COMMAN);
-    wind_close_interrupt();
     ppipe->magic = 0;
     ppipe->used = B_FALSE;
     ppipe->name = NULL;

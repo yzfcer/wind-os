@@ -37,23 +37,19 @@ extern "C" {
 #if WIND_PIPE_SUPPORT > 0
 
 #define WIND_PIPE_MAGIC 0x56384c6a
-#define PIPE_NAME_LEN 10
+#define PIPE_NAME_LEN 12
 
 typedef struct __WIND_PIPE
 {
     w_uint32_t magic;
-    const char *name;//[PIPE_NAME_LEN];
-    pthread_s client;
-    pthread_s owner;
+    const char *name;
     w_bool_t used;
-    queue_s *in;
-    queue_s *out;
-    w_uint32_t inlen;
-    w_uint32_t outlen;
+    queue_s *buff;
+    w_uint32_t buflen;
 }pipe_s,*ppipe_s;
 
 w_err_t wind_pipe_init(void);
-ppipe_s wind_pipe_create(const char *name,void *inbuf,w_uint32_t inlen,void *outbuf,w_uint32_t outlen);
+ppipe_s wind_pipe_create(const char *name,void *buff,w_uint32_t buflen);
 w_err_t wind_pipe_connect(ppipe_s ppipe);
 w_int16_t wind_pipe_read(ppipe_s ppipe,w_int8_t *str,w_int16_t len);
 w_int16_t wind_pipe_write(ppipe_s ppipe,w_int8_t *str,w_int16_t len);
