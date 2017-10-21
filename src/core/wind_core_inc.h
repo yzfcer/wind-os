@@ -28,8 +28,8 @@
 
 #include "wind_config.h"
 #include "wind_type.h"
-#include "wind_core.h"
 #include "wind_debug.h"
+#include "wind_core.h"
 #include "wind_os_hwif.h"
 #include "wind_time.h"
 

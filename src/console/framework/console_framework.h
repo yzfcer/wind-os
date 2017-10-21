@@ -89,12 +89,6 @@ typedef struct __cmd_param_s
     char * argv[CMD_PARAM_CNT];
 }cmd_param_s;
 
-typedef struct 
-{
-    w_err_t (*getchar)(char *ch);
-    w_int32_t (*printf)(const char *fmt,...);
-}console_ops;
-
 
 typedef struct __console_s
 {
@@ -106,7 +100,6 @@ typedef struct __console_s
     cmd_his_s his;
     cmd_param_s param;
     cmd_list_s cmd_list;
-    console_ops ops;
 }console_s;
 
 

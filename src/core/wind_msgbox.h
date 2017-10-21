@@ -55,7 +55,6 @@ typedef struct __mbox_s
     w_bool_t used;
     w_bool_t valid;//” œ‰ «∑Òø…”√
     pthread_s owner;
-    pthread_s waiter;
 }mbox_s, *pmbox_s;
 
 

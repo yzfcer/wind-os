@@ -33,15 +33,13 @@ extern "C" {
 #endif
 typedef struct _wind_flag
 {
-
-    w_int8_t flag;
+    w_uint32_t flag;
     w_uint8_t isvalid;
 }flag_s,*pflag_s;
 
 
-
-w_err_t wind_flag_new(pflag_s pflag,w_uint8_t cnt);
-w_err_t wind_flag_signal(pflag_s pflag);
+w_err_t wind_flag_create(pflag_s pflag,w_uint8_t cnt);
+w_err_t wind_flag_set(pflag_s pflag,w_uint32_t mask);
 w_err_t wind_flag_fetch(pflag_s pflag,w_uint32_t timeout);
 w_err_t wind_flag_free(pflag_s pflag);
 

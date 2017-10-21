@@ -119,7 +119,6 @@ pmbox_s wind_mbox_create(const char *name,pthread_s owner)
     pmbox->used = B_TRUE;
     pmbox->valid = B_TRUE;
     pmbox->owner = owner;
-    pmbox->waiter = NULL;
     wind_close_interrupt();
     dlist_insert_tail(&g_core.mboxlist,&pmbox->mboxnode);
     wind_open_interrupt();
@@ -131,9 +130,9 @@ w_err_t wind_mbox_destroy(pmbox_s pmbox)
     w_err_t err;
     pthread_s pthread;
     WIND_ASSERT_RETURN(pmbox != NULL,ERR_NULL_POINTER);
-    pthread = pmbox->waiter;
-    if((pmbox->waiter->runstat == THREAD_STATUS_SUSPEND) 
-       && (pmbox->waiter->cause == CAUSE_MSG))
+    pthread = pmbox->owner;
+    if((pmbox->owner->runstat == THREAD_STATUS_SUSPEND) 
+       && (pmbox->owner->cause == CAUSE_MSG))
     {
         pthread->runstat = THREAD_STATUS_READY;
     }
@@ -163,14 +162,14 @@ w_err_t wind_mbox_post(pmbox_s mbox,pmsg_s pmsg)
     mbox->num ++;
 
     //激活被阻塞的线程
-    pthread = mbox->waiter;
+    pthread = mbox->owner;
     if((pthread->runstat != THREAD_STATUS_SUSPEND) 
        || (pthread->cause != CAUSE_MSG))
     {
         wind_open_interrupt();
         return ERR_OK;
     }
-    mbox->waiter->runstat = THREAD_STATUS_READY;
+    mbox->owner->runstat = THREAD_STATUS_READY;
     wind_open_interrupt();
     wind_thread_dispatch();//切换线程
     return ERR_OK;
