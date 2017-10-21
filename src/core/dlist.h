@@ -37,7 +37,6 @@ struct __dlist_s
 #define PRI_DLIST_OBJ(ptr,type,mbrnode) (void*)(((char*)(ptr))-((w_uint32_t)&(((type*)0)->mbrnode.node)))
 
 #define foreach_node(node,list) for(node = dlist_head(list);node != NULL;node = dnode_next(node))
-//#define foreach_prionode(node,list) for(node = prilist_head(list);node != NULL;node = prinode_next(node.node))
 
 //获取链表头部节点
 static __INLINE__ 

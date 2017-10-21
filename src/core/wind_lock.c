@@ -46,15 +46,12 @@ static w_err_t lock_free(void *lock)
     return wind_core_free(STAT_LOCK,lock);
 }
 
+//创建一个lock对象，并加入所有lock列表
 plock_s wind_lock_create(const char *name)
 {
     plock_s plock;
     plock = lock_malloc();
-    if(plock == NULL)
-    {
-        wind_open_interrupt();
-        return NULL;
-    }
+    WIND_ASSERT_TODO(plock != NULL,wind_open_interrupt(),NULL);
     DNODE_INIT(plock->locknode);
     plock->name = name;
     plock->locked = B_FALSE;

@@ -143,8 +143,7 @@ pthread_s wind_thread_get_byname(w_int8_t *name)
     pdnode_s pdnode;
     WIND_ASSERT_RETURN(name != NULL,NULL);
     wind_close_interrupt();
-    pdnode = dlist_head(&g_core.threadlist);
-    while(pdnode)
+    foreach_node(pdnode,&g_core.threadlist)
     {
         pthread = PRI_DLIST_OBJ(pdnode,thread_s,validthr);
         if(wind_strcmp(pthread->name,name) == 0)
@@ -152,9 +151,8 @@ pthread_s wind_thread_get_byname(w_int8_t *name)
             wind_open_interrupt();
             return pthread;
         }
-        pdnode = dnode_next(pdnode);
     }
-    WIND_ASSERT_TODO(pthread != NULL,wind_open_interrupt(),NULL);
+    wind_open_interrupt();
     return NULL;
 }
 
@@ -299,7 +297,6 @@ w_err_t wind_thread_kill(pthread_s pthread)
     wind_close_interrupt();
     node = &pthread->validthr.node;
     dlist_remove(&g_core.threadlist,node);
-    //wind_thread_print(&g_core.threadlist);
 #if WIND_THREAD_CALLBACK_SUPPORT > 0
     if(pthread->cb.dead != NULL)
         pthread->cb.dead(pthread);
@@ -355,17 +352,15 @@ w_err_t wind_thread_sleep(w_uint32_t ms)
 
     wind_open_interrupt();
 #if 0
-    pnode = dlist_head(&g_core.sleeplist);
-    while(pnode)
+    foreach_node(pnode,&g_core.sleeplist)
     {
-        pthread = DLIST_OBJ(pnode,thread_s,sleepthr);
+        pthread = PRI_DLIST_OBJ(pnode,thread_s,sleepthr);
         if(pthread->prio < 0)
         {
             wind_thread_print(&g_core.sleeplist);
             WIND_ERROR("sleep err\r\n");
             break;
         }
-        pnode = dnode_next(pnode);
     }
 #endif
     wind_thread_dispatch();
