@@ -199,7 +199,6 @@ void wind_init()
     wind_datetime_init();
 #endif
     WIND_INFO("initialization completed!\r\n");
-    
 }
 
 
