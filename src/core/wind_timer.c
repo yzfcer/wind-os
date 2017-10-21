@@ -144,8 +144,8 @@ w_err_t wind_timer_set_period(ptimer_s pttimer,w_uint32_t t_ms)
 void wind_timer_event(void)
 {
     ptimer_s ptmr;
-    pdnode_s pdnode = dlist_head(&g_core.ttmerlist);
-    while(pdnode)
+    pdnode_s pdnode;
+    foreach_node(pdnode,&g_core.ttmerlist)
     {
         ptmr = DLIST_OBJ(pdnode,ttimer_s,tmrnode);
         if(ptmr->count > 0)
@@ -155,8 +155,6 @@ void wind_timer_event(void)
             ptmr->handle(ptmr->arg);
             ptmr->count = ptmr->init_count;
         }
-        //tmpttimerlist = tmpttimerlist->next;
-        pdnode = dnode_next(pdnode);
     }
 }
 #endif //#if WIND_TIMER_SUPPORT > 0

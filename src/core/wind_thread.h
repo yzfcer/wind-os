@@ -73,7 +73,7 @@ typedef enum __suscause
 #if WIND_THREAD_CALLBACK_SUPPORT > 0
 typedef enum __procevt_e
 {
-    //PROCEVT_CREATE,
+    PROCEVT_CREATE,
     PROCEVT_START,
     PROCEVT_SUSPEND,
     PROCEVT_RESUME,
@@ -84,7 +84,7 @@ typedef enum __procevt_e
 struct _thread_s;
 typedef struct __threadcb_s
 {
-    //void (*proc_created)(struct _pcb_s *pthread);
+    void (*proc_created)(struct _thread_s *pthread);
     void (*start)(struct _thread_s *pthread);
     void (*suspend)(struct _thread_s *pthread);
     void (*resume)(struct _thread_s *pthread);
@@ -150,7 +150,7 @@ pthread_s wind_thread_current(void);
 w_int8_t* wind_thread_status(thread_stat_e stat);
 
 w_err_t wind_thread_sleep(w_uint32_t ms);
-void    wind_thread_wakeup(void);
+w_err_t wind_thread_wakeup(void);
 w_err_t wind_thread_exit(w_err_t exitcode);
 
 w_err_t wind_thread_print(pdlist_s list);

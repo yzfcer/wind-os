@@ -375,13 +375,13 @@ w_err_t wind_thread_sleep(w_uint32_t ms)
     return ERR_OK;
 }
 
-void wind_thread_wakeup(void)
+w_err_t wind_thread_wakeup(void)
 {
     pdnode_s pnode;
     pthread_s pthread;
     wind_close_interrupt();
-    pnode = dlist_head(&g_core.sleeplist);
-    while(RUN_FLAG && (pnode != NULL))
+    WIND_ASSERT_TODO(RUN_FLAG,wind_open_interrupt(),ERR_OK);
+    foreach_node(pnode,&g_core.sleeplist)
     {
         pthread = PRI_DLIST_OBJ(pnode,thread_s,sleepthr);
         if(pthread->sleep_ticks > 0)
@@ -395,9 +395,9 @@ void wind_thread_wakeup(void)
                 dlist_remove(&g_core.sleeplist,&pthread->sleepthr.node);
             }
         }
-        pnode = dnode_next(pnode);
     }
     wind_open_interrupt();
+    return ERR_OK;
 }
 
 #if WIND_THREAD_CALLBACK_SUPPORT > 0
@@ -407,9 +407,9 @@ w_err_t wind_thread_callback_register(pthread_s pthread,procevt_e id,void(*cb)(p
 
     switch(id)
     {
-    //case PROCEVT_CREATE:
-    //    pthread->cb.proc_created = cb;
-    //    break;
+    case PROCEVT_CREATE:
+        pthread->cb.proc_created = cb;
+        break;
     case PROCEVT_START:
         pthread->cb.start = cb;
         break;
@@ -444,14 +444,12 @@ w_err_t wind_thread_print(pdlist_s list)
     wind_printf("----------------------------------------------\r\n");
     wind_printf("%-16s %-8s %-10s\r\n","thread","prio","state");
     wind_printf("----------------------------------------------\r\n");
-    pnode = dlist_head(list);
-    while(pnode)
+    foreach_node(pnode,list)
     {
         pthread = PRI_DLIST_OBJ(pnode,thread_s,validthr);
         stat = wind_thread_status(pthread->runstat);
         wind_printf("%-16s %-8d %-10s\r\n",
             pthread->name,pthread->prio,stat);
-        pnode = dnode_next(pnode);
     }
     wind_printf("----------------------------------------------\r\n");
     return ERR_OK;

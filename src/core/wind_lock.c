@@ -112,7 +112,7 @@ w_err_t wind_lock_close(plock_s plock)
     pthread->runstat = THREAD_STATUS_SUSPEND;
     pthread->cause = CAUSE_LOCK;
     
-    dlist_insert_tail(&plock->waitlist,&pthread->suspendthr.node);
+    dlist_insert_prio(&plock->waitlist,&pthread->suspendthr,pthread->prio);
     wind_open_interrupt();
     wind_thread_dispatch();
     return ERR_OK;
@@ -136,7 +136,7 @@ w_err_t wind_lock_open(plock_s plock)
     }
     dlist_remove_head(&plock->waitlist);
     pthread = PRI_DLIST_OBJ(pnode,thread_s,suspendthr);
-    
+
     pthread->runstat = THREAD_STATUS_READY;
     pthread->cause = CAUSE_LOCK;
     wind_open_interrupt();
