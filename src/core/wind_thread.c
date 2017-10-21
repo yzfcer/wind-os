@@ -146,7 +146,7 @@ pthread_s wind_thread_get_byname(w_int8_t *name)
     pdnode = dlist_head(&g_core.threadlist);
     while(pdnode)
     {
-        pthread = DLIST_OBJ(pdnode,thread_s,validthr);
+        pthread = PRI_DLIST_OBJ(pdnode,thread_s,validthr);
         if(wind_strcmp(pthread->name,name) == 0)
         {
             wind_open_interrupt();
@@ -351,9 +351,8 @@ w_err_t wind_thread_sleep(w_uint32_t ms)
     pthread->runstat = THREAD_STATUS_SUSPEND;
     pthread->cause = CAUSE_SLEEP;
     pthread->sleep_ticks = stcnt;
-    dlist_insert_tail(&g_core.sleeplist,&pthread->sleepthr.node);
-    //wind_printf("in sleep\r\n");
-    //wind_thread_print(&g_core.sleeplist);
+    dlist_insert_prio(&g_core.sleeplist,&pthread->sleepthr,pthread->prio);
+
     wind_open_interrupt();
 #if 0
     pnode = dlist_head(&g_core.sleeplist);
@@ -381,7 +380,7 @@ void wind_thread_wakeup(void)
     pnode = dlist_head(&g_core.sleeplist);
     while(RUN_FLAG && (pnode != NULL))
     {
-        pthread = DLIST_OBJ(pnode,thread_s,sleepthr);
+        pthread = PRI_DLIST_OBJ(pnode,thread_s,sleepthr);
         if(pthread->sleep_ticks > 0)
             pthread->sleep_ticks --;
         if(pthread->sleep_ticks <= 0)
@@ -390,8 +389,6 @@ void wind_thread_wakeup(void)
             {
                 pthread->runstat = THREAD_STATUS_READY;
                 pthread->cause = CAUSE_SLEEP;
-                //wind_printf("out sleep\r\n");
-                //wind_thread_print(&g_core.sleeplist);
                 dlist_remove(&g_core.sleeplist,&pthread->sleepthr.node);
             }
         }
@@ -447,7 +444,7 @@ w_err_t wind_thread_print(pdlist_s list)
     pnode = dlist_head(list);
     while(pnode)
     {
-        pthread = DLIST_OBJ(pnode,thread_s,validthr);
+        pthread = PRI_DLIST_OBJ(pnode,thread_s,validthr);
         stat = wind_thread_status(pthread->runstat);
         wind_printf("%-16s %-8d %-10s\r\n",
             pthread->name,pthread->prio,stat);

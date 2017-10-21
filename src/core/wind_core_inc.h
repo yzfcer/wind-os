@@ -36,7 +36,7 @@
 
 #include "wind_queue.h"
 #include "wind_flag.h"
-#include "wind_message.h"
+#include "wind_msgbox.h"
 #include "wind_thread.h"
 #include "wind_sem.h"
 

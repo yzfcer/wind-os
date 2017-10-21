@@ -1174,16 +1174,6 @@
               <FilePath>..\..\..\..\..\src\core\wind_mem.h</FilePath>
             </File>
             <File>
-              <FileName>wind_message.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\core\wind_message.c</FilePath>
-            </File>
-            <File>
-              <FileName>wind_message.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\core\wind_message.h</FilePath>
-            </File>
-            <File>
               <FileName>wind_mpool.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\core\wind_mpool.c</FilePath>
@@ -1302,6 +1292,16 @@
               <FileName>dlist.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\..\..\..\src\core\dlist.h</FilePath>
+            </File>
+            <File>
+              <FileName>wind_msgbox.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\core\wind_msgbox.c</FilePath>
+            </File>
+            <File>
+              <FileName>wind_msgbox.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\core\wind_msgbox.h</FilePath>
             </File>
           </Files>
         </Group>

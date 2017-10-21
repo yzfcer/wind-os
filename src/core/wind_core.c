@@ -89,15 +89,19 @@ static pthread_s wind_search_highthread(void)
     pdnode_s pnode;
     pthread_s pthread = NULL;
     wind_close_interrupt();
+    if(gwind_core_cnt > 0)
+    {
+        pthread = wind_thread_current();
+        wind_open_interrupt();
+        return pthread;
+    }
     foreach_node(pnode,&g_core.threadlist)
     {
-        pthread = DLIST_OBJ(pnode,thread_s,validthr.node);
+        pthread = PRI_DLIST_OBJ(pnode,thread_s,validthr);
         if((pthread->used) && (pthread->runstat == THREAD_STATUS_READY))
         {
-            //gwind_high_stack = &pthread->pstk;
             wind_open_interrupt();
             return pthread;
-            //break;
         }
     }
     wind_open_interrupt();
@@ -156,6 +160,11 @@ void wind_thread_dispatch(void)
         return;
     }
     pthr = wind_search_highthread();
+    if(pthr == wind_thread_current())
+    {
+        wind_open_interrupt();
+        return;
+    }
     gwind_high_stack = &pthr->stack;
     if(gwind_high_stack != gwind_cur_stack)
     {

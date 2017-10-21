@@ -168,14 +168,14 @@ w_err_t wind_sem_free(psem_s psem)
     while(pdnode)
     {
         dlist_remove(&psem->waitlist,pdnode);
-        pthread = DLIST_OBJ(pdnode,thread_s,suspendthr);
+        pthread = PRI_DLIST_OBJ(pdnode,thread_s,suspendthr);
         pthread->runstat = THREAD_STATUS_READY;
         pthread->cause = CAUSE_SEM;
         pdnode = dnode_next(pdnode);
     }
     dlist_remove(&g_core.semlist,&psem->semnode);
     wind_open_interrupt();
-    wind_core_free(STAT_SEM,psem);
+    sem_free(psem);
     return err;    
 }
 

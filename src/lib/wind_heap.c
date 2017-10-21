@@ -162,7 +162,7 @@ void *wind_heap_alloc(pheap_s heap,w_uint32_t size)
     wind_lock_close(mhp->plock);
     foreach_node(pdnode,&mhp->free_list)
     {
-        freeitem = DLIST_OBJ(pdnode,heapitem_s,itemnode);
+        freeitem = PRI_DLIST_OBJ(pdnode,heapitem_s,itemnode);
         if(size <= freeitem->size)
         {
             dlist_remove(&mhp->free_list,&freeitem->itemnode.node);
@@ -239,11 +239,11 @@ w_err_t wind_heap_free(void *ptr)
     item->magic = WIND_HEAPITEM_MAGIC;
     dlist_insert_prio(&heap->free_list,&item->itemnode,(w_uint32_t)item);
     pdnode = dnode_next(&item->itemnode.node);
-    tmpitem = DLIST_OBJ(pdnode,heapitem_s,itemnode.node);
+    tmpitem = PRI_DLIST_OBJ(pdnode,heapitem_s,itemnode);
     if(tmpitem != NULL)
         combine_heapitem(item,tmpitem);
     pdnode = dnode_prev(&item->itemnode.node);
-    tmpitem = DLIST_OBJ(pdnode,heapitem_s,itemnode.node);
+    tmpitem = DLIST_OBJ(pdnode,heapitem_s,itemnode);
     if(tmpitem != NULL)
         combine_heapitem(tmpitem,item);
     wind_lock_open(heap->plock);

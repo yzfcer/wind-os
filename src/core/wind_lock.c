@@ -55,12 +55,12 @@ plock_s wind_lock_create(const char *name)
         wind_open_interrupt();
         return NULL;
     }
-    PRIO_DNODE_INIT(plock->locknode);
+    DNODE_INIT(plock->locknode);
     plock->name = name;
     plock->locked = B_FALSE;
     DLIST_INIT(plock->waitlist);
     wind_close_interrupt();
-    dlist_insert_tail(&g_core.locklist,&plock->locknode.node);
+    dlist_insert_tail(&g_core.locklist,&plock->locknode);
     wind_open_interrupt();
     return plock;
 }
@@ -86,11 +86,11 @@ w_err_t wind_lock_free(plock_s plock)
     foreach_node(pnode,&plock->waitlist)
     {
         dlist_remove(&plock->waitlist,pnode);
-        pthread = DLIST_OBJ(pnode,thread_s,suspendthr.node);
+        pthread = PRI_DLIST_OBJ(pnode,thread_s,suspendthr);
         pthread->runstat = THREAD_STATUS_READY;
         pthread->cause = CAUSE_LOCK;
     }
-    dlist_remove(&g_core.locklist,&plock->locknode.node);
+    dlist_remove(&g_core.locklist,&plock->locknode);
     plock->used = B_FALSE;
     plock->name = NULL;
     lock_free(plock);
@@ -138,7 +138,7 @@ w_err_t wind_lock_open(plock_s plock)
         return ERR_OK; //信号量有效，直接返回效，
     }
     dlist_remove_head(&plock->waitlist);
-    pthread = DLIST_OBJ(pnode,thread_s,suspendthr.node);
+    pthread = PRI_DLIST_OBJ(pnode,thread_s,suspendthr);
     
     pthread->runstat = THREAD_STATUS_READY;
     pthread->cause = CAUSE_LOCK;
@@ -159,7 +159,7 @@ w_err_t wind_lock_print(pdlist_s list)
     wind_printf("--------------------------------------\r\n");
     foreach_node(dnode,list)
     {
-        plock = (plock_s)DLIST_OBJ(dnode,lock_s,locknode.node);
+        plock = (plock_s)DLIST_OBJ(dnode,lock_s,locknode);
         wind_printf("%-16s %-8s\r\n",
             plock->name,plock->locked?"lock":"unlock");
     }

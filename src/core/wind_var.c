@@ -27,7 +27,7 @@
 #include "wind_thread.h"
 #include "dlist.h"
 #include "wind_pipe.h"
-#include "wind_message.h"
+#include "wind_msgbox.h"
 #include "wind_sem.h"
 #include "wind_lock.h"
 #include "wind_timer.h"
