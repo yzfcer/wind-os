@@ -37,20 +37,19 @@ extern "C" {
 #if WIND_HEAP_SUPPORT > 0
 
 
-#define WIND_HEAP_NAME_LEN 12
-/* dynamic pool magic and mask */
-#define WIND_HEAP_ALIGN_SIZE 4
-#define WIND_HEAP_MAGIC        0x1ea01ea0
-#define WIND_HEAP_MASK         0xfffffffe
-#define WIND_HEAP_USED         0x01
-#define wind_heap_FREED        0x00
-
-#define WIND_HEAP_IS_USED(h)   ((h)->magic & WIND_HEAP_USED)
 #define WIND_HEAP_MINIALLOC    12
+#define WIND_HEAP_ALIGN_SIZE 4
+#define WIND_HEAP_MAGIC        0xa5e8749c
+#define WIND_HEAPITEM_MAGIC    0x1ea01ea0
+#define WIND_HEAP_MASK         0xfffffffe
+#define WIND_HEAP_USED         0x05
 
-#define WIND_HEAP_ALIGN(size,N) ((size + N -1) / N * N)
-#define WIND_HEAP_SIZE         WIND_HEAP_ALIGN(sizeof(heapitem_s), WIND_HEAP_ALIGN_SIZE)
-#define MEMITEM_SIZE(item)      ((w_uint32_t)item->next - (w_uint32_t)item - WIND_HEAP_SIZE)
+#define HEAP_IS_USED(h)   ((h)->magic & WIND_HEAP_USED)
+
+#define __ALIGN_R(size,N) ((size + N - 1) / N * N)
+#define __ALIGN_L(size,N) ((size - N + 1) / N * N)
+
+#define WIND_HEAP_SIZE         __ALIGN_R(sizeof(heapitem_s), WIND_HEAP_ALIGN_SIZE)
 
 
 //内存块的块数的定义，如果系统存在多个不连续的内存区，则应该在下面添加定义
@@ -66,42 +65,39 @@ typedef enum __HeapBlock_e
 
 
 typedef struct __heapitem_s heapitem_s,*pheapitem_s;
-typedef struct __memheap_s memheap_s,*pmemheap_s;
+typedef struct __memheap_s heap_s,*pheap_s;
 struct __heapitem_s
 {
     w_uint32_t magic;
-    memheap_s *pheap;
-    heapitem_s *next;
-    heapitem_s *prev;
-    heapitem_s *next_free;
-    heapitem_s *prev_free;
+    heap_s *pheap;
+    prinode_s node;
+    w_int32_t size;
 };
 
 
-typedef struct __memheap_s
+struct __memheap_s
 {
-    w_int8_t name[WIND_HEAP_NAME_LEN];
-    plock_s plock; 
-    dnode_s mnode;
+    w_uint32_t magic;
+    const char *name;
     void *addr; 
     w_uint32_t size;
     w_uint32_t rest;
     w_uint32_t max_used;
-    pheapitem_s free_list;
-    heapitem_s free_header;
-}memheap_s,*pmemheap_s;
+    dnode_s heap_node;
+    dlist_s list;
+    dlist_s free_list;
+    plock_s plock; 
+};
 
-w_err_t wind_heap_init(pmemheap_s mhp,
-                         const char *name,
-                         void *start_addr,
-                         w_uint32_t size);
+w_err_t wind_heap_init(const char *name,
+             void *base,w_uint32_t size);
 
 void wind_heaps_init(void);
 
-void *wind_heap_alloc(pmemheap_s heap, w_uint32_t size);
+void *wind_heap_alloc(pheap_s heap, w_uint32_t size);
 void *wind_heap_alloc_default(w_uint32_t size);
 
-void *wind_heap_realloc(pmemheap_s heap, void* ptr, w_uint32_t newsize);
+void *wind_heap_realloc(pheap_s heap, void* ptr, w_uint32_t newsize);
 
 w_err_t wind_heap_free(void *ptr);
 

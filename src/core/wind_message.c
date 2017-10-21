@@ -65,13 +65,11 @@ static w_err_t mbox_delete_msgs(pmbox_s mbox)
     pdnode_s pnode;
     pmsg_s msg;
     WIND_ASSERT_RETURN(mbox != NULL,ERR_NULL_POINTER);
-    pnode = dlist_head(&mbox->msglist);
-    while(pnode)
+    foreach_node(pnode,&mbox->msglist)
     {
         dlist_remove(&mbox->msglist,pnode);
         msg = DLIST_OBJ(pnode,msg_s,msgnode);
         wind_message_destroy(msg);
-        pnode = pnode->next;
     }
     return ERR_OK;
 }
@@ -208,7 +206,7 @@ w_err_t wind_mbox_fetch(pmbox_s mbox,pmsg_s *pmsg,w_uint32_t timeout)
     pthread = mbox->owner;
     pthread->runstat = THREAD_STATUS_SUSPEND;
     pthread->cause = CAUSE_MSG;
-    dlist_insert_tail(&g_core.sleeplist,&pthread->sleepthr);
+    dlist_insert_tail(&g_core.sleeplist,&pthread->sleepthr.node);
     wind_open_interrupt();
     
     wind_thread_dispatch();

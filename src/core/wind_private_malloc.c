@@ -53,15 +53,15 @@ w_err_t wind_privateheap_create(w_uint32_t size)
     w_err_t err;
     void *start;
     pthread_s pthread;
-    pmemheap_s mhp;
+    pheap_s mhp;
     pthread = wind_thread_current();
     WIND_ASSERT_RETURN((pthread != NULL),ERR_NULL_POINTER);
-    mhp = (pmemheap_s)wind_heap_alloc_default(size);
+    mhp = (pheap_s)wind_heap_alloc_default(size);
     WIND_ASSERT_RETURN(mhp != NULL,ERR_NULL_POINTER);
-    //mhp = (pmemheap_s)
+    //mhp = (pheap_s)
     pthread->private_heap = mhp;
-    start = (void*)((w_uint32_t)mhp + sizeof(memheap_s));
-    err = wind_heap_init(mhp,"pri heap",start,size);
+    start = (void*)((w_uint32_t)mhp + sizeof(heap_s));
+    err = wind_heap_init("pri_heap",start,size);
     if(err != ERR_OK)
     {
         wind_heap_free(mhp);

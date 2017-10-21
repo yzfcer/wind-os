@@ -31,6 +31,7 @@
 #include "wind_stati.h"
 #include "wind_var.h"
 #include "wind_assert.h"
+#include "dlist.h"
 #if WIND_LOCK_SUPPORT > 0
 extern pthread_s wind_thread_current(void);
 extern void wind_thread_dispatch(void);
@@ -54,12 +55,12 @@ plock_s wind_lock_create(const char *name)
         wind_open_interrupt();
         return NULL;
     }
-    DNODE_INIT(plock->locknode);
+    PRIO_DNODE_INIT(plock->locknode);
     plock->name = name;
     plock->locked = B_FALSE;
     DLIST_INIT(plock->waitlist);
     wind_close_interrupt();
-    dlist_insert_tail(&g_core.locklist,&plock->locknode);
+    dlist_insert_tail(&g_core.locklist,&plock->locknode.node);
     wind_open_interrupt();
     return plock;
 }
@@ -82,15 +83,14 @@ w_err_t wind_lock_free(plock_s plock)
     pthread_s pthread;
     WIND_ASSERT_RETURN(plock != NULL,ERR_NULL_POINTER);
     wind_close_interrupt();
-    pnode = dlist_head(&plock->waitlist);
-    while(pnode)
+    foreach_node(pnode,&plock->waitlist)
     {
         dlist_remove(&plock->waitlist,pnode);
         pthread = DLIST_OBJ(pnode,thread_s,suspendthr);
         pthread->runstat = THREAD_STATUS_READY;
         pthread->cause = CAUSE_LOCK;
     }
-    dlist_remove(&g_core.locklist,&plock->locknode);
+    dlist_remove(&g_core.locklist,&plock->locknode.node);
     plock->used = B_FALSE;
     plock->name = NULL;
     lock_free(plock);
@@ -114,7 +114,8 @@ w_err_t wind_lock_close(plock_s plock)
     pthread = wind_thread_current();
     pthread->runstat = THREAD_STATUS_SUSPEND;
     pthread->cause = CAUSE_LOCK;
-    dlist_insert_tail(&plock->waitlist,&pthread->suspendthr);
+    
+    dlist_insert_tail(&plock->waitlist,&pthread->suspendthr.node);
     wind_open_interrupt();
     wind_thread_dispatch();
     return ERR_OK;
@@ -128,6 +129,7 @@ w_err_t wind_lock_open(plock_s plock)
     WIND_ASSERT_RETURN(plock != NULL,ERR_NULL_POINTER);
     wind_close_interrupt();
     WIND_ASSERT_TODO(plock->locked,wind_open_interrupt(),ERR_OK);
+    
     pnode = dlist_head(&plock->waitlist);
     if (pnode == NULL)
     {
@@ -155,13 +157,11 @@ w_err_t wind_lock_print(pdlist_s list)
     wind_printf("--------------------------------------\r\n");
     wind_printf("%-16s %-8s\r\n","lock","status");
     wind_printf("--------------------------------------\r\n");
-    dnode = dlist_head(list);
-    while(dnode)
+    foreach_node(dnode,list)
     {
         plock = (plock_s)DLIST_OBJ(dnode,lock_s,locknode);
         wind_printf("%-16s %-8s\r\n",
             plock->name,plock->locked?"lock":"unlock");
-        dnode = dnode_next(dnode);
     }
     wind_printf("--------------------------------------\r\n");
     return ERR_OK;

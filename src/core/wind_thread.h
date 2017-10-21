@@ -96,9 +96,9 @@ typedef struct __threadcb_s
 //线程控制PCB
 typedef struct _thread_s
 {
-    dnode_s validthr;
-    dnode_s suspendthr;
-    dnode_s sleepthr;
+    prinode_s validthr;
+    prinode_s suspendthr;
+    prinode_s sleepthr;
     w_pstack_t stack;//堆栈指针
     w_pstack_t stack_top;//栈顶指针
     w_uint16_t stksize;//堆栈大小，以栈宽度技术
@@ -153,7 +153,6 @@ w_err_t wind_thread_sleep(w_uint32_t ms);
 void    wind_thread_wakeup(void);
 w_err_t wind_thread_exit(w_err_t exitcode);
 
-void insert_thread(pdlist_s list,pthread_s thread);
 w_err_t wind_thread_print(pdlist_s list);
 #if WIND_THREAD_CALLBACK_SUPPORT > 0
 w_err_t wind_thread_callback_register(pthread_s pthread,procevt_e id,void(*cb)(pthread_s));

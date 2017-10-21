@@ -36,7 +36,7 @@ extern "C" {
 
 typedef struct _wind_lock
 {
-    dnode_s locknode;
+    prinode_s locknode;
     const char *name;
     w_bool_t used;         //是否有效的标志
     w_bool_t locked;     //当前的信号量的值

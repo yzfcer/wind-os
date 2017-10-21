@@ -166,39 +166,6 @@ w_int8_t *wind_thread_curname(void)
     return pthread->name;
 }
 
-void insert_thread(pdlist_s list,pthread_s thread)
-{
-    pthread_s thr = NULL;
-    pdnode_s dnode;
-    wind_close_interrupt();
-    dnode = dlist_head(list);
-    if(dnode == NULL)
-    {
-        dlist_insert_tail(&g_core.threadlist,&thread->validthr);
-        wind_open_interrupt();
-        return;
-    }
-    while(dnode)
-    {
-        thr = DLIST_OBJ(dnode,thread_s,validthr);
-        if(thr->prio <= thread->prio)
-            dnode = dnode_next(dnode);
-        else
-            break;
-    }
-    if(dnode == NULL)
-        dlist_insert_tail(&g_core.threadlist,&thread->validthr);
-    else 
-    {
-        if(thr->validthr.prev)
-            dlist_insert(&g_core.threadlist,thr->validthr.prev,&thread->validthr);
-        else
-            dlist_insert_head(&g_core.threadlist,&thread->validthr);
-    }
-        
-    //wind_thread_print(&g_core.threadlist);
-    wind_open_interrupt();
-}
 
 //创建一个线程
 pthread_s wind_thread_create(const w_int8_t *name,
@@ -222,9 +189,9 @@ pthread_s wind_thread_create(const w_int8_t *name,
     pthread = pcb_malloc(priolevel);
     WIND_ASSERT_RETURN(pthread != NULL,NULL);
     wind_strcpy(pthread->name,name);
-    DNODE_INIT(pthread->validthr);
-    DNODE_INIT(pthread->suspendthr);
-    DNODE_INIT(pthread->sleepthr);
+    PRIO_DNODE_INIT(pthread->validthr);
+    PRIO_DNODE_INIT(pthread->suspendthr);
+    PRIO_DNODE_INIT(pthread->sleepthr);
     pthread->parent = wind_thread_current();
     pthread->stack_top = pstk;
     pthread->stack = pstk;
@@ -243,14 +210,13 @@ pthread_s wind_thread_create(const w_int8_t *name,
     pthread->private_heap = NULL;
 #endif
     
-    insert_thread(&g_core.threadlist,pthread);
+    dlist_insert_prio(&g_core.threadlist,&pthread->validthr,pthread->prio);
     WIND_DEBUG("pthread->name:%s\r\n",pthread->name);
     WIND_DEBUG("pthread->stack:0x%x\r\n",pthread->stack);
     WIND_DEBUG("pthread->runstat:%d\r\n",pthread->runstat);
     WIND_DEBUG("pthread->prio:%d\r\n",pthread->prio);
     WIND_DEBUG("pthread->stksize:%d\r\n\r\n",pthread->stksize);
     return pthread;
-    
 }
 
 w_err_t wind_thread_changeprio(pthread_s pthread,w_int16_t prio)
@@ -268,10 +234,10 @@ w_err_t wind_thread_changeprio(pthread_s pthread,w_int16_t prio)
 
     wind_close_interrupt();
     WIND_DEBUG("change prio %s:%d\r\n",pthread->name,prio);
-    node = &pthread->validthr;
+    node = &pthread->validthr.node;
     dlist_remove(&g_core.threadlist,node);
     pthread->prio = prio;
-    insert_thread(&g_core.threadlist,pthread);
+    dlist_insert_prio(&g_core.threadlist,&pthread->validthr,prio);
     wind_open_interrupt();
     return ERR_OK;
 }
@@ -331,7 +297,7 @@ w_err_t wind_thread_kill(pthread_s pthread)
     extern void wind_thread_dispatch(void);
     WIND_ASSERT_RETURN(pthread != NULL,ERR_NULL_POINTER);
     wind_close_interrupt();
-    node = &pthread->validthr;
+    node = &pthread->validthr.node;
     dlist_remove(&g_core.threadlist,node);
     //wind_thread_print(&g_core.threadlist);
 #if WIND_THREAD_CALLBACK_SUPPORT > 0
@@ -385,7 +351,7 @@ w_err_t wind_thread_sleep(w_uint32_t ms)
     pthread->runstat = THREAD_STATUS_SUSPEND;
     pthread->cause = CAUSE_SLEEP;
     pthread->sleep_ticks = stcnt;
-    dlist_insert_tail(&g_core.sleeplist,&pthread->sleepthr);
+    dlist_insert_tail(&g_core.sleeplist,&pthread->sleepthr.node);
     //wind_printf("in sleep\r\n");
     //wind_thread_print(&g_core.sleeplist);
     wind_open_interrupt();
@@ -426,7 +392,7 @@ void wind_thread_wakeup(void)
                 pthread->cause = CAUSE_SLEEP;
                 //wind_printf("out sleep\r\n");
                 //wind_thread_print(&g_core.sleeplist);
-                dlist_remove(&g_core.sleeplist,&pthread->sleepthr);
+                dlist_remove(&g_core.sleeplist,&pthread->sleepthr.node);
             }
         }
         pnode = dnode_next(pnode);

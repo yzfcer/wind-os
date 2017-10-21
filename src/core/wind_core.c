@@ -86,12 +86,12 @@ static w_bool_t is_switch_enable(void)
 
 static pthread_s wind_search_highthread(void)
 {
+    pdnode_s pnode;
     pthread_s pthread = NULL;
-    pdnode_s pnode = dlist_head(&g_core.threadlist);
     wind_close_interrupt();
-    while(pnode)
+    foreach_node(pnode,&g_core.threadlist)
     {
-        pthread = DLIST_OBJ(pnode,thread_s,validthr);
+        pthread = DLIST_OBJ(pnode,thread_s,validthr.node);
         if((pthread->used) && (pthread->runstat == THREAD_STATUS_READY))
         {
             //gwind_high_stack = &pthread->pstk;
@@ -99,7 +99,6 @@ static pthread_s wind_search_highthread(void)
             return pthread;
             //break;
         }
-        pnode = dnode_next(pnode);
     }
     wind_open_interrupt();
     WIND_ERROR("core NOT find valid thread!");

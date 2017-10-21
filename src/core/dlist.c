@@ -129,4 +129,41 @@ pdlist_s dlist_combine(pdlist_s dlist1,pdlist_s dlist2)
     return dlist1;
 }
 
+// 在链表插入一个带优先级节点
+void dlist_insert_prio(pdlist_s dlist, pprinode_s prinode,w_uint32_t prio)
+{
+    pprinode_s prin = NULL;
+    pdnode_s dnode;
+    prinode->prio = prio;
+    dnode = dlist_head(dlist);
+    if(dnode == NULL)
+    {
+        dlist_insert_tail(dlist,&prinode->node);
+        return;
+    }
+    while(dnode)
+    {
+        prin = DLIST_OBJ(dnode,prinode_s,node);
+        if(prin->prio <= prinode->prio)
+            dnode = dnode_next(dnode);
+        else
+            break;
+    }
+    if(dnode == NULL)
+        dlist_insert_tail(dlist,&prinode->node);
+    else 
+    {
+        if(prin->node.prev)
+            dlist_insert(dlist,prin->node.prev,&prinode->node);
+        else
+            dlist_insert_head(dlist,&prinode->node);
+    }
+}
+
+// 从链表中删除给定带优先级节点
+pprinode_s dlist_remove_prio(pdlist_s dlist,pprinode_s node)
+{
+    return NULL;
+}
+
 #endif//__dlist_s_H__
