@@ -90,7 +90,7 @@
 #define WIND_SOFTINT_MAX_NUM 32 //软中断向量表的长度
 
 #define WIND_STK_MAX_NUM 10//堆栈的数量
-#define WINS_STK_SIZE 512
+#define WIND_STK_SIZE 512
 
 
 #endif

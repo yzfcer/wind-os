@@ -55,7 +55,7 @@ static w_uint16_t get_prio(prio_e priolevel)
 }
 
 //********************************************internal functions******************************
-static pthread_s pcb_malloc(void)
+static pthread_s thread_malloc(void)
 {
     pthread_s pthread;    
     pthread = wind_core_alloc(STAT_PROC);
@@ -65,7 +65,7 @@ static pthread_s pcb_malloc(void)
     return pthread;
 }
 
-static w_err_t pcb_free(pthread_s pthread)
+static w_err_t thread_free(pthread_s pthread)
 {
     WIND_ASSERT_RETURN(pthread != NULL,ERR_NULL_POINTER);
     pthread->used = B_FALSE;
@@ -91,7 +91,7 @@ w_err_t wind_thread_distroy(pthread_s pthread)
         wind_heap_free(pthread->private_heap);
     }
 #endif
-    pcb_free(pthread);
+    thread_free(pthread);
     wind_open_interrupt();
     return ERR_OK;
 }
@@ -191,7 +191,7 @@ pthread_s wind_thread_create(const w_int8_t *name,
     WIND_ASSERT_RETURN(pstk != NULL,NULL);
     WIND_ASSERT_RETURN(stksize > 0,NULL);
     WIND_ASSERT_RETURN(priolevel < PRIO_SYS_LOW && priolevel > PRIO_ZERO,NULL);
-    pthread = pcb_malloc();
+    pthread = thread_malloc();
     WIND_ASSERT_RETURN(pthread != NULL,NULL);
     wind_strcpy(pthread->name,name);
     pthread->prio = get_prio(priolevel);
@@ -223,6 +223,18 @@ pthread_s wind_thread_create(const w_int8_t *name,
     WIND_DEBUG("pthread->prio:%d\r\n",pthread->prio);
     WIND_DEBUG("pthread->stksize:%d\r\n\r\n",pthread->stksize);
     return pthread;
+}
+
+
+pthread_s wind_thread_create_default(const w_int8_t *name,
+                   w_err_t (*procfunc)(w_int32_t argc,w_int8_t **argv),
+                   w_int16_t argc,
+                   w_int8_t **argv)
+{
+    prio_e priol = PRIO_MID;
+    w_pstack_t pstk = wind_stack_alloc();
+    int stksize = WIND_STK_SIZE;
+    return wind_thread_create(name,priol,procfunc,argc,argv,pstk,stksize);
 }
 
 w_err_t wind_thread_changeprio(pthread_s pthread,w_int16_t prio)

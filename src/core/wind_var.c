@@ -42,7 +42,7 @@ w_pstack_t *gwind_high_stack;
 w_pstack_t *gwind_cur_stack;
 void wind_corepool_init(void)
 {
-    wind_pool_create("pcb_pool",g_core.pcb,sizeof(g_core.pcb),sizeof(thread_s));
+    wind_pool_create("thread_pool",g_core.thread,sizeof(g_core.thread),sizeof(thread_s));
 #if WIND_PIPE_SUPPORT > 0
     wind_pool_create("pipe_pool",g_core.pipe,sizeof(g_core.pipe),sizeof(pipe_s));
     
@@ -60,7 +60,7 @@ void wind_corepool_init(void)
 #if WIND_LOCK_SUPPORT > 0
     wind_pool_create("lock_pool",g_core.lock,sizeof(g_core.lock),sizeof(lock_s));
 #endif
-    wind_pool_create("stkbuf_pool",g_core.stkbuf,sizeof(g_core.stkbuf),2048 * sizeof(w_stack_t));
+    wind_pool_create("stkbuf_pool",g_core.stkbuf,sizeof(g_core.stkbuf),WIND_STK_SIZE * sizeof(w_stack_t));
 }
 void print_core_pool(void)
 {
@@ -90,7 +90,7 @@ void *wind_core_alloc(stat_e type)
     switch(type)
     {
     case STAT_PROC:
-        p = wind_pool_alloc(g_core.pcb);
+        p = wind_pool_alloc(g_core.thread);
         break;
 #if WIND_LOCK_SUPPORT > 0
     case STAT_LOCK:
@@ -134,7 +134,7 @@ w_err_t wind_core_free(stat_e type,void *block)
     switch(type)
     {
     case STAT_PROC:
-        err = wind_pool_free(g_core.pcb,block);
+        err = wind_pool_free(g_core.thread,block);
         break;
 #if WIND_LOCK_SUPPORT > 0
     case STAT_LOCK:
@@ -173,19 +173,11 @@ w_err_t wind_core_free(stat_e type,void *block)
 }
 
 //申请一个线程堆栈
-w_pstack_t wind_stack_alloc(w_uint32_t size)
+w_pstack_t wind_stack_alloc(void)
 {
-    w_uint16_t stksize;
     w_pstack_t pstk;
-    if(size == 0)
-        return NULL;
-    if(stksize <= 16)
-    {
-        pstk = wind_pool_alloc(g_core.stkbuf);
-        if(pstk)
-            return pstk;
-    }
-    return NULL;
+    pstk = wind_pool_alloc(g_core.stkbuf);
+    return pstk;
 }
 
 //释放一个线程堆栈

@@ -29,126 +29,117 @@
 #include "wind_mpool.h"
 #include "wind_assert.h"
 
-w_err_t wind_pool_print(w_int8_t *name,void *pool)
-{
-    ppool_head_s pm = pool;
-    WIND_ASSERT_RETURN(name != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(pool != NULL,ERR_NULL_POINTER);    
-    wind_printf("pool name:%s\r\n",name);
-    wind_printf("pool head:%d\r\n",pm->head);
-    wind_printf("pool lenth:%d\r\n",pm->len);
-    wind_printf("pool num:%d\r\n",pm->num);
-    wind_printf("pool itemsize:%d\r\n\r\n",pm->itemsize);
-    return ERR_OK;
-}
-w_err_t wind_pool_create(const char *name,void *mem,w_uint32_t msize,w_uint32_t itemsize)
+#define WIND_MPOOL_ALIGN_R(x) (((x)+3) & (~0x03))
+#define WIND_MPOOL_ALIGN_L(x) ((x) & (~0x03))
+
+#define WIND_MPOOL_DEBUG(...) 
+#define WIND_MPOOL_MAGIC 0x5d9c843e
+#define WIND_MPOOL_BLOCK_MAGIC 0x52d6e3a9
+
+#define POOL_BLK_FREE 0x52d6e300
+#define POOL_BLK_USED (POOL_BLK_FREE | 0xA5)
+
+
+w_err_t wind_pool_create(const char *name,void *mem,w_uint32_t memsize,w_uint32_t itemsize)
 {
     w_uint32_t i,si;
-    ppool_s head;
-    ppool_head_s pm;
+    ppool_item_s item;
+    ppool_s pm;
     WIND_ASSERT_RETURN(mem != NULL,ERR_NULL_POINTER);
-    si = itemsize < sizeof(ppool_s)?sizeof(ppool_s):itemsize;
-    if((si & 0x03) != 0)
-    {
-        si = (((si + 3) >> 2) << 2);
-    }
-    if(msize < sizeof(pool_head_s) + si)
+    WIND_ASSERT_RETURN(memsize > 0,ERR_INVALID_PARAM);
+    WIND_ASSERT_RETURN(itemsize > 0,ERR_INVALID_PARAM);
+    pm = (ppool_s)WIND_MPOOL_ALIGN_R((w_uint32_t)mem);
+    if(pm != (ppool_s)mem)
+        memsize -= (w_uint32_t)((w_uint32_t)pm - (w_uint32_t)mem);
+    memsize = WIND_MPOOL_ALIGN_L(memsize);
+
+    si = itemsize < sizeof(ppool_item_s)?sizeof(ppool_item_s):itemsize;
+    si = WIND_MPOOL_ALIGN_R(si);
+    if(memsize < sizeof(pool_s) + si)
         return -1;
-    WIND_MPOOL_DEBUG("mpool:%d,%d,%d,%d\r\n",mem,msize,itemsize,sizeof(pool_head_s));
-    pm = (ppool_head_s)mem;
-    head = (ppool_s)(sizeof(pool_head_s) + (w_uint32_t)mem);
-    pm->head = head;
-    pm->name = name;
-    //WIND_MPOOL_DEBUG("pm:0x%x,pm->head:0x%x\r\n",pm,pm->head);
-    pm->len = msize - sizeof(pool_head_s);
-    pm->itemsize = si + sizeof(w_uint32_t);
-    pm->num = pm->len / pm->itemsize;
-    pm->used = 0;
-    pm->free = (ppool_s)pm->head;
-    head = (ppool_s)pm->head;
-    for(i = 0;i < pm->num;i ++)
-    {
-        //WIND_MPOOL_DEBUG("head:0x%x\r\n",head);
-        pm->last = head;
-        head->next = (ppool_s)(pm->itemsize + (w_uint32_t)head);
-        head = head->next;
-    }
-    head->next = NULL;
     
+    item = (ppool_item_s)(sizeof(pool_s) + (w_uint32_t)pm);
+    pm->head = item;
+    pm->name = name;
+    pm->size = memsize - sizeof(pool_s);
+    pm->itemsize = si + sizeof(w_uint32_t);
+    pm->itemnum = pm->size / pm->itemsize;
+    pm->used = 0;
+    pm->free_head = (ppool_item_s)pm->head;
+    item = (ppool_item_s)pm->head;
+    for(i = 0;i < pm->itemnum;i ++)
+    {
+        pm->free_end = item;
+        item->flag = POOL_BLK_FREE;
+        item->next = (ppool_item_s)(pm->itemsize + (w_uint32_t)item);
+        item = item->next;
+    }
+    item->next = NULL;
     pm->magic = WIND_MPOOL_MAGIC;
-    //WIND_MPOOL_DEBUG("pm->itemsize:%d\r\n",pm->itemsize);
-    //WIND_MPOOL_DEBUG("pm->num:%d\r\n",pm->num);
-    //WIND_MPOOL_DEBUG("pm->len:%d\r\n",pm->len);
-    WIND_MPOOL_DEBUG("pm->head:%d\r\n",pm->head);
     return ERR_OK;
 }
 
 
 void *wind_pool_alloc(void *mem)
 {
-    ppool_head_s pm;
     void *p;
-    ppool_s head;
+    ppool_s pm;
+    ppool_item_s item;
     WIND_ASSERT_RETURN(mem != NULL,NULL);
-    pm = (ppool_head_s)mem;
-    if(pm->magic != WIND_MPOOL_MAGIC)
-    {
-        WIND_ERROR("mpool alloc magic err\r\n");
-        return NULL;
-    }
+    pm = (ppool_s)WIND_MPOOL_ALIGN_R((w_uint32_t)mem);
+    WIND_ASSERT_RETURN(pm->magic == WIND_MPOOL_MAGIC,NULL);
+
     wind_close_interrupt();
-    if(pm->free == NULL)
+    if(pm->free_head == NULL)
     {
         wind_open_interrupt();
         WIND_ERROR("mpool empty\r\n");
         return NULL;
     }
-    head = pm->free;
-    p = head;
-    pm->free = head->next;
+    item = pm->free_head;
+    if(item->flag != POOL_BLK_FREE)
+    {
+        wind_open_interrupt();
+        WIND_ERROR("mpool ERROR\r\n");
+        return NULL;
+    }
+    pm->free_head = item->next;
     pm->used ++;
-    if(pm->free == NULL)
-        pm->last = NULL;
-    *((w_uint32_t*)p) = WIND_MPOOL_BLOCK_MAGIC;
-    p = (void*)(sizeof(w_uint32_t) + (w_uint32_t)p);    
+    if(pm->free_head == NULL)
+        pm->free_end = NULL;
+    
+    item->flag = POOL_BLK_USED;
+    item->next = NULL;
+    p = (void*)(sizeof(ppool_item_s) + (w_uint32_t)item);    
     wind_open_interrupt();
-    //WIND_MPOOL_DEBUG("mpool alloc-size:%d,addr:0x%x\r\n",pm->itemsize,p);
     return p;    
 }
 
 w_err_t wind_pool_free(void *mem,void *block)
 {
-    ppool_head_s pm;
-    //void *p;
-    ppool_s pp;
+    ppool_s pm;
+    ppool_item_s item;
     
     WIND_ASSERT_RETURN(mem != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(block != NULL,ERR_NULL_POINTER);    
-    pm = (ppool_head_s)mem;
-    WIND_ASSERT_RETURN(pm->magic == WIND_MPOOL_MAGIC,pm->magic != WIND_MPOOL_MAGIC);
-    pp = (ppool_s)(((w_uint32_t)block) - sizeof(w_uint32_t));
-    //WIND_MPOOL_DEBUG("pp:%d\r\n",pp);
-    if((((w_uint32_t)pp) - ((w_uint32_t)pm->head))%pm->itemsize != 0)
-    {
-        WIND_ERROR("mpool free pos err\r\n");
-        return ERR_COMMAN;
-    }
-    //·ÀÖ¹ÖØ¸´ÊÍ·Å
-    if((w_uint32_t)pp->next != WIND_MPOOL_BLOCK_MAGIC)
-    {
-        WIND_ERROR("mpool item magic err\r\n");
-        return ERR_COMMAN;
-    }
+    pm = (ppool_s)WIND_MPOOL_ALIGN_R((w_uint32_t)mem);
+    WIND_ASSERT_RETURN(pm->magic == WIND_MPOOL_MAGIC,ERR_INVALID_PARAM);
+    item = (ppool_item_s)(((w_uint32_t)block) - sizeof(ppool_item_s));
+    WIND_ASSERT_RETURN(item->flag == POOL_BLK_USED,ERR_INVALID_PARAM);
     wind_close_interrupt();
-    if(pm->last == NULL)
-        pm->last = (ppool_s)pp;
+    item->flag = POOL_BLK_FREE;
+    item->next = NULL;
+    if(pm->free_end == NULL)
+    {
+        pm->free_head = (ppool_item_s)item;
+        pm->free_end = (ppool_item_s)item;
+    }
     else
     {
-        pm->last->next = (ppool_s)pp;
-        pm->last = (ppool_s)pp;
+        pm->free_end->next = (ppool_item_s)item;
+        pm->free_end = (ppool_item_s)item;
     }
-    pm->name = NULL;
-    *((w_uint32_t*)((w_uint32_t)block - sizeof(w_uint32_t))) = 0;
+    pm->used --;
     wind_open_interrupt();
     return ERR_OK;
 }
@@ -173,4 +164,18 @@ void wind_mpool_test(void)
         wind_pool_free(mpooltest,p2);
     }
 }
+
+w_err_t wind_pool_print(w_int8_t *name,void *pool)
+{
+    ppool_s pm = pool;
+    WIND_ASSERT_RETURN(name != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(pool != NULL,ERR_NULL_POINTER);    
+    wind_printf("pool name:%s\r\n",name);
+    wind_printf("pool head:%d\r\n",pm->head);
+    wind_printf("pool lenth:%d\r\n",pm->size);
+    wind_printf("pool num:%d\r\n",pm->itemnum);
+    wind_printf("pool itemsize:%d\r\n\r\n",pm->itemsize);
+    return ERR_OK;
+}
+
 

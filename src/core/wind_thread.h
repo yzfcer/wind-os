@@ -134,6 +134,11 @@ pthread_s wind_thread_create(const w_int8_t *name,
                    w_int8_t **argv,
                    w_pstack_t psck,
                    w_uint16_t stksize);
+pthread_s wind_thread_create_default(const w_int8_t *name,
+                   w_err_t (*procfunc)(w_int32_t argc,w_int8_t **argv),
+                   w_int16_t argc,
+                   w_int8_t **argv);
+
 w_err_t wind_thread_changeprio(pthread_s pthread,w_int16_t prio);
 w_err_t wind_thread_start(pthread_s pthread);
 w_err_t wind_thread_suspend(pthread_s pthread);

@@ -33,41 +33,42 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#define WIND_MPOOL_DEBUG(...) //WIND_STD_OUT(__VA_ARGS__)
-#define WIND_MPOOL_MAGIC 0x5d9c843e
-#define WIND_MPOOL_BLOCK_MAGIC 0x52d6e3a9
+
+typedef struct __pool_item_s pool_item_s,*ppool_item_s;
+typedef struct __mpool_s pool_s,*ppool_s;
+
 //一个基本的内存池链结构体
-typedef struct __pool_s
+struct __pool_item_s
 {
-    struct __pool_s *next;
-}pool_s,*ppool_s;
+    w_uint32_t flag;
+    ppool_item_s next;
+};
 
 //内存池的头部信息结构体
-typedef struct __mpoolHead_s
+struct __mpool_s
 {
     w_uint32_t magic;//内存池被成功建立的标志
-    void *head;//内存池的头部位置
     const char *name;
-    w_uint32_t len;//内存池的实际可用空间大小
+    void *head;//内存池的头部位置
+    w_uint32_t size;//内存池的实际可用空间大小
     w_uint32_t itemsize;//每个块的大小
-    w_uint32_t num;//分成的内存块的数量
+    w_uint32_t itemnum;//分成的内存块的数量
     w_uint32_t used;//已经使用的内存块的数量
-    ppool_s free;//空闲块的指针
-    ppool_s last;//最后一个空闲块的指针
-}pool_head_s,*ppool_head_s;
+    ppool_item_s free_head;//空闲块的指针
+    ppool_item_s free_end;//最后一个空闲块的指针
+};
 
-#define WIND_MPOOL_ALIGN(x) ((((x)+3)/4)*4)
 //定义内存池的方法
-#define WIND_MPOOL(pool,num,size) w_uint8_t pool[sizeof(pool_head_s) + num * (WIND_MPOOL_ALIGN(size) + sizeof(w_uint32_t))]
+#define WIND_MPOOL_ALIGN(size) (((size)+3) & (~0x03))
+#define WIND_MPOOL(pool,itemnum,itemsize) w_uint8_t pool[sizeof(pool_s) + itemnum * (WIND_MPOOL_ALIGN(itemsize) + sizeof(pool_item_s))]
 
-w_err_t wind_pool_print(w_int8_t *name,void *pool);
+w_err_t wind_pool_create(const char *name,void *mem,w_uint32_t memsize,w_uint32_t itemsize);
 
-w_err_t wind_pool_create(const char *name,void *mem,w_uint32_t msize,w_uint32_t itemsize);
-
-void *wind_pool_alloc(void *mem);
+void   *wind_pool_alloc(void *mem);
 
 w_err_t wind_pool_free(void *mem,void *block);
 
+w_err_t wind_pool_print(w_int8_t *name,void *pool);
 
 #ifdef __cplusplus
 }

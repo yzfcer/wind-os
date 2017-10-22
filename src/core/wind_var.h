@@ -41,7 +41,7 @@ extern "C" {
 #endif
 typedef struct __core_var_s
 {
-    WIND_MPOOL(pcb,WIND_THREAD_MAX_NUM,sizeof(thread_s));
+    WIND_MPOOL(thread,WIND_THREAD_MAX_NUM,sizeof(thread_s));
     //WIND_MPOOL(node,WIND_NODE_MAX_NUM,sizeof(node_s));
 #if WIND_PIPE_SUPPORT > 0
     WIND_MPOOL(pipe,WIND_PIPE_MAX_NUM,sizeof(pipe_s));
@@ -60,7 +60,7 @@ typedef struct __core_var_s
     WIND_MPOOL(lock,WIND_LOCK_NUM,sizeof(lock_s));
 #endif
     //定义一些堆栈以便创建程序在时使用
-    WIND_MPOOL(stkbuf,WIND_STK_MAX_NUM,WINS_STK_SIZE * sizeof(w_stack_t));
+    WIND_MPOOL(stkbuf,WIND_STK_MAX_NUM,WIND_STK_SIZE * sizeof(w_stack_t));
     
     dlist_s threadlist;
     dlist_s sleeplist;
@@ -98,7 +98,7 @@ void *wind_core_alloc(stat_e type);
 
 w_err_t wind_core_free(stat_e type,void *block);
 
-w_pstack_t wind_stack_alloc(w_uint32_t size);
+w_pstack_t wind_stack_alloc(void);
 
 w_err_t wind_stack_free(w_pstack_t pstack);
 

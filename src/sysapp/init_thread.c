@@ -1,7 +1,7 @@
 #include "wind_type.h"
 #include "wind_var.h"
 #include "wind_thread.h"
-
+#include "wind_softint.h"
 #define MAIN_STK_SIZE 256
 void wind_tick_init(void);
 void create_stati_thread(void);
