@@ -33,6 +33,9 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+#define WIND_MPOOL_MAGIC 0x5d9c843e
+#define POOL_BLK_FREE 0x52d6e300
+#define POOL_BLK_USED (POOL_BLK_FREE | 0xA5)
 
 typedef struct __pool_item_s pool_item_s,*ppool_item_s;
 typedef struct __mpool_s pool_s,*ppool_s;

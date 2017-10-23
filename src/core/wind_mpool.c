@@ -33,11 +33,6 @@
 #define WIND_MPOOL_ALIGN_L(x) ((x) & (~0x03))
 
 #define WIND_MPOOL_DEBUG(...) 
-#define WIND_MPOOL_MAGIC 0x5d9c843e
-#define WIND_MPOOL_BLOCK_MAGIC 0x52d6e3a9
-
-#define POOL_BLK_FREE 0x52d6e300
-#define POOL_BLK_USED (POOL_BLK_FREE | 0xA5)
 
 
 w_err_t wind_pool_create(const char *name,void *mem,w_uint32_t memsize,w_uint32_t itemsize)
@@ -62,7 +57,7 @@ w_err_t wind_pool_create(const char *name,void *mem,w_uint32_t memsize,w_uint32_
     pm->head = item;
     pm->name = name;
     pm->size = memsize - sizeof(pool_s);
-    pm->itemsize = si + sizeof(w_uint32_t);
+    pm->itemsize = si + sizeof(pool_item_s);
     pm->itemnum = pm->size / pm->itemsize;
     pm->used = 0;
     pm->free_head = (ppool_item_s)pm->head;
