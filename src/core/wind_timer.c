@@ -95,49 +95,49 @@ ptimer_s wind_timer_create(w_uint32_t t_ms,softtimer_fn func,void *arg,w_bool_t 
     return timer; 
 }
 
-w_err_t wind_timer_start(ptimer_s pttimer)
+w_err_t wind_timer_start(ptimer_s ptimer)
 {
-    if(pttimer == NULL)
+    if(ptimer == NULL)
         return ERR_NULL_POINTER;
-    if(!pttimer->used)
+    if(!ptimer->used)
         return ERR_COMMAN;
-    pttimer->running = B_TRUE;
+    ptimer->running = B_TRUE;
     return ERR_OK;
 }
 
-w_err_t wind_timer_stop(ptimer_s pttimer)
+w_err_t wind_timer_stop(ptimer_s ptimer)
 {
-    if(pttimer == NULL)
+    if(ptimer == NULL)
         return ERR_NULL_POINTER;
-    if(!pttimer->used)
+    if(!ptimer->used)
         return ERR_COMMAN;
-    pttimer->running = B_FALSE;
+    ptimer->running = B_FALSE;
     return ERR_OK;
 }
 
-w_err_t wind_timer_free(ptimer_s pttimer)
+w_err_t wind_timer_free(ptimer_s ptimer)
 {
-    if(pttimer == NULL)
+    if(ptimer == NULL)
         return ERR_NULL_POINTER;
-    if(!pttimer->used)
+    if(!ptimer->used)
         return ERR_COMMAN;
     wind_close_interrupt();
-    dlist_remove(&g_core.ttmerlist,&pttimer->tmrnode);
-    ttimer_free(pttimer);
+    dlist_remove(&g_core.ttmerlist,&ptimer->tmrnode);
+    ttimer_free(ptimer);
     wind_open_interrupt();
     return ERR_OK;
 }
 
-w_err_t wind_timer_set_period(ptimer_s pttimer,w_uint32_t t_ms)
+w_err_t wind_timer_set_period(ptimer_s ptimer,w_uint32_t t_ms)
 {
     w_int32_t count = t_ms / TIMER_PERIOD;
     if(count <= 0)
         count = 1;
-    if(pttimer == NULL)
+    if(ptimer == NULL)
         return ERR_NULL_POINTER;
-    if(!pttimer->used)
+    if(!ptimer->used)
         return ERR_COMMAN;
-    pttimer->count = count;
+    ptimer->count = count;
     return ERR_OK;
 }
 
@@ -147,7 +147,7 @@ void wind_timer_event(void)
     pdnode_s pdnode;
     foreach_node(pdnode,&g_core.ttmerlist)
     {
-        ptmr = DLIST_OBJ(pdnode,ttimer_s,tmrnode);
+        ptmr = DLIST_OBJ(pdnode,timer_s,tmrnode);
         if(ptmr->count > 0)
             ptmr->count --;
         if(ptmr->count == 0 && ptmr->running)

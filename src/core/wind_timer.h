@@ -45,14 +45,14 @@ typedef struct tagTicktimer
     w_uint32_t init_count;
     softtimer_fn handle;
     void *arg;
-}ttimer_s,*ptimer_s;
+}timer_s,*ptimer_s;
 
 w_err_t wind_timer_init(void);
 ptimer_s wind_timer_create(w_uint32_t t_ms,softtimer_fn func,void *arg,w_bool_t run);
-w_err_t wind_timer_start(ptimer_s pttimer);
-w_err_t wind_timer_stop(ptimer_s pttimer);
-w_err_t wind_timer_free(ptimer_s pttimer);
-w_err_t wind_timer_set_period(ptimer_s pttimer,w_uint32_t t_ms);
+w_err_t wind_timer_start(ptimer_s ptimer);
+w_err_t wind_timer_stop(ptimer_s ptimer);
+w_err_t wind_timer_free(ptimer_s ptimer);
+w_err_t wind_timer_set_period(ptimer_s ptimer,w_uint32_t t_ms);
 void wind_timer_event(void);
 
 

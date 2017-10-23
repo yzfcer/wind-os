@@ -56,7 +56,7 @@ void wind_stat_init(void)
 #endif
 #if WIND_TIMER_SUPPORT > 0
     G_STAT[STAT_TIMER].tot = WIND_TTIMER_MAX_NUM;
-    wind_memcpy(G_STAT[STAT_TIMER].name,"ttimer",6);
+    wind_memcpy(G_STAT[STAT_TIMER].name,"timer",6);
 #endif
 }
 

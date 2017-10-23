@@ -55,7 +55,7 @@ void wind_corepool_init(void)
     wind_pool_create("sem_pool",g_core.sem,sizeof(g_core.sem),sizeof(sem_s));
 #endif
 #if WIND_TIMER_SUPPORT > 0
-    wind_pool_create("ttimer_pool",g_core.ttimer,sizeof(g_core.ttimer),sizeof(ttimer_s));
+    wind_pool_create("timer_pool",g_core.timer,sizeof(g_core.timer),sizeof(timer_s));
 #endif
 #if WIND_LOCK_SUPPORT > 0
     wind_pool_create("lock_pool",g_core.lock,sizeof(g_core.lock),sizeof(lock_s));
@@ -114,7 +114,7 @@ void *wind_core_alloc(stat_e type)
 #endif
 #if WIND_TIMER_SUPPORT > 0
     case STAT_TIMER:
-        p = wind_pool_alloc(g_core.ttimer);
+        p = wind_pool_alloc(g_core.timer);
         break;
 #endif
     default:p = NULL;
@@ -158,7 +158,7 @@ w_err_t wind_core_free(stat_e type,void *block)
 #endif
 #if WIND_TIMER_SUPPORT > 0
     case STAT_TIMER:
-        err = wind_pool_free(g_core.ttimer,block);
+        err = wind_pool_free(g_core.timer,block);
         break;
 #endif
     default:
