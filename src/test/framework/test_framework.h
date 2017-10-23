@@ -131,6 +131,10 @@ struct __stati_info_s
 
 
 /********************************************全局函数申明**********************************************/
+static ut_int32_t stringlenth(char *str);
+ut_int32_t stringcmp(const char *cs,const char *ct);
+
+
 err_t test_suite_register(test_suite_s *test_suite);
 void show_test_suites(void);
 void cut_test_start(char* testsuite,char *testcase);

@@ -27,22 +27,11 @@ extern "C" {
 
 #define TNUM 5
 #define TSIZE 13
-/*********************************************头文件定义***********************************************/
 
-/********************************************内部变量定义**********************************************/
+
 WIND_MPOOL(test_pool,TNUM,TSIZE);
 void *testblk[TNUM+1];
 
-
-/********************************************内部函数定义*********************************************/
-
-
-
-/********************************************全局变量定义**********************************************/
-
-
-
-/********************************************全局函数定义**********************************************/
 
 CASE_SETUP(pool_info)
 {
@@ -58,6 +47,7 @@ CASE_FUNC(pool_info)
 {
     ppool_s pool = (ppool_s)test_pool;
     EXPECT_EQ(pool->magic,WIND_MPOOL_MAGIC);
+    EXPECT_STR_EQ(pool->name,"test_pool");
     EXPECT_EQ(pool->size,sizeof(test_pool)-sizeof(pool_s));
     EXPECT_EQ(pool->itemnum,TNUM);
     EXPECT_EQ(pool->itemsize,(((TSIZE+3)>>2)<<2)+sizeof(pool_item_s));

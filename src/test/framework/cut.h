@@ -38,6 +38,11 @@
     {FAIL_EXPECT_OUT(x,y,">=");test_suite_err(__LINE__);}\
     }while(0)
 
+//¶ÏÑÔ×Ö·û´®ÏàÍ¬
+#define EXPECT_STR_EQ(x,y) \
+    do{if(stringcmp((x),(y)) != 0) \
+    {FAIL_EXPECT_OUT(x,y,"!=");test_suite_err(__LINE__);}\
+    }while(0)
 
 
 #define SUITE_SETUP()  static void suite_setup(void)
