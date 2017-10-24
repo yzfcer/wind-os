@@ -47,13 +47,13 @@ extern void wind_start_switch(void);
 //允许创建用户线程
 static void wind_thread_open()
 {
-    g_core.usrprocen = B_TRUE;
+    g_core.usrthren = B_TRUE;
 }
 
 //查看是否允许创建用户线程
 w_bool_t wind_thread_isopen()
 {
-    return g_core.usrprocen;
+    return g_core.usrthren;
 }
 
 void wind_disable_switch(void)
@@ -182,7 +182,7 @@ void wind_thread_dispatch(void)
 //操作系统初始化
 void wind_init()
 {
-    g_core.usrprocen = B_FALSE;
+    g_core.usrthren = B_FALSE;
     wind_target_init();//目标机运行环境初始化
     wind_std_port_init();//调试端口初始化
     wind_print_os_info();

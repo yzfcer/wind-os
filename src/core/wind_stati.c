@@ -34,8 +34,8 @@ void wind_stat_init(void)
 {
     WIND_INFO("statistics initializing...\r\n");
     wind_memset(g_stati,0,sizeof(g_stati));
-    g_stati[IDX_PROC].tot = WIND_THREAD_MAX_NUM;
-    wind_memcpy(g_stati[IDX_PROC].name,"proc",4);
+    g_stati[IDX_THREAD].tot = WIND_THREAD_MAX_NUM;
+    wind_memcpy(g_stati[IDX_THREAD].name,"thread",4);
 #if WIND_LOCK_SUPPORT > 0
     g_stati[IDX_LOCK].tot = WIND_LOCK_NUM;
     wind_memcpy(g_stati[IDX_LOCK].name,"lock",4);

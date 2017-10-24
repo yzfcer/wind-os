@@ -35,7 +35,7 @@ extern "C" {
 #if WIND_STAT_SUPPORT > 0
 typedef enum __stat_e
 {
-    IDX_PROC,
+    IDX_THREAD,
 #if WIND_LOCK_SUPPORT > 0
     IDX_LOCK,
 #endif

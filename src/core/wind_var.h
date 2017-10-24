@@ -50,7 +50,7 @@ typedef struct __core_var_s
     dlist_s ttmerlist;
     w_int16_t pcbcnt;//线程计数器
     volatile w_bool_t run_falg;//多线程调度开始的标志
-    w_bool_t usrprocen;/*用户线程允许创建的标志 */
+    w_bool_t usrthren;/*用户线程允许创建的标志 */
     
     volatile w_uint32_t idle_cnt;//空闲计算器
     w_uint32_t ticks_cnt;//tick计时

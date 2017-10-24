@@ -63,12 +63,11 @@ static void core_output_srcusage(w_uint16_t opt)
     core_stat_convert_num(&str[STAT_NAME_LEN + 24],g_stati[opt].err);
     console_printf("%s\r\n",str);
 }
-static void core_stat_show_proc(w_uint16_t opt)
+static void core_stati_print(w_uint16_t opt)
 {
     w_int8_t str[STAT_NAME_LEN + 33];
     w_int16_t i;
     wind_memset(str,0,STAT_NAME_LEN + 33);
-    //str[STAT_NAME_LEN + 24] = 0;
     wind_memcpy(str,"source",6);
     wind_memcpy(&str[STAT_NAME_LEN],"tot",3);
     wind_memcpy(&str[STAT_NAME_LEN + 8],"used",4);
@@ -100,7 +99,7 @@ static void core_stat_show_proc(w_uint16_t opt)
 
 w_err_t cmd_stat_show_mpool_main(w_int32_t argc,char **argv)
 {
-    core_stat_show_proc(0xffff);
+    core_stati_print(0xffff);
     return ERR_OK;
 }
 

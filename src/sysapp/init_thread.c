@@ -30,7 +30,7 @@ static w_err_t init_thread(w_int32_t argc,w_int8_t **argv)
     create_idle_thread();
     set_idle_cnt();
 #if WIND_SOFTINT_SUPPORT > 0    
-    wind_create_softint_proc();
+    wind_create_softint_thread();
 #endif
 #if WIND_TIMER_SUPPORT
     create_timer_thread();

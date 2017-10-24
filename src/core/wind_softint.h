@@ -40,7 +40,7 @@ typedef void (*softint_func)(void);
 void wind_softint_init(void);
 HANDLE wind_softint_reg(softint_func func);
 void wind_soft_int(HANDLE handler);
-w_err_t wind_create_softint_proc(void);
+w_err_t wind_create_softint_thread(void);
 w_err_t wind_softint_test(void);
 
 

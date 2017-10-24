@@ -66,7 +66,7 @@ void *wind_core_alloc(stat_e type)
     void *p;
     switch(type)
     {
-    case IDX_PROC:
+    case IDX_THREAD:
         p = wind_pool_alloc(g_pool.thread);
         break;
 #if WIND_LOCK_SUPPORT > 0
@@ -113,7 +113,7 @@ w_err_t wind_core_free(stat_e type,void *block)
     WIND_ASSERT_RETURN(block != NULL,ERR_NULL_POINTER);
     switch(type)
     {
-    case IDX_PROC:
+    case IDX_THREAD:
         err = wind_pool_free(g_pool.thread,block);
         break;
 #if WIND_LOCK_SUPPORT > 0

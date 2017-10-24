@@ -59,7 +59,7 @@ static w_uint16_t get_prio(prio_e priolevel)
 static pthread_s thread_malloc(void)
 {
     pthread_s pthread;    
-    pthread = wind_core_alloc(IDX_PROC);
+    pthread = wind_core_alloc(IDX_THREAD);
     WIND_ASSERT_RETURN(pthread != NULL,NULL);
     pthread->used = B_TRUE;
     WIND_DEBUG("alloc pthread->prio:%d\r\n",pthread->prio);
@@ -77,7 +77,7 @@ static w_err_t thread_free(pthread_s pthread)
     pthread->cause = CAUSE_COM;
     pthread->stack = NULL;
     pthread->stksize = 0;
-    return wind_core_free(IDX_PROC,pthread);
+    return wind_core_free(IDX_THREAD,pthread);
 }
 
 w_err_t wind_thread_distroy(pthread_s pthread)
@@ -104,7 +104,7 @@ static void thread_entry(void *args)
     WIND_INFO("begin to run thread:%s\r\n",pthread->name);
     if(pthread != NULL)
     {
-        err = pthread->procfunc(pthread->argc,pthread->argv);
+        err = pthread->thread_func(pthread->argc,pthread->argv);
         wind_thread_exit(err);
     }
 }
@@ -175,7 +175,7 @@ w_int8_t *wind_thread_curname(void)
 //创建一个线程
 pthread_s wind_thread_create(const w_int8_t *name,
                    prio_e priolevel,
-                   w_err_t (*procfunc)(w_int32_t argc,w_int8_t **argv),
+                   w_err_t (*thread_func)(w_int32_t argc,w_int8_t **argv),
                    w_int16_t argc,
                    w_int8_t **argv,
                    w_pstack_t pstk,
@@ -187,7 +187,7 @@ pthread_s wind_thread_create(const w_int8_t *name,
 
     WIND_INFO("creating thread:%s\r\n",name);
     WIND_ASSERT_RETURN(name != NULL,NULL);
-    WIND_ASSERT_RETURN(procfunc != NULL,NULL);
+    WIND_ASSERT_RETURN(thread_func != NULL,NULL);
     WIND_ASSERT_RETURN(pstk != NULL,NULL);
     WIND_ASSERT_RETURN(stksize > 0,NULL);
     WIND_ASSERT_RETURN(priolevel < PRIO_SYS_LOW && priolevel > PRIO_ZERO,NULL);
@@ -207,7 +207,7 @@ pthread_s wind_thread_create(const w_int8_t *name,
     tmpstk = wind_stk_init(thread_entry,0,pstk + stksize -1);
     pthread->argc = argc;
     pthread->argv = argv;
-    pthread->procfunc = procfunc;
+    pthread->thread_func = thread_func;
     pthread->stack = tmpstk;
     pthread->runstat = THREAD_STATUS_READY;
     pthread->cause = CAUSE_COM;
@@ -227,14 +227,14 @@ pthread_s wind_thread_create(const w_int8_t *name,
 
 
 pthread_s wind_thread_create_default(const w_int8_t *name,
-                   w_err_t (*procfunc)(w_int32_t argc,w_int8_t **argv),
+                   w_err_t (*thread_func)(w_int32_t argc,w_int8_t **argv),
                    w_int16_t argc,
                    w_int8_t **argv)
 {
     prio_e priol = PRIO_MID;
     w_pstack_t pstk = wind_core_alloc(IDX_STACK);
     int stksize = WIND_STK_SIZE;
-    return wind_thread_create(name,priol,procfunc,argc,argv,pstk,stksize);
+    return wind_thread_create(name,priol,thread_func,argc,argv,pstk,stksize);
 }
 
 w_err_t wind_thread_changeprio(pthread_s pthread,w_int16_t prio)
@@ -347,7 +347,7 @@ w_err_t wind_thread_exit(w_err_t exitcode)
 {
     pthread_s pthread;
     pthread = wind_thread_current();
-    WIND_INFO("proc %s exit with code %d\r\n",pthread->name,exitcode);
+    WIND_INFO("thread %s exit with code %d\r\n",pthread->name,exitcode);
     wind_thread_kill(pthread);
     wind_thread_dispatch();
     return ERR_OK;
@@ -413,25 +413,25 @@ w_err_t wind_thread_wakeup(void)
 }
 
 #if WIND_THREAD_CALLBACK_SUPPORT > 0
-w_err_t wind_thread_callback_register(pthread_s pthread,procevt_e id,void(*cb)(pthread_s))
+w_err_t wind_thread_callback_register(pthread_s pthread,thr_evt_e id,void(*cb)(pthread_s))
 {
     WIND_ASSERT_RETURN(pthread != NULL,ERR_NULL_POINTER);
 
     switch(id)
     {
-    case PROCEVT_CREATE:
-        pthread->cb.proc_created = cb;
+    case THR_EVT_CREATE:
+        pthread->cb.create = cb;
         break;
-    case PROCEVT_START:
+    case THR_EVT_START:
         pthread->cb.start = cb;
         break;
-    case PROCEVT_SUSPEND:
+    case THR_EVT_SUSPEND:
         pthread->cb.suspend = cb;
         break;
-    case PROCEVT_RESUME:
+    case THR_EVT_RESUME:
         pthread->cb.resume = cb;
         break;
-    case PROCEVT_DEAD:
+    case THR_EVT_DEAD:
         pthread->cb.dead = cb;
         break;
     default:

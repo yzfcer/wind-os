@@ -48,7 +48,7 @@ typedef enum _PRIOLEVEL
     PRIO_SYS_LOW
 } prio_e;
 //线程状态列表
-typedef enum __proc_status
+typedef enum __thread_status
 {
     THREAD_STATUS_INIT = 0,//初始化状态
     THREAD_STATUS_READY = 1,//就绪状态
@@ -71,20 +71,20 @@ typedef enum __suscause
 
 //定义与线程相关的一些回调函数，需要配置选项支持
 #if WIND_THREAD_CALLBACK_SUPPORT > 0
-typedef enum __procevt_e
+typedef enum __thr_evt_e
 {
-    PROCEVT_CREATE,
-    PROCEVT_START,
-    PROCEVT_SUSPEND,
-    PROCEVT_RESUME,
-    PROCEVT_DEAD
-}procevt_e;
+    THR_EVT_CREATE,
+    THR_EVT_START,
+    THR_EVT_SUSPEND,
+    THR_EVT_RESUME,
+    THR_EVT_DEAD
+}thr_evt_e;
 
 
 struct _thread_s;
 typedef struct __threadcb_s
 {
-    void (*proc_created)(struct _thread_s *pthread);
+    void (*create)(struct _thread_s *pthread);
     void (*start)(struct _thread_s *pthread);
     void (*suspend)(struct _thread_s *pthread);
     void (*resume)(struct _thread_s *pthread);
@@ -103,7 +103,7 @@ typedef struct _thread_s
     w_pstack_t stack_top;//栈顶指针
     w_uint16_t stksize;//堆栈大小，以栈宽度技术
     
-    w_err_t (*procfunc)(w_int32_t argc,w_int8_t **argv);
+    w_err_t (*thread_func)(w_int32_t argc,w_int8_t **argv);
     w_int16_t argc;
     w_int8_t **argv;
     
@@ -129,13 +129,13 @@ typedef struct _thread_s
 
 pthread_s wind_thread_create(const w_int8_t *name,
                    prio_e priolevel,
-                   w_err_t (*procfunc)(w_int32_t argc,w_int8_t **argv),
+                   w_err_t (*thread_func)(w_int32_t argc,w_int8_t **argv),
                    w_int16_t argc,
                    w_int8_t **argv,
                    w_pstack_t psck,
                    w_uint16_t stksize);
 pthread_s wind_thread_create_default(const w_int8_t *name,
-                   w_err_t (*procfunc)(w_int32_t argc,w_int8_t **argv),
+                   w_err_t (*thread_func)(w_int32_t argc,w_int8_t **argv),
                    w_int16_t argc,
                    w_int8_t **argv);
 
@@ -160,7 +160,7 @@ w_err_t wind_thread_exit(w_err_t exitcode);
 
 w_err_t wind_thread_print(pdlist_s list);
 #if WIND_THREAD_CALLBACK_SUPPORT > 0
-w_err_t wind_thread_callback_register(pthread_s pthread,procevt_e id,void(*cb)(pthread_s));
+w_err_t wind_thread_callback_register(pthread_s pthread,thr_evt_e id,void(*cb)(pthread_s));
 #endif
 
 
