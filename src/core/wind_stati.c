@@ -58,6 +58,9 @@ void wind_stat_init(void)
     G_STAT[STAT_TIMER].tot = WIND_TTIMER_MAX_NUM;
     wind_memcpy(G_STAT[STAT_TIMER].name,"timer",6);
 #endif
+    
+    G_STAT[STAT_STACK].tot = WIND_STK_MAX_NUM;
+    wind_memcpy(G_STAT[STAT_STACK].name,"stack",6);
 }
 
 #endif
