@@ -31,7 +31,6 @@
 
 #define WIND_STAT_SUPPORT 1 //是否支持资源统计功能
 
-#define WIND_LOCK_SUPPORT 1 //是否支持互斥锁
 
 #define WIND_SEM_SUPPORT 1 //是否支持信号量
 
@@ -41,16 +40,17 @@
 
 #define WIND_REALTIME_CORE_SUPPORT 1 //是否支持实时内核，即抢占式切换
 
+#define WIND_STKPOOL_SUPPORT 1 //是否支持线程堆栈通过内存池分配
 
 #define WIND_DAEMON_SUPPORT 1    //是否支持守护线程
 
-#define WIND_QUEUE_SUPPORT 1   //是否支持队列
+#define WIND_QUEUE_SUPPORT 1  //是否支持队列
 
 #define WIND_STACK_SUPPORT 1   //是否支持堆栈
 
 #define WIND_MEM_SUPPORT 1   //是否支持内存管理
 
-#define WIND_TIMER_SUPPORT 1  //是否支持tick精度的定时器
+#define WIND_TIMER_SUPPORT 1  //是否支持软件定时器
 
 #define WIND_RTC_SUPPORT 0  //是否支持实时时间
 
@@ -64,7 +64,7 @@
 
 #define WIND_THREAD_CALLBACK_SUPPORT 1//是否支持线程事件毁回调函数
 
-#define WIND_FS_SUPPORT 1 //是否支持内存文件系统
+#define WIND_FS_SUPPORT 0 //是否支持内存文件系统
 //-----------------------------------------------------------------------
 
 #define WIND_THREAD_MAX_NUM 40 //需要的线程总数,建议根据需要来定义
@@ -83,7 +83,7 @@
 
 #define WIND_NODE_MAX_NUM 200  //链表节点内存池的容量
 
-#define WIND_TTIMER_MAX_NUM 30  //tick定时器内存池的容量
+#define WIND_TIMER_MAX_NUM 30  //tick定时器内存池的容量
 
 #define WIND_LOCK_NUM 10 //互斥锁的数量
 

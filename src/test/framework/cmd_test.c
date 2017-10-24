@@ -36,9 +36,10 @@
 #include "wind_cmd.h"
 #include "test_framework.h"
 
+#if WIND_CONSOLE_SUPPORT
 w_err_t cmd_testsoftint_main(w_int32_t argc,char **argv)
 {
-#if WIND_SOFTINT_SUPPORT > 0
+#if WIND_SOFTINT_SUPPORT
     if(0 == wind_strcmp(argv[0],"softint"))
     {
         wind_softint_test();
@@ -50,7 +51,7 @@ w_err_t cmd_testsoftint_main(w_int32_t argc,char **argv)
 
 w_err_t cmd_testheap_main(w_int32_t argc,char **argv)
 {
-#if WIND_HEAP_SUPPORT > 0
+#if WIND_HEAP_SUPPORT
     if(0 == wind_strcmp(argv[0],"heap"))
     {
         wind_printf("heaptest not support yet\r\n");
@@ -105,4 +106,4 @@ void test_init(console_s *ctrl)
 }
 
 
-//#endif
+#endif

@@ -26,7 +26,7 @@ extern "C" {
 /*********************************************头文件定义***********************************************/
 #include "wind_cmd.h"
 
-
+#if WIND_CONSOLE_SUPPORT
 
 /********************************************内部变量定义**********************************************/
 
@@ -64,6 +64,7 @@ static w_err_t cmd_main(w_int32_t argc,char **argv)
 
 CMD_DEF(echo);
 
+#endif
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

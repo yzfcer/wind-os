@@ -40,28 +40,28 @@ core_pools_s g_pool;
 void wind_corepool_init(void)
 {
     wind_pool_create("thread_pool",g_pool.thread,sizeof(g_pool.thread),sizeof(thread_s));
-#if WIND_PIPE_SUPPORT > 0
-    wind_pool_create("pipe_pool",g_pool.pipe,sizeof(g_pool.pipe),sizeof(pipe_s));
-    
+#if (WIND_PIPE_SUPPORT && WIND_QUEUE_SUPPORT)
+    wind_pool_create("pipe_pool",g_pool.pipe,sizeof(g_pool.pipe),sizeof(pipe_s));    
 #endif
-#if WIND_MESSAGE_SUPPORT > 0
+#if WIND_MESSAGE_SUPPORT
     wind_pool_create("msg_pool",g_pool.msg,sizeof(g_pool.msg),sizeof(msg_s));
     wind_pool_create("mbox_pool",g_pool.mbox,sizeof(g_pool.mbox),sizeof(mbox_s));
 #endif
-#if WIND_SEM_SUPPORT > 0
+#if WIND_SEM_SUPPORT
     wind_pool_create("sem_pool",g_pool.sem,sizeof(g_pool.sem),sizeof(sem_s));
 #endif
-#if WIND_TIMER_SUPPORT > 0
+#if WIND_TIMER_SUPPORT
     wind_pool_create("timer_pool",g_pool.timer,sizeof(g_pool.timer),sizeof(timer_s));
 #endif
-#if WIND_LOCK_SUPPORT > 0
     wind_pool_create("lock_pool",g_pool.lock,sizeof(g_pool.lock),sizeof(lock_s));
-#endif
+    
+#if WIND_STKPOOL_SUPPORT
     wind_pool_create("stkbuf_pool",g_pool.stkbuf,sizeof(g_pool.stkbuf),WIND_STK_SIZE * sizeof(w_stack_t));
+#endif
 }
 
 
-void *wind_core_alloc(stat_e type)
+void *wind_core_alloc(objid_e type)
 {
     void *p;
     switch(type)
@@ -69,34 +69,34 @@ void *wind_core_alloc(stat_e type)
     case IDX_THREAD:
         p = wind_pool_alloc(g_pool.thread);
         break;
-#if WIND_LOCK_SUPPORT > 0
     case IDX_LOCK:
         p = wind_pool_alloc(g_pool.lock);
         break;
-#endif
-#if WIND_SEM_SUPPORT > 0
+#if WIND_SEM_SUPPORT
     case IDX_SEM:
         p = wind_pool_alloc(g_pool.sem);
         break;
 #endif
-#if WIND_PIPE_SUPPORT > 0
+#if (WIND_PIPE_SUPPORT && WIND_QUEUE_SUPPORT)
     case IDX_PIPE:
         p = wind_pool_alloc(g_pool.pipe);
         break;
 #endif
-#if WIND_MESSAGE_SUPPORT > 0
+#if WIND_MESSAGE_SUPPORT
     case IDX_MSG:
         p = wind_pool_alloc(g_pool.msg);
         break;
 #endif
-#if WIND_TIMER_SUPPORT > 0
+#if WIND_TIMER_SUPPORT
     case IDX_TIMER:
         p = wind_pool_alloc(g_pool.timer);
         break;
 #endif
+#if WIND_STKPOOL_SUPPORT
     case IDX_STACK:
         p = wind_pool_alloc(g_pool.stkbuf);
         break;
+#endif
     default:p = NULL;
     }
     if(p != NULL)
@@ -107,7 +107,7 @@ void *wind_core_alloc(stat_e type)
     return p;
 }
 
-w_err_t wind_core_free(stat_e type,void *block)
+w_err_t wind_core_free(objid_e type,void *block)
 {
     w_err_t err;
     WIND_ASSERT_RETURN(block != NULL,ERR_NULL_POINTER);
@@ -116,34 +116,34 @@ w_err_t wind_core_free(stat_e type,void *block)
     case IDX_THREAD:
         err = wind_pool_free(g_pool.thread,block);
         break;
-#if WIND_LOCK_SUPPORT > 0
     case IDX_LOCK:
         err = wind_pool_free(g_pool.lock,block);
         break;
-#endif
-#if WIND_SEM_SUPPORT > 0
+#if WIND_SEM_SUPPORT
     case IDX_SEM:
         err = wind_pool_free(g_pool.sem,block);
         break;
 #endif
-#if WIND_PIPE_SUPPORT > 0
+#if (WIND_PIPE_SUPPORT && WIND_QUEUE_SUPPORT)
     case IDX_PIPE:
         err = wind_pool_free(g_pool.pipe,block);
         break;
 #endif
-#if WIND_MESSAGE_SUPPORT > 0
+#if WIND_MESSAGE_SUPPORT
     case IDX_MSG:
         err = wind_pool_free(g_pool.msg,block);
         break;
 #endif
-#if WIND_TIMER_SUPPORT > 0
+#if WIND_TIMER_SUPPORT
     case IDX_TIMER:
         err = wind_pool_free(g_pool.timer,block);
         break;
 #endif
+#if WIND_STKPOOL_SUPPORT
     case IDX_STACK:
         err = wind_pool_free(g_pool.stkbuf,block);
         break;
+#endif
     default:
         err = ERR_COMMAN;
         break;

@@ -30,9 +30,8 @@
 #include "wind_string.h"
 #include "wind_stati.h"
 #include "wind_var.h"
-
 #include "wind_cmd.h"
-
+#if WIND_CONSOLE_SUPPORT
 static void core_stat_convert_num(w_int8_t *buf,w_uint32_t num)
 {
     w_uint8_t i = 0;
@@ -140,4 +139,6 @@ static w_err_t cmd_main(w_int32_t argc,char **argv)
 }
 
 CMD_DEF(stati);
+
+#endif
 

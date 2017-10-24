@@ -32,29 +32,28 @@
 extern "C" {
 #endif
 
-#if WIND_STAT_SUPPORT > 0
-typedef enum __stat_e
+typedef enum __objid_e
 {
     IDX_THREAD,
-#if WIND_LOCK_SUPPORT > 0
     IDX_LOCK,
-#endif
-#if WIND_SEM_SUPPORT > 0
+#if WIND_SEM_SUPPORT
     IDX_SEM,
 #endif
-#if WIND_PIPE_SUPPORT > 0
+#if WIND_PIPE_SUPPORT
     IDX_PIPE,
 #endif
-#if WIND_MESSAGE_SUPPORT > 0
+#if WIND_MESSAGE_SUPPORT
     IDX_MSG,
     IDX_MBOX,
 #endif
-#if WIND_TIMER_SUPPORT > 0
+#if WIND_TIMER_SUPPORT
     IDX_TIMER,
 #endif
     IDX_STACK,
     IDX_CNT
-}stat_e;
+}objid_e;
+
+#if WIND_STAT_SUPPORT
 
 #define STAT_NAME_LEN 12
 typedef struct __stat_s

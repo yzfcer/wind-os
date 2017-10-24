@@ -5,9 +5,18 @@
 #define MAIN_STK_SIZE 256
 void wind_tick_init(void);
 void create_stati_thread(void);
+#if WIND_DAEMON_SUPPORT
 void create_daemon_thread(void);
+#else 
+#define create_daemon_thread()
+#endif
 void create_idle_thread(void);
+#if WIND_CONSOLE_SUPPORT
 void create_console_thread(void);
+#else 
+#define create_console_thread()
+#endif
+
 void create_timer_thread(void);
 
 extern w_err_t wind_main(void);
@@ -29,7 +38,7 @@ static w_err_t init_thread(w_int32_t argc,w_int8_t **argv)
     WIND_INFO("create sys thread:\r\n");
     create_idle_thread();
     set_idle_cnt();
-#if WIND_SOFTINT_SUPPORT > 0    
+#if WIND_SOFTINT_SUPPORT
     wind_create_softint_thread();
 #endif
 #if WIND_TIMER_SUPPORT
@@ -37,9 +46,8 @@ static w_err_t init_thread(w_int32_t argc,w_int8_t **argv)
 #endif
     create_stati_thread();
     create_daemon_thread();
-#if WIND_CONSOLE_SUPPORT > 0
     create_console_thread();
-#endif
+
     //wind_thread_print(&g_core.threadlist);
     
     wind_main();

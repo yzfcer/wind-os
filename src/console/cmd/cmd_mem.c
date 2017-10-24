@@ -32,7 +32,7 @@
 #include "wind_sem.h"
 #include "wind_var.h"
 #include "wind_cmd.h"
-
+#if WIND_CONSOLE_SUPPORT
 
 static w_bool_t str2int(const char *str,w_uint32_t *value)
 {
@@ -173,4 +173,6 @@ static w_err_t cmd_main(w_int32_t argc,char **argv)
 }
 
 CMD_DEF(mem);
+
+#endif
 

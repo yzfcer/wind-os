@@ -36,7 +36,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif //__cplusplus
-#if WIND_MEM_SUPPORT > 0
+#if (WIND_MEM_SUPPORT && WIND_HEAP_SUPPORT)
 
 
 typedef struct __memhaed_s

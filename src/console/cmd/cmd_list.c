@@ -34,6 +34,7 @@
 #include "wind_lock.h"
 #include "wind_var.h"
 #include "wind_cmd.h"
+#if WIND_CONSOLE_SUPPORT
 
 static void cmd_showdisc(void)
 {
@@ -59,11 +60,13 @@ static w_err_t cmd_main(w_int32_t argc,char **argv)
         wind_thread_print(&g_core.threadlist);
         return ERR_OK;
     }
+#if WIND_SEM_SUPPORT
     else if(0 == wind_strcmp(argv[1],"sem"))
     {
         wind_sem_print(&g_core.semlist);
         return ERR_COMMAN;
     }
+#endif
     else if(0 == wind_strcmp(argv[1],"lock"))
     {
         wind_lock_print(&g_core.locklist);
@@ -74,3 +77,4 @@ static w_err_t cmd_main(w_int32_t argc,char **argv)
 
 CMD_DEF(list);
 
+#endif

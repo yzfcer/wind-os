@@ -2,6 +2,7 @@
 #include "wind_var.h"
 #include "wind_thread.h"
 #include "wind_debug.h"
+#if WIND_DAEMON_SUPPORT 
 #define DAEMON_STK_SIZE 256
 static w_stack_t daemonstk[DAEMON_STK_SIZE];
 
@@ -33,4 +34,6 @@ void create_daemon_thread(void)
     g_core.pdaemon = wind_thread_create("daemon",PRIO_HIGH,daemon_thread,
                      0,NULL,daemonstk,DAEMON_STK_SIZE);
 }
+
+#endif
 

@@ -42,31 +42,30 @@ extern "C" {
 typedef struct __core_pool_s
 {
     WIND_MPOOL(thread,WIND_THREAD_MAX_NUM,sizeof(thread_s));
-#if WIND_PIPE_SUPPORT > 0
+#if (WIND_PIPE_SUPPORT && WIND_QUEUE_SUPPORT)
     WIND_MPOOL(pipe,WIND_PIPE_MAX_NUM,sizeof(pipe_s));
 #endif
-#if WIND_MESSAGE_SUPPORT > 0
+#if WIND_MESSAGE_SUPPORT
     WIND_MPOOL(msg,WIND_MESSAGE_MAX_NUM,sizeof(msg_s));
     WIND_MPOOL(mbox,WIND_MBOX_MAX_NUM,sizeof(mbox_s));
 #endif
-#if WIND_SEM_SUPPORT > 0
+#if WIND_SEM_SUPPORT
     WIND_MPOOL(sem,WIND_SEM_MAX_NUM,sizeof(sem_s));
 #endif
-#if WIND_TIMER_SUPPORT > 0
-    WIND_MPOOL(timer,WIND_TTIMER_MAX_NUM,sizeof(timer_s));
+#if WIND_TIMER_SUPPORT
+    WIND_MPOOL(timer,WIND_TIMER_MAX_NUM,sizeof(timer_s));
 #endif
-#if WIND_LOCK_SUPPORT > 0
     WIND_MPOOL(lock,WIND_LOCK_NUM,sizeof(lock_s));
-#endif
-    //定义一些堆栈以便创建程序在时使用
+#if WIND_STKPOOL_SUPPORT
     WIND_MPOOL(stkbuf,WIND_STK_MAX_NUM,WIND_STK_SIZE * sizeof(w_stack_t));
+#endif
 }core_pools_s;
 
 void wind_corepool_init(void);
 
-void *wind_core_alloc(stat_e type);
+void *wind_core_alloc(objid_e type);
 
-w_err_t wind_core_free(stat_e type,void *block);
+w_err_t wind_core_free(objid_e type,void *block);
 
 void print_core_pool(void);
 

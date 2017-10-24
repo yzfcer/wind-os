@@ -30,7 +30,7 @@
 #include "wind_err.h"
 //#include "S3C2440addr.h"
 #include "wind_debug.h"
-#if WIND_RTC_SUPPORT > 0
+#if WIND_RTC_SUPPORT
 datetime_s G_DATETIME;//当前日期和时间
 w_uint8_t g_half_day = DAY_AM;//当前是上午还是下午
 static w_uint8_t g_daysofmonth[12] = {31,28,31,30,31,30,31,31,30,31,30,31};
@@ -264,5 +264,5 @@ void wind_msecond_inc(void)
         wind_second_inc();
     }
 }
-#endif//WIND_RTC_SUPPORT > 0
+#endif//WIND_RTC_SUPPORT
 

@@ -34,7 +34,7 @@
 extern "C" {
 #endif
 
-#if WIND_SEM_SUPPORT > 0
+#if WIND_SEM_SUPPORT
 #define SEM_NAME_LEN 20 //线程名的最大长度，包括 '\0'
 
 typedef struct _wind_sem

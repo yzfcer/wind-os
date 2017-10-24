@@ -28,17 +28,15 @@
 #include "wind_os_hwif.h"
 #include "wind_assert.h"
 #include "wind_err.h"
-
+#if WIND_QUEUE_SUPPORT
 static w_uint32_t wind_queue_lock(queue_s *q)
 {
     if(q->lock_type == LOCK_TYPE_NONE)
         return 0;
     else if(q->lock_type == LOCK_TYPE_GLOBAL) 
         wind_close_interrupt();
-#if WIND_LOCK_SUPPORT > 0
     else if(q->lock_type == LOCK_TYPE_AREA)
         wind_lock_close(q->lock);
-#endif
     return 0;
 }
 
@@ -48,10 +46,8 @@ static void wind_queue_unlock(queue_s *q)
         return;
     else if(q->lock_type == LOCK_TYPE_GLOBAL) 
         wind_open_interrupt();
-#if WIND_LOCK_SUPPORT > 0
     else if(q->lock_type == LOCK_TYPE_AREA)
         wind_lock_open(q->lock);
-#endif
 }
 
 
@@ -71,13 +67,9 @@ w_err_t wind_queue_create(void *mem,
     //在需要使用局部锁时，如果互斥锁不支持，则使用全局锁
     if(lock_type == LOCK_TYPE_GLOBAL)
     {
-#if WIND_LOCK_SUPPORT > 0
         q->lock_type = (w_int32_t)lock_type;
         q->lock = wind_lock_create("queue");
         WIND_ASSERT_RETURN(q->lock != NULL,ERR_NULL_POINTER);
-#else
-        q->lock_type = LOCK_TYPE_GLOBAL;
-#endif
     }
 
     q->rd = q->buf;
@@ -223,15 +215,13 @@ w_err_t wind_queue_destory(void *queue)
     wind_queue_unlock(q);
     if(q->lock_type == LOCK_TYPE_GLOBAL)
     {
-#if WIND_LOCK_SUPPORT > 0
         err = wind_lock_free(q->lock);
         WIND_ASSERT_RETURN(err == ERR_OK,err);
-#endif
     }
     return ERR_OK;
 }
 
 
-
+#endif
 
 

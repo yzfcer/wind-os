@@ -32,8 +32,7 @@
 extern "C" {
 #endif
 
-#if WIND_STACK_SUPPORT > 0
-
+#if WIND_STACK_SUPPORT
 
 #ifndef NOT_OK
 #define NOT_OK              -3                        /* ²ÎÊý´íÎó                                     */

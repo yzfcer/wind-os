@@ -31,7 +31,8 @@
 #include "wind_stati.h"
 #include "wind_var.h"
 #include "wind_assert.h"
-#if WIND_PIPE_SUPPORT > 0
+#include "core_obj.h"
+#if (WIND_PIPE_SUPPORT && WIND_QUEUE_SUPPORT)
 
 //********************************************internal functions******************************
 

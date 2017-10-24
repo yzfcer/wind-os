@@ -32,10 +32,8 @@
 #include "wind_var.h"
 #include "wind_assert.h"
 #include "dlist.h"
-#if WIND_LOCK_SUPPORT > 0
-extern pthread_s wind_thread_current(void);
-extern void wind_thread_dispatch(void);
-
+#include "wind_core.h"
+#include "core_obj.h"
 static plock_s lock_malloc(void)
 {
     return wind_core_alloc(IDX_LOCK);
@@ -165,5 +163,4 @@ w_err_t wind_lock_print(pdlist_s list)
 }
 
 
-#endif //WIND_LOCK_SUPPORT > 0
 

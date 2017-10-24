@@ -33,7 +33,8 @@
 #include "wind_var.h"
 #include "wind_assert.h"
 #include "wind_string.h"
-#if WIND_SEM_SUPPORT > 0
+#include "core_obj.h"
+#if WIND_SEM_SUPPORT
 extern void wind_thread_dispatch(void);
 static psem_s sem_malloc(void)
 {

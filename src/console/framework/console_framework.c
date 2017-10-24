@@ -18,18 +18,19 @@
 ** 本文件由C语言源文件模板软件生成。------------清风海岸出品，必属精品！------------
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
-#ifdef __cplusplus
-extern "C" {
-#endif // #ifdef __cplusplus
-
-
-/*********************************************头文件定义***********************************************/
 #include "wind_config.h"
 #include "wind_type.h"
 #include "console_framework.h"
 #include "wind_debug.h"
 #include "wind_var.h"
 #include "wind_cmd.h"
+#ifdef __cplusplus
+extern "C" {
+#endif // #ifdef __cplusplus
+
+#if WIND_CONSOLE_SUPPORT
+
+/*********************************************头文件定义***********************************************/
 /********************************************内部变量定义**********************************************/
 
 console_s g_ctrl[WIND_CONSOLE_COUNT];
@@ -385,8 +386,7 @@ void create_console_thread(void)
     wind_thread_changeprio(g_core.pctrl,32760);
 }
 
-
-
+#endif
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

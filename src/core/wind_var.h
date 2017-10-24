@@ -41,14 +41,14 @@ extern "C" {
 #endif
 typedef struct __core_var_s
 {
+    //内核对象列表
     dlist_s threadlist;
     dlist_s sleeplist;
     dlist_s semlist;
     dlist_s locklist;
     dlist_s mboxlist;
-    
     dlist_s ttmerlist;
-    w_int16_t pcbcnt;//线程计数器
+    
     volatile w_bool_t run_falg;//多线程调度开始的标志
     w_bool_t usrthren;/*用户线程允许创建的标志 */
     
@@ -72,14 +72,6 @@ extern w_pstack_t *gwind_high_stack;
 extern w_pstack_t *gwind_cur_stack;
 
 void wind_corevar_init(void);
-
-void *wind_core_alloc(stat_e type);
-
-w_err_t wind_core_free(stat_e type,void *block);
-
-w_pstack_t wind_stack_alloc(void);
-
-w_err_t wind_stack_free(w_pstack_t pstack);
 
 //CPU的总体占用率
 #define WIND_CPU_USAGE (g_core.cpu_usage)

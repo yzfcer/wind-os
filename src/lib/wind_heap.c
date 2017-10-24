@@ -35,7 +35,7 @@
 #include "wind_assert.h"
 
 
-#if WIND_HEAP_SUPPORT > 0
+#if WIND_HEAP_SUPPORT
 dlist_s gwind_heaplist = {NULL,NULL};//所有内存块的入口
 #define WIND_HEAP_DEBUG(...)
 #define OFFSET_ADDR(base,offset) (void*)(((char*)(base))+(offset))
@@ -174,7 +174,7 @@ void *wind_heap_alloc(pheap_s heap,w_uint32_t size)
     return p;
 }
 
-
+#if WIND_HEAP_SUPPORT
 void *wind_heap_alloc_default(w_uint32_t size)
 {
     void *p = NULL;
@@ -189,6 +189,7 @@ void *wind_heap_alloc_default(w_uint32_t size)
     }
     return NULL;
 }
+#endif
 
 void *wind_heap_realloc(pheap_s heap, void* ptr, w_uint32_t newsize)
 {

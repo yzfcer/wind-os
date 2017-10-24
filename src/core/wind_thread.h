@@ -70,7 +70,7 @@ typedef enum __suscause
 
 
 //定义与线程相关的一些回调函数，需要配置选项支持
-#if WIND_THREAD_CALLBACK_SUPPORT > 0
+#if WIND_THREAD_CALLBACK_SUPPORT
 typedef enum __thr_evt_e
 {
     THR_EVT_CREATE,
@@ -115,11 +115,11 @@ typedef struct _thread_s
     thread_stat_e runstat;
     w_int32_t sleep_ticks;
     suscause_e cause;//导致状态变化的原因
-#if WIND_THREAD_CALLBACK_SUPPORT > 0
+#if WIND_THREAD_CALLBACK_SUPPORT
     threadcb_s cb;
 #endif
 
-#if WIND_HEAP_SUPPORT > 0 && WIND_PRIVATE_HEAP_SUPPORT > 0
+#if WIND_HEAP_SUPPORT && WIND_PRIVATE_HEAP_SUPPORT
     void *private_heap;
 #endif
 }thread_s,*pthread_s;
@@ -159,7 +159,7 @@ w_err_t wind_thread_wakeup(void);
 w_err_t wind_thread_exit(w_err_t exitcode);
 
 w_err_t wind_thread_print(pdlist_s list);
-#if WIND_THREAD_CALLBACK_SUPPORT > 0
+#if WIND_THREAD_CALLBACK_SUPPORT
 w_err_t wind_thread_callback_register(pthread_s pthread,thr_evt_e id,void(*cb)(pthread_s));
 #endif
 

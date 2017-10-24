@@ -33,10 +33,9 @@
 #include "wind_debug.h"
 #include "wind_time.h"
 #include "wind_assert.h"
+#include "wind_core.h"
+#if WIND_SOFTINT_SUPPORT
 
-#if WIND_SOFTINT_SUPPORT > 0
-extern pthread_s wind_thread_current(void);
-extern void wind_thread_dispatch(void);
 //软中断线程的堆栈
 static w_stack_t softint_stk[WIND_SOFTINT_STK_LEN];
 static w_uint16_t softint_index = 0;

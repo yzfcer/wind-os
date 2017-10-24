@@ -49,9 +49,7 @@ typedef struct __queue_s
     w_uint32_t capacity;// 队列中允许存储的数据个数 
     w_uint32_t  itemsize; // 元素的数据宽度
     w_int32_t lock_type;
-#if WIND_LOCK_SUPPORT > 0
     plock_s lock;
-#endif
     w_uint8_t buf[4]; // 存储数据的空间          
 } queue_s,*pqueue_s;
 

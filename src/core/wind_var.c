@@ -45,7 +45,6 @@ void wind_corevar_init(void)
 {
     g_core.cpu_usage = 0;
     g_core.idle_cnt = 0;
-    g_core.pcbcnt = 0;
     g_core.usrthren = B_FALSE;
     g_core.run_falg = B_FALSE;
     g_core.ticks_cnt = 0;

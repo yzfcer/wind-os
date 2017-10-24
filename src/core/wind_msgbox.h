@@ -34,7 +34,7 @@
 extern "C" {
 #endif
 
-#if WIND_MESSAGE_SUPPORT > 0
+#if WIND_MESSAGE_SUPPORT
 
 typedef struct _wind_message
 {

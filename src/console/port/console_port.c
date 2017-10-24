@@ -1,6 +1,6 @@
 #include "wind_type.h"
-//#include "console_framework.h"
 #include "wind_cmd.h"
+#if WIND_CONSOLE_SUPPORT
 CMD_DECLARE(list);
 CMD_DECLARE(echo);
 //CMD_DECLARE(datetime);
@@ -24,3 +24,4 @@ w_bool_t console_have_user(char *user)
     return B_TRUE;
 }
 
+#endif

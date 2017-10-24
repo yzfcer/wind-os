@@ -29,6 +29,7 @@
 #include "wind_err.h"
 #include "wind_stati.h"
 #include "wind_var.h"
+#include "core_obj.h"
 #if WIND_TIMER_SUPPORT
 static ptimer_s ttimer_malloc(void)
 {
@@ -46,14 +47,12 @@ w_err_t ttimer_free(ptimer_s timer)
 {
     if(timer == NULL)
         return ERR_NULL_POINTER;
-    wind_close_interrupt();
-    
     timer->running = B_FALSE;
     timer->used = B_FALSE;
     timer->count = 0;
     timer->init_count = 0;
     timer->handle = NULL;
-    wind_open_interrupt();
+    wind_core_free(IDX_TIMER,timer);
     return ERR_OK;
 }
 
@@ -157,6 +156,6 @@ void wind_timer_event(void)
         }
     }
 }
-#endif //#if WIND_TIMER_SUPPORT > 0
+#endif //#if WIND_TIMER_SUPPORT
 
 

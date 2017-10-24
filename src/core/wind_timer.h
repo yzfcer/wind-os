@@ -56,7 +56,7 @@ w_err_t wind_timer_set_period(ptimer_s ptimer,w_uint32_t t_ms);
 void wind_timer_event(void);
 
 
-#endif //#if WIND_TIMER_SUPPORT > 0
+#endif //#if WIND_TIMER_SUPPORT
 #ifdef __cplusplus
 }
 #endif

@@ -28,6 +28,7 @@
 #include "wind_stack.h"
 #include "wind_os_hwif.h"
 
+#if WIND_STACK_SUPPORT
 
 static w_err_t defaultreadempty(pstack_s pstk,void *data)
 {
@@ -174,11 +175,7 @@ w_err_t wind_stack_read(void *Buf,void *Ret)
 ** 日　期:
 **------------------------------------------------------------------------------------------------------
 ********************************************************************************************************/
-#ifndef EN_STACK_WRITE
-#define EN_STACK_WRITE      0
-#endif
 
-#if EN_STACK_WRITE > 0
 
 w_err_t wind_stack_write(void *Buf, void *Data)
 {
@@ -215,7 +212,7 @@ w_err_t wind_stack_write(void *Buf, void *Data)
     }
     return err;
 }
-#endif
+
 
 
 
@@ -234,11 +231,7 @@ w_err_t wind_stack_write(void *Buf, void *Data)
 ** 日　期:
 **------------------------------------------------------------------------------------------------------
 ********************************************************************************************************/
-#ifndef EN_STACK_NDATA
-#define EN_STACK_NDATA    0
-#endif
 
-#if EN_STACK_NDATA > 0
 
 w_uint16_t wind_stack_datalen(void *Buf)
 {
@@ -253,7 +246,6 @@ w_uint16_t wind_stack_datalen(void *Buf)
     return temp;
 }
 
-#endif
 
 /*********************************************************************************************************
 ** 函数名称: wind_stack_size
@@ -270,11 +262,7 @@ w_uint16_t wind_stack_datalen(void *Buf)
 ** 日　期:
 **------------------------------------------------------------------------------------------------------
 ********************************************************************************************************/
-#ifndef EN_stack_sIZE
-#define EN_stack_sIZE    0
-#endif
 
-#if EN_stack_sIZE 
 
 w_uint16_t wind_stack_size(void *Buf)
 {
@@ -289,7 +277,7 @@ w_uint16_t wind_stack_size(void *Buf)
     return temp;
 }
 
-#endif
+
 
 /*********************************************************************************************************
 ** 函数名称: wind_stack_flush
@@ -306,11 +294,7 @@ w_uint16_t wind_stack_size(void *Buf)
 ** 日　期:
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
-#ifndef EN_STACK_FLUSH
-#define EN_STACK_FLUSH    0
-#endif
 
-#if EN_STACK_FLUSH 
 
 void wind_stack_flush(void *Buf)
 {
@@ -326,9 +310,10 @@ void wind_stack_flush(void *Buf)
         wind_open_interrupt();
     }
 }
+
+
+
 #endif
-
-
 
 /*********************************************************************************************************
 **                            End Of File

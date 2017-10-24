@@ -36,7 +36,7 @@ extern "C" {
 #include "wind_comman.h"
 //#include "console_framework.h"
 #include "wind_cmd.h"
-#if WIND_RTC_SUPPORT > 0
+#if WIND_RTC_SUPPORT
 
 static extern datetime_s G_DATETIME;//当前日期和时间
 static w_err_t cmd_set_datetime(w_int32_t argc,char **argv)

@@ -33,7 +33,7 @@
 #include "wind_err.h"
 #include "wind_heap.h"
 #include "wind_assert.h"
-#if WIND_MEM_SUPPORT > 0
+#if (WIND_MEM_SUPPORT && WIND_HEAP_SUPPORT)
 
 
 
@@ -83,8 +83,11 @@ void *wind_malloc(w_uint32_t size)
 #endif
     wind_close_interrupt();
     //这里如果有多个不连续的自由空间，可能还需要改进
-    //phead = (pmemhead_s)(g_mem_for_allcoc[0].base + g_mem_for_allcoc[0].offset);
+
     phead = (pmemhead_s)wind_heap_alloc_default(si + sizeof(memhead_s));
+
+    phead = NULL;
+
     //因为前面的初始空间已经分配完了，因此，可以开始考虑从回收的空间中分配新的空间
     //如果从回收的空间中分配了新的空间，那么分配可以成功，否则分配将失败
     //phead = core_get_free_space(si + sizeof(memhead_s));

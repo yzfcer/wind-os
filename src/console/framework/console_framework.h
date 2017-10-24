@@ -34,6 +34,7 @@ extern "C" {
 #include "wind_thread.h"
 #include "cmd_history.h"
 
+#if WIND_CONSOLE_SUPPORT
 
 /***********************************************宏定义*************************************************/
 #define WIND_CMD_MAX_LEN 512//一个命令的最大长度
@@ -119,6 +120,7 @@ w_err_t wind_cmd_register(cmd_list_s *cgl,cmd_s *cmd,int cnt);
 void register_all_cmd(console_s *ctrl);
 extern void test_init(console_s *ctrl);
 
+#endif
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

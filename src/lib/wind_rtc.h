@@ -31,7 +31,7 @@
 extern "C" {
 #endif
 
-#if WIND_RTC_SUPPORT > 0
+#if WIND_RTC_SUPPORT
 #define HOUR_TYPE_12 1//定义为12小时制
 #define HOUR_TYPE_24 2//定义为24小时制
 #define HOUR_TYPE HOUR_TYPE_24
@@ -84,7 +84,7 @@ void wind_second_inc(void);
 void wind_msecond_inc(void); 
 
 
-#endif//WIND_RTC_SUPPORT > 0
+#endif//WIND_RTC_SUPPORT
 #ifdef c_plusplus__
 }
 #endif//c_plusplus__

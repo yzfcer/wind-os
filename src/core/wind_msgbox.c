@@ -32,7 +32,8 @@
 #include "wind_var.h"
 #include "wind_err.h"
 #include "wind_assert.h"
-#if WIND_MESSAGE_SUPPORT > 0
+#include "core_obj.h"
+#if WIND_MESSAGE_SUPPORT
 extern void wind_thread_dispatch(void);
 
 static pmsg_s msg_malloc(void)

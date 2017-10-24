@@ -95,8 +95,9 @@ w_err_t wind_heap_init(const char *name,
 void wind_heaps_init(void);
 
 void *wind_heap_alloc(pheap_s heap, w_uint32_t size);
+#if WIND_HEAP_SUPPORT
 void *wind_heap_alloc_default(w_uint32_t size);
-
+#endif
 void *wind_heap_realloc(pheap_s heap, void* ptr, w_uint32_t newsize);
 
 w_err_t wind_heap_free(void *ptr);

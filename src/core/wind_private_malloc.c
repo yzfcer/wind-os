@@ -33,7 +33,7 @@
 extern "C" {
 #endif
 
-#if WIND_PRIVATE_HEAP_SUPPORT > 0 && WIND_PRIVATE_HEAP_SUPPORT > 0
+#if (WIND_HEAP_SUPPORT  && WIND_PRIVATE_HEAP_SUPPORT)
 
 /********************************************内部变量定义**********************************************/
 

@@ -34,7 +34,7 @@
 extern "C" {
 #endif
 
-#if WIND_PIPE_SUPPORT > 0
+#if (WIND_PIPE_SUPPORT && WIND_QUEUE_SUPPORT)
 
 #define WIND_PIPE_MAGIC 0x56384c6a
 #define PIPE_NAME_LEN 12
@@ -58,7 +58,7 @@ w_err_t wind_pipe_free(ppipe_s ppipe);
 
 
 
-#endif //WIND_PIPE_SUPPORT > 0
+#endif //WIND_PIPE_SUPPORT
 #ifdef __cplusplus
 }
 #endif

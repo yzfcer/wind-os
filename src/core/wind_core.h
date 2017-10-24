@@ -34,7 +34,7 @@ extern "C" {
 #endif
 
 
-#if WIND_REALTIME_CORE_SUPPORT > 0
+#if WIND_REALTIME_CORE_SUPPORT
 void wind_thread_dispatch(void);
 #else
 #define wind_thread_dispatch() 

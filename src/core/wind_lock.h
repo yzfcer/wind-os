@@ -32,7 +32,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#if WIND_LOCK_SUPPORT > 0
 
 typedef struct _wind_lock
 {
@@ -52,7 +51,6 @@ w_err_t wind_lock_open(plock_s plock);
 w_err_t wind_lock_print(pdlist_s list);
 
 
-#endif //WIND_LOCK_SUPPORT > 0
 #ifdef __cplusplus
 }
 #endif

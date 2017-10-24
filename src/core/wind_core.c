@@ -147,7 +147,7 @@ static void wind_run()
 
 
 //在线程中切换到高优先级的线程
-#if WIND_REALTIME_CORE_SUPPORT > 0
+#if WIND_REALTIME_CORE_SUPPORT
 void wind_thread_dispatch(void)
 {
     pthread_s pthr;
@@ -187,16 +187,16 @@ void wind_init()
     wind_std_port_init();//调试端口初始化
     wind_print_os_info();
     
-#if WIND_STAT_SUPPORT > 0
+#if WIND_STAT_SUPPORT
     wind_stat_init();
 #endif
     wind_corepool_init();
     wind_corevar_init();
-#if WIND_HEAP_SUPPORT > 0
+#if WIND_HEAP_SUPPORT
     wind_heaps_init();
 #endif
     wind_time_init();//时间初始化
-#if WIND_RTC_SUPPORT > 0
+#if WIND_RTC_SUPPORT
     wind_datetime_init();
 #endif
     WIND_INFO("initialization completed!\r\n");

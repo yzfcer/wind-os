@@ -30,7 +30,7 @@
 extern "C" {
 #endif
 
-#if WIND_HEAP_SUPPORT > 0 && WIND_PRIVATE_HEAP_SUPPORT > 0
+#if (WIND_HEAP_SUPPORT  && WIND_PRIVATE_HEAP_SUPPORT)
 #define PRIVATE_HEAP_SIZE 4096//私有栈的空间默认大小
 
 
@@ -57,7 +57,7 @@ void *wind_privateheap_alloc(w_uint32_t size);
 w_err_t wind_privateheap_free(void *ptr);
 
 
-#endif//#if WIND_HEAP_SUPPORT > 0 && WIND_PRIVATE_HEAP_SUPPORT > 0
+#endif//#if WIND_HEAP_SUPPORT && WIND_PRIVATE_HEAP_SUPPORT
 #ifdef __cplusplus
 }
 #endif

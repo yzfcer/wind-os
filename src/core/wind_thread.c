@@ -85,7 +85,7 @@ w_err_t wind_thread_distroy(pthread_s pthread)
     WIND_ASSERT_RETURN(pthread != NULL,ERR_NULL_POINTER);
     wind_close_interrupt();
     //这里需要先释放一些与这个线程相关的一些东西后才能释放这个pcb
-#if WIND_HEAP_SUPPORT > 0 && WIND_PRIVATE_HEAP_SUPPORT > 0
+#if WIND_HEAP_SUPPORT && WIND_PRIVATE_HEAP_SUPPORT
     if(pthread->private_heap != NULL)
     {
         wind_heap_free(pthread->private_heap);
@@ -212,7 +212,7 @@ pthread_s wind_thread_create(const w_int8_t *name,
     pthread->runstat = THREAD_STATUS_READY;
     pthread->cause = CAUSE_COM;
     pthread->sleep_ticks = 0;
-#if WIND_HEAP_SUPPORT > 0 && WIND_PRIVATE_HEAP_SUPPORT > 0
+#if WIND_HEAP_SUPPORT && WIND_PRIVATE_HEAP_SUPPORT
     pthread->private_heap = NULL;
 #endif
     
@@ -265,7 +265,7 @@ w_err_t wind_thread_start(pthread_s pthread)
 {
     WIND_ASSERT_RETURN(pthread != NULL,ERR_NULL_POINTER);
     wind_close_interrupt();   
-#if WIND_THREAD_CALLBACK_SUPPORT > 0
+#if WIND_THREAD_CALLBACK_SUPPORT
     if(pthread->cb.start != NULL)
         pthread->cb.start(pthread);
 #endif
@@ -281,7 +281,7 @@ w_err_t wind_thread_suspend(pthread_s pthread)
 {
     WIND_ASSERT_RETURN(pthread != NULL,ERR_NULL_POINTER);
     wind_close_interrupt();
-#if WIND_THREAD_CALLBACK_SUPPORT > 0
+#if WIND_THREAD_CALLBACK_SUPPORT
     if(pthread->cb.suspend != NULL)
         pthread->cb.suspend(pthread);
 #endif
@@ -298,7 +298,7 @@ w_err_t wind_thread_resume(pthread_s pthread)
     WIND_ASSERT_RETURN(pthread != NULL,ERR_NULL_POINTER);
     
     wind_close_interrupt();
-#if WIND_THREAD_CALLBACK_SUPPORT > 0
+#if WIND_THREAD_CALLBACK_SUPPORT
     if(pthread->cb.resume != NULL)
         pthread->cb.resume(pthread);
 #endif
@@ -312,12 +312,11 @@ w_err_t wind_thread_resume(pthread_s pthread)
 w_err_t wind_thread_kill(pthread_s pthread)
 {
     pdnode_s node;
-    extern void wind_thread_dispatch(void);
     WIND_ASSERT_RETURN(pthread != NULL,ERR_NULL_POINTER);
     wind_close_interrupt();
     node = &pthread->validthr.node;
     dlist_remove(&g_core.threadlist,node);
-#if WIND_THREAD_CALLBACK_SUPPORT > 0
+#if WIND_THREAD_CALLBACK_SUPPORT
     if(pthread->cb.dead != NULL)
         pthread->cb.dead(pthread);
 #endif
@@ -412,7 +411,7 @@ w_err_t wind_thread_wakeup(void)
     return ERR_OK;
 }
 
-#if WIND_THREAD_CALLBACK_SUPPORT > 0
+#if WIND_THREAD_CALLBACK_SUPPORT
 w_err_t wind_thread_callback_register(pthread_s pthread,thr_evt_e id,void(*cb)(pthread_s))
 {
     WIND_ASSERT_RETURN(pthread != NULL,ERR_NULL_POINTER);
