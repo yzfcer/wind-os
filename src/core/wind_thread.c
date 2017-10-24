@@ -59,7 +59,7 @@ static w_uint16_t get_prio(prio_e priolevel)
 static pthread_s thread_malloc(void)
 {
     pthread_s pthread;    
-    pthread = wind_core_alloc(STAT_PROC);
+    pthread = wind_core_alloc(IDX_PROC);
     WIND_ASSERT_RETURN(pthread != NULL,NULL);
     pthread->used = B_TRUE;
     WIND_DEBUG("alloc pthread->prio:%d\r\n",pthread->prio);
@@ -77,8 +77,7 @@ static w_err_t thread_free(pthread_s pthread)
     pthread->cause = CAUSE_COM;
     pthread->stack = NULL;
     pthread->stksize = 0;
-    WIND_DEBUG("minus:%d,%d\r\n",G_STAT[STAT_PROC].used,G_STAT[STAT_PROC].max);
-    return wind_core_free(STAT_PROC,pthread);
+    return wind_core_free(IDX_PROC,pthread);
 }
 
 w_err_t wind_thread_distroy(pthread_s pthread)
@@ -233,7 +232,7 @@ pthread_s wind_thread_create_default(const w_int8_t *name,
                    w_int8_t **argv)
 {
     prio_e priol = PRIO_MID;
-    w_pstack_t pstk = wind_core_alloc(STAT_STACK);
+    w_pstack_t pstk = wind_core_alloc(IDX_STACK);
     int stksize = WIND_STK_SIZE;
     return wind_thread_create(name,priol,procfunc,argc,argv,pstk,stksize);
 }

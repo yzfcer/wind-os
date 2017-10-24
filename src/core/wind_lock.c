@@ -38,12 +38,12 @@ extern void wind_thread_dispatch(void);
 
 static plock_s lock_malloc(void)
 {
-    return wind_core_alloc(STAT_LOCK);
+    return wind_core_alloc(IDX_LOCK);
 }
 
 static w_err_t lock_free(void *lock)
 {
-    return wind_core_free(STAT_LOCK,lock);
+    return wind_core_free(IDX_LOCK,lock);
 }
 
 //创建一个lock对象，并加入所有lock列表

@@ -66,35 +66,35 @@ void *wind_core_alloc(stat_e type)
     void *p;
     switch(type)
     {
-    case STAT_PROC:
+    case IDX_PROC:
         p = wind_pool_alloc(g_pool.thread);
         break;
 #if WIND_LOCK_SUPPORT > 0
-    case STAT_LOCK:
+    case IDX_LOCK:
         p = wind_pool_alloc(g_pool.lock);
         break;
 #endif
 #if WIND_SEM_SUPPORT > 0
-    case STAT_SEM:
+    case IDX_SEM:
         p = wind_pool_alloc(g_pool.sem);
         break;
 #endif
 #if WIND_PIPE_SUPPORT > 0
-    case STAT_PIPE:
+    case IDX_PIPE:
         p = wind_pool_alloc(g_pool.pipe);
         break;
 #endif
 #if WIND_MESSAGE_SUPPORT > 0
-    case STAT_MESSAGE:
+    case IDX_MSG:
         p = wind_pool_alloc(g_pool.msg);
         break;
 #endif
 #if WIND_TIMER_SUPPORT > 0
-    case STAT_TIMER:
+    case IDX_TIMER:
         p = wind_pool_alloc(g_pool.timer);
         break;
 #endif
-    case STAT_STACK:
+    case IDX_STACK:
         p = wind_pool_alloc(g_pool.stkbuf);
         break;
     default:p = NULL;
@@ -113,35 +113,35 @@ w_err_t wind_core_free(stat_e type,void *block)
     WIND_ASSERT_RETURN(block != NULL,ERR_NULL_POINTER);
     switch(type)
     {
-    case STAT_PROC:
+    case IDX_PROC:
         err = wind_pool_free(g_pool.thread,block);
         break;
 #if WIND_LOCK_SUPPORT > 0
-    case STAT_LOCK:
+    case IDX_LOCK:
         err = wind_pool_free(g_pool.lock,block);
         break;
 #endif
 #if WIND_SEM_SUPPORT > 0
-    case STAT_SEM:
+    case IDX_SEM:
         err = wind_pool_free(g_pool.sem,block);
         break;
 #endif
 #if WIND_PIPE_SUPPORT > 0
-    case STAT_PIPE:
+    case IDX_PIPE:
         err = wind_pool_free(g_pool.pipe,block);
         break;
 #endif
 #if WIND_MESSAGE_SUPPORT > 0
-    case STAT_MESSAGE:
+    case IDX_MSG:
         err = wind_pool_free(g_pool.msg,block);
         break;
 #endif
 #if WIND_TIMER_SUPPORT > 0
-    case STAT_TIMER:
+    case IDX_TIMER:
         err = wind_pool_free(g_pool.timer,block);
         break;
 #endif
-    case STAT_STACK:
+    case IDX_STACK:
         err = wind_pool_free(g_pool.stkbuf,block);
         break;
     default:

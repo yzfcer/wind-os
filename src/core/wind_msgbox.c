@@ -37,23 +37,23 @@ extern void wind_thread_dispatch(void);
 
 static pmsg_s msg_malloc(void)
 {
-    return (pmsg_s)wind_core_alloc(STAT_MESSAGE);
+    return (pmsg_s)wind_core_alloc(IDX_MSG);
 }
 
 static w_err_t msg_free(pmsg_s msg)
 {
-    return wind_core_free(STAT_MESSAGE,(void *)msg);
+    return wind_core_free(IDX_MSG,(void *)msg);
 }
 
 
 static pmbox_s mbox_malloc(void)
 {
-    return (pmbox_s)wind_core_alloc(STAT_MBOX);
+    return (pmbox_s)wind_core_alloc(IDX_MBOX);
 }
 
 static w_err_t mbox_free(pmbox_s mbox)
 {
-    return wind_core_free(STAT_MBOX,(void *)mbox);
+    return wind_core_free(IDX_MBOX,(void *)mbox);
 }
 
 

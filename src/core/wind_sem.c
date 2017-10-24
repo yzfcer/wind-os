@@ -38,13 +38,13 @@ extern void wind_thread_dispatch(void);
 static psem_s sem_malloc(void)
 {
     psem_s psem;
-    psem = wind_core_alloc(STAT_SEM);
+    psem = wind_core_alloc(IDX_SEM);
     return psem;
 }
 
 static w_err_t sem_free(psem_s psem)
 {
-    return wind_core_free(STAT_SEM,psem);
+    return wind_core_free(IDX_SEM,psem);
 }
 
 

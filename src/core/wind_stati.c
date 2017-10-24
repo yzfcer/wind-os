@@ -29,38 +29,38 @@
 
 #if WIND_STAT_SUPPORT > 0
 
-stat_s G_STAT[STAT_CNT];
+stat_s g_stati[IDX_CNT];
 void wind_stat_init(void)
 {
     WIND_INFO("statistics initializing...\r\n");
-    wind_memset(G_STAT,0,sizeof(G_STAT));
-    G_STAT[STAT_PROC].tot = WIND_THREAD_MAX_NUM;
-    wind_memcpy(G_STAT[STAT_PROC].name,"proc",4);
+    wind_memset(g_stati,0,sizeof(g_stati));
+    g_stati[IDX_PROC].tot = WIND_THREAD_MAX_NUM;
+    wind_memcpy(g_stati[IDX_PROC].name,"proc",4);
 #if WIND_LOCK_SUPPORT > 0
-    G_STAT[STAT_LOCK].tot = WIND_LOCK_NUM;
-    wind_memcpy(G_STAT[STAT_LOCK].name,"lock",4);
+    g_stati[IDX_LOCK].tot = WIND_LOCK_NUM;
+    wind_memcpy(g_stati[IDX_LOCK].name,"lock",4);
 #endif
 #if WIND_SEM_SUPPORT > 0
-    G_STAT[STAT_SEM].tot = WIND_SEM_MAX_NUM;
-    wind_memcpy(G_STAT[STAT_SEM].name,"sem",3);
+    g_stati[IDX_SEM].tot = WIND_SEM_MAX_NUM;
+    wind_memcpy(g_stati[IDX_SEM].name,"sem",3);
 #endif
 #if WIND_PIPE_SUPPORT > 0
-    G_STAT[STAT_PIPE].tot = WIND_PIPE_MAX_NUM;
-    wind_memcpy(G_STAT[STAT_PIPE].name,"pipe",4);
+    g_stati[IDX_PIPE].tot = WIND_PIPE_MAX_NUM;
+    wind_memcpy(g_stati[IDX_PIPE].name,"pipe",4);
 #endif
 #if WIND_MESSAGE_SUPPORT > 0
-    G_STAT[STAT_MESSAGE].tot = WIND_MESSAGE_MAX_NUM;
-    wind_memcpy(G_STAT[STAT_MESSAGE].name,"message",7);
-    G_STAT[STAT_MBOX].tot = WIND_MBOX_MAX_NUM;
-    wind_memcpy(G_STAT[STAT_MBOX].name,"mbox",4);
+    g_stati[IDX_MSG].tot = WIND_MESSAGE_MAX_NUM;
+    wind_memcpy(g_stati[IDX_MSG].name,"message",7);
+    g_stati[IDX_MBOX].tot = WIND_MBOX_MAX_NUM;
+    wind_memcpy(g_stati[IDX_MBOX].name,"mbox",4);
 #endif
 #if WIND_TIMER_SUPPORT > 0
-    G_STAT[STAT_TIMER].tot = WIND_TTIMER_MAX_NUM;
-    wind_memcpy(G_STAT[STAT_TIMER].name,"timer",6);
+    g_stati[IDX_TIMER].tot = WIND_TTIMER_MAX_NUM;
+    wind_memcpy(g_stati[IDX_TIMER].name,"timer",6);
 #endif
     
-    G_STAT[STAT_STACK].tot = WIND_STK_MAX_NUM;
-    wind_memcpy(G_STAT[STAT_STACK].name,"stack",6);
+    g_stati[IDX_STACK].tot = WIND_STK_MAX_NUM;
+    wind_memcpy(g_stati[IDX_STACK].name,"stack",6);
 }
 
 #endif

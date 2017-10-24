@@ -50,7 +50,7 @@ ppipe_s wind_pipe_create(const char *name,void *buff,w_uint32_t buflen)
     WIND_ASSERT_RETURN((buff != NULL),NULL);
     WIND_ASSERT_RETURN(buflen > 0,NULL);
     
-    ppipe = wind_core_alloc(STAT_PIPE);
+    ppipe = wind_core_alloc(IDX_PIPE);
     WIND_ASSERT_RETURN(ppipe != NULL,NULL);
     ppipe->magic = WIND_PIPE_MAGIC;
     ppipe->name = name;
@@ -60,7 +60,7 @@ ppipe_s wind_pipe_create(const char *name,void *buff,w_uint32_t buflen)
     err = wind_queue_create(buff,buflen,1,LOCK_TYPE_AREA);
     if(ERR_OK != err)
     {
-        wind_core_free(STAT_PIPE,ppipe);
+        wind_core_free(IDX_PIPE,ppipe);
         return NULL;
     }
     return ppipe;
@@ -96,7 +96,7 @@ w_err_t wind_pipe_free(ppipe_s ppipe)
     ppipe->magic = 0;
     ppipe->used = B_FALSE;
     ppipe->name = NULL;
-    wind_core_free(STAT_PIPE,ppipe);
+    wind_core_free(IDX_PIPE,ppipe);
     return ERR_OK;
 }
 #endif //WIND_PIPE_SUPPORT

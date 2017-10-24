@@ -35,25 +35,25 @@ extern "C" {
 #if WIND_STAT_SUPPORT > 0
 typedef enum __stat_e
 {
-    STAT_PROC,
+    IDX_PROC,
 #if WIND_LOCK_SUPPORT > 0
-    STAT_LOCK,
+    IDX_LOCK,
 #endif
 #if WIND_SEM_SUPPORT > 0
-    STAT_SEM,
+    IDX_SEM,
 #endif
 #if WIND_PIPE_SUPPORT > 0
-    STAT_PIPE,
+    IDX_PIPE,
 #endif
 #if WIND_MESSAGE_SUPPORT > 0
-    STAT_MESSAGE,
-    STAT_MBOX,
+    IDX_MSG,
+    IDX_MBOX,
 #endif
 #if WIND_TIMER_SUPPORT > 0
-    STAT_TIMER,
+    IDX_TIMER,
 #endif
-    STAT_STACK,
-    STAT_CNT
+    IDX_STACK,
+    IDX_CNT
 }stat_e;
 
 #define STAT_NAME_LEN 12
@@ -66,13 +66,13 @@ typedef struct __stat_s
     w_uint32_t err;
 }stat_s,*pstat_s;
 
-extern stat_s G_STAT[STAT_CNT];
-#define WIND_STAT_INC(stat_type) G_STAT[stat_type].used++
-#define WIND_STAT_MINUS(stat_type) G_STAT[stat_type].used--
+extern stat_s g_stati[IDX_CNT];
+#define WIND_STAT_INC(stat_type) g_stati[stat_type].used++
+#define WIND_STAT_MINUS(stat_type) g_stati[stat_type].used--
 
 #define WIND_STAT_MAX(stat_type) \
-        do{if(G_STAT[stat_type].used > G_STAT[stat_type].max) \
-        G_STAT[stat_type].max = G_STAT[stat_type].used;}while(0)
+        do{if(g_stati[stat_type].used > g_stati[stat_type].max) \
+        g_stati[stat_type].max = g_stati[stat_type].used;}while(0)
 
 
 void wind_stat_init(void);

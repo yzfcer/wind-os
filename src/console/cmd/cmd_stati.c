@@ -53,14 +53,14 @@ static void core_output_srcusage(w_uint16_t opt)
     w_int16_t i,len;
     wind_memset(str,' ',STAT_NAME_LEN + 33);
     str[STAT_NAME_LEN + 32] = 0;
-    len = wind_strlen(G_STAT[opt].name);
+    len = wind_strlen(g_stati[opt].name);
     for(i = 0;i < len;i ++)
-        str[i] = G_STAT[opt].name[i];
-    //wind_memcpy(str,G_STAT[opt].name,STAT_NAME_LEN);
-    core_stat_convert_num(&str[STAT_NAME_LEN],G_STAT[opt].tot);
-    core_stat_convert_num(&str[STAT_NAME_LEN + 8],G_STAT[opt].used);
-    core_stat_convert_num(&str[STAT_NAME_LEN + 16],G_STAT[opt].max);
-    core_stat_convert_num(&str[STAT_NAME_LEN + 24],G_STAT[opt].err);
+        str[i] = g_stati[opt].name[i];
+    //wind_memcpy(str,g_stati[opt].name,STAT_NAME_LEN);
+    core_stat_convert_num(&str[STAT_NAME_LEN],g_stati[opt].tot);
+    core_stat_convert_num(&str[STAT_NAME_LEN + 8],g_stati[opt].used);
+    core_stat_convert_num(&str[STAT_NAME_LEN + 16],g_stati[opt].max);
+    core_stat_convert_num(&str[STAT_NAME_LEN + 24],g_stati[opt].err);
     console_printf("%s\r\n",str);
 }
 static void core_stat_show_proc(w_uint16_t opt)
@@ -88,7 +88,7 @@ static void core_stat_show_proc(w_uint16_t opt)
     }
     else
     {
-        for(i = 0;i < STAT_CNT;i++)
+        for(i = 0;i < IDX_CNT;i++)
         {
             core_output_srcusage(i);
         }

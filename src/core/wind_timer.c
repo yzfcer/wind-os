@@ -33,7 +33,7 @@
 static ptimer_s ttimer_malloc(void)
 {
     ptimer_s timer;
-    timer = wind_core_alloc(STAT_TIMER);
+    timer = wind_core_alloc(IDX_TIMER);
     if(timer == NULL)
     {
         return NULL;
