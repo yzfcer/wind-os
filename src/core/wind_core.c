@@ -34,7 +34,7 @@
 #include "wind_var.h"
 #include "wind_heap.h"
 #include "wind_time.h"
-
+#include "core_obj.h"
 
 volatile w_int8_t gwind_int_cnt = 0;//全局的中断计数值
 volatile w_int8_t gwind_core_cnt = 0;//全局的禁止切换计数值
@@ -190,6 +190,7 @@ void wind_init()
 #if WIND_STAT_SUPPORT > 0
     wind_stat_init();
 #endif
+    wind_corepool_init();
     wind_corevar_init();
 #if WIND_HEAP_SUPPORT > 0
     wind_heaps_init();

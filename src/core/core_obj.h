@@ -4,7 +4,7 @@
 **                                       yzfcer@163.com
 **
 **--------------文件信息--------------------------------------------------------------------------------
-**文   件   名: wind_var.h / wind_var.c
+**文   件   名: core_obj.h / core_obj.c
 **创   建   人: 周江村
 **最后修改日期: 2012.09.26
 **描        述: wind os的内核相关的变量的集合
@@ -22,6 +22,9 @@
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
+#ifndef CORE_OBJ_H__
+#define CORE_OBJ_H__
+
 #include "wind_config.h"
 #include "wind_type.h"
 #include "wind_thread.h"
@@ -31,30 +34,47 @@
 #include "wind_sem.h"
 #include "wind_lock.h"
 #include "wind_timer.h"
-#include "wind_err.h"
+#include "wind_stati.h"
 #include "wind_mpool.h"
-#include "wind_var.h"
-#include "wind_assert.h"
-core_var_s g_core;
-volatile w_bool_t gwind_start_flag = B_FALSE;
-
-w_pstack_t *gwind_high_stack;
-w_pstack_t *gwind_cur_stack;
-
-void wind_corevar_init(void)
+#ifdef __cplusplus
+extern "C" {
+#endif
+typedef struct __core_pool_s
 {
-    g_core.cpu_usage = 0;
-    g_core.idle_cnt = 0;
-    g_core.pcbcnt = 0;
-    g_core.usrprocen = B_FALSE;
-    g_core.run_falg = B_FALSE;
-    g_core.ticks_cnt = 0;
-    
-    DLIST_INIT(g_core.threadlist);
-    DLIST_INIT(g_core.sleeplist);
-    DLIST_INIT(g_core.semlist);
-    DLIST_INIT(g_core.locklist);
-    DLIST_INIT(g_core.mboxlist);
-    DLIST_INIT(g_core.ttmerlist);
+    WIND_MPOOL(thread,WIND_THREAD_MAX_NUM,sizeof(thread_s));
+#if WIND_PIPE_SUPPORT > 0
+    WIND_MPOOL(pipe,WIND_PIPE_MAX_NUM,sizeof(pipe_s));
+#endif
+#if WIND_MESSAGE_SUPPORT > 0
+    WIND_MPOOL(msg,WIND_MESSAGE_MAX_NUM,sizeof(msg_s));
+    WIND_MPOOL(mbox,WIND_MBOX_MAX_NUM,sizeof(mbox_s));
+#endif
+#if WIND_SEM_SUPPORT > 0
+    WIND_MPOOL(sem,WIND_SEM_MAX_NUM,sizeof(sem_s));
+#endif
+#if WIND_TIMER_SUPPORT > 0
+    WIND_MPOOL(timer,WIND_TTIMER_MAX_NUM,sizeof(timer_s));
+#endif
+#if WIND_LOCK_SUPPORT > 0
+    WIND_MPOOL(lock,WIND_LOCK_NUM,sizeof(lock_s));
+#endif
+    //定义一些堆栈以便创建程序在时使用
+    WIND_MPOOL(stkbuf,WIND_STK_MAX_NUM,WIND_STK_SIZE * sizeof(w_stack_t));
+}core_pools_s;
+
+void wind_corepool_init(void);
+
+void *wind_core_alloc(stat_e type);
+
+w_err_t wind_core_free(stat_e type,void *block);
+
+void print_core_pool(void);
+
+
+#ifdef __cplusplus
 }
+#endif
+
+
+#endif
 

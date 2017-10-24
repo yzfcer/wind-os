@@ -38,6 +38,7 @@
 #include "wind_assert.h"
 #include "wind_heap.h"
 #include "wind_macro.h"
+#include "core_obj.h"
 //用来表示
 
 #define WIND_THREAD_PRIO_MIN_LIM 100//优先级的最小值
@@ -232,7 +233,7 @@ pthread_s wind_thread_create_default(const w_int8_t *name,
                    w_int8_t **argv)
 {
     prio_e priol = PRIO_MID;
-    w_pstack_t pstk = wind_stack_alloc();
+    w_pstack_t pstk = wind_core_alloc(STAT_STACK);
     int stksize = WIND_STK_SIZE;
     return wind_thread_create(name,priol,procfunc,argc,argv,pstk,stksize);
 }

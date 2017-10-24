@@ -52,6 +52,7 @@ typedef enum __stat_e
 #if WIND_TIMER_SUPPORT > 0
     STAT_TIMER,
 #endif
+    STAT_STACK,
     STAT_CNT
 }stat_e;
 
