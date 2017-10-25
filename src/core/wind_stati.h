@@ -51,7 +51,7 @@ typedef enum __objid_e
 #endif
     IDX_STACK,
     IDX_CNT
-}objid_e;
+}obj_id_e;
 
 #if WIND_STAT_SUPPORT
 

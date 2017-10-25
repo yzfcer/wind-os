@@ -63,9 +63,9 @@ typedef struct __core_pool_s
 
 void wind_corepool_init(void);
 
-void *wind_core_alloc(objid_e type);
+void *wind_core_alloc(obj_id_e type);
 
-w_err_t wind_core_free(objid_e type,void *block);
+w_err_t wind_core_free(obj_id_e type,void *block);
 
 void print_core_pool(void);
 

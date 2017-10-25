@@ -34,6 +34,7 @@
 #include "wind_lock.h"
 #include "wind_var.h"
 #include "wind_cmd.h"
+#include "wind_mpool.h"
 #if WIND_CONSOLE_SUPPORT
 
 static void cmd_showdisc(void)
@@ -46,6 +47,7 @@ static void cmd_showusage(void)
     console_printf("list thread:to show thread infomation.\r\n");
     console_printf("list sem:to show sem infomation.\r\n");
     console_printf("list lock:to show all lock status.\r\n");
+    console_printf("list pool:to show all core object pools.\r\n");
 }
 
 static w_err_t cmd_main(w_int32_t argc,char **argv)
@@ -70,6 +72,11 @@ static w_err_t cmd_main(w_int32_t argc,char **argv)
     else if(0 == wind_strcmp(argv[1],"lock"))
     {
         wind_lock_print(&g_core.locklist);
+        return ERR_COMMAN;
+    }
+    else if(0 == wind_strcmp(argv[1],"pool"))
+    {
+        wind_pool_print_list(&g_core.poollist);
         return ERR_COMMAN;
     }
     return ERR_COMMAN;

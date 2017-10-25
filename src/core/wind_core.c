@@ -187,11 +187,11 @@ void wind_init()
     wind_std_port_init();//调试端口初始化
     wind_print_os_info();
     
+    wind_corevar_init();
 #if WIND_STAT_SUPPORT
     wind_stat_init();
 #endif
     wind_corepool_init();
-    wind_corevar_init();
 #if WIND_HEAP_SUPPORT
     wind_heaps_init();
 #endif

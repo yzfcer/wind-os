@@ -39,29 +39,29 @@ core_pools_s g_pool;
 
 void wind_corepool_init(void)
 {
-    wind_pool_create("thread_pool",g_pool.thread,sizeof(g_pool.thread),sizeof(thread_s));
+    wind_pool_create("thread",g_pool.thread,sizeof(g_pool.thread),sizeof(thread_s));
 #if (WIND_PIPE_SUPPORT && WIND_QUEUE_SUPPORT)
-    wind_pool_create("pipe_pool",g_pool.pipe,sizeof(g_pool.pipe),sizeof(pipe_s));    
+    wind_pool_create("pipe",g_pool.pipe,sizeof(g_pool.pipe),sizeof(pipe_s));    
 #endif
 #if WIND_MESSAGE_SUPPORT
-    wind_pool_create("msg_pool",g_pool.msg,sizeof(g_pool.msg),sizeof(msg_s));
-    wind_pool_create("mbox_pool",g_pool.mbox,sizeof(g_pool.mbox),sizeof(mbox_s));
+    wind_pool_create("msg",g_pool.msg,sizeof(g_pool.msg),sizeof(msg_s));
+    wind_pool_create("mbox",g_pool.mbox,sizeof(g_pool.mbox),sizeof(mbox_s));
 #endif
 #if WIND_SEM_SUPPORT
-    wind_pool_create("sem_pool",g_pool.sem,sizeof(g_pool.sem),sizeof(sem_s));
+    wind_pool_create("sem",g_pool.sem,sizeof(g_pool.sem),sizeof(sem_s));
 #endif
 #if WIND_TIMER_SUPPORT
-    wind_pool_create("timer_pool",g_pool.timer,sizeof(g_pool.timer),sizeof(timer_s));
+    wind_pool_create("timer",g_pool.timer,sizeof(g_pool.timer),sizeof(timer_s));
 #endif
-    wind_pool_create("lock_pool",g_pool.lock,sizeof(g_pool.lock),sizeof(lock_s));
+    wind_pool_create("lock",g_pool.lock,sizeof(g_pool.lock),sizeof(lock_s));
     
 #if WIND_STKPOOL_SUPPORT
-    wind_pool_create("stkbuf_pool",g_pool.stkbuf,sizeof(g_pool.stkbuf),WIND_STK_SIZE * sizeof(w_stack_t));
+    wind_pool_create("stkbuf",g_pool.stkbuf,sizeof(g_pool.stkbuf),WIND_STK_SIZE * sizeof(w_stack_t));
 #endif
 }
 
 
-void *wind_core_alloc(objid_e type)
+void *wind_core_alloc(obj_id_e type)
 {
     void *p;
     switch(type)
@@ -107,7 +107,7 @@ void *wind_core_alloc(objid_e type)
     return p;
 }
 
-w_err_t wind_core_free(objid_e type,void *block)
+w_err_t wind_core_free(obj_id_e type,void *block)
 {
     w_err_t err;
     WIND_ASSERT_RETURN(block != NULL,ERR_NULL_POINTER);

@@ -62,6 +62,7 @@ static void core_output_srcusage(w_uint16_t opt)
     core_stat_convert_num(&str[STAT_NAME_LEN + 24],g_stati[opt].err);
     console_printf("%s\r\n",str);
 }
+
 static void core_stati_print(w_uint16_t opt)
 {
     w_int8_t str[STAT_NAME_LEN + 33];

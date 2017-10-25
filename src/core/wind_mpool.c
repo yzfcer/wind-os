@@ -28,6 +28,7 @@
 #include "wind_err.h"
 #include "wind_mpool.h"
 #include "wind_assert.h"
+#include "wind_var.h"
 
 #define WIND_MPOOL_ALIGN_R(x) (((x)+3) & (~0x03))
 #define WIND_MPOOL_ALIGN_L(x) ((x) & (~0x03))
@@ -56,6 +57,7 @@ w_err_t wind_pool_create(const char *name,void *mem,w_uint32_t memsize,w_uint32_
     item = (ppool_item_s)(sizeof(pool_s) + (w_uint32_t)pm);
     pm->head = item;
     pm->name = name;
+    DNODE_INIT(pm->poolnode);
     pm->size = memsize - sizeof(pool_s);
     pm->itemsize = si + sizeof(pool_item_s);
     pm->itemnum = pm->size / pm->itemsize;
@@ -70,6 +72,9 @@ w_err_t wind_pool_create(const char *name,void *mem,w_uint32_t memsize,w_uint32_
         item = item->next;
     }
     item->next = NULL;
+    wind_close_interrupt();
+    dlist_insert_tail(&g_core.poollist,&pm->poolnode);
+    wind_open_interrupt();
     pm->magic = WIND_MPOOL_MAGIC;
     return ERR_OK;
 }
@@ -139,38 +144,23 @@ w_err_t wind_pool_free(void *mem,void *block)
     return ERR_OK;
 }
 
-WIND_MPOOL(mpooltest,10,8);
-void wind_mpool_test(void)
+
+void wind_pool_print_list(pdlist_s list)
 {
-    void *p1,*p2;
-    int i;
-    wind_pool_create("testpool",mpooltest,sizeof(mpooltest),8);
-    wind_pool_print("testpool",mpooltest);
-    for(i = 0;i < 20;i ++)
+    pdnode_s pdnode;
+    ppool_s pm;
+    wind_printf("\r\n\r\nthread list as following:\r\n");
+    wind_printf("-----------------------------------------------------------------\r\n");
+    wind_printf("%-12s %-10s %-8s %-8s %-10s %-8s\r\n","name","head","size","itemnum","itemsize","used");
+    wind_printf("-----------------------------------------------------------------\r\n");
+    foreach_node(pdnode,list)
     {
-        p1 = wind_pool_alloc(mpooltest);
-        WIND_MPOOL_DEBUG("mpool alloc p1:%d\r\n",p1);
-        p2 = wind_pool_alloc(mpooltest);
-        WIND_MPOOL_DEBUG("mpool alloc p2:%d\r\n",p2);
-        wind_pool_free(mpooltest,p1);
-        WIND_MPOOL_DEBUG("mpool free p1\r\n",p1);
-        wind_pool_free(mpooltest,p2);
-        WIND_MPOOL_DEBUG("mpool free p2\r\n",p2);
-        wind_pool_free(mpooltest,p2);
-    }
+        pm = DLIST_OBJ(pdnode,pool_s,poolnode);
+        wind_printf("%-12s 0x%-8d %-8d %-10d %-8d %-8d\r\n",
+            pm->name,pm->head,pm->size,pm->itemnum,pm->itemsize,pm->used);
+     }
+    wind_printf("-----------------------------------------------------------------\r\n");
 }
 
-w_err_t wind_pool_print(w_int8_t *name,void *pool)
-{
-    ppool_s pm = pool;
-    WIND_ASSERT_RETURN(name != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(pool != NULL,ERR_NULL_POINTER);    
-    wind_printf("pool name:%s\r\n",name);
-    wind_printf("pool head:%d\r\n",pm->head);
-    wind_printf("pool lenth:%d\r\n",pm->size);
-    wind_printf("pool num:%d\r\n",pm->itemnum);
-    wind_printf("pool itemsize:%d\r\n\r\n",pm->itemsize);
-    return ERR_OK;
-}
 
 
