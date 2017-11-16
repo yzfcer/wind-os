@@ -305,6 +305,7 @@ static w_err_t execute_cmd(console_s * ctrl)
     if(wind_strcmp(ctrl->param.argv[1],"?") == 0)
     {
         cmd->showusage();
+        return ERR_OK;
     }
     cmd->execute(ctrl->param.argc,ctrl->param.argv);
     return ERR_OK;

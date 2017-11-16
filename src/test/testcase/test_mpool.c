@@ -35,7 +35,7 @@ void *testblk[TNUM+1];
 
 CASE_SETUP(pool_info)
 {
-    
+    wind_pool_create("test_pool",test_pool,sizeof(test_pool),TSIZE);
 }
 
 CASE_TEARDOWN(pool_info)
@@ -54,12 +54,16 @@ CASE_FUNC(pool_info)
     EXPECT_EQ(pool->used,0);
 }
 
+
 CASE_SETUP(pool_alloc)
 {
     int i;
+    wind_pool_create("test_pool",test_pool,
+                     sizeof(test_pool),TSIZE);
     for(i = 0;i < TNUM+1;i ++)
         testblk[i] = 0;
 }
+
 
 CASE_TEARDOWN(pool_alloc)
 {
@@ -101,21 +105,15 @@ CASE_FUNC(pool_alloc)
 }
 
 
-SUITE_SETUP()
-{
-    wind_pool_create("test_pool",test_pool,sizeof(test_pool),TSIZE);
-}
-
-SUITE_TEARDOWN()
-{
-
-}
+SUITE_SETUP(test_mpool){}
+SUITE_TEARDOWN(test_mpool){}
 
 
-TEST_CASE_START
+
+TEST_CASES_START(test_mpool)
 TEST_CASE(pool_info)
 TEST_CASE(pool_alloc)
-TEST_CASE_END
+TEST_CASES_END
 TEST_SUITE(test_mpool)
 
 
