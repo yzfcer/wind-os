@@ -390,6 +390,11 @@ void show_test_suites(void)
     ut_uint32_t i;
     test_suite_s *ts;
     test_printf("\r\nTest Suites List As Following:\r\n");
+    if(suite_list.head == NULL)
+    {
+        test_framework_init();
+        test_suite_register_all();
+    }
     ts = suite_list.head;
     for(i = 0;i < suite_list.cnt;i ++)
     {

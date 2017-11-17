@@ -68,10 +68,10 @@ static void cmd_showdisc(void)
 
 static void cmd_showusage(void)
 {
-    wind_printf("test show:to show all test suites and cases list.");
-    wind_printf("test <suitename> <casename>:to test some appointed test cases.");
-    wind_printf("suitename:use * to test all test suite.");
-    wind_printf("casename:use * to test all test suite.");
+    wind_printf("test show:to show all test suites and cases list.\r\n");
+    wind_printf("test <suitename> <casename>:to test some appointed test cases.\r\n");
+    wind_printf("suitename:use * to test all test suite.\r\n");
+    wind_printf("casename:use * to test all test suite.\r\n");
 }
 
 static w_err_t cmd_main(w_int32_t argc,char **argv)
