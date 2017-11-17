@@ -39,7 +39,7 @@
 //软中断线程的堆栈
 static w_stack_t softint_stk[WIND_SOFTINT_STK_LEN];
 static w_uint16_t softint_index = 0;
-static pthread_s softint_ppcb = NULL;
+static pthread_s softint_thread = NULL;
 //static HANDLE softint_handle = -1;
 softint_func wind_soft_vectors[WIND_SOFTINT_MAX_NUM];
 //初始化软中断的一些相关参数
@@ -58,8 +58,8 @@ static w_err_t wind_softint_thread(w_int32_t argc,w_int8_t **argv)
     while(1)
     {
         wind_close_interrupt();
-        softint_ppcb->runstat = THREAD_STATUS_SUSPEND;
-        softint_ppcb->cause = CAUSE_COM;
+        softint_thread->runstat = THREAD_STATUS_SUSPEND;
+        softint_thread->cause = CAUSE_COM;
         wind_open_interrupt();
         wind_thread_dispatch();
         if(wind_soft_vectors[softint_index] != NULL)
@@ -109,7 +109,7 @@ void wind_soft_int(HANDLE handler)
 {
     wind_close_interrupt();
     softint_index = handler;
-    softint_ppcb->runstat = THREAD_STATUS_READY;
+    softint_thread->runstat = THREAD_STATUS_READY;
     wind_open_interrupt();
     wind_thread_dispatch();
 }
@@ -118,9 +118,9 @@ void wind_soft_int(HANDLE handler)
 w_err_t wind_create_softint_thread(void)
 {
     WIND_INFO("create soft interrupt thread.\r\n");
-    softint_ppcb = wind_thread_create("softint",PRIO_HIGH,wind_softint_thread,
+    softint_thread = wind_thread_create("softint",PRIO_HIGH,wind_softint_thread,
                 0,NULL,softint_stk,WIND_SOFTINT_STK_LEN);
-                wind_thread_changeprio(softint_ppcb,0);
+                wind_thread_changeprio(softint_thread,0);
     return ERR_OK;
 }
 

@@ -95,6 +95,8 @@ CASE_FUNC(pool_alloc)
         wind_pool_free(test_pool,testblk[i]);
         itm = (ppool_item_s)((w_uint32_t)testblk[i] - sizeof(ppool_item_s));
         EXPECT_EQ(itm->flag,POOL_BLK_FREE);
+        EXPECT_NE(itm->next,NULL);
+        EXPECT_EQ(pool->used,TNUM - i-1);
     }
     err = wind_pool_free(test_pool,testblk[TNUM]);
     EXPECT_EQ(err,ERR_NULL_POINTER);

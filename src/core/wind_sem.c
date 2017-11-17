@@ -54,8 +54,7 @@ psem_s wind_sem_create(const char *name,w_uint16_t sem_value)
     psem_s psem;
     psem = sem_malloc();
     WIND_ASSERT_RETURN(psem != NULL,NULL);
-    wind_memset(psem->name,0,SEM_NAME_LEN);
-    wind_strcpy(psem->name,name);
+    psem->name = name;
     DNODE_INIT(psem->semnode);
     psem->used = B_TRUE;
     psem->sem_num = sem_value;

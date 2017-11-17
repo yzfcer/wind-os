@@ -35,11 +35,11 @@ extern "C" {
 #endif
 
 #if WIND_SEM_SUPPORT
-#define SEM_NAME_LEN 20 //线程名的最大长度，包括 '\0'
+//#define SEM_NAME_LEN 20 //线程名的最大长度，包括 '\0'
 
 typedef struct _wind_sem
 {
-    char name[SEM_NAME_LEN];
+    const char* name;
     dnode_s semnode;
     dlist_s waitlist;  //等待线程队列
     w_bool_t used;         //是否有效的标志

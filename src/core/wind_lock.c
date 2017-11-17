@@ -34,12 +34,12 @@
 #include "dlist.h"
 #include "wind_core.h"
 #include "core_obj.h"
-static plock_s lock_malloc(void)
+static __INLINE__ plock_s lock_malloc(void)
 {
     return wind_core_alloc(IDX_LOCK);
 }
 
-static w_err_t lock_free(void *lock)
+static __INLINE__ w_err_t lock_free(void *lock)
 {
     return wind_core_free(IDX_LOCK,lock);
 }
@@ -54,6 +54,7 @@ plock_s wind_lock_create(const char *name)
     plock->name = name;
     plock->locked = B_FALSE;
     DLIST_INIT(plock->waitlist);
+    
     wind_close_interrupt();
     dlist_insert_tail(&g_core.locklist,&plock->locknode);
     wind_open_interrupt();
@@ -109,6 +110,7 @@ w_err_t wind_lock_close(plock_s plock)
     pthread = wind_thread_current();
     pthread->runstat = THREAD_STATUS_SUSPEND;
     pthread->cause = CAUSE_LOCK;
+    pthread->sleep_ticks = 0x7fffffff;
     
     dlist_insert_prio(&plock->waitlist,&pthread->suspendthr,pthread->prio);
     wind_open_interrupt();
@@ -132,9 +134,9 @@ w_err_t wind_lock_open(plock_s plock)
         wind_open_interrupt();
         return ERR_OK; //信号量有效，直接返回效，
     }
+
     dlist_remove_head(&plock->waitlist);
     pthread = PRI_DLIST_OBJ(pnode,thread_s,suspendthr);
-
     pthread->runstat = THREAD_STATUS_READY;
     pthread->cause = CAUSE_LOCK;
     wind_open_interrupt();

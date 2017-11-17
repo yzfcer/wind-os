@@ -36,7 +36,7 @@ extern w_int32_t wind_std_output(w_uint8_t *str,w_int32_t len);
 int wind_printf(const w_int8_t *string,...)
 {
     w_uint16_t index, value, pos, cnt, base, ulNeg;
-    w_int8_t *pcStr, pcBuf[16], chfill;
+    w_int8_t *pcStr, buff[16], chfill;
     va_list vaArgP;
     
     if(string == NULL)
@@ -136,19 +136,19 @@ convert:
                         cnt--;
                     if(ulNeg && (chfill == '0'))
                     {
-                        pcBuf[pos++] = '-';
+                        buff[pos++] = '-';
                         ulNeg = 0;
                     }
                     if((cnt > 1) && (cnt < 16))
                     {
                         for(cnt--; cnt; cnt--)
-                            pcBuf[pos++] = chfill;
+                            buff[pos++] = chfill;
                     }
                     if(ulNeg)
-                        pcBuf[pos++] = '-';
+                        buff[pos++] = '-';
                     for(; index; index /= base)
-                        pcBuf[pos++] = hexlist[(value / index) % base];
-                    wind_std_output((w_uint8_t *)pcBuf, pos);
+                        buff[pos++] = hexlist[(value / index) % base];
+                    wind_std_output((w_uint8_t *)buff, pos);
                     break;
                 }
             case '%':
@@ -167,7 +167,7 @@ convert:
 
 #endif
 
-
+#if 0
 #define ZEROPAD    1        /* pad with zero */ 
 #define SIGN    2        /* unsigned/signed long */ 
 #define PLUS    4        /* show plus */ 
@@ -175,10 +175,12 @@ convert:
 #define LEFT    16        /* left justified */ 
 #define SPECIAL    32        /* 0x */ 
 #define LARGE    64        /* use 'ABCDEF' instead of 'abcdef' */ 
-static char sprint_buf[1024];
 int wind_vsprintf(char *buf, const char *fmt, va_list args) ;
+#endif
+
 w_int32_t wind_printf(const char *fmt, ...) 
 { 
+    static char sprint_buf[1024];
     va_list args; 
     w_int32_t n;
     wind_close_interrupt();

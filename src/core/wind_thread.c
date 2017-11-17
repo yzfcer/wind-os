@@ -46,12 +46,12 @@
 
 static w_uint16_t get_prio(prio_e priolevel)
 {
-    static w_uint16_t pcbcnt = 0;
+    static w_uint16_t threadcnt = 0;
     w_uint16_t prio;
-    pcbcnt ++;
-    if(pcbcnt >= 10000)
-        pcbcnt = 0;
-    prio = (priolevel - 1) * 10000 + pcbcnt;
+    threadcnt ++;
+    if(threadcnt >= 10000)
+        threadcnt = 0;
+    prio = (priolevel - 1) * 10000 + threadcnt;
     return prio;
 }
 
@@ -84,7 +84,7 @@ w_err_t wind_thread_distroy(pthread_s pthread)
 {
     WIND_ASSERT_RETURN(pthread != NULL,ERR_NULL_POINTER);
     wind_close_interrupt();
-    //这里需要先释放一些与这个线程相关的一些东西后才能释放这个pcb
+    //这里需要先释放一些与这个线程相关的一些东西后才能释放这个thread
 #if WIND_HEAP_SUPPORT && WIND_PRIVATE_HEAP_SUPPORT
     if(pthread->private_heap != NULL)
     {

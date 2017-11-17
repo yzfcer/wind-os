@@ -34,7 +34,6 @@
 extern "C" {
 #endif
 
-#define PCB_NUM_LIMIT 512 //线程总数的上限值
 #define THREAD_NAME_LEN 20 //线程名的最大长度，包括 '\0'
 #define THREAD_FROM_MEMBER(ptr,type,mbr) (void*)(((char*)(ptr))-((w_uint32_t)&(((type*)0)->mbr)))
 
@@ -93,7 +92,7 @@ typedef struct __threadcb_s
 #endif 
 
 
-//线程控制PCB
+//线程对象结构
 typedef struct _thread_s
 {
     prinode_s validthr;
@@ -162,17 +161,6 @@ w_err_t wind_thread_print(pdlist_s list);
 #if WIND_THREAD_CALLBACK_SUPPORT
 w_err_t wind_thread_callback_register(pthread_s pthread,thr_evt_e id,void(*cb)(pthread_s));
 #endif
-
-
-
-#if WIND_THREAD_MAX_NUM > PCB_NUM_LIMIT
-#error "PCB_MAX_NUM should not be a number larger than PCB_NUM_LIMIT!"
-#endif //#if PCB_MAX_NUM > PCB_NUM_LIMIT
-
-#if WIND_THREAD_MAX_NUM < 8
-#error "WIND_THREAD_MAX_NUM should not be a number smaller than 8,as operation system reserves some threads!"
-#endif //#if WIND_THREAD_MAX_NUM < 8
-
 
 #ifdef __cplusplus
 }

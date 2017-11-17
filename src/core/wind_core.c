@@ -185,8 +185,8 @@ void wind_init()
     g_core.usrthren = B_FALSE;
     wind_target_init();//目标机运行环境初始化
     wind_std_port_init();//调试端口初始化
-    wind_print_os_info();
     
+    wind_print_os_info();
     wind_corevar_init();
 #if WIND_STAT_SUPPORT
     wind_stat_init();
@@ -220,7 +220,6 @@ int wind_os_lunch(void)
 
 
 //C程序的入口
-//int main(int argc,char **argv)
 int main(void)
 {
     wind_os_lunch();

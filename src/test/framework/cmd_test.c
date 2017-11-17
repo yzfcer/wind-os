@@ -68,8 +68,9 @@ static void cmd_showdisc(void)
 
 static void cmd_showusage(void)
 {
-    wind_printf("test softint:to test soft interrupt module.");
-    wind_printf("test heap","to test to allocate memory from the system memory heap.");
+    wind_printf("test <suitename> <casename>:to test some appointed test cases.");
+    wind_printf("suitename:use * to test all test suite.");
+    wind_printf("casename:use * to test all test suite.");
 }
 
 static w_err_t cmd_main(w_int32_t argc,char **argv)
