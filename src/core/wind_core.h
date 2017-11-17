@@ -34,12 +34,8 @@ extern "C" {
 #endif
 
 
-#if WIND_REALTIME_CORE_SUPPORT
-void wind_thread_dispatch(void);
-#else
-#define wind_thread_dispatch() 
-#endif
 
+void wind_thread_dispatch(void);
 void wind_disable_switch(void);
 void wind_enable_switch(void);
 

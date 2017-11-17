@@ -173,6 +173,8 @@ void wind_thread_dispatch(void)
     }
     wind_open_interrupt();
 }
+#else
+void wind_thread_dispatch(void){}
 #endif
 
 
