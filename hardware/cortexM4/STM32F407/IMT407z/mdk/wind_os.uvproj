@@ -943,32 +943,32 @@
           <GroupName>os_api</GroupName>
         </Group>
         <Group>
-          <GroupName>os_sysapp</GroupName>
+          <GroupName>os_systhread</GroupName>
           <Files>
             <File>
               <FileName>daemon_thread.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\sysapp\daemon_thread.c</FilePath>
+              <FilePath>..\..\..\..\..\src\systhread\daemon_thread.c</FilePath>
             </File>
             <File>
               <FileName>idle_thread.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\sysapp\idle_thread.c</FilePath>
+              <FilePath>..\..\..\..\..\src\systhread\idle_thread.c</FilePath>
             </File>
             <File>
               <FileName>init_thread.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\sysapp\init_thread.c</FilePath>
+              <FilePath>..\..\..\..\..\src\systhread\init_thread.c</FilePath>
             </File>
             <File>
               <FileName>stati_thread.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\sysapp\stati_thread.c</FilePath>
+              <FilePath>..\..\..\..\..\src\systhread\stati_thread.c</FilePath>
             </File>
             <File>
               <FileName>timer_thread.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\sysapp\timer_thread.c</FilePath>
+              <FilePath>..\..\..\..\..\src\systhread\timer_thread.c</FilePath>
             </File>
           </Files>
         </Group>

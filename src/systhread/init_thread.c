@@ -3,6 +3,7 @@
 #include "wind_thread.h"
 #include "wind_softint.h"
 #define MAIN_STK_SIZE 256
+
 void wind_tick_init(void);
 void create_stati_thread(void);
 #if WIND_DAEMON_SUPPORT
@@ -47,9 +48,6 @@ static w_err_t init_thread(w_int32_t argc,w_int8_t **argv)
     create_stati_thread();
     create_daemon_thread();
     create_console_thread();
-
-    //wind_thread_print(&g_core.threadlist);
-    
     wind_main();
     return ERR_OK;
 }
