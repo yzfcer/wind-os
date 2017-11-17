@@ -850,39 +850,6 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>os_api</GroupName>
-        </Group>
-        <Group>
-          <GroupName>os_sysapp</GroupName>
-          <Files>
-            <File>
-              <FileName>daemon_thread.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\sysapp\daemon_thread.c</FilePath>
-            </File>
-            <File>
-              <FileName>idle_thread.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\sysapp\idle_thread.c</FilePath>
-            </File>
-            <File>
-              <FileName>init_thread.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\sysapp\init_thread.c</FilePath>
-            </File>
-            <File>
-              <FileName>stati_thread.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\sysapp\stati_thread.c</FilePath>
-            </File>
-            <File>
-              <FileName>timer_thread.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\sysapp\timer_thread.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>console_framework</GroupName>
           <Files>
             <File>
@@ -954,6 +921,54 @@
               <FileName>cmd_stati.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\console\cmd\cmd_stati.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>console_port</GroupName>
+          <Files>
+            <File>
+              <FileName>console_port.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\console\port\console_port.c</FilePath>
+            </File>
+            <File>
+              <FileName>console_port.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\console\port\console_port.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>os_api</GroupName>
+        </Group>
+        <Group>
+          <GroupName>os_sysapp</GroupName>
+          <Files>
+            <File>
+              <FileName>daemon_thread.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\sysapp\daemon_thread.c</FilePath>
+            </File>
+            <File>
+              <FileName>idle_thread.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\sysapp\idle_thread.c</FilePath>
+            </File>
+            <File>
+              <FileName>init_thread.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\sysapp\init_thread.c</FilePath>
+            </File>
+            <File>
+              <FileName>stati_thread.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\sysapp\stati_thread.c</FilePath>
+            </File>
+            <File>
+              <FileName>timer_thread.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\sysapp\timer_thread.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1367,21 +1382,6 @@
               <FileName>test_mpool.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\test\testcase\test_mpool.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>console_port</GroupName>
-          <Files>
-            <File>
-              <FileName>console_port.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\console\port\console_port.c</FilePath>
-            </File>
-            <File>
-              <FileName>console_port.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\console\port\console_port.h</FilePath>
             </File>
           </Files>
         </Group>

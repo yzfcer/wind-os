@@ -14,7 +14,7 @@
 
 //LED对应IO初始化
 void LED_Init(void)
-{    	 
+{
   GPIO_InitTypeDef  GPIO_InitStructure;
 
   RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOG, ENABLE);//使能GPIOG时钟

@@ -381,7 +381,7 @@ void show_test_cases(test_suite_s *ts)
     int i;
     for(i = 0;i < ts->case_cnt;i ++)
     {
-        test_printf("|   |-----%s\r\n",ts->tcase[i].name);
+        test_printf("|   |----%s\r\n",ts->tcase[i].name);
     }
 }
 
@@ -398,7 +398,7 @@ void show_test_suites(void)
     ts = suite_list.head;
     for(i = 0;i < suite_list.cnt;i ++)
     {
-        test_printf("|---%s\r\n",ts->name);
+        test_printf("|------%s\r\n",ts->name);
         show_test_cases(ts);
         ts = ts->next;
     }

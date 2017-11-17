@@ -26,7 +26,7 @@
 #include "wind_type.h"
 #include "wind_version.h"
 #include "wind_debug.h"
-const w_int8_t versioninfo[] = \
+const char* versioninfo = \
 "yzfcer@163.com,thank you for your support!\r\n";
 
 w_uint8_t *g_wind_logo[4] = 
@@ -36,6 +36,7 @@ w_uint8_t *g_wind_logo[4] =
     "  \\\\//  \\\\//  ",
     "   \\/    \\/   "   
 };
+
 const w_int8_t *wind_get_core_version_info(void)
 {
     return versioninfo;
