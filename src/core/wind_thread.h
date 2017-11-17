@@ -107,7 +107,7 @@ typedef struct _thread_s
     w_int8_t **argv;
     
     struct _thread_s *parent;
-    char name[THREAD_NAME_LEN];//
+    char name[THREAD_NAME_LEN];
     w_bool_t used;
     w_int16_t prio;
     

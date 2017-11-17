@@ -34,12 +34,11 @@ extern "C" {
 #endif
 
 #if WIND_SOFTINT_SUPPORT
-#define WIND_SOFTINT_STK_LEN 256 //软中断线程的堆栈深度
 typedef void (*softint_func)(void);
 
 void wind_softint_init(void);
 HANDLE wind_softint_reg(softint_func func);
-void wind_soft_int(HANDLE handler);
+void wind_softint_trig(HANDLE handler);
 w_err_t wind_create_softint_thread(void);
 w_err_t wind_softint_test(void);
 

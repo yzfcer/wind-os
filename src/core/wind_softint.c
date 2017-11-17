@@ -35,7 +35,7 @@
 #include "wind_assert.h"
 #include "wind_core.h"
 #if WIND_SOFTINT_SUPPORT
-
+#define WIND_SOFTINT_STK_LEN 256 //软中断线程的堆栈深度
 //软中断线程的堆栈
 static w_stack_t softint_stk[WIND_SOFTINT_STK_LEN];
 static w_uint16_t softint_index = 0;
@@ -66,7 +66,6 @@ static w_err_t wind_softint_thread(w_int32_t argc,w_int8_t **argv)
         {
             (wind_soft_vectors[softint_index])();
         }
-        
     }
     //return ERR_OK;
 }
@@ -105,7 +104,7 @@ w_err_t wind_softint_unreg(HANDLE hint)
 }
 
 //触发一个软件中断
-void wind_soft_int(HANDLE handler)
+void wind_softint_trig(HANDLE handler)
 {
     wind_close_interrupt();
     softint_index = handler;
@@ -135,7 +134,7 @@ w_err_t wind_softint_test(void)
 {
     HANDLE h;
     h = wind_softint_reg(softint_output);
-    wind_soft_int(h);
+    wind_softint_trig(h);
     return ERR_OK;
 }
 //-----------------------软件中断测试---------------------------------------------
