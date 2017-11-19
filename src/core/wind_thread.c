@@ -364,7 +364,7 @@ w_err_t wind_thread_sleep(w_uint32_t ms)
         stcnt = 1;
     wind_close_interrupt();
     pthread = wind_thread_current();
-    pthread->runstat = THREAD_STATUS_SUSPEND;
+    pthread->runstat = THREAD_STATUS_SLEEP;
     pthread->cause = CAUSE_SLEEP;
     pthread->sleep_ticks = stcnt;
     dlist_insert_prio(&g_core.sleeplist,&pthread->sleepthr,pthread->prio);
@@ -399,7 +399,7 @@ w_err_t wind_thread_wakeup(void)
             pthread->sleep_ticks --;
         if(pthread->sleep_ticks <= 0)
         {
-            if(pthread->runstat != THREAD_STATUS_READY)
+            if(pthread->runstat == THREAD_STATUS_SLEEP)
             {
                 pthread->runstat = THREAD_STATUS_READY;
                 pthread->cause = CAUSE_SLEEP;

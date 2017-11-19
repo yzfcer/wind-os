@@ -132,7 +132,7 @@ w_err_t wind_mbox_destroy(pmbox_s pmbox)
     pthread_s pthread;
     WIND_ASSERT_RETURN(pmbox != NULL,ERR_NULL_POINTER);
     pthread = pmbox->owner;
-    if((pmbox->owner->runstat == THREAD_STATUS_SUSPEND) 
+    if((pmbox->owner->runstat == THREAD_STATUS_SLEEP) 
        && (pmbox->owner->cause == CAUSE_MSG))
     {
         pthread->runstat = THREAD_STATUS_READY;
@@ -164,7 +164,7 @@ w_err_t wind_mbox_post(pmbox_s mbox,pmsg_s pmsg)
 
     //激活被阻塞的线程
     pthread = mbox->owner;
-    if((pthread->runstat != THREAD_STATUS_SUSPEND) 
+    if((pthread->runstat != THREAD_STATUS_SLEEP) 
        || (pthread->cause != CAUSE_MSG))
     {
         wind_open_interrupt();
@@ -203,7 +203,7 @@ w_err_t wind_mbox_fetch(pmbox_s mbox,pmsg_s *pmsg,w_uint32_t timeout)
     if(ticks == 0)
         ticks = 1;
     pthread = mbox->owner;
-    pthread->runstat = THREAD_STATUS_SUSPEND;
+    pthread->runstat = THREAD_STATUS_SLEEP;
     pthread->cause = CAUSE_MSG;
     dlist_insert_tail(&g_core.sleeplist,&pthread->sleepthr.node);
     wind_open_interrupt();
