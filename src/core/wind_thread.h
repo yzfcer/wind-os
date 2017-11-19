@@ -46,13 +46,14 @@ typedef enum _PRIOLEVEL
     PRIO_LOW,
     PRIO_SYS_LOW
 } prio_e;
+
 //线程状态列表
 typedef enum __thread_status
 {
     THREAD_STATUS_INIT = 0,//初始化状态
-    THREAD_STATUS_READY = 1,//就绪状态
-    THREAD_STATUS_SUSPEND,//阻塞状态
-    THREAD_STATUS_SLEEP,//休眠状态
+    THREAD_STATUS_READY = 1,//就绪状态,可随时运行
+    THREAD_STATUS_SUSPEND,//阻塞状态，需要被阻塞源唤醒
+    THREAD_STATUS_SLEEP,//休眠状态，可被超时唤醒
     THREAD_STATUS_DEAD,//死亡状态，将永远不会被唤醒和调度
 }thread_stat_e;
 
