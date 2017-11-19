@@ -114,7 +114,7 @@ w_err_t wind_sem_fetch(psem_s psem,w_uint32_t timeout)
 
     //将当前线程加入睡眠和阻塞队列，触发线程切换
     pthread = wind_thread_current();
-    pthread->runstat = THREAD_STATUS_SUSPEND;
+    pthread->runstat = THREAD_STATUS_SLEEP;
     pthread->cause = CAUSE_SEM;
     pthread->sleep_ticks = ticks;
     dlist_insert_prio(&g_core.sleeplist,&pthread->sleepthr,pthread->prio);

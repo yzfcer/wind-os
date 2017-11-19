@@ -115,11 +115,15 @@ struct __test_stati_s
 
 struct __stati_info_s
 {
+    //统计信息
     test_stati_s stat;
-    fail_info_s *faillist;
+
+    //错误信息列表
+    fail_info_s *failhead;
     fail_info_s *lastfail;
     ut_uint32_t failcnt;
 
+    //当前测试信息
     test_suite_s *suite;
     test_case_s *tcase;
     ut_uint32_t case_err;

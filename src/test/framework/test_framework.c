@@ -29,8 +29,8 @@ extern "C" {
 
 
 /********************************************内部变量定义**********************************************/
-
-
+static suite_list_s suite_list;
+stati_info_s stati_info;
 
 /********************************************内部函数定义*********************************************/
 
@@ -57,9 +57,6 @@ ut_int32_t stringcmp(const char *cs,const char *ct)
 
 
 /********************************************全局变量定义**********************************************/
-static suite_list_s suite_list;
-stati_info_s stati_info;
-//fail_info_s g_fail_obj[TEST_FAIL_LIST_CNT];
 
 /********************************************全局函数定义**********************************************/
 static void test_stati_init(test_stati_s *tst)
@@ -87,7 +84,7 @@ static void stati_info_init(stati_info_s *sti)
 {
     test_stati_init(&sti->stat);
     
-    sti->faillist = NULL;
+    sti->failhead = NULL;
     sti->lastfail = NULL;
     sti->failcnt = 0;
     sti->suite = NULL;
@@ -129,22 +126,48 @@ err_t test_suite_register(test_suite_s *test_suite)
     return ERR_OK;
 }
 
-void save_fail_info(ut_uint32_t line)
+static ut_int32_t is_in_errlist(ut_uint32_t line)
+{
+    stati_info_s *sti;
+    fail_info_s *fail;
+    ut_int32_t match = 0;
+    sti = &stati_info;
+    if(sti->failhead == NULL)
+        return 0;
+    for(fail = sti->failhead;fail != NULL;fail = fail->next)
+    {
+        do 
+        {
+            if(fail->suite != sti->suite)
+                break;
+            if(fail->tcase != sti->tcase)
+                break;
+            if(fail->line != line)
+                break;
+            match = 1;
+        }while(0);
+    }
+    if(match)
+        return 1;
+    return 0;
+}
+
+static void save_fail_info(ut_uint32_t line)
 {
     stati_info_s *sti;
     fail_info_s *fail;
     sti = &stati_info;
     if(sti->failcnt >= TEST_FAIL_LIST_CNT)
-    {
         return;
-    }
+     if(is_in_errlist(line))
+        return;
     fail = &sti->stat.fail_obj[sti->failcnt ++];//&g_fail_obj[sti->failcnt ++];
     fail->suite = sti->suite;
     fail->tcase = sti->tcase;
     fail->line = line;
     if(sti->lastfail == NULL)
     {
-        sti->faillist = fail;
+        sti->failhead = fail;
         sti->lastfail = fail;
     }
     else
@@ -153,7 +176,6 @@ void save_fail_info(ut_uint32_t line)
         sti->lastfail = fail;
     }
     fail->next = NULL;
-    //sti->failcnt ++;
 }
 
 void test_suite_err(ut_uint32_t line)
@@ -178,7 +200,6 @@ void test_case_done(void)
     {
         sti->stat.passed_case ++;
     }
-    sti->case_err = 0;
 }
 
 void test_suite_done(void)
@@ -194,8 +215,6 @@ void test_suite_done(void)
     {
         sti->stat.passed_suite ++;
     }
-    sti->suite_err = 0;
-
 }
 void print_boarder(ut_uint32_t space_cnt)
 {
@@ -264,10 +283,10 @@ void test_framework_summit(void)
     test_printf("passed cases:%d\r\n",sti->stat.passed_case);
     test_printf("failed cases:%d\r\n",sti->stat.failed_case);
 
-    if(sti->faillist != NULL)
+    if(sti->failhead != NULL)
     {
         test_printf("\r\nfailture list as following:\r\n\r\n",sti->stat.tot_case);
-        fail = sti->faillist;
+        fail = sti->failhead;
         print_boarder(space_cnt);
         print_header(space_cnt);
         print_boarder(space_cnt);
@@ -410,12 +429,15 @@ static void execute_one_case(test_suite_s *ts,test_case_s *tc)
     stati_info_s *sti = &stati_info;
     
     sti->tcase = tc;
-    test_printf("\r\n[######  Test Case:%s  ######]\r\n",tc->name);
+    sti->stat.tot_case ++;
+    sti->case_err = 0;
+    test_printf("\r\n\r\n[###### Test Case:%s ######]\r\n",tc->name);
     tc->setup();
     tc->test();
     tc->teardown();
     test_case_done();
-    test_printf("\r\n");
+    test_printf("[###### Test Case:%s ######]\r\n\r\n",
+                sti->case_err?"FAILED":"PASSED");
     
 }
 
@@ -425,8 +447,8 @@ static void execute_one_suite(test_suite_s *ts,char *casefilter)
     test_case_s *tc;
     stati_info_s *sti = &stati_info;
     sti->stat.tot_suite ++;
-    sti->stat.tot_case += ts->case_cnt;
-    test_printf("\r\n[**************  Test Suite:%s  **************] \r\n",ts->name);
+    sti->suite_err = 0;
+    test_printf("\r\n\r\n[*********** Test Suite:%s ***********]\r\n",ts->name);
     sti->suite = ts;
     ts->setup();
     for(i = 0;i < ts->case_cnt;i ++)
@@ -437,7 +459,8 @@ static void execute_one_suite(test_suite_s *ts,char *casefilter)
     }
     ts->teardown();
     test_suite_done();
-    test_printf("++++-----------------++++\r\n\r\n");
+    test_printf("[*********** Test Suite:%s ***********]\r\n\r\n",
+                sti->suite_err?"FAILED":"PASSED");
 }
 
 void execute_all_suites(char* suitefilter,char *casefilter)
