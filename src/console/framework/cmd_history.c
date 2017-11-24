@@ -1,4 +1,4 @@
-#include "wind_err.h"
+#include "wind_debug.h"
 #include "wind_string.h"
 #include "cmd_history.h"
 

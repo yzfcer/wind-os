@@ -24,7 +24,6 @@
 *******************************************************************************************************/
 
 #include <stdio.h>
-//#include <stdlib.h>
 #include <stdarg.h>
 #include "wind_config.h"
 #include "wind_type.h"

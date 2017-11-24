@@ -30,9 +30,7 @@
 #include "wind_mem.h"
 #include "wind_debug.h"
 #include "wind_os_hwif.h"
-#include "wind_err.h"
 #include "wind_heap.h"
-#include "wind_assert.h"
 #if (WIND_MEM_SUPPORT && WIND_HEAP_SUPPORT)
 
 

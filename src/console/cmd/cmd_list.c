@@ -25,7 +25,6 @@
 #include "wind_config.h"
 #include "wind_type.h"
 #include "console_framework.h"
-#include "wind_err.h"
 #include "wind_debug.h"
 #include "wind_mem.h"
 #include "wind_string.h"

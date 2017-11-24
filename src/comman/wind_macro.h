@@ -29,6 +29,7 @@
 #ifdef c_plusplus__
 extern {
 #endif
+
 #define MEM_B(addr) (*((w_uint8_t *)(addr)))//从给定的地址上获取一个字节
 #define MEM_W(addr) (*((w_uint16_t *)(addr)))//从给定的地址上获取一个字
 #define MEM_DW(addr) (*(w_uint32_t *)(addr))//从给定的地址上获取一个双字
@@ -41,38 +42,41 @@ extern {
 #define MIN4(x, y, z, w) MIN(MIN(x,y),MIN(z,w))
 
 //将大端格式转换成小端格式或者将小端格式转换成大端格式
-#define BE2LE2(bit16) ((bit16 >> 8) + (bit16 << 8))
-#define BE2LE4(bit32) (((bit32 >> 24) & 0xff) \
-            + ((bit32 >> 16) & 0xff00)\
-            + ((bit32 << 16) & 0xff0000)\
-            + ((bit32 << 24) & 0xff000000))
+#define BE2LE_2(value16) ((value16 >> 8) + (value16 << 8))
+#define BE2LE_4(value32) (((value32 >> 24) & 0xff) \
+            + ((value32 >> 16) & 0xff00)\
+            + ((value32 << 16) & 0xff0000)\
+            + ((value32 << 24) & 0xff000000))
             
 
 //获得结构体中一个字段的偏移量
-#define MBR_POS(type, mbr) ((w_uint32_t)&(((type*)0)->mbr))
+#define MBR_OFFSET(type, mbr) ((w_uint32_t)&(((type*)0)->mbr))
+
 //得到一个结构体中的某个字段的长度
 #define MBR_SIZE(type,mbr) sizeof(((type *)0)->mbr)
+
 //根据字段地址找到结构地址
 #define OBJ_FROM_MBR(ptr,type,mbr) (void*)(((char*)(ptr))-((w_uint32_t)&(((type*)0)->mbr)))
 
 //按照LSB格式把两个字节转化为一个u16_t
-#define FLIPW( ray ) ( (((w_uint16_t) (ray)[0]) * 256) + (ray)[1] )
+#define FLIPW(arr) ( (((w_uint16_t) (arr)[0]) * 256) + (arr)[1] )
 
 //按照LSB格式把一个u16_t转化为两个字节
-#define FLOPW( ray, val ) \
-(ray)[0] = ((val) / 256); \
-(ray)[1] = ((val) & 0xFF)
+#define FLOPW( arr, val ) do{(arr)[0] = ((val) / 256);(arr)[1] = ((val) & 0xFF);}while(0)
+
 
 //得到一个变量的地址（w_uint16_t宽度）
-#define B_PTR( var ) ( (w_uint8_t *) (void *) &(var) )
-#define W_PTR( var ) ( (w_uint16_t *) (void *) &(var) )
+#define PTR_BYTE(var) ((w_uint8_t *)(void *)&(var))
+#define PTR_WORD(var) ((w_uint16_t *)(void *)&(var))
 
 //得到一个字的高位和低位字节
 #define WORD_LO(x) ((w_uint8_t) ((w_uint16_t)(x) & 0xff))
 #define WORD_HI(x) ((w_uint8_t) ((w_uint16_t)(x) >> 8))
 
-//返回一个比X大的最接近的8的倍数
-#define RND8( x ) ((((x) + 7) / 8 ) * 8 )
+//将整形数字向右对齐，align为2的N次方
+#define RIGHT_ALIGN(x,align) ((((x) + (align-1)) / (align) ) * (align))
+//将整形数字向左对齐，align为2的N次方
+#define RIGHT_ALIGN(x,align) ((x)/(align)*(align))
 
 //将一个字母转换为大写
 #define UPCASE(c) (((c) >= 'a' && (c) <= 'z')?((c) - 0x20):(c))
@@ -81,7 +85,7 @@ extern {
 #define DOWNCASE(c) (((c) >= 'A' && (c) <= 'Z')?((c) + 0x20):(c))
 
 //判断字符是不是10进值的数字
-#define DECCHK( c ) ((c) >= '0' && (c) <= '9')
+#define DECCHK(c) ((c) >= '0' && (c) <= '9')
 
 //判断字符是不是16进值的数字
 #define HEXCHK( c ) (((c) >= '0' && (c) <= '9') ||\
@@ -93,35 +97,11 @@ extern {
 
 
 //返回数组元素的个数
-#define ARR_SIZE(a) (sizeof((a))/sizeof((a[0])))
+#define ARR_SIZE(arr) (sizeof((arr))/sizeof((arr[0])))
 
 //返回一个无符号数n尾的值MOD_BY_POWER_OF_TWO(X,n)=X%(2^n)
 #define MOD_BY_POWER_OF_TWO( val, mod_by ) \
 ((w_uint32_t)(val) & (w_uint32_t)((mod_by)-1))
-
-
-#ifdef _DEBUG
-#define DEBUGMSG(msg,date) printf(msg);printf("?d%d%d"?date,_LINE_,_FILE_)
-#else
-#define DEBUGMSG(msg,date)
-#endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #ifdef c_plusplus__
 }

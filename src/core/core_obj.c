@@ -31,10 +31,9 @@
 #include "wind_sem.h"
 #include "wind_lock.h"
 #include "wind_timer.h"
-#include "wind_err.h"
+#include "wind_debug.h"
 #include "wind_mpool.h"
 #include "core_obj.h"
-#include "wind_assert.h"
 core_pools_s g_pool;
 
 void wind_corepool_init(void)

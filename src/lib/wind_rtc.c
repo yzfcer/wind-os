@@ -27,9 +27,8 @@
 #include "wind_config.h"
 #include "wind_rtc.h"
 #include "wind_os_hwif.h"
-#include "wind_err.h"
-//#include "S3C2440addr.h"
 #include "wind_debug.h"
+//#include "S3C2440addr.h"
 #if WIND_RTC_SUPPORT
 datetime_s G_DATETIME;//当前日期和时间
 w_uint8_t g_half_day = DAY_AM;//当前是上午还是下午

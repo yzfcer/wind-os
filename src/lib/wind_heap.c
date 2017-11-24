@@ -29,10 +29,8 @@
 #include "wind_type.h"
 #include "wind_heap.h"
 #include "wind_lock.h"
-#include "WIND_ERR.h"
-#include "wind_string.h"
 #include "wind_debug.h"
-#include "wind_assert.h"
+#include "wind_string.h"
 
 
 #if WIND_HEAP_SUPPORT

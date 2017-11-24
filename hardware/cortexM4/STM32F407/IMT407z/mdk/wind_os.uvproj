@@ -868,11 +868,6 @@
               <FilePath>..\..\..\..\..\src\comman\wind_atomic.h</FilePath>
             </File>
             <File>
-              <FileName>wind_err.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\comman\wind_err.c</FilePath>
-            </File>
-            <File>
               <FileName>wind_err.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\..\..\..\src\comman\wind_err.h</FilePath>
@@ -921,6 +916,16 @@
               <FileName>wind_crc32.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\..\..\..\src\comman\wind_crc32.h</FilePath>
+            </File>
+            <File>
+              <FileName>wind_debug.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\comman\wind_debug.c</FilePath>
+            </File>
+            <File>
+              <FileName>wind_debug.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\comman\wind_debug.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -1087,16 +1092,6 @@
               <FileName>wind_comman.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\..\..\..\src\lib\wind_comman.h</FilePath>
-            </File>
-            <File>
-              <FileName>wind_debug.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\lib\wind_debug.c</FilePath>
-            </File>
-            <File>
-              <FileName>wind_debug.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\lib\wind_debug.h</FilePath>
             </File>
             <File>
               <FileName>wind_heap.c</FileName>

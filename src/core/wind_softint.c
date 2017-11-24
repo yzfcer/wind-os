@@ -27,12 +27,10 @@
 #include "wind_config.h"
 #include "wind_type.h"
 #include "wind_softint.h"
-#include "wind_err.h"
+#include "wind_debug.h"
 #include "wind_string.h"
 #include "wind_thread.h"
-#include "wind_debug.h"
 #include "wind_time.h"
-#include "wind_assert.h"
 #include "wind_core.h"
 #if WIND_SOFTINT_SUPPORT
 #define WIND_SOFTINT_STK_LEN 256 //软中断线程的堆栈深度

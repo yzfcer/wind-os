@@ -26,8 +26,7 @@
 #include "wind_type.h"
 #include "wind_queue.h"
 #include "wind_os_hwif.h"
-#include "wind_assert.h"
-#include "wind_err.h"
+#include "wind_debug.h"
 #if WIND_QUEUE_SUPPORT
 static w_uint32_t wind_queue_lock(queue_s *q)
 {

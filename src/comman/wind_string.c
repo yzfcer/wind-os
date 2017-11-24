@@ -24,7 +24,7 @@
 *******************************************************************************************************/
 #include "wind_type.h"
 #include "wind_string.h"
-#include "wind_err.h"
+#include "wind_debug.h"
 
 
 char* wind_strcpy(char *dest,const char *src)

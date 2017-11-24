@@ -32,13 +32,23 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+//系统错误代码定义
+#define ERR_OK                 0 //正常返回结果
+#define ERR_COMMAN            -1 //一般错误
+#define ERR_NULL_POINTER      -2 //指针为空
+#define ERR_PARAM_OVERFLOW    -3 //传入的参数超出了范围
+#define ERR_MEM               -4 //存储空间受到限制
+#define ERR_INVALID_PARAM     -6//参数无效
+#define ERR_TIMEOUT           -7//操作超时，返回失败
+
+
+//---------------------------------------------------------------------
+//系统调试信息打印级别
 #define WIND_ERROR_OUT_EN 1 //允许输出错误信息
 #define WIND_INFO_OUT_EN  1 //允许输出普通的消息信息
 #define WIND_WARN_OUT_EN  1 //允许输出警告信息
 #define WIND_DEBUG_OUT_EN 0 //允许调试信息输出
 
-
-//void wind_printf(const w_int8_t *string,...);
 w_int32_t wind_printf(const char *fmt, ...);
 //WIND_DEBUG
 #if WIND_DEBUG_OUT_EN
@@ -68,6 +78,14 @@ w_int32_t wind_printf(const char *fmt, ...);
 #define WIND_ERROR(fmt,...)
 #endif
 
+
+
+//---------------------------------------------------------------------
+//判断条件断言
+#define WIND_ASSERT_RETURN(cond,res) do{if(!(cond)) {WIND_ERROR("ASSERT(%s)",#cond);return res;}}while(0)
+#define WIND_ASSERT_TODO(cond,todo,res) do{\
+    if(!(cond)) {todo;return res;}\
+        }while(0)
 
 #ifdef __cplusplus
 }

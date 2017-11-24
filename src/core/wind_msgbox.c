@@ -30,8 +30,7 @@
 #include "wind_core.h"
 #include "wind_stati.h"
 #include "wind_var.h"
-#include "wind_err.h"
-#include "wind_assert.h"
+#include "wind_debug.h"
 #include "core_obj.h"
 #if WIND_MESSAGE_SUPPORT
 extern void wind_thread_dispatch(void);

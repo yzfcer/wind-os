@@ -25,9 +25,8 @@
 
 #include "wind_config.h"
 #include "wind_type.h"
-#include "wind_err.h"
+#include "wind_debug.h"
 #include "wind_mpool.h"
-#include "wind_assert.h"
 #include "wind_var.h"
 
 #define WIND_MPOOL_ALIGN_R(x) (((x)+3) & (~0x03))

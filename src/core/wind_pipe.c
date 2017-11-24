@@ -27,10 +27,9 @@
 #include "wind_pipe.h"
 #include "wind_os_hwif.h"
 #include "wind_core.h"
-#include "wind_err.h"
+#include "wind_debug.h"
 #include "wind_stati.h"
 #include "wind_var.h"
-#include "wind_assert.h"
 #include "core_obj.h"
 #if (WIND_PIPE_SUPPORT && WIND_QUEUE_SUPPORT)
 

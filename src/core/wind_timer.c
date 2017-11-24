@@ -26,7 +26,6 @@
 #include "wind_type.h"
 #include "wind_timer.h"
 #include "wind_debug.h"
-#include "wind_err.h"
 #include "wind_stati.h"
 #include "wind_var.h"
 #include "core_obj.h"

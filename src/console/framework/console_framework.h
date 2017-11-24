@@ -27,9 +27,8 @@ extern "C" {
 /*********************************************头文件定义***********************************************/
 #include "wind_config.h"
 #include "wind_type.h"
-#include "wind_err.h"
+#include "wind_debug.h"
 #include "wind_key.h"
-#include "wind_assert.h"
 #include "wind_string.h"
 #include "wind_thread.h"
 #include "cmd_history.h"

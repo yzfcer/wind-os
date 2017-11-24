@@ -23,11 +23,10 @@
 /*********************************************头文件定义***********************************************/
 #include "wind_config.h"
 #include "wind_type.h"
-#include "wind_err.h"
+#include "wind_debug.h"
 #include "wind_heap.h"
 #include "wind_thread.h"
 #include "wind_private_malloc.h"
-#include "wind_assert.h"
 
 #ifdef __cplusplus
 extern "C" {

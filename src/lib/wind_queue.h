@@ -25,12 +25,10 @@
 #ifndef __WIND_QUEUE_H_
 #define __WIND_QUEUE_H_
 
-
-
 #include "wind_config.h"
 #include "wind_type.h"
 #include "wind_lock.h"
-#include "wind_err.h"
+#include "wind_debug.h"
 
 #ifdef __cplusplus
 extern "C"{

@@ -31,10 +31,9 @@
 #include "wind_sem.h"
 #include "wind_lock.h"
 #include "wind_timer.h"
-#include "wind_err.h"
+#include "wind_debug.h"
 #include "wind_mpool.h"
 #include "wind_var.h"
-#include "wind_assert.h"
 core_var_s g_core;
 volatile w_bool_t gwind_start_flag = B_FALSE;
 
