@@ -1,5 +1,5 @@
 #include "wind_type.h"
-#include "crc16.h"
+#include "wind_crc16.h"
 #if CRC_SUPPORT_EN 
 w_uint16_t code crc_tab_ccitt[256]={/* CRC ×Ö½ÚÓàÊ½±í */  
  0X0000, 0X1021, 0X2042, 0X3063, 0X4084, 0X50A5, 0X60C6, 0X70E7,

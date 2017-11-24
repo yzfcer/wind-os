@@ -853,26 +853,6 @@
           <GroupName>comman</GroupName>
           <Files>
             <File>
-              <FileName>crc16.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\comman\crc16.c</FilePath>
-            </File>
-            <File>
-              <FileName>crc16.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\comman\crc16.h</FilePath>
-            </File>
-            <File>
-              <FileName>crc32.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\comman\crc32.c</FilePath>
-            </File>
-            <File>
-              <FileName>crc32.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\comman\crc32.h</FilePath>
-            </File>
-            <File>
               <FileName>wind_assert.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\..\..\..\src\comman\wind_assert.h</FilePath>
@@ -921,6 +901,26 @@
               <FileName>wind_dlist.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\..\..\..\src\comman\wind_dlist.h</FilePath>
+            </File>
+            <File>
+              <FileName>wind_crc16.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\comman\wind_crc16.c</FilePath>
+            </File>
+            <File>
+              <FileName>wind_crc16.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\comman\wind_crc16.h</FilePath>
+            </File>
+            <File>
+              <FileName>wind_crc32.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\comman\wind_crc32.c</FilePath>
+            </File>
+            <File>
+              <FileName>wind_crc32.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\comman\wind_crc32.h</FilePath>
             </File>
           </Files>
         </Group>
