@@ -49,9 +49,9 @@ typedef struct __user_s
 } user_s;
 
 
-HANDLE wind_user_create(w_int8_t *name,w_int8_t *pwd,usrprio_e prio);
-w_err_t wind_user_insert(HANDLE husr);
-w_err_t wind_user_remove(HANDLE husr);
+w_handle_t wind_user_create(w_int8_t *name,w_int8_t *pwd,usrprio_e prio);
+w_err_t wind_user_insert(w_handle_t husr);
+w_err_t wind_user_remove(w_handle_t husr);
 
 
 

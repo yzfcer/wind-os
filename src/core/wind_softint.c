@@ -38,7 +38,7 @@
 static w_stack_t softint_stk[WIND_SOFTINT_STK_LEN];
 static w_uint16_t softint_index = 0;
 static pthread_s softint_thread = NULL;
-//static HANDLE softint_handle = -1;
+//static w_handle_t softint_handle = -1;
 softint_func wind_soft_vectors[WIND_SOFTINT_MAX_NUM];
 //初始化软中断的一些相关参数
 void wind_softint_init(void)
@@ -69,9 +69,9 @@ static w_err_t wind_softint_thread(w_int32_t argc,w_int8_t **argv)
 }
 
 //向软中断模块注册一个中断向量响应函数
-HANDLE wind_softint_reg(softint_func func)
+w_handle_t wind_softint_reg(softint_func func)
 {
-    HANDLE hint = -1;
+    w_handle_t hint = -1;
     w_int16_t i;
     for(i = 0;i < WIND_SOFTINT_MAX_NUM;i ++)
     {
@@ -93,7 +93,7 @@ HANDLE wind_softint_reg(softint_func func)
 }
 
 //取消一个软中断的注册
-w_err_t wind_softint_unreg(HANDLE hint)
+w_err_t wind_softint_unreg(w_handle_t hint)
 {
     if(hint < 0 || hint >= WIND_SOFTINT_MAX_NUM)
         return ERR_PARAM_OVERFLOW;
@@ -102,7 +102,7 @@ w_err_t wind_softint_unreg(HANDLE hint)
 }
 
 //触发一个软件中断
-void wind_softint_trig(HANDLE handler)
+void wind_softint_trig(w_handle_t handler)
 {
     wind_close_interrupt();
     softint_index = handler;
@@ -130,7 +130,7 @@ void softint_output(void)
 
 w_err_t wind_softint_test(void)
 {
-    HANDLE h;
+    w_handle_t h;
     h = wind_softint_reg(softint_output);
     wind_softint_trig(h);
     return ERR_OK;

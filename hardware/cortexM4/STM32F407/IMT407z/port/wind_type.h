@@ -98,8 +98,8 @@ typedef w_uint32_t *w_pstack_t;
 #endif
 
 
-#ifndef HANDLE 
-typedef w_int16_t HANDLE;
+#ifndef w_handle_t 
+typedef w_int16_t w_handle_t;
 #endif
 
 typedef enum __lock_type_e

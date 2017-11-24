@@ -37,8 +37,8 @@ extern "C" {
 typedef void (*softint_func)(void);
 
 void wind_softint_init(void);
-HANDLE wind_softint_reg(softint_func func);
-void wind_softint_trig(HANDLE handler);
+w_handle_t wind_softint_reg(softint_func func);
+void wind_softint_trig(w_handle_t handler);
 w_err_t wind_create_softint_thread(void);
 w_err_t wind_softint_test(void);
 
