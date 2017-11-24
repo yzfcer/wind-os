@@ -873,16 +873,6 @@
               <FilePath>..\..\..\..\..\src\comman\crc32.h</FilePath>
             </File>
             <File>
-              <FileName>dlist.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\comman\dlist.c</FilePath>
-            </File>
-            <File>
-              <FileName>dlist.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\comman\dlist.h</FilePath>
-            </File>
-            <File>
               <FileName>wind_assert.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\..\..\..\src\comman\wind_assert.h</FilePath>
@@ -921,6 +911,16 @@
               <FileName>wind_string.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\..\..\..\src\comman\wind_string.h</FilePath>
+            </File>
+            <File>
+              <FileName>wind_dlist.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\comman\wind_dlist.c</FilePath>
+            </File>
+            <File>
+              <FileName>wind_dlist.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\comman\wind_dlist.h</FilePath>
             </File>
           </Files>
         </Group>

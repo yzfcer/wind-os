@@ -28,7 +28,7 @@
 #include "wind_config.h"
 #include "wind_type.h"
 #include "wind_thread.h"
-#include "dlist.h"
+#include "wind_dlist.h"
 #include "wind_pipe.h"
 #include "wind_msgbox.h"
 #include "wind_sem.h"

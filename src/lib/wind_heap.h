@@ -29,7 +29,7 @@
 #include "wind_config.h"
 #include "wind_type.h"
 #include "wind_lock.h"
-#include "dlist.h"
+#include "wind_dlist.h"
 
 #ifdef __cplusplus
 extern "C" {

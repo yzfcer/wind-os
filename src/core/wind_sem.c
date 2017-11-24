@@ -26,7 +26,7 @@
 #include "wind_type.h"
 #include "wind_thread.h"
 #include "wind_sem.h"
-#include "dlist.h"
+#include "wind_dlist.h"
 #include "wind_err.h"
 #include "wind_stati.h"
 #include "wind_debug.h"

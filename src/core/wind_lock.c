@@ -31,7 +31,7 @@
 #include "wind_stati.h"
 #include "wind_var.h"
 #include "wind_assert.h"
-#include "dlist.h"
+#include "wind_dlist.h"
 #include "wind_core.h"
 #include "core_obj.h"
 static __INLINE__ plock_s lock_malloc(void)

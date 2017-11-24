@@ -1,6 +1,6 @@
 #ifndef __DLIST_H__
 #define __DLIST_H__
-#include "dlist.h"
+#include "wind_dlist.h"
 
 // 在链表头部插入一个节点
 void dlist_insert_head(pdlist_s dlist,pdnode_s node)
