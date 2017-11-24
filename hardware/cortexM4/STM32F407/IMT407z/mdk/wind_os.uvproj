@@ -364,7 +364,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F40_41xxx,USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\board;..\driver;..\port;..\start;..\..\..\..\..\src\api;..\..\..\..\..\src\app;..\..\..\..\..\src\console\framework;..\..\..\..\..\src\core;..\..\..\..\..\src\driver;..\..\..\..\..\src\entry;..\..\..\..\..\src\lib;..\..\..\..\..\src\xlib;..\..\..\..\..\src\console\cmd;..\..\..\..\..\src\test\framework;..\..\..\..\..\src\test\port;..\..\..\..\..\src\test\case</IncludePath>
+              <IncludePath>..\board;..\driver;..\port;..\start;..\..\..\..\..\src\api;..\..\..\..\..\src\app;..\..\..\..\..\src\comman;..\..\..\..\..\src\console\framework;..\..\..\..\..\src\core;..\..\..\..\..\src\driver;..\..\..\..\..\src\entry;..\..\..\..\..\src\lib;..\..\..\..\..\src\xlib;..\..\..\..\..\src\console\cmd;..\..\..\..\..\src\test\framework;..\..\..\..\..\src\test\port;..\..\..\..\..\src\test\case</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -850,6 +850,81 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>comman</GroupName>
+          <Files>
+            <File>
+              <FileName>crc16.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\comman\crc16.c</FilePath>
+            </File>
+            <File>
+              <FileName>crc16.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\comman\crc16.h</FilePath>
+            </File>
+            <File>
+              <FileName>crc32.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\comman\crc32.c</FilePath>
+            </File>
+            <File>
+              <FileName>crc32.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\comman\crc32.h</FilePath>
+            </File>
+            <File>
+              <FileName>dlist.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\comman\dlist.c</FilePath>
+            </File>
+            <File>
+              <FileName>dlist.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\comman\dlist.h</FilePath>
+            </File>
+            <File>
+              <FileName>wind_assert.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\comman\wind_assert.h</FilePath>
+            </File>
+            <File>
+              <FileName>wind_atomic.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\comman\wind_atomic.c</FilePath>
+            </File>
+            <File>
+              <FileName>wind_atomic.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\comman\wind_atomic.h</FilePath>
+            </File>
+            <File>
+              <FileName>wind_err.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\comman\wind_err.c</FilePath>
+            </File>
+            <File>
+              <FileName>wind_err.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\comman\wind_err.h</FilePath>
+            </File>
+            <File>
+              <FileName>wind_macro.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\comman\wind_macro.h</FilePath>
+            </File>
+            <File>
+              <FileName>wind_string.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\comman\wind_string.c</FilePath>
+            </File>
+            <File>
+              <FileName>wind_string.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\comman\wind_string.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>console_framework</GroupName>
           <Files>
             <File>
@@ -1004,21 +1079,6 @@
               <FilePath>..\..\..\..\..\src\lib\RBTree.h</FilePath>
             </File>
             <File>
-              <FileName>wind_assert.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\lib\wind_assert.h</FilePath>
-            </File>
-            <File>
-              <FileName>wind_atomic.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\lib\wind_atomic.c</FilePath>
-            </File>
-            <File>
-              <FileName>wind_atomic.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\lib\wind_atomic.h</FilePath>
-            </File>
-            <File>
               <FileName>wind_comman.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\lib\wind_comman.c</FilePath>
@@ -1037,16 +1097,6 @@
               <FileName>wind_debug.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\..\..\..\src\lib\wind_debug.h</FilePath>
-            </File>
-            <File>
-              <FileName>wind_err.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\lib\wind_err.c</FilePath>
-            </File>
-            <File>
-              <FileName>wind_err.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\lib\wind_err.h</FilePath>
             </File>
             <File>
               <FileName>wind_heap.c</FileName>
@@ -1088,41 +1138,11 @@
               <FileType>5</FileType>
               <FilePath>..\..\..\..\..\src\lib\wind_stack.h</FilePath>
             </File>
-            <File>
-              <FileName>wind_string.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\lib\wind_string.c</FilePath>
-            </File>
-            <File>
-              <FileName>wind_string.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\lib\wind_string.h</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
           <GroupName>os_xlib</GroupName>
           <Files>
-            <File>
-              <FileName>crc16.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\xlib\crc16.c</FilePath>
-            </File>
-            <File>
-              <FileName>crc16.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\xlib\crc16.h</FilePath>
-            </File>
-            <File>
-              <FileName>crc32.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\xlib\crc32.c</FilePath>
-            </File>
-            <File>
-              <FileName>crc32.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\xlib\crc32.h</FilePath>
-            </File>
             <File>
               <FileName>fft.c</FileName>
               <FileType>1</FileType>
@@ -1137,11 +1157,6 @@
               <FileName>firwin.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\xlib\firwin.c</FilePath>
-            </File>
-            <File>
-              <FileName>wind_macro.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\xlib\wind_macro.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -1292,16 +1307,6 @@
               <FileName>wind_stati.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\core\wind_stati.c</FilePath>
-            </File>
-            <File>
-              <FileName>dlist.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\core\dlist.c</FilePath>
-            </File>
-            <File>
-              <FileName>dlist.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\core\dlist.h</FilePath>
             </File>
             <File>
               <FileName>wind_msgbox.c</FileName>

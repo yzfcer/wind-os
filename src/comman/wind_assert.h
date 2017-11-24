@@ -93,7 +93,7 @@ static void __debug_info(const char *prefix,const char *fmt, ...)
 
 
 
-#define WIND_ASSERT_RETURN(cond,res) do{if(!(cond)) {WIND_ERROR("ERROR:%s",#cond);return res;}}while(0)
+#define WIND_ASSERT_RETURN(cond,res) do{if(!(cond)) {WIND_ERROR("ASSERT(%s)",#cond);return res;}}while(0)
 #define WIND_ASSERT_TODO(cond,todo,res) do{\
     if(!(cond)) {todo;return res;}\
         }while(0)

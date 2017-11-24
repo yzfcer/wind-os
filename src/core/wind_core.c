@@ -32,7 +32,7 @@
 #include "wind_core.h"
 #include "wind_softint.h"
 #include "wind_var.h"
-#include "wind_heap.h"
+//#include "wind_heap.h"
 #include "wind_time.h"
 #include "core_obj.h"
 
@@ -194,9 +194,7 @@ void wind_init()
     wind_stat_init();
 #endif
     wind_corepool_init();
-#if WIND_HEAP_SUPPORT
-    wind_heaps_init();
-#endif
+
     wind_time_init();//时间初始化
 #if WIND_RTC_SUPPORT
     wind_datetime_init();

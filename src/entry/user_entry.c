@@ -38,6 +38,8 @@ w_err_t wind_main(void)
     psem_s psem1 = wind_sem_create("sem2",4);
     psem_s psem2 = wind_sem_create("sem3",6);
 #endif
-	WIND_INFO("enter wind main.\r\n");
+    plock_s lock1 = wind_lock_create("lock1");
+    plock_s lock2 = wind_lock_create("lock2");
+    WIND_INFO("enter wind main.\r\n");
     return 0;
 }

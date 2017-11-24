@@ -60,8 +60,8 @@ typedef enum __HeapBlock_e
     HEAP_BLOCK_CNT//¿éÊý
 }HeapBlock_e;
 
-#define HEAP1_HEAD  0X68000000
-#define HEAD1_LENTH (800*1024)
+#define HEAP1_HEAD  0X10000000
+#define HEAD1_LENTH (64*1024)
 
 
 typedef struct __heapitem_s heapitem_s,*pheapitem_s;

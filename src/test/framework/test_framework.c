@@ -274,7 +274,7 @@ void test_framework_summit(void)
     fail_info_s *fail;
     ut_uint32_t space_cnt = 4;
     sti = &stati_info;
-    test_printf("\r\n\r\n[-----------ALL TEST SUMMARY-----------]\r\n");
+    test_printf("\r\n\r\n[************ALL TEST SUMMARY************]\r\n");
     test_printf("total  suites:%d\r\n",sti->stat.tot_suite);
     test_printf("passed suites:%d\r\n",sti->stat.passed_suite);
     test_printf("failed suites:%d\r\n",sti->stat.failed_suite);
@@ -431,12 +431,12 @@ static void execute_one_case(test_suite_s *ts,test_case_s *tc)
     sti->tcase = tc;
     sti->stat.tot_case ++;
     sti->case_err = 0;
-    test_printf("\r\n\r\n[###### Test Case:%s ######]\r\n",tc->name);
+    test_printf("\r\n\r\n[++++++++++++ Test Case:%s ++++++++++++]\r\n",tc->name);
     tc->setup();
     tc->test();
     tc->teardown();
     test_case_done();
-    test_printf("[###### Test Case:%s ######]\r\n\r\n",
+    test_printf("[++++++++++++ Test Case:%s ++++++++++++]\r\n\r\n",
                 sti->case_err?"FAILED":"PASSED");
     
 }
@@ -448,7 +448,7 @@ static void execute_one_suite(test_suite_s *ts,char *casefilter)
     stati_info_s *sti = &stati_info;
     sti->stat.tot_suite ++;
     sti->suite_err = 0;
-    test_printf("\r\n\r\n[*********** Test Suite:%s ***********]\r\n",ts->name);
+    test_printf("\r\n\r\n[------------ Test Suite:%s ------------]\r\n",ts->name);
     sti->suite = ts;
     ts->setup();
     for(i = 0;i < ts->case_cnt;i ++)
@@ -459,7 +459,7 @@ static void execute_one_suite(test_suite_s *ts,char *casefilter)
     }
     ts->teardown();
     test_suite_done();
-    test_printf("[*********** Test Suite:%s ***********]\r\n\r\n",
+    test_printf("[------------ Test Suite:%s ------------]\r\n\r\n",
                 sti->suite_err?"FAILED":"PASSED");
 }
 
@@ -470,14 +470,14 @@ void execute_all_suites(char* suitefilter,char *casefilter)
     sti = &stati_info;
     ts = suite_list.head;
     stati_info_init(sti);
-    test_printf("-------Test framework start-------\r\n");
+    test_printf("************Test framework start************\r\n");
     while(ts)
     {
         if(is_match_str(ts->name,suitefilter))
             execute_one_suite(ts,casefilter);
         ts = ts->next;
     }
-    test_printf("-------Test framework end-------\r\n");
+    test_printf("*******Test framework end*******\r\n");
     test_framework_summit();
 }
 

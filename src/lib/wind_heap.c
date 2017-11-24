@@ -40,30 +40,31 @@ dlist_s gwind_heaplist = {NULL,NULL};//所有内存块的入口
 #define WIND_HEAP_DEBUG(...)
 #define OFFSET_ADDR(base,offset) (void*)(((char*)(base))+(offset))
 #define ITEM_FROM_PTR(ptr) (void*)((w_uint32_t)ptr - sizeof(heapitem_s))
-w_err_t wind_heap_init(const char *name,
-             void *base,w_uint32_t size)
+
+
+w_err_t wind_heap_init(const char *name,void *base,w_uint32_t size)
 {
-    w_err_t err;
     pheapitem_s item;
     pheap_s mhp;
-    WIND_ASSERT_RETURN(mhp != NULL,ERR_NULL_POINTER);
+    static plock_s lock = NULL;
     WIND_ASSERT_RETURN(name != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(base != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(err == ERR_OK,ERR_COMMAN);
+    WIND_ASSERT_RETURN(size > sizeof(heap_s),ERR_COMMAN);
 
     mhp = (pheap_s)base;
     mhp->magic = WIND_HEAP_MAGIC;
     mhp->name = name;
-    mhp->addr = base;
-    mhp->size = __ALIGN_L(size, WIND_HEAP_ALIGN_SIZE);//
+    mhp->addr = OFFSET_ADDR(base,sizeof(heap_s));;
+    mhp->size = __ALIGN_L(size, WIND_HEAP_ALIGN_SIZE);
     mhp->rest = mhp->size - sizeof(heap_s);
     mhp->max_used = mhp->size - mhp->rest;
     DNODE_INIT(mhp->heap_node);
     DLIST_INIT(mhp->list);
     DLIST_INIT(mhp->free_list);
-    mhp->plock = wind_lock_create(name);
+    lock = wind_lock_create(name);
+    mhp->plock = lock;//wind_lock_create(name);
     
-    item = OFFSET_ADDR(base,sizeof(heap_s));
+    item = mhp->addr;
     item->magic = WIND_HEAPITEM_MAGIC;
     item->pheap = mhp;
     PRIO_DNODE_INIT(item->itemnode);
@@ -74,7 +75,6 @@ w_err_t wind_heap_init(const char *name,
 
     return ERR_OK;
 }
-
 
 
 //堆可自由分配的内存空间进行初始化
