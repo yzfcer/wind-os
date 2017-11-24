@@ -76,7 +76,7 @@ extern {
 //将整形数字向右对齐，align为2的N次方
 #define RIGHT_ALIGN(x,align) ((((x) + (align-1)) / (align) ) * (align))
 //将整形数字向左对齐，align为2的N次方
-#define RIGHT_ALIGN(x,align) ((x)/(align)*(align))
+#define LEFT_ALIGN(x,align) ((x)/(align)*(align))
 
 //将一个字母转换为大写
 #define UPCASE(c) (((c) >= 'a' && (c) <= 'z')?((c) - 0x20):(c))

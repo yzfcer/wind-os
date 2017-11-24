@@ -52,7 +52,7 @@ extern "C" {
 w_int32_t wind_printf(const char *fmt, ...);
 //WIND_DEBUG
 #if WIND_DEBUG_OUT_EN
-#define WIND_DEBUG(fmt,...) do{wind_printf("debug:"fmt" [%s,%d]\r\n",##__VA_ARGS__,__FILE__,__LINE__);wind_printf("[%s,%d]\r\n",__FILE__,__LINE__);}while(0)
+#define WIND_DEBUG(fmt,...) do{wind_printf("DEBUG:"fmt" [%s,%d]\r\n",##__VA_ARGS__,__FILE__,__LINE__);wind_printf("[%s,%d]\r\n",__FILE__,__LINE__);}while(0)
 #else 
 #define WIND_DEBUG(fmt,...)
 #endif
