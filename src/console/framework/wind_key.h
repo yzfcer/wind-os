@@ -65,6 +65,7 @@ extern "C" {
 // PRINTABLE ASCII CODE
 //
 #define WVK_SPACE        0x20            // space char
+
 #define WVK_0            0x30            /* 0 */
 #define WVK_1            0x31            /* 1 */
 #define WVK_2            0x32            /* 2 */
@@ -130,8 +131,18 @@ extern "C" {
 
 #define WVK_DEL          0x7f            /* del */
 
+//KEY event
+#define KEY_EVT_UP           0x1B5B41
+#define KEY_EVT_DOWN         0x1B5B42
+#define KEY_EVT_LEFT         0x1B5B44
+#define KEY_EVT_RIGHT        0x1B5B43
 
-
+#define KEY_EVT_HOME         0x1B5B317E
+#define KEY_EVT_INS          0x1B5B327E
+#define KEY_EVT_DEL          0x1B5B337E
+#define KEY_EVT_END          0x1B5B347E
+#define KEY_EVT_PGUP         0x1B5B357E
+#define KEY_EVT_PGDN         0x1B5B367E
 
 
 

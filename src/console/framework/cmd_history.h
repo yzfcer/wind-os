@@ -9,8 +9,10 @@ struct __cmd_his_s
 {
     w_int32_t hiscnt;
     w_int32_t buf_used;
+    
     w_int32_t curidx;
     char *curcmd;
+    
     char *hiscmd[CMD_HISTORY_COUNT];
     char cmdbuf[CMD_HSIBUF_LENTH];
 };

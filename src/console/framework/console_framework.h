@@ -43,6 +43,8 @@ extern "C" {
 #define WIND_CONSOLE_COUNT 1//支持的控制套终端的数量
 #define CMD_PARAM_CNT 10
 
+#define USER_AUTHENTICATION_EN 1
+    
 
 
 /**********************************************枚举定义************************************************/
@@ -94,9 +96,13 @@ typedef struct __console_s
 {
     cslstat_e stat;//当前的解析状态
     w_int32_t index;//命令的下一个字符下标
+    w_int8_t key_evt_f;
+    w_int8_t key_evt_len;
+    w_uint32_t key_evt_id;
     char buf[WIND_CMD_MAX_LEN];//接收的数据缓存区
     char user[WIND_CTL_USRNAME_LEN];//用户名
     char pwd[WIND_CTL_PWD_LEN];//密码的值
+    
     cmd_his_s his;
     cmd_param_s param;
     cmd_list_s cmd_list;
