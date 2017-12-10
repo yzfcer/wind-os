@@ -18,8 +18,6 @@ w_err_t cmd_history_init(cmd_his_s *his)
     his->hiscnt = 0;
     his->buf_used = 0;
     his->curidx = -1;
-    //his->headidx = -1;
-    //his->endidx = -1;
     his->curcmd = NULL;
     for(i =0 ;i < CMD_HISTORY_COUNT;i ++)
         his->hiscmd[i] = NULL;

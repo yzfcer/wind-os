@@ -32,7 +32,7 @@
 stat_s g_stati[IDX_CNT];
 void wind_stat_init(void)
 {
-    WIND_INFO("statistics initializing...\r\n");
+    wind_notice("statistics initializing...\r\n");
     wind_memset(g_stati,0,sizeof(g_stati));
     g_stati[IDX_THREAD].tot = WIND_THREAD_MAX_NUM;
     wind_memcpy(g_stati[IDX_THREAD].name,"thread",4);

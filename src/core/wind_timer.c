@@ -63,10 +63,10 @@ ptimer_s wind_timer_create(w_uint32_t t_ms,softtimer_fn func,void *arg,w_bool_t 
     w_int32_t count = t_ms / TIMER_PERIOD;
     if(count <= 0)
         count = 1;
-    WIND_INFO("creating tick timer:%d ms\r\n",t_ms);
+    wind_notice("creating tick timer:%d ms\r\n",t_ms);
     if(func == NULL)
     {
-        WIND_ERROR("wind_timer_create err 1\r\n");
+        wind_error("wind_timer_create err 1\r\n");
         return NULL;
     }
     wind_close_interrupt();
@@ -74,12 +74,12 @@ ptimer_s wind_timer_create(w_uint32_t t_ms,softtimer_fn func,void *arg,w_bool_t 
     if(!timer)
     {
         wind_open_interrupt();
-        WIND_ERROR("wind_timer_create err 2\r\n");
+        wind_error("wind_timer_create err 2\r\n");
         return NULL;
     }
 
     wind_open_interrupt();
-    WIND_INFO("wind_timer_create OK\r\n");
+    wind_notice("wind_timer_create OK\r\n");
     DNODE_INIT(timer->tmrnode);
 
     timer->count = count;

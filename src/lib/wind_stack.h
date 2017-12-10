@@ -39,7 +39,7 @@ extern "C" {
 #endif
 
 #define STACK_OK            0                           /* 操作成功                                     */
-#define STACK_ERR            -1
+#define STACK_ERR           -1
 #define STACK_FULL          -2                           /* 队列满                                       */
 #define STACK_EMPTY         -3                           /* 无数据                                       */
 
@@ -50,8 +50,6 @@ extern "C" {
 #define STACK_DATA_TYPE     w_uint8_t
 #endif
 
-//__packed
-//#pragma pack(1)
 typedef struct __stack_s{
     STACK_DATA_TYPE     *Out;                   /* 指向数据输出位置         */
     STACK_DATA_TYPE     *In;                    /* 指向数据输入位置         */      
@@ -67,7 +65,6 @@ typedef struct __stack_s{
 } stack_s,*pstack_s;
 
 
-//#ifndef IN_STACK
 w_err_t wind_stack_create(void *Buf,
                           w_uint32_t SizeOfBuf,
                           w_uint16_t DataWid,
@@ -85,14 +82,6 @@ w_uint16_t wind_stack_datalen(void *Buf);
 w_uint16_t wind_stack_size(void *Buf);
 
 void wind_stack_flush(void *Buf);
-//#endif //IN_STACK
-
-#define EN_STACK_WRITE            1     /* 禁止(0)或允许(1)FIFO发送数据       */
-#define EN_STACK_WRITE_FRONT      1     /* 禁止(0)或允许(1)LIFO发送数据       */
-#define EN_STACK_NDATA            1     /* 禁止(0)或允许(1)取得队列数据数目   */
-#define EN_STACK_SIZE             1     /* 禁止(0)或允许(1)取得队列数据总容量 */
-#define EN_STACK_FLUSH            1     /* 禁止(0)或允许(1)清空队列           */
-
 
 #endif
 

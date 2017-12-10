@@ -92,14 +92,14 @@ void *wind_pool_alloc(void *mem)
     if(pm->free_head == NULL)
     {
         wind_open_interrupt();
-        WIND_ERROR("mpool empty\r\n");
+        wind_error("mpool empty\r\n");
         return NULL;
     }
     item = pm->free_head;
     if(item->flag != POOL_BLK_FREE)
     {
         wind_open_interrupt();
-        WIND_ERROR("mpool ERROR\r\n");
+        wind_error("mpool ERROR\r\n");
         return NULL;
     }
     pm->free_head = item->next;

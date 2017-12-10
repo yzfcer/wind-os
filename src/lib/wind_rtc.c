@@ -61,7 +61,7 @@ static void hwrtc_set_date(void)
     rBCDYEAR = Num3BCD(dt->date.year - 2000);        //ƒÍ
     rBCDMON  = Num3BCD(dt->date.month) ;        //‘¬
     rBCDDATE = Num3BCD(dt->date.day);        //»’    
-    WIND_ERROR("%d,%d,%d\r\n",rBCDYEAR,rBCDMON,rBCDDATE);
+    wind_error("%d,%d,%d\r\n",rBCDYEAR,rBCDMON,rBCDDATE);
     rRTCCON &= ~1 ;        //RTC read and write disable
 }
 

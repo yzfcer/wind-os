@@ -60,7 +60,7 @@ static pthread_s thread_malloc(void)
     pthread = wind_core_alloc(IDX_THREAD);
     WIND_ASSERT_RETURN(pthread != NULL,NULL);
     pthread->used = B_TRUE;
-    WIND_DEBUG("alloc pthread->prio:%d\r\n",pthread->prio);
+    wind_debug("alloc pthread\r\n");
     return pthread;
 }
 
@@ -99,7 +99,7 @@ static void thread_entry(void *args)
     w_err_t err;
     pthread_s pthread;
     pthread = wind_thread_current();
-    WIND_INFO("begin to run thread:%s\r\n",pthread->name);
+    wind_notice("begin to run thread:%s\r\n",pthread->name);
     if(pthread != NULL)
     {
         err = pthread->thread_func(pthread->argc,pthread->argv);
@@ -183,7 +183,7 @@ pthread_s wind_thread_create(const w_int8_t *name,
     pthread_s pthread;
     w_pstack_t tmpstk;
 
-    WIND_INFO("creating thread:%s\r\n",name);
+    wind_notice("creating thread:%s\r\n",name);
     WIND_ASSERT_RETURN(name != NULL,NULL);
     WIND_ASSERT_RETURN(thread_func != NULL,NULL);
     WIND_ASSERT_RETURN(pstk != NULL,NULL);
@@ -215,11 +215,11 @@ pthread_s wind_thread_create(const w_int8_t *name,
 #endif
     
     dlist_insert_prio(&g_core.threadlist,&pthread->validthr,pthread->prio);
-    WIND_DEBUG("pthread->name:%s\r\n",pthread->name);
-    WIND_DEBUG("pthread->stack:0x%x\r\n",pthread->stack);
-    WIND_DEBUG("pthread->runstat:%d\r\n",pthread->runstat);
-    WIND_DEBUG("pthread->prio:%d\r\n",pthread->prio);
-    WIND_DEBUG("pthread->stksize:%d\r\n\r\n",pthread->stksize);
+    wind_debug("pthread->name:%s\r\n",pthread->name);
+    wind_debug("pthread->stack:0x%x\r\n",pthread->stack);
+    wind_debug("pthread->runstat:%d\r\n",pthread->runstat);
+    wind_debug("pthread->prio:%d\r\n",pthread->prio);
+    wind_debug("pthread->stksize:%d\r\n\r\n",pthread->stksize);
     return pthread;
 }
 
@@ -249,7 +249,7 @@ w_err_t wind_thread_changeprio(pthread_s pthread,w_int16_t prio)
     }
 
     wind_close_interrupt();
-    WIND_DEBUG("change prio %s:%d\r\n",pthread->name,prio);
+    wind_debug("change prio %s:%d\r\n",pthread->name,prio);
     node = &pthread->validthr.node;
     dlist_remove(&g_core.threadlist,node);
     pthread->prio = prio;
@@ -344,7 +344,7 @@ w_err_t wind_thread_exit(w_err_t exitcode)
 {
     pthread_s pthread;
     pthread = wind_thread_current();
-    WIND_INFO("thread %s exit with code %d\r\n",pthread->name,exitcode);
+    wind_notice("thread %s exit with code %d\r\n",pthread->name,exitcode);
     wind_thread_kill(pthread);
     wind_thread_dispatch();
     return ERR_OK;
@@ -375,7 +375,7 @@ w_err_t wind_thread_sleep(w_uint32_t ms)
         if(pthread->prio < 0)
         {
             wind_thread_print(&g_core.sleeplist);
-            WIND_ERROR("sleep err\r\n");
+            wind_error("sleep err\r\n");
             break;
         }
     }

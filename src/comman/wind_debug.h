@@ -25,13 +25,11 @@
 
 #ifndef WIND_DEBUG_H__
 #define WIND_DEBUG_H__
-
-#include "wind_config.h"
-#include "wind_os_hwif.h"
-
+#include "wind_type.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
+
 //系统错误代码定义
 #define ERR_OK                 0 //正常返回结果
 #define ERR_COMMAN            -1 //一般错误
@@ -43,49 +41,62 @@ extern "C" {
 
 
 //---------------------------------------------------------------------
-//系统调试信息打印级别
-#define WIND_ERROR_OUT_EN 1 //允许输出错误信息
-#define WIND_INFO_OUT_EN  1 //允许输出普通的消息信息
-#define WIND_WARN_OUT_EN  1 //允许输出警告信息
-#define WIND_DEBUG_OUT_EN 0 //允许调试信息输出
-
+#ifdef _USE_USER_PRINT
+extern w_int32_t wind_std_output(w_uint8_t *str,w_int32_t len);
 w_int32_t wind_printf(const char *fmt, ...);
-//WIND_DEBUG
-#if WIND_DEBUG_OUT_EN
-#define WIND_DEBUG(fmt,...) do{wind_printf("DEBUG:"fmt" [%s,%d]\r\n",##__VA_ARGS__,__FILE__,__LINE__);wind_printf("[%s,%d]\r\n",__FILE__,__LINE__);}while(0)
-#else 
-#define WIND_DEBUG(fmt,...)
+#else
+#include <stdio.h>
+#define wind_printf printf
 #endif
 
-//WIND_INFO
-#if WIND_INFO_OUT_EN
-#define WIND_INFO(fmt,...) do{wind_printf(fmt,##__VA_ARGS__);}while(0)
+//系统调试信息打印级别
+#define PRINT_LV_DEBUG   1
+#define PRINT_LV_NOTICE  2
+#define PRINT_LV_WARN    3
+#define PRINT_LV_ERROR   4
+#define PRINT_LV_CRIT     5
+
+#define PRINT_LEVEL PRINT_LV_NOTICE
+
+
+#if (PRINT_LEVEL <= PRINT_LV_DEBUG)
+#define wind_debug(fmt,...) do{wind_printf("[debug] ");wind_printf(fmt,##__VA_ARGS__);}while(0)
 #else 
-#define WIND_INFO(fmt,...) 
+#define wind_debug(fmt,...)
 #endif
 
-//WIND_WARN
-#if WIND_WARN_OUT_EN
-#define WIND_WARN(fmt,...) do{wind_printf(fmt,##__VA_ARGS__);wind_printf("[%s,%d]\r\n",__FILE__,__LINE__);}while(0)
+#if (PRINT_LEVEL <= PRINT_LV_NOTICE)
+#define wind_notice(fmt,...) do{wind_printf("[notice] ");wind_printf(fmt,##__VA_ARGS__);}while(0)
 #else 
-#define WIND_WARN(fmt,...)
+#define wind_notice(fmt,...) 
 #endif
 
-//WIND_ERROR
-#if WIND_ERROR_OUT_EN
-#define WIND_ERROR(fmt,...) do{wind_printf(fmt,##__VA_ARGS__);wind_printf("[%s,%d]\r\n",__FILE__,__LINE__);}while(0)
+#if (PRINT_LEVEL <= PRINT_LV_WARN)
+#define wind_warn(fmt,...) do{wind_printf("[warn] ");wind_printf(fmt,##__VA_ARGS__);}while(0)
 #else 
-#define WIND_ERROR(fmt,...)
+#define wind_warn(fmt,...)
+#endif
+
+#if (PRINT_LEVEL <= PRINT_LV_ERROR)
+#define wind_error(fmt,...) do{wind_printf("[error] ");wind_printf(fmt,##__VA_ARGS__);}while(0)
+#else 
+#define wind_error(fmt,...)
+#endif
+
+#if (PRINT_LEVEL <= PRINT_LV_CRIT)
+#define wind_critical(fmt,...) do{wind_printf("[critical] ");wind_printf(fmt,##__VA_ARGS__);}while(0)
+#else 
+#define wind_critical(fmt,...)
 #endif
 
 
 
 //---------------------------------------------------------------------
 //判断条件断言
-#define WIND_ASSERT_RETURN(cond,res) do{if(!(cond)) {WIND_ERROR("ASSERT(%s)",#cond);return res;}}while(0)
-#define WIND_ASSERT_TODO(cond,todo,res) do{\
-    if(!(cond)) {todo;return res;}\
-        }while(0)
+#define WIND_ASSERT_RETURN(cond,res) do{if(!(cond)) {wind_error("ASSERT(%s)",#cond);return res;}}while(0)
+#define WIND_ASSERT_TODO(cond,todo,res) do{if(!(cond)) {todo;return res;}}while(0)
+    
+        
 
 #ifdef __cplusplus
 }

@@ -71,7 +71,7 @@ void wind_enter_int(void)
 {
     if(RUN_FLAG == B_FALSE)
     {
-        WIND_ERROR("enter not rd\r\n");
+        wind_error("enter not rd\r\n");
         return;
     }
     if(gwind_int_cnt < 255)
@@ -105,7 +105,7 @@ static pthread_s wind_search_highthread(void)
         }
     }
     wind_open_interrupt();
-    WIND_ERROR("core NOT find valid thread!");
+    wind_error("core NOT find valid thread!");
     return NULL;
 }
 void wind_exit_int(void)
@@ -113,7 +113,7 @@ void wind_exit_int(void)
     pthread_s pthr;
     if(RUN_FLAG == B_FALSE)
     {
-        WIND_ERROR("exit not rd %d\r\n",RUN_FLAG);
+        wind_error("exit not rd %d\r\n",RUN_FLAG);
         return;
     }
     
@@ -199,7 +199,7 @@ void wind_init()
 #if WIND_RTC_SUPPORT
     wind_datetime_init();
 #endif
-    WIND_INFO("initialization completed!\r\n");
+    wind_notice("initialization completed!\r\n");
 }
 
 
@@ -212,7 +212,7 @@ int wind_os_lunch(void)
     wind_init();
     create_init_thread();
     wind_thread_open();
-    WIND_INFO("wind is ready for running!\r\n");
+    wind_notice("wind is ready for running!\r\n");
     wind_thread_open();
     wind_run();
     return ERR_OK;

@@ -32,6 +32,7 @@
 #include "wind_thread.h"
 #include "wind_time.h"
 #include "wind_core.h"
+#include "wind_os_hwif.h"
 #if WIND_SOFTINT_SUPPORT
 #define WIND_SOFTINT_STK_LEN 256 //软中断线程的堆栈深度
 //软中断线程的堆栈
@@ -114,7 +115,7 @@ void wind_softint_trig(w_handle_t handler)
 //创建软件中断线程
 w_err_t wind_create_softint_thread(void)
 {
-    WIND_INFO("create soft interrupt thread.\r\n");
+    wind_notice("create soft interrupt thread.\r\n");
     softint_thread = wind_thread_create("softint",PRIO_HIGH,wind_softint_thread,
                 0,NULL,softint_stk,WIND_SOFTINT_STK_LEN);
                 wind_thread_changeprio(softint_thread,0);

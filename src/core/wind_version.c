@@ -51,18 +51,18 @@ static void output_logo(void)
     int i;
     for(i = 0;i < 4;i++)
     {
-        WIND_INFO("%s\r\n",g_wind_logo[i]);
+        wind_printf("%s\r\n",g_wind_logo[i]);
     }
 }
 
 void wind_print_os_info(void)
 {
-    const w_int8_t *str;
-    WIND_INFO("\r\n\r\nwind_os version:%s\r\n",wind_get_core_version());
+    const char *str;
+    wind_printf("\r\n\r\nwind_os version:%s\r\n",wind_get_core_version());
     output_logo();
-    WIND_INFO("core created on:%s @ chongqing,china.\r\n",__DATE__);
+    wind_printf("core created on:%s @ chongqing,china.\r\n",__DATE__);
     str = wind_get_core_version_info();
-    WIND_INFO(str);
-    WIND_INFO("core is built at %s %s\r\n\r\n",__TIME__,__DATE__);
+    wind_printf(str);
+    wind_printf("core is built at %s %s\r\n\r\n",__TIME__,__DATE__);
 }
 
