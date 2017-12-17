@@ -46,12 +46,12 @@ typedef struct __WIND_PIPE
     w_bool_t used;
     queue_s *buff;
     w_uint32_t buflen;
-}pipe_s,*ppipe_s;
+}pipe_s;
 
-ppipe_s wind_pipe_create(const char *name,void *buff,w_uint32_t buflen);
-w_int16_t wind_pipe_read(ppipe_s ppipe,w_int8_t *str,w_int16_t len);
-w_int16_t wind_pipe_write(ppipe_s ppipe,w_int8_t *str,w_int16_t len);
-w_err_t wind_pipe_free(ppipe_s ppipe);
+pipe_s* wind_pipe_create(const char *name,void *buff,w_uint32_t buflen);
+w_int16_t wind_pipe_read(pipe_s* ppipe,w_int8_t *str,w_int16_t len);
+w_int16_t wind_pipe_write(pipe_s* ppipe,w_int8_t *str,w_int16_t len);
+w_err_t wind_pipe_free(pipe_s* ppipe);
 
 
 

@@ -83,10 +83,10 @@ static w_bool_t is_switch_enable(void)
     return gwind_core_cnt>0?B_FALSE:B_TRUE;
 }
 
-static pthread_s wind_search_highthread(void)
+static thread_s * wind_search_highthread(void)
 {
     pdnode_s pnode;
-    pthread_s pthread = NULL;
+    thread_s * pthread = NULL;
     wind_close_interrupt();
     if(gwind_core_cnt > 0)
     {
@@ -109,7 +109,7 @@ static pthread_s wind_search_highthread(void)
 }
 void wind_exit_int(void)
 {
-    pthread_s pthr;
+    thread_s * pthr;
     if(RUN_FLAG == B_FALSE)
     {
         wind_error("exit not rd %d\r\n",RUN_FLAG);
@@ -135,7 +135,7 @@ void wind_exit_int(void)
 //系统调度开始启动运行
 static void wind_run()
 {
-    pthread_s pthr;
+    thread_s * pthr;
     pthr = wind_search_highthread();
     gwind_high_stack = &pthr->stack;
     gwind_cur_stack = gwind_high_stack;
@@ -149,7 +149,7 @@ static void wind_run()
 #if WIND_REALTIME_CORE_SUPPORT
 void wind_thread_dispatch(void)
 {
-    pthread_s pthr;
+    thread_s * pthr;
     if(RUN_FLAG == B_FALSE)
         return;
     wind_close_interrupt();

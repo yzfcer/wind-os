@@ -86,7 +86,7 @@ struct __memheap_s
     dnode_s heap_node;
     dlist_s list;
     dlist_s free_list;
-    plock_s plock; 
+    lock_s * plock; 
 };
 
 w_err_t wind_heap_init(const char *name,

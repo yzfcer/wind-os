@@ -117,7 +117,7 @@ static w_err_t display_mem(char **argv)
 static w_err_t display_stack(char **argv)
 {
     w_uint32_t start,end,cur,len,used;
-    pthread_s thr;
+    thread_s * thr;
     if(wind_strcmp(argv[1],"stack") != 0)
     {
         return ERR_COMMAN;

@@ -34,22 +34,22 @@
 #include "core_obj.h"
 #if WIND_SEM_SUPPORT
 extern void wind_thread_dispatch(void);
-static psem_s sem_malloc(void)
+static sem_s * sem_malloc(void)
 {
-    psem_s psem;
+    sem_s * psem;
     psem = wind_core_alloc(IDX_SEM);
     return psem;
 }
 
-static w_err_t sem_free(psem_s psem)
+static w_err_t sem_free(sem_s * psem)
 {
     return wind_core_free(IDX_SEM,psem);
 }
 
 
-psem_s wind_sem_create(const char *name,w_uint16_t sem_value)
+sem_s * wind_sem_create(const char *name,w_uint16_t sem_value)
 {
-    psem_s psem;
+    sem_s * psem;
     psem = sem_malloc();
     WIND_ASSERT_RETURN(psem != NULL,NULL);
     psem->name = name;
@@ -64,10 +64,10 @@ psem_s wind_sem_create(const char *name,w_uint16_t sem_value)
     return psem;
 }
 
-w_err_t wind_sem_post(psem_s psem)
+w_err_t wind_sem_post(sem_s * psem)
 {
     pdnode_s pnode;
-    pthread_s pthread;
+    thread_s * pthread;
     WIND_ASSERT_RETURN(psem != NULL,ERR_NULL_POINTER);
     wind_close_interrupt();
     //无阻塞的线程，减少信号量后直接返回
@@ -92,10 +92,10 @@ w_err_t wind_sem_post(psem_s psem)
 }
 
 
-w_err_t wind_sem_fetch(psem_s psem,w_uint32_t timeout)
+w_err_t wind_sem_fetch(sem_s * psem,w_uint32_t timeout)
 {
     w_int32_t ticks;
-    pthread_s pthread;
+    thread_s * pthread;
     WIND_ASSERT_RETURN(psem != NULL,ERR_NULL_POINTER);
     ticks = timeout * WIND_TICK_PER_SEC / 1000;
     if(ticks == 0)
@@ -140,7 +140,7 @@ w_err_t wind_sem_fetch(psem_s psem,w_uint32_t timeout)
 
 
 //试图释放一个信号量，如果有线程被阻塞，则释放将终止
-w_err_t wind_sem_tryfree(psem_s psem)
+w_err_t wind_sem_tryfree(sem_s * psem)
 {
     pdnode_s pdnode;
     WIND_ASSERT_RETURN(psem != NULL,ERR_NULL_POINTER);
@@ -155,11 +155,11 @@ w_err_t wind_sem_tryfree(psem_s psem)
     return wind_sem_free(psem);
 }
 
-w_err_t wind_sem_free(psem_s psem)
+w_err_t wind_sem_free(sem_s * psem)
 {
     w_err_t err;
     pdnode_s pdnode;
-    pthread_s pthread;
+    thread_s * pthread;
     WIND_ASSERT_RETURN(psem != NULL,ERR_NULL_POINTER);
     wind_close_interrupt();
     foreach_node(pdnode,&psem->waitlist)
@@ -178,7 +178,7 @@ w_err_t wind_sem_free(psem_s psem)
 w_err_t wind_sem_print(pdlist_s list)
 {
     pdnode_s dnode;
-    psem_s psem;
+    sem_s * psem;
     WIND_ASSERT_RETURN(list != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(list->head != NULL,ERR_NULL_POINTER);
     wind_printf("\r\n\r\nsem list as following:\r\n");
@@ -188,7 +188,7 @@ w_err_t wind_sem_print(pdlist_s list)
 
     foreach_node(dnode,list)
     {
-        psem = (psem_s)DLIST_OBJ(dnode,sem_s,semnode);
+        psem = (sem_s *)DLIST_OBJ(dnode,sem_s,semnode);
         wind_printf("%-16s %-8d %-10d\r\n",
             psem->name,psem->sem_tot,psem->sem_num);
     }

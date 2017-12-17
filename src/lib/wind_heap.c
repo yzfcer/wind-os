@@ -44,7 +44,7 @@ w_err_t wind_heap_init(const char *name,void *base,w_uint32_t size)
 {
     pheapitem_s item;
     pheap_s mhp;
-    static plock_s lock = NULL;
+    static lock_s * lock = NULL;
     WIND_ASSERT_RETURN(name != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(base != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(size > sizeof(heap_s),ERR_COMMAN);

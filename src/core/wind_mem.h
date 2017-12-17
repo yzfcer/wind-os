@@ -54,7 +54,7 @@ typedef struct __meminfo_s
     //w_uint32_t used;//已经分配的空间的总和
     pmemhead_s plast;//最后的一次分配的指针的位置
     pmemhead_s pfree;
-}meminfo_s,*pmeminfo_s;
+}meminfo_s;
 
 #define MEM_ALIGN_4 1 //定义内存空间以4字节对齐
 

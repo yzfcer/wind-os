@@ -59,12 +59,12 @@ typedef struct __core_var_s
     w_uint32_t cpu_usage;
 
     //线程引用对象
-    pthread_s pmain;
-    pthread_s pidle;
-    pthread_s pstat;
-    pthread_s pctrl;
-    pthread_s pdaemon;
-    pthread_s ptimer;
+    thread_s * pmain;
+    thread_s * pidle;
+    thread_s * pstat;
+    thread_s * pctrl;
+    thread_s * pdaemon;
+    thread_s * ptimer;
 }core_var_s;
 extern core_var_s g_core;//内核相关的参数集
 extern volatile w_bool_t gwind_start_flag;//开始调度的标志

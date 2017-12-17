@@ -38,21 +38,21 @@
 w_err_t wind_pool_create(const char *name,void *mem,w_uint32_t memsize,w_uint32_t itemsize)
 {
     w_uint32_t i,si;
-    ppool_item_s item;
-    ppool_s pm;
+    pool_item_s* item;
+    pool_s * pm;
     WIND_ASSERT_RETURN(mem != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(memsize > 0,ERR_INVALID_PARAM);
     WIND_ASSERT_RETURN(itemsize > 0,ERR_INVALID_PARAM);
-    pm = (ppool_s)WIND_MPOOL_ALIGN_R((w_uint32_t)mem);
-    if(pm != (ppool_s)mem)
+    pm = (pool_s *)WIND_MPOOL_ALIGN_R((w_uint32_t)mem);
+    if(pm != (pool_s *)mem)
         memsize -= (w_uint32_t)((w_uint32_t)pm - (w_uint32_t)mem);
     memsize = WIND_MPOOL_ALIGN_L(memsize);
 
-    si = itemsize < sizeof(ppool_item_s)?sizeof(ppool_item_s):itemsize;
+    si = itemsize < sizeof(pool_item_s*)?sizeof(pool_item_s*):itemsize;
     si = WIND_MPOOL_ALIGN_R(si);
     if(memsize < sizeof(pool_s) + si)
         return -1;
-    item = (ppool_item_s)(sizeof(pool_s) + (w_uint32_t)pm);
+    item = (pool_item_s*)(sizeof(pool_s) + (w_uint32_t)pm);
     pm->head = item;
     pm->name = name;
     DNODE_INIT(pm->poolnode);
@@ -60,13 +60,13 @@ w_err_t wind_pool_create(const char *name,void *mem,w_uint32_t memsize,w_uint32_
     pm->itemsize = si + sizeof(pool_item_s);
     pm->itemnum = pm->size / pm->itemsize;
     pm->used = 0;
-    pm->free_head = (ppool_item_s)pm->head;
-    item = (ppool_item_s)pm->head;
+    pm->free_head = (pool_item_s*)pm->head;
+    item = (pool_item_s*)pm->head;
     for(i = 0;i < pm->itemnum;i ++)
     {
         pm->free_end = item;
         item->flag = POOL_BLK_FREE;
-        item->next = (ppool_item_s)(pm->itemsize + (w_uint32_t)item);
+        item->next = (pool_item_s*)(pm->itemsize + (w_uint32_t)item);
         item = item->next;
     }
     item->next = NULL;
@@ -82,10 +82,10 @@ w_err_t wind_pool_create(const char *name,void *mem,w_uint32_t memsize,w_uint32_
 void *wind_pool_alloc(void *mem)
 {
     void *p;
-    ppool_s pm;
-    ppool_item_s item;
+    pool_s * pm;
+    pool_item_s* item;
     WIND_ASSERT_RETURN(mem != NULL,NULL);
-    pm = (ppool_s)WIND_MPOOL_ALIGN_R((w_uint32_t)mem);
+    pm = (pool_s *)WIND_MPOOL_ALIGN_R((w_uint32_t)mem);
     WIND_ASSERT_RETURN(pm->magic == WIND_MPOOL_MAGIC,NULL);
 
     wind_close_interrupt();
@@ -112,34 +112,34 @@ void *wind_pool_alloc(void *mem)
     
     item->flag = POOL_BLK_USED;
     item->next = NULL;
-    p = (void*)(sizeof(ppool_item_s) + (w_uint32_t)item);
+    p = (void*)(sizeof(pool_item_s*) + (w_uint32_t)item);
     wind_open_interrupt();
     return p;
 }
 
 w_err_t wind_pool_free(void *mem,void *block)
 {
-    ppool_s pm;
-    ppool_item_s item;
+    pool_s * pm;
+    pool_item_s* item;
     
     WIND_ASSERT_RETURN(mem != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(block != NULL,ERR_NULL_POINTER);    
-    pm = (ppool_s)WIND_MPOOL_ALIGN_R((w_uint32_t)mem);
+    pm = (pool_s *)WIND_MPOOL_ALIGN_R((w_uint32_t)mem);
     WIND_ASSERT_RETURN(pm->magic == WIND_MPOOL_MAGIC,ERR_INVALID_PARAM);
-    item = (ppool_item_s)(((w_uint32_t)block) - sizeof(ppool_item_s));
+    item = (pool_item_s*)(((w_uint32_t)block) - sizeof(pool_item_s*));
     WIND_ASSERT_RETURN(item->flag == POOL_BLK_USED,ERR_INVALID_PARAM);
     wind_close_interrupt();
     item->flag = POOL_BLK_FREE;
     item->next = NULL;
     if(pm->free_end == NULL)
     {
-        pm->free_head = (ppool_item_s)item;
-        pm->free_end = (ppool_item_s)item;
+        pm->free_head = (pool_item_s*)item;
+        pm->free_end = (pool_item_s*)item;
     }
     else
     {
-        pm->free_end->next = (ppool_item_s)item;
-        pm->free_end = (ppool_item_s)item;
+        pm->free_end->next = (pool_item_s*)item;
+        pm->free_end = (pool_item_s*)item;
     }
     pm->used --;
     WIND_STATI_MINUS(pm->stati);
@@ -151,7 +151,7 @@ w_err_t wind_pool_free(void *mem,void *block)
 void wind_pool_print_list(pdlist_s list)
 {
     pdnode_s pdnode;
-    ppool_s pm;
+    pool_s * pm;
     wind_printf("\r\n\r\nthread list as following:\r\n");
     wind_printf("-----------------------------------------------------------------\r\n");
     wind_printf("%-12s %-10s %-8s %-8s %-10s %-8s\r\n","name","head","size","itemnum","itemsize","used");

@@ -30,9 +30,9 @@
 #include "wind_var.h"
 #include "core_obj.h"
 #if WIND_TIMER_SUPPORT
-static ptimer_s ttimer_malloc(void)
+static timer_s* ttimer_malloc(void)
 {
-    ptimer_s timer;
+    timer_s* timer;
     timer = wind_core_alloc(IDX_TIMER);
     if(timer == NULL)
     {
@@ -42,7 +42,7 @@ static ptimer_s ttimer_malloc(void)
     timer->running = B_FALSE;
     return timer;
 }
-w_err_t ttimer_free(ptimer_s timer)
+w_err_t ttimer_free(timer_s* timer)
 {
     if(timer == NULL)
         return ERR_NULL_POINTER;
@@ -56,9 +56,9 @@ w_err_t ttimer_free(ptimer_s timer)
 }
 
 
-ptimer_s wind_timer_create(w_uint32_t t_ms,softtimer_fn func,void *arg,w_bool_t run)
+timer_s* wind_timer_create(w_uint32_t t_ms,softtimer_fn func,void *arg,w_bool_t run)
 {
-    ptimer_s timer;
+    timer_s* timer;
     pdnode_s pnode;
     w_int32_t count = t_ms / TIMER_PERIOD;
     if(count <= 0)
@@ -93,7 +93,7 @@ ptimer_s wind_timer_create(w_uint32_t t_ms,softtimer_fn func,void *arg,w_bool_t 
     return timer; 
 }
 
-w_err_t wind_timer_start(ptimer_s ptimer)
+w_err_t wind_timer_start(timer_s* ptimer)
 {
     if(ptimer == NULL)
         return ERR_NULL_POINTER;
@@ -103,7 +103,7 @@ w_err_t wind_timer_start(ptimer_s ptimer)
     return ERR_OK;
 }
 
-w_err_t wind_timer_stop(ptimer_s ptimer)
+w_err_t wind_timer_stop(timer_s* ptimer)
 {
     if(ptimer == NULL)
         return ERR_NULL_POINTER;
@@ -113,7 +113,7 @@ w_err_t wind_timer_stop(ptimer_s ptimer)
     return ERR_OK;
 }
 
-w_err_t wind_timer_free(ptimer_s ptimer)
+w_err_t wind_timer_free(timer_s* ptimer)
 {
     if(ptimer == NULL)
         return ERR_NULL_POINTER;
@@ -126,7 +126,7 @@ w_err_t wind_timer_free(ptimer_s ptimer)
     return ERR_OK;
 }
 
-w_err_t wind_timer_set_period(ptimer_s ptimer,w_uint32_t t_ms)
+w_err_t wind_timer_set_period(timer_s* ptimer,w_uint32_t t_ms)
 {
     w_int32_t count = t_ms / TIMER_PERIOD;
     if(count <= 0)
@@ -141,7 +141,7 @@ w_err_t wind_timer_set_period(ptimer_s ptimer,w_uint32_t t_ms)
 
 void wind_timer_event(void)
 {
-    ptimer_s ptmr;
+    timer_s* ptmr;
     pdnode_s pdnode;
     foreach_node(pdnode,&g_core.ttmerlist)
     {

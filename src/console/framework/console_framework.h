@@ -70,7 +70,7 @@ typedef struct __cmd_s
     void (*showdisc)(void);//简要功能说明
     void (*showusage)(void);//详细的帮助说明
     w_err_t (*execute)(w_int32_t argc,char **argv);//命令的入口函数
-}cmd_s,*pcmd_s;
+}cmd_s;
 
 
 

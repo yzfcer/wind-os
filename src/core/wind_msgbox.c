@@ -106,7 +106,7 @@ w_err_t wind_message_destroy(pmsg_s pmsg)
 
 
 //创建邮箱，只能在线程中创建，不能在中断中和线程运行之前
-pmbox_s wind_mbox_create(const char *name,pthread_s owner)
+pmbox_s wind_mbox_create(const char *name,thread_s * owner)
 {
     pmbox_s pmbox;
     pmbox = mbox_malloc();
@@ -128,7 +128,7 @@ pmbox_s wind_mbox_create(const char *name,pthread_s owner)
 w_err_t wind_mbox_destroy(pmbox_s pmbox)
 {
     w_err_t err;
-    pthread_s pthread;
+    thread_s * pthread;
     WIND_ASSERT_RETURN(pmbox != NULL,ERR_NULL_POINTER);
     pthread = pmbox->owner;
     if((pmbox->owner->runstat == THREAD_STATUS_SLEEP) 
@@ -151,7 +151,7 @@ w_err_t wind_mbox_destroy(pmbox_s pmbox)
 
 w_err_t wind_mbox_post(pmbox_s mbox,pmsg_s pmsg)
 {
-    pthread_s pthread;
+    thread_s * pthread;
     WIND_ASSERT_RETURN(mbox != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(pmsg != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(mbox->valid,ERR_COMMAN);
@@ -181,7 +181,7 @@ w_err_t wind_mbox_fetch(pmbox_s mbox,pmsg_s *pmsg,w_uint32_t timeout)
     w_err_t err;
     w_uint32_t ticks;
     pdnode_s dnode;
-    pthread_s pthread;
+    thread_s * pthread;
     WIND_ASSERT_RETURN(mbox != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(pmsg != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(mbox->valid,ERR_COMMAN);

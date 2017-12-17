@@ -38,14 +38,14 @@ extern "C" {
 #define POOL_BLK_FREE 0x52d6e300
 #define POOL_BLK_USED (POOL_BLK_FREE | 0xA5)
 
-typedef struct __pool_item_s pool_item_s,*ppool_item_s;
-typedef struct __mpool_s pool_s,*ppool_s;
+typedef struct __pool_item_s pool_item_s;
+typedef struct __mpool_s pool_s;
 
 //一个基本的内存池链结构体
 struct __pool_item_s
 {
     w_uint32_t flag;
-    ppool_item_s next;
+    pool_item_s* next;
 };
 
 //内存池的头部信息结构体
@@ -60,8 +60,8 @@ struct __mpool_s
     w_uint32_t itemsize;//每个块的大小
     w_uint32_t itemnum;//分成的内存块的数量
     w_uint32_t used;//已经使用的内存块的数量
-    ppool_item_s free_head;//空闲块的指针
-    ppool_item_s free_end;//最后一个空闲块的指针
+    pool_item_s* free_head;//空闲块的指针
+    pool_item_s* free_end;//最后一个空闲块的指针
 };
 
 //定义内存池的方法
