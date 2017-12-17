@@ -63,23 +63,11 @@ timer_s* wind_timer_create(w_uint32_t t_ms,softtimer_fn func,void *arg,w_bool_t 
     w_int32_t count = t_ms / TIMER_PERIOD;
     if(count <= 0)
         count = 1;
-    wind_notice("creating tick timer:%d ms",t_ms);
-    if(func == NULL)
-    {
-        wind_error("wind_timer_create err 1");
-        return NULL;
-    }
-    wind_close_interrupt();
+    wind_notice("creating soft timer:%d ms",t_ms);
+    WIND_ASSERT_RETURN(func != NULL,NULL);
     timer = ttimer_malloc();
-    if(!timer)
-    {
-        wind_open_interrupt();
-        wind_error("wind_timer_create err 2");
-        return NULL;
-    }
-
-    wind_open_interrupt();
-    wind_notice("wind_timer_create OK");
+    WIND_ASSERT_RETURN(timer != NULL,NULL);
+    wind_notice("creat soft timer OK");
     DNODE_INIT(timer->tmrnode);
 
     timer->count = count;
@@ -87,38 +75,30 @@ timer_s* wind_timer_create(w_uint32_t t_ms,softtimer_fn func,void *arg,w_bool_t 
     timer->running = run;
     timer->arg = arg;
     timer->handle = func;
-    //wind_node_bindobj(pnode,CORE_TYPE_TTIMER,t_ms,timer);
-    //wind_list_insert(&g_core.ttmerlist,pnode);
     dlist_insert_tail(&g_core.ttmerlist,pnode);
     return timer; 
 }
 
 w_err_t wind_timer_start(timer_s* ptimer)
 {
-    if(ptimer == NULL)
-        return ERR_NULL_POINTER;
-    if(!ptimer->used)
-        return ERR_COMMAN;
+    WIND_ASSERT_RETURN(ptimer != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(ptimer->used != B_FALSE,ERR_COMMAN);
     ptimer->running = B_TRUE;
     return ERR_OK;
 }
 
 w_err_t wind_timer_stop(timer_s* ptimer)
 {
-    if(ptimer == NULL)
-        return ERR_NULL_POINTER;
-    if(!ptimer->used)
-        return ERR_COMMAN;
+    WIND_ASSERT_RETURN(ptimer != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(ptimer->used != B_FALSE,ERR_COMMAN);
     ptimer->running = B_FALSE;
     return ERR_OK;
 }
 
 w_err_t wind_timer_free(timer_s* ptimer)
 {
-    if(ptimer == NULL)
-        return ERR_NULL_POINTER;
-    if(!ptimer->used)
-        return ERR_COMMAN;
+    WIND_ASSERT_RETURN(ptimer != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(ptimer->used != B_FALSE,ERR_COMMAN);
     wind_close_interrupt();
     dlist_remove(&g_core.ttmerlist,&ptimer->tmrnode);
     ttimer_free(ptimer);
@@ -131,10 +111,8 @@ w_err_t wind_timer_set_period(timer_s* ptimer,w_uint32_t t_ms)
     w_int32_t count = t_ms / TIMER_PERIOD;
     if(count <= 0)
         count = 1;
-    if(ptimer == NULL)
-        return ERR_NULL_POINTER;
-    if(!ptimer->used)
-        return ERR_COMMAN;
+    WIND_ASSERT_RETURN(ptimer != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(ptimer->used != B_FALSE,ERR_COMMAN);
     ptimer->count = count;
     return ERR_OK;
 }
@@ -155,6 +133,7 @@ void wind_timer_event(void)
         }
     }
 }
+
 #endif //#if WIND_TIMER_SUPPORT
 
 

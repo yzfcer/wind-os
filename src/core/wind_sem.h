@@ -43,13 +43,12 @@ typedef struct _wind_sem
     dnode_s semnode;
     dlist_s waitlist;  //等待线程队列
     w_bool_t used;         //是否有效的标志
-    w_uint16_t sem_tot;    //初始化的信号量的值
-    w_uint16_t sem_num;    //当前的信号量的值
+    w_int16_t sem_tot;    //初始化的信号量的值
+    w_int16_t sem_num;    //当前的信号量的值
 }sem_s;
 
 
-
-sem_s *wind_sem_create(const char *name,w_uint16_t semValue);
+sem_s *wind_sem_create(const char *name,w_int16_t semValue);
 w_err_t wind_sem_post(sem_s *psem);
 w_err_t wind_sem_fetch(sem_s *psem,w_uint32_t timeout);
 w_err_t wind_sem_tryfree(sem_s *psem);

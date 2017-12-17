@@ -356,7 +356,6 @@ w_err_t wind_thread_exit(w_err_t exitcode)
 w_err_t wind_thread_sleep(w_uint32_t ms)
 {
     w_uint16_t stcnt;
-    //dnode_s *pnode;
     thread_s *pthread = NULL;
     stcnt = ms *WIND_TICK_PER_SEC / 1000;
     if(0 == stcnt)

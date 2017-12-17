@@ -47,11 +47,12 @@ static w_err_t sem_free(sem_s *psem)
 }
 
 
-sem_s *wind_sem_create(const char *name,w_uint16_t sem_value)
+sem_s *wind_sem_create(const char *name,w_int16_t sem_value)
 {
     sem_s *psem;
     psem = sem_malloc();
     WIND_ASSERT_RETURN(psem != NULL,NULL);
+    WIND_ASSERT_RETURN(sem_value >= 0,NULL);
     psem->name = name;
     DNODE_INIT(psem->semnode);
     psem->used = B_TRUE;
