@@ -34,6 +34,7 @@
 #include "wind_var.h"
 #include "wind_time.h"
 #include "core_obj.h"
+#include "wind_std.h"
 
 volatile w_int8_t gwind_int_cnt = 0;//全局的中断计数值
 volatile w_int8_t gwind_core_cnt = 0;//全局的禁止切换计数值
@@ -185,7 +186,7 @@ void wind_init()
 {
     g_core.usrthren = B_FALSE;
     wind_target_init();//目标机运行环境初始化
-    wind_std_port_init();//调试端口初始化
+    wind_std_init();//调试端口初始化
     
     wind_print_os_info();
     wind_corevar_init();

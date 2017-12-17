@@ -24,6 +24,7 @@
 #include "wind_debug.h"
 #include "wind_var.h"
 #include "wind_cmd.h"
+#include "wind_std.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus

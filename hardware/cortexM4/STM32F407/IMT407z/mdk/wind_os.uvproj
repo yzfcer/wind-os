@@ -847,6 +847,16 @@
               <FileType>2</FileType>
               <FilePath>..\port\wind_os_switch.s</FilePath>
             </File>
+            <File>
+              <FileName>wind_std.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\port\wind_std.c</FilePath>
+            </File>
+            <File>
+              <FileName>wind_std.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\port\wind_std.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
