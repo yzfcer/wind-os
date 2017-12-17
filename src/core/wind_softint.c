@@ -115,7 +115,7 @@ void wind_softint_trig(w_handle_t handler)
 //创建软件中断线程
 w_err_t wind_create_softint_thread(void)
 {
-    wind_notice("create soft interrupt thread.\r\n");
+    wind_notice("create soft interrupt thread.");
     softint_thread = wind_thread_create("softint",PRIO_HIGH,wind_softint_thread,
                 0,NULL,softint_stk,WIND_SOFTINT_STK_LEN);
                 wind_thread_changeprio(softint_thread,0);

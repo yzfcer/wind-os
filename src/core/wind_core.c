@@ -71,7 +71,7 @@ void wind_enter_int(void)
 {
     if(RUN_FLAG == B_FALSE)
     {
-        wind_error("enter not rd\r\n");
+        wind_error("enter not rd.");
         return;
     }
     if(gwind_int_cnt < 255)
@@ -113,7 +113,7 @@ void wind_exit_int(void)
     thread_s *pthr;
     if(RUN_FLAG == B_FALSE)
     {
-        wind_error("exit not rd %d\r\n",RUN_FLAG);
+        wind_error("exit not rd %d",RUN_FLAG);
         return;
     }
     
@@ -197,7 +197,7 @@ void wind_init()
 #if WIND_RTC_SUPPORT
     wind_datetime_init();
 #endif
-    wind_notice("initialization completed!\r\n");
+    wind_notice("initialization completed!");
 }
 
 
@@ -210,7 +210,7 @@ int wind_os_lunch(void)
     wind_init();
     create_init_thread();
     wind_thread_open();
-    wind_notice("wind is ready for running!\r\n");
+    wind_notice("wind is ready for running!");
     wind_thread_open();
     wind_run();
     return ERR_OK;

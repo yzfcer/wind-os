@@ -41,7 +41,7 @@ static w_err_t init_thread(w_int32_t argc,w_int8_t **argv)
 #if WIND_HEAP_SUPPORT
     wind_heaps_init();
 #endif
-    wind_notice("create sys thread:\r\n");
+    wind_notice("create sys thread:");
     create_idle_thread();
     set_idle_cnt();
 #if WIND_SOFTINT_SUPPORT

@@ -60,7 +60,7 @@ static thread_s *thread_malloc(void)
     pthread = wind_core_alloc(IDX_THREAD);
     WIND_ASSERT_RETURN(pthread != NULL,NULL);
     pthread->used = B_TRUE;
-    wind_debug("alloc pthread\r\n");
+    wind_debug("alloc pthread.");
     return pthread;
 }
 
@@ -99,7 +99,7 @@ static void thread_entry(void *args)
     w_err_t err;
     thread_s *pthread;
     pthread = wind_thread_current();
-    wind_notice("begin to run thread:%s\r\n",pthread->name);
+    wind_notice("begin to run thread:%s.",pthread->name);
     if(pthread != NULL)
     {
         err = pthread->thread_func(pthread->argc,pthread->argv);
@@ -158,6 +158,7 @@ thread_s *wind_thread_get_byname(w_int8_t *name)
         }
     }
     wind_open_interrupt();
+    wind_warn("can not find thread:%s",name);
     return NULL;
 }
 
@@ -183,7 +184,7 @@ thread_s *wind_thread_create(const w_int8_t *name,
     thread_s *pthread;
     w_pstack_t tmpstk;
 
-    wind_notice("creating thread:%s\r\n",name);
+    wind_notice("creating thread:%s",name);
     WIND_ASSERT_RETURN(name != NULL,NULL);
     WIND_ASSERT_RETURN(thread_func != NULL,NULL);
     WIND_ASSERT_RETURN(pstk != NULL,NULL);
@@ -215,11 +216,12 @@ thread_s *wind_thread_create(const w_int8_t *name,
 #endif
     
     dlist_insert_prio(&g_core.threadlist,&pthread->validthr,pthread->prio);
-    wind_debug("pthread->name:%s\r\n",pthread->name);
-    wind_debug("pthread->stack:0x%x\r\n",pthread->stack);
-    wind_debug("pthread->runstat:%d\r\n",pthread->runstat);
-    wind_debug("pthread->prio:%d\r\n",pthread->prio);
-    wind_debug("pthread->stksize:%d\r\n\r\n",pthread->stksize);
+    wind_debug("create thread info");
+    wind_debug("pthread->name:%s",pthread->name);
+    wind_debug("pthread->stack:0x%x",pthread->stack);
+    wind_debug("pthread->runstat:%d",pthread->runstat);
+    wind_debug("pthread->prio:%d",pthread->prio);
+    wind_debug("pthread->stksize:%d\r\n",pthread->stksize);
     return pthread;
 }
 
@@ -294,7 +296,6 @@ w_err_t wind_thread_suspend(thread_s *pthread)
 w_err_t wind_thread_resume(thread_s *pthread)
 {
     WIND_ASSERT_RETURN(pthread != NULL,ERR_NULL_POINTER);
-    
     wind_close_interrupt();
 #if WIND_THREAD_CALLBACK_SUPPORT
     if(pthread->cb.resume != NULL)
@@ -344,7 +345,7 @@ w_err_t wind_thread_exit(w_err_t exitcode)
 {
     thread_s *pthread;
     pthread = wind_thread_current();
-    wind_notice("thread %s exit with code %d\r\n",pthread->name,exitcode);
+    wind_notice("thread %s exit with code %d",pthread->name,exitcode);
     wind_thread_kill(pthread);
     wind_thread_dispatch();
     return ERR_OK;
@@ -375,7 +376,7 @@ w_err_t wind_thread_sleep(w_uint32_t ms)
         if(pthread->prio < 0)
         {
             wind_thread_print(&g_core.sleeplist);
-            wind_error("sleep err\r\n");
+            wind_error("sleep err");
             break;
         }
     }

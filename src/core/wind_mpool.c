@@ -93,7 +93,7 @@ void *wind_pool_alloc(void *mem)
     {
         WIND_STATI_ERR_INC(pm->stati);
         wind_open_interrupt();
-        wind_error("mpool empty\r\n");
+        wind_error("mpool empty");
         return NULL;
     }
     item = pm->free_head;
@@ -101,7 +101,7 @@ void *wind_pool_alloc(void *mem)
     {
         WIND_STATI_ERR_INC(pm->stati);
         wind_open_interrupt();
-        wind_error("mpool ERROR\r\n");
+        wind_error("mpool ERROR");
         return NULL;
     }
     pm->free_head = item->next;

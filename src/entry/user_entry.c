@@ -40,6 +40,6 @@ w_err_t wind_main(void)
 #endif
     lock_s *lock1 = wind_lock_create("lock1");
     lock_s *lock2 = wind_lock_create("lock2");
-    wind_notice("enter wind main.\r\n");
+    wind_notice("enter wind main.");
     return 0;
 }

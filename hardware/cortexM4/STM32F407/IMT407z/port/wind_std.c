@@ -57,7 +57,6 @@ void wind_stdin_irq(char data)
     uartbuf.wridx ++;
     if(uartbuf.wridx >= uartbuf.size)
         uartbuf.wridx = 0;
-
 }
 
 void wind_std_init(void)

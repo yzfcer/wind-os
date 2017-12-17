@@ -49,7 +49,7 @@ w_err_t wind_heap_init(const char *name,void *base,w_uint32_t size)
     WIND_ASSERT_RETURN(base != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(size > sizeof(heap_s),ERR_COMMAN);
     
-    wind_notice("create heap:%s,0x%X,%d\r\n",name,base,size);
+    wind_notice("create heap:%s,0x%X,%d",name,base,size);
     mhp = (pheap_s)base;
     mhp->magic = WIND_HEAP_MAGIC;
     mhp->name = name;
@@ -80,7 +80,7 @@ w_err_t wind_heap_init(const char *name,void *base,w_uint32_t size)
 void wind_heaps_init(void)
 {
     pheap_s pheap;
-    wind_notice("memory heap initializing...\r\n");
+    wind_notice("memory heap initializing...");
     wind_heap_init("heap0",
                 (void *)HEAP1_HEAD,
                 HEAD1_LENTH);
@@ -334,7 +334,7 @@ w_err_t wind_heap_test(void)
     }
     else
     {
-        wind_error("p1:malloc err\r\n");
+        wind_error("p1:malloc err");
     }
     p2 = wind_hmalloc(1024);
     if(p2)
@@ -343,7 +343,7 @@ w_err_t wind_heap_test(void)
     }
     else
     {
-        wind_error("p2:malloc err\r\n");
+        wind_error("p2:malloc err");
     }
     p3 = wind_hmalloc(0x1000000);
     if(p3)
@@ -352,7 +352,7 @@ w_err_t wind_heap_test(void)
     }
     else
     {
-        wind_error("p3:malloc err\r\n");
+        wind_error("p3:malloc err");
     }
     wind_printf("memory free:p1\r\n");
     wind_hfree(p1);
