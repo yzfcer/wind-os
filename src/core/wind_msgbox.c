@@ -35,23 +35,23 @@
 #if WIND_MESSAGE_SUPPORT
 extern void wind_thread_dispatch(void);
 
-static pmsg_s msg_malloc(void)
+static msg_s *msg_malloc(void)
 {
-    return (pmsg_s)wind_core_alloc(IDX_MSG);
+    return (msg_s *)wind_core_alloc(IDX_MSG);
 }
 
-static w_err_t msg_free(pmsg_s msg)
+static w_err_t msg_free(msg_s *msg)
 {
     return wind_core_free(IDX_MSG,(void *)msg);
 }
 
 
-static pmbox_s mbox_malloc(void)
+static mbox_s *mbox_malloc(void)
 {
-    return (pmbox_s)wind_core_alloc(IDX_MBOX);
+    return (mbox_s *)wind_core_alloc(IDX_MBOX);
 }
 
-static w_err_t mbox_free(pmbox_s mbox)
+static w_err_t mbox_free(mbox_s *mbox)
 {
     return wind_core_free(IDX_MBOX,(void *)mbox);
 }
@@ -60,10 +60,10 @@ static w_err_t mbox_free(pmbox_s mbox)
 //********************************************internal functions******************************
 
 //删除邮箱里面的所有消息
-static w_err_t mbox_delete_msgs(pmbox_s mbox)
+static w_err_t mbox_delete_msgs(mbox_s *mbox)
 {
     pdnode_s pnode;
-    pmsg_s msg;
+    msg_s *msg;
     WIND_ASSERT_RETURN(mbox != NULL,ERR_NULL_POINTER);
     foreach_node(pnode,&mbox->msglist)
     {
@@ -79,10 +79,10 @@ static w_err_t mbox_delete_msgs(pmbox_s mbox)
 //**********************************************extern functions******************************
 
 //创建一个消息，并返回消息
-pmsg_s wind_message_create(const char *name,w_uint16_t msg_id,
+msg_s *wind_message_create(const char *name,w_uint16_t msg_id,
                             w_uint16_t msg_len,void *msg_arg)
 {
-    pmsg_s pmsg;
+    msg_s *pmsg;
     pmsg = msg_malloc();
     WIND_ASSERT_RETURN(pmsg != NULL,NULL);
     pmsg->name = name;
@@ -94,7 +94,7 @@ pmsg_s wind_message_create(const char *name,w_uint16_t msg_id,
     return pmsg;
 }
 
-w_err_t wind_message_destroy(pmsg_s pmsg)
+w_err_t wind_message_destroy(msg_s *pmsg)
 {
     w_err_t err;
     WIND_ASSERT_RETURN(pmsg != NULL,ERR_NULL_POINTER);
@@ -106,9 +106,9 @@ w_err_t wind_message_destroy(pmsg_s pmsg)
 
 
 //创建邮箱，只能在线程中创建，不能在中断中和线程运行之前
-pmbox_s wind_mbox_create(const char *name,thread_s * owner)
+mbox_s *wind_mbox_create(const char *name,thread_s *owner)
 {
-    pmbox_s pmbox;
+    mbox_s *pmbox;
     pmbox = mbox_malloc();
     WIND_ASSERT_RETURN(pmbox != NULL,NULL);
 
@@ -125,10 +125,10 @@ pmbox_s wind_mbox_create(const char *name,thread_s * owner)
     return pmbox;
 }
 
-w_err_t wind_mbox_destroy(pmbox_s pmbox)
+w_err_t wind_mbox_destroy(mbox_s *pmbox)
 {
     w_err_t err;
-    thread_s * pthread;
+    thread_s *pthread;
     WIND_ASSERT_RETURN(pmbox != NULL,ERR_NULL_POINTER);
     pthread = pmbox->owner;
     if((pmbox->owner->runstat == THREAD_STATUS_SLEEP) 
@@ -149,9 +149,9 @@ w_err_t wind_mbox_destroy(pmbox_s pmbox)
     return ERR_OK;
 }
 
-w_err_t wind_mbox_post(pmbox_s mbox,pmsg_s pmsg)
+w_err_t wind_mbox_post(mbox_s *mbox,msg_s *pmsg)
 {
-    thread_s * pthread;
+    thread_s *pthread;
     WIND_ASSERT_RETURN(mbox != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(pmsg != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(mbox->valid,ERR_COMMAN);
@@ -176,12 +176,12 @@ w_err_t wind_mbox_post(pmbox_s mbox,pmsg_s pmsg)
 }
 
 
-w_err_t wind_mbox_fetch(pmbox_s mbox,pmsg_s *pmsg,w_uint32_t timeout)
+w_err_t wind_mbox_fetch(mbox_s *mbox,msg_s **pmsg,w_uint32_t timeout)
 {
     w_err_t err;
     w_uint32_t ticks;
     pdnode_s dnode;
-    thread_s * pthread;
+    thread_s *pthread;
     WIND_ASSERT_RETURN(mbox != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(pmsg != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(mbox->valid,ERR_COMMAN);
@@ -198,7 +198,7 @@ w_err_t wind_mbox_fetch(pmbox_s mbox,pmsg_s *pmsg,w_uint32_t timeout)
     }
 
     //否则将线程加入睡眠队列
-    ticks = timeout * WIND_TICK_PER_SEC / 1000;
+    ticks = timeout *WIND_TICK_PER_SEC / 1000;
     if(ticks == 0)
         ticks = 1;
     pthread = mbox->owner;

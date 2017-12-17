@@ -33,7 +33,7 @@
 #include "wind_dlist.h"
 #include "wind_core.h"
 #include "core_obj.h"
-static __INLINE__ lock_s * lock_malloc(void)
+static __INLINE__ lock_s *lock_malloc(void)
 {
     return wind_core_alloc(IDX_LOCK);
 }
@@ -44,9 +44,9 @@ static __INLINE__ w_err_t lock_free(void *lock)
 }
 
 //创建一个lock对象，并加入所有lock列表
-lock_s * wind_lock_create(const char *name)
+lock_s *wind_lock_create(const char *name)
 {
-    lock_s * plock;
+    lock_s *plock;
     plock = lock_malloc();
     WIND_ASSERT_TODO(plock != NULL,wind_open_interrupt(),NULL);
     DNODE_INIT(plock->locknode);
@@ -61,7 +61,7 @@ lock_s * wind_lock_create(const char *name)
 }
 
 //试图释放一个互斥锁，如果有线程被阻塞，则释放将终止
-w_err_t wind_lock_tryfree(lock_s * plock)
+w_err_t wind_lock_tryfree(lock_s *plock)
 {
     WIND_ASSERT_RETURN(plock != NULL,ERR_NULL_POINTER);
     wind_close_interrupt();
@@ -72,10 +72,10 @@ w_err_t wind_lock_tryfree(lock_s * plock)
 }
 
 //强制性释放互斥锁，并把所有的被该互斥锁阻塞的线程全部激活
-w_err_t wind_lock_free(lock_s * plock)
+w_err_t wind_lock_free(lock_s *plock)
 {
     pdnode_s pnode;
-    thread_s * pthread;
+    thread_s *pthread;
     WIND_ASSERT_RETURN(plock != NULL,ERR_NULL_POINTER);
     wind_close_interrupt();
     foreach_node(pnode,&plock->waitlist)
@@ -94,9 +94,9 @@ w_err_t wind_lock_free(lock_s * plock)
 }
 
 //试图锁定一个互斥锁，如果已经被锁定，则线程将被挂起
-w_err_t wind_lock_close(lock_s * plock)
+w_err_t wind_lock_close(lock_s *plock)
 {
-    thread_s * pthread;
+    thread_s *pthread;
     WIND_ASSERT_RETURN(plock != NULL,ERR_NULL_POINTER);
     wind_close_interrupt();
 
@@ -118,10 +118,10 @@ w_err_t wind_lock_close(lock_s * plock)
 }
 
 //试图打开一个互斥锁，如果有线程被阻塞，则优先激活线程
-w_err_t wind_lock_open(lock_s * plock)
+w_err_t wind_lock_open(lock_s *plock)
 {
     pdnode_s pnode;
-    thread_s * pthread;
+    thread_s *pthread;
     WIND_ASSERT_RETURN(plock != NULL,ERR_NULL_POINTER);
     wind_close_interrupt();
     WIND_ASSERT_TODO(plock->locked,wind_open_interrupt(),ERR_OK);
@@ -146,7 +146,7 @@ w_err_t wind_lock_open(lock_s * plock)
 w_err_t wind_lock_print(pdlist_s list)
 {
     pdnode_s dnode;
-    lock_s * plock;
+    lock_s *plock;
     WIND_ASSERT_RETURN(list != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(list->head != NULL,ERR_NULL_POINTER);
     wind_printf("\r\n\r\nlock list as following:\r\n");

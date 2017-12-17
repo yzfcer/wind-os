@@ -38,13 +38,13 @@
 //软中断线程的堆栈
 static w_stack_t softint_stk[WIND_SOFTINT_STK_LEN];
 static w_uint16_t softint_index = 0;
-static thread_s * softint_thread = NULL;
+static thread_s *softint_thread = NULL;
 //static w_handle_t softint_handle = -1;
 softint_func wind_soft_vectors[WIND_SOFTINT_MAX_NUM];
 //初始化软中断的一些相关参数
 void wind_softint_init(void)
 {
-    wind_memset(softint_stk,0,WIND_SOFTINT_STK_LEN * sizeof(w_stack_t));
+    wind_memset(softint_stk,0,WIND_SOFTINT_STK_LEN *sizeof(w_stack_t));
 }
 
 static w_err_t wind_softint_thread(w_int32_t argc,w_int8_t **argv)

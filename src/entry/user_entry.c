@@ -34,12 +34,12 @@
 w_err_t wind_main(void)
 {
 #if WIND_SEM_SUPPORT
-    sem_s * psem = wind_sem_create("sem1",12);
-    sem_s * psem1 = wind_sem_create("sem2",4);
-    sem_s * psem2 = wind_sem_create("sem3",6);
+    sem_s *psem = wind_sem_create("sem1",12);
+    sem_s *psem1 = wind_sem_create("sem2",4);
+    sem_s *psem2 = wind_sem_create("sem3",6);
 #endif
-    lock_s * lock1 = wind_lock_create("lock1");
-    lock_s * lock2 = wind_lock_create("lock2");
+    lock_s *lock1 = wind_lock_create("lock1");
+    lock_s *lock2 = wind_lock_create("lock2");
     wind_notice("enter wind main.\r\n");
     return 0;
 }

@@ -29,7 +29,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-w_uint16_t wind_crc16(unsigned char * data, int len);
+w_uint16_t wind_crc16(unsigned char *data, int len);
 
 
 #ifdef __cplusplus

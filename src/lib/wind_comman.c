@@ -39,7 +39,7 @@ w_int32_t wind_convert_str2s32_t(w_int8_t *str)
     {
         if(str[i] <= '9' && str[i] >= '0')
         {
-            num = num * 10 + str[i] - '0';
+            num = num *10 + str[i] - '0';
             i ++;
         }
         else
@@ -59,7 +59,7 @@ w_uint32_t wind_convert_str2u32_t(w_int8_t *str)
     {
         if(str[i] <= '9' && str[i] >= '0')
         {
-            num = num * 10 + str[i] - '0';
+            num = num *10 + str[i] - '0';
             i ++;
         }
         else

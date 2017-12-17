@@ -55,7 +55,7 @@ void wind_corepool_init(void)
     wind_pool_create("lock",g_pool.lock,sizeof(g_pool.lock),sizeof(lock_s));
     
 #if WIND_STKPOOL_SUPPORT
-    wind_pool_create("stkbuf",g_pool.stkbuf,sizeof(g_pool.stkbuf),WIND_STK_SIZE * sizeof(w_stack_t));
+    wind_pool_create("stkbuf",g_pool.stkbuf,sizeof(g_pool.stkbuf),WIND_STK_SIZE *sizeof(w_stack_t));
 #endif
 }
 

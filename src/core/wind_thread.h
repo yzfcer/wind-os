@@ -127,31 +127,31 @@ typedef struct _thread_s
 
 
 
-thread_s * wind_thread_create(const w_int8_t *name,
+thread_s *wind_thread_create(const w_int8_t *name,
                    prio_e priolevel,
                    w_err_t (*thread_func)(w_int32_t argc,w_int8_t **argv),
                    w_int16_t argc,
                    w_int8_t **argv,
                    w_pstack_t psck,
                    w_uint16_t stksize);
-thread_s * wind_thread_create_default(const w_int8_t *name,
+thread_s *wind_thread_create_default(const w_int8_t *name,
                    w_err_t (*thread_func)(w_int32_t argc,w_int8_t **argv),
                    w_int16_t argc,
                    w_int8_t **argv);
 
-w_err_t wind_thread_changeprio(thread_s * pthread,w_int16_t prio);
-w_err_t wind_thread_start(thread_s * pthread);
-w_err_t wind_thread_suspend(thread_s * pthread);
-w_err_t wind_thread_resume(thread_s * pthread);
-w_err_t wind_thread_kill(thread_s * pthread);
+w_err_t wind_thread_changeprio(thread_s *pthread,w_int16_t prio);
+w_err_t wind_thread_start(thread_s *pthread);
+w_err_t wind_thread_suspend(thread_s *pthread);
+w_err_t wind_thread_resume(thread_s *pthread);
+w_err_t wind_thread_kill(thread_s *pthread);
 w_err_t wind_thread_killbyname(w_int8_t *name);
 
 
 w_bool_t  wind_thread_isopen(void);
-w_err_t   wind_thread_getname(thread_s * pthread,w_int8_t *name);
-thread_s * wind_thread_get_byname(w_int8_t *name);
+w_err_t   wind_thread_getname(thread_s *pthread,w_int8_t *name);
+thread_s *wind_thread_get_byname(w_int8_t *name);
 w_int8_t* wind_thread_curname(void);
-thread_s * wind_thread_current(void);
+thread_s *wind_thread_current(void);
 w_int8_t* wind_thread_status(thread_stat_e stat);
 
 w_err_t wind_thread_sleep(w_uint32_t ms);
@@ -160,7 +160,7 @@ w_err_t wind_thread_exit(w_err_t exitcode);
 
 w_err_t wind_thread_print(pdlist_s list);
 #if WIND_THREAD_CALLBACK_SUPPORT
-w_err_t wind_thread_callback_register(thread_s * pthread,thr_evt_e id,void(*cb)(thread_s *));
+w_err_t wind_thread_callback_register(thread_s *pthread,thr_evt_e id,void(*cb)(thread_s *));
 #endif
 
 #ifdef __cplusplus

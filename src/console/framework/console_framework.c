@@ -377,7 +377,7 @@ static w_int32_t get_string(char *str,w_int32_t idx,char ** arg)
     return i + 1;
 }
 
-static w_err_t spit_cmd(console_s * ctrl)
+static w_err_t spit_cmd(console_s *ctrl)
 {
     w_err_t idx = 0,i;
     cmd_param_s *prm = &ctrl->param;
@@ -410,7 +410,7 @@ static cmd_s *get_matched_cmd(console_s *ctrl)
     return NULL;
 }
 
-static w_err_t execute_cmd(console_s * ctrl)
+static w_err_t execute_cmd(console_s *ctrl)
 {
     w_err_t err;
     cmd_s *cmd;

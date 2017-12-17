@@ -70,7 +70,7 @@ w_err_t wind_queue_create(void *mem,
     q->capacity = (size - (w_uint32_t)(((queue_s *)0)->buf)) / q->itemsize;
     
     // 计算数据缓冲的结束地址
-    q->end = q->buf + q->capacity * q->itemsize;               
+    q->end = q->buf + q->capacity *q->itemsize;               
     q->magic = WIND_QUEUE_MAGIC;
     return ERR_OK;
 }
@@ -93,7 +93,7 @@ w_int32_t wind_queue_read(void *queue,void *buf,w_uint32_t len)
     buff = buf;
     
     wind_queue_lock(q);
-    lenth = q->count * q->itemsize;
+    lenth = q->count *q->itemsize;
     lenth = lenth > len?len:lenth;
     for(i = 0;i < lenth;i ++)
     {
@@ -126,7 +126,7 @@ w_int32_t wind_queue_write(void *queue,void *buf,w_uint32_t len)
     buff = buf;
 
     wind_queue_lock(q);
-    lenth = (q->capacity - q->count) * q->itemsize;
+    lenth = (q->capacity - q->count) *q->itemsize;
     lenth = lenth > len?len:lenth;
                                                              
     for(i = 0;i < q->itemsize;i ++)

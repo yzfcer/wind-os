@@ -41,7 +41,7 @@ static w_bool_t str2int(const char *str,w_uint32_t *value)
     {
         if ((*str < '0') || (*str > '9'))  //如果当前字符不是数字
             return B_FALSE;
-        temp = temp * 10 + (*str - '0'); //如果当前字符是数字则计算数值
+        temp = temp *10 + (*str - '0'); //如果当前字符是数字则计算数值
         str++;      //移到下一个字符
     }
     *value = temp;
@@ -55,11 +55,11 @@ static w_bool_t strh2int(const char *str,w_uint32_t *value)
     while(*str != 0)
     {
         if ((*str >= '0') && (*str <= '9'))  
-            temp = temp * 16 + (*str - '0');
+            temp = temp *16 + (*str - '0');
         else if ((*str >= 'a') && (*str <= 'f'))  
-            temp = temp * 16 + (*str - 'a' + 10);
+            temp = temp *16 + (*str - 'a' + 10);
         else if ((*str >= 'A') && (*str <= 'F'))  
-            temp = temp * 16 + (*str - 'A' + 10);
+            temp = temp *16 + (*str - 'A' + 10);
         else
             return B_FALSE;
         str++;     
@@ -117,7 +117,7 @@ static w_err_t display_mem(char **argv)
 static w_err_t display_stack(char **argv)
 {
     w_uint32_t start,end,cur,len,used;
-    thread_s * thr;
+    thread_s *thr;
     if(wind_strcmp(argv[1],"stack") != 0)
     {
         return ERR_COMMAN;

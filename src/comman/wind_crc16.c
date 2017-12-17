@@ -62,7 +62,7 @@ w_uint16_t code crc_tab_ccitt[256]={/* CRC 字节余式表 */
   
 
 
-w_uint16_t wind_crc16(unsigned char * data, int len)
+w_uint16_t wind_crc16(unsigned char *data, int len)
 {
     w_uint16_t crc = 0x0000;    // 初始化
     while(len--)

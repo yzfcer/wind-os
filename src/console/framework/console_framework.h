@@ -88,7 +88,7 @@ typedef struct __cmd_list
 typedef struct __cmd_param_s
 {
     w_uint32_t argc;
-    char * argv[CMD_PARAM_CNT];
+    char *argv[CMD_PARAM_CNT];
 }cmd_param_s;
 
 

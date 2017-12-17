@@ -43,11 +43,11 @@ typedef struct _wind_lock
 }lock_s;
 
 //w_err_t wind_lock_init(void);
-lock_s * wind_lock_create(const char *name);
-w_err_t wind_lock_tryfree(lock_s * plock);
-w_err_t wind_lock_free(lock_s * plock);
-w_err_t wind_lock_close(lock_s * plock);
-w_err_t wind_lock_open(lock_s * plock);
+lock_s *wind_lock_create(const char *name);
+w_err_t wind_lock_tryfree(lock_s *plock);
+w_err_t wind_lock_free(lock_s *plock);
+w_err_t wind_lock_close(lock_s *plock);
+w_err_t wind_lock_open(lock_s *plock);
 w_err_t wind_lock_print(pdlist_s list);
 
 

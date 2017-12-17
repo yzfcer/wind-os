@@ -116,13 +116,13 @@ void **wind_calloc(w_uint32_t block,w_uint32_t size)
 #else
     si = size;
 #endif
-    p = (void **)wind_malloc(block * sizeof(void *) + block * si);
+    p = (void **)wind_malloc(block *sizeof(void *) + block *si);
     if(p == NULL)
         return NULL;
-    base = block * sizeof(void *) + (w_uint32_t)p;
+    base = block *sizeof(void *) + (w_uint32_t)p;
     for(i = 0;i < block;i ++)
     {
-        p[i] = (void *)(base + si * i);
+        p[i] = (void *)(base + si *i);
     }
     return p;
 }
@@ -139,16 +139,16 @@ void ***wind_talloc(w_uint32_t num,w_uint32_t block,w_uint32_t size)
 #else
     si = size;
 #endif
-    p = (void ***)wind_malloc(num * sizeof(void **) + num * block * sizeof(void *) + num * block * si);
+    p = (void ***)wind_malloc(num *sizeof(void **) + num *block *sizeof(void *) + num *block *si);
     if(p == NULL)
         return NULL;
-    base = num * sizeof(void **) + num * block * sizeof(void *) + (w_uint32_t)p;
+    base = num *sizeof(void **) + num *block *sizeof(void *) + (w_uint32_t)p;
     for(i = 0;i < num;i ++)
     {
-        p[i] = (void **)(base + num * sizeof(void **) + i * block * sizeof(void *));
+        p[i] = (void **)(base + num *sizeof(void **) + i *block *sizeof(void *));
         for(j = 0;j < block;j ++)
         {
-            p[i][j] = (void *)(base + i * block * si + j *si);
+            p[i][j] = (void *)(base + i *block *si + j *si);
         }
     }
     return p;

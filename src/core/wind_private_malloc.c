@@ -51,7 +51,7 @@ w_err_t wind_privateheap_create(w_uint32_t size)
 {
     w_err_t err;
     void *start;
-    thread_s * pthread;
+    thread_s *pthread;
     pheap_s mhp;
     pthread = wind_thread_current();
     WIND_ASSERT_RETURN((pthread != NULL),ERR_NULL_POINTER);
@@ -74,7 +74,7 @@ void *wind_privateheap_alloc(w_uint32_t size)
 {
     void *p;
     w_err_t err;
-    thread_s * pthread;
+    thread_s *pthread;
     pthread = wind_thread_current();
     WIND_ASSERT_RETURN(pthread != NULL,NULL);
     WIND_ASSERT_RETURN(pthread->private_heap != NULL,NULL);

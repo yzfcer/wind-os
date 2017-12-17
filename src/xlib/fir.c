@@ -67,7 +67,7 @@ double fir_basic(double input, int ntaps, const double h[],double z[])
     accum = 0;
     for (ii = 0; ii < ntaps; ii++) 
     {
-        accum += h[ii] * z[ii];
+        accum += h[ii] *z[ii];
     }
     /* shift delay line */
     for (ii = ntaps - 2; ii >= 0; ii--) 
@@ -106,7 +106,7 @@ double fir_circular(double input, int ntaps, const double h[],double z[],int *p_
     accum = 0;
     for (ii = ntaps - 1; ii >= 0; ii--) 
     {
-        accum += h[ii] * z[state];
+        accum += h[ii] *z[state];
         if (++state >= ntaps) 
         { /* incr state and check for wrap */
             state = 0;
@@ -129,10 +129,10 @@ double fir_shuffle(double input, int ntaps, double h[],
     /* store input at the beginning of the delay line */
     z[0] = input;
     /* calc FIR and shift data */
-    accum = h[ntaps - 1] * z[ntaps - 1];
+    accum = h[ntaps - 1] *z[ntaps - 1];
     for (ii = ntaps - 2; ii >= 0; ii--) 
     {
-        accum += h[ii] * z[ii];
+        accum += h[ii] *z[ii];
         z[ii + 1] = z[ii];
     }
     return accum;
@@ -156,13 +156,13 @@ double fir_split(double input, int ntaps, double h[],double z[],int *p_state)
     end_ntaps = ntaps - state;
     for (ii = 0; ii < end_ntaps; ii++) 
     {
-        accum += *p_h++ * *p_z++;
+        accum += *p_h++ **p_z++;
     }
     /* calculate the beginning part */
     p_z = z;
     for (ii = 0; ii < state; ii++) 
     {
-        accum += *p_h++ * *p_z++;
+        accum += *p_h++ **p_z++;
     }
     /* decrement the state, wrapping if below zero */
     if (--state < 0) 
@@ -189,7 +189,7 @@ double fir_double_z(double input, int ntaps, double h[],double z[],int *p_state)
     accum = 0;
     for (ii = 0; ii < ntaps; ii++) 
     {
-        accum += *p_h++ * *p_z++;
+        accum += *p_h++ **p_z++;
     }
     /* decrement state, wrapping if below zero */
     if (--state < 0) 
@@ -218,7 +218,7 @@ double fir_double_h(double input, int ntaps, const double h[],
     accum = 0;
     for (ii = 0; ii < ntaps; ii++) 
     {
-        accum += *p_h++ * *p_z++;
+        accum += *p_h++ **p_z++;
     }
 
     if (--state < 0) 
@@ -239,9 +239,9 @@ int fir_test(void)
 {
 #define NTAPS 6
     static double h[NTAPS] = { 1.0, 2.0, 3.0, 4.0, 5.0,6.0 };
-    static double h2[2 * NTAPS];
-    static double z[2 * NTAPS];
-#define IMP_SIZE (3 * NTAPS)
+    static double h2[2 *NTAPS];
+    static double z[2 *NTAPS];
+#define IMP_SIZE (3 *NTAPS)
     static double imp[IMP_SIZE];
     double output;
     int ii, state;
@@ -291,7 +291,7 @@ int fir_test(void)
     }
     wind_printf("\n\n");
     wind_printf("Testing fir_double_z:\n ");
-    clear(2 * NTAPS, z);
+    clear(2 *NTAPS, z);
     state = 0;
     for (ii = 0; ii < IMP_SIZE; ii++) 
     {

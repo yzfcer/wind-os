@@ -57,7 +57,7 @@ typedef struct __core_pool_s
 #endif
     WIND_MPOOL(lock,WIND_LOCK_NUM,sizeof(lock_s));
 #if WIND_STKPOOL_SUPPORT
-    WIND_MPOOL(stkbuf,WIND_STK_MAX_NUM,WIND_STK_SIZE * sizeof(w_stack_t));
+    WIND_MPOOL(stkbuf,WIND_STK_MAX_NUM,WIND_STK_SIZE *sizeof(w_stack_t));
 #endif
 }core_pools_s;
 

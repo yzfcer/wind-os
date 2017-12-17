@@ -44,7 +44,7 @@ w_err_t wind_heap_init(const char *name,void *base,w_uint32_t size)
 {
     pheapitem_s item;
     pheap_s mhp;
-    static lock_s * lock = NULL;
+    static lock_s *lock = NULL;
     WIND_ASSERT_RETURN(name != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(base != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(size > sizeof(heap_s),ERR_COMMAN);
@@ -302,7 +302,7 @@ void *wind_hcalloc(w_uint32_t count, w_uint32_t size)
     w_uint32_t tot_size;
     WIND_ASSERT_RETURN(count > 0,NULL);
     WIND_ASSERT_RETURN(size > 0,NULL);
-    tot_size = count * size;
+    tot_size = count *size;
     ptr = wind_hmalloc(tot_size);
     WIND_ASSERT_RETURN(ptr != NULL,NULL);
     wind_memset(ptr, 0, tot_size);

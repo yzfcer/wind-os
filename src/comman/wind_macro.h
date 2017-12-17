@@ -59,7 +59,7 @@ extern {
 #define OBJ_FROM_MBR(ptr,type,mbr) (void*)(((char*)(ptr))-((w_uint32_t)&(((type*)0)->mbr)))
 
 //按照LSB格式把两个字节转化为一个u16_t
-#define FLIPW(arr) ( (((w_uint16_t) (arr)[0]) * 256) + (arr)[1] )
+#define FLIPW(arr) ( (((w_uint16_t) (arr)[0]) *256) + (arr)[1] )
 
 //按照LSB格式把一个u16_t转化为两个字节
 #define FLOPW( arr, val ) do{(arr)[0] = ((val) / 256);(arr)[1] = ((val) & 0xFF);}while(0)
@@ -74,7 +74,7 @@ extern {
 #define WORD_HI(x) ((w_uint8_t) ((w_uint16_t)(x) >> 8))
 
 //将整形数字向右对齐，align为2的N次方
-#define RIGHT_ALIGN(x,align) ((((x) + (align-1)) / (align) ) * (align))
+#define RIGHT_ALIGN(x,align) ((((x) + (align-1)) / (align) ) *(align))
 //将整形数字向左对齐，align为2的N次方
 #define LEFT_ALIGN(x,align) ((x)/(align)*(align))
 

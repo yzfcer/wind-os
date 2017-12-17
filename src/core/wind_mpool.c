@@ -39,7 +39,7 @@ w_err_t wind_pool_create(const char *name,void *mem,w_uint32_t memsize,w_uint32_
 {
     w_uint32_t i,si;
     pool_item_s* item;
-    pool_s * pm;
+    pool_s *pm;
     WIND_ASSERT_RETURN(mem != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(memsize > 0,ERR_INVALID_PARAM);
     WIND_ASSERT_RETURN(itemsize > 0,ERR_INVALID_PARAM);
@@ -82,7 +82,7 @@ w_err_t wind_pool_create(const char *name,void *mem,w_uint32_t memsize,w_uint32_
 void *wind_pool_alloc(void *mem)
 {
     void *p;
-    pool_s * pm;
+    pool_s *pm;
     pool_item_s* item;
     WIND_ASSERT_RETURN(mem != NULL,NULL);
     pm = (pool_s *)WIND_MPOOL_ALIGN_R((w_uint32_t)mem);
@@ -119,7 +119,7 @@ void *wind_pool_alloc(void *mem)
 
 w_err_t wind_pool_free(void *mem,void *block)
 {
-    pool_s * pm;
+    pool_s *pm;
     pool_item_s* item;
     
     WIND_ASSERT_RETURN(mem != NULL,ERR_NULL_POINTER);
@@ -151,7 +151,7 @@ w_err_t wind_pool_free(void *mem,void *block)
 void wind_pool_print_list(pdlist_s list)
 {
     pdnode_s pdnode;
-    pool_s * pm;
+    pool_s *pm;
     wind_printf("\r\n\r\nthread list as following:\r\n");
     wind_printf("-----------------------------------------------------------------\r\n");
     wind_printf("%-12s %-10s %-8s %-8s %-10s %-8s\r\n","name","head","size","itemnum","itemsize","used");

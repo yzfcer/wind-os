@@ -46,8 +46,8 @@ extern "C" {
 
 #define HEAP_IS_USED(h)   ((h)->magic & WIND_HEAP_USED)
 
-#define __ALIGN_R(size,N) ((size + N - 1) / N * N)
-#define __ALIGN_L(size,N) ((size - N + 1) / N * N)
+#define __ALIGN_R(size,N) ((size + N - 1) / N *N)
+#define __ALIGN_L(size,N) ((size - N + 1) / N *N)
 
 #define WIND_HEAP_SIZE         __ALIGN_R(sizeof(heapitem_s), WIND_HEAP_ALIGN_SIZE)
 
@@ -86,7 +86,7 @@ struct __memheap_s
     dnode_s heap_node;
     dlist_s list;
     dlist_s free_list;
-    lock_s * plock; 
+    lock_s *plock; 
 };
 
 w_err_t wind_heap_init(const char *name,

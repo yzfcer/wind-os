@@ -45,7 +45,7 @@ CASE_TEARDOWN(pool_info)
 
 CASE_FUNC(pool_info)
 {
-    pool_s * pool = (pool_s *)test_pool;
+    pool_s *pool = (pool_s *)test_pool;
     EXPECT_EQ(pool->magic,WIND_MPOOL_MAGIC);
     EXPECT_STR_EQ(pool->name,"test_pool");
     EXPECT_EQ(pool->size,sizeof(test_pool)-sizeof(pool_s));
@@ -77,7 +77,7 @@ CASE_FUNC(pool_alloc)
     int i;
     w_err_t err;
     pool_item_s* itm;
-    pool_s * pool = (pool_s *)test_pool;
+    pool_s *pool = (pool_s *)test_pool;
     for(i = 0;i < TNUM;i ++)
     {
         testblk[i] = wind_pool_alloc(test_pool);

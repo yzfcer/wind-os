@@ -36,7 +36,7 @@ static w_uint8_t g_daysofmonth[12] = {31,28,31,30,31,30,31,31,30,31,30,31};
 
 //-------------------------------------------------------------------------------------
 
-#define BCD2Num(x) (((x) >> 4) * 10 + ((x) & 0x0f))
+#define BCD2Num(x) (((x) >> 4) *10 + ((x) & 0x0f))
 #define Num3BCD(x) ((((x) / 10) << 4) + ((x) % 10))
 static void hwrtc_set_datetime(void)
 {
