@@ -54,7 +54,7 @@ w_err_t wind_sem_post(sem_s *psem);
 w_err_t wind_sem_fetch(sem_s *psem,w_uint32_t timeout);
 w_err_t wind_sem_tryfree(sem_s *psem);
 w_err_t wind_sem_free(sem_s *psem);
-w_err_t wind_sem_print(pdlist_s list);
+w_err_t wind_sem_print(dlist_s *list);
 
 #endif
 #ifdef __cplusplus

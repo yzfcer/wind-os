@@ -148,9 +148,9 @@ w_err_t wind_pool_free(void *mem,void *block)
 }
 
 
-void wind_pool_print_list(pdlist_s list)
+void wind_pool_print_list(dlist_s *list)
 {
-    pdnode_s pdnode;
+    dnode_s *pdnode;
     pool_s *pm;
     wind_printf("\r\n\r\nthread list as following:\r\n");
     wind_printf("-----------------------------------------------------------------\r\n");

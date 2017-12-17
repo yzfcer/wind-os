@@ -74,7 +74,7 @@ w_err_t wind_lock_tryfree(lock_s *plock)
 //强制性释放互斥锁，并把所有的被该互斥锁阻塞的线程全部激活
 w_err_t wind_lock_free(lock_s *plock)
 {
-    pdnode_s pnode;
+    dnode_s *pnode;
     thread_s *pthread;
     WIND_ASSERT_RETURN(plock != NULL,ERR_NULL_POINTER);
     wind_close_interrupt();
@@ -120,7 +120,7 @@ w_err_t wind_lock_close(lock_s *plock)
 //试图打开一个互斥锁，如果有线程被阻塞，则优先激活线程
 w_err_t wind_lock_open(lock_s *plock)
 {
-    pdnode_s pnode;
+    dnode_s *pnode;
     thread_s *pthread;
     WIND_ASSERT_RETURN(plock != NULL,ERR_NULL_POINTER);
     wind_close_interrupt();
@@ -143,9 +143,9 @@ w_err_t wind_lock_open(lock_s *plock)
 }
 
 
-w_err_t wind_lock_print(pdlist_s list)
+w_err_t wind_lock_print(dlist_s *list)
 {
-    pdnode_s dnode;
+    dnode_s *dnode;
     lock_s *plock;
     WIND_ASSERT_RETURN(list != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(list->head != NULL,ERR_NULL_POINTER);

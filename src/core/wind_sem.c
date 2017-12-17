@@ -66,7 +66,7 @@ sem_s *wind_sem_create(const char *name,w_uint16_t sem_value)
 
 w_err_t wind_sem_post(sem_s *psem)
 {
-    pdnode_s pnode;
+    dnode_s *pnode;
     thread_s *pthread;
     WIND_ASSERT_RETURN(psem != NULL,ERR_NULL_POINTER);
     wind_close_interrupt();
@@ -142,7 +142,7 @@ w_err_t wind_sem_fetch(sem_s *psem,w_uint32_t timeout)
 //试图释放一个信号量，如果有线程被阻塞，则释放将终止
 w_err_t wind_sem_tryfree(sem_s *psem)
 {
-    pdnode_s pdnode;
+    dnode_s *pdnode;
     WIND_ASSERT_RETURN(psem != NULL,ERR_NULL_POINTER);
     wind_close_interrupt();
     pdnode = dlist_head(&psem->waitlist);
@@ -158,7 +158,7 @@ w_err_t wind_sem_tryfree(sem_s *psem)
 w_err_t wind_sem_free(sem_s *psem)
 {
     w_err_t err;
-    pdnode_s pdnode;
+    dnode_s *pdnode;
     thread_s *pthread;
     WIND_ASSERT_RETURN(psem != NULL,ERR_NULL_POINTER);
     wind_close_interrupt();
@@ -175,9 +175,9 @@ w_err_t wind_sem_free(sem_s *psem)
     return err;    
 }
 
-w_err_t wind_sem_print(pdlist_s list)
+w_err_t wind_sem_print(dlist_s *list)
 {
-    pdnode_s dnode;
+    dnode_s *dnode;
     sem_s *psem;
     WIND_ASSERT_RETURN(list != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(list->head != NULL,ERR_NULL_POINTER);

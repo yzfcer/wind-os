@@ -158,7 +158,7 @@ w_err_t wind_thread_sleep(w_uint32_t ms);
 w_err_t wind_thread_wakeup(void);
 w_err_t wind_thread_exit(w_err_t exitcode);
 
-w_err_t wind_thread_print(pdlist_s list);
+w_err_t wind_thread_print(dlist_s *list);
 #if WIND_THREAD_CALLBACK_SUPPORT
 w_err_t wind_thread_callback_register(thread_s *pthread,thr_evt_e id,void(*cb)(thread_s *));
 #endif

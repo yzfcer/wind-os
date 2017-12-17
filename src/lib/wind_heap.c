@@ -145,7 +145,7 @@ void *wind_heap_alloc(pheap_s heap,w_uint32_t size)
 {
     void *p = NULL;
     pheap_s mhp = heap;
-    pdnode_s pdnode;
+    dnode_s *pdnode;
     pheapitem_s freeitem;
     WIND_ASSERT_RETURN(heap != NULL,NULL);
     WIND_ASSERT_RETURN(size > 0,NULL);
@@ -177,7 +177,7 @@ void *wind_heap_alloc(pheap_s heap,w_uint32_t size)
 void *wind_heap_alloc_default(w_uint32_t size)
 {
     void *p = NULL;
-    pdnode_s pdnode;
+    dnode_s *pdnode;
     pheap_s pheap;
     foreach_node(pdnode,&gwind_heaplist)
     {
@@ -226,7 +226,7 @@ w_err_t wind_heap_free(void *ptr)
 {
     pheap_s heap;
     pheapitem_s item,tmpitem;
-    pdnode_s pdnode;
+    dnode_s *pdnode;
     WIND_ASSERT_RETURN(ptr != NULL,ERR_NULL_POINTER);
     item = ITEM_FROM_PTR(ptr);
     WIND_ASSERT_RETURN(item->magic == (WIND_HEAPITEM_MAGIC | WIND_HEAP_USED),ERR_INVALID_PARAM);
@@ -255,7 +255,7 @@ void *wind_hmalloc(w_uint32_t size)
 {
     void *ptr = NULL;
     pheap_s heap;
-    pdnode_s pnode;
+    dnode_s *pnode;
     foreach_node(pnode,&gwind_heaplist)
     {
         heap = DLIST_OBJ(pnode,heap_s,heap_node);
@@ -283,7 +283,7 @@ void *wind_hrealloc(void *rmem, w_uint32_t newsize)
 {
     void *pnew;
     pheap_s pheap;
-    pdnode_s pnode;
+    dnode_s *pnode;
     if (rmem == NULL)
         return wind_hmalloc(newsize);
     foreach_node(pnode,&gwind_heaplist)
@@ -312,7 +312,7 @@ void *wind_hcalloc(w_uint32_t count, w_uint32_t size)
 
 void wind_heap_showinfo(void)
 {
-    pdnode_s pnode;
+    dnode_s *pnode;
     pheap_s heap;
     wind_printf("heap list:\r\n");
     foreach_node(pnode,&gwind_heaplist)

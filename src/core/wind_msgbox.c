@@ -62,7 +62,7 @@ static w_err_t mbox_free(mbox_s *mbox)
 //删除邮箱里面的所有消息
 static w_err_t mbox_delete_msgs(mbox_s *mbox)
 {
-    pdnode_s pnode;
+    dnode_s *pnode;
     msg_s *msg;
     WIND_ASSERT_RETURN(mbox != NULL,ERR_NULL_POINTER);
     foreach_node(pnode,&mbox->msglist)
@@ -180,7 +180,7 @@ w_err_t wind_mbox_fetch(mbox_s *mbox,msg_s **pmsg,w_uint32_t timeout)
 {
     w_err_t err;
     w_uint32_t ticks;
-    pdnode_s dnode;
+    dnode_s *dnode;
     thread_s *pthread;
     WIND_ASSERT_RETURN(mbox != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(pmsg != NULL,ERR_NULL_POINTER);

@@ -85,7 +85,7 @@ static w_bool_t is_switch_enable(void)
 
 static thread_s *wind_search_highthread(void)
 {
-    pdnode_s pnode;
+    dnode_s *pnode;
     thread_s *pthread = NULL;
     wind_close_interrupt();
     if(gwind_core_cnt > 0)

@@ -145,7 +145,7 @@ w_int8_t* wind_thread_status(thread_stat_e stat)
 thread_s *wind_thread_get_byname(w_int8_t *name)
 {
     thread_s *pthread = NULL;
-    pdnode_s pdnode;
+    dnode_s *pdnode;
     WIND_ASSERT_RETURN(name != NULL,NULL);
     wind_close_interrupt();
     foreach_node(pdnode,&g_core.threadlist)
@@ -237,7 +237,7 @@ thread_s *wind_thread_create_default(const w_int8_t *name,
 
 w_err_t wind_thread_changeprio(thread_s *pthread,w_int16_t prio)
 {
-    pdnode_s node;
+    dnode_s *node;
     
     w_int16_t minlim = 0,maxlim = 32767;
     WIND_ASSERT_RETURN(pthread != NULL,ERR_NULL_POINTER);
@@ -309,7 +309,7 @@ w_err_t wind_thread_resume(thread_s *pthread)
 
 w_err_t wind_thread_kill(thread_s *pthread)
 {
-    pdnode_s node;
+    dnode_s *node;
     WIND_ASSERT_RETURN(pthread != NULL,ERR_NULL_POINTER);
     wind_close_interrupt();
     node = &pthread->validthr.node;
@@ -355,7 +355,7 @@ w_err_t wind_thread_exit(w_err_t exitcode)
 w_err_t wind_thread_sleep(w_uint32_t ms)
 {
     w_uint16_t stcnt;
-    //pdnode_s pnode;
+    //dnode_s *pnode;
     thread_s *pthread = NULL;
     stcnt = ms *WIND_TICK_PER_SEC / 1000;
     if(0 == stcnt)
@@ -386,7 +386,7 @@ w_err_t wind_thread_sleep(w_uint32_t ms)
 
 w_err_t wind_thread_wakeup(void)
 {
-    pdnode_s pnode;
+    dnode_s *pnode;
     thread_s *pthread;
     wind_close_interrupt();
     WIND_ASSERT_TODO(RUN_FLAG,wind_open_interrupt(),ERR_OK);
@@ -441,9 +441,9 @@ w_err_t wind_thread_callback_register(thread_s *pthread,thr_evt_e id,void(*cb)(t
 
 
 //调试时用到的函数，打印当前的系统中的线程的信息
-w_err_t wind_thread_print(pdlist_s list)
+w_err_t wind_thread_print(dlist_s *list)
 {
-    pdnode_s pnode;
+    dnode_s *pnode;
     thread_s *pthread;
     char *stat;
     WIND_ASSERT_RETURN(list != NULL,ERR_NULL_POINTER);

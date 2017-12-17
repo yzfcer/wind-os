@@ -27,7 +27,7 @@
 #include "wind_dlist.h"
 
 // 在链表头部插入一个节点
-void dlist_insert_head(pdlist_s dlist,pdnode_s node)
+void dlist_insert_head(dlist_s *dlist,dnode_s *node)
 {
     node->prev = NULL;
     node->next = dlist->head;
@@ -39,7 +39,7 @@ void dlist_insert_head(pdlist_s dlist,pdnode_s node)
 }
 
 //在链 表尾部插入一个节点
-void dlist_insert_tail(pdlist_s dlist,pdnode_s node)
+void dlist_insert_tail(dlist_s *dlist,dnode_s *node)
 {
     node->next = NULL;
     node->prev = dlist->tail;
@@ -51,7 +51,7 @@ void dlist_insert_tail(pdlist_s dlist,pdnode_s node)
 }
 
 // 在指定节点后插入一个节点
-void dlist_insert(pdlist_s dlist,pdnode_s prenode,pdnode_s node) 
+void dlist_insert(dlist_s *dlist,dnode_s *prenode,dnode_s *node) 
 {
     if(prenode) {
         if(prenode->next)
@@ -67,10 +67,10 @@ void dlist_insert(pdlist_s dlist,pdnode_s prenode,pdnode_s node)
 }
 
 // 从链表头部弹出一个节点
-pdnode_s dlist_remove_head(pdlist_s dlist) 
+dnode_s *dlist_remove_head(dlist_s *dlist) 
 {
     if(dlist->head) {
-        pdnode_s node = dlist->head;
+        dnode_s *node = dlist->head;
         if(dlist->head->next)
             dlist->head->next->prev = NULL;
         else
@@ -84,10 +84,10 @@ pdnode_s dlist_remove_head(pdlist_s dlist)
 }
 
 // 从链表尾部弹出一个节点
-pdnode_s dlist_remove_tail(pdlist_s dlist) 
+dnode_s *dlist_remove_tail(dlist_s *dlist) 
 {
     if(dlist->tail) {
-        pdnode_s node = dlist->tail;
+        dnode_s *node = dlist->tail;
         if(dlist->tail->prev)
             dlist->tail->prev->next = NULL;
         else
@@ -101,7 +101,7 @@ pdnode_s dlist_remove_tail(pdlist_s dlist)
 }
 
 // 从链表中删除给定节点
-pdnode_s dlist_remove(pdlist_s dlist,pdnode_s node) 
+dnode_s *dlist_remove(dlist_s *dlist,dnode_s *node) 
 {
     if(node->prev)
         node->prev->next = node->next;
@@ -115,7 +115,7 @@ pdnode_s dlist_remove(pdlist_s dlist,pdnode_s node)
 }
 
 // 检查 链表是否为空
-w_bool_t dlist_is_empty(pdlist_s dlist) 
+w_bool_t dlist_is_empty(dlist_s *dlist) 
 {
     if(dlist->head || dlist->tail)
         return B_FALSE;
@@ -124,10 +124,10 @@ w_bool_t dlist_is_empty(pdlist_s dlist)
 }
 
 // 获取链表中的节点数
-w_int32_t dlist_get_count(pdlist_s dlist) 
+w_int32_t dlist_get_count(dlist_s *dlist) 
 {
     w_int32_t count = 0;
-    pdnode_s node = dlist_head(dlist);
+    dnode_s *node = dlist_head(dlist);
     while(node) {
         ++ count;
         node = dnode_next(node);
@@ -136,7 +136,7 @@ w_int32_t dlist_get_count(pdlist_s dlist)
 }
 
 //合并两个链表
-pdlist_s dlist_combine(pdlist_s dlist1,pdlist_s dlist2) 
+dlist_s *dlist_combine(dlist_s *dlist1,dlist_s *dlist2) 
 {
     if(!dlist_is_empty(dlist2)) {
         if(!dlist_is_empty(dlist1)) {
@@ -154,10 +154,10 @@ pdlist_s dlist_combine(pdlist_s dlist1,pdlist_s dlist2)
 }
 
 // 在链表插入一个带优先级节点
-void dlist_insert_prio(pdlist_s dlist, pprinode_s prinode,w_uint32_t prio)
+void dlist_insert_prio(dlist_s *dlist, prinode_s *prinode,w_uint32_t prio)
 {
-    pprinode_s prin = NULL;
-    pdnode_s dnode;
+    prinode_s *prin = NULL;
+    dnode_s *dnode;
     prinode->prio = prio;
     dnode = dlist_head(dlist);
     if(dnode == NULL)
@@ -185,9 +185,9 @@ void dlist_insert_prio(pdlist_s dlist, pprinode_s prinode,w_uint32_t prio)
 }
 
 // 从链表中删除给定带优先级节点
-pprinode_s dlist_remove_prio(pdlist_s dlist,pprinode_s prinode)
+prinode_s *dlist_remove_prio(dlist_s *dlist,prinode_s *prinode)
 {
-    pdnode_s pdnode;
+    dnode_s *pdnode;
     pdnode = dlist_remove(dlist,&prinode->node);
     return DLIST_OBJ(pdnode,prinode_s,node);
 }
