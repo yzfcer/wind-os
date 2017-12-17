@@ -34,7 +34,7 @@ extern "C" {
 #endif
 void wind_target_init(void);
 
-void wind_std_port_init(void);
+void      wind_std_port_init(void);
 w_int32_t wind_std_input(w_uint8_t *str,w_int32_t len);
 w_int32_t wind_std_output(w_uint8_t *str,w_int32_t len);
 
