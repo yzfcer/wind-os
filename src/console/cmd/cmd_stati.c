@@ -31,66 +31,22 @@
 #include "wind_var.h"
 #include "wind_cmd.h"
 #if WIND_CONSOLE_SUPPORT
-static void core_stat_convert_num(w_int8_t *buf,w_uint32_t num)
-{
-    w_uint8_t i = 0;
-    if(num >= 10000)
-        buf[i++] = (num/10000)%10 + '0';
-    if(num >= 1000)
-        buf[i++] = (num/1000)%10 + '0';
-    if(num >= 100)
-        buf[i++] = (num/100)%10 + '0';
-    if(num >= 10)
-        buf[i++] = (num/10)%10 + '0';
-    buf[i++] = num%10 + '0';
-}
-
-static void core_output_srcusage(w_uint16_t opt)
-{
-    w_int8_t str[STAT_NAME_LEN + 33];
-    w_int16_t i,len;
-    wind_memset(str,' ',STAT_NAME_LEN + 33);
-    str[STAT_NAME_LEN + 32] = 0;
-    len = wind_strlen(g_stati[opt].name);
-    for(i = 0;i < len;i ++)
-        str[i] = g_stati[opt].name[i];
-    //wind_memcpy(str,g_stati[opt].name,STAT_NAME_LEN);
-    core_stat_convert_num(&str[STAT_NAME_LEN],g_stati[opt].tot);
-    core_stat_convert_num(&str[STAT_NAME_LEN + 8],g_stati[opt].used);
-    core_stat_convert_num(&str[STAT_NAME_LEN + 16],g_stati[opt].max);
-    core_stat_convert_num(&str[STAT_NAME_LEN + 24],g_stati[opt].err);
-    console_printf("%s\r\n",str);
-}
 
 static void core_stati_print(w_uint16_t opt)
 {
-    w_int8_t str[STAT_NAME_LEN + 33];
-    w_int16_t i;
-    wind_memset(str,0,STAT_NAME_LEN + 33);
-    wind_memcpy(str,"source",6);
-    wind_memcpy(&str[STAT_NAME_LEN],"tot",3);
-    wind_memcpy(&str[STAT_NAME_LEN + 8],"used",4);
-    wind_memcpy(&str[STAT_NAME_LEN + 16],"max",3);
-    wind_memcpy(&str[STAT_NAME_LEN + 24],"err",3);
-    for(i = 0;i < STAT_NAME_LEN + 32;i ++)
+    dnode_s *dnode;
+    pool_s *pool;
+    dlist_s *list = &g_core.poollist;
+    wind_printf("-------------------------------------------------\r\n");
+    wind_printf("%-16s%-8s%-8s%-8s%-8s\r\n","pool","tot","used","maxused","err");
+    wind_printf("-------------------------------------------------\r\n");
+    foreach_node(dnode,list)
     {
-        if(str[i] == 0)
-            str[i] = ' ';
+        pool = (pool_s*)DLIST_OBJ(dnode,pool_s,poolnode);
+        wind_printf("%-16s%-8d%-8d%-8d%-8d\r\n",pool->name,pool->stati.tot,
+            pool->stati.used,pool->stati.max,pool->stati.err);
     }
-    console_printf("\r\n%s\r\n",str);
-    
-    
-    if(opt != 0xffff)
-    {
-        core_output_srcusage(opt);
-    }
-    else
-    {
-        for(i = 0;i < IDX_CNT;i++)
-        {
-            core_output_srcusage(i);
-        }
-    }
+    wind_printf("-------------------------------------------------\r\n");
 }
 
 

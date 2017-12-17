@@ -55,31 +55,32 @@ typedef enum __objid_e
 
 #if WIND_STAT_SUPPORT
 
-#define STAT_NAME_LEN 12
 typedef struct __stat_s
 {
-    w_int8_t name[STAT_NAME_LEN];
     w_uint32_t tot;
     w_uint32_t used;
     w_uint32_t max;
     w_uint32_t err;
-}stat_s,*pstat_s;
+}stati_s,*pstati_s;
 
-extern stat_s g_stati[IDX_CNT];
-#define WIND_STAT_INC(stat_type) g_stati[stat_type].used++
-#define WIND_STAT_MINUS(stat_type) g_stati[stat_type].used--
+#define WIND_STATI_INIT(stati,totel) \
+            do{stati.tot = totel;\
+            stati.used = 0;\
+            stati.max = 0;\
+            stati.err = 0;}while(0)
+#define WIND_STATI_INC(stati) do{stati.used++;WIND_STATI_MAX(stati);}while(0)
+#define WIND_STATI_MINUS(stati) do{if(stati.used > 0) stati.used--;}while(0)
+#define WIND_STATI_ERR_INC(stati) stati.err++
+#define WIND_STATI_MAX(stati) \
+        do{if(stati.used > stati.max) \
+        stati.max = stati.used;}while(0)
 
-#define WIND_STAT_MAX(stat_type) \
-        do{if(g_stati[stat_type].used > g_stati[stat_type].max) \
-        g_stati[stat_type].max = g_stati[stat_type].used;}while(0)
-
-
-void wind_stat_init(void);
 #else
-#define wind_stat_init()
-#define WIND_STAT_INC(stat_type)
-#define WIND_STAT_MINUS(stat_type)
-#define WIND_STAT_MAX(stat_type)
+#define WIND_STATI_INIT(stati,totel)
+#define WIND_STATI_INC(stati)
+#define WIND_STATI_MINUS(stati)
+#define WIND_STATI_ERR_INC(stati) 
+#define WIND_STATI_MAX(stati)
 #endif
 
 #ifdef __cplusplus

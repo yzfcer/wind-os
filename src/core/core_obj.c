@@ -98,11 +98,6 @@ void *wind_core_alloc(obj_id_e type)
 #endif
     default:p = NULL;
     }
-    if(p != NULL)
-    {
-        WIND_STAT_INC(type);
-        WIND_STAT_MAX(type);
-    }
     return p;
 }
 
@@ -146,10 +141,6 @@ w_err_t wind_core_free(obj_id_e type,void *block)
     default:
         err = ERR_COMMAN;
         break;
-    }
-    if(err == ERR_OK)
-    {
-        WIND_STAT_MINUS(type);
     }
     return err;
 }

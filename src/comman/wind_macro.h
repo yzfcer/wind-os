@@ -65,9 +65,10 @@ extern {
 #define FLOPW( arr, val ) do{(arr)[0] = ((val) / 256);(arr)[1] = ((val) & 0xFF);}while(0)
 
 
-//得到一个变量的地址（w_uint16_t宽度）
+//得到一个变量的地址
 #define PTR_BYTE(var) ((w_uint8_t *)(void *)&(var))
 #define PTR_WORD(var) ((w_uint16_t *)(void *)&(var))
+#define PTR_DWORD(var) ((w_uint32_t *)(void *)&(var))
 
 //得到一个字的高位和低位字节
 #define WORD_LO(x) ((w_uint8_t) ((w_uint16_t)(x) & 0xff))
@@ -88,9 +89,9 @@ extern {
 #define DECCHK(c) ((c) >= '0' && (c) <= '9')
 
 //判断字符是不是16进值的数字
-#define HEXCHK( c ) (((c) >= '0' && (c) <= '9') ||\
-((c) >= 'A' && (c) <= 'F') ||\
-((c) >= 'a' && (c) <= 'f'))
+#define HEXCHK( c ) (((c) >= '0' && (c) <= '9') ||((c) >= 'A' && (c) <= 'F') ||((c) >= 'a' && (c) <= 'f'))
+
+
 
 //防止溢出的一个方法
 #define INC_SAT(val) (val=((val)+1>(val))?(val)+1:(val))

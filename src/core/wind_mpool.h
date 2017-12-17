@@ -30,6 +30,7 @@
 #include "wind_type.h"
 #include "wind_debug.h"
 #include "wind_dlist.h"
+#include "wind_stati.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -53,6 +54,7 @@ struct __mpool_s
     w_uint32_t magic;//内存池被成功建立的标志
     const char *name;
     dnode_s poolnode;
+    stati_s stati;
     void *head;//内存池的头部位置
     w_uint32_t size;//内存池的实际可用空间大小
     w_uint32_t itemsize;//每个块的大小

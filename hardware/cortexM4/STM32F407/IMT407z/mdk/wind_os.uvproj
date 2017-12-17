@@ -1289,11 +1289,6 @@
               <FilePath>..\..\..\..\..\src\core\wind_timer.h</FilePath>
             </File>
             <File>
-              <FileName>wind_stati.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\core\wind_stati.c</FilePath>
-            </File>
-            <File>
               <FileName>wind_msgbox.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\core\wind_msgbox.c</FilePath>

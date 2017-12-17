@@ -52,7 +52,6 @@ w_err_t wind_pool_create(const char *name,void *mem,w_uint32_t memsize,w_uint32_
     si = WIND_MPOOL_ALIGN_R(si);
     if(memsize < sizeof(pool_s) + si)
         return -1;
-    
     item = (ppool_item_s)(sizeof(pool_s) + (w_uint32_t)pm);
     pm->head = item;
     pm->name = name;
@@ -71,6 +70,7 @@ w_err_t wind_pool_create(const char *name,void *mem,w_uint32_t memsize,w_uint32_
         item = item->next;
     }
     item->next = NULL;
+    WIND_STATI_INIT(pm->stati,pm->itemnum);
     wind_close_interrupt();
     dlist_insert_tail(&g_core.poollist,&pm->poolnode);
     wind_open_interrupt();
@@ -91,6 +91,7 @@ void *wind_pool_alloc(void *mem)
     wind_close_interrupt();
     if(pm->free_head == NULL)
     {
+        WIND_STATI_ERR_INC(pm->stati);
         wind_open_interrupt();
         wind_error("mpool empty\r\n");
         return NULL;
@@ -98,20 +99,22 @@ void *wind_pool_alloc(void *mem)
     item = pm->free_head;
     if(item->flag != POOL_BLK_FREE)
     {
+        WIND_STATI_ERR_INC(pm->stati);
         wind_open_interrupt();
         wind_error("mpool ERROR\r\n");
         return NULL;
     }
     pm->free_head = item->next;
     pm->used ++;
+    WIND_STATI_INC(pm->stati);
     if(pm->free_head == NULL)
         pm->free_end = NULL;
     
     item->flag = POOL_BLK_USED;
     item->next = NULL;
-    p = (void*)(sizeof(ppool_item_s) + (w_uint32_t)item);    
+    p = (void*)(sizeof(ppool_item_s) + (w_uint32_t)item);
     wind_open_interrupt();
-    return p;    
+    return p;
 }
 
 w_err_t wind_pool_free(void *mem,void *block)
@@ -139,6 +142,7 @@ w_err_t wind_pool_free(void *mem,void *block)
         pm->free_end = (ppool_item_s)item;
     }
     pm->used --;
+    WIND_STATI_MINUS(pm->stati);
     wind_open_interrupt();
     return ERR_OK;
 }
