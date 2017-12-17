@@ -25,16 +25,14 @@
 #ifndef __WIND_QUEUE_H_
 #define __WIND_QUEUE_H_
 
-#include "wind_config.h"
+//#include "wind_config.h"
+//#include "wind_lock.h"
 #include "wind_type.h"
-#include "wind_lock.h"
-#include "wind_debug.h"
 
 #ifdef __cplusplus
 extern "C"{
 #endif
 
-#if WIND_QUEUE_SUPPORT
 #define WIND_QUEUE_MAGIC 0x25a5c629
 
 typedef struct __queue_s
@@ -46,8 +44,7 @@ typedef struct __queue_s
     w_uint32_t count;// 队列中数据个数          
     w_uint32_t capacity;// 队列中允许存储的数据个数 
     w_uint32_t  itemsize; // 元素的数据宽度
-    w_int32_t lock_type;
-    plock_s lock;
+    void* lock;
     w_uint8_t buf[4]; // 存储数据的空间          
 } queue_s,*pqueue_s;
 
@@ -55,8 +52,7 @@ typedef struct __queue_s
 
 w_err_t wind_queue_create(void *mem,
                           w_uint32_t size,
-                          w_uint16_t itemsize,
-                          lock_type_e lock_type);
+                          w_uint16_t itemsize);
 
 w_int32_t wind_queue_read(void *queue,void *buf,w_uint32_t len);
 
@@ -69,8 +65,6 @@ w_int32_t wind_queue_capacity(void *queue);
 w_err_t wind_queue_flush(void *queue);
 
 w_err_t wind_queue_destory(void *queue);
-
-#endif//#if WIND_QUEUE_SUPPORT
 
 #ifdef __cplusplus
 }

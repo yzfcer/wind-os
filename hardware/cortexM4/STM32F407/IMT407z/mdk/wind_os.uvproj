@@ -907,6 +907,16 @@
               <FileType>5</FileType>
               <FilePath>..\..\..\..\..\src\comman\wind_debug.h</FilePath>
             </File>
+            <File>
+              <FileName>wind_queue.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\comman\wind_queue.c</FilePath>
+            </File>
+            <File>
+              <FileName>wind_queue.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\comman\wind_queue.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1082,16 +1092,6 @@
               <FileName>wind_heap.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\..\..\..\src\lib\wind_heap.h</FilePath>
-            </File>
-            <File>
-              <FileName>wind_queue.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\lib\wind_queue.c</FilePath>
-            </File>
-            <File>
-              <FileName>wind_queue.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\lib\wind_queue.h</FilePath>
             </File>
             <File>
               <FileName>wind_rtc.c</FileName>

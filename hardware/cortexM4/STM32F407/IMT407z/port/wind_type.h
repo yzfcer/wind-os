@@ -102,15 +102,6 @@ typedef w_uint32_t *w_pstack_t;
 typedef w_int16_t w_handle_t;
 #endif
 
-typedef enum __lock_type_e
-{
-    LOCK_TYPE_NONE = 0,
-    LOCK_TYPE_AREA = 1,
-    LOCK_TYPE_GLOBAL = 2,
-    LOCK_TYPE_BUTT
-}lock_type_e;
-
-
 
 
 

@@ -42,7 +42,7 @@ extern "C" {
 typedef struct __core_pool_s
 {
     WIND_MPOOL(thread,WIND_THREAD_MAX_NUM,sizeof(thread_s));
-#if (WIND_PIPE_SUPPORT && WIND_QUEUE_SUPPORT)
+#if (WIND_PIPE_SUPPORT)
     WIND_MPOOL(pipe,WIND_PIPE_MAX_NUM,sizeof(pipe_s));
 #endif
 #if WIND_MESSAGE_SUPPORT

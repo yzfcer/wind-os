@@ -31,7 +31,7 @@
 #include "wind_stati.h"
 #include "wind_var.h"
 #include "core_obj.h"
-#if (WIND_PIPE_SUPPORT && WIND_QUEUE_SUPPORT)
+#if (WIND_PIPE_SUPPORT)
 
 //********************************************internal functions******************************
 
@@ -57,7 +57,7 @@ ppipe_s wind_pipe_create(const char *name,void *buff,w_uint32_t buflen)
     ppipe->buflen = buflen;
     ppipe->used = B_TRUE;
     ppipe->buff = buff;
-    err = wind_queue_create(buff,buflen,1,LOCK_TYPE_AREA);
+    err = wind_queue_create(buff,buflen,1);
     if(ERR_OK != err)
     {
         wind_core_free(IDX_PIPE,ppipe);

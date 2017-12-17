@@ -27,50 +27,40 @@
 #include "wind_queue.h"
 #include "wind_os_hwif.h"
 #include "wind_debug.h"
-#if WIND_QUEUE_SUPPORT
-static w_uint32_t wind_queue_lock(queue_s *q)
+static w_err_t wind_queue_create_lock(queue_s *q)
 {
-    if(q->lock_type == LOCK_TYPE_NONE)
-        return 0;
-    else if(q->lock_type == LOCK_TYPE_GLOBAL) 
-        wind_close_interrupt();
-    else if(q->lock_type == LOCK_TYPE_AREA)
-        wind_lock_close(q->lock);
-    return 0;
+    return ERR_OK;
+}
+static void wind_queue_free_lock(queue_s *q)
+{
+    wind_error("no lock for queue");
+}
+
+static void wind_queue_lock(queue_s *q)
+{
+    wind_error("no lock for queue");
 }
 
 static void wind_queue_unlock(queue_s *q)
 {
-    if(q->lock_type == LOCK_TYPE_NONE)
-        return;
-    else if(q->lock_type == LOCK_TYPE_GLOBAL) 
-        wind_open_interrupt();
-    else if(q->lock_type == LOCK_TYPE_AREA)
-        wind_lock_open(q->lock);
+    wind_error("no lock for queue");
 }
 
 
 w_err_t wind_queue_create(void *mem,
                           w_uint32_t size,
-                          w_uint16_t itemsize,
-                          lock_type_e lock_type
+                          w_uint16_t itemsize
                           )
 {
+    w_err_t err;
     queue_s *q;
     WIND_ASSERT_RETURN(mem != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(size > sizeof(queue_s),ERR_INVALID_PARAM);
     WIND_ASSERT_RETURN(itemsize > 0,ERR_INVALID_PARAM);
 
     q = (queue_s *)mem;
-    
-    //在需要使用局部锁时，如果互斥锁不支持，则使用全局锁
-    if(lock_type == LOCK_TYPE_GLOBAL)
-    {
-        q->lock_type = (w_int32_t)lock_type;
-        q->lock = wind_lock_create("queue");
-        WIND_ASSERT_RETURN(q->lock != NULL,ERR_NULL_POINTER);
-    }
-
+    err = wind_queue_create_lock(q);
+    WIND_ASSERT_RETURN(err == ERR_OK,ERR_NULL_POINTER);
     q->rd = q->buf;
     q->wr = q->buf;
     q->itemsize = itemsize;
@@ -204,7 +194,6 @@ w_err_t wind_queue_flush(void *queue)
 w_err_t wind_queue_destory(void *queue)
 {
     queue_s *q;
-    w_err_t err;
     WIND_ASSERT_RETURN(queue != NULL,ERR_NULL_POINTER);
 
     q = (queue_s *)queue;
@@ -212,15 +201,10 @@ w_err_t wind_queue_destory(void *queue)
     wind_queue_lock(q);
     q->magic = 0;
     wind_queue_unlock(q);
-    if(q->lock_type == LOCK_TYPE_GLOBAL)
-    {
-        err = wind_lock_free(q->lock);
-        WIND_ASSERT_RETURN(err == ERR_OK,err);
-    }
+    wind_queue_free_lock(q);
     return ERR_OK;
 }
 
 
-#endif
 
 

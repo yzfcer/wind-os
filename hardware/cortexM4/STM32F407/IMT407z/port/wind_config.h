@@ -42,8 +42,6 @@
 
 #define WIND_DAEMON_SUPPORT 1    //是否支持守护线程
 
-#define WIND_QUEUE_SUPPORT 1  //是否支持队列
-
 #define WIND_STACK_SUPPORT 1   //是否支持堆栈
 
 #define WIND_MEM_SUPPORT 1   //是否支持内存管理

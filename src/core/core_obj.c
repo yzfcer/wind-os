@@ -39,7 +39,7 @@ core_pools_s g_pool;
 void wind_corepool_init(void)
 {
     wind_pool_create("thread",g_pool.thread,sizeof(g_pool.thread),sizeof(thread_s));
-#if (WIND_PIPE_SUPPORT && WIND_QUEUE_SUPPORT)
+#if (WIND_PIPE_SUPPORT)
     wind_pool_create("pipe",g_pool.pipe,sizeof(g_pool.pipe),sizeof(pipe_s));    
 #endif
 #if WIND_MESSAGE_SUPPORT
@@ -76,7 +76,7 @@ void *wind_core_alloc(obj_id_e type)
         p = wind_pool_alloc(g_pool.sem);
         break;
 #endif
-#if (WIND_PIPE_SUPPORT && WIND_QUEUE_SUPPORT)
+#if (WIND_PIPE_SUPPORT)
     case IDX_PIPE:
         p = wind_pool_alloc(g_pool.pipe);
         break;
@@ -118,7 +118,7 @@ w_err_t wind_core_free(obj_id_e type,void *block)
         err = wind_pool_free(g_pool.sem,block);
         break;
 #endif
-#if (WIND_PIPE_SUPPORT && WIND_QUEUE_SUPPORT)
+#if (WIND_PIPE_SUPPORT)
     case IDX_PIPE:
         err = wind_pool_free(g_pool.pipe,block);
         break;
