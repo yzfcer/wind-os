@@ -47,9 +47,9 @@ void wind_create_crc32tb(void)
     }
 }
 
-w_uint32_t wind_crc32(w_uint32_t crc, w_uint8_t *string, w_uint32_t size)
+w_uint32_t wind_crc32(w_uint32_t crc, w_uint8_t *data, w_uint32_t size)
 {
     while(size--)
-        crc = (crc >> 8)^(crc32_table[(crc ^ *string++)&0xff]);
+        crc = (crc >> 8)^(crc32_table[(crc ^ *data++)&0xff]);
     return crc;
 }
