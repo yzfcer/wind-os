@@ -917,6 +917,16 @@
               <FileType>5</FileType>
               <FilePath>..\..\..\..\..\src\comman\wind_queue.h</FilePath>
             </File>
+            <File>
+              <FileName>wind_tree.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\comman\wind_tree.c</FilePath>
+            </File>
+            <File>
+              <FileName>wind_tree.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\comman\wind_tree.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1367,6 +1377,11 @@
               <FileName>test_mpool.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\test\testcase\test_mpool.c</FilePath>
+            </File>
+            <File>
+              <FileName>test_tree.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\test\testcase\test_tree.c</FilePath>
             </File>
           </Files>
         </Group>
