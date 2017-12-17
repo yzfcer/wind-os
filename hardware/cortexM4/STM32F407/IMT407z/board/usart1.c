@@ -57,14 +57,14 @@ void uart1_send_chars(w_uint8_t *str, w_uint16_t strlen)
     while (k < strlen); 
 }
 
-extern void wind_stdin(char data);
+extern void wind_stdin_irq(char data);
 void USART1_IRQHandler(void)
 {
 	w_uint8_t rec_data;
 	if(USART_GetITStatus(USART1, USART_IT_RXNE) != RESET)
     {
         rec_data =(w_uint8_t)USART_ReceiveData(USART1);
-        wind_stdin((char)rec_data);
+        wind_stdin_irq((char)rec_data);
     } 
 } 
 

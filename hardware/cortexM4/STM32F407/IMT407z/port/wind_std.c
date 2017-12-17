@@ -51,7 +51,7 @@ static void uartbuf_init(void)
 }
 
 
-void wind_stdin(char data)
+void wind_stdin_irq(char data)
 {
     uartbuf.buf[uartbuf.wridx] = data;
     uartbuf.wridx ++;
