@@ -53,7 +53,6 @@ typedef enum __objid_e
     IDX_CNT
 }obj_id_e;
 
-#if WIND_STAT_SUPPORT
 
 typedef struct __stat_s
 {
@@ -74,14 +73,6 @@ typedef struct __stat_s
 #define WIND_STATI_MAX(stati) \
         do{if(stati.used > stati.max) \
         stati.max = stati.used;}while(0)
-
-#else
-#define WIND_STATI_INIT(stati,totel)
-#define WIND_STATI_INC(stati)
-#define WIND_STATI_MINUS(stati)
-#define WIND_STATI_ERR_INC(stati) 
-#define WIND_STATI_MAX(stati)
-#endif
 
 #ifdef __cplusplus
 }
