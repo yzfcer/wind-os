@@ -159,7 +159,7 @@ void wind_pool_print_list(dlist_s *list)
     foreach_node(pdnode,list)
     {
         pm = DLIST_OBJ(pdnode,pool_s,poolnode);
-        wind_printf("%-12s 0x%-8d %-8d %-10d %-8d %-8d\r\n",
+        wind_printf("%-12s 0x%-8x %-8d %-10d %-8d %-8d\r\n",
             pm->name,pm->head,pm->size,pm->itemnum,pm->itemsize,pm->used);
      }
     wind_printf("-----------------------------------------------------------------\r\n");

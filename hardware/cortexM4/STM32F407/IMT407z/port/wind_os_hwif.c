@@ -49,6 +49,22 @@ void wind_close_interrupt(void)
     ssr[sreg_idx++] = cpu_sr;
 }
 
+#if WIND_HEAP_SUPPORT
+#include "wind_heap.h"
+#define HEAP1_HEAD  0X10000000
+#define HEAD1_LENTH (64*1024)
+
+//堆可自由分配的内存空间进行初始化
+void wind_heaps_init(void)
+{
+    wind_heap_init("heap0",
+                (void *)HEAP1_HEAD,
+                HEAD1_LENTH);
+    //wind_heap_showinfo();
+}
+
+#endif
+
 void wind_open_interrupt(void)
 {
     sreg_t cpu_sr;

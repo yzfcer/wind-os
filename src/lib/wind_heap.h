@@ -60,8 +60,6 @@ typedef enum __HeapBlock_e
     HEAP_BLOCK_CNT//¿éÊý
 }HeapBlock_e;
 
-#define HEAP1_HEAD  0X10000000
-#define HEAD1_LENTH (64*1024)
 
 
 typedef struct __heapitem_s heapitem_s,*pheapitem_s;
@@ -92,12 +90,11 @@ struct __memheap_s
 w_err_t wind_heap_init(const char *name,
              void *base,w_uint32_t size);
 
-void wind_heaps_init(void);
 
 void *wind_heap_alloc(pheap_s heap, w_uint32_t size);
-#if WIND_HEAP_SUPPORT
+
 void *wind_heap_alloc_default(w_uint32_t size);
-#endif
+
 void *wind_heap_realloc(pheap_s heap, void* ptr, w_uint32_t newsize);
 
 w_err_t wind_heap_free(void *ptr);

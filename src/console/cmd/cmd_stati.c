@@ -72,7 +72,7 @@ static void cmd_showdisc(void)
 
 static void cmd_showusage(void)
 {
-    console_printf("stati showpool:to show system pools usage info.\r\n");
+    console_printf("stati pool:to show system pools usage info.\r\n");
     console_printf("stati cpuusage:to show current cpu usage persent.\r\n");
 }
 
@@ -83,7 +83,7 @@ static w_err_t cmd_main(w_int32_t argc,char **argv)
         cmd_showusage();
         return ERR_OK;
     }
-    if(0 == wind_strcmp(argv[1],"showpool"))
+    if(0 == wind_strcmp(argv[1],"pool"))
     {
         return cmd_stat_show_mpool_main(argc,argv);
     }

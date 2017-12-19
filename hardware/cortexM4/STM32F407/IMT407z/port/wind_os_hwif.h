@@ -24,8 +24,6 @@
 *******************************************************************************************************/
 #ifndef WIND_OS_HWIF_H_
 #define WIND_OS_HWIF_H_
-
-
 #include "wind_config.h"
 #include "wind_type.h"
 
@@ -34,9 +32,9 @@ extern "C" {
 #endif
 void wind_target_init(void);
 
-//void      wind_std_init(void);
-//w_int32_t wind_std_input(w_uint8_t *str,w_int32_t len);
-//w_int32_t wind_std_output(w_uint8_t *str,w_int32_t len);
+#if WIND_HEAP_SUPPORT
+void wind_heaps_init(void);
+#endif
 
 void wind_close_interrupt(void);
 void wind_open_interrupt(void);

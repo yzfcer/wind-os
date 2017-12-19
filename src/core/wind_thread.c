@@ -451,14 +451,14 @@ w_err_t wind_thread_print(dlist_s *list)
     //pnode = list->head;
     wind_printf("\r\n\r\nthread list as following:\r\n");
     wind_printf("----------------------------------------------\r\n");
-    wind_printf("%-16s %-8s %-10s\r\n","thread","prio","state");
+    wind_printf("%-16s %-8s %-10s %-10s\r\n","thread","prio","state","stacksize");
     wind_printf("----------------------------------------------\r\n");
     foreach_node(pnode,list)
     {
         pthread = PRI_DLIST_OBJ(pnode,thread_s,validthr);
         stat = wind_thread_status(pthread->runstat);
-        wind_printf("%-16s %-8d %-10s\r\n",
-            pthread->name,pthread->prio,stat);
+        wind_printf("%-16s %-8d %-10s %-10d\r\n",
+            pthread->name,pthread->prio,stat,pthread->stksize);
     }
     wind_printf("----------------------------------------------\r\n");
     return ERR_OK;

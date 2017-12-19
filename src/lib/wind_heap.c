@@ -31,10 +31,10 @@
 #include "wind_lock.h"
 #include "wind_debug.h"
 #include "wind_string.h"
-
+#include "wind_var.h"
 
 #if WIND_HEAP_SUPPORT
-dlist_s gwind_heaplist = {NULL,NULL};//所有内存块的入口
+//dlist_s gwind_heaplist = {NULL,NULL};//所有内存块的入口
 #define WIND_HEAP_DEBUG(...)
 #define OFFSET_ADDR(base,offset) (void*)(((char*)(base))+(offset))
 #define ITEM_FROM_PTR(ptr) (void*)((w_uint32_t)ptr - sizeof(heapitem_s))
@@ -45,11 +45,12 @@ w_err_t wind_heap_init(const char *name,void *base,w_uint32_t size)
     pheapitem_s item;
     pheap_s mhp;
     static lock_s *lock = NULL;
+    
     WIND_ASSERT_RETURN(name != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(base != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(size > sizeof(heap_s),ERR_COMMAN);
     
-    wind_notice("create heap:%s,0x%X,%d",name,base,size);
+    wind_notice("create heap:%s,base:0x%X,lenth:%d",name,base,size);
     mhp = (pheap_s)base;
     mhp->magic = WIND_HEAP_MAGIC;
     mhp->name = name;
@@ -61,33 +62,24 @@ w_err_t wind_heap_init(const char *name,void *base,w_uint32_t size)
     DLIST_INIT(mhp->list);
     DLIST_INIT(mhp->free_list);
     lock = wind_lock_create(name);
-    mhp->plock = lock;//wind_lock_create(name);
+    mhp->plock = lock;
     
     item = mhp->addr;
     item->magic = WIND_HEAPITEM_MAGIC;
     item->pheap = mhp;
     PRIO_DNODE_INIT(item->itemnode);
     item->size = mhp->rest;
+
     wind_lock_close(mhp->plock);
     dlist_insert_head(&mhp->free_list,&item->itemnode.node);
+    dlist_insert_tail(&g_core.heaplist,&mhp->heap_node);
     wind_lock_open(mhp->plock);
 
     return ERR_OK;
 }
 
 
-//堆可自由分配的内存空间进行初始化
-void wind_heaps_init(void)
-{
-    pheap_s pheap;
-    wind_notice("memory heap initializing...");
-    wind_heap_init("heap0",
-                (void *)HEAP1_HEAD,
-                HEAD1_LENTH);
-    pheap = (pheap_s)HEAP1_HEAD;
-    dlist_insert_tail(&gwind_heaplist,&pheap->heap_node);
-    //wind_heap_showinfo();
-}
+
 
 static void *alloc_from_item(pheap_s heap,pheapitem_s freeitem,w_uint32_t size)
 {
@@ -173,13 +165,12 @@ void *wind_heap_alloc(pheap_s heap,w_uint32_t size)
     return p;
 }
 
-#if WIND_HEAP_SUPPORT
 void *wind_heap_alloc_default(w_uint32_t size)
 {
     void *p = NULL;
     dnode_s *pdnode;
     pheap_s pheap;
-    foreach_node(pdnode,&gwind_heaplist)
+    foreach_node(pdnode,&g_core.heaplist)
     {
         pheap = DLIST_OBJ(pdnode,heap_s,heap_node);
         p = wind_heap_alloc((pheap_s)pheap,size);
@@ -188,7 +179,6 @@ void *wind_heap_alloc_default(w_uint32_t size)
     }
     return NULL;
 }
-#endif
 
 void *wind_heap_realloc(pheap_s heap, void* ptr, w_uint32_t newsize)
 {
@@ -256,7 +246,7 @@ void *wind_hmalloc(w_uint32_t size)
     void *ptr = NULL;
     pheap_s heap;
     dnode_s *pnode;
-    foreach_node(pnode,&gwind_heaplist)
+    foreach_node(pnode,&g_core.heaplist)
     {
         heap = DLIST_OBJ(pnode,heap_s,heap_node);
         WIND_HEAP_DEBUG("malloc in heap:0x%x\r\n",heap);
@@ -286,7 +276,7 @@ void *wind_hrealloc(void *rmem, w_uint32_t newsize)
     dnode_s *pnode;
     if (rmem == NULL)
         return wind_hmalloc(newsize);
-    foreach_node(pnode,&gwind_heaplist)
+    foreach_node(pnode,&g_core.heaplist)
     {
         pheap = DLIST_OBJ(pnode,heap_s,heap_node);
         pnew = wind_heap_realloc(pheap,rmem,newsize);
@@ -315,7 +305,7 @@ void wind_heap_showinfo(void)
     dnode_s *pnode;
     pheap_s heap;
     wind_printf("heap list:\r\n");
-    foreach_node(pnode,&gwind_heaplist)
+    foreach_node(pnode,&g_core.heaplist)
     {
         heap = DLIST_OBJ(pnode,heap_s,heap_node);
         wind_printf("name:%s\r\n",heap->name);
