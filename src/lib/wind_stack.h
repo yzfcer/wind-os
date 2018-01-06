@@ -69,8 +69,8 @@ w_err_t wind_stack_create(void *mem,
                           w_uint32_t size,
                           w_uint16_t item_size,
                           w_err_t (* ReadEmpty)(),
-                          w_err_t (* WriteFull)()
-                          );
+                          w_err_t (* WriteFull)());
+                          
 
 
 w_err_t wind_stack_read(void *mem,void *Ret);

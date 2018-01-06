@@ -41,7 +41,7 @@ typedef struct __queue_s
     w_uint32_t count;// 队列中数据个数          
     w_uint32_t capacity;// 队列中允许存储的数据个数 
     w_uint32_t  itemsize; // 元素的数据宽度
-    void* lock;
+    //void* lock;
     w_uint8_t buf[4]; // 存储数据的空间          
 } queue_s,*pqueue_s;
 

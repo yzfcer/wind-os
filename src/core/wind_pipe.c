@@ -26,9 +26,7 @@
 #include "wind_type.h"
 #include "wind_pipe.h"
 #include "wind_os_hwif.h"
-//#include "wind_core.h"
 #include "wind_debug.h"
-//#include "wind_stati.h"
 #include "wind_var.h"
 #include "core_obj.h"
 #include "wind_queue.h"
@@ -68,22 +66,22 @@ pipe_s* wind_pipe_create(const char *name,void *buff,w_uint32_t buflen)
 }
 
 
-w_int16_t wind_pipe_read(pipe_s* ppipe,w_int8_t *str,w_int16_t len)
+w_int32_t wind_pipe_read(pipe_s* ppipe,w_int8_t *str,w_int16_t len)
 {
-    w_int16_t cnt = -1;
+    w_int32_t count = -1;
     WIND_ASSERT_RETURN(ppipe != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(str != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(len > 0,ERR_INVALID_PARAM);
     WIND_ASSERT_RETURN(ppipe->magic == WIND_PIPE_MAGIC,ERR_INVALID_PARAM);
     wind_close_interrupt();
-    cnt = wind_queue_read(ppipe->buff,str,len);
+    count = wind_queue_read(ppipe->buff,str,len);
     wind_open_interrupt();
-    return cnt;
+    return count;
 }
 
-w_int16_t wind_pipe_write(pipe_s* ppipe,w_int8_t *str,w_int16_t len)
+w_int32_t wind_pipe_write(pipe_s* ppipe,w_int8_t *str,w_int16_t len)
 {
-    w_int16_t cnt = -1;
+    w_int32_t cnt = -1;
     WIND_ASSERT_RETURN(ppipe != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(ppipe->magic == WIND_PIPE_MAGIC,ERR_INVALID_PARAM);
     WIND_ASSERT_RETURN(str != NULL,ERR_NULL_POINTER);
