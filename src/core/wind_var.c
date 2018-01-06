@@ -56,6 +56,7 @@ void wind_corevar_init(void)
     DLIST_INIT(g_core.ttmerlist);
     DLIST_INIT(g_core.poollist);
     DLIST_INIT(g_core.heaplist);
+    DLIST_INIT(g_core.pipelist);
     
 }
 
