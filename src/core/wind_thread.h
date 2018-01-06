@@ -36,7 +36,7 @@ extern "C" {
 
 #define THREAD_NAME_LEN 20 //线程名的最大长度，包括 '\0'
 #define THREAD_FROM_MEMBER(ptr,type,mbr) (void*)(((char*)(ptr))-((w_uint32_t)&(((type*)0)->mbr)))
-
+#define SLEEP_TIMEOUT_MAX 0x7fffffff
 //线程的优先等级，
 typedef enum _PRIOLEVEL
 {
