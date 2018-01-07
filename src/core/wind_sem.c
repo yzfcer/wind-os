@@ -173,7 +173,7 @@ w_err_t wind_sem_free(sem_s *psem)
     }
     dlist_remove(&g_core.semlist,&psem->semnode);
     wind_open_interrupt();
-    sem_free(psem);
+    err = sem_free(psem);
     return err;    
 }
 

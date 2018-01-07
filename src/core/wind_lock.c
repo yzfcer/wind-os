@@ -51,6 +51,7 @@ lock_s *wind_lock_create(const char *name)
     WIND_ASSERT_TODO(plock != NULL,wind_open_interrupt(),NULL);
     DNODE_INIT(plock->locknode);
     plock->name = name;
+    plock->used = B_TRUE;
     plock->locked = B_FALSE;
     DLIST_INIT(plock->waitlist);
     

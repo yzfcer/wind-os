@@ -25,9 +25,9 @@ extern "C" {
 
 /*********************************************头文件定义***********************************************/
 #include "cut.h"
-#include "wind_lock.h"
+#include "wind_sem.h"
 /********************************************内部变量定义**********************************************/
-static lock_s *locks[4];
+sem_s *sems[4];
 
 
 /********************************************内部函数定义*********************************************/
@@ -40,100 +40,114 @@ static lock_s *locks[4];
 
 /********************************************全局函数定义**********************************************/
 
-CASE_SETUP(lockinfo)
+
+CASE_SETUP(seminfo)
 {
 
 }
 
-CASE_TEARDOWN(lockinfo)
+CASE_TEARDOWN(seminfo)
 {
 
 }
 
-CASE_FUNC(lockinfo)
+CASE_FUNC(seminfo)
 {
     w_err_t err;
-    locks[0] = wind_lock_create("test");
-    EXPECT_NE(locks[0],NULL);
-    EXPECT_EQ(locks[0]->used,B_TRUE);
-    EXPECT_EQ(locks[0]->locked,B_FALSE);
-    EXPECT_EQ(locks[0]->waitlist.head,NULL);
-    EXPECT_EQ(locks[0]->waitlist.tail,NULL);
-    err = wind_lock_free(locks[0]);
+    sems[0] = wind_sem_create("test",3);
+    EXPECT_NE(sems[0],NULL);
+    EXPECT_STR_EQ(sems[0]->name,"test");
+    EXPECT_EQ(sems[0]->used,B_TRUE);
+    EXPECT_EQ(sems[0]->sem_tot,3);
+    EXPECT_EQ(sems[0]->sem_num,3);
+    EXPECT_EQ(sems[0]->waitlist.head,NULL);
+    EXPECT_EQ(sems[0]->waitlist.tail,NULL);
+    err = wind_sem_free(sems[0]);
     EXPECT_EQ(ERR_OK,err);
+
 }
 
-CASE_SETUP(lockfunc)
+CASE_SETUP(semfunc)
+{
+
+}
+
+CASE_TEARDOWN(semfunc)
+{
+
+}
+
+CASE_FUNC(semfunc)
+{
+    w_int32_t i;
+    w_err_t err;
+    sems[0] = wind_sem_create("test",3);
+    EXPECT_NE(sems[0],NULL);
+    for(i = 0;i < 3;i ++)
+    {
+        err = wind_sem_fetch(sems[0],1000);
+        EXPECT_EQ(err,ERR_OK);
+        EXPECT_EQ(sems[0]->sem_num,sems[0]->sem_tot - 1 - i);
+    }
+    err = wind_sem_fetch(sems[0],1000);
+    EXPECT_EQ(err,ERR_TIMEOUT);
+    EXPECT_EQ(sems[0]->sem_num,0);
+
+    for(i = 0;i < 3;i ++)
+    {
+        err = wind_sem_post(sems[0]);
+        EXPECT_EQ(err,ERR_OK);
+        EXPECT_EQ(sems[0]->sem_num,1 + i);
+    }
+    err = wind_sem_free(sems[0]);
+    EXPECT_EQ(ERR_OK,err);
+
+}
+
+CASE_SETUP(semmulti)
 {
     
 }
 
-CASE_TEARDOWN(lockfunc)
+CASE_TEARDOWN(semmulti)
 {
 
 }
 
-CASE_FUNC(lockfunc)
-{
-    w_err_t err;
-    locks[0] = wind_lock_create("test");
-    EXPECT_NE(locks[0],NULL);
-    err = wind_lock_close(locks[0]);
-    EXPECT_EQ(ERR_OK,err);
-    EXPECT_EQ(locks[0]->locked,B_TRUE);
-    err = wind_lock_open(locks[0]);
-    EXPECT_EQ(ERR_OK,err);
-    EXPECT_EQ(locks[0]->used,B_TRUE);
-    EXPECT_EQ(locks[0]->locked,B_FALSE);
-    EXPECT_EQ(locks[0]->waitlist.head,NULL);
-    EXPECT_EQ(locks[0]->waitlist.tail,NULL);
-    err = wind_lock_free(locks[0]);
-    EXPECT_EQ(ERR_OK,err);
-}
-
-CASE_SETUP(lockmulti)
-{
-    
-}
-
-CASE_TEARDOWN(lockmulti)
-{
-
-}
-
-CASE_FUNC(lockmulti)
+CASE_FUNC(semmulti)
 {
     w_int32_t i;
     w_err_t err;
     for(i = 0;i < 4;i ++)
     {
-        locks[i] = wind_lock_create("test");
-        EXPECT_NE(locks[0],NULL);
+        sems[i] = wind_sem_create("test",1);
+        EXPECT_NE(sems[0],NULL);
     }
     for(i = 0;i < 4;i ++)
     {
-        err = wind_lock_free(locks[i]);
+        err = wind_sem_free(sems[i]);
         EXPECT_EQ(ERR_OK,err);
     }
 }
 
-SUITE_SETUP(test_lock)
+
+SUITE_SETUP(test_sem)
 {
 
 }
 
-SUITE_TEARDOWN(test_lock)
+SUITE_TEARDOWN(test_sem)
 {
 
 }
 
 
-TEST_CASES_START(test_lock)
-TEST_CASE(lockinfo)
-TEST_CASE(lockfunc)
-TEST_CASE(lockmulti)
+TEST_CASES_START(test_sem)
+TEST_CASE(seminfo)
+TEST_CASE(semfunc)
+TEST_CASE(semmulti)
 TEST_CASES_END
-TEST_SUITE(test_lock)
+TEST_SUITE(test_sem)
 
 
 #ifdef __cplusplus

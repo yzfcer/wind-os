@@ -1,6 +1,6 @@
 /****************************************Copyright (c)**************************************************
 **                                       清  风  海  岸
-** 文   件   名: test_mpool.h / test_mpool.c
+** 文   件   名: test_mpool.c
 ** 创   建   人: 周江村
 ** 最后修改日期: 2017/10/22 16:29:55
 ** 描        述: 
@@ -95,7 +95,7 @@ CASE_FUNC(pool_alloc)
         wind_pool_free(test_pool,testblk[i]);
         itm = (pool_item_s*)((w_uint32_t)testblk[i] - sizeof(pool_item_s*));
         EXPECT_EQ(itm->flag,POOL_BLK_FREE);
-        EXPECT_NE(itm->next,NULL);
+        EXPECT_EQ(itm->next,NULL);
         EXPECT_EQ(pool->used,TNUM - i-1);
     }
     err = wind_pool_free(test_pool,testblk[TNUM]);
@@ -107,16 +107,16 @@ CASE_FUNC(pool_alloc)
 }
 
 
-SUITE_SETUP(mpool_test){}
-SUITE_TEARDOWN(mpool_test){}
+SUITE_SETUP(test_mpool){}
+SUITE_TEARDOWN(test_mpool){}
 
 
 
-TEST_CASES_START(mpool_test)
+TEST_CASES_START(test_mpool)
 TEST_CASE(pool_info)
 TEST_CASE(pool_alloc)
 TEST_CASES_END
-TEST_SUITE(mpool_test)
+TEST_SUITE(test_mpool)
 
 
 #ifdef __cplusplus

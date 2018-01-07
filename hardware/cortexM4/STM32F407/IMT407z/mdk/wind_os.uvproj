@@ -1393,6 +1393,16 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\test\testcase\test_tree.c</FilePath>
             </File>
+            <File>
+              <FileName>test_lock.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\test\testcase\test_lock.c</FilePath>
+            </File>
+            <File>
+              <FileName>test_sem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\test\testcase\test_sem.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>
