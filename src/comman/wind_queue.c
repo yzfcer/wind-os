@@ -26,19 +26,20 @@
 #include "wind_type.h"
 #include "wind_queue.h"
 #include "wind_debug.h"
+#define MBR_OFFSET(type, mbr) ((w_uint32_t)&(((type*)0)->mbr))
 
 w_err_t wind_queue_create(void *mem,w_uint32_t size,w_uint16_t itemsize)
 {
-    w_err_t err;
     queue_s *q;
     WIND_ASSERT_RETURN(mem != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(size > sizeof(queue_s),ERR_INVALID_PARAM);
     WIND_ASSERT_RETURN(itemsize > 0,ERR_INVALID_PARAM);
 
     q = (queue_s *)mem;
-    WIND_ASSERT_RETURN(err == ERR_OK,ERR_NULL_POINTER);
+    q->magic = WIND_QUEUE_MAGIC;
     q->rd = q->buf;
     q->wr = q->buf;
+    q->end = (q->buf + size - MBR_OFFSET(queue_s,buf));
     q->itemsize = itemsize;
     q->count = 0;
     
@@ -47,7 +48,6 @@ w_err_t wind_queue_create(void *mem,w_uint32_t size,w_uint16_t itemsize)
     
     // 计算数据缓冲的结束地址
     q->end = q->buf + q->capacity *q->itemsize;               
-    q->magic = WIND_QUEUE_MAGIC;
     return ERR_OK;
 }
 
@@ -60,6 +60,7 @@ w_int32_t wind_queue_read(void *queue,void *buf,w_uint32_t len)
     w_uint8_t *buff;
     w_uint32_t lenth;
     
+    q = (queue_s *)queue;
     WIND_ASSERT_RETURN(buf != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(queue != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(len % q->itemsize == 0,ERR_INVALID_PARAM);
@@ -90,7 +91,8 @@ w_int32_t wind_queue_write(void *queue,void *buf,w_uint32_t len)
     queue_s *q;
     w_uint8_t *buff;
     w_uint32_t lenth;
-    
+
+    q = (queue_s *)queue;
     WIND_ASSERT_RETURN(buf != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(queue != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(len % q->itemsize == 0,ERR_INVALID_PARAM);
