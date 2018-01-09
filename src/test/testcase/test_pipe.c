@@ -27,6 +27,7 @@ extern "C" {
 #include "cut.h"
 #include "wind_pipe.h"
 #include "wind_string.h"
+#include "wind_queue.h"
 /********************************************内部变量定义**********************************************/
 
 w_uint8_t pipebuf[128];
@@ -90,11 +91,13 @@ CASE_FUNC(pipefunc)
     EXPECT_NE(pipe,NULL);
     for(i = 0;i < 10;i ++)
     {
+        wind_memset(buf,0,14);
         res = wind_pipe_write(pipe,"test123456789",13);
         EXPECT_EQ(res,13);
         res = wind_pipe_read(pipe,buf,14);
         EXPECT_EQ(res,13);
         res = wind_memcmp(buf,"test123456789",13);
+        EXPECT_EQ(res,0);
     }
     err = wind_pipe_free(pipe);
     EXPECT_EQ(ERR_OK,err);
