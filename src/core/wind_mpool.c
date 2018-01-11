@@ -101,7 +101,7 @@ void *wind_pool_alloc(void *mem)
     {
         WIND_STATI_ERR_INC(pm->stati);
         wind_open_interrupt();
-        wind_error("mpool ERROR");
+        wind_error("mpool is NOT free.");
         return NULL;
     }
     pm->free_head = item->next;
