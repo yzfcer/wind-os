@@ -1408,6 +1408,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\test\testcase\test_pipe.c</FilePath>
             </File>
+            <File>
+              <FileName>test_queue.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\test\testcase\test_queue.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

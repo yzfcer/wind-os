@@ -39,14 +39,10 @@ w_err_t wind_queue_create(void *mem,w_uint32_t size,w_uint16_t itemsize)
     q->magic = WIND_QUEUE_MAGIC;
     q->rd = q->buf;
     q->wr = q->buf;
-    q->end = (q->buf + size - MBR_OFFSET(queue_s,buf));
     q->itemsize = itemsize;
     q->count = 0;
     
-    // 计算队列可以存储的数据数目 
-    q->capacity = (size - (w_uint32_t)(((queue_s *)0)->buf)) / q->itemsize;
-    
-    // 计算数据缓冲的结束地址
+    q->capacity = (size - MBR_OFFSET(queue_s,buf)) / q->itemsize;
     q->end = q->buf + q->capacity *q->itemsize;               
     return ERR_OK;
 }
@@ -69,16 +65,16 @@ w_int32_t wind_queue_read(void *queue,void *buf,w_uint32_t len)
     WIND_ASSERT_RETURN(q->magic == WIND_QUEUE_MAGIC,ERR_INVALID_PARAM);
     buff = buf;
     
-    lenth = q->count *q->itemsize;
+    lenth = q->count * q->itemsize;
     lenth = lenth > len?len:lenth;
     for(i = 0;i < lenth;i ++)
     {
-        buff[i] = q->rd[0]; /* 数据出队     */
-        q->rd++;  /* 调整出队指针 */
+        buff[i] = q->rd[0]; 
+        q->rd++;  
         if(q->rd >= q->end)
-            q->rd = 0;
+            q->rd = q->buf;
     }
-    q->count -= lenth / q->itemsize;                                     /* 数据减少      */
+    q->count -= lenth / q->itemsize; 
     return lenth;
 }
 
@@ -104,12 +100,12 @@ w_int32_t wind_queue_write(void *queue,void *buf,w_uint32_t len)
     lenth = (q->capacity - q->count) *q->itemsize;
     lenth = lenth > len?len:lenth;
                                                              
-    for(i = 0;i < q->itemsize;i ++)
+    for(i = 0;i < lenth;i ++)
     {
         q->wr[0] = buff[i];                                        
-        q->wr++; /* 调整入队指针*/
+        q->wr++; 
         if(q->wr >= q->end)
-            q->wr = 0;                                         
+            q->wr = q->buf;                                         
     }
     q->count += lenth / q->itemsize;   
     return lenth;
