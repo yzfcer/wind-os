@@ -7,6 +7,7 @@ CMD_DECLARE(echo);
 CMD_DECLARE(mem);
 CMD_DECLARE(stati);
 CMD_DECLARE(test);
+CMD_DECLARE(reset);
 
 
 void register_all_cmd(console_s *ctrl)
@@ -17,6 +18,7 @@ void register_all_cmd(console_s *ctrl)
     wind_cmd_register(&ctrl->cmd_list,COMMAND(stati),1);
     wind_cmd_register(&ctrl->cmd_list,COMMAND(mem),1);
     wind_cmd_register(&ctrl->cmd_list,COMMAND(test),1);
+    wind_cmd_register(&ctrl->cmd_list,COMMAND(reset),1);
 }
 
 w_bool_t console_have_user(char *user)

@@ -1012,6 +1012,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\console\cmd\cmd_stati.c</FilePath>
             </File>
+            <File>
+              <FileName>cmd_reset.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\console\cmd\cmd_reset.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
