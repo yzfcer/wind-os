@@ -1379,16 +1379,6 @@
           <GroupName>test_case</GroupName>
           <Files>
             <File>
-              <FileName>test_mode.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\test\testcase\test_mode.c</FilePath>
-            </File>
-            <File>
-              <FileName>test_mode1.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\test\testcase\test_mode1.c</FilePath>
-            </File>
-            <File>
               <FileName>test_mpool.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\test\testcase\test_mpool.c</FilePath>
