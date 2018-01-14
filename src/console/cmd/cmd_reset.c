@@ -26,17 +26,17 @@
 #include "wind_type.h"
 #include "wind_os_hwif.h"
 #include "wind_cmd.h"
-static void cmd_showdisc(void)
+COMMAND_DISC(reset)
 {
     console_printf("to reset system.\r\n");
 }
 
-static void cmd_showusage(void)
+COMMAND_USAGE(reset)
 {
     console_printf("reset:to reset system.\r\n");
 }
 
-static w_err_t cmd_main(w_int32_t argc,char **argv)
+COMMAND_MAIN(reset,argc,argv)
 {
     console_printf("system will reset now!\r\n");
     wind_thread_sleep(1000);
@@ -45,4 +45,4 @@ static w_err_t cmd_main(w_int32_t argc,char **argv)
     //return ERR_OK;
 }
 
-CMD_DEF(reset);
+COMMAND_DEF(reset);

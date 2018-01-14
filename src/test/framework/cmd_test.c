@@ -60,12 +60,12 @@ w_err_t cmd_testheap_main(w_int32_t argc,char **argv)
     return ERR_COMMAN;
 }
 
-static void cmd_showdisc(void)
+COMMAND_DISC(test)
 {
     wind_printf("to test some test cases.\r\n");
 }
 
-static void cmd_showusage(void)
+COMMAND_USAGE(test)
 {
     wind_printf("test show:to show all test suites and cases list.\r\n");
     wind_printf("test <suitename> <casename>:to test some appointed test cases.\r\n");
@@ -73,14 +73,9 @@ static void cmd_showusage(void)
     wind_printf("casename:use *to test all test suite.\r\n");
 }
 
-static w_err_t cmd_main(w_int32_t argc,char **argv)
+COMMAND_MAIN(test,argc,argv)
 {
-    if(argc < 2)
-    {
-        cmd_showusage();
-        return ERR_OK;
-    }
-    else if(0 == wind_strcmp(argv[1],"softint"))
+    if(0 == wind_strcmp(argv[1],"softint"))
     {
         return cmd_testsoftint_main(argc,argv);
     }
@@ -99,7 +94,7 @@ static w_err_t cmd_main(w_int32_t argc,char **argv)
     return  ERR_COMMAN;
 }
 
-CMD_DEF(test);
+COMMAND_DEF(test);
 
 void test_init(console_s *ctrl)
 {

@@ -81,24 +81,21 @@ static w_err_t cmd_showdatetime(w_int32_t argc,char **argv)
     return ERR_OK;
 }
 
-static void cmd_showdisc(void)
+
+
+COMMAND_DISC(datetime)
 {
     console_printf("to set or show system date and time.\r\n");
 }
 
-static void cmd_showusage(void)
+COMMAND_USAGE(datetime)
 {
     console_printf("datetime set <datetime>:to set the system date infomation.format:YYYY/MM/DD HH:mm:SS\r\n");
     console_printf("datetime show:to show the system date and time infomation.\r\n");
 }
 
-static w_err_t cmd_main(w_int32_t argc,char **argv)
+COMMAND_DISC(datetime,argc,argv)
 {
-    if(argc < 2)
-    {
-        cmd_showusage();
-        return ERR_OK;
-    }
     if(wind_strcmp(argv[1],"set") == 0)
     {
         return cmd_set_datetime(argc,argv);
@@ -114,7 +111,7 @@ static w_err_t cmd_main(w_int32_t argc,char **argv)
     }
 }
 
-CMD_DEF(datetime);
+COMMAND_DEF(datetime);
 
 
 #endif

@@ -65,24 +65,19 @@ w_err_t cmd_stat_show_cpuusage_main(w_int32_t argc,char **argv)
 }
 
 
-static void cmd_showdisc(void)
+COMMAND_DISC(stati)
 {
     console_printf("show some statistics infomation.\r\n");
 }
 
-static void cmd_showusage(void)
+COMMAND_USAGE(stati)
 {
     console_printf("stati pool:to show system pools usage info.\r\n");
     console_printf("stati cpuusage:to show current cpu usage persent.\r\n");
 }
 
-static w_err_t cmd_main(w_int32_t argc,char **argv)
+COMMAND_MAIN(stati,argc,argv)
 {
-    if(argc < 2)
-    {
-        cmd_showusage();
-        return ERR_OK;
-    }
     if(0 == wind_strcmp(argv[1],"pool"))
     {
         return cmd_stat_show_mpool_main(argc,argv);
@@ -94,7 +89,7 @@ static w_err_t cmd_main(w_int32_t argc,char **argv)
     return ERR_COMMAN;
 }
 
-CMD_DEF(stati);
+COMMAND_DEF(stati);
 
 #endif
 
