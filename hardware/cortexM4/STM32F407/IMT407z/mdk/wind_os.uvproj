@@ -1012,6 +1012,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\console\cmd\cmd_stati.c</FilePath>
             </File>
+            <File>
+              <FileName>cmd_reset.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\console\cmd\cmd_reset.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1374,16 +1379,6 @@
           <GroupName>test_case</GroupName>
           <Files>
             <File>
-              <FileName>test_mode.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\test\testcase\test_mode.c</FilePath>
-            </File>
-            <File>
-              <FileName>test_mode1.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\test\testcase\test_mode1.c</FilePath>
-            </File>
-            <File>
               <FileName>test_mpool.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\test\testcase\test_mpool.c</FilePath>
@@ -1392,6 +1387,26 @@
               <FileName>test_tree.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\test\testcase\test_tree.c</FilePath>
+            </File>
+            <File>
+              <FileName>test_lock.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\test\testcase\test_lock.c</FilePath>
+            </File>
+            <File>
+              <FileName>test_sem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\test\testcase\test_sem.c</FilePath>
+            </File>
+            <File>
+              <FileName>test_pipe.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\test\testcase\test_pipe.c</FilePath>
+            </File>
+            <File>
+              <FileName>test_queue.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\test\testcase\test_queue.c</FilePath>
             </File>
           </Files>
         </Group>
