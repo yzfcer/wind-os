@@ -40,7 +40,6 @@ typedef struct _wind_message
 {
     const char *name;
     dnode_s msgnode;
-    w_bool_t used;
     w_uint16_t msg_id;
     w_uint16_t msg_len;
     void *msg_arg;
@@ -52,7 +51,6 @@ typedef struct __mbox_s
     dnode_s mboxnode;
     dlist_s msglist;//消息队列
     int num;//消息的数量
-    w_bool_t used;
     w_bool_t valid;//邮箱是否可用
     thread_s *owner;
 }mbox_s;

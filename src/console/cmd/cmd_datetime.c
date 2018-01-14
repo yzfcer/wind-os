@@ -33,7 +33,6 @@ extern "C" {
 #include "wind_mem.h"
 #include "wind_rtc.h"
 #include "wind_comman.h"
-//#include "console_framework.h"
 #include "wind_cmd.h"
 #if WIND_RTC_SUPPORT
 

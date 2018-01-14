@@ -55,7 +55,6 @@ CASE_FUNC(lockinfo)
     w_err_t err;
     locks[0] = wind_lock_create("test");
     EXPECT_NE(locks[0],NULL);
-    EXPECT_EQ(locks[0]->used,B_TRUE);
     EXPECT_EQ(locks[0]->locked,B_FALSE);
     EXPECT_EQ(locks[0]->waitlist.head,NULL);
     EXPECT_EQ(locks[0]->waitlist.tail,NULL);
@@ -83,7 +82,6 @@ CASE_FUNC(lockfunc)
     EXPECT_EQ(locks[0]->locked,B_TRUE);
     err = wind_lock_open(locks[0]);
     EXPECT_EQ(ERR_OK,err);
-    EXPECT_EQ(locks[0]->used,B_TRUE);
     EXPECT_EQ(locks[0]->locked,B_FALSE);
     EXPECT_EQ(locks[0]->waitlist.head,NULL);
     EXPECT_EQ(locks[0]->waitlist.tail,NULL);

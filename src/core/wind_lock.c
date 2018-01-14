@@ -51,7 +51,6 @@ lock_s *wind_lock_create(const char *name)
     WIND_ASSERT_TODO(plock != NULL,wind_open_interrupt(),NULL);
     DNODE_INIT(plock->locknode);
     plock->name = name;
-    plock->used = B_TRUE;
     plock->locked = B_FALSE;
     DLIST_INIT(plock->waitlist);
     
@@ -87,7 +86,6 @@ w_err_t wind_lock_free(lock_s *plock)
         pthread->cause = CAUSE_LOCK;
     }
     dlist_remove(&g_core.locklist,&plock->locknode);
-    plock->used = B_FALSE;
     plock->name = NULL;
     lock_free(plock);
     wind_open_interrupt();

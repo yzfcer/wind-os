@@ -87,7 +87,6 @@ msg_s *wind_message_create(const char *name,w_uint16_t msg_id,
     WIND_ASSERT_RETURN(pmsg != NULL,NULL);
     pmsg->name = name;
     DNODE_INIT(pmsg->msgnode);
-    pmsg->used = B_TRUE;
     pmsg->msg_id = msg_id;
     pmsg->msg_len = msg_len;
     pmsg->msg_arg = msg_arg;
@@ -98,7 +97,6 @@ w_err_t wind_message_destroy(msg_s *pmsg)
 {
     w_err_t err;
     WIND_ASSERT_RETURN(pmsg != NULL,ERR_NULL_POINTER);
-    pmsg->used = B_FALSE;
     pmsg->name = NULL;
     err = msg_free(pmsg);
     return err;
@@ -116,7 +114,6 @@ mbox_s *wind_mbox_create(const char *name,thread_s *owner)
     DNODE_INIT(pmbox->mboxnode);
     DLIST_INIT(pmbox->msglist);
     pmbox->num = 0;
-    pmbox->used = B_TRUE;
     pmbox->valid = B_TRUE;
     pmbox->owner = owner;
     wind_close_interrupt();

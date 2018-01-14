@@ -55,7 +55,6 @@ sem_s *wind_sem_create(const char *name,w_int16_t sem_value)
     WIND_ASSERT_RETURN(sem_value >= 0,NULL);
     psem->name = name;
     DNODE_INIT(psem->semnode);
-    psem->used = B_TRUE;
     psem->sem_num = sem_value;
     psem->sem_tot = sem_value;
     DLIST_INIT(psem->waitlist);

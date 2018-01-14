@@ -58,7 +58,6 @@ CASE_FUNC(seminfo)
     sems[0] = wind_sem_create("test",3);
     EXPECT_NE(sems[0],NULL);
     EXPECT_STR_EQ(sems[0]->name,"test");
-    EXPECT_EQ(sems[0]->used,B_TRUE);
     EXPECT_EQ(sems[0]->sem_tot,3);
     EXPECT_EQ(sems[0]->sem_num,3);
     EXPECT_EQ(sems[0]->waitlist.head,NULL);
