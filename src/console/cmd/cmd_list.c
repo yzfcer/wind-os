@@ -4,7 +4,7 @@
 **                                       yzfcer@163.com
 **
 **--------------文件信息--------------------------------------------------------------------------------
-**文   件   名: wind_echo.c
+**文   件   名: cmd_list.c
 **创   建   人: 周江村
 **最后修改日期: 2013.10.19
 **描        述: 系统的控制台命令show处理函数，输出一些系统内部信息
@@ -36,12 +36,12 @@
 #include "wind_mpool.h"
 #if WIND_CONSOLE_SUPPORT
 
-static void cmd_showdisc(void)
+COMMAND_DISC(list)
 {
     console_printf("show core objects infomation.\r\n");
 }
 
-static void cmd_showusage(void)
+COMMAND_USAGE(list)
 {
     console_printf("list thread:to show thread infomation.\r\n");
     console_printf("list sem:to show sem infomation.\r\n");
@@ -49,14 +49,9 @@ static void cmd_showusage(void)
     console_printf("list pool:to show all core object pools.\r\n");
 }
 
-static w_err_t cmd_main(w_int32_t argc,char **argv)
+COMMAND_MAIN(list,argc,argv)
 {
-    if(argc < 2)
-    {
-        cmd_showusage();
-        return ERR_OK;
-    }
-    else if(0 == wind_strcmp(argv[1],"thread"))
+    if(0 == wind_strcmp(argv[1],"thread"))
     {
         wind_thread_print(&g_core.threadlist);
         return ERR_OK;
@@ -81,6 +76,6 @@ static w_err_t cmd_main(w_int32_t argc,char **argv)
     return ERR_COMMAN;
 }
 
-CMD_DEF(list);
+COMMAND_DEF(list);
 
 #endif

@@ -29,11 +29,16 @@
 #include "wind_debug.h"
 #include "misc.h"
 #include "usart1.h"
+#include "core_cm4.h"
 void wind_target_init(void)
 {
 
 }
 
+void wind_system_reset(void)
+{
+    NVIC_SystemReset();
+}
 
 
 //SREG，CPU状态寄存器对应的数据位宽，当关闭中断时需要保存这个寄存器

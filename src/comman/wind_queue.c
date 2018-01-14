@@ -25,53 +25,25 @@
 
 #include "wind_type.h"
 #include "wind_queue.h"
-#include "wind_os_hwif.h"
 #include "wind_debug.h"
-static w_err_t wind_queue_create_lock(queue_s *q)
-{
-    return ERR_OK;
-}
-static void wind_queue_free_lock(queue_s *q)
-{
-    wind_error("no lock for queue");
-}
+#define MBR_OFFSET(type, mbr) ((w_uint32_t)&(((type*)0)->mbr))
 
-static void wind_queue_lock(queue_s *q)
+w_err_t wind_queue_create(void *mem,w_uint32_t size,w_uint16_t itemsize)
 {
-    wind_error("no lock for queue");
-}
-
-static void wind_queue_unlock(queue_s *q)
-{
-    wind_error("no lock for queue");
-}
-
-
-w_err_t wind_queue_create(void *mem,
-                          w_uint32_t size,
-                          w_uint16_t itemsize
-                          )
-{
-    w_err_t err;
     queue_s *q;
     WIND_ASSERT_RETURN(mem != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(size > sizeof(queue_s),ERR_INVALID_PARAM);
     WIND_ASSERT_RETURN(itemsize > 0,ERR_INVALID_PARAM);
 
     q = (queue_s *)mem;
-    err = wind_queue_create_lock(q);
-    WIND_ASSERT_RETURN(err == ERR_OK,ERR_NULL_POINTER);
+    q->magic = WIND_QUEUE_MAGIC;
     q->rd = q->buf;
     q->wr = q->buf;
     q->itemsize = itemsize;
     q->count = 0;
     
-    // 计算队列可以存储的数据数目 
-    q->capacity = (size - (w_uint32_t)(((queue_s *)0)->buf)) / q->itemsize;
-    
-    // 计算数据缓冲的结束地址
+    q->capacity = (size - MBR_OFFSET(queue_s,buf)) / q->itemsize;
     q->end = q->buf + q->capacity *q->itemsize;               
-    q->magic = WIND_QUEUE_MAGIC;
     return ERR_OK;
 }
 
@@ -84,6 +56,7 @@ w_int32_t wind_queue_read(void *queue,void *buf,w_uint32_t len)
     w_uint8_t *buff;
     w_uint32_t lenth;
     
+    q = (queue_s *)queue;
     WIND_ASSERT_RETURN(buf != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(queue != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(len % q->itemsize == 0,ERR_INVALID_PARAM);
@@ -92,18 +65,16 @@ w_int32_t wind_queue_read(void *queue,void *buf,w_uint32_t len)
     WIND_ASSERT_RETURN(q->magic == WIND_QUEUE_MAGIC,ERR_INVALID_PARAM);
     buff = buf;
     
-    wind_queue_lock(q);
-    lenth = q->count *q->itemsize;
+    lenth = q->count * q->itemsize;
     lenth = lenth > len?len:lenth;
     for(i = 0;i < lenth;i ++)
     {
-        buff[i] = q->rd[0]; /* 数据出队     */
-        q->rd++;  /* 调整出队指针 */
+        buff[i] = q->rd[0]; 
+        q->rd++;  
         if(q->rd >= q->end)
-            q->rd = 0;
+            q->rd = q->buf;
     }
-    q->count -= lenth / q->itemsize;                                     /* 数据减少      */
-    wind_queue_unlock(q);
+    q->count -= lenth / q->itemsize; 
     return lenth;
 }
 
@@ -116,7 +87,8 @@ w_int32_t wind_queue_write(void *queue,void *buf,w_uint32_t len)
     queue_s *q;
     w_uint8_t *buff;
     w_uint32_t lenth;
-    
+
+    q = (queue_s *)queue;
     WIND_ASSERT_RETURN(buf != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(queue != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(len % q->itemsize == 0,ERR_INVALID_PARAM);
@@ -125,69 +97,54 @@ w_int32_t wind_queue_write(void *queue,void *buf,w_uint32_t len)
     WIND_ASSERT_RETURN(q->magic == WIND_QUEUE_MAGIC,ERR_INVALID_PARAM);
     buff = buf;
 
-    wind_queue_lock(q);
     lenth = (q->capacity - q->count) *q->itemsize;
     lenth = lenth > len?len:lenth;
                                                              
-    for(i = 0;i < q->itemsize;i ++)
+    for(i = 0;i < lenth;i ++)
     {
         q->wr[0] = buff[i];                                        
-        q->wr++; /* 调整入队指针*/
+        q->wr++; 
         if(q->wr >= q->end)
-            q->wr = 0;                                         
+            q->wr = q->buf;                                         
     }
     q->count += lenth / q->itemsize;   
-    wind_queue_unlock(q);
-
     return lenth;
 }
 
 
-w_int32_t wind_queue_datalen(void *queue)
+w_int32_t wind_queue_data_count(void *queue)
 {
-    w_int32_t temp;
     queue_s *q;
     WIND_ASSERT_RETURN(queue != NULL,ERR_NULL_POINTER);
     q = (queue_s *)queue;
     WIND_ASSERT_RETURN(q->magic == WIND_QUEUE_MAGIC,ERR_INVALID_PARAM);
-    temp = 0;                                                   
-    wind_queue_lock(q);
-    temp = q->count;
-    wind_queue_unlock(q);
-    return temp;
+    return q->count;
 }
 
 
 
 
-w_int32_t wind_queue_capacity(void *queue)
+w_int32_t wind_queue_max_count(void *queue)
 {
-    w_int32_t temp;
     queue_s *q;
     WIND_ASSERT_RETURN(queue != NULL,ERR_NULL_POINTER);
     q = (queue_s *)queue;
     WIND_ASSERT_RETURN(q->magic == WIND_QUEUE_MAGIC,ERR_INVALID_PARAM);
-    temp = 0;                                                   /* 队列无效返回0 */
-    wind_queue_lock(q);
-    temp = ((queue_s *)queue)->count;
-    wind_queue_unlock(q);
-    return temp;
+    return q->capacity;
 }
 
 
 
-w_err_t wind_queue_flush(void *queue)
+w_err_t wind_queue_clean(void *queue)
 {
     queue_s *q;
     WIND_ASSERT_RETURN(queue != NULL,ERR_NULL_POINTER);
 
     q = (queue_s *)queue;
     WIND_ASSERT_RETURN(q->magic == WIND_QUEUE_MAGIC,ERR_INVALID_PARAM);
-    wind_queue_lock(q);
     q->rd = q->buf;
     q->wr = q->buf;
     q->count = 0;                                           /* 数据数目为0 */
-    wind_queue_unlock(q);
     return ERR_OK;
 }
 
@@ -198,10 +155,7 @@ w_err_t wind_queue_destory(void *queue)
 
     q = (queue_s *)queue;
     WIND_ASSERT_RETURN(q->magic == WIND_QUEUE_MAGIC,ERR_INVALID_PARAM);
-    wind_queue_lock(q);
     q->magic = 0;
-    wind_queue_unlock(q);
-    wind_queue_free_lock(q);
     return ERR_OK;
 }
 

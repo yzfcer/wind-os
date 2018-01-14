@@ -145,24 +145,19 @@ static w_err_t display_stack(char **argv)
 
 
 
-static void cmd_showdisc(void)
+COMMAND_DISC(mem)
 {
     console_printf("show memory data values.\r\n");
 }
 
-static void cmd_showusage(void)
+COMMAND_USAGE(mem)
 {
     console_printf("mem <start> <lenth>:to show thread infomation.\r\n");
     console_printf("mem stack <threadname>:to show thread stack infomation.\r\n");
 }
 
-static w_err_t cmd_main(w_int32_t argc,char **argv)
+COMMAND_MAIN(mem,argc,argv)
 {
-    if(argc < 2)
-    {
-        cmd_showusage();
-        return ERR_OK;
-    }
     if(display_mem(argv) == ERR_OK)
         return ERR_OK;
     else if(display_stack(argv) == ERR_OK)
@@ -171,7 +166,7 @@ static w_err_t cmd_main(w_int32_t argc,char **argv)
     return ERR_COMMAN;
 }
 
-CMD_DEF(mem);
+COMMAND_DEF(mem);
 
 #endif
 

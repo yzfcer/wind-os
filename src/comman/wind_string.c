@@ -221,7 +221,7 @@ void *wind_memmove(void *dest,const void *src,w_uint32_t count)
     return dest;
 }
 
-w_uint32_t wind_memcmp(const void *cs,const void *ct,w_uint32_t count)
+w_int32_t wind_memcmp(const void *cs,const void *ct,w_uint32_t count)
 {
     const w_uint8_t *su1, *su2;
     signed char res = 0;

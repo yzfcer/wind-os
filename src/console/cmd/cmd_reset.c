@@ -4,49 +4,45 @@
 **                                       yzfcer@163.com
 **
 **--------------文件信息--------------------------------------------------------------------------------
-**文   件   名: wind_cpu_port.h
+**文   件   名: cmd_reset.c
 **创   建   人: 周江村
-**最后修改日期: 2012.09.26
-**描        述: wind os的时间管理代码头文件
+**最后修改日期: 
+**描        述: 系统的用户管理相关的定义，需要等待相关的文件系统支持
 **              
 **--------------历史版本信息----------------------------------------------------------------------------
 ** 创建人: 周江村
 ** 版  本: v1.0
-** 日　期: 2012.09.26
+** 日　期: 
 ** 描　述: 原始版本
 **
 **--------------当前版本修订----------------------------------------------------------------------------
-** 修改人: 周江村
-** 日　期: 2012.10.20
+** 修改人: 
+** 日　期: 
 ** 描　述: 
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
-#ifndef WIND_OS_HWIF_H_
-#define WIND_OS_HWIF_H_
 #include "wind_config.h"
 #include "wind_type.h"
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-void wind_target_init(void);
-void wind_system_reset(void);
-
-#if WIND_HEAP_SUPPORT
-void wind_heaps_init(void);
-#endif
-
-void wind_close_interrupt(void);
-void wind_open_interrupt(void);
-
-typedef  void (*thread_run_f)(void *pargs);
-//线程堆栈的初始化入口，移植需要重新实现
-w_pstack_t wind_stk_init(thread_run_f pfunc,void *pdata, w_pstack_t pstkbt);
-
-
-#ifdef __cplusplus
+#include "wind_os_hwif.h"
+#include "wind_cmd.h"
+COMMAND_DISC(reset)
+{
+    console_printf("to reset system.\r\n");
 }
-#endif
 
-#endif
+COMMAND_USAGE(reset)
+{
+    console_printf("reset:to reset system.\r\n");
+}
+
+COMMAND_MAIN(reset,argc,argv)
+{
+    console_printf("system will reset now!\r\n");
+    wind_thread_sleep(1000);
+    wind_system_reset();
+    while(1);
+    //return ERR_OK;
+}
+
+COMMAND_DEF(reset);

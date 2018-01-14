@@ -1,6 +1,6 @@
 /****************************************Copyright (c)**************************************************
 **                                       清  风  海  岸
-** 文   件   名: cmd_echo.h / cmd_echo.c
+** 文   件   名: cmd_echo.c
 ** 创   建   人: 周江村
 ** 最后修改日期: 2015/1/24 20:24:37
 ** 描        述: 
@@ -42,17 +42,17 @@ extern "C" {
 
 
 /********************************************全局函数定义**********************************************/
-static void cmd_showdisc(void)
+COMMAND_DISC(echo)
 {
     console_printf("to display echo string that you input.\r\n");
 }
 
-static void cmd_showusage(void)
+COMMAND_USAGE(echo)
 {
     console_printf("echo <str>:to show str on your std displaying device.\r\n");
 }
 
-static w_err_t cmd_main(w_int32_t argc,char **argv)
+COMMAND_MAIN(echo,argc,argv)
 {
     char *str;
     if(argc < 1)
@@ -62,7 +62,7 @@ static w_err_t cmd_main(w_int32_t argc,char **argv)
     return ERR_OK;
 }
 
-CMD_DEF(echo);
+COMMAND_DEF(echo);
 
 #endif
 #ifdef __cplusplus

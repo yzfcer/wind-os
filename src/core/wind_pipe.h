@@ -25,10 +25,9 @@
 #ifndef WIND_PIPE_H__
 #define WIND_PIPE_H__
 
-#include "wind_queue.h"
 #include "wind_config.h"
 #include "wind_type.h"
-#include "wind_thread.h"
+#include "wind_dlist.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -43,14 +42,15 @@ typedef struct __WIND_PIPE
 {
     w_uint32_t magic;
     const char *name;
+    dnode_s pipenode;
     w_bool_t used;
-    queue_s *buff;
+    void *buff;
     w_uint32_t buflen;
 }pipe_s;
 
 pipe_s* wind_pipe_create(const char *name,void *buff,w_uint32_t buflen);
-w_int16_t wind_pipe_read(pipe_s* ppipe,w_int8_t *str,w_int16_t len);
-w_int16_t wind_pipe_write(pipe_s* ppipe,w_int8_t *str,w_int16_t len);
+w_int32_t wind_pipe_read(pipe_s* ppipe,w_int8_t *str,w_int16_t len);
+w_int32_t wind_pipe_write(pipe_s* ppipe,w_int8_t *str,w_int16_t len);
 w_err_t wind_pipe_free(pipe_s* ppipe);
 
 

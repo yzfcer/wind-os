@@ -1,8 +1,8 @@
 /****************************************Copyright (c)**************************************************
 **                                       清  风  海  岸
-** 文   件   名: test_sem.c
+** 文   件   名: test_queue.c
 ** 创   建   人: 周江村
-** 最后修改日期: 2017/10/22 16:29:55
+** 最后修改日期: 2018/01/09 16:29:55
 ** 描        述: 
 **  
 **--------------历史版本信息----------------------------------------------------------------------------
@@ -25,9 +25,12 @@ extern "C" {
 
 /*********************************************头文件定义***********************************************/
 #include "cut.h"
-#include "wind_lock.h"
+#include "wind_queue.h"
+#include "wind_string.h"
+#include "wind_queue.h"
 /********************************************内部变量定义**********************************************/
-static lock_s *locks[4];
+
+w_uint8_t queuebuf[128];
 
 
 /********************************************内部函数定义*********************************************/
@@ -40,100 +43,93 @@ static lock_s *locks[4];
 
 /********************************************全局函数定义**********************************************/
 
-CASE_SETUP(lockinfo)
+
+CASE_SETUP(queueinfo)
 {
 
 }
 
-CASE_TEARDOWN(lockinfo)
+CASE_TEARDOWN(queueinfo)
 {
 
 }
 
-CASE_FUNC(lockinfo)
+CASE_FUNC(queueinfo)
 {
     w_err_t err;
-    locks[0] = wind_lock_create("test");
-    EXPECT_NE(locks[0],NULL);
-    EXPECT_EQ(locks[0]->used,B_TRUE);
-    EXPECT_EQ(locks[0]->locked,B_FALSE);
-    EXPECT_EQ(locks[0]->waitlist.head,NULL);
-    EXPECT_EQ(locks[0]->waitlist.tail,NULL);
-    err = wind_lock_free(locks[0]);
+    queue_s *q = (queue_s *)queuebuf;
+    err = wind_queue_create(queuebuf,sizeof(queuebuf),sizeof(w_int32_t));
+    EXPECT_NE(err,ERR_OK);
+    EXPECT_EQ(q->magic,WIND_QUEUE_MAGIC);
+    EXPECT_EQ(q->rd,q->buf);
+    EXPECT_EQ(q->wr,q->buf);
+    EXPECT_EQ(q->itemsize,sizeof(w_int32_t));
+    EXPECT_EQ(q->count,0);
+    EXPECT_EQ(q->capacity,(sizeof(queuebuf) - (w_uint32_t)(((queue_s *)0)->buf)) / q->itemsize);
+    EXPECT_EQ(q->end,q->buf + q->capacity * q->itemsize);
+    err = wind_queue_destory(q);
     EXPECT_EQ(ERR_OK,err);
+
 }
 
-CASE_SETUP(lockfunc)
-{
-    
-}
-
-CASE_TEARDOWN(lockfunc)
+CASE_SETUP(queuefunc)
 {
 
 }
 
-CASE_FUNC(lockfunc)
+CASE_TEARDOWN(queuefunc)
+{
+
+}
+
+CASE_FUNC(queuefunc)
 {
     w_err_t err;
-    locks[0] = wind_lock_create("test");
-    EXPECT_NE(locks[0],NULL);
-    err = wind_lock_close(locks[0]);
-    EXPECT_EQ(ERR_OK,err);
-    EXPECT_EQ(locks[0]->locked,B_TRUE);
-    err = wind_lock_open(locks[0]);
-    EXPECT_EQ(ERR_OK,err);
-    EXPECT_EQ(locks[0]->used,B_TRUE);
-    EXPECT_EQ(locks[0]->locked,B_FALSE);
-    EXPECT_EQ(locks[0]->waitlist.head,NULL);
-    EXPECT_EQ(locks[0]->waitlist.tail,NULL);
-    err = wind_lock_free(locks[0]);
-    EXPECT_EQ(ERR_OK,err);
-}
-
-CASE_SETUP(lockmulti)
-{
-    
-}
-
-CASE_TEARDOWN(lockmulti)
-{
-
-}
-
-CASE_FUNC(lockmulti)
-{
     w_int32_t i;
-    w_err_t err;
-    for(i = 0;i < 4;i ++)
+    w_int32_t res;
+    w_int32_t va = 100;
+    queue_s *queue;
+    err = wind_queue_create(queuebuf,sizeof(queuebuf),sizeof(w_int32_t));
+    EXPECT_NE(err,ERR_OK);
+    for(i = 0;i < 50;i ++)
     {
-        locks[i] = wind_lock_create("test");
-        EXPECT_NE(locks[0],NULL);
+        va = 100 + i;
+        res = wind_queue_write(queue,&va,sizeof(w_int32_t));
+        EXPECT_EQ(res,sizeof(w_int32_t));
+        
     }
-    for(i = 0;i < 4;i ++)
+    
+    for(i = 0;i < 50;i ++)
     {
-        err = wind_lock_free(locks[i]);
-        EXPECT_EQ(ERR_OK,err);
+        res = wind_queue_read(queue,&va,sizeof(w_int32_t));
+        EXPECT_EQ(res,sizeof(w_int32_t));
+        EXPECT_EQ(va,100 + i);
     }
+    err = wind_queue_destory(queue);
+    EXPECT_EQ(ERR_OK,err);
+
 }
 
-SUITE_SETUP(test_lock)
+
+
+
+
+SUITE_SETUP(test_queue)
 {
 
 }
 
-SUITE_TEARDOWN(test_lock)
+SUITE_TEARDOWN(test_queue)
 {
 
 }
 
 
-TEST_CASES_START(test_lock)
-TEST_CASE(lockinfo)
-TEST_CASE(lockfunc)
-TEST_CASE(lockmulti)
+TEST_CASES_START(test_queue)
+TEST_CASE(queueinfo)
+TEST_CASE(queuefunc)
 TEST_CASES_END
-TEST_SUITE(test_lock)
+TEST_SUITE(test_queue)
 
 
 #ifdef __cplusplus

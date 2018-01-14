@@ -65,7 +65,7 @@ extern void *wind_memcpy(void *dest,const void *src,w_uint32_t count);
 
 extern void *wind_memmove(void *dest,const void *src,w_uint32_t count);
 
-extern w_uint32_t wind_memcmp(const void *cs,const void *ct,w_uint32_t count);
+extern w_int32_t wind_memcmp(const void *cs,const void *ct,w_uint32_t count);
 
 extern void *wind_memscan(void *addr, w_uint32_t c, w_uint32_t size);
 

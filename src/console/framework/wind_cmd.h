@@ -34,12 +34,17 @@ extern "C" {
 #endif
 
 #define console_printf(fmt,...) wind_printf(fmt,##__VA_ARGS__)
-#define CMD_DECLARE(CMD) extern cmd_s g_cmd_##CMD
-#define COMMAND(CMD) &g_cmd_##CMD
-#define CMD_DEF(CMD) \
-cmd_s g_cmd_##CMD = { \
-NULL,#CMD,cmd_showdisc,\
-cmd_showusage,cmd_main}
+
+#define COMMAND_DISC(cmdname) static void cmd_##cmdname##_disc(void)
+#define COMMAND_USAGE(cmdname) static void cmd_##cmdname##_help(void)
+#define COMMAND_MAIN(cmdname,argc,argv) static w_err_t cmd_##cmdname##_main(w_int32_t argc,char **argv)
+#define COMMAND_DEF(cmdname) cmd_s g_cmd_##cmdname = { \
+NULL,#cmdname,cmd_##cmdname##_disc,\
+cmd_##cmdname##_help,cmd_##cmdname##_main}
+
+#define CMD_DECLARE(cmdname) extern cmd_s g_cmd_##cmdname
+#define COMMAND(cmdname) &g_cmd_##cmdname
+
 
 
 

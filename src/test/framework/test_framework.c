@@ -216,22 +216,8 @@ void test_suite_done(void)
         sti->stat.passed_suite ++;
     }
 }
-void print_boarder(ut_uint32_t space_cnt)
-{
-    char space[20];
-    ut_uint32_t i,len;
-    len = space_cnt > 20?20:space_cnt;
-    for(i = 0;i < len;i ++)
-        space[i] = ' ';
-    for(;i < 20;i ++)
-        space[i] = 0;
 
-    test_printf("------------");
-    test_printf("%s",space);
-    test_printf("------------");
-    test_printf("%s",space);
-    test_printf("------\r\n");
-}
+
 
 void print_header(ut_uint32_t space_cnt)
 {
@@ -287,9 +273,9 @@ void test_framework_summit(void)
     {
         test_printf("\r\nfailture list as following:\r\n\r\n",sti->stat.tot_case);
         fail = sti->failhead;
-        print_boarder(space_cnt);
+        test_printf("--------------------------------------\r\n");
         print_header(space_cnt);
-        print_boarder(space_cnt);
+        test_printf("--------------------------------------\r\n");
         for(i = 0;i < sti->failcnt;i ++)
         {
             print_fail_info(fail,space_cnt);
@@ -297,7 +283,7 @@ void test_framework_summit(void)
             if(fail == NULL)
                 break;
         }
-        print_boarder(space_cnt);
+        test_printf("--------------------------------------\r\n");
 
     }
 }
@@ -417,7 +403,7 @@ void show_test_suites(void)
     ts = suite_list.head;
     for(i = 0;i < suite_list.cnt;i ++)
     {
-        test_printf("|------%s\r\n",ts->name);
+        test_printf("|---%s\r\n",ts->name);
         show_test_cases(ts);
         ts = ts->next;
     }

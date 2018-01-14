@@ -72,19 +72,19 @@ w_int32_t wind_printf(const char *fmt, ...);
 #endif
 
 #if (PRINT_LEVEL <= PRINT_LV_WARN)
-#define wind_warn(fmt,...) do{/*wind_printf("[warn] ");*/wind_printf("%s"fmt"\r\n","[warn] ",##__VA_ARGS__);}while(0)
+#define wind_warn(fmt,...) do{/*wind_printf("[warn] ");*/wind_printf("%s[%s,%d] "fmt"\r\n","[warn] ",__FUNCTION__,__LINE__,##__VA_ARGS__);}while(0)
 #else 
 #define wind_warn(fmt,...)
 #endif
 
 #if (PRINT_LEVEL <= PRINT_LV_ERROR)
-#define wind_error(fmt,...) do{/*wind_printf("[error] ");*/wind_printf("%s"fmt"\r\n","[error] ",##__VA_ARGS__);}while(0)
+#define wind_error(fmt,...) do{/*wind_printf("[error] ");*/wind_printf("%s[%s,%d] "fmt"\r\n","[error] ",__FUNCTION__,__LINE__,##__VA_ARGS__);}while(0)
 #else 
 #define wind_error(fmt,...)
 #endif
 
 #if (PRINT_LEVEL <= PRINT_LV_CRIT)
-#define wind_critical(fmt,...) do{/*wind_printf("[critical] ");*/wind_printf("%s"fmt"\r\n","[critical] ",##__VA_ARGS__);}while(0)
+#define wind_critical(fmt,...) do{/*wind_printf("[critical] ");*/wind_printf("%s[%s,%d] "fmt"\r\n","[critical] ",__FUNCTION__,__LINE__,##__VA_ARGS__);}while(0)
 #else 
 #define wind_critical(fmt,...)
 #endif
