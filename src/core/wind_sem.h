@@ -46,7 +46,7 @@ typedef struct _wind_sem
     w_int16_t sem_num;    //当前的信号量的值
 }sem_s;
 
-
+w_err_t wind_sem_init(void);
 sem_s *wind_sem_create(const char *name,w_int16_t semValue);
 w_err_t wind_sem_post(sem_s *psem);
 w_err_t wind_sem_fetch(sem_s *psem,w_uint32_t timeout);

@@ -32,15 +32,23 @@
 #include "wind_var.h"
 #include "wind_dlist.h"
 #include "wind_core.h"
-#include "core_obj.h"
+#include "wind_mpool.h"
+static WIND_MPOOL(lockpool,WIND_LOCK_MAX_NUM,sizeof(lock_s));
+
 static __INLINE__ lock_s *lock_malloc(void)
 {
-    return wind_core_alloc(IDX_LOCK);
+    return (lock_s*)wind_pool_alloc(lockpool);
 }
 
 static __INLINE__ w_err_t lock_free(void *lock)
 {
-    return wind_core_free(IDX_LOCK,lock);
+    return wind_pool_free(lockpool,lock);
+}
+w_err_t wind_lock_init(void)
+{
+    w_err_t err;
+    err = wind_pool_create("lock",lockpool,sizeof(lockpool),sizeof(lock_s));
+    return err;
 }
 
 //创建一个lock对象，并加入所有lock列表

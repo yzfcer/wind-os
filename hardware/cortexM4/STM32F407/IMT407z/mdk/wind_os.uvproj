@@ -1323,16 +1323,6 @@
               <FileType>5</FileType>
               <FilePath>..\..\..\..\..\src\core\wind_msgbox.h</FilePath>
             </File>
-            <File>
-              <FileName>core_obj.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\core\core_obj.c</FilePath>
-            </File>
-            <File>
-              <FileName>core_obj.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\core\core_obj.h</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>

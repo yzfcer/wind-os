@@ -31,29 +31,30 @@
 #include "wind_stati.h"
 #include "wind_var.h"
 #include "wind_debug.h"
-#include "core_obj.h"
 #if WIND_MESSAGE_SUPPORT
 extern void wind_thread_dispatch(void);
+WIND_MPOOL(msgpool,WIND_MESSAGE_MAX_NUM,sizeof(msg_s));
+WIND_MPOOL(mboxpool,WIND_MBOX_MAX_NUM,sizeof(mbox_s));
 
 static msg_s *msg_malloc(void)
 {
-    return (msg_s *)wind_core_alloc(IDX_MSG);
+    return wind_pool_alloc(msgpool);
 }
 
 static w_err_t msg_free(msg_s *msg)
 {
-    return wind_core_free(IDX_MSG,(void *)msg);
+    return wind_pool_free(msgpool,msg);
 }
 
 
 static mbox_s *mbox_malloc(void)
 {
-    return (mbox_s *)wind_core_alloc(IDX_MBOX);
+    return wind_pool_alloc(mboxpool);
 }
 
 static w_err_t mbox_free(mbox_s *mbox)
 {
-    return wind_core_free(IDX_MBOX,(void *)mbox);
+    return wind_pool_free(mboxpool,mbox);
 }
 
 
@@ -77,6 +78,14 @@ static w_err_t mbox_delete_msgs(mbox_s *mbox)
 
 
 //**********************************************extern functions******************************
+w_err_t wind_mbox_init(void)
+{
+    w_err_t err;
+    err = wind_pool_create("msg",msgpool,sizeof(msgpool),sizeof(msg_s));
+    WIND_ASSERT_RETURN(err == ERR_OK,err);
+    err = wind_pool_create("mbox",mboxpool,sizeof(mboxpool),sizeof(mbox_s));
+    return err;
+}
 
 //创建一个消息，并返回消息
 msg_s *wind_message_create(const char *name,w_uint16_t msg_id,

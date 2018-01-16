@@ -75,6 +75,7 @@ w_err_t wind_pool_create(const char *name,void *mem,w_uint32_t memsize,w_uint32_
     dlist_insert_tail(&g_core.poollist,&pm->poolnode);
     wind_open_interrupt();
     pm->magic = WIND_MPOOL_MAGIC;
+    wind_pool_print_list(&g_core.poollist);
     return ERR_OK;
 }
 

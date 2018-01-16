@@ -33,7 +33,6 @@
 #include "wind_softint.h"
 #include "wind_var.h"
 #include "wind_time.h"
-#include "core_obj.h"
 #include "wind_std.h"
 
 volatile w_int8_t gwind_int_cnt = 0;//全局的中断计数值
@@ -98,7 +97,7 @@ static thread_s *wind_search_highthread(void)
     foreach_node(pnode,&g_core.threadlist)
     {
         pthread = PRI_DLIST_OBJ(pnode,thread_s,validthr);
-        if((pthread->used) && (pthread->runstat == THREAD_STATUS_READY))
+        if(pthread->runstat == THREAD_STATUS_READY)
         {
             wind_open_interrupt();
             return pthread;
@@ -190,8 +189,12 @@ void wind_init()
     
     wind_print_os_info();
     wind_corevar_init();
-
-    wind_corepool_init();
+    wind_thread_init();
+    wind_sem_init();
+    wind_lock_init();
+    wind_pipe_init();
+    wind_mbox_init();
+    wind_timer_init();
 
     wind_time_init();//时间初始化
 #if WIND_RTC_SUPPORT

@@ -28,11 +28,22 @@
 #include "wind_os_hwif.h"
 #include "wind_debug.h"
 #include "wind_var.h"
-#include "core_obj.h"
 #include "wind_queue.h"
 #if (WIND_PIPE_SUPPORT)
 
+static WIND_MPOOL(pipepool,WIND_PIPE_MAX_NUM,sizeof(pipe_s));
 //********************************************internal functions******************************
+
+static __INLINE__ pipe_s *pipe_malloc(void)
+{
+    return (pipe_s*)wind_pool_alloc(pipepool);
+}
+
+static __INLINE__ w_err_t pipe_free(void *pipe)
+{
+    return wind_pool_free(pipepool,pipe);
+}
+
 
 
 //********************************************internal functions******************************
@@ -41,6 +52,12 @@
 
 
 //**********************************************extern functions******************************
+w_err_t wind_pipe_init(void)
+{
+    w_err_t err;
+    err = wind_pool_create("pipe",pipepool,sizeof(pipepool),sizeof(pipe_s));
+    return err;
+}
 
 pipe_s* wind_pipe_create(const char *name,void *buff,w_uint32_t buflen)
 {
@@ -51,7 +68,7 @@ pipe_s* wind_pipe_create(const char *name,void *buff,w_uint32_t buflen)
     err = wind_queue_create(buff,buflen,1);
     WIND_ASSERT_RETURN(err == ERR_OK,NULL);
     
-    ppipe = wind_core_alloc(IDX_PIPE);
+    ppipe = pipe_malloc();
     WIND_ASSERT_RETURN(ppipe != NULL,NULL);
     ppipe->magic = WIND_PIPE_MAGIC;
     ppipe->name = name;
@@ -101,7 +118,7 @@ w_err_t wind_pipe_free(pipe_s* ppipe)
     ppipe->magic = 0;
     ppipe->used = B_FALSE;
     ppipe->name = NULL;
-    wind_core_free(IDX_PIPE,ppipe);
+    pipe_free(ppipe);
     wind_open_interrupt();
     return ERR_OK;
 }

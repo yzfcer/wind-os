@@ -41,7 +41,7 @@ typedef struct _wind_lock
     dlist_s waitlist;  //等待线程队列
 }lock_s;
 
-//w_err_t wind_lock_init(void);
+w_err_t wind_lock_init(void);
 lock_s *wind_lock_create(const char *name);
 w_err_t wind_lock_tryfree(lock_s *plock);
 w_err_t wind_lock_free(lock_s *plock);

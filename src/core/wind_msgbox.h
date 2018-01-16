@@ -55,7 +55,7 @@ typedef struct __mbox_s
     thread_s *owner;
 }mbox_s;
 
-
+w_err_t wind_mbox_init(void);
 msg_s *wind_message_create(const char *name,w_uint16_t msgNo,w_uint16_t param,void *lparam);
 w_err_t wind_message_destroy(msg_s *pmsg);
 

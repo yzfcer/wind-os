@@ -84,11 +84,11 @@ typedef enum __thr_evt_e
 struct _thread_s;
 typedef struct __threadcb_s
 {
-    void (*create)(struct _thread_s *pthread);
-    void (*start)(struct _thread_s *pthread);
-    void (*suspend)(struct _thread_s *pthread);
-    void (*resume)(struct _thread_s *pthread);
-    void (*dead)(struct _thread_s *pthread);
+    void (*create)(struct _thread_s *thread);
+    void (*start)(struct _thread_s *thread);
+    void (*suspend)(struct _thread_s *thread);
+    void (*resume)(struct _thread_s *thread);
+    void (*dead)(struct _thread_s *thread);
 }threadcb_s;
 #endif 
 
@@ -109,7 +109,6 @@ typedef struct _thread_s
     
     struct _thread_s *parent;
     char name[THREAD_NAME_LEN];
-    w_bool_t used;
     w_int16_t prio;
     
     thread_stat_e runstat;
@@ -126,6 +125,7 @@ typedef struct _thread_s
 
 
 
+w_err_t wind_thread_init(void);
 
 thread_s *wind_thread_create(const w_int8_t *name,
                    prio_e priolevel,
@@ -134,21 +134,22 @@ thread_s *wind_thread_create(const w_int8_t *name,
                    w_int8_t **argv,
                    w_pstack_t psck,
                    w_uint16_t stksize);
+#if WIND_STKPOOL_SUPPORT
 thread_s *wind_thread_create_default(const w_int8_t *name,
                    w_err_t (*thread_func)(w_int32_t argc,w_int8_t **argv),
                    w_int16_t argc,
                    w_int8_t **argv);
-
-w_err_t wind_thread_changeprio(thread_s *pthread,w_int16_t prio);
-w_err_t wind_thread_start(thread_s *pthread);
-w_err_t wind_thread_suspend(thread_s *pthread);
-w_err_t wind_thread_resume(thread_s *pthread);
-w_err_t wind_thread_kill(thread_s *pthread);
+#endif
+w_err_t wind_thread_changeprio(thread_s *thread,w_int16_t prio);
+w_err_t wind_thread_start(thread_s *thread);
+w_err_t wind_thread_suspend(thread_s *thread);
+w_err_t wind_thread_resume(thread_s *thread);
+w_err_t wind_thread_kill(thread_s *thread);
 w_err_t wind_thread_killbyname(w_int8_t *name);
 
 
 w_bool_t  wind_thread_isopen(void);
-w_err_t   wind_thread_getname(thread_s *pthread,w_int8_t *name);
+w_err_t   wind_thread_getname(thread_s *thread,w_int8_t *name);
 thread_s *wind_thread_get_byname(w_int8_t *name);
 w_int8_t* wind_thread_curname(void);
 thread_s *wind_thread_current(void);
@@ -160,7 +161,7 @@ w_err_t wind_thread_exit(w_err_t exitcode);
 
 w_err_t wind_thread_print(dlist_s *list);
 #if WIND_THREAD_CALLBACK_SUPPORT
-w_err_t wind_thread_callback_register(thread_s *pthread,thr_evt_e id,void(*cb)(thread_s *));
+w_err_t wind_thread_callback_register(thread_s *thread,thr_evt_e id,void(*cb)(thread_s *));
 #endif
 
 #ifdef __cplusplus

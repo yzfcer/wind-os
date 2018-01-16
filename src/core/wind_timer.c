@@ -28,35 +28,29 @@
 #include "wind_debug.h"
 #include "wind_stati.h"
 #include "wind_var.h"
-#include "core_obj.h"
 #if WIND_TIMER_SUPPORT
-static timer_s* ttimer_malloc(void)
+static WIND_MPOOL(timerpool,WIND_TIMER_MAX_NUM,sizeof(timer_s));
+
+static __INLINE__ timer_s *timer_malloc(void)
 {
-    timer_s* timer;
-    timer = wind_core_alloc(IDX_TIMER);
-    if(timer == NULL)
-    {
-        return NULL;
-    }
-    timer->used = B_TRUE;
-    timer->running = B_FALSE;
-    return timer;
+    return (timer_s*)wind_pool_alloc(timerpool);
 }
-w_err_t ttimer_free(timer_s* timer)
+
+static __INLINE__ w_err_t timer_free(void *timer)
 {
-    if(timer == NULL)
-        return ERR_NULL_POINTER;
-    timer->running = B_FALSE;
-    timer->used = B_FALSE;
-    timer->count = 0;
-    timer->init_count = 0;
-    timer->handle = NULL;
-    wind_core_free(IDX_TIMER,timer);
-    return ERR_OK;
+    return wind_pool_free(timerpool,timer);
 }
 
 
-timer_s* wind_timer_create(w_uint32_t t_ms,softtimer_fn func,void *arg,w_bool_t run)
+w_err_t wind_timer_init(void)
+{
+    w_err_t err;
+    err = wind_pool_create("timer",timerpool,sizeof(timerpool),sizeof(timer_s));
+    return err;
+}
+
+
+timer_s* wind_timer_create(w_uint32_t t_ms,softimer_fn func,void *arg,w_bool_t run)
 {
     timer_s* timer;
     dnode_s *pnode;
@@ -65,7 +59,7 @@ timer_s* wind_timer_create(w_uint32_t t_ms,softtimer_fn func,void *arg,w_bool_t 
         count = 1;
     wind_notice("creating soft timer:%d ms",t_ms);
     WIND_ASSERT_RETURN(func != NULL,NULL);
-    timer = ttimer_malloc();
+    timer = timer_malloc();
     WIND_ASSERT_RETURN(timer != NULL,NULL);
     wind_notice("creat soft timer OK");
     DNODE_INIT(timer->tmrnode);
@@ -79,41 +73,37 @@ timer_s* wind_timer_create(w_uint32_t t_ms,softtimer_fn func,void *arg,w_bool_t 
     return timer; 
 }
 
-w_err_t wind_timer_start(timer_s* ptimer)
+w_err_t wind_timer_start(timer_s* timer)
 {
-    WIND_ASSERT_RETURN(ptimer != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(ptimer->used != B_FALSE,ERR_COMMAN);
-    ptimer->running = B_TRUE;
+    WIND_ASSERT_RETURN(timer != NULL,ERR_NULL_POINTER);
+    timer->running = B_TRUE;
     return ERR_OK;
 }
 
-w_err_t wind_timer_stop(timer_s* ptimer)
+w_err_t wind_timer_stop(timer_s* timer)
 {
-    WIND_ASSERT_RETURN(ptimer != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(ptimer->used != B_FALSE,ERR_COMMAN);
-    ptimer->running = B_FALSE;
+    WIND_ASSERT_RETURN(timer != NULL,ERR_NULL_POINTER);
+    timer->running = B_FALSE;
     return ERR_OK;
 }
 
-w_err_t wind_timer_free(timer_s* ptimer)
+w_err_t wind_timer_free(timer_s* timer)
 {
-    WIND_ASSERT_RETURN(ptimer != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(ptimer->used != B_FALSE,ERR_COMMAN);
+    WIND_ASSERT_RETURN(timer != NULL,ERR_NULL_POINTER);
     wind_close_interrupt();
-    dlist_remove(&g_core.ttmerlist,&ptimer->tmrnode);
-    ttimer_free(ptimer);
+    dlist_remove(&g_core.ttmerlist,&timer->tmrnode);
+    timer_free(timer);
     wind_open_interrupt();
     return ERR_OK;
 }
 
-w_err_t wind_timer_set_period(timer_s* ptimer,w_uint32_t t_ms)
+w_err_t wind_timer_set_period(timer_s* timer,w_uint32_t t_ms)
 {
     w_int32_t count = t_ms / TIMER_PERIOD;
     if(count <= 0)
         count = 1;
-    WIND_ASSERT_RETURN(ptimer != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(ptimer->used != B_FALSE,ERR_COMMAN);
-    ptimer->count = count;
+    WIND_ASSERT_RETURN(timer != NULL,ERR_NULL_POINTER);
+    timer->count = count;
     return ERR_OK;
 }
 

@@ -31,19 +31,26 @@
 #include "wind_stati.h"
 #include "wind_var.h"
 #include "wind_string.h"
-#include "core_obj.h"
 #if WIND_SEM_SUPPORT
 extern void wind_thread_dispatch(void);
-static sem_s *sem_malloc(void)
+static WIND_MPOOL(sempool,WIND_SEM_MAX_NUM,sizeof(sem_s));
+
+static __INLINE__ sem_s *sem_malloc(void)
 {
-    sem_s *psem;
-    psem = wind_core_alloc(IDX_SEM);
-    return psem;
+    return (sem_s*)wind_pool_alloc(sempool);
 }
 
-static w_err_t sem_free(sem_s *psem)
+static __INLINE__ w_err_t sem_free(void *sem)
 {
-    return wind_core_free(IDX_SEM,psem);
+    return wind_pool_free(sempool,sem);
+}
+
+
+w_err_t wind_sem_init(void)
+{
+    w_err_t err;
+    err = wind_pool_create("sem",sempool,sizeof(sempool),sizeof(sem_s));
+    return err;
 }
 
 

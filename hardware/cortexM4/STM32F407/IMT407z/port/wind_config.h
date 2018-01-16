@@ -81,7 +81,7 @@
 
 #define WIND_TIMER_MAX_NUM 30  //tick定时器内存池的容量
 
-#define WIND_LOCK_NUM 10 //互斥锁的数量
+#define WIND_LOCK_MAX_NUM 10 //互斥锁的数量
 
 #define WIND_SOFTINT_MAX_NUM 32 //软中断向量表的长度
 
