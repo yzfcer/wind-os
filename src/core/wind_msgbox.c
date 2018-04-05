@@ -33,19 +33,7 @@
 #include "wind_debug.h"
 #if WIND_MESSAGE_SUPPORT
 extern void wind_thread_dispatch(void);
-WIND_MPOOL(msgpool,WIND_MESSAGE_MAX_NUM,sizeof(msg_s));
 WIND_MPOOL(mboxpool,WIND_MBOX_MAX_NUM,sizeof(mbox_s));
-
-static msg_s *msg_malloc(void)
-{
-    return wind_pool_alloc(msgpool);
-}
-
-static w_err_t msg_free(msg_s *msg)
-{
-    return wind_pool_free(msgpool,msg);
-}
-
 
 static mbox_s *mbox_malloc(void)
 {
@@ -60,57 +48,17 @@ static w_err_t mbox_free(mbox_s *mbox)
 
 //********************************************internal functions******************************
 
-//删除邮箱里面的所有消息
-static w_err_t mbox_delete_msgs(mbox_s *mbox)
-{
-    dnode_s *pnode;
-    msg_s *msg;
-    WIND_ASSERT_RETURN(mbox != NULL,ERR_NULL_POINTER);
-    foreach_node(pnode,&mbox->msglist)
-    {
-        dlist_remove(&mbox->msglist,pnode);
-        msg = DLIST_OBJ(pnode,msg_s,msgnode);
-        wind_message_destroy(msg);
-    }
-    return ERR_OK;
-}
 //********************************************internal functions******************************
 
 
 //**********************************************extern functions******************************
+
 w_err_t wind_mbox_init(void)
 {
     w_err_t err;
-    err = wind_pool_create("msg",msgpool,sizeof(msgpool),sizeof(msg_s));
-    WIND_ASSERT_RETURN(err == ERR_OK,err);
     err = wind_pool_create("mbox",mboxpool,sizeof(mboxpool),sizeof(mbox_s));
     return err;
 }
-
-//创建一个消息，并返回消息
-msg_s *wind_message_create(const char *name,w_uint16_t msg_id,
-                            w_uint16_t msg_len,void *msg_arg)
-{
-    msg_s *pmsg;
-    pmsg = msg_malloc();
-    WIND_ASSERT_RETURN(pmsg != NULL,NULL);
-    pmsg->name = name;
-    DNODE_INIT(pmsg->msgnode);
-    pmsg->msg_id = msg_id;
-    pmsg->msg_len = msg_len;
-    pmsg->msg_arg = msg_arg;
-    return pmsg;
-}
-
-w_err_t wind_message_destroy(msg_s *pmsg)
-{
-    w_err_t err;
-    WIND_ASSERT_RETURN(pmsg != NULL,ERR_NULL_POINTER);
-    pmsg->name = NULL;
-    err = msg_free(pmsg);
-    return err;
-}
-
 
 //创建邮箱，只能在线程中创建，不能在中断中和线程运行之前
 mbox_s *wind_mbox_create(const char *name,thread_s *owner)
@@ -134,6 +82,7 @@ mbox_s *wind_mbox_create(const char *name,thread_s *owner)
 w_err_t wind_mbox_destroy(mbox_s *pmbox)
 {
     w_err_t err;
+    dnode_s *dnode;
     thread_s *pthread;
     WIND_ASSERT_RETURN(pmbox != NULL,ERR_NULL_POINTER);
     pthread = pmbox->owner;
@@ -148,8 +97,11 @@ w_err_t wind_mbox_destroy(mbox_s *pmbox)
     pmbox->valid = B_FALSE;
     pmbox->owner = NULL;
     pmbox->name = NULL;
-    err = mbox_delete_msgs(pmbox);
-    WIND_ASSERT_RETURN(err == ERR_OK,err);
+    dnode = dlist_head(&pmbox->msglist);
+    if(dnode != NULL)
+    {
+        wind_warn("msgbox:%s is NOT empty while destroying it.",pmbox->name);
+    }
     mbox_free(pmbox);
     wind_open_interrupt();
     return ERR_OK;

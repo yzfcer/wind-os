@@ -38,7 +38,6 @@ extern "C" {
 
 typedef struct _wind_message
 {
-    const char *name;
     dnode_s msgnode;
     w_uint16_t msg_id;
     w_uint16_t msg_len;
@@ -55,9 +54,10 @@ typedef struct __mbox_s
     thread_s *owner;
 }mbox_s;
 
+
+#define GET_MSG(nodeptr,msgtype,msgnode) (void*)(((char*)(nodeptr))-((w_uint32_t)&(((msgtype*)0)->msgnode)))
+
 w_err_t wind_mbox_init(void);
-msg_s *wind_message_create(const char *name,w_uint16_t msgNo,w_uint16_t param,void *lparam);
-w_err_t wind_message_destroy(msg_s *pmsg);
 
 mbox_s *wind_mbox_create(const char *name,thread_s *owner);
 w_err_t wind_mbox_destroy(mbox_s *pmbox);
