@@ -53,6 +53,7 @@ CASE_SETUP(tree_case)
 CASE_TEARDOWN(tree_case)
 {
     int i;
+    wind_pool_destroy(test_tree);
     for(i = 0;i < TREENUM+1;i ++)
         trees[i] = 0;
 }

@@ -79,6 +79,18 @@ w_err_t wind_pool_create(const char *name,void *mem,w_uint32_t memsize,w_uint32_
     return ERR_OK;
 }
 
+w_err_t wind_pool_destroy(void *mem)
+{
+    pool_s *pm;
+    WIND_ASSERT_RETURN(mem != NULL,ERR_NULL_POINTER);
+    pm = (pool_s *)WIND_MPOOL_ALIGN_R((w_uint32_t)mem);
+    WIND_ASSERT_RETURN(pm->magic == WIND_MPOOL_MAGIC,ERR_INVALID_PARAM);
+    wind_close_interrupt();
+    dlist_remove(&g_core.poollist,&pm->poolnode);
+    wind_open_interrupt();
+    pm->magic = 0;
+    return ERR_OK;
+}
 
 void *wind_pool_alloc(void *mem)
 {
@@ -153,7 +165,7 @@ void wind_pool_print_list(dlist_s *list)
 {
     dnode_s *pdnode;
     pool_s *pm;
-    wind_printf("\r\n\r\nthread list as following:\r\n");
+    wind_printf("\r\n\r\nmpool list as following:\r\n");
     wind_printf("-----------------------------------------------------------------\r\n");
     wind_printf("%-12s %-10s %-8s %-8s %-10s %-8s\r\n","name","head","size","itemnum","itemsize","used");
     wind_printf("-----------------------------------------------------------------\r\n");
@@ -162,7 +174,7 @@ void wind_pool_print_list(dlist_s *list)
         pm = DLIST_OBJ(pdnode,pool_s,poolnode);
         wind_printf("%-12s 0x%-8x %-8d %-10d %-8d %-8d\r\n",
             pm->name,pm->head,pm->size,pm->itemnum,pm->itemsize,pm->used);
-     }
+    }
     wind_printf("-----------------------------------------------------------------\r\n");
 }
 

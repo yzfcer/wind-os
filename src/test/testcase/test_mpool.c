@@ -40,7 +40,7 @@ CASE_SETUP(pool_info)
 
 CASE_TEARDOWN(pool_info)
 {
-    
+    wind_pool_destroy(test_pool);
 }
 
 CASE_FUNC(pool_info)
@@ -68,6 +68,7 @@ CASE_SETUP(pool_alloc)
 CASE_TEARDOWN(pool_alloc)
 {
     int i;
+    wind_pool_destroy(test_pool);
     for(i = 0;i < TNUM+1;i ++)
         testblk[i] = 0;
 }
