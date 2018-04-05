@@ -46,7 +46,7 @@ typedef struct __core_var_s
     dlist_s sleeplist;
     dlist_s semlist;
     dlist_s locklist;
-    dlist_s mboxlist;
+    dlist_s msgboxlist;
     dlist_s ttmerlist;
     dlist_s poollist;
     dlist_s heaplist;

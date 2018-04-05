@@ -35,7 +35,7 @@ extern "C" {
 #endif
 
 #if WIND_MESSAGE_SUPPORT
-
+#define WIND_MSGBOX_MAGIC 0x378A523B
 typedef struct _wind_message
 {
     dnode_s msgnode;
@@ -44,26 +44,26 @@ typedef struct _wind_message
     void *msg_arg;
 }msg_s; 
 
-typedef struct __mbox_s
+typedef struct __msgbox_s
 {
+    w_uint32_t magic;//魔术字
     const char *name;
-    dnode_s mboxnode;
+    dnode_s msgboxnode;
     dlist_s msglist;//消息队列
     int num;//消息的数量
-    w_bool_t valid;//邮箱是否可用
     thread_s *owner;
-}mbox_s;
+}msgbox_s;
 
 
 #define GET_MSG(nodeptr,msgtype,msgnode) (void*)(((char*)(nodeptr))-((w_uint32_t)&(((msgtype*)0)->msgnode)))
 
-w_err_t wind_mbox_init(void);
+w_err_t wind_msgbox_init(void);
 
-mbox_s *wind_mbox_create(const char *name,thread_s *owner);
-w_err_t wind_mbox_destroy(mbox_s *pmbox);
+msgbox_s *wind_msgbox_create(const char *name,thread_s *owner);
+w_err_t wind_msgbox_destroy(msgbox_s *pmsgbox);
 
-w_err_t wind_mbox_post(mbox_s *mbox,msg_s *pmsg);
-w_err_t wind_mbox_fetch(mbox_s *mbox,msg_s **pmsg,w_uint32_t timeout);
+w_err_t wind_msgbox_post(msgbox_s *msgbox,msg_s *pmsg);
+w_err_t wind_msgbox_fetch(msgbox_s *msgbox,msg_s **pmsg,w_uint32_t timeout);
 /**/
 #endif //WIND_MESSAGE_SUPPORT
 

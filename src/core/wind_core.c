@@ -143,8 +143,6 @@ static void wind_run()
 }
 
 
-
-
 //在线程中切换到高优先级的线程
 #if WIND_REALTIME_CORE_SUPPORT
 void wind_thread_dispatch(void)
@@ -177,7 +175,24 @@ void wind_thread_dispatch(void){}
 #endif
 
 
-
+void wind_switchto_thread(thread_s *pthread)
+{
+    thread_s *pthr;
+    wind_close_interrupt();
+    pthr = pthread;
+    if(pthr == wind_thread_current())
+    {
+        wind_open_interrupt();
+        return;
+    }
+    gwind_high_stack = &pthr->stack;
+    if(gwind_high_stack != gwind_cur_stack)
+    {
+        wind_open_interrupt();
+        wind_thread_switch();
+    }
+    wind_open_interrupt();
+}
 
 
 //操作系统初始化
@@ -193,7 +208,7 @@ void wind_init()
     wind_sem_init();
     wind_lock_init();
     wind_pipe_init();
-    wind_mbox_init();
+    wind_msgbox_init();
     wind_timer_init();
 
     wind_time_init();//时间初始化

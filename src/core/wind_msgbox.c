@@ -33,16 +33,16 @@
 #include "wind_debug.h"
 #if WIND_MESSAGE_SUPPORT
 extern void wind_thread_dispatch(void);
-WIND_MPOOL(mboxpool,WIND_MBOX_MAX_NUM,sizeof(mbox_s));
+WIND_MPOOL(msgboxpool,WIND_MBOX_MAX_NUM,sizeof(msgbox_s));
 
-static mbox_s *mbox_malloc(void)
+static msgbox_s *msgbox_malloc(void)
 {
-    return wind_pool_alloc(mboxpool);
+    return wind_pool_alloc(msgboxpool);
 }
 
-static w_err_t mbox_free(mbox_s *mbox)
+static w_err_t msgbox_free(msgbox_s *msgbox)
 {
-    return wind_pool_free(mboxpool,mbox);
+    return wind_pool_free(msgboxpool,msgbox);
 }
 
 
@@ -53,103 +53,102 @@ static w_err_t mbox_free(mbox_s *mbox)
 
 //**********************************************extern functions******************************
 
-w_err_t wind_mbox_init(void)
+w_err_t wind_msgbox_init(void)
 {
     w_err_t err;
-    err = wind_pool_create("mbox",mboxpool,sizeof(mboxpool),sizeof(mbox_s));
+    err = wind_pool_create("msgbox",msgboxpool,sizeof(msgboxpool),sizeof(msgbox_s));
     return err;
 }
 
 //创建邮箱，只能在线程中创建，不能在中断中和线程运行之前
-mbox_s *wind_mbox_create(const char *name,thread_s *owner)
+msgbox_s *wind_msgbox_create(const char *name,thread_s *owner)
 {
-    mbox_s *pmbox;
-    pmbox = mbox_malloc();
-    WIND_ASSERT_RETURN(pmbox != NULL,NULL);
+    msgbox_s *pmsgbox;
+    pmsgbox = msgbox_malloc();
+    WIND_ASSERT_RETURN(pmsgbox != NULL,NULL);
 
-    pmbox->name = name;
-    DNODE_INIT(pmbox->mboxnode);
-    DLIST_INIT(pmbox->msglist);
-    pmbox->num = 0;
-    pmbox->valid = B_TRUE;
-    pmbox->owner = owner;
+    pmsgbox->name = name;
+    DNODE_INIT(pmsgbox->msgboxnode);
+    DLIST_INIT(pmsgbox->msglist);
+    pmsgbox->num = 0;
+    pmsgbox->magic = WIND_MSGBOX_MAGIC;
+    pmsgbox->owner = owner;
     wind_close_interrupt();
-    dlist_insert_tail(&g_core.mboxlist,&pmbox->mboxnode);
+    dlist_insert_tail(&g_core.msgboxlist,&pmsgbox->msgboxnode);
     wind_open_interrupt();
-    return pmbox;
+    return pmsgbox;
 }
 
-w_err_t wind_mbox_destroy(mbox_s *pmbox)
+w_err_t wind_msgbox_destroy(msgbox_s *pmsgbox)
 {
-    w_err_t err;
     dnode_s *dnode;
     thread_s *pthread;
-    WIND_ASSERT_RETURN(pmbox != NULL,ERR_NULL_POINTER);
-    pthread = pmbox->owner;
-    if((pmbox->owner->runstat == THREAD_STATUS_SLEEP) 
-       && (pmbox->owner->cause == CAUSE_MSG))
+    WIND_ASSERT_RETURN(pmsgbox != NULL,ERR_NULL_POINTER);
+    pthread = pmsgbox->owner;
+    if((pmsgbox->owner->runstat == THREAD_STATUS_SLEEP) 
+       && (pmsgbox->owner->cause == CAUSE_MSG))
     {
         pthread->runstat = THREAD_STATUS_READY;
     }
 
     wind_close_interrupt();
-    dlist_remove_tail(&g_core.mboxlist);
-    pmbox->valid = B_FALSE;
-    pmbox->owner = NULL;
-    pmbox->name = NULL;
-    dnode = dlist_head(&pmbox->msglist);
+    dlist_remove_tail(&g_core.msgboxlist);
+    pmsgbox->magic = 0;
+    pmsgbox->owner = NULL;
+    pmsgbox->name = NULL;
+    dnode = dlist_head(&pmsgbox->msglist);
     if(dnode != NULL)
     {
-        wind_warn("msgbox:%s is NOT empty while destroying it.",pmbox->name);
+        wind_warn("msgbox:%s is NOT empty while destroying it.",pmsgbox->name);
     }
-    mbox_free(pmbox);
+    msgbox_free(pmsgbox);
     wind_open_interrupt();
     return ERR_OK;
 }
 
-w_err_t wind_mbox_post(mbox_s *mbox,msg_s *pmsg)
+w_err_t wind_msgbox_post(msgbox_s *msgbox,msg_s *pmsg)
 {
     thread_s *pthread;
-    WIND_ASSERT_RETURN(mbox != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(msgbox != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(pmsg != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(mbox->valid,ERR_COMMAN);
-    WIND_ASSERT_RETURN(mbox->owner,ERR_COMMAN);
+    WIND_ASSERT_RETURN(msgbox->magic == WIND_MSGBOX_MAGIC,ERR_COMMAN);
+    WIND_ASSERT_RETURN(msgbox->owner,ERR_COMMAN);
     //将消息加入邮箱
     wind_close_interrupt();
-    dlist_insert_tail(&mbox->msglist,&pmsg->msgnode);
-    mbox->num ++;
+    dlist_insert_tail(&msgbox->msglist,&pmsg->msgnode);
+    msgbox->num ++;
 
     //激活被阻塞的线程
-    pthread = mbox->owner;
+    pthread = msgbox->owner;
     if((pthread->runstat != THREAD_STATUS_SLEEP) 
        || (pthread->cause != CAUSE_MSG))
     {
         wind_open_interrupt();
         return ERR_OK;
     }
-    mbox->owner->runstat = THREAD_STATUS_READY;
+    msgbox->owner->runstat = THREAD_STATUS_READY;
     wind_open_interrupt();
     wind_thread_dispatch();//切换线程
     return ERR_OK;
 }
 
 
-w_err_t wind_mbox_fetch(mbox_s *mbox,msg_s **pmsg,w_uint32_t timeout)
+w_err_t wind_msgbox_fetch(msgbox_s *msgbox,msg_s **pmsg,w_uint32_t timeout)
 {
     w_err_t err;
     w_uint32_t ticks;
     dnode_s *dnode;
     thread_s *pthread;
-    WIND_ASSERT_RETURN(mbox != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(msgbox != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(pmsg != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(mbox->valid,ERR_COMMAN);
-    WIND_ASSERT_RETURN(mbox->owner,ERR_COMMAN);
+    WIND_ASSERT_RETURN(msgbox->magic == WIND_MSGBOX_MAGIC,ERR_COMMAN);
+    WIND_ASSERT_RETURN(msgbox->owner,ERR_COMMAN);
     
     //如果邮箱中有消息，就直接返回消息
     wind_close_interrupt();
-    if(mbox->num > 0)
+    if(msgbox->num > 0)
     {
-        dnode = dlist_remove_head(&mbox->msglist);
+        dnode = dlist_remove_head(&msgbox->msglist);
         *pmsg = DLIST_OBJ(dnode,msg_s,msgnode);
         wind_open_interrupt();
         return ERR_OK;
@@ -159,7 +158,7 @@ w_err_t wind_mbox_fetch(mbox_s *mbox,msg_s **pmsg,w_uint32_t timeout)
     ticks = timeout *WIND_TICK_PER_SEC / 1000;
     if(ticks == 0)
         ticks = 1;
-    pthread = mbox->owner;
+    pthread = msgbox->owner;
     pthread->runstat = THREAD_STATUS_SLEEP;
     pthread->cause = CAUSE_MSG;
     dlist_insert_tail(&g_core.sleeplist,&pthread->sleepthr.node);
@@ -168,12 +167,12 @@ w_err_t wind_mbox_fetch(mbox_s *mbox,msg_s **pmsg,w_uint32_t timeout)
     wind_thread_dispatch();
     if(pthread->cause == CAUSE_MSG)
     {
-        if(mbox->num <= 0)
+        if(msgbox->num <= 0)
         {
             pthread->runstat = THREAD_STATUS_READY;
             return ERR_NULL_POINTER;
         }
-        dnode = dlist_remove_head(&mbox->msglist);
+        dnode = dlist_remove_head(&msgbox->msglist);
         *pmsg = DLIST_OBJ(dnode,msg_s,msgnode);
         wind_open_interrupt();
         err = ERR_OK;

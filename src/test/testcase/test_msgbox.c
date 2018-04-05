@@ -1,6 +1,6 @@
 /****************************************Copyright (c)**************************************************
 **                                       清  风  海  岸
-** 文   件   名: test_lock.c
+** 文   件   名: test_msgbox.c
 ** 创   建   人: 周江村
 ** 最后修改日期: 2017/10/22 16:29:55
 ** 描        述: 
@@ -25,10 +25,18 @@ extern "C" {
 
 /*********************************************头文件定义***********************************************/
 #include "cut.h"
-#include "wind_lock.h"
+#include "wind_mpool.h"
+#include "wind_thread.h"
+#include "wind_msgbox.h"
 /********************************************内部变量定义**********************************************/
-static lock_s *locks[4];
+static msgbox_s *msgbox;
+typedef struct 
+{
+    msg_s msg;
+    int value;
+}test_msg_s;
 
+WIND_MPOOL(testmsg,6,sizeof(test_msg_s));
 
 /********************************************内部函数定义*********************************************/
 
@@ -40,98 +48,80 @@ static lock_s *locks[4];
 
 /********************************************全局函数定义**********************************************/
 
-CASE_SETUP(lockinfo)
+CASE_SETUP(msgboxinfo)
 {
 
 }
 
-CASE_TEARDOWN(lockinfo)
+CASE_TEARDOWN(msgboxinfo)
 {
 
 }
 
-CASE_FUNC(lockinfo)
+CASE_FUNC(msgboxinfo)
 {
     w_err_t err;
-    locks[0] = wind_lock_create("test");
-    EXPECT_NE(locks[0],NULL);
-    EXPECT_EQ(locks[0]->locked,B_FALSE);
-    EXPECT_EQ(locks[0]->waitlist.head,NULL);
-    EXPECT_EQ(locks[0]->waitlist.tail,NULL);
-    err = wind_lock_free(locks[0]);
+    thread_s *thr;
+    thr = wind_thread_current();
+    msgbox = wind_msgbox_create("test",thr);
+    EXPECT_NE(msgbox,NULL);
+    EXPECT_EQ(msgbox->magic,WIND_MSGBOX_MAGIC);
+    EXPECT_EQ(msgbox->num,0);
+    EXPECT_EQ(msgbox->msglist.head,NULL);
+    EXPECT_EQ(msgbox->msglist.tail,NULL);
+    EXPECT_EQ(msgbox->owner,thr);
+    err = wind_msgbox_destroy(msgbox);
     EXPECT_EQ(ERR_OK,err);
 }
 
-CASE_SETUP(lockfunc)
+CASE_SETUP(msgboxfunc)
 {
     
 }
 
-CASE_TEARDOWN(lockfunc)
+CASE_TEARDOWN(msgboxfunc)
 {
 
 }
 
-CASE_FUNC(lockfunc)
+CASE_FUNC(msgboxfunc)
 {
+#if 0
     w_err_t err;
-    locks[0] = wind_lock_create("test");
-    EXPECT_NE(locks[0],NULL);
-    err = wind_lock_close(locks[0]);
+    msgbox = wind_msgbox_create("test");
+    EXPECT_NE(msgbox,NULL);
+    err = wind_msgbox_close(msgbox);
     EXPECT_EQ(ERR_OK,err);
-    EXPECT_EQ(locks[0]->locked,B_TRUE);
-    err = wind_lock_open(locks[0]);
+    EXPECT_EQ(msgbox->msgboxed,B_TRUE);
+    err = wind_msgbox_open(msgbox);
     EXPECT_EQ(ERR_OK,err);
-    EXPECT_EQ(locks[0]->locked,B_FALSE);
-    EXPECT_EQ(locks[0]->waitlist.head,NULL);
-    EXPECT_EQ(locks[0]->waitlist.tail,NULL);
-    err = wind_lock_free(locks[0]);
+    EXPECT_EQ(msgbox->msgboxed,B_FALSE);
+    EXPECT_EQ(msgbox->waitlist.head,NULL);
+    EXPECT_EQ(msgbox->waitlist.tail,NULL);
+    err = wind_msgbox_free(msgbox);
     EXPECT_EQ(ERR_OK,err);
+#endif
 }
 
-CASE_SETUP(lockmulti)
-{
-    
-}
 
-CASE_TEARDOWN(lockmulti)
+
+SUITE_SETUP(test_msgbox)
 {
 
 }
 
-CASE_FUNC(lockmulti)
-{
-    w_int32_t i;
-    w_err_t err;
-    for(i = 0;i < 4;i ++)
-    {
-        locks[i] = wind_lock_create("test");
-        EXPECT_NE(locks[0],NULL);
-    }
-    for(i = 0;i < 4;i ++)
-    {
-        err = wind_lock_free(locks[i]);
-        EXPECT_EQ(ERR_OK,err);
-    }
-}
-
-SUITE_SETUP(test_lock)
-{
-
-}
-
-SUITE_TEARDOWN(test_lock)
+SUITE_TEARDOWN(test_msgbox)
 {
 
 }
 
 
-TEST_CASES_START(test_lock)
-TEST_CASE(lockinfo)
-TEST_CASE(lockfunc)
-TEST_CASE(lockmulti)
+TEST_CASES_START(test_msgbox)
+TEST_CASE(msgboxinfo)
+TEST_CASE(msgboxfunc)
+//TEST_CASE(msgboxmulti)
 TEST_CASES_END
-TEST_SUITE(test_lock)
+TEST_SUITE(test_msgbox)
 
 
 #ifdef __cplusplus
