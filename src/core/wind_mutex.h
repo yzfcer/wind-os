@@ -45,8 +45,8 @@ w_err_t wind_mutex_init(void);
 mutex_s *wind_mutex_create(const char *name);
 w_err_t wind_mutex_tryfree(mutex_s *pmutex);
 w_err_t wind_mutex_free(mutex_s *pmutex);
-w_err_t wind_mutex_close(mutex_s *pmutex);
-w_err_t wind_mutex_open(mutex_s *pmutex);
+w_err_t wind_mutex_lock(mutex_s *pmutex);
+w_err_t wind_mutex_unlock(mutex_s *pmutex);
 w_err_t wind_mutex_print(dlist_s *list);
 
 

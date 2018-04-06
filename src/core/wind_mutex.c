@@ -101,7 +101,7 @@ w_err_t wind_mutex_free(mutex_s *pmutex)
 }
 
 //试图锁定一个互斥锁，如果已经被锁定，则线程将被挂起
-w_err_t wind_mutex_close(mutex_s *pmutex)
+w_err_t wind_mutex_lock(mutex_s *pmutex)
 {
     thread_s *pthread;
     WIND_ASSERT_RETURN(pmutex != NULL,ERR_NULL_POINTER);
@@ -125,7 +125,7 @@ w_err_t wind_mutex_close(mutex_s *pmutex)
 }
 
 //试图打开一个互斥锁，如果有线程被阻塞，则优先激活线程
-w_err_t wind_mutex_open(mutex_s *pmutex)
+w_err_t wind_mutex_unlock(mutex_s *pmutex)
 {
     dnode_s *pnode;
     thread_s *pthread;
@@ -164,7 +164,7 @@ w_err_t wind_mutex_print(dlist_s *list)
     {
         pmutex = (mutex_s *)DLIST_OBJ(dnode,mutex_s,mutexnode);
         wind_printf("%-16s %-8s\r\n",
-            pmutex->name,pmutex->mutexed?"mutex":"unmutex");
+            pmutex->name,pmutex->mutexed?"lock":"unlock");
     }
     wind_printf("--------------------------------------\r\n");
     return ERR_OK;

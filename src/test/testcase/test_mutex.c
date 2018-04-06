@@ -77,10 +77,10 @@ CASE_FUNC(mutexfunc)
     w_err_t err;
     mutexs[0] = wind_mutex_create("test");
     EXPECT_NE(mutexs[0],NULL);
-    err = wind_mutex_close(mutexs[0]);
+    err = wind_mutex_lock(mutexs[0]);
     EXPECT_EQ(ERR_OK,err);
     EXPECT_EQ(mutexs[0]->mutexed,B_TRUE);
-    err = wind_mutex_open(mutexs[0]);
+    err = wind_mutex_unlock(mutexs[0]);
     EXPECT_EQ(ERR_OK,err);
     EXPECT_EQ(mutexs[0]->mutexed,B_FALSE);
     EXPECT_EQ(mutexs[0]->waitlist.head,NULL);

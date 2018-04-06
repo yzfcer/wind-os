@@ -1379,11 +1379,6 @@
               <FilePath>..\..\..\..\..\src\test\testcase\test_tree.c</FilePath>
             </File>
             <File>
-              <FileName>test_lock.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\test\testcase\test_lock.c</FilePath>
-            </File>
-            <File>
               <FileName>test_sem.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\test\testcase\test_sem.c</FilePath>
@@ -1402,6 +1397,11 @@
               <FileName>test_msgbox.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\test\testcase\test_msgbox.c</FilePath>
+            </File>
+            <File>
+              <FileName>test_mutex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\test\testcase\test_mutex.c</FilePath>
             </File>
           </Files>
         </Group>

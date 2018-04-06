@@ -70,10 +70,10 @@ w_err_t wind_heap_init(const char *name,void *base,w_uint32_t size)
     PRIO_DNODE_INIT(item->itemnode);
     item->size = mhp->rest;
 
-    wind_mutex_close(mhp->pmutex);
+    wind_mutex_lock(mhp->pmutex);
     dlist_insert_head(&mhp->free_list,&item->itemnode.node);
     dlist_insert_tail(&g_core.heaplist,&mhp->heap_node);
-    wind_mutex_open(mhp->pmutex);
+    wind_mutex_unlock(mhp->pmutex);
 
     return ERR_OK;
 }
@@ -150,7 +150,7 @@ void *wind_heap_alloc(pheap_s heap,w_uint32_t size)
     WIND_HEAP_DEBUG("pool_size:0x%x\r\n",heap->size);
     WIND_HEAP_DEBUG("available_size:0x%x\r\n",heap->rest);
 
-    wind_mutex_close(mhp->pmutex);
+    wind_mutex_lock(mhp->pmutex);
     foreach_node(pdnode,&mhp->free_list)
     {
         freeitem = PRI_DLIST_OBJ(pdnode,heapitem_s,itemnode);
@@ -161,7 +161,7 @@ void *wind_heap_alloc(pheap_s heap,w_uint32_t size)
             break;
         }
     }
-    wind_mutex_open(mhp->pmutex);
+    wind_mutex_unlock(mhp->pmutex);
     return p;
 }
 
@@ -193,7 +193,7 @@ void *wind_heap_realloc(pheap_s heap, void* ptr, w_uint32_t newsize)
     if (newsize < WIND_HEAP_MINIALLOC)
         newsize = WIND_HEAP_MINIALLOC;
     newsize = __ALIGN_R(newsize, WIND_HEAP_ALIGN_SIZE) + sizeof(heapitem_s);
-    wind_mutex_close(heap->pmutex);
+    wind_mutex_lock(heap->pmutex);
     if(old->size > newsize)
     {
         dlist_remove(&heap->list,&old->itemnode.node);
@@ -206,7 +206,7 @@ void *wind_heap_realloc(pheap_s heap, void* ptr, w_uint32_t newsize)
     }
     if(p != NULL)
         wind_memcpy(p,ptr,newsize);
-    wind_mutex_open(heap->pmutex);
+    wind_mutex_unlock(heap->pmutex);
     return p;
 }
 
@@ -224,7 +224,7 @@ w_err_t wind_heap_free(void *ptr)
     heap = item->pheap;
     WIND_ASSERT_RETURN(heap != NULL,ERR_INVALID_PARAM);
     WIND_ASSERT_RETURN(heap->magic == WIND_HEAP_MAGIC,ERR_INVALID_PARAM);
-    wind_mutex_close(heap->pmutex);
+    wind_mutex_lock(heap->pmutex);
     dlist_remove(&heap->list,&item->itemnode.node);
     item->magic = WIND_HEAPITEM_MAGIC;
     dlist_insert_prio(&heap->free_list,&item->itemnode,(w_uint32_t)item);
@@ -236,7 +236,7 @@ w_err_t wind_heap_free(void *ptr)
     tmpitem = DLIST_OBJ(pdnode,heapitem_s,itemnode);
     if(tmpitem != NULL)
         combine_heapitem(tmpitem,item);
-    wind_mutex_open(heap->pmutex);
+    wind_mutex_unlock(heap->pmutex);
     return ERR_OK;
 }
 
