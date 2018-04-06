@@ -1,6 +1,6 @@
 /****************************************Copyright (c)**************************************************
 **                                       清  风  海  岸
-** 文   件   名: test_lock.c
+** 文   件   名: test_mutex.c
 ** 创   建   人: 周江村
 ** 最后修改日期: 2017/10/22 16:29:55
 ** 描        述: 
@@ -25,9 +25,9 @@ extern "C" {
 
 /*********************************************头文件定义***********************************************/
 #include "cut.h"
-#include "wind_lock.h"
+#include "wind_mutex.h"
 /********************************************内部变量定义**********************************************/
-static lock_s *locks[4];
+static mutex_s *mutexs[4];
 
 
 /********************************************内部函数定义*********************************************/
@@ -40,98 +40,98 @@ static lock_s *locks[4];
 
 /********************************************全局函数定义**********************************************/
 
-CASE_SETUP(lockinfo)
+CASE_SETUP(mutexinfo)
 {
 
 }
 
-CASE_TEARDOWN(lockinfo)
+CASE_TEARDOWN(mutexinfo)
 {
 
 }
 
-CASE_FUNC(lockinfo)
+CASE_FUNC(mutexinfo)
 {
     w_err_t err;
-    locks[0] = wind_lock_create("test");
-    EXPECT_NE(locks[0],NULL);
-    EXPECT_EQ(locks[0]->locked,B_FALSE);
-    EXPECT_EQ(locks[0]->waitlist.head,NULL);
-    EXPECT_EQ(locks[0]->waitlist.tail,NULL);
-    err = wind_lock_free(locks[0]);
+    mutexs[0] = wind_mutex_create("test");
+    EXPECT_NE(mutexs[0],NULL);
+    EXPECT_EQ(mutexs[0]->mutexed,B_FALSE);
+    EXPECT_EQ(mutexs[0]->waitlist.head,NULL);
+    EXPECT_EQ(mutexs[0]->waitlist.tail,NULL);
+    err = wind_mutex_free(mutexs[0]);
     EXPECT_EQ(ERR_OK,err);
 }
 
-CASE_SETUP(lockfunc)
+CASE_SETUP(mutexfunc)
 {
     
 }
 
-CASE_TEARDOWN(lockfunc)
+CASE_TEARDOWN(mutexfunc)
 {
 
 }
 
-CASE_FUNC(lockfunc)
+CASE_FUNC(mutexfunc)
 {
     w_err_t err;
-    locks[0] = wind_lock_create("test");
-    EXPECT_NE(locks[0],NULL);
-    err = wind_lock_close(locks[0]);
+    mutexs[0] = wind_mutex_create("test");
+    EXPECT_NE(mutexs[0],NULL);
+    err = wind_mutex_close(mutexs[0]);
     EXPECT_EQ(ERR_OK,err);
-    EXPECT_EQ(locks[0]->locked,B_TRUE);
-    err = wind_lock_open(locks[0]);
+    EXPECT_EQ(mutexs[0]->mutexed,B_TRUE);
+    err = wind_mutex_open(mutexs[0]);
     EXPECT_EQ(ERR_OK,err);
-    EXPECT_EQ(locks[0]->locked,B_FALSE);
-    EXPECT_EQ(locks[0]->waitlist.head,NULL);
-    EXPECT_EQ(locks[0]->waitlist.tail,NULL);
-    err = wind_lock_free(locks[0]);
+    EXPECT_EQ(mutexs[0]->mutexed,B_FALSE);
+    EXPECT_EQ(mutexs[0]->waitlist.head,NULL);
+    EXPECT_EQ(mutexs[0]->waitlist.tail,NULL);
+    err = wind_mutex_free(mutexs[0]);
     EXPECT_EQ(ERR_OK,err);
 }
 
-CASE_SETUP(lockmulti)
+CASE_SETUP(mutexmulti)
 {
     
 }
 
-CASE_TEARDOWN(lockmulti)
+CASE_TEARDOWN(mutexmulti)
 {
 
 }
 
-CASE_FUNC(lockmulti)
+CASE_FUNC(mutexmulti)
 {
     w_int32_t i;
     w_err_t err;
     for(i = 0;i < 4;i ++)
     {
-        locks[i] = wind_lock_create("test");
-        EXPECT_NE(locks[0],NULL);
+        mutexs[i] = wind_mutex_create("test");
+        EXPECT_NE(mutexs[0],NULL);
     }
     for(i = 0;i < 4;i ++)
     {
-        err = wind_lock_free(locks[i]);
+        err = wind_mutex_free(mutexs[i]);
         EXPECT_EQ(ERR_OK,err);
     }
 }
 
-SUITE_SETUP(test_lock)
+SUITE_SETUP(test_mutex)
 {
 
 }
 
-SUITE_TEARDOWN(test_lock)
+SUITE_TEARDOWN(test_mutex)
 {
 
 }
 
 
-TEST_CASES_START(test_lock)
-TEST_CASE(lockinfo)
-TEST_CASE(lockfunc)
-TEST_CASE(lockmulti)
+TEST_CASES_START(test_mutex)
+TEST_CASE(mutexinfo)
+TEST_CASE(mutexfunc)
+TEST_CASE(mutexmulti)
 TEST_CASES_END
-TEST_SUITE(test_lock)
+TEST_SUITE(test_mutex)
 
 
 #ifdef __cplusplus

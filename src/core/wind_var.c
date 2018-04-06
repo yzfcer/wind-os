@@ -29,7 +29,7 @@
 #include "wind_pipe.h"
 #include "wind_msgbox.h"
 #include "wind_sem.h"
-#include "wind_lock.h"
+#include "wind_mutex.h"
 #include "wind_timer.h"
 #include "wind_debug.h"
 #include "wind_mpool.h"
@@ -51,7 +51,7 @@ void wind_corevar_init(void)
     DLIST_INIT(g_core.threadlist);
     DLIST_INIT(g_core.sleeplist);
     DLIST_INIT(g_core.semlist);
-    DLIST_INIT(g_core.locklist);
+    DLIST_INIT(g_core.mutexlist);
     DLIST_INIT(g_core.msgboxlist);
     DLIST_INIT(g_core.ttmerlist);
     DLIST_INIT(g_core.poollist);

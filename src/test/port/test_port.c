@@ -5,7 +5,7 @@
 //DECLARE_SUITE(TestSuite2);
 DECLARE_SUITE(test_mpool);
 DECLARE_SUITE(test_tree);
-DECLARE_SUITE(test_lock);
+DECLARE_SUITE(test_mutex);
 DECLARE_SUITE(test_sem);
 DECLARE_SUITE(test_pipe);
 DECLARE_SUITE(test_msgbox);
@@ -16,7 +16,7 @@ void test_suite_register_all(void)
     //REGSTER_SUITE(TestSuite2);
     REGSTER_SUITE(test_mpool);
     REGSTER_SUITE(test_tree);
-    REGSTER_SUITE(test_lock);
+    REGSTER_SUITE(test_mutex);
     REGSTER_SUITE(test_sem);
     REGSTER_SUITE(test_pipe);
     REGSTER_SUITE(test_msgbox);

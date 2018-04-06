@@ -30,8 +30,8 @@ extern "C" {
 
 
 /***********************************************宏定义*************************************************/
-#define RB_TREE_LOCK(lock)
-#define RB_TREE_UNLOCK(lock)
+#define RB_TREE_LOCK(mutex)
+#define RB_TREE_UNLOCK(mutex)
 
 /**********************************************枚举定义************************************************/
 typedef enum __TreeColor //定义红黑树结点颜色颜色类型 

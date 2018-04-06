@@ -428,7 +428,7 @@ void FLASH_Unlock(void)
   */
 void FLASH_Lock(void)
 {
-  /* Set the LOCK Bit to lock the FLASH Registers access */
+  /* Set the LOCK Bit to mutex the FLASH Registers access */
   FLASH->CR |= FLASH_CR_LOCK;
 }
 
@@ -982,7 +982,7 @@ void FLASH_OB_Unlock(void)
   */
 void FLASH_OB_Lock(void)
 {
-  /* Set the OPTLOCK Bit to lock the FLASH Option Byte Registers access */
+  /* Set the OPTLOCK Bit to mutex the FLASH Option Byte Registers access */
   FLASH->OPTCR |= FLASH_OPTCR_OPTLOCK;
 }
 

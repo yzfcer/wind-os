@@ -4,7 +4,7 @@
 **                                       yzfcer@163.com
 **
 **--------------文件信息--------------------------------------------------------------------------------
-**文   件   名: wind_lock.h
+**文   件   名: wind_mutex.h
 **创   建   人: 周江村
 **最后修改日期: 2012.09.26
 **描        述: 系统的互斥锁
@@ -33,21 +33,21 @@
 extern "C" {
 #endif
 
-typedef struct _wind_lock
+typedef struct _wind_mutex
 {
-    dnode_s locknode;
+    dnode_s mutexnode;
     const char *name;
-    w_bool_t locked;     //当前的信号量的值
+    w_bool_t mutexed;     //当前的信号量的值
     dlist_s waitlist;  //等待线程队列
-}lock_s;
+}mutex_s;
 
-w_err_t wind_lock_init(void);
-lock_s *wind_lock_create(const char *name);
-w_err_t wind_lock_tryfree(lock_s *plock);
-w_err_t wind_lock_free(lock_s *plock);
-w_err_t wind_lock_close(lock_s *plock);
-w_err_t wind_lock_open(lock_s *plock);
-w_err_t wind_lock_print(dlist_s *list);
+w_err_t wind_mutex_init(void);
+mutex_s *wind_mutex_create(const char *name);
+w_err_t wind_mutex_tryfree(mutex_s *pmutex);
+w_err_t wind_mutex_free(mutex_s *pmutex);
+w_err_t wind_mutex_close(mutex_s *pmutex);
+w_err_t wind_mutex_open(mutex_s *pmutex);
+w_err_t wind_mutex_print(dlist_s *list);
 
 
 #ifdef __cplusplus

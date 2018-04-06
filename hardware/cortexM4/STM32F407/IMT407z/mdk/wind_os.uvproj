@@ -1194,16 +1194,6 @@
               <FilePath>..\..\..\..\..\src\core\wind_flag.h</FilePath>
             </File>
             <File>
-              <FileName>wind_lock.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\core\wind_lock.c</FilePath>
-            </File>
-            <File>
-              <FileName>wind_lock.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\core\wind_lock.h</FilePath>
-            </File>
-            <File>
               <FileName>wind_mem.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\core\wind_mem.c</FilePath>
@@ -1322,6 +1312,16 @@
               <FileName>wind_msgbox.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\..\..\..\src\core\wind_msgbox.h</FilePath>
+            </File>
+            <File>
+              <FileName>wind_mutex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\core\wind_mutex.c</FilePath>
+            </File>
+            <File>
+              <FileName>wind_mutex.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\core\wind_mutex.h</FilePath>
             </File>
           </Files>
         </Group>

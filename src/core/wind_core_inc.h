@@ -35,7 +35,7 @@
 
 
 #include "wind_queue.h"
-#include "wind_lock.h"
+#include "wind_mutex.h"
 #include "wind_flag.h"
 #include "wind_msgbox.h"
 #include "wind_thread.h"

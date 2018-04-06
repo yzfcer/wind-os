@@ -30,7 +30,7 @@
 #include "wind_string.h"
 #include "wind_thread.h"
 #include "wind_sem.h"
-#include "wind_lock.h"
+#include "wind_mutex.h"
 #include "wind_var.h"
 #include "wind_cmd.h"
 #include "wind_mpool.h"
@@ -45,7 +45,7 @@ COMMAND_USAGE(list)
 {
     console_printf("list thread:to show thread infomation.\r\n");
     console_printf("list sem:to show sem infomation.\r\n");
-    console_printf("list lock:to show all lock status.\r\n");
+    console_printf("list mutex:to show all mutex status.\r\n");
     console_printf("list pool:to show all core object pools.\r\n");
 }
 
@@ -63,9 +63,9 @@ COMMAND_MAIN(list,argc,argv)
         return ERR_COMMAN;
     }
 #endif
-    else if(0 == wind_strcmp(argv[1],"lock"))
+    else if(0 == wind_strcmp(argv[1],"mutex"))
     {
-        wind_lock_print(&g_core.locklist);
+        wind_mutex_print(&g_core.mutexlist);
         return ERR_COMMAN;
     }
     else if(0 == wind_strcmp(argv[1],"pool"))

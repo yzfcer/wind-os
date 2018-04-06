@@ -205,7 +205,7 @@ void wind_init()
     wind_print_os_info();
     wind_corevar_init();
     wind_thread_init();
-    wind_lock_init();
+    wind_mutex_init();
     wind_sem_init();
     wind_msgbox_init();
     wind_pipe_init();

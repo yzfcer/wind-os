@@ -990,7 +990,7 @@ typedef struct
   __IO uint32_t ODR;      /*!< GPIO port output data register,        Address offset: 0x14      */
   __IO uint16_t BSRRL;    /*!< GPIO port bit set/reset low register,  Address offset: 0x18      */
   __IO uint16_t BSRRH;    /*!< GPIO port bit set/reset high register, Address offset: 0x1A      */
-  __IO uint32_t LCKR;     /*!< GPIO port configuration lock register, Address offset: 0x1C      */
+  __IO uint32_t LCKR;     /*!< GPIO port configuration mutex register, Address offset: 0x1C      */
   __IO uint32_t AFR[2];   /*!< GPIO alternate function registers,     Address offset: 0x20-0x24 */
 } GPIO_TypeDef;
 

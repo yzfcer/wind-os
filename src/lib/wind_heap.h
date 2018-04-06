@@ -28,7 +28,7 @@
 
 #include "wind_config.h"
 #include "wind_type.h"
-#include "wind_lock.h"
+#include "wind_mutex.h"
 #include "wind_dlist.h"
 
 #ifdef __cplusplus
@@ -53,12 +53,12 @@ extern "C" {
 
 
 //内存块的块数的定义，如果系统存在多个不连续的内存区，则应该在下面添加定义
-//同时还应该在wind_heap_block_init函数中注册新的内存块
-typedef enum __HeapBlock_e
+//同时还应该在wind_heap_mutex_init函数中注册新的内存块
+typedef enum __HeapBmutex_e
 {
     HEAP_BLOCK_1 = 0,//第一块
     HEAP_BLOCK_CNT//块数
-}HeapBlock_e;
+}HeapBmutex_e;
 
 
 
@@ -84,7 +84,7 @@ struct __memheap_s
     dnode_s heap_node;
     dlist_s list;
     dlist_s free_list;
-    lock_s *plock; 
+    mutex_s *pmutex; 
 };
 
 w_err_t wind_heap_init(const char *name,

@@ -32,7 +32,7 @@
 #include "wind_pipe.h"
 #include "wind_msgbox.h"
 #include "wind_sem.h"
-#include "wind_lock.h"
+#include "wind_mutex.h"
 #include "wind_timer.h"
 #include "wind_stati.h"
 #include "wind_mpool.h"
@@ -45,7 +45,7 @@ typedef struct __core_var_s
     dlist_s threadlist;
     dlist_s sleeplist;
     dlist_s semlist;
-    dlist_s locklist;
+    dlist_s mutexlist;
     dlist_s msgboxlist;
     dlist_s ttmerlist;
     dlist_s poollist;
