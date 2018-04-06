@@ -35,7 +35,6 @@ extern "C" {
 #endif
 
 #if WIND_SEM_SUPPORT
-//#define SEM_NAME_LEN 20 //线程名的最大长度，包括 '\0'
 
 typedef struct _wind_sem
 {
@@ -53,7 +52,8 @@ w_err_t wind_sem_fetch(sem_s *psem,w_uint32_t timeout);
 w_err_t wind_sem_tryfree(sem_s *psem);
 w_err_t wind_sem_free(sem_s *psem);
 w_err_t wind_sem_print(dlist_s *list);
-
+#else
+#define wind_sem_init() ERR_OK
 #endif
 #ifdef __cplusplus
 }

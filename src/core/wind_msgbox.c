@@ -60,6 +60,15 @@ w_err_t wind_msgbox_init(void)
     return err;
 }
 
+void wind_msg_init(msg_s *msg,w_uint16_t msg_id,w_uint16_t msg_len,void *msg_arg)
+{
+    msg->msg_id = msg_id;
+    msg->msg_len = msg_len;
+    msg->msg_arg = msg_arg;
+    DNODE_INIT(msg->msgnode);
+}
+
+
 //创建邮箱，只能在线程中创建，不能在中断中和线程运行之前
 msgbox_s *wind_msgbox_create(const char *name,thread_s *owner)
 {

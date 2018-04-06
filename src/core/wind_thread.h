@@ -139,6 +139,8 @@ thread_s *wind_thread_create_default(const w_int8_t *name,
                    w_err_t (*thread_func)(w_int32_t argc,w_int8_t **argv),
                    w_int16_t argc,
                    w_int8_t **argv);
+#else 
+#define wind_thread_create_default(n,f,c,v) ERR_COMMAN
 #endif
 w_err_t wind_thread_changeprio(thread_s *thread,w_int16_t prio);
 w_err_t wind_thread_start(thread_s *thread);

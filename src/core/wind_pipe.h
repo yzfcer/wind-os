@@ -55,6 +55,8 @@ w_err_t wind_pipe_free(pipe_s* ppipe);
 
 
 
+#else
+#define wind_pipe_init() ERR_OK
 
 #endif //WIND_PIPE_SUPPORT
 #ifdef __cplusplus
