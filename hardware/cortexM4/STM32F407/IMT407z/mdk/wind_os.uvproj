@@ -487,6 +487,16 @@
               <FileType>5</FileType>
               <FilePath>..\board\usart1.h</FilePath>
             </File>
+            <File>
+              <FileName>beep.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\board\beep.c</FilePath>
+            </File>
+            <File>
+              <FileName>beep.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\board\beep.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1016,6 +1026,11 @@
               <FileName>cmd_reset.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\console\cmd\cmd_reset.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_bee.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\console\cmd\cmd_bee.c</FilePath>
             </File>
           </Files>
         </Group>

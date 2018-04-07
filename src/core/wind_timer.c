@@ -53,7 +53,6 @@ w_err_t wind_timer_init(void)
 timer_s* wind_timer_create(w_uint32_t t_ms,softimer_fn func,void *arg,w_bool_t run)
 {
     timer_s* timer;
-    dnode_s *pnode;
     w_int32_t count = t_ms / TIMER_PERIOD;
     if(count <= 0)
         count = 1;
@@ -69,7 +68,7 @@ timer_s* wind_timer_create(w_uint32_t t_ms,softimer_fn func,void *arg,w_bool_t r
     timer->running = run;
     timer->arg = arg;
     timer->handle = func;
-    dlist_insert_tail(&g_core.ttmerlist,pnode);
+    dlist_insert_tail(&g_core.ttmerlist,&timer->tmrnode);
     return timer; 
 }
 

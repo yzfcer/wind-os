@@ -31,6 +31,27 @@ void LED_Init(void)
 
 }
 
+void LED_On(unsigned int ledidx)
+{
+    switch(ledidx)
+    {
+    case 0:LED0 = 0;break;
+    case 1:LED1 = 0;break;
+    case 2:LED2 = 0;break;
+    default:break;
+    }
+}
+
+void LED_Off(unsigned int ledidx)
+{
+    switch(ledidx)
+    {
+    case 0:LED0 = 1;break;
+    case 1:LED1 = 1;break;
+    case 2:LED2 = 1;break;
+    default:break;
+    }
+}
 
 
 
