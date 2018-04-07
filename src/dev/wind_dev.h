@@ -56,17 +56,18 @@ struct __dev_ops_s
     w_int32_t (*write)(w_uint8_t *buf,w_uint16_t len);
     w_err_t   (*close)(void);
 };
+w_err_t _register_devs(void);
 
 w_err_t wind_register_dev(dev_s *dev,w_int32_t count);
 w_err_t wind_unregister_dev(dev_s *dev);
 
-w_err_t wind_driver_init(void);
-dev_s *wind_chdev_get(char *name);
-w_err_t wind_chdev_open(dev_s *dev);
-w_err_t wind_chdev_ioctl(dev_s *dev,w_int32_t ctrlpoint,void *param);
-w_int32_t wind_chdev_read(dev_s *dev,w_uint8_t *buf,w_int32_t len);
-w_int32_t wind_chdev_write(dev_s *dev,w_uint8_t *buf,w_int32_t len);
-w_err_t wind_chdev_close(dev_s *dev);
+w_err_t wind_devices_init(void);
+dev_s *wind_dev_get(char *name);
+w_err_t wind_dev_open(dev_s *dev);
+w_err_t wind_dev_ioctl(dev_s *dev,w_int32_t ctrlpoint,void *param);
+w_int32_t wind_dev_read(dev_s *dev,w_uint8_t *buf,w_int32_t len);
+w_int32_t wind_dev_write(dev_s *dev,w_uint8_t *buf,w_int32_t len);
+w_err_t wind_dev_close(dev_s *dev);
 
 #ifdef __cplusplus
 }

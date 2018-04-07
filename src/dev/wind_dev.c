@@ -50,7 +50,7 @@ w_err_t wind_register_dev(dev_s *dev,w_int32_t count)
         }
     }
     dev->mutex = wind_mutex_create(dev->name);
-    dlist_insert_tail(&dev_list,dnode);
+    dlist_insert_tail(&dev_list,&dev->devnode);
     wind_open_interrupt();
     return ERR_OK;
 }
@@ -71,16 +71,18 @@ w_err_t wind_unregister_dev(dev_s *dev)
     wind_mutex_free(dev->mutex);
     dev->mutex = NULL;
     wind_open_interrupt();
-    return ERR_OK;    
-}
-
-w_err_t wind_driver_init(void)
-{
-    DLIST_INIT(dev_list);
     return ERR_OK;
 }
 
-dev_s *wind_chdev_get(char *name)
+
+w_err_t wind_devices_init(void)
+{
+    DLIST_INIT(dev_list);
+    _register_devs();
+    return ERR_OK;
+}
+
+dev_s *wind_dev_get(char *name)
 {
     dev_s *dev;
     dnode_s *dnode;
@@ -93,7 +95,7 @@ dev_s *wind_chdev_get(char *name)
     return NULL;
 }
 
-w_err_t wind_chdev_open(dev_s *dev)
+w_err_t wind_dev_open(dev_s *dev)
 {
     w_err_t err;
     WIND_ASSERT_RETURN(dev != NULL,ERR_NULL_POINTER);
@@ -106,7 +108,7 @@ w_err_t wind_chdev_open(dev_s *dev)
     return err;
 }
 
-w_err_t wind_chdev_ioctl(dev_s *dev,w_int32_t ctrlpoint,void *param)
+w_err_t wind_dev_ioctl(dev_s *dev,w_int32_t ctrlpoint,void *param)
 {
     w_err_t err;
     WIND_ASSERT_RETURN(dev != NULL,ERR_NULL_POINTER);
@@ -119,7 +121,7 @@ w_err_t wind_chdev_ioctl(dev_s *dev,w_int32_t ctrlpoint,void *param)
     return err;
 }
 
-w_int32_t wind_chdev_read(dev_s *dev,w_uint8_t *buf,w_int32_t len)
+w_int32_t wind_dev_read(dev_s *dev,w_uint8_t *buf,w_int32_t len)
 {
     w_err_t err;
     WIND_ASSERT_RETURN(dev != NULL,ERR_NULL_POINTER);
@@ -132,7 +134,7 @@ w_int32_t wind_chdev_read(dev_s *dev,w_uint8_t *buf,w_int32_t len)
     return err;
 }
 
-w_int32_t wind_chdev_write(dev_s *dev,w_uint8_t *buf,w_int32_t len)
+w_int32_t wind_dev_write(dev_s *dev,w_uint8_t *buf,w_int32_t len)
 {
     w_err_t err;
     WIND_ASSERT_RETURN(dev != NULL,ERR_NULL_POINTER);
@@ -145,7 +147,7 @@ w_int32_t wind_chdev_write(dev_s *dev,w_uint8_t *buf,w_int32_t len)
     return err;
 }
 
-w_err_t wind_chdev_close(dev_s *dev)
+w_err_t wind_dev_close(dev_s *dev)
 {
     w_err_t err;
     WIND_ASSERT_RETURN(dev != NULL,ERR_NULL_POINTER);

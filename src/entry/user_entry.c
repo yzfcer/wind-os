@@ -30,47 +30,8 @@
 没有创建，则用户程序将不会再次被执行到。因为wind_main函数只会被系统调用一次
 */
 #include "wind_core_inc.h"
-#include "led.h"
 #include "beep.h"
-
-void led0_timer(void *arg)
-{
-    static w_bool_t f = B_TRUE;
-    if(f)
-        LED_On(0);
-    else
-        LED_Off(0);
-    f = !f;
-}
-
-void led1_timer(void *arg)
-{
-    static w_bool_t f = B_TRUE;
-    if(f)
-        LED_On(1);
-    else
-        LED_Off(1);
-    f = !f;
-}
-
-void led2_timer(void *arg)
-{
-    static w_bool_t f = B_TRUE;
-    if(f)
-        LED_On(2);
-    else
-        LED_Off(2);
-    f = !f;
-}
-
-void led_start(void)
-{
-    LED_Init();
-    wind_timer_create(300,led0_timer,NULL,B_TRUE);
-    wind_timer_create(500,led1_timer,NULL,B_TRUE);
-    wind_timer_create(800,led2_timer,NULL,B_TRUE);
-}
-
+extern led_start(void);
 w_err_t wind_main(void)
 {
 #if WIND_SEM_SUPPORT

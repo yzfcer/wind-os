@@ -1,21 +1,40 @@
 #include "wind_dev.h"
 #include "wind_debug.h"
+#include "led.h"
+static w_uint8_t ledst[3] = {0,0,0};
 w_err_t   gpio_open(void)
 {
+    LED_Init();
     return ERR_OK;
 }
-w_err_t   gpio_ioctl(w_int32_t ctrlpoint,void *param)
+
+w_err_t  gpio_ioctl(w_int32_t ctrlpoint,void *param)
 {
     return ERR_OK;
 }
+
 w_int32_t gpio_read(w_uint8_t *buf,w_uint16_t len)
 {
-    return 0;
+    w_int32_t i;
+    for(i = 0;i < 3;i ++)
+        buf[i] = ledst[i];
+    return 3;
 }
+
 w_int32_t gpio_write(w_uint8_t *buf,w_uint16_t len)
 {
+    w_int32_t i;
+    for(i = 0;i < 3;i ++)
+    {
+        if(ledst[i] != buf[i])
+        {
+            buf[i]?LED_On(i):LED_Off(i);
+            ledst[i] = buf[i];
+        }
+    }
     return 0;
 }
+
 w_err_t   gpio_close(void)
 {
     return ERR_OK;
