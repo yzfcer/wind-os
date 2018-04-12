@@ -51,7 +51,7 @@ w_err_t wind_pipe_init(void);
 pipe_s* wind_pipe_create(const char *name,void *buff,w_uint32_t buflen);
 w_int32_t wind_pipe_read(pipe_s* ppipe,w_int8_t *str,w_int16_t len);
 w_int32_t wind_pipe_write(pipe_s* ppipe,w_int8_t *str,w_int16_t len);
-w_err_t wind_pipe_free(pipe_s* ppipe);
+w_err_t wind_pipe_destroy(pipe_s* ppipe);
 
 
 

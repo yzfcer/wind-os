@@ -79,6 +79,7 @@ static __INLINE__ w_err_t thread_free(thread_s *thread)
 w_err_t wind_thread_distroy(thread_s *thread)
 {
     WIND_ASSERT_RETURN(thread != NULL,ERR_NULL_POINTER);
+    wind_notice("distroy thread:%s",thread->name);
     wind_close_interrupt();
     //这里需要先释放一些与这个线程相关的一些东西后才能释放这个thread
 #if WIND_HEAP_SUPPORT && WIND_PRIVATE_HEAP_SUPPORT

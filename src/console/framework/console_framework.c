@@ -50,9 +50,10 @@ static w_err_t core_get_cmd_ch(w_int8_t *ch)
 static void show_cmd_list(void)
 {
     cmd_s *cmd = g_cmd_global->head;
+    wind_printf("\r\ncomnad list as following:\r\n");
     while(cmd)
     {
-        console_printf("%s : ",cmd->cmd);
+        console_printf("%-10s : ",cmd->cmd);
         cmd->showdisc();
         cmd = cmd->next;
     }
@@ -284,7 +285,7 @@ void console_framework_init(console_s *ctrl)
     cgl->cnt = 0;
     register_all_cmd(ctrl);
     g_cmd_global = cgl;
-    show_cmd_list();
+    //show_cmd_list();
 }
 
 w_bool_t is_in_list(cmd_list_s *list,cmd_s *cmd)

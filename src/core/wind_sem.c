@@ -57,6 +57,7 @@ w_err_t wind_sem_init(void)
 sem_s *wind_sem_create(const char *name,w_int16_t sem_value)
 {
     sem_s *psem;
+    wind_notice("create sem:%s",name);
     psem = sem_malloc();
     WIND_ASSERT_RETURN(psem != NULL,NULL);
     WIND_ASSERT_RETURN(sem_value >= 0,NULL);
@@ -148,7 +149,7 @@ w_err_t wind_sem_fetch(sem_s *psem,w_uint32_t timeout)
 
 
 //试图释放一个信号量，如果有线程被阻塞，则释放将终止
-w_err_t wind_sem_tryfree(sem_s *psem)
+w_err_t wind_sem_try_destroy(sem_s *psem)
 {
     dnode_s *pdnode;
     WIND_ASSERT_RETURN(psem != NULL,ERR_NULL_POINTER);
@@ -160,15 +161,16 @@ w_err_t wind_sem_tryfree(sem_s *psem)
         return ERR_COMMAN;
     }
     wind_open_interrupt();
-    return wind_sem_free(psem);
+    return wind_sem_destroy(psem);
 }
 
-w_err_t wind_sem_free(sem_s *psem)
+w_err_t wind_sem_destroy(sem_s *psem)
 {
     w_err_t err;
     dnode_s *pdnode;
     thread_s *pthread;
     WIND_ASSERT_RETURN(psem != NULL,ERR_NULL_POINTER);
+    wind_notice("create sem:%s",psem->name);
     wind_close_interrupt();
     foreach_node(pdnode,&psem->waitlist)
     {

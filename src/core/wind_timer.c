@@ -60,7 +60,6 @@ timer_s* wind_timer_create(w_uint32_t t_ms,softimer_fn func,void *arg,w_bool_t r
     WIND_ASSERT_RETURN(func != NULL,NULL);
     timer = timer_malloc();
     WIND_ASSERT_RETURN(timer != NULL,NULL);
-    wind_notice("creat soft timer OK");
     DNODE_INIT(timer->tmrnode);
 
     timer->count = count;
@@ -86,7 +85,7 @@ w_err_t wind_timer_stop(timer_s* timer)
     return ERR_OK;
 }
 
-w_err_t wind_timer_free(timer_s* timer)
+w_err_t wind_timer_destroy(timer_s* timer)
 {
     WIND_ASSERT_RETURN(timer != NULL,ERR_NULL_POINTER);
     wind_close_interrupt();

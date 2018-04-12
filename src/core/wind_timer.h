@@ -50,7 +50,7 @@ w_err_t wind_timer_init(void);
 timer_s* wind_timer_create(w_uint32_t t_ms,softimer_fn func,void *arg,w_bool_t run);
 w_err_t wind_timer_start(timer_s* timer);
 w_err_t wind_timer_stop(timer_s* timer);
-w_err_t wind_timer_free(timer_s* timer);
+w_err_t wind_timer_destroy(timer_s* timer);
 w_err_t wind_timer_set_period(timer_s* timer,w_uint32_t t_ms);
 void wind_timer_event(void);
 

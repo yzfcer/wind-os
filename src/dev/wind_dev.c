@@ -38,6 +38,7 @@ w_err_t wind_register_dev(dev_s *dev,w_int32_t count)
     WIND_ASSERT_RETURN(count > 0,ERR_INVALID_PARAM);
     WIND_ASSERT_RETURN(dev->magic == WIND_DEV_MAGIC,ERR_INVALID_PARAM);
     
+    wind_notice("register dev:%s",dev->name);
     wind_close_interrupt();
     foreach_node(dnode,&dev_list)
     {
@@ -60,6 +61,7 @@ w_err_t wind_unregister_dev(dev_s *dev)
     dnode_s *dnode;
     WIND_ASSERT_RETURN(dev != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(dev->magic == WIND_DEV_MAGIC,ERR_INVALID_PARAM);
+    wind_notice("unregister dev:%s",dev->name);
     wind_close_interrupt();
     dnode = dlist_remove(&dev_list,dnode);
     if(dnode == NULL)
@@ -68,7 +70,7 @@ w_err_t wind_unregister_dev(dev_s *dev)
         wind_open_interrupt();
         return ERR_COMMAN;
     }
-    wind_mutex_free(dev->mutex);
+    wind_mutex_destroy(dev->mutex);
     dev->mutex = NULL;
     wind_open_interrupt();
     return ERR_OK;

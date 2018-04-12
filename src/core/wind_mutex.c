@@ -33,7 +33,7 @@
 #include "wind_dlist.h"
 #include "wind_core.h"
 #include "wind_mpool.h"
-static WIND_MPOOL(mutexpool,WIND_LOCK_MAX_NUM,sizeof(mutex_s));
+static WIND_MPOOL(mutexpool,WIND_MUTEX_MAX_NUM,sizeof(mutex_s));
 
 static __INLINE__ mutex_s *mutex_malloc(void)
 {
@@ -55,6 +55,7 @@ w_err_t wind_mutex_init(void)
 mutex_s *wind_mutex_create(const char *name)
 {
     mutex_s *pmutex;
+    wind_notice("create mutex:%s",name);
     pmutex = mutex_malloc();
     WIND_ASSERT_TODO(pmutex != NULL,wind_open_interrupt(),NULL);
     DNODE_INIT(pmutex->mutexnode);
@@ -69,22 +70,23 @@ mutex_s *wind_mutex_create(const char *name)
 }
 
 //试图释放一个互斥锁，如果有线程被阻塞，则释放将终止
-w_err_t wind_mutex_tryfree(mutex_s *pmutex)
+w_err_t wind_mutex_try_destroy(mutex_s *pmutex)
 {
     WIND_ASSERT_RETURN(pmutex != NULL,ERR_NULL_POINTER);
     wind_close_interrupt();
     WIND_ASSERT_TODO(pmutex->mutexed == B_FALSE,wind_open_interrupt(),ERR_COMMAN);
-    wind_mutex_free(pmutex);
+    wind_mutex_destroy(pmutex);
     wind_open_interrupt();
     return ERR_OK;    
 }
 
 //强制性释放互斥锁，并把所有的被该互斥锁阻塞的线程全部激活
-w_err_t wind_mutex_free(mutex_s *pmutex)
+w_err_t wind_mutex_destroy(mutex_s *pmutex)
 {
     dnode_s *pnode;
     thread_s *pthread;
     WIND_ASSERT_RETURN(pmutex != NULL,ERR_NULL_POINTER);
+    wind_notice("destroy mutex:%s",pmutex->name);
     wind_close_interrupt();
     foreach_node(pnode,&pmutex->waitlist)
     {

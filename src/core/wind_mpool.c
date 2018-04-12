@@ -40,9 +40,11 @@ w_err_t wind_pool_create(const char *name,void *mem,w_uint32_t memsize,w_uint32_
     w_uint32_t i,si;
     pool_item_s* item;
     pool_s *pm;
+    wind_notice("create pool:%s",name);
     WIND_ASSERT_RETURN(mem != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(memsize > 0,ERR_INVALID_PARAM);
     WIND_ASSERT_RETURN(itemsize > 0,ERR_INVALID_PARAM);
+    
     pm = (pool_s *)WIND_MPOOL_ALIGN_R((w_uint32_t)mem);
     if(pm != (pool_s *)mem)
         memsize -= (w_uint32_t)((w_uint32_t)pm - (w_uint32_t)mem);
@@ -85,6 +87,7 @@ w_err_t wind_pool_destroy(void *mem)
     WIND_ASSERT_RETURN(mem != NULL,ERR_NULL_POINTER);
     pm = (pool_s *)WIND_MPOOL_ALIGN_R((w_uint32_t)mem);
     WIND_ASSERT_RETURN(pm->magic == WIND_MPOOL_MAGIC,ERR_INVALID_PARAM);
+    wind_notice("destroy pool:%s",pm->name);
     wind_close_interrupt();
     dlist_remove(&g_core.poollist,&pm->poolnode);
     wind_open_interrupt();

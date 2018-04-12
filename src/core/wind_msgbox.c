@@ -73,6 +73,7 @@ void wind_msg_init(msg_s *msg,w_uint16_t msg_id,w_uint16_t msg_len,void *msg_arg
 msgbox_s *wind_msgbox_create(const char *name,thread_s *owner)
 {
     msgbox_s *pmsgbox;
+    wind_notice("create msgbox:%s",name);
     pmsgbox = msgbox_malloc();
     WIND_ASSERT_RETURN(pmsgbox != NULL,NULL);
 
@@ -93,6 +94,7 @@ w_err_t wind_msgbox_destroy(msgbox_s *pmsgbox)
     dnode_s *dnode;
     thread_s *pthread;
     WIND_ASSERT_RETURN(pmsgbox != NULL,ERR_NULL_POINTER);
+    wind_notice("destroy msgbox:%s",pmsgbox->name);
     pthread = pmsgbox->owner;
     if((pmsgbox->owner->runstat == THREAD_STATUS_SLEEP) 
        && (pmsgbox->owner->cause == CAUSE_MSG))
@@ -157,6 +159,7 @@ w_err_t wind_msgbox_fetch(msgbox_s *msgbox,msg_s **pmsg,w_uint32_t timeout)
     wind_close_interrupt();
     if(msgbox->num > 0)
     {
+        msgbox->num --;
         dnode = dlist_remove_head(&msgbox->msglist);
         *pmsg = DLIST_OBJ(dnode,msg_s,msgnode);
         wind_open_interrupt();
@@ -188,8 +191,10 @@ w_err_t wind_msgbox_fetch(msgbox_s *msgbox,msg_s **pmsg,w_uint32_t timeout)
     }
     else if(pthread->cause == CAUSE_SLEEP)
     {
-        err = ERR_OK;
+        err = ERR_TIMEOUT;
     }
+    else
+        err = ERR_COMMAN;
     
     return err;
 }

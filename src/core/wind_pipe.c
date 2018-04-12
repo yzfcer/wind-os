@@ -63,6 +63,8 @@ pipe_s* wind_pipe_create(const char *name,void *buff,w_uint32_t buflen)
 {
     pipe_s* ppipe;
     w_err_t err;
+    
+    wind_notice("create pipe:%s",name);
     WIND_ASSERT_RETURN((buff != NULL),NULL);
     WIND_ASSERT_RETURN(buflen > 0,NULL);
     err = wind_queue_create(buff,buflen,1);
@@ -109,10 +111,11 @@ w_int32_t wind_pipe_write(pipe_s* ppipe,w_int8_t *str,w_int16_t len)
     return cnt;
 }
 
-w_err_t wind_pipe_free(pipe_s* ppipe)
+w_err_t wind_pipe_destroy(pipe_s* ppipe)
 {
     WIND_ASSERT_RETURN(ppipe != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(ppipe->magic == WIND_PIPE_MAGIC,ERR_INVALID_PARAM);
+    wind_notice("destroy pipe:%s",ppipe->name);
     wind_close_interrupt();
     dlist_remove(&g_core.pipelist,&ppipe->pipenode);
     ppipe->magic = 0;

@@ -75,19 +75,19 @@
 #define WIND_PIPE_MAX_NUM 50  //最大的管道数量
 
 #define WIND_MESSAGE_MAX_NUM 50 //最大的消息数量
+
 #define WIND_MBOX_MAX_NUM 20//邮箱的数量
 
 #define WIND_SEM_MAX_NUM 50 //最大的信号量的数量
 
-#define WIND_NODE_MAX_NUM 200  //链表节点内存池的容量
-
 #define WIND_TIMER_MAX_NUM 30  //tick定时器内存池的容量
 
-#define WIND_LOCK_MAX_NUM 10 //互斥锁的数量
+#define WIND_MUTEX_MAX_NUM 20 //互斥锁的数量
 
 #define WIND_SOFTINT_MAX_NUM 32 //软中断向量表的长度
 
-#define WIND_STK_MAX_NUM 10//堆栈的数量
+#define WIND_STK_MAX_NUM 4//堆栈的数量
+
 #define WIND_STK_SIZE 512
 
 

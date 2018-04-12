@@ -62,7 +62,7 @@ CASE_FUNC(seminfo)
     EXPECT_EQ(sems[0]->sem_num,3);
     EXPECT_EQ(sems[0]->waitlist.head,NULL);
     EXPECT_EQ(sems[0]->waitlist.tail,NULL);
-    err = wind_sem_free(sems[0]);
+    err = wind_sem_destroy(sems[0]);
     EXPECT_EQ(ERR_OK,err);
 
 }
@@ -99,7 +99,7 @@ CASE_FUNC(semfunc)
         EXPECT_EQ(err,ERR_OK);
         EXPECT_EQ(sems[0]->sem_num,1 + i);
     }
-    err = wind_sem_free(sems[0]);
+    err = wind_sem_destroy(sems[0]);
     EXPECT_EQ(ERR_OK,err);
 
 }
@@ -125,7 +125,7 @@ CASE_FUNC(semmulti)
     }
     for(i = 0;i < 4;i ++)
     {
-        err = wind_sem_free(sems[i]);
+        err = wind_sem_destroy(sems[i]);
         EXPECT_EQ(ERR_OK,err);
     }
 }
