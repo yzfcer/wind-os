@@ -56,7 +56,7 @@ timer_s* wind_timer_create(w_uint32_t t_ms,softimer_fn func,void *arg,w_bool_t r
     w_int32_t count = t_ms / TIMER_PERIOD;
     if(count <= 0)
         count = 1;
-    wind_notice("creating soft timer:%d ms",t_ms);
+    wind_notice("create timer:%d ms",t_ms);
     WIND_ASSERT_RETURN(func != NULL,NULL);
     timer = timer_malloc();
     WIND_ASSERT_RETURN(timer != NULL,NULL);

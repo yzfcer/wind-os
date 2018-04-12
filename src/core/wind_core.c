@@ -215,7 +215,7 @@ void wind_init()
 #if WIND_RTC_SUPPORT
     wind_datetime_init();
 #endif
-    wind_notice("initialization completed!");
+    wind_notice("wind init complete!");
 }
 
 
@@ -228,7 +228,7 @@ int wind_os_lunch(void)
     wind_init();
     create_init_thread();
     wind_thread_open();
-    wind_notice("wind is ready for running!");
+    wind_notice("wind is going to multple thread mode.");
     wind_thread_open();
     wind_run();
     return ERR_OK;

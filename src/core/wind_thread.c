@@ -195,7 +195,7 @@ thread_s *wind_thread_create(const w_int8_t *name,
     thread_s *thread;
     w_pstack_t tmpstk;
 
-    wind_notice("creating thread:%s",name);
+    wind_notice("create thread:%s",name);
     WIND_ASSERT_RETURN(name != NULL,NULL);
     WIND_ASSERT_RETURN(thread_func != NULL,NULL);
     WIND_ASSERT_RETURN(pstk != NULL,NULL);
