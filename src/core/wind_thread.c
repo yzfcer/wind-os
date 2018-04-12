@@ -99,7 +99,7 @@ static void thread_entry(void *args)
     w_err_t err;
     thread_s *thread;
     thread = wind_thread_current();
-    wind_notice("begin to run thread:%s.",thread->name);
+    wind_notice("run thread:%s.",thread->name);
     if(thread != NULL)
     {
         err = thread->thread_func(thread->argc,thread->argv);

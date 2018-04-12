@@ -4,7 +4,7 @@
 static w_uint8_t ledst[3] = {0,0,0};
 w_err_t   gpio_open(void)
 {
-    LED_Init();
+    LED_Init(0x07);
     return ERR_OK;
 }
 

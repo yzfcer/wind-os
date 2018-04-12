@@ -13,22 +13,26 @@
 *********************************************************************************/
 
 //LED对应IO初始化
-void LED_Init(void)
+void LED_Init(int mask)
 {
-  GPIO_InitTypeDef  GPIO_InitStructure;
+    GPIO_InitTypeDef  GPIO_InitStructure;
 
-  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOG, ENABLE);//使能GPIOG时钟
+    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOG, ENABLE);//使能GPIOG时钟
 
-  //PG13、PG14和PG15初始化设置
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15;//LED0、LED1和LED2对应IO口
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;                  //普通输出模式
-  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;                 //推挽输出
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;             //100MHz
-  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;                   //上拉
-  GPIO_Init(GPIOG, &GPIO_InitStructure);                         //初始化GPIO
-	
-	GPIO_SetBits(GPIOG, GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15);  //GPIOG13,G14,G15设置高，灯灭
-
+    //PG13、PG14和PG15初始化设置
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15;//LED0、LED1和LED2对应IO口
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;                  //普通输出模式
+    GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;                 //推挽输出
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;             //100MHz
+    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;                   //上拉
+    GPIO_Init(GPIOG, &GPIO_InitStructure);                         //初始化GPIO
+    //GPIOG13,G14,G15设置高，灯灭
+    if(mask & 0x01)
+        GPIO_SetBits(GPIOG, GPIO_Pin_13);
+    if(mask & 0x02)
+        GPIO_SetBits(GPIOG, GPIO_Pin_14);
+    if(mask & 0x04)
+        GPIO_SetBits(GPIOG, GPIO_Pin_15);
 }
 
 void LED_On(unsigned int ledidx)

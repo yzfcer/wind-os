@@ -10,7 +10,7 @@
 #define LED2 PGout(15)	  
 
 //函数声明
-void LED_Init(void);//初始化	
+void LED_Init(int mask);//初始化	
 void LED_On(unsigned int ledidx);
 void LED_Off(unsigned int ledidx);
 #endif

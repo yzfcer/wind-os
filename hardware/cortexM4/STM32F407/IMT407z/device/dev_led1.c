@@ -4,7 +4,7 @@
 static w_uint8_t ledst = 0;
 w_err_t   led1_open(void)
 {
-    LED_Init();
+    LED_Init(0x02);
     return ERR_OK;
 }
 
