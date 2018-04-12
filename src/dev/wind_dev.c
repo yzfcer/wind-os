@@ -41,7 +41,7 @@ w_err_t wind_register_dev(dev_s *dev,w_int32_t count)
     wind_close_interrupt();
     foreach_node(dnode,&dev_list)
     {
-        dev = DLIST_OBJ(dnode,dev_s,devnode);
+        devi = DLIST_OBJ(dnode,dev_s,devnode);
         if(wind_strcmp(dev->name,devi->name) == 0)
         {
             wind_error("device has been registered.\r\n");

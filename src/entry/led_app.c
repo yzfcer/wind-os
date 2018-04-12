@@ -1,42 +1,35 @@
 #include "led.h"
 #include "wind_timer.h"
 #include "wind_dev.h"
+timer_s *ledtmr = NULL;
 void led0_timer(void *arg)
 {
     dev_s *dev;
-    w_uint8_t stat[3];
-    dev = wind_dev_get("gpio");
-    wind_dev_read(dev,stat,3);
-    stat[0] = 1- stat[0];
-    wind_dev_write(dev,stat,3);
+    w_uint8_t stat;
+    dev = wind_dev_get("led0");
+    wind_dev_read(dev,&stat,1);
+    
+    if(stat)
+    {
+        stat = 0;
+        wind_dev_write(dev,&stat,1);
+        wind_timer_set_period(ledtmr,1000);
+    }
+    else
+    {
+        stat = 1;
+        wind_dev_write(dev,&stat,1);
+        wind_timer_set_period(ledtmr,100);
+    }
 }
 
-void led1_timer(void *arg)
-{
-    dev_s *dev;
-    w_uint8_t stat[3];
-    dev = wind_dev_get("gpio");
-    wind_dev_read(dev,stat,3);
-    stat[1] = 1- stat[1];
-    wind_dev_write(dev,stat,3);
-}
-
-void led2_timer(void *arg)
-{
-    dev_s *dev;
-    w_uint8_t stat[3];
-    dev = wind_dev_get("gpio");
-    wind_dev_read(dev,stat,3);
-    stat[2] = 1- stat[2];
-    wind_dev_write(dev,stat,3);
-}
 
 void led_start(void)
 {
     dev_s *dev;
-    dev = wind_dev_get("gpio");
+    dev = wind_dev_get("led0");
     wind_dev_open(dev);
-    wind_timer_create(300,led0_timer,NULL,B_TRUE);
-    wind_timer_create(500,led1_timer,NULL,B_TRUE);
-    wind_timer_create(600,led2_timer,NULL,B_TRUE);
+    ledtmr = wind_timer_create(300,led0_timer,NULL,B_TRUE);
+    //wind_timer_create(500,led1_timer,NULL,B_TRUE);
+    //wind_timer_create(600,led2_timer,NULL,B_TRUE);
 }

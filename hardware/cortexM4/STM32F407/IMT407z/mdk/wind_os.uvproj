@@ -830,6 +830,36 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>device</GroupName>
+          <Files>
+            <File>
+              <FileName>dev_gpio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\device\dev_gpio.c</FilePath>
+            </File>
+            <File>
+              <FileName>dev_led0.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\device\dev_led0.c</FilePath>
+            </File>
+            <File>
+              <FileName>dev_led1.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\device\dev_led1.c</FilePath>
+            </File>
+            <File>
+              <FileName>dev_led2.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\device\dev_led2.c</FilePath>
+            </File>
+            <File>
+              <FileName>dev_list.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\device\dev_list.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>port</GroupName>
           <Files>
             <File>
@@ -1032,6 +1062,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\console\cmd\cmd_bee.c</FilePath>
             </File>
+            <File>
+              <FileName>cmd_led.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\console\cmd\cmd_led.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1048,9 +1083,6 @@
               <FilePath>..\..\..\..\..\src\console\port\console_port.h</FilePath>
             </File>
           </Files>
-        </Group>
-        <Group>
-          <GroupName>os_api</GroupName>
         </Group>
         <Group>
           <GroupName>os_systhread</GroupName>
@@ -1086,11 +1118,6 @@
           <GroupName>os_dev</GroupName>
           <Files>
             <File>
-              <FileName>gpio_dev.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\dev\gpio_dev.c</FilePath>
-            </File>
-            <File>
               <FileName>wind_dev.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\dev\wind_dev.c</FilePath>
@@ -1099,11 +1126,6 @@
               <FileName>wind_dev.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\..\..\..\src\dev\wind_dev.h</FilePath>
-            </File>
-            <File>
-              <FileName>dev_list.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\dev\dev_list.c</FilePath>
             </File>
           </Files>
         </Group>

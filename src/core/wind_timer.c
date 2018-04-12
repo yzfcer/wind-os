@@ -102,6 +102,7 @@ w_err_t wind_timer_set_period(timer_s* timer,w_uint32_t t_ms)
     if(count <= 0)
         count = 1;
     WIND_ASSERT_RETURN(timer != NULL,ERR_NULL_POINTER);
+    timer->init_count = count;
     timer->count = count;
     return ERR_OK;
 }
