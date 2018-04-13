@@ -337,7 +337,7 @@ w_err_t wind_thread_kill(thread_s *thread)
 #endif
     wind_thread_distroy(thread);
     wind_open_interrupt();
-    wind_thread_dispatch();
+    _wind_thread_dispatch();
     return ERR_OK;
 }
 
@@ -363,7 +363,7 @@ w_err_t wind_thread_exit(w_err_t exitcode)
     thread = wind_thread_current();
     wind_notice("thread %s exit with code %d",thread->name,exitcode);
     wind_thread_kill(thread);
-    wind_thread_dispatch();
+    _wind_thread_dispatch();
     return ERR_OK;
 }
 
@@ -396,7 +396,7 @@ w_err_t wind_thread_sleep(w_uint32_t ms)
         }
     }
 #endif
-    wind_thread_dispatch();
+    _wind_thread_dispatch();
     return ERR_OK;
 }
 

@@ -35,8 +35,8 @@ extern "C" {
 
 
 
-void wind_thread_dispatch(void);
-void wind_switchto_thread(thread_s *thread);
+void _wind_thread_dispatch(void);
+void _wind_switchto_thread(thread_s *thread);
 
 void wind_disable_switch(void);
 void wind_enable_switch(void);

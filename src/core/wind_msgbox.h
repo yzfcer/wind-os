@@ -67,6 +67,7 @@ w_err_t wind_msgbox_destroy(msgbox_s *msgbox);
 w_err_t wind_msgbox_post(msgbox_s *msgbox,msg_s *pmsg);
 w_err_t wind_msgbox_wait(msgbox_s *msgbox,msg_s **pmsg,w_uint32_t timeout);
 w_err_t wind_msgbox_trywait(msgbox_s *msgbox,msg_s **pmsg);
+w_err_t _wind_msgbox_print(dlist_s *list);
 
 #else
 #define _wind_pipe_init() ERR_OK

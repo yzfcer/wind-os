@@ -32,7 +32,7 @@
 #include "wind_var.h"
 #include "wind_debug.h"
 #if WIND_MESSAGE_SUPPORT
-extern void wind_thread_dispatch(void);
+extern void _wind_thread_dispatch(void);
 WIND_MPOOL(msgboxpool,WIND_MBOX_MAX_NUM,sizeof(msgbox_s));
 
 static msgbox_s *msgbox_malloc(void)
@@ -139,7 +139,7 @@ w_err_t wind_msgbox_post(msgbox_s *msgbox,msg_s *pmsg)
     }
     msgbox->owner->runstat = THREAD_STATUS_READY;
     wind_open_interrupt();
-    wind_thread_dispatch();//切换线程
+    _wind_thread_dispatch();//切换线程
     return ERR_OK;
 }
 
@@ -176,7 +176,7 @@ w_err_t wind_msgbox_wait(msgbox_s *msgbox,msg_s **pmsg,w_uint32_t timeout)
     dlist_insert_tail(&g_core.sleeplist,&thread->sleepthr.node);
     wind_open_interrupt();
     
-    wind_thread_dispatch();
+    _wind_thread_dispatch();
     if(thread->cause == CAUSE_MSG)
     {
         if(msgbox->num <= 0)
@@ -226,5 +226,10 @@ w_err_t wind_msgbox_trywait(msgbox_s *msgbox,msg_s **pmsg)
     return err;
 }
 
+w_err_t _wind_msgbox_print(dlist_s *list)
+{
+    wind_error("NOT support yet.");
+    return ERR_COMMAN;
+}
 #endif  //WIND_MESSAGE_SUPPORT
 

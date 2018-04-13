@@ -145,7 +145,7 @@ static void wind_run()
 
 //在线程中切换到高优先级的线程
 #if WIND_REALTIME_CORE_SUPPORT
-void wind_thread_dispatch(void)
+void _wind_thread_dispatch(void)
 {
     thread_s *pthr;
     if(RUN_FLAG == B_FALSE)
@@ -171,11 +171,11 @@ void wind_thread_dispatch(void)
     wind_open_interrupt();
 }
 #else
-void wind_thread_dispatch(void){}
+void _wind_thread_dispatch(void){}
 #endif
 
 
-void wind_switchto_thread(thread_s *thread)
+void _wind_switchto_thread(thread_s *thread)
 {
     thread_s *pthr;
     wind_close_interrupt();

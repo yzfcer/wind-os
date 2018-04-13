@@ -34,6 +34,7 @@
 #include "wind_var.h"
 #include "wind_cmd.h"
 #include "wind_mpool.h"
+#include "wind_msgbox.h"
 #if WIND_CONSOLE_SUPPORT
 
 COMMAND_DISC(list)
@@ -48,6 +49,7 @@ COMMAND_USAGE(list)
     console_printf("list mutex:show all mutex status.\r\n");
     console_printf("list pool:show all core object pools.\r\n");
     console_printf("list pipe:show all pipe infomation.\r\n");
+    console_printf("list msgbox:show all message box infomation.\r\n");
 }
 
 COMMAND_MAIN(list,argc,argv)
@@ -71,12 +73,17 @@ COMMAND_MAIN(list,argc,argv)
     }
     else if(0 == wind_strcmp(argv[1],"pool"))
     {
-        wind_pool_print_list(&g_core.poollist);
+        _wind_pool_print_list(&g_core.poollist);
         return ERR_COMMAN;
     }
     else if(0 == wind_strcmp(argv[1],"pipe"))
     {
-        wind_pipe_print(&g_core.pipelist);
+        _wind_pipe_print(&g_core.pipelist);
+        return ERR_COMMAN;
+    }
+    else if(0 == wind_strcmp(argv[1],"msgbox"))
+    {
+        _wind_msgbox_print(&g_core.msgboxlist);
         return ERR_COMMAN;
     }
     return ERR_COMMAN;

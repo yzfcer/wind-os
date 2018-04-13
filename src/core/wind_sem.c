@@ -32,7 +32,7 @@
 #include "wind_var.h"
 #include "wind_string.h"
 #if WIND_SEM_SUPPORT
-extern void wind_thread_dispatch(void);
+extern void _wind_thread_dispatch(void);
 static WIND_MPOOL(sempool,WIND_SEM_MAX_NUM,sizeof(sem_s));
 
 static __INLINE__ sem_s *sem_malloc(void)
@@ -108,7 +108,7 @@ w_err_t wind_sem_post(sem_s *sem)
     wind_open_interrupt();
     thread->cause = CAUSE_SEM;
     thread->runstat = THREAD_STATUS_READY;
-    wind_thread_dispatch();
+    _wind_thread_dispatch();
     return ERR_OK;
 }
 
@@ -146,7 +146,7 @@ w_err_t wind_sem_wait(sem_s *sem,w_uint32_t timeout)
         thread->runstat = THREAD_STATUS_SUSPEND;
     dlist_insert_prio(&sem->waitlist,&thread->suspendthr,thread->prio);
     wind_open_interrupt();
-    wind_thread_dispatch();
+    _wind_thread_dispatch();
 
     wind_close_interrupt();
     //如果是超时唤醒的，则移除出睡眠队列

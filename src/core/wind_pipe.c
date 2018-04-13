@@ -139,7 +139,7 @@ w_err_t wind_pipe_destroy(pipe_s* pipe)
     return ERR_OK;
 }
 
-w_err_t wind_pipe_print(dlist_s* list)
+w_err_t _wind_pipe_print(dlist_s* list)
 {
     dnode_s *pnode;
     pipe_s *pipe;

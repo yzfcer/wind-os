@@ -76,7 +76,7 @@ void   *wind_pool_alloc(void *mem);
 
 w_err_t wind_pool_free(void *mem,void *block);
 
-void wind_pool_print_list(dlist_s *list);
+void _wind_pool_print_list(dlist_s *list);
 
 #ifdef __cplusplus
 }

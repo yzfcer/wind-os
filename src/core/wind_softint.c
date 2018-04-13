@@ -60,7 +60,7 @@ static w_err_t wind_softint_thread(w_int32_t argc,w_int8_t **argv)
         softint_thread->runstat = THREAD_STATUS_SUSPEND;
         softint_thread->cause = CAUSE_COM;
         wind_open_interrupt();
-        wind_thread_dispatch();
+        _wind_thread_dispatch();
         if(wind_soft_vectors[softint_index] != NULL)
         {
             (wind_soft_vectors[softint_index])();
@@ -109,7 +109,7 @@ void wind_softint_trig(w_handle_t handler)
     softint_index = handler;
     softint_thread->runstat = THREAD_STATUS_READY;
     wind_open_interrupt();
-    wind_thread_dispatch();
+    _wind_thread_dispatch();
 }
 
 //创建软件中断线程

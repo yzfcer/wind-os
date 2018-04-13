@@ -139,7 +139,7 @@ w_err_t wind_mutex_lock(mutex_s *mutex)
     
     dlist_insert_prio(&mutex->waitlist,&thread->suspendthr,thread->prio);
     wind_open_interrupt();
-    wind_thread_dispatch();
+    _wind_thread_dispatch();
     return ERR_OK;
 }
 
