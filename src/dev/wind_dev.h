@@ -36,9 +36,9 @@ extern "C" {
 #endif
 
 #define WIND_DEV_MAGIC 0x68353D6A
-typedef struct __chdev_s dev_s;
+typedef struct __dev_s dev_s;
 typedef struct __dev_ops_s dev_ops_s;
-struct __chdev_s
+struct __dev_s
 {
     w_uint32_t magic;
     dnode_s devnode;
@@ -50,11 +50,11 @@ struct __chdev_s
 
 struct __dev_ops_s
 {
-    w_err_t   (*open)(void);
-    w_err_t   (*ioctl)(w_int32_t ctrlpoint,void *param);
-    w_int32_t (*read)(w_uint8_t *buf,w_uint16_t len);
-    w_int32_t (*write)(w_uint8_t *buf,w_uint16_t len);
-    w_err_t   (*close)(void);
+    w_err_t   (*open)(dev_s *dev);
+    w_err_t   (*ioctl)(dev_s *dev,w_int32_t ctrlpoint,void *param);
+    w_int32_t (*read)(dev_s *dev,w_uint8_t *buf,w_uint16_t len);
+    w_int32_t (*write)(dev_s *dev,w_uint8_t *buf,w_uint16_t len);
+    w_err_t   (*close)(dev_s *dev);
 };
 w_err_t _register_devs(void);
 

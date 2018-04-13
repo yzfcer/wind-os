@@ -38,6 +38,7 @@ extern "C" {
 #define ERR_MEM               -4 //存储空间受到限制
 #define ERR_INVALID_PARAM     -6//参数无效
 #define ERR_TIMEOUT           -7//操作超时，返回失败
+#define ERR_STATUS           -8//当前状态错误
 
 
 //---------------------------------------------------------------------
