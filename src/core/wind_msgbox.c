@@ -72,54 +72,54 @@ void wind_msg_init(msg_s *msg,w_uint16_t msg_id,w_uint16_t msg_len,void *msg_arg
 //创建邮箱，只能在线程中创建，不能在中断中和线程运行之前
 msgbox_s *wind_msgbox_create(const char *name,thread_s *owner)
 {
-    msgbox_s *pmsgbox;
+    msgbox_s *msgbox;
     wind_notice("create msgbox:%s",name);
-    pmsgbox = msgbox_malloc();
-    WIND_ASSERT_RETURN(pmsgbox != NULL,NULL);
+    msgbox = msgbox_malloc();
+    WIND_ASSERT_RETURN(msgbox != NULL,NULL);
 
-    pmsgbox->name = name;
-    DNODE_INIT(pmsgbox->msgboxnode);
-    DLIST_INIT(pmsgbox->msglist);
-    pmsgbox->num = 0;
-    pmsgbox->magic = WIND_MSGBOX_MAGIC;
-    pmsgbox->owner = owner;
+    msgbox->name = name;
+    DNODE_INIT(msgbox->msgboxnode);
+    DLIST_INIT(msgbox->msglist);
+    msgbox->num = 0;
+    msgbox->magic = WIND_MSGBOX_MAGIC;
+    msgbox->owner = owner;
     wind_close_interrupt();
-    dlist_insert_tail(&g_core.msgboxlist,&pmsgbox->msgboxnode);
+    dlist_insert_tail(&g_core.msgboxlist,&msgbox->msgboxnode);
     wind_open_interrupt();
-    return pmsgbox;
+    return msgbox;
 }
 
-w_err_t wind_msgbox_destroy(msgbox_s *pmsgbox)
+w_err_t wind_msgbox_destroy(msgbox_s *msgbox)
 {
     dnode_s *dnode;
-    thread_s *pthread;
-    WIND_ASSERT_RETURN(pmsgbox != NULL,ERR_NULL_POINTER);
-    wind_notice("destroy msgbox:%s",pmsgbox->name);
-    pthread = pmsgbox->owner;
-    if((pmsgbox->owner->runstat == THREAD_STATUS_SLEEP) 
-       && (pmsgbox->owner->cause == CAUSE_MSG))
+    thread_s *thread;
+    WIND_ASSERT_RETURN(msgbox != NULL,ERR_NULL_POINTER);
+    wind_notice("destroy msgbox:%s",msgbox->name);
+    thread = msgbox->owner;
+    if((msgbox->owner->runstat == THREAD_STATUS_SLEEP) 
+       && (msgbox->owner->cause == CAUSE_MSG))
     {
-        pthread->runstat = THREAD_STATUS_READY;
+        thread->runstat = THREAD_STATUS_READY;
     }
 
     wind_close_interrupt();
     dlist_remove_tail(&g_core.msgboxlist);
-    pmsgbox->magic = 0;
-    pmsgbox->owner = NULL;
-    pmsgbox->name = NULL;
-    dnode = dlist_head(&pmsgbox->msglist);
+    msgbox->magic = 0;
+    msgbox->owner = NULL;
+    msgbox->name = NULL;
+    dnode = dlist_head(&msgbox->msglist);
     if(dnode != NULL)
     {
-        wind_warn("msgbox:%s is NOT empty while destroying it.",pmsgbox->name);
+        wind_warn("msgbox:%s is NOT empty while destroying it.",msgbox->name);
     }
-    msgbox_free(pmsgbox);
+    msgbox_free(msgbox);
     wind_open_interrupt();
     return ERR_OK;
 }
 
 w_err_t wind_msgbox_post(msgbox_s *msgbox,msg_s *pmsg)
 {
-    thread_s *pthread;
+    thread_s *thread;
     WIND_ASSERT_RETURN(msgbox != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(pmsg != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(msgbox->magic == WIND_MSGBOX_MAGIC,ERR_COMMAN);
@@ -130,9 +130,9 @@ w_err_t wind_msgbox_post(msgbox_s *msgbox,msg_s *pmsg)
     msgbox->num ++;
 
     //激活被阻塞的线程
-    pthread = msgbox->owner;
-    if((pthread->runstat != THREAD_STATUS_SLEEP) 
-       || (pthread->cause != CAUSE_MSG))
+    thread = msgbox->owner;
+    if((thread->runstat != THREAD_STATUS_SLEEP) 
+       || (thread->cause != CAUSE_MSG))
     {
         wind_open_interrupt();
         return ERR_OK;
@@ -149,7 +149,7 @@ w_err_t wind_msgbox_fetch(msgbox_s *msgbox,msg_s **pmsg,w_uint32_t timeout)
     w_err_t err;
     w_uint32_t ticks;
     dnode_s *dnode;
-    thread_s *pthread;
+    thread_s *thread;
     WIND_ASSERT_RETURN(msgbox != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(pmsg != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(msgbox->magic == WIND_MSGBOX_MAGIC,ERR_COMMAN);
@@ -170,18 +170,18 @@ w_err_t wind_msgbox_fetch(msgbox_s *msgbox,msg_s **pmsg,w_uint32_t timeout)
     ticks = timeout *WIND_TICK_PER_SEC / 1000;
     if(ticks == 0)
         ticks = 1;
-    pthread = msgbox->owner;
-    pthread->runstat = THREAD_STATUS_SLEEP;
-    pthread->cause = CAUSE_MSG;
-    dlist_insert_tail(&g_core.sleeplist,&pthread->sleepthr.node);
+    thread = msgbox->owner;
+    thread->runstat = THREAD_STATUS_SLEEP;
+    thread->cause = CAUSE_MSG;
+    dlist_insert_tail(&g_core.sleeplist,&thread->sleepthr.node);
     wind_open_interrupt();
     
     wind_thread_dispatch();
-    if(pthread->cause == CAUSE_MSG)
+    if(thread->cause == CAUSE_MSG)
     {
         if(msgbox->num <= 0)
         {
-            pthread->runstat = THREAD_STATUS_READY;
+            thread->runstat = THREAD_STATUS_READY;
             return ERR_NULL_POINTER;
         }
         dnode = dlist_remove_head(&msgbox->msglist);
@@ -189,7 +189,7 @@ w_err_t wind_msgbox_fetch(msgbox_s *msgbox,msg_s **pmsg,w_uint32_t timeout)
         wind_open_interrupt();
         err = ERR_OK;
     }
-    else if(pthread->cause == CAUSE_SLEEP)
+    else if(thread->cause == CAUSE_SLEEP)
     {
         err = ERR_TIMEOUT;
     }

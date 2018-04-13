@@ -33,6 +33,9 @@
 #include "wind_dlist.h"
 #include "wind_core.h"
 #include "wind_mpool.h"
+#include "wind_string.h"
+
+#define WIND_MUTEX_MAGIC 0x37AD490F
 static WIND_MPOOL(mutexpool,WIND_MUTEX_MAX_NUM,sizeof(mutex_s));
 
 static __INLINE__ mutex_s *mutex_malloc(void)
@@ -51,102 +54,133 @@ w_err_t wind_mutex_init(void)
     return err;
 }
 
+mutex_s *wind_mutex_get(const char *name)
+{
+    mutex_s *mutex;
+    dnode_s *dnode;
+    foreach_node(dnode,&g_core.semlist)
+    {
+        mutex = DLIST_OBJ(dnode,mutex_s,mutexnode);
+        if(wind_strcmp(name,mutex->name) == 0)
+            return mutex;
+    }
+    return NULL;
+}
 //创建一个mutex对象，并加入所有mutex列表
 mutex_s *wind_mutex_create(const char *name)
 {
-    mutex_s *pmutex;
+    mutex_s *mutex;
     wind_notice("create mutex:%s",name);
-    pmutex = mutex_malloc();
-    WIND_ASSERT_TODO(pmutex != NULL,wind_open_interrupt(),NULL);
-    DNODE_INIT(pmutex->mutexnode);
-    pmutex->name = name;
-    pmutex->mutexed = B_FALSE;
-    DLIST_INIT(pmutex->waitlist);
+    mutex = mutex_malloc();
+    WIND_ASSERT_TODO(mutex != NULL,wind_open_interrupt(),NULL);
+    mutex->magic = WIND_MUTEX_MAGIC;
+    DNODE_INIT(mutex->mutexnode);
+    mutex->name = name;
+    mutex->mutexed = B_FALSE;
+    DLIST_INIT(mutex->waitlist);
     
     wind_close_interrupt();
-    dlist_insert_tail(&g_core.mutexlist,&pmutex->mutexnode);
+    dlist_insert_tail(&g_core.mutexlist,&mutex->mutexnode);
     wind_open_interrupt();
-    return pmutex;
+    return mutex;
 }
 
 //试图释放一个互斥锁，如果有线程被阻塞，则释放将终止
-w_err_t wind_mutex_try_destroy(mutex_s *pmutex)
+w_err_t wind_mutex_try_destroy(mutex_s *mutex)
 {
-    WIND_ASSERT_RETURN(pmutex != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(mutex != NULL,ERR_NULL_POINTER);
     wind_close_interrupt();
-    WIND_ASSERT_TODO(pmutex->mutexed == B_FALSE,wind_open_interrupt(),ERR_COMMAN);
-    wind_mutex_destroy(pmutex);
+    WIND_ASSERT_TODO(mutex->mutexed == B_FALSE,wind_open_interrupt(),ERR_COMMAN);
+    wind_mutex_destroy(mutex);
     wind_open_interrupt();
     return ERR_OK;    
 }
 
 //强制性释放互斥锁，并把所有的被该互斥锁阻塞的线程全部激活
-w_err_t wind_mutex_destroy(mutex_s *pmutex)
+w_err_t wind_mutex_destroy(mutex_s *mutex)
 {
     dnode_s *pnode;
-    thread_s *pthread;
-    WIND_ASSERT_RETURN(pmutex != NULL,ERR_NULL_POINTER);
-    wind_notice("destroy mutex:%s",pmutex->name);
+    thread_s *thread;
+    WIND_ASSERT_RETURN(mutex != NULL,ERR_NULL_POINTER);
+    wind_notice("destroy mutex:%s",mutex->name);
     wind_close_interrupt();
-    foreach_node(pnode,&pmutex->waitlist)
+    foreach_node(pnode,&mutex->waitlist)
     {
-        dlist_remove(&pmutex->waitlist,pnode);
-        pthread = PRI_DLIST_OBJ(pnode,thread_s,suspendthr);
-        pthread->runstat = THREAD_STATUS_READY;
-        pthread->cause = CAUSE_LOCK;
+        dlist_remove(&mutex->waitlist,pnode);
+        thread = PRI_DLIST_OBJ(pnode,thread_s,suspendthr);
+        thread->runstat = THREAD_STATUS_READY;
+        thread->cause = CAUSE_LOCK;
     }
-    dlist_remove(&g_core.mutexlist,&pmutex->mutexnode);
-    pmutex->name = NULL;
-    mutex_free(pmutex);
+    dlist_remove(&g_core.mutexlist,&mutex->mutexnode);
+    mutex->name = NULL;
+    mutex->magic = 0;
+    mutex_free(mutex);
     wind_open_interrupt();
     return ERR_OK;
 }
 
-//试图锁定一个互斥锁，如果已经被锁定，则线程将被挂起
-w_err_t wind_mutex_lock(mutex_s *pmutex)
+
+w_err_t wind_mutex_lock(mutex_s *mutex)
 {
-    thread_s *pthread;
-    WIND_ASSERT_RETURN(pmutex != NULL,ERR_NULL_POINTER);
+    thread_s *thread;
+    WIND_ASSERT_RETURN(mutex != NULL,ERR_NULL_POINTER);
     wind_close_interrupt();
 
-    if (pmutex->mutexed == B_FALSE)
+    if (mutex->mutexed == B_FALSE)
     {
-        pmutex->mutexed = B_TRUE;
+        mutex->mutexed = B_TRUE;
         wind_open_interrupt();
         return ERR_OK; 
     }
-    pthread = wind_thread_current();
-    pthread->runstat = THREAD_STATUS_SUSPEND;
-    pthread->cause = CAUSE_LOCK;
-    pthread->sleep_ticks = 0x7fffffff;
+    thread = wind_thread_current();
+    thread->runstat = THREAD_STATUS_SUSPEND;
+    thread->cause = CAUSE_LOCK;
+    thread->sleep_ticks = 0x7fffffff;
     
-    dlist_insert_prio(&pmutex->waitlist,&pthread->suspendthr,pthread->prio);
+    dlist_insert_prio(&mutex->waitlist,&thread->suspendthr,thread->prio);
     wind_open_interrupt();
     wind_thread_dispatch();
     return ERR_OK;
 }
 
+w_err_t wind_mutex_trylock(mutex_s *mutex)
+{
+    w_err_t err;
+    WIND_ASSERT_RETURN(mutex != NULL,ERR_NULL_POINTER);
+    wind_close_interrupt();
+    if (mutex->mutexed == B_FALSE)
+    {
+        mutex->mutexed = B_TRUE;
+        err = ERR_OK; 
+    }
+    else
+        err = ERR_COMMAN; 
+    wind_open_interrupt();
+    return err;
+}
+
+
 //试图打开一个互斥锁，如果有线程被阻塞，则优先激活线程
-w_err_t wind_mutex_unlock(mutex_s *pmutex)
+w_err_t wind_mutex_unlock(mutex_s *mutex)
 {
     dnode_s *pnode;
-    thread_s *pthread;
-    WIND_ASSERT_RETURN(pmutex != NULL,ERR_NULL_POINTER);
+    thread_s *thread;
+    WIND_ASSERT_RETURN(mutex != NULL,ERR_NULL_POINTER);
     wind_close_interrupt();
-    WIND_ASSERT_TODO(pmutex->mutexed,wind_open_interrupt(),ERR_OK);
+    WIND_ASSERT_TODO(mutex->mutexed,wind_open_interrupt(),ERR_OK);
     
-    pnode = dlist_head(&pmutex->waitlist);
+    pnode = dlist_head(&mutex->waitlist);
     if (pnode == NULL)
     {
-        pmutex->mutexed = B_FALSE;
+        mutex->mutexed = B_FALSE;
         wind_open_interrupt();
         return ERR_OK; //信号量有效，直接返回效，
     }
 
-    dlist_remove_head(&pmutex->waitlist);
-    pthread = PRI_DLIST_OBJ(pnode,thread_s,suspendthr);
-    pthread->runstat = THREAD_STATUS_READY;
-    pthread->cause = CAUSE_LOCK;
+    dlist_remove_head(&mutex->waitlist);
+    thread = PRI_DLIST_OBJ(pnode,thread_s,suspendthr);
+    thread->runstat = THREAD_STATUS_READY;
+    thread->cause = CAUSE_LOCK;
     wind_open_interrupt();
     return ERR_OK;    
 }
@@ -155,7 +189,7 @@ w_err_t wind_mutex_unlock(mutex_s *pmutex)
 w_err_t wind_mutex_print(dlist_s *list)
 {
     dnode_s *dnode;
-    mutex_s *pmutex;
+    mutex_s *mutex;
     WIND_ASSERT_RETURN(list != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(list->head != NULL,ERR_NULL_POINTER);
     wind_printf("\r\n\r\nmutex list as following:\r\n");
@@ -164,9 +198,9 @@ w_err_t wind_mutex_print(dlist_s *list)
     wind_printf("--------------------------------------\r\n");
     foreach_node(dnode,list)
     {
-        pmutex = (mutex_s *)DLIST_OBJ(dnode,mutex_s,mutexnode);
+        mutex = (mutex_s *)DLIST_OBJ(dnode,mutex_s,mutexnode);
         wind_printf("%-16s %-8s\r\n",
-            pmutex->name,pmutex->mutexed?"lock":"unlock");
+            mutex->name,mutex->mutexed?"lock":"unlock");
     }
     wind_printf("--------------------------------------\r\n");
     return ERR_OK;

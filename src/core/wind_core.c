@@ -86,21 +86,21 @@ static w_bool_t is_switch_enable(void)
 static thread_s *wind_search_highthread(void)
 {
     dnode_s *pnode;
-    thread_s *pthread = NULL;
+    thread_s *thread = NULL;
     wind_close_interrupt();
     if(gwind_core_cnt > 0)
     {
-        pthread = wind_thread_current();
+        thread = wind_thread_current();
         wind_open_interrupt();
-        return pthread;
+        return thread;
     }
     foreach_node(pnode,&g_core.threadlist)
     {
-        pthread = PRI_DLIST_OBJ(pnode,thread_s,validthr);
-        if(pthread->runstat == THREAD_STATUS_READY)
+        thread = PRI_DLIST_OBJ(pnode,thread_s,validthr);
+        if(thread->runstat == THREAD_STATUS_READY)
         {
             wind_open_interrupt();
-            return pthread;
+            return thread;
         }
     }
     wind_open_interrupt();
@@ -175,11 +175,11 @@ void wind_thread_dispatch(void){}
 #endif
 
 
-void wind_switchto_thread(thread_s *pthread)
+void wind_switchto_thread(thread_s *thread)
 {
     thread_s *pthr;
     wind_close_interrupt();
-    pthr = pthread;
+    pthr = thread;
     if(pthr == wind_thread_current())
     {
         wind_open_interrupt();

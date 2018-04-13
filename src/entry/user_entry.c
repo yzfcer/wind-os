@@ -32,6 +32,7 @@
 #include "wind_core_inc.h"
 #include "beep.h"
 extern led_start(void);
+w_uint8_t pipebuff[128];
 w_err_t wind_main(void)
 {
 #if WIND_SEM_SUPPORT
@@ -41,6 +42,7 @@ w_err_t wind_main(void)
 #endif
     mutex_s *mutex1 = wind_mutex_create("mutex1");
     mutex_s *mutex2 = wind_mutex_create("mutex2");
+    pipe_s *pipe = wind_pipe_create("pipe1",pipebuff,sizeof(pipebuff));
     wind_notice("enter wind main.");
     led_start();
     BEEP_Init();

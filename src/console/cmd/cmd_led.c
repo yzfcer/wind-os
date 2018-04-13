@@ -49,16 +49,18 @@ COMMAND_MAIN(led,argc,argv)
     WIND_ASSERT_RETURN(argc == 3,ERR_INVALID_PARAM);
     led = wind_dev_get(argv[2]);
     WIND_ASSERT_RETURN(led != NULL,ERR_INVALID_PARAM);
-    err = wind_dev_open(led);
-    WIND_ASSERT_RETURN(err == ERR_OK,ERR_COMMAN);
     if(0 == wind_strcmp(argv[1],"on"))
     {
+        err = wind_dev_open(led);
+        WIND_ASSERT_RETURN(err == ERR_OK,ERR_COMMAN);
         stat = 1;
         wind_dev_write(led,&stat,1);
         return ERR_OK;
     }
     else if(0 == wind_strcmp(argv[1],"off"))
     {
+        err = wind_dev_open(led);
+        WIND_ASSERT_RETURN(err == ERR_OK,ERR_COMMAN);
         stat = 0;
         wind_dev_write(led,&stat,1);
         return ERR_OK;

@@ -59,11 +59,10 @@ typedef struct __msgbox_s
 
 w_err_t wind_msgbox_init(void);
 
-
 void wind_msg_init(msg_s *msg,w_uint16_t msg_id,w_uint16_t msg_len,void *msg_arg);
 
 msgbox_s *wind_msgbox_create(const char *name,thread_s *owner);
-w_err_t wind_msgbox_destroy(msgbox_s *pmsgbox);
+w_err_t wind_msgbox_destroy(msgbox_s *msgbox);
 
 w_err_t wind_msgbox_post(msgbox_s *msgbox,msg_s *pmsg);
 w_err_t wind_msgbox_fetch(msgbox_s *msgbox,msg_s **pmsg,w_uint32_t timeout);

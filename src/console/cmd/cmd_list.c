@@ -43,10 +43,11 @@ COMMAND_DISC(list)
 
 COMMAND_USAGE(list)
 {
-    console_printf("list thread:to show thread infomation.\r\n");
-    console_printf("list sem:to show sem infomation.\r\n");
-    console_printf("list mutex:to show all mutex status.\r\n");
-    console_printf("list pool:to show all core object pools.\r\n");
+    console_printf("list thread:show thread infomation.\r\n");
+    console_printf("list sem:show sem infomation.\r\n");
+    console_printf("list mutex:show all mutex status.\r\n");
+    console_printf("list pool:show all core object pools.\r\n");
+    console_printf("list pipe:show all pipe infomation.\r\n");
 }
 
 COMMAND_MAIN(list,argc,argv)
@@ -71,6 +72,11 @@ COMMAND_MAIN(list,argc,argv)
     else if(0 == wind_strcmp(argv[1],"pool"))
     {
         wind_pool_print_list(&g_core.poollist);
+        return ERR_COMMAN;
+    }
+    else if(0 == wind_strcmp(argv[1],"pipe"))
+    {
+        wind_pipe_print(&g_core.pipelist);
         return ERR_COMMAN;
     }
     return ERR_COMMAN;
