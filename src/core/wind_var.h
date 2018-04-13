@@ -75,7 +75,7 @@ extern volatile w_bool_t gwind_start_flag;//开始调度的标志
 extern w_pstack_t *gwind_high_stack;
 extern w_pstack_t *gwind_cur_stack;
 
-void wind_corevar_init(void);
+void _wind_corevar_init(void);
 
 //CPU的总体占用率
 #define WIND_CPU_USAGE (g_core.cpu_usage)

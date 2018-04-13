@@ -44,7 +44,7 @@ extern void wind_start_switch(void);
 
 
 //允许创建用户线程
-static void wind_thread_open()
+static void _wind_thread_open()
 {
     g_core.usrthren = B_TRUE;
 }
@@ -196,24 +196,24 @@ void wind_switchto_thread(thread_s *thread)
 
 
 //操作系统初始化
-void wind_init()
+static void wind_init()
 {
     g_core.usrthren = B_FALSE;
-    wind_target_init();//目标机运行环境初始化
-    wind_std_init();//调试端口初始化
+    _wind_target_init();//目标机运行环境初始化
+    _wind_std_init();//调试端口初始化
     
     wind_print_os_info();
-    wind_corevar_init();
-    wind_thread_init();
-    wind_mutex_init();
-    wind_sem_init();
-    wind_msgbox_init();
-    wind_pipe_init();
-    wind_timer_init();
+    _wind_corevar_init();
+    _wind_thread_init();
+    _wind_mutex_init();
+    _wind_sem_init();
+    _wind_msgbox_init();
+    _wind_pipe_init();
+    _wind_timer_init();
 
-    wind_time_init();//时间初始化
+    _wind_time_init();//时间初始化
 #if WIND_RTC_SUPPORT
-    wind_datetime_init();
+    _wind_datetime_init();
 #endif
     wind_notice("wind init complete!");
 }
@@ -223,13 +223,12 @@ void wind_init()
 //****************************wind_entry***********************************************
 int create_init_thread(void);
 
-int wind_os_lunch(void)
+static int wind_os_lunch(void)
 {
     wind_init();
     create_init_thread();
-    wind_thread_open();
+    _wind_thread_open();
     wind_notice("wind is going to multple thread mode.");
-    wind_thread_open();
     wind_run();
     return ERR_OK;
 }

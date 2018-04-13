@@ -42,7 +42,7 @@ typedef struct _wind_mutex
     dlist_s waitlist;  //等待线程队列
 }mutex_s;
 
-w_err_t wind_mutex_init(void);
+w_err_t _wind_mutex_init(void);
 mutex_s *wind_mutex_get(const char *name);
 mutex_s *wind_mutex_create(const char *name);
 w_err_t wind_mutex_try_destroy(mutex_s *mutex);

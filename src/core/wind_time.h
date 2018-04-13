@@ -31,7 +31,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-w_err_t wind_time_init(void);
+w_err_t _wind_time_init(void);
 w_uint32_t wind_get_time_count(void);
 
 #ifdef __cplusplus

@@ -125,7 +125,7 @@ typedef struct _thread_s
 
 
 
-w_err_t wind_thread_init(void);
+w_err_t _wind_thread_init(void);
 
 thread_s *wind_thread_create(const w_int8_t *name,
                    prio_e priolevel,

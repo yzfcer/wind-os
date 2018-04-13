@@ -46,7 +46,7 @@ static __INLINE__ w_err_t sem_free(void *sem)
 }
 
 
-w_err_t wind_sem_init(void)
+w_err_t _wind_sem_init(void)
 {
     w_err_t err;
     err = wind_pool_create("sem",sempool,sizeof(sempool),sizeof(sem_s));
@@ -158,6 +158,23 @@ w_err_t wind_sem_wait(sem_s *sem,w_uint32_t timeout)
     return ERR_OK;
 }
 
+w_err_t wind_sem_trywait(sem_s *sem)
+{
+    w_err_t err;
+    WIND_ASSERT_RETURN(sem != NULL,ERR_NULL_POINTER);
+
+    //信号量有效，直接返回
+    wind_close_interrupt();
+    if (sem->sem_num > 0)
+    {
+        sem->sem_num --;
+        err = ERR_OK; 
+    }
+    else
+        err = ERR_COMMAN;
+    wind_open_interrupt();
+    return err;
+}
 
 
 //试图释放一个信号量，如果有线程被阻塞，则释放将终止

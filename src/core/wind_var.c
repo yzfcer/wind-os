@@ -40,7 +40,7 @@ volatile w_bool_t gwind_start_flag = B_FALSE;
 w_pstack_t *gwind_high_stack;
 w_pstack_t *gwind_cur_stack;
 
-void wind_corevar_init(void)
+void _wind_corevar_init(void)
 {
     g_core.cpu_usage = 0;
     g_core.idle_cnt = 0;

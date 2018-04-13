@@ -30,7 +30,7 @@
 #include "misc.h"
 #include "usart1.h"
 #include "core_cm4.h"
-void wind_target_init(void)
+void _wind_target_init(void)
 {
 
 }

@@ -79,7 +79,7 @@ pdate_s wind_get_date(void);
 ptime_s wind_get_time(void);
 pdatetime_s wind_get_datetime(void);
 w_err_t wind_copy_datetime(pdatetime_s desdt,pdatetime_s srcdt);
-void wind_datetime_init(void);
+void _wind_datetime_init(void);
 void wind_second_inc(void);
 void wind_msecond_inc(void); 
 

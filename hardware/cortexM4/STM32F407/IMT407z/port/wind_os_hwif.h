@@ -30,7 +30,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-void wind_target_init(void);
+void _wind_target_init(void);
 void wind_system_reset(void);
 
 #if WIND_HEAP_SUPPORT

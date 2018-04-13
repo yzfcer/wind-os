@@ -178,7 +178,7 @@ pdatetime_s wind_get_datetime(void)
 
 
 
-void wind_datetime_init(void)
+void _wind_datetime_init(void)
 {
     //wind_set_datetime(2013,10,19,23,34,35,0,5,1);
 }

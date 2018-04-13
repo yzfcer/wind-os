@@ -53,7 +53,7 @@ static w_err_t msgbox_free(msgbox_s *msgbox)
 
 //**********************************************extern functions******************************
 
-w_err_t wind_msgbox_init(void)
+w_err_t _wind_msgbox_init(void)
 {
     w_err_t err;
     err = wind_pool_create("msgbox",msgboxpool,sizeof(msgboxpool),sizeof(msgbox_s));
@@ -144,7 +144,7 @@ w_err_t wind_msgbox_post(msgbox_s *msgbox,msg_s *pmsg)
 }
 
 
-w_err_t wind_msgbox_fetch(msgbox_s *msgbox,msg_s **pmsg,w_uint32_t timeout)
+w_err_t wind_msgbox_wait(msgbox_s *msgbox,msg_s **pmsg,w_uint32_t timeout)
 {
     w_err_t err;
     w_uint32_t ticks;
@@ -199,6 +199,32 @@ w_err_t wind_msgbox_fetch(msgbox_s *msgbox,msg_s **pmsg,w_uint32_t timeout)
     return err;
 }
 
+w_err_t wind_msgbox_trywait(msgbox_s *msgbox,msg_s **pmsg)
+{
+    w_err_t err;
+    dnode_s *dnode;
+    WIND_ASSERT_RETURN(msgbox != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(pmsg != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(msgbox->magic == WIND_MSGBOX_MAGIC,ERR_COMMAN);
+    WIND_ASSERT_RETURN(msgbox->owner,ERR_COMMAN);
+    
+    //如果邮箱中有消息，就直接返回消息
+    wind_close_interrupt();
+    if(msgbox->num > 0)
+    {
+        msgbox->num --;
+        dnode = dlist_remove_head(&msgbox->msglist);
+        *pmsg = DLIST_OBJ(dnode,msg_s,msgnode);
+        err = ERR_OK;
+    }
+    else
+    {
+        *pmsg = NULL;
+        err = ERR_COMMAN;
+    }
+    wind_open_interrupt();
+    return err;
+}
 
 #endif  //WIND_MESSAGE_SUPPORT
 
