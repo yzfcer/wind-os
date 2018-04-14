@@ -81,20 +81,22 @@ typedef enum __thr_evt_e
 }thr_evt_e;
 
 
-struct _thread_s;
-typedef struct __threadcb_s
+typedef struct _thread_s thread_s;
+typedef struct __threadcb_s threadcb_s;
+
+struct __threadcb_s
 {
     void (*create)(struct _thread_s *thread);
     void (*start)(struct _thread_s *thread);
     void (*suspend)(struct _thread_s *thread);
     void (*resume)(struct _thread_s *thread);
     void (*dead)(struct _thread_s *thread);
-}threadcb_s;
+};
 #endif 
 
 
 //线程对象结构
-typedef struct _thread_s
+struct _thread_s
 {
     prinode_s validthr;
     prinode_s suspendthr;
@@ -103,11 +105,11 @@ typedef struct _thread_s
     w_pstack_t stack_top;//栈顶指针
     w_uint16_t stksize;//堆栈大小，以栈宽度技术
     
-    w_err_t (*thread_func)(w_int32_t argc,w_int8_t **argv);
     w_int16_t argc;
     w_int8_t **argv;
+    w_err_t (*thread_func)(w_int32_t argc,w_int8_t **argv);
     
-    struct _thread_s *parent;
+
     char name[THREAD_NAME_LEN];
     w_int16_t prio;
     
@@ -121,7 +123,7 @@ typedef struct _thread_s
 #if WIND_HEAP_SUPPORT && WIND_PRIVATE_HEAP_SUPPORT
     void *private_heap;
 #endif
-}thread_s;
+};
 
 
 

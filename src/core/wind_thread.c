@@ -66,7 +66,6 @@ static __INLINE__ thread_s *thread_malloc(void)
 static __INLINE__ w_err_t thread_free(thread_s *thread)
 {
     WIND_ASSERT_RETURN(thread != NULL,ERR_NULL_POINTER);
-    thread->parent = NULL;
     wind_memset(thread->name,0,THREAD_NAME_LEN);
     thread->prio = -1;
     thread->runstat = THREAD_STATUS_INIT;
@@ -208,7 +207,6 @@ thread_s *wind_thread_create(const w_int8_t *name,
     PRIO_DNODE_INIT(thread->validthr);
     PRIO_DNODE_INIT(thread->suspendthr);
     PRIO_DNODE_INIT(thread->sleepthr);
-    thread->parent = wind_thread_current();
     thread->stack_top = pstk;
     thread->stack = pstk;
     thread->stksize = stksize;

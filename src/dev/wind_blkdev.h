@@ -77,7 +77,7 @@ w_err_t wind_blkdev_eraseall(blkdev_s *blkdev);
 w_err_t wind_blkdev_close(blkdev_s *blkdev);
 
 #else
-_register_blkdevs() ERR_OK
+_wind_blkdev_init() ERR_OK
 #endif
 
 #ifdef __cplusplus

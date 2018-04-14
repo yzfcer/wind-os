@@ -24,12 +24,14 @@ typedef enum
 {
     FSTYPE_TREEFS = 0x01,
     FSTYPE_UNDEF = 0xff,
-}fstype_e
+}fstype_e;
+
 typedef struct 
 {
     char name[32];
     ftype_e ftype;
     fmode_e fmode;
+    fs_ops_s *ops;
 }file_s;
 
 
@@ -47,9 +49,22 @@ struct __fs_ops_s
 
 struct fs_s
 {
-    
+    char name[12];
+    fstype_e fstype;
     fs_ops_s *ops;
 };
+
+w_err_t _wind_fs_init(void);
+fs_s *wind_fs_get(char *name);
+
+file_s* wind_file_open(const char *path,fmode_e fmode);
+w_err_t wind_file_close(file_s* file);
+w_err_t wind_file_seek(file_s* file,w_int32_t offset);
+w_int32_t wind_file_tell(file_s* file);
+w_int32_t wind_file_read(file_s* file,char *buff, w_int32_t size);
+w_int32_t wind_file_write(file_s* file,char *buff, w_int32_t size);
+w_err_t wind_file_gets(file_s* file,char *buff, w_int32_t maxlen);
+w_err_t wind_file_puts(file_s* file,char *buff);
 
 
 #endif

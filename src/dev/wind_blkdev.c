@@ -27,7 +27,7 @@
 #include "wind_debug.h"
 #include "wind_blkdev.h"
 #include "wind_mutex.h"
-#include "wind_os_hwif.h"
+#include "wind_core.h"
 #include "wind_string.h"
 #include "wind_var.h"
 
@@ -40,7 +40,7 @@ w_err_t wind_register_blkdev(blkdev_s *blkdev,w_int32_t count)
     WIND_ASSERT_RETURN(blkdev->magic == WIND_BLKDEV_MAGIC,ERR_INVALID_PARAM);
     
     wind_notice("register blkdev:%s",blkdev->name);
-    wind_close_interrupt();
+    wind_disable_switch();
     foreach_node(dnode,&g_core.blkdevlist)
     {
         blkdevi = DLIST_OBJ(dnode,blkdev_s,blkdevnode);
@@ -53,7 +53,7 @@ w_err_t wind_register_blkdev(blkdev_s *blkdev,w_int32_t count)
     }
     blkdev->mutex = wind_mutex_create(blkdev->name);
     dlist_insert_tail(&g_core.blkdevlist,&blkdev->blkdevnode);
-    wind_open_interrupt();
+    wind_enable_switch();
     return ERR_OK;
 }
 
@@ -63,7 +63,7 @@ w_err_t wind_unregister_blkdev(blkdev_s *blkdev)
     WIND_ASSERT_RETURN(blkdev != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(blkdev->magic == WIND_BLKDEV_MAGIC,ERR_INVALID_PARAM);
     wind_notice("unregister blkdev:%s",blkdev->name);
-    wind_close_interrupt();
+    wind_disable_switch();
     dnode = dlist_remove(&g_core.blkdevlist,dnode);
     if(dnode == NULL)
     {
@@ -73,7 +73,7 @@ w_err_t wind_unregister_blkdev(blkdev_s *blkdev)
     }
     wind_mutex_destroy(blkdev->mutex);
     blkdev->mutex = NULL;
-    wind_open_interrupt();
+    wind_enable_switch();
     return ERR_OK;
 }
 
@@ -86,15 +86,17 @@ w_err_t _wind_blkdev_init(void)
 
 blkdev_s *wind_blkdev_get(char *name)
 {
-    blkdev_s *blkdev;
+    blkdev_s *blkdev = NULL;
     dnode_s *dnode;
+    wind_disable_switch();
     foreach_node(dnode,&g_core.blkdevlist)
     {
         blkdev = DLIST_OBJ(dnode,blkdev_s,blkdevnode);
         if(wind_strcmp(blkdev->name,name) == 0)
-            return blkdev;
+            break;
     }
-    return NULL;
+    wind_enable_switch();
+    return blkdev;
 }
 
 w_err_t wind_blkdev_open(blkdev_s *blkdev)
