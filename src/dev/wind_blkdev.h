@@ -54,27 +54,27 @@ struct __blkdev_s
 
 struct __blkdev_ops_s
 {
-    w_err_t   (*open)(blkdev_s *blkdev);
-    w_err_t   (*erase)(blkdev_s *blkdev,w_addr_t addr,w_int32_t blkcnt);
-    w_err_t   (*eraseall)(blkdev_s *blkdev);
-    w_int32_t (*read)(blkdev_s *blkdev,w_addr_t addr,w_uint8_t *buf,w_int32_t blkcnt);
-    w_int32_t (*write)(blkdev_s *blkdev,w_addr_t addr,w_uint8_t *buf,w_int32_t blkcnt);
-    w_err_t   (*close)(blkdev_s *blkdev);
+    w_err_t   (*open)(blkdev_s *dev);
+    w_err_t   (*erase)(blkdev_s *dev,w_addr_t addr,w_int32_t blkcnt);
+    w_err_t   (*eraseall)(blkdev_s *dev);
+    w_int32_t (*read)(blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t blkcnt);
+    w_int32_t (*write)(blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t blkcnt);
+    w_err_t   (*close)(blkdev_s *dev);
 };
+w_err_t _wind_blkdev_init(void);
 w_err_t _register_blkdevs(void);
 
-w_err_t wind_register_blkdev(blkdev_s *blkdev,w_int32_t count);
-w_err_t wind_unregister_blkdev(blkdev_s *blkdev);
+w_err_t wind_register_blkdev(blkdev_s *dev,w_int32_t count);
+w_err_t wind_unregister_blkdev(blkdev_s *dev);
 
-w_err_t _wind_blkdev_init(void);
 blkdev_s *wind_blkdev_get(char *name);
 
-w_err_t wind_blkdev_open(blkdev_s *blkdev);
-w_int32_t wind_blkdev_read(blkdev_s *blkdev,w_addr_t blkaddr,w_uint8_t *buf,w_int32_t blkcnt);
-w_int32_t wind_blkdev_write(blkdev_s *blkdev,w_addr_t blkaddr,w_uint8_t *buf,w_int32_t blkcnt);
-w_err_t wind_blkdev_erase(blkdev_s *blkdev,w_addr_t blkaddr,w_int32_t blkcnt);
-w_err_t wind_blkdev_eraseall(blkdev_s *blkdev);
-w_err_t wind_blkdev_close(blkdev_s *blkdev);
+w_err_t wind_blkdev_open(blkdev_s *dev);
+w_int32_t wind_blkdev_read(blkdev_s *dev,w_addr_t blkaddr,w_uint8_t *buf,w_int32_t blkcnt);
+w_int32_t wind_blkdev_write(blkdev_s *dev,w_addr_t blkaddr,w_uint8_t *buf,w_int32_t blkcnt);
+w_err_t wind_blkdev_erase(blkdev_s *dev,w_addr_t blkaddr,w_int32_t blkcnt);
+w_err_t wind_blkdev_eraseall(blkdev_s *dev);
+w_err_t wind_blkdev_close(blkdev_s *dev);
 
 #else
 _wind_blkdev_init() ERR_OK

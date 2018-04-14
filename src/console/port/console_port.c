@@ -10,6 +10,7 @@ CMD_DECLARE(test);
 CMD_DECLARE(reset);
 CMD_DECLARE(bee);
 CMD_DECLARE(led);
+CMD_DECLARE(blkdev);
 
 
 
@@ -24,6 +25,7 @@ void register_all_cmd(console_s *ctrl)
     wind_cmd_register(&ctrl->cmd_list,COMMAND(reset),1);
     wind_cmd_register(&ctrl->cmd_list,COMMAND(bee),1);
     wind_cmd_register(&ctrl->cmd_list,COMMAND(led),1);
+    wind_cmd_register(&ctrl->cmd_list,COMMAND(blkdev),1);
 }
 
 w_bool_t console_have_user(char *user)

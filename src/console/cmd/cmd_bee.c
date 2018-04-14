@@ -32,7 +32,7 @@
 
 COMMAND_DISC(bee)
 {
-    console_printf("conreol the bee device.\r\n");
+    console_printf("control the bee device.\r\n");
 }
 
 COMMAND_USAGE(bee)

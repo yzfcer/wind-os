@@ -497,6 +497,26 @@
               <FileType>5</FileType>
               <FilePath>..\board\beep.h</FilePath>
             </File>
+            <File>
+              <FileName>spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\board\spi.c</FilePath>
+            </File>
+            <File>
+              <FileName>spi.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\board\spi.h</FilePath>
+            </File>
+            <File>
+              <FileName>w25qxx.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\board\w25qxx.c</FilePath>
+            </File>
+            <File>
+              <FileName>w25qxx.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\board\w25qxx.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -867,6 +887,11 @@
               <FileType>1</FileType>
               <FilePath>..\device\blkdev_memblk.c</FilePath>
             </File>
+            <File>
+              <FileName>blkdev_spi_flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\device\blkdev_spi_flash.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -987,6 +1012,16 @@
               <FileType>5</FileType>
               <FilePath>..\..\..\..\..\src\comman\wind_tree.h</FilePath>
             </File>
+            <File>
+              <FileName>wind_conv.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\comman\wind_conv.c</FilePath>
+            </File>
+            <File>
+              <FileName>wind_conv.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\comman\wind_conv.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1076,6 +1111,11 @@
               <FileName>cmd_led.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\console\cmd\cmd_led.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_blkdev.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\console\cmd\cmd_blkdev.c</FilePath>
             </File>
           </Files>
         </Group>

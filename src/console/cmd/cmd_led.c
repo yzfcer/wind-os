@@ -32,7 +32,7 @@
 
 COMMAND_DISC(led)
 {
-    console_printf("conreol a led device.\r\n");
+    console_printf("control a led device.\r\n");
 }
 
 COMMAND_USAGE(led)

@@ -31,7 +31,7 @@ w_bool_t wind_atoi(char *str,w_int32_t *value)
     w_int32_t num = 0;
     
     sign = (str[0] == '-')?1:0;
-    if(str[i]=='+'||str[i]==' -')
+    if(str[i]=='+'||str[i]=='-')
         i++;
     for(;;i ++)
     {
@@ -76,7 +76,7 @@ w_bool_t wind_atoui(char *str,w_uint32_t *value)
 {
     w_uint32_t num = 0;
     w_uint8_t i = 0;
-    if(str[i]=='+'||str[i]==' -')
+    if(str[i]=='+'||str[i]=='-')
         i++;
     for(;;i ++)
     {
