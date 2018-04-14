@@ -56,12 +56,12 @@ struct __dev_ops_s
     w_int32_t (*write)(dev_s *dev,w_uint8_t *buf,w_uint16_t len);
     w_err_t   (*close)(dev_s *dev);
 };
+w_err_t _wind_dev_init(void);
 w_err_t _register_devs(void);
 
 w_err_t wind_register_dev(dev_s *dev,w_int32_t count);
 w_err_t wind_unregister_dev(dev_s *dev);
 
-w_err_t _wind_dev_init(void);
 dev_s *wind_dev_get(char *name);
 w_err_t wind_dev_open(dev_s *dev);
 w_err_t wind_dev_ioctl(dev_s *dev,w_int32_t cmd,void *param);

@@ -27,7 +27,7 @@
 #include "wind_debug.h"
 #include "wind_dev.h"
 #include "wind_mutex.h"
-#include "wind_os_hwif.h"
+#include "wind_core.h"
 #include "wind_string.h"
 #include "wind_var.h"
 #if WIND_DRVFRAME_SUPPORT
@@ -41,7 +41,7 @@ w_err_t wind_register_dev(dev_s *dev,w_int32_t count)
     WIND_ASSERT_RETURN(dev->magic == WIND_DEV_MAGIC,ERR_INVALID_PARAM);
     
     wind_notice("register dev:%s",dev->name);
-    wind_close_interrupt();
+    wind_disable_switch();
     foreach_node(dnode,&g_core.devlist)
     {
         devi = DLIST_OBJ(dnode,dev_s,devnode);
@@ -54,7 +54,7 @@ w_err_t wind_register_dev(dev_s *dev,w_int32_t count)
     }
     dev->mutex = wind_mutex_create(dev->name);
     dlist_insert_tail(&g_core.devlist,&dev->devnode);
-    wind_open_interrupt();
+    wind_enable_switch();
     return ERR_OK;
 }
 
@@ -64,7 +64,7 @@ w_err_t wind_unregister_dev(dev_s *dev)
     WIND_ASSERT_RETURN(dev != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(dev->magic == WIND_DEV_MAGIC,ERR_INVALID_PARAM);
     wind_notice("unregister dev:%s",dev->name);
-    wind_close_interrupt();
+    wind_disable_switch();
     dnode = dlist_remove(&g_core.devlist,dnode);
     if(dnode == NULL)
     {
@@ -74,29 +74,30 @@ w_err_t wind_unregister_dev(dev_s *dev)
     }
     wind_mutex_destroy(dev->mutex);
     dev->mutex = NULL;
-    wind_open_interrupt();
+    wind_enable_switch();
     return ERR_OK;
 }
 
 
 w_err_t _wind_dev_init(void)
 {
-    //DLIST_INIT(dev_list);
     _register_devs();
     return ERR_OK;
 }
 
 dev_s *wind_dev_get(char *name)
 {
-    dev_s *dev;
+    dev_s *dev = NULL;
     dnode_s *dnode;
+    wind_disable_switch();
     foreach_node(dnode,&g_core.devlist)
     {
         dev = DLIST_OBJ(dnode,dev_s,devnode);
         if(wind_strcmp(dev->name,name) == 0)
-            return dev;
+            break;
     }
-    return NULL;
+    wind_enable_switch();
+    return dev;
 }
 
 w_err_t wind_dev_open(dev_s *dev)
