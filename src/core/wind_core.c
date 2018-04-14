@@ -210,7 +210,7 @@ static void wind_init()
     _wind_msgbox_init();
     _wind_pipe_init();
     _wind_timer_init();
-
+    
     _wind_time_init();//时间初始化
 #if WIND_RTC_SUPPORT
     _wind_datetime_init();

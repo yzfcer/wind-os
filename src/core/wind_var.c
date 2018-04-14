@@ -45,7 +45,7 @@ void _wind_corevar_init(void)
     g_core.cpu_usage = 0;
     g_core.idle_cnt = 0;
     g_core.usrthren = B_FALSE;
-    g_core.run_falg = B_FALSE;
+    //g_core.run_falg = B_FALSE;
     g_core.ticks_cnt = 0;
     
     DLIST_INIT(g_core.threadlist);
@@ -57,6 +57,8 @@ void _wind_corevar_init(void)
     DLIST_INIT(g_core.poollist);
     DLIST_INIT(g_core.heaplist);
     DLIST_INIT(g_core.pipelist);
+    DLIST_INIT(g_core.devlist);
+    DLIST_INIT(g_core.blkdevlist);
     
 }
 

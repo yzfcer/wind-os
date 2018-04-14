@@ -38,7 +38,7 @@ static void set_idle_cnt(void)
 static w_err_t init_thread(w_int32_t argc,w_int8_t **argv)
 {   
     wind_tick_init();
-    wind_devices_init();
+    wind_dev_init();
 #if WIND_HEAP_SUPPORT
     wind_heaps_init();
 #endif

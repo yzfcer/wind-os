@@ -33,7 +33,6 @@ static w_uint32_t g_wind_time_ms_cnt = 0;//∫¡√Îº∆ ±
 
 w_err_t _wind_time_init(void)
 {
-    //wind_notice("sleep list initializing...");
     g_wind_time_ms_cnt = 0;
     return ERR_OK;
 }

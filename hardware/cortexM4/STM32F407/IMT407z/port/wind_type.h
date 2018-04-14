@@ -69,6 +69,10 @@ typedef float w_fp32_t;
 typedef float w_fp64_t;
 #endif
 
+#ifndef w_addr_t
+typedef unsigned long w_addr_t; 
+#endif
+
 #ifndef w_str16_t
 typedef char w_str16_t[16] ;
 #endif

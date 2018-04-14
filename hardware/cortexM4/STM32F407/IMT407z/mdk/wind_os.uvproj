@@ -857,6 +857,11 @@
               <FileType>1</FileType>
               <FilePath>..\device\dev_list.c</FilePath>
             </File>
+            <File>
+              <FileName>blkdev_list.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\device\blkdev_list.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1126,6 +1131,16 @@
               <FileName>wind_dev.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\..\..\..\src\dev\wind_dev.h</FilePath>
+            </File>
+            <File>
+              <FileName>wind_blkdev.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\dev\wind_blkdev.c</FilePath>
+            </File>
+            <File>
+              <FileName>wind_blkdev.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\dev\wind_blkdev.h</FilePath>
             </File>
           </Files>
         </Group>

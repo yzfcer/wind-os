@@ -4,10 +4,10 @@
 **                                       yzfcer@163.com
 **
 **--------------文件信息--------------------------------------------------------------------------------
-**文   件   名: wind_driver.c
+**文   件   名: wind_dev.c
 **创   建   人: 周江村
 **最后修改日期: 
-**描        述: 系统的驱动的相关的源文件
+**描        述: 字符设备API接口
 **              
 **--------------历史版本信息----------------------------------------------------------------------------
 ** 创建人: 
@@ -30,7 +30,7 @@
 #include "wind_os_hwif.h"
 #include "wind_string.h"
 #include "wind_var.h"
-//dlist_s dev_list;
+
 w_err_t wind_register_dev(dev_s *dev,w_int32_t count)
 {
     dev_s *devi;    
@@ -78,7 +78,7 @@ w_err_t wind_unregister_dev(dev_s *dev)
 }
 
 
-w_err_t wind_devices_init(void)
+w_err_t wind_dev_init(void)
 {
     //DLIST_INIT(dev_list);
     _register_devs();
@@ -116,7 +116,7 @@ w_err_t wind_dev_open(dev_s *dev)
     return err;
 }
 
-w_err_t wind_dev_ioctl(dev_s *dev,w_int32_t ctrlpoint,void *param)
+w_err_t wind_dev_ioctl(dev_s *dev,w_int32_t cmd,void *param)
 {
     w_err_t err = ERR_COMMAN;
     WIND_ASSERT_RETURN(dev != NULL,ERR_NULL_POINTER);
@@ -125,7 +125,7 @@ w_err_t wind_dev_ioctl(dev_s *dev,w_int32_t ctrlpoint,void *param)
     WIND_ASSERT_RETURN(dev->opened == B_TRUE,ERR_STATUS);
     wind_mutex_lock(dev->mutex);
     if(dev->ops->open != NULL)
-        err = dev->ops->ioctl(dev,ctrlpoint,param);
+        err = dev->ops->ioctl(dev,cmd,param);
     wind_mutex_unlock(dev->mutex);
     return err;
 }

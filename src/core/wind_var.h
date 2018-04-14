@@ -52,8 +52,9 @@ typedef struct __core_var_s
     dlist_s heaplist;
     dlist_s pipelist;
     dlist_s devlist;
+    dlist_s blkdevlist;
     
-    volatile w_bool_t run_falg;//多线程调度开始的标志
+    //volatile w_bool_t run_falg;//多线程调度开始的标志
     w_bool_t usrthren;/*用户线程允许创建的标志 */
     
     volatile w_uint32_t idle_cnt;//空闲计算器
