@@ -862,6 +862,11 @@
               <FileType>1</FileType>
               <FilePath>..\device\blkdev_list.c</FilePath>
             </File>
+            <File>
+              <FileName>blkdev_memblk.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\device\blkdev_memblk.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

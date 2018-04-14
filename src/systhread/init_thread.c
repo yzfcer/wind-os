@@ -4,6 +4,8 @@
 #include "wind_softint.h"
 #include "wind_heap.h"
 #include "wind_dev.h"
+#include "wind_blkdev.h"
+
 #define MAIN_STK_SIZE 256
 
 void wind_tick_init(void);
@@ -38,8 +40,8 @@ static void set_idle_cnt(void)
 static w_err_t init_thread(w_int32_t argc,w_int8_t **argv)
 {   
     wind_tick_init();
-    wind_dev_init();
-    wind_blkdev_init();
+    _wind_dev_init();
+    _wind_blkdev_init();
 #if WIND_HEAP_SUPPORT
     wind_heaps_init();
 #endif

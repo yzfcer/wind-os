@@ -35,7 +35,8 @@
 extern "C" {
 #endif
 #if WIND_BLK_DRVFRAME_SUPPORT
-#define WIND_DEV_MAGIC 0xB88F3D9A
+
+#define WIND_BLKDEV_MAGIC 0xB88F3D9A
 typedef struct __blkdev_s blkdev_s;
 typedef struct __blkdev_ops_s blkdev_ops_s;
 struct __blkdev_s
@@ -43,9 +44,10 @@ struct __blkdev_s
     w_uint32_t magic;
     dnode_s blkdevnode;
     char name[12];
+    w_bool_t opened;
+    w_addr_t addr;
     w_int32_t blkcnt;
     w_int32_t blksize;
-    w_bool_t opened;
     mutex_s *mutex;
     const blkdev_ops_s *ops;
 };
@@ -64,7 +66,7 @@ w_err_t _register_blkdevs(void);
 w_err_t wind_register_blkdev(blkdev_s *blkdev,w_int32_t count);
 w_err_t wind_unregister_blkdev(blkdev_s *blkdev);
 
-w_err_t wind_blkdev_init(void);
+w_err_t _wind_blkdev_init(void);
 blkdev_s *wind_blkdev_get(char *name);
 
 w_err_t wind_blkdev_open(blkdev_s *blkdev);
