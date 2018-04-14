@@ -30,6 +30,7 @@
 #include "wind_os_hwif.h"
 #include "wind_string.h"
 #include "wind_var.h"
+#if WIND_DRVFRAME_SUPPORT
 
 w_err_t wind_register_dev(dev_s *dev,w_int32_t count)
 {
@@ -78,7 +79,7 @@ w_err_t wind_unregister_dev(dev_s *dev)
 }
 
 
-w_err_t wind_dev_init(void)
+w_err_t _wind_dev_init(void)
 {
     //DLIST_INIT(dev_list);
     _register_devs();
@@ -175,5 +176,7 @@ w_err_t wind_dev_close(dev_s *dev)
     wind_mutex_unlock(dev->mutex);
     return err;
 }
+
+#endif
 
 

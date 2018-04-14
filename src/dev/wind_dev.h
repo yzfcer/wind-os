@@ -34,7 +34,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
+#if WIND_DRVFRAME_SUPPORT
 #define WIND_DEV_MAGIC 0x68353D6A
 typedef struct __dev_s dev_s;
 typedef struct __dev_ops_s dev_ops_s;
@@ -61,14 +61,16 @@ w_err_t _register_devs(void);
 w_err_t wind_register_dev(dev_s *dev,w_int32_t count);
 w_err_t wind_unregister_dev(dev_s *dev);
 
-w_err_t wind_dev_init(void);
+w_err_t _wind_dev_init(void);
 dev_s *wind_dev_get(char *name);
 w_err_t wind_dev_open(dev_s *dev);
 w_err_t wind_dev_ioctl(dev_s *dev,w_int32_t cmd,void *param);
 w_int32_t wind_dev_read(dev_s *dev,w_uint8_t *buf,w_int32_t len);
 w_int32_t wind_dev_write(dev_s *dev,w_uint8_t *buf,w_int32_t len);
 w_err_t wind_dev_close(dev_s *dev);
-
+#else
+_wind_dev_init() ERR_OK
+#endif
 #ifdef __cplusplus
 }
 #endif

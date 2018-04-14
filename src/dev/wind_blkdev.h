@@ -34,8 +34,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#define WIND_DEV_MAGIC 0x68353D6A
+#if WIND_BLK_DRVFRAME_SUPPORT
+#define WIND_DEV_MAGIC 0xB88F3D9A
 typedef struct __blkdev_s blkdev_s;
 typedef struct __blkdev_ops_s blkdev_ops_s;
 struct __blkdev_s
@@ -74,7 +74,9 @@ w_err_t wind_blkdev_erase(blkdev_s *blkdev,w_addr_t addr,w_int32_t blkcnt);
 w_err_t wind_blkdev_eraseall(blkdev_s *blkdev);
 w_err_t wind_blkdev_close(blkdev_s *blkdev);
 
-
+#else
+_register_blkdevs() ERR_OK
+#endif
 
 #ifdef __cplusplus
 }
