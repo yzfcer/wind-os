@@ -44,6 +44,8 @@ COMMAND_USAGE(blkdev)
     console_printf("blkdev <dev> erase <addr> <blknum>:to erase the block device sectors.\r\n");
 }
 
+
+static w_uint8_t buffer[512];
 COMMAND_MAIN(blkdev,argc,argv)
 {
     blkdev_s *dev;
@@ -56,7 +58,7 @@ COMMAND_MAIN(blkdev,argc,argv)
     wind_blkdev_open(dev);
     WIND_ASSERT_RETURN(dev != NULL,ERR_INVALID_PARAM);
     addr = (w_addr_t)wind_convert_str2u32_t(argv[3]);
-    buff = wind_heap_alloc_default(dev->blksize);
+    buff = buffer;//wind_heap_alloc_default(dev->blksize);
     wind_memset(buff,0,dev->blksize);
     if(0 == wind_strcmp(argv[2],"read"))
     {
@@ -81,7 +83,7 @@ COMMAND_MAIN(blkdev,argc,argv)
         err = ERR_OK;
     }
     else ;
-    wind_heap_free(buff);
+    //wind_heap_free(buff);
     return err;
 }
 
