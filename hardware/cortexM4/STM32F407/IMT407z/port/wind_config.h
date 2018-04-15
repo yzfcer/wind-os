@@ -34,7 +34,7 @@
 
 #define WIND_PIPE_SUPPORT 1  //是否支持管道机制
 
-#define WIND_MESSAGE_SUPPORT 1  //是否支持消息机制
+#define WIND_MSGBOX_SUPPORT 1  //是否支持消息机制
 
 #define WIND_REALTIME_CORE_SUPPORT 1 //是否支持实时内核，即抢占式切换
 

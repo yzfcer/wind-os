@@ -23,8 +23,6 @@
 ** 备  注：不要在中断服务例程中分配或释放动态内存块
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
-
-
 #include "wind_config.h"
 #include "wind_type.h"
 #include "wind_heap.h"
@@ -69,7 +67,7 @@ w_err_t wind_heap_create(const char *name,w_addr_t base,w_uint32_t size)
     hp->size = hpsize;
     hp->rest = hp->size - sizeof(heap_s);
     hp->max_used = sizeof(heap_s);
-    DNODE_INIT(hp->heap_node);
+    DNODE_INIT(hp->heapnode);
     DLIST_INIT(hp->used_list);
     DLIST_INIT(hp->free_list);
     hp->pmutex = wind_mutex_create(name);
@@ -78,7 +76,7 @@ w_err_t wind_heap_create(const char *name,w_addr_t base,w_uint32_t size)
     heapitem_init(item,hp,hp->rest);
     wind_disable_switch();
     dlist_insert_head(&hp->free_list,&item->itemnode.node);
-    dlist_insert_tail(&g_core.heaplist,&hp->heap_node);
+    dlist_insert_tail(&g_core.heaplist,&hp->heapnode);
     wind_enable_switch();
 
     return ERR_OK;
@@ -92,7 +90,7 @@ w_err_t wind_heap_destroy(w_addr_t base)
     WIND_ASSERT_RETURN(heap->magic == WIND_HEAP_MAGIC,ERR_INVALID_PARAM);
     WIND_ASSERT_RETURN(heap->size > sizeof(heap_s),ERR_INVALID_PARAM);
     wind_disable_switch();
-    dlist_remove(&g_core.heaplist,&heap->heap_node);
+    dlist_remove(&g_core.heaplist,&heap->heapnode);
     wind_enable_switch();
     wind_mutex_destroy(heap->pmutex);
     wind_memset(heap,0,sizeof(heap_s));
@@ -191,7 +189,7 @@ void *wind_heap_alloc_default(w_uint32_t size)
     heap_s* pheap;
     foreach_node(pdnode,&g_core.heaplist)
     {
-        pheap = DLIST_OBJ(pdnode,heap_s,heap_node);
+        pheap = DLIST_OBJ(pdnode,heap_s,heapnode);
         p = wind_heap_alloc((heap_s*)pheap,size);
         if(NULL != p)
             return p;
@@ -273,7 +271,7 @@ void *wind_hmalloc(w_uint32_t size)
     dnode_s *pnode;
     foreach_node(pnode,&g_core.heaplist)
     {
-        heap = DLIST_OBJ(pnode,heap_s,heap_node);
+        heap = DLIST_OBJ(pnode,heap_s,heapnode);
         WIND_HEAP_DEBUG("malloc in heap:0x%x\r\n",heap);
         WIND_HEAP_DEBUG("pool_size:0x%x\r\n",heap->size);
         WIND_HEAP_DEBUG("available_size:0x%x\r\n",heap->rest);
@@ -303,7 +301,7 @@ void *wind_hrealloc(void *rmem, w_uint32_t newsize)
         return wind_hmalloc(newsize);
     foreach_node(pnode,&g_core.heaplist)
     {
-        pheap = DLIST_OBJ(pnode,heap_s,heap_node);
+        pheap = DLIST_OBJ(pnode,heap_s,heapnode);
         pnew = wind_heap_realloc(pheap,rmem,newsize);
         return pnew;
     }
@@ -325,14 +323,14 @@ void *wind_hcalloc(w_uint32_t count, w_uint32_t size)
 }
 
 
-void wind_heap_print(void)
+w_err_t wind_heap_print(void)
 {
     dnode_s *pnode;
     heap_s* heap;
     wind_printf("heap list:\r\n");
     foreach_node(pnode,&g_core.heaplist)
     {
-        heap = DLIST_OBJ(pnode,heap_s,heap_node);
+        heap = DLIST_OBJ(pnode,heap_s,heapnode);
         wind_printf("magic :%x\r\n",heap->magic);
         wind_printf("name  :%s\r\n",heap->name);
         wind_printf("addr  :%x\r\n",heap->addr);
@@ -340,57 +338,40 @@ void wind_heap_print(void)
         wind_printf("rest  :%d\r\n",heap->rest);
         wind_printf("used  :%d\r\n",heap->max_used);
     }
+    return ERR_OK;
 }
 
-void wind_heap_item_print(dlist_s *list)
-{
-    dnode_s *dnode;
-    heapitem_s *item;
+w_err_t wind_heapitem_print(dlist_s *list)
+{   
+    dnode_s *dnode,*dnode1;
+    heap_s *heap;
+    heapitem_s *heapitem;
+    WIND_ASSERT_RETURN(list != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(list->head != NULL,ERR_NULL_POINTER);
+    wind_printf("\r\n\r\nheapitem list as following:\r\n");
+    wind_printf("----------------------------------------------\r\n");
+    wind_printf("%-16s %-8s %-10s\r\n","addr","size","state");
+    wind_printf("----------------------------------------------\r\n");
+
     foreach_node(dnode,list)
     {
-        item = (heapitem_s*)DLIST_OBJ(dnode,heapitem_s,itemnode.node);
-        
+        heap = (heap_s*)DLIST_OBJ(dnode,heap_s,heapnode);
+        foreach_node(dnode1,&heap->free_list)
+        {
+            heapitem = (heapitem_s *)DLIST_OBJ(dnode1,heapitem_s,itemnode.node);
+            wind_printf("0x%-14x %-8d %-10s\r\n",
+                heapitem,heapitem->size,(heapitem->magic & WIND_HEAP_USED)?"uesd":"free");
+        }
+        foreach_node(dnode1,&heap->used_list)
+        {
+            heapitem = (heapitem_s *)DLIST_OBJ(dnode1,heapitem_s,itemnode.node);
+            wind_printf("0x%-14x %-8d %-10s\r\n",
+                heapitem,heapitem->size,(heapitem->magic & WIND_HEAP_USED)?"uesd":"free");
+        }
     }
+    wind_printf("----------------------------------------------\r\n");
+    return ERR_OK;
 }
 
-w_err_t wind_heap_test(void)
-{
-    w_uint8_t *p1,*p2,*p3;
-    p1 = wind_hmalloc(120);
-    if(p1)
-    {
-        wind_printf("p1:0x%x,size:120\r\n",p1);
-    }
-    else
-    {
-        wind_error("p1:malloc err");
-    }
-    p2 = wind_hmalloc(1024);
-    if(p2)
-    {
-        wind_printf("p2:0x%x,size:1024\r\n",p2);
-    }
-    else
-    {
-        wind_error("p2:malloc err");
-    }
-    p3 = wind_hmalloc(0x1000000);
-    if(p3)
-    {
-        wind_printf("p3:0x%x,size:0x10000\r\n",p3);
-    }
-    else
-    {
-        wind_error("p3:malloc err");
-    }
-    wind_printf("memory free:p1\r\n");
-    wind_hfree(p1);
-    wind_printf("memory free:p2\r\n");
-    wind_hfree(p2);
-    wind_printf("memory free:p3\r\n");
-    wind_hfree(p3);
-    return ERR_OK;
-    
-}
 #endif
 

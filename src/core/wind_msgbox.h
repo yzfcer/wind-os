@@ -34,7 +34,7 @@
 extern "C" {
 #endif
 
-#if WIND_MESSAGE_SUPPORT
+#if WIND_MSGBOX_SUPPORT
 #define WIND_MSGBOX_MAGIC 0x378A523B
 typedef struct _wind_message
 {
@@ -71,7 +71,7 @@ w_err_t _wind_msgbox_print(dlist_s *list);
 
 #else
 #define _wind_pipe_init() ERR_OK
-#endif //WIND_MESSAGE_SUPPORT
+#endif //WIND_MSGBOX_SUPPORT
 
 #ifdef __cplusplus
 }

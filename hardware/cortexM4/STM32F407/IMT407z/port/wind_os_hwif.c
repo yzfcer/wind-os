@@ -56,6 +56,7 @@ void wind_close_interrupt(void)
 
 #if WIND_HEAP_SUPPORT
 #include "wind_heap.h"
+#include "wind_var.h"
 #define HEAP1_HEAD  0x10000000
 #define HEAD1_LENTH (64*1024)
 
@@ -64,6 +65,7 @@ void wind_heaps_init(void)
 {
     wind_heap_create("heap0",HEAP1_HEAD,HEAD1_LENTH);
     wind_heap_print();
+    wind_heapitem_print(&g_core.heaplist);
 }
 
 #endif

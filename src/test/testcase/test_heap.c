@@ -26,6 +26,7 @@ extern "C" {
 #include "cut.h"
 #include "wind_heap.h"
 #include "wind_string.h"
+#include "wind_var.h"
 /********************************************内部变量定义**********************************************/
 
 
@@ -40,18 +41,17 @@ extern "C" {
 
 /********************************************全局函数定义**********************************************/
 
-
-CASE_SETUP(heapinfo)
+CASE_SETUP(heapfunc)
 {
 
 }
 
-CASE_TEARDOWN(heapinfo)
+CASE_TEARDOWN(heapfunc)
 {
 
 }
 
-CASE_FUNC(heapinfo)
+CASE_FUNC(heapfunc)
 {
     w_int32_t res;
     w_err_t err;
@@ -66,20 +66,6 @@ CASE_FUNC(heapinfo)
     EXPECT_EQ(err,ERR_OK);
 }
 
-CASE_SETUP(heapfunc)
-{
-
-}
-
-CASE_TEARDOWN(heapfunc)
-{
-
-}
-
-CASE_FUNC(heapfunc)
-{
-}
-
 CASE_SETUP(heapmulti)
 {
     
@@ -90,8 +76,30 @@ CASE_TEARDOWN(heapmulti)
 
 }
 
+static char *buff[12];
 CASE_FUNC(heapmulti)
 {
+    w_int32_t i;
+    w_int32_t res;
+    w_err_t err;
+    w_int32_t len = 8;
+    for(i = 0;i < 12;i ++)
+    {
+        len += 8;
+        buff[i] = (char*)wind_heap_alloc_default(len);
+        EXPECT_NE(buff[i],NULL);
+        wind_memset(buff[i],0,len);
+        wind_strcpy((char*)buff[i],"heap test start.");
+        res = wind_strcmp((char*)buff[i],"heap test start.");
+        EXPECT_EQ(res,0);
+    }
+    for(i = 0;i < 12;i ++)
+    {
+        err = wind_heap_free(buff[i]);
+        EXPECT_EQ(err,ERR_OK);
+        wind_heapitem_print(&g_core.heaplist);
+    }
+
 }
 
 
@@ -107,7 +115,6 @@ SUITE_TEARDOWN(test_heap)
 
 
 TEST_CASES_START(test_heap)
-TEST_CASE(heapinfo)
 TEST_CASE(heapfunc)
 TEST_CASE(heapmulti)
 TEST_CASES_END

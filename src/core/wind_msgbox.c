@@ -31,7 +31,7 @@
 #include "wind_stati.h"
 #include "wind_var.h"
 #include "wind_debug.h"
-#if WIND_MESSAGE_SUPPORT
+#if WIND_MSGBOX_SUPPORT
 extern void _wind_thread_dispatch(void);
 WIND_MPOOL(msgboxpool,WIND_MBOX_MAX_NUM,sizeof(msgbox_s));
 
@@ -231,5 +231,5 @@ w_err_t _wind_msgbox_print(dlist_s *list)
     wind_error("NOT support yet.");
     return ERR_COMMAN;
 }
-#endif  //WIND_MESSAGE_SUPPORT
+#endif  //WIND_MSGBOX_SUPPORT
 

@@ -81,7 +81,7 @@ struct __heap_s
     w_uint32_t size;
     w_uint32_t rest;
     w_uint32_t max_used;
-    dnode_s heap_node;
+    dnode_s heapnode;
     dlist_s used_list;
     dlist_s free_list;
     mutex_s *pmutex; 
@@ -106,9 +106,9 @@ w_err_t wind_hfree(void *rmem);
 
 void *wind_hcalloc(w_uint32_t count, w_uint32_t size);
 
-void wind_heap_print(void);
+w_err_t wind_heap_print(void);
 
-void wind_heap_item_print(dlist_s *list);
+w_err_t wind_heapitem_print(dlist_s *list);
 
 #endif
 

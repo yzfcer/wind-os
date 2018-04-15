@@ -35,6 +35,7 @@
 #include "wind_cmd.h"
 #include "wind_mpool.h"
 #include "wind_msgbox.h"
+#include "wind_heap.h"
 #if WIND_CONSOLE_SUPPORT
 
 COMMAND_DISC(list)
@@ -50,10 +51,12 @@ COMMAND_USAGE(list)
     console_printf("list pool:show all core object pools.\r\n");
     console_printf("list pipe:show all pipe infomation.\r\n");
     console_printf("list msgbox:show all message box infomation.\r\n");
+    console_printf("list heap:show all heap map infomation.\r\n");
 }
 
 COMMAND_MAIN(list,argc,argv)
 {
+    WIND_ASSERT_RETURN(argc == 2,ERR_INVALID_PARAM);
     if(0 == wind_strcmp(argv[1],"thread"))
     {
         wind_thread_print(&g_core.threadlist);
@@ -76,16 +79,29 @@ COMMAND_MAIN(list,argc,argv)
         _wind_pool_print_list(&g_core.poollist);
         return ERR_COMMAN;
     }
+#if WIND_PIPE_SUPPORT
     else if(0 == wind_strcmp(argv[1],"pipe"))
     {
         _wind_pipe_print(&g_core.pipelist);
         return ERR_COMMAN;
     }
+#endif
+#if WIND_MSGBOX_SUPPORT
     else if(0 == wind_strcmp(argv[1],"msgbox"))
     {
         _wind_msgbox_print(&g_core.msgboxlist);
         return ERR_COMMAN;
     }
+#endif
+#if WIND_HEAP_SUPPORT
+    else if(0 == wind_strcmp(argv[1],"heap"))
+    {
+        wind_heapitem_print(&g_core.heaplist);
+        return ERR_COMMAN;
+    }
+#endif
+    else
+        wind_error("command is NOT support on device.");
     return ERR_COMMAN;
 }
 

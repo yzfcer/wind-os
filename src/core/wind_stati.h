@@ -42,7 +42,7 @@ typedef enum __objid_e
 #if WIND_PIPE_SUPPORT
     IDX_PIPE,
 #endif
-#if WIND_MESSAGE_SUPPORT
+#if WIND_MSGBOX_SUPPORT
     IDX_MSG,
     IDX_MBOX,
 #endif
