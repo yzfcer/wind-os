@@ -58,32 +58,36 @@ COMMAND_MAIN(blkdev,argc,argv)
     wind_blkdev_open(dev);
     WIND_ASSERT_RETURN(dev != NULL,ERR_INVALID_PARAM);
     addr = (w_addr_t)wind_convert_str2u32_t(argv[3]);
-    buff = buffer;//wind_heap_alloc_default(dev->blksize);
+    buff = buffer;
     wind_memset(buff,0,dev->blksize);
     if(0 == wind_strcmp(argv[2],"read"))
     {
         err = wind_blkdev_read(dev,addr,buff,1);
-        wind_printf("%s",buff);
-        wind_blkdev_close(dev);
-        err = ERR_OK;
+        if(wind_strlen((char*)buff) >= sizeof(buffer))
+        {
+            wind_error("data is too long.\r\n");
+            err = ERR_COMMAN;
+        }
+        else
+        {
+            wind_printf("%s",buff);
+            err = ERR_OK;
+        }
     }
     else if(0 == wind_strcmp(argv[2],"write"))
     {
-        //wind_blkdev_open(dev);
         wind_strcpy((char*)buff,argv[4]);
         err = wind_blkdev_write(dev,addr,buff,1);
-        wind_blkdev_close(dev);
         err = ERR_OK;
     }
     else if(0 == wind_strcmp(argv[2],"write"))
     {
-        //wind_blkdev_open(dev);
         err = wind_blkdev_erase(dev,addr,1);
-        wind_blkdev_close(dev);
         err = ERR_OK;
     }
-    else ;
-    //wind_heap_free(buff);
+    else 
+        ;
+    wind_blkdev_close(dev);
     return err;
 }
 

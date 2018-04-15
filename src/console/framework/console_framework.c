@@ -81,7 +81,6 @@ static w_bool_t handle_LF(console_s *ctrl)
 
 static w_bool_t handle_DEL(console_s *ctrl)
 {
-    //ctrl->index --;
     if(ctrl->index > 0)
     {
         ctrl->index --;
@@ -245,7 +244,7 @@ static void init_console_stat(console_s *ctrl)
 #if USER_AUTHENTICATION_EN
     ctrl->stat = CSLSTAT_USER;
 #else
-    ctrl->stat = CSLSTAT_APP;
+    ctrl->stat = CSLSTAT_CMD;
 #endif
     ctrl->index = 0;
     ctrl->key_evt_f = 0;
@@ -359,23 +358,51 @@ static w_err_t check_user_pwd(console_s *ctrl)
         return ERR_COMMAN;
     }
     wind_strcpy(ctrl->pwd,ctrl->buf);
-    ctrl->stat = CSLSTAT_APP;
+    ctrl->stat = CSLSTAT_CMD;
     console_printf("\r\n%s@wind-os>",ctrl->user);
     return ERR_OK;
 }
 #endif
+static w_int32_t find_char_index(char *str,char c)
+{
+    w_int32_t idx = 0;
+    for(idx = 0;idx < WIND_CMD_MAX_LEN;idx ++)
+    {
+        if(str[idx] == c)
+            return idx;
+        if(str[idx] == 0)
+            return -1;
+    }
+    return -1;
+}
 
 static w_int32_t get_string(char *str,w_int32_t idx,char ** arg)
 {
-    int i;
-    while(str[i] && (str[i] == ' '))
+    int i = idx,index;
+    /*跳过空格*/
+    while(str[i] == ' ') i ++;
+    if(str[i] == '\"')
+    {/*引号内的空格不分割，去掉引号*/
         i ++;
-    if(str[i] == 0)
-        return -1;
-    *arg = &str[i];
-    while(str[i] && (str[i] != ' '))
-        i ++;
-    str[i] = 0;
+        *arg = &str[i];
+        index = find_char_index(&str[i],'\"');
+        if(index <= 0)
+            return -1;
+        i += index;
+        str[i] = 0;
+    }
+    else
+    {
+        while(str[i] && (str[i] == ' '))
+            i ++;
+        if(str[i] == 0)
+            return -1;
+        *arg = &str[i];
+        while(str[i] && (str[i] != ' '))
+            i ++;
+        str[i] = 0;
+    }
+    
     return i + 1;
 }
 
@@ -395,6 +422,8 @@ static w_err_t spit_cmd(console_s *ctrl)
     }
     if(i >= CMD_PARAM_CNT)
         return ERR_COMMAN;
+    //for(i = 0;i < prm->argc;i ++)
+    //    console_printf("%s\r\n",prm->argv[i]);
     return ERR_OK;
 }
 
@@ -464,7 +493,7 @@ w_err_t console_thread(w_int32_t argc,char **argv)
                     check_user_pwd(ctrl);
                     break;
 #endif 
-                case CSLSTAT_APP:
+                case CSLSTAT_CMD:
                     cmd_history_append(&ctrl->his,ctrl->buf);
                     execute_cmd(ctrl);
 #if USER_AUTHENTICATION_EN
@@ -479,7 +508,7 @@ w_err_t console_thread(w_int32_t argc,char **argv)
                     break;
                 default:
                     console_printf("\r\nlogin:");
-                    ctrl->stat = CSLSTAT_APP;
+                    ctrl->stat = CSLSTAT_USER;
                     break;
             }
         }

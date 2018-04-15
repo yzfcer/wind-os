@@ -124,6 +124,8 @@ w_int32_t wind_blkdev_read(blkdev_s *dev,w_addr_t blkaddr,w_uint8_t *buf,w_int32
     WIND_ASSERT_RETURN(dev != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(buf != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(blkcnt > 0,ERR_INVALID_PARAM);
+    WIND_ASSERT_RETURN(blkaddr < dev->blkcnt,ERR_INVALID_PARAM);
+    WIND_ASSERT_RETURN(blkaddr + blkcnt <= dev->blkcnt,ERR_INVALID_PARAM);
     
     WIND_ASSERT_RETURN(dev->magic == WIND_BLKDEV_MAGIC,ERR_INVALID_PARAM);
     WIND_ASSERT_RETURN(dev->ops != NULL,ERR_INVALID_PARAM);
@@ -142,6 +144,8 @@ w_int32_t wind_blkdev_write(blkdev_s *dev,w_addr_t blkaddr,w_uint8_t *buf,w_int3
     WIND_ASSERT_RETURN(dev != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(buf != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(blkcnt > 0,ERR_INVALID_PARAM);
+    WIND_ASSERT_RETURN(blkaddr < dev->blkcnt,ERR_INVALID_PARAM);
+    WIND_ASSERT_RETURN(blkaddr + blkcnt <= dev->blkcnt,ERR_INVALID_PARAM);
     WIND_ASSERT_RETURN(dev->magic == WIND_BLKDEV_MAGIC,ERR_INVALID_PARAM);
     WIND_ASSERT_RETURN(dev->ops != NULL,ERR_INVALID_PARAM);
     WIND_ASSERT_RETURN(dev->opened == B_TRUE,ERR_STATUS);
