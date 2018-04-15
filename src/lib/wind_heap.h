@@ -62,8 +62,8 @@ typedef enum __HeapBmutex_e
 
 
 
-typedef struct __heapitem_s heapitem_s,*pheapitem_s;
-typedef struct __memheap_s heap_s,*pheap_s;
+typedef struct __heapitem_s heapitem_s;
+typedef struct __heap_s heap_s;
 struct __heapitem_s
 {
     w_uint32_t magic;
@@ -73,7 +73,7 @@ struct __heapitem_s
 };
 
 
-struct __memheap_s
+struct __heap_s
 {
     w_uint32_t magic;
     const char *name;
@@ -82,20 +82,21 @@ struct __memheap_s
     w_uint32_t rest;
     w_uint32_t max_used;
     dnode_s heap_node;
-    dlist_s list;
+    dlist_s used_list;
     dlist_s free_list;
     mutex_s *pmutex; 
 };
 
-w_err_t wind_heap_init(const char *name,
-             void *base,w_uint32_t size);
+w_err_t wind_heap_create(const char *name,
+             w_addr_t base,w_uint32_t size);
+w_err_t wind_heap_destroy(w_addr_t base);
 
 
-void *wind_heap_alloc(pheap_s heap, w_uint32_t size);
+void *wind_heap_alloc(heap_s* heap, w_uint32_t size);
 
 void *wind_heap_alloc_default(w_uint32_t size);
 
-void *wind_heap_realloc(pheap_s heap, void* ptr, w_uint32_t newsize);
+void *wind_heap_realloc(heap_s* heap, void* ptr, w_uint32_t newsize);
 
 w_err_t wind_heap_free(void *ptr);
 
@@ -105,7 +106,9 @@ w_err_t wind_hfree(void *rmem);
 
 void *wind_hcalloc(w_uint32_t count, w_uint32_t size);
 
-void wind_heap_showinfo(void);
+void wind_heap_print(void);
+
+void wind_heap_item_print(dlist_s *list);
 
 #endif
 

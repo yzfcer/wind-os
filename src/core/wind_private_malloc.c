@@ -50,17 +50,17 @@ extern "C" {
 w_err_t wind_privateheap_create(w_uint32_t size)
 {
     w_err_t err;
-    void *start;
+    w_addr_t start;
     thread_s *thread;
-    pheap_s mhp;
+    heap_s* mhp;
     thread = wind_thread_current();
     WIND_ASSERT_RETURN((thread != NULL),ERR_NULL_POINTER);
-    mhp = (pheap_s)wind_heap_alloc_default(size);
+    mhp = (heap_s*)wind_heap_alloc_default(size);
     WIND_ASSERT_RETURN(mhp != NULL,ERR_NULL_POINTER);
-    //mhp = (pheap_s)
+    //mhp = (heap_s*)
     thread->private_heap = mhp;
-    start = (void*)((w_uint32_t)mhp + sizeof(heap_s));
-    err = wind_heap_init("pri_heap",start,size);
+    start = (w_addr_t)((w_addr_t)mhp + sizeof(heap_s));
+    err = wind_heap_create("pri_heap",start,size);
     if(err != ERR_OK)
     {
         wind_heap_free(mhp);

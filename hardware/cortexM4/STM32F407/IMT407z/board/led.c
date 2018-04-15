@@ -15,8 +15,10 @@
 //LED对应IO初始化
 void LED_Init(int mask)
 {
+    static int flag = 0;
     GPIO_InitTypeDef  GPIO_InitStructure;
-
+    if(flag == 1)
+        return;
     RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOG, ENABLE);//使能GPIOG时钟
 
     //PG13、PG14和PG15初始化设置
@@ -27,12 +29,8 @@ void LED_Init(int mask)
     GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;                   //上拉
     GPIO_Init(GPIOG, &GPIO_InitStructure);                         //初始化GPIO
     //GPIOG13,G14,G15设置高，灯灭
-    if(mask & 0x01)
-        GPIO_SetBits(GPIOG, GPIO_Pin_13);
-    if(mask & 0x02)
-        GPIO_SetBits(GPIOG, GPIO_Pin_14);
-    if(mask & 0x04)
-        GPIO_SetBits(GPIOG, GPIO_Pin_15);
+    GPIO_SetBits(GPIOG, GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15);
+    flag = 1;
 }
 
 void LED_On(unsigned int ledidx)

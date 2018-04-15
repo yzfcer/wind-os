@@ -25,6 +25,7 @@ extern "C" {
 /*********************************************头文件定义***********************************************/
 #include "cut.h"
 #include "wind_heap.h"
+#include "wind_string.h"
 /********************************************内部变量定义**********************************************/
 
 
@@ -52,13 +53,17 @@ CASE_TEARDOWN(heapinfo)
 
 CASE_FUNC(heapinfo)
 {
+    w_int32_t res;
     w_err_t err;
     w_uint8_t *buff;
     buff = (w_uint8_t*)wind_heap_alloc_default(64);
     EXPECT_NE(buff,NULL);
-    EXPECT_NE(1,1);
-    test_printf("heap has errors");
-
+    wind_memset(buff,0,64);
+    wind_strcpy((char*)buff,"heap test start.");
+    res = wind_strcmp((char*)buff,"heap test start.");
+    EXPECT_EQ(res,0);
+    err = wind_heap_free(buff);
+    EXPECT_EQ(err,ERR_OK);
 }
 
 CASE_SETUP(heapfunc)

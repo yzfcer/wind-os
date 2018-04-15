@@ -1542,6 +1542,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\test\testcase\test_mutex.c</FilePath>
             </File>
+            <File>
+              <FileName>test_heap.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\test\testcase\test_heap.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

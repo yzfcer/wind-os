@@ -9,6 +9,7 @@ DECLARE_SUITE(test_mutex);
 DECLARE_SUITE(test_sem);
 DECLARE_SUITE(test_pipe);
 DECLARE_SUITE(test_msgbox);
+DECLARE_SUITE(test_heap);
 
 void test_suite_register_all(void)
 {
@@ -20,6 +21,7 @@ void test_suite_register_all(void)
     REGSTER_SUITE(test_sem);
     REGSTER_SUITE(test_pipe);
     REGSTER_SUITE(test_msgbox);
+    REGSTER_SUITE(test_heap);
 }
 
 
