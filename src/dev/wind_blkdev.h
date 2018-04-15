@@ -75,7 +75,7 @@ w_int32_t wind_blkdev_write(blkdev_s *dev,w_addr_t blkaddr,w_uint8_t *buf,w_int3
 w_err_t wind_blkdev_erase(blkdev_s *dev,w_addr_t blkaddr,w_int32_t blkcnt);
 w_err_t wind_blkdev_eraseall(blkdev_s *dev);
 w_err_t wind_blkdev_close(blkdev_s *dev);
-
+w_err_t wind_blkdev_print(dlist_s *list);
 #else
 _wind_blkdev_init() ERR_OK
 #endif

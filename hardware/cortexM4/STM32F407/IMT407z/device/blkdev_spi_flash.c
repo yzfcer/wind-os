@@ -6,7 +6,7 @@
 
 w_err_t   spi_flash_open(blkdev_s *dev)
 {
-    static w_bool_t init = B_FALSE;
+    static w_bool_t init_flag = B_FALSE;
     if(wind_strcmp(dev->name,"spi_flash") == 0)
     {
         dev->blkaddr = 0;
@@ -19,7 +19,11 @@ w_err_t   spi_flash_open(blkdev_s *dev)
         dev->blksize = 512;
         dev->blkcnt = 16384;        
     }
-    W25QXX_Init();
+    if(!init_flag)
+    {
+        W25QXX_Init();
+        init_flag = B_TRUE;
+    }
     return ERR_OK;
 }
 
@@ -82,7 +86,7 @@ blkdev_s spi_flash_dev[2] =
         {NULL,NULL},
         "spi_flash",
         B_FALSE,
-        0,0,0,
+        0,16384,512,
         NULL,
         &spi_flash_ops
     },
@@ -91,7 +95,7 @@ blkdev_s spi_flash_dev[2] =
         {NULL,NULL},
         "spi_flash1",
         B_FALSE,
-        0,0,0,
+        16384,16384,512,
         NULL,
         &spi_flash_ops
     }

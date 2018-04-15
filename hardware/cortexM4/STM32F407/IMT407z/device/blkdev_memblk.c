@@ -73,7 +73,7 @@ blkdev_s memblk_dev =
     {NULL,NULL},
     "memblk",
     B_FALSE,
-    0,0,0,
+    (w_addr_t)memblk,8,64,
     NULL,
     &memblk_ops
 };

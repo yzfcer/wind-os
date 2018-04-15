@@ -28,6 +28,7 @@
 #include "wind_cmd.h"
 #include "wind_blkdev.h"
 #include "wind_conv.h"
+#include "wind_var.h"
 #include "wind_heap.h"
 #if WIND_CONSOLE_SUPPORT
 
@@ -53,6 +54,11 @@ COMMAND_MAIN(blkdev,argc,argv)
     w_addr_t addr;
     w_err_t err = ERR_COMMAN;
     
+    if(0 == wind_strcmp(argv[1],"list"))
+    {
+        wind_blkdev_print(&g_core.blkdevlist);
+        return ERR_OK;
+    }
     WIND_ASSERT_RETURN(argc == 5,ERR_INVALID_PARAM);
     dev = wind_blkdev_get(argv[1]);
     wind_blkdev_open(dev);

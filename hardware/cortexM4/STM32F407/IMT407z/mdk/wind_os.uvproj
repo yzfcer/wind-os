@@ -517,6 +517,16 @@
               <FileType>5</FileType>
               <FilePath>..\board\w25qxx.h</FilePath>
             </File>
+            <File>
+              <FileName>24c02.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\board\24c02.c</FilePath>
+            </File>
+            <File>
+              <FileName>24c02.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\board\24c02.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -891,6 +901,11 @@
               <FileName>blkdev_spi_flash.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\device\blkdev_spi_flash.c</FilePath>
+            </File>
+            <File>
+              <FileName>blkdev_24c02.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\device\blkdev_24c02.c</FilePath>
             </File>
           </Files>
         </Group>
