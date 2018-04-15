@@ -38,7 +38,8 @@ extern "C" {
 typedef void (*softimer_fn)(void *arg);
 typedef struct tagTicktimer
 {
-    dnode_s tmrnode;
+    const char *name;
+    dnode_s timernode;
     w_bool_t running;
     w_uint32_t count;
     w_uint32_t init_count;
@@ -47,7 +48,9 @@ typedef struct tagTicktimer
 }timer_s;
 
 w_err_t _wind_timer_init(void);
-timer_s* wind_timer_create(w_uint32_t t_ms,softimer_fn func,void *arg,w_bool_t run);
+timer_s* wind_timer_get(char *name);
+
+timer_s* wind_timer_create(const char *name,w_uint32_t t_ms,softimer_fn func,void *arg,w_bool_t run);
 w_err_t wind_timer_start(timer_s* timer);
 w_err_t wind_timer_stop(timer_s* timer);
 w_err_t wind_timer_destroy(timer_s* timer);

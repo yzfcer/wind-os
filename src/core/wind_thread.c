@@ -359,7 +359,7 @@ w_err_t wind_thread_exit(w_err_t exitcode)
 {
     thread_s *thread;
     thread = wind_thread_current();
-    wind_notice("thread %s exit with code %d",thread->name,exitcode);
+    wind_notice("thread \"%s\" exit:%d",thread->name,exitcode);
     wind_thread_kill(thread);
     _wind_thread_dispatch();
     return ERR_OK;

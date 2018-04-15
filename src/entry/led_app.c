@@ -29,7 +29,7 @@ void led_start(void)
     dev_s *dev;
     dev = wind_dev_get("led0");
     wind_dev_open(dev);
-    ledtmr = wind_timer_create(300,led0_timer,NULL,B_TRUE);
+    ledtmr = wind_timer_create("led0tmr",300,led0_timer,NULL,B_TRUE);
     //wind_timer_create(500,led1_timer,NULL,B_TRUE);
     //wind_timer_create(600,led2_timer,NULL,B_TRUE);
 }

@@ -50,6 +50,7 @@ COMMAND_USAGE(blkdev)
 static w_uint8_t buffer[512];
 COMMAND_MAIN(blkdev,argc,argv)
 {
+    w_bool_t res;
     blkdev_s *dev;
     w_uint8_t *buff;
     w_addr_t addr;
@@ -64,7 +65,8 @@ COMMAND_MAIN(blkdev,argc,argv)
     dev = wind_blkdev_get(argv[1]);
     wind_blkdev_open(dev);
     WIND_ASSERT_RETURN(dev != NULL,ERR_INVALID_PARAM);
-    addr = (w_addr_t)wind_convert_str2u32_t(argv[3]);
+    res = wind_atoui(argv[3],(w_uint32_t*)&addr);
+    WIND_ASSERT_RETURN(res == B_TRUE,ERR_INVALID_PARAM);
     buff = buffer;
     wind_memset(buff,0,dev->blksize);
     if(0 == wind_strcmp(argv[2],"read"))
@@ -93,7 +95,7 @@ COMMAND_MAIN(blkdev,argc,argv)
         err = ERR_OK;
     }
     else 
-        ;
+        err = ERR_COMMAN;
     wind_blkdev_close(dev);
     return err;
 }

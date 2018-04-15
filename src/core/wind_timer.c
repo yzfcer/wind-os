@@ -28,6 +28,7 @@
 #include "wind_debug.h"
 #include "wind_stati.h"
 #include "wind_var.h"
+#include "wind_string.h"
 #if WIND_TIMER_SUPPORT
 static WIND_MPOOL(timerpool,WIND_TIMER_MAX_NUM,sizeof(timer_s));
 
@@ -48,26 +49,41 @@ w_err_t _wind_timer_init(void)
     err = wind_pool_create("timer",timerpool,sizeof(timerpool),sizeof(timer_s));
     return err;
 }
+timer_s* wind_timer_get(char *name)
+{
+    timer_s *timer;
+    dnode_s *dnode;
+    foreach_node(dnode,&g_core.timerlist)
+    {
+        timer = DLIST_OBJ(dnode,timer_s,timernode);
+        if(wind_strcmp(name,timer->name) == 0)
+            return timer;
+    }
+    return NULL;
+}
 
 
-timer_s* wind_timer_create(w_uint32_t t_ms,softimer_fn func,void *arg,w_bool_t run)
+timer_s* wind_timer_create(const char *name,w_uint32_t t_ms,softimer_fn func,void *arg,w_bool_t run)
 {
     timer_s* timer;
     w_int32_t count = t_ms / TIMER_PERIOD;
     if(count <= 0)
         count = 1;
-    wind_notice("create timer:%d ms",t_ms);
+    wind_notice("create timer %s:%d ms",name,t_ms);
     WIND_ASSERT_RETURN(func != NULL,NULL);
     timer = timer_malloc();
     WIND_ASSERT_RETURN(timer != NULL,NULL);
-    DNODE_INIT(timer->tmrnode);
+    timer->name = name;
+    DNODE_INIT(timer->timernode);
 
     timer->count = count;
     timer->init_count = count;
     timer->running = run;
     timer->arg = arg;
     timer->handle = func;
-    dlist_insert_tail(&g_core.ttmerlist,&timer->tmrnode);
+    wind_close_interrupt();
+    dlist_insert_tail(&g_core.timerlist,&timer->timernode);
+    wind_open_interrupt();
     return timer; 
 }
 
@@ -89,7 +105,7 @@ w_err_t wind_timer_destroy(timer_s* timer)
 {
     WIND_ASSERT_RETURN(timer != NULL,ERR_NULL_POINTER);
     wind_close_interrupt();
-    dlist_remove(&g_core.ttmerlist,&timer->tmrnode);
+    dlist_remove(&g_core.timerlist,&timer->timernode);
     timer_free(timer);
     wind_open_interrupt();
     return ERR_OK;
@@ -110,9 +126,9 @@ void wind_timer_event(void)
 {
     timer_s* ptmr;
     dnode_s *pdnode;
-    foreach_node(pdnode,&g_core.ttmerlist)
+    foreach_node(pdnode,&g_core.timerlist)
     {
-        ptmr = DLIST_OBJ(pdnode,timer_s,tmrnode);
+        ptmr = DLIST_OBJ(pdnode,timer_s,timernode);
         if(ptmr->count > 0)
             ptmr->count --;
         if(ptmr->count == 0 && ptmr->running)

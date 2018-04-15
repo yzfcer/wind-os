@@ -53,7 +53,7 @@ void _wind_corevar_init(void)
     DLIST_INIT(g_core.semlist);
     DLIST_INIT(g_core.mutexlist);
     DLIST_INIT(g_core.msgboxlist);
-    DLIST_INIT(g_core.ttmerlist);
+    DLIST_INIT(g_core.timerlist);
     DLIST_INIT(g_core.poollist);
     DLIST_INIT(g_core.heaplist);
     DLIST_INIT(g_core.pipelist);
