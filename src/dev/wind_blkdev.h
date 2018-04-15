@@ -45,7 +45,7 @@ struct __blkdev_s
     dnode_s blkdevnode;
     char name[12];
     w_bool_t opened;
-    w_addr_t addr;
+    w_addr_t blkaddr;
     w_int32_t blkcnt;
     w_int32_t blksize;
     mutex_s *mutex;
