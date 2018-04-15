@@ -40,6 +40,7 @@ COMMAND_DISC(blkdev)
 
 COMMAND_USAGE(blkdev)
 {
+    console_printf("blkdev list:to show all block devices.\r\n");
     console_printf("blkdev <dev> read <addr> <blknum>:to read date from the block device.\r\n");
     console_printf("blkdev <dev> write <addr> <string>:to write into the block device.\r\n");
     console_printf("blkdev <dev> erase <addr> <blknum>:to erase the block device sectors.\r\n");

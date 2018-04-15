@@ -7,7 +7,7 @@
 w_err_t   spi_flash_open(blkdev_s *dev)
 {
     static w_bool_t init_flag = B_FALSE;
-    if(wind_strcmp(dev->name,"spi_flash") == 0)
+    if(wind_strcmp(dev->name,"spi_flash0") == 0)
     {
         dev->blkaddr = 0;
         dev->blksize = 512;
@@ -84,7 +84,7 @@ blkdev_s spi_flash_dev[2] =
     {
         WIND_BLKDEV_MAGIC,
         {NULL,NULL},
-        "spi_flash",
+        "spi_flash0",
         B_FALSE,
         0,16384,512,
         NULL,

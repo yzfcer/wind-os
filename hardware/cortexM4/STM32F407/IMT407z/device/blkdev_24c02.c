@@ -7,8 +7,8 @@
 w_err_t   at24c02_open(blkdev_s *dev)
 {
     dev->blkaddr = 0;
-    dev->blksize = 512;
-    dev->blkcnt = 16384;        
+    dev->blksize = 16;
+    dev->blkcnt = 16;        
     IIC_Init();
     return ERR_OK;
 }

@@ -1,5 +1,5 @@
 #include "common.h"
-
+#include "wind_thread.h"
 
 /*********************************************************************************
 *************************MCU启明 STM32F407核心开发板******************************
@@ -167,98 +167,17 @@ void delay_init(void)
 }								    
 
 
-#ifdef OS_CRITICAL_METHOD 	//如果OS_CRITICAL_METHOD定义了,说明使用ucosII了.
 //延时nus
 //nus:要延时的us数.		    								   
 void delay_us(w_uint32_t nus)
 {		
-	w_uint32_t ticks;
-	w_uint32_t told,tnow,tcnt=0;
-	w_uint32_t reload=SysTick->LOAD;	//LOAD的值	    	 
-	ticks=nus*fac_us; 			//需要的节拍数	  		 
-	tcnt=0;
-	OSSchedLock();				//阻止ucos调度，防止打断us延时
-	told=SysTick->VAL;        	//刚进入时的计数器值
-	while(1)
-	{
-		tnow=SysTick->VAL;	
-		if(tnow!=told)
-		{	    
-			if(tnow<told)tcnt+=told-tnow;//这里注意一下SYSTICK是一个递减的计数器就可以了.
-			else tcnt+=reload-tnow+told;	    
-			told=tnow;
-			if(tcnt>=ticks)break;//时间超过/等于要延迟的时间,则退出.
-		}  
-	};
-	OSSchedUnlock();			//开启ucos调度 									    
+    wind_thread_sleep((nus+999)/1000);
 }
 //延时nms
 //nms:要延时的ms数
 void delay_ms(w_uint16_t nms)
 {	
-		if(OSRunning==OS_TRUE&&OSLockNesting==0)//如果os已经在跑了	   
-	{		  
-		if(nms>=fac_ms)//延时的时间大于ucos的最少时间周期 
-		{
-   			OSTimeDly(nms/fac_ms);	//ucos延时
-		}
-		nms%=fac_ms;				//ucos已经无法提供这么小的延时了,采用普通方式延时    
-	}
-	delay_us((w_uint32_t)(nms*1000));		//普通方式延时 
+    wind_thread_sleep(nms);
 }
-#else  //不用ucos时
-//延时nus
-//nus为要延时的us数.	
-//注意:nus的值,不要大于798915us
-void delay_us(w_uint32_t nus)
-{		
-	w_uint32_t temp;	    	 
-	SysTick->LOAD=nus*fac_us; //时间加载	  		 
-	SysTick->VAL=0x00;        //清空计数器
-	SysTick->CTRL|=SysTick_CTRL_ENABLE_Msk ;          //开始倒数 
-	do
-	{
-		temp=SysTick->CTRL;
-	}
-	while((temp&0x01)&&!(temp&(1<<16)));//等待时间到达   
-	SysTick->CTRL&=~SysTick_CTRL_ENABLE_Msk;       //关闭计数器
-	SysTick->VAL =0X00;       //清空计数器	 
-}
-//延时nms
-//注意nms的范围
-//SysTick->LOAD为24位寄存器,所以,最大延时为:
-//nms<=0xffffff*8*1000/SYSCLK
-//SYSCLK单位为Hz,nms单位为ms
-//对168M条件下,nms<=798ms 
-void delay_xms(w_uint16_t nms)
-{	 		  	  
-	w_uint32_t temp;		   
-	SysTick->LOAD=(w_uint32_t)nms*fac_ms;//时间加载(SysTick->LOAD为24bit)
-	SysTick->VAL =0x00;           //清空计数器
-	SysTick->CTRL|=SysTick_CTRL_ENABLE_Msk ;          //开始倒数  
-	do
-	{
-		temp=SysTick->CTRL;
-	}
-	while((temp&0x01)&&!(temp&(1<<16)));//等待时间到达   
-	SysTick->CTRL&=~SysTick_CTRL_ENABLE_Msk;       //关闭计数器
-	SysTick->VAL =0X00;       //清空计数器	  	    
-} 
-//延时nms 
-//nms:0~65535
-void delay_ms(w_uint16_t nms)
-{	 	 
-	w_uint8_t repeat=nms/540;	//这里用540,是考虑到某些客户可能超频使用,
-						//比如超频到248M的时候,delay_xms最大只能延时541ms左右了
-	w_uint16_t remain=nms%540;
-	while(repeat)
-	{
-		delay_xms(540);
-		repeat--;
-	}
-	if(remain)delay_xms(remain);
-	
-} 
-#endif
-			 
+	 
  
