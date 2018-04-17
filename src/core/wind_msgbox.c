@@ -31,6 +31,8 @@
 #include "wind_stati.h"
 #include "wind_var.h"
 #include "wind_debug.h"
+#include "wind_string.h"
+
 #if WIND_MSGBOX_SUPPORT
 extern void _wind_thread_dispatch(void);
 WIND_MPOOL(msgboxpool,WIND_MBOX_MAX_NUM,sizeof(msgbox_s));
@@ -68,6 +70,23 @@ void wind_msg_init(msg_s *msg,w_uint16_t msg_id,w_uint16_t msg_len,void *msg_arg
     DNODE_INIT(msg->msgnode);
 }
 
+msgbox_s *wind_msgbox_get(const char *name)
+{
+    msgbox_s *msgbox;
+    dnode_s *dnode;
+    wind_disable_switch();
+    foreach_node(dnode,&g_core.msgboxlist)
+    {
+        msgbox = DLIST_OBJ(dnode,msgbox_s,msgboxnode);
+        if(wind_strcmp(name,msgbox->name) == 0)
+        {
+            wind_enable_switch();
+            return msgbox;
+        }
+    }
+    wind_enable_switch();
+    return NULL;
+}
 
 //创建邮箱，只能在线程中创建，不能在中断中和线程运行之前
 msgbox_s *wind_msgbox_create(const char *name,thread_s *owner)

@@ -30,6 +30,7 @@
 #include "wind_debug.h"
 #include "wind_stati.h"
 #include "wind_var.h"
+#include "wind_core.h"
 #include "wind_string.h"
 #if WIND_SEM_SUPPORT
 extern void _wind_thread_dispatch(void);
@@ -57,12 +58,17 @@ sem_s *wind_sem_get(const char *name)
 {
     sem_s *sem;
     dnode_s *dnode;
+    wind_disable_switch();
     foreach_node(dnode,&g_core.semlist)
     {
         sem = DLIST_OBJ(dnode,sem_s,semnode);
         if(wind_strcmp(name,sem->name) == 0)
+        {
+            wind_enable_switch();
             return sem;
+        }
     }
+    wind_enable_switch();
     return NULL;
 }
 

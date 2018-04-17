@@ -28,6 +28,7 @@
 #include "wind_debug.h"
 #include "wind_stati.h"
 #include "wind_var.h"
+#include "wind_core.h"
 #include "wind_string.h"
 #if WIND_TIMER_SUPPORT
 static WIND_MPOOL(timerpool,WIND_TIMER_MAX_NUM,sizeof(timer_s));
@@ -53,12 +54,17 @@ timer_s* wind_timer_get(char *name)
 {
     timer_s *timer;
     dnode_s *dnode;
+    wind_disable_switch();
     foreach_node(dnode,&g_core.timerlist)
     {
         timer = DLIST_OBJ(dnode,timer_s,timernode);
         if(wind_strcmp(name,timer->name) == 0)
+        {
+            wind_enable_switch();
             return timer;
+        }
     }
+    wind_enable_switch();
     return NULL;
 }
 

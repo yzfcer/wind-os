@@ -26,14 +26,33 @@
 #include "wind_config.h"
 #include "wind_type.h"
 #include "wind_debug.h"
-#include "wind_mpool.h"
+#include "wind_pool.h"
 #include "wind_var.h"
+#include "wind_core.h"
+#include "wind_string.h"
 
 #define WIND_MPOOL_ALIGN_R(x) (((x)+3) & (~0x03))
 #define WIND_MPOOL_ALIGN_L(x) ((x) & (~0x03))
 
 #define WIND_MPOOL_DEBUG(...) 
 
+pool_s *wind_pool_get(const char *name)
+{
+    pool_s *pool;
+    dnode_s *dnode;
+    wind_disable_switch();
+    foreach_node(dnode,&g_core.poollist)
+    {
+        pool = DLIST_OBJ(dnode,pool_s,poolnode);
+        if(wind_strcmp(name,pool->name) == 0)
+        {
+            wind_enable_switch();
+            return pool;
+        }
+    }
+    wind_enable_switch();
+    return NULL;
+}
 
 w_err_t wind_pool_create(const char *name,void *mem,w_uint32_t memsize,w_uint32_t itemsize)
 {
@@ -76,7 +95,7 @@ w_err_t wind_pool_create(const char *name,void *mem,w_uint32_t memsize,w_uint32_
     wind_close_interrupt();
     dlist_insert_tail(&g_core.poollist,&pm->poolnode);
     wind_open_interrupt();
-    pm->magic = WIND_MPOOL_MAGIC;
+    pm->magic = WIND_POOL_MAGIC;
     //_wind_pool_print_list(&g_core.poollist);
     return ERR_OK;
 }
@@ -86,7 +105,7 @@ w_err_t wind_pool_destroy(void *mem)
     pool_s *pm;
     WIND_ASSERT_RETURN(mem != NULL,ERR_NULL_POINTER);
     pm = (pool_s *)WIND_MPOOL_ALIGN_R((w_uint32_t)mem);
-    WIND_ASSERT_RETURN(pm->magic == WIND_MPOOL_MAGIC,ERR_INVALID_PARAM);
+    WIND_ASSERT_RETURN(pm->magic == WIND_POOL_MAGIC,ERR_INVALID_PARAM);
     wind_notice("destroy pool:%s",pm->name);
     wind_close_interrupt();
     dlist_remove(&g_core.poollist,&pm->poolnode);
@@ -102,7 +121,7 @@ void *wind_pool_alloc(void *mem)
     pool_item_s* item;
     WIND_ASSERT_RETURN(mem != NULL,NULL);
     pm = (pool_s *)WIND_MPOOL_ALIGN_R((w_uint32_t)mem);
-    WIND_ASSERT_RETURN(pm->magic == WIND_MPOOL_MAGIC,NULL);
+    WIND_ASSERT_RETURN(pm->magic == WIND_POOL_MAGIC,NULL);
 
     wind_close_interrupt();
     if(pm->free_head == NULL)
@@ -141,7 +160,7 @@ w_err_t wind_pool_free(void *mem,void *block)
     WIND_ASSERT_RETURN(mem != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(block != NULL,ERR_NULL_POINTER);    
     pm = (pool_s *)WIND_MPOOL_ALIGN_R((w_uint32_t)mem);
-    WIND_ASSERT_RETURN(pm->magic == WIND_MPOOL_MAGIC,ERR_INVALID_PARAM);
+    WIND_ASSERT_RETURN(pm->magic == WIND_POOL_MAGIC,ERR_INVALID_PARAM);
     item = (pool_item_s*)(((w_uint32_t)block) - sizeof(pool_item_s*));
     WIND_ASSERT_RETURN(item->flag == POOL_BLK_USED,ERR_INVALID_PARAM);
     wind_close_interrupt();

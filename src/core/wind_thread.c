@@ -32,7 +32,7 @@
 #include "wind_string.h"
 #include "wind_debug.h"
 #include "wind_stati.h"
-#include "wind_mpool.h"
+#include "wind_pool.h"
 #include "wind_var.h"
 #include "wind_heap.h"
 #include "wind_macro.h"
@@ -121,12 +121,22 @@ w_err_t _wind_thread_init(void)
     return err;
 }
 
-w_err_t wind_thread_getname(thread_s *thread,w_int8_t *name)
+thread_s *wind_thread_get(const char *name)
 {
-    WIND_ASSERT_RETURN(thread != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(name != NULL,ERR_NULL_POINTER);
-    wind_strcpy(name,thread->name);
-    return ERR_OK;
+    thread_s *thread;
+    dnode_s *dnode;
+    wind_disable_switch();
+    foreach_node(dnode,&g_core.threadlist)
+    {
+        thread = DLIST_OBJ(dnode,thread_s,validthr);
+        if(wind_strcmp(name,thread->name) == 0)
+        {
+            wind_enable_switch();
+            return thread;
+        }
+    }
+    wind_enable_switch();
+    return NULL;
 }
 
 thread_s *wind_thread_current()

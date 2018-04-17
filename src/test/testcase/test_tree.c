@@ -21,7 +21,7 @@
 #include "cut.h"
 #include "wind_core_inc.h"
 #include "wind_tree.h"
-#include "wind_mpool.h"
+#include "wind_pool.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus

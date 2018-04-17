@@ -28,8 +28,10 @@
 #include "wind_os_hwif.h"
 #include "wind_debug.h"
 #include "wind_var.h"
+#include "wind_core.h"
 #include "wind_queue.h"
 #include "wind_string.h"
+
 #if (WIND_PIPE_SUPPORT)
 
 static WIND_MPOOL(pipepool,WIND_PIPE_MAX_NUM,sizeof(pipe_s));
@@ -59,18 +61,25 @@ w_err_t _wind_pipe_init(void)
     err = wind_pool_create("pipe",pipepool,sizeof(pipepool),sizeof(pipe_s));
     return err;
 }
-pipe_s* wind_pipe_get(const char *name)
+
+pipe_s *wind_pipe_get(const char *name)
 {
     pipe_s *pipe;
     dnode_s *dnode;
+    wind_disable_switch();
     foreach_node(dnode,&g_core.pipelist)
     {
         pipe = DLIST_OBJ(dnode,pipe_s,pipenode);
         if(wind_strcmp(name,pipe->name) == 0)
+        {
+            wind_enable_switch();
             return pipe;
+        }
     }
+    wind_enable_switch();
     return NULL;
 }
+
 
 pipe_s* wind_pipe_create(const char *name,void *buff,w_uint32_t buflen)
 {

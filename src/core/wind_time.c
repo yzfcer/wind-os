@@ -52,8 +52,8 @@ void wind_tick_callback(void)
 
 void wind_tick_isr(void)
 {				   
-    wind_enter_int();
+    wind_enter_irq();
     wind_tick_callback();
-    wind_exit_int();       
+    wind_exit_irq();       
 }
 

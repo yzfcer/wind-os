@@ -1343,16 +1343,6 @@
               <FilePath>..\..\..\..\..\src\core\wind_mem.h</FilePath>
             </File>
             <File>
-              <FileName>wind_mpool.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\core\wind_mpool.c</FilePath>
-            </File>
-            <File>
-              <FileName>wind_mpool.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\core\wind_mpool.h</FilePath>
-            </File>
-            <File>
               <FileName>wind_pipe.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\core\wind_pipe.c</FilePath>
@@ -1461,6 +1451,16 @@
               <FileName>wind_mutex.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\..\..\..\src\core\wind_mutex.h</FilePath>
+            </File>
+            <File>
+              <FileName>wind_pool.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\core\wind_pool.c</FilePath>
+            </File>
+            <File>
+              <FileName>wind_pool.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\core\wind_pool.h</FilePath>
             </File>
           </Files>
         </Group>

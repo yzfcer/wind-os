@@ -66,7 +66,7 @@ void wind_enable_switch(void)
         gwind_core_cnt --;
 }
 
-void wind_enter_int(void)
+void wind_enter_irq(void)
 {
     if(RUN_FLAG == B_FALSE)
     {
@@ -107,7 +107,8 @@ static thread_s *wind_search_highthread(void)
     wind_error("core NOT find valid thread!");
     return NULL;
 }
-void wind_exit_int(void)
+
+void wind_exit_irq(void)
 {
     thread_s *pthr;
     if(RUN_FLAG == B_FALSE)
@@ -115,7 +116,6 @@ void wind_exit_int(void)
         wind_error("exit not rd %d",RUN_FLAG);
         return;
     }
-    
     wind_close_interrupt();
     if(gwind_int_cnt > 0)
         gwind_int_cnt --;

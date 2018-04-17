@@ -32,7 +32,7 @@
 #include "wind_var.h"
 #include "wind_dlist.h"
 #include "wind_core.h"
-#include "wind_mpool.h"
+#include "wind_pool.h"
 #include "wind_string.h"
 
 #define WIND_MUTEX_MAGIC 0x37AD490F
@@ -58,14 +58,20 @@ mutex_s *wind_mutex_get(const char *name)
 {
     mutex_s *mutex;
     dnode_s *dnode;
+    wind_disable_switch();
     foreach_node(dnode,&g_core.semlist)
     {
         mutex = DLIST_OBJ(dnode,mutex_s,mutexnode);
         if(wind_strcmp(name,mutex->name) == 0)
+        {
+            wind_enable_switch();
             return mutex;
+        }
     }
+    wind_enable_switch();
     return NULL;
 }
+
 //创建一个mutex对象，并加入所有mutex列表
 mutex_s *wind_mutex_create(const char *name)
 {

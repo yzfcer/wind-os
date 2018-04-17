@@ -23,8 +23,8 @@
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
 
-#ifndef WIND_MPOOL_H__
-#define WIND_MPOOL_H__
+#ifndef WIND_POOL_H__
+#define WIND_POOL_H__
 
 #include "wind_config.h"
 #include "wind_type.h"
@@ -34,7 +34,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#define WIND_MPOOL_MAGIC 0x5d9c843e
+#define WIND_POOL_MAGIC 0x5d9c843e
 #define POOL_BLK_FREE 0x52d6e300
 #define POOL_BLK_USED (POOL_BLK_FREE | 0xA5)
 
@@ -67,6 +67,7 @@ struct __mpool_s
 //定义内存池的方法
 #define WIND_MPOOL_ALIGN(size) (((size)+3) & (~0x03))
 #define WIND_MPOOL(pool,itemnum,itemsize) w_uint8_t pool[sizeof(pool_s) + itemnum *(WIND_MPOOL_ALIGN(itemsize) + sizeof(pool_item_s))+8]
+pool_s *wind_pool_get(const char *name);
 
 w_err_t wind_pool_create(const char *name,void *mem,w_uint32_t memsize,w_uint32_t itemsize);
 

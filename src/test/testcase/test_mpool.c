@@ -20,7 +20,7 @@
 *******************************************************************************************************/
 #include "cut.h"
 #include "wind_core_inc.h"
-#include "wind_mpool.h"
+#include "wind_pool.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
@@ -46,7 +46,7 @@ CASE_TEARDOWN(pool_info)
 CASE_FUNC(pool_info)
 {
     pool_s *pool = (pool_s *)test_pool;
-    EXPECT_EQ(pool->magic,WIND_MPOOL_MAGIC);
+    EXPECT_EQ(pool->magic,WIND_POOL_MAGIC);
     EXPECT_STR_EQ(pool->name,"test_pool");
     EXPECT_EQ(pool->size,sizeof(test_pool)-sizeof(pool_s));
     EXPECT_EQ(pool->itemnum,TNUM);
