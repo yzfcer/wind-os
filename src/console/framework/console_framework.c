@@ -39,25 +39,14 @@ console_s g_ctrl[WIND_CONSOLE_COUNT];
 
 
 /********************************************内部函数定义*********************************************/
-static w_err_t core_get_cmd_ch(w_int8_t *ch)
+static w_err_t get_cmd_ch(w_int8_t *ch)
 {
     w_int32_t len;
     len = wind_std_input((w_uint8_t *)ch,1);
     return len > 0 ? ERR_OK : ERR_COMMAN;
 }
 
-static void show_cmd_list(void)
-{
-    dnode_s *node;
-    cmd_s *cmd;
-    wind_printf("\r\ncomnad list as following:\r\n");
-    foreach_node(node,&g_core.cmdlist)
-    {
-        cmd = DLIST_OBJ(node,cmd_s,cmdnode);
-        console_printf("%-10s : ",cmd->name);
-        cmd->showdisc();
-    }
-}
+
 
 static w_bool_t insert_ch(console_s *ctrl,char ch,w_int32_t len)
 {
@@ -225,7 +214,7 @@ static w_int32_t console_read_line(console_s *ctrl,w_int32_t len)
     console_clear_buf(ctrl);
     while(1)
     {
-        err = core_get_cmd_ch(&ch);
+        err = get_cmd_ch(&ch);
         if(err != ERR_OK)
             wind_thread_sleep(20);
         else
@@ -252,19 +241,9 @@ static void init_console_stat(console_s *ctrl)
     wind_memset(ctrl->user,0,WIND_CTL_USRNAME_LEN);
     wind_memset(ctrl->pwd,0,WIND_CTL_PWD_LEN);
     cmd_history_init(&ctrl->his);
-    console_framework_init(ctrl);
+    wind_cmd_init(ctrl);
 }
 
-int find_param_end(char *str,int offset,int len)
-{
-    int i;
-    for(i = offset;i < len;i ++)
-    {
-        if(str[i] == ' ' || str[i] == 0)
-            return i;
-    }
-    return i;
-}
 
 
 /********************************************全局变量定义**********************************************/
@@ -273,7 +252,7 @@ int find_param_end(char *str,int offset,int len)
 
 /********************************************全局函数定义**********************************************/
 
-void console_framework_init(console_s *ctrl)
+void wind_cmd_init(console_s *ctrl)
 {
     DLIST_INIT(g_core.cmdlist);
     _wind_register_all_cmd(ctrl);
@@ -315,6 +294,19 @@ w_err_t wind_cmd_register(cmd_s *cmd,int cnt)
     return ERR_OK;
 }
 
+w_err_t wind_cmd_print(void)
+{
+    dnode_s *node;
+    cmd_s *cmd;
+    wind_printf("\r\ncomnad list as following:\r\n");
+    foreach_node(node,&g_core.cmdlist)
+    {
+        cmd = DLIST_OBJ(node,cmd_s,cmdnode);
+        console_printf("%-10s : ",cmd->name);
+        cmd->showdisc();
+    }
+    return ERR_OK;
+}
 
 #if USER_AUTHENTICATION_EN
 static w_err_t check_user_name(console_s *ctrl)
@@ -418,7 +410,7 @@ static w_err_t execute_cmd(console_s *ctrl)
         return err;
     if(wind_strcmp(ctrl->param.argv[0],"?") == 0)
     {
-        show_cmd_list();
+        wind_cmd_print();
         return ERR_OK;
     }
     cmd = wind_cmd_get(ctrl->param.argv[0]);//get_matched_cmd(ctrl);
@@ -432,7 +424,6 @@ static w_err_t execute_cmd(console_s *ctrl)
     cmd->execute(ctrl->param.argc,ctrl->param.argv);
     return ERR_OK;
 }
-
 
 
 w_err_t console_thread(w_int32_t argc,char **argv)

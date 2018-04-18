@@ -118,10 +118,11 @@ typedef struct __console_s
 /********************************************全局函数申明**********************************************/
 
 //输出命令列表
-void console_framework_init(console_s *ctrl);
+void wind_cmd_init(console_s *ctrl);
 void create_console_thread(void);
 cmd_s *wind_cmd_get(const char *name);
 w_err_t wind_cmd_register(cmd_s *cmd,int cnt);
+w_err_t wind_cmd_print(void);
 void _wind_register_all_cmd(console_s *ctrl);
 extern void wind_cmd_register_cmd_test(console_s *ctrl);
 
