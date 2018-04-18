@@ -32,7 +32,7 @@
 #include "wind_var.h"
 #if WIND_DRVFRAME_SUPPORT
 
-w_err_t wind_register_dev(dev_s *dev,w_int32_t count)
+w_err_t wind_dev_register(dev_s *dev,w_int32_t count)
 {
     w_int32_t i;
     dev_s *devi;    
@@ -63,7 +63,7 @@ w_err_t wind_register_dev(dev_s *dev,w_int32_t count)
     return ERR_OK;
 }
 
-w_err_t wind_unregister_dev(dev_s *dev)
+w_err_t wind_dev_unregister(dev_s *dev)
 {
     dnode_s *dnode;
     WIND_ASSERT_RETURN(dev != NULL,ERR_NULL_POINTER);

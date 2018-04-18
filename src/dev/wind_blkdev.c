@@ -31,7 +31,7 @@
 #include "wind_string.h"
 #include "wind_var.h"
 
-w_err_t wind_register_blkdev(blkdev_s *dev,w_int32_t count)
+w_err_t wind_blkdev_register(blkdev_s *dev,w_int32_t count)
 {
     w_int32_t i;
     blkdev_s *devi;    
@@ -62,7 +62,7 @@ w_err_t wind_register_blkdev(blkdev_s *dev,w_int32_t count)
     return ERR_OK;
 }
 
-w_err_t wind_unregister_blkdev(blkdev_s *dev)
+w_err_t wind_blkdev_unregister(blkdev_s *dev)
 {
     dnode_s *dnode;
     WIND_ASSERT_RETURN(dev != NULL,ERR_NULL_POINTER);

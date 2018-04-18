@@ -25,6 +25,7 @@
 #include "wind_var.h"
 #include "wind_cmd.h"
 #include "wind_std.h"
+#include "wind_core.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
@@ -35,8 +36,6 @@ extern "C" {
 /********************************************内部变量定义**********************************************/
 
 console_s g_ctrl[WIND_CONSOLE_COUNT];
-cmd_list_s *g_cmd_global;
-//临时使用的数据读取函数
 
 
 /********************************************内部函数定义*********************************************/
@@ -44,18 +43,19 @@ static w_err_t core_get_cmd_ch(w_int8_t *ch)
 {
     w_int32_t len;
     len = wind_std_input((w_uint8_t *)ch,1);
-    return len > 0?ERR_OK:ERR_COMMAN;
+    return len > 0 ? ERR_OK : ERR_COMMAN;
 }
 
 static void show_cmd_list(void)
 {
-    cmd_s *cmd = g_cmd_global->head;
+    dnode_s *node;
+    cmd_s *cmd;
     wind_printf("\r\ncomnad list as following:\r\n");
-    while(cmd)
+    foreach_node(node,&g_core.cmdlist)
     {
-        console_printf("%-10s : ",cmd->cmd);
+        cmd = DLIST_OBJ(node,cmd_s,cmdnode);
+        console_printf("%-10s : ",cmd->name);
         cmd->showdisc();
-        cmd = cmd->next;
     }
 }
 
@@ -140,11 +140,9 @@ static w_bool_t handle_key_evt(console_s *ctrl,char ch)
     switch(ctrl->key_evt_id)
     {
         case KEY_EVT_UP:
-            //console_printf("receive KEY_UP\r\n");
             handle_key_evt_up(ctrl);
             goto key_evt_done;
         case KEY_EVT_DOWN:
-            //console_printf("receive KEY_EVT_DOWN\r\n");
             handle_key_evt_down(ctrl);
             goto key_evt_done;
             
@@ -255,7 +253,6 @@ static void init_console_stat(console_s *ctrl)
     wind_memset(ctrl->pwd,0,WIND_CTL_PWD_LEN);
     cmd_history_init(&ctrl->his);
     console_framework_init(ctrl);
-    //ctrl->ops.printf = console_printf;
 }
 
 int find_param_end(char *str,int offset,int len)
@@ -278,60 +275,46 @@ int find_param_end(char *str,int offset,int len)
 
 void console_framework_init(console_s *ctrl)
 {
-    cmd_list_s *cgl = &ctrl->cmd_list;
-    cgl->head = NULL;
-    cgl->tail = NULL;
-    cgl->cnt = 0;
-    register_all_cmd(ctrl);
-    g_cmd_global = cgl;
-    //show_cmd_list();
+    DLIST_INIT(g_core.cmdlist);
+    _wind_register_all_cmd(ctrl);
 }
 
-w_bool_t is_in_list(cmd_list_s *list,cmd_s *cmd)
+cmd_s *wind_cmd_get(const char *name)
 {
-    w_int32_t i;
-    cmd_s *c = list->head;
-    for(i = 0;i < list->cnt;i ++)
+    cmd_s *cmd;
+    dnode_s *dnode;
+    wind_disable_switch();
+    foreach_node(dnode,&g_core.cmdlist)
     {
-        if(c == cmd)
-            return B_TRUE;
-        c = c->next;
+        cmd = DLIST_OBJ(dnode,cmd_s,cmdnode);
+        if(wind_strcmp(name,cmd->name) == 0)
+        {
+            wind_enable_switch();
+            return cmd;
+        }
     }
-    return B_FALSE;
+    wind_enable_switch();
+    return NULL;
 }
 
-w_err_t wind_cmd_register(cmd_list_s *cgl,cmd_s *cmd,int cnt)
+w_err_t wind_cmd_register(cmd_s *cmd,int cnt)
 {
     int i;
-    cmd_list_s *cg = cgl;
-
+    cmd_s *old;
+    dlist_s *cgl = &g_core.cmdlist;
     WIND_ASSERT_RETURN(cmd != NULL,ERR_NULL_POINTER);
     for(i = 0;i < cnt;i ++)
     {
-        if(is_in_list(cg,&cmd[i]))
+        old = wind_cmd_get(cmd->name);
+        if(old != NULL)
             continue;
-        if(cg->tail == NULL)
-        {
-            cmd[i].next = NULL;
-            cg->tail = &cmd[i];
-            cg->head = &cmd[i];
-        }
-        else
-        {
-            cmd[i].next = NULL;
-            cg->tail->next = &cmd[i];
-            cg->tail = &cmd[i];
-        }
-        cg->cnt ++;
+        wind_disable_switch();
+        dlist_insert_tail(cgl,&cmd[i].cmdnode);
+        wind_enable_switch();
     }
     return ERR_OK;
 }
 
-//获取当前系统支持的命令列表
-cmd_s *wind_get_cmdlist(void)
-{
-    return g_cmd_global->head;
-}
 
 #if USER_AUTHENTICATION_EN
 static w_err_t check_user_name(console_s *ctrl)
@@ -422,24 +405,9 @@ static w_err_t spit_cmd(console_s *ctrl)
     }
     if(i >= CMD_PARAM_CNT)
         return ERR_COMMAN;
-    //for(i = 0;i < prm->argc;i ++)
-    //    console_printf("%s\r\n",prm->argv[i]);
     return ERR_OK;
 }
 
-static cmd_s *get_matched_cmd(console_s *ctrl)
-{
-    cmd_s *cmd = ctrl->cmd_list.head;
-    while(cmd)
-    {
-        if(wind_strcmp(ctrl->param.argv[0],cmd->cmd) == 0)
-        {
-            return cmd;
-        }
-        cmd = cmd->next;
-    }
-    return NULL;
-}
 
 static w_err_t execute_cmd(console_s *ctrl)
 {
@@ -453,7 +421,7 @@ static w_err_t execute_cmd(console_s *ctrl)
         show_cmd_list();
         return ERR_OK;
     }
-    cmd = get_matched_cmd(ctrl);
+    cmd = wind_cmd_get(ctrl->param.argv[0]);//get_matched_cmd(ctrl);
     if(cmd == NULL)
         return ERR_COMMAN;
     if(wind_strcmp(ctrl->param.argv[1],"?") == 0)
@@ -476,7 +444,7 @@ w_err_t console_thread(w_int32_t argc,char **argv)
     ctrl = &g_ctrl[argc];
     cmd_history_init(&ctrl->his);
     init_console_stat(ctrl);
-    test_init(ctrl);
+    wind_cmd_register_cmd_test(ctrl);
     //console_printf("\r\nlogin:");
     while(1)
     {

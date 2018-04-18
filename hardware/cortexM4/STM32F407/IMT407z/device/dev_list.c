@@ -7,9 +7,9 @@ extern dev_s led2_dev;
 
 w_err_t _register_devs(void)
 {
-    wind_register_dev(&gpio_dev,1);
-    wind_register_dev(&led0_dev,1);
-    wind_register_dev(&led1_dev,1);
-    wind_register_dev(&led2_dev,1);
+    wind_dev_register(&gpio_dev,1);
+    wind_dev_register(&led0_dev,1);
+    wind_dev_register(&led1_dev,1);
+    wind_dev_register(&led2_dev,1);
     return ERR_OK;
 }

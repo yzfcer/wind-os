@@ -64,11 +64,10 @@ struct __blkdev_ops_s
 w_err_t _wind_blkdev_init(void);
 w_err_t _register_blkdevs(void);
 
-w_err_t wind_register_blkdev(blkdev_s *dev,w_int32_t count);
-w_err_t wind_unregister_blkdev(blkdev_s *dev);
+w_err_t wind_blkdev_register(blkdev_s *dev,w_int32_t count);
+w_err_t wind_blkdev_unregister(blkdev_s *dev);
 
 blkdev_s *wind_blkdev_get(char *name);
-
 w_err_t wind_blkdev_open(blkdev_s *dev);
 w_int32_t wind_blkdev_read(blkdev_s *dev,w_addr_t blkaddr,w_uint8_t *buf,w_int32_t blkcnt);
 w_int32_t wind_blkdev_write(blkdev_s *dev,w_addr_t blkaddr,w_uint8_t *buf,w_int32_t blkcnt);

@@ -32,6 +32,7 @@ extern "C" {
 #include "wind_string.h"
 #include "wind_thread.h"
 #include "cmd_history.h"
+#include "wind_dlist.h"
 
 #if WIND_CONSOLE_SUPPORT
 
@@ -60,20 +61,21 @@ typedef enum __cslstat_e
     CSLSTAT_USER,//需要输入用户名
     CSLSTAT_PWD,//需要输入密码
     CSLSTAT_CMD,//在命令行模式
-    CSLSTAT_APP //运行于应用程序模式
+    CSLSTAT_APP //运行于应用程序模式,暂时无用
 } cslstat_e;
 
 typedef struct __cmd_s
 {
-    struct __cmd_s *next;
-    char* cmd;//命令的名称
+    //struct __cmd_s *next;
+    dnode_s cmdnode;
+    char* name;//命令的名称
     void (*showdisc)(void);//简要功能说明
     void (*showusage)(void);//详细的帮助说明
     w_err_t (*execute)(w_int32_t argc,char **argv);//命令的入口函数
 }cmd_s;
 
 
-
+#if 0
 //全局的cmd列表
 typedef struct __cmd_list
 {
@@ -81,7 +83,7 @@ typedef struct __cmd_list
     cmd_s *tail;
     w_uint32_t cnt;
 }cmd_list_s;
-
+#endif
 
 
 //得到分解后的参数列表
@@ -105,7 +107,7 @@ typedef struct __console_s
     
     cmd_his_s his;
     cmd_param_s param;
-    cmd_list_s cmd_list;
+    dlist_s cmd_list;
 }console_s;
 
 
@@ -116,14 +118,12 @@ typedef struct __console_s
 /********************************************全局函数申明**********************************************/
 
 //输出命令列表
-void console_framework_init(console_s *ctlobj);
+void console_framework_init(console_s *ctrl);
 void create_console_thread(void);
-cmd_s *wind_get_cmdlist(void);
-w_err_t wind_output_cmdlist(void);
-
-w_err_t wind_cmd_register(cmd_list_s *cgl,cmd_s *cmd,int cnt);
-void register_all_cmd(console_s *ctrl);
-extern void test_init(console_s *ctrl);
+cmd_s *wind_cmd_get(const char *name);
+w_err_t wind_cmd_register(cmd_s *cmd,int cnt);
+void _wind_register_all_cmd(console_s *ctrl);
+extern void wind_cmd_register_cmd_test(console_s *ctrl);
 
 #endif
 #ifdef __cplusplus

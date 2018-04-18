@@ -39,7 +39,7 @@ extern "C" {
 #define COMMAND_USAGE(cmdname) static void cmd_##cmdname##_help(void)
 #define COMMAND_MAIN(cmdname,argc,argv) static w_err_t cmd_##cmdname##_main(w_int32_t argc,char **argv)
 #define COMMAND_DEF(cmdname) cmd_s g_cmd_##cmdname = { \
-NULL,#cmdname,cmd_##cmdname##_disc,\
+{NULL,NULL},#cmdname,cmd_##cmdname##_disc,\
 cmd_##cmdname##_help,cmd_##cmdname##_main}
 
 #define CMD_DECLARE(cmdname) extern cmd_s g_cmd_##cmdname

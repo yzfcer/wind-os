@@ -59,8 +59,8 @@ struct __dev_ops_s
 w_err_t _wind_dev_init(void);
 w_err_t _register_devs(void);
 
-w_err_t wind_register_dev(dev_s *dev,w_int32_t count);
-w_err_t wind_unregister_dev(dev_s *dev);
+w_err_t wind_dev_register(dev_s *dev,w_int32_t count);
+w_err_t wind_dev_unregister(dev_s *dev);
 
 dev_s *wind_dev_get(char *name);
 w_err_t wind_dev_open(dev_s *dev);

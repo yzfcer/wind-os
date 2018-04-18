@@ -12,9 +12,9 @@ extern blkdev_s at24c02_dev;
 
 w_err_t _register_blkdevs(void)
 {
-    //wind_register_blkdev(&gpio_dev,1);
-    wind_register_blkdev(&at24c02_dev,1);
-    wind_register_blkdev(spi_flash_dev,2);
-    wind_register_blkdev(&memblk_dev,1);
+    //wind_blkdev_register(&gpio_dev,1);
+    wind_blkdev_register(&at24c02_dev,1);
+    wind_blkdev_register(spi_flash_dev,2);
+    wind_blkdev_register(&memblk_dev,1);
     return ERR_OK;
 }

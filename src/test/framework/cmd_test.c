@@ -96,9 +96,9 @@ COMMAND_MAIN(test,argc,argv)
 
 COMMAND_DEF(test);
 
-void test_init(console_s *ctrl)
+void wind_cmd_register_cmd_test(console_s *ctrl)
 {
-    wind_cmd_register(&ctrl->cmd_list,COMMAND(test),1);
+    wind_cmd_register(COMMAND(test),1);
 }
 
 

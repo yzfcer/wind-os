@@ -14,18 +14,18 @@ CMD_DECLARE(blkdev);
 
 
 
-void register_all_cmd(console_s *ctrl)
+void _wind_register_all_cmd(console_s *ctrl)
 {
-    wind_cmd_register(&ctrl->cmd_list,COMMAND(list),1);
-    wind_cmd_register(&ctrl->cmd_list,COMMAND(echo),1);
-    //wind_cmd_register(&ctrl->cmd_list,COMMAND(datetime),1);
-    wind_cmd_register(&ctrl->cmd_list,COMMAND(stati),1);
-    wind_cmd_register(&ctrl->cmd_list,COMMAND(mem),1);
-    wind_cmd_register(&ctrl->cmd_list,COMMAND(test),1);
-    wind_cmd_register(&ctrl->cmd_list,COMMAND(reset),1);
-    wind_cmd_register(&ctrl->cmd_list,COMMAND(bee),1);
-    wind_cmd_register(&ctrl->cmd_list,COMMAND(led),1);
-    wind_cmd_register(&ctrl->cmd_list,COMMAND(blkdev),1);
+    wind_cmd_register(COMMAND(list),1);
+    wind_cmd_register(COMMAND(echo),1);
+    //wind_cmd_register(COMMAND(datetime),1);
+    wind_cmd_register(COMMAND(stati),1);
+    wind_cmd_register(COMMAND(mem),1);
+    wind_cmd_register(COMMAND(test),1);
+    wind_cmd_register(COMMAND(reset),1);
+    wind_cmd_register(COMMAND(bee),1);
+    wind_cmd_register(COMMAND(led),1);
+    wind_cmd_register(COMMAND(blkdev),1);
 }
 
 w_bool_t console_have_user(char *user)

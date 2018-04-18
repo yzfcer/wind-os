@@ -51,6 +51,7 @@ typedef struct __core_var_s
     dlist_s poollist;
     dlist_s heaplist;
     dlist_s pipelist;
+    dlist_s cmdlist;
     dlist_s devlist;
     dlist_s blkdevlist;
     
