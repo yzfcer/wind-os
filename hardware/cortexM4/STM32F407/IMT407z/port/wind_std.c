@@ -29,6 +29,7 @@
 #include "wind_debug.h"
 #include "misc.h"
 #include "usart1.h"
+#if WIND_DEBUG_SUPPORT
 
 #define UART_RCV_BUFLEN 256
 typedef struct
@@ -89,6 +90,7 @@ w_int32_t wind_std_output(w_uint8_t *str,w_int32_t len)
     return len;
 }
 
+#endif
 
 
 

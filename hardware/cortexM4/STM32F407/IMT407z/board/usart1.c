@@ -2,6 +2,7 @@
 #include "string.h"
 #include "stdlib.h"  
 #include "led.h" 
+#if WIND_DEBUG_SUPPORT
 
 void uart1_init(w_uint32_t baud)
 {   //GPIO∂Àø⁄…Ë÷√
@@ -67,4 +68,4 @@ void USART1_IRQHandler(void)
         wind_stdin_irq((char)rec_data);
     } 
 } 
-
+#endif
