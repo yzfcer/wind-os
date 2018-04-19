@@ -12,8 +12,9 @@ CMD_DECLARE(reset);
 CMD_DECLARE(bee);
 CMD_DECLARE(led);
 #endif
+#if WIND_BLK_DRVFRAME_SUPPORT
 CMD_DECLARE(blkdev);
-
+#endif
 
 
 void _wind_register_all_cmd(console_s *ctrl)
@@ -29,7 +30,9 @@ void _wind_register_all_cmd(console_s *ctrl)
     wind_cmd_register(COMMAND(bee),1);
     wind_cmd_register(COMMAND(led),1);
 #endif
+#if WIND_BLK_DRVFRAME_SUPPORT
     wind_cmd_register(COMMAND(blkdev),1);
+#endif
 }
 
 w_bool_t console_have_user(char *user)

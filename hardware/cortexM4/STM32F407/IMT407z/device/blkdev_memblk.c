@@ -1,6 +1,7 @@
 #include "wind_blkdev.h"
 #include "wind_debug.h"
 #include "wind_string.h"
+#if WIND_BLK_DRVFRAME_SUPPORT
 static w_uint8_t memblk[8*64];
 
 w_err_t   memblk_open(blkdev_s *dev)
@@ -78,5 +79,5 @@ blkdev_s memblk_dev =
     &memblk_ops
 };
 
-
+#endif
 

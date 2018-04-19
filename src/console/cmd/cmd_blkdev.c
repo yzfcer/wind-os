@@ -31,7 +31,7 @@
 #include "wind_var.h"
 #include "wind_heap.h"
 #if WIND_CONSOLE_SUPPORT
-
+#if WIND_BLK_DRVFRAME_SUPPORT
 
 COMMAND_DISC(blkdev)
 {
@@ -102,5 +102,6 @@ COMMAND_MAIN(blkdev,argc,argv)
 
 COMMAND_DEF(blkdev);
 
+#endif
 #endif
 

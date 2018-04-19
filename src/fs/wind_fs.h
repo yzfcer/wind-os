@@ -1,6 +1,8 @@
 #ifndef WIND_FS_H__
 #define WIND_FS_H__
-
+#include "wind_config.h"
+#include "wind_type.h"
+#if WIND_FS_SUPPORT
 typedef struct __fs_ops_s fs_ops_s;
 typedef struct __fs_s fs_s;
 typedef struct __file_info_s file_info_s;
@@ -66,6 +68,6 @@ w_int32_t wind_file_write(file_s* file,char *buff, w_int32_t size);
 w_err_t wind_file_gets(file_s* file,char *buff, w_int32_t maxlen);
 w_err_t wind_file_puts(file_s* file,char *buff);
 
-
+#endif
 #endif
 

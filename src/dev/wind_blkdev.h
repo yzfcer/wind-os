@@ -76,7 +76,7 @@ w_err_t wind_blkdev_eraseall(blkdev_s *dev);
 w_err_t wind_blkdev_close(blkdev_s *dev);
 w_err_t wind_blkdev_print(dlist_s *list);
 #else
-_wind_blkdev_init() ERR_OK
+#define _wind_blkdev_init()
 #endif
 
 #ifdef __cplusplus

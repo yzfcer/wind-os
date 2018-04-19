@@ -30,6 +30,7 @@
 #include "wind_core.h"
 #include "wind_string.h"
 #include "wind_var.h"
+#if WIND_BLK_DRVFRAME_SUPPORT
 
 w_err_t wind_blkdev_register(blkdev_s *dev,w_int32_t count)
 {
@@ -232,4 +233,7 @@ w_err_t wind_blkdev_print(dlist_s *list)
     wind_printf("----------------------------------------------\r\n");
     return ERR_OK;
 }
+
+#endif
+
 

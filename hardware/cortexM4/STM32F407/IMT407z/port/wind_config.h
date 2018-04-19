@@ -60,7 +60,7 @@
 
 #define WIND_DRVFRAME_SUPPORT 0  //是否字符驱动框架
 
-#define WIND_BLK_DRVFRAME_SUPPORT 1  //是否块驱动框架
+#define WIND_BLK_DRVFRAME_SUPPORT 0  //是否块驱动框架
 
 #define WIND_FS_SUPPORT 1 //是否支持内存文件系统
 //-----------------------------------------------------------------------
