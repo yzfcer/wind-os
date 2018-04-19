@@ -55,7 +55,7 @@ w_err_t wind_sem_try_destroy(sem_s *sem);
 w_err_t wind_sem_destroy(sem_s *sem);
 w_err_t wind_sem_print(dlist_s *list);
 #else
-#define wind_sem_init() ERR_OK
+#define _wind_sem_init() 
 #endif
 #ifdef __cplusplus
 }

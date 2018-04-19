@@ -186,6 +186,27 @@ w_err_t wind_dev_close(dev_s *dev)
     return err;
 }
 
+w_err_t wind_dev_print(dlist_s *list)
+{
+    dnode_s *dnode;
+    dev_s *dev;
+    int cnt = 0;
+    WIND_ASSERT_RETURN(list != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(list->head != NULL,ERR_NULL_POINTER);
+    wind_printf("\r\ndev list as following:\r\n");
+    
+    foreach_node(dnode,list)
+    {
+        dev = (dev_s *)DLIST_OBJ(dnode,dev_s,devnode);
+        wind_printf("%-12s ",dev->name);
+        cnt ++;
+        if((cnt & 0x03) == 0)
+            wind_printf("\r\n");
+    }
+    return ERR_OK;
+}
+
+
 #endif
 
 

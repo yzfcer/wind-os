@@ -8,8 +8,10 @@ CMD_DECLARE(mem);
 CMD_DECLARE(stati);
 CMD_DECLARE(test);
 CMD_DECLARE(reset);
+#if WIND_DRVFRAME_SUPPORT
 CMD_DECLARE(bee);
 CMD_DECLARE(led);
+#endif
 CMD_DECLARE(blkdev);
 
 
@@ -23,8 +25,10 @@ void _wind_register_all_cmd(console_s *ctrl)
     wind_cmd_register(COMMAND(mem),1);
     wind_cmd_register(COMMAND(test),1);
     wind_cmd_register(COMMAND(reset),1);
+#if WIND_DRVFRAME_SUPPORT
     wind_cmd_register(COMMAND(bee),1);
     wind_cmd_register(COMMAND(led),1);
+#endif
     wind_cmd_register(COMMAND(blkdev),1);
 }
 

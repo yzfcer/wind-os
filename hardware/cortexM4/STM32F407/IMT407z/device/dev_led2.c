@@ -1,6 +1,7 @@
 #include "wind_dev.h"
 #include "wind_debug.h"
 #include "led.h"
+#if WIND_DRVFRAME_SUPPORT
 static w_uint8_t ledst = 0;
 w_err_t   led2_open(dev_s *dev)
 {
@@ -49,6 +50,6 @@ dev_s led2_dev =
     NULL,
     &led2_ops
 };
-
+#endif
 
 

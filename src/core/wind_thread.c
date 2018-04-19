@@ -86,7 +86,9 @@ w_err_t wind_thread_distroy(thread_s *thread)
         wind_free(thread->private_heap);
     }
 #endif
+#if WIND_STKPOOL_SUPPORT
     wind_pool_free(stkbufpool,thread->stack_top);
+#endif
     thread_free(thread);
     wind_open_interrupt();
     return ERR_OK;

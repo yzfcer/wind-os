@@ -28,6 +28,7 @@
 #include "wind_cmd.h"
 #include "beep.h"
 #if WIND_CONSOLE_SUPPORT
+#if WIND_DRVFRAME_SUPPORT
 
 
 COMMAND_DISC(bee)
@@ -58,5 +59,6 @@ COMMAND_MAIN(bee,argc,argv)
 
 COMMAND_DEF(bee);
 
+#endif
 #endif
 

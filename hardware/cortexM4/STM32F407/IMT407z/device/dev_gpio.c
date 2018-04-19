@@ -1,6 +1,8 @@
 #include "wind_dev.h"
 #include "wind_debug.h"
 #include "led.h"
+
+#if WIND_DRVFRAME_SUPPORT
 static w_uint8_t ledst[3] = {0,0,0};
 w_err_t   gpio_open(dev_s *dev)
 {
@@ -59,5 +61,6 @@ dev_s gpio_dev =
     &gpio_ops
 };
 
+#endif
 
 

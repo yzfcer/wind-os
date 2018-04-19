@@ -1,5 +1,7 @@
 #include "wind_dev.h"
 #include "wind_debug.h"
+#if WIND_DRVFRAME_SUPPORT
+
 extern dev_s gpio_dev;
 extern dev_s led0_dev;
 extern dev_s led1_dev;
@@ -13,3 +15,6 @@ w_err_t _register_devs(void)
     wind_dev_register(&led2_dev,1);
     return ERR_OK;
 }
+
+#endif
+

@@ -27,6 +27,7 @@ extern "C" {
 #include "wind_heap.h"
 #include "wind_string.h"
 #include "wind_var.h"
+#if WIND_HEAP_SUPPORT
 /********************************************内部变量定义**********************************************/
 
 
@@ -121,6 +122,7 @@ TEST_CASES_END
 TEST_SUITE(test_heap)
 
 
+#endif
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

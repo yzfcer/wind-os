@@ -58,7 +58,7 @@ w_err_t wind_pipe_destroy(pipe_s* pipe);
 
 
 #else
-#define wind_pipe_init() ERR_OK
+#define _wind_pipe_init()
 
 #endif //WIND_PIPE_SUPPORT
 #ifdef __cplusplus

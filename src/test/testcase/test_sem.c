@@ -25,6 +25,8 @@ extern "C" {
 /*********************************************头文件定义***********************************************/
 #include "cut.h"
 #include "wind_sem.h"
+
+#if WIND_SEM_SUPPORT
 /********************************************内部变量定义**********************************************/
 sem_s *sems[4];
 
@@ -149,7 +151,7 @@ TEST_CASE(semmulti)
 TEST_CASES_END
 TEST_SUITE(test_sem)
 
-
+#endif
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

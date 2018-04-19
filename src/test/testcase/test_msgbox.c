@@ -28,6 +28,7 @@ extern "C" {
 #include "wind_pool.h"
 #include "wind_thread.h"
 #include "wind_msgbox.h"
+#if WIND_MSGBOX_SUPPORT
 /********************************************内部变量定义**********************************************/
 static msgbox_s *msgbox;
 typedef struct 
@@ -67,7 +68,7 @@ CASE_FUNC(msgboxinfo)
     msgbox = wind_msgbox_create("test",thr);
     EXPECT_NE(msgbox,NULL);
     EXPECT_EQ(msgbox->magic,WIND_MSGBOX_MAGIC);
-    EXPECT_EQ(msgbox->num,0);
+    EXPECT_EQ(msgbox->msgnum,0);
     EXPECT_EQ(msgbox->msglist.head,NULL);
     EXPECT_EQ(msgbox->msglist.tail,NULL);
     EXPECT_EQ(msgbox->owner,thr);
@@ -144,7 +145,7 @@ TEST_CASE(msgbox_multthread)
 TEST_CASES_END
 TEST_SUITE(test_msgbox)
 
-
+#endif 
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

@@ -57,7 +57,8 @@ w_err_t wind_timer_destroy(timer_s* timer);
 w_err_t wind_timer_set_period(timer_s* timer,w_uint32_t t_ms);
 void wind_timer_event(void);
 
-
+#else
+#define _wind_timer_init()
 #endif //#if WIND_TIMER_SUPPORT
 #ifdef __cplusplus
 }

@@ -50,7 +50,7 @@ typedef struct __msgbox_s
     const char *name;
     dnode_s msgboxnode;
     dlist_s msglist;//消息队列
-    int num;//消息的数量
+    int msgnum;//消息的数量
     thread_s *owner;
 }msgbox_s;
 
@@ -69,10 +69,10 @@ w_err_t wind_msgbox_destroy(msgbox_s *msgbox);
 w_err_t wind_msgbox_post(msgbox_s *msgbox,msg_s *pmsg);
 w_err_t wind_msgbox_wait(msgbox_s *msgbox,msg_s **pmsg,w_uint32_t timeout);
 w_err_t wind_msgbox_trywait(msgbox_s *msgbox,msg_s **pmsg);
-w_err_t _wind_msgbox_print(dlist_s *list);
+w_err_t wind_msgbox_print(dlist_s *list);
 
 #else
-#define _wind_pipe_init() ERR_OK
+#define _wind_msgbox_init()
 #endif //WIND_MSGBOX_SUPPORT
 
 #ifdef __cplusplus

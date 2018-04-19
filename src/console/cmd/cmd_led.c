@@ -28,7 +28,7 @@
 #include "wind_cmd.h"
 #include "wind_dev.h"
 #if WIND_CONSOLE_SUPPORT
-
+#if WIND_DEV_SUPPORT
 
 COMMAND_DISC(led)
 {
@@ -70,5 +70,6 @@ COMMAND_MAIN(led,argc,argv)
 
 COMMAND_DEF(led);
 
+#endif
 #endif
 

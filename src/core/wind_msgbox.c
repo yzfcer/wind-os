@@ -99,7 +99,7 @@ msgbox_s *wind_msgbox_create(const char *name,thread_s *owner)
     msgbox->name = name;
     DNODE_INIT(msgbox->msgboxnode);
     DLIST_INIT(msgbox->msglist);
-    msgbox->num = 0;
+    msgbox->msgnum = 0;
     msgbox->magic = WIND_MSGBOX_MAGIC;
     msgbox->owner = owner;
     wind_close_interrupt();
@@ -146,7 +146,7 @@ w_err_t wind_msgbox_post(msgbox_s *msgbox,msg_s *pmsg)
     //将消息加入邮箱
     wind_close_interrupt();
     dlist_insert_tail(&msgbox->msglist,&pmsg->msgnode);
-    msgbox->num ++;
+    msgbox->msgnum ++;
 
     //激活被阻塞的线程
     thread = msgbox->owner;
@@ -176,9 +176,9 @@ w_err_t wind_msgbox_wait(msgbox_s *msgbox,msg_s **pmsg,w_uint32_t timeout)
     
     //如果邮箱中有消息，就直接返回消息
     wind_close_interrupt();
-    if(msgbox->num > 0)
+    if(msgbox->msgnum > 0)
     {
-        msgbox->num --;
+        msgbox->msgnum --;
         dnode = dlist_remove_head(&msgbox->msglist);
         *pmsg = DLIST_OBJ(dnode,msg_s,msgnode);
         wind_open_interrupt();
@@ -198,7 +198,7 @@ w_err_t wind_msgbox_wait(msgbox_s *msgbox,msg_s **pmsg,w_uint32_t timeout)
     _wind_thread_dispatch();
     if(thread->cause == CAUSE_MSG)
     {
-        if(msgbox->num <= 0)
+        if(msgbox->msgnum <= 0)
         {
             thread->runstat = THREAD_STATUS_READY;
             return ERR_NULL_POINTER;
@@ -229,9 +229,9 @@ w_err_t wind_msgbox_trywait(msgbox_s *msgbox,msg_s **pmsg)
     
     //如果邮箱中有消息，就直接返回消息
     wind_close_interrupt();
-    if(msgbox->num > 0)
+    if(msgbox->msgnum > 0)
     {
-        msgbox->num --;
+        msgbox->msgnum --;
         dnode = dlist_remove_head(&msgbox->msglist);
         *pmsg = DLIST_OBJ(dnode,msg_s,msgnode);
         err = ERR_OK;
@@ -245,10 +245,26 @@ w_err_t wind_msgbox_trywait(msgbox_s *msgbox,msg_s **pmsg)
     return err;
 }
 
-w_err_t _wind_msgbox_print(dlist_s *list)
+w_err_t wind_msgbox_print(dlist_s *list)
 {
-    wind_error("NOT support yet.");
-    return ERR_COMMAN;
+    dnode_s *dnode;
+    msgbox_s *msgbox;
+    WIND_ASSERT_RETURN(list != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(list->head != NULL,ERR_NULL_POINTER);
+    wind_printf("\r\n\r\nmsgbox list as following:\r\n");
+    wind_printf("----------------------------------------------\r\n");
+    wind_printf("%-16s %-8s %-10s\r\n","msgbox","msg_num");
+    wind_printf("----------------------------------------------\r\n");
+
+    foreach_node(dnode,list)
+    {
+        msgbox = (msgbox_s *)DLIST_OBJ(dnode,msgbox_s,msgboxnode);
+        wind_printf("%-16s %-8d \r\n",
+            msgbox->name,msgbox->msgnum);
+    }
+    wind_printf("----------------------------------------------\r\n");
+    return ERR_OK;
 }
+
 #endif  //WIND_MSGBOX_SUPPORT
 

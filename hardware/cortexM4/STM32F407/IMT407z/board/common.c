@@ -164,7 +164,7 @@ void delay_init(void)
 #else
 	fac_ms=(w_uint16_t)fac_us*1000;//非ucos下,代表每个ms需要的systick时钟数   
 #endif
-}								    
+}
 
 
 //延时nus
