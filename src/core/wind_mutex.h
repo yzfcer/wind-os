@@ -28,10 +28,10 @@
 #include "wind_config.h"
 #include "wind_type.h"
 #include "wind_dlist.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif
+#if WIND_MUTEX_SUPPORT
 
 typedef struct _wind_mutex
 {
@@ -51,7 +51,9 @@ w_err_t wind_mutex_lock(mutex_s *mutex);
 w_err_t wind_mutex_trylock(mutex_s *mutex);
 w_err_t wind_mutex_unlock(mutex_s *mutex);
 w_err_t wind_mutex_print(dlist_s *list);
-
+#else
+#define _wind_mutex_init()
+#endif
 
 #ifdef __cplusplus
 }

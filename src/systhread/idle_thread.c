@@ -1,5 +1,6 @@
 #include "wind_type.h"
 #include "wind_var.h"
+#include "wind_debug.h"
 #include "wind_thread.h"
 
 #define IDLE_STK_SIZE 64
@@ -13,9 +14,11 @@ static w_err_t idle_thread(w_int32_t argc,w_int8_t **argv)
 }
 
 
-void create_idle_thread(void)
+w_err_t create_idle_thread(void)
 {
-    g_core.pidle = wind_thread_create("idle",PRIO_LOW,idle_thread,
+    thread_s *thread;
+    thread = wind_thread_create("idle",PRIO_LOW,idle_thread,
                     0,NULL,idlestk,IDLE_STK_SIZE);
-    wind_thread_changeprio(g_core.pidle,32767);
+    WIND_ASSERT_RETURN(thread != NULL,ERR_COMMAN);
+    return ERR_OK;
 }

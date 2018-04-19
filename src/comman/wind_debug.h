@@ -42,12 +42,16 @@ extern "C" {
 
 
 //---------------------------------------------------------------------
+#if WIND_DEBUG_SUPPORT
 #ifdef _USE_USER_PRINT
 extern w_int32_t wind_std_output(w_uint8_t *str,w_int32_t len);
 w_int32_t wind_printf(const char *fmt, ...);
 #else
 #include <stdio.h>
 #define wind_printf printf
+#endif
+#else
+#define wind_printf
 #endif
 
 //系统调试信息打印级别
@@ -60,31 +64,31 @@ w_int32_t wind_printf(const char *fmt, ...);
 #define PRINT_LEVEL PRINT_LV_NOTICE
 
 
-#if (PRINT_LEVEL <= PRINT_LV_DEBUG)
+#if (WIND_DEBUG_SUPPORT && (PRINT_LEVEL <= PRINT_LV_DEBUG))
 #define wind_debug(fmt,...) do{/*wind_printf("[debug] ");*/wind_printf("%s"fmt"\r\n","[debug] ",##__VA_ARGS__);}while(0)
 #else 
 #define wind_debug(fmt,...)
 #endif
 
-#if (PRINT_LEVEL <= PRINT_LV_NOTICE)
+#if (WIND_DEBUG_SUPPORT && (PRINT_LEVEL <= PRINT_LV_NOTICE))
 #define wind_notice(fmt,...) do{/*wind_printf("[notice] ");*/wind_printf("%s"fmt"\r\n","[notice] ",##__VA_ARGS__);}while(0)
 #else 
 #define wind_notice(fmt,...) 
 #endif
 
-#if (PRINT_LEVEL <= PRINT_LV_WARN)
+#if (WIND_DEBUG_SUPPORT && (PRINT_LEVEL <= PRINT_LV_WARN))
 #define wind_warn(fmt,...) do{/*wind_printf("[warn] ");*/wind_printf("%s[%s,%d] "fmt"\r\n","[warn] ",__FUNCTION__,__LINE__,##__VA_ARGS__);}while(0)
 #else 
 #define wind_warn(fmt,...)
 #endif
 
-#if (PRINT_LEVEL <= PRINT_LV_ERROR)
+#if (WIND_DEBUG_SUPPORT && (PRINT_LEVEL <= PRINT_LV_ERROR))
 #define wind_error(fmt,...) do{/*wind_printf("[error] ");*/wind_printf("%s[%s,%d] "fmt"\r\n","[error] ",__FUNCTION__,__LINE__,##__VA_ARGS__);}while(0)
 #else 
 #define wind_error(fmt,...)
 #endif
 
-#if (PRINT_LEVEL <= PRINT_LV_CRIT)
+#if (WIND_DEBUG_SUPPORT && (PRINT_LEVEL <= PRINT_LV_CRIT))
 #define wind_critical(fmt,...) do{/*wind_printf("[critical] ");*/wind_printf("%s[%s,%d] "fmt"\r\n","[critical] ",__FUNCTION__,__LINE__,##__VA_ARGS__);}while(0)
 #else 
 #define wind_critical(fmt,...)

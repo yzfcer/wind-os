@@ -6,11 +6,15 @@
 #include "wind_dev.h"
 #include "wind_blkdev.h"
 
-#define MAIN_STK_SIZE 256
+#define INIT_STK_SIZE 256
 
 void wind_tick_init(void);
+#if WIND_STATI_THREAD_SUPPORT
 void create_stati_thread(void);
-#if WIND_DAEMON_SUPPORT
+#else
+#define create_stati_thread()
+#endif
+#if WIND_DAEMON_THREAD_SUPPORT
 void create_daemon_thread(void);
 #else 
 #define create_daemon_thread()
@@ -25,7 +29,7 @@ void create_console_thread(void);
 void create_timer_thread(void);
 
 extern w_err_t wind_main(void);
-static w_stack_t mainstk[MAIN_STK_SIZE];
+static w_stack_t mainstk[INIT_STK_SIZE];
 
 static void set_idle_cnt(void)
 {
@@ -61,9 +65,11 @@ static w_err_t init_thread(w_int32_t argc,w_int8_t **argv)
     return ERR_OK;
 }
 
-int create_init_thread(void)
+w_err_t create_init_thread(void)
 {
-    g_core.pmain = wind_thread_create("init",PRIO_HIGH,init_thread,
-                        0,NULL,mainstk,MAIN_STK_SIZE);
+    thread_s *thread;
+    thread = wind_thread_create("init",PRIO_HIGH,init_thread,
+                        0,NULL,mainstk,INIT_STK_SIZE);
+    WIND_ASSERT_RETURN(thread != NULL,ERR_COMMAN);
     return ERR_OK;
 }

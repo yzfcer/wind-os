@@ -27,6 +27,8 @@ extern "C" {
 #include "cut.h"
 #include "wind_mutex.h"
 /********************************************内部变量定义**********************************************/
+#if WIND_MUTEX_SUPPORT
+
 static mutex_s *mutexs[4];
 
 
@@ -133,7 +135,7 @@ TEST_CASE(mutexmulti)
 TEST_CASES_END
 TEST_SUITE(test_mutex)
 
-
+#endif
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

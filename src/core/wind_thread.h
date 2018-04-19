@@ -71,19 +71,6 @@ typedef enum __suscause
 
 //定义与线程相关的一些回调函数，需要配置选项支持
 #if WIND_THREAD_CALLBACK_SUPPORT
-typedef enum __thr_evt_e
-{
-    THR_EVT_CREATE,
-    THR_EVT_START,
-    THR_EVT_SUSPEND,
-    THR_EVT_RESUME,
-    THR_EVT_DEAD
-}thr_evt_e;
-
-
-typedef struct _thread_s thread_s;
-typedef struct __threadcb_s threadcb_s;
-
 struct __threadcb_s
 {
     void (*create)(struct _thread_s *thread);
@@ -94,6 +81,17 @@ struct __threadcb_s
 };
 #endif 
 
+typedef enum __thr_evt_e
+{
+    THR_EVT_CREATE,
+    THR_EVT_START,
+    THR_EVT_SUSPEND,
+    THR_EVT_RESUME,
+    THR_EVT_DEAD
+}thr_evt_e;
+
+typedef struct _thread_s thread_s;
+typedef struct __threadcb_s threadcb_s;
 
 //线程对象结构
 struct _thread_s

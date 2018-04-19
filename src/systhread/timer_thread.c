@@ -18,10 +18,13 @@ static w_err_t timer_thread(w_int32_t argc,w_int8_t **argv)
     }
 }
 
-void create_timer_thread(void)
+w_err_t create_timer_thread(void)
 {
-    g_core.ptimer = wind_thread_create("timer",PRIO_HIGH,timer_thread,
+    thread_s *thread;
+    thread = wind_thread_create("timer",PRIO_HIGH,timer_thread,
                      0,NULL,timerstk,TIMER_STK_SIZE);
+    WIND_ASSERT_RETURN(thread != NULL,ERR_COMMAN);
+    return ERR_OK;
 }
 #endif
 

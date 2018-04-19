@@ -26,6 +26,8 @@
 #include "wind_type.h"
 #include "wind_os_hwif.h"
 #include "wind_cmd.h"
+#if WIND_CONSOLE_SUPPORT
+
 COMMAND_DISC(reset)
 {
     console_printf("to reset system.\r\n");
@@ -42,7 +44,7 @@ COMMAND_MAIN(reset,argc,argv)
     wind_thread_sleep(1000);
     wind_system_reset();
     while(1);
-    //return ERR_OK;
 }
 
 COMMAND_DEF(reset);
+#endif

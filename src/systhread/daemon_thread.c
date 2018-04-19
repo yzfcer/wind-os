@@ -1,8 +1,8 @@
 #include "wind_type.h"
-#include "wind_var.h"
+//#include "wind_var.h"
 #include "wind_thread.h"
 #include "wind_debug.h"
-#if WIND_DAEMON_SUPPORT 
+#if WIND_DAEMON_THREAD_SUPPORT 
 #define DAEMON_STK_SIZE 256
 static w_stack_t daemonstk[DAEMON_STK_SIZE];
 
@@ -36,11 +36,13 @@ static w_err_t daemon_thread(w_int32_t argc,w_int8_t **argv)
     }
 }
 
-void create_daemon_thread(void)
+w_err_t create_daemon_thread(void)
 {
-
-    g_core.pdaemon = wind_thread_create("daemon",PRIO_HIGH,daemon_thread,
+    thread_s *thread;
+    thread = wind_thread_create("daemon",PRIO_HIGH,daemon_thread,
                      0,NULL,daemonstk,DAEMON_STK_SIZE);
+    WIND_ASSERT_RETURN(thread != NULL,ERR_COMMAN);
+    return ERR_OK;
 }
 
 #endif

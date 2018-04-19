@@ -45,8 +45,10 @@ w_err_t wind_main(void)
     sem_s *psem1 = wind_sem_create("sem2",4);
     sem_s *psem2 = wind_sem_create("sem3",6);
 #endif
+#if WIND_MUTEX_SUPPORT
     mutex_s *mutex1 = wind_mutex_create("mutex1");
     mutex_s *mutex2 = wind_mutex_create("mutex2");
+#endif
 #if WIND_PIPE_SUPPORT
     pipe_s *pipe = wind_pipe_create("pipe1",pipebuff,sizeof(pipebuff));
 #endif

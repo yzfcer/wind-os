@@ -35,6 +35,7 @@
 #include "wind_pool.h"
 #include "wind_string.h"
 
+#if WIND_MUTEX_SUPPORT
 #define WIND_MUTEX_MAGIC 0x37AD490F
 static WIND_MPOOL(mutexpool,WIND_MUTEX_MAX_NUM,sizeof(mutex_s));
 
@@ -212,5 +213,5 @@ w_err_t wind_mutex_print(dlist_s *list)
     return ERR_OK;
 }
 
-
+#endif
 
