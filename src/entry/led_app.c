@@ -19,7 +19,7 @@ void led0_timer(void *arg)
     {
         stat = 1;
         wind_dev_write(dev,&stat,1);
-        wind_timer_set_period(ledtmr,50);
+        wind_timer_set_period(ledtmr,100);
     }
 }
 

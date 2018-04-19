@@ -30,7 +30,6 @@ extern "C" {
 #include "wind_type.h"
 #include "wind_debug.h"
 #include "wind_string.h"
-#include "wind_mem.h"
 #include "wind_rtc.h"
 #include "wind_comman.h"
 #include "wind_cmd.h"

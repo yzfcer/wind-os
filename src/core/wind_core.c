@@ -228,7 +228,7 @@ static int wind_os_lunch(void)
     wind_init();
     create_init_thread();
     _wind_thread_open();
-    wind_notice("wind is going to multple thread mode.");
+    wind_notice("wind multple thread mode.");
     wind_run();
     return ERR_OK;
 }

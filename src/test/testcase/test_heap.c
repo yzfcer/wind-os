@@ -56,13 +56,13 @@ CASE_FUNC(heapfunc)
     w_int32_t res;
     w_err_t err;
     w_uint8_t *buff;
-    buff = (w_uint8_t*)wind_heap_alloc_default(64);
+    buff = (w_uint8_t*)wind_malloc(64);
     EXPECT_NE(buff,NULL);
     wind_memset(buff,0,64);
     wind_strcpy((char*)buff,"heap test start.");
     res = wind_strcmp((char*)buff,"heap test start.");
     EXPECT_EQ(res,0);
-    err = wind_heap_free(buff);
+    err = wind_free(buff);
     EXPECT_EQ(err,ERR_OK);
 }
 
@@ -86,7 +86,7 @@ CASE_FUNC(heapmulti)
     for(i = 0;i < 12;i ++)
     {
         len += 8;
-        buff[i] = (char*)wind_heap_alloc_default(len);
+        buff[i] = (char*)wind_malloc(len);
         EXPECT_NE(buff[i],NULL);
         wind_memset(buff[i],0,len);
         wind_strcpy((char*)buff[i],"heap test start.");
@@ -95,7 +95,7 @@ CASE_FUNC(heapmulti)
     }
     for(i = 0;i < 12;i ++)
     {
-        err = wind_heap_free(buff[i]);
+        err = wind_free(buff[i]);
         EXPECT_EQ(err,ERR_OK);
         wind_heapitem_print(&g_core.heaplist);
     }

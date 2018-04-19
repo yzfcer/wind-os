@@ -1333,16 +1333,6 @@
               <FilePath>..\..\..\..\..\src\core\wind_flag.h</FilePath>
             </File>
             <File>
-              <FileName>wind_mem.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\core\wind_mem.c</FilePath>
-            </File>
-            <File>
-              <FileName>wind_mem.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\core\wind_mem.h</FilePath>
-            </File>
-            <File>
               <FileName>wind_pipe.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\core\wind_pipe.c</FilePath>

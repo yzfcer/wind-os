@@ -46,6 +46,25 @@ static void heapitem_init(heapitem_s *item,heap_s *hp,w_int32_t size)
     item->size = size;
 }
 
+heap_s *wind_heap_get(const char *name)
+{
+    heap_s *heap;
+    dnode_s *dnode;
+    wind_disable_switch();
+    foreach_node(dnode,&g_core.heaplist)
+    {
+        heap = DLIST_OBJ(dnode,heap_s,heapnode);
+        if(wind_strcmp(name,heap->name) == 0)
+        {
+            wind_enable_switch();
+            return heap;
+        }
+    }
+    wind_enable_switch();
+    return NULL;
+}
+
+
 w_err_t wind_heap_create(const char *name,w_addr_t base,w_uint32_t size)
 {
     heapitem_s* item;
@@ -150,7 +169,7 @@ static w_err_t combine_heapitem(heapitem_s* item1,heapitem_s* item2)
 }
 
 //从内存堆中分出一块空间
-void *wind_heap_alloc(heap_s* heap,w_uint32_t size)
+void *wind_heap_malloc(heap_s* heap,w_uint32_t size)
 {
     void *p = NULL;
     heap_s* hp = heap;
@@ -182,20 +201,7 @@ void *wind_heap_alloc(heap_s* heap,w_uint32_t size)
     return p;
 }
 
-void *wind_heap_alloc_default(w_uint32_t size)
-{
-    void *p = NULL;
-    dnode_s *pdnode;
-    heap_s* pheap;
-    foreach_node(pdnode,&g_core.heaplist)
-    {
-        pheap = DLIST_OBJ(pdnode,heap_s,heapnode);
-        p = wind_heap_alloc((heap_s*)pheap,size);
-        if(NULL != p)
-            return p;
-    }
-    return NULL;
-}
+
 
 void *wind_heap_realloc(heap_s* heap, void* ptr, w_uint32_t newsize)
 {
@@ -218,8 +224,8 @@ void *wind_heap_realloc(heap_s* heap, void* ptr, w_uint32_t newsize)
     }
     else
     {
-        p = wind_heap_alloc(heap,newsize);
-        wind_heap_free(ptr);
+        p = wind_heap_malloc(heap,newsize);
+        wind_free(ptr);
     }
     if(p != NULL)
         wind_memcpy(p,ptr,newsize);
@@ -229,9 +235,9 @@ void *wind_heap_realloc(heap_s* heap, void* ptr, w_uint32_t newsize)
 
 
 
-w_err_t wind_heap_free(void *ptr)
+w_err_t wind_heap_free(heap_s* heap,void *ptr)
 {
-    heap_s* heap;
+    
     heapitem_s* item,*tmpitem;
     dnode_s *pdnode;
     WIND_ASSERT_RETURN(ptr != NULL,ERR_NULL_POINTER);
@@ -262,66 +268,6 @@ w_err_t wind_heap_free(void *ptr)
     wind_mutex_unlock(heap->pmutex);
     return ERR_OK;
 }
-
-
-void *wind_hmalloc(w_uint32_t size)
-{
-    void *ptr = NULL;
-    heap_s* heap;
-    dnode_s *pnode;
-    foreach_node(pnode,&g_core.heaplist)
-    {
-        heap = DLIST_OBJ(pnode,heap_s,heapnode);
-        WIND_HEAP_DEBUG("malloc in heap:0x%x\r\n",heap);
-        WIND_HEAP_DEBUG("pool_size:0x%x\r\n",heap->size);
-        WIND_HEAP_DEBUG("available_size:0x%x\r\n",heap->rest);
-        ptr = wind_heap_alloc(heap, size);
-        if(ptr)
-        {
-            break;
-        }
-    }
-    return ptr;
-}
-
-
-w_err_t wind_hfree(void *rmem)
-{
-    WIND_ASSERT_RETURN(rmem != NULL,ERR_NULL_POINTER);
-    return wind_heap_free(rmem);
-}
-
-
-void *wind_hrealloc(void *rmem, w_uint32_t newsize)
-{
-    void *pnew;
-    heap_s* pheap;
-    dnode_s *pnode;
-    if (rmem == NULL)
-        return wind_hmalloc(newsize);
-    foreach_node(pnode,&g_core.heaplist)
-    {
-        pheap = DLIST_OBJ(pnode,heap_s,heapnode);
-        pnew = wind_heap_realloc(pheap,rmem,newsize);
-        return pnew;
-    }
-    return NULL;
-}
-
-
-void *wind_hcalloc(w_uint32_t count, w_uint32_t size)
-{
-    void *ptr;
-    w_uint32_t tot_size;
-    WIND_ASSERT_RETURN(count > 0,NULL);
-    WIND_ASSERT_RETURN(size > 0,NULL);
-    tot_size = count *size;
-    ptr = wind_hmalloc(tot_size);
-    WIND_ASSERT_RETURN(ptr != NULL,NULL);
-    wind_memset(ptr, 0, tot_size);
-    return ptr;
-}
-
 
 w_err_t wind_heap_print(void)
 {
@@ -372,6 +318,76 @@ w_err_t wind_heapitem_print(dlist_s *list)
     wind_printf("----------------------------------------------\r\n");
     return ERR_OK;
 }
+
+void *wind_malloc(w_uint32_t size)
+{
+    void *ptr;
+    heap_s* heap;
+    dnode_s *pnode;
+    foreach_node(pnode,&g_core.heaplist)
+    {
+        heap = DLIST_OBJ(pnode,heap_s,heapnode);
+        WIND_HEAP_DEBUG("malloc in heap:0x%x\r\n",heap);
+        WIND_HEAP_DEBUG("pool_size:0x%x\r\n",heap->size);
+        WIND_HEAP_DEBUG("available_size:0x%x\r\n",heap->rest);
+        ptr = wind_heap_malloc(heap, size);
+        if(ptr)
+            return ptr;
+    }
+    return NULL;
+}
+
+
+w_err_t wind_free(void *ptr)
+{
+    w_err_t err;
+    heap_s* pheap;
+    dnode_s *pnode;
+    WIND_ASSERT_RETURN(ptr != NULL,ERR_NULL_POINTER);
+    foreach_node(pnode,&g_core.heaplist)
+    {
+        pheap = DLIST_OBJ(pnode,heap_s,heapnode);
+        err = wind_heap_free(pheap,ptr);
+        if(err == ERR_OK)
+            return ERR_OK;
+    }
+    return ERR_INVALID_PARAM;
+}
+
+
+void *wind_realloc(void *ptr, w_uint32_t newsize)
+{
+    void *pnew;
+    heap_s* pheap;
+    dnode_s *pnode;
+    if (ptr == NULL)
+        return wind_malloc(newsize);
+    foreach_node(pnode,&g_core.heaplist)
+    {
+        pheap = DLIST_OBJ(pnode,heap_s,heapnode);
+        pnew = wind_heap_realloc(pheap,ptr,newsize);
+        if(pnew)
+            return pnew;
+    }
+    return NULL;
+}
+
+
+void *wind_calloc(w_uint32_t count, w_uint32_t size)
+{
+    void *ptr;
+    w_uint32_t tot_size;
+    WIND_ASSERT_RETURN(count > 0,NULL);
+    WIND_ASSERT_RETURN(size > 0,NULL);
+    tot_size = count *size;
+    ptr = wind_malloc(tot_size);
+    WIND_ASSERT_RETURN(ptr != NULL,NULL);
+    wind_memset(ptr, 0, tot_size);
+    return ptr;
+}
+
+
+
 
 #endif
 

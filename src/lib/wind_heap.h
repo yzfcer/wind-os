@@ -87,28 +87,34 @@ struct __heap_s
     mutex_s *pmutex; 
 };
 
+heap_s *wind_heap_get(const char *name);
+
 w_err_t wind_heap_create(const char *name,
              w_addr_t base,w_uint32_t size);
+
 w_err_t wind_heap_destroy(w_addr_t base);
 
 
-void *wind_heap_alloc(heap_s* heap, w_uint32_t size);
-
-void *wind_heap_alloc_default(w_uint32_t size);
+void *wind_heap_malloc(heap_s* heap, w_uint32_t size);
 
 void *wind_heap_realloc(heap_s* heap, void* ptr, w_uint32_t newsize);
 
-w_err_t wind_heap_free(void *ptr);
-
-void *wind_hmalloc(w_uint32_t size);
-
-w_err_t wind_hfree(void *rmem);
-
-void *wind_hcalloc(w_uint32_t count, w_uint32_t size);
+w_err_t wind_heap_free(heap_s* heap,void *ptr);
 
 w_err_t wind_heap_print(void);
 
 w_err_t wind_heapitem_print(dlist_s *list);
+
+
+void *wind_malloc(w_uint32_t size);
+
+void *wind_calloc(w_uint32_t count, w_uint32_t size);
+
+void *wind_realloc(void *rmem, w_uint32_t newsize);
+
+w_err_t wind_free(void *rmem);
+
+
 
 #endif
 

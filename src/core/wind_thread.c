@@ -28,7 +28,6 @@
 #include "wind_os_hwif.h"
 #include "wind_core.h"
 #include "wind_thread.h"
-#include "wind_mem.h"
 #include "wind_string.h"
 #include "wind_debug.h"
 #include "wind_stati.h"
@@ -84,7 +83,7 @@ w_err_t wind_thread_distroy(thread_s *thread)
 #if WIND_HEAP_SUPPORT && WIND_PRIVATE_HEAP_SUPPORT
     if(thread->private_heap != NULL)
     {
-        wind_heap_free(thread->private_heap);
+        wind_free(thread->private_heap);
     }
 #endif
     wind_pool_free(stkbufpool,thread->stack_top);

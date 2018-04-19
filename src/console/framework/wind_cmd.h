@@ -45,9 +45,6 @@ cmd_##cmdname##_help,cmd_##cmdname##_main}
 #define CMD_DECLARE(cmdname) extern cmd_s g_cmd_##cmdname
 #define COMMAND(cmdname) &g_cmd_##cmdname
 
-
-
-
 #endif//ifndef WIND_CONSOLE_H__
 #ifdef __cplusplus
 }

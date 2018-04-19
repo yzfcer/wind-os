@@ -55,7 +55,7 @@ w_err_t wind_privateheap_create(w_uint32_t size)
     heap_s* mhp;
     thread = wind_thread_current();
     WIND_ASSERT_RETURN((thread != NULL),ERR_NULL_POINTER);
-    mhp = (heap_s*)wind_heap_alloc_default(size);
+    mhp = (heap_s*)wind_malloc(size);
     WIND_ASSERT_RETURN(mhp != NULL,ERR_NULL_POINTER);
     //mhp = (heap_s*)
     thread->private_heap = mhp;
@@ -63,7 +63,7 @@ w_err_t wind_privateheap_create(w_uint32_t size)
     err = wind_heap_create("pri_heap",start,size);
     if(err != ERR_OK)
     {
-        wind_heap_free(mhp);
+        wind_free(mhp);
         thread->private_heap = NULL;
         return ERR_COMMAN;
     }
@@ -83,7 +83,7 @@ void *wind_privateheap_alloc(w_uint32_t size)
         err = wind_privateheap_create(PRIVATE_HEAP_SIZE);
         WIND_ASSERT_RETURN(err == ERR_OK,NULL);
     }
-    p = wind_heap_alloc(thread->private_heap,size);
+    p = wind_heap_malloc(thread->private_heap,size);
     return p;
 }
 
@@ -91,7 +91,7 @@ w_err_t wind_privateheap_free(void *ptr)
 {
     w_err_t err;
     WIND_ASSERT_RETURN(ptr != NULL,ERR_NULL_POINTER);
-    err = wind_heap_free((void *) ptr);
+    err = wind_free((void *) ptr);
     return err;    
 }
 
