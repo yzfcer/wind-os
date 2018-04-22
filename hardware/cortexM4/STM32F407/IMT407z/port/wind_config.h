@@ -29,7 +29,7 @@
 
 //-------------------------------------------------------------------------------
 
-#define WIND_MUTEX_SUPPORT 0 //是否支持互斥锁
+#define WIND_MUTEX_SUPPORT 1 //是否支持互斥锁
 
 #define WIND_SEM_SUPPORT 0 //是否支持信号量
 
@@ -53,7 +53,7 @@
 
 #define WIND_CONSOLE_SUPPORT 0 //是否支持控制台模块
 
-#define WIND_DEBUG_SUPPORT 0 //是否支持调试输出模块
+#define WIND_DEBUG_SUPPORT 1 //是否支持调试输出模块
 
 #define WIND_SOFTINT_SUPPORT 0 //是否支持软中断功能
 

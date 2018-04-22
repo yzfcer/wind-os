@@ -31,7 +31,6 @@ extern "C" {
 #include "wind_debug.h"
 #include "wind_string.h"
 #include "wind_rtc.h"
-#include "wind_comman.h"
 #include "wind_cmd.h"
 #if WIND_RTC_SUPPORT
 

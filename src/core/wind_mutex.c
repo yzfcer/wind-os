@@ -60,7 +60,7 @@ mutex_s *wind_mutex_get(const char *name)
     mutex_s *mutex;
     dnode_s *dnode;
     wind_disable_switch();
-    foreach_node(dnode,&g_core.semlist)
+    foreach_node(dnode,&g_core.mutexlist)
     {
         mutex = DLIST_OBJ(dnode,mutex_s,mutexnode);
         if(wind_strcmp(name,mutex->name) == 0)

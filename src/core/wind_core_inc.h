@@ -33,10 +33,8 @@
 #include "wind_os_hwif.h"
 #include "wind_time.h"
 
-
 #include "wind_queue.h"
 #include "wind_mutex.h"
-#include "wind_flag.h"
 #include "wind_msgbox.h"
 #include "wind_thread.h"
 #include "wind_sem.h"
@@ -48,9 +46,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-//你需要在你的用户区添加这个函数的实现
-
 
 
 #ifdef __cplusplus
