@@ -28,7 +28,7 @@
 #include "wind_cmd.h"
 #include "wind_dev.h"
 #if WIND_CONSOLE_SUPPORT
-#if WIND_DEV_SUPPORT
+#if WIND_DRVFRAME_SUPPORT
 
 COMMAND_DISC(led)
 {

@@ -42,7 +42,7 @@ static void hwrtc_set_datetime(void)
 {
     datetime_s *dt;
     dt = &G_DATETIME;
-    rRTCCON = 1 ;        //RTC read and write enable
+    rRTCCON = 1;        //RTC read and write enable
     rBCDYEAR = Num3BCD(dt->date.year - 2000);        //Äê
     rBCDMON  = Num3BCD(dt->date.month);        //ÔÂ
     rBCDDATE = Num3BCD(dt->date.day) ;        //ÈÕ    

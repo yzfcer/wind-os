@@ -479,11 +479,14 @@ w_err_t console_thread(w_int32_t argc,char **argv)
 
 #define CTRL_STK_SIZE 256
 static w_stack_t ctrlstk[CTRL_STK_SIZE];//Ö÷ÈÎÎñ¶ÑÕ»
-void create_console_thread(void)
+w_err_t create_console_thread(void)
 {
-    g_core.pctrl = wind_thread_create("console",PRIO_LOW,console_thread,
+    thread_s *thread;
+    thread = wind_thread_create("console",PRIO_LOW,console_thread,
                0,NULL,ctrlstk,CTRL_STK_SIZE);
-    wind_thread_changeprio(g_core.pctrl,32760);
+    WIND_ASSERT_RETURN(thread != NULL,ERR_COMMAN);
+    wind_thread_changeprio(thread,32760);
+    return ERR_OK;
 }
 
 #endif

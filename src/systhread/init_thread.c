@@ -21,9 +21,9 @@ void create_daemon_thread(void);
 #endif
 void create_idle_thread(void);
 #if WIND_CONSOLE_SUPPORT
-void create_console_thread(void);
+w_err_t create_console_thread(void);
 #else 
-#define create_console_thread()
+#define create_console_thread() ERR_OK
 #endif
 
 void create_timer_thread(void);

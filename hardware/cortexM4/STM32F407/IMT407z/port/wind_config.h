@@ -31,41 +31,41 @@
 
 #define WIND_MUTEX_SUPPORT 1 //是否支持互斥锁
 
-#define WIND_SEM_SUPPORT 0 //是否支持信号量
+#define WIND_SEM_SUPPORT 1 //是否支持信号量
 
-#define WIND_PIPE_SUPPORT 0  //是否支持管道机制
+#define WIND_PIPE_SUPPORT 1  //是否支持管道机制
 
-#define WIND_MSGBOX_SUPPORT 0  //是否支持消息机制
+#define WIND_MSGBOX_SUPPORT 1  //是否支持消息机制
 
 #define WIND_REALTIME_CORE_SUPPORT 1 //是否支持实时内核，即抢占式切换
 
-#define WIND_STKPOOL_SUPPORT 0 //是否支持线程堆栈通过内存池分配
+#define WIND_STKPOOL_SUPPORT 1 //是否支持线程堆栈通过内存池分配
 
-#define WIND_DAEMON_THREAD_SUPPORT 0    //是否支持守护线程
+#define WIND_DAEMON_THREAD_SUPPORT 1    //是否支持守护线程
 
-#define WIND_STATI_THREAD_SUPPORT 0    //是否支持统计线程
+#define WIND_STATI_THREAD_SUPPORT 1    //是否支持统计线程
 
 #define WIND_STACK_SUPPORT 1   //是否支持堆栈
 
-#define WIND_TIMER_SUPPORT 0  //是否支持软件定时器
+#define WIND_TIMER_SUPPORT 1  //是否支持软件定时器
 
 #define WIND_RTC_SUPPORT 0  //是否支持实时时间
 
-#define WIND_CONSOLE_SUPPORT 0 //是否支持控制台模块
+#define WIND_CONSOLE_SUPPORT 1 //是否支持控制台模块
 
 #define WIND_DEBUG_SUPPORT 1 //是否支持调试输出模块
 
 #define WIND_SOFTINT_SUPPORT 0 //是否支持软中断功能
 
-#define WIND_HEAP_SUPPORT 0   //是否支持内存堆的分配
+#define WIND_HEAP_SUPPORT 1   //是否支持内存堆的分配
 
-#define WIND_PRIVATE_HEAP_SUPPORT 0  //是否支持线程的私有堆的分配
+#define WIND_PRIVATE_HEAP_SUPPORT 1  //是否支持线程的私有堆的分配
 
-#define WIND_THREAD_CALLBACK_SUPPORT 0  //是否支持线程事件毁回调函数
+#define WIND_THREAD_CALLBACK_SUPPORT 1  //是否支持线程事件毁回调函数
 
-#define WIND_DRVFRAME_SUPPORT 0  //是否字符驱动框架
+#define WIND_DRVFRAME_SUPPORT 1  //是否字符驱动框架
 
-#define WIND_BLK_DRVFRAME_SUPPORT 0  //是否块驱动框架
+#define WIND_BLK_DRVFRAME_SUPPORT 1  //是否块驱动框架
 
 #define WIND_FS_SUPPORT 1 //是否支持内存文件系统
 

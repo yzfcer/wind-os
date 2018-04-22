@@ -1238,16 +1238,6 @@
               <FilePath>..\..\..\..\..\src\lib\RBTree.h</FilePath>
             </File>
             <File>
-              <FileName>wind_comman.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\lib\wind_comman.c</FilePath>
-            </File>
-            <File>
-              <FileName>wind_comman.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\lib\wind_comman.h</FilePath>
-            </File>
-            <File>
               <FileName>wind_heap.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\lib\wind_heap.c</FilePath>

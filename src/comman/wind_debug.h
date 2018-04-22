@@ -25,6 +25,7 @@
 
 #ifndef WIND_DEBUG_H__
 #define WIND_DEBUG_H__
+#include "wind_config.h"
 #include "wind_type.h"
 #ifdef __cplusplus
 extern "C" {
