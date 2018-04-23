@@ -63,7 +63,7 @@ void wind_close_interrupt(void)
 //堆可自由分配的内存空间进行初始化
 void wind_heaps_init(void)
 {
-    wind_heap_create("heap0",HEAP1_HEAD,HEAD1_LENTH);
+    wind_heap_create("heap0",HEAP1_HEAD,HEAD1_LENTH,0);
     wind_heap_print();
     wind_heapitem_print(&g_core.heaplist);
 }

@@ -37,14 +37,18 @@ extern "C" {
 #if WIND_HEAP_SUPPORT > 0
 
 
+#define WIND_HEAP_MIN_SIZE    256
 #define WIND_HEAP_MINIALLOC    12
 #define WIND_HEAP_ALIGN_SIZE 4
-#define WIND_HEAP_MAGIC        0xa5e8749c
+#define WIND_HEAP_MAGIC        0xa5e87490
 #define WIND_HEAPITEM_MAGIC    0x1ea01ea0
 #define WIND_HEAP_MASK         0xfffffffe
-#define WIND_HEAP_USED         0x05
+
+#define WIND_HEAP_USED         0x01
+#define WIND_HEAP_PRIVATE      0x01
 
 #define HEAP_IS_USED(h)   ((h)->magic & WIND_HEAP_USED)
+#define HEAP_IS_PRIVATE(h)   ((h)->magic & WIND_HEAP_PRIVATE)
 
 #define __ALIGN_R(size,N) ((size + N - 1) / N *N)
 #define __ALIGN_L(size,N) ((size - N + 1) / N *N)
@@ -67,7 +71,7 @@ typedef struct __heap_s heap_s;
 struct __heapitem_s
 {
     w_uint32_t magic;
-    heap_s *pheap;
+    heap_s *heap;
     prinode_s itemnode;
     w_int32_t size;
 };
@@ -89,8 +93,8 @@ struct __heap_s
 
 heap_s *wind_heap_get(const char *name);
 
-w_err_t wind_heap_create(const char *name,
-             w_addr_t base,w_uint32_t size);
+heap_s *wind_heap_create(const char *name,
+             w_addr_t base,w_uint32_t size,w_uint32_t flag);
 
 w_err_t wind_heap_destroy(w_addr_t base);
 
