@@ -1303,16 +1303,6 @@
               <FilePath>..\..\..\..\..\src\core\wind_core.h</FilePath>
             </File>
             <File>
-              <FileName>wind_core_inc.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\core\wind_core_inc.h</FilePath>
-            </File>
-            <File>
-              <FileName>wind_flag.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\core\wind_flag.h</FilePath>
-            </File>
-            <File>
               <FileName>wind_pipe.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\core\wind_pipe.c</FilePath>
@@ -1331,16 +1321,6 @@
               <FileName>wind_sem.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\..\..\..\src\core\wind_sem.h</FilePath>
-            </File>
-            <File>
-              <FileName>wind_softint.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\core\wind_softint.c</FilePath>
-            </File>
-            <File>
-              <FileName>wind_softint.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\core\wind_softint.h</FilePath>
             </File>
             <File>
               <FileName>wind_thread.c</FileName>
@@ -1431,6 +1411,16 @@
               <FileName>wind_heap.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\..\..\..\src\core\wind_heap.h</FilePath>
+            </File>
+            <File>
+              <FileName>wind_softirq.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\core\wind_softirq.c</FilePath>
+            </File>
+            <File>
+              <FileName>wind_softirq.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\core\wind_softirq.h</FilePath>
             </File>
           </Files>
         </Group>

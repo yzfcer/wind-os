@@ -1,7 +1,7 @@
 #include "wind_type.h"
 #include "wind_var.h"
 #include "wind_thread.h"
-#include "wind_softint.h"
+#include "wind_softirq.h"
 #include "wind_heap.h"
 #include "wind_dev.h"
 #include "wind_blkdev.h"
@@ -52,8 +52,8 @@ static w_err_t init_thread(w_int32_t argc,w_int8_t **argv)
     wind_notice("create sys thread:");
     create_idle_thread();
     set_idle_cnt();
-#if WIND_SOFTINT_SUPPORT
-    wind_create_softint_thread();
+#if WIND_SOFTIRQ_SUPPORT
+    wind_create_softirq_thread();
 #endif
 #if WIND_TIMER_SUPPORT
     create_timer_thread();

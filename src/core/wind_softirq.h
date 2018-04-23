@@ -4,7 +4,7 @@
 **                                       yzfcer@163.com
 **
 **--------------文件信息--------------------------------------------------------------------------------
-**文   件   名: wind_softint.h / wind_softint.c
+**文   件   名: wind_softirq.h / wind_softirq.c
 **创   建   人: 周江村
 **最后修改日期: 
 **描        述: 用于实现系统的软中断的功能，软中断主要是提供一种在高优先级运行的任务模式，在该模块执行
@@ -33,14 +33,14 @@
 extern "C" {
 #endif
 
-#if WIND_SOFTINT_SUPPORT
-typedef void (*softint_func)(void);
+#if WIND_SOFTIRQ_SUPPORT
+typedef void (*softirq_fn)(void);
 
-void wind_softint_init(void);
-w_handle_t wind_softint_reg(softint_func func);
-void wind_softint_trig(w_handle_t handler);
-w_err_t wind_create_softint_thread(void);
-w_err_t wind_softint_test(void);
+void wind_softirq_init(void);
+w_int32_t wind_softirq_reg(softirq_fn func);
+void wind_softirq_trig(w_int32_t handler);
+w_err_t wind_create_softirq_thread(void);
+w_err_t wind_softirq_test(void);
 
 
 #endif

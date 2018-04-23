@@ -55,7 +55,7 @@
 
 #define WIND_DEBUG_SUPPORT 1 //是否支持调试输出模块
 
-#define WIND_SOFTINT_SUPPORT 0 //是否支持软中断功能
+#define WIND_SOFTIRQ_SUPPORT 1 //是否支持软中断功能
 
 #define WIND_HEAP_SUPPORT 1   //是否支持内存堆的分配
 

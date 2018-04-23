@@ -27,7 +27,7 @@
 #include "wind_debug.h"
 #include "wind_string.h"
 #include "wind_thread.h"
-#include "wind_softint.h"
+#include "wind_softirq.h"
 #include "wind_heap.h"
 #include "cut.h"
 
@@ -35,17 +35,6 @@
 #include "test_framework.h"
 
 #if WIND_CONSOLE_SUPPORT
-w_err_t cmd_testsoftint_main(w_int32_t argc,char **argv)
-{
-#if WIND_SOFTINT_SUPPORT
-    if(0 == wind_strcmp(argv[0],"softint"))
-    {
-        wind_softint_test();
-        return ERR_OK;
-    }
-#endif
-    return ERR_OK;
-}
 
 w_err_t cmd_testheap_main(w_int32_t argc,char **argv)
 {
@@ -74,11 +63,7 @@ COMMAND_USAGE(test)
 
 COMMAND_MAIN(test,argc,argv)
 {
-    if(0 == wind_strcmp(argv[1],"softint"))
-    {
-        return cmd_testsoftint_main(argc,argv);
-    }
-    else if(0 == wind_strcmp(argv[1],"heap"))
+    if(0 == wind_strcmp(argv[1],"heap"))
     {
         return cmd_testheap_main(argc,argv);
     }

@@ -30,7 +30,7 @@
 #include "wind_version.h"
 #include "wind_thread.h"
 #include "wind_core.h"
-#include "wind_softint.h"
+#include "wind_softirq.h"
 #include "wind_var.h"
 #include "wind_time.h"
 #include "wind_std.h"
