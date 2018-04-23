@@ -21,5 +21,6 @@ w_err_t create_idle_thread(void)
     thread = wind_thread_create("idle",PRIO_LOW,idle_thread,
                     0,NULL,idlestk,IDLE_STK_SIZE);
     WIND_ASSERT_RETURN(thread != NULL,ERR_COMMAN);
+    wind_thread_changeprio(thread,32767);
     return ERR_OK;
 }

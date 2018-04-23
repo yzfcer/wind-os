@@ -234,14 +234,16 @@ thread_s *wind_thread_create(const w_int8_t *name,
 #if WIND_HEAP_SUPPORT && WIND_PRIVATE_HEAP_SUPPORT
     thread->private_heap = NULL;
 #endif
-    
+    wind_close_interrupt();
     dlist_insert_prio(&g_core.threadlist,&thread->validthr,thread->prio);
+    wind_open_interrupt();
     wind_debug("create thread info");
     wind_debug("thread->name:%s",thread->name);
     wind_debug("thread->stack:0x%x",thread->stack);
     wind_debug("thread->runstat:%d",thread->runstat);
     wind_debug("thread->prio:%d",thread->prio);
     wind_debug("thread->stksize:%d\r\n",thread->stksize);
+    wind_thread_print(&g_core.threadlist);
     return thread;
 }
 
@@ -472,8 +474,6 @@ w_err_t wind_thread_print(dlist_s *list)
     thread_s *thread;
     char *stat;
     WIND_ASSERT_RETURN(list != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(list->head != NULL,ERR_NULL_POINTER);
-    //pnode = list->head;
     wind_printf("\r\n\r\nthread list as following:\r\n");
     wind_printf("----------------------------------------------\r\n");
     wind_printf("%-16s %-8s %-10s %-10s\r\n","thread","prio","state","stacksize");

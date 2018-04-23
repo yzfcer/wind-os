@@ -192,7 +192,6 @@ w_err_t wind_dev_print(dlist_s *list)
     dev_s *dev;
     int cnt = 0;
     WIND_ASSERT_RETURN(list != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(list->head != NULL,ERR_NULL_POINTER);
     wind_printf("\r\ndev list as following:\r\n");
     
     foreach_node(dnode,list)

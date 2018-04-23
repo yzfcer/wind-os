@@ -225,7 +225,6 @@ w_err_t wind_sem_print(dlist_s *list)
     dnode_s *dnode;
     sem_s *sem;
     WIND_ASSERT_RETURN(list != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(list->head != NULL,ERR_NULL_POINTER);
     wind_printf("\r\n\r\nsem list as following:\r\n");
     wind_printf("----------------------------------------------\r\n");
     wind_printf("%-16s %-8s %-10s\r\n","sem","sem_tot","sem_num");

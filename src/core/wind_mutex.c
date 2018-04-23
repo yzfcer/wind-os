@@ -198,7 +198,6 @@ w_err_t wind_mutex_print(dlist_s *list)
     dnode_s *dnode;
     mutex_s *mutex;
     WIND_ASSERT_RETURN(list != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(list->head != NULL,ERR_NULL_POINTER);
     wind_printf("\r\n\r\nmutex list as following:\r\n");
     wind_printf("--------------------------------------\r\n");
     wind_printf("%-16s %-8s\r\n","mutex","status");

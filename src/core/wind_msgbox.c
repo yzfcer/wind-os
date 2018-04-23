@@ -250,10 +250,9 @@ w_err_t wind_msgbox_print(dlist_s *list)
     dnode_s *dnode;
     msgbox_s *msgbox;
     WIND_ASSERT_RETURN(list != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(list->head != NULL,ERR_NULL_POINTER);
     wind_printf("\r\n\r\nmsgbox list as following:\r\n");
     wind_printf("----------------------------------------------\r\n");
-    wind_printf("%-16s %-8s %-10s\r\n","msgbox","msg_num");
+    wind_printf("%-16s %-8s\r\n","msgbox","msg_num");
     wind_printf("----------------------------------------------\r\n");
 
     foreach_node(dnode,list)

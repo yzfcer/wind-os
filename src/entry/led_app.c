@@ -1,7 +1,7 @@
 #include "led.h"
 #include "wind_timer.h"
 #include "wind_dev.h"
-#if (WIND_TIMER_SUPPORT && WIND_DEV_SUPPORT)
+#if (WIND_TIMER_SUPPORT && WIND_DRVFRAME_SUPPORT)
 timer_s *ledtmr = NULL;
 void led0_timer(void *arg)
 {
@@ -30,10 +30,7 @@ void led_start(void)
     dev_s *dev;
     dev = wind_dev_get("led0");
     wind_dev_open(dev);
-    ledtmr = wind_timer_create("led0tmr",50,led0_timer,NULL,B_TRUE);
-    //wind_timer_create(500,led1_timer,NULL,B_TRUE);
-    //wind_timer_create(600,led2_timer,NULL,B_TRUE);
-
+    ledtmr = wind_timer_create("led0tmr",100,led0_timer,NULL,B_TRUE);
 }
 #else
 void led_start(void) {}
