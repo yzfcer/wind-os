@@ -27,6 +27,7 @@
 #include <stdarg.h>
 #include "wind_type.h"
 #include "wind_debug.h"
+#include "wind_core.h"
 #if WIND_DEBUG_SUPPORT
 #ifdef _USE_USER_PRINT
 #include "wind_std.h"

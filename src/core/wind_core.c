@@ -66,6 +66,28 @@ void wind_enable_switch(void)
         gwind_core_cnt --;
 }
 
+//SREG，CPU状态寄存器对应的数据位宽，当关闭中断时需要保存这个寄存器
+typedef unsigned int sreg_t;
+extern sreg_t  wind_save_sr(void);
+extern void   wind_restore_sr(sreg_t cpu_sr);
+static sreg_t ssr[32];
+static w_int32_t sreg_idx = 0;
+void wind_close_interrupt(void)
+{
+    sreg_t cpu_sr;
+    cpu_sr = wind_save_sr();
+    ssr[sreg_idx++] = cpu_sr;
+}
+
+void wind_open_interrupt(void)
+{
+    sreg_t cpu_sr;
+    if(sreg_idx > 0)
+        sreg_idx --;
+    cpu_sr = ssr[sreg_idx];
+    wind_restore_sr(cpu_sr);
+}
+
 void wind_enter_irq(void)
 {
     if(RUN_FLAG == B_FALSE)

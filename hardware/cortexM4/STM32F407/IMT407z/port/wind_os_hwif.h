@@ -37,9 +37,6 @@ void wind_system_reset(void);
 void wind_heaps_init(void);
 #endif
 
-void wind_close_interrupt(void);
-void wind_open_interrupt(void);
-
 typedef  void (*thread_run_f)(void *pargs);
 //线程堆栈的初始化入口，移植需要重新实现
 w_pstack_t wind_stk_init(thread_run_f pfunc,void *pdata, w_pstack_t pstkbt);

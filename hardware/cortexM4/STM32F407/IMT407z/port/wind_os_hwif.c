@@ -41,18 +41,6 @@ void wind_system_reset(void)
 }
 
 
-//SREG，CPU状态寄存器对应的数据位宽，当关闭中断时需要保存这个寄存器
-typedef unsigned int sreg_t;
-extern sreg_t  wind_save_sr(void);
-extern void   wind_restore_sr(sreg_t cpu_sr);
-static sreg_t ssr[100];
-static w_int32_t sreg_idx = 0;
-void wind_close_interrupt(void)
-{
-    sreg_t cpu_sr;
-    cpu_sr = wind_save_sr();
-    ssr[sreg_idx++] = cpu_sr;
-}
 
 #if WIND_HEAP_SUPPORT
 #include "wind_heap.h"
@@ -70,14 +58,7 @@ void wind_heaps_init(void)
 
 #endif
 
-void wind_open_interrupt(void)
-{
-    sreg_t cpu_sr;
-    if(sreg_idx > 0)
-        sreg_idx --;
-    cpu_sr = ssr[sreg_idx];
-    wind_restore_sr(cpu_sr);
-}
+
 
 
 w_pstack_t wind_stk_init(thread_run_f pfunc,void *pdata, w_pstack_t pstkbt)

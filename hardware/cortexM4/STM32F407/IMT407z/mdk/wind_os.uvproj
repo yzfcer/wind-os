@@ -1238,16 +1238,6 @@
               <FilePath>..\..\..\..\..\src\lib\RBTree.h</FilePath>
             </File>
             <File>
-              <FileName>wind_heap.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\lib\wind_heap.c</FilePath>
-            </File>
-            <File>
-              <FileName>wind_heap.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\lib\wind_heap.h</FilePath>
-            </File>
-            <File>
               <FileName>wind_rtc.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\lib\wind_rtc.c</FilePath>
@@ -1431,6 +1421,16 @@
               <FileName>wind_pool.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\..\..\..\src\core\wind_pool.h</FilePath>
+            </File>
+            <File>
+              <FileName>wind_heap.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\core\wind_heap.c</FilePath>
+            </File>
+            <File>
+              <FileName>wind_heap.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\core\wind_heap.h</FilePath>
             </File>
           </Files>
         </Group>
