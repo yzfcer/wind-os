@@ -29,8 +29,12 @@
 并转到新的线程中执行用户程序。同时这个程序不需要死循环，可以退出，但新线程如果在退出时
 没有创建，则用户程序将不会再次被执行到。因为wind_main函数只会被系统调用一次
 */
-#include "wind_core_inc.h"
+
 #include "beep.h"
+#include "wind_debug.h"
+#include "wind_sem.h"
+#include "wind_mutex.h"
+#include "wind_pipe.h"
 extern led_start(void);
 #if WIND_PIPE_SUPPORT
 w_uint8_t pipebuff[128];
@@ -40,18 +44,6 @@ w_uint8_t pipebuff[128];
 
 w_err_t wind_main(void)
 {
-#if WIND_SEM_SUPPORT
-    sem_s *psem = wind_sem_create("sem1",12);
-    sem_s *psem1 = wind_sem_create("sem2",4);
-    sem_s *psem2 = wind_sem_create("sem3",6);
-#endif
-#if WIND_MUTEX_SUPPORT
-    mutex_s *mutex1 = wind_mutex_create("mutex1");
-    mutex_s *mutex2 = wind_mutex_create("mutex2");
-#endif
-#if WIND_PIPE_SUPPORT
-    pipe_s *pipe = wind_pipe_create("pipe1",pipebuff,sizeof(pipebuff));
-#endif
     wind_notice("enter wind main.");
     led_start();
     BEEP_Init();
