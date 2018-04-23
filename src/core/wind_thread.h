@@ -153,9 +153,9 @@ w_err_t wind_thread_killbyname(w_int8_t *name);
 w_bool_t  wind_thread_isopen(void);
 thread_s *wind_thread_get(const char *name);
 thread_s *wind_thread_get_byname(w_int8_t *name);
-w_int8_t* wind_thread_curname(void);
+w_int8_t *wind_thread_curname(void);
 thread_s *wind_thread_current(void);
-w_int8_t* wind_thread_status(thread_stat_e stat);
+w_int8_t *wind_thread_status(thread_stat_e stat);
 
 w_err_t wind_thread_sleep(w_uint32_t ms);
 w_err_t wind_thread_wakeup(void);

@@ -145,7 +145,7 @@ thread_s *wind_thread_current()
     return THREAD_FROM_MEMBER(gwind_cur_stack,thread_s,stack);
 }
 
-w_int8_t* wind_thread_status(thread_stat_e stat)
+w_int8_t *wind_thread_status(thread_stat_e stat)
 {
     switch(stat)
     {

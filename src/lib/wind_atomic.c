@@ -23,7 +23,7 @@
 /*********************************************头文件定义***********************************************/
 #include "wind_config.h"
 #include "wind_type.h"
-#include "wind_os_hwif.h"
+#include "wind_core.h"
 #include "wind_atomic.h"
 #ifdef __cplusplus
 extern "C" {

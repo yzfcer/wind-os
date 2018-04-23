@@ -19,9 +19,9 @@
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
 #include "cut.h"
-#include "wind_core_inc.h"
 #include "wind_tree.h"
 #include "wind_pool.h"
+#include "wind_string.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
