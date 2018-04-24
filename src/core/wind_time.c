@@ -47,7 +47,7 @@ w_uint32_t wind_get_time_count(void)
 void wind_tick_callback(void)
 {
     TICKS_CNT ++;//更新tick计数器
-    wind_thread_wakeup();
+    _wind_thread_wakeup();
 }
 
 void wind_tick_isr(void)

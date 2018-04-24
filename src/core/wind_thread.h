@@ -117,16 +117,15 @@ struct _thread_s
 #if WIND_THREAD_CALLBACK_SUPPORT
     threadcb_s cb;
 #endif
-
-#if WIND_HEAP_SUPPORT && WIND_PRIVATE_HEAP_SUPPORT
-    void *private_heap;
-#endif
 };
 
 
 
 w_err_t _wind_thread_init(void);
+w_err_t _wind_thread_wakeup(void);
 
+thread_s *wind_thread_get(const char *name);
+thread_s *wind_thread_current(void);
 thread_s *wind_thread_create(const w_int8_t *name,
                    prio_e priolevel,
                    w_err_t (*thread_func)(w_int32_t argc,w_int8_t **argv),
@@ -142,23 +141,21 @@ thread_s *wind_thread_create_default(const w_int8_t *name,
 #else 
 #define wind_thread_create_default(n,f,c,v) ERR_COMMAN
 #endif
-w_err_t wind_thread_changeprio(thread_s *thread,w_int16_t prio);
+
+
+w_err_t wind_thread_set_priority(thread_s *thread,w_int16_t prio);
 w_err_t wind_thread_start(thread_s *thread);
 w_err_t wind_thread_suspend(thread_s *thread);
 w_err_t wind_thread_resume(thread_s *thread);
 w_err_t wind_thread_kill(thread_s *thread);
-w_err_t wind_thread_killbyname(w_int8_t *name);
+w_err_t wind_thread_kill_byname(w_int8_t *name);
 
 
 w_bool_t  wind_thread_isopen(void);
-thread_s *wind_thread_get(const char *name);
-thread_s *wind_thread_get_byname(w_int8_t *name);
-w_int8_t *wind_thread_curname(void);
-thread_s *wind_thread_current(void);
+char *wind_thread_curname(void);
 w_int8_t *wind_thread_status(thread_stat_e stat);
 
 w_err_t wind_thread_sleep(w_uint32_t ms);
-w_err_t wind_thread_wakeup(void);
 w_err_t wind_thread_exit(w_err_t exitcode);
 
 w_err_t wind_thread_print(dlist_s *list);

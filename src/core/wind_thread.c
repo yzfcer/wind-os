@@ -80,12 +80,6 @@ w_err_t wind_thread_distroy(thread_s *thread)
     wind_notice("distroy thread:%s",thread->name);
     wind_close_interrupt();
     //这里需要先释放一些与这个线程相关的一些东西后才能释放这个thread
-#if WIND_HEAP_SUPPORT && WIND_PRIVATE_HEAP_SUPPORT
-    if(thread->private_heap != NULL)
-    {
-        wind_free(thread->private_heap);
-    }
-#endif
 #if WIND_STKPOOL_SUPPORT
     wind_pool_free(stkbufpool,thread->stack_top);
 #endif
@@ -162,27 +156,6 @@ w_int8_t *wind_thread_status(thread_stat_e stat)
     }
 }
 
-//这个函数不一定能找到实际的线程，因为无法保证所有的线程的线程名都不一样。
-thread_s *wind_thread_get_byname(w_int8_t *name)
-{
-    thread_s *thread = NULL;
-    dnode_s *pdnode;
-    WIND_ASSERT_RETURN(name != NULL,NULL);
-    wind_close_interrupt();
-    foreach_node(pdnode,&g_core.threadlist)
-    {
-        thread = PRI_DLIST_OBJ(pdnode,thread_s,validthr);
-        if(wind_strcmp(thread->name,name) == 0)
-        {
-            wind_open_interrupt();
-            return thread;
-        }
-    }
-    wind_open_interrupt();
-    wind_warn("can not find thread:%s",name);
-    return NULL;
-}
-
 
 w_int8_t *wind_thread_curname(void)
 {
@@ -231,8 +204,8 @@ thread_s *wind_thread_create(const w_int8_t *name,
     thread->runstat = THREAD_STATUS_READY;
     thread->cause = CAUSE_COM;
     thread->sleep_ticks = 0;
-#if WIND_HEAP_SUPPORT && WIND_PRIVATE_HEAP_SUPPORT
-    thread->private_heap = NULL;
+#if WIND_THREAD_CALLBACK_SUPPORT
+    wind_memset(&thread->cb,0,sizeof(thread->cb));
 #endif
     wind_close_interrupt();
     dlist_insert_prio(&g_core.threadlist,&thread->validthr,thread->prio);
@@ -264,10 +237,9 @@ thread_s *wind_thread_create_default(const w_int8_t *name,
 }
 #endif
 
-w_err_t wind_thread_changeprio(thread_s *thread,w_int16_t prio)
+w_err_t wind_thread_set_priority(thread_s *thread,w_int16_t prio)
 {
     dnode_s *node;
-    
     w_int16_t minlim = 0,maxlim = 32767;
     WIND_ASSERT_RETURN(thread != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN((prio >= minlim) && (prio <= maxlim),ERR_PARAM_OVERFLOW);
@@ -355,12 +327,12 @@ w_err_t wind_thread_kill(thread_s *thread)
 
 
 //根据线程的名称来销毁线程
-w_err_t wind_thread_killbyname(w_int8_t *name)
+w_err_t wind_thread_kill_byname(w_int8_t *name)
 {
     w_err_t err;
     thread_s *thread;
     WIND_ASSERT_RETURN(name != NULL,ERR_NULL_POINTER);
-    thread = wind_thread_get_byname(name);
+    thread = wind_thread_get(name);
     WIND_ASSERT_RETURN(thread != NULL,ERR_NULL_POINTER);
     err = wind_thread_kill(thread);
     return err;
@@ -411,7 +383,7 @@ w_err_t wind_thread_sleep(w_uint32_t ms)
     return ERR_OK;
 }
 
-w_err_t wind_thread_wakeup(void)
+w_err_t _wind_thread_wakeup(void)
 {
     dnode_s *pnode;
     thread_s *thread;

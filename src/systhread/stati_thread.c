@@ -7,7 +7,6 @@
 static w_stack_t statisstk[STATI_STK_SIZE];
 static w_err_t stati_thread(w_int32_t argc,w_int8_t **argv)
 {
-    
     w_uint32_t statcnt = 0;
     w_uint32_t stati_ms = 1000;
     while(1)
@@ -19,7 +18,6 @@ static w_err_t stati_thread(w_int32_t argc,w_int8_t **argv)
         if(WIND_CPU_USAGE > 100)
             WIND_CPU_USAGE = 0;
     }
-
 }
 
 w_err_t _create_stati_thread(void)
@@ -28,6 +26,7 @@ w_err_t _create_stati_thread(void)
     thread = wind_thread_create("statistics",PRIO_HIGH,stati_thread,
                      0,NULL,statisstk,STATI_STK_SIZE);
     WIND_ASSERT_RETURN(thread != NULL,ERR_COMMAN);
+    wind_thread_set_priority(thread,5);
     return ERR_OK;
 }
 #endif

@@ -121,7 +121,7 @@ static w_err_t display_stack(char **argv)
     {
         return ERR_COMMAN;
     }
-    thr = wind_thread_get_byname(argv[2]);
+    thr = wind_thread_get(argv[2]);
     if(thr == NULL)
     {
         return ERR_COMMAN;

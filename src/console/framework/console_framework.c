@@ -485,7 +485,7 @@ w_err_t _create_console_thread(void)
     thread = wind_thread_create("console",PRIO_LOW,console_thread,
                0,NULL,ctrlstk,CTRL_STK_SIZE);
     WIND_ASSERT_RETURN(thread != NULL,ERR_COMMAN);
-    wind_thread_changeprio(thread,32760);
+    wind_thread_set_priority(thread,32760);
     return ERR_OK;
 }
 

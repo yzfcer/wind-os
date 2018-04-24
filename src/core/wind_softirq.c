@@ -120,7 +120,8 @@ w_err_t _wind_create_softirq_thread(void)
     wind_notice("create soft interrupt thread.");
     softirq_thread = wind_thread_create("softirq",PRIO_HIGH,wind_softirq_thread,
                 0,NULL,softirq_stk,WIND_SOFTINT_STK_LEN);
-                wind_thread_changeprio(softirq_thread,0);
+    WIND_ASSERT_RETURN(softirq_thread != NULL,ERR_COMMAN);
+    wind_thread_set_priority(softirq_thread,1);
     return ERR_OK;
 }
 

@@ -59,8 +59,6 @@
 
 #define WIND_HEAP_SUPPORT 1   //是否支持内存堆的分配
 
-#define WIND_PRIVATE_HEAP_SUPPORT 1  //是否支持线程的私有堆的分配
-
 #define WIND_THREAD_CALLBACK_SUPPORT 1  //是否支持线程事件毁回调函数
 
 #define WIND_DRVFRAME_SUPPORT 1  //是否字符驱动框架
