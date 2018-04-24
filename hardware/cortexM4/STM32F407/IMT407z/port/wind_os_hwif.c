@@ -49,7 +49,7 @@ void wind_system_reset(void)
 #define HEAD1_LENTH (64*1024)
 
 //堆可自由分配的内存空间进行初始化
-void wind_heaps_init(void)
+void _wind_heaps_init(void)
 {
     wind_heap_create("heap0",HEAP1_HEAD,HEAD1_LENTH,0);
     wind_heap_print();

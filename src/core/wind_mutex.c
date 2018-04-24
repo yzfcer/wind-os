@@ -37,7 +37,7 @@
 
 #if WIND_MUTEX_SUPPORT
 #define WIND_MUTEX_MAGIC 0x37AD490F
-static WIND_MPOOL(mutexpool,WIND_MUTEX_MAX_NUM,sizeof(mutex_s));
+static WIND_POOL(mutexpool,WIND_MUTEX_MAX_NUM,sizeof(mutex_s));
 
 static __INLINE__ mutex_s *mutex_malloc(void)
 {

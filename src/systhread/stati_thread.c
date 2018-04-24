@@ -22,7 +22,7 @@ static w_err_t stati_thread(w_int32_t argc,w_int8_t **argv)
 
 }
 
-w_err_t create_stati_thread(void)
+w_err_t _create_stati_thread(void)
 {
     thread_s *thread;
     thread = wind_thread_create("statistics",PRIO_HIGH,stati_thread,

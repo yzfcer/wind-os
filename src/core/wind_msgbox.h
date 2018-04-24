@@ -57,12 +57,9 @@ typedef struct __msgbox_s
 
 #define GET_MSG(nodeptr,msgtype,msgnode) (void*)(((char*)(nodeptr))-((w_uint32_t)&(((msgtype*)0)->msgnode)))
 
-w_err_t _wind_msgbox_init(void);
-
 void wind_msg_init(msg_s *msg,w_uint16_t msg_id,w_uint16_t msg_len,void *msg_arg);
-
+w_err_t _wind_msgbox_init(void);
 msgbox_s *wind_msgbox_get(const char *name);
-
 msgbox_s *wind_msgbox_create(const char *name,thread_s *owner);
 w_err_t wind_msgbox_destroy(msgbox_s *msgbox);
 

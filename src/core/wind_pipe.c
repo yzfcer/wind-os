@@ -34,7 +34,7 @@
 
 #if (WIND_PIPE_SUPPORT)
 
-static WIND_MPOOL(pipepool,WIND_PIPE_MAX_NUM,sizeof(pipe_s));
+static WIND_POOL(pipepool,WIND_PIPE_MAX_NUM,sizeof(pipe_s));
 //********************************************internal functions******************************
 
 static __INLINE__ pipe_s *pipe_malloc(void)

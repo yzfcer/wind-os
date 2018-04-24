@@ -107,7 +107,7 @@ static w_bool_t is_switch_enable(void)
 
 static thread_s *wind_search_highthread(void)
 {
-    dnode_s *pnode;
+    dnode_s *node;
     thread_s *thread = NULL;
     wind_close_interrupt();
     if(gwind_core_cnt > 0)
@@ -116,9 +116,9 @@ static thread_s *wind_search_highthread(void)
         wind_open_interrupt();
         return thread;
     }
-    foreach_node(pnode,&g_core.threadlist)
+    foreach_node(node,&g_core.threadlist)
     {
-        thread = PRI_DLIST_OBJ(pnode,thread_s,validthr);
+        thread = PRI_DLIST_OBJ(node,thread_s,validthr);
         if(thread->runstat == THREAD_STATUS_READY)
         {
             wind_open_interrupt();
@@ -132,7 +132,7 @@ static thread_s *wind_search_highthread(void)
 
 void wind_exit_irq(void)
 {
-    thread_s *pthr;
+    thread_s *thread;
     if(RUN_FLAG == B_FALSE)
     {
         wind_error("exit not rd %d",RUN_FLAG);
@@ -143,8 +143,8 @@ void wind_exit_irq(void)
         gwind_int_cnt --;
     if((gwind_int_cnt == 0) && is_switch_enable())
     {
-        pthr = wind_search_highthread();
-        gwind_high_stack = &pthr->stack;
+        thread = wind_search_highthread();
+        gwind_high_stack = &thread->stack;
         if(gwind_high_stack != gwind_cur_stack)
         {
             wind_interrupt_switch();
@@ -157,9 +157,10 @@ void wind_exit_irq(void)
 //系统调度开始启动运行
 static void wind_run()
 {
-    thread_s *pthr;
-    pthr = wind_search_highthread();
-    gwind_high_stack = &pthr->stack;
+    thread_s *thread;
+    thread = wind_search_highthread();
+    wind_notice("wind multple thread mode.");
+    gwind_high_stack = &thread->stack;
     gwind_cur_stack = gwind_high_stack;
     wind_start_switch();
 }
@@ -169,7 +170,7 @@ static void wind_run()
 #if WIND_REALTIME_CORE_SUPPORT
 void _wind_thread_dispatch(void)
 {
-    thread_s *pthr;
+    thread_s *thread;
     if(RUN_FLAG == B_FALSE)
         return;
     wind_close_interrupt();
@@ -178,13 +179,13 @@ void _wind_thread_dispatch(void)
         wind_open_interrupt();
         return;
     }
-    pthr = wind_search_highthread();
-    if(pthr == wind_thread_current())
+    thread = wind_search_highthread();
+    if(thread == wind_thread_current())
     {
         wind_open_interrupt();
         return;
     }
-    gwind_high_stack = &pthr->stack;
+    gwind_high_stack = &thread->stack;
     if(gwind_high_stack != gwind_cur_stack)
     {
         wind_open_interrupt();
@@ -199,15 +200,13 @@ void _wind_thread_dispatch(void){}
 
 void _wind_switchto_thread(thread_s *thread)
 {
-    thread_s *pthr;
     wind_close_interrupt();
-    pthr = thread;
-    if(pthr == wind_thread_current())
+    if(thread == wind_thread_current())
     {
         wind_open_interrupt();
         return;
     }
-    gwind_high_stack = &pthr->stack;
+    gwind_high_stack = &thread->stack;
     if(gwind_high_stack != gwind_cur_stack)
     {
         wind_open_interrupt();
@@ -218,13 +217,13 @@ void _wind_switchto_thread(thread_s *thread)
 
 
 //操作系统初始化
-static void wind_init()
+static void _wind_init()
 {
     g_core.usrthren = B_FALSE;
     _wind_target_init();//目标机运行环境初始化
     _wind_std_init();//调试端口初始化
     
-    wind_print_os_info();
+    _wind_print_os_info();
     _wind_corevar_init();
     _wind_thread_init();
     _wind_mutex_init();
@@ -232,25 +231,24 @@ static void wind_init()
     _wind_msgbox_init();
     _wind_pipe_init();
     _wind_timer_init();
+    _wind_softirq_init();
     
     _wind_time_init();//时间初始化
 #if WIND_RTC_SUPPORT
     _wind_datetime_init();
 #endif
-    wind_notice("wind init complete!");
 }
 
 
 
 //****************************wind_entry***********************************************
-int create_init_thread(void);
+int _create_init_thread(void);
 
 static int wind_os_lunch(void)
 {
-    wind_init();
-    create_init_thread();
+    _wind_init();
+    _create_init_thread();
     _wind_thread_open();
-    wind_notice("wind multple thread mode.");
     wind_run();
     return ERR_OK;
 }

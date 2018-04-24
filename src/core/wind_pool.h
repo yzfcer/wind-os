@@ -65,8 +65,8 @@ struct __mpool_s
 };
 
 //定义内存池的方法
-#define WIND_MPOOL_ALIGN(size) (((size)+3) & (~0x03))
-#define WIND_MPOOL(pool,itemnum,itemsize) w_uint8_t pool[sizeof(pool_s) + itemnum *(WIND_MPOOL_ALIGN(itemsize) + sizeof(pool_item_s))+8]
+#define WIND_POOL_ALIGN(size) (((size)+3) & (~0x03))
+#define WIND_POOL(pool,itemnum,itemsize) w_uint8_t pool[sizeof(pool_s) + itemnum *(WIND_POOL_ALIGN(itemsize) + sizeof(pool_item_s))+8]
 pool_s *wind_pool_get(const char *name);
 
 w_err_t wind_pool_create(const char *name,void *mem,w_uint32_t memsize,w_uint32_t itemsize);

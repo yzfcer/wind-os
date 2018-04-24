@@ -52,9 +52,9 @@ static w_uint16_t get_prio(prio_e priolevel)
 }
 
 //********************************************internal functions******************************
-static WIND_MPOOL(threadpool,WIND_THREAD_MAX_NUM,sizeof(thread_s));
+static WIND_POOL(threadpool,WIND_THREAD_MAX_NUM,sizeof(thread_s));
 #if WIND_STKPOOL_SUPPORT
-WIND_MPOOL(stkbufpool,WIND_STK_MAX_NUM,WIND_STK_SIZE *sizeof(w_stack_t));
+WIND_POOL(stkbufpool,WIND_STK_MAX_NUM,WIND_STK_SIZE *sizeof(w_stack_t));
 #endif
 
 static __INLINE__ thread_s *thread_malloc(void)

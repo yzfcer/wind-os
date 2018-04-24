@@ -119,7 +119,7 @@ typedef struct __console_s
 
 //Êä³öÃüÁîÁĞ±í
 void wind_cmd_init(console_s *ctrl);
-w_err_t create_console_thread(void);
+w_err_t _create_console_thread(void);
 cmd_s *wind_cmd_get(const char *name);
 w_err_t wind_cmd_register(cmd_s *cmd,int cnt);
 w_err_t wind_cmd_print(void);

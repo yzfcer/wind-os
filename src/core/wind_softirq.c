@@ -44,7 +44,7 @@ static thread_s *softirq_thread = NULL;
 //static w_handle_t softirq_handle = -1;
 softirq_fn wind_soft_vectors[WIND_SOFTINT_MAX_NUM];
 //初始化软中断的一些相关参数
-void wind_softirq_init(void)
+void _wind_softirq_init(void)
 {
     wind_memset(softirq_stk,0,WIND_SOFTINT_STK_LEN *sizeof(w_stack_t));
 }
@@ -53,8 +53,8 @@ void wind_softirq_init(void)
 //向软中断模块注册一个中断向量响应函数
 w_int32_t wind_softirq_reg(softirq_fn func)
 {
+    w_int32_t i;
     w_int32_t irq_id = -1;
-    w_int16_t i;
     for(i = 0;i < WIND_SOFTINT_MAX_NUM;i ++)
     {
         if(wind_soft_vectors[i] == func)
@@ -115,7 +115,7 @@ static w_err_t wind_softirq_thread(w_int32_t argc,w_int8_t **argv)
 }
 
 //创建软件中断线程
-w_err_t wind_create_softirq_thread(void)
+w_err_t _wind_create_softirq_thread(void)
 {
     wind_notice("create soft interrupt thread.");
     softirq_thread = wind_thread_create("softirq",PRIO_HIGH,wind_softirq_thread,

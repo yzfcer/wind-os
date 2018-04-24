@@ -28,7 +28,7 @@ extern "C" {
 #define TSIZE 13
 
 
-WIND_MPOOL(test_pool,TNUM,TSIZE);
+WIND_POOL(test_pool,TNUM,TSIZE);
 void *testblk[TNUM+1];
 
 

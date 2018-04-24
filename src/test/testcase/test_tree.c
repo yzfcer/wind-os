@@ -34,7 +34,7 @@ typedef struct
     tree_s tree;
 }test_tree_s;
 
-WIND_MPOOL(test_tree,TREENUM,sizeof(test_tree_s));
+WIND_POOL(test_tree,TREENUM,sizeof(test_tree_s));
 test_tree_s *trees[TREENUM+1];
 
 

@@ -31,7 +31,7 @@
 #include "wind_core.h"
 #include "wind_string.h"
 #if WIND_TIMER_SUPPORT
-static WIND_MPOOL(timerpool,WIND_TIMER_MAX_NUM,sizeof(timer_s));
+static WIND_POOL(timerpool,WIND_TIMER_MAX_NUM,sizeof(timer_s));
 
 static __INLINE__ timer_s *timer_malloc(void)
 {

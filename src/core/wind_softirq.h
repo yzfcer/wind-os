@@ -36,13 +36,14 @@ extern "C" {
 #if WIND_SOFTIRQ_SUPPORT
 typedef void (*softirq_fn)(void);
 
-void wind_softirq_init(void);
+void _wind_softirq_init(void);
 w_int32_t wind_softirq_reg(softirq_fn func);
 void wind_softirq_trig(w_int32_t handler);
-w_err_t wind_create_softirq_thread(void);
+w_err_t _wind_create_softirq_thread(void);
 w_err_t wind_softirq_test(void);
 
-
+#else
+#define _wind_softirq_init() 
 #endif
 #ifdef __cplusplus
 }

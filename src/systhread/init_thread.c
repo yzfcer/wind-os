@@ -10,26 +10,33 @@
 
 void wind_tick_init(void);
 #if WIND_STATI_THREAD_SUPPORT
-void create_stati_thread(void);
+void _create_stati_thread(void);
 #else
-#define create_stati_thread()
+#define _create_stati_thread()
 #endif
+
 #if WIND_DAEMON_THREAD_SUPPORT
-void create_daemon_thread(void);
+void _create_daemon_thread(void);
 #else 
-#define create_daemon_thread()
+#define _create_daemon_thread()
 #endif
-void create_idle_thread(void);
+
+void _create_idle_thread(void);
+
 #if WIND_CONSOLE_SUPPORT
-w_err_t create_console_thread(void);
+w_err_t _create_console_thread(void);
 #else 
 #define create_console_thread() ERR_OK
 #endif
 
-void create_timer_thread(void);
+#if WIND_TIMER_SUPPORT
+w_err_t _create_timer_thread(void);
+#else 
+#define _create_timer_thread() ERR_OK
+#endif
 
 extern w_err_t wind_main(void);
-static w_stack_t mainstk[INIT_STK_SIZE];
+static w_stack_t initstk[INIT_STK_SIZE];
 
 static void set_idle_cnt(void)
 {
@@ -47,29 +54,28 @@ static w_err_t init_thread(w_int32_t argc,w_int8_t **argv)
     _wind_dev_init();
     _wind_blkdev_init();
 #if WIND_HEAP_SUPPORT
-    wind_heaps_init();
+    _wind_heaps_init();
 #endif
-    wind_notice("create sys thread:");
-    create_idle_thread();
+    _create_idle_thread();
     set_idle_cnt();
 #if WIND_SOFTIRQ_SUPPORT
-    wind_create_softirq_thread();
+    _wind_create_softirq_thread();
 #endif
 #if WIND_TIMER_SUPPORT
-    create_timer_thread();
+    _create_timer_thread();
 #endif
-    create_stati_thread();
-    create_daemon_thread();
-    create_console_thread();
+    _create_stati_thread();
+    _create_daemon_thread();
+    _create_console_thread();
     wind_main();
     return ERR_OK;
 }
 
-w_err_t create_init_thread(void)
+w_err_t _create_init_thread(void)
 {
     thread_s *thread;
     thread = wind_thread_create("init",PRIO_HIGH,init_thread,
-                        0,NULL,mainstk,INIT_STK_SIZE);
+                        0,NULL,initstk,INIT_STK_SIZE);
     WIND_ASSERT_RETURN(thread != NULL,ERR_COMMAN);
     return ERR_OK;
 }

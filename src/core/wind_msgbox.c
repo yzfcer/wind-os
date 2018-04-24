@@ -35,7 +35,7 @@
 
 #if WIND_MSGBOX_SUPPORT
 extern void _wind_thread_dispatch(void);
-WIND_MPOOL(msgboxpool,WIND_MBOX_MAX_NUM,sizeof(msgbox_s));
+WIND_POOL(msgboxpool,WIND_MBOX_MAX_NUM,sizeof(msgbox_s));
 
 static msgbox_s *msgbox_malloc(void)
 {

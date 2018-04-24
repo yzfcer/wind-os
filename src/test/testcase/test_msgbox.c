@@ -37,8 +37,8 @@ typedef struct
     int value;
 }test_msg_s;
 
-WIND_MPOOL(testmsg,6,sizeof(test_msg_s));
-WIND_MPOOL(testmsg_pool,4,sizeof(test_msg_s));
+WIND_POOL(testmsg,6,sizeof(test_msg_s));
+WIND_POOL(testmsg_pool,4,sizeof(test_msg_s));
 
 /********************************************内部函数定义*********************************************/
 

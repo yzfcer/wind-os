@@ -34,7 +34,7 @@
 #include "wind_string.h"
 #if WIND_SEM_SUPPORT
 extern void _wind_thread_dispatch(void);
-static WIND_MPOOL(sempool,WIND_SEM_MAX_NUM,sizeof(sem_s));
+static WIND_POOL(sempool,WIND_SEM_MAX_NUM,sizeof(sem_s));
 
 static __INLINE__ sem_s *sem_malloc(void)
 {
