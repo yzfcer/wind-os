@@ -50,7 +50,7 @@ w_err_t wind_dev_register(dev_s *dev,w_int32_t count)
             if(wind_strcmp(dev[i].name,devi->name) == 0)
             {
                 wind_error("device has been registered.\r\n");
-                wind_open_interrupt();
+                wind_enable_interrupt();
                 return ERR_COMMAN;
             }
         }
@@ -74,7 +74,7 @@ w_err_t wind_dev_unregister(dev_s *dev)
     if(dnode == NULL)
     {
         wind_error("device has NOT been registered.\r\n");
-        wind_open_interrupt();
+        wind_enable_interrupt();
         return ERR_COMMAN;
     }
     wind_mutex_destroy(dev->mutex);

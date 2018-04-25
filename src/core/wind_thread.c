@@ -78,13 +78,13 @@ w_err_t wind_thread_distroy(thread_s *thread)
 {
     WIND_ASSERT_RETURN(thread != NULL,ERR_NULL_POINTER);
     wind_notice("distroy thread:%s",thread->name);
-    wind_close_interrupt();
+    wind_disable_interrupt();
     //这里需要先释放一些与这个线程相关的一些东西后才能释放这个thread
 #if WIND_STKPOOL_SUPPORT
     wind_pool_free(stkbufpool,thread->stack_top);
 #endif
     thread_free(thread);
-    wind_open_interrupt();
+    wind_enable_interrupt();
     return ERR_OK;
 }
 
@@ -207,9 +207,9 @@ thread_s *wind_thread_create(const w_int8_t *name,
 #if WIND_THREAD_CALLBACK_SUPPORT
     wind_memset(&thread->cb,0,sizeof(thread->cb));
 #endif
-    wind_close_interrupt();
+    wind_disable_interrupt();
     dlist_insert_prio(&g_core.threadlist,&thread->validthr,thread->prio);
-    wind_open_interrupt();
+    wind_enable_interrupt();
     wind_debug("create thread info");
     wind_debug("thread->name:%s",thread->name);
     wind_debug("thread->stack:0x%x",thread->stack);
@@ -249,13 +249,13 @@ w_err_t wind_thread_set_priority(thread_s *thread,w_int16_t prio)
         maxlim = WIND_THREAD_PRIO_MAX_LIM;
     }
 
-    wind_close_interrupt();
+    wind_disable_interrupt();
     wind_debug("change prio %s:%d\r\n",thread->name,prio);
     node = &thread->validthr.node;
     dlist_remove(&g_core.threadlist,node);
     thread->prio = prio;
     dlist_insert_prio(&g_core.threadlist,&thread->validthr,prio);
-    wind_open_interrupt();
+    wind_enable_interrupt();
     return ERR_OK;
 }
 
@@ -263,14 +263,14 @@ w_err_t wind_thread_set_priority(thread_s *thread,w_int16_t prio)
 w_err_t wind_thread_start(thread_s *thread)
 {
     WIND_ASSERT_RETURN(thread != NULL,ERR_NULL_POINTER);
-    wind_close_interrupt();   
+    wind_disable_interrupt();   
 #if WIND_THREAD_CALLBACK_SUPPORT
     if(thread->cb.start != NULL)
         thread->cb.start(thread);
 #endif
     thread->runstat = THREAD_STATUS_READY;
     thread->cause = CAUSE_COM;
-    wind_open_interrupt();
+    wind_enable_interrupt();
 
     return ERR_OK;
 }
@@ -279,14 +279,14 @@ w_err_t wind_thread_start(thread_s *thread)
 w_err_t wind_thread_suspend(thread_s *thread)
 {
     WIND_ASSERT_RETURN(thread != NULL,ERR_NULL_POINTER);
-    wind_close_interrupt();
+    wind_disable_interrupt();
 #if WIND_THREAD_CALLBACK_SUPPORT
     if(thread->cb.suspend != NULL)
         thread->cb.suspend(thread);
 #endif
     thread->runstat = THREAD_STATUS_SUSPEND;
     thread->cause = CAUSE_COM;
-    wind_open_interrupt();
+    wind_enable_interrupt();
     return ERR_OK;
 }
 
@@ -295,14 +295,14 @@ w_err_t wind_thread_suspend(thread_s *thread)
 w_err_t wind_thread_resume(thread_s *thread)
 {
     WIND_ASSERT_RETURN(thread != NULL,ERR_NULL_POINTER);
-    wind_close_interrupt();
+    wind_disable_interrupt();
 #if WIND_THREAD_CALLBACK_SUPPORT
     if(thread->cb.resume != NULL)
         thread->cb.resume(thread);
 #endif
     thread->runstat = THREAD_STATUS_READY;
     thread->cause = CAUSE_COM;
-    wind_open_interrupt();
+    wind_enable_interrupt();
     return ERR_OK;
 }
 
@@ -311,7 +311,7 @@ w_err_t wind_thread_kill(thread_s *thread)
 {
     dnode_s *node;
     WIND_ASSERT_RETURN(thread != NULL,ERR_NULL_POINTER);
-    wind_close_interrupt();
+    wind_disable_interrupt();
     node = &thread->validthr.node;
     dlist_remove(&g_core.threadlist,node);
 #if WIND_THREAD_CALLBACK_SUPPORT
@@ -319,7 +319,7 @@ w_err_t wind_thread_kill(thread_s *thread)
         thread->cb.dead(thread);
 #endif
     wind_thread_distroy(thread);
-    wind_open_interrupt();
+    wind_enable_interrupt();
     _wind_thread_dispatch();
     return ERR_OK;
 }
@@ -359,14 +359,14 @@ w_err_t wind_thread_sleep(w_uint32_t ms)
     stcnt = ms *WIND_TICK_PER_SEC / 1000;
     if(0 == stcnt)
         stcnt = 1;
-    wind_close_interrupt();
+    wind_disable_interrupt();
     thread = wind_thread_current();
     thread->runstat = THREAD_STATUS_SLEEP;
     thread->cause = CAUSE_SLEEP;
     thread->sleep_ticks = stcnt;
     dlist_insert_prio(&g_core.sleeplist,&thread->sleepthr,thread->prio);
 
-    wind_open_interrupt();
+    wind_enable_interrupt();
 #if 0
     foreach_node(pnode,&g_core.sleeplist)
     {
@@ -387,8 +387,8 @@ w_err_t _wind_thread_wakeup(void)
 {
     dnode_s *pnode;
     thread_s *thread;
-    wind_close_interrupt();
-    WIND_ASSERT_TODO(RUN_FLAG,wind_open_interrupt(),ERR_OK);
+    wind_disable_interrupt();
+    WIND_ASSERT_TODO(RUN_FLAG,wind_enable_interrupt(),ERR_OK);
     foreach_node(pnode,&g_core.sleeplist)
     {
         thread = PRI_DLIST_OBJ(pnode,thread_s,sleepthr);
@@ -404,7 +404,7 @@ w_err_t _wind_thread_wakeup(void)
             }
         }
     }
-    wind_open_interrupt();
+    wind_enable_interrupt();
     return ERR_OK;
 }
 

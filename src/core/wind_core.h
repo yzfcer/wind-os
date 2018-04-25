@@ -41,8 +41,8 @@ void _wind_switchto_thread(thread_s *thread);
 void wind_disable_switch(void);
 void wind_enable_switch(void);
 
-void wind_close_interrupt(void);
-void wind_open_interrupt(void);
+void wind_disable_interrupt(void);
+void wind_enable_interrupt(void);
 
 void wind_enter_irq(void);
 void wind_exit_irq(void);

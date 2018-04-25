@@ -37,13 +37,13 @@ w_int32_t wind_printf(const char *fmt, ...)
     static char sprint_buf[512];
     va_list args; 
     w_int32_t n;
-    wind_close_interrupt();
+    wind_disable_interrupt();
     va_start(args, fmt);
     n = vsprintf(sprint_buf, fmt, args);
     sprint_buf[n] = 0;
     va_end(args);
     wind_std_output((w_uint8_t *)sprint_buf, n);
-    wind_open_interrupt();
+    wind_enable_interrupt();
     return n; 
 }
 #endif

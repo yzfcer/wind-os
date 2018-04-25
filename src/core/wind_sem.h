@@ -35,9 +35,10 @@ extern "C" {
 #endif
 
 #if WIND_SEM_SUPPORT
-
+#define WIND_SEM_MAGIC 0x36F7A854
 typedef struct _wind_sem
 {
+    w_uint32_t magic;
     const char* name;
     dnode_s semnode;
     dlist_s waitlist;  //等待线程队列

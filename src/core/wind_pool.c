@@ -92,9 +92,9 @@ w_err_t wind_pool_create(const char *name,void *mem,w_uint32_t memsize,w_uint32_
     }
     item->next = NULL;
     WIND_STATI_INIT(pm->stati,pm->itemnum);
-    wind_close_interrupt();
+    wind_disable_interrupt();
     dlist_insert_tail(&g_core.poollist,&pm->poolnode);
-    wind_open_interrupt();
+    wind_enable_interrupt();
     pm->magic = WIND_POOL_MAGIC;
     //_wind_pool_print_list(&g_core.poollist);
     return ERR_OK;
@@ -107,9 +107,9 @@ w_err_t wind_pool_destroy(void *mem)
     pm = (pool_s *)WIND_MPOOL_ALIGN_R((w_uint32_t)mem);
     WIND_ASSERT_RETURN(pm->magic == WIND_POOL_MAGIC,ERR_INVALID_PARAM);
     wind_notice("destroy pool:%s",pm->name);
-    wind_close_interrupt();
+    wind_disable_interrupt();
     dlist_remove(&g_core.poollist,&pm->poolnode);
-    wind_open_interrupt();
+    wind_enable_interrupt();
     pm->magic = 0;
     return ERR_OK;
 }
@@ -123,11 +123,11 @@ void *wind_pool_alloc(void *mem)
     pm = (pool_s *)WIND_MPOOL_ALIGN_R((w_uint32_t)mem);
     WIND_ASSERT_RETURN(pm->magic == WIND_POOL_MAGIC,NULL);
 
-    wind_close_interrupt();
+    wind_disable_interrupt();
     if(pm->free_head == NULL)
     {
         WIND_STATI_ERR_INC(pm->stati);
-        wind_open_interrupt();
+        wind_enable_interrupt();
         wind_error("mpool empty");
         return NULL;
     }
@@ -135,7 +135,7 @@ void *wind_pool_alloc(void *mem)
     if(item->flag != POOL_BLK_FREE)
     {
         WIND_STATI_ERR_INC(pm->stati);
-        wind_open_interrupt();
+        wind_enable_interrupt();
         wind_error("mpool is NOT free.");
         return NULL;
     }
@@ -148,7 +148,7 @@ void *wind_pool_alloc(void *mem)
     item->flag = POOL_BLK_USED;
     item->next = NULL;
     p = (void*)(sizeof(pool_item_s*) + (w_uint32_t)item);
-    wind_open_interrupt();
+    wind_enable_interrupt();
     return p;
 }
 
@@ -163,7 +163,7 @@ w_err_t wind_pool_free(void *mem,void *block)
     WIND_ASSERT_RETURN(pm->magic == WIND_POOL_MAGIC,ERR_INVALID_PARAM);
     item = (pool_item_s*)(((w_uint32_t)block) - sizeof(pool_item_s*));
     WIND_ASSERT_RETURN(item->flag == POOL_BLK_USED,ERR_INVALID_PARAM);
-    wind_close_interrupt();
+    wind_disable_interrupt();
     item->flag = POOL_BLK_FREE;
     item->next = NULL;
     if(pm->free_end == NULL)
@@ -178,7 +178,7 @@ w_err_t wind_pool_free(void *mem,void *block)
     }
     pm->used --;
     WIND_STATI_MINUS(pm->stati);
-    wind_open_interrupt();
+    wind_enable_interrupt();
     return ERR_OK;
 }
 

@@ -204,7 +204,7 @@ void wind_second_inc(void)
     w_uint8_t dayofmonth;
     datetime_s *dt;
     dt = &G_DATETIME;
-    wind_close_interrupt();
+    wind_disable_interrupt();
     dt->time.second ++;
     if(dt->time.second >= 60)
     {
@@ -225,7 +225,7 @@ void wind_second_inc(void)
                 g_half_day = 1 - g_half_day;
                 if(g_half_day)
                 {
-                    wind_open_interrupt();
+                    wind_enable_interrupt();
                     return;
                 }
 #endif
@@ -249,7 +249,7 @@ void wind_second_inc(void)
             }
         }
     }
-    wind_open_interrupt();
+    wind_enable_interrupt();
 }
 
 void wind_msecond_inc(void)

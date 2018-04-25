@@ -86,10 +86,10 @@ w_err_t wind_softirq_unreg(w_int32_t irq_id)
 //触发一个软件中断
 void wind_softirq_trig(w_int32_t irq_id)
 {
-    wind_close_interrupt();
+    wind_disable_interrupt();
     softirq_index = irq_id;
     softirq_thread->runstat = THREAD_STATUS_READY;
-    wind_open_interrupt();
+    wind_enable_interrupt();
     _wind_switchto_thread(softirq_thread);
 }
 
@@ -101,10 +101,10 @@ static w_err_t wind_softirq_thread(w_int32_t argc,w_int8_t **argv)
         wind_soft_vectors[i] = NULL;
     while(1)
     {
-        wind_close_interrupt();
+        wind_disable_interrupt();
         softirq_thread->runstat = THREAD_STATUS_SUSPEND;
         softirq_thread->cause = CAUSE_COM;
-        wind_open_interrupt();
+        wind_enable_interrupt();
         _wind_thread_dispatch();
         if(wind_soft_vectors[softirq_index] != NULL)
         {

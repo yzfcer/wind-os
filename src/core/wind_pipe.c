@@ -100,9 +100,9 @@ pipe_s* wind_pipe_create(const char *name,void *buff,w_uint32_t buflen)
     pipe->used = B_TRUE;
     pipe->buff = buff;
     pipe->buflen = buflen;
-    wind_close_interrupt();
+    wind_disable_interrupt();
     dlist_insert_tail(&g_core.pipelist,&pipe->pipenode);
-    wind_open_interrupt();
+    wind_enable_interrupt();
     return pipe;
 }
 
@@ -114,9 +114,9 @@ w_int32_t wind_pipe_read(pipe_s* pipe,w_int8_t *str,w_int16_t len)
     WIND_ASSERT_RETURN(str != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(len > 0,ERR_INVALID_PARAM);
     WIND_ASSERT_RETURN(pipe->magic == WIND_PIPE_MAGIC,ERR_INVALID_PARAM);
-    wind_close_interrupt();
+    wind_disable_interrupt();
     count = wind_queue_read(pipe->buff,str,len);
-    wind_open_interrupt();
+    wind_enable_interrupt();
     return count;
 }
 
@@ -127,9 +127,9 @@ w_int32_t wind_pipe_write(pipe_s* pipe,w_int8_t *str,w_int16_t len)
     WIND_ASSERT_RETURN(pipe->magic == WIND_PIPE_MAGIC,ERR_INVALID_PARAM);
     WIND_ASSERT_RETURN(str != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(len > 0,ERR_INVALID_PARAM);
-    wind_close_interrupt();
+    wind_disable_interrupt();
     cnt = wind_queue_write(pipe->buff,str,len);
-    wind_open_interrupt();
+    wind_enable_interrupt();
     return cnt;
 }
 
@@ -138,13 +138,13 @@ w_err_t wind_pipe_destroy(pipe_s* pipe)
     WIND_ASSERT_RETURN(pipe != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(pipe->magic == WIND_PIPE_MAGIC,ERR_INVALID_PARAM);
     wind_notice("destroy pipe:%s",pipe->name);
-    wind_close_interrupt();
+    wind_disable_interrupt();
     dlist_remove(&g_core.pipelist,&pipe->pipenode);
     pipe->magic = 0;
     pipe->used = B_FALSE;
     pipe->name = NULL;
     pipe_free(pipe);
-    wind_open_interrupt();
+    wind_enable_interrupt();
     return ERR_OK;
 }
 
