@@ -47,7 +47,7 @@ struct __fs_ops_s
     w_int32_t (*write)(file_s* file,char *buff, w_int32_t size);
     w_err_t (*fgets)(file_s* file,char *buff, w_int32_t maxlen);
     w_err_t (*fputs)(file_s* file,char *buff);
-}fs_ops_s;
+};
 
 struct fs_s
 {
