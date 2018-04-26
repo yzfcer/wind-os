@@ -25,19 +25,20 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
-
+#include <stdio.h>
 #include "wind_config.h"
 #include "wind_type.h"
 #include "wind_debug.h"
 #include "wind_string.h"
-#include "wind_rtc.h"
 #include "wind_cmd.h"
+#include "wind_time.h"
 #if WIND_RTC_SUPPORT
 
-static extern datetime_s G_DATETIME;//当前日期和时间
+//static extern datetime_s g_datetime;//当前日期和时间
 static w_err_t cmd_set_datetime(w_int32_t argc,char **argv)
 {
-    datetime_s *dt;
+    w_int32_t cnt;
+    datetime_s dt;
     if(argc < 4)
     {
         console_printf("error:parameter is NOT enough.\r\n");
@@ -52,29 +53,32 @@ static w_err_t cmd_set_datetime(w_int32_t argc,char **argv)
     {
         console_printf("time format error.\r\n");
         return ERR_INVALID_PARAM;
-    }    
-    wind_set_date(wind_convert_str2u32_t(&argv[2][0]),
-                    wind_convert_str2u32_t(&argv[2][4]),
-                    wind_convert_str2u32_t(&argv[2][7]));
+    }
     
-    wind_set_time(wind_convert_str2u32_t(&(argv[3][0])),
-                    wind_convert_str2u32_t(&(argv[3][3])),
-                    wind_convert_str2u32_t(&(argv[3][6])),0);
-    
-    dt = &G_DATETIME;
-    console_printf("system date:%d/%d/%d %d:%d:%d  %d\r\n",dt->date.year,
-                dt->date.month,dt->date.day,dt->time.hour,
-                dt->time.minute,dt->time.second,dt->time.msecond);
+    cnt = sscanf(argv[2],"%4d/%2d/%2d",&dt.date.year,
+                &dt.date.month,&dt.date.day);
+    WIND_ASSERT_RETURN(cnt >= 3,ERR_INVALID_PARAM);
+    cnt = sscanf(argv[3],"%2d:%2d:%2d",&dt.time.hour,
+                &dt.time.minute,&dt.time.second);
+    WIND_ASSERT_RETURN(cnt >= 3,ERR_INVALID_PARAM);
+    dt.time.msecond = 0;
+    wind_set_datetime(&dt);
+    console_printf("system date:%d/%d/%d %d:%d:%d %d\r\n",dt.date.year,
+                dt.date.month,dt.date.day,dt.time.hour,
+                dt.time.minute,dt.time.second,dt.time.msecond);
     return ERR_OK;
 }
 
 
 static w_err_t cmd_showdatetime(w_int32_t argc,char **argv)
 {
-    dt = &G_DATETIME;
-    console_printf("system date:%d/%d/%d %d:%d:%d  %d\r\n",dt->date.year,
-                dt->date.month,dt->date.day,dt->time.hour,
-                dt->time.minute,dt->time.second,dt->time.msecond);
+    w_err_t err;
+    datetime_s dt;
+    err = wind_get_datetime(&dt);
+    WIND_ASSERT_RETURN(err == ERR_OK,ERR_COMMAN);
+    console_printf("system date:%d/%d/%d %d:%d:%d  %d\r\n",dt.date.year,
+                dt.date.month,dt.date.day,dt.time.hour,
+                dt.time.minute,dt.time.second,dt.time.msecond);
     return ERR_OK;
 }
 
@@ -91,7 +95,7 @@ COMMAND_USAGE(datetime)
     console_printf("datetime show:to show the system date and time infomation.\r\n");
 }
 
-COMMAND_DISC(datetime,argc,argv)
+COMMAND_MAIN(datetime,argc,argv)
 {
     if(wind_strcmp(argv[1],"set") == 0)
     {

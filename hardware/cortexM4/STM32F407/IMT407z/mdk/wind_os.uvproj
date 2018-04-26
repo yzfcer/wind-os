@@ -1248,16 +1248,6 @@
               <FilePath>..\..\..\..\..\src\lib\RBTree.h</FilePath>
             </File>
             <File>
-              <FileName>wind_rtc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\lib\wind_rtc.c</FilePath>
-            </File>
-            <File>
-              <FileName>wind_rtc.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\lib\wind_rtc.h</FilePath>
-            </File>
-            <File>
               <FileName>wind_stack.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\lib\wind_stack.c</FilePath>
