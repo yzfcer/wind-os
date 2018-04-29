@@ -32,6 +32,7 @@
 extern "C" {
 #endif
 
+#if WIND_DATETIME_SUPPORT
 
 #define HOUR_TYPE_12 1//定义为12小时制
 #define HOUR_TYPE_24 2//定义为24小时制
@@ -57,13 +58,13 @@ typedef struct __date_s
 
 typedef enum __week_e
 {
+    SUN = 0,
     MON = 1,
     TUS = 2,
     WED = 3,
     THU = 4,
     FRI = 5,
     SAT = 6,
-    SUN = 7
 }week_e;
 
 typedef struct __datetime_s
@@ -72,20 +73,25 @@ typedef struct __datetime_s
     time_s time;
     week_e week;
 } datetime_s;
-
-w_err_t wind_set_date(date_s *date);
-w_err_t wind_set_time(time_s *time);
-w_err_t wind_set_datetime(datetime_s *datetime);
-w_err_t wind_get_date(date_s * date);
-w_err_t wind_get_time(time_s *time);
-w_err_t wind_get_datetime(datetime_s *datetime);
-w_err_t wind_copy_datetime(datetime_s *desdt,datetime_s *srcdt);
 void _wind_datetime_init(void);
-void wind_second_inc(void);
-void wind_msecond_inc(void); 
 
-w_err_t _wind_time_init(void);
-w_uint32_t wind_get_tick_count(void);
+w_err_t wind_datetime_setdate(date_s *date);
+w_err_t wind_datetime_settime(time_s *time);
+w_err_t wind_datetime_set(datetime_s *datetime);
+
+w_err_t wind_datetime_getdate(date_s * date);
+w_err_t wind_datetime_gettime(time_s *time);
+w_err_t wind_datetime_get(datetime_s *datetime);
+
+w_err_t wind_datetime_copy(datetime_s *desdt,datetime_s *srcdt);
+void wind_second_inc(void);
+void wind_msecond_inc(void);
+#else
+#define _wind_datetime_init() 
+#endif
+
+w_err_t _wind_tick_init(void);
+w_uint32_t wind_get_tick(void);
 
 #ifdef __cplusplus
 }

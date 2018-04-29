@@ -32,9 +32,8 @@ extern "C" {
 #include "wind_string.h"
 #include "wind_cmd.h"
 #include "wind_time.h"
-#if WIND_RTC_SUPPORT
+#if WIND_DATETIME_SUPPORT
 
-//static extern datetime_s g_datetime;//当前日期和时间
 static w_err_t cmd_set_datetime(w_int32_t argc,char **argv)
 {
     w_int32_t cnt;
@@ -62,7 +61,7 @@ static w_err_t cmd_set_datetime(w_int32_t argc,char **argv)
                 &dt.time.minute,&dt.time.second);
     WIND_ASSERT_RETURN(cnt >= 3,ERR_INVALID_PARAM);
     dt.time.msecond = 0;
-    wind_set_datetime(&dt);
+    wind_datetime_set(&dt);
     console_printf("system date:%d/%d/%d %d:%d:%d %d\r\n",dt.date.year,
                 dt.date.month,dt.date.day,dt.time.hour,
                 dt.time.minute,dt.time.second,dt.time.msecond);
@@ -74,7 +73,7 @@ static w_err_t cmd_showdatetime(w_int32_t argc,char **argv)
 {
     w_err_t err;
     datetime_s dt;
-    err = wind_get_datetime(&dt);
+    err = wind_datetime_get(&dt);
     WIND_ASSERT_RETURN(err == ERR_OK,ERR_COMMAN);
     console_printf("system date:%d/%d/%d %d:%d:%d  %d\r\n",dt.date.year,
                 dt.date.month,dt.date.day,dt.time.hour,

@@ -233,10 +233,7 @@ static void _wind_init()
     _wind_timer_init();
     _wind_softirq_init();
     
-    _wind_time_init();//时间初始化
-#if WIND_RTC_SUPPORT
-    _wind_datetime_init();
-#endif
+    _wind_tick_init();//时间初始化
 }
 
 

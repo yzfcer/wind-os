@@ -49,7 +49,9 @@
 
 #define WIND_TIMER_SUPPORT 1  //是否支持软件定时器
 
-#define WIND_RTC_SUPPORT 1  //是否支持实时时间
+#define WIND_RTC_SUPPORT 0  //是否支持实时时间
+
+#define WIND_DATETIME_SUPPORT 1  //是否支持系统时间
 
 #define WIND_CONSOLE_SUPPORT 1 //是否支持控制台模块
 

@@ -53,6 +53,10 @@ static w_err_t init_thread(w_int32_t argc,w_int8_t **argv)
     wind_tick_init();
     _wind_dev_init();
     _wind_blkdev_init();
+    
+#if WIND_DATETIME_SUPPORT
+    _wind_datetime_init();
+#endif
 #if WIND_HEAP_SUPPORT
     _wind_heaps_init();
 #endif
