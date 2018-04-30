@@ -283,10 +283,9 @@ void tick64_to_datetime(datetime_s *st, systick_s *tick64)
 {
   w_int32_t JD;
   w_uint32_t second,fraction;
-  //w_uint32_t s = (w_uint32_t)(tick64->second);
   second = tick64->second;
   fraction = tick64->frac;
-  wind_printf("sec:0x%x,frac:0x%x\r\n",second,fraction);
+  //wind_printf("sec:0x%x,frac:0x%x\r\n",second,fraction);
   st->time.second = (w_uint8_t)(second % 60);
   second /= 60;
   st->time.minute = (w_uint8_t)(second % 60);
@@ -301,10 +300,7 @@ void tick64_to_datetime(datetime_s *st, systick_s *tick64)
 
 
 
-datetime_s g_datetime;//当前日期和时间
-//static w_uint64_t systick64;
 systick_s systick64;
-
 static w_uint16_t systick_ms;
 static w_uint8_t g_daysofmonth[12] = {31,28,31,30,31,30,31,31,30,31,30,31};
 static w_uint32_t tick_cnt_for_time;
@@ -317,6 +313,7 @@ static w_uint32_t get_ms(void)
 
 static w_err_t hwrtc_set_datetime(datetime_s *datetime)
 {
+    systick_s tick64;
 #if WIND_RTC_SUPPORT
     dev_s *dev;
     WIND_ASSERT_RETURN(datetime != NULL,ERR_NULL_POINTER);
@@ -326,7 +323,11 @@ static w_err_t hwrtc_set_datetime(datetime_s *datetime)
     wind_dev_write(dev,(w_uint8_t*)datetime,sizeof(datetime_s));
     wind_dev_close(dev);
 #endif
-    wind_memcpy((w_uint8_t*)&g_datetime,(w_uint8_t*)datetime,sizeof(datetime_s));
+    datetime_to_tick64(&tick64,datetime);
+    wind_disable_interrupt();
+    systick64.second = tick64.second;
+    systick64.frac = tick64.frac;
+    wind_enable_interrupt();
     return ERR_OK;
 }
 
@@ -342,10 +343,10 @@ static w_err_t hwrtc_get_datetime(datetime_s *datetime)
     wind_dev_close(dev);
 #else
     systick_s tick64;
-    //wind_memcpy((w_uint8_t*)datetime,(w_uint8_t*)&g_datetime,sizeof(datetime_s));
+    wind_disable_interrupt();
     tick64.second = systick64.second;
-    //tick64.frac = systick64.frac;
     tick64.frac += ms2frac_map[(w_uint32_t)get_ms()];
+    wind_enable_interrupt();
     tick64_to_datetime(datetime,&tick64);
 #endif
     return ERR_OK;
@@ -366,8 +367,7 @@ static w_uint8_t is_leap(w_uint16_t year)
 
 w_err_t wind_datetime_setdate(date_s *date)
 {
-    datetime_s *dt;
-    dt = &g_datetime;
+    datetime_s dt;
     if(is_leap(date->year) && (date->month == 2) && (date->day > 29))
         return ERR_INVALID_PARAM;
     else if((date->month >= 13)
@@ -375,27 +375,28 @@ w_err_t wind_datetime_setdate(date_s *date)
     || (date->day == 0)
     || (date->day > g_daysofmonth[date->month - 1]))
     return ERR_INVALID_PARAM;
-    dt->date.year = date->year;
-    dt->date.month = date->month;
-    dt->date.day = date->day;
-    hwrtc_set_datetime(dt);
+    hwrtc_get_datetime(&dt);
+    dt.date.year = date->year;
+    dt.date.month = date->month;
+    dt.date.day = date->day;
+    hwrtc_set_datetime(&dt);
     return ERR_OK;
 }
 
 w_err_t wind_datetime_settime(time_s *time)
 {
-    datetime_s *dt;
-    dt = &g_datetime;
+    datetime_s dt;
     if(time->hour >= 24
     || time->minute >= 60
     || time->second >= 60
     || time->msecond >= 1000)
     return ERR_INVALID_PARAM;
-    dt->time.hour = time->hour;
-    dt->time.minute = time->minute;
-    dt->time.second = time->second;
-    dt->time.msecond = time->msecond;
-    hwrtc_set_datetime(dt);
+    hwrtc_get_datetime(&dt);
+    dt.time.hour = time->hour;
+    dt.time.minute = time->minute;
+    dt.time.second = time->second;
+    dt.time.msecond = time->msecond;
+    hwrtc_set_datetime(&dt);
     return ERR_OK;
 }
 
@@ -407,22 +408,23 @@ w_err_t wind_datetime_set(datetime_s *datetime)
 
 w_err_t wind_datetime_getdate(date_s * date)
 {
-    hwrtc_get_datetime(&g_datetime);
-    wind_memcpy(date,&g_datetime.date,sizeof(date_s));
+    datetime_s dt;
+    hwrtc_get_datetime(&dt);
+    wind_memcpy(date,&dt.date,sizeof(date_s));
     return ERR_OK;
 }
 
 w_err_t wind_datetime_gettime(time_s *time)
 {
-    hwrtc_get_datetime(&g_datetime);
-    wind_memcpy(time,&g_datetime.time,sizeof(time_s));
+    datetime_s dt;
+    hwrtc_get_datetime(&dt);
+    wind_memcpy(time,&dt.time,sizeof(time_s));
     return ERR_OK;
 }
 
 w_err_t wind_datetime_get(datetime_s *datetime)
 {
-    hwrtc_get_datetime(&g_datetime);
-    wind_memcpy(datetime,&g_datetime,sizeof(datetime_s));
+    hwrtc_get_datetime(datetime);
     return ERR_OK;
 }
 
@@ -472,7 +474,6 @@ void wind_msecond_inc(void)
     if(systick_ms >= 1000)
     {
         systick_ms = 0;
-        //systick64 += 1000;
         systick64.second ++;
     }
     wind_enable_interrupt();
@@ -496,6 +497,7 @@ w_uint32_t wind_get_tick(void)
 void wind_tick_callback(void)
 {
     TICKS_CNT ++;//更新tick计数器
+    g_wind_time_ms_cnt ++;
 #if WIND_DATETIME_SUPPORT
     wind_disable_interrupt();
     tick_cnt_for_time ++;

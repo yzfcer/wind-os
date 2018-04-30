@@ -92,7 +92,11 @@
 
 #define WIND_STK_MAX_NUM 4//堆栈的数量
 
-#define WIND_STK_SIZE 512
+#define WIND_STK_SIZE 512 //堆栈大小
+
+#define WIND_FS_MAX_NUM 5 //允许支持的文件系统的数量
+
+#define WIND_FILE_MAX_NUM 5 //允许打开的文件的数量
 
 
 #endif

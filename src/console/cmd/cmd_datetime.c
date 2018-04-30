@@ -54,7 +54,7 @@ static w_err_t cmd_set_datetime(w_int32_t argc,char **argv)
         return ERR_INVALID_PARAM;
     }
     
-    cnt = sscanf(argv[2],"%4d/%2d/%2d",&dt.date.year,
+    cnt = sscanf(argv[2],"%4d/%02d/%02d",&dt.date.year,
                 &dt.date.month,&dt.date.day);
     WIND_ASSERT_RETURN(cnt >= 3,ERR_INVALID_PARAM);
     cnt = sscanf(argv[3],"%2d:%2d:%2d",&dt.time.hour,
@@ -62,7 +62,7 @@ static w_err_t cmd_set_datetime(w_int32_t argc,char **argv)
     WIND_ASSERT_RETURN(cnt >= 3,ERR_INVALID_PARAM);
     dt.time.msecond = 0;
     wind_datetime_set(&dt);
-    console_printf("system date:%d/%d/%d %d:%d:%d %d\r\n",dt.date.year,
+    console_printf("system date:%4d/%02d/%02d %02d:%02d:%02d %4d\r\n",dt.date.year,
                 dt.date.month,dt.date.day,dt.time.hour,
                 dt.time.minute,dt.time.second,dt.time.msecond);
     return ERR_OK;
@@ -75,7 +75,7 @@ static w_err_t cmd_showdatetime(w_int32_t argc,char **argv)
     datetime_s dt;
     err = wind_datetime_get(&dt);
     WIND_ASSERT_RETURN(err == ERR_OK,ERR_COMMAN);
-    console_printf("system date:%d/%d/%d %d:%d:%d  %d\r\n",dt.date.year,
+    console_printf("system date:%4d/%02d/%02d %02d:%02d:%02d  %4d\r\n",dt.date.year,
                 dt.date.month,dt.date.day,dt.time.hour,
                 dt.time.minute,dt.time.second,dt.time.msecond);
     return ERR_OK;

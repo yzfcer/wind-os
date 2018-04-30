@@ -22,6 +22,7 @@
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
+#include "stdio.h"
 #include "wind_config.h"
 #include "wind_type.h"
 #include "wind_debug.h"
@@ -37,8 +38,8 @@ COMMAND_DISC(led)
 
 COMMAND_USAGE(led)
 {
-    console_printf("led on <ledname>:to open a led device.\r\n");
-    console_printf("led off <ledname>:to close a led device.\r\n");
+    console_printf("led on <ledindex>:to open a led device.\r\n");
+    console_printf("led off <ledindex>:to close a led device.\r\n");
 }
 
 COMMAND_MAIN(led,argc,argv)
@@ -46,8 +47,11 @@ COMMAND_MAIN(led,argc,argv)
     w_err_t err;
     dev_s *led;
     w_uint8_t stat;
+    char devname[8];
     WIND_ASSERT_RETURN(argc == 3,ERR_INVALID_PARAM);
-    led = wind_dev_get(argv[2]);
+    wind_memset(devname,0,sizeof(devname));
+    sprintf(devname,"led%s",argv[2]);
+    led = wind_dev_get(devname);
     WIND_ASSERT_RETURN(led != NULL,ERR_INVALID_PARAM);
     if(0 == wind_strcmp(argv[1],"on"))
     {
