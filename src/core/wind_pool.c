@@ -114,7 +114,7 @@ w_err_t wind_pool_destroy(void *mem)
     return ERR_OK;
 }
 
-void *wind_pool_alloc(void *mem)
+void *wind_pool_malloc(void *mem)
 {
     void *p;
     pool_s *pm;

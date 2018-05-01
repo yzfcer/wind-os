@@ -39,7 +39,7 @@ WIND_POOL(msgboxpool,WIND_MBOX_MAX_NUM,sizeof(msgbox_s));
 
 static msgbox_s *msgbox_malloc(void)
 {
-    return wind_pool_alloc(msgboxpool);
+    return wind_pool_malloc(msgboxpool);
 }
 
 static w_err_t msgbox_free(msgbox_s *msgbox)

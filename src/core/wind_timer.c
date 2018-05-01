@@ -35,7 +35,7 @@ static WIND_POOL(timerpool,WIND_TIMER_MAX_NUM,sizeof(timer_s));
 
 static __INLINE__ timer_s *timer_malloc(void)
 {
-    return (timer_s*)wind_pool_alloc(timerpool);
+    return (timer_s*)wind_pool_malloc(timerpool);
 }
 
 static __INLINE__ w_err_t timer_free(void *timer)

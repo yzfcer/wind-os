@@ -41,7 +41,7 @@ static WIND_POOL(mutexpool,WIND_MUTEX_MAX_NUM,sizeof(mutex_s));
 
 static __INLINE__ mutex_s *mutex_malloc(void)
 {
-    return (mutex_s*)wind_pool_alloc(mutexpool);
+    return (mutex_s*)wind_pool_malloc(mutexpool);
 }
 
 static __INLINE__ w_err_t mutex_free(void *mutex)

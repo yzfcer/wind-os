@@ -71,7 +71,7 @@ w_err_t wind_fs_mount(char *fsname,char *blkname,char *path)
     fs_s *fs;
     err = mount_param_check(fsname,blkname,path);
     WIND_ASSERT_RETURN(err == ERR_OK,ERR_INVALID_PARAM);
-    fs = wind_pool_alloc(fspool);
+    fs = wind_pool_malloc(fspool);
     WIND_ASSERT_RETURN(fs != NULL,ERR_MEM);
     wind_strcpy(fs->name,fsname);
     wind_strcpy(fs->path,path);

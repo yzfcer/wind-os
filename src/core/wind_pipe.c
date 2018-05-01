@@ -39,7 +39,7 @@ static WIND_POOL(pipepool,WIND_PIPE_MAX_NUM,sizeof(pipe_s));
 
 static __INLINE__ pipe_s *pipe_malloc(void)
 {
-    return (pipe_s*)wind_pool_alloc(pipepool);
+    return (pipe_s*)wind_pool_malloc(pipepool);
 }
 
 static __INLINE__ w_err_t pipe_free(void *pipe)

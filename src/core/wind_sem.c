@@ -38,7 +38,7 @@ static WIND_POOL(sempool,WIND_SEM_MAX_NUM,sizeof(sem_s));
 
 static __INLINE__ sem_s *sem_malloc(void)
 {
-    return (sem_s*)wind_pool_alloc(sempool);
+    return (sem_s*)wind_pool_malloc(sempool);
 }
 
 static __INLINE__ w_err_t sem_free(void *sem)

@@ -59,7 +59,7 @@ WIND_POOL(stkbufpool,WIND_STK_MAX_NUM,WIND_STK_SIZE *sizeof(w_stack_t));
 
 static __INLINE__ thread_s *thread_malloc(void)
 {
-    return (thread_s*)wind_pool_alloc(threadpool);
+    return (thread_s*)wind_pool_malloc(threadpool);
 }
 
 static __INLINE__ w_err_t thread_free(thread_s *thread)
@@ -225,7 +225,7 @@ thread_s *wind_thread_create_default(const w_int8_t *name,
     int stksize;
     priol = PRIO_MID;
     stksize = WIND_STK_SIZE;
-    pstk = wind_pool_alloc(stkbufpool);
+    pstk = wind_pool_malloc(stkbufpool);
     WIND_ASSERT_RETURN(pstk != NULL,NULL);
     return wind_thread_create(name,priol,thread_func,argc,argv,pstk,stksize);
 }

@@ -73,7 +73,7 @@ w_err_t wind_pool_create(const char *name,void *mem,w_uint32_t memsize,w_uint32_
 
 w_err_t wind_pool_destroy(void *mem);
 
-void   *wind_pool_alloc(void *mem);
+void   *wind_pool_malloc(void *mem);
 
 w_err_t wind_pool_free(void *mem,void *block);
 

@@ -80,14 +80,14 @@ CASE_FUNC(pool_alloc)
     pool_s *pool = (pool_s *)test_pool;
     for(i = 0;i < TNUM;i ++)
     {
-        testblk[i] = wind_pool_alloc(test_pool);
+        testblk[i] = wind_pool_malloc(test_pool);
         EXPECT_NE(testblk[i],NULL);
         itm = (pool_item_s*)((w_uint32_t)testblk[i] - sizeof(pool_item_s*));
         EXPECT_EQ(itm->flag,POOL_BLK_USED);
         EXPECT_EQ(itm->next,NULL);
         EXPECT_EQ(pool->used,i+1);
     }
-    testblk[TNUM] = wind_pool_alloc(test_pool);
+    testblk[TNUM] = wind_pool_malloc(test_pool);
     EXPECT_EQ(testblk[TNUM],NULL);
     
     for(i = 0;i < TNUM;i ++)
