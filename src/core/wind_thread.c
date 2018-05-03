@@ -235,22 +235,21 @@ w_err_t wind_thread_destroy(thread_s *thread)
 
 w_err_t wind_thread_set_priority(thread_s *thread,w_int16_t prio)
 {
-    dnode_s *node;
     w_int16_t minlim = 0,maxlim = 32767;
     extern w_bool_t  wind_thread_isopen(void);
     WIND_ASSERT_RETURN(thread != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(thread->magic == WIND_THREAD_MAGIC,ERR_INVALID_PARAM);
     WIND_ASSERT_RETURN((prio >= minlim) && (prio <= maxlim),ERR_PARAM_OVERFLOW);
+    //如何防止用户强制修改为禁用的优先级?
     if(wind_thread_isopen())
     {
         minlim = WIND_THREAD_PRIO_MIN_LIM;
         maxlim = WIND_THREAD_PRIO_MAX_LIM;
     }
 
-    wind_disable_interrupt();
     wind_debug("change prio %s:%d\r\n",thread->name,prio);
-    node = &thread->validthr.node;
-    dlist_remove(&g_core.threadlist,node);
+    wind_disable_interrupt();
+    dlist_remove(&g_core.threadlist,&thread->validthr.node);
     thread->prio = prio;
     dlist_insert_prio(&g_core.threadlist,&thread->validthr,prio);
     wind_enable_interrupt();
