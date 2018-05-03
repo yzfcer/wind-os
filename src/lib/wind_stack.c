@@ -51,7 +51,7 @@ static w_err_t defaultwritefull(pstack_s pstk,void *data)
 ** 输　出: STACK_ERR:参数错误
 **         STACK_OK:成功
 ** 全局变量: 无
-** 调用模块: wind_close_interrupt,wind_open_interrupt()
+** 调用模块: wind_disable_interrupt,wind_enable_interrupt()
 **
 ** 作　者: 周江村
 ** 日　期: 2012.09.26
@@ -73,7 +73,7 @@ w_err_t wind_stack_create(void *mem,
     {
         pstk = (pstack_s )mem;
 
-        wind_close_interrupt();
+        wind_disable_interrupt();
         if(ReadEmpty)                                                        // 初始化结构体数据 
             pstk->read_empty = ReadEmpty;
         else
@@ -92,7 +92,7 @@ w_err_t wind_stack_create(void *mem,
         pstk->item_cnt = 0;
         pstk->emptycnt = 0;
         pstk->fullcnt = 0;
-        wind_open_interrupt();
+        wind_enable_interrupt();
         return STACK_OK;
     }
     else
@@ -111,7 +111,7 @@ w_err_t wind_stack_create(void *mem,
 **         STACK_OK   ：收到消息
 **         STACK_EMPTY：无消息
 ** 全局变量: 无
-** 调用模块: wind_close_interrupt,wind_open_interrupt()
+** 调用模块: wind_disable_interrupt,wind_enable_interrupt()
 **
 ** 作　者: 周江村
 ** 日　期: 2012.09.26
@@ -132,7 +132,7 @@ w_err_t wind_stack_read(void *mem,void *Ret)
     {                                                           /* 有效 */
         pstk = (pstack_s)mem;
         
-        wind_close_interrupt();
+        wind_disable_interrupt();
         if (pstk->item_cnt >= pstk->item_size)                     /* 堆栈是否为空 */
         {                                                       /* 不空         */
             pstk->in = pstk->out;
@@ -149,7 +149,7 @@ w_err_t wind_stack_read(void *mem,void *Ret)
         {                                                       /* 空              */
                err = pstk->read_empty(pstk,Ret);
         }
-        wind_open_interrupt();
+        wind_enable_interrupt();
     }
     return err;
 }
@@ -165,7 +165,7 @@ w_err_t wind_stack_read(void *mem,void *Ret)
 **         STACK_FULL:堆栈满
 **         STACK_OK  :发送成功
 ** 全局变量: 无
-** 调用模块: wind_close_interrupt,wind_open_interrupt()
+** 调用模块: wind_disable_interrupt,wind_enable_interrupt()
 **
 ** 作　者: 周江村
 ** 日　期: 2012.09.26
@@ -187,7 +187,7 @@ w_err_t wind_stack_write(void *mem, void *Data)
     if (mem != NULL)                                                    /* 堆栈是否有效 */
     {
         pstk = (pstack_s )mem;
-        wind_close_interrupt();
+        wind_disable_interrupt();
         if (pstk->item_cnt <= pstk->item_max - pstk->item_size)                              /* 堆栈是否满  */
         {                                                               /* 不满        */
             for(i = 0;i < pstk->item_size;i ++)
@@ -207,7 +207,7 @@ w_err_t wind_stack_write(void *mem, void *Data)
                 err = pstk->write_full(pstk, Data);
             }
         }
-        wind_open_interrupt();
+        wind_enable_interrupt();
     }
     return err;
 }
@@ -221,7 +221,7 @@ w_err_t wind_stack_write(void *mem, void *Data)
 ** 输　入: mem:指向堆栈的指针
 ** 输　出: 消息数
 ** 全局变量: 无
-** 调用模块: wind_close_interrupt,wind_open_interrupt()
+** 调用模块: wind_disable_interrupt,wind_enable_interrupt()
 **
 ** 作　者: 周江村
 ** 日　期: 2012.09.26
@@ -238,9 +238,9 @@ w_uint16_t wind_stack_datalen(void *mem)
     temp = 0;                                                   /* 堆栈无效返回0 */
     if (mem != NULL)
     {
-        wind_close_interrupt();
+        wind_disable_interrupt();
         temp = ((pstack_s )mem)->item_cnt / ((pstack_s )mem)->item_size;
-        wind_open_interrupt();
+        wind_enable_interrupt();
     }
     return temp;
 }
@@ -252,7 +252,7 @@ w_uint16_t wind_stack_datalen(void *mem)
 ** 输　入: mem:指向堆栈的指针
 ** 输　出: 堆栈总容量
 ** 全局变量: 无
-** 调用模块: wind_close_interrupt,wind_open_interrupt()
+** 调用模块: wind_disable_interrupt,wind_enable_interrupt()
 **
 ** 作　者: 周江村
 ** 日　期: 2012.09.26
@@ -269,9 +269,9 @@ w_uint16_t wind_stack_size(void *mem)
     temp = 0;                                                   /* 堆栈无效返回0 */
     if (mem != NULL)
     {
-        wind_close_interrupt();
+        wind_disable_interrupt();
         temp = ((pstack_s )mem)->item_max / ((pstack_s )mem)->item_size;
-        wind_open_interrupt();
+        wind_enable_interrupt();
     }
     return temp;
 }
@@ -284,7 +284,7 @@ w_uint16_t wind_stack_size(void *mem)
 ** 输　入: mem:指向堆栈的指针
 ** 输　出: 无
 ** 全局变量: 无
-** 调用模块: wind_close_interrupt,wind_open_interrupt()
+** 调用模块: wind_disable_interrupt,wind_enable_interrupt()
 **
 ** 作　者: 周江村
 ** 日　期: 2012.09.26
@@ -301,12 +301,12 @@ void wind_stack_flush(void *mem)
     if (mem != NULL)                                                /* 堆栈是否有效 */
     {                                                               /* 有效         */
         pstk = (pstack_s)mem;
-        wind_close_interrupt();
+        wind_disable_interrupt();
         pstk->item_cnt = 0;                                           /* 数据数目为0 */
         pstk->top = pstk->buff + pstk->item_max;               // 计算数据缓冲的结束地址 
         pstk->out = pstk->buff;
         pstk->in = pstk->buff;
-        wind_open_interrupt();
+        wind_enable_interrupt();
     }
 }
 

@@ -35,7 +35,7 @@ static WIND_POOL(timerpool,WIND_TIMER_MAX_NUM,sizeof(timer_s));
 
 static __INLINE__ timer_s *timer_malloc(void)
 {
-    return (timer_s*)wind_pool_alloc(timerpool);
+    return (timer_s*)wind_pool_malloc(timerpool);
 }
 
 static __INLINE__ w_err_t timer_free(void *timer)
@@ -87,9 +87,9 @@ timer_s* wind_timer_create(const char *name,w_uint32_t t_ms,softimer_fn func,voi
     timer->running = run;
     timer->arg = arg;
     timer->handle = func;
-    wind_close_interrupt();
+    wind_disable_interrupt();
     dlist_insert_tail(&g_core.timerlist,&timer->timernode);
-    wind_open_interrupt();
+    wind_enable_interrupt();
     return timer; 
 }
 
@@ -110,10 +110,10 @@ w_err_t wind_timer_stop(timer_s* timer)
 w_err_t wind_timer_destroy(timer_s* timer)
 {
     WIND_ASSERT_RETURN(timer != NULL,ERR_NULL_POINTER);
-    wind_close_interrupt();
+    wind_disable_interrupt();
     dlist_remove(&g_core.timerlist,&timer->timernode);
     timer_free(timer);
-    wind_open_interrupt();
+    wind_enable_interrupt();
     return ERR_OK;
 }
 

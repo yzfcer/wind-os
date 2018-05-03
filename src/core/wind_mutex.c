@@ -41,7 +41,7 @@ static WIND_POOL(mutexpool,WIND_MUTEX_MAX_NUM,sizeof(mutex_s));
 
 static __INLINE__ mutex_s *mutex_malloc(void)
 {
-    return (mutex_s*)wind_pool_alloc(mutexpool);
+    return (mutex_s*)wind_pool_malloc(mutexpool);
 }
 
 static __INLINE__ w_err_t mutex_free(void *mutex)
@@ -79,16 +79,16 @@ mutex_s *wind_mutex_create(const char *name)
     mutex_s *mutex;
     wind_notice("create mutex:%s",name);
     mutex = mutex_malloc();
-    WIND_ASSERT_TODO(mutex != NULL,wind_open_interrupt(),NULL);
+    WIND_ASSERT_TODO(mutex != NULL,wind_enable_interrupt(),NULL);
     mutex->magic = WIND_MUTEX_MAGIC;
     DNODE_INIT(mutex->mutexnode);
     mutex->name = name;
     mutex->mutexed = B_FALSE;
     DLIST_INIT(mutex->waitlist);
     
-    wind_close_interrupt();
+    wind_disable_interrupt();
     dlist_insert_tail(&g_core.mutexlist,&mutex->mutexnode);
-    wind_open_interrupt();
+    wind_enable_interrupt();
     return mutex;
 }
 
@@ -96,10 +96,10 @@ mutex_s *wind_mutex_create(const char *name)
 w_err_t wind_mutex_try_destroy(mutex_s *mutex)
 {
     WIND_ASSERT_RETURN(mutex != NULL,ERR_NULL_POINTER);
-    wind_close_interrupt();
-    WIND_ASSERT_TODO(mutex->mutexed == B_FALSE,wind_open_interrupt(),ERR_COMMAN);
+    wind_disable_interrupt();
+    WIND_ASSERT_TODO(mutex->mutexed == B_FALSE,wind_enable_interrupt(),ERR_COMMAN);
     wind_mutex_destroy(mutex);
-    wind_open_interrupt();
+    wind_enable_interrupt();
     return ERR_OK;    
 }
 
@@ -110,7 +110,7 @@ w_err_t wind_mutex_destroy(mutex_s *mutex)
     thread_s *thread;
     WIND_ASSERT_RETURN(mutex != NULL,ERR_NULL_POINTER);
     wind_notice("destroy mutex:%s",mutex->name);
-    wind_close_interrupt();
+    wind_disable_interrupt();
     foreach_node(pnode,&mutex->waitlist)
     {
         dlist_remove(&mutex->waitlist,pnode);
@@ -122,7 +122,7 @@ w_err_t wind_mutex_destroy(mutex_s *mutex)
     mutex->name = NULL;
     mutex->magic = 0;
     mutex_free(mutex);
-    wind_open_interrupt();
+    wind_enable_interrupt();
     return ERR_OK;
 }
 
@@ -131,12 +131,12 @@ w_err_t wind_mutex_lock(mutex_s *mutex)
 {
     thread_s *thread;
     WIND_ASSERT_RETURN(mutex != NULL,ERR_NULL_POINTER);
-    wind_close_interrupt();
+    wind_disable_interrupt();
 
     if (mutex->mutexed == B_FALSE)
     {
         mutex->mutexed = B_TRUE;
-        wind_open_interrupt();
+        wind_enable_interrupt();
         return ERR_OK; 
     }
     thread = wind_thread_current();
@@ -145,7 +145,7 @@ w_err_t wind_mutex_lock(mutex_s *mutex)
     thread->sleep_ticks = 0x7fffffff;
     
     dlist_insert_prio(&mutex->waitlist,&thread->suspendthr,thread->prio);
-    wind_open_interrupt();
+    wind_enable_interrupt();
     _wind_thread_dispatch();
     return ERR_OK;
 }
@@ -154,7 +154,7 @@ w_err_t wind_mutex_trylock(mutex_s *mutex)
 {
     w_err_t err;
     WIND_ASSERT_RETURN(mutex != NULL,ERR_NULL_POINTER);
-    wind_close_interrupt();
+    wind_disable_interrupt();
     if (mutex->mutexed == B_FALSE)
     {
         mutex->mutexed = B_TRUE;
@@ -162,7 +162,7 @@ w_err_t wind_mutex_trylock(mutex_s *mutex)
     }
     else
         err = ERR_COMMAN; 
-    wind_open_interrupt();
+    wind_enable_interrupt();
     return err;
 }
 
@@ -173,14 +173,14 @@ w_err_t wind_mutex_unlock(mutex_s *mutex)
     dnode_s *pnode;
     thread_s *thread;
     WIND_ASSERT_RETURN(mutex != NULL,ERR_NULL_POINTER);
-    wind_close_interrupt();
-    WIND_ASSERT_TODO(mutex->mutexed,wind_open_interrupt(),ERR_OK);
+    wind_disable_interrupt();
+    WIND_ASSERT_TODO(mutex->mutexed,wind_enable_interrupt(),ERR_OK);
     
     pnode = dlist_head(&mutex->waitlist);
     if (pnode == NULL)
     {
         mutex->mutexed = B_FALSE;
-        wind_open_interrupt();
+        wind_enable_interrupt();
         return ERR_OK; //信号量有效，直接返回效，
     }
 
@@ -188,7 +188,7 @@ w_err_t wind_mutex_unlock(mutex_s *mutex)
     thread = PRI_DLIST_OBJ(pnode,thread_s,suspendthr);
     thread->runstat = THREAD_STATUS_READY;
     thread->cause = CAUSE_LOCK;
-    wind_open_interrupt();
+    wind_enable_interrupt();
     return ERR_OK;    
 }
 

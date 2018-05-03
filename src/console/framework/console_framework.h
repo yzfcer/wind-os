@@ -44,7 +44,7 @@ extern "C" {
 #define WIND_CONSOLE_COUNT 1//支持的控制套终端的数量
 #define CMD_PARAM_CNT 10
 
-#define USER_AUTHENTICATION_EN 1
+#define USER_AUTHENTICATION_EN 0
     
 
 

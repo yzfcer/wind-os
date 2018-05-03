@@ -298,7 +298,7 @@ w_err_t wind_cmd_print(void)
 {
     dnode_s *node;
     cmd_s *cmd;
-    wind_printf("\r\ncomnad list as following:\r\n");
+    wind_printf("\r\ncommand list as following:\r\n");
     foreach_node(node,&g_core.cmdlist)
     {
         cmd = DLIST_OBJ(node,cmd_s,cmdnode);

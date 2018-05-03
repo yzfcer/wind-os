@@ -93,7 +93,7 @@ CASE_FUNC(tree_case)
     test_tree_s *tt;
     for(i = 0;i < TREENUM;i ++)
     {
-        trees[i] = wind_pool_alloc(test_tree);
+        trees[i] = wind_pool_malloc(test_tree);
         tt = trees[i];
         tt->layer = 0;
         wind_tree_init(&tt->tree);

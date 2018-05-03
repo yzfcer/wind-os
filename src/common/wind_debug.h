@@ -39,7 +39,9 @@ extern "C" {
 #define ERR_MEM               -4 //存储空间受到限制
 #define ERR_INVALID_PARAM     -6//参数无效
 #define ERR_TIMEOUT           -7//操作超时，返回失败
-#define ERR_STATUS           -8//当前状态错误
+#define ERR_STATUS            -8//当前状态错误
+#define ERR_FILE_NOT_EXIT     -9//当前状态错误
+#define ERR_OBJ_REPEAT        -10//特定条件下对象重复
 
 
 //---------------------------------------------------------------------

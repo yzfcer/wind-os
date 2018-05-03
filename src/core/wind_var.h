@@ -72,6 +72,10 @@ typedef struct __core_var_s
 #if WIND_BLK_DRVFRAME_SUPPORT
     dlist_s blkdevlist;
 #endif
+#if WIND_FS_SUPPORT
+    dlist_s fslist;
+    dlist_s filelist;
+#endif
     
     //volatile w_bool_t run_falg;//多线程调度开始的标志
     w_bool_t usrthren;/*用户线程允许创建的标志 */

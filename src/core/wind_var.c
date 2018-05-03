@@ -75,6 +75,10 @@ void _wind_corevar_init(void)
 #if WIND_BLK_DRVFRAME_SUPPORT
     DLIST_INIT(g_core.blkdevlist);
 #endif
+#if WIND_FS_SUPPORT
+    DLIST_INIT(g_core.fslist);
+    DLIST_INIT(g_core.filelist);
+#endif
     
 }
 

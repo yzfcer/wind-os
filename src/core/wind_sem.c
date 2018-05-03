@@ -38,7 +38,7 @@ static WIND_POOL(sempool,WIND_SEM_MAX_NUM,sizeof(sem_s));
 
 static __INLINE__ sem_s *sem_malloc(void)
 {
-    return (sem_s*)wind_pool_alloc(sempool);
+    return (sem_s*)wind_pool_malloc(sempool);
 }
 
 static __INLINE__ w_err_t sem_free(void *sem)
@@ -79,14 +79,15 @@ sem_s *wind_sem_create(const char *name,w_int16_t sem_value)
     sem = sem_malloc();
     WIND_ASSERT_RETURN(sem != NULL,NULL);
     WIND_ASSERT_RETURN(sem_value >= 0,NULL);
+    sem->magic = WIND_SEM_MAGIC;
     sem->name = name;
     DNODE_INIT(sem->semnode);
     sem->sem_num = sem_value;
     sem->sem_tot = sem_value;
     DLIST_INIT(sem->waitlist);
-    wind_close_interrupt();
+    wind_disable_interrupt();
     dlist_insert_tail(&g_core.semlist,&sem->semnode);
-    wind_open_interrupt();
+    wind_enable_interrupt();
     return sem;
 }
 
@@ -95,14 +96,15 @@ w_err_t wind_sem_post(sem_s *sem)
     dnode_s *pnode;
     thread_s *thread;
     WIND_ASSERT_RETURN(sem != NULL,ERR_NULL_POINTER);
-    wind_close_interrupt();
+    WIND_ASSERT_RETURN(sem->magic != WIND_SEM_MAGIC,ERR_INVALID_PARAM);
+    wind_disable_interrupt();
     //无阻塞的线程，减少信号量后直接返回
     pnode = dlist_head(&sem->waitlist);
     if(pnode == NULL)
     {
         if(sem->sem_num < sem->sem_tot)
             sem->sem_num ++;
-        wind_open_interrupt();
+        wind_enable_interrupt();
         return ERR_OK;
     }
     
@@ -111,7 +113,7 @@ w_err_t wind_sem_post(sem_s *sem)
     thread = PRI_DLIST_OBJ(pnode,thread_s,suspendthr);
     if(thread->runstat == THREAD_STATUS_SLEEP)
         dlist_remove(&g_core.sleeplist,&thread->sleepthr.node);
-    wind_open_interrupt();
+    wind_enable_interrupt();
     thread->cause = CAUSE_SEM;
     thread->runstat = THREAD_STATUS_READY;
     _wind_thread_dispatch();
@@ -124,16 +126,17 @@ w_err_t wind_sem_wait(sem_s *sem,w_uint32_t timeout)
     w_int32_t ticks;
     thread_s *thread;
     WIND_ASSERT_RETURN(sem != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(sem->magic != WIND_SEM_MAGIC,ERR_INVALID_PARAM);
     ticks = timeout *WIND_TICK_PER_SEC / 1000;
     if(ticks == 0)
         ticks = 1;
 
     //信号量有效，直接返回
-    wind_close_interrupt();
+    wind_disable_interrupt();
     if (sem->sem_num > 0)
     {
         sem->sem_num --;
-        wind_open_interrupt();
+        wind_enable_interrupt();
         return ERR_OK; 
     }
     if(timeout == 0)
@@ -151,14 +154,14 @@ w_err_t wind_sem_wait(sem_s *sem,w_uint32_t timeout)
     else
         thread->runstat = THREAD_STATUS_SUSPEND;
     dlist_insert_prio(&sem->waitlist,&thread->suspendthr,thread->prio);
-    wind_open_interrupt();
+    wind_enable_interrupt();
     _wind_thread_dispatch();
 
-    wind_close_interrupt();
+    wind_disable_interrupt();
     //如果是超时唤醒的，则移除出睡眠队列
     if(thread->cause == CAUSE_SLEEP)
         dlist_remove(&sem->waitlist,&thread->suspendthr.node);
-    wind_open_interrupt();
+    wind_enable_interrupt();
     if(thread->cause == CAUSE_SLEEP)
         return ERR_TIMEOUT;
     return ERR_OK;
@@ -168,9 +171,10 @@ w_err_t wind_sem_trywait(sem_s *sem)
 {
     w_err_t err;
     WIND_ASSERT_RETURN(sem != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(sem->magic != WIND_SEM_MAGIC,ERR_INVALID_PARAM);
 
     //信号量有效，直接返回
-    wind_close_interrupt();
+    wind_disable_interrupt();
     if (sem->sem_num > 0)
     {
         sem->sem_num --;
@@ -178,7 +182,7 @@ w_err_t wind_sem_trywait(sem_s *sem)
     }
     else
         err = ERR_COMMAN;
-    wind_open_interrupt();
+    wind_enable_interrupt();
     return err;
 }
 
@@ -188,14 +192,15 @@ w_err_t wind_sem_try_destroy(sem_s *sem)
 {
     dnode_s *pdnode;
     WIND_ASSERT_RETURN(sem != NULL,ERR_NULL_POINTER);
-    wind_close_interrupt();
+    WIND_ASSERT_RETURN(sem->magic != WIND_SEM_MAGIC,ERR_INVALID_PARAM);
+    wind_disable_interrupt();
     pdnode = dlist_head(&sem->waitlist);
     if(pdnode != NULL)
     {
-        wind_open_interrupt();
+        wind_enable_interrupt();
         return ERR_COMMAN;
     }
-    wind_open_interrupt();
+    wind_enable_interrupt();
     return wind_sem_destroy(sem);
 }
 
@@ -205,8 +210,11 @@ w_err_t wind_sem_destroy(sem_s *sem)
     dnode_s *pdnode;
     thread_s *thread;
     WIND_ASSERT_RETURN(sem != NULL,ERR_NULL_POINTER);
-    wind_notice("create sem:%s",sem->name);
-    wind_close_interrupt();
+    WIND_ASSERT_RETURN(sem->magic != WIND_SEM_MAGIC,ERR_INVALID_PARAM);
+    wind_notice("destroy sem:%s",sem->name);
+    wind_disable_interrupt();
+    dlist_remove(&g_core.semlist,&sem->semnode);
+    sem->magic = 0;
     foreach_node(pdnode,&sem->waitlist)
     {
         dlist_remove(&sem->waitlist,pdnode);
@@ -214,9 +222,8 @@ w_err_t wind_sem_destroy(sem_s *sem)
         thread->runstat = THREAD_STATUS_READY;
         thread->cause = CAUSE_SEM;
     }
-    dlist_remove(&g_core.semlist,&sem->semnode);
-    wind_open_interrupt();
     err = sem_free(sem);
+    wind_enable_interrupt();
     return err;    
 }
 

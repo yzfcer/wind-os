@@ -72,14 +72,14 @@ extern sreg_t  wind_save_sr(void);
 extern void   wind_restore_sr(sreg_t cpu_sr);
 static sreg_t ssr[32];
 static w_int32_t sreg_idx = 0;
-void wind_close_interrupt(void)
+void wind_disable_interrupt(void)
 {
     sreg_t cpu_sr;
     cpu_sr = wind_save_sr();
     ssr[sreg_idx++] = cpu_sr;
 }
 
-void wind_open_interrupt(void)
+void wind_enable_interrupt(void)
 {
     sreg_t cpu_sr;
     if(sreg_idx > 0)
@@ -109,11 +109,11 @@ static thread_s *wind_search_highthread(void)
 {
     dnode_s *node;
     thread_s *thread = NULL;
-    wind_close_interrupt();
+    wind_disable_interrupt();
     if(gwind_core_cnt > 0)
     {
         thread = wind_thread_current();
-        wind_open_interrupt();
+        wind_enable_interrupt();
         return thread;
     }
     foreach_node(node,&g_core.threadlist)
@@ -121,11 +121,11 @@ static thread_s *wind_search_highthread(void)
         thread = PRI_DLIST_OBJ(node,thread_s,validthr);
         if(thread->runstat == THREAD_STATUS_READY)
         {
-            wind_open_interrupt();
+            wind_enable_interrupt();
             return thread;
         }
     }
-    wind_open_interrupt();
+    wind_enable_interrupt();
     wind_error("core NOT find valid thread!");
     return NULL;
 }
@@ -138,7 +138,7 @@ void wind_exit_irq(void)
         wind_error("exit not rd %d",RUN_FLAG);
         return;
     }
-    wind_close_interrupt();
+    wind_disable_interrupt();
     if(gwind_int_cnt > 0)
         gwind_int_cnt --;
     if((gwind_int_cnt == 0) && is_switch_enable())
@@ -150,7 +150,7 @@ void wind_exit_irq(void)
             wind_interrupt_switch();
         }
     }
-    wind_open_interrupt();
+    wind_enable_interrupt();
 }
 
 
@@ -173,25 +173,25 @@ void _wind_thread_dispatch(void)
     thread_s *thread;
     if(RUN_FLAG == B_FALSE)
         return;
-    wind_close_interrupt();
+    wind_disable_interrupt();
     if(!is_switch_enable())
     {
-        wind_open_interrupt();
+        wind_enable_interrupt();
         return;
     }
     thread = wind_search_highthread();
     if(thread == wind_thread_current())
     {
-        wind_open_interrupt();
+        wind_enable_interrupt();
         return;
     }
     gwind_high_stack = &thread->stack;
     if(gwind_high_stack != gwind_cur_stack)
     {
-        wind_open_interrupt();
+        wind_enable_interrupt();
         wind_thread_switch();
     }
-    wind_open_interrupt();
+    wind_enable_interrupt();
 }
 #else
 void _wind_thread_dispatch(void){}
@@ -200,19 +200,19 @@ void _wind_thread_dispatch(void){}
 
 void _wind_switchto_thread(thread_s *thread)
 {
-    wind_close_interrupt();
+    wind_disable_interrupt();
     if(thread == wind_thread_current())
     {
-        wind_open_interrupt();
+        wind_enable_interrupt();
         return;
     }
     gwind_high_stack = &thread->stack;
     if(gwind_high_stack != gwind_cur_stack)
     {
-        wind_open_interrupt();
+        wind_enable_interrupt();
         wind_thread_switch();
     }
-    wind_open_interrupt();
+    wind_enable_interrupt();
 }
 
 
@@ -233,10 +233,7 @@ static void _wind_init()
     _wind_timer_init();
     _wind_softirq_init();
     
-    _wind_time_init();//时间初始化
-#if WIND_RTC_SUPPORT
-    _wind_datetime_init();
-#endif
+    _wind_tick_init();//时间初始化
 }
 
 

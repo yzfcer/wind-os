@@ -39,7 +39,7 @@ WIND_POOL(msgboxpool,WIND_MBOX_MAX_NUM,sizeof(msgbox_s));
 
 static msgbox_s *msgbox_malloc(void)
 {
-    return wind_pool_alloc(msgboxpool);
+    return wind_pool_malloc(msgboxpool);
 }
 
 static w_err_t msgbox_free(msgbox_s *msgbox)
@@ -102,9 +102,9 @@ msgbox_s *wind_msgbox_create(const char *name,thread_s *owner)
     msgbox->msgnum = 0;
     msgbox->magic = WIND_MSGBOX_MAGIC;
     msgbox->owner = owner;
-    wind_close_interrupt();
+    wind_disable_interrupt();
     dlist_insert_tail(&g_core.msgboxlist,&msgbox->msgboxnode);
-    wind_open_interrupt();
+    wind_enable_interrupt();
     return msgbox;
 }
 
@@ -114,6 +114,8 @@ w_err_t wind_msgbox_destroy(msgbox_s *msgbox)
     thread_s *thread;
     WIND_ASSERT_RETURN(msgbox != NULL,ERR_NULL_POINTER);
     wind_notice("destroy msgbox:%s",msgbox->name);
+    wind_disable_interrupt();
+    dlist_remove_tail(&g_core.msgboxlist);
     thread = msgbox->owner;
     if((msgbox->owner->runstat == THREAD_STATUS_SLEEP) 
        && (msgbox->owner->cause == CAUSE_MSG))
@@ -121,8 +123,6 @@ w_err_t wind_msgbox_destroy(msgbox_s *msgbox)
         thread->runstat = THREAD_STATUS_READY;
     }
 
-    wind_close_interrupt();
-    dlist_remove_tail(&g_core.msgboxlist);
     msgbox->magic = 0;
     msgbox->owner = NULL;
     msgbox->name = NULL;
@@ -132,7 +132,7 @@ w_err_t wind_msgbox_destroy(msgbox_s *msgbox)
         wind_warn("msgbox:%s is NOT empty while destroying it.",msgbox->name);
     }
     msgbox_free(msgbox);
-    wind_open_interrupt();
+    wind_enable_interrupt();
     return ERR_OK;
 }
 
@@ -144,7 +144,7 @@ w_err_t wind_msgbox_post(msgbox_s *msgbox,msg_s *pmsg)
     WIND_ASSERT_RETURN(msgbox->magic == WIND_MSGBOX_MAGIC,ERR_COMMAN);
     WIND_ASSERT_RETURN(msgbox->owner,ERR_COMMAN);
     //将消息加入邮箱
-    wind_close_interrupt();
+    wind_disable_interrupt();
     dlist_insert_tail(&msgbox->msglist,&pmsg->msgnode);
     msgbox->msgnum ++;
 
@@ -153,11 +153,11 @@ w_err_t wind_msgbox_post(msgbox_s *msgbox,msg_s *pmsg)
     if((thread->runstat != THREAD_STATUS_SLEEP) 
        || (thread->cause != CAUSE_MSG))
     {
-        wind_open_interrupt();
+        wind_enable_interrupt();
         return ERR_OK;
     }
     msgbox->owner->runstat = THREAD_STATUS_READY;
-    wind_open_interrupt();
+    wind_enable_interrupt();
     _wind_thread_dispatch();//切换线程
     return ERR_OK;
 }
@@ -175,13 +175,13 @@ w_err_t wind_msgbox_wait(msgbox_s *msgbox,msg_s **pmsg,w_uint32_t timeout)
     WIND_ASSERT_RETURN(msgbox->owner,ERR_COMMAN);
     
     //如果邮箱中有消息，就直接返回消息
-    wind_close_interrupt();
+    wind_disable_interrupt();
     if(msgbox->msgnum > 0)
     {
         msgbox->msgnum --;
         dnode = dlist_remove_head(&msgbox->msglist);
         *pmsg = DLIST_OBJ(dnode,msg_s,msgnode);
-        wind_open_interrupt();
+        wind_enable_interrupt();
         return ERR_OK;
     }
 
@@ -193,7 +193,7 @@ w_err_t wind_msgbox_wait(msgbox_s *msgbox,msg_s **pmsg,w_uint32_t timeout)
     thread->runstat = THREAD_STATUS_SLEEP;
     thread->cause = CAUSE_MSG;
     dlist_insert_tail(&g_core.sleeplist,&thread->sleepthr.node);
-    wind_open_interrupt();
+    wind_enable_interrupt();
     
     _wind_thread_dispatch();
     if(thread->cause == CAUSE_MSG)
@@ -205,7 +205,7 @@ w_err_t wind_msgbox_wait(msgbox_s *msgbox,msg_s **pmsg,w_uint32_t timeout)
         }
         dnode = dlist_remove_head(&msgbox->msglist);
         *pmsg = DLIST_OBJ(dnode,msg_s,msgnode);
-        wind_open_interrupt();
+        wind_enable_interrupt();
         err = ERR_OK;
     }
     else if(thread->cause == CAUSE_SLEEP)
@@ -228,7 +228,7 @@ w_err_t wind_msgbox_trywait(msgbox_s *msgbox,msg_s **pmsg)
     WIND_ASSERT_RETURN(msgbox->owner,ERR_COMMAN);
     
     //如果邮箱中有消息，就直接返回消息
-    wind_close_interrupt();
+    wind_disable_interrupt();
     if(msgbox->msgnum > 0)
     {
         msgbox->msgnum --;
@@ -241,7 +241,7 @@ w_err_t wind_msgbox_trywait(msgbox_s *msgbox,msg_s **pmsg)
         *pmsg = NULL;
         err = ERR_COMMAN;
     }
-    wind_open_interrupt();
+    wind_enable_interrupt();
     return err;
 }
 

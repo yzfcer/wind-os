@@ -3,7 +3,9 @@
 #if WIND_CONSOLE_SUPPORT
 CMD_DECLARE(list);
 CMD_DECLARE(echo);
-//CMD_DECLARE(datetime);
+#if WIND_DATETIME_SUPPORT
+CMD_DECLARE(datetime);
+#endif
 CMD_DECLARE(mem);
 CMD_DECLARE(stati);
 CMD_DECLARE(test);
@@ -21,7 +23,9 @@ void _wind_register_all_cmd(console_s *ctrl)
 {
     wind_cmd_register(COMMAND(list),1);
     wind_cmd_register(COMMAND(echo),1);
-    //wind_cmd_register(COMMAND(datetime),1);
+#if WIND_DATETIME_SUPPORT
+    wind_cmd_register(COMMAND(datetime),1);
+#endif
     wind_cmd_register(COMMAND(stati),1);
     wind_cmd_register(COMMAND(mem),1);
     wind_cmd_register(COMMAND(test),1);
