@@ -33,7 +33,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
+#define WIND_THREAD_MAGIC 0x35BA6857
 #define THREAD_NAME_LEN 20 //线程名的最大长度，包括 '\0'
 #define THREAD_FROM_MEMBER(ptr,type,mbr) (void*)(((char*)(ptr))-((w_uint32_t)&(((type*)0)->mbr)))
 #define SLEEP_TIMEOUT_MAX 0x7fffffff
@@ -96,6 +96,7 @@ typedef enum __thr_evt_e
 //线程对象结构
 struct _thread_s
 {
+    w_uint32_t magic;
     prinode_s validthr;
     prinode_s suspendthr;
     prinode_s sleepthr;
@@ -133,6 +134,7 @@ thread_s *wind_thread_create(const w_int8_t *name,
                    w_int8_t **argv,
                    w_pstack_t psck,
                    w_uint16_t stksize);
+
 #if WIND_STKPOOL_SUPPORT
 thread_s *wind_thread_create_default(const w_int8_t *name,
                    w_err_t (*thread_func)(w_int32_t argc,w_int8_t **argv),

@@ -55,10 +55,10 @@ static w_err_t cmd_set_datetime(w_int32_t argc,char **argv)
     }
     
     cnt = sscanf(argv[2],"%4d/%02d/%02d",&dt.date.year,
-                &dt.date.month,&dt.date.day);
+                (w_uint32_t*)&dt.date.month,(w_uint32_t*)&dt.date.day);
     WIND_ASSERT_RETURN(cnt >= 3,ERR_INVALID_PARAM);
-    cnt = sscanf(argv[3],"%2d:%2d:%2d",&dt.time.hour,
-                &dt.time.minute,&dt.time.second);
+    cnt = sscanf(argv[3],"%2d:%2d:%2d",(w_uint32_t*)&dt.time.hour,
+                (w_uint32_t*)&dt.time.minute,(w_uint32_t*)&dt.time.second);
     WIND_ASSERT_RETURN(cnt >= 3,ERR_INVALID_PARAM);
     dt.time.msecond = 0;
     wind_datetime_set(&dt);

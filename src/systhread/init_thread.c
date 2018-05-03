@@ -5,6 +5,7 @@
 #include "wind_heap.h"
 #include "wind_dev.h"
 #include "wind_blkdev.h"
+#include "wind_time.h"
 
 #define INIT_STK_SIZE 256
 

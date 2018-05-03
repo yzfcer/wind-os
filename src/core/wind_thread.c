@@ -186,20 +186,23 @@ thread_s *wind_thread_create(const w_int8_t *name,
     WIND_ASSERT_RETURN(priolevel < PRIO_SYS_LOW && priolevel > PRIO_ZERO,NULL);
     thread = thread_malloc();
     WIND_ASSERT_RETURN(thread != NULL,NULL);
-    wind_strcpy(thread->name,name);
-    thread->prio = get_prio(priolevel);
+    thread->magic = WIND_THREAD_MAGIC;
     PRIO_DNODE_INIT(thread->validthr);
     PRIO_DNODE_INIT(thread->suspendthr);
     PRIO_DNODE_INIT(thread->sleepthr);
-    thread->stack_top = pstk;
     thread->stack = pstk;
+    thread->stack_top = pstk;
     thread->stksize = stksize;
     for(i = 0;i < stksize;i ++)
         thread->stack[i] = 0;
-    tmpstk = wind_stk_init(thread_entry,0,pstk + stksize -1);
     thread->argc = argc;
     thread->argv = argv;
     thread->thread_func = thread_func;
+    
+    wind_strcpy(thread->name,name);
+    thread->prio = get_prio(priolevel);
+    
+    tmpstk = wind_stk_init(thread_entry,0,pstk + stksize -1);
     thread->stack = tmpstk;
     thread->runstat = THREAD_STATUS_READY;
     thread->cause = CAUSE_COM;
@@ -236,6 +239,7 @@ w_err_t wind_thread_set_priority(thread_s *thread,w_int16_t prio)
     dnode_s *node;
     w_int16_t minlim = 0,maxlim = 32767;
     WIND_ASSERT_RETURN(thread != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(thread->magic == WIND_THREAD_MAGIC,ERR_INVALID_PARAM);
     WIND_ASSERT_RETURN((prio >= minlim) && (prio <= maxlim),ERR_PARAM_OVERFLOW);
     if(wind_thread_isopen())
     {
@@ -257,6 +261,7 @@ w_err_t wind_thread_set_priority(thread_s *thread,w_int16_t prio)
 w_err_t wind_thread_start(thread_s *thread)
 {
     WIND_ASSERT_RETURN(thread != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(thread->magic == WIND_THREAD_MAGIC,ERR_INVALID_PARAM);
     wind_disable_interrupt();   
 #if WIND_THREAD_CALLBACK_SUPPORT
     if(thread->cb.start != NULL)
@@ -273,6 +278,7 @@ w_err_t wind_thread_start(thread_s *thread)
 w_err_t wind_thread_suspend(thread_s *thread)
 {
     WIND_ASSERT_RETURN(thread != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(thread->magic == WIND_THREAD_MAGIC,ERR_INVALID_PARAM);
     wind_disable_interrupt();
 #if WIND_THREAD_CALLBACK_SUPPORT
     if(thread->cb.suspend != NULL)
@@ -289,6 +295,7 @@ w_err_t wind_thread_suspend(thread_s *thread)
 w_err_t wind_thread_resume(thread_s *thread)
 {
     WIND_ASSERT_RETURN(thread != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(thread->magic == WIND_THREAD_MAGIC,ERR_INVALID_PARAM);
     wind_disable_interrupt();
 #if WIND_THREAD_CALLBACK_SUPPORT
     if(thread->cb.resume != NULL)
@@ -305,6 +312,7 @@ w_err_t wind_thread_kill(thread_s *thread)
 {
     dnode_s *node;
     WIND_ASSERT_RETURN(thread != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(thread->magic == WIND_THREAD_MAGIC,ERR_INVALID_PARAM);
     wind_disable_interrupt();
     node = &thread->validthr.node;
     dlist_remove(&g_core.threadlist,node);
@@ -406,6 +414,7 @@ w_err_t _wind_thread_wakeup(void)
 w_err_t wind_thread_callback_register(thread_s *thread,thr_evt_e id,void(*cb)(thread_s *))
 {
     WIND_ASSERT_RETURN(thread != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(thread->magic == WIND_THREAD_MAGIC,ERR_INVALID_PARAM);
 
     switch(id)
     {

@@ -35,9 +35,11 @@ extern "C" {
 
 #if WIND_TIMER_SUPPORT
 #define TIMER_PERIOD 10
+#define WIND_TIMER_MAGIC 0x34F574B2
 typedef void (*softimer_fn)(void *arg);
 typedef struct tagTicktimer
 {
+    w_uint32_t magic;
     const char *name;
     dnode_s timernode;
     w_bool_t running;

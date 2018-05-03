@@ -293,7 +293,7 @@ void tick64_to_datetime(datetime_s *st, systick_s *tick64)
   st->time.hour = (w_uint8_t)(second % 24);
   second /= 24;
   JD = second + JAN_1ST_1900;
-  st->week = (w_uint16_t)((JD + 1) % 7);
+  st->week = (week_e)((JD + 1) % 7);
   tick32_to_date(JD, &st->date);
   st->time.msecond = tick32_to_ms(fraction);
 }
