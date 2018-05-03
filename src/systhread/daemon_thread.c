@@ -39,8 +39,8 @@ static w_err_t daemon_thread(w_int32_t argc,w_int8_t **argv)
 w_err_t _create_daemon_thread(void)
 {
     thread_s *thread;
-    thread = wind_thread_create("daemon",PRIO_HIGH,daemon_thread,
-                     0,NULL,daemonstk,DAEMON_STK_SIZE);
+    thread = wind_thread_create("daemon",daemon_thread,
+                     0,NULL,PRIO_HIGH,daemonstk,DAEMON_STK_SIZE);
     WIND_ASSERT_RETURN(thread != NULL,ERR_COMMAN);
     return ERR_OK;
 }

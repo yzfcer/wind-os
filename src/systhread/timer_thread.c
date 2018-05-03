@@ -20,8 +20,8 @@ static w_err_t timer_thread(w_int32_t argc,w_int8_t **argv)
 w_err_t _create_timer_thread(void)
 {
     thread_s *thread;
-    thread = wind_thread_create("timer",PRIO_HIGH,timer_thread,
-                     0,NULL,timerstk,TIMER_STK_SIZE);
+    thread = wind_thread_create("timer",timer_thread,
+                     0,NULL,PRIO_HIGH,timerstk,TIMER_STK_SIZE);
     WIND_ASSERT_RETURN(thread != NULL,ERR_COMMAN);
     wind_thread_set_priority(thread,3);
     return ERR_OK;

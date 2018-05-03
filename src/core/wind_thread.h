@@ -129,18 +129,18 @@ thread_s *wind_thread_current(void);
 char *wind_thread_curname(void);
 
 thread_s *wind_thread_create(const char *name,
-                   prio_e priolevel,
-                   w_err_t (*thread_func)(w_int32_t argc,w_int8_t **argv),
-                   w_int16_t argc,
-                   w_int8_t **argv,
-                   w_pstack_t psck,
-                   w_uint16_t stksize);
+                    w_err_t (*thread_func)(w_int32_t argc,w_int8_t **argv),
+                    w_int16_t argc,
+                    w_int8_t **argv,
+                    prio_e priolevel,
+                    w_pstack_t psck,
+                    w_uint16_t stksize);
 
 #if WIND_STKPOOL_SUPPORT
 thread_s *wind_thread_create_default(const char *name,
-                   w_err_t (*thread_func)(w_int32_t argc,w_int8_t **argv),
-                   w_int16_t argc,
-                   w_int8_t **argv);
+                    w_err_t (*thread_func)(w_int32_t argc,w_int8_t **argv),
+                    w_int16_t argc,
+                    w_int8_t **argv);
 #else 
 #define wind_thread_create_default(n,f,c,v) ERR_COMMAN
 #endif

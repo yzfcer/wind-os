@@ -144,12 +144,12 @@ char *wind_thread_curname(void)
 
 //创建一个线程
 thread_s *wind_thread_create(const char *name,
-                   prio_e priolevel,
-                   w_err_t (*thread_func)(w_int32_t argc,w_int8_t **argv),
-                   w_int16_t argc,
-                   w_int8_t **argv,
-                   w_pstack_t pstk,
-                   w_uint16_t stksize)
+                    w_err_t (*thread_func)(w_int32_t argc,w_int8_t **argv),
+                    w_int16_t argc,
+                    w_int8_t **argv,
+                    prio_e priolevel,
+                    w_pstack_t pstk,
+                    w_uint16_t stksize)
 {
     w_uint16_t i;
     thread_s *thread;
@@ -196,9 +196,9 @@ thread_s *wind_thread_create(const char *name,
 
 #if WIND_STKPOOL_SUPPORT
 thread_s *wind_thread_create_default(const w_int8_t *name,
-                   w_err_t (*thread_func)(w_int32_t argc,w_int8_t **argv),
-                   w_int16_t argc,
-                   w_int8_t **argv)
+                    w_err_t (*thread_func)(w_int32_t argc,w_int8_t **argv),
+                    w_int16_t argc,
+                    w_int8_t **argv)
 {
     prio_e priol;
     w_pstack_t pstk;
@@ -207,7 +207,7 @@ thread_s *wind_thread_create_default(const w_int8_t *name,
     stksize = WIND_STK_SIZE;
     pstk = wind_pool_malloc(stkbufpool);
     WIND_ASSERT_RETURN(pstk != NULL,NULL);
-    return wind_thread_create(name,priol,thread_func,argc,argv,pstk,stksize);
+    return wind_thread_create(name,thread_func,argc,argv,priol,pstk,stksize);
 }
 #endif
 

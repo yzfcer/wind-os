@@ -94,7 +94,7 @@ w_err_t wind_sem_trydestroy(sem_s *sem)
 {
     dnode_s *pdnode;
     WIND_ASSERT_RETURN(sem != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(sem->magic != WIND_SEM_MAGIC,ERR_INVALID_PARAM);
+    WIND_ASSERT_RETURN(sem->magic == WIND_SEM_MAGIC,ERR_INVALID_PARAM);
     wind_disable_interrupt();
     pdnode = dlist_head(&sem->waitlist);
     if(pdnode != NULL)
@@ -112,7 +112,7 @@ w_err_t wind_sem_destroy(sem_s *sem)
     dnode_s *pdnode;
     thread_s *thread;
     WIND_ASSERT_RETURN(sem != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(sem->magic != WIND_SEM_MAGIC,ERR_INVALID_PARAM);
+    WIND_ASSERT_RETURN(sem->magic == WIND_SEM_MAGIC,ERR_INVALID_PARAM);
     wind_notice("destroy sem:%s",sem->name);
     wind_disable_interrupt();
     dlist_remove(&g_core.semlist,&sem->semnode);
@@ -134,7 +134,7 @@ w_err_t wind_sem_post(sem_s *sem)
     dnode_s *pnode;
     thread_s *thread;
     WIND_ASSERT_RETURN(sem != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(sem->magic != WIND_SEM_MAGIC,ERR_INVALID_PARAM);
+    WIND_ASSERT_RETURN(sem->magic == WIND_SEM_MAGIC,ERR_INVALID_PARAM);
     wind_disable_interrupt();
     //无阻塞的线程，减少信号量后直接返回
     pnode = dlist_head(&sem->waitlist);
@@ -164,7 +164,7 @@ w_err_t wind_sem_wait(sem_s *sem,w_uint32_t timeout)
     w_int32_t ticks;
     thread_s *thread;
     WIND_ASSERT_RETURN(sem != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(sem->magic != WIND_SEM_MAGIC,ERR_INVALID_PARAM);
+    WIND_ASSERT_RETURN(sem->magic == WIND_SEM_MAGIC,ERR_INVALID_PARAM);
     ticks = timeout *WIND_TICK_PER_SEC / 1000;
     if(ticks == 0)
         ticks = 1;
@@ -209,7 +209,7 @@ w_err_t wind_sem_trywait(sem_s *sem)
 {
     w_err_t err;
     WIND_ASSERT_RETURN(sem != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(sem->magic != WIND_SEM_MAGIC,ERR_INVALID_PARAM);
+    WIND_ASSERT_RETURN(sem->magic == WIND_SEM_MAGIC,ERR_INVALID_PARAM);
 
     //信号量有效，直接返回
     wind_disable_interrupt();
