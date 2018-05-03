@@ -25,16 +25,14 @@
 
 #include "wind_config.h"
 #include "wind_type.h"
-#include "wind_os_hwif.h"
 #include "wind_core.h"
 #include "wind_thread.h"
 #include "wind_string.h"
 #include "wind_debug.h"
-#include "wind_stati.h"
 #include "wind_pool.h"
 #include "wind_var.h"
 #include "wind_heap.h"
-#include "wind_macro.h"
+#include "wind_os_hwif.h"
 //用来表示
 
 #define WIND_THREAD_PRIO_MIN_LIM 100//优先级的最小值
@@ -64,29 +62,9 @@ static __INLINE__ thread_s *thread_malloc(void)
 
 static __INLINE__ w_err_t thread_free(thread_s *thread)
 {
-    WIND_ASSERT_RETURN(thread != NULL,ERR_NULL_POINTER);
-    wind_memset(thread->name,0,THREAD_NAME_LEN);
-    thread->prio = -1;
-    thread->runstat = THREAD_STATUS_INIT;
-    thread->cause = CAUSE_COM;
-    thread->stack = NULL;
-    thread->stksize = 0;
     return wind_pool_free(threadpool,thread);
 }
 
-w_err_t wind_thread_distroy(thread_s *thread)
-{
-    WIND_ASSERT_RETURN(thread != NULL,ERR_NULL_POINTER);
-    wind_notice("distroy thread:%s",thread->name);
-    wind_disable_interrupt();
-    //这里需要先释放一些与这个线程相关的一些东西后才能释放这个thread
-#if WIND_STKPOOL_SUPPORT
-    wind_pool_free(stkbufpool,thread->stack_top);
-#endif
-    thread_free(thread);
-    wind_enable_interrupt();
-    return ERR_OK;
-}
 
 static void thread_entry(void *args)
 {
@@ -100,6 +78,24 @@ static void thread_entry(void *args)
         wind_thread_exit(err);
     }
 }
+
+static char *wind_thread_status(thread_stat_e stat)
+{
+    switch(stat)
+    {
+        case THREAD_STATUS_READY:
+            return "ready";
+        case THREAD_STATUS_SLEEP:
+            return "sleep";
+        case THREAD_STATUS_SUSPEND:
+            return "suspend";
+        case THREAD_STATUS_DEAD:
+            return "dead";
+        default:
+            return "unkown";
+    }
+}
+
 //********************************************internal functions******************************
 
 
@@ -134,39 +130,20 @@ thread_s *wind_thread_get(const char *name)
     return NULL;
 }
 
-thread_s *wind_thread_current()
+thread_s *wind_thread_current(void)
 {
     return THREAD_FROM_MEMBER(gwind_cur_stack,thread_s,stack);
 }
 
-w_int8_t *wind_thread_status(thread_stat_e stat)
-{
-    switch(stat)
-    {
-        case THREAD_STATUS_READY:
-            return "ready";
-        case THREAD_STATUS_SLEEP:
-            return "sleep";
-        case THREAD_STATUS_SUSPEND:
-            return "suspend";
-        case THREAD_STATUS_DEAD:
-            return "dead";
-        default:
-            return "unkown";
-    }
-}
-
-
-w_int8_t *wind_thread_curname(void)
+char *wind_thread_curname(void)
 {
     thread_s *thread;
     thread = wind_thread_current();
     return thread->name;
 }
 
-
 //创建一个线程
-thread_s *wind_thread_create(const w_int8_t *name,
+thread_s *wind_thread_create(const char *name,
                    prio_e priolevel,
                    w_err_t (*thread_func)(w_int32_t argc,w_int8_t **argv),
                    w_int16_t argc,
@@ -234,10 +211,33 @@ thread_s *wind_thread_create_default(const w_int8_t *name,
 }
 #endif
 
+w_err_t wind_thread_destroy(thread_s *thread)
+{
+    WIND_ASSERT_RETURN(thread != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(thread->magic == WIND_THREAD_MAGIC,ERR_INVALID_PARAM);
+    wind_notice("distroy thread:%s",thread->name);
+#if WIND_THREAD_CALLBACK_SUPPORT
+        if(thread->cb.dead != NULL)
+            thread->cb.dead(thread);
+#endif
+    wind_disable_interrupt();
+    dlist_remove(&g_core.threadlist,&thread->validthr.node);
+    //这里需要先释放一些与这个线程相关的一些东西后才能释放这个thread
+#if WIND_STKPOOL_SUPPORT
+    wind_pool_free(stkbufpool,thread->stack_top);
+#endif
+    
+    thread_free(thread);
+    wind_enable_interrupt();
+    _wind_thread_dispatch();
+    return ERR_OK;
+}
+
 w_err_t wind_thread_set_priority(thread_s *thread,w_int16_t prio)
 {
     dnode_s *node;
     w_int16_t minlim = 0,maxlim = 32767;
+    extern w_bool_t  wind_thread_isopen(void);
     WIND_ASSERT_RETURN(thread != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(thread->magic == WIND_THREAD_MAGIC,ERR_INVALID_PARAM);
     WIND_ASSERT_RETURN((prio >= minlim) && (prio <= maxlim),ERR_PARAM_OVERFLOW);
@@ -256,6 +256,7 @@ w_err_t wind_thread_set_priority(thread_s *thread,w_int16_t prio)
     wind_enable_interrupt();
     return ERR_OK;
 }
+
 
 
 w_err_t wind_thread_start(thread_s *thread)
@@ -308,46 +309,13 @@ w_err_t wind_thread_resume(thread_s *thread)
 }
 
 
-w_err_t wind_thread_kill(thread_s *thread)
-{
-    dnode_s *node;
-    WIND_ASSERT_RETURN(thread != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(thread->magic == WIND_THREAD_MAGIC,ERR_INVALID_PARAM);
-    wind_disable_interrupt();
-    node = &thread->validthr.node;
-    dlist_remove(&g_core.threadlist,node);
-#if WIND_THREAD_CALLBACK_SUPPORT
-    if(thread->cb.dead != NULL)
-        thread->cb.dead(thread);
-#endif
-    wind_thread_distroy(thread);
-    wind_enable_interrupt();
-    _wind_thread_dispatch();
-    return ERR_OK;
-}
-
-
-
-//根据线程的名称来销毁线程
-w_err_t wind_thread_kill_byname(w_int8_t *name)
-{
-    w_err_t err;
-    thread_s *thread;
-    WIND_ASSERT_RETURN(name != NULL,ERR_NULL_POINTER);
-    thread = wind_thread_get(name);
-    WIND_ASSERT_RETURN(thread != NULL,ERR_NULL_POINTER);
-    err = wind_thread_kill(thread);
-    return err;
-}
-
-
 //退出线程，在对应的线程中调用
 w_err_t wind_thread_exit(w_err_t exitcode)
 {
     thread_s *thread;
     thread = wind_thread_current();
     wind_notice("thread \"%s\" exit:%d",thread->name,exitcode);
-    wind_thread_kill(thread);
+    wind_thread_destroy(thread);
     _wind_thread_dispatch();
     return ERR_OK;
 }
@@ -418,9 +386,6 @@ w_err_t wind_thread_callback_register(thread_s *thread,thr_evt_e id,void(*cb)(th
 
     switch(id)
     {
-    case THR_EVT_CREATE:
-        thread->cb.create = cb;
-        break;
     case THR_EVT_START:
         thread->cb.start = cb;
         break;

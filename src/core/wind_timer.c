@@ -22,14 +22,13 @@
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
-#include "wind_config.h"
-#include "wind_type.h"
 #include "wind_timer.h"
 #include "wind_debug.h"
-#include "wind_stati.h"
 #include "wind_var.h"
 #include "wind_core.h"
 #include "wind_string.h"
+#include "wind_pool.h"
+
 #if WIND_TIMER_SUPPORT
 static WIND_POOL(timerpool,WIND_TIMER_MAX_NUM,sizeof(timer_s));
 
@@ -135,7 +134,7 @@ w_err_t wind_timer_set_period(timer_s* timer,w_uint32_t t_ms)
     return ERR_OK;
 }
 
-void wind_timer_event(void)
+void _wind_timer_event(void)
 {
     timer_s* ptmr;
     dnode_s *pdnode;

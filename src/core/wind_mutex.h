@@ -45,7 +45,7 @@ typedef struct _wind_mutex
 w_err_t _wind_mutex_init(void);
 mutex_s *wind_mutex_get(const char *name);
 mutex_s *wind_mutex_create(const char *name);
-w_err_t wind_mutex_try_destroy(mutex_s *mutex);
+w_err_t wind_mutex_trydestroy(mutex_s *mutex);
 w_err_t wind_mutex_destroy(mutex_s *mutex);
 w_err_t wind_mutex_lock(mutex_s *mutex);
 w_err_t wind_mutex_trylock(mutex_s *mutex);

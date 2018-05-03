@@ -22,18 +22,15 @@
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
-#include "wind_config.h"
-#include "wind_type.h"
+#include "wind_var.h"
 #include "wind_thread.h"
-#include "wind_dlist.h"
 #include "wind_pipe.h"
 #include "wind_msgbox.h"
 #include "wind_sem.h"
 #include "wind_mutex.h"
 #include "wind_timer.h"
-#include "wind_debug.h"
 #include "wind_pool.h"
-#include "wind_var.h"
+#include "wind_debug.h"
 core_var_s g_core;
 volatile w_bool_t gwind_start_flag = B_FALSE;
 

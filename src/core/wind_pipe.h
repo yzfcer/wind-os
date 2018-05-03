@@ -47,6 +47,7 @@ typedef struct __WIND_PIPE
     void *buff;
     w_uint32_t buflen;
 }pipe_s;
+
 w_err_t _wind_pipe_init(void);
 w_err_t _wind_pipe_print(dlist_s* list);
 pipe_s* wind_pipe_get(const char *name);

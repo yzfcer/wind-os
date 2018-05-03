@@ -28,7 +28,6 @@
 
 #include "wind_config.h"
 #include "wind_type.h"
-#include "wind_mutex.h"
 #include "wind_dlist.h"
 
 #ifdef __cplusplus
@@ -88,7 +87,7 @@ struct __heap_s
     dnode_s heapnode;
     dlist_s used_list;
     dlist_s free_list;
-    mutex_s *pmutex; 
+    void *pmutex; 
 };
 
 heap_s *wind_heap_get(const char *name);

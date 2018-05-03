@@ -27,15 +27,16 @@
 
 #include "wind_config.h"
 #include "wind_type.h"
-#include "wind_thread.h"
 #include "wind_dlist.h"
+#if 0
+#include "wind_thread.h"
 #include "wind_pipe.h"
 #include "wind_msgbox.h"
 #include "wind_sem.h"
 #include "wind_mutex.h"
 #include "wind_timer.h"
-#include "wind_stati.h"
 #include "wind_pool.h"
+#endif
 #ifdef __cplusplus
 extern "C" {
 #endif

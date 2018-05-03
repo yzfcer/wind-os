@@ -37,6 +37,7 @@
 #include "wind_heap.h"
 #include "wind_dev.h"
 #include "wind_blkdev.h"
+#include "wind_pipe.h"
 #if WIND_CONSOLE_SUPPORT
 
 COMMAND_DISC(list)

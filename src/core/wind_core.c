@@ -29,11 +29,18 @@
 
 #include "wind_version.h"
 #include "wind_thread.h"
-#include "wind_core.h"
+#include "wind_mutex.h"
+#include "wind_sem.h"
+#include "wind_msgbox.h"
+#include "wind_pipe.h"
+#include "wind_timer.h"
 #include "wind_softirq.h"
+
+#include "wind_core.h"
 #include "wind_var.h"
 #include "wind_time.h"
 #include "wind_std.h"
+#include "wind_debug.h"
 
 volatile w_int8_t gwind_int_cnt = 0;//全局的中断计数值
 volatile w_int8_t gwind_core_cnt = 0;//全局的禁止切换计数值

@@ -49,11 +49,13 @@ typedef struct _wind_sem
 w_err_t _wind_sem_init(void);
 sem_s *wind_sem_get(const char *name);
 sem_s *wind_sem_create(const char *name,w_int16_t semValue);
+w_err_t wind_sem_trydestroy(sem_s *sem);
+w_err_t wind_sem_destroy(sem_s *sem);
+
 w_err_t wind_sem_post(sem_s *sem);
 w_err_t wind_sem_wait(sem_s *sem,w_uint32_t timeout);
 w_err_t wind_sem_trywait(sem_s *sem);
-w_err_t wind_sem_try_destroy(sem_s *sem);
-w_err_t wind_sem_destroy(sem_s *sem);
+
 w_err_t wind_sem_print(dlist_s *list);
 #else
 #define _wind_sem_init() 

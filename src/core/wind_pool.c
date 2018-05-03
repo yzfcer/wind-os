@@ -22,11 +22,8 @@
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
-
-#include "wind_config.h"
-#include "wind_type.h"
-#include "wind_debug.h"
 #include "wind_pool.h"
+#include "wind_debug.h"
 #include "wind_var.h"
 #include "wind_core.h"
 #include "wind_string.h"

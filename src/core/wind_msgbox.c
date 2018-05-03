@@ -22,16 +22,12 @@
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
-
-#include "wind_config.h"
-#include "wind_type.h"
-#include "wind_os_hwif.h"
 #include "wind_msgbox.h"
 #include "wind_core.h"
-#include "wind_stati.h"
 #include "wind_var.h"
 #include "wind_debug.h"
 #include "wind_string.h"
+#include "wind_pool.h"
 
 #if WIND_MSGBOX_SUPPORT
 extern void _wind_thread_dispatch(void);
@@ -108,14 +104,32 @@ msgbox_s *wind_msgbox_create(const char *name,thread_s *owner)
     return msgbox;
 }
 
+w_err_t wind_msgbox_trydestroy(msgbox_s *msgbox)
+{
+    dnode_s *pdnode;
+    WIND_ASSERT_RETURN(msgbox != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(msgbox->magic == WIND_MSGBOX_MAGIC,ERR_INVALID_PARAM);
+    wind_disable_interrupt();
+    pdnode = dlist_head(&msgbox->msglist);
+    if(pdnode != NULL)
+    {
+        wind_enable_interrupt();
+        return ERR_COMMAN;
+    }
+    wind_enable_interrupt();
+    return wind_msgbox_destroy(msgbox);
+}
+
 w_err_t wind_msgbox_destroy(msgbox_s *msgbox)
 {
     dnode_s *dnode;
     thread_s *thread;
     WIND_ASSERT_RETURN(msgbox != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(msgbox->magic == WIND_MSGBOX_MAGIC,ERR_INVALID_PARAM);
     wind_notice("destroy msgbox:%s",msgbox->name);
     wind_disable_interrupt();
     dlist_remove_tail(&g_core.msgboxlist);
+    wind_enable_interrupt();
     thread = msgbox->owner;
     if((msgbox->owner->runstat == THREAD_STATUS_SLEEP) 
        && (msgbox->owner->cause == CAUSE_MSG))
@@ -124,15 +138,12 @@ w_err_t wind_msgbox_destroy(msgbox_s *msgbox)
     }
 
     msgbox->magic = 0;
-    msgbox->owner = NULL;
-    msgbox->name = NULL;
     dnode = dlist_head(&msgbox->msglist);
     if(dnode != NULL)
     {
         wind_warn("msgbox:%s is NOT empty while destroying it.",msgbox->name);
     }
     msgbox_free(msgbox);
-    wind_enable_interrupt();
     return ERR_OK;
 }
 

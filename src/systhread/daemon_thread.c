@@ -1,7 +1,7 @@
 #include "wind_type.h"
-//#include "wind_var.h"
 #include "wind_thread.h"
 #include "wind_debug.h"
+
 #if WIND_DAEMON_THREAD_SUPPORT 
 #define DAEMON_STK_SIZE 256
 static w_stack_t daemonstk[DAEMON_STK_SIZE];

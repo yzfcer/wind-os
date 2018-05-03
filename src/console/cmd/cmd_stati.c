@@ -29,6 +29,8 @@
 #include "wind_stati.h"
 #include "wind_var.h"
 #include "wind_cmd.h"
+#include "wind_pool.h"
+
 #if WIND_CONSOLE_SUPPORT
 
 static void core_stati_print(w_uint16_t opt)

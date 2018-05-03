@@ -1,6 +1,7 @@
 #include "wind_type.h"
 #include "wind_var.h"
 #include "wind_thread.h"
+#include "wind_debug.h"
 #if WIND_STATI_THREAD_SUPPORT
 
 #define STATI_STK_SIZE 256

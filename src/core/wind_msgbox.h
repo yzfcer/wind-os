@@ -28,6 +28,7 @@
 
 #include "wind_config.h"
 #include "wind_type.h"
+#include "wind_dlist.h"
 #include "wind_thread.h"
 
 #ifdef __cplusplus
@@ -61,6 +62,7 @@ void wind_msg_init(msg_s *msg,w_uint16_t msg_id,w_uint16_t msg_len,void *msg_arg
 w_err_t _wind_msgbox_init(void);
 msgbox_s *wind_msgbox_get(const char *name);
 msgbox_s *wind_msgbox_create(const char *name,thread_s *owner);
+w_err_t wind_msgbox_trydestroy(msgbox_s *msgbox);
 w_err_t wind_msgbox_destroy(msgbox_s *msgbox);
 
 w_err_t wind_msgbox_post(msgbox_s *msgbox,msg_s *pmsg);

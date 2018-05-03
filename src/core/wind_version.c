@@ -29,7 +29,7 @@
 const char* versioninfo = \
 "E-mail:yzfcer@163.com.\r\n";
 
-w_uint8_t *g_wind_logo[4] = 
+char *g_wind_logo[4] = 
 {
     " _    __    _",
     " \\\\  //\\\\  // ",
@@ -37,15 +37,16 @@ w_uint8_t *g_wind_logo[4] =
     "   \\/    \\/   "   
 };
 
-const w_int8_t *wind_get_core_version_info(void)
+const char *wind_get_core_version_info(void)
 {
     return versioninfo;
 }
 
-const w_int8_t *wind_get_core_version(void)
+const char *wind_get_core_version(void)
 {
     return WIND_CORE_VERSION;
 }
+
 static void output_logo(void)
 {
     int i;

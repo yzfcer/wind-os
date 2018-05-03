@@ -75,7 +75,6 @@ typedef struct __threadcb_s threadcb_s;
 #if WIND_THREAD_CALLBACK_SUPPORT
 struct __threadcb_s
 {
-    void (*create)(thread_s *thread);
     void (*start)(thread_s *thread);
     void (*suspend)(thread_s *thread);
     void (*resume)(thread_s *thread);
@@ -127,7 +126,9 @@ w_err_t _wind_thread_wakeup(void);
 
 thread_s *wind_thread_get(const char *name);
 thread_s *wind_thread_current(void);
-thread_s *wind_thread_create(const w_int8_t *name,
+char *wind_thread_curname(void);
+
+thread_s *wind_thread_create(const char *name,
                    prio_e priolevel,
                    w_err_t (*thread_func)(w_int32_t argc,w_int8_t **argv),
                    w_int16_t argc,
@@ -136,7 +137,7 @@ thread_s *wind_thread_create(const w_int8_t *name,
                    w_uint16_t stksize);
 
 #if WIND_STKPOOL_SUPPORT
-thread_s *wind_thread_create_default(const w_int8_t *name,
+thread_s *wind_thread_create_default(const char *name,
                    w_err_t (*thread_func)(w_int32_t argc,w_int8_t **argv),
                    w_int16_t argc,
                    w_int8_t **argv);
@@ -144,18 +145,10 @@ thread_s *wind_thread_create_default(const w_int8_t *name,
 #define wind_thread_create_default(n,f,c,v) ERR_COMMAN
 #endif
 
-
 w_err_t wind_thread_set_priority(thread_s *thread,w_int16_t prio);
 w_err_t wind_thread_start(thread_s *thread);
 w_err_t wind_thread_suspend(thread_s *thread);
 w_err_t wind_thread_resume(thread_s *thread);
-w_err_t wind_thread_kill(thread_s *thread);
-w_err_t wind_thread_kill_byname(w_int8_t *name);
-
-
-w_bool_t  wind_thread_isopen(void);
-char *wind_thread_curname(void);
-w_int8_t *wind_thread_status(thread_stat_e stat);
 
 w_err_t wind_thread_sleep(w_uint32_t ms);
 w_err_t wind_thread_exit(w_err_t exitcode);

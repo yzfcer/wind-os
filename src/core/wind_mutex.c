@@ -22,15 +22,10 @@
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
-#include "wind_config.h"
-#include "wind_type.h"
-#include "wind_debug.h"
 #include "wind_mutex.h"
+#include "wind_debug.h"
 #include "wind_thread.h"
-#include "wind_os_hwif.h"
-#include "wind_stati.h"
 #include "wind_var.h"
-#include "wind_dlist.h"
 #include "wind_core.h"
 #include "wind_pool.h"
 #include "wind_string.h"
@@ -92,8 +87,8 @@ mutex_s *wind_mutex_create(const char *name)
     return mutex;
 }
 
-//试图释放一个互斥锁，如果有线程被阻塞，则释放将终止
-w_err_t wind_mutex_try_destroy(mutex_s *mutex)
+//试图销毁一个互斥锁，如果有线程被阻塞，则销毁将终止
+w_err_t wind_mutex_trydestroy(mutex_s *mutex)
 {
     WIND_ASSERT_RETURN(mutex != NULL,ERR_NULL_POINTER);
     wind_disable_interrupt();
@@ -103,7 +98,7 @@ w_err_t wind_mutex_try_destroy(mutex_s *mutex)
     return ERR_OK;    
 }
 
-//强制性释放互斥锁，并把所有的被该互斥锁阻塞的线程全部激活
+//强制性销毁互斥锁，并把所有的被该互斥锁阻塞的线程全部激活
 w_err_t wind_mutex_destroy(mutex_s *mutex)
 {
     dnode_s *pnode;
@@ -111,6 +106,7 @@ w_err_t wind_mutex_destroy(mutex_s *mutex)
     WIND_ASSERT_RETURN(mutex != NULL,ERR_NULL_POINTER);
     wind_notice("destroy mutex:%s",mutex->name);
     wind_disable_interrupt();
+    dlist_remove(&g_core.mutexlist,&mutex->mutexnode);
     foreach_node(pnode,&mutex->waitlist)
     {
         dlist_remove(&mutex->waitlist,pnode);
@@ -118,11 +114,9 @@ w_err_t wind_mutex_destroy(mutex_s *mutex)
         thread->runstat = THREAD_STATUS_READY;
         thread->cause = CAUSE_LOCK;
     }
-    dlist_remove(&g_core.mutexlist,&mutex->mutexnode);
-    mutex->name = NULL;
+    wind_enable_interrupt();
     mutex->magic = 0;
     mutex_free(mutex);
-    wind_enable_interrupt();
     return ERR_OK;
 }
 
