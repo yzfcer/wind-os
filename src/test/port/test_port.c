@@ -1,5 +1,5 @@
 #include "test_port.h"
-#include "cut.h"
+#include "wind_cut.h"
 
 //DECLARE_SUITE(TestSuite1);
 //DECLARE_SUITE(TestSuite2);

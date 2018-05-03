@@ -23,9 +23,6 @@
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
 #include "stdio.h"
-#include "wind_config.h"
-#include "wind_type.h"
-#include "wind_debug.h"
 #include "wind_cmd.h"
 #include "wind_dev.h"
 #if WIND_CONSOLE_SUPPORT

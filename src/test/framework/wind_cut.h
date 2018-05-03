@@ -1,5 +1,5 @@
-#ifndef __CUT_H__
-#define __CUT_H__
+#ifndef WIND_CUT_H__
+#define WIND_CUT_H__
 #include "test_framework.h"
 
 //¶ÏÑÔx == y

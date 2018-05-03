@@ -22,14 +22,9 @@
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
-#include "wind_config.h"
-#include "wind_type.h"
-#include "wind_debug.h"
+#include "wind_cmd.h"
 #include "wind_string.h"
 #include "wind_thread.h"
-#include "wind_sem.h"
-#include "wind_var.h"
-#include "wind_cmd.h"
 #if WIND_CONSOLE_SUPPORT
 
 static w_bool_t str2int(const char *str,w_uint32_t *value)

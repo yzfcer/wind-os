@@ -22,10 +22,8 @@
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
-#include "wind_config.h"
-#include "wind_type.h"
-#include "wind_os_hwif.h"
 #include "wind_cmd.h"
+#include "wind_os_hwif.h"
 #if WIND_CONSOLE_SUPPORT
 
 COMMAND_DISC(reset)

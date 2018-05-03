@@ -22,16 +22,12 @@
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
-#include "wind_config.h"
-#include "wind_type.h"
-#include "console_framework.h"
-#include "wind_debug.h"
+#include "wind_cmd.h"
 #include "wind_string.h"
 #include "wind_thread.h"
 #include "wind_sem.h"
 #include "wind_mutex.h"
 #include "wind_var.h"
-#include "wind_cmd.h"
 #include "wind_pool.h"
 #include "wind_msgbox.h"
 #include "wind_heap.h"

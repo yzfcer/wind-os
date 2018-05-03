@@ -29,7 +29,7 @@
 #include "wind_thread.h"
 #include "wind_softirq.h"
 #include "wind_heap.h"
-#include "cut.h"
+#include "wind_cut.h"
 
 #include "wind_cmd.h"
 #include "test_framework.h"

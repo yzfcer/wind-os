@@ -23,7 +23,7 @@ extern "C" {
 #endif // #ifdef __cplusplus
 
 /*********************************************头文件定义***********************************************/
-#include "cut.h"
+#include "wind_cut.h"
 #include "wind_sem.h"
 
 #if WIND_SEM_SUPPORT

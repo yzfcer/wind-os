@@ -24,7 +24,7 @@ extern "C" {
 
 
 /*********************************************头文件定义***********************************************/
-#include "cut.h"
+#include "wind_cut.h"
 #include "wind_pool.h"
 #include "wind_thread.h"
 #include "wind_msgbox.h"
