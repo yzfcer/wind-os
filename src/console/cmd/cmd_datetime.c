@@ -22,13 +22,13 @@
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
-#ifdef __cplusplus
-extern "C" {
-#endif // #ifdef __cplusplus
 #include <stdio.h>
 #include "wind_string.h"
 #include "wind_cmd.h"
 #include "wind_time.h"
+#ifdef __cplusplus
+extern "C" {
+#endif // #ifdef __cplusplus
 #if WIND_DATETIME_SUPPORT
 
 static w_err_t cmd_set_datetime(w_int32_t argc,char **argv)

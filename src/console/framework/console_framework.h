@@ -20,11 +20,6 @@
 *******************************************************************************************************/
 #ifndef __CONSOLE_FRAMEWORK_H__
 #define __CONSOLE_FRAMEWORK_H__
-#ifdef __cplusplus
-extern "C" {
-#endif // #ifdef __cplusplus
-
-/*********************************************头文件定义***********************************************/
 #include "wind_config.h"
 #include "wind_type.h"
 #include "wind_debug.h"
@@ -33,6 +28,11 @@ extern "C" {
 #include "wind_thread.h"
 #include "cmd_history.h"
 #include "wind_dlist.h"
+#ifdef __cplusplus
+extern "C" {
+#endif // #ifdef __cplusplus
+
+/*********************************************头文件定义***********************************************/
 
 #if WIND_CONSOLE_SUPPORT
 
