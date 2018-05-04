@@ -43,7 +43,7 @@ static w_err_t get_cmd_ch(w_int8_t *ch)
 {
     w_int32_t len;
     len = wind_std_input((w_uint8_t *)ch,1);
-    return len > 0 ? ERR_OK : ERR_COMMAN;
+    return len > 0 ? ERR_OK : ERR_FAIL;
 }
 
 
@@ -314,7 +314,7 @@ static w_err_t check_user_name(console_s *ctrl)
     if(wind_strcmp(ctrl->buf,"root") != 0)
     {
         console_printf("\r\nlogin:");
-        return ERR_COMMAN;
+        return ERR_FAIL;
     }
     wind_strcpy(ctrl->user,ctrl->buf);
     ctrl->stat = CSLSTAT_PWD;
@@ -330,7 +330,7 @@ static w_err_t check_user_pwd(console_s *ctrl)
     {
         ctrl->stat = CSLSTAT_USER;
         console_printf("\r\nlogin:");
-        return ERR_COMMAN;
+        return ERR_FAIL;
     }
     wind_strcpy(ctrl->pwd,ctrl->buf);
     ctrl->stat = CSLSTAT_CMD;
@@ -396,7 +396,7 @@ static w_err_t spit_cmd(console_s *ctrl)
             break;
     }
     if(i >= CMD_PARAM_CNT)
-        return ERR_COMMAN;
+        return ERR_FAIL;
     return ERR_OK;
 }
 
@@ -415,7 +415,7 @@ static w_err_t execute_cmd(console_s *ctrl)
     }
     cmd = wind_cmd_get(ctrl->param.argv[0]);//get_matched_cmd(ctrl);
     if(cmd == NULL)
-        return ERR_COMMAN;
+        return ERR_FAIL;
     if(wind_strcmp(ctrl->param.argv[1],"?") == 0)
     {
         cmd->showusage();
@@ -431,7 +431,7 @@ w_err_t console_thread(w_int32_t argc,char **argv)
     w_int32_t len;
     console_s *ctrl;
     if(argc >= WIND_CONSOLE_COUNT)
-        return ERR_COMMAN;
+        return ERR_FAIL;
     ctrl = &g_ctrl[argc];
     cmd_history_init(&ctrl->his);
     init_console_stat(ctrl);
@@ -484,7 +484,7 @@ w_err_t _create_console_thread(void)
     thread_s *thread;
     thread = wind_thread_create("console",console_thread,
                0,NULL,PRIO_LOW,ctrlstk,CTRL_STK_SIZE);
-    WIND_ASSERT_RETURN(thread != NULL,ERR_COMMAN);
+    WIND_ASSERT_RETURN(thread != NULL,ERR_FAIL);
     wind_thread_set_priority(thread,32760);
     return ERR_OK;
 }

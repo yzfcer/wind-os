@@ -51,7 +51,7 @@ w_err_t wind_dev_register(dev_s *dev,w_int32_t count)
             {
                 wind_error("device has been registered.\r\n");
                 wind_enable_interrupt();
-                return ERR_COMMAN;
+                return ERR_FAIL;
             }
         }
         dev[i].mutex = wind_mutex_create(dev[i].name);
@@ -75,7 +75,7 @@ w_err_t wind_dev_unregister(dev_s *dev)
     {
         wind_error("device has NOT been registered.\r\n");
         wind_enable_interrupt();
-        return ERR_COMMAN;
+        return ERR_FAIL;
     }
     wind_mutex_destroy(dev->mutex);
     dev->mutex = NULL;
@@ -110,7 +110,7 @@ dev_s *wind_dev_get(char *name)
 
 w_err_t wind_dev_open(dev_s *dev)
 {
-    w_err_t err = ERR_COMMAN;
+    w_err_t err = ERR_FAIL;
     WIND_ASSERT_RETURN(dev != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(dev->magic == WIND_DEV_MAGIC,ERR_INVALID_PARAM);
     WIND_ASSERT_RETURN(dev->ops != NULL,ERR_INVALID_PARAM);
@@ -128,7 +128,7 @@ w_err_t wind_dev_open(dev_s *dev)
 
 w_err_t wind_dev_ioctl(dev_s *dev,w_int32_t cmd,void *param)
 {
-    w_err_t err = ERR_COMMAN;
+    w_err_t err = ERR_FAIL;
     WIND_ASSERT_RETURN(dev != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(dev->magic == WIND_DEV_MAGIC,ERR_INVALID_PARAM);
     WIND_ASSERT_RETURN(dev->ops != NULL,ERR_INVALID_PARAM);
@@ -142,7 +142,7 @@ w_err_t wind_dev_ioctl(dev_s *dev,w_int32_t cmd,void *param)
 
 w_int32_t wind_dev_read(dev_s *dev,w_uint8_t *buf,w_int32_t len)
 {
-    w_err_t err = ERR_COMMAN;
+    w_err_t err = ERR_FAIL;
     WIND_ASSERT_RETURN(dev != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(dev->magic == WIND_DEV_MAGIC,ERR_INVALID_PARAM);
     WIND_ASSERT_RETURN(dev->ops != NULL,ERR_INVALID_PARAM);
@@ -156,7 +156,7 @@ w_int32_t wind_dev_read(dev_s *dev,w_uint8_t *buf,w_int32_t len)
 
 w_int32_t wind_dev_write(dev_s *dev,w_uint8_t *buf,w_int32_t len)
 {
-    w_err_t err = ERR_COMMAN;
+    w_err_t err = ERR_FAIL;
     WIND_ASSERT_RETURN(dev != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(dev->magic == WIND_DEV_MAGIC,ERR_INVALID_PARAM);
     WIND_ASSERT_RETURN(dev->ops != NULL,ERR_INVALID_PARAM);

@@ -98,11 +98,11 @@ static w_err_t display_mem(char **argv)
     w_uint32_t start,len;
     if(!get_num(argv[1],&start))
     {
-        return ERR_COMMAN;
+        return ERR_FAIL;
     }
     else if(!get_num(argv[2],&len))
     {
-        return ERR_COMMAN;
+        return ERR_FAIL;
     }
     print_mem(start,len);
     return ERR_OK;
@@ -114,12 +114,12 @@ static w_err_t display_stack(char **argv)
     thread_s *thr;
     if(wind_strcmp(argv[1],"stack") != 0)
     {
-        return ERR_COMMAN;
+        return ERR_FAIL;
     }
     thr = wind_thread_get(argv[2]);
     if(thr == NULL)
     {
-        return ERR_COMMAN;
+        return ERR_FAIL;
     }
     start = (w_uint32_t)thr->stack_top;
     end = start + thr->stksize*sizeof(w_stack_t);
@@ -157,7 +157,7 @@ COMMAND_MAIN(mem,argc,argv)
     else if(display_stack(argv) == ERR_OK)
         return ERR_OK;
     console_printf("command [%s] format error.\r\n",argv[0]);
-    return ERR_COMMAN;
+    return ERR_FAIL;
 }
 
 COMMAND_DEF(mem);

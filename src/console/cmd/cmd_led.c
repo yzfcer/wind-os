@@ -53,7 +53,7 @@ COMMAND_MAIN(led,argc,argv)
     if(0 == wind_strcmp(argv[1],"on"))
     {
         err = wind_dev_open(led);
-        WIND_ASSERT_RETURN(err == ERR_OK,ERR_COMMAN);
+        WIND_ASSERT_RETURN(err == ERR_OK,ERR_FAIL);
         stat = 1;
         wind_dev_write(led,&stat,1);
         return ERR_OK;
@@ -61,12 +61,12 @@ COMMAND_MAIN(led,argc,argv)
     else if(0 == wind_strcmp(argv[1],"off"))
     {
         err = wind_dev_open(led);
-        WIND_ASSERT_RETURN(err == ERR_OK,ERR_COMMAN);
+        WIND_ASSERT_RETURN(err == ERR_OK,ERR_FAIL);
         stat = 0;
         wind_dev_write(led,&stat,1);
         return ERR_OK;
     }
-    return ERR_COMMAN;
+    return ERR_FAIL;
 }
 
 COMMAND_DEF(led);

@@ -65,7 +65,7 @@ CASE_FUNC(msgboxinfo)
     w_err_t err;
     thread_s *thr;
     thr = wind_thread_current();
-    msgbox = wind_msgbox_create("test",thr);
+    msgbox = wind_msgbox_create("test");
     EXPECT_NE(msgbox,NULL);
     EXPECT_EQ(msgbox->magic,WIND_MSGBOX_MAGIC);
     EXPECT_EQ(msgbox->msgnum,0);
@@ -92,7 +92,7 @@ CASE_FUNC(msgboxfunc)
     msg_s *msg;
     test_msg_s *tmsg,*tmsg1;
     tmsg1 = wind_pool_malloc(testmsg_pool);
-    msgbox = wind_msgbox_create("test",wind_thread_current());
+    msgbox = wind_msgbox_create("test");
     err = wind_msgbox_wait(msgbox,&msg,100);
     EXPECT_EQ(err,ERR_TIMEOUT);
     wind_msg_init(&tmsg1->msg,1,sizeof(test_msg_s),tmsg1);

@@ -142,7 +142,7 @@ thread_s *wind_thread_create_default(const char *name,
                     w_int16_t argc,
                     w_int8_t **argv);
 #else 
-#define wind_thread_create_default(n,f,c,v) ERR_COMMAN
+#define wind_thread_create_default(n,f,c,v) ERR_FAIL
 #endif
 
 w_err_t wind_thread_set_priority(thread_s *thread,w_int16_t prio);

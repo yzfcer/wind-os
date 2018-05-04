@@ -33,7 +33,7 @@ extern "C" {
 
 //系统错误代码定义
 #define ERR_OK                 0 //正常返回结果
-#define ERR_COMMAN            -1 //一般错误
+#define ERR_FAIL            -1 //一般错误
 #define ERR_NULL_POINTER      -2 //指针为空
 #define ERR_PARAM_OVERFLOW    -3 //传入的参数超出了范围
 #define ERR_MEM               -4 //存储空间受到限制

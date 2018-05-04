@@ -51,7 +51,7 @@ COMMAND_MAIN(bee,argc,argv)
         BEEP = 0;
         return ERR_OK;
     }
-    return ERR_COMMAN;
+    return ERR_FAIL;
 }
 
 COMMAND_DEF(bee);

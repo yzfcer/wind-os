@@ -38,7 +38,7 @@ file_s* wind_file_open(const char *path,fmode_e fmode)
     if(file != NULL)
     {
         wind_error("file has been opened.");
-        return ERR_COMMAN;
+        return ERR_FAIL;
     }
     file = 
     wind_mutex_lock(file->mutex);

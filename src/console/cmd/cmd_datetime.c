@@ -71,7 +71,7 @@ static w_err_t cmd_showdatetime(w_int32_t argc,char **argv)
     w_err_t err;
     datetime_s dt;
     err = wind_datetime_get(&dt);
-    WIND_ASSERT_RETURN(err == ERR_OK,ERR_COMMAN);
+    WIND_ASSERT_RETURN(err == ERR_OK,ERR_FAIL);
     console_printf("system date:%4d/%02d/%02d %02d:%02d:%02d  %4d\r\n",dt.date.year,
                 dt.date.month,dt.date.day,dt.time.hour,
                 dt.time.minute,dt.time.second,dt.time.msecond);
@@ -104,7 +104,7 @@ COMMAND_MAIN(datetime,argc,argv)
     else
     {
         console_printf("datetime:format error.\r\n");
-        return ERR_COMMAN;
+        return ERR_FAIL;
     }
 }
 

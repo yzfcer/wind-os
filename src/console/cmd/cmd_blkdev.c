@@ -51,7 +51,7 @@ COMMAND_MAIN(blkdev,argc,argv)
     blkdev_s *dev;
     w_uint8_t *buff;
     w_addr_t addr;
-    w_err_t err = ERR_COMMAN;
+    w_err_t err = ERR_FAIL;
     
     if(0 == wind_strcmp(argv[1],"list"))
     {
@@ -72,7 +72,7 @@ COMMAND_MAIN(blkdev,argc,argv)
         if(wind_strlen((char*)buff) >= sizeof(buffer))
         {
             wind_error("data is too long.\r\n");
-            err = ERR_COMMAN;
+            err = ERR_FAIL;
         }
         else
         {
@@ -92,7 +92,7 @@ COMMAND_MAIN(blkdev,argc,argv)
         err = ERR_OK;
     }
     else 
-        err = ERR_COMMAN;
+        err = ERR_FAIL;
     wind_blkdev_close(dev);
     return err;
 }

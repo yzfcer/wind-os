@@ -78,58 +78,58 @@ COMMAND_MAIN(list,argc,argv)
     else if(0 == wind_strcmp(argv[1],"mutex"))
     {
         wind_mutex_print(&g_core.mutexlist);
-        return ERR_COMMAN;
+        return ERR_FAIL;
     }
     else if(0 == wind_strcmp(argv[1],"pool"))
     {
         _wind_pool_print_list(&g_core.poollist);
-        return ERR_COMMAN;
+        return ERR_FAIL;
     }
 #if WIND_SEM_SUPPORT
     else if(0 == wind_strcmp(argv[1],"sem"))
     {
         wind_sem_print(&g_core.semlist);
-        return ERR_COMMAN;
+        return ERR_FAIL;
     }
 #endif
 #if WIND_PIPE_SUPPORT
     else if(0 == wind_strcmp(argv[1],"pipe"))
     {
         _wind_pipe_print(&g_core.pipelist);
-        return ERR_COMMAN;
+        return ERR_FAIL;
     }
 #endif
 #if WIND_MSGBOX_SUPPORT
     else if(0 == wind_strcmp(argv[1],"msgbox"))
     {
         wind_msgbox_print(&g_core.msgboxlist);
-        return ERR_COMMAN;
+        return ERR_FAIL;
     }
 #endif
 #if WIND_HEAP_SUPPORT
     else if(0 == wind_strcmp(argv[1],"heap"))
     {
         wind_heapitem_print(&g_core.heaplist);
-        return ERR_COMMAN;
+        return ERR_FAIL;
     }
 #endif
 #if WIND_DRVFRAME_SUPPORT
     else if(0 == wind_strcmp(argv[1],"dev"))
     {
         wind_dev_print(&g_core.devlist);
-        return ERR_COMMAN;
+        return ERR_FAIL;
     }
 #endif
 #if WIND_BLK_DRVFRAME_SUPPORT
     else if(0 == wind_strcmp(argv[1],"blkdev"))
     {
         wind_blkdev_print(&g_core.blkdevlist);
-        return ERR_COMMAN;
+        return ERR_FAIL;
     }
 #endif
     else
         wind_error("command is NOT support on device.");
-    return ERR_COMMAN;
+    return ERR_FAIL;
 }
 
 COMMAND_DEF(list);

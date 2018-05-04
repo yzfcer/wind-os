@@ -84,7 +84,7 @@ COMMAND_MAIN(stati,argc,argv)
     {
         return cmd_stat_show_cpuusage_main(argc,argv);
     }
-    return ERR_COMMAN;
+    return ERR_FAIL;
 }
 
 COMMAND_DEF(stati);

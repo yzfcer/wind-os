@@ -20,7 +20,7 @@ w_err_t _create_idle_thread(void)
     thread_s *thread;
     thread = wind_thread_create("idle",idle_thread,
                     0,NULL,PRIO_LOW,idlestk,IDLE_STK_SIZE);
-    WIND_ASSERT_RETURN(thread != NULL,ERR_COMMAN);
+    WIND_ASSERT_RETURN(thread != NULL,ERR_FAIL);
     wind_thread_set_priority(thread,32767);
     return ERR_OK;
 }

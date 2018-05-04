@@ -62,7 +62,7 @@ w_err_t wind_tree_search(tree_s *root,tree_s *tree)
         if(ERR_OK == wind_tree_search(subtree,tree))
             return ERR_OK;
     }
-    return ERR_COMMAN;
+    return ERR_FAIL;
 }
 
 w_err_t wind_tree_visit(tree_s *root,void (*visit)(tree_s *tree))

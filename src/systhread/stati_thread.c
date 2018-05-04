@@ -26,7 +26,7 @@ w_err_t _create_stati_thread(void)
     thread_s *thread;
     thread = wind_thread_create("statistics",stati_thread,
                      0,NULL,PRIO_HIGH,statisstk,STATI_STK_SIZE);
-    WIND_ASSERT_RETURN(thread != NULL,ERR_COMMAN);
+    WIND_ASSERT_RETURN(thread != NULL,ERR_FAIL);
     wind_thread_set_priority(thread,5);
     return ERR_OK;
 }

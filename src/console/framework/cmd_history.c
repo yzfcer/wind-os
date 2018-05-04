@@ -30,7 +30,7 @@ static w_err_t remove_old_history(cmd_his_s *his)
     w_int32_t i;
     w_int32_t len;
     if(his->hiscnt <= 0)
-        return ERR_COMMAN;
+        return ERR_FAIL;
     len = wind_strlen(his->hiscmd[0])+1;
     if(his->hiscnt > 1)
     {
@@ -88,7 +88,7 @@ w_err_t cmd_history_append(cmd_his_s *his,char *cmd)
     }
     //console_printf("append cmd:%s\r\n",cmd);
     add_hiscmd(his,cmd);
-    return ERR_COMMAN;
+    return ERR_FAIL;
 }
 
 w_err_t cmd_history_get_next(cmd_his_s *his,char *cmd)
@@ -100,11 +100,11 @@ w_err_t cmd_history_get_next(cmd_his_s *his,char *cmd)
         his->curidx = his->hiscnt;
         his->curcmd = NULL;
         cmd[0] = 0; 
-        return ERR_COMMAN;
+        return ERR_FAIL;
     }
     his->curcmd = his->hiscmd[his->curidx];
     if(his->curcmd == NULL)
-        return ERR_COMMAN;
+        return ERR_FAIL;
     //console_printf("next cmd:%s\r\n",his->curcmd);
     wind_strcpy(cmd,his->curcmd);
     
@@ -119,11 +119,11 @@ w_err_t cmd_history_get_prev(cmd_his_s *his,char *cmd)
         his->curidx = -1;
         his->curcmd = NULL;
         cmd[0] = 0; 
-        return ERR_COMMAN;
+        return ERR_FAIL;
     }
     his->curcmd = his->hiscmd[his->curidx];
     if(his->curcmd == NULL)
-        return ERR_COMMAN;
+        return ERR_FAIL;
     //console_printf("prev cmd:%s\r\n",his->curcmd);
     wind_strcpy(cmd,his->curcmd);
     if(his->curidx > 0)

@@ -93,7 +93,7 @@ w_err_t wind_mutex_trydestroy(mutex_s *mutex)
 {
     WIND_ASSERT_RETURN(mutex != NULL,ERR_NULL_POINTER);
     wind_disable_interrupt();
-    WIND_ASSERT_TODO(mutex->mutexed == B_FALSE,wind_enable_interrupt(),ERR_COMMAN);
+    WIND_ASSERT_TODO(mutex->mutexed == B_FALSE,wind_enable_interrupt(),ERR_FAIL);
     wind_mutex_destroy(mutex);
     wind_enable_interrupt();
     return ERR_OK;    
@@ -158,7 +158,7 @@ w_err_t wind_mutex_trylock(mutex_s *mutex)
         err = ERR_OK; 
     }
     else
-        err = ERR_COMMAN; 
+        err = ERR_FAIL; 
     wind_enable_interrupt();
     return err;
 }
@@ -173,7 +173,7 @@ w_err_t wind_mutex_unlock(mutex_s *mutex)
     wind_disable_interrupt();
     WIND_ASSERT_TODO(mutex->mutexed,wind_enable_interrupt(),ERR_OK);
     thread = wind_thread_current();
-    WIND_ASSERT_TODO(mutex->owner == thread,wind_enable_interrupt(),ERR_COMMAN);
+    WIND_ASSERT_TODO(mutex->owner == thread,wind_enable_interrupt(),ERR_FAIL);
     pnode = dlist_head(&mutex->waitlist);
     if (pnode == NULL)
     {

@@ -81,6 +81,6 @@ w_err_t _create_init_thread(void)
     thread_s *thread;
     thread = wind_thread_create("init",init_thread,
                         0,NULL,PRIO_HIGH,initstk,INIT_STK_SIZE);
-    WIND_ASSERT_RETURN(thread != NULL,ERR_COMMAN);
+    WIND_ASSERT_RETURN(thread != NULL,ERR_FAIL);
     return ERR_OK;
 }

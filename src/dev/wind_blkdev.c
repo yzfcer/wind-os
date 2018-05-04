@@ -51,7 +51,7 @@ w_err_t wind_blkdev_register(blkdev_s *dev,w_int32_t count)
             {
                 wind_error("device has been registered.\r\n");
                 wind_enable_interrupt();
-                return ERR_COMMAN;
+                return ERR_FAIL;
             }
         }
         dev[i].mutex = wind_mutex_create(dev[i].name);
@@ -75,7 +75,7 @@ w_err_t wind_blkdev_unregister(blkdev_s *dev)
     {
         wind_error("blkdevice has NOT been registered.\r\n");
         wind_enable_interrupt();
-        return ERR_COMMAN;
+        return ERR_FAIL;
     }
     wind_mutex_destroy(dev->mutex);
     dev->mutex = NULL;
@@ -110,7 +110,7 @@ blkdev_s *wind_blkdev_get(char *name)
 
 w_err_t wind_blkdev_open(blkdev_s *dev)
 {
-    w_err_t err = ERR_COMMAN;
+    w_err_t err = ERR_FAIL;
     WIND_ASSERT_RETURN(dev != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(dev->magic == WIND_BLKDEV_MAGIC,ERR_INVALID_PARAM);
     WIND_ASSERT_RETURN(dev->ops != NULL,ERR_INVALID_PARAM);
@@ -167,7 +167,7 @@ w_int32_t wind_blkdev_write(blkdev_s *dev,w_addr_t blkaddr,w_uint8_t *buf,w_int3
 
 w_err_t wind_blkdev_erase(blkdev_s *dev,w_addr_t blkaddr,w_int32_t blkcnt)
 {
-    w_err_t err = ERR_COMMAN;
+    w_err_t err = ERR_FAIL;
     WIND_ASSERT_RETURN(dev != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(blkcnt > 0,ERR_INVALID_PARAM);
     WIND_ASSERT_RETURN(dev->magic == WIND_BLKDEV_MAGIC,ERR_INVALID_PARAM);
@@ -182,7 +182,7 @@ w_err_t wind_blkdev_erase(blkdev_s *dev,w_addr_t blkaddr,w_int32_t blkcnt)
 
 w_err_t wind_blkdev_eraseall(blkdev_s *dev)
 {
-    w_err_t err = ERR_COMMAN;
+    w_err_t err = ERR_FAIL;
     WIND_ASSERT_RETURN(dev != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(dev->magic == WIND_BLKDEV_MAGIC,ERR_INVALID_PARAM);
     WIND_ASSERT_RETURN(dev->ops != NULL,ERR_INVALID_PARAM);

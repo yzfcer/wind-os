@@ -56,7 +56,7 @@ COMMAND_MAIN(echo,argc,argv)
 {
     char *str;
     if(argc < 1)
-        return ERR_COMMAN;
+        return ERR_FAIL;
     str = argv[1];
     console_printf("%s",str);
     return ERR_OK;

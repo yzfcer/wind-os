@@ -100,7 +100,7 @@ w_err_t wind_sem_trydestroy(sem_s *sem)
     if(pdnode != NULL)
     {
         wind_enable_interrupt();
-        return ERR_COMMAN;
+        return ERR_FAIL;
     }
     wind_enable_interrupt();
     return wind_sem_destroy(sem);
@@ -178,7 +178,7 @@ w_err_t wind_sem_wait(sem_s *sem,w_uint32_t timeout)
         return ERR_OK; 
     }
     if(timeout == 0)
-        return ERR_COMMAN;
+        return ERR_FAIL;
 
     //将当前线程加入睡眠和阻塞队列，触发线程切换
     thread = wind_thread_current();
@@ -219,7 +219,7 @@ w_err_t wind_sem_trywait(sem_s *sem)
         err = ERR_OK; 
     }
     else
-        err = ERR_COMMAN;
+        err = ERR_FAIL;
     wind_enable_interrupt();
     return err;
 }
