@@ -79,6 +79,7 @@ mutex_s *wind_mutex_create(const char *name)
     DNODE_INIT(mutex->mutexnode);
     mutex->name = name;
     mutex->mutexed = B_FALSE;
+    mutex->owner = NULL;
     DLIST_INIT(mutex->waitlist);
     
     wind_disable_interrupt();
@@ -130,6 +131,7 @@ w_err_t wind_mutex_lock(mutex_s *mutex)
     if (mutex->mutexed == B_FALSE)
     {
         mutex->mutexed = B_TRUE;
+        mutex->owner = wind_thread_current();
         wind_enable_interrupt();
         return ERR_OK; 
     }
@@ -152,6 +154,7 @@ w_err_t wind_mutex_trylock(mutex_s *mutex)
     if (mutex->mutexed == B_FALSE)
     {
         mutex->mutexed = B_TRUE;
+        mutex->owner = wind_thread_current();
         err = ERR_OK; 
     }
     else
@@ -169,11 +172,13 @@ w_err_t wind_mutex_unlock(mutex_s *mutex)
     WIND_ASSERT_RETURN(mutex != NULL,ERR_NULL_POINTER);
     wind_disable_interrupt();
     WIND_ASSERT_TODO(mutex->mutexed,wind_enable_interrupt(),ERR_OK);
-    
+    thread = wind_thread_current();
+    WIND_ASSERT_TODO(mutex->owner == thread,wind_enable_interrupt(),ERR_COMMAN);
     pnode = dlist_head(&mutex->waitlist);
     if (pnode == NULL)
     {
         mutex->mutexed = B_FALSE;
+        mutex->owner = NULL;
         wind_enable_interrupt();
         return ERR_OK; //信号量有效，直接返回效，
     }
@@ -182,6 +187,7 @@ w_err_t wind_mutex_unlock(mutex_s *mutex)
     thread = PRI_DLIST_OBJ(pnode,thread_s,suspendthr);
     thread->runstat = THREAD_STATUS_READY;
     thread->cause = CAUSE_LOCK;
+    mutex->owner = thread;
     wind_enable_interrupt();
     return ERR_OK;    
 }
@@ -194,13 +200,14 @@ w_err_t wind_mutex_print(dlist_s *list)
     WIND_ASSERT_RETURN(list != NULL,ERR_NULL_POINTER);
     wind_printf("\r\n\r\nmutex list as following:\r\n");
     wind_printf("--------------------------------------\r\n");
-    wind_printf("%-16s %-8s\r\n","mutex","status");
+    wind_printf("%-16s %-8s %-16s \r\n","mutex","status","owner");
     wind_printf("--------------------------------------\r\n");
     foreach_node(dnode,list)
     {
         mutex = (mutex_s *)DLIST_OBJ(dnode,mutex_s,mutexnode);
-        wind_printf("%-16s %-8s\r\n",
-            mutex->name,mutex->mutexed?"lock":"unlock");
+        wind_printf("%-16s %-8s %-16s \r\n",
+            mutex->name,mutex->mutexed?"lock":"unlock",
+            mutex->owner != NULL?mutex->owner->name:"null");
     }
     wind_printf("--------------------------------------\r\n");
     return ERR_OK;
