@@ -88,7 +88,7 @@
 
 #define WIND_MUTEX_MAX_NUM 20 //互斥锁的数量
 
-#define WIND_SOFTINT_MAX_NUM 32 //软中断向量表的长度
+#define WIND_SOFTINT_MAX_NUM 256 //软中断向量表的长度
 
 #define WIND_STK_MAX_NUM 4//堆栈的数量
 

@@ -42,7 +42,7 @@
 #include "wind_std.h"
 #include "wind_debug.h"
 
-volatile w_int8_t gwind_int_cnt = 0;//全局的中断计数值
+volatile w_int8_t gwind_int_nest = 0;//全局的中断嵌套计数值
 volatile w_int8_t gwind_core_cnt = 0;//全局的禁止切换计数值
 
 extern void wind_thread_switch(void);
@@ -84,6 +84,11 @@ void wind_disable_interrupt(void)
     sreg_t cpu_sr;
     cpu_sr = wind_save_sr();
     ssr[sreg_idx++] = cpu_sr;
+    if(sreg_idx >= 32)
+    {
+        wind_critical("int nest error.");
+        wind_system_reset();
+    }
 }
 
 void wind_enable_interrupt(void)
@@ -92,6 +97,7 @@ void wind_enable_interrupt(void)
     if(sreg_idx > 0)
         sreg_idx --;
     cpu_sr = ssr[sreg_idx];
+    
     wind_restore_sr(cpu_sr);
 }
 
@@ -102,8 +108,8 @@ void wind_enter_irq(void)
         wind_error("enter not rd.");
         return;
     }
-    if(gwind_int_cnt < 255)
-        gwind_int_cnt ++;
+    if(gwind_int_nest < 255)
+        gwind_int_nest ++;
     return;
 }
 
@@ -146,9 +152,9 @@ void wind_exit_irq(void)
         return;
     }
     wind_disable_interrupt();
-    if(gwind_int_cnt > 0)
-        gwind_int_cnt --;
-    if((gwind_int_cnt == 0) && is_switch_enable())
+    if(gwind_int_nest > 0)
+        gwind_int_nest --;
+    if((gwind_int_nest == 0) && is_switch_enable())
     {
         thread = wind_search_highthread();
         gwind_high_stack = &thread->stack;

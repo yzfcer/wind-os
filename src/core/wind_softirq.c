@@ -35,62 +35,57 @@
 #include "wind_os_hwif.h"
 #if WIND_SOFTIRQ_SUPPORT
 #define WIND_SOFTINT_STK_LEN 256 //软中断线程的堆栈深度
+#define SOFT_FLAG_ARR_CNT ((WIND_SOFTINT_MAX_NUM + 31) >> 5)
 //软中断线程的堆栈
 static w_stack_t softirq_stk[WIND_SOFTINT_STK_LEN];
 
 static w_uint16_t softirq_index = 0;
 static thread_s *softirq_thread = NULL;
 
-//static w_handle_t softirq_handle = -1;
 softirq_fn wind_soft_vectors[WIND_SOFTINT_MAX_NUM];
+w_uint32_t softirq_flag[SOFT_FLAG_ARR_CNT];
+
 //初始化软中断的一些相关参数
-void _wind_softirq_init(void)
+w_err_t _wind_softirq_init(void)
 {
-    wind_memset(softirq_stk,0,WIND_SOFTINT_STK_LEN *sizeof(w_stack_t));
+    wind_memset(softirq_flag,0,sizeof(softirq_flag));
+    wind_memset(wind_soft_vectors,0,sizeof(wind_soft_vectors));
+    wind_memset(softirq_stk,0,WIND_SOFTINT_STK_LEN * sizeof(w_stack_t));
+    return ERR_OK;
 }
 
 
 //向软中断模块注册一个中断向量响应函数
-w_int32_t wind_softirq_reg(softirq_fn func)
+w_err_t wind_softirq_reg(w_uint16_t irqid,softirq_fn func)
 {
-    w_int32_t i;
-    w_int32_t irq_id = -1;
-    for(i = 0;i < WIND_SOFTINT_MAX_NUM;i ++)
-    {
-        if(wind_soft_vectors[i] == func)
-        {
-            return i;
-        }
-    }
-    for(i = 0;i < WIND_SOFTINT_MAX_NUM;i ++)
-    {
-        if(wind_soft_vectors[i] == NULL)
-        {
-            irq_id = i;
-            wind_soft_vectors[i] = func;
-            break;
-        }
-    }
-    return irq_id;
+    WIND_ASSERT_RETURN(irqid < WIND_SOFTINT_MAX_NUM,ERR_PARAM_OVERFLOW);
+    wind_soft_vectors[irqid] = func;
+    return ERR_OK;
 }
 
 //取消一个软中断的注册
-w_err_t wind_softirq_unreg(w_int32_t irq_id)
+w_err_t wind_softirq_unreg(w_int32_t irqid)
 {
-    if(irq_id < 0 || irq_id >= WIND_SOFTINT_MAX_NUM)
-        return ERR_PARAM_OVERFLOW;
-    wind_soft_vectors[irq_id] = NULL;
+    WIND_ASSERT_RETURN(irqid < WIND_SOFTINT_MAX_NUM,ERR_PARAM_OVERFLOW);
+    wind_soft_vectors[irqid] = NULL;
     return ERR_OK;
 }
 
 //触发一个软件中断
-void wind_softirq_trig(w_int32_t irq_id)
+w_err_t wind_softirq_trig(w_int32_t irqid)
 {
+    w_int32_t idx1,idx2;
+    WIND_ASSERT_RETURN(irqid < WIND_SOFTINT_MAX_NUM,ERR_PARAM_OVERFLOW);
     wind_disable_interrupt();
-    softirq_index = irq_id;
-    softirq_thread->runstat = THREAD_STATUS_READY;
+    idx1 = (irqid >> 5);
+    idx2 = (irqid & 0x1f);
+    //softirq_index = irq_id;
+    //softirq_thread->runstat = THREAD_STATUS_READY;
+    softirq_flag[idx1] |= (1 << idx2);
+    wind_thread_resume(softirq_thread);
     wind_enable_interrupt();
     _wind_switchto_thread(softirq_thread);
+    return ERR_OK;
 }
 
 static w_err_t wind_softirq_thread(w_int32_t argc,w_int8_t **argv)

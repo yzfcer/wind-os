@@ -7,6 +7,8 @@
 #include "wind_blkdev.h"
 #include "wind_time.h"
 #include "wind_debug.h"
+#include "wind_os_hwif.h"
+
 #define INIT_STK_SIZE 256
 
 void wind_tick_init(void);
