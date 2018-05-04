@@ -92,6 +92,7 @@ mutex_s *wind_mutex_create(const char *name)
 w_err_t wind_mutex_trydestroy(mutex_s *mutex)
 {
     WIND_ASSERT_RETURN(mutex != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(mutex->magic == WIND_MUTEX_MAGIC,ERR_INVALID_PARAM);
     wind_disable_interrupt();
     WIND_ASSERT_TODO(mutex->mutexed == B_FALSE,wind_enable_interrupt(),ERR_FAIL);
     wind_mutex_destroy(mutex);
@@ -105,6 +106,7 @@ w_err_t wind_mutex_destroy(mutex_s *mutex)
     dnode_s *pnode;
     thread_s *thread;
     WIND_ASSERT_RETURN(mutex != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(mutex->magic == WIND_MUTEX_MAGIC,ERR_INVALID_PARAM);
     wind_notice("destroy mutex:%s",mutex->name);
     wind_disable_interrupt();
     dlist_remove(&g_core.mutexlist,&mutex->mutexnode);
@@ -126,6 +128,7 @@ w_err_t wind_mutex_lock(mutex_s *mutex)
 {
     thread_s *thread;
     WIND_ASSERT_RETURN(mutex != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(mutex->magic == WIND_MUTEX_MAGIC,ERR_INVALID_PARAM);
     wind_disable_interrupt();
 
     if (mutex->mutexed == B_FALSE)
@@ -150,6 +153,7 @@ w_err_t wind_mutex_trylock(mutex_s *mutex)
 {
     w_err_t err;
     WIND_ASSERT_RETURN(mutex != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(mutex->magic == WIND_MUTEX_MAGIC,ERR_INVALID_PARAM);
     wind_disable_interrupt();
     if (mutex->mutexed == B_FALSE)
     {
@@ -170,6 +174,7 @@ w_err_t wind_mutex_unlock(mutex_s *mutex)
     dnode_s *pnode;
     thread_s *thread;
     WIND_ASSERT_RETURN(mutex != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(mutex->magic == WIND_MUTEX_MAGIC,ERR_INVALID_PARAM);
     wind_disable_interrupt();
     WIND_ASSERT_TODO(mutex->mutexed,wind_enable_interrupt(),ERR_OK);
     thread = wind_thread_current();
