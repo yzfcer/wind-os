@@ -83,6 +83,7 @@ sem_s *wind_sem_create(const char *name,w_int16_t sem_value)
     sem->sem_num = sem_value;
     sem->sem_tot = sem_value;
     DLIST_INIT(sem->waitlist);
+    //DLIST_INIT(sem->ownerlist);
     wind_disable_interrupt();
     dlist_insert_tail(&g_core.semlist,&sem->semnode);
     wind_enable_interrupt();
