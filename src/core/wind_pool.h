@@ -58,7 +58,6 @@ struct __mpool_s
     w_uint32_t size;//内存池的实际可用空间大小
     w_uint32_t itemsize;//每个块的大小
     w_uint32_t itemnum;//分成的内存块的数量
-    w_uint32_t used;//已经使用的内存块的数量
     pool_item_s* free_head;//空闲块的指针
     pool_item_s* free_end;//最后一个空闲块的指针
 };

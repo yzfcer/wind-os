@@ -77,7 +77,6 @@ w_err_t wind_pool_create(const char *name,void *mem,w_uint32_t memsize,w_uint32_
     pm->size = memsize - sizeof(pool_s);
     pm->itemsize = si + sizeof(pool_item_s);
     pm->itemnum = pm->size / pm->itemsize;
-    pm->used = 0;
     pm->free_head = (pool_item_s*)pm->head;
     item = (pool_item_s*)pm->head;
     for(i = 0;i < pm->itemnum;i ++)
@@ -137,7 +136,6 @@ void *wind_pool_malloc(void *mem)
         return NULL;
     }
     pm->free_head = item->next;
-    pm->used ++;
     WIND_STATI_INC(pm->stati);
     if(pm->free_head == NULL)
         pm->free_end = NULL;
@@ -173,7 +171,6 @@ w_err_t wind_pool_free(void *mem,void *block)
         pm->free_end->next = (pool_item_s*)item;
         pm->free_end = (pool_item_s*)item;
     }
-    pm->used --;
     WIND_STATI_MINUS(pm->stati);
     wind_enable_interrupt();
     return ERR_OK;
@@ -185,16 +182,16 @@ void _wind_pool_print_list(dlist_s *list)
     dnode_s *pdnode;
     pool_s *pm;
     wind_printf("\r\n\r\nmpool list as following:\r\n");
-    wind_printf("-----------------------------------------------------------------\r\n");
-    wind_printf("%-12s %-10s %-8s %-8s %-10s %-8s\r\n","name","head","size","itemnum","itemsize","used");
-    wind_printf("-----------------------------------------------------------------\r\n");
+    wind_printf("-----------------------------------------------------\r\n");
+    wind_printf("%-12s %-12s %-8s %-8s %-10s\r\n","name","head","size","itemnum","itemsize");
+    wind_printf("-----------------------------------------------------\r\n");
     foreach_node(pdnode,list)
     {
         pm = DLIST_OBJ(pdnode,pool_s,poolnode);
-        wind_printf("%-12s 0x%-8x %-8d %-10d %-8d %-8d\r\n",
-            pm->name,pm->head,pm->size,pm->itemnum,pm->itemsize,pm->used);
+        wind_printf("%-12s 0x%-10x %-8d %-10d %-8d\r\n",
+            pm->name,pm->head,pm->size,pm->itemnum,pm->itemsize);
     }
-    wind_printf("-----------------------------------------------------------------\r\n");
+    wind_printf("------------------------------------------------------\r\n");
 }
 
 
