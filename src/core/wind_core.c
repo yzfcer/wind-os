@@ -204,7 +204,7 @@ void _wind_thread_dispatch(void)
         wind_enable_interrupt();
         wind_thread_switch();
     }
-    wind_enable_interrupt();
+    kikkwind_enable_interrupt();
 }
 #else
 void _wind_thread_dispatch(void){}

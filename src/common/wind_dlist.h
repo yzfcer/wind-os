@@ -26,7 +26,7 @@
 #define __WIND_DLIST_H__
 #include "wind_type.h"
 typedef struct __dnode_s dnode_s;
-typedef struct __pri_dnode_s prinode_s;
+typedef struct __prio_dnode_s prionode_s;
 typedef struct __dlist_s dlist_s;
 
 //链表节点结构
@@ -37,7 +37,7 @@ struct __dnode_s
 };
 
 //带优先级链表节点结构
-struct __pri_dnode_s 
+struct __prio_dnode_s 
 {
     dnode_s node;
     w_uint32_t prio;
@@ -118,9 +118,9 @@ w_int32_t dlist_get_count(dlist_s *dlist);
 dlist_s *dlist_combine(dlist_s *dlist1,dlist_s *dlist2);
 
 // 在链表插入一个带优先级节点
-void dlist_insert_prio(dlist_s *dlist,prinode_s *prinode,w_uint32_t prio);
+void dlist_insert_prio(dlist_s *dlist,prionode_s *prionode,w_uint32_t prio);
 
 // 从链表中删除给定带优先级节点
-prinode_s *dlist_remove_prio(dlist_s *dlist,prinode_s *prinode);
+prionode_s *dlist_remove_prio(dlist_s *dlist,prionode_s *prionode);
 
 #endif//__dlist_s_H__
