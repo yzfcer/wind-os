@@ -121,7 +121,7 @@ w_err_t wind_sem_destroy(sem_s *sem)
     foreach_node(pdnode,&sem->waitlist)
     {
         dlist_remove(&sem->waitlist,pdnode);
-        thread = PRI_DLIST_OBJ(pdnode,thread_s,suspendthr);
+        thread = PRI_DLIST_OBJ(pdnode,thread_s,suspendnode);
         thread->runstat = THREAD_STATUS_READY;
         thread->cause = CAUSE_SEM;
     }
@@ -149,9 +149,9 @@ w_err_t wind_sem_post(sem_s *sem)
     
     //激活被阻塞的线程，从睡眠队列移除,触发线程切换
     dlist_remove(&sem->waitlist,pnode);
-    thread = PRI_DLIST_OBJ(pnode,thread_s,suspendthr);
+    thread = PRI_DLIST_OBJ(pnode,thread_s,suspendnode);
     if(thread->runstat == THREAD_STATUS_SLEEP)
-        dlist_remove(&g_core.sleeplist,&thread->sleepthr.node);
+        dlist_remove(&g_core.sleeplist,&thread->sleepnode.node);
     wind_enable_interrupt();
     thread->cause = CAUSE_SEM;
     thread->runstat = THREAD_STATUS_READY;
@@ -188,18 +188,18 @@ w_err_t wind_sem_wait(sem_s *sem,w_uint32_t timeout)
     {
         thread->runstat = THREAD_STATUS_SLEEP;
         thread->sleep_ticks = ticks;
-        dlist_insert_prio(&g_core.sleeplist,&thread->sleepthr,thread->prio);
+        dlist_insert_prio(&g_core.sleeplist,&thread->sleepnode,thread->prio);
     }
     else
         thread->runstat = THREAD_STATUS_SUSPEND;
-    dlist_insert_prio(&sem->waitlist,&thread->suspendthr,thread->prio);
+    dlist_insert_prio(&sem->waitlist,&thread->suspendnode,thread->prio);
     wind_enable_interrupt();
     _wind_thread_dispatch();
 
     wind_disable_interrupt();
     //如果是超时唤醒的，则移除出睡眠队列
     if(thread->cause == CAUSE_SLEEP)
-        dlist_remove(&sem->waitlist,&thread->suspendthr.node);
+        dlist_remove(&sem->waitlist,&thread->suspendnode.node);
     wind_enable_interrupt();
     if(thread->cause == CAUSE_SLEEP)
         return ERR_TIMEOUT;

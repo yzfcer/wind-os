@@ -1497,6 +1497,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\test\testcase\test_heap.c</FilePath>
             </File>
+            <File>
+              <FileName>test_softirq.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\test\testcase\test_softirq.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>
