@@ -154,42 +154,42 @@ dlist_s *dlist_combine(dlist_s *dlist1,dlist_s *dlist2)
 }
 
 // 在链表插入一个带优先级节点
-void dlist_insert_prio(dlist_s *dlist, prinode_s *prinode,w_uint32_t prio)
+void dlist_insert_prio(dlist_s *dlist, prionode_s *prionode,w_uint32_t prio)
 {
-    prinode_s *prin = NULL;
+    prionode_s *prinode = NULL;
     dnode_s *dnode;
-    prinode->prio = prio;
+    prionode->prio = prio;
     dnode = dlist_head(dlist);
     if(dnode == NULL)
     {
-        dlist_insert_tail(dlist,&prinode->node);
+        dlist_insert_tail(dlist,&prionode->node);
         return;
     }
     while(dnode)
     {
-        prin = DLIST_OBJ(dnode,prinode_s,node);
-        if(prin->prio <= prinode->prio)
+        prionode = DLIST_OBJ(dnode,prionode_s,node);
+        if(prionode->prio <= prionode->prio)
             dnode = dnode_next(dnode);
         else
             break;
     }
     if(dnode == NULL)
-        dlist_insert_tail(dlist,&prinode->node);
+        dlist_insert_tail(dlist,&prionode->node);
     else 
     {
-        if(prin->node.prev)
-            dlist_insert(dlist,prin->node.prev,&prinode->node);
+        if(prionode->node.prev)
+            dlist_insert(dlist,prionode->node.prev,&prionode->node);
         else
-            dlist_insert_head(dlist,&prinode->node);
+            dlist_insert_head(dlist,&prionode->node);
     }
 }
 
 // 从链表中删除给定带优先级节点
-prinode_s *dlist_remove_prio(dlist_s *dlist,prinode_s *prinode)
+prionode_s *dlist_remove_prio(dlist_s *dlist,prionode_s *prionode)
 {
     dnode_s *pdnode;
-    pdnode = dlist_remove(dlist,&prinode->node);
-    return DLIST_OBJ(pdnode,prinode_s,node);
+    pdnode = dlist_remove(dlist,&prionode->node);
+    return DLIST_OBJ(pdnode,prionode_s,node);
 }
 
 #endif//__dlist_s_H__

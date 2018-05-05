@@ -4,7 +4,7 @@
 **                                       yzfcer@163.com
 **
 **--------------文件信息--------------------------------------------------------------------------------
-**文   件   名: wind_message.c
+**文   件   名: wind_event.c
 **创   建   人: 周江村
 **最后修改日期: 2012.09.26
 **描        述: wind os的消息相关的代码
@@ -22,25 +22,25 @@
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
-#include "wind_msgbox.h"
+#include "wind_event.h"
 #include "wind_core.h"
 #include "wind_var.h"
 #include "wind_debug.h"
 #include "wind_string.h"
 #include "wind_pool.h"
 
-#if WIND_MSGBOX_SUPPORT
+#if WIND_EVENT_SUPPORT
 extern void _wind_thread_dispatch(void);
-WIND_POOL(msgboxpool,WIND_MSGBOX_MAX_NUM,sizeof(msgbox_s));
+WIND_POOL(eventpool,WIND_EVENT_MAX_NUM,sizeof(event_s));
 
-static msgbox_s *msgbox_malloc(void)
+static event_s *event_malloc(void)
 {
-    return wind_pool_malloc(msgboxpool);
+    return wind_pool_malloc(eventpool);
 }
 
-static w_err_t msgbox_free(msgbox_s *msgbox)
+static w_err_t event_free(event_s *event)
 {
-    return wind_pool_free(msgboxpool,msgbox);
+    return wind_pool_free(eventpool,event);
 }
 
 
@@ -51,14 +51,14 @@ static w_err_t msgbox_free(msgbox_s *msgbox)
 
 //**********************************************extern functions******************************
 
-w_err_t _wind_msgbox_init(void)
+w_err_t _wind_event_init(void)
 {
     w_err_t err;
-    err = wind_pool_create("msgbox",msgboxpool,sizeof(msgboxpool),sizeof(msgbox_s));
+    err = wind_pool_create("event",eventpool,sizeof(eventpool),sizeof(event_s));
     return err;
 }
 
-void wind_msg_init(msg_s *msg,w_uint16_t msg_id,w_uint16_t msg_len,void *msg_arg)
+void wind_msg_init(listener_s *msg,w_uint16_t msg_id,w_uint16_t msg_len,void *msg_arg)
 {
     msg->msg_id = msg_id;
     msg->msg_len = msg_len;
@@ -66,18 +66,18 @@ void wind_msg_init(msg_s *msg,w_uint16_t msg_id,w_uint16_t msg_len,void *msg_arg
     DNODE_INIT(msg->msgnode);
 }
 
-msgbox_s *wind_msgbox_get(const char *name)
+event_s *wind_event_get(const char *name)
 {
-    msgbox_s *msgbox;
+    event_s *event;
     dnode_s *dnode;
     wind_disable_switch();
-    foreach_node(dnode,&g_core.msgboxlist)
+    foreach_node(dnode,&g_core.eventlist)
     {
-        msgbox = DLIST_OBJ(dnode,msgbox_s,msgboxnode);
-        if(wind_strcmp(name,msgbox->name) == 0)
+        event = DLIST_OBJ(dnode,event_s,eventnode);
+        if(wind_strcmp(name,event->name) == 0)
         {
             wind_enable_switch();
-            return msgbox;
+            return event;
         }
     }
     wind_enable_switch();
@@ -85,120 +85,120 @@ msgbox_s *wind_msgbox_get(const char *name)
 }
 
 //创建邮箱，创建邮箱的那个线程才能从中读取消息
-msgbox_s *wind_msgbox_create(const char *name)
+event_s *wind_event_create(const char *name)
 {
-    msgbox_s *msgbox;
-    wind_notice("create msgbox:%s",name);
-    msgbox = msgbox_malloc();
-    WIND_ASSERT_RETURN(msgbox != NULL,NULL);
+    event_s *event;
+    wind_notice("create event:%s",name);
+    event = event_malloc();
+    WIND_ASSERT_RETURN(event != NULL,NULL);
 
-    msgbox->name = name;
-    DNODE_INIT(msgbox->msgboxnode);
-    DLIST_INIT(msgbox->msglist);
-    msgbox->msgnum = 0;
-    msgbox->magic = WIND_MSGBOX_MAGIC;
-    msgbox->owner = wind_thread_current();
+    event->name = name;
+    DNODE_INIT(event->eventnode);
+    DLIST_INIT(event->msglist);
+    event->msgnum = 0;
+    event->magic = WIND_EVENT_MAGIC;
+    event->owner = wind_thread_current();
     wind_disable_interrupt();
-    dlist_insert_tail(&g_core.msgboxlist,&msgbox->msgboxnode);
+    dlist_insert_tail(&g_core.eventlist,&event->eventnode);
     wind_enable_interrupt();
-    return msgbox;
+    return event;
 }
 
 
-w_err_t wind_msgbox_trydestroy(msgbox_s *msgbox)
+w_err_t wind_event_trydestroy(event_s *event)
 {
     dnode_s *pdnode;
     thread_s *thread;
-    WIND_ASSERT_RETURN(msgbox != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(msgbox->magic == WIND_MSGBOX_MAGIC,ERR_INVALID_PARAM);
+    WIND_ASSERT_RETURN(event != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(event->magic == WIND_EVENT_MAGIC,ERR_INVALID_PARAM);
     thread = wind_thread_current();
-    WIND_ASSERT_RETURN(msgbox->owner == thread,ERR_FAIL);
+    WIND_ASSERT_RETURN(event->owner == thread,ERR_FAIL);
     wind_disable_interrupt();
-    pdnode = dlist_head(&msgbox->msglist);
+    pdnode = dlist_head(&event->msglist);
     if(pdnode != NULL)
     {
         wind_enable_interrupt();
         return ERR_FAIL;
     }
     wind_enable_interrupt();
-    return wind_msgbox_destroy(msgbox);
+    return wind_event_destroy(event);
 }
 
-w_err_t wind_msgbox_destroy(msgbox_s *msgbox)
+w_err_t wind_event_destroy(event_s *event)
 {
     dnode_s *dnode;
     thread_s *thread;
-    WIND_ASSERT_RETURN(msgbox != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(msgbox->magic == WIND_MSGBOX_MAGIC,ERR_INVALID_PARAM);
+    WIND_ASSERT_RETURN(event != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(event->magic == WIND_EVENT_MAGIC,ERR_INVALID_PARAM);
     thread = wind_thread_current();
-    WIND_ASSERT_RETURN(msgbox->owner == thread,ERR_FAIL);
-    wind_notice("destroy msgbox:%s",msgbox->name);
+    WIND_ASSERT_RETURN(event->owner == thread,ERR_FAIL);
+    wind_notice("destroy event:%s",event->name);
     wind_disable_interrupt();
-    dlist_remove_tail(&g_core.msgboxlist);
+    dlist_remove_tail(&g_core.eventlist);
     wind_enable_interrupt();
-    thread = msgbox->owner;
-    if((msgbox->owner->runstat == THREAD_STATUS_SLEEP) 
-       && (msgbox->owner->cause == CAUSE_MSG))
+    thread = event->owner;
+    if((event->owner->runstat == THREAD_STATUS_SLEEP) 
+       && (event->owner->cause == CAUSE_MSG))
     {
         thread->runstat = THREAD_STATUS_READY;
     }
 
-    msgbox->magic = 0;
-    dnode = dlist_head(&msgbox->msglist);
+    event->magic = 0;
+    dnode = dlist_head(&event->msglist);
     if(dnode != NULL)
     {
-        wind_warn("msgbox:%s is NOT empty while destroying it.",msgbox->name);
+        wind_warn("event:%s is NOT empty while destroying it.",event->name);
     }
-    msgbox_free(msgbox);
+    event_free(event);
     return ERR_OK;
 }
 
-w_err_t wind_msgbox_post(msgbox_s *msgbox,msg_s *pmsg)
+w_err_t wind_event_post(event_s *event,listener_s *pmsg)
 {
     thread_s *thread;
-    WIND_ASSERT_RETURN(msgbox != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(event != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(pmsg != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(msgbox->magic == WIND_MSGBOX_MAGIC,ERR_FAIL);
-    WIND_ASSERT_RETURN(msgbox->owner,ERR_FAIL);
+    WIND_ASSERT_RETURN(event->magic == WIND_EVENT_MAGIC,ERR_FAIL);
+    WIND_ASSERT_RETURN(event->owner,ERR_FAIL);
     //将消息加入邮箱
     wind_disable_interrupt();
-    dlist_insert_tail(&msgbox->msglist,&pmsg->msgnode);
-    msgbox->msgnum ++;
+    dlist_insert_tail(&event->msglist,&pmsg->msgnode);
+    event->msgnum ++;
 
     //激活被阻塞的线程
-    thread = msgbox->owner;
+    thread = event->owner;
     if((thread->runstat != THREAD_STATUS_SLEEP) 
        || (thread->cause != CAUSE_MSG))
     {
         wind_enable_interrupt();
         return ERR_OK;
     }
-    msgbox->owner->runstat = THREAD_STATUS_READY;
+    event->owner->runstat = THREAD_STATUS_READY;
     wind_enable_interrupt();
     _wind_thread_dispatch();//切换线程
     return ERR_OK;
 }
 
 
-w_err_t wind_msgbox_wait(msgbox_s *msgbox,msg_s **pmsg,w_uint32_t timeout)
+w_err_t wind_event_wait(event_s *event,listener_s **pmsg,w_uint32_t timeout)
 {
     w_err_t err;
     w_uint32_t ticks;
     dnode_s *dnode;
     thread_s *thread;
-    WIND_ASSERT_RETURN(msgbox != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(event != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(pmsg != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(msgbox->magic == WIND_MSGBOX_MAGIC,ERR_FAIL);
-    WIND_ASSERT_RETURN(msgbox->owner,ERR_FAIL);
+    WIND_ASSERT_RETURN(event->magic == WIND_EVENT_MAGIC,ERR_FAIL);
+    WIND_ASSERT_RETURN(event->owner,ERR_FAIL);
     thread = wind_thread_current();
-    WIND_ASSERT_RETURN(msgbox->owner == thread,ERR_FAIL);
+    WIND_ASSERT_RETURN(event->owner == thread,ERR_FAIL);
     //如果邮箱中有消息，就直接返回消息
     wind_disable_interrupt();
-    if(msgbox->msgnum > 0)
+    if(event->msgnum > 0)
     {
-        msgbox->msgnum --;
-        dnode = dlist_remove_head(&msgbox->msglist);
-        *pmsg = DLIST_OBJ(dnode,msg_s,msgnode);
+        event->msgnum --;
+        dnode = dlist_remove_head(&event->msglist);
+        *pmsg = DLIST_OBJ(dnode,listener_s,msgnode);
         wind_enable_interrupt();
         return ERR_OK;
     }
@@ -207,7 +207,7 @@ w_err_t wind_msgbox_wait(msgbox_s *msgbox,msg_s **pmsg,w_uint32_t timeout)
     ticks = timeout *WIND_TICK_PER_SEC / 1000;
     if(ticks == 0)
         ticks = 1;
-    thread = msgbox->owner;
+    thread = event->owner;
     thread->runstat = THREAD_STATUS_SLEEP;
     thread->cause = CAUSE_MSG;
     dlist_insert_tail(&g_core.sleeplist,&thread->sleepnode.node);
@@ -216,13 +216,13 @@ w_err_t wind_msgbox_wait(msgbox_s *msgbox,msg_s **pmsg,w_uint32_t timeout)
     _wind_thread_dispatch();
     if(thread->cause == CAUSE_MSG)
     {
-        if(msgbox->msgnum <= 0)
+        if(event->msgnum <= 0)
         {
             thread->runstat = THREAD_STATUS_READY;
             return ERR_NULL_POINTER;
         }
-        dnode = dlist_remove_head(&msgbox->msglist);
-        *pmsg = DLIST_OBJ(dnode,msg_s,msgnode);
+        dnode = dlist_remove_head(&event->msglist);
+        *pmsg = DLIST_OBJ(dnode,listener_s,msgnode);
         wind_enable_interrupt();
         err = ERR_OK;
     }
@@ -236,24 +236,24 @@ w_err_t wind_msgbox_wait(msgbox_s *msgbox,msg_s **pmsg,w_uint32_t timeout)
     return err;
 }
 
-w_err_t wind_msgbox_trywait(msgbox_s *msgbox,msg_s **pmsg)
+w_err_t wind_event_trywait(event_s *event,listener_s **pmsg)
 {
     w_err_t err;
     dnode_s *dnode;
     thread_s *thread;
-    WIND_ASSERT_RETURN(msgbox != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(event != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(pmsg != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(msgbox->magic == WIND_MSGBOX_MAGIC,ERR_FAIL);
-    WIND_ASSERT_RETURN(msgbox->owner,ERR_FAIL);
+    WIND_ASSERT_RETURN(event->magic == WIND_EVENT_MAGIC,ERR_FAIL);
+    WIND_ASSERT_RETURN(event->owner,ERR_FAIL);
     thread = wind_thread_current();
-    WIND_ASSERT_RETURN(msgbox->owner == thread,ERR_FAIL);
+    WIND_ASSERT_RETURN(event->owner == thread,ERR_FAIL);
     //如果邮箱中有消息，就直接返回消息
     wind_disable_interrupt();
-    if(msgbox->msgnum > 0)
+    if(event->msgnum > 0)
     {
-        msgbox->msgnum --;
-        dnode = dlist_remove_head(&msgbox->msglist);
-        *pmsg = DLIST_OBJ(dnode,msg_s,msgnode);
+        event->msgnum --;
+        dnode = dlist_remove_head(&event->msglist);
+        *pmsg = DLIST_OBJ(dnode,listener_s,msgnode);
         err = ERR_OK;
     }
     else
@@ -265,21 +265,21 @@ w_err_t wind_msgbox_trywait(msgbox_s *msgbox,msg_s **pmsg)
     return err;
 }
 
-w_err_t wind_msgbox_print(dlist_s *list)
+w_err_t wind_event_print(dlist_s *list)
 {
     dnode_s *dnode;
-    msgbox_s *msgbox;
+    event_s *event;
     WIND_ASSERT_RETURN(list != NULL,ERR_NULL_POINTER);
-    wind_printf("\r\n\r\nmsgbox list as following:\r\n");
+    wind_printf("\r\n\r\nevent list as following:\r\n");
     wind_printf("----------------------------------------------\r\n");
-    wind_printf("%-16s %-8s %-16s \r\n","msgbox","msg_num","owner");
+    wind_printf("%-16s %-8s %-16s \r\n","event","msg_num","owner");
     wind_printf("----------------------------------------------\r\n");
 
     foreach_node(dnode,list)
     {
-        msgbox = (msgbox_s *)DLIST_OBJ(dnode,msgbox_s,msgboxnode);
+        event = (event_s *)DLIST_OBJ(dnode,event_s,eventnode);
         wind_printf("%-16s %-8d %-16s\r\n",
-            msgbox->name,msgbox->msgnum,msgbox->owner->name);
+            event->name,event->msgnum,event->owner->name);
     }
     wind_printf("----------------------------------------------\r\n");
     return ERR_OK;

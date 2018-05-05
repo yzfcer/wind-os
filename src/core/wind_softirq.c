@@ -38,18 +38,15 @@
 #define SOFT_FLAG_ARR_CNT ((WIND_SOFTINT_MAX_NUM + 31) >> 5)
 //软中断线程的堆栈
 static w_stack_t softirq_stk[WIND_SOFTINT_STK_LEN];
-
-static w_uint16_t softirq_index = 0;
 static thread_s *softirq_thread = NULL;
-
-softirq_fn wind_soft_vectors[WIND_SOFTINT_MAX_NUM];
+softirq_fn softirq_vectors[WIND_SOFTINT_MAX_NUM];
 w_uint32_t softirq_flag[SOFT_FLAG_ARR_CNT];
 
 //初始化软中断的一些相关参数
 w_err_t _wind_softirq_init(void)
 {
     wind_memset(softirq_flag,0,sizeof(softirq_flag));
-    wind_memset(wind_soft_vectors,0,sizeof(wind_soft_vectors));
+    wind_memset(softirq_vectors,0,sizeof(softirq_vectors));
     wind_memset(softirq_stk,0,WIND_SOFTINT_STK_LEN * sizeof(w_stack_t));
     return ERR_OK;
 }
@@ -59,7 +56,7 @@ w_err_t _wind_softirq_init(void)
 w_err_t wind_softirq_reg(w_uint16_t irqid,softirq_fn func)
 {
     WIND_ASSERT_RETURN(irqid < WIND_SOFTINT_MAX_NUM,ERR_PARAM_OVERFLOW);
-    wind_soft_vectors[irqid] = func;
+    softirq_vectors[irqid] = func;
     return ERR_OK;
 }
 
@@ -67,7 +64,7 @@ w_err_t wind_softirq_reg(w_uint16_t irqid,softirq_fn func)
 w_err_t wind_softirq_unreg(w_int32_t irqid)
 {
     WIND_ASSERT_RETURN(irqid < WIND_SOFTINT_MAX_NUM,ERR_PARAM_OVERFLOW);
-    wind_soft_vectors[irqid] = NULL;
+    softirq_vectors[irqid] = NULL;
     return ERR_OK;
 }
 
@@ -79,8 +76,6 @@ w_err_t wind_softirq_trig(w_int32_t irqid)
     wind_disable_interrupt();
     idx1 = (irqid >> 5);
     idx2 = (irqid & 0x1f);
-    //softirq_index = irq_id;
-    //softirq_thread->runstat = THREAD_STATUS_READY;
     softirq_flag[idx1] |= (1 << idx2);
     wind_thread_resume(softirq_thread);
     wind_enable_interrupt();
@@ -88,25 +83,54 @@ w_err_t wind_softirq_trig(w_int32_t irqid)
     return ERR_OK;
 }
 
-static w_err_t wind_softirq_thread(w_int32_t argc,w_int8_t **argv)
+static softirq_fn get_irq_handle(void)
 {
-    w_int32_t i;
+    w_int32_t i,j;
+    w_int32_t idx1,idx2;
     
-    for(i = 0;i < WIND_SOFTINT_MAX_NUM;i ++)
-        wind_soft_vectors[i] = NULL;
-    while(1)
+    for(i = 0;i < SOFT_FLAG_ARR_CNT;i ++)
     {
-        wind_disable_interrupt();
-        softirq_thread->runstat = THREAD_STATUS_SUSPEND;
-        softirq_thread->cause = CAUSE_COM;
-        wind_enable_interrupt();
-        _wind_thread_dispatch();
-        if(wind_soft_vectors[softirq_index] != NULL)
+        if(softirq_flag[i] != 0)
         {
-            (wind_soft_vectors[softirq_index])();
+            idx1 = i;
+            for(j = 0;j < 32;j ++)
+            {
+                if(softirq_flag[i] & (1 << j))
+                {
+                    idx2 = j;
+                    softirq_flag[idx1] &= (~(0x01 << idx2));
+                    return softirq_vectors[(idx1 << 5) + idx2];
+                }
+            }
         }
     }
-    //return ERR_OK;
+    return NULL;
+}
+
+static w_err_t wind_softirq_thread(w_int32_t argc,w_int8_t **argv)
+{
+    softirq_fn func;
+    softirq_thread->cause = CAUSE_COMMON;
+    softirq_thread->runstat = THREAD_STATUS_SUSPEND;
+    while(B_TRUE)
+    {
+        _wind_thread_dispatch();
+        while(B_TRUE)
+        {
+            wind_disable_interrupt();
+            func = get_irq_handle();
+            if(func == NULL)
+            {
+                softirq_thread->cause = CAUSE_COMMON;
+                softirq_thread->runstat = THREAD_STATUS_SUSPEND;
+                wind_enable_interrupt();
+                break;
+            }
+            wind_enable_interrupt();
+            if(func != NULL)
+                func();
+        }
+    }
 }
 
 //创建软件中断线程

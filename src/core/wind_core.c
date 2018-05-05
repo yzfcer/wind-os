@@ -131,7 +131,7 @@ static thread_s *wind_search_highthread(void)
     }
     foreach_node(node,&g_core.threadlist)
     {
-        thread = PRI_DLIST_OBJ(node,thread_s,validthr);
+        thread = PRI_DLIST_OBJ(node,thread_s,validnode);
         if(thread->runstat == THREAD_STATUS_READY)
         {
             wind_enable_interrupt();
@@ -204,7 +204,7 @@ void _wind_thread_dispatch(void)
         wind_enable_interrupt();
         wind_thread_switch();
     }
-    wind_enable_interrupt();
+    kikkwind_enable_interrupt();
 }
 #else
 void _wind_thread_dispatch(void){}
