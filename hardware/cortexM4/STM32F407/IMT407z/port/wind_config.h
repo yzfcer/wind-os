@@ -31,8 +31,6 @@
 
 #define WIND_MUTEX_SUPPORT 1 //是否支持互斥锁
 
-#define WIND_EVENT_SUPPORT 1 //是否支持事件机制
-
 #define WIND_SEM_SUPPORT 1 //是否支持信号量
 
 #define WIND_PIPE_SUPPORT 1  //是否支持管道机制
@@ -82,17 +80,13 @@
 
 #define WIND_PIPE_MAX_NUM 10  //最大的管道数量
 
-#define WIND_MSGBOX_MAX_NUM 5//邮箱的数量
+#define WIND_MBOX_MAX_NUM 5//邮箱的数量
 
 #define WIND_SEM_MAX_NUM 10 //最大的信号量的数量
 
 #define WIND_TIMER_MAX_NUM 10  //tick定时器内存池的容量
 
 #define WIND_MUTEX_MAX_NUM 20 //互斥锁的数量
-
-#define WIND_EVENT_MAX_NUM 10 //事件的数量
-
-#define WIND_EVENT_LISTENER_MAX_NUM 10 //事件监听者的数量
 
 #define WIND_SOFTINT_MAX_NUM 256 //软中断向量表的长度
 

@@ -139,7 +139,6 @@ w_err_t wind_mutex_lock(mutex_s *mutex)
         return ERR_OK; 
     }
     thread = wind_thread_current();
-    WIND_ASSERT_TODO(mutex->owner != thread,wind_enable_interrupt(),ERR_FAIL);
     thread->runstat = THREAD_STATUS_SUSPEND;
     thread->cause = CAUSE_LOCK;
     thread->sleep_ticks = 0x7fffffff;
@@ -169,7 +168,7 @@ w_err_t wind_mutex_trylock(mutex_s *mutex)
 }
 
 
-//打开一个互斥锁，如果有线程被阻塞，则优先激活线程
+//试图打开一个互斥锁，如果有线程被阻塞，则优先激活线程
 w_err_t wind_mutex_unlock(mutex_s *mutex)
 {
     dnode_s *pnode;

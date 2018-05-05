@@ -1,11 +1,8 @@
 #include "test_port.h"
 #include "wind_cut.h"
 
-<<<<<<< HEAD
 //DECLARE_SUITE(TestSuite1);
 //DECLARE_SUITE(TestSuite2);
-=======
->>>>>>> yzfcer
 DECLARE_SUITE(test_pool);
 DECLARE_SUITE(test_tree);
 #if WIND_MUTEX_SUPPORT
@@ -29,11 +26,8 @@ DECLARE_SUITE(test_softirq);
 
 void test_suite_register_all(void)
 {
-<<<<<<< HEAD
     //REGSTER_SUITE(TestSuite1);
     //REGSTER_SUITE(TestSuite2);
-=======
->>>>>>> yzfcer
     REGSTER_SUITE(test_pool);
     REGSTER_SUITE(test_tree);
 #if WIND_MUTEX_SUPPORT
