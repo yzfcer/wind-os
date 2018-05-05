@@ -18,6 +18,9 @@ DECLARE_SUITE(test_msgbox);
 #if WIND_HEAP_SUPPORT
 DECLARE_SUITE(test_heap);
 #endif
+#if WIND_SOFTIRQ_SUPPORT
+DECLARE_SUITE(test_softirq);
+#endif
 
 void test_suite_register_all(void)
 {
@@ -37,6 +40,9 @@ void test_suite_register_all(void)
 #endif
 #if WIND_HEAP_SUPPORT
     REGSTER_SUITE(test_heap);
+#endif
+#if WIND_SOFTIRQ_SUPPORT
+    REGSTER_SUITE(test_softirq);
 #endif
 }
 
