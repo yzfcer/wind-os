@@ -131,7 +131,7 @@ static thread_s *wind_search_highthread(void)
     }
     foreach_node(node,&g_core.threadlist)
     {
-        thread = PRI_DLIST_OBJ(node,thread_s,validthr);
+        thread = PRI_DLIST_OBJ(node,thread_s,validnode);
         if(thread->runstat == THREAD_STATUS_READY)
         {
             wind_enable_interrupt();

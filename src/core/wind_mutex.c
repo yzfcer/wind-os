@@ -113,7 +113,7 @@ w_err_t wind_mutex_destroy(mutex_s *mutex)
     foreach_node(pnode,&mutex->waitlist)
     {
         dlist_remove(&mutex->waitlist,pnode);
-        thread = PRI_DLIST_OBJ(pnode,thread_s,suspendthr);
+        thread = PRI_DLIST_OBJ(pnode,thread_s,suspendnode);
         thread->runstat = THREAD_STATUS_READY;
         thread->cause = CAUSE_LOCK;
     }
@@ -139,11 +139,12 @@ w_err_t wind_mutex_lock(mutex_s *mutex)
         return ERR_OK; 
     }
     thread = wind_thread_current();
+    WIND_ASSERT_TODO(mutex->owner != thread,wind_enable_interrupt(),ERR_FAIL);
     thread->runstat = THREAD_STATUS_SUSPEND;
     thread->cause = CAUSE_LOCK;
     thread->sleep_ticks = 0x7fffffff;
     
-    dlist_insert_prio(&mutex->waitlist,&thread->suspendthr,thread->prio);
+    dlist_insert_prio(&mutex->waitlist,&thread->suspendnode,thread->prio);
     wind_enable_interrupt();
     _wind_thread_dispatch();
     return ERR_OK;
@@ -168,7 +169,7 @@ w_err_t wind_mutex_trylock(mutex_s *mutex)
 }
 
 
-//试图打开一个互斥锁，如果有线程被阻塞，则优先激活线程
+//打开一个互斥锁，如果有线程被阻塞，则优先激活线程
 w_err_t wind_mutex_unlock(mutex_s *mutex)
 {
     dnode_s *pnode;
@@ -189,7 +190,7 @@ w_err_t wind_mutex_unlock(mutex_s *mutex)
     }
 
     dlist_remove_head(&mutex->waitlist);
-    thread = PRI_DLIST_OBJ(pnode,thread_s,suspendthr);
+    thread = PRI_DLIST_OBJ(pnode,thread_s,suspendnode);
     thread->runstat = THREAD_STATUS_READY;
     thread->cause = CAUSE_LOCK;
     mutex->owner = thread;

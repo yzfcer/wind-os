@@ -71,7 +71,7 @@ struct __heapitem_s
 {
     w_uint32_t magic;
     heap_s *heap;
-    prinode_s itemnode;
+    prionode_s itemnode;
     w_int32_t size;
 };
 

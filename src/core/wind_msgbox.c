@@ -31,7 +31,7 @@
 
 #if WIND_MSGBOX_SUPPORT
 extern void _wind_thread_dispatch(void);
-WIND_POOL(msgboxpool,WIND_MBOX_MAX_NUM,sizeof(msgbox_s));
+WIND_POOL(msgboxpool,WIND_MSGBOX_MAX_NUM,sizeof(msgbox_s));
 
 static msgbox_s *msgbox_malloc(void)
 {
@@ -210,7 +210,7 @@ w_err_t wind_msgbox_wait(msgbox_s *msgbox,msg_s **pmsg,w_uint32_t timeout)
     thread = msgbox->owner;
     thread->runstat = THREAD_STATUS_SLEEP;
     thread->cause = CAUSE_MSG;
-    dlist_insert_tail(&g_core.sleeplist,&thread->sleepthr.node);
+    dlist_insert_tail(&g_core.sleeplist,&thread->sleepnode.node);
     wind_enable_interrupt();
     
     _wind_thread_dispatch();

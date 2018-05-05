@@ -1458,11 +1458,6 @@
           <GroupName>test_case</GroupName>
           <Files>
             <File>
-              <FileName>test_mpool.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\test\testcase\test_mpool.c</FilePath>
-            </File>
-            <File>
               <FileName>test_tree.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\test\testcase\test_tree.c</FilePath>
@@ -1496,6 +1491,11 @@
               <FileName>test_heap.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\test\testcase\test_heap.c</FilePath>
+            </File>
+            <File>
+              <FileName>test_pool.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\test\testcase\test_pool.c</FilePath>
             </File>
           </Files>
         </Group>

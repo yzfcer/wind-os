@@ -1,6 +1,6 @@
 /****************************************Copyright (c)**************************************************
 **                                       清  风  海  岸
-** 文   件   名: test_mpool.c
+** 文   件   名: test_pool.c
 ** 创   建   人: 周江村
 ** 最后修改日期: 2017/10/22 16:29:55
 ** 描        述: 
@@ -76,7 +76,6 @@ CASE_FUNC(pool_alloc)
     int i;
     w_err_t err;
     pool_item_s* itm;
-    pool_s *pool = (pool_s *)test_pool;
     for(i = 0;i < TNUM;i ++)
     {
         testblk[i] = wind_pool_malloc(test_pool);
@@ -104,16 +103,16 @@ CASE_FUNC(pool_alloc)
 }
 
 
-SUITE_SETUP(test_mpool){}
-SUITE_TEARDOWN(test_mpool){}
+SUITE_SETUP(test_pool){}
+SUITE_TEARDOWN(test_pool){}
 
 
 
-TEST_CASES_START(test_mpool)
+TEST_CASES_START(test_pool)
 TEST_CASE(pool_info)
 TEST_CASE(pool_alloc)
 TEST_CASES_END
-TEST_SUITE(test_mpool)
+TEST_SUITE(test_pool)
 
 
 #ifdef __cplusplus

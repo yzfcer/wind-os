@@ -96,9 +96,9 @@ typedef enum __thr_evt_e
 struct _thread_s
 {
     w_uint32_t magic;
-    prinode_s validthr;
-    prinode_s suspendthr;
-    prinode_s sleepthr;
+    prionode_s validnode;
+    prionode_s suspendnode;
+    prionode_s sleepnode;
     w_pstack_t stack;//堆栈指针
     w_pstack_t stack_top;//栈顶指针
     w_uint16_t stksize;//堆栈大小，以栈宽度技术
