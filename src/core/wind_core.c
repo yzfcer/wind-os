@@ -257,9 +257,11 @@ int _create_init_thread(void);
 
 static int wind_os_lunch(void)
 {
+    wind_disable_interrupt();
     _wind_init();
     _create_init_thread();
     _wind_thread_open();
+    wind_enable_interrupt();
     wind_run();
     return ERR_OK;
 }

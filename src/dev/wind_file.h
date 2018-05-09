@@ -39,12 +39,14 @@ typedef struct
     void *fileobj;//文件对象
     w_int32_t offset;//偏移量
     mutex_s *mutex;//文件操作变量
+    void *fileobj;
     fs_ops_s *ops;//操作函数集
 }file_s;
 
 
 struct __file_ops_s
 {
+    w_err_t (*mkdir)(const char *path);
     file_s* (*open)(const char *path,fmode_e fmode);
     w_err_t (*close)(file_s* file);
     w_err_t (*seek)(file_s* file,w_int32_t offset);
@@ -55,6 +57,8 @@ struct __file_ops_s
     w_err_t (*fputs)(file_s* file,char *buff);
 };
 
+file_s *_file_malloc(void);
+w_err_t _file_free(file_s *file);
 
 w_err_t _wind_file_init(void);
 fs_s *wind_fs_get(char *name);

@@ -171,7 +171,7 @@ w_err_t wind_pool_free(void *mem,void *block)
         pm->free_end->next = (pool_item_s*)item;
         pm->free_end = (pool_item_s*)item;
     }
-    WIND_STATI_MINUS(pm->stati);
+    WIND_STATI_DEC(pm->stati);
     wind_enable_interrupt();
     return ERR_OK;
 }

@@ -477,7 +477,7 @@ w_err_t console_thread(w_int32_t argc,char **argv)
 
 
 
-#define CTRL_STK_SIZE 256
+#define CTRL_STK_SIZE 2048
 static w_stack_t ctrlstk[CTRL_STK_SIZE];//Ö÷ÈÎÎñ¶ÑÕ»
 w_err_t _create_console_thread(void)
 {

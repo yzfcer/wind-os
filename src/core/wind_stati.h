@@ -38,7 +38,7 @@ typedef struct __stat_s
     w_uint32_t used;
     w_uint32_t max;
     w_uint32_t err;
-}stati_s,*pstati_s;
+}stati_s;
 
 #define WIND_STATI_INIT(stati,totel) \
             do{stati.tot = totel;\
@@ -46,11 +46,13 @@ typedef struct __stat_s
             stati.max = 0;\
             stati.err = 0;}while(0)
 #define WIND_STATI_INC(stati) do{stati.used++;WIND_STATI_MAX(stati);}while(0)
-#define WIND_STATI_MINUS(stati) do{if(stati.used > 0) stati.used--;}while(0)
+#define WIND_STATI_DEC(stati) do{if(stati.used > 0) stati.used--;}while(0)
 #define WIND_STATI_ERR_INC(stati) stati.err++
 #define WIND_STATI_MAX(stati) \
         do{if(stati.used > stati.max) \
         stati.max = stati.used;}while(0)
+#define WIND_STATI_ADD(stati,num) do{stati.used+=num;WIND_STATI_MAX(stati);}while(0)
+#define WIND_STATI_MINUS(stati,num) do{if(stati.used >= (num)) stati.used-=(num);}while(0)
 
 #ifdef __cplusplus
 }

@@ -29,6 +29,7 @@
 #include "wind_config.h"
 #include "wind_type.h"
 #include "wind_dlist.h"
+#include "wind_stati.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -40,17 +41,17 @@ extern "C" {
 #define WIND_HEAP_MINIALLOC    12
 #define WIND_HEAP_ALIGN_SIZE 4
 #define WIND_HEAP_MAGIC        0xa5e87490
-#define WIND_HEAPITEM_MAGIC    0x1ea01ea0
-#define WIND_HEAP_MASK         0xfffffffe
+#define WIND_HEAPITEM_MAGIC    0x01ea01ea
+#define WIND_HEAP_MASK         0xfffffff0
 
 #define WIND_HEAP_USED         0x01
-#define WIND_HEAP_PRIVATE      0x01
+#define WIND_HEAP_PRIVATE      0x02
 
 #define HEAP_IS_USED(h)   ((h)->magic & WIND_HEAP_USED)
 #define HEAP_IS_PRIVATE(h)   ((h)->magic & WIND_HEAP_PRIVATE)
 
-#define __ALIGN_R(size,N) ((size + N - 1) / N *N)
-#define __ALIGN_L(size,N) ((size - N + 1) / N *N)
+#define __ALIGN_R(size) (((size + 3) >>2) << 2)
+#define __ALIGN_L(size) (((size) >> 2) << 2)
 
 #define WIND_HEAP_SIZE         __ALIGN_R(sizeof(heapitem_s), WIND_HEAP_ALIGN_SIZE)
 
@@ -69,7 +70,8 @@ typedef struct __heapitem_s heapitem_s;
 typedef struct __heap_s heap_s;
 struct __heapitem_s
 {
-    w_uint32_t magic;
+    w_uint32_t magic:28;
+    w_uint32_t used:1;
     heap_s *heap;
     prinode_s itemnode;
     w_int32_t size;
@@ -80,14 +82,12 @@ struct __heap_s
 {
     w_uint32_t magic;
     const char *name;
-    void *addr; 
-    w_uint32_t size;
-    w_uint32_t rest;
-    w_uint32_t max_used;
+    void *addr;
+    stati_s stati;
     dnode_s heapnode;
     dlist_s used_list;
     dlist_s free_list;
-    void *pmutex; 
+    void *mutex; 
 };
 
 heap_s *wind_heap_get(const char *name);

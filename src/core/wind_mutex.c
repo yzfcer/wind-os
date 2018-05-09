@@ -79,6 +79,7 @@ mutex_s *wind_mutex_create(const char *name)
     DNODE_INIT(mutex->mutexnode);
     mutex->name = name;
     mutex->mutexed = B_FALSE;
+    mutex->nest = 0;
     mutex->owner = NULL;
     DLIST_INIT(mutex->waitlist);
     
@@ -130,15 +131,24 @@ w_err_t wind_mutex_lock(mutex_s *mutex)
     WIND_ASSERT_RETURN(mutex != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(mutex->magic == WIND_MUTEX_MAGIC,ERR_INVALID_PARAM);
     wind_disable_interrupt();
+    thread = wind_thread_current();
 
     if (mutex->mutexed == B_FALSE)
     {
         mutex->mutexed = B_TRUE;
+        mutex->nest ++;
         mutex->owner = wind_thread_current();
         wind_enable_interrupt();
         return ERR_OK; 
     }
-    thread = wind_thread_current();
+    if(thread == mutex->owner)
+    {
+        if(mutex->nest < 65535)
+            mutex->nest ++;
+        wind_enable_interrupt();
+        return ERR_OK; 
+    }
+    
     thread->runstat = THREAD_STATUS_SUSPEND;
     thread->cause = CAUSE_LOCK;
     thread->sleep_ticks = 0x7fffffff;
@@ -179,6 +189,13 @@ w_err_t wind_mutex_unlock(mutex_s *mutex)
     WIND_ASSERT_TODO(mutex->mutexed,wind_enable_interrupt(),ERR_OK);
     thread = wind_thread_current();
     WIND_ASSERT_TODO(mutex->owner == thread,wind_enable_interrupt(),ERR_FAIL);
+    if(mutex->nest > 0)
+        mutex->nest --;
+    if(mutex->nest > 0)
+    {
+        wind_enable_interrupt();
+        return ERR_OK;
+    }
     pnode = dlist_head(&mutex->waitlist);
     if (pnode == NULL)
     {

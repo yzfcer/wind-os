@@ -40,6 +40,7 @@ typedef struct _wind_mutex
     const char *name;
     dnode_s mutexnode;
     w_bool_t mutexed;     //当前的信号量的值
+    w_uint16_t nest;
     thread_s *owner;
     dlist_s waitlist;  //等待线程队列
 }mutex_s;

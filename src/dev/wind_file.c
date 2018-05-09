@@ -3,6 +3,15 @@
 #if WIND_FS_SUPPORT
 
 WIND_POOL(filepool,WIND_FILE_MAX_NUM,sizeof(file_s));
+file_s *_file_malloc(void)
+{
+    return wind_pool_malloc(filepool);
+}
+
+w_err_t _file_free(file_s *file)
+{
+    return wind_pool_free(filepool,file);
+}
 
 w_err_t _wind_file_init(void)
 {

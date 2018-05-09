@@ -17,6 +17,7 @@ CMD_DECLARE(led);
 #if WIND_BLK_DRVFRAME_SUPPORT
 CMD_DECLARE(blkdev);
 #endif
+//CMD_DECLARE(lua);
 
 
 void _wind_register_all_cmd(console_s *ctrl)
@@ -37,6 +38,8 @@ void _wind_register_all_cmd(console_s *ctrl)
 #if WIND_BLK_DRVFRAME_SUPPORT
     wind_cmd_register(COMMAND(blkdev),1);
 #endif
+    //wind_cmd_register(COMMAND(lua),1);
+
 }
 
 w_bool_t console_have_user(char *user)
