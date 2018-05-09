@@ -64,7 +64,7 @@ w_int32_t wind_printf(const char *fmt, ...);
 #define PRINT_LV_ERROR   4
 #define PRINT_LV_CRIT     5
 
-#define PRINT_LEVEL PRINT_LV_NOTICE
+#define PRINT_LEVEL PRINT_LV_DEBUG
 
 
 #if (WIND_DEBUG_SUPPORT && (PRINT_LEVEL <= PRINT_LV_DEBUG))

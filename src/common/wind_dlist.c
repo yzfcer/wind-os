@@ -159,6 +159,10 @@ void dlist_insert_prio(dlist_s *dlist, prinode_s *prinode,w_uint32_t prio)
     prinode_s *prin = NULL;
     dnode_s *dnode;
     prinode->prio = prio;
+    if((w_uint32_t)prinode == 0x100013f8)
+    {
+        prinode = prinode;
+    }
     dnode = dlist_head(dlist);
     if(dnode == NULL)
     {

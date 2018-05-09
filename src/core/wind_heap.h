@@ -50,8 +50,8 @@ extern "C" {
 #define HEAP_IS_USED(h)   ((h)->magic & WIND_HEAP_USED)
 #define HEAP_IS_PRIVATE(h)   ((h)->magic & WIND_HEAP_PRIVATE)
 
-#define __ALIGN_R(size) (((size + 3) >>2) << 2)
-#define __ALIGN_L(size) (((size) >> 2) << 2)
+#define __ALIGN_R(size) (((size + 7) >> 3) << 3)
+#define __ALIGN_L(size) (((size) >> 3) << 3)
 
 #define WIND_HEAP_SIZE         __ALIGN_R(sizeof(heapitem_s), WIND_HEAP_ALIGN_SIZE)
 
