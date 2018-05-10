@@ -1808,9 +1808,9 @@
               <FilePath>..\..\..\..\..\src\components\lua-5.3.4\src\lzio.h</FilePath>
             </File>
             <File>
-              <FileName>lua_sysport.c</FileName>
+              <FileName>lua_port.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\components\lua-5.3.4\src\lua_sysport.c</FilePath>
+              <FilePath>..\..\..\..\..\src\components\lua-5.3.4\port\lua_port.c</FilePath>
             </File>
           </Files>
         </Group>
