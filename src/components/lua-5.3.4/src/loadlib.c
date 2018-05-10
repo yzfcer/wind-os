@@ -189,7 +189,7 @@ static void pusherror (lua_State *L) {
       NULL, error, 0, buffer, sizeof(buffer)/sizeof(char), NULL))
     lua_pushstring(L, buffer);
   else
-    lua_pushfstring(L, "system error %d\n", error);
+    lua_pushfstring(L, "system error %d\r\n", error);
 }
 
 static void lsys_unloadlib (void *lib) {
@@ -446,7 +446,7 @@ static const char *searchpath (lua_State *L, const char *name,
     lua_remove(L, -2);  /* remove path template */
     if (readable(filename))  /* does file exist and is readable? */
       return filename;  /* return that file name */
-    lua_pushfstring(L, "\n\tno file '%s'", filename);
+    lua_pushfstring(L, "\r\n\tno file '%s'", filename);
     lua_remove(L, -2);  /* remove file name */
     luaL_addvalue(&msg);  /* concatenate error msg. entry */
   }
@@ -487,7 +487,7 @@ static int checkload (lua_State *L, int stat, const char *filename) {
     return 2;  /* return open function and file name */
   }
   else
-    return luaL_error(L, "error loading module '%s' from file '%s':\n\t%s",
+    return luaL_error(L, "error loading module '%s' from file '%s':\r\n\t%s",
                           lua_tostring(L, 1), filename, lua_tostring(L, -1));
 }
 
@@ -548,7 +548,7 @@ static int searcher_Croot (lua_State *L) {
     if (stat != ERRFUNC)
       return checkload(L, 0, filename);  /* real error */
     else {  /* open function not found */
-      lua_pushfstring(L, "\n\tno module '%s' in file '%s'", name, filename);
+      lua_pushfstring(L, "\r\n\tno module '%s' in file '%s'", name, filename);
       return 1;
     }
   }
@@ -561,7 +561,7 @@ static int searcher_preload (lua_State *L) {
   const char *name = luaL_checkstring(L, 1);
   lua_getfield(L, LUA_REGISTRYINDEX, LUA_PRELOAD_TABLE);
   if (lua_getfield(L, -1, name) == LUA_TNIL)  /* not found? */
-    lua_pushfstring(L, "\n\tno field package.preload['%s']", name);
+    lua_pushfstring(L, "\r\n\tno field package.preload['%s']", name);
   return 1;
 }
 
@@ -772,8 +772,8 @@ LUAMOD_API int luaopen_package (lua_State *L) {
   setpath(L, "path", LUA_PATH_VAR, LUA_PATH_DEFAULT);
   setpath(L, "cpath", LUA_CPATH_VAR, LUA_CPATH_DEFAULT);
   /* store config information */
-  lua_pushliteral(L, LUA_DIRSEP "\n" LUA_PATH_SEP "\n" LUA_PATH_MARK "\n"
-                     LUA_EXEC_DIR "\n" LUA_IGMARK "\n");
+  lua_pushliteral(L, LUA_DIRSEP "\r\n" LUA_PATH_SEP "\r\n" LUA_PATH_MARK "\r\n"
+                     LUA_EXEC_DIR "\r\n" LUA_IGMARK "\r\n");
   lua_setfield(L, -2, "config");
   /* set field 'loaded' */
   luaL_getsubtable(L, LUA_REGISTRYINDEX, LUA_LOADED_TABLE);

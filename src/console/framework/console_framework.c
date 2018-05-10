@@ -207,7 +207,7 @@ static void console_clear_buf(console_s *ctrl)
     wind_memset(ctrl->buf,0,WIND_CMD_MAX_LEN);
 }
 
-static w_int32_t console_read_line(console_s *ctrl,w_int32_t len)
+w_int32_t console_read_line(console_s *ctrl,w_int32_t len)
 {
     w_err_t err;
     char ch;

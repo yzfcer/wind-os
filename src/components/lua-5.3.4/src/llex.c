@@ -146,14 +146,14 @@ TString *luaX_newstring (LexState *ls, const char *str, size_t l) {
 
 /*
 ** increment line number and skips newline sequence (any of
-** \n, \r, \n\r, or \r\n)
+** \r\n, \r, \r\n\r, or \r\r\n)
 */
 static void inclinenumber (LexState *ls) {
   int old = ls->current;
   lua_assert(currIsNewline(ls));
-  next(ls);  /* skip '\n' or '\r' */
+  next(ls);  /* skip '\r\n' or '\r' */
   if (currIsNewline(ls) && ls->current != old)
-    next(ls);  /* skip '\n\r' or '\r\n' */
+    next(ls);  /* skip '\r\n\r' or '\r\r\n' */
   if (++ls->linenumber >= MAX_INT)
     lexerror(ls, "chunk has too many lines", 0);
 }
@@ -387,7 +387,8 @@ static void read_string (LexState *ls, int del, SemInfo *seminfo) {
           case 'v': c = '\v'; goto read_save;
           case 'x': c = readhexaesc(ls); goto read_save;
           case 'u': utf8esc(ls);  goto no_save;
-          case '\n': case '\r':
+          case '\n': 
+          case '\r':
             inclinenumber(ls); c = '\n'; goto only_save;
           case '\\': case '\"': case '\'':
             c = ls->current; goto read_save;

@@ -68,7 +68,7 @@
 
 #endif				/* } */
 
-
+//extern lua_readline(lua_State *L,char *buff,const char *prmt);
 /*
 ** lua_readline defines how to show a prompt and then read a line from
 ** the standard input.
@@ -81,15 +81,15 @@
 
 #include <readline/readline.h>
 #include <readline/history.h>
-#define lua_readline(L,b,p)	((void)L, ((b)=readline(p)) != NULL)
+//#define lua_readline(L,b,p)	((void)L, ((b)=readline(p)) != NULL)
 #define lua_saveline(L,line)	((void)L, add_history(line))
 #define lua_freeline(L,b)	((void)L, free(b))
 
 #else				/* }{ */
 
-#define lua_readline(L,b,p) \
-        ((void)L, fputs(p, stdout), fflush(stdout),  /* show prompt */ \
-        fgets(b, LUA_MAXINPUT, stdin) != NULL)  /* get line */
+//#define lua_readline(L,b,p) \
+//        ((void)L, fputs(p, stdout), fflush(stdout),  /* show prompt */ \
+//        fgets(b, LUA_MAXINPUT, stdin) != NULL)  /* get line */
 #define lua_saveline(L,line)	{ (void)L; (void)line; }
 #define lua_freeline(L,b)	{ (void)L; (void)b; }
 
@@ -130,19 +130,19 @@ static void laction (int i) {
 static void print_usage (const char *badoption) {
   lua_writestringerror("%s: ", progname);
   if (badoption[1] == 'e' || badoption[1] == 'l')
-    lua_writestringerror("'%s' needs argument\n", badoption);
+    lua_writestringerror("'%s' needs argument\r\n", badoption);
   else
-    lua_writestringerror("unrecognized option '%s'\n", badoption);
+    lua_writestringerror("unrecognized option '%s'\r\n", badoption);
   lua_writestringerror(
-  "usage: %s [options] [script [args]]\n"
-  "Available options are:\n"
-  "  -e stat  execute string 'stat'\n"
-  "  -i       enter interactive mode after executing 'script'\n"
-  "  -l name  require library 'name'\n"
-  "  -v       show version information\n"
-  "  -E       ignore environment variables\n"
-  "  --       stop handling options\n"
-  "  -        stop handling options and execute stdin\n"
+  "usage: %s [options] [script [args]]\r\n"
+  "Available options are:\r\n"
+  "  -e stat  execute string 'stat'\r\n"
+  "  -i       enter interactive mode after executing 'script'\r\n"
+  "  -l name  require library 'name'\r\n"
+  "  -v       show version information\r\n"
+  "  -E       ignore environment variables\r\n"
+  "  --       stop handling options\r\n"
+  "  -        stop handling options and execute stdin\r\n"
   ,
   progname);
 }
@@ -154,7 +154,7 @@ static void print_usage (const char *badoption) {
 */
 static void l_message (const char *pname, const char *msg) {
   if (pname) lua_writestringerror("%s: ", pname);
-  lua_writestringerror("%s\n", msg);
+  lua_writestringerror("%s\r\n", msg);
 }
 
 
@@ -304,6 +304,9 @@ static int incomplete (lua_State *L, int status) {
 /*
 ** Prompt the user, read a line, and push it into the Lua stack.
 */
+extern  int lua_readline(lua_State *L,char *buff,const char *prmt);
+extern w_int32_t wind_memcmp(const void *cs,const void *ct,w_uint32_t count);
+
 static int pushline (lua_State *L, int firstline) {
   char buffer[LUA_MAXINPUT];
   char *b = buffer;
@@ -316,6 +319,8 @@ static int pushline (lua_State *L, int firstline) {
   l = strlen(b);
   if (l > 0 && b[l-1] == '\n')  /* line ends with newline? */
     b[--l] = '\0';  /* remove it */
+  if(wind_memcmp(b,"exit",4) == 0)
+    return 0;
   if (firstline && b[0] == '=')  /* for compatibility with 5.2, ... */
     lua_pushfstring(L, "return %s", b + 1);  /* change '=' to 'return' */
   else
@@ -356,7 +361,7 @@ static int multiline (lua_State *L) {
       lua_saveline(L, line);  /* keep history */
       return status;  /* cannot or should not try to add continuation line */
     }
-    lua_pushliteral(L, "\n");  /* add newline... */
+    lua_pushliteral(L, "\r\n");  /* add newline... */
     lua_insert(L, -2);  /* ...between the two lines */
     lua_concat(L, 3);  /* join them */
   }
@@ -592,7 +597,7 @@ static int pmain (lua_State *L) {
   return 1;
 }
 
-#if 0
+#if 1
 int lua_main (int argc, char **argv) 
 {
   int status, result;

@@ -226,7 +226,7 @@ LUALIB_API void (luaL_openlib) (lua_State *L, const char *libname,
 
 /* print a newline and flush the output */
 #if !defined(lua_writeline)
-//#define lua_writeline()        (lua_writestring("\n", 1), fflush(stdout))
+//#define lua_writeline()        (lua_writestring("\r\n", 1), fflush(stdout))
 #define lua_writeline()        wind_std_output("\r\n",2)
 #endif
 

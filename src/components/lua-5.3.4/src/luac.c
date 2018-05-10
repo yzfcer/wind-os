@@ -37,32 +37,32 @@ static const char* progname=PROGNAME;	/* actual program name */
 
 static void fatal(const char* message)
 {
- fprintf(stderr,"%s: %s\n",progname,message);
+ fprintf(stderr,"%s: %s\r\n",progname,message);
  exit(EXIT_FAILURE);
 }
 
 static void cannot(const char* what)
 {
- fprintf(stderr,"%s: cannot %s %s: %s\n",progname,what,output,strerror(errno));
+ fprintf(stderr,"%s: cannot %s %s: %s\r\n",progname,what,output,strerror(errno));
  exit(EXIT_FAILURE);
 }
 
 static void usage(const char* message)
 {
  if (*message=='-')
-  fprintf(stderr,"%s: unrecognized option '%s'\n",progname,message);
+  fprintf(stderr,"%s: unrecognized option '%s'\r\n",progname,message);
  else
-  fprintf(stderr,"%s: %s\n",progname,message);
+  fprintf(stderr,"%s: %s\r\n",progname,message);
  fprintf(stderr,
-  "usage: %s [options] [filenames]\n"
-  "Available options are:\n"
-  "  -l       list (use -l -l for full listing)\n"
-  "  -o name  output to file 'name' (default is \"%s\")\n"
-  "  -p       parse only\n"
-  "  -s       strip debug information\n"
-  "  -v       show version information\n"
-  "  --       stop handling options\n"
-  "  -        stop handling options and process stdin\n"
+  "usage: %s [options] [filenames]\r\n"
+  "Available options are:\r\n"
+  "  -l       list (use -l -l for full listing)\r\n"
+  "  -o name  output to file 'name' (default is \"%s\")\r\n"
+  "  -p       parse only\r\n"
+  "  -s       strip debug information\r\n"
+  "  -v       show version information\r\n"
+  "  --       stop handling options\r\n"
+  "  -        stop handling options and process stdin\r\n"
   ,progname,Output);
  exit(EXIT_FAILURE);
 }
@@ -111,7 +111,7 @@ static int doargs(int argc, char* argv[])
  }
  if (version)
  {
-  printf("%s\n",LUA_COPYRIGHT);
+  printf("%s\r\n",LUA_COPYRIGHT);
   if (version==argc-1) exit(EXIT_SUCCESS);
  }
  return i;
@@ -238,7 +238,7 @@ static void PrintString(const TString* ts)
    case '\a': printf("\\a"); break;
    case '\b': printf("\\b"); break;
    case '\f': printf("\\f"); break;
-   case '\n': printf("\\n"); break;
+   case '\r\n': printf("\\r\n"); break;
    case '\r': printf("\\r"); break;
    case '\t': printf("\\t"); break;
    case '\v': printf("\\v"); break;
@@ -385,7 +385,7 @@ static void PrintCode(const Proto* f)
    default:
     break;
   }
-  printf("\n");
+  printf("\r\n");
  }
 }
 
@@ -401,14 +401,14 @@ static void PrintHeader(const Proto* f)
   s="(bstring)";
  else
   s="(string)";
- printf("\n%s <%s:%d,%d> (%d instruction%s at %p)\n",
+ printf("\r\n%s <%s:%d,%d> (%d instruction%s at %p)\r\n",
  	(f->linedefined==0)?"main":"function",s,
 	f->linedefined,f->lastlinedefined,
 	S(f->sizecode),VOID(f));
  printf("%d%s param%s, %d slot%s, %d upvalue%s, ",
 	(int)(f->numparams),f->is_vararg?"+":"",SS(f->numparams),
 	S(f->maxstacksize),S(f->sizeupvalues));
- printf("%d local%s, %d constant%s, %d function%s\n",
+ printf("%d local%s, %d constant%s, %d function%s\r\n",
 	S(f->sizelocvars),S(f->sizek),S(f->sizep));
 }
 
@@ -416,25 +416,25 @@ static void PrintDebug(const Proto* f)
 {
  int i,n;
  n=f->sizek;
- printf("constants (%d) for %p:\n",n,VOID(f));
+ printf("constants (%d) for %p:\r\n",n,VOID(f));
  for (i=0; i<n; i++)
  {
   printf("\t%d\t",i+1);
   PrintConstant(f,i);
-  printf("\n");
+  printf("\r\n");
  }
  n=f->sizelocvars;
- printf("locals (%d) for %p:\n",n,VOID(f));
+ printf("locals (%d) for %p:\r\n",n,VOID(f));
  for (i=0; i<n; i++)
  {
-  printf("\t%d\t%s\t%d\t%d\n",
+  printf("\t%d\t%s\t%d\t%d\r\n",
   i,getstr(f->locvars[i].varname),f->locvars[i].startpc+1,f->locvars[i].endpc+1);
  }
  n=f->sizeupvalues;
- printf("upvalues (%d) for %p:\n",n,VOID(f));
+ printf("upvalues (%d) for %p:\r\n",n,VOID(f));
  for (i=0; i<n; i++)
  {
-  printf("\t%d\t%s\t%d\t%d\n",
+  printf("\t%d\t%s\t%d\t%d\r\n",
   i,UPVALNAME(i),f->upvalues[i].instack,f->upvalues[i].idx);
  }
 }

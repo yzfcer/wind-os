@@ -129,23 +129,23 @@ LUALIB_API void luaL_traceback (lua_State *L, lua_State *L1,
   int last = lastlevel(L1);
   int n1 = (last - level > LEVELS1 + LEVELS2) ? LEVELS1 : -1;
   if (msg)
-    lua_pushfstring(L, "%s\n", msg);
+    lua_pushfstring(L, "%s\r\n", msg);
   luaL_checkstack(L, 10, NULL);
   lua_pushliteral(L, "stack traceback:");
   while (lua_getstack(L1, level++, &ar)) {
     if (n1-- == 0) {  /* too many levels? */
-      lua_pushliteral(L, "\n\t...");  /* add a '...' */
+      lua_pushliteral(L, "\r\n\t...");  /* add a '...' */
       level = last - LEVELS2 + 1;  /* and skip to last ones */
     }
     else {
       lua_getinfo(L1, "Slnt", &ar);
-      lua_pushfstring(L, "\n\t%s:", ar.short_src);
+      lua_pushfstring(L, "\r\n\t%s:", ar.short_src);
       if (ar.currentline > 0)
         lua_pushfstring(L, "%d:", ar.currentline);
       lua_pushliteral(L, " in ");
       pushfuncname(L, &ar);
       if (ar.istailcall)
-        lua_pushliteral(L, "\n\t(...tail calls...)");
+        lua_pushliteral(L, "\r\n\t(...tail calls...)");
       lua_concat(L, lua_gettop(L) - top);
     }
   }
@@ -1008,7 +1008,7 @@ LUALIB_API const char *luaL_gsub (lua_State *L, const char *s, const char *p,
 static void *l_alloc (void *ud, void *ptr, size_t osize, size_t nsize) {
   (void)ud; (void)osize;  /* not used */
   if (nsize == 0) {
-		if(osize > 0)
+		if(ptr != NULL)
 			wind_free(ptr);
 		//free(ptr);
     return NULL;
@@ -1020,7 +1020,7 @@ static void *l_alloc (void *ud, void *ptr, size_t osize, size_t nsize) {
 
 
 static int panic (lua_State *L) {
-  lua_writestringerror("PANIC: unprotected error in call to Lua API (%s)\n",
+  lua_writestringerror("PANIC: unprotected error in call to Lua API (%s)\r\n",
                         lua_tostring(L, -1));
   return 0;  /* return to Lua to abort */
 }

@@ -1,6 +1,9 @@
 #include "stdio.h"
 #include "wind_std.h"
-
+#include "console_framework.h"
+#include "wind_string.h"
+#include "lua.h"
+#define LUA_MAXINPUT 512
 typedef int FILEHANDLE;
 #ifndef NULL
 #define NULL (void*)0
@@ -103,4 +106,18 @@ int clock(void *ptr)
 {
     return 0;
 }
+extern console_s g_ctrl[WIND_CONSOLE_COUNT];
+extern w_int32_t console_read_line(console_s *ctrl,w_int32_t len);
+
+int lua_readline(lua_State *L,char *buff,const char *prmt)
+{
+    int len;
+    wind_std_output((w_uint8_t*)prmt,wind_strlen(prmt));
+    len = console_read_line(&g_ctrl[0],LUA_MAXINPUT);
+    wind_strcpy(buff,g_ctrl[0].buf);
+    buff[len] = '\n';
+    buff[len+1] = '\0';
+    return 1;
+}
+
 #endif
