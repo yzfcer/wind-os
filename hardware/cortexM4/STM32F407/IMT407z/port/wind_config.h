@@ -69,6 +69,9 @@
 
 #define WIND_FS_SUPPORT 0 //是否支持内存文件系统
 
+#define WIND_LUA_SUPPORT 1 //是否支持lua脚本语言
+
+
 //-----------------------------------------------------------------------
 
 #define WIND_THREAD_MAX_NUM 8 //需要的线程总数,建议根据需要来定义

@@ -17,8 +17,9 @@ CMD_DECLARE(led);
 #if WIND_BLK_DRVFRAME_SUPPORT
 CMD_DECLARE(blkdev);
 #endif
+#if WIND_LUA_SUPPORT
 CMD_DECLARE(lua);
-
+#endif
 
 void _wind_register_all_cmd(console_s *ctrl)
 {
@@ -38,7 +39,9 @@ void _wind_register_all_cmd(console_s *ctrl)
 #if WIND_BLK_DRVFRAME_SUPPORT
     wind_cmd_register(COMMAND(blkdev),1);
 #endif
+#if WIND_LUA_SUPPORT
     wind_cmd_register(COMMAND(lua),1);
+#endif
 
 }
 
