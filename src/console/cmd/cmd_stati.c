@@ -36,12 +36,13 @@ static void core_stati_print(w_uint16_t opt)
     dnode_s *dnode;
     pool_s *pool;
     heap_s *heap;
-    dlist_s *list = &g_core.poollist;
+    dlist_s *list;
     wind_printf("-------------------------------------------------\r\n");
     wind_printf("%-16s%-8s%-8s%-8s%-8s\r\n","pool","tot","used","maxused","err");
     wind_printf("-------------------------------------------------\r\n");
     if(opt == 1)
     {
+        list = &g_core.poollist;
         foreach_node(dnode,list)
         {
             pool = (pool_s*)DLIST_OBJ(dnode,pool_s,poolnode);
@@ -51,6 +52,7 @@ static void core_stati_print(w_uint16_t opt)
     }
     else if(opt == 2)
     {
+        list = &g_core.heaplist;
         foreach_node(dnode,list)
         {
             heap = (heap_s*)DLIST_OBJ(dnode,heap_s,heapnode);
@@ -104,7 +106,7 @@ COMMAND_MAIN(stati,argc,argv)
     }
     if(0 == wind_strcmp(argv[1],"heap"))
     {
-        return cmd_stat_show_pool_main(argc,argv);
+        return cmd_stat_show_heap_main(argc,argv);
     }
     else if(0 == wind_strcmp(argv[1],"cpuusage"))
     {

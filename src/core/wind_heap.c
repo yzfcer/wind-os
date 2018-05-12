@@ -148,17 +148,13 @@ static void *alloc_from_freeitem(heap_s* heap,heapitem_s* freeitem,w_uint32_t si
         item->size = freeitem->size;
         freeitem = NULL;
     }
-    
-    //if(item->size > 0xffff)
-    //    item->size = item->size;
+    WIND_STATI_ADD(hp->stati,item->size);
     heapitem_init(item,heap,item->size,1);
     p = OFFSET_ADDR(item,sizeof(heapitem_s));
     dlist_insert_prio(&hp->used_list,&item->itemnode,(w_uint32_t)&item);
 
     if(freeitem)
     {
-        //if(freeitem->size > 0xffff)
-        //    freeitem->size = freeitem->size;
         heapitem_init(freeitem,heap,rest,0);
         dlist_insert_prio(&hp->free_list,&freeitem->itemnode,(w_uint32_t)freeitem);
     }
@@ -214,7 +210,6 @@ void *wind_heap_malloc(heap_s* heap,w_uint32_t size)
         {
             dlist_remove(&hp->free_list,&freeitem->itemnode.node);
             p = alloc_from_freeitem(heap,freeitem,size);
-            WIND_STATI_ADD(hp->stati,size);
             break;
         }
     }
@@ -246,7 +241,7 @@ void *wind_heap_realloc(heap_s* heap, void* ptr, w_uint32_t newsize)
     p = wind_heap_malloc(heap,size);
     if(p != NULL)
     {
-        WIND_STATI_ADD(heap->stati,size);
+        //WIND_STATI_ADD(heap->stati,size);
         size = old->size - sizeof(heapitem_s) > newsize?newsize:old->size - sizeof(heapitem_s);
         wind_memcpy(p,ptr,size);
     }
@@ -279,6 +274,7 @@ w_err_t wind_heap_free(heap_s* heap,void *ptr)
     WIND_ASSERT_RETURN(heap->magic == WIND_HEAP_MAGIC,ERR_INVALID_PARAM);
     wind_mutex_lock(heap->mutex);
     dlist_remove(&heap->used_list,&item->itemnode.node);
+    WIND_STATI_MINUS(heap->stati,item->size);
     heapitem_init(item,heap,item->size,0);
     //wind_debug("insert3 0x%x",&item->itemnode);
     dlist_insert_prio(&heap->free_list,&item->itemnode,(w_uint32_t)item);

@@ -174,7 +174,7 @@ SEARCH_COMPLETE:
 }
 
 
-static treefile_s *treefs_mk_file(const char *path)
+treefile_s *treefs_mk_file(const char *path)
 {
     w_int32_t len;
     attr_u *uattr;
@@ -188,7 +188,7 @@ static treefile_s *treefs_mk_file(const char *path)
     return fsnode;
 }
 
-static w_err_t treefs_rm_file(treefile_s *file)
+w_err_t treefs_rm_file(treefile_s *file)
 {
     dnode_s *node;
     tree_s *tree;
@@ -222,7 +222,8 @@ w_err_t treefs_format(void)
     treefile_s *root = treefs_get_root();
     if(root != NULL)
         treefs_rm_file(root);
-    root = mk_subnode(NULL,"/",1);
+    else
+        root = mk_subnode(NULL,"/",1);
     if(root)
     {
         treefs_set_root(root);

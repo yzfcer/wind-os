@@ -45,13 +45,19 @@ CASE_FUNC(treefs_create)
     EXPECT_NE(file,NULL);
     err = treefile_close(file);
     EXPECT_EQ(err,ERR_OK);
+    err = treefs_rm_file(file);
+    EXPECT_EQ(err,ERR_OK);
     file = treefile_open("/test1.txt",FMODE_CRT);
     EXPECT_NE(file,NULL);
     err = treefile_close(file);
     EXPECT_EQ(err,ERR_OK);
+    err = treefs_rm_file(file);
+    EXPECT_EQ(err,ERR_OK);
     file = treefile_open("/test2.txt",FMODE_CRT);
     EXPECT_NE(file,NULL);
     err = treefile_close(file);
+    EXPECT_EQ(err,ERR_OK);
+    err = treefs_rm_file(file);
     EXPECT_EQ(err,ERR_OK);
 }
 
@@ -72,7 +78,7 @@ CASE_FUNC(treefs_readwrite)
     w_err_t err;
     treefile_s *file;
     char *str = "this is a file test string.";
-    file = treefile_open("/test.txt",FMODE_W);
+    file = treefile_open("/test.txt",FMODE_CRT | FMODE_W);
     EXPECT_NE(file,NULL);
     len = treefile_write(file,(w_uint8_t*)str,wind_strlen(str));
     EXPECT_EQ(len,wind_strlen(str));
@@ -88,12 +94,14 @@ CASE_FUNC(treefs_readwrite)
     EXPECT_EQ(len,0);
     err = treefile_close(file);
     EXPECT_EQ(err,ERR_OK);
+    err = treefs_rm_file(file);
+    EXPECT_EQ(err,ERR_OK);
     
 }
 
 SUITE_SETUP(test_treefs)
 {
-    treefile_s *file;
+    //treefile_s *file;
     treefs_format();
     //file = treefile_open("/",FMODE_CRT);
     //treefile_close(file);

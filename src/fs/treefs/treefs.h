@@ -55,6 +55,8 @@ typedef struct treefs_s
 
 
 w_err_t treefs_format(void);
+treefile_s *treefs_mk_file(const char *path);
+w_err_t treefs_rm_file(treefile_s *file);
 
 w_err_t treefile_get_attr(treefile_s *file,tf_attr_s *attr);
 w_err_t treefile_set_attr(treefile_s *file,tf_attr_s *attr);
