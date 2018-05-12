@@ -39,31 +39,13 @@ extern "C" {
 
 #define WIND_HEAP_MIN_SIZE    256
 #define WIND_HEAP_MINIALLOC    12
-#define WIND_HEAP_ALIGN_SIZE 4
-#define WIND_HEAP_MAGIC        0xa5e87490
+#define WIND_HEAP_MAGIC        0x0a5e8749
 #define WIND_HEAPITEM_MAGIC    0x01ea01ea
-#define WIND_HEAP_MASK         0xfffffff0
-
-#define WIND_HEAP_USED         0x01
-#define WIND_HEAP_PRIVATE      0x02
-
-#define HEAP_IS_USED(h)   ((h)->magic & WIND_HEAP_USED)
-#define HEAP_IS_PRIVATE(h)   ((h)->magic & WIND_HEAP_PRIVATE)
 
 #define __ALIGN_R(size) (((size + 7) >> 3) << 3)
 #define __ALIGN_L(size) (((size) >> 3) << 3)
 
 #define WIND_HEAP_SIZE         __ALIGN_R(sizeof(heapitem_s), WIND_HEAP_ALIGN_SIZE)
-
-
-//内存块的块数的定义，如果系统存在多个不连续的内存区，则应该在下面添加定义
-//同时还应该在wind_heap_mutex_init函数中注册新的内存块
-typedef enum __HeapBmutex_e
-{
-    HEAP_BLOCK_1 = 0,//第一块
-    HEAP_BLOCK_CNT//块数
-}HeapBmutex_e;
-
 
 
 typedef struct __heapitem_s heapitem_s;
@@ -80,7 +62,8 @@ struct __heapitem_s
 
 struct __heap_s
 {
-    w_uint32_t magic;
+    w_uint32_t magic:28;
+    w_uint32_t is_private:1;
     const char *name;
     void *addr;
     stati_s stati;
@@ -93,7 +76,7 @@ struct __heap_s
 heap_s *wind_heap_get(const char *name);
 
 heap_s *wind_heap_create(const char *name,
-             w_addr_t base,w_uint32_t size,w_uint32_t flag);
+             w_addr_t base,w_uint32_t size,w_uint32_t is_private);
 
 w_err_t wind_heap_destroy(w_addr_t base);
 

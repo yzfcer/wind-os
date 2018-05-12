@@ -73,7 +73,7 @@ heap_s *wind_heap_get(const char *name)
 }
 
 
-heap_s *wind_heap_create(const char *name,w_addr_t base,w_uint32_t size,w_uint32_t flag)
+heap_s *wind_heap_create(const char *name,w_addr_t base,w_uint32_t size,w_uint32_t is_private)
 {
     heapitem_s* item;
     heap_s* hp;
@@ -89,8 +89,9 @@ heap_s *wind_heap_create(const char *name,w_addr_t base,w_uint32_t size,w_uint32
     hpsize = __ALIGN_L(hpsize);
     
     hp->magic = WIND_HEAP_MAGIC;
-    if(flag & WIND_HEAP_PRIVATE)
-        hp->magic |= WIND_HEAP_PRIVATE;
+    hp->is_private = is_private?1:0;
+    //if(flag & WIND_HEAP_PRIVATE)
+    //    hp->magic |= WIND_HEAP_PRIVATE;
     hp->name = name;
     hp->addr = OFFSET_ADDR(hp,sizeof(heap_s));
     WIND_STATI_INIT(hp->stati,hpsize);
@@ -361,7 +362,7 @@ void *wind_malloc(w_uint32_t size)
     {
         heap = DLIST_OBJ(pnode,heap_s,heapnode);
         //wind_debug("malloc in heap:0x%x\r\n",heap);
-        if(!HEAP_IS_PRIVATE(heap))
+        if(!heap->is_private)
         {
             ptr = wind_heap_malloc(heap, size);
             if(ptr)
@@ -400,7 +401,7 @@ void *wind_realloc(void *ptr, w_uint32_t newsize)
     foreach_node(pnode,&g_core.heaplist)
     {
         heap = DLIST_OBJ(pnode,heap_s,heapnode);
-        if(!HEAP_IS_PRIVATE(heap))
+        if(!heap->is_private)
         {
             pnew = wind_heap_realloc(heap,ptr,newsize);
             if(pnew)
