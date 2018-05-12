@@ -52,7 +52,7 @@ void wind_system_reset(void)
 void _wind_heaps_init(void)
 {
     wind_heap_create("heap0",HEAP1_HEAD,HEAD1_LENTH,0);
-    wind_heap_print();
+    wind_heap_print(&g_core.heaplist);
     wind_heapitem_print(&g_core.heaplist);
 }
 

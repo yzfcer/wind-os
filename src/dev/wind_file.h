@@ -13,7 +13,7 @@ typedef enum
     FMODE_W = 0x02,
     FMODE_RW = 0x03,
     FMODE_CRT = 0x04,
-    FMODE_A = 0x04,
+    FMODE_A = 0x08,
 }fmode_e;
 
 typedef enum 
@@ -22,12 +22,7 @@ typedef enum
     FTYPE_FILE = 0x02,
 }ftype_e;
 
-typedef enum 
-{
-    FSTYPE_TREEFS = 0x01,
-    FSTYPE_UNDEF = 0xff,
-}fstype_e;
-
+#if 0
 typedef struct 
 {
     char name[32];
@@ -39,10 +34,9 @@ typedef struct
     void *fileobj;//文件对象
     w_int32_t offset;//偏移量
     mutex_s *mutex;//文件操作变量
-    void *fileobj;
     fs_ops_s *ops;//操作函数集
 }file_s;
-
+#endif
 
 struct __file_ops_s
 {

@@ -5,7 +5,7 @@ w_err_t wind_tree_init(tree_s *tree)
     WIND_ASSERT_RETURN(tree != NULL,ERR_NULL_POINTER);
     tree->parent = NULL;
     DLIST_INIT(tree->child_list);
-    DNODE_INIT(tree->brother_node);
+    DNODE_INIT(tree->treenode);
     return ERR_OK;
 }
 
@@ -14,7 +14,7 @@ w_err_t wind_tree_insert_child(tree_s *parent,tree_s *child)
     WIND_ASSERT_RETURN(parent != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(child != NULL,ERR_NULL_POINTER);
     child->parent = parent;
-    dlist_insert_tail(&parent->child_list,&child->brother_node);
+    dlist_insert_tail(&parent->child_list,&child->treenode);
     return ERR_OK;
 }
 
@@ -30,10 +30,10 @@ w_err_t wind_tree_remove_child(tree_s *parent,tree_s *child)
     dnode_s *dnode;
     WIND_ASSERT_RETURN(parent != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(child != NULL,ERR_NULL_POINTER);
-    dnode = dlist_remove(&parent->child_list,&child->brother_node);
+    dnode = dlist_remove(&parent->child_list,&child->treenode);
     WIND_ASSERT_RETURN(dnode != NULL,ERR_INVALID_PARAM);
     child->parent = NULL;
-    DNODE_INIT(child->brother_node);
+    DNODE_INIT(child->treenode);
     return ERR_OK;
 }
 
@@ -56,7 +56,7 @@ w_err_t wind_tree_search(tree_s *root,tree_s *tree)
     WIND_ASSERT_RETURN(tree != NULL,ERR_OK);
     foreach_node(dnode,&root->child_list)
     {
-        subtree = DLIST_OBJ(dnode,tree_s,brother_node);
+        subtree = DLIST_OBJ(dnode,tree_s,treenode);
         if(subtree == tree)
             return ERR_OK;
         if(ERR_OK == wind_tree_search(subtree,tree))
@@ -74,7 +74,7 @@ w_err_t wind_tree_visit(tree_s *root,void (*visit)(tree_s *tree))
         visit(root);
     foreach_node(dnode,&root->child_list)
     {
-        subroot = DLIST_OBJ(dnode,tree_s,brother_node);
+        subroot = DLIST_OBJ(dnode,tree_s,treenode);
         wind_tree_visit(subroot,visit);
     }
     return ERR_OK;

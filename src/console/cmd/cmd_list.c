@@ -58,6 +58,7 @@ COMMAND_USAGE(list)
 #endif
 #if WIND_HEAP_SUPPORT
     console_printf("list heap:show all heap map infomation.\r\n");
+    console_printf("list heapitem:show all heapitems infomation.\r\n");
 #endif
 #if WIND_DRVFRAME_SUPPORT
     console_printf("list dev:show all character devices list.\r\n");
@@ -108,6 +109,11 @@ COMMAND_MAIN(list,argc,argv)
 #endif
 #if WIND_HEAP_SUPPORT
     else if(0 == wind_strcmp(argv[1],"heap"))
+    {
+        wind_heap_print(&g_core.heaplist);
+        return ERR_FAIL;
+    }
+    else if(0 == wind_strcmp(argv[1],"heapitem"))
     {
         wind_heapitem_print(&g_core.heaplist);
         return ERR_FAIL;

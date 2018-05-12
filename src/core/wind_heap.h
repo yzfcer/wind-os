@@ -87,7 +87,7 @@ void *wind_heap_realloc(heap_s* heap, void* ptr, w_uint32_t newsize);
 
 w_err_t wind_heap_free(heap_s* heap,void *ptr);
 
-w_err_t wind_heap_print(void);
+w_err_t wind_heap_print(dlist_s *list);
 
 w_err_t wind_heapitem_print(dlist_s *list);
 

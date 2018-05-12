@@ -24,3 +24,4 @@ w_err_t _create_idle_thread(void)
     wind_thread_set_priority(thread,32767);
     return ERR_OK;
 }
+

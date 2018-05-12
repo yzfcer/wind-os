@@ -40,8 +40,9 @@ extern "C" {
 #define ERR_INVALID_PARAM     -6//参数无效
 #define ERR_TIMEOUT           -7//操作超时，返回失败
 #define ERR_STATUS            -8//当前状态错误
-#define ERR_FILE_NOT_EXIT     -9//当前状态错误
-#define ERR_OBJ_REPEAT        -10//特定条件下对象重复
+#define ERR_OBJ_REPEAT        -9//特定条件下对象重复
+#define ERR_FILE_NOT_EXIT     -10//文件不存在
+#define ERR_FILE_HAS_OPENED   -11//文件已经打开
 
 
 //---------------------------------------------------------------------

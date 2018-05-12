@@ -31,7 +31,7 @@ struct __tree_s
     tree_s *parent;
     dlist_s child_list;
     //dnode_s child_node;
-    dnode_s brother_node;
+    dnode_s treenode;
 };
 
 w_err_t wind_tree_init(tree_s *tree);

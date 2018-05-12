@@ -23,6 +23,7 @@ DECLARE_SUITE(test_heap);
 #if WIND_SOFTIRQ_SUPPORT
 DECLARE_SUITE(test_softirq);
 #endif
+DECLARE_SUITE(test_treefs);
 
 void test_suite_register_all(void)
 {
@@ -48,6 +49,7 @@ void test_suite_register_all(void)
 #if WIND_SOFTIRQ_SUPPORT
     REGSTER_SUITE(test_softirq);
 #endif
+    REGSTER_SUITE(test_treefs);
 }
 
 

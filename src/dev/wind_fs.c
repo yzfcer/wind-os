@@ -43,6 +43,7 @@ w_err_t _wind_fs_init(void)
 {
     w_err_t err;
     wind_pool_create("fs",fspool,sizeof(fspool),sizeof(fs_s));
+    
     return err;
 }
 

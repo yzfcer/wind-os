@@ -301,12 +301,12 @@ w_err_t wind_heap_free(heap_s* heap,void *ptr)
     return ERR_OK;
 }
 
-w_err_t wind_heap_print(void)
+w_err_t wind_heap_print(dlist_s *list)
 {
     dnode_s *pnode;
     heap_s* heap;
     wind_printf("heap list:\r\n");
-    foreach_node(pnode,&g_core.heaplist)
+    foreach_node(pnode,list)
     {
         heap = DLIST_OBJ(pnode,heap_s,heapnode);
         wind_printf("magic :%x\r\n",heap->magic);
