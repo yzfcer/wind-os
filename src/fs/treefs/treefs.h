@@ -22,16 +22,16 @@
 
 typedef struct 
 {
-    w_uint8_t o_x:1;
-    w_uint8_t o_w:1;
-    w_uint8_t o_r:1;
-    w_uint8_t g_x:1;
-    w_uint8_t g_w:1;
-    w_uint8_t g_r:1;
-    w_uint8_t u_x:1;
-    w_uint8_t u_w:1;
-    w_uint8_t u_r:1;
-    w_uint32_t isdir:1;
+    w_uint16_t o_x:1;
+    w_uint16_t o_w:1;
+    w_uint16_t o_r:1;
+    w_uint16_t g_x:1;
+    w_uint16_t g_w:1;
+    w_uint16_t g_r:1;
+    w_uint16_t u_x:1;
+    w_uint16_t u_w:1;
+    w_uint16_t u_r:1;
+    w_uint16_t isdir:1;
 }tf_attr_s;
 
 typedef union 
@@ -62,7 +62,7 @@ w_err_t treefile_get_attr(treefile_s *file,tf_attr_s *attr);
 w_err_t treefile_set_attr(treefile_s *file,tf_attr_s *attr);
 
 
-treefile_s* treefile_open(const char *path,fmode_e mode);
+treefile_s* treefile_open(const char *path,w_uint16_t mode);
 
 w_err_t treefile_close(treefile_s* file);
 
@@ -73,6 +73,8 @@ w_int32_t treefile_ftell(treefile_s* file);
 w_int32_t treefile_read(treefile_s* file,w_uint8_t *buff, w_int32_t size);
 
 w_int32_t treefile_write(treefile_s* file,w_uint8_t *buff, w_int32_t size);
+
+treefile_s *treefile_readdir(treefile_s* file,w_int32_t index);
 
 w_err_t treefile_fgets(treefile_s* file,char *buff, w_int32_t maxlen);
 

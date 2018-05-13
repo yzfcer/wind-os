@@ -20,6 +20,7 @@ CMD_DECLARE(blkdev);
 #if WIND_LUA_SUPPORT
 CMD_DECLARE(lua);
 #endif
+CMD_DECLARE(treefs);
 
 void _wind_register_all_cmd(console_s *ctrl)
 {
@@ -42,6 +43,7 @@ void _wind_register_all_cmd(console_s *ctrl)
 #if WIND_LUA_SUPPORT
     wind_cmd_register(COMMAND(lua),1);
 #endif
+    wind_cmd_register(COMMAND(treefs),1);
 
 }
 

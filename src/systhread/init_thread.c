@@ -9,6 +9,7 @@
 #include "wind_debug.h"
 #include "wind_os_hwif.h"
 
+
 #define INIT_STK_SIZE 256
 
 void wind_tick_init(void);
@@ -51,17 +52,19 @@ static void set_idle_cnt(void)
     wind_printf("idle count:%d\r\n",IDLE_CNT_PER_SEC);
 }
 
+extern w_err_t treefs_format(void);
+
 static w_err_t init_thread(w_int32_t argc,w_int8_t **argv)
 {   
     wind_tick_init();
     _wind_dev_init();
     _wind_blkdev_init();
+#if WIND_HEAP_SUPPORT
+        _wind_heaps_init();
+#endif
     
 #if WIND_DATETIME_SUPPORT
     _wind_datetime_init();
-#endif
-#if WIND_HEAP_SUPPORT
-    _wind_heaps_init();
 #endif
     _create_idle_thread();
     set_idle_cnt();
@@ -71,6 +74,7 @@ static w_err_t init_thread(w_int32_t argc,w_int8_t **argv)
 #if WIND_TIMER_SUPPORT
     _create_timer_thread();
 #endif
+    treefs_format();
     _create_stati_thread();
     _create_daemon_thread();
     _create_console_thread();
