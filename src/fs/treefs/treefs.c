@@ -244,6 +244,9 @@ w_err_t treefs_format(void)
     treefs_mk_file("/var/");
     treefs_mk_file("/mnt/");
     treefs_mk_file("/usr/");
+    treefs_mk_file("/sys/");
+    treefs_mk_file("/proc/");
+    treefs_mk_file("/bin/");
     treefs_mk_file("/usr/config.txt");
     treefs_mk_file("/usr/wind-os.log");
     treefs_mk_file("/usr/env.cfg");

@@ -177,7 +177,7 @@ static w_err_t treefs_cmd_ls(w_int32_t argc,char **argv)
         sub = treefile_readdir(file,i);
         if(sub == NULL)
             break;
-        console_printf("%s\t\t",sub->filename);
+        console_printf("%-24s",sub->filename);
         if(i%4 == 3)
             console_printf("\r\n");
     }
