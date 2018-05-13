@@ -38,7 +38,7 @@ extern "C" {
 
 
 #define WIND_HEAP_MIN_SIZE    256
-#define WIND_HEAP_MINIALLOC    12
+//#define WIND_HEAP_MINIALLOC    12
 #define WIND_HEAP_MAGIC        0x0a5e8749
 #define WIND_HEAPITEM_MAGIC    0x01ea01ea
 

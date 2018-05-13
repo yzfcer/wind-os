@@ -89,19 +89,21 @@ static w_err_t treefs_cmd_pwd(void)
 
 static w_err_t treefs_cmd_cd(w_int32_t argc,char **argv)
 {
+    w_bool_t isexist;
     char *path;
     treefile_s *file;
     tf_attr_s attr;
     if(argc < 3)
         return ERR_FAIL;
     path = getpath(curpath,argv[2],1);
-    file = treefile_open(path,FMODE_R);
-    if(file == NULL)
+    isexist = treefile_existing(path);
+    if(!isexist)
     {
-        console_printf("directory is NOT existing.\r\n");
+        console_printf("open directory or file failed.\r\n");
         wind_free(path);
         return ERR_FILE_NOT_EXIT;
     }
+    file = treefile_open(path,FMODE_R);
     treefile_get_attr(file,&attr);
     if(!attr.isdir)
     {
@@ -117,10 +119,11 @@ static w_err_t treefs_cmd_cd(w_int32_t argc,char **argv)
 
 static w_err_t treefs_cmd_mkdir(w_int32_t argc,char **argv)
 {
+    w_bool_t isexist;
     treefile_s *file;
     char * path = getpath(curpath,argv[2],1);
-    file = treefile_open(path,FMODE_R);
-    if(file != NULL)
+    isexist = treefile_existing(path);
+    if(isexist)
     {
         console_printf("directory has been existing.\r\n");
         wind_free(path);
@@ -129,6 +132,26 @@ static w_err_t treefs_cmd_mkdir(w_int32_t argc,char **argv)
     }
     
     file = treefs_mk_file(path);
+    if(file == NULL)
+        console_printf("make directory failed.");
+    wind_free(path);
+    return ERR_OK;
+}
+static w_err_t treefs_cmd_rm(w_int32_t argc,char **argv)
+{
+    w_err_t err;
+    treefile_s *file;
+    char * path = getpath(curpath,argv[2],1);
+    file = treefile_open(path,FMODE_R);
+    if(file == NULL)
+    {
+        console_printf("open directory or file failed.\r\n");
+        wind_free(path);
+        return ERR_FILE_NOT_EXIT;
+    }
+    err = treefs_rm_file(file);
+    if(err != ERR_OK)
+        treefile_close(file);
     wind_free(path);
     return ERR_OK;
 }
@@ -145,7 +168,7 @@ static w_err_t treefs_cmd_ls(w_int32_t argc,char **argv)
     file = treefile_open(path,FMODE_R);
     if(file == NULL)
     {
-        console_printf("directory is NOT existing.\r\n");
+        console_printf("open directory or file failed.\r\n");
         wind_free(path);
         return ERR_FILE_NOT_EXIT;
     }
@@ -159,6 +182,7 @@ static w_err_t treefs_cmd_ls(w_int32_t argc,char **argv)
             console_printf("\r\n");
     }
     treefile_close(file);
+    wind_free(path);
     return ERR_OK;
 }
 
@@ -175,14 +199,17 @@ static w_err_t treefs_cmd_cat(w_int32_t argc,char **argv)
     file = treefile_open(path,FMODE_R);
     if(file == NULL)
     {
-        console_printf("file %s is NOT existing.\r\n",path);
+        console_printf("open directory or file failed.\r\n",path);
         wind_free(path);
         return ERR_FILE_NOT_EXIT;
     }
     buff = wind_malloc(129);
     if(buff == NULL)
+    {
+        wind_free(path);
         return ERR_FAIL;
-    console_printf("[***%s***]\r\n",path);
+    }
+    console_printf("[***%s***]\r\n\r\n",path);
     while(1)
     {
         wind_memset(buff,0,129);
@@ -209,7 +236,7 @@ static w_err_t treefs_cmd_write(w_int32_t argc,char **argv)
     file = treefile_open(path,FMODE_W|FMODE_CRT);
     if(file == NULL)
     {
-        console_printf("file %s is NOT existing.\r\n",path);
+        console_printf("open directory or file failed.\r\n",path);
         wind_free(path);
         return ERR_FILE_NOT_EXIT;
     }
@@ -220,9 +247,11 @@ static w_err_t treefs_cmd_write(w_int32_t argc,char **argv)
     if(filelen == len)
     {
         console_printf("write file OK.\r\n");
+        wind_free(path);
         return ERR_OK;
     }
     console_printf("write file failed.\r\n");
+    wind_free(path);
     return ERR_FAIL;
 }
 
@@ -243,6 +272,7 @@ COMMAND_USAGE(treefs)
     console_printf("treefs pwd:to show current user path.\r\n");
     console_printf("treefs cd:to change current user path.\r\n");
     console_printf("treefs mkdir:to make a directory path.\r\n");
+    console_printf("treefs rm:to remove a directory or file.\r\n");
     console_printf("treefs ls:to show files in a directory.\r\n");
     console_printf("treefs cat:to show file context.\r\n");
     console_printf("treefs write:to write context into a file.\r\n");
@@ -265,6 +295,8 @@ COMMAND_MAIN(treefs,argc,argv)
         return treefs_cmd_cat(argc,argv);
     else if(wind_strcmp(argv[1],"write") == 0)
         return treefs_cmd_write(argc,argv);
+    else if(wind_strcmp(argv[1],"rm") == 0)
+        return treefs_cmd_rm(argc,argv);
     return ERR_OK;
 }
 

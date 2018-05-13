@@ -211,13 +211,11 @@ w_err_t treefs_rm_file(treefile_s *file)
     tree = &file->tree;
     if(wind_strcmp(file->filename,"") == 0)
         return ERR_INVALID_PARAM;
-    if(!dlist_head(&tree->child_list))
+    wind_printf("rm %s\r\n",file->filename);
+    foreach_node(node,&tree->child_list)
     {
-        foreach_node(node,&tree->child_list)
-        {
-            subfile = DLIST_OBJ(node,treefile_s,tree.treenode);
-            treefs_rm_file(subfile);
-        }
+        subfile = DLIST_OBJ(node,treefile_s,tree.treenode);
+        treefs_rm_file(subfile);
     }
     if(file->tree.parent)
         wind_tree_remove_child(file->tree.parent,&file->tree);
@@ -233,6 +231,8 @@ w_err_t treefs_rm_file(treefile_s *file)
 
 w_err_t treefs_format(void)
 {
+    char *buff;
+    treefile_s *file;
     treefile_s *root = treefs_get_root();
     if(root != NULL)
         treefs_rm_file(root);
@@ -246,6 +246,19 @@ w_err_t treefs_format(void)
     treefs_mk_file("/usr/");
     treefs_mk_file("/usr/config.txt");
     treefs_mk_file("/usr/wind-os.log");
+    treefs_mk_file("/usr/env.cfg");
+    file = treefile_open("/usr/env.cfg",FMODE_W);
+    buff = "os=wind-os\r\n";
+    treefile_write(file,(w_uint8_t*)buff,wind_strlen(buff));
+    buff = "version=1.2.23\r\n";
+    treefile_write(file,(w_uint8_t*)buff,wind_strlen(buff));
+    buff = "path=/;/mnt/;/usr/;;\r\n";
+    treefile_write(file,(w_uint8_t*)buff,wind_strlen(buff));
+    buff = "usr=root;wind;\r\n";
+    treefile_write(file,(w_uint8_t*)buff,wind_strlen(buff));
+    buff = "passwd=wind;wind;\r\n";
+    treefile_write(file,(w_uint8_t*)buff,wind_strlen(buff));
+    treefile_close(file);
     return ERR_OK;
 }
 
@@ -295,6 +308,15 @@ w_err_t treefile_close(treefile_s* file)
     return ERR_OK;
 }
 
+w_bool_t treefile_existing(const char *path)
+{
+    treefile_s *file;
+    file = search_node(path,B_FALSE);
+    if(file != NULL)
+        return B_TRUE;
+    return B_FALSE;
+}
+
 w_err_t treefile_seek(treefile_s* file,w_int32_t offset)
 {
     WIND_ASSERT_RETURN(file != NULL,ERR_NULL_POINTER);
@@ -340,10 +362,11 @@ w_int32_t treefile_read(treefile_s* file,w_uint8_t *buff, w_int32_t size)
         
     for(;node != NULL;node = dnode_next(node))
     {
-        len = TREEFS_BLK_SIZE - dataidx;
-        len = si > len?len:si;
         src = (w_uint8_t*)node;
         src += sizeof(dnode_s);
+        src += dataidx;
+        len = TREEFS_BLK_SIZE - dataidx;
+        len = si > len?len:si;
         wind_memcpy(&buff[bufidx],src,len);
         bufidx += len;
         si -= len;
@@ -385,10 +408,11 @@ w_int32_t treefile_write(treefile_s* file,w_uint8_t *buff, w_int32_t size)
     
     for(;node != NULL;node = dnode_next(node))
     {
-        len = TREEFS_BLK_SIZE - dataidx;
-        len = si > len?len:si;
         dest = (w_uint8_t*)node;
         dest += sizeof(dnode_s);
+        dest += dataidx;
+        len = TREEFS_BLK_SIZE - dataidx;
+        len = si > len?len:si;
         wind_memcpy(dest,&buff[bufidx],len);
         bufidx += len;
         si -= len;

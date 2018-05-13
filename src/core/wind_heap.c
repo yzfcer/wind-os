@@ -196,8 +196,8 @@ void *wind_heap_malloc(heap_s* heap,w_uint32_t size)
     WIND_ASSERT_RETURN(size > 0,NULL);
     WIND_ASSERT_RETURN(heap->magic == WIND_HEAP_MAGIC,NULL);
     //wind_debug("heap_malloc %d",size);
-    if (size < WIND_HEAP_MINIALLOC)
-        size = WIND_HEAP_MINIALLOC;
+    //if (size < WIND_HEAP_MINIALLOC)
+    //    size = WIND_HEAP_MINIALLOC;
     size = __ALIGN_R(size) + sizeof(heapitem_s);
     
     wind_mutex_lock(hp->mutex);

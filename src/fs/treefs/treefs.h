@@ -66,6 +66,8 @@ treefile_s* treefile_open(const char *path,w_uint16_t mode);
 
 w_err_t treefile_close(treefile_s* file);
 
+w_bool_t treefile_existing(const char *path);
+
 w_err_t treefile_seek(treefile_s* file,w_int32_t offset);
 
 w_int32_t treefile_ftell(treefile_s* file);

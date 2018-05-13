@@ -33,7 +33,7 @@ w_err_t wind_tree_remove_child(tree_s *parent,tree_s *child)
     dnode = dlist_remove(&parent->child_list,&child->treenode);
     WIND_ASSERT_RETURN(dnode != NULL,ERR_INVALID_PARAM);
     child->parent = NULL;
-    DNODE_INIT(child->treenode);
+    //DNODE_INIT(child->treenode);
     return ERR_OK;
 }
 
