@@ -253,7 +253,7 @@ w_err_t treefs_format(void)
     file = treefile_open("/usr/env.cfg",FMODE_W);
     buff = "os=wind-os\r\n";
     treefile_write(file,(w_uint8_t*)buff,wind_strlen(buff));
-    buff = "version=1.2.23\r\n";
+    buff = "version=1.1.23\r\n";
     treefile_write(file,(w_uint8_t*)buff,wind_strlen(buff));
     buff = "path=/;/mnt/;/usr/;;\r\n";
     treefile_write(file,(w_uint8_t*)buff,wind_strlen(buff));

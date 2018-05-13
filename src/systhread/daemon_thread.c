@@ -6,32 +6,12 @@
 #define DAEMON_STK_SIZE 256
 static w_stack_t daemonstk[DAEMON_STK_SIZE];
 
-static void test2(void)
-{
-    wind_thread_sleep(5);
-}
-static void test1(void)
-{
-    test2();
-}
-static int test(void)
-{
-    w_int32_t i,ret = 0;
-    for(i = 0;i < 30000;i ++)
-    {
-        ret += ((2436647*376*i)/5467);
-    }
-    test1();
-    return ret;
-}
-
 
 static w_err_t daemon_thread(w_int32_t argc,w_int8_t **argv)
 {
     (void)argc;
     while(1)
     {
-        //test();
         wind_thread_sleep(1000);
     }
 }
