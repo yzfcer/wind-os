@@ -151,7 +151,7 @@ static void *alloc_from_freeitem(heap_s* heap,heapitem_s* freeitem,w_uint32_t si
     WIND_STATI_ADD(hp->stati,item->size);
     heapitem_init(item,heap,item->size,1);
     p = OFFSET_ADDR(item,sizeof(heapitem_s));
-    dlist_insert_prio(&hp->used_list,&item->itemnode,(w_uint32_t)&item);
+    dlist_insert_prio(&hp->used_list,&item->itemnode,(w_uint32_t)item);
 
     if(freeitem)
     {
@@ -305,6 +305,11 @@ w_err_t wind_heap_print(dlist_s *list)
     foreach_node(pnode,list)
     {
         heap = DLIST_OBJ(pnode,heap_s,heapnode);
+        if(heap->magic != WIND_HEAP_MAGIC)
+        {
+            wind_error("heap header:0x%x has errors.",heap);
+            return ERR_MEM;
+        }
         wind_printf("magic :%x\r\n",heap->magic);
         wind_printf("name  :%s\r\n",heap->name);
         wind_printf("addr  :%x\r\n",heap->addr);
@@ -333,12 +338,22 @@ w_err_t wind_heapitem_print(dlist_s *list)
         foreach_node(dnode1,&heap->free_list)
         {
             heapitem = (heapitem_s *)DLIST_OBJ(dnode1,heapitem_s,itemnode.node);
+            if(heapitem->magic != WIND_HEAPITEM_MAGIC)
+            {
+                wind_error("heap memory has been illegally accessed .");
+                return ERR_MEM;
+            }
             wind_printf("0x%-14x %-8d %-10s\r\n",
                 heapitem,heapitem->size,(heapitem->used)?"uesd":"free");
         }
         foreach_node(dnode1,&heap->used_list)
         {
             heapitem = (heapitem_s *)DLIST_OBJ(dnode1,heapitem_s,itemnode.node);
+            if(heapitem->magic != WIND_HEAPITEM_MAGIC)
+            {
+                wind_error("heap memory:0x%x has been illegally accessed.",heapitem);
+                return ERR_MEM;
+            }
             wind_printf("0x%-14x %-8d %-10s\r\n",
                 heapitem,heapitem->size,(heapitem->used)?"uesd":"free");
         }
