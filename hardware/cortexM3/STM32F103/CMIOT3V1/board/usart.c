@@ -437,39 +437,14 @@ void UsartPrintf(USART_TypeDef *USARTx, char *fmt,...)
 *	说明：		
 ************************************************************
 */
+extern void wind_stdin_irq(char data);
 void USART1_IRQHandler(void)
 {
 	
-	RTOS_EnterInt();
-
-#if(USART_DMA_RX_EN == 0)
-	if(USART_GetFlagStatus(USART1, USART_FLAG_RXNE) != RESET)		//接收中断
-	{
-		alterInfo.alterCount %= sizeof(alterInfo.alterBuf);			//防止串口被刷爆
-		
-        alterInfo.alterBuf[alterInfo.alterCount++] = USART1->DR;
-		
-		USART_ClearFlag(USART1, USART_FLAG_RXNE);
-	}
-#endif
-
-	if(USART_GetFlagStatus(USART1, USART_FLAG_IDLE) != RESET)
-	{
-		alterInfo.rev_idle = 1;
-		alterInfo.alterCount = 0;
-		
-		USART1->DR;													//读取数据注意：这句必须要，否则不能够清除中断标志位
-		USART_ClearFlag(USART1, USART_IT_IDLE);
-		
-#if(USART_DMA_RX_EN == 1)
-		DMA_Cmd(DMA1_Channel5, DISABLE);
-		
-		DMA1_Channel5->CNDTR = sizeof(alterInfo.alterBuf);			//重新设置下次接收的长度，否则无法启动下次DMA接收
-		
-		DMA_Cmd(DMA1_Channel5, ENABLE);
-#endif
-	}
-	
-	RTOS_ExitInt();
-
+	w_uint8_t rec_data;
+	if(USART_GetITStatus(USART1, USART_IT_RXNE) != RESET)
+    {
+        rec_data =(w_uint8_t)USART_ReceiveData(USART1);
+        wind_stdin_irq((char)rec_data);
+    } 
 }

@@ -8,9 +8,9 @@
 #define USART_DEBUG		USART1		//调试打印所使用的串口组
 
 
-#define USART_DMA_TX_EN		1		//1-使能DMA发送		0-失能DMA发送
+#define USART_DMA_TX_EN		0		//1-使能DMA发送		0-失能DMA发送
 
-#define USART_DMA_RX_EN		1		//1-使能DMA接收		0-失能DMA接收
+#define USART_DMA_RX_EN		0		//1-使能DMA接收		0-失能DMA接收
 
 
 #define USART_TX_TYPE		0

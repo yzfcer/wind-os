@@ -1411,11 +1411,6 @@
           <GroupName>test_framwwork</GroupName>
           <Files>
             <File>
-              <FileName>cut.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\test\framework\cut.h</FilePath>
-            </File>
-            <File>
               <FileName>test_framework.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\test\framework\test_framework.c</FilePath>
@@ -1429,6 +1424,11 @@
               <FileName>cmd_test.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\test\framework\cmd_test.c</FilePath>
+            </File>
+            <File>
+              <FileName>wind_cut.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\test\framework\wind_cut.h</FilePath>
             </File>
           </Files>
         </Group>
