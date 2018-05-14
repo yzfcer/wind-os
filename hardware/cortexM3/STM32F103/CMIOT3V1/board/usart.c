@@ -94,7 +94,7 @@ void Usart1_Init(unsigned int baud)
 	USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);									//使能接收中断
 #endif
 
-	USART_ITConfig(USART1, USART_IT_IDLE, ENABLE);									//使能IDLE中断
+	//USART_ITConfig(USART1, USART_IT_IDLE, ENABLE);									//使能IDLE中断
 	
 	nvicInitStruct.NVIC_IRQChannel = USART1_IRQn;
 	nvicInitStruct.NVIC_IRQChannelCmd = ENABLE;
@@ -440,7 +440,6 @@ void UsartPrintf(USART_TypeDef *USARTx, char *fmt,...)
 extern void wind_stdin_irq(char data);
 void USART1_IRQHandler(void)
 {
-	
 	w_uint8_t rec_data;
 	if(USART_GetITStatus(USART1, USART_IT_RXNE) != RESET)
     {
