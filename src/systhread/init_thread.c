@@ -74,7 +74,9 @@ static w_err_t init_thread(w_int32_t argc,w_int8_t **argv)
 #if WIND_TIMER_SUPPORT
     _create_timer_thread();
 #endif
+#if WIND_FS_SUPPORT
     treefs_format();
+#endif
     _create_stati_thread();
     _create_daemon_thread();
     _create_console_thread();

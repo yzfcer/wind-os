@@ -4,10 +4,10 @@
 **                                       yzfcer@163.com
 **
 **--------------文件信息--------------------------------------------------------------------------------
-**文   件   名: entry.c
+**文   件   名: wind_cpu_port.h
 **创   建   人: 周江村
 **最后修改日期: 2012.09.26
-**描        述: wind os的用户态程序入口
+**描        述: wind os的时间管理代码头文件
 **              
 **--------------历史版本信息----------------------------------------------------------------------------
 ** 创建人: 周江村
@@ -22,30 +22,23 @@
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
+#ifndef WIND_STD_H_
+#define WIND_STD_H_
+#include "wind_type.h"
 
-/*
-这个文件是用户程序的入口，用户程序由wind_main函数进入开始执行，但这个函数的所在线程的
-优先级很高，因此不建议用户程序在这里直接执行，最好是用户在这里创建具有中等优先级的线程
-并转到新的线程中执行用户程序。同时这个程序不需要死循环，可以退出，但新线程如果在退出时
-没有创建，则用户程序将不会再次被执行到。因为wind_main函数只会被系统调用一次
-*/
-
-#include "beep.h"
-#include "wind_debug.h"
-#include "wind_sem.h"
-#include "wind_mutex.h"
-#include "wind_pipe.h"
-extern led_start(void);
-#if WIND_PIPE_SUPPORT
-w_uint8_t pipebuff[128];
+#ifdef __cplusplus
+extern "C" {
+#endif
+#if WIND_DEBUG_SUPPORT
+void      _wind_std_init(void);
+w_int32_t wind_std_input(w_uint8_t *str,w_int32_t len);
+w_int32_t wind_std_output(w_uint8_t *str,w_int32_t len);
+#else
+#define _wind_std_init()
 #endif
 
-
-
-w_err_t wind_main(void)
-{
-    wind_notice("enter wind main.");
-    led_start();
-    //BEEP_Init();
-    return 0;
+#ifdef __cplusplus
 }
+#endif
+
+#endif

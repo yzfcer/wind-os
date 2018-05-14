@@ -4,10 +4,10 @@
 **                                       yzfcer@163.com
 **
 **--------------文件信息--------------------------------------------------------------------------------
-**文   件   名: entry.c
+**文   件   名: wind_cpu_port.h
 **创   建   人: 周江村
 **最后修改日期: 2012.09.26
-**描        述: wind os的用户态程序入口
+**描        述: wind os的时间管理代码头文件
 **              
 **--------------历史版本信息----------------------------------------------------------------------------
 ** 创建人: 周江村
@@ -22,30 +22,28 @@
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
+#ifndef WIND_OS_HWIF_H_
+#define WIND_OS_HWIF_H_
+#include "wind_config.h"
+#include "wind_type.h"
 
-/*
-这个文件是用户程序的入口，用户程序由wind_main函数进入开始执行，但这个函数的所在线程的
-优先级很高，因此不建议用户程序在这里直接执行，最好是用户在这里创建具有中等优先级的线程
-并转到新的线程中执行用户程序。同时这个程序不需要死循环，可以退出，但新线程如果在退出时
-没有创建，则用户程序将不会再次被执行到。因为wind_main函数只会被系统调用一次
-*/
+#ifdef __cplusplus
+extern "C" {
+#endif
+void _wind_target_init(void);
+void wind_system_reset(void);
 
-#include "beep.h"
-#include "wind_debug.h"
-#include "wind_sem.h"
-#include "wind_mutex.h"
-#include "wind_pipe.h"
-extern led_start(void);
-#if WIND_PIPE_SUPPORT
-w_uint8_t pipebuff[128];
+#if WIND_HEAP_SUPPORT
+void _wind_heaps_init(void);
 #endif
 
+typedef  void (*thread_run_f)(void *pargs);
+//线程堆栈的初始化入口，移植需要重新实现
+w_pstack_t wind_stk_init(thread_run_f pfunc,void *pdata, w_pstack_t pstkbt);
 
 
-w_err_t wind_main(void)
-{
-    wind_notice("enter wind main.");
-    led_start();
-    //BEEP_Init();
-    return 0;
+#ifdef __cplusplus
 }
+#endif
+
+#endif

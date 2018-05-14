@@ -20,8 +20,9 @@ CMD_DECLARE(blkdev);
 #if WIND_LUA_SUPPORT
 CMD_DECLARE(lua);
 #endif
+#if WIND_FS_SUPPORT
 CMD_DECLARE(treefs);
-
+#endif
 void _wind_register_all_cmd(console_s *ctrl)
 {
     wind_cmd_register(COMMAND(list),1);
@@ -43,13 +44,11 @@ void _wind_register_all_cmd(console_s *ctrl)
 #if WIND_LUA_SUPPORT
     wind_cmd_register(COMMAND(lua),1);
 #endif
+#if WIND_FS_SUPPORT
     wind_cmd_register(COMMAND(treefs),1);
+#endif
 
 }
 
-w_bool_t console_have_user(char *user)
-{
-    return B_TRUE;
-}
 
 #endif
