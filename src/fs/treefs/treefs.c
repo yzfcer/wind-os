@@ -4,6 +4,7 @@
 #include "wind_heap.h"
 #include "wind_debug.h"
 #include "wind_string.h"
+#if WIND_FS_SUPPORT
 static treefile_s *treefile_rootnode = NULL;
 
 static void *treefile_malloc(w_int32_t size)
@@ -467,5 +468,5 @@ w_err_t treefile_fputs(treefile_s* file,char *buff)
     return ERR_OK;
 }
 
-
+#endif
 

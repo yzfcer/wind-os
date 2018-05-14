@@ -5,6 +5,7 @@
 #include "wind_dlist.h"
 #include "wind_tree.h"
 #include "wind_file.h"
+#if WIND_FS_SUPPORT
 #define TREEFILE_MAGIC 0x48A97D26
 #define TREEFS_DIR_LAYCNT 32
 
@@ -82,5 +83,5 @@ w_err_t treefile_fgets(treefile_s* file,char *buff, w_int32_t maxlen);
 
 w_err_t treefile_fputs(treefile_s* file,char *buff);
 
-
+#endif
 #endif

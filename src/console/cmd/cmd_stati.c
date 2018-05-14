@@ -31,53 +31,61 @@
 
 #if WIND_CONSOLE_SUPPORT
 
-static void core_stati_print(w_uint16_t opt)
+static void core_stati_pool_print(void)
 {
     dnode_s *dnode;
     pool_s *pool;
-    heap_s *heap;
     dlist_s *list;
     wind_printf("-------------------------------------------------\r\n");
     wind_printf("%-16s%-8s%-8s%-8s%-8s\r\n","pool","tot","used","maxused","err");
     wind_printf("-------------------------------------------------\r\n");
-    if(opt == 1)
+
+    list = &g_core.poollist;
+    foreach_node(dnode,list)
     {
-        list = &g_core.poollist;
-        foreach_node(dnode,list)
-        {
-            pool = (pool_s*)DLIST_OBJ(dnode,pool_s,poolnode);
-            wind_printf("%-16s%-8d%-8d%-8d%-8d\r\n",pool->name,pool->stati.tot,
-                pool->stati.used,pool->stati.max,pool->stati.err);
-        }
-    }
-    else if(opt == 2)
-    {
-        list = &g_core.heaplist;
-        foreach_node(dnode,list)
-        {
-            heap = (heap_s*)DLIST_OBJ(dnode,heap_s,heapnode);
-            wind_printf("%-16s%-8d%-8d%-8d%-8d\r\n",heap->name,heap->stati.tot,
-                heap->stati.used,heap->stati.max,heap->stati.err);
-        }
+        pool = (pool_s*)DLIST_OBJ(dnode,pool_s,poolnode);
+        wind_printf("%-16s%-8d%-8d%-8d%-8d\r\n",pool->name,pool->stati.tot,
+            pool->stati.used,pool->stati.max,pool->stati.err);
     }
     wind_printf("-------------------------------------------------\r\n");
 }
 
+#if WIND_HEAP_SUPPORT
+static void core_stati_heap_print(void)
+{
+    dnode_s *dnode;
+    heap_s *heap;
+    dlist_s *list;
+    wind_printf("-------------------------------------------------\r\n");
+    wind_printf("%-16s%-8s%-8s%-8s%-8s\r\n","heap","tot","used","maxused","err");
+    wind_printf("-------------------------------------------------\r\n");
 
+    list = &g_core.heaplist;
+    foreach_node(dnode,list)
+    {
+        heap = (heap_s*)DLIST_OBJ(dnode,heap_s,heapnode);
+        wind_printf("%-16s%-8d%-8d%-8d%-8d\r\n",heap->name,heap->stati.tot,
+            heap->stati.used,heap->stati.max,heap->stati.err);
+    }
+   
+    wind_printf("-------------------------------------------------\r\n");
+}
+#endif
 
 
 w_err_t cmd_stat_show_pool_main(w_int32_t argc,char **argv)
 {
-    core_stati_print(1);
+    core_stati_pool_print();
     return ERR_OK;
 }
 
+#if WIND_HEAP_SUPPORT
 w_err_t cmd_stat_show_heap_main(w_int32_t argc,char **argv)
 {
-    core_stati_print(2);
+    core_stati_heap_print();
     return ERR_OK;
 }
-
+#endif
 
 w_err_t cmd_stat_show_cpuusage_main(w_int32_t argc,char **argv)
 {
@@ -94,7 +102,9 @@ COMMAND_DISC(stati)
 COMMAND_USAGE(stati)
 {
     console_printf("stati pool:to show system pools statistics info.\r\n");
+#if WIND_HEAP_SUPPORT
     console_printf("stati heap:to show system heaps statistics info.\r\n");
+#endif
     console_printf("stati cpuusage:to show current cpu usage persent.\r\n");
 }
 
@@ -104,10 +114,12 @@ COMMAND_MAIN(stati,argc,argv)
     {
         return cmd_stat_show_pool_main(argc,argv);
     }
+#if WIND_HEAP_SUPPORT
     if(0 == wind_strcmp(argv[1],"heap"))
     {
         return cmd_stat_show_heap_main(argc,argv);
     }
+#endif
     else if(0 == wind_strcmp(argv[1],"cpuusage"))
     {
         return cmd_stat_show_cpuusage_main(argc,argv);

@@ -177,7 +177,7 @@ static w_err_t treefs_cmd_ls(w_int32_t argc,char **argv)
         sub = treefile_readdir(file,i);
         if(sub == NULL)
             break;
-        console_printf("%-24s",sub->filename);
+        console_printf("%-24s ",sub->filename);
         if(i%4 == 3)
             console_printf("\r\n");
     }
@@ -209,7 +209,7 @@ static w_err_t treefs_cmd_cat(w_int32_t argc,char **argv)
         wind_free(path);
         return ERR_FAIL;
     }
-    console_printf("[***%s***]\r\n\r\n",path);
+    console_printf("---------%s---------\r\n",path);
     while(1)
     {
         wind_memset(buff,0,129);
@@ -219,6 +219,7 @@ static w_err_t treefs_cmd_cat(w_int32_t argc,char **argv)
         else
             break;
     }
+    console_printf("---------%s---------\r\n",path);
     treefile_close(file);
     wind_free(buff);
     return ERR_OK;
