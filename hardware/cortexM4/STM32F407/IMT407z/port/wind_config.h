@@ -71,6 +71,7 @@
 
 #define WIND_LUA_SUPPORT 1 //是否支持lua脚本语言
 
+#define WIND_XMODEM_SUPPORT 1 //是否支持XMODEM协议
 
 //-----------------------------------------------------------------------
 

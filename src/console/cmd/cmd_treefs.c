@@ -217,7 +217,7 @@ static w_err_t treefs_cmd_cat(w_int32_t argc,char **argv)
         wind_free(path);
         return ERR_FILE_NOT_EXIT;
     }
-    buff = wind_malloc(129);
+    buff = wind_malloc(TREEFS_BLK_SIZE+1);
     if(buff == NULL)
     {
         wind_free(path);
@@ -226,8 +226,8 @@ static w_err_t treefs_cmd_cat(w_int32_t argc,char **argv)
     console_printf("\r\n---------%s---------\r\n",path);
     while(1)
     {
-        wind_memset(buff,0,129);
-        len = treefile_read(file,buff,128);
+        wind_memset(buff,0,TREEFS_BLK_SIZE+1);
+        len = treefile_read(file,buff,TREEFS_BLK_SIZE);
         if(len > 0)
             console_printf("%s",(char*)buff);
         else

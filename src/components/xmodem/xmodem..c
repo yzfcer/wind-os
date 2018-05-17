@@ -1,10 +1,12 @@
-#include "string.h"  
-
+#include "wind_config.h"
 #include "wind_type.h"  
+#include "string.h"  
 #include "wind_debug.h"  
 #include "wind_std.h"  
 #include "wind_thread.h"  
 #include "wind_crc16.h"  
+#if WIND_XMODEM_SUPPORT
+
 #define SOH  0x01
 #define STX  0x02
 #define EOT  0x04
@@ -314,3 +316,6 @@ start_trans:
         }  
     }  
 }  
+
+#endif
+

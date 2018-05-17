@@ -21,6 +21,7 @@
 #include "wind_cmd.h"
 #include "wind_heap.h"
 #include "treefs.h"
+#if WIND_XMODEM_SUPPORT
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
@@ -112,3 +113,4 @@ COMMAND_DEF(xmodem);
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus
+#endif
