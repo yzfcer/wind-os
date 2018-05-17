@@ -1142,6 +1142,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\console\cmd\cmd_treefs.c</FilePath>
             </File>
+            <File>
+              <FileName>cmd_xmodem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\console\cmd\cmd_xmodem.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1831,6 +1836,16 @@
               <FileName>treefs.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\..\..\..\src\fs\treefs\treefs.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>xmodem</GroupName>
+          <Files>
+            <File>
+              <FileName>xmodem..c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\components\xmodem\xmodem..c</FilePath>
             </File>
           </Files>
         </Group>

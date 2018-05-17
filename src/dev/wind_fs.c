@@ -1,14 +1,7 @@
 #include "wind_config.h"
 #include "wind_fs.h"
 #if WIND_FS_SUPPORT
-#if 0
-typedef struct
-{
-    fs_s *fs;
-    blkdev_s *dev;
-    char *path;
-}mount_map_s;
-#endif
+
 
 WIND_POOL(fspool,WIND_FS_MAX_NUM,sizeof(file_s));
 

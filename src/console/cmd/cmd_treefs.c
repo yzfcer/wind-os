@@ -117,11 +117,14 @@ static w_err_t treefs_cmd_cd(w_int32_t argc,char **argv)
     return ERR_OK;
 }
 
-static w_err_t treefs_cmd_mkdir(w_int32_t argc,char **argv)
+static w_err_t mknode(w_int32_t argc,char **argv,w_uint16_t isdir)
 {
     w_bool_t isexist;
     treefile_s *file;
-    char * path = getpath(curpath,argv[2],1);
+    char * path;
+    if(argc < 3)
+        return ERR_INVALID_PARAM;
+    path = getpath(curpath,argv[2],isdir);
     isexist = treefile_existing(path);
     if(isexist)
     {
@@ -137,6 +140,17 @@ static w_err_t treefs_cmd_mkdir(w_int32_t argc,char **argv)
     wind_free(path);
     return ERR_OK;
 }
+
+static w_err_t treefs_cmd_mkdir(w_int32_t argc,char **argv)
+{
+    return mknode(argc,argv,1);
+}
+
+static w_err_t treefs_cmd_touch(w_int32_t argc,char **argv)
+{
+    return mknode(argc,argv,0);
+}
+
 static w_err_t treefs_cmd_rm(w_int32_t argc,char **argv)
 {
     w_err_t err;
@@ -209,7 +223,7 @@ static w_err_t treefs_cmd_cat(w_int32_t argc,char **argv)
         wind_free(path);
         return ERR_FAIL;
     }
-    console_printf("---------%s---------\r\n",path);
+    console_printf("\r\n---------%s---------\r\n",path);
     while(1)
     {
         wind_memset(buff,0,129);
@@ -219,7 +233,7 @@ static w_err_t treefs_cmd_cat(w_int32_t argc,char **argv)
         else
             break;
     }
-    console_printf("---------%s---------\r\n",path);
+    console_printf("\r\n---------%s---------\r\n",path);
     treefile_close(file);
     wind_free(buff);
     return ERR_OK;
@@ -273,6 +287,7 @@ COMMAND_USAGE(treefs)
     console_printf("treefs pwd:to show current user path.\r\n");
     console_printf("treefs cd:to change current user path.\r\n");
     console_printf("treefs mkdir:to make a directory path.\r\n");
+    console_printf("treefs touch:to make a file.\r\n");
     console_printf("treefs rm:to remove a directory or file.\r\n");
     console_printf("treefs ls:to show files in a directory.\r\n");
     console_printf("treefs cat:to show file context.\r\n");
@@ -290,6 +305,8 @@ COMMAND_MAIN(treefs,argc,argv)
         return treefs_cmd_cd(argc,argv);
     else if(wind_strcmp(argv[1],"mkdir") == 0)
         return treefs_cmd_mkdir(argc,argv);
+    else if(wind_strcmp(argv[1],"touch") == 0)
+        return treefs_cmd_touch(argc,argv);
     else if(wind_strcmp(argv[1],"ls") == 0)
         return treefs_cmd_ls(argc,argv);
     else if(wind_strcmp(argv[1],"cat") == 0)

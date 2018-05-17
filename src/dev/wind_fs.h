@@ -20,13 +20,12 @@ struct __fs_ops_s
     w_err_t (*mount)(fs_s *fs);
     w_err_t (*unmount)(fs_s *fs);
     w_err_t (*format)(fs_s *fs);
-    
 };
 
 struct __fs_s
 {
-    char name[FS_NAME_LEN];
-    char path[FS_MOUNT_PATH_LEN];
+    char *name;
+    char *path;
     dnode_s fsnode;
     fstype_e fstype;
     blkdev_s *dev;

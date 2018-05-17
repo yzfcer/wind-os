@@ -23,6 +23,9 @@ CMD_DECLARE(lua);
 #if WIND_FS_SUPPORT
 CMD_DECLARE(treefs);
 #endif
+CMD_DECLARE(xmodem);
+
+
 void _wind_register_all_cmd(console_s *ctrl)
 {
     wind_cmd_register(COMMAND(list),1);
@@ -47,6 +50,7 @@ void _wind_register_all_cmd(console_s *ctrl)
 #if WIND_FS_SUPPORT
     wind_cmd_register(COMMAND(treefs),1);
 #endif
+    wind_cmd_register(COMMAND(xmodem),1);
 
 }
 

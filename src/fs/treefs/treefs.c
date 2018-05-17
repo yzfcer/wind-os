@@ -41,6 +41,7 @@ static dnode_s *get_node_by_offset(dlist_s *list,w_uint32_t offset)
             return NULL;
         if(idx == nodeidx)
             return node;
+        idx ++;
     }
     return NULL;
 }
