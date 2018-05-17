@@ -54,8 +54,13 @@ typedef struct treefs_s
     dlist_s datalist;
 }treefile_s;
 
+void *treefs_malloc(w_int32_t size);
+w_err_t treefs_free(void *ptr);
 
 w_err_t treefs_format(void);
+
+char *treefs_get_full_path(char *oldpath,char *newpath,w_uint16_t isdir);
+
 treefile_s *treefs_mk_file(const char *path);
 w_err_t treefs_rm_file(treefile_s *file);
 

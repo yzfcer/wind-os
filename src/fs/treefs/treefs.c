@@ -7,12 +7,12 @@
 #if WIND_FS_SUPPORT
 static treefile_s *treefile_rootnode = NULL;
 
-static void *treefile_malloc(w_int32_t size)
+void *treefs_malloc(w_int32_t size)
 {
     return wind_malloc(size);
 }
 
-static w_err_t treefile_free(void *ptr)
+w_err_t treefs_free(void *ptr)
 {
     if(ptr == NULL)
         return ERR_OK;
@@ -106,11 +106,11 @@ static treefile_s *mk_subnode(treefile_s *parent,char *nodename,w_uint8_t isdir)
     attr_u *attr;
     int len = wind_strlen(nodename);
     WIND_ASSERT_RETURN(nodename != NULL,NULL);
-    fsnode = treefile_malloc(sizeof(treefile_s));
+    fsnode = treefs_malloc(sizeof(treefile_s));
     WIND_ASSERT_RETURN(fsnode != NULL,NULL);
     fsnode->magic = TREEFILE_MAGIC;
-    fsnode->filename = treefile_malloc(len+1);
-    WIND_ASSERT_TODO(fsnode->filename != NULL,treefile_free(fsnode),NULL);
+    fsnode->filename = treefs_malloc(len+1);
+    WIND_ASSERT_TODO(fsnode->filename != NULL,treefs_free(fsnode),NULL);
     wind_tree_init(&fsnode->tree);
     wind_memset(fsnode->filename,0,len+1);
     wind_strcpy(fsnode->filename,nodename);
@@ -138,10 +138,10 @@ static treefile_s *search_node(const char *path,w_bool_t create)
     treefile_s *fsnode = NULL,*parent = NULL;
     char **nameseg;
     char *pathname;
-    nameseg = (char **)treefile_malloc(TREEFS_DIR_LAYCNT * sizeof(char*));
+    nameseg = (char **)treefs_malloc(TREEFS_DIR_LAYCNT * sizeof(char*));
     len = wind_strlen(path);
     isdir = path[len-1]=='/'?1:0;
-    pathname = treefile_malloc(len+1);
+    pathname = treefs_malloc(len+1);
     if(pathname == NULL || nameseg == NULL)
         goto SEARCH_COMPLETE;
     wind_strcpy(pathname,path);
@@ -185,11 +185,44 @@ static treefile_s *search_node(const char *path,w_bool_t create)
         }
     }
 SEARCH_COMPLETE:
-    treefile_free(pathname);
-    treefile_free(nameseg);
+    treefs_free(pathname);
+    treefs_free(nameseg);
     return parent;
 }
 
+
+char *treefs_get_full_path(char *oldpath,char *newpath,w_uint16_t isdir)
+{
+    char *path;
+    w_int32_t len,len1;
+    w_int32_t ap = 0;
+    len = wind_strlen(newpath) + 1;
+    if(isdir)
+        len += 1;
+    if(newpath[0] == '/')
+    {
+        path = treefs_malloc(len+ap);
+        wind_memset(path,0,len+ap);
+        wind_strcpy(path,newpath);
+    }
+    else
+    {
+        len1 = wind_strlen(oldpath) + 1;
+        len += len1;
+        path = treefs_malloc(len);
+        wind_memset(path,0,len);
+        wind_strcpy(path,oldpath);
+        if(oldpath[len1-1] != '/')
+            path[len1] = '/';
+        wind_strcat(path,newpath);
+    }
+    
+    len = wind_strlen(path);
+    if(isdir && (path[len-1] != '/'))
+        path[len] = '/';
+    //console_printf("path:%s\r\n",path);
+    return path;
+}
 
 treefile_s *treefs_mk_file(const char *path)
 {
@@ -221,13 +254,13 @@ w_err_t treefs_rm_file(treefile_s *file)
     }
     if(file->tree.parent)
         wind_tree_remove_child(file->tree.parent,&file->tree);
-    treefile_free(file->filename);
+    treefs_free(file->filename);
     foreach_node(node,&file->datalist)
     {
         dlist_remove(&file->datalist,node);
-        treefile_free(node);
+        treefs_free(node);
     }
-    treefile_free(file);
+    treefs_free(file);
     return ERR_OK;
 }
 
@@ -398,7 +431,7 @@ w_int32_t treefile_write(treefile_s* file,w_uint8_t *buff, w_int32_t size)
     WIND_ASSERT_RETURN(size > 0,ERR_INVALID_PARAM);
     while(file->bufflen < file->filelen + size)
     {
-        node = treefile_malloc(TREEFS_BLK_SIZE + sizeof(dnode_s));
+        node = treefs_malloc(TREEFS_BLK_SIZE + sizeof(dnode_s));
         WIND_ASSERT_RETURN(node != NULL,-1);
         dlist_insert_tail(&file->datalist,node);
         file->bufflen += TREEFS_BLK_SIZE;
@@ -431,7 +464,7 @@ w_int32_t treefile_write(treefile_s* file,w_uint8_t *buff, w_int32_t size)
     {
         node = dlist_remove_tail(&file->datalist);
         WIND_ASSERT_RETURN(node != NULL,-1);
-        treefile_free(node);
+        treefs_free(node);
         file->bufflen -= TREEFS_BLK_SIZE;
     }
     return wsize;

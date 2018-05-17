@@ -40,11 +40,17 @@ extern "C" {
 extern w_int32_t xmodem_send(w_uint8_t *src, w_int32_t srcsz);
 extern w_int32_t xmodem_recv(w_uint8_t *dest, w_int32_t destsz);
 
-static w_err_t cmd_xmode_get(int argc,char **argv)
+static w_err_t cmd_xmodem_get(int argc,char **argv)
 {
     w_int32_t len;
     treefile_s *file;
-    w_uint8_t *buff = wind_malloc(4096);
+    w_uint8_t *buff;
+    if(argv[2][0] != '/')
+    {
+        wind_error("unknown file path.");
+        return ERR_INVALID_PARAM;
+    }
+    buff = wind_malloc(4096);
     wind_memset(buff,0,4096);
     len = xmodem_recv(buff,4096);
     if(len <= 0)
@@ -59,21 +65,25 @@ static w_err_t cmd_xmode_get(int argc,char **argv)
     return ERR_OK;
 }
 
-static w_err_t cmd_xmode_put(int argc,char **argv)
+static w_err_t cmd_xmodem_put(int argc,char **argv)
 {
     w_int32_t len;
     treefile_s *file;
-    w_uint8_t *buff = wind_malloc(4096);
-    wind_memset(buff,0,4096);
-    
+    w_uint8_t *buff;
+    if(argv[2][0] != '/')
+    {
+        wind_error("unknown file path.");
+        return ERR_INVALID_PARAM;
+    }
     file = treefile_open(argv[2],FMODE_R);
     if(file == NULL)
     {
         wind_error("file is NOT exist.");
-        wind_free(buff);
         return ERR_FILE_NOT_EXIT;
     }
-    len = treefile_read(file,buff,4096);
+    buff = wind_malloc(file->filelen);
+    wind_memset(buff,0,file->filelen);
+    len = treefile_read(file,buff,file->filelen);
     len = xmodem_send(buff,len);
     treefile_close(file);
     wind_free(buff);
@@ -101,9 +111,9 @@ COMMAND_MAIN(xmodem,argc,argv)
     if(argc < 3)
         return ERR_FAIL;
     if(wind_strcmp(argv[1],"get") == 0)
-        return cmd_xmode_get(argc,argv);
+        return cmd_xmodem_get(argc,argv);
     if(wind_strcmp(argv[1],"put") == 0)
-        return cmd_xmode_put(argc,argv);
+        return cmd_xmodem_put(argc,argv);
     return ERR_OK;
 }
 

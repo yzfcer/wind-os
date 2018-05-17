@@ -38,44 +38,13 @@ static char *curpath = NULL;
 
 
 /********************************************内部函数定义*********************************************/
-static char *getpath(char *oldpath,char *newpath,w_uint16_t isdir)
-{
-    char *path;
-    w_int32_t len,len1;
-    w_int32_t ap = 0;
-    len = wind_strlen(newpath) + 1;
-    if(isdir)
-        len += 1;
-    if(newpath[0] == '/')
-    {
-        path = wind_malloc(len+ap);
-        wind_memset(path,0,len+ap);
-        wind_strcpy(path,newpath);
-    }
-    else
-    {
-        len1 = wind_strlen(oldpath) + 1;
-        len += len1;
-        path = wind_malloc(len);
-        wind_memset(path,0,len);
-        wind_strcpy(path,oldpath);
-        if(oldpath[len1-1] != '/')
-            path[len1] = '/';
-        wind_strcat(path,newpath);
-    }
-    
-    len = wind_strlen(path);
-    if(isdir && (path[len-1] != '/'))
-        path[len] = '/';
-    console_printf("path:%s\r\n",path);
-    return path;
-}
+
 
 static void path_init(void)
 {
     if(curpath == NULL)
     {
-        curpath = wind_malloc(2);
+        curpath = treefs_malloc(2);
         curpath[0] = '/';
         curpath[1] = 0;
     }
@@ -95,12 +64,12 @@ static w_err_t treefs_cmd_cd(w_int32_t argc,char **argv)
     tf_attr_s attr;
     if(argc < 3)
         return ERR_FAIL;
-    path = getpath(curpath,argv[2],1);
+    path = treefs_get_full_path(curpath,argv[2],1);
     isexist = treefile_existing(path);
     if(!isexist)
     {
         console_printf("open directory or file failed.\r\n");
-        wind_free(path);
+        treefs_free(path);
         return ERR_FILE_NOT_EXIT;
     }
     file = treefile_open(path,FMODE_R);
@@ -108,11 +77,11 @@ static w_err_t treefs_cmd_cd(w_int32_t argc,char **argv)
     if(!attr.isdir)
     {
         console_printf("%s is NOT a valid directory\r\n",path);
-        wind_free(path);
+        treefs_free(path);
         return ERR_INVALID_PARAM;
     }
     treefile_close(file);
-    wind_free(curpath);
+    treefs_free(curpath);
     curpath = path;
     return ERR_OK;
 }
@@ -124,12 +93,12 @@ static w_err_t mknode(w_int32_t argc,char **argv,w_uint16_t isdir)
     char * path;
     if(argc < 3)
         return ERR_INVALID_PARAM;
-    path = getpath(curpath,argv[2],isdir);
+    path = treefs_get_full_path(curpath,argv[2],isdir);
     isexist = treefile_existing(path);
     if(isexist)
     {
         console_printf("directory has been existing.\r\n");
-        wind_free(path);
+        treefs_free(path);
         treefile_close(file);
         return ERR_FAIL;
     }
@@ -137,7 +106,7 @@ static w_err_t mknode(w_int32_t argc,char **argv,w_uint16_t isdir)
     file = treefs_mk_file(path);
     if(file == NULL)
         console_printf("make directory failed.");
-    wind_free(path);
+    treefs_free(path);
     return ERR_OK;
 }
 
@@ -155,18 +124,18 @@ static w_err_t treefs_cmd_rm(w_int32_t argc,char **argv)
 {
     w_err_t err;
     treefile_s *file;
-    char * path = getpath(curpath,argv[2],1);
+    char * path = treefs_get_full_path(curpath,argv[2],1);
     file = treefile_open(path,FMODE_R);
     if(file == NULL)
     {
         console_printf("open directory or file failed.\r\n");
-        wind_free(path);
+        treefs_free(path);
         return ERR_FILE_NOT_EXIT;
     }
     err = treefs_rm_file(file);
     if(err != ERR_OK)
         treefile_close(file);
-    wind_free(path);
+    treefs_free(path);
     return ERR_OK;
 }
 
@@ -176,14 +145,14 @@ static w_err_t treefs_cmd_ls(w_int32_t argc,char **argv)
     treefile_s *file,*sub;
     char * path;
     if(argc >= 3)
-       path = getpath(curpath,argv[2],1);
+       path = treefs_get_full_path(curpath,argv[2],1);
     else
-        path = getpath(curpath,curpath,1);
+        path = treefs_get_full_path(curpath,curpath,1);
     file = treefile_open(path,FMODE_R);
     if(file == NULL)
     {
         console_printf("open directory or file failed.\r\n");
-        wind_free(path);
+        treefs_free(path);
         return ERR_FILE_NOT_EXIT;
     }
     for(i = 0;;i ++)
@@ -196,7 +165,7 @@ static w_err_t treefs_cmd_ls(w_int32_t argc,char **argv)
             console_printf("\r\n");
     }
     treefile_close(file);
-    wind_free(path);
+    treefs_free(path);
     return ERR_OK;
 }
 
@@ -209,18 +178,18 @@ static w_err_t treefs_cmd_cat(w_int32_t argc,char **argv)
 
     if(argc < 3)
         return ERR_INVALID_PARAM;
-    path = getpath(curpath,argv[2],0);
+    path = treefs_get_full_path(curpath,argv[2],0);
     file = treefile_open(path,FMODE_R);
     if(file == NULL)
     {
         console_printf("open directory or file failed.\r\n",path);
-        wind_free(path);
+        treefs_free(path);
         return ERR_FILE_NOT_EXIT;
     }
-    buff = wind_malloc(TREEFS_BLK_SIZE+1);
+    buff = treefs_malloc(TREEFS_BLK_SIZE+1);
     if(buff == NULL)
     {
-        wind_free(path);
+        treefs_free(path);
         return ERR_FAIL;
     }
     console_printf("\r\n---------%s---------\r\n",path);
@@ -235,7 +204,7 @@ static w_err_t treefs_cmd_cat(w_int32_t argc,char **argv)
     }
     console_printf("\r\n---------%s---------\r\n",path);
     treefile_close(file);
-    wind_free(buff);
+    treefs_free(buff);
     return ERR_OK;
 }
     
@@ -247,12 +216,12 @@ static w_err_t treefs_cmd_write(w_int32_t argc,char **argv)
 
     if(argc < 4)
         return ERR_INVALID_PARAM;
-    path = getpath(curpath,argv[2],0);
+    path = treefs_get_full_path(curpath,argv[2],0);
     file = treefile_open(path,FMODE_W|FMODE_CRT);
     if(file == NULL)
     {
         console_printf("open directory or file failed.\r\n",path);
-        wind_free(path);
+        treefs_free(path);
         return ERR_FILE_NOT_EXIT;
     }
 
@@ -262,11 +231,11 @@ static w_err_t treefs_cmd_write(w_int32_t argc,char **argv)
     if(filelen == len)
     {
         console_printf("write file OK.\r\n");
-        wind_free(path);
+        treefs_free(path);
         return ERR_OK;
     }
     console_printf("write file failed.\r\n");
-    wind_free(path);
+    treefs_free(path);
     return ERR_FAIL;
 }
 
