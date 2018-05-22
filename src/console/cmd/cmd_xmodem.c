@@ -21,6 +21,7 @@
 #include "wind_cmd.h"
 #include "wind_heap.h"
 #include "treefs.h"
+#include "xmodem.h"
 #if WIND_XMODEM_SUPPORT
 #ifdef __cplusplus
 extern "C" {
@@ -38,10 +39,11 @@ extern "C" {
 
 /********************************************内部函数定义*********************************************/
 extern w_int32_t xmodem_send(w_uint8_t *src, w_int32_t srcsz);
-extern w_int32_t xmodem_recv(w_uint8_t *dest, w_int32_t destsz);
+extern w_int32_t xmodem_recv_bak(w_uint8_t *dest, w_int32_t destsz);
 
 static w_err_t cmd_xmodem_get(int argc,char **argv)
 {
+    w_err_t err = ERR_OK;
     w_int32_t len;
     treefile_s *file;
     w_uint8_t *buff;
@@ -50,19 +52,29 @@ static w_err_t cmd_xmodem_get(int argc,char **argv)
         wind_error("unknown file path.");
         return ERR_INVALID_PARAM;
     }
+    xmodem_recv_start();
     buff = wind_malloc(4096);
-    wind_memset(buff,0,4096);
-    len = xmodem_recv(buff,4096);
-    if(len <= 0)
-    {
-        wind_error("xmodem receive failed.");
-        return ERR_FAIL;
-    }
     file = treefile_open(argv[2],FMODE_CRT|FMODE_W);
-    treefile_write(file,buff,len);
+    for(;;)
+    {
+        wind_memset(buff,0,4096);
+        len = xmodem_recv_data(buff,4096);
+        if(len < 0)
+        {
+            wind_error("xmodem receive failed.");
+            err = ERR_FAIL;
+            break;
+        }
+        if(len == 0)
+        {
+            break;
+        }
+        treefile_write(file,buff,len);
+    }
+    xmodem_recv_end();
     treefile_close(file);
     wind_free(buff);
-    return ERR_OK;
+    return err;
 }
 
 static w_err_t cmd_xmodem_put(int argc,char **argv)

@@ -9,13 +9,16 @@ static treefile_s *treefile_rootnode = NULL;
 
 void *treefs_malloc(w_int32_t size)
 {
-    return wind_malloc(size);
+    void *ptr = wind_malloc(size);
+    //wind_printf("treefs malloc:0x%x\r\n",ptr);
+    return ptr;
 }
 
 w_err_t treefs_free(void *ptr)
 {
     if(ptr == NULL)
         return ERR_OK;
+    //wind_printf("treefs free:0x%x\r\n",ptr);
     return wind_free(ptr);
 }
 
@@ -276,6 +279,7 @@ w_err_t treefs_format(void)
     if(!root)
         return ERR_FAIL;
     treefs_set_root(root);
+    #if 1
     treefs_mk_file("/var/");
     treefs_mk_file("/mnt/");
     treefs_mk_file("/usr/");
@@ -297,6 +301,7 @@ w_err_t treefs_format(void)
     buff = "passwd=wind;wind;\r\n";
     treefile_write(file,(w_uint8_t*)buff,wind_strlen(buff));
     treefile_close(file);
+    #endif
     return ERR_OK;
 }
 

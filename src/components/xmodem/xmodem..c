@@ -1,10 +1,11 @@
 #include "wind_config.h"
 #include "wind_type.h"  
-#include "string.h"  
+#include "wind_string.h"  
 #include "wind_debug.h"  
 #include "wind_std.h"  
 #include "wind_thread.h"  
 #include "wind_crc16.h"  
+#include "wind_heap.h"  
 #if WIND_XMODEM_SUPPORT
 
 #define SOH  0x01
@@ -23,14 +24,51 @@
 #define STAT_DATA 0x01
 
 
+typedef enum 
+{
+    XM_RECV_INIT = 0,
+    XM_RECV_DATA_FIRST,
+    XM_RECV_DATA,
+    XM_RECV_END,
+    XM_ERROR
+}xm_stat_e;
+
+typedef struct 
+{
+    xm_stat_e stat;
+    w_uint8_t trychar;
+    w_uint8_t *buff;
+    w_int16_t bufsz;
+    w_int16_t idx;
+    w_int8_t  pack_no;
+    w_int32_t crcmode;
+    w_int32_t retry;
+}xmodem_info_s;
+
+xmodem_info_s xm_info;
+
+
 static w_int32_t last_error = 0;
 static w_uint8_t xbuff[1030];
-w_uint32_t recv_cnt = 0;
-void port_write(w_uint8_t trychar)
+void xm_write(w_uint8_t trychar)
 {
     wind_std_output(&trychar,1);
-}  
-  
+}
+
+static w_int32_t xm_read(w_uint8_t *ch,w_uint32_t time_out)
+{
+    w_int32_t cnt;
+    w_uint32_t i;
+    w_uint32_t tick = time_out / 10;
+    for(i = 0;i < tick;i ++)
+    {
+        cnt = wind_std_input(ch,1);
+        if(cnt >= 1)
+            return 1;
+        wind_thread_sleep(10);
+    }
+    return 0;
+}
 w_uint8_t port_read(w_uint32_t time_out)
 {
     w_int32_t cnt;
@@ -42,7 +80,6 @@ w_uint8_t port_read(w_uint32_t time_out)
         cnt = wind_std_input(&ch,1);
         if(cnt >= 1)
         {
-            recv_cnt ++;
             return ch;
         }
             
@@ -51,7 +88,8 @@ w_uint8_t port_read(w_uint32_t time_out)
     last_error = 1;
     return 0;
 }
-  
+
+
 static w_int32_t xmodem_check(w_int32_t crcmode, const w_uint8_t *buf, w_int32_t sz)
 {
     w_uint16_t crc,tcrc;
@@ -81,110 +119,175 @@ static void flush_data(void)
     static w_uint16_t flush_cnt = 0;
     flush_cnt ++;
 }
-  
-w_int32_t xmodem_recv(w_uint8_t *dest, w_int32_t destsz)
+
+
+
+void xmodem_recv_start(void)
 {
+    xmodem_info_s *info = &xm_info;
+    info->stat = XM_RECV_DATA_FIRST;
+    info->trychar = 'C';
+    info->crcmode = 1;
+    if(info->buff == NULL)
+    info->buff = wind_malloc(1030);
+    info->bufsz = 0;
+    info->idx = 0;
+    info->pack_no = 1;
+    info->retry = MAXRETRANS;
+    xm_write(CAN);
+}
+
+void xmodem_recv_end(void)
+{
+    xmodem_info_s *info = &xm_info;
+    if(info->buff != NULL)
+        wind_free(info->buff);
+    info->buff = NULL;
+    info->stat = XM_RECV_INIT;
+}
+
+
+
+static w_err_t wait_data(void)
+{
+    w_int32_t i;
+    xmodem_info_s *info = &xm_info;
+    info->idx = 0;
+    wind_memset(info->buff,0,1030);
+    for(i = 0;i < 30;i ++)
+    {
+        xm_write(info->trychar);
+        if(i >= 15)
+        {
+            info->trychar = NAK;
+            info->crcmode = 0;
+        }
+            
+        if(xm_read(&info->buff[0],(DLY_1S)<<1) <= 0)
+            continue;
+        switch(info->buff[0])
+        {
+        case SOH:
+            info->bufsz = 128;
+            info->stat = XM_RECV_DATA;
+            info->idx = 1;
+            return ERR_OK;
+        case STX:
+            info->bufsz = 1024;
+            info->stat = XM_RECV_DATA;
+            info->idx = 1;
+            return ERR_OK;
+        case EOT:
+            info->stat = XM_RECV_END;
+            return ERR_OK;
+        case CAN:
+            info->stat = XM_ERROR;
+            return ERR_FAIL;
+        default:
+            info->stat = XM_ERROR;
+            return ERR_FAIL;
+        }  
+    }  
+    info->stat = XM_ERROR;
+    return ERR_FAIL;
+}
+
+static w_err_t check_data_recv(void)
+{
+    xmodem_info_s *info = &xm_info;
+    if(info->buff[1] != (w_uint8_t)(~info->buff[2]))
+        return ERR_FAIL;
+    if((info->buff[1] != info->pack_no) && (info->buff[1] !=(w_uint8_t)info->pack_no - 1))
+        return ERR_FAIL;
+    if(!xmodem_check(info->crcmode, &info->buff[3], info->bufsz))
+        return ERR_FAIL;
+    return ERR_OK;
+}
+
+w_int32_t read_and_check_data(w_uint8_t *buff,w_int32_t len)
+{
+    w_int32_t i;
+    w_int32_t buflen;
+    xmodem_info_s *info = &xm_info;    
+    buflen = (info->bufsz+(info->crcmode?1:0)+3);
+    for(i = 0;i < buflen;i++)
+    {
+        if(xm_read(&info->buff[info->idx],(DLY_1S)<<1) <= 0)
+        {
+            info->stat = XM_ERROR;
+            return -1;
+        }
+            
+        info->idx ++;
+    }
     
-    w_uint8_t *p;
-    w_int32_t bufsz, crcmode = 0;
-    w_uint8_t trychar = 'C';
-    w_uint8_t packetno = 1;
-    w_int32_t i, c, len = 0;
-    w_int32_t retry, retrans = MAXRETRANS;
-    recv_cnt = 0;
+    if(check_data_recv() == ERR_OK)
+    {
+        buflen = len < info->bufsz?len:info->bufsz;
+        wind_memcpy(buff, &info->buff[3], buflen);
+        info->pack_no ++;
+        info->retry = MAXRETRANS;
+        info->stat = XM_RECV_DATA_FIRST;
+        return buflen;
+    }
+    info->retry --;
+    if(info->retry <= 0)
+    {
+        info->stat = XM_ERROR;
+        return -1;
+    }
+    info->stat = XM_RECV_DATA_FIRST;
+    info->trychar = NAK;
+    return 0;
+}
+
+
+w_int32_t xmodem_recv_data(w_uint8_t *data, w_int32_t size)
+{
+    //w_int32_t i;
+    //w_err_t err;
+    w_int32_t idx = 0,len;    
+    xmodem_info_s *info = &xm_info;
+    
     for(;;)
     {
-        for(retry = 0;retry < 16;++retry)
+        switch(info->stat)
         {
-            if(trychar)
-                port_write(trychar);
-            c = port_read((DLY_1S)<<1);
-            //c = port_read((DLY_1S)<<1);
-            if(last_error == 0)
+        case XM_RECV_DATA_FIRST:
+            wait_data();
+            break;
+        case XM_RECV_DATA:
+            len = read_and_check_data(&data[idx],size - idx);
+            if(len < 0)
+                break;
+            if(len == 0)
             {
-                switch(c)
-                {
-                case SOH:
-                    bufsz = 128;
-                    goto start_recv;
-                case STX:
-                    bufsz = 1024;
-                    goto start_recv;
-                case EOT:
-                    flush_data();
-                    port_write(ACK);
-                    return len;
-                case CAN:
-                    c = port_read(DLY_1S);
-                    if(c == CAN)
-                    {
-                        flush_data();
-                        port_write(ACK);
-                        return -1;
-                    }  
-                    break;
-                default:
-                    break;
-                }  
-            }  
-        }  
-        if(trychar == 'C')
-        {
-            trychar = NAK;
-            continue;
-        }  
-        flush_data();
-        port_write(CAN);
-        port_write(CAN);
-        port_write(CAN);
-        return -2;
-start_recv:
-        if(trychar == 'C') crcmode = 1;
-            trychar = 0;
-        p = xbuff;
-        *p++ = c;
-        for(i = 0;i <(bufsz+(crcmode?1:0)+3);++i)
-        {
-            c = port_read(DLY_1S);
-  
-            if(last_error != 0)
-                goto reject;
-            *p++ = c;
-        }  
-  
-        if(xbuff[1] ==(w_uint8_t)(~xbuff[2]) &&  
-           (xbuff[1] == packetno || xbuff[1] ==(w_uint8_t)packetno-1) &&  
-            xmodem_check(crcmode, &xbuff[3], bufsz))
-        {
-            if(xbuff[1] == packetno) 
-            {
-                w_int32_t count = destsz - len;
-                if(count > bufsz)
-                    count = bufsz;
-                if(count > 0)
-                {
-                    memcpy(&dest[len], &xbuff[3], count);
-                    len += count;
-                }  
-                ++packetno;
-                retrans = MAXRETRANS+1;
+                info->trychar = NAK;
+                info->stat = XM_RECV_DATA_FIRST;
+                break;
             }
-            if(--retrans <= 0)
-            {
-                flush_data();
-                port_write(CAN);
-                port_write(CAN);
-                port_write(CAN);
-                return -3;
-            }  
-            port_write(ACK);
-            continue;
-        }  
-reject:
-        flush_data();
-        port_write(NAK);
+            info->stat = XM_RECV_DATA_FIRST;
+            info->trychar = ACK;
+            idx += len;
+            if(idx >= size)
+                return idx;
+            break;
+        case XM_RECV_END:
+            //xmodem_recv_end();
+            return idx;
+        case XM_ERROR:
+            xmodem_recv_end();
+            wind_error("xmodem error.");
+            return -1;
+        default:
+            //xmodem_recv_end();
+            //wind_error("unknown xmodem status.");
+            return 0;
+        }
     }
-}  
+    //return -1;
+}
+ 
   
 w_int32_t xmodem_send(w_uint8_t *src, w_int32_t srcsz)
 {
@@ -212,7 +315,7 @@ w_int32_t xmodem_send(w_uint8_t *src, w_int32_t srcsz)
                     c = port_read(DLY_1S);
                     if(c == CAN)
                     {
-                        port_write(ACK);
+                        xm_write(ACK);
                         flush_data();
                         return -1;
                     }  
@@ -222,9 +325,9 @@ w_int32_t xmodem_send(w_uint8_t *src, w_int32_t srcsz)
                 }  
             }  
         }  
-        port_write(CAN);
-        port_write(CAN);
-        port_write(CAN);
+        xm_write(CAN);
+        xm_write(CAN);
+        xm_write(CAN);
         flush_data();
         return -2;
   
@@ -239,14 +342,14 @@ start_trans:
                 c = bufsz;
             if(c >= 0)
             {
-                memset(&xbuff[3], 0, bufsz);
+                wind_memset(&xbuff[3], 0, bufsz);
                 if(c == 0)
                 {
                     xbuff[3] = CTRLZ;
                 }  
                 else  
                 {
-                    memcpy(&xbuff[3], &src[len], c);
+                    wind_memcpy(&xbuff[3], &src[len], c);
                     if(c < bufsz) 
                         xbuff[3+c] = CTRLZ;
                 }  
@@ -269,7 +372,7 @@ start_trans:
                 {
                     for(i = 0;i < bufsz+4+(crcmode?1:0);++i)
                     {
-                        port_write(xbuff[i]);
+                        xm_write(xbuff[i]);
                     }  
                     c = port_read(DLY_1S);
                     if(last_error == 0 )
@@ -284,7 +387,7 @@ start_trans:
                             c = port_read(DLY_1S);
                             if( c == CAN)
                             {
-                                port_write(ACK);
+                                xm_write(ACK);
                                 flush_data();
                                 return -1;
                             }  
@@ -295,9 +398,9 @@ start_trans:
                         }  
                     }  
                 }  
-                port_write(CAN);
-                port_write(CAN);
-                port_write(CAN);
+                xm_write(CAN);
+                xm_write(CAN);
+                xm_write(CAN);
                 flush_data();
                 return -4;
             }  
@@ -305,7 +408,7 @@ start_trans:
             {
                 for(retry = 0;retry < 10;++retry)
                 {
-                    port_write(EOT);
+                    xm_write(EOT);
                     c = port_read((DLY_1S)<<1);
                     if(c == ACK) 
                         break;
