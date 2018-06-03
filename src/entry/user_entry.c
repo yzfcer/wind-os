@@ -46,6 +46,6 @@ w_err_t wind_main(void)
 {
     wind_notice("enter wind main.");
     led_start();
-    //BEEP_Init();
+    BEEP_Init();
     return 0;
 }

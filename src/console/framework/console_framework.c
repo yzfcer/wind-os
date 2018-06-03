@@ -46,8 +46,6 @@ static w_err_t get_cmd_ch(w_int8_t *ch)
     return len > 0 ? ERR_OK : ERR_FAIL;
 }
 
-
-
 static w_bool_t insert_ch(console_s *ctrl,char ch,w_int32_t len)
 {
     ctrl->buf[ctrl->index] = ch;
@@ -68,12 +66,13 @@ static w_bool_t handle_LF(console_s *ctrl)
     return B_TRUE;
 }
 
-static w_bool_t handle_DEL(console_s *ctrl)
+static w_bool_t handle_BKSPACE(console_s *ctrl)
 {
     if(ctrl->index > 0)
     {
         ctrl->index --;
-        console_printf("%c",WVK_DEL);
+        console_printf("%c",WVK_BACKSPACE);
+        console_printf(VT100_BKSPACE);
     }
     return B_FALSE;
 }
@@ -90,7 +89,7 @@ static w_bool_t handle_key_evt_up(console_s *ctrl)
 {
     w_err_t err;
     while(ctrl->index > 0)
-        handle_DEL(ctrl);
+        handle_BKSPACE(ctrl);
     wind_memset(ctrl->buf,0,WIND_CMD_MAX_LEN);
     err = cmd_history_get_prev(&ctrl->his,ctrl->buf);
     if(ERR_OK == err)
@@ -105,7 +104,7 @@ static w_bool_t handle_key_evt_down(console_s *ctrl)
 {
     w_err_t err;
     while(ctrl->index > 0)
-        handle_DEL(ctrl);
+        handle_BKSPACE(ctrl);
     wind_memset(ctrl->buf,0,WIND_CMD_MAX_LEN);
     err = cmd_history_get_next(&ctrl->his,ctrl->buf);
     if(ERR_OK == err)
@@ -179,9 +178,9 @@ static w_bool_t console_prehandle_char(console_s *ctrl,char ch,w_int32_t len)
     ret = handle_key_evt(ctrl,ch);
     if(B_TRUE == ret)
         return B_FALSE;
-    if(ch == WVK_DEL)
+    if(ch == WVK_BACKSPACE)
     {
-        return handle_DEL(ctrl);
+        return handle_BKSPACE(ctrl);
     }
     else if(ch == WVK_ENTER)
     {

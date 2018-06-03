@@ -292,16 +292,17 @@ w_int32_t xmodem_recv_data(w_uint8_t *data, w_int32_t size)
 w_int32_t xmodem_send(w_uint8_t *src, w_int32_t srcsz)
 {
     w_int32_t bufsz, crcmode = -1;
-    w_uint8_t packetno = 1;
-    w_int32_t i, c, len = 0;
+    w_uint8_t packetno = 1,c;
+    w_int32_t i,len = 0;
     w_int32_t retry;
+    w_int32_t cnt;
   
     for(;;) 
     {
         for( retry = 0;retry < 16;++retry)
         {
-            c = port_read((DLY_1S)<<1);
-            if(last_error == 0)
+            cnt = xm_read(&c,(DLY_1S)<<1);
+            if(cnt > 0)
             {
                 switch(c)
                 {
@@ -312,8 +313,8 @@ w_int32_t xmodem_send(w_uint8_t *src, w_int32_t srcsz)
                     crcmode = 0;
                     goto start_trans;
                 case CAN:
-                    c = port_read(DLY_1S);
-                    if(c == CAN)
+                    cnt = xm_read(&c,DLY_1S);
+                    if((cnt > 0)&&(c == CAN))
                     {
                         xm_write(ACK);
                         flush_data();
@@ -374,8 +375,8 @@ start_trans:
                     {
                         xm_write(xbuff[i]);
                     }  
-                    c = port_read(DLY_1S);
-                    if(last_error == 0 )
+                    cnt = xm_read(&c,DLY_1S);
+                    if(cnt > 0)
                     {
                         switch(c)
                         {
@@ -384,8 +385,8 @@ start_trans:
                             len += bufsz;
                             goto start_trans;
                         case CAN:
-                            c = port_read(DLY_1S);
-                            if( c == CAN)
+                            cnt = xm_read(&c,DLY_1S);
+                            if((cnt > 0)&&(c == CAN))
                             {
                                 xm_write(ACK);
                                 flush_data();
@@ -409,7 +410,8 @@ start_trans:
                 for(retry = 0;retry < 10;++retry)
                 {
                     xm_write(EOT);
-                    c = port_read((DLY_1S)<<1);
+                    cnt = xm_read(&c,(DLY_1S)<<1);
+                    if((cnt > 0)&&(c == ACK))
                     if(c == ACK) 
                         break;
                 }  

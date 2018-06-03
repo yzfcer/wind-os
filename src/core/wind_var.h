@@ -32,6 +32,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
 typedef struct __core_var_s
 {
     //内核对象列表
