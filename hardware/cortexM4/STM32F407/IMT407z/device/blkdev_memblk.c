@@ -3,6 +3,13 @@
 #include "wind_string.h"
 #if WIND_BLK_DRVFRAME_SUPPORT
 static w_uint8_t memblk[8*64];
+w_err_t   memblk_init(blkdev_s *dev)
+{
+    dev->blkaddr = (w_addr_t)memblk;
+    dev->blkcnt = 8;
+    dev->blksize = 64;
+    return ERR_OK;
+}
 
 w_err_t   memblk_open(blkdev_s *dev)
 {
@@ -60,6 +67,7 @@ w_err_t   memblk_close(blkdev_s *dev)
 
 const blkdev_ops_s memblk_ops = 
 {
+    memblk_init,
     memblk_open,
     memblk_erase,
     memblk_eraseall,
@@ -68,15 +76,9 @@ const blkdev_ops_s memblk_ops =
     memblk_close
 };
 
-blkdev_s memblk_dev = 
+blkdev_s memblk_dev[1] = 
 {
-    WIND_BLKDEV_MAGIC,
-    {NULL,NULL},
-    "memblk",
-    B_FALSE,
-    (w_addr_t)memblk,8,64,
-    NULL,
-    &memblk_ops
+    WIND_BLKDEV_DEF("memblk",0,0,0,0,&memblk_ops)
 };
 
 #endif

@@ -52,16 +52,11 @@ const dev_ops_s gpio_ops =
     gpio_close
 };
 
-dev_s gpio_dev = 
+dev_s gpio_dev[1] = 
 {
-    WIND_DEV_MAGIC,
-    "gpio",
-    B_FALSE,
-    0,
-    {NULL,NULL},
-    NULL,
-    &gpio_ops
+    WIND_DEV_DEF("gpio",0,&gpio_ops)
 };
+
 
 #endif
 

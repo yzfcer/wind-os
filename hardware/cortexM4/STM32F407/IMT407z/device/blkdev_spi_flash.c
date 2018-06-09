@@ -71,6 +71,7 @@ w_err_t   spi_flash_close(blkdev_s *dev)
 
 const blkdev_ops_s spi_flash_ops = 
 {
+    NULL,
     spi_flash_open,
     spi_flash_erase,
     spi_flash_eraseall,
@@ -81,24 +82,8 @@ const blkdev_ops_s spi_flash_ops =
 
 blkdev_s spi_flash_dev[2] = 
 {
-    {
-        WIND_BLKDEV_MAGIC,
-        {NULL,NULL},
-        "spi_flash0",
-        B_FALSE,
-        0,16384,512,
-        NULL,
-        &spi_flash_ops
-    },
-    {
-        WIND_BLKDEV_MAGIC,
-        {NULL,NULL},
-        "spi_flash1",
-        B_FALSE,
-        16384,16384,512,
-        NULL,
-        &spi_flash_ops
-    }
+    WIND_BLKDEV_DEF("spi_flash0",0,0,16384,512,&spi_flash_ops),
+    WIND_BLKDEV_DEF("spi_flash1",1,16384,16384,512,&spi_flash_ops)
 };
 
 #endif

@@ -44,8 +44,8 @@ struct __dev_s
 {
     w_uint32_t magic;
     char name[12];
-    w_bool_t opened;
     w_int8_t devid;
+    w_bool_t opened;
     dnode_s devnode;
     mutex_s *mutex;
     const dev_ops_s *ops;
@@ -60,6 +60,9 @@ struct __dev_ops_s
     w_int32_t (*write)(dev_s *dev,w_uint8_t *buf,w_uint16_t len);
     w_err_t   (*close)(dev_s *dev);
 };
+
+#define WIND_DEV_DEF(name,devid,ops) {WIND_DEV_MAGIC,name,devid,B_FALSE,{NULL,NULL},NULL,ops}
+
 w_err_t _wind_dev_init(void);
 w_err_t _register_devs(void);
 

@@ -868,16 +868,6 @@
               <FilePath>..\device\dev_gpio.c</FilePath>
             </File>
             <File>
-              <FileName>dev_list.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\device\dev_list.c</FilePath>
-            </File>
-            <File>
-              <FileName>blkdev_list.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\device\blkdev_list.c</FilePath>
-            </File>
-            <File>
               <FileName>blkdev_memblk.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\device\blkdev_memblk.c</FilePath>
@@ -896,6 +886,16 @@
               <FileName>dev_led.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\device\dev_led.c</FilePath>
+            </File>
+            <File>
+              <FileName>list_blkdev.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\device\list_blkdev.c</FilePath>
+            </File>
+            <File>
+              <FileName>list_dev.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\device\list_dev.c</FilePath>
             </File>
           </Files>
         </Group>

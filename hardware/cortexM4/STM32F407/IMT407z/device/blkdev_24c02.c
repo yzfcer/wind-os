@@ -72,6 +72,7 @@ w_err_t   at24c02_close(blkdev_s *dev)
 
 const blkdev_ops_s at24c02_ops = 
 {
+    NULL,
     at24c02_open,
     at24c02_erase,
     at24c02_eraseall,
@@ -80,15 +81,9 @@ const blkdev_ops_s at24c02_ops =
     at24c02_close
 };
 
-blkdev_s at24c02_dev = 
+blkdev_s at24c02_dev[1] = 
 {
-	WIND_BLKDEV_MAGIC,
-	{NULL,NULL},
-	"at24c02",
-	B_FALSE,
-	0,16,16,
-	NULL,
-	&at24c02_ops
+    WIND_BLKDEV_DEF("at24c02",0,0,16,16,&at24c02_ops)
 };
 
 #endif

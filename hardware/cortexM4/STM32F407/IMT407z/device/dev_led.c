@@ -55,30 +55,9 @@ const dev_ops_s led_ops =
 
 dev_s led_dev[3] = 
 {
-    {
-        WIND_DEV_MAGIC,
-        "led0",
-        B_FALSE,0,
-        {NULL,NULL},
-        NULL,
-        &led_ops
-    },
-    {
-        WIND_DEV_MAGIC,
-        "led1",
-        B_FALSE,1,
-        {NULL,NULL},
-        NULL,
-        &led_ops
-    },
-    {
-        WIND_DEV_MAGIC,
-        "led2",
-        B_FALSE,2,
-        {NULL,NULL},
-        NULL,
-        &led_ops
-    }
+    WIND_DEV_DEF("led0",0,&led_ops),
+    WIND_DEV_DEF("led1",1,&led_ops),
+    WIND_DEV_DEF("led2",2,&led_ops),
 };
 #endif
 
