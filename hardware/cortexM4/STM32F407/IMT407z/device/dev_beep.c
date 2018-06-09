@@ -9,6 +9,7 @@ w_err_t   beep_init(dev_s *dev)
 {
     BEEP_Init();
     beepst[0] = 0;
+    return ERR_OK;
 }
 
 w_err_t   beep_open(dev_s *dev)
