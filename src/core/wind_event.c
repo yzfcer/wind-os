@@ -58,13 +58,6 @@ w_err_t _wind_event_init(void)
     return err;
 }
 
-void wind_msg_init(listener_s *msg,w_uint16_t msg_id,w_uint16_t msg_len,void *msg_arg)
-{
-    msg->msg_id = msg_id;
-    msg->msg_len = msg_len;
-    msg->msg_arg = msg_arg;
-    DNODE_INIT(msg->msgnode);
-}
 
 event_s *wind_event_get(const char *name)
 {
@@ -105,24 +98,6 @@ event_s *wind_event_create(const char *name)
 }
 
 
-w_err_t wind_event_trydestroy(event_s *event)
-{
-    dnode_s *pdnode;
-    thread_s *thread;
-    WIND_ASSERT_RETURN(event != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(event->magic == WIND_EVENT_MAGIC,ERR_INVALID_PARAM);
-    thread = wind_thread_current();
-    WIND_ASSERT_RETURN(event->owner == thread,ERR_FAIL);
-    wind_disable_interrupt();
-    pdnode = dlist_head(&event->msglist);
-    if(pdnode != NULL)
-    {
-        wind_enable_interrupt();
-        return ERR_FAIL;
-    }
-    wind_enable_interrupt();
-    return wind_event_destroy(event);
-}
 
 w_err_t wind_event_destroy(event_s *event)
 {
@@ -153,7 +128,7 @@ w_err_t wind_event_destroy(event_s *event)
     return ERR_OK;
 }
 
-w_err_t wind_event_post(event_s *event,listener_s *pmsg)
+w_err_t wind_event_trig(event_s *event,const void *arg)
 {
     thread_s *thread;
     WIND_ASSERT_RETURN(event != NULL,ERR_NULL_POINTER);
@@ -180,7 +155,7 @@ w_err_t wind_event_post(event_s *event,listener_s *pmsg)
 }
 
 
-w_err_t wind_event_wait(event_s *event,listener_s **pmsg,w_uint32_t timeout)
+w_err_t wind_event_wait(event_s *event,void **arg,w_uint32_t timeout)
 {
     w_err_t err;
     w_uint32_t ticks;
@@ -236,34 +211,6 @@ w_err_t wind_event_wait(event_s *event,listener_s **pmsg,w_uint32_t timeout)
     return err;
 }
 
-w_err_t wind_event_trywait(event_s *event,listener_s **pmsg)
-{
-    w_err_t err;
-    dnode_s *dnode;
-    thread_s *thread;
-    WIND_ASSERT_RETURN(event != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(pmsg != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(event->magic == WIND_EVENT_MAGIC,ERR_FAIL);
-    WIND_ASSERT_RETURN(event->owner,ERR_FAIL);
-    thread = wind_thread_current();
-    WIND_ASSERT_RETURN(event->owner == thread,ERR_FAIL);
-    //如果邮箱中有消息，就直接返回消息
-    wind_disable_interrupt();
-    if(event->msgnum > 0)
-    {
-        event->msgnum --;
-        dnode = dlist_remove_head(&event->msglist);
-        *pmsg = DLIST_OBJ(dnode,listener_s,msgnode);
-        err = ERR_OK;
-    }
-    else
-    {
-        *pmsg = NULL;
-        err = ERR_FAIL;
-    }
-    wind_enable_interrupt();
-    return err;
-}
 
 w_err_t wind_event_print(dlist_s *list)
 {

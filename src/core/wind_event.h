@@ -36,15 +36,16 @@ extern "C" {
 #endif
 
 #if WIND_EVENT_SUPPORT
+#define WIND_EVENT_MAGIC 0x5A9C524C
+	
+#if 0	
 typedef struct __event_s
-
-#define WIND_EVENT_MAGIC 0x579A524C
-typedef 
 typedef struct _wind_event
 {
     dnode_s listenernode;
     
 }listener_s; 
+#endif
 
 typedef struct __event_s
 {
@@ -57,19 +58,14 @@ typedef struct __event_s
 }event_s;
 
 
-#define GET_MSG(nodeptr,msgtype,msgnode) (void*)(((char*)(nodeptr))-((w_uint32_t)&(((msgtype*)0)->msgnode)))
-
-void wind_msg_init(listener_s *msg,w_uint16_t msg_id,w_uint16_t msg_len,void *msg_arg);
 w_err_t _wind_event_init(void);
 event_s *wind_event_get(const char *name);
 event_s *wind_event_create(const char *name);
 
-w_err_t wind_event_trydestroy(event_s *event);
 w_err_t wind_event_destroy(event_s *event);
 
-w_err_t wind_event_trig(event_s *event,listener_s *pmsg);
-w_err_t wind_event_wait(event_s *event,listener_s **pmsg,w_uint32_t timeout);
-w_err_t wind_event_trywait(event_s *event,listener_s **pmsg);
+w_err_t wind_event_trig(event_s *event,const void *arg);
+w_err_t wind_event_wait(event_s *event,const void *arg,w_uint32_t timeout);
 w_err_t wind_event_print(dlist_s *list);
 
 #else

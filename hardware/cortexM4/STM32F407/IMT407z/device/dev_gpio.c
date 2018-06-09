@@ -44,6 +44,7 @@ w_err_t   gpio_close(dev_s *dev)
 
 const dev_ops_s gpio_ops = 
 {
+    NULL,
     gpio_open,
     gpio_ioctl,
     gpio_read,
@@ -54,9 +55,10 @@ const dev_ops_s gpio_ops =
 dev_s gpio_dev = 
 {
     WIND_DEV_MAGIC,
-    {NULL,NULL},
     "gpio",
     B_FALSE,
+    0,
+    {NULL,NULL},
     NULL,
     &gpio_ops
 };

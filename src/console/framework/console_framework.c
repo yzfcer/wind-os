@@ -72,7 +72,7 @@ static w_bool_t handle_BKSPACE(console_s *ctrl)
     {
         ctrl->index --;
         console_printf("%c",WVK_BACKSPACE);
-        console_printf(VT100_BKSPACE);
+        console_printf(VT100_ERASE_END);
     }
     return B_FALSE;
 }

@@ -146,15 +146,23 @@ extern "C" {
 
 
 //control words
-#define VT100_CLOSE "\033[0m" //关闭属性
-#define VT100_HI_LITE "\033[1m" //高亮
-#define VT100_UNDERLINE "\033[4m" //下划线
-#define VT100_FLICKER  "\033[5m" //闪烁
-#define VT100_REVERSE  "\033[7m" //反显
-#define VT100_HIDDEN  "\033[8m" //消隐
-#define VT100_CLRSCR  "\033[2J" //清屏
+#define VT100_RESET    "\033[0m" //重置属性
+#define VT100_BRIGHT   "\033[1m" //高亮
+#define VT100_DIM      "\033[2m" //高暗
+#define VT100_UNDERSCORE "\033[4m" //下划线
+#define VT100_BLINK      "\033[5m" //闪烁
+#define VT100_REVERSE    "\033[7m" //反显
+#define VT100_HIDDEN     "\033[8m" //消隐
 
-#define VT100_BKSPACE "\033[K" //清除从光标到行尾的内容
+#define VT100_ERASE_END  "\033[K"  //清除从光标到行尾的内容
+#define VT100_ERASE_HEAD "\033[1K" //清除从光标到行首的内容
+#define VT100_ERASE_LINE "\033[2K" //清除整行的内容
+
+
+#define VT100_ERASE_DOWN   "\033[J"  //清除从当前行到屏幕底部
+#define VT100_ERASE_UP     "\033[1J" //清除从当前行到屏幕顶部
+#define VT100_ERASE_SCREEN "\033[2J" //清除屏幕
+
 
 
 

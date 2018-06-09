@@ -19,11 +19,6 @@
 #define DLY_1S 1000
 #define MAXRETRANS 25
 
-#define STAT_WAIT 0x00
-#define STAT_DATA 0x01
-#define STAT_DATA 0x01
-
-
 typedef enum 
 {
     XM_RECV_INIT = 0,
@@ -44,12 +39,9 @@ typedef struct
     w_int32_t crcmode;
     w_int32_t retry;
 }xmodem_info_s;
-
 xmodem_info_s xm_info;
-
-
-static w_int32_t last_error = 0;
 static w_uint8_t xbuff[1030];
+
 void xm_write(w_uint8_t trychar)
 {
     wind_std_output(&trychar,1);
@@ -69,25 +61,7 @@ static w_int32_t xm_read(w_uint8_t *ch,w_uint32_t time_out)
     }
     return 0;
 }
-w_uint8_t port_read(w_uint32_t time_out)
-{
-    w_int32_t cnt;
-    w_uint8_t ch;
-    w_uint32_t i,tick = time_out / 10;
-    last_error = 0;
-    for(i = 0;i < tick;i ++)
-    {
-        cnt = wind_std_input(&ch,1);
-        if(cnt >= 1)
-        {
-            return ch;
-        }
-            
-        wind_thread_sleep(10);
-    }
-    last_error = 1;
-    return 0;
-}
+
 
 
 static w_int32_t xmodem_check(w_int32_t crcmode, const w_uint8_t *buf, w_int32_t sz)
@@ -244,8 +218,6 @@ w_int32_t read_and_check_data(w_uint8_t *buff,w_int32_t len)
 
 w_int32_t xmodem_recv_data(w_uint8_t *data, w_int32_t size)
 {
-    //w_int32_t i;
-    //w_err_t err;
     w_int32_t idx = 0,len;    
     xmodem_info_s *info = &xm_info;
     
@@ -291,7 +263,7 @@ w_int32_t xmodem_recv_data(w_uint8_t *data, w_int32_t size)
   
 w_int32_t xmodem_send(w_uint8_t *src, w_int32_t srcsz)
 {
-    w_int32_t bufsz, crcmode = -1;
+    w_int32_t bufsz, crcmode = -1,rest;
     w_uint8_t packetno = 1,c;
     w_int32_t i,len = 0;
     w_int32_t retry;
@@ -302,7 +274,7 @@ w_int32_t xmodem_send(w_uint8_t *src, w_int32_t srcsz)
         for( retry = 0;retry < 16;++retry)
         {
             cnt = xm_read(&c,(DLY_1S)<<1);
-            if(cnt > 0)
+            if(cnt > 0) 
             {
                 switch(c)
                 {
@@ -338,21 +310,21 @@ start_trans:
             xbuff[0] = SOH;bufsz = 128;
             xbuff[1] = packetno;
             xbuff[2] = ~packetno;
-            c = srcsz - len;
-            if(c > bufsz) 
-                c = bufsz;
-            if(c >= 0)
+            rest = srcsz - len;
+            if(rest > bufsz) 
+                rest = bufsz;
+            if(rest >= 0)
             {
                 wind_memset(&xbuff[3], 0, bufsz);
-                if(c == 0)
+                if(rest == 0)
                 {
                     xbuff[3] = CTRLZ;
                 }  
                 else  
                 {
-                    wind_memcpy(&xbuff[3], &src[len], c);
-                    if(c < bufsz) 
-                        xbuff[3+c] = CTRLZ;
+                    wind_memcpy(&xbuff[3], &src[len], rest);
+                    if(rest < bufsz) 
+                        xbuff[3+rest] = CTRLZ;
                 }  
                 if(crcmode)
                 {

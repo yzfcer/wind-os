@@ -868,21 +868,6 @@
               <FilePath>..\device\dev_gpio.c</FilePath>
             </File>
             <File>
-              <FileName>dev_led0.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\device\dev_led0.c</FilePath>
-            </File>
-            <File>
-              <FileName>dev_led1.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\device\dev_led1.c</FilePath>
-            </File>
-            <File>
-              <FileName>dev_led2.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\device\dev_led2.c</FilePath>
-            </File>
-            <File>
               <FileName>dev_list.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\device\dev_list.c</FilePath>
@@ -906,6 +891,11 @@
               <FileName>blkdev_24c02.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\device\blkdev_24c02.c</FilePath>
+            </File>
+            <File>
+              <FileName>dev_led.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\device\dev_led.c</FilePath>
             </File>
           </Files>
         </Group>

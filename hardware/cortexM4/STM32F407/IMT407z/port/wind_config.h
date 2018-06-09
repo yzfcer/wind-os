@@ -37,6 +37,8 @@
 
 #define WIND_MSGBOX_SUPPORT 1  //是否支持消息机制
 
+#define WIND_EVENT_SUPPORT 0  //是否支持事件机制
+
 #define WIND_REALTIME_CORE_SUPPORT 1 //是否支持实时内核，即抢占式切换
 
 #define WIND_STKPOOL_SUPPORT 1 //是否支持线程堆栈通过内存池分配
@@ -81,10 +83,11 @@
 
 #define HARD_STACK_SIZE 40 //为硬件堆栈保留的空间大小，在某些硬件里可以不需要
 
-
 #define WIND_PIPE_MAX_NUM 10  //最大的管道数量
 
 #define WIND_MBOX_MAX_NUM 5//邮箱的数量
+
+#define WIND_EVENT_MAX_NUM 5//事件的数量
 
 #define WIND_SEM_MAX_NUM 10 //最大的信号量的数量
 

@@ -43,15 +43,17 @@ typedef struct __dev_ops_s dev_ops_s;
 struct __dev_s
 {
     w_uint32_t magic;
-    dnode_s devnode;
     char name[12];
     w_bool_t opened;
+    w_int8_t devid;
+    dnode_s devnode;
     mutex_s *mutex;
     const dev_ops_s *ops;
 };
 
 struct __dev_ops_s
 {
+    w_err_t   (*init)(dev_s *dev);
     w_err_t   (*open)(dev_s *dev);
     w_err_t   (*ioctl)(dev_s *dev,w_int32_t cmd,void *param);
     w_int32_t (*read)(dev_s *dev,w_uint8_t *buf,w_uint16_t len);
