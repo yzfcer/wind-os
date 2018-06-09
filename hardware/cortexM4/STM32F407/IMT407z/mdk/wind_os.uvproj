@@ -897,6 +897,11 @@
               <FileType>1</FileType>
               <FilePath>..\device\list_dev.c</FilePath>
             </File>
+            <File>
+              <FileName>dev_beep.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\device\dev_beep.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1108,11 +1113,6 @@
               <FilePath>..\..\..\..\..\src\console\cmd\cmd_reset.c</FilePath>
             </File>
             <File>
-              <FileName>cmd_bee.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\console\cmd\cmd_bee.c</FilePath>
-            </File>
-            <File>
               <FileName>cmd_led.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\console\cmd\cmd_led.c</FilePath>
@@ -1136,6 +1136,11 @@
               <FileName>cmd_xmodem.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\console\cmd\cmd_xmodem.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_beep.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\console\cmd\cmd_beep.c</FilePath>
             </File>
           </Files>
         </Group>

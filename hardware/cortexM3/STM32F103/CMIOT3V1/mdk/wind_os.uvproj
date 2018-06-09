@@ -1106,11 +1106,6 @@
               <FilePath>..\..\..\..\..\src\console\cmd\cmd_reset.c</FilePath>
             </File>
             <File>
-              <FileName>cmd_bee.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\console\cmd\cmd_bee.c</FilePath>
-            </File>
-            <File>
               <FileName>cmd_led.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\console\cmd\cmd_led.c</FilePath>
@@ -1129,6 +1124,11 @@
               <FileName>cmd_treefs.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\console\cmd\cmd_treefs.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_beep.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\console\cmd\cmd_beep.c</FilePath>
             </File>
           </Files>
         </Group>

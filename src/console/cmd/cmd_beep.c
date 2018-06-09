@@ -4,7 +4,7 @@
 **                                       yzfcer@163.com
 **
 **--------------文件信息--------------------------------------------------------------------------------
-**文   件   名: wind_bee.c
+**文   件   名: cmd_bee.c
 **创   建   人: 周江村
 **最后修改日期: 2013.10.19
 **描        述: 系统的控制台命令stati处理函数，统计资源使用情况
@@ -23,38 +23,49 @@
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
 #include "wind_cmd.h"
-#include "beep.h"
+#include "wind_dev.h"
 #if WIND_CONSOLE_SUPPORT
 #if WIND_DRVFRAME_SUPPORT
 
 
-COMMAND_DISC(bee)
+COMMAND_DISC(beep)
 {
-    console_printf("control the bee device.\r\n");
+    console_printf("control the beep device.\r\n");
 }
 
-COMMAND_USAGE(bee)
+COMMAND_USAGE(beep)
 {
-    console_printf("bee on:to open the bee device.\r\n");
-    console_printf("bee off:to close the bee device.\r\n");
+    console_printf("beep on:to open the beep device.\r\n");
+    console_printf("beep off:to close the beep device.\r\n");
 }
 
-COMMAND_MAIN(bee,argc,argv)
+COMMAND_MAIN(beep,argc,argv)
 {
+    dev_s *dev;
+    w_err_t err;
+    w_uint8_t stat;
+    dev = wind_dev_get("beep");
+    WIND_ASSERT_RETURN(dev != NULL,ERR_INVALID_PARAM);
     if(0 == wind_strcmp(argv[1],"on"))
     {
-        BEEP = 1;
+        err = wind_dev_open(dev);
+        WIND_ASSERT_RETURN(err == ERR_OK,ERR_FAIL);
+        stat = 1;
+        wind_dev_write(dev,&stat,1);
         return ERR_OK;
     }
     else if(0 == wind_strcmp(argv[1],"off"))
     {
-        BEEP = 0;
+        err = wind_dev_open(dev);
+        WIND_ASSERT_RETURN(err == ERR_OK,ERR_FAIL);
+        stat = 0;
+        wind_dev_write(dev,&stat,1);
         return ERR_OK;
     }
     return ERR_FAIL;
 }
 
-COMMAND_DEF(bee);
+COMMAND_DEF(beep);
 
 #endif
 #endif

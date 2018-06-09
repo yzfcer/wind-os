@@ -23,7 +23,7 @@ CMD_DECLARE(treefs);
 CMD_DECLARE(xmodem);
 #endif
 #if WIND_DRVFRAME_SUPPORT
-CMD_DECLARE(bee);
+CMD_DECLARE(beep);
 CMD_DECLARE(led);
 #endif
 
@@ -51,7 +51,7 @@ void _wind_register_all_cmd(console_s *ctrl)
     wind_cmd_register(COMMAND(xmodem),1);
 #endif
 #if WIND_DRVFRAME_SUPPORT
-    wind_cmd_register(COMMAND(bee),1);
+    wind_cmd_register(COMMAND(beep),1);
     wind_cmd_register(COMMAND(led),1);
 #endif
 
