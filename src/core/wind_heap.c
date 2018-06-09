@@ -264,7 +264,8 @@ w_err_t wind_heap_free(heap_s* heap,void *ptr)
     heapitem_s* item,*tmpitem;
     dnode_s *pdnode;
     //wind_debug("heap_free 0x%08x",ptr);
-    WIND_ASSERT_RETURN(ptr != NULL,ERR_NULL_POINTER);
+    if(ptr == NULL)
+        return ERR_OK;
     item = ITEM_FROM_PTR(ptr);
     WIND_ASSERT_RETURN(item->magic == WIND_HEAPITEM_MAGIC,ERR_INVALID_PARAM);
     WIND_ASSERT_RETURN(item->used == 1,ERR_INVALID_PARAM);
@@ -387,10 +388,8 @@ void *wind_malloc(w_uint32_t size)
 w_err_t wind_free(void *ptr)
 {
     heapitem_s *item;
-    //wind_debug("wind_free 0x%0x",ptr);
     if(ptr == NULL)
-        ptr = NULL;
-    WIND_ASSERT_RETURN(ptr != NULL,ERR_NULL_POINTER);
+        return ERR_OK;
     item = ITEM_FROM_PTR(ptr);
     if(item->used != 1)
         item->used = item->used;

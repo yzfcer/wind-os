@@ -104,6 +104,7 @@ struct _thread_s
     w_uint16_t stksize;//堆栈大小，以栈宽度技术
     
     w_int16_t argc;
+    w_uint16_t stkpool_flag:1;
     w_int8_t **argv;
     w_err_t (*thread_func)(w_int32_t argc,w_int8_t **argv);
     
