@@ -49,7 +49,7 @@ COMMAND_DISC(lua)
 
 COMMAND_USAGE(lua)
 {
-    console_printf("lua:to show str on your std displaying device.\r\n");
+    console_printf("lua:to run into lua application.\r\n");
 }
 #if 1
 extern int lua_main (int argc, char **argv);
