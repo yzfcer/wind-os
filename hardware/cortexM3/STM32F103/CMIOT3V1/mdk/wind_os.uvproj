@@ -1208,12 +1208,7 @@
             <File>
               <FileName>user_entry.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\entry\user_entry.c</FilePath>
-            </File>
-            <File>
-              <FileName>led_app.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\entry\led_app.c</FilePath>
+              <FilePath>..\..\..\..\..\src\entry\CMIOT3V1\user_entry.c</FilePath>
             </File>
           </Files>
         </Group>
