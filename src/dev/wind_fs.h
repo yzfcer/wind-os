@@ -15,6 +15,7 @@ typedef enum
     FSTYPE_TREEFS = 0x01,
     FSTYPE_UNDEF = 0xff,
 }fstype_e;
+
 struct __fs_ops_s
 {
     w_err_t (*mount)(fs_s *fs);

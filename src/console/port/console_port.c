@@ -16,10 +16,10 @@ CMD_DECLARE(blkdev);
 #if WIND_LUA_SUPPORT
 CMD_DECLARE(lua);
 #endif
-#if WIND_FS_SUPPORT
+#if (WIND_CONSOLE_SUPPORT && WIND_FS_SUPPORT)
 CMD_DECLARE(treefs);
 #endif
-#if WIND_XMODEM_SUPPORT
+#if (WIND_XMODEM_SUPPORT && WIND_FS_SUPPORT)
 CMD_DECLARE(xmodem);
 #endif
 #if WIND_DRVFRAME_SUPPORT
@@ -44,10 +44,10 @@ void _wind_register_all_cmd(console_s *ctrl)
 #if WIND_LUA_SUPPORT
     wind_cmd_register(COMMAND(lua),1);
 #endif
-#if WIND_FS_SUPPORT
+#if (WIND_CONSOLE_SUPPORT && WIND_FS_SUPPORT)
     wind_cmd_register(COMMAND(treefs),1);
 #endif
-#if WIND_XMODEM_SUPPORT
+#if (WIND_XMODEM_SUPPORT && WIND_FS_SUPPORT)
     wind_cmd_register(COMMAND(xmodem),1);
 #endif
 #if WIND_DRVFRAME_SUPPORT

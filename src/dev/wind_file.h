@@ -22,21 +22,18 @@ typedef enum
     FTYPE_FILE = 0x02,
 }ftype_e;
 
-#if 0
-typedef struct 
+struct __file_s
 {
     char name[32];
     dnode_s filenode;//链表节点
     ftype_e ftype;//文件系统类型
     fmode_e fmode;//操作模式
-    //w_bool_t opened;
     fs_s *fs;
     void *fileobj;//文件对象
     w_int32_t offset;//偏移量
     mutex_s *mutex;//文件操作变量
-    fs_ops_s *ops;//操作函数集
-}file_s;
-#endif
+    file_ops_s *ops;//操作函数集
+};
 
 struct __file_ops_s
 {
@@ -44,6 +41,7 @@ struct __file_ops_s
     file_s* (*open)(const char *path,fmode_e fmode);
     w_err_t (*close)(file_s* file);
     w_err_t (*seek)(file_s* file,w_int32_t offset);
+    w_err_t (*rename)(file_s* file,char *newname);
     w_int32_t (*ftell)(file_s* file);
     w_int32_t (*read)(file_s* file,char *buff, w_int32_t size);
     w_int32_t (*write)(file_s* file,char *buff, w_int32_t size);
@@ -60,12 +58,12 @@ fs_s *wind_fs_get(char *name);
 file_s* wind_file_open(const char *path,fmode_e fmode);
 w_err_t wind_file_close(file_s *file);
 w_err_t wind_file_seek(file_s *file,w_int32_t offset);
+w_err_t wind_file_rename(file_s *file,char *newname);
 w_int32_t wind_file_tell(file_s *file);
 w_int32_t wind_file_read(file_s *file,char *buff, w_int32_t size);
 w_int32_t wind_file_write(file_s *file,char *buff, w_int32_t size);
 w_err_t wind_file_gets(file_s *file,char *buff, w_int32_t maxlen);
 w_err_t wind_file_puts(file_s *file,char *buff);
-
 #endif
 #endif
 

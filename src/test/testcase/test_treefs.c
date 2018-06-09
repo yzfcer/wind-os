@@ -24,7 +24,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
-
+#if (WIND_CONSOLE_SUPPORT && WIND_FS_SUPPORT)
 
 CASE_SETUP(treefs_create)
 {
@@ -120,7 +120,7 @@ TEST_CASE(treefs_readwrite)
 TEST_CASES_END
 TEST_SUITE(test_treefs)
 
-
+#endif
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

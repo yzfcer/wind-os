@@ -49,47 +49,114 @@ file_s* wind_file_open(const char *path,fmode_e fmode)
         wind_error("file has been opened.");
         return ERR_FAIL;
     }
-    file = 
+    file = wind_file_get(path);
+    if(file != NULL)
+    {
+        wind_error("file:%s has been opened.",path);
+        return ERR_FILE_HAS_OPENED;
+    }
     wind_mutex_lock(file->mutex);
-    if(file->ops.open)
+    if(file->ops->open)
+        file->ops->
     wind_mutex_unlock(file->mutex);
     return NULL;
 }
 
 w_err_t wind_file_close(file_s *file)
 {
-    WIND_ASSERT_RETURN(file != NULL,NULL);
+    w_err_t err = ERR_FAIL;
+    WIND_ASSERT_RETURN(file != NULL,ERR_NULL_POINTER);
     wind_mutex_lock(file->mutex);
-    if(file->ops.open)
+    if(file->ops->close)
+        err = file->ops->close(file);
     wind_mutex_unlock(file->mutex);
-    
-    return ERR_OK;
+    return err;
 }
+
 w_err_t wind_file_seek(file_s *file,w_int32_t offset)
 {
-    return ERR_OK;
+    w_err_t err = ERR_FAIL;
+    WIND_ASSERT_RETURN(file != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(offset >= 0,ERR_INVALID_PARAM);
+    wind_mutex_lock(file->mutex);
+    if(file->ops->seek)
+        err = file->ops->seek(file,offset);
+    wind_mutex_unlock(file->mutex);
+    return err;
 }
     
+w_err_t wind_file_rename(file_s *file,char *newname)
+{
+    w_err_t err = ERR_FAIL;
+    WIND_ASSERT_RETURN(file != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(newname != NULL,ERR_NULL_POINTER);
+    wind_mutex_lock(file->mutex);
+    if(file->ops->rename)
+        err = file->ops->rename(file,newname);
+    wind_mutex_unlock(file->mutex);
+    return err;
+}
 
 w_int32_t wind_file_tell(file_s *file)
 {
-    return ERR_OK;
+    w_int32_t offset = -1;
+    WIND_ASSERT_RETURN(file != NULL,-1);
+    wind_mutex_lock(file->mutex);
+    if(file->ops->ftell)
+        offset = file->ops->ftell(file);
+    wind_mutex_unlock(file->mutex);
+    return offset;
 }
+
 w_int32_t wind_file_read(file_s *file,char *buff, w_int32_t size)
 {
-    return ERR_OK;
+    w_int32_t len = -1;
+    WIND_ASSERT_RETURN(file != NULL,-1);
+    WIND_ASSERT_RETURN(buff != NULL,-2);
+    WIND_ASSERT_RETURN(size > 0,-3);
+    wind_mutex_lock(file->mutex);
+    if(file->ops->read)
+        len = file->ops->read(file,buff,size);
+    wind_mutex_unlock(file->mutex);
+    return len;
 }
+
 w_int32_t wind_file_write(file_s *file,char *buff, w_int32_t size)
 {
-    return ERR_OK;
+    w_int32_t len = -1;
+    WIND_ASSERT_RETURN(file != NULL,-1);
+    WIND_ASSERT_RETURN(buff != NULL,-2);
+    WIND_ASSERT_RETURN(size > 0,-3);
+    wind_mutex_lock(file->mutex);
+    if(file->ops->write)
+        len = file->ops->write(file,buff,size);
+    wind_mutex_unlock(file->mutex);
+    return len;
 }
+
 w_err_t wind_file_gets(file_s *file,char *buff, w_int32_t maxlen)
 {
-    return ERR_OK;
+    w_int32_t len = -1;
+    WIND_ASSERT_RETURN(file != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(buff != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(maxlen > 0,ERR_INVALID_PARAM);
+    wind_mutex_lock(file->mutex);
+    if(file->ops->fgets)
+        len = file->ops->fgets(file,buff,maxlen);
+    wind_mutex_unlock(file->mutex);
+    return len > 0?ERR_OK:ERR_FAIL;
 }
+
 w_err_t wind_file_puts(file_s *file,char *buff)
 {
-    return ERR_OK;
+    w_int32_t len = -1;
+    WIND_ASSERT_RETURN(file != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(buff != NULL,ERR_NULL_POINTER);
+    wind_mutex_lock(file->mutex);
+    if(file->ops->fputs)
+        len = file->ops->fputs(file,buff);
+    wind_mutex_unlock(file->mutex);
+    return len > 0?ERR_OK:ERR_FAIL;
 }
 
 #endif
