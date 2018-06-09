@@ -35,15 +35,15 @@ static void treefs_set_root(treefile_s *root)
 static dnode_s *get_node_by_offset(dlist_s *list,w_uint32_t offset)
 {
     int idx;
-    dnode_s *node;
+    dnode_s *dnode;
     w_int32_t nodeidx = offset / TREEFS_BLK_SIZE;
     idx = 0;
-    foreach_node(node,list)
+    foreach_node(dnode,list)
     {
-        if(node == NULL)
+        if(dnode == NULL)
             return NULL;
         if(idx == nodeidx)
-            return node;
+            return dnode;
         idx ++;
     }
     return NULL;
@@ -99,7 +99,7 @@ int split_path(char *path,char **layers,w_int32_t layercnt)
     }
     cnt = (layers[cnt-1][0] != 0?cnt:cnt -1);
     //for(j = 0;j < cnt;j ++)
-    //    wind_printf("node:%s\r\n",layers[j]);
+    //    wind_printf("dnode:%s\r\n",layers[j]);
     return cnt;
 }
 
@@ -137,7 +137,7 @@ static treefile_s *search_node(const char *path,w_bool_t create)
     w_int32_t len,cnt,i;
     w_uint8_t isdir,dir_f;
     w_bool_t flag;
-    dnode_s *node;
+    dnode_s *dnode;
     treefile_s *fsnode = NULL,*parent = NULL;
     char **nameseg;
     char *pathname;
@@ -158,9 +158,9 @@ static treefile_s *search_node(const char *path,w_bool_t create)
     for(i = 1;i < cnt;i ++)
     {
         flag = B_FALSE;
-        foreach_node(node,&parent->tree.child_list)
+        foreach_node(dnode,&parent->tree.child_list)
         {
-            fsnode = DLIST_OBJ(node,treefile_s,tree.treenode);
+            fsnode = DLIST_OBJ(dnode,treefile_s,tree.treenode);
             if(wind_strcmp(fsnode->filename,nameseg[i]) == 0)
             {
                 parent = fsnode;
@@ -242,7 +242,7 @@ treefile_s *treefs_mk_file(const char *path)
 
 w_err_t treefs_rm_file(treefile_s *file)
 {
-    dnode_s *node;
+    dnode_s *dnode;
     tree_s *tree;
     treefile_s *subfile;
     WIND_ASSERT_RETURN(file != NULL,ERR_NULL_POINTER);
@@ -250,18 +250,18 @@ w_err_t treefs_rm_file(treefile_s *file)
     if(wind_strcmp(file->filename,"") == 0)
         return ERR_INVALID_PARAM;
     wind_printf("rm %s\r\n",file->filename);
-    foreach_node(node,&tree->child_list)
+    foreach_node(dnode,&tree->child_list)
     {
-        subfile = DLIST_OBJ(node,treefile_s,tree.treenode);
+        subfile = DLIST_OBJ(dnode,treefile_s,tree.treenode);
         treefs_rm_file(subfile);
     }
     if(file->tree.parent)
         wind_tree_remove_child(file->tree.parent,&file->tree);
     treefs_free(file->filename);
-    foreach_node(node,&file->datalist)
+    foreach_node(dnode,&file->datalist)
     {
-        dlist_remove(&file->datalist,node);
-        treefs_free(node);
+        dlist_remove(&file->datalist,dnode);
+        treefs_free(dnode);
     }
     treefs_free(file);
     return ERR_OK;
@@ -384,7 +384,7 @@ w_int32_t treefile_read(treefile_s* file,w_uint8_t *buff, w_int32_t size)
 {
     w_int32_t rsize,len,si;
     w_uint32_t dataidx,bufidx;
-    dnode_s *node;
+    dnode_s *dnode;
     w_uint8_t *src;
     //tf_attr_s attr;
     WIND_ASSERT_RETURN(file != NULL,ERR_NULL_POINTER);
@@ -398,14 +398,14 @@ w_int32_t treefile_read(treefile_s* file,w_uint8_t *buff, w_int32_t size)
     WIND_ASSERT_RETURN(size > 0,ERR_INVALID_PARAM);
     
     rsize = file->filelen - file->offset > size?size:file->filelen - file->offset;
-    node = get_node_by_offset(&file->datalist,file->offset);
+    dnode = get_node_by_offset(&file->datalist,file->offset);
     dataidx = get_dataidx_by_offset(file->offset);
     bufidx = 0;
     si = rsize;
         
-    for(;node != NULL;node = dnode_next(node))
+    for(;dnode != NULL;dnode = dnode_next(dnode))
     {
-        src = (w_uint8_t*)node;
+        src = (w_uint8_t*)dnode;
         src += sizeof(dnode_s);
         src += dataidx;
         len = TREEFS_BLK_SIZE - dataidx;
@@ -424,7 +424,7 @@ w_int32_t treefile_write(treefile_s* file,w_uint8_t *buff, w_int32_t size)
 {
     w_int32_t wsize,len,si;
     w_uint32_t dataidx,bufidx;
-    dnode_s *node;
+    dnode_s *dnode;
     w_uint8_t *dest;
     //tf_attr_s attr;
     WIND_ASSERT_RETURN(file != NULL,ERR_NULL_POINTER);
@@ -436,22 +436,22 @@ w_int32_t treefile_write(treefile_s* file,w_uint8_t *buff, w_int32_t size)
     WIND_ASSERT_RETURN(size > 0,ERR_INVALID_PARAM);
     while(file->bufflen < file->filelen + size)
     {
-        node = treefs_malloc(TREEFS_BLK_SIZE + sizeof(dnode_s));
-        WIND_ASSERT_RETURN(node != NULL,-1);
-        dlist_insert_tail(&file->datalist,node);
+        dnode = treefs_malloc(TREEFS_BLK_SIZE + sizeof(dnode_s));
+        WIND_ASSERT_RETURN(dnode != NULL,-1);
+        dlist_insert_tail(&file->datalist,dnode);
         file->bufflen += TREEFS_BLK_SIZE;
     }
     
     //wsize = file->filelen - file->offset > size?size:file->filelen - file->offset;
     wsize = size;
-    node = get_node_by_offset(&file->datalist,file->offset);
+    dnode = get_node_by_offset(&file->datalist,file->offset);
     dataidx = get_dataidx_by_offset(file->offset);
     bufidx = 0;
     si = wsize;
     
-    for(;node != NULL;node = dnode_next(node))
+    for(;dnode != NULL;dnode = dnode_next(dnode))
     {
-        dest = (w_uint8_t*)node;
+        dest = (w_uint8_t*)dnode;
         dest += sizeof(dnode_s);
         dest += dataidx;
         len = TREEFS_BLK_SIZE - dataidx;
@@ -467,9 +467,9 @@ w_int32_t treefile_write(treefile_s* file,w_uint8_t *buff, w_int32_t size)
     file->filelen =  file->offset;
     while(file->bufflen >= file->filelen + TREEFS_BLK_SIZE)
     {
-        node = dlist_remove_tail(&file->datalist);
-        WIND_ASSERT_RETURN(node != NULL,-1);
-        treefs_free(node);
+        dnode = dlist_remove_tail(&file->datalist);
+        WIND_ASSERT_RETURN(dnode != NULL,-1);
+        treefs_free(dnode);
         file->bufflen -= TREEFS_BLK_SIZE;
     }
     return wsize;
@@ -478,7 +478,7 @@ w_int32_t treefile_write(treefile_s* file,w_uint8_t *buff, w_int32_t size)
 treefile_s *treefile_readdir(treefile_s* file,w_int32_t index)
 {
     int idx;
-    dnode_s *node;
+    dnode_s *dnode;
     treefile_s *sub;
     attr_u *attr;
     WIND_ASSERT_RETURN(file != NULL,NULL);
@@ -487,9 +487,9 @@ treefile_s *treefile_readdir(treefile_s* file,w_int32_t index)
     WIND_ASSERT_RETURN(attr->sattr.isdir == 1,NULL);
     
     idx = 0;
-    foreach_node(node,&file->tree.child_list)
+    foreach_node(dnode,&file->tree.child_list)
     {
-        sub = (treefile_s*)DLIST_OBJ(node,treefile_s,tree.treenode);
+        sub = (treefile_s*)DLIST_OBJ(dnode,treefile_s,tree.treenode);
         if(idx == index)
             return sub;
         idx ++;

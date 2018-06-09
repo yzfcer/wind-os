@@ -39,7 +39,7 @@ struct __dnode_s
 //带优先级链表节点结构
 struct __pri_dnode_s 
 {
-    dnode_s node;
+    dnode_s dnode;
     w_uint32_t prio;
 };
 
@@ -54,13 +54,13 @@ struct __dlist_s
 
 
 #define DNODE_INIT(dnode) {dnode.prev = NULL;dnode.next = NULL;}
-#define PRIO_DNODE_INIT(prionode) {prionode.node.prev = NULL;prionode.node.next = NULL;prionode.prio = 0;}
+#define PRIO_DNODE_INIT(prionode) {prionode.dnode.prev = NULL;prionode.dnode.next = NULL;prionode.prio = 0;}
 #define DLIST_INIT(dlist) {dlist.head = NULL;dlist.tail = NULL;}
 #define FIND(type,e) ((w_uint32_t)&(((type*)0)->e))
 #define DLIST_OBJ(ptr,type,mbrnode) (void*)(((char*)(ptr))-((w_uint32_t)&(((type*)0)->mbrnode)))
-#define PRI_DLIST_OBJ(ptr,type,mbrnode) (void*)(((char*)(ptr))-((w_uint32_t)&(((type*)0)->mbrnode.node)))
+#define PRI_DLIST_OBJ(ptr,type,mbrnode) (void*)(((char*)(ptr))-((w_uint32_t)&(((type*)0)->mbrnode.dnode)))
 
-#define foreach_node(node,list) for(node = dlist_head(list);node != NULL;node = dnode_next(node))
+#define foreach_node(dnode,list) for(dnode = dlist_head(list);dnode != NULL;dnode = dnode_next(dnode))
 
 //获取链表头部节点
 static __INLINE__ 
@@ -78,27 +78,27 @@ dnode_s *dlist_tail(dlist_s *dlist)
 
 // 获取给定节点的下一个节点
 static __INLINE__ 
-dnode_s *dnode_next(dnode_s *node) 
+dnode_s *dnode_next(dnode_s *dnode) 
 {
-    return node->next;
+    return dnode->next;
 }
 
 // 获取给定节点的下一个节点
 static __INLINE__ 
-dnode_s *dnode_prev(dnode_s *node) 
+dnode_s *dnode_prev(dnode_s *dnode) 
 {
-    return node->prev;
+    return dnode->prev;
 }
 
 
 // 在链表头部插入一个节点
-void dlist_insert_head(dlist_s *dlist,dnode_s *node);
+void dlist_insert_head(dlist_s *dlist,dnode_s *dnode);
 
 //在链 表尾部插入一个节点
-void dlist_insert_tail(dlist_s *dlist,dnode_s *node);
+void dlist_insert_tail(dlist_s *dlist,dnode_s *dnode);
 
 // 在指定节点后插入一个节点
-void dlist_insert(dlist_s *dlist,dnode_s *lpAfter,dnode_s *node);
+void dlist_insert(dlist_s *dlist,dnode_s *lpAfter,dnode_s *dnode);
 
 // 从链表头部弹出一个节点
 dnode_s *dlist_remove_head(dlist_s *dlist);
@@ -107,7 +107,7 @@ dnode_s *dlist_remove_head(dlist_s *dlist);
 dnode_s *dlist_remove_tail(dlist_s *dlist);
 
 // 从链表中删除给定节点
-dnode_s *dlist_remove(dlist_s *dlist,dnode_s *node);
+dnode_s *dlist_remove(dlist_s *dlist,dnode_s *dnode);
 
 // 检查 链表是否为空
 w_bool_t dlist_is_empty(dlist_s *dlist);

@@ -210,7 +210,7 @@ w_err_t wind_msgbox_wait(msgbox_s *msgbox,msg_s **pmsg,w_uint32_t timeout)
     thread = msgbox->owner;
     thread->runstat = THREAD_STATUS_SLEEP;
     thread->cause = CAUSE_MSG;
-    dlist_insert_tail(&g_core.sleeplist,&thread->sleepnode.node);
+    dlist_insert_tail(&g_core.sleeplist,&thread->sleepnode.dnode);
     wind_enable_interrupt();
     
     _wind_thread_dispatch();
@@ -271,9 +271,9 @@ w_err_t wind_msgbox_print(dlist_s *list)
     msgbox_s *msgbox;
     WIND_ASSERT_RETURN(list != NULL,ERR_NULL_POINTER);
     wind_printf("\r\n\r\nmsgbox list as following:\r\n");
-    wind_printf("----------------------------------------------\r\n");
-    wind_printf("%-16s %-8s %-16s \r\n","msgbox","msg_num","owner");
-    wind_printf("----------------------------------------------\r\n");
+    wind_print_space(5);
+    wind_printf("%-16s %-8s %-16s\r\n","msgbox","msg_num","owner");
+    wind_print_space(5);
 
     foreach_node(dnode,list)
     {
@@ -281,7 +281,7 @@ w_err_t wind_msgbox_print(dlist_s *list)
         wind_printf("%-16s %-8d %-16s\r\n",
             msgbox->name,msgbox->msgnum,msgbox->owner->name);
     }
-    wind_printf("----------------------------------------------\r\n");
+    wind_print_space(5);
     return ERR_OK;
 }
 

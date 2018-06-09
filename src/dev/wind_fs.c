@@ -9,7 +9,7 @@ static w_err_t mount_param_check(char *fsname,char *blkname,char *path)
 {
     blkdev_s *dev;
     fs_s *fs;
-    dnode_s *node;
+    dnode_s *dnode;
     WIND_ASSERT_RETURN(fsname != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(blkname != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(path != NULL,ERR_NULL_POINTER);
@@ -21,9 +21,9 @@ static w_err_t mount_param_check(char *fsname,char *blkname,char *path)
         return ERR_INVALID_PARAM;
     if(wind_strlen(fsname) >= FS_MOUNT_PATH_LEN)
         return ERR_INVALID_PARAM;
-    foreach_node(node,&g_core.fslist)
+    foreach_node(dnode,&g_core.fslist)
     {
-        fs = DLIST_OBJ(node,fs_s,fsnode);
+        fs = DLIST_OBJ(dnode,fs_s,fsnode);
         if(wind_strcmp(path,fs->path) == 0)
             return ERR_OBJ_REPEAT;
         if(wind_strcmp(blkname,fs->dev->name) == 0)

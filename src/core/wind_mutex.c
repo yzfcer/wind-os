@@ -104,17 +104,17 @@ w_err_t wind_mutex_trydestroy(mutex_s *mutex)
 //强制性销毁互斥锁，并把所有的被该互斥锁阻塞的线程全部激活
 w_err_t wind_mutex_destroy(mutex_s *mutex)
 {
-    dnode_s *pnode;
+    dnode_s *dnode;
     thread_s *thread;
     WIND_ASSERT_RETURN(mutex != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(mutex->magic == WIND_MUTEX_MAGIC,ERR_INVALID_PARAM);
     wind_notice("destroy mutex:%s",mutex->name);
     wind_disable_interrupt();
     dlist_remove(&g_core.mutexlist,&mutex->mutexnode);
-    foreach_node(pnode,&mutex->waitlist)
+    foreach_node(dnode,&mutex->waitlist)
     {
-        dlist_remove(&mutex->waitlist,pnode);
-        thread = PRI_DLIST_OBJ(pnode,thread_s,suspendnode);
+        dlist_remove(&mutex->waitlist,dnode);
+        thread = PRI_DLIST_OBJ(dnode,thread_s,suspendnode);
         thread->runstat = THREAD_STATUS_READY;
         thread->cause = CAUSE_LOCK;
     }
@@ -181,7 +181,7 @@ w_err_t wind_mutex_trylock(mutex_s *mutex)
 //试图打开一个互斥锁，如果有线程被阻塞，则优先激活线程
 w_err_t wind_mutex_unlock(mutex_s *mutex)
 {
-    dnode_s *pnode;
+    dnode_s *dnode;
     thread_s *thread;
     WIND_ASSERT_RETURN(mutex != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(mutex->magic == WIND_MUTEX_MAGIC,ERR_INVALID_PARAM);
@@ -196,8 +196,8 @@ w_err_t wind_mutex_unlock(mutex_s *mutex)
         wind_enable_interrupt();
         return ERR_OK;
     }
-    pnode = dlist_head(&mutex->waitlist);
-    if (pnode == NULL)
+    dnode = dlist_head(&mutex->waitlist);
+    if (dnode == NULL)
     {
         mutex->mutexed = B_FALSE;
         mutex->owner = NULL;
@@ -206,7 +206,7 @@ w_err_t wind_mutex_unlock(mutex_s *mutex)
     }
 
     dlist_remove_head(&mutex->waitlist);
-    thread = PRI_DLIST_OBJ(pnode,thread_s,suspendnode);
+    thread = PRI_DLIST_OBJ(dnode,thread_s,suspendnode);
     thread->runstat = THREAD_STATUS_READY;
     thread->cause = CAUSE_LOCK;
     mutex->owner = thread;
@@ -221,9 +221,9 @@ w_err_t wind_mutex_print(dlist_s *list)
     mutex_s *mutex;
     WIND_ASSERT_RETURN(list != NULL,ERR_NULL_POINTER);
     wind_printf("\r\n\r\nmutex list as following:\r\n");
-    wind_printf("--------------------------------------\r\n");
+    wind_print_space(5);
     wind_printf("%-16s %-8s %-16s \r\n","mutex","status","owner");
-    wind_printf("--------------------------------------\r\n");
+    wind_print_space(5);
     foreach_node(dnode,list)
     {
         mutex = (mutex_s *)DLIST_OBJ(dnode,mutex_s,mutexnode);
@@ -231,7 +231,7 @@ w_err_t wind_mutex_print(dlist_s *list)
             mutex->name,mutex->mutexed?"lock":"unlock",
             mutex->owner != NULL?mutex->owner->name:"null");
     }
-    wind_printf("--------------------------------------\r\n");
+    wind_print_space(5);
     return ERR_OK;
 }
 

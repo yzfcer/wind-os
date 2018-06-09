@@ -120,7 +120,7 @@ static w_bool_t is_switch_enable(void)
 
 static thread_s *wind_search_highthread(void)
 {
-    dnode_s *node;
+    dnode_s *dnode;
     thread_s *thread = NULL;
     wind_disable_interrupt();
     if(gwind_core_cnt > 0)
@@ -129,9 +129,9 @@ static thread_s *wind_search_highthread(void)
         wind_enable_interrupt();
         return thread;
     }
-    foreach_node(node,&g_core.threadlist)
+    foreach_node(dnode,&g_core.threadlist)
     {
-        thread = PRI_DLIST_OBJ(node,thread_s,validnode);
+        thread = PRI_DLIST_OBJ(dnode,thread_s,validnode);
         if(thread->runstat == THREAD_STATUS_READY)
         {
             wind_enable_interrupt();

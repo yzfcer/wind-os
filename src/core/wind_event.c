@@ -185,7 +185,7 @@ w_err_t wind_event_wait(event_s *event,void **arg,w_uint32_t timeout)
     thread = event->owner;
     thread->runstat = THREAD_STATUS_SLEEP;
     thread->cause = CAUSE_MSG;
-    dlist_insert_tail(&g_core.sleeplist,&thread->sleepnode.node);
+    dlist_insert_tail(&g_core.sleeplist,&thread->sleepnode.dnode);
     wind_enable_interrupt();
     
     _wind_thread_dispatch();
@@ -218,9 +218,9 @@ w_err_t wind_event_print(dlist_s *list)
     event_s *event;
     WIND_ASSERT_RETURN(list != NULL,ERR_NULL_POINTER);
     wind_printf("\r\n\r\nevent list as following:\r\n");
-    wind_printf("----------------------------------------------\r\n");
+    wind_print_space(6);
     wind_printf("%-16s %-8s %-16s \r\n","event","msg_num","owner");
-    wind_printf("----------------------------------------------\r\n");
+    wind_print_space(6);
 
     foreach_node(dnode,list)
     {
@@ -228,7 +228,7 @@ w_err_t wind_event_print(dlist_s *list)
         wind_printf("%-16s %-8d %-16s\r\n",
             event->name,event->msgnum,event->owner->name);
     }
-    wind_printf("----------------------------------------------\r\n");
+    wind_print_space(6);
     return ERR_OK;
 }
 

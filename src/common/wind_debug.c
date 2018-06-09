@@ -46,6 +46,15 @@ w_int32_t wind_printf(const char *fmt, ...)
     wind_enable_interrupt();
     return n; 
 }
+
+void wind_print_space(w_int32_t space8_cnt)
+{
+    w_int32_t i;
+    for(i = 0;i < space8_cnt;i ++)
+        wind_printf("--------");
+    wind_printf("\r\n");
+}
+
 #endif
 #endif
 

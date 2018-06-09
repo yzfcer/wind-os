@@ -295,12 +295,12 @@ w_err_t wind_cmd_register(cmd_s *cmd,int cnt)
 
 w_err_t wind_cmd_print(void)
 {
-    dnode_s *node;
+    dnode_s *dnode;
     cmd_s *cmd;
     wind_printf("\r\ncommand list as following:\r\n");
-    foreach_node(node,&g_core.cmdlist)
+    foreach_node(dnode,&g_core.cmdlist)
     {
-        cmd = DLIST_OBJ(node,cmd_s,cmdnode);
+        cmd = DLIST_OBJ(dnode,cmd_s,cmdnode);
         console_printf("%-10s : ",cmd->name);
         cmd->showdisc();
     }

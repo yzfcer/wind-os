@@ -132,14 +132,14 @@ w_err_t wind_sem_destroy(sem_s *sem)
 
 w_err_t wind_sem_post(sem_s *sem)
 {
-    dnode_s *pnode;
+    dnode_s *dnode;
     thread_s *thread;
     WIND_ASSERT_RETURN(sem != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(sem->magic == WIND_SEM_MAGIC,ERR_INVALID_PARAM);
     wind_disable_interrupt();
     //无阻塞的线程，减少信号量后直接返回
-    pnode = dlist_head(&sem->waitlist);
-    if(pnode == NULL)
+    dnode = dlist_head(&sem->waitlist);
+    if(dnode == NULL)
     {
         if(sem->sem_num < sem->sem_tot)
             sem->sem_num ++;
@@ -148,10 +148,10 @@ w_err_t wind_sem_post(sem_s *sem)
     }
     
     //激活被阻塞的线程，从睡眠队列移除,触发线程切换
-    dlist_remove(&sem->waitlist,pnode);
-    thread = PRI_DLIST_OBJ(pnode,thread_s,suspendnode);
+    dlist_remove(&sem->waitlist,dnode);
+    thread = PRI_DLIST_OBJ(dnode,thread_s,suspendnode);
     if(thread->runstat == THREAD_STATUS_SLEEP)
-        dlist_remove(&g_core.sleeplist,&thread->sleepnode.node);
+        dlist_remove(&g_core.sleeplist,&thread->sleepnode.dnode);
     wind_enable_interrupt();
     thread->cause = CAUSE_SEM;
     thread->runstat = THREAD_STATUS_READY;
@@ -199,7 +199,7 @@ w_err_t wind_sem_wait(sem_s *sem,w_uint32_t timeout)
     wind_disable_interrupt();
     //如果是超时唤醒的，则移除出睡眠队列
     if(thread->cause == CAUSE_SLEEP)
-        dlist_remove(&sem->waitlist,&thread->suspendnode.node);
+        dlist_remove(&sem->waitlist,&thread->suspendnode.dnode);
     wind_enable_interrupt();
     if(thread->cause == CAUSE_SLEEP)
         return ERR_TIMEOUT;
@@ -232,9 +232,9 @@ w_err_t wind_sem_print(dlist_s *list)
     sem_s *sem;
     WIND_ASSERT_RETURN(list != NULL,ERR_NULL_POINTER);
     wind_printf("\r\n\r\nsem list as following:\r\n");
-    wind_printf("----------------------------------------------\r\n");
+    wind_print_space(5);
     wind_printf("%-16s %-8s %-10s\r\n","sem","sem_tot","sem_num");
-    wind_printf("----------------------------------------------\r\n");
+    wind_print_space(5);
 
     foreach_node(dnode,list)
     {
@@ -242,7 +242,7 @@ w_err_t wind_sem_print(dlist_s *list)
         wind_printf("%-16s %-8d %-10d\r\n",
             sem->name,sem->sem_tot,sem->sem_num);
     }
-    wind_printf("----------------------------------------------\r\n");
+    wind_print_space(5);
     return ERR_OK;
 }
 

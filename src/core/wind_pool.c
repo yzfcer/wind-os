@@ -182,16 +182,16 @@ void _wind_pool_print_list(dlist_s *list)
     dnode_s *pdnode;
     pool_s *pm;
     wind_printf("\r\n\r\nmpool list as following:\r\n");
-    wind_printf("-----------------------------------------------------\r\n");
-    wind_printf("%-12s %-12s %-8s %-8s %-10s\r\n","name","head","size","itemnum","itemsize");
-    wind_printf("-----------------------------------------------------\r\n");
+    wind_print_space(7);
+    wind_printf("%-12s %-12s %-8s %-8s %-8s\r\n","name","head","size","itemnum","itemsize");
+    wind_print_space(7);
     foreach_node(pdnode,list)
     {
         pm = DLIST_OBJ(pdnode,pool_s,poolnode);
-        wind_printf("%-12s 0x%-10x %-8d %-10d %-8d\r\n",
+        wind_printf("%-12s 0x%-10x %-8d %-8d %-8d\r\n",
             pm->name,pm->head,pm->size,pm->itemnum,pm->itemsize);
     }
-    wind_printf("------------------------------------------------------\r\n");
+    wind_print_space(7);
 }
 
 

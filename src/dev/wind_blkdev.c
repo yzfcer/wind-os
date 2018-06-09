@@ -230,9 +230,9 @@ w_err_t wind_blkdev_print(dlist_s *list)
     blkdev_s *blkdev;
     WIND_ASSERT_RETURN(list != NULL,ERR_NULL_POINTER);
     wind_printf("\r\n\r\nblock device list as following:\r\n");
-    wind_printf("----------------------------------------------\r\n");
+    wind_print_space(5);
     wind_printf("%-16s %-12s %-10s\r\n","blkdev","blockcnt","blocksize");
-    wind_printf("----------------------------------------------\r\n");
+    wind_print_space(5);
 
     foreach_node(dnode,list)
     {
@@ -240,7 +240,7 @@ w_err_t wind_blkdev_print(dlist_s *list)
         wind_printf("%-16s %-12d %-10d\r\n",
             blkdev->name,blkdev->blkcnt,blkdev->blksize);
     }
-    wind_printf("----------------------------------------------\r\n");
+    wind_print_space(5);
     return ERR_OK;
 }
 

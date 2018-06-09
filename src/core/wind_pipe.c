@@ -148,25 +148,25 @@ w_err_t wind_pipe_destroy(pipe_s* pipe)
 
 w_err_t _wind_pipe_print(dlist_s* list)
 {
-    dnode_s *pnode;
+    dnode_s *dnode;
     pipe_s *pipe;
     queue_s *queue;
     w_int32_t size,used;
     WIND_ASSERT_RETURN(list != NULL,ERR_NULL_POINTER);
     wind_printf("\r\n\r\npipe list as following:\r\n");
-    wind_printf("------------------------------------\r\n");
+    wind_print_space(5);
     wind_printf("%-16s %-8s %-10s\r\n","pipe","lenth","used");
-    wind_printf("------------------------------------\r\n");
-    foreach_node(pnode,list)
+    wind_print_space(5);
+    foreach_node(dnode,list)
     {
-        pipe = DLIST_OBJ(pnode,pipe_s,pipenode);
+        pipe = DLIST_OBJ(dnode,pipe_s,pipenode);
         queue = (queue_s *)pipe->buff;
         size = wind_queue_max_count(queue);
         used = wind_queue_data_count(queue);
         wind_printf("%-16s %-8d %-10d\r\n",
             pipe->name,size,used);
     }
-    wind_printf("------------------------------------\r\n");
+    wind_print_space(5);
     return ERR_OK;
 }
 #endif //WIND_PIPE_SUPPORT
