@@ -1128,11 +1128,6 @@
               <FilePath>..\..\..\..\..\src\console\cmd\cmd_lua.c</FilePath>
             </File>
             <File>
-              <FileName>cmd_treefs.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\console\cmd\cmd_treefs.c</FilePath>
-            </File>
-            <File>
               <FileName>cmd_xmodem.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\console\cmd\cmd_xmodem.c</FilePath>
@@ -1211,6 +1206,21 @@
               <FileName>wind_blkdev.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\..\..\..\src\dev\wind_blkdev.h</FilePath>
+            </File>
+            <File>
+              <FileName>wind_file.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\dev\wind_file.c</FilePath>
+            </File>
+            <File>
+              <FileName>wind_file.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\dev\wind_file.h</FilePath>
+            </File>
+            <File>
+              <FileName>adapter_treefs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\dev\adapter_treefs.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1506,11 +1516,6 @@
               <FileName>test_pool.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\test\testcase\test_pool.c</FilePath>
-            </File>
-            <File>
-              <FileName>test_treefs.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\test\testcase\test_treefs.c</FilePath>
             </File>
           </Files>
         </Group>

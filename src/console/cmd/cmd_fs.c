@@ -1,6 +1,6 @@
 /****************************************Copyright (c)**************************************************
 **                                       清  风  海  岸
-** 文   件   名: cmd_treefs.c
+** 文   件   名: cmd_fs.c
 ** 创   建   人: 周江村
 ** 最后修改日期: 2018/5/13 20:24:37
 ** 描        述: 
@@ -21,8 +21,8 @@
 #include "wind_cmd.h"
 #include "wind_heap.h"
 #include "wind_string.h"
-#include "treefs.h"
-//#include "wind_file.h"
+#include "wind_fs.h"
+#include "wind_file.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -42,14 +42,14 @@ extern "C" {
 
 
 
-static w_err_t treefs_cmd_pwd(void)
+static w_err_t fs_cmd_pwd(void)
 {
     char *curpath = wind_file_get_current_path();
     console_printf("%s\r\n",curpath);
     return ERR_OK;
 }
 
-static w_err_t treefs_cmd_cd(w_int32_t argc,char **argv)
+static w_err_t fs_cmd_cd(w_int32_t argc,char **argv)
 {
     w_bool_t isexist;
     char *path;
@@ -63,7 +63,7 @@ static w_err_t treefs_cmd_cd(w_int32_t argc,char **argv)
     if(!isexist)
     {
         console_printf("open directory or file failed.\r\n");
-        treefs_free(path);
+        fs_free(path);
         return ERR_FILE_NOT_EXIT;
     }
     file = treefile_open(path,FMODE_R);
@@ -71,11 +71,11 @@ static w_err_t treefs_cmd_cd(w_int32_t argc,char **argv)
     if(!attr.isdir)
     {
         console_printf("%s is NOT a valid directory\r\n",path);
-        treefs_free(path);
+        fs_free(path);
         return ERR_INVALID_PARAM;
     }
     treefile_close(file);
-    treefs_free(curpath);
+    fs_free(curpath);
     curpath = path;
     return ERR_OK;
 }
@@ -93,29 +93,29 @@ static w_err_t mknode(w_int32_t argc,char **argv,w_uint16_t isdir)
     if(isexist)
     {
         console_printf("directory has been existing.\r\n");
-        treefs_free(path);
+        fs_free(path);
         treefile_close(file);
         return ERR_FAIL;
     }
     
-    file = treefs_mk_file(path);
+    file = fs_mk_file(path);
     if(file == NULL)
         console_printf("make directory failed.");
-    treefs_free(path);
+    fs_free(path);
     return ERR_OK;
 }
 
-static w_err_t treefs_cmd_mkdir(w_int32_t argc,char **argv)
+static w_err_t fs_cmd_mkdir(w_int32_t argc,char **argv)
 {
     return mknode(argc,argv,1);
 }
 
-static w_err_t treefs_cmd_touch(w_int32_t argc,char **argv)
+static w_err_t fs_cmd_touch(w_int32_t argc,char **argv)
 {
     return mknode(argc,argv,0);
 }
 
-static w_err_t treefs_cmd_rm(w_int32_t argc,char **argv)
+static w_err_t fs_cmd_rm(w_int32_t argc,char **argv)
 {
     w_err_t err;
     treefile_s *file;
@@ -125,16 +125,16 @@ static w_err_t treefs_cmd_rm(w_int32_t argc,char **argv)
     if(file == NULL)
     {
         console_printf("open directory or file failed.\r\n");
-        treefs_free(path);
+        fs_free(path);
         return ERR_FILE_NOT_EXIT;
     }
     treefile_close(file);
-    err = treefs_rm_file(file);
-    treefs_free(path);
+    err = fs_rm_file(file);
+    fs_free(path);
     return err;
 }
 
-static w_err_t treefs_cmd_ls(w_int32_t argc,char **argv)
+static w_err_t fs_cmd_ls(w_int32_t argc,char **argv)
 {
     w_int32_t i;
     treefile_s *file,*sub;
@@ -148,7 +148,7 @@ static w_err_t treefs_cmd_ls(w_int32_t argc,char **argv)
     if(file == NULL)
     {
         console_printf("open directory or file failed.\r\n");
-        treefs_free(path);
+        fs_free(path);
         return ERR_FILE_NOT_EXIT;
     }
     for(i = 0;;i ++)
@@ -161,11 +161,11 @@ static w_err_t treefs_cmd_ls(w_int32_t argc,char **argv)
             console_printf("\r\n");
     }
     treefile_close(file);
-    treefs_free(path);
+    fs_free(path);
     return ERR_OK;
 }
 
-static w_err_t treefs_cmd_cat(w_int32_t argc,char **argv)
+static w_err_t fs_cmd_cat(w_int32_t argc,char **argv)
 {
     treefile_s *file;
     char * path;
@@ -179,13 +179,13 @@ static w_err_t treefs_cmd_cat(w_int32_t argc,char **argv)
     if(file == NULL)
     {
         console_printf("open directory or file failed.\r\n",path);
-        treefs_free(path);
+        fs_free(path);
         return ERR_FILE_NOT_EXIT;
     }
-    buff = treefs_malloc(TREEFS_BLK_SIZE+1);
+    buff = fs_malloc(TREEFS_BLK_SIZE+1);
     if(buff == NULL)
     {
-        treefs_free(path);
+        fs_free(path);
         return ERR_FAIL;
     }
     console_printf("\r\n---------%s---------\r\n",path);
@@ -200,11 +200,11 @@ static w_err_t treefs_cmd_cat(w_int32_t argc,char **argv)
     }
     console_printf("\r\n---------%s---------\r\n",path);
     treefile_close(file);
-    treefs_free(buff);
+    fs_free(buff);
     return ERR_OK;
 }
     
-static w_err_t treefs_cmd_write(w_int32_t argc,char **argv)
+static w_err_t fs_cmd_write(w_int32_t argc,char **argv)
 {
     treefile_s *file;
     char * path;
@@ -217,7 +217,7 @@ static w_err_t treefs_cmd_write(w_int32_t argc,char **argv)
     if(file == NULL)
     {
         console_printf("open directory or file failed.\r\n",path);
-        treefs_free(path);
+        fs_free(path);
         return ERR_FILE_NOT_EXIT;
     }
 
@@ -227,11 +227,11 @@ static w_err_t treefs_cmd_write(w_int32_t argc,char **argv)
     if(filelen == len)
     {
         console_printf("write file OK.\r\n");
-        treefs_free(path);
+        fs_free(path);
         return ERR_OK;
     }
     console_printf("write file failed.\r\n");
-    treefs_free(path);
+    fs_free(path);
     return ERR_FAIL;
 }
 
@@ -242,48 +242,48 @@ static w_err_t treefs_cmd_write(w_int32_t argc,char **argv)
 
 
 /********************************************全局函数定义**********************************************/
-COMMAND_DISC(treefs)
+COMMAND_DISC(fs)
 {
-    console_printf("to operate treefs file system.\r\n");
+    console_printf("to operate fs file system.\r\n");
 }
 
-COMMAND_USAGE(treefs)
+COMMAND_USAGE(fs)
 {
-    console_printf("treefs pwd:to show current user path.\r\n");
-    console_printf("treefs cd:to change current user path.\r\n");
-    console_printf("treefs mkdir:to make a directory path.\r\n");
-    console_printf("treefs touch:to make a file.\r\n");
-    console_printf("treefs rm:to remove a directory or file.\r\n");
-    console_printf("treefs ls:to show files in a directory.\r\n");
-    console_printf("treefs cat:to show file context.\r\n");
-    console_printf("treefs write:to write context into a file.\r\n");
+    console_printf("fs pwd:to show current user path.\r\n");
+    console_printf("fs cd:to change current user path.\r\n");
+    console_printf("fs mkdir:to make a directory path.\r\n");
+    console_printf("fs touch:to make a file.\r\n");
+    console_printf("fs rm:to remove a directory or file.\r\n");
+    console_printf("fs ls:to show files in a directory.\r\n");
+    console_printf("fs cat:to show file context.\r\n");
+    console_printf("fs write:to write context into a file.\r\n");
 }
 
-COMMAND_MAIN(treefs,argc,argv)
+COMMAND_MAIN(fs,argc,argv)
 {
     //path_init();
     if(argc < 2)
         return ERR_FAIL;
     if(wind_strcmp(argv[1],"pwd") == 0)
-        return treefs_cmd_pwd();
+        return fs_cmd_pwd();
     else if(wind_strcmp(argv[1],"cd") == 0)
-        return treefs_cmd_cd(argc,argv);
+        return fs_cmd_cd(argc,argv);
     else if(wind_strcmp(argv[1],"mkdir") == 0)
-        return treefs_cmd_mkdir(argc,argv);
+        return fs_cmd_mkdir(argc,argv);
     else if(wind_strcmp(argv[1],"touch") == 0)
-        return treefs_cmd_touch(argc,argv);
+        return fs_cmd_touch(argc,argv);
     else if(wind_strcmp(argv[1],"ls") == 0)
-        return treefs_cmd_ls(argc,argv);
+        return fs_cmd_ls(argc,argv);
     else if(wind_strcmp(argv[1],"cat") == 0)
-        return treefs_cmd_cat(argc,argv);
+        return fs_cmd_cat(argc,argv);
     else if(wind_strcmp(argv[1],"write") == 0)
-        return treefs_cmd_write(argc,argv);
+        return fs_cmd_write(argc,argv);
     else if(wind_strcmp(argv[1],"rm") == 0)
-        return treefs_cmd_rm(argc,argv);
+        return fs_cmd_rm(argc,argv);
     return ERR_OK;
 }
 
-COMMAND_DEF(treefs);
+COMMAND_DEF(fs);
 
 #endif
 #ifdef __cplusplus

@@ -1,4 +1,4 @@
-#include "wind_file.h"
+//#include "wind_file.h"
 #include "treefs.h"
 #include "wind_tree.h"
 #include "wind_heap.h"
@@ -194,38 +194,6 @@ SEARCH_COMPLETE:
 }
 
 
-char *treefs_get_full_path(char *oldpath,char *newpath,w_uint16_t isdir)
-{
-    char *path;
-    w_int32_t len,len1;
-    w_int32_t ap = 0;
-    len = wind_strlen(newpath) + 1;
-    if(isdir)
-        len += 1;
-    if(newpath[0] == '/')
-    {
-        path = treefs_malloc(len+ap);
-        wind_memset(path,0,len+ap);
-        wind_strcpy(path,newpath);
-    }
-    else
-    {
-        len1 = wind_strlen(oldpath) + 1;
-        len += len1;
-        path = treefs_malloc(len);
-        wind_memset(path,0,len);
-        wind_strcpy(path,oldpath);
-        if(oldpath[len1-1] != '/')
-            path[len1] = '/';
-        wind_strcat(path,newpath);
-    }
-    
-    len = wind_strlen(path);
-    if(isdir && (path[len-1] != '/'))
-        path[len] = '/';
-    //console_printf("path:%s\r\n",path);
-    return path;
-}
 
 treefile_s *treefs_mk_file(const char *path)
 {
@@ -247,8 +215,8 @@ w_err_t treefs_rm_file(treefile_s *file)
     treefile_s *subfile;
     WIND_ASSERT_RETURN(file != NULL,ERR_NULL_POINTER);
     tree = &file->tree;
-    if(wind_strcmp(file->filename,"") == 0)
-        return ERR_INVALID_PARAM;
+    //if(wind_strcmp(file->filename,"") == 0)
+    //    return ERR_INVALID_PARAM;
     wind_printf("rm %s\r\n",file->filename);
     foreach_node(dnode,&tree->child_list)
     {
@@ -263,7 +231,8 @@ w_err_t treefs_rm_file(treefile_s *file)
         dlist_remove(&file->datalist,dnode);
         treefs_free(dnode);
     }
-    treefs_free(file);
+    if(wind_strcmp(file->filename,"") != 0)
+        treefs_free(file);
     return ERR_OK;
 }
 
@@ -289,7 +258,7 @@ w_err_t treefs_format(void)
     treefs_mk_file("/usr/config.txt");
     treefs_mk_file("/usr/wind-os.log");
     treefs_mk_file("/usr/env.cfg");
-    file = treefile_open("/usr/env.cfg",FMODE_W);
+    file = treefile_open("/usr/env.cfg",TF_FMODE_W);
     buff = "os=wind-os\r\n";
     treefile_write(file,(w_uint8_t*)buff,wind_strlen(buff));
     buff = "version=1.1.23\r\n";
@@ -327,7 +296,7 @@ treefile_s* treefile_open(const char *path,w_uint16_t mode)
     w_bool_t is_crt;
     treefile_s *file;
 
-    is_crt = (mode & FMODE_CRT)?B_TRUE:B_FALSE;
+    is_crt = (mode & TF_FMODE_CRT)?B_TRUE:B_FALSE;
     file = search_node(path,is_crt);
     WIND_ASSERT_RETURN(file != NULL,NULL);
     WIND_ASSERT_RETURN(file->magic == TREEFILE_MAGIC,NULL);
@@ -335,7 +304,7 @@ treefile_s* treefile_open(const char *path,w_uint16_t mode)
     if(file == NULL)
         return NULL;
     file->mode = (w_uint8_t)mode;
-    if(mode & FMODE_A)
+    if(mode & TF_FMODE_A)
         file->offset = file->filelen;
     else
         file->offset = 0;
@@ -391,8 +360,8 @@ w_int32_t treefile_read(treefile_s* file,w_uint8_t *buff, w_int32_t size)
     WIND_ASSERT_RETURN(file->magic == TREEFILE_MAGIC,ERR_INVALID_PARAM);
     //treefile_get_attr(file,&attr);
     //WIND_ASSERT_RETURN(attr.u_r != 0,ERR_FAIL);
-    WIND_ASSERT_RETURN((file->attr & FMODE_R),ERR_FAIL);
-    WIND_ASSERT_RETURN((file->mode & FMODE_R),ERR_FAIL);
+    WIND_ASSERT_RETURN((file->attr & TF_FMODE_R),ERR_FAIL);
+    WIND_ASSERT_RETURN((file->mode & TF_FMODE_R),ERR_FAIL);
     
     WIND_ASSERT_RETURN(buff != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(size > 0,ERR_INVALID_PARAM);
@@ -431,7 +400,7 @@ w_int32_t treefile_write(treefile_s* file,w_uint8_t *buff, w_int32_t size)
     WIND_ASSERT_RETURN(file->magic == TREEFILE_MAGIC,ERR_INVALID_PARAM);
     //treefile_get_attr(file,&attr);
     //WIND_ASSERT_RETURN(attr.u_w != 0,ERR_FAIL);
-    WIND_ASSERT_RETURN((file->mode & (FMODE_W | FMODE_A)),ERR_FAIL);
+    WIND_ASSERT_RETURN((file->mode & (TF_FMODE_W | TF_FMODE_A)),ERR_FAIL);
     WIND_ASSERT_RETURN(buff != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(size > 0,ERR_INVALID_PARAM);
     while(file->bufflen < file->filelen + size)

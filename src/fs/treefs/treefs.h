@@ -4,8 +4,18 @@
 #include "wind_type.h"
 #include "wind_dlist.h"
 #include "wind_tree.h"
-#include "wind_file.h"
+//#include "wind_file.h"
+
 #if WIND_FS_SUPPORT
+typedef enum
+{
+    TF_FMODE_R = 0x01,
+    TF_FMODE_W = 0x02,
+    TF_FMODE_RW = 0x03,
+    TF_FMODE_CRT = 0x04,
+    TF_FMODE_A = 0x08,
+}tf_fmode_e;
+
 #define TREEFILE_MAGIC 0x48A97D26
 #define TREEFS_DIR_LAYCNT 32
 
@@ -59,7 +69,6 @@ w_err_t treefs_free(void *ptr);
 
 w_err_t treefs_format(void);
 
-char *treefs_get_full_path(char *oldpath,char *newpath,w_uint16_t isdir);
 
 treefile_s *treefs_mk_file(const char *path);
 w_err_t treefs_rm_file(treefile_s *file);

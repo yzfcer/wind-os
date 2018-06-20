@@ -2,10 +2,34 @@
 #define WIND_FILE_H__
 #include "wind_config.h"
 #include "wind_type.h"
-#include "wind_fs.h"
+#include "wind_dlist.h"
+#include "wind_blkdev.h"
+//#include "wind_fs.h"
+
 #if WIND_FS_SUPPORT
-typedef struct __file_ops_s file_ops_s;
+
+#define FS_NAME_LEN 12
+#define FS_MOUNT_PATH_LEN 64
+typedef struct __fs_ops_s fs_ops_s;
+typedef struct __fs_s fs_s;
 typedef struct __file_s file_s;
+typedef enum 
+{
+    FSTYPE_TREEFS = 0x01,
+    FSTYPE_UNDEF = 0xff,
+}fstype_e;
+
+
+struct __fs_s
+{
+    char *name;
+    char *mount_path;
+    dnode_s fsnode;
+    fstype_e fstype;
+    blkdev_s *blkdev;
+    fs_ops_s *ops;
+};
+
 
 typedef enum
 {
@@ -22,46 +46,88 @@ typedef enum
     FTYPE_FILE = 0x02,
 }ftype_e;
 
-struct __file_s
+struct __fs_ops_s
 {
-    char name[32];
-    dnode_s filenode;//链表节点
-    ftype_e ftype;//文件系统类型
-    fmode_e fmode;//操作模式
-    fs_s *fs;
-    void *fileobj;//文件对象
-    w_int32_t offset;//偏移量
-    mutex_s *mutex;//文件操作变量
-    file_ops_s *ops;//操作函数集
-};
-
-struct __file_ops_s
-{
-    w_err_t (*mkdir)(const char *path);
-    file_s* (*open)(const char *path,fmode_e fmode);
+    //w_err_t (*mount)(fs_s *fs);
+    //w_err_t (*unmount)(fs_s *fs);
+    w_err_t (*format)(fs_s *fs);
+    
+    w_err_t (*mkfile)(const char *path);
+    w_err_t (*rmfile)(const char *path);
+    
+    w_err_t (*open)(file_s *file,fmode_e fmode);
+    //file_s* (*open)(const char *path,fmode_e fmode);
     w_err_t (*close)(file_s* file);
     w_err_t (*seek)(file_s* file,w_int32_t offset);
     w_err_t (*rename)(file_s* file,char *newname);
     w_int32_t (*ftell)(file_s* file);
-    w_int32_t (*read)(file_s* file,char *buff, w_int32_t size);
-    w_int32_t (*write)(file_s* file,char *buff, w_int32_t size);
+    w_int32_t (*read)(file_s* file,w_uint8_t *buff, w_int32_t size);
+    w_int32_t (*write)(file_s* file,w_uint8_t *buff, w_int32_t size);
     w_err_t (*fgets)(file_s* file,char *buff, w_int32_t maxlen);
     w_err_t (*fputs)(file_s* file,char *buff);
 };
 
-file_s *_file_malloc(void);
-w_err_t _file_free(file_s *file);
 
-w_err_t _wind_file_init(void);
+
+
+struct __file_s
+{
+    //char name[32];
+    char *path;
+    dnode_s filenode;//链表节点
+    w_uint32_t ftype:8;//文件系统类型
+    w_uint32_t fmode:16;//操作模式
+    w_uint32_t isdir:1;
+    fs_s *fs;
+    void *fileobj;//文件对象
+    w_int32_t offset;//偏移量
+    mutex_s *mutex;//文件操作变量
+    fs_ops_s *ops;//操作函数集
+};
+
+#define FS_OPS_DEF(treefs_op) \
+static fs_ops_s fs_ops = {\
+treefs_op##_format,\
+NULL,\
+NULL,\
+treefs_op##_open,\
+treefs_op##_close,\
+treefs_op##_seek,\
+treefs_op##_rename,\
+treefs_op##_ftell,\
+treefs_op##_read,\
+treefs_op##_write,\
+treefs_op##_fgets,\
+treefs_op##_fputs,\
+}
+
+#define FS_DEF(name,type,ops) \
+fs_s fs_##name = { \
+#name,NULL,{NULL,NULL},type,NULL,&ops};
+
+
+//file_s *_file_malloc(void);
+//w_err_t _file_free(file_s *file);
+
+w_err_t _wind_fs_init(void);
 fs_s *wind_fs_get(char *name);
+w_err_t wind_fs_mount(char *fsname,char *devname,char *path);
+w_err_t wind_fs_unmount(char *fsname);
+w_err_t wind_fs_format(fs_s *fs);
+
+char *wind_file_get_full_path(char *oldpath,char *newpath,w_uint16_t isdir);
+void wind_file_set_current_path(char *path);
+char *wind_file_get_current_path(void);
+
+
 
 file_s* wind_file_open(const char *path,fmode_e fmode);
 w_err_t wind_file_close(file_s *file);
 w_err_t wind_file_seek(file_s *file,w_int32_t offset);
 w_err_t wind_file_rename(file_s *file,char *newname);
 w_int32_t wind_file_tell(file_s *file);
-w_int32_t wind_file_read(file_s *file,char *buff, w_int32_t size);
-w_int32_t wind_file_write(file_s *file,char *buff, w_int32_t size);
+w_int32_t wind_file_read(file_s *file,w_uint8_t *buff, w_int32_t size);
+w_int32_t wind_file_write(file_s *file,w_uint8_t *buff, w_int32_t size);
 w_err_t wind_file_gets(file_s *file,char *buff, w_int32_t maxlen);
 w_err_t wind_file_puts(file_s *file,char *buff);
 #endif
