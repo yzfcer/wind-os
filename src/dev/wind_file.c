@@ -158,12 +158,6 @@ w_err_t wind_fs_format(fs_s *fs)
     return err;
 }
 
-
-static void path_init(void)
-{
-    wind_file_set_current_path("/");
-}
-
 char *wind_file_get_current_path(void)
 {
     return curpath;
@@ -233,7 +227,7 @@ file_s *wind_file_get(fs_s *fs,const char *path)
 file_s* wind_file_open(const char *path,fmode_e fmode)
 {
     file_s *file;
-    char *fullpath,*realpath;
+    char *fullpath = NULL,*realpath = NULL;
     fs_s *fs;
     w_int32_t len,len1;
     w_uint16_t isdir;
@@ -258,6 +252,8 @@ file_s* wind_file_open(const char *path,fmode_e fmode)
     if(file != NULL)
     {
         wind_error("file has been opened.");
+        wind_free(fullpath);
+        wind_free(realpath);
         return NULL;
     }
     file = _file_malloc();
@@ -272,20 +268,21 @@ file_s* wind_file_open(const char *path,fmode_e fmode)
     file->offset = 0;
     file->mutex = wind_mutex_create(NULL);
     file->ops = fs->ops;
-    err = file->ops->open(file,(w_uint32_t)file->fmode);
+    err = file->ops->open(file,(fmode_e)file->fmode);
     if(err != ERR_OK)
     {
         wind_mutex_destroy(file->mutex);
         _file_free(file);
         wind_free(realpath);
-        file = NULL;
+        wind_free(fullpath);
+        return NULL;
     }
     else
     {
         dlist_insert_tail(&g_core.filelist,&file->filenode);
+        wind_free(fullpath);
+        return file;
     }
-    wind_free(fullpath);
-    return file;
 }
 
 w_err_t wind_file_close(file_s *file)
