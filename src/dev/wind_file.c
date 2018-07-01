@@ -7,9 +7,10 @@
 #include "wind_heap.h"
 #include "wind_core.h"
 #include "wind_var.h"
+#include "wind_os_hwif.h"
 
 #if WIND_FS_SUPPORT
-WIND_POOL(fspool,WIND_FS_MAX_NUM,sizeof(file_s));
+//WIND_POOL(fspool,WIND_FS_MAX_NUM,sizeof(file_s));
 WIND_POOL(filepool,WIND_FILE_MAX_NUM,sizeof(file_s));
 static char *curpath = NULL;
 
@@ -67,6 +68,8 @@ w_err_t _wind_fs_init(void)
     wind_file_set_current_path("/");
     wind_pool_create("fs",fspool,sizeof(fspool),sizeof(fs_s));
     wind_pool_create("file",filepool,sizeof(filepool),sizeof(file_s));
+    wind_fs_register();
+    _wind_fs_mount_init();
     return err;
 }
 

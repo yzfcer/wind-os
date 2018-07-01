@@ -180,7 +180,7 @@ thread_s *wind_thread_create(const char *name,
     wind_strcpy(thread->name,name);
     thread->prio = get_prio(priolevel);
     
-    tmpstk = wind_stk_init(thread_entry,0,pstk + stksize -1);
+    tmpstk = _wind_thread_stack_init(thread_entry,0,pstk + stksize -1);
     thread->stack = tmpstk;
     thread->runstat = THREAD_STATUS_READY;
     thread->cause = CAUSE_COMMON;
