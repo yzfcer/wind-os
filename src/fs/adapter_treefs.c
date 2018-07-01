@@ -11,10 +11,11 @@ static w_err_t treefs_op_format(fs_s *fs)
 {
     return ERR_OK;
 }
+
 static w_err_t treefs_op_mkdir(const char *path)
 {
     WIND_ASSERT_RETURN(path != NULL,ERR_NULL_POINTER);
-    return ERR_FAIL;//treefs_mk_file(path);
+    return ERR_FAIL;//treefile_create(path);
 }
 
 static w_err_t treefs_op_open(file_s *file,fmode_e fmode)
@@ -29,7 +30,18 @@ static w_err_t treefs_op_open(file_s *file,fmode_e fmode)
 static w_err_t treefs_op_close(file_s* file)
 {
     WIND_ASSERT_RETURN(file != NULL,ERR_NULL_POINTER);
+    return treefile_rm((treefile_s *)file->fileobj);
+}
+
+static w_err_t treefs_op_rmfile(file_s* file)
+{
+    WIND_ASSERT_RETURN(file != NULL,ERR_NULL_POINTER);
     return treefile_close((treefile_s *)file->fileobj);
+}
+
+static file_s *treefs_op_subfile(file_s* file,w_int32_t index)
+{
+    return NULL;
 }
 
 static w_err_t treefs_op_seek(file_s* file,w_int32_t offset)
@@ -80,7 +92,7 @@ static w_err_t treefs_op_fputs(file_s* file,char *buff)
     return ERR_FAIL;
 }
 
-FS_OPS_DEF(treefs_op);
+FS_OPS_DEF(treefs);
 FS_DEF(treefs,FSTYPE_TREEFS,fs_ops);
 
 

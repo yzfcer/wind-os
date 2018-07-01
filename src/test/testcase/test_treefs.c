@@ -45,19 +45,19 @@ CASE_FUNC(treefs_create)
     EXPECT_NE(file,NULL);
     err = treefile_close(file);
     EXPECT_EQ(err,ERR_OK);
-    err = treefs_rm_file(file);
+    err = treefile_rm(file);
     EXPECT_EQ(err,ERR_OK);
     file = treefile_open("/test1.txt",FMODE_CRT);
     EXPECT_NE(file,NULL);
     err = treefile_close(file);
     EXPECT_EQ(err,ERR_OK);
-    err = treefs_rm_file(file);
+    err = treefile_rm(file);
     EXPECT_EQ(err,ERR_OK);
     file = treefile_open("/test2.txt",FMODE_CRT);
     EXPECT_NE(file,NULL);
     err = treefile_close(file);
     EXPECT_EQ(err,ERR_OK);
-    err = treefs_rm_file(file);
+    err = treefile_rm(file);
     EXPECT_EQ(err,ERR_OK);
 }
 
@@ -94,7 +94,7 @@ CASE_FUNC(treefs_readwrite)
     EXPECT_EQ(len,0);
     err = treefile_close(file);
     EXPECT_EQ(err,ERR_OK);
-    err = treefs_rm_file(file);
+    err = treefile_rm(file);
     EXPECT_EQ(err,ERR_OK);
     
 }

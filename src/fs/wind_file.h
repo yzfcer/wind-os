@@ -51,13 +51,11 @@ struct __fs_ops_s
     //w_err_t (*mount)(fs_s *fs);
     //w_err_t (*unmount)(fs_s *fs);
     w_err_t (*format)(fs_s *fs);
-    
-    w_err_t (*mkfile)(const char *path);
-    w_err_t (*rmfile)(const char *path);
-    
+    //w_err_t (*mkfile)(const char *path);
     w_err_t (*open)(file_s *file,fmode_e fmode);
-    //file_s* (*open)(const char *path,fmode_e fmode);
     w_err_t (*close)(file_s* file);
+    w_err_t (*rmfile)(file_s* file);
+    file_s *(*subfile)(file_s* file,w_int32_t index);
     w_err_t (*seek)(file_s* file,w_int32_t offset);
     w_err_t (*rename)(file_s* file,char *newname);
     w_int32_t (*ftell)(file_s* file);
@@ -85,20 +83,20 @@ struct __file_s
     fs_ops_s *ops;//²Ù×÷º¯Êý¼¯
 };
 
-#define FS_OPS_DEF(treefs_op) \
+#define FS_OPS_DEF(fs) \
 static fs_ops_s fs_ops = {\
-treefs_op##_format,\
-NULL,\
-NULL,\
-treefs_op##_open,\
-treefs_op##_close,\
-treefs_op##_seek,\
-treefs_op##_rename,\
-treefs_op##_ftell,\
-treefs_op##_read,\
-treefs_op##_write,\
-treefs_op##_fgets,\
-treefs_op##_fputs,\
+fs##_op_format,\
+fs##_op_open,\
+fs##_op_close,\
+fs##_op_rmfile,\
+fs##_op_subfile,\
+fs##_op_seek,\
+fs##_op_rename,\
+fs##_op_ftell,\
+fs##_op_read,\
+fs##_op_write,\
+fs##_op_fgets,\
+fs##_op_fputs,\
 }
 
 #define FS_DEF(name,type,ops) \
@@ -123,6 +121,9 @@ char *wind_file_get_current_path(void);
 
 file_s* wind_file_open(const char *path,fmode_e fmode);
 w_err_t wind_file_close(file_s *file);
+w_err_t wind_file_remove(file_s *file);
+file_s* wind_file_subfile(file_s *file,w_int32_t index);
+
 w_err_t wind_file_seek(file_s *file,w_int32_t offset);
 w_err_t wind_file_rename(file_s *file,char *newname);
 w_int32_t wind_file_tell(file_s *file);

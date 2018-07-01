@@ -98,7 +98,7 @@ static w_err_t mknode(w_int32_t argc,char **argv,w_uint16_t isdir)
         return ERR_FAIL;
     }
     
-    file = treefs_mk_file(path);
+    file = treefile_create(path);
     if(file == NULL)
         console_printf("make directory failed.");
     treefs_free(path);
@@ -129,7 +129,7 @@ static w_err_t treefs_cmd_rm(w_int32_t argc,char **argv)
         return ERR_FILE_NOT_EXIT;
     }
     treefile_close(file);
-    err = treefs_rm_file(file);
+    err = treefile_rm(file);
     treefs_free(path);
     return err;
 }

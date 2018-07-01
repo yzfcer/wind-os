@@ -62,13 +62,19 @@ static w_err_t mount_param_check(char *fsname,char *blkname,char *path)
     return ERR_OK;
 }
 
+static w_err_t wind_all_fs_regster(void)
+{
+    
+    return ERR_OK;
+}
+
 w_err_t _wind_fs_init(void)
 {
     w_err_t err;
     wind_file_set_current_path("/");
-    wind_pool_create("fs",fspool,sizeof(fspool),sizeof(fs_s));
+    //("fs",fspool,sizeof(fspool),sizeof(fs_s));
     wind_pool_create("file",filepool,sizeof(filepool),sizeof(file_s));
-    wind_fs_register();
+    wind_all_fs_regster();
     _wind_fs_mount_init();
     return err;
 }
@@ -301,6 +307,34 @@ w_err_t wind_file_close(file_s *file)
     _file_free(file);
     wind_free(file->path);
     return err;
+}
+
+w_err_t wind_file_remove(file_s *file)
+{
+    w_err_t err = ERR_FAIL;
+    WIND_ASSERT_RETURN(file != NULL,ERR_NULL_POINTER);
+    wind_mutex_lock(file->mutex);
+    if(file->ops->rmfile)
+    err = file->ops->rmfile(file);
+    wind_mutex_unlock(file->mutex);
+    dlist_remove(&g_core.filelist,&file->filenode);
+    wind_mutex_destroy(file->mutex);
+    _file_free(file);
+    wind_free(file->path);
+    return err;
+}
+
+file_s* wind_file_subfile(file_s *file,w_int32_t index)
+{
+    file_s *subfile = NULL;
+    WIND_ASSERT_RETURN(file != NULL,NULL);
+    WIND_ASSERT_RETURN(index >= 0,NULL);
+    WIND_ASSERT_RETURN(file->isdir != 0,NULL);
+    wind_mutex_lock(file->mutex);
+    if(file->ops->subfile)
+        subfile = file->ops->subfile(file,index);
+    wind_mutex_unlock(file->mutex);
+    return subfile;
 }
 
 w_err_t wind_file_seek(file_s *file,w_int32_t offset)

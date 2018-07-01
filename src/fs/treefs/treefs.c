@@ -10,7 +10,6 @@ static treefile_s *treefile_rootnode = NULL;
 void *treefs_malloc(w_int32_t size)
 {
     void *ptr = wind_malloc(size);
-    //wind_printf("treefs malloc:0x%x\r\n",ptr);
     return ptr;
 }
 
@@ -18,7 +17,6 @@ w_err_t treefs_free(void *ptr)
 {
     if(ptr == NULL)
         return ERR_OK;
-    //wind_printf("treefs free:0x%x\r\n",ptr);
     return wind_free(ptr);
 }
 
@@ -55,23 +53,6 @@ static w_uint32_t get_dataidx_by_offset(w_uint32_t offset)
 }
 
 
-#if 0
-static w_int32_t path_compare(const char *path,const char *nodename)
-{
-    int i,len;
-    len = wind_strlen(nodename);
-    if(path[len] != '/')
-        return -1;
-    for(i = 0;i < len;i ++)
-    {
-        if(path[i] != nodename[i])
-            return -1;
-    }
-    return len;
-}
-#endif
-
-
 //将路径分割成段
 int split_path(char *path,char **layers,w_int32_t layercnt)
 {
@@ -98,8 +79,6 @@ int split_path(char *path,char **layers,w_int32_t layercnt)
             break;
     }
     cnt = (layers[cnt-1][0] != 0?cnt:cnt -1);
-    //for(j = 0;j < cnt;j ++)
-    //    wind_printf("dnode:%s\r\n",layers[j]);
     return cnt;
 }
 
@@ -125,7 +104,6 @@ static treefile_s *mk_subnode(treefile_s *parent,char *nodename,w_uint8_t isdir)
     fsnode->offset = 0;
     fsnode->filelen = 0;
     fsnode->bufflen = 0;
-    //fsnode->data = NULL;
     DLIST_INIT(fsnode->datalist);
     if(parent != NULL)
         wind_tree_insert_child(&parent->tree,&fsnode->tree);
@@ -195,7 +173,7 @@ SEARCH_COMPLETE:
 
 
 
-treefile_s *treefs_mk_file(const char *path)
+treefile_s *treefile_create(const char *path)
 {
     w_int32_t len;
     attr_u *uattr;
@@ -208,7 +186,7 @@ treefile_s *treefs_mk_file(const char *path)
     return fsnode;
 }
 
-w_err_t treefs_rm_file(treefile_s *file)
+w_err_t treefile_rm(treefile_s *file)
 {
     dnode_s *dnode;
     tree_s *tree;
@@ -221,7 +199,7 @@ w_err_t treefs_rm_file(treefile_s *file)
     foreach_node(dnode,&tree->child_list)
     {
         subfile = DLIST_OBJ(dnode,treefile_s,tree.treenode);
-        treefs_rm_file(subfile);
+        treefile_rm(subfile);
     }
     if(file->tree.parent)
         wind_tree_remove_child(file->tree.parent,&file->tree);
@@ -242,22 +220,22 @@ w_err_t treefs_format(void)
     treefile_s *file;
     treefile_s *root = treefs_get_root();
     if(root != NULL)
-        treefs_rm_file(root);
+        treefile_rm(root);
     else
         root = mk_subnode(NULL,"",1);
     if(!root)
         return ERR_FAIL;
     treefs_set_root(root);
     #if 1
-    treefs_mk_file("/var/");
-    treefs_mk_file("/mnt/");
-    treefs_mk_file("/usr/");
-    treefs_mk_file("/sys/");
-    treefs_mk_file("/proc/");
-    treefs_mk_file("/bin/");
-    treefs_mk_file("/usr/config.txt");
-    treefs_mk_file("/usr/wind-os.log");
-    treefs_mk_file("/usr/env.cfg");
+    treefile_create("/var/");
+    treefile_create("/mnt/");
+    treefile_create("/usr/");
+    treefile_create("/sys/");
+    treefile_create("/proc/");
+    treefile_create("/bin/");
+    treefile_create("/usr/config.txt");
+    treefile_create("/usr/wind-os.log");
+    treefile_create("/usr/env.cfg");
     file = treefile_open("/usr/env.cfg",TF_FMODE_W);
     buff = "os=wind-os\r\n";
     treefile_write(file,(w_uint8_t*)buff,wind_strlen(buff));
