@@ -53,29 +53,29 @@ static w_err_t fs_cmd_cd(w_int32_t argc,char **argv)
 {
     w_bool_t isexist;
     char *path;
-    treefile_s *file;
-    tf_attr_s attr;
+    file_s *file;
+    //tf_attr_s attr;
     char *curpath = wind_file_get_current_path();
     if(argc < 3)
         return ERR_FAIL;
     path = wind_file_get_full_path(curpath,argv[2],1);
-    isexist = treefile_existing(path);
+    isexist = wind_file_existing(path);
     if(!isexist)
     {
         console_printf("open directory or file failed.\r\n");
-        fs_free(path);
+        wind_free(path);
         return ERR_FILE_NOT_EXIT;
     }
-    file = treefile_open(path,FMODE_R);
-    treefile_get_attr(file,&attr);
-    if(!attr.isdir)
+    file = wind_file_open(path,FMODE_R);
+    //wind_file_get_attr(file,&attr);
+    if(!file->isdir)
     {
         console_printf("%s is NOT a valid directory\r\n",path);
-        fs_free(path);
+        wind_free(path);
         return ERR_INVALID_PARAM;
     }
-    treefile_close(file);
-    fs_free(curpath);
+    wind_file_close(file);
+    wind_free(curpath);
     curpath = path;
     return ERR_OK;
 }
@@ -83,25 +83,25 @@ static w_err_t fs_cmd_cd(w_int32_t argc,char **argv)
 static w_err_t mknode(w_int32_t argc,char **argv,w_uint16_t isdir)
 {
     w_bool_t isexist;
-    treefile_s *file;
+    file_s *file;
     char * path;
     char *curpath = wind_file_get_current_path();
     if(argc < 3)
         return ERR_INVALID_PARAM;
     path = wind_file_get_full_path(curpath,argv[2],isdir);
-    isexist = treefile_existing(path);
+    isexist = wind_file_existing(path);
     if(isexist)
     {
         console_printf("directory has been existing.\r\n");
-        fs_free(path);
-        treefile_close(file);
+        wind_free(path);
+        wind_file_close(file);
         return ERR_FAIL;
     }
     
-    file = fs_mk_file(path);
+    file = wind_file_open(path,FMODE_CRT);
     if(file == NULL)
         console_printf("make directory failed.");
-    fs_free(path);
+    wind_free(path);
     return ERR_OK;
 }
 
@@ -118,56 +118,56 @@ static w_err_t fs_cmd_touch(w_int32_t argc,char **argv)
 static w_err_t fs_cmd_rm(w_int32_t argc,char **argv)
 {
     w_err_t err;
-    treefile_s *file;
+    file_s *file;
     char *curpath = wind_file_get_current_path();
     char * path = wind_file_get_full_path(curpath,argv[2],1);
-    file = treefile_open(path,FMODE_R);
+    file = wind_file_open(path,FMODE_R);
     if(file == NULL)
     {
         console_printf("open directory or file failed.\r\n");
-        fs_free(path);
+        wind_free(path);
         return ERR_FILE_NOT_EXIT;
     }
-    treefile_close(file);
-    err = fs_rm_file(file);
-    fs_free(path);
+    wind_file_close(file);
+    err = wind_file_remove(file);
+    wind_free(path);
     return err;
 }
 
 static w_err_t fs_cmd_ls(w_int32_t argc,char **argv)
 {
     w_int32_t i;
-    treefile_s *file,*sub;
+    file_s *file,*sub;
     char * path;
     char *curpath = wind_file_get_current_path();
     if(argc >= 3)
        path = wind_file_get_full_path(curpath,argv[2],1);
     else
         path = wind_file_get_full_path(curpath,curpath,1);
-    file = treefile_open(path,FMODE_R);
+    file = wind_file_open(path,FMODE_R);
     if(file == NULL)
     {
         console_printf("open directory or file failed.\r\n");
-        fs_free(path);
+        wind_free(path);
         return ERR_FILE_NOT_EXIT;
     }
     for(i = 0;;i ++)
     {
-        sub = treefile_readdir(file,i);
+        sub = wind_file_subfile(file,i);
         if(sub == NULL)
             break;
-        console_printf("%-24s ",sub->filename);
+        console_printf("%-24s ",sub->path);
         if(i%4 == 3)
             console_printf("\r\n");
     }
-    treefile_close(file);
-    fs_free(path);
+    wind_file_close(file);
+    wind_free(path);
     return ERR_OK;
 }
 
 static w_err_t fs_cmd_cat(w_int32_t argc,char **argv)
 {
-    treefile_s *file;
+    file_s *file;
     char * path;
     w_uint8_t *buff;
     w_int32_t len;
@@ -175,17 +175,17 @@ static w_err_t fs_cmd_cat(w_int32_t argc,char **argv)
     if(argc < 3)
         return ERR_INVALID_PARAM;
     path = wind_file_get_full_path(curpath,argv[2],0);
-    file = treefile_open(path,FMODE_R);
+    file = wind_file_open(path,FMODE_R);
     if(file == NULL)
     {
         console_printf("open directory or file failed.\r\n",path);
-        fs_free(path);
+        wind_free(path);
         return ERR_FILE_NOT_EXIT;
     }
-    buff = fs_malloc(TREEFS_BLK_SIZE+1);
+    buff = wind_malloc(TREEFS_BLK_SIZE+1);
     if(buff == NULL)
     {
-        fs_free(path);
+        wind_free(path);
         return ERR_FAIL;
     }
     console_printf("\r\n---------%s---------\r\n",path);
@@ -200,38 +200,38 @@ static w_err_t fs_cmd_cat(w_int32_t argc,char **argv)
     }
     console_printf("\r\n---------%s---------\r\n",path);
     treefile_close(file);
-    fs_free(buff);
+    wind_free(buff);
     return ERR_OK;
 }
     
 static w_err_t fs_cmd_write(w_int32_t argc,char **argv)
 {
-    treefile_s *file;
+    file_s *file;
     char * path;
     w_int32_t len,filelen;
     char *curpath = wind_file_get_current_path();
     if(argc < 4)
         return ERR_INVALID_PARAM;
     path = wind_file_get_full_path(curpath,argv[2],0);
-    file = treefile_open(path,FMODE_W|FMODE_CRT);
+    file = wind_file_open(path,FMODE_W|FMODE_CRT);
     if(file == NULL)
     {
         console_printf("open directory or file failed.\r\n",path);
-        fs_free(path);
+        wind_free(path);
         return ERR_FILE_NOT_EXIT;
     }
 
     len = wind_strlen(argv[3]);
-    filelen = treefile_write(file,(w_uint8_t*)argv[3],len);
+    filelen = wind_file_write(file,(w_uint8_t*)argv[3],len);
     treefile_close(file);
     if(filelen == len)
     {
         console_printf("write file OK.\r\n");
-        fs_free(path);
+        wind_free(path);
         return ERR_OK;
     }
     console_printf("write file failed.\r\n");
-    fs_free(path);
+    wind_free(path);
     return ERR_FAIL;
 }
 

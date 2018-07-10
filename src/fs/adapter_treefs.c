@@ -7,6 +7,12 @@
 #include "wind_string.h"
 #include "wind_heap.h"
 #if WIND_FS_SUPPORT
+static w_err_t treefs_op_init(fs_s *fs)
+{
+    treefs_format();
+    return ERR_OK;
+}
+
 static w_err_t treefs_op_format(fs_s *fs)
 {
     return ERR_OK;

@@ -64,7 +64,7 @@ static w_err_t mount_param_check(char *fsname,char *blkname,char *path)
 
 static w_err_t wind_all_fs_regster(void)
 {
-    
+    wind_fs_mount("treefs",NULL,"/");
     return ERR_OK;
 }
 
@@ -72,7 +72,6 @@ w_err_t _wind_fs_init(void)
 {
     w_err_t err;
     wind_file_set_current_path("/");
-    //("fs",fspool,sizeof(fspool),sizeof(fs_s));
     wind_pool_create("file",filepool,sizeof(filepool),sizeof(file_s));
     wind_all_fs_regster();
     _wind_fs_mount_init();
@@ -135,6 +134,8 @@ w_err_t wind_fs_mount(char *fsname,char *blkname,char *path)
     WIND_ASSERT_RETURN(fs->mount_path != NULL,ERR_MEM);
     wind_strcpy(fs->mount_path,path);
     fs->blkdev = blkdev;
+    if(fs->ops.init)
+        fs->ops.init(fs);
     wind_disable_switch();
     dlist_insert_tail(&g_core.fslist,&fs->fsnode);
     wind_enable_switch();
@@ -233,6 +234,18 @@ file_s *wind_file_get(fs_s *fs,const char *path)
     return NULL;
 }
 
+w_bool_t wind_file_existing(const char *path)
+{
+    file_s *file;
+    w_bool_t exist = B_FALSE;
+    file = wind_file_open(path,FMODE_R);
+    if(file != NULL)
+    {
+        exist = B_TRUE;
+        wind_file_close(file);
+    }
+    return exist;
+}
 file_s* wind_file_open(const char *path,fmode_e fmode)
 {
     file_s *file;

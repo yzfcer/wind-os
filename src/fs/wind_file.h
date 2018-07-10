@@ -49,7 +49,7 @@ typedef enum
 struct __fs_ops_s
 {
     //w_err_t (*mount)(fs_s *fs);
-    //w_err_t (*unmount)(fs_s *fs);
+    w_err_t (*init)(fs_s *fs);
     w_err_t (*format)(fs_s *fs);
     //w_err_t (*mkfile)(const char *path);
     w_err_t (*open)(file_s *file,fmode_e fmode);
@@ -85,6 +85,7 @@ struct __file_s
 
 #define FS_OPS_DEF(fs) \
 static fs_ops_s fs_ops = {\
+fs##_op_init,\
 fs##_op_format,\
 fs##_op_open,\
 fs##_op_close,\
@@ -118,7 +119,7 @@ void wind_file_set_current_path(char *path);
 char *wind_file_get_current_path(void);
 
 
-
+w_bool_t wind_file_existing(const char *path);
 file_s* wind_file_open(const char *path,fmode_e fmode);
 w_err_t wind_file_close(file_s *file);
 w_err_t wind_file_remove(file_s *file);

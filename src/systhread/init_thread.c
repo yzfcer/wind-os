@@ -7,6 +7,7 @@
 #include "wind_blkdev.h"
 #include "wind_time.h"
 #include "wind_debug.h"
+#include "wind_file.h"
 #include "wind_os_hwif.h"
 
 
@@ -75,7 +76,8 @@ static w_err_t init_thread(w_int32_t argc,w_int8_t **argv)
     _create_timer_thread();
 #endif
 #if WIND_FS_SUPPORT
-    treefs_format();
+    //treefs_format();
+    _wind_fs_init();
 #endif
     _create_stati_thread();
     _create_daemon_thread();

@@ -1137,6 +1137,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\console\cmd\cmd_beep.c</FilePath>
             </File>
+            <File>
+              <FileName>cmd_fs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\console\cmd\cmd_fs.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
