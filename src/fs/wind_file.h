@@ -10,6 +10,7 @@
 
 #define FS_NAME_LEN 12
 #define FS_MOUNT_PATH_LEN 64
+#define FS_CUR_PATH "/"
 typedef struct __fs_ops_s fs_ops_s;
 typedef struct __fs_s fs_s;
 typedef struct __file_s file_s;
@@ -104,9 +105,6 @@ fs##_op_fputs,\
 fs_s fs_##name = { \
 #name,NULL,{NULL,NULL},type,NULL,&ops};
 
-
-//file_s *_file_malloc(void);
-//w_err_t _file_free(file_s *file);
 
 w_err_t _wind_fs_init(void);
 fs_s *wind_fs_get(char *name);

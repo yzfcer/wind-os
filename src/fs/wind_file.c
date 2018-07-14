@@ -71,7 +71,7 @@ static w_err_t wind_all_fs_regster(void)
 w_err_t _wind_fs_init(void)
 {
     w_err_t err;
-    wind_file_set_current_path("/");
+    wind_file_set_current_path(FS_CUR_PATH);
     wind_pool_create("file",filepool,sizeof(filepool),sizeof(file_s));
     wind_all_fs_regster();
     _wind_fs_mount_init();
@@ -134,8 +134,8 @@ w_err_t wind_fs_mount(char *fsname,char *blkname,char *path)
     WIND_ASSERT_RETURN(fs->mount_path != NULL,ERR_MEM);
     wind_strcpy(fs->mount_path,path);
     fs->blkdev = blkdev;
-    if(fs->ops.init)
-        fs->ops.init(fs);
+    if(fs->ops->init)
+        fs->ops->init(fs);
     wind_disable_switch();
     dlist_insert_tail(&g_core.fslist,&fs->fsnode);
     wind_enable_switch();
@@ -182,30 +182,30 @@ void wind_file_set_current_path(char *path)
     wind_memcpy(curpath,path,len+1);
 }
 
-char *wind_file_get_full_path(char *oldpath,char *newpath,w_uint16_t isdir)
+char *wind_file_get_full_path(char *pre_path,char *relative_path,w_uint16_t isdir)
 {
     char *path;
     w_int32_t len,len1;
     w_int32_t ap = 0;
-    len = wind_strlen(newpath) + 1;
+    len = wind_strlen(relative_path) + 1;
     if(isdir)
         len += 1;
-    if(newpath[0] == '/')
+    if(relative_path[0] == '/')
     {
         path = wind_malloc(len+ap);
         wind_memset(path,0,len+ap);
-        wind_strcpy(path,newpath);
+        wind_strcpy(path,relative_path);
     }
     else
     {
-        len1 = wind_strlen(oldpath) + 1;
+        len1 = wind_strlen(pre_path) + 1;
         len += len1;
         path = wind_malloc(len);
         wind_memset(path,0,len);
-        wind_strcpy(path,oldpath);
-        if(oldpath[len1-1] != '/')
+        wind_strcpy(path,pre_path);
+        if(pre_path[len1-1] != '/')
             path[len1] = '/';
-        wind_strcat(path,newpath);
+        wind_strcat(path,relative_path);
     }
     
     len = wind_strlen(path);

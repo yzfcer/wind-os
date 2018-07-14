@@ -34,7 +34,7 @@ extern "C" {
 #if (WIND_CONSOLE_SUPPORT && WIND_FS_SUPPORT)
 
 /********************************************内部变量定义**********************************************/
-
+#define BUF_SIZE 128
 
 
 /********************************************内部函数定义*********************************************/
@@ -182,7 +182,7 @@ static w_err_t fs_cmd_cat(w_int32_t argc,char **argv)
         wind_free(path);
         return ERR_FILE_NOT_EXIT;
     }
-    buff = wind_malloc(TREEFS_BLK_SIZE+1);
+    buff = wind_malloc(BUF_SIZE+1);
     if(buff == NULL)
     {
         wind_free(path);
@@ -191,15 +191,15 @@ static w_err_t fs_cmd_cat(w_int32_t argc,char **argv)
     console_printf("\r\n---------%s---------\r\n",path);
     while(1)
     {
-        wind_memset(buff,0,TREEFS_BLK_SIZE+1);
-        len = treefile_read(file,buff,TREEFS_BLK_SIZE);
+        wind_memset(buff,0,BUF_SIZE+1);
+        len = wind_file_read(file,buff,BUF_SIZE);
         if(len > 0)
             console_printf("%s",(char*)buff);
         else
             break;
     }
     console_printf("\r\n---------%s---------\r\n",path);
-    treefile_close(file);
+    wind_file_close(file);
     wind_free(buff);
     return ERR_OK;
 }
@@ -223,7 +223,7 @@ static w_err_t fs_cmd_write(w_int32_t argc,char **argv)
 
     len = wind_strlen(argv[3]);
     filelen = wind_file_write(file,(w_uint8_t*)argv[3],len);
-    treefile_close(file);
+    wind_file_close(file);
     if(filelen == len)
     {
         console_printf("write file OK.\r\n");
