@@ -99,7 +99,11 @@ static w_err_t treefs_op_fputs(file_s* file,char *buff)
 }
 
 FS_OPS_DEF(treefs);
-FS_DEF(treefs,FSTYPE_TREEFS,fs_ops);
+
+fs_s fs_treefs[1] = 
+{
+    WIND_FS_DEF(treefs,FSTYPE_TREEFS,fs_ops),
+};
 
 
 

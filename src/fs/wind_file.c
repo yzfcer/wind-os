@@ -23,17 +23,7 @@ static w_err_t _file_free(file_s *file)
 {
     return wind_pool_free(filepool,file);
 }
-#if 0
-static file_s *_fs_malloc(void)
-{
-    return wind_pool_malloc(fspool);
-}
 
-static w_err_t _fs_free(fs_s *fs)
-{
-    return wind_pool_free(fspool,fs);
-}
-#endif
 
 static w_err_t mount_param_check(char *fsname,char *blkname,char *path)
 {
@@ -62,19 +52,69 @@ static w_err_t mount_param_check(char *fsname,char *blkname,char *path)
     return ERR_OK;
 }
 
+w_err_t wind_fs_regster(fs_s *fs,w_int32_t count)
+{
+    w_int32_t i;
+    fs_s *fsi;    
+    w_err_t err;
+    WIND_ASSERT_RETURN(fs != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(count > 0,ERR_INVALID_PARAM);
+    for(i = 0;i < count;i ++)
+    {
+        WIND_ASSERT_RETURN(fs[i].magic == WIND_FS_MAGIC,ERR_INVALID_PARAM);
+        wind_notice("register fs:%s",fs[i].name);
+        fsi = wind_fs_get(fs[i].name);
+        if(fsi != NULL)
+        {
+            wind_error("fs %s has been registered.\r\n",fsi->name);
+            continue;
+        }
+        if(fs[i].ops->init)
+        {
+            err = fs[i].ops->init(&fs[i]);
+            if(err != ERR_OK)
+            {
+                wind_error("fs:%s init failed:%d.",fs[i].name,err);
+                continue;
+            }
+        }
+        wind_disable_switch();
+        dlist_insert_tail(&g_core.devlist,&fs[i].fsnode);
+        wind_enable_switch();    
+    }
+    return ERR_OK;
+}
+w_err_t wind_fs_unregster(fs_s *fs)
+{
+    dnode_s *dnode;
+    WIND_ASSERT_RETURN(fs != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(fs->magic == WIND_FS_MAGIC,ERR_INVALID_PARAM);
+    wind_notice("unregister fs:%s",fs->name);
+    wind_disable_switch();
+    dnode = dlist_remove(&g_core.blkdevlist,dnode);
+    wind_enable_switch();
+    if(dnode == NULL)
+    {
+        wind_error("fs has NOT been registered.\r\n");
+        return ERR_FAIL;
+    }
+    return ERR_OK;
+}
+
 static w_err_t wind_all_fs_regster(void)
 {
-    wind_fs_mount("treefs",NULL,"/");
+    extern fs_s fs_treefs[1];
+    wind_fs_regster(fs_treefs,1);
     return ERR_OK;
 }
 
 w_err_t _wind_fs_init(void)
 {
     w_err_t err;
-    wind_file_set_current_path(FS_CUR_PATH);
     wind_pool_create("file",filepool,sizeof(filepool),sizeof(file_s));
     wind_all_fs_regster();
     _wind_fs_mount_init();
+    wind_file_set_current_path(FS_CUR_PATH);
     return err;
 }
 

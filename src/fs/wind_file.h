@@ -7,7 +7,8 @@
 //#include "wind_fs.h"
 
 #if WIND_FS_SUPPORT
-
+#define WIND_FS_MAGIC 0x235C79A5
+#define WIND_FILE_MAGIC 0x275972D5
 #define FS_NAME_LEN 12
 #define FS_MOUNT_PATH_LEN 64
 #define FS_CUR_PATH "/"
@@ -23,6 +24,7 @@ typedef enum
 
 struct __fs_s
 {
+    w_uint32_t magic;
     char *name;
     char *mount_path;
     dnode_s fsnode;
@@ -101,10 +103,8 @@ fs##_op_fgets,\
 fs##_op_fputs,\
 }
 
-#define FS_DEF(name,type,ops) \
-fs_s fs_##name = { \
-#name,NULL,{NULL,NULL},type,NULL,&ops};
-
+#define WIND_FS_DEF(name,type,ops) \
+{WIND_FS_MAGIC,#name,NULL,{NULL,NULL},type,NULL,&ops}
 
 w_err_t _wind_fs_init(void);
 fs_s *wind_fs_get(char *name);
