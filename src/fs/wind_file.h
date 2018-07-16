@@ -4,7 +4,6 @@
 #include "wind_type.h"
 #include "wind_dlist.h"
 #include "wind_blkdev.h"
-//#include "wind_fs.h"
 
 #if WIND_FS_SUPPORT
 #define WIND_FS_MAGIC 0x235C79A5
@@ -51,10 +50,8 @@ typedef enum
 
 struct __fs_ops_s
 {
-    //w_err_t (*mount)(fs_s *fs);
     w_err_t (*init)(fs_s *fs);
     w_err_t (*format)(fs_s *fs);
-    //w_err_t (*mkfile)(const char *path);
     w_err_t (*open)(file_s *file,fmode_e fmode);
     w_err_t (*close)(file_s* file);
     w_err_t (*rmfile)(file_s* file);

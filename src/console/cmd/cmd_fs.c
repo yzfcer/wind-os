@@ -21,7 +21,6 @@
 #include "wind_cmd.h"
 #include "wind_heap.h"
 #include "wind_string.h"
-#include "wind_fs.h"
 #include "wind_file.h"
 
 #ifdef __cplusplus
