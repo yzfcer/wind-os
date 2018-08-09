@@ -58,6 +58,7 @@ w_int32_t wind_printf(const char *fmt, ...);
 #else
 #define wind_printf
 #endif
+
 void wind_print_space(w_int32_t space8_cnt);
 //系统调试信息打印级别
 #define PRINT_LV_DEBUG   1

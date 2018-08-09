@@ -7,7 +7,7 @@
 **文   件   名: wind_crc16.h
 **创   建   人: Jason Zhou
 **最后修改日期: 2017.12.10
-**描        述: 
+**描        述: 16位CRC校验方法
 **              
 **--------------历史版本信息----------------------------------------------------------------------------
 ** 创建人: 
@@ -29,7 +29,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-w_uint16_t wind_crc16(const unsigned char *data, int len);
+w_uint16_t wind_crc16(const unsigned char *data, int len,w_uint16_t crc);
 
 
 #ifdef __cplusplus

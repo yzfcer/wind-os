@@ -1,3 +1,27 @@
+/****************************************Copyright (c)**************************************************
+**                                       清  风  海  岸
+**
+**                                       yzfcer@163.com
+**
+**--------------文件信息--------------------------------------------------------------------------------
+**文   件   名: wind_dev.h
+**创   建   人: 周江村
+**最后修改日期: 
+**描        述: 文件系统标准化API接口
+**              
+**--------------历史版本信息----------------------------------------------------------------------------
+** 创建人: 
+** 版  本: v1.0
+** 日　期: 
+** 描　述: 原始版本
+**
+**--------------当前版本修订----------------------------------------------------------------------------
+** 修改人: 
+** 日　期: 
+** 描　述: 
+**
+**------------------------------------------------------------------------------------------------------
+*******************************************************************************************************/
 #include "wind_config.h"
 #include "wind_file.h"
 #include "wind_pool.h"
@@ -10,7 +34,7 @@
 #include "wind_os_hwif.h"
 
 #if WIND_FS_SUPPORT
-//WIND_POOL(fspool,WIND_FS_MAX_NUM,sizeof(file_s));
+
 WIND_POOL(filepool,WIND_FILE_MAX_NUM,sizeof(file_s));
 static char *curpath = NULL;
 
@@ -27,16 +51,16 @@ static w_err_t _file_free(file_s *file)
 
 static w_err_t mount_param_check(char *fsname,char *blkname,char *path)
 {
-    blkdev_s *dev;
+    //blkdev_s *dev;
     fs_s *fs;
     dnode_s *dnode;
     WIND_ASSERT_RETURN(fsname != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(blkname != NULL,ERR_NULL_POINTER);
+    //WIND_ASSERT_RETURN(blkname != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(path != NULL,ERR_NULL_POINTER);
-    dev = wind_blkdev_get(blkname);
-    WIND_ASSERT_RETURN(dev != NULL,ERR_INVALID_PARAM);
+    //dev = wind_blkdev_get(blkname);
+    //WIND_ASSERT_RETURN(dev != NULL,ERR_INVALID_PARAM);
     fs = wind_fs_get(fsname);
-    WIND_ASSERT_RETURN(fs == NULL,ERR_OBJ_REPEAT);
+    WIND_ASSERT_RETURN(fs != NULL,ERR_OBJ_REPEAT);
     if(wind_strlen(path) >= FS_MOUNT_PATH_LEN)
         return ERR_INVALID_PARAM;
     if(wind_strlen(fsname) >= FS_MOUNT_PATH_LEN)
@@ -46,6 +70,8 @@ static w_err_t mount_param_check(char *fsname,char *blkname,char *path)
         fs = DLIST_OBJ(dnode,fs_s,fsnode);
         if(wind_strcmp(path,fs->mount_path) == 0)
             return ERR_OBJ_REPEAT;
+        if(blkname == NULL)
+            continue;
         if(wind_strcmp(blkname,fs->blkdev->name) == 0)
             return ERR_OBJ_REPEAT;
     }
@@ -79,7 +105,7 @@ w_err_t wind_fs_regster(fs_s *fs,w_int32_t count)
             }
         }
         wind_disable_switch();
-        dlist_insert_tail(&g_core.devlist,&fs[i].fsnode);
+        dlist_insert_tail(&g_core.fslist,&fs[i].fsnode);
         wind_enable_switch();    
     }
     return ERR_OK;
@@ -142,11 +168,11 @@ fs_s *wind_fs_get_bypath(char *path)
     dnode_s *dnode;
     w_int32_t len;
     wind_disable_switch();
-    foreach_node(dnode,&g_core.filelist)
+    foreach_node(dnode,&g_core.fslist)
     {
         fs = DLIST_OBJ(dnode,fs_s,fsnode);
         len = wind_strlen(fs->mount_path);
-        if(wind_memcmp(path,fs->name,len) == 0)
+        if(wind_memcmp(path,fs->mount_path,len) == 0)
         {
             if((retfs == NULL)||(wind_strlen(retfs->mount_path) < len))
                 retfs = fs;
@@ -168,7 +194,7 @@ w_err_t wind_fs_mount(char *fsname,char *blkname,char *path)
     fs = wind_fs_get(fsname);
     WIND_ASSERT_RETURN(fs != NULL,ERR_MEM);
     blkdev = wind_blkdev_get(blkname);
-    WIND_ASSERT_RETURN(fs != NULL,ERR_MEM);
+    //WIND_ASSERT_RETURN(fs != NULL,ERR_MEM);
     len = wind_strlen(path)+1;
     fs->mount_path = wind_malloc(len);
     WIND_ASSERT_RETURN(fs->mount_path != NULL,ERR_MEM);
@@ -176,9 +202,9 @@ w_err_t wind_fs_mount(char *fsname,char *blkname,char *path)
     fs->blkdev = blkdev;
     if(fs->ops->init)
         fs->ops->init(fs);
-    wind_disable_switch();
-    dlist_insert_tail(&g_core.fslist,&fs->fsnode);
-    wind_enable_switch();
+    //wind_disable_switch();
+    //dlist_insert_tail(&g_core.fslist,&fs->fsnode);
+    //wind_enable_switch();
     return ERR_OK;
 }
 
@@ -188,9 +214,9 @@ w_err_t wind_fs_unmount(char *fsname)
     WIND_ASSERT_RETURN(fsname != NULL,ERR_NULL_POINTER);
     fs = wind_fs_get(fsname);
     WIND_ASSERT_RETURN(fs != NULL,ERR_INVALID_PARAM);
-    wind_disable_switch();
-    dlist_remove(&g_core.fslist,&fs->fsnode);
-    wind_enable_switch();
+    //wind_disable_switch();
+    //dlist_remove(&g_core.fslist,&fs->fsnode);
+    //wind_enable_switch();
     fs->blkdev = NULL;
     DNODE_INIT(fs->fsnode);
     wind_free(fs->mount_path);

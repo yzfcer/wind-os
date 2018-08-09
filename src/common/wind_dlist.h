@@ -7,7 +7,7 @@
 **文   件   名: wind_list.h
 **创   建   人: Jason Zhou
 **最后修改日期: 2017.12.10
-**描        述: 
+**描        述: 双向链表的实现方法
 **              
 **--------------历史版本信息----------------------------------------------------------------------------
 ** 创建人: 
@@ -56,7 +56,7 @@ struct __dlist_s
 #define DNODE_INIT(dnode) {dnode.prev = NULL;dnode.next = NULL;}
 #define PRIO_DNODE_INIT(prionode) {prionode.dnode.prev = NULL;prionode.dnode.next = NULL;prionode.prio = 0;}
 #define DLIST_INIT(dlist) {dlist.head = NULL;dlist.tail = NULL;}
-#define FIND(type,e) ((w_uint32_t)&(((type*)0)->e))
+
 #define DLIST_OBJ(ptr,type,mbrnode) (void*)(((char*)(ptr))-((w_uint32_t)&(((type*)0)->mbrnode)))
 #define PRI_DLIST_OBJ(ptr,type,mbrnode) (void*)(((char*)(ptr))-((w_uint32_t)&(((type*)0)->mbrnode.dnode)))
 

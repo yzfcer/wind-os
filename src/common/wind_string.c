@@ -29,7 +29,7 @@
 
 char* wind_strcpy(char *dest,const char *src)
 {
-        char *tmp = dest;
+    char *tmp = dest;
     while ((*dest++ = *src++) != '\0');
     return tmp;
 }
@@ -37,11 +37,8 @@ char* wind_strcpy(char *dest,const char *src)
 char* wind_strncpy(char *dest,const char *src,w_uint32_t count)
 {
     char *tmp = dest;
-
     while (count-- && (*dest++ = *src++) != '\0')
-        /* nothing */;
     return tmp;
-
 }
 
 
@@ -49,11 +46,9 @@ char* wind_strncpy(char *dest,const char *src,w_uint32_t count)
 char *wind_strcat(char *dest, const char *src)
 {
     char *tmp = dest;
-
     while (*dest)
         dest++;
-    while ((*dest++ = *src++) != '\0')
-        ;
+    while ((*dest++ = *src++) != '\0');
     return tmp;
 }
 
@@ -61,7 +56,6 @@ char *wind_strcat(char *dest, const char *src)
 char* wind_strncat(char *dest, const char *src, w_uint32_t count)
 {
     char *tmp = dest;
-
     if (count) {
         while (*dest)
             dest++;
