@@ -57,6 +57,9 @@ typedef struct __core_var_s
 #if WIND_PIPE_SUPPORT
     dlist_s pipelist;
 #endif
+#if WIND_WATCHDOG_SUPPORT
+    dlist_s watchdoglist;
+#endif
 #if WIND_CONSOLE_SUPPORT
     dlist_s cmdlist;
 #endif

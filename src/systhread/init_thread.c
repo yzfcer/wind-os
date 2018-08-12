@@ -3,6 +3,7 @@
 #include "wind_thread.h"
 #include "wind_softirq.h"
 #include "wind_heap.h"
+#include "wind_watchdog.h"
 #include "wind_dev.h"
 #include "wind_blkdev.h"
 #include "wind_time.h"
@@ -65,6 +66,9 @@ static w_err_t init_thread(w_int32_t argc,w_int8_t **argv)
     
 #if WIND_DATETIME_SUPPORT
     _wind_datetime_init();
+#endif
+#if WIND_WATCHDOG_SUPPORT
+    _wind_watchdog_init();
 #endif
     _create_idle_thread();
     set_idle_cnt();

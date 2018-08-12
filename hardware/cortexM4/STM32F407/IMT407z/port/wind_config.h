@@ -39,6 +39,8 @@
 
 #define WIND_EVENT_SUPPORT 0  //是否支持事件机制
 
+#define WIND_WATCHDOG_SUPPORT 1 //是否支持线程级看门狗
+
 #define WIND_REALTIME_CORE_SUPPORT 1 //是否支持实时内核，即抢占式切换
 
 #define WIND_STKPOOL_SUPPORT 1 //是否支持线程堆栈通过内存池分配
@@ -88,6 +90,8 @@
 #define WIND_MBOX_MAX_NUM 5//邮箱的数量
 
 #define WIND_EVENT_MAX_NUM 5//事件的数量
+
+#define WIND_WATCHDOG_MAX_NUM 5//线程级看门狗的数量
 
 #define WIND_SEM_MAX_NUM 10 //最大的信号量的数量
 

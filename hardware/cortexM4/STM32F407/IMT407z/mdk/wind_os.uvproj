@@ -364,7 +364,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F40_41xxx,USE_STDPERIPH_DRIVER,_USE_USER_PRINT,__USE_C99_MATH</Define>
               <Undefine></Undefine>
-              <IncludePath>..\board;..\driver;..\port;..\start;..\..\..\..\..\src\api;..\..\..\..\..\src\app;..\..\..\..\..\src\common;..\..\..\..\..\src\console\framework;..\..\..\..\..\src\core;..\..\..\..\..\src\driver;..\..\..\..\..\src\entry;..\..\..\..\..\src\lib;..\..\..\..\..\src\xlib;..\..\..\..\..\src\console\cmd;..\..\..\..\..\src\test\framework;..\..\..\..\..\src\test\port;..\..\..\..\..\src\test\case;..\..\..\..\..\src\dev;..\..\..\..\..\src\components\lua-5.3.4\src;..\..\..\..\..\src\fs\treefs;..\..\..\..\..\src\components\xmodem</IncludePath>
+              <IncludePath>..\board;..\driver;..\port;..\start;..\..\..\..\..\src\api;..\..\..\..\..\src\app;..\..\..\..\..\src\common;..\..\..\..\..\src\console\framework;..\..\..\..\..\src\core;..\..\..\..\..\src\driver;..\..\..\..\..\src\entry;..\..\..\..\..\src\lib;..\..\..\..\..\src\xlib;..\..\..\..\..\src\console\cmd;..\..\..\..\..\src\test\framework;..\..\..\..\..\src\test\port;..\..\..\..\..\src\test\case;..\..\..\..\..\src\dev;..\..\..\..\..\src\components\lua-5.3.4\src;..\..\..\..\..\src\fs;..\..\..\..\..\src\fs\treefs;..\..\..\..\..\src\components\xmodem</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1128,11 +1128,6 @@
               <FilePath>..\..\..\..\..\src\console\cmd\cmd_lua.c</FilePath>
             </File>
             <File>
-              <FileName>cmd_treefs.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\console\cmd\cmd_treefs.c</FilePath>
-            </File>
-            <File>
               <FileName>cmd_xmodem.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\console\cmd\cmd_xmodem.c</FilePath>
@@ -1417,6 +1412,16 @@
               <FileType>5</FileType>
               <FilePath>..\..\..\..\..\src\core\wind_softirq.h</FilePath>
             </File>
+            <File>
+              <FileName>wind_watchdog.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\core\wind_watchdog.c</FilePath>
+            </File>
+            <File>
+              <FileName>wind_watchdog.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\core\wind_watchdog.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1506,11 +1511,6 @@
               <FileName>test_pool.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\test\testcase\test_pool.c</FilePath>
-            </File>
-            <File>
-              <FileName>test_treefs.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\test\testcase\test_treefs.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1818,6 +1818,9 @@
               <FilePath>..\..\..\..\..\src\components\lua-5.3.4\port\lua_port.c</FilePath>
             </File>
           </Files>
+        </Group>
+        <Group>
+          <GroupName>fs</GroupName>
         </Group>
         <Group>
           <GroupName>fs_treefs</GroupName>
