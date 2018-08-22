@@ -1,6 +1,7 @@
 #include "wind_type.h"
 #include "wind_thread.h"
 #include "wind_debug.h"
+#include "wind_watchdog.h"
 
 #if WIND_DAEMON_THREAD_SUPPORT 
 #define DAEMON_STK_SIZE 256
@@ -10,6 +11,8 @@ static w_stack_t daemonstk[DAEMON_STK_SIZE];
 static w_err_t daemon_thread(w_int32_t argc,w_int8_t **argv)
 {
     (void)argc;
+    wind_watchdog_create("daemon",0,10);
+	
     while(1)
     {
         wind_thread_sleep(1000);

@@ -34,6 +34,8 @@
 #include "wind_dev.h"
 #include "wind_blkdev.h"
 #include "wind_pipe.h"
+#include "wind_watchdog.h"
+
 #if WIND_CONSOLE_SUPPORT
 
 COMMAND_DISC(list)
@@ -65,6 +67,9 @@ COMMAND_USAGE(list)
 #endif
 #if WIND_BLK_DRVFRAME_SUPPORT
     console_printf("list blkdev:show all block devices list.\r\n");
+#endif
+#if WIND_WATCHDOG_SUPPORT
+    console_printf("list watchdog:show all thread watchdog.\r\n");
 #endif
 }
 
@@ -132,6 +137,13 @@ COMMAND_MAIN(list,argc,argv)
         wind_blkdev_print(&g_core.blkdevlist);
         return ERR_FAIL;
     }
+#endif
+#if WIND_WATCHDOG_SUPPORT
+        else if(0 == wind_strcmp(argv[1],"watchdog"))
+        {
+            wind_watchdog_print(&g_core.watchdoglist);
+            return ERR_FAIL;
+        }
 #endif
     else
         wind_error("command is NOT support on device.");

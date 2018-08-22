@@ -36,10 +36,15 @@ extern "C" {
 #endif
 
 #if WIND_WATCHDOG_SUPPORT
-#define WIND_WATCHDOG_MAGIC 0x33FA8157
+#define WIND_WATCHDOG_MAGIC 0x33FA81
+
+#define WDOG_WARN  0x00
+#define WDOG_RESET 0x01
+
 typedef struct _wind_watchdog
 {
-    w_uint32_t magic;
+    w_uint32_t magic:24;
+    w_uint32_t flag;
     const char* name;
     dnode_s watchdognode;
     w_int16_t time_max;    //初始化的信号量的值
@@ -49,7 +54,7 @@ typedef struct _wind_watchdog
 
 w_err_t _wind_watchdog_init(void);
 watchdog_s *wind_watchdog_get(const char *name);
-watchdog_s *wind_watchdog_create(const char *name,w_int16_t timeout_1s);
+watchdog_s *wind_watchdog_create(const char *name,w_uint32_t flag,w_int16_t timeout_1s);
 w_err_t wind_watchdog_destroy(watchdog_s *watchdog);
 w_err_t wind_watchdog_feed(watchdog_s *watchdog);
 w_err_t wind_watchdog_print(dlist_s *list);
