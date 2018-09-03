@@ -14,7 +14,7 @@
 WIND_POOL(filepool,WIND_FILE_MAX_NUM,sizeof(file_s));
 static char *curpath = NULL;
 
-static file_s *_file_malloc(void)
+file_s *_file_malloc(void)
 {
     return wind_pool_malloc(filepool);
 }
@@ -36,7 +36,7 @@ static w_err_t mount_param_check(char *fsname,char *blkname,char *path)
     dev = wind_blkdev_get(blkname);
     WIND_ASSERT_RETURN(dev != NULL,ERR_INVALID_PARAM);
     fs = wind_fs_get(fsname);
-    WIND_ASSERT_RETURN(fs == NULL,ERR_OBJ_REPEAT);
+    WIND_ASSERT_RETURN(fs != NULL,ERR_OBJ_REPEAT);
     if(wind_strlen(path) >= FS_MOUNT_PATH_LEN)
         return ERR_INVALID_PARAM;
     if(wind_strlen(fsname) >= FS_MOUNT_PATH_LEN)
@@ -79,7 +79,7 @@ w_err_t wind_fs_regster(fs_s *fs,w_int32_t count)
             }
         }
         wind_disable_switch();
-        dlist_insert_tail(&g_core.devlist,&fs[i].fsnode);
+        dlist_insert_tail(&g_core.fslist,&fs[i].fsnode);
         wind_enable_switch();    
     }
     return ERR_OK;
@@ -142,11 +142,11 @@ fs_s *wind_fs_get_bypath(char *path)
     dnode_s *dnode;
     w_int32_t len;
     wind_disable_switch();
-    foreach_node(dnode,&g_core.filelist)
+    foreach_node(dnode,&g_core.fslist)
     {
         fs = DLIST_OBJ(dnode,fs_s,fsnode);
         len = wind_strlen(fs->mount_path);
-        if(wind_memcmp(path,fs->name,len) == 0)
+        if(wind_memcmp(path,fs->mount_path,len) == 0)
         {
             if((retfs == NULL)||(wind_strlen(retfs->mount_path) < len))
                 retfs = fs;
@@ -176,9 +176,9 @@ w_err_t wind_fs_mount(char *fsname,char *blkname,char *path)
     fs->blkdev = blkdev;
     if(fs->ops->init)
         fs->ops->init(fs);
-    wind_disable_switch();
-    dlist_insert_tail(&g_core.fslist,&fs->fsnode);
-    wind_enable_switch();
+    //wind_disable_switch();
+    //dlist_insert_tail(&g_core.fslist,&fs->fsnode);
+    //wind_enable_switch();
     return ERR_OK;
 }
 
@@ -188,9 +188,9 @@ w_err_t wind_fs_unmount(char *fsname)
     WIND_ASSERT_RETURN(fsname != NULL,ERR_NULL_POINTER);
     fs = wind_fs_get(fsname);
     WIND_ASSERT_RETURN(fs != NULL,ERR_INVALID_PARAM);
-    wind_disable_switch();
-    dlist_remove(&g_core.fslist,&fs->fsnode);
-    wind_enable_switch();
+    //wind_disable_switch();
+    //dlist_remove(&g_core.fslist,&fs->fsnode);
+    //wind_enable_switch();
     fs->blkdev = NULL;
     DNODE_INIT(fs->fsnode);
     wind_free(fs->mount_path);
@@ -308,7 +308,7 @@ file_s* wind_file_open(const char *path,fmode_e fmode)
     }
     len1 = wind_strlen(fs->mount_path);
     realpath = wind_malloc(len-len1+1);
-    wind_strcpy(realpath,(const char*)fullpath[len1]);
+    wind_strcpy(realpath,(const char*)&fullpath[len1-1]);
     
     file = wind_file_get(fs,fullpath);
     if(file != NULL)
@@ -341,7 +341,9 @@ file_s* wind_file_open(const char *path,fmode_e fmode)
     }
     else
     {
+        wind_disable_switch();
         dlist_insert_tail(&g_core.filelist,&file->filenode);
+        wind_enable_switch();
         wind_free(fullpath);
         return file;
     }

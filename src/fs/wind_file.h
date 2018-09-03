@@ -103,6 +103,8 @@ fs##_op_fputs,\
 #define WIND_FS_DEF(name,type,ops) \
 {WIND_FS_MAGIC,#name,NULL,{NULL,NULL},type,NULL,&ops}
 
+file_s *_file_malloc(void);
+
 w_err_t _wind_fs_init(void);
 fs_s *wind_fs_get(char *name);
 w_err_t wind_fs_mount(char *fsname,char *devname,char *path);

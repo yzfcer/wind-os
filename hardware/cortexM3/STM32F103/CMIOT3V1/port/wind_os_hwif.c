@@ -66,7 +66,7 @@ void _wind_heaps_init(void)
 
 
 
-w_pstack_t wind_stk_init(thread_run_f pfunc,void *pdata, w_pstack_t pstkbt)
+w_pstack_t _wind_thread_stack_init(thread_run_f pfunc,void *pdata, w_pstack_t pstkbt)
 {
     w_pstack_t stk;
     stk = pstkbt;  

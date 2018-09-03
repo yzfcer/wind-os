@@ -1,4 +1,3 @@
-//#include "wind_file.h"
 #include "treefs.h"
 #include "wind_tree.h"
 #include "wind_heap.h"
@@ -85,7 +84,6 @@ int split_path(char *path,char **layers,w_int32_t layercnt)
 static treefile_s *mk_subnode(treefile_s *parent,char *nodename,w_uint8_t isdir)
 {
     treefile_s *fsnode;
-    attr_u *attr;
     int len = wind_strlen(nodename);
     WIND_ASSERT_RETURN(nodename != NULL,NULL);
     fsnode = treefs_malloc(sizeof(treefile_s));
@@ -97,9 +95,7 @@ static treefile_s *mk_subnode(treefile_s *parent,char *nodename,w_uint8_t isdir)
     wind_memset(fsnode->filename,0,len+1);
     wind_strcpy(fsnode->filename,nodename);
     
-    fsnode->attr = 0755;
-    attr = (attr_u*)&fsnode->attr;
-    attr->sattr.isdir = isdir?1:0;
+    fsnode->isdir = isdir?1:0;
     fsnode->mode = 0;
     fsnode->offset = 0;
     fsnode->filelen = 0;
@@ -176,13 +172,11 @@ SEARCH_COMPLETE:
 treefile_s *treefile_create(const char *path)
 {
     w_int32_t len;
-    attr_u *uattr;
     treefile_s *fsnode = NULL;
     fsnode = search_node(path,B_TRUE);
     WIND_ASSERT_RETURN(fsnode != NULL,NULL);
     len = wind_strlen(path);
-    uattr = (attr_u*)&fsnode->attr;
-    uattr->sattr.isdir = path[len-1] == '/'?1:0;
+    fsnode->isdir = path[len-1] == '/'?1:0;
     return fsnode;
 }
 
@@ -193,8 +187,6 @@ w_err_t treefile_rm(treefile_s *file)
     treefile_s *subfile;
     WIND_ASSERT_RETURN(file != NULL,ERR_NULL_POINTER);
     tree = &file->tree;
-    //if(wind_strcmp(file->filename,"") == 0)
-    //    return ERR_INVALID_PARAM;
     wind_printf("rm %s\r\n",file->filename);
     foreach_node(dnode,&tree->child_list)
     {
@@ -249,22 +241,6 @@ w_err_t treefs_format(void)
     treefile_write(file,(w_uint8_t*)buff,wind_strlen(buff));
     treefile_close(file);
     #endif
-    return ERR_OK;
-}
-
-w_err_t treefile_get_attr(treefile_s *file,tf_attr_s *attr)
-{
-    attr_u uattr;
-    uattr.vattr = file->attr;
-    wind_memcpy(attr,&uattr.sattr,sizeof(attr_u));
-    return ERR_OK;
-}
-
-w_err_t treefile_set_attr(treefile_s *file,tf_attr_s *attr)
-{
-    attr_u uattr;
-    uattr.vattr = file->attr;
-    wind_memcpy(&uattr.sattr,attr,sizeof(attr_u));
     return ERR_OK;
 }
 
@@ -333,12 +309,9 @@ w_int32_t treefile_read(treefile_s* file,w_uint8_t *buff, w_int32_t size)
     w_uint32_t dataidx,bufidx;
     dnode_s *dnode;
     w_uint8_t *src;
-    //tf_attr_s attr;
     WIND_ASSERT_RETURN(file != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(file->magic == TREEFILE_MAGIC,ERR_INVALID_PARAM);
-    //treefile_get_attr(file,&attr);
-    //WIND_ASSERT_RETURN(attr.u_r != 0,ERR_FAIL);
-    WIND_ASSERT_RETURN((file->attr & TF_FMODE_R),ERR_FAIL);
+    WIND_ASSERT_RETURN(file->isdir != 0,ERR_FAIL);
     WIND_ASSERT_RETURN((file->mode & TF_FMODE_R),ERR_FAIL);
     
     WIND_ASSERT_RETURN(buff != NULL,ERR_NULL_POINTER);
@@ -373,11 +346,8 @@ w_int32_t treefile_write(treefile_s* file,w_uint8_t *buff, w_int32_t size)
     w_uint32_t dataidx,bufidx;
     dnode_s *dnode;
     w_uint8_t *dest;
-    //tf_attr_s attr;
     WIND_ASSERT_RETURN(file != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(file->magic == TREEFILE_MAGIC,ERR_INVALID_PARAM);
-    //treefile_get_attr(file,&attr);
-    //WIND_ASSERT_RETURN(attr.u_w != 0,ERR_FAIL);
     WIND_ASSERT_RETURN((file->mode & (TF_FMODE_W | TF_FMODE_A)),ERR_FAIL);
     WIND_ASSERT_RETURN(buff != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(size > 0,ERR_INVALID_PARAM);
@@ -427,11 +397,9 @@ treefile_s *treefile_readdir(treefile_s* file,w_int32_t index)
     int idx;
     dnode_s *dnode;
     treefile_s *sub;
-    attr_u *attr;
     WIND_ASSERT_RETURN(file != NULL,NULL);
     WIND_ASSERT_RETURN(file->magic == TREEFILE_MAGIC,NULL);
-    attr = (attr_u*)&file->attr;
-    WIND_ASSERT_RETURN(attr->sattr.isdir == 1,NULL);
+    WIND_ASSERT_RETURN(file->isdir == 1,NULL);
     
     idx = 0;
     foreach_node(dnode,&file->tree.child_list)

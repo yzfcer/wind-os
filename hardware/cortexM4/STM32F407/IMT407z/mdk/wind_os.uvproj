@@ -902,6 +902,11 @@
               <FileType>1</FileType>
               <FilePath>..\device\dev_beep.c</FilePath>
             </File>
+            <File>
+              <FileName>blkdev_null.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\device\blkdev_null.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

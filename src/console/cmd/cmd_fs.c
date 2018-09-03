@@ -52,8 +52,7 @@ static w_err_t fs_cmd_cd(w_int32_t argc,char **argv)
 {
     w_bool_t isexist;
     char *path;
-    file_s *file;
-    //tf_attr_s attr;
+    //file_s *file;
     char *curpath = wind_file_get_current_path();
     if(argc < 3)
         return ERR_FAIL;
@@ -65,8 +64,8 @@ static w_err_t fs_cmd_cd(w_int32_t argc,char **argv)
         wind_free(path);
         return ERR_FILE_NOT_EXIT;
     }
+    #if 0
     file = wind_file_open(path,FMODE_R);
-    //wind_file_get_attr(file,&attr);
     if(!file->isdir)
     {
         console_printf("%s is NOT a valid directory\r\n",path);
@@ -74,6 +73,7 @@ static w_err_t fs_cmd_cd(w_int32_t argc,char **argv)
         return ERR_INVALID_PARAM;
     }
     wind_file_close(file);
+    #endif
     wind_free(curpath);
     curpath = path;
     return ERR_OK;
