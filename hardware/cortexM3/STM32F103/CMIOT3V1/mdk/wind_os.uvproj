@@ -1121,11 +1121,6 @@
               <FilePath>..\..\..\..\..\src\console\cmd\cmd_lua.c</FilePath>
             </File>
             <File>
-              <FileName>cmd_treefs.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\console\cmd\cmd_treefs.c</FilePath>
-            </File>
-            <File>
               <FileName>cmd_beep.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\console\cmd\cmd_beep.c</FilePath>
