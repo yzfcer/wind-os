@@ -36,7 +36,6 @@ w_err_t wind_dev_register(dev_s *dev,w_int32_t count)
 {
     w_int32_t i;
     dev_s *devi;    
-    dnode_s *dnode;
     w_err_t err;
     WIND_ASSERT_RETURN(dev != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(count > 0,ERR_INVALID_PARAM);
@@ -44,6 +43,12 @@ w_err_t wind_dev_register(dev_s *dev,w_int32_t count)
     {
         WIND_ASSERT_RETURN(dev[i].magic == WIND_DEV_MAGIC,ERR_INVALID_PARAM);
         wind_notice("register dev:%s",dev[i].name);
+        devi = wind_dev_get(dev[i].name);
+        if(devi != NULL)
+        {
+            wind_error("device has been registered.\r\n");
+            continue;
+        }
         if(dev[i].ops->init)
         {
             err = dev[i].ops->init(&dev[i]);
@@ -53,20 +58,10 @@ w_err_t wind_dev_register(dev_s *dev,w_int32_t count)
                 continue;
             }
         }
-        wind_disable_switch();
-        foreach_node(dnode,&g_core.devlist)
-        {
-            devi = DLIST_OBJ(dnode,dev_s,devnode);
-            if(wind_strcmp(dev[i].name,devi->name) == 0)
-            {
-                wind_error("device has been registered.\r\n");
-                wind_enable_interrupt();
-                return ERR_FAIL;
-            }
-        }
         dev[i].mutex = wind_mutex_create(dev[i].name);
+        wind_disable_switch();
         dlist_insert_tail(&g_core.devlist,&dev[i].devnode);
-        wind_enable_switch();    
+        wind_enable_switch();
     }
     
     wind_enable_switch();
@@ -81,15 +76,14 @@ w_err_t wind_dev_unregister(dev_s *dev)
     wind_notice("unregister dev:%s",dev->name);
     wind_disable_switch();
     dnode = dlist_remove(&g_core.devlist,dnode);
+    wind_enable_switch();
     if(dnode == NULL)
     {
         wind_error("device has NOT been registered.\r\n");
-        wind_enable_interrupt();
         return ERR_FAIL;
     }
     wind_mutex_destroy(dev->mutex);
     dev->mutex = NULL;
-    wind_enable_switch();
     return ERR_OK;
 }
 

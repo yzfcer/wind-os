@@ -4,49 +4,30 @@
 #include "wind_type.h"
 #include "wind_dlist.h"
 #include "wind_tree.h"
-#include "wind_file.h"
+//#include "wind_file.h"
+
 #if WIND_FS_SUPPORT
+typedef enum
+{
+    TF_FMODE_R = 0x01,
+    TF_FMODE_W = 0x02,
+    TF_FMODE_RW = 0x03,
+    TF_FMODE_CRT = 0x04,
+    TF_FMODE_A = 0x08,
+}tf_fmode_e;
+
 #define TREEFILE_MAGIC 0x48A97D26
 #define TREEFS_DIR_LAYCNT 32
 
 #define TREEFS_BLK_SIZE 128
 
-#if  0
-#define TREEFS_SET_ATTR_READONLY(attr,v) ((attr.vattr.readonly) = v?1:0)
-#define TREEFS_SET_ATTR_ISDIR(attr,v) ((attr.vattr.isdir) = v?1:0)
-#define TREEFS_SET_ATTR_MODE(attr,v) ((attr.vattr.mode) = (w_uint16_t)(v))
-
-#define TREEFS_GET_ATTR_READONLY(attr,v) (attr.vattr.readonly)
-#define TREEFS_GET_ATTR_ISDIR(attr,v) (attr.vattr.isdir)
-#define TREEFS_GET_ATTR_MODE(attr,v) (attr.vattr.mode)
-#endif
-
-typedef struct 
-{
-    w_uint16_t o_x:1;
-    w_uint16_t o_w:1;
-    w_uint16_t o_r:1;
-    w_uint16_t g_x:1;
-    w_uint16_t g_w:1;
-    w_uint16_t g_r:1;
-    w_uint16_t u_x:1;
-    w_uint16_t u_w:1;
-    w_uint16_t u_r:1;
-    w_uint16_t isdir:1;
-}tf_attr_s;
-
-typedef union 
-{
-    w_uint16_t vattr;
-    tf_attr_s sattr;
-}attr_u;
 
 typedef struct treefs_s
 {
     w_uint32_t magic;
     tree_s tree;
     char *filename;
-    w_uint16_t attr;
+    w_uint16_t isdir:1;
     w_uint8_t mode;
     w_uint32_t offset;
     w_uint32_t filelen;
@@ -59,13 +40,9 @@ w_err_t treefs_free(void *ptr);
 
 w_err_t treefs_format(void);
 
-char *treefs_get_full_path(char *oldpath,char *newpath,w_uint16_t isdir);
 
-treefile_s *treefs_mk_file(const char *path);
-w_err_t treefs_rm_file(treefile_s *file);
-
-w_err_t treefile_get_attr(treefile_s *file,tf_attr_s *attr);
-w_err_t treefile_set_attr(treefile_s *file,tf_attr_s *attr);
+treefile_s *treefile_create(const char *path);
+w_err_t treefile_rm(treefile_s *file);
 
 
 treefile_s* treefile_open(const char *path,w_uint16_t mode);

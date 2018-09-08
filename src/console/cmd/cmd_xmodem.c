@@ -54,7 +54,7 @@ static w_err_t cmd_xmodem_get(int argc,char **argv)
     }
     xmodem_recv_start();
     buff = wind_malloc(4096);
-    file = treefile_open(argv[2],FMODE_CRT|FMODE_W);
+    file = treefile_open(argv[2],TF_FMODE_CRT | TF_FMODE_W);
     for(;;)
     {
         wind_memset(buff,0,4096);
@@ -87,7 +87,7 @@ static w_err_t cmd_xmodem_put(int argc,char **argv)
         wind_error("unknown file path.");
         return ERR_INVALID_PARAM;
     }
-    file = treefile_open(argv[2],FMODE_R);
+    file = treefile_open(argv[2],TF_FMODE_R);
     if(file == NULL)
     {
         wind_error("file is NOT exist.");

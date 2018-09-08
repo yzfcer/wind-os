@@ -9,7 +9,9 @@
 #include "wind_time.h"
 #include "wind_debug.h"
 #include "wind_os_hwif.h"
-
+#if WIND_FS_SUPPORT
+#include "wind_file.h"
+#endif
 
 #define INIT_STK_SIZE 256
 
@@ -61,7 +63,7 @@ static w_err_t init_thread(w_int32_t argc,w_int8_t **argv)
     _wind_dev_init();
     _wind_blkdev_init();
 #if WIND_HEAP_SUPPORT
-        _wind_heaps_init();
+		_wind_heaps_init();
 #endif
     
 #if WIND_DATETIME_SUPPORT
@@ -79,7 +81,8 @@ static w_err_t init_thread(w_int32_t argc,w_int8_t **argv)
     _create_timer_thread();
 #endif
 #if WIND_FS_SUPPORT
-    treefs_format();
+    //treefs_format();
+    _wind_fs_init();
 #endif
     _create_stati_thread();
     _create_daemon_thread();

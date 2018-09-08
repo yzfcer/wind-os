@@ -30,11 +30,14 @@
 #include "misc.h"
 #include "usart1.h"
 #include "core_cm4.h"
+
+//目标硬件的最初阶段初始化
 void _wind_target_init(void)
 {
 
 }
 
+//设备重启
 void wind_system_reset(void)
 {
     NVIC_SystemReset();
@@ -57,10 +60,17 @@ void _wind_heaps_init(void)
 }
 #endif
 
+#if WIND_FS_SUPPORT
+#include "wind_file.h"
+void _wind_fs_mount_init(void)
+{
+    wind_fs_mount("treefs","null","/");
+}
+#endif
 
 
 
-w_pstack_t wind_stk_init(thread_run_f pfunc,void *pdata, w_pstack_t pstkbt)
+w_pstack_t _wind_thread_stack_init(thread_run_f pfunc,void *pdata, w_pstack_t pstkbt)
 {
     w_pstack_t stk;
     stk = pstkbt;                            /* Load stack pointer                                 */

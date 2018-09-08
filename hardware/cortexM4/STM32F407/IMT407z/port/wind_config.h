@@ -71,9 +71,9 @@
 
 #define WIND_BLK_DRVFRAME_SUPPORT 1  //是否块驱动框架
 
-#define WIND_FS_SUPPORT 0 //是否支持内存文件系统
+#define WIND_FS_SUPPORT 1 //是否支持内存文件系统
 
-#define WIND_LUA_SUPPORT 1 //是否支持lua脚本语言
+#define WIND_LUA_SUPPORT 0 //是否支持lua脚本语言
 
 #define WIND_XMODEM_SUPPORT 1 //是否支持XMODEM协议
 

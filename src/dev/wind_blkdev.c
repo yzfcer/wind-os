@@ -36,7 +36,6 @@ w_err_t wind_blkdev_register(blkdev_s *blkdev,w_int32_t count)
 {
     w_int32_t i;
     blkdev_s *devi;    
-    dnode_s *dnode;
     w_err_t err;
     WIND_ASSERT_RETURN(blkdev != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(count > 0,ERR_INVALID_PARAM);
@@ -44,6 +43,12 @@ w_err_t wind_blkdev_register(blkdev_s *blkdev,w_int32_t count)
     {
         WIND_ASSERT_RETURN(blkdev[i].magic == WIND_BLKDEV_MAGIC,ERR_INVALID_PARAM);
         wind_notice("register blkdev:%s",blkdev[i].name);
+        devi = wind_blkdev_get(blkdev[i].name);
+        if(devi != NULL)
+        {
+            wind_error("device has been registered.\r\n");
+            continue;
+        }
         if(blkdev[i].ops->init)
         {
             err = blkdev[i].ops->init(&blkdev[i]);
@@ -53,24 +58,11 @@ w_err_t wind_blkdev_register(blkdev_s *blkdev,w_int32_t count)
                 continue;
             }
         }
-            
-        wind_disable_switch();
-        foreach_node(dnode,&g_core.devlist)
-        {
-            devi = DLIST_OBJ(dnode,blkdev_s,blkdevnode);
-            if(wind_strcmp(blkdev[i].name,devi->name) == 0)
-            {
-                wind_error("device has been registered.\r\n");
-                wind_enable_interrupt();
-                return ERR_FAIL;
-            }
-        }
         blkdev[i].mutex = wind_mutex_create(blkdev[i].name);
+        wind_disable_switch();
         dlist_insert_tail(&g_core.blkdevlist,&blkdev[i].blkdevnode);
         wind_enable_switch();    
     }
-    
-    wind_enable_switch();
     return ERR_OK;
 }
 
@@ -82,15 +74,14 @@ w_err_t wind_blkdev_unregister(blkdev_s *blkdev)
     wind_notice("unregister blkdev:%s",blkdev->name);
     wind_disable_switch();
     dnode = dlist_remove(&g_core.blkdevlist,dnode);
+    wind_enable_switch();
     if(dnode == NULL)
     {
         wind_error("blkdevice has NOT been registered.\r\n");
-        wind_enable_interrupt();
         return ERR_FAIL;
     }
     wind_mutex_destroy(blkdev->mutex);
     blkdev->mutex = NULL;
-    wind_enable_switch();
     return ERR_OK;
 }
 

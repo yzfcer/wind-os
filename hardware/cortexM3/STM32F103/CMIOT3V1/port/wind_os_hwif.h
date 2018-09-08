@@ -39,7 +39,7 @@ void _wind_heaps_init(void);
 
 typedef  void (*thread_run_f)(void *pargs);
 //线程堆栈的初始化入口，移植需要重新实现
-w_pstack_t wind_stk_init(thread_run_f pfunc,void *pdata, w_pstack_t pstkbt);
+w_pstack_t _wind_thread_stack_init(thread_run_f pfunc,void *pdata, w_pstack_t pstkbt);
 
 
 #ifdef __cplusplus

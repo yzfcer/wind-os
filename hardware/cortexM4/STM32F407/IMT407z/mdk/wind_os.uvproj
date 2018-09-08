@@ -902,6 +902,11 @@
               <FileType>1</FileType>
               <FilePath>..\device\dev_beep.c</FilePath>
             </File>
+            <File>
+              <FileName>blkdev_null.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\device\blkdev_null.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1136,6 +1141,11 @@
               <FileName>cmd_beep.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\console\cmd\cmd_beep.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_fs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\console\cmd\cmd_fs.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1411,16 +1421,6 @@
               <FileName>wind_softirq.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\..\..\..\src\core\wind_softirq.h</FilePath>
-            </File>
-            <File>
-              <FileName>wind_watchdog.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\core\wind_watchdog.c</FilePath>
-            </File>
-            <File>
-              <FileName>wind_watchdog.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\core\wind_watchdog.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -1821,6 +1821,23 @@
         </Group>
         <Group>
           <GroupName>fs</GroupName>
+          <Files>
+            <File>
+              <FileName>adapter_treefs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\fs\adapter_treefs.c</FilePath>
+            </File>
+            <File>
+              <FileName>wind_file.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\fs\wind_file.c</FilePath>
+            </File>
+            <File>
+              <FileName>wind_file.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\fs\wind_file.h</FilePath>
+            </File>
+          </Files>
         </Group>
         <Group>
           <GroupName>fs_treefs</GroupName>

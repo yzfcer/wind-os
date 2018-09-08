@@ -24,7 +24,7 @@ DECLARE_SUITE(test_heap);
 DECLARE_SUITE(test_softirq);
 #endif
 #if WIND_FS_SUPPORT
-DECLARE_SUITE(test_treefs);
+//DECLARE_SUITE(test_treefs);
 #endif
 
 void test_suite_register_all(void)
@@ -52,7 +52,7 @@ void test_suite_register_all(void)
     REGSTER_SUITE(test_softirq);
 #endif
 #if WIND_FS_SUPPORT
-    REGSTER_SUITE(test_treefs);
+//    REGSTER_SUITE(test_treefs);
 #endif
 }
 
