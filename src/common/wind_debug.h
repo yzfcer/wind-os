@@ -64,7 +64,7 @@ void wind_print_space(w_int32_t space8_cnt);
 #define PRINT_LV_NOTICE  2
 #define PRINT_LV_WARN    3
 #define PRINT_LV_ERROR   4
-#define PRINT_LV_CRIT     5
+#define PRINT_LV_CRIT    5
 
 #define PRINT_LEVEL PRINT_LV_NOTICE
 

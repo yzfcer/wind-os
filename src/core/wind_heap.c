@@ -253,13 +253,16 @@ w_err_t wind_heap_free(heap_s* heap,void *ptr)
     
     heapitem_s* item,*tmpitem;
     dnode_s *pdnode;
-    //wind_debug("heap_free 0x%08x",ptr);
     if(ptr == NULL)
+    {
+        wind_debug("wind_free:ptr=null");
         return ERR_OK;
+    }
     item = ITEM_FROM_PTR(ptr);
     WIND_ASSERT_RETURN(item->magic == WIND_HEAPITEM_MAGIC,ERR_INVALID_PARAM);
     WIND_ASSERT_RETURN(item->used == 1,ERR_INVALID_PARAM);
     WIND_ASSERT_RETURN(item->heap != NULL,ERR_INVALID_PARAM);
+    wind_debug("heap_free %s,0x%08x",heap->name,ptr);
     heap = item->heap;
     WIND_ASSERT_RETURN(heap != NULL,ERR_INVALID_PARAM);
     WIND_ASSERT_RETURN(heap->magic == WIND_HEAP_MAGIC,ERR_INVALID_PARAM);
@@ -305,24 +308,6 @@ w_err_t wind_heap_print(dlist_s *list)
             heap->is_private?"TRUE":"FALSE");
     }
     wind_print_space(7);
-
-    #if 0
-    foreach_node(dnode,list)
-    {
-        heap = DLIST_OBJ(dnode,heap_s,heapnode);
-        if(heap->magic != WIND_HEAP_MAGIC)
-        {
-            wind_error("heap header:0x%x has errors.",heap);
-            return ERR_MEM;
-        }
-        wind_printf("magic :%x\r\n",heap->magic);
-        wind_printf("name  :%s\r\n",heap->name);
-        wind_printf("addr  :%x\r\n",heap->addr);
-        wind_printf("size  :%d\r\n",heap->stati.tot);
-        wind_printf("used  :%d\r\n",heap->stati.used);
-        wind_printf("maxused  :%d\r\n",heap->stati.max);
-    }
-    #endif
     return ERR_OK;
 }
 
@@ -373,19 +358,24 @@ void *wind_malloc(w_uint32_t size)
     void *ptr;
     heap_s* heap;
     dnode_s *dnode;
-    //wind_debug("wind_malloc %d",size);
+    wind_debug("wind_malloc:%d",size);
     size = __ALIGN_R(size);
     foreach_node(dnode,&g_core.heaplist)
     {
         heap = DLIST_OBJ(dnode,heap_s,heapnode);
-        //wind_debug("malloc in heap:0x%x\r\n",heap);
+        wind_debug("malloc in heap:0x%x",heap);
         if(!heap->is_private)
         {
             ptr = wind_heap_malloc(heap, size);
             if(ptr)
+            {
+                wind_debug("ptr=0x%x",ptr);
                 return ptr;
+            }
+                
         }
     }
+    wind_error("memory is NULL");
     return NULL;
 }
 
@@ -394,10 +384,12 @@ w_err_t wind_free(void *ptr)
 {
     heapitem_s *item;
     if(ptr == NULL)
+    {
+        wind_debug("wind_free:ptr=null");
         return ERR_OK;
+    }
+    wind_debug("wind_free:ptr=0x%x",ptr);
     item = ITEM_FROM_PTR(ptr);
-    if(item->used != 1)
-        item->used = item->used;
     WIND_ASSERT_RETURN(item->magic == WIND_HEAPITEM_MAGIC,ERR_INVALID_PARAM);
     WIND_ASSERT_RETURN(item->used == 1,ERR_INVALID_PARAM);
     return wind_heap_free(item->heap,ptr);
@@ -409,7 +401,7 @@ void *wind_realloc(void *ptr, w_uint32_t newsize)
     void *pnew;
     heap_s* heap;
     dnode_s *dnode;
-    //wind_debug("wind_realloc 0x%0x,%d",ptr,newsize);
+    wind_debug("wind_realloc:0x%0x,%d",ptr,newsize);
     newsize = __ALIGN_R(newsize);
     if (ptr == NULL)
         return wind_malloc(newsize);
@@ -434,7 +426,7 @@ void *wind_calloc(w_uint32_t count, w_uint32_t size)
     WIND_ASSERT_RETURN(count > 0,NULL);
     WIND_ASSERT_RETURN(size > 0,NULL);
     size = __ALIGN_R(size);
-    wind_debug("wind_calloc %d,%d",count,size);
+    wind_debug("wind_calloc:%d,%d",count,size);
     tot_size = count *size;
     ptr = wind_malloc(tot_size);
     WIND_ASSERT_RETURN(ptr != NULL,NULL);

@@ -72,7 +72,7 @@ mutex_s *wind_mutex_get(const char *name)
 mutex_s *wind_mutex_create(const char *name)
 {
     mutex_s *mutex;
-    wind_notice("create mutex:%s",name);
+    //wind_notice("create mutex:%s",name);
     mutex = mutex_malloc();
     WIND_ASSERT_TODO(mutex != NULL,wind_enable_interrupt(),NULL);
     mutex->magic = WIND_MUTEX_MAGIC;
@@ -108,7 +108,7 @@ w_err_t wind_mutex_destroy(mutex_s *mutex)
     thread_s *thread;
     WIND_ASSERT_RETURN(mutex != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(mutex->magic == WIND_MUTEX_MAGIC,ERR_INVALID_PARAM);
-    wind_notice("destroy mutex:%s",mutex->name);
+    //wind_notice("destroy mutex:%s",mutex->name);
     wind_disable_interrupt();
     dlist_remove(&g_core.mutexlist,&mutex->mutexnode);
     foreach_node(dnode,&mutex->waitlist)

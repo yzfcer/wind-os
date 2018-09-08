@@ -17,19 +17,26 @@ static w_err_t treefs_op_format(fs_s *fs)
 {
     return ERR_OK;
 }
-
+/*
 static w_err_t treefs_op_mkdir(const char *path)
 {
     WIND_ASSERT_RETURN(path != NULL,ERR_NULL_POINTER);
     return ERR_FAIL;
 }
-
+*/
 static w_err_t treefs_op_open(file_s *file,fmode_e fmode)
 {
+    treefile_s *tfile;
     WIND_ASSERT_RETURN(file != NULL,ERR_NULL_POINTER);
-    file->fileobj = treefile_open(file->path,(tf_fmode_e)fmode);
-    if(file->fileobj == NULL)
+    tfile = treefile_open(file->path,(tf_fmode_e)fmode);
+    if(tfile == NULL)
         return ERR_FAIL;
+    if(file->isdir != tfile->isdir)
+    {
+        treefile_close(tfile);
+        return ERR_INVALID_PARAM;
+    }
+    file->fileobj = tfile;
     return ERR_OK;
 }
 
@@ -45,17 +52,23 @@ static w_err_t treefs_op_rmfile(file_s* file)
     return treefile_rm((treefile_s *)file->fileobj);
 }
 
-static file_s *treefs_op_subfile(file_s* file,w_int32_t index)
+static char *treefs_op_subfile(file_s* dir,w_int32_t index)
 {
-    file_s *nfile;
+    char *subname;
     treefile_s *tfile;
-    tfile = treefile_readdir((treefile_s *)file->fileobj,index);
-    WIND_ASSERT_RETURN(tfile != NULL,NULL);
-    nfile = _file_malloc();
-    WIND_ASSERT_RETURN(nfile != NULL,NULL);
-    nfile->fileobj = tfile;
-    //nf
-    return NULL;
+    w_int32_t len;
+    tfile = treefile_readdir((treefile_s *)dir->fileobj,index);
+    if(tfile == NULL)
+        return NULL;
+    len = wind_strlen(tfile->filename)+1;
+    if(len >= WFILE_NAME_LEN)
+    {
+        wind_error("file name:\"%s\" is too long.",tfile->filename);
+        return NULL;
+    }
+    WIND_ASSERT_RETURN(dir->subname != NULL,NULL);
+    wind_strcpy(dir->subname,tfile->filename);
+    return dir->subname;
 }
 
 static w_err_t treefs_op_seek(file_s* file,w_int32_t offset)

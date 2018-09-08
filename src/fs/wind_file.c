@@ -216,13 +216,13 @@ char *wind_file_get_current_path(void)
 void wind_file_set_current_path(char *path)
 {
     w_int32_t len = wind_strlen(path);
-    if(curpath == NULL)
+    if(curpath != NULL)
         wind_free(curpath);
     curpath = wind_malloc(len +1);
     wind_memcpy(curpath,path,len+1);
 }
 
-char *wind_file_get_full_path(char *pre_path,char *relative_path,w_uint16_t isdir)
+char *wind_full_path_generate(char *pre_path,char *relative_path,w_uint16_t isdir)
 {
     char *path;
     w_int32_t len,len1;
@@ -254,6 +254,10 @@ char *wind_file_get_full_path(char *pre_path,char *relative_path,w_uint16_t isdi
     return path;
 }
 
+w_err_t wind_full_path_release(char *path)
+{
+    return wind_free(path);
+}
 
 file_s *wind_file_get(fs_s *fs,const char *path)
 {
@@ -277,9 +281,13 @@ file_s *wind_file_get(fs_s *fs,const char *path)
 w_bool_t wind_file_existing(const char *path)
 {
     file_s *file;
+    w_uint32_t isdir;
     w_bool_t exist = B_FALSE;
+    WIND_ASSERT_RETURN(path != NULL,B_FALSE);
+    wind_debug("wind_file_existing:%s",path);
+    isdir = path[wind_strlen(path)-1]=='/'?1:0;
     file = wind_file_open(path,FMODE_R);
-    if(file != NULL)
+    if((file != NULL)&&(file->isdir==isdir))
     {
         exist = B_TRUE;
         wind_file_close(file);
@@ -289,21 +297,23 @@ w_bool_t wind_file_existing(const char *path)
 file_s* wind_file_open(const char *path,fmode_e fmode)
 {
     file_s *file;
-    char *fullpath = NULL,*realpath = NULL;
     fs_s *fs;
+    char *fullpath = NULL;
+    char *realpath = NULL;
     w_int32_t len,len1;
     w_uint16_t isdir;
     w_err_t err;
     WIND_ASSERT_RETURN(path != NULL,NULL);
+    wind_debug("open file:%s",path);
     len = wind_strlen(path);
     WIND_ASSERT_RETURN(len > 0,NULL);
     isdir = path[len-1] == '/'?1:0;
-    fullpath = wind_file_get_full_path(curpath,(char*)path,isdir);
+    fullpath = wind_full_path_generate(curpath,(char*)path,isdir);
     fs = wind_fs_get_bypath(fullpath);
     if(fs == NULL)
     {
         wind_error("path:%s NOT exsit.",fullpath);
-        wind_free(fullpath);
+        wind_full_path_release(fullpath);
         return NULL;
     }
     len1 = wind_strlen(fs->mount_path);
@@ -314,13 +324,14 @@ file_s* wind_file_open(const char *path,fmode_e fmode)
     if(file != NULL)
     {
         wind_error("file has been opened.");
-        wind_free(fullpath);
+        wind_full_path_release(fullpath);
         wind_free(realpath);
         return NULL;
     }
     file = _file_malloc();
     WIND_ASSERT_RETURN(file != NULL,NULL);
     file->path = realpath;
+    file->subname = NULL;
     DNODE_INIT(file->filenode);
     file->ftype = fs->fstype;
     file->fmode = fmode;
@@ -336,7 +347,7 @@ file_s* wind_file_open(const char *path,fmode_e fmode)
         wind_mutex_destroy(file->mutex);
         _file_free(file);
         wind_free(realpath);
-        wind_free(fullpath);
+        wind_full_path_release(fullpath);
         return NULL;
     }
     else
@@ -344,7 +355,7 @@ file_s* wind_file_open(const char *path,fmode_e fmode)
         wind_disable_switch();
         dlist_insert_tail(&g_core.filelist,&file->filenode);
         wind_enable_switch();
-        wind_free(fullpath);
+        wind_full_path_release(fullpath);
         return file;
     }
 }
@@ -353,14 +364,17 @@ w_err_t wind_file_close(file_s *file)
 {
     w_err_t err = ERR_FAIL;
     WIND_ASSERT_RETURN(file != NULL,ERR_NULL_POINTER);
+    wind_debug("close file:%s.",file->path);
     wind_mutex_lock(file->mutex);
     if(file->ops->close)
     err = file->ops->close(file);
     wind_mutex_unlock(file->mutex);
     dlist_remove(&g_core.filelist,&file->filenode);
     wind_mutex_destroy(file->mutex);
-    _file_free(file);
+    if(file->subname != NULL)
+        wind_free(file->subname);
     wind_free(file->path);
+    _file_free(file);
     return err;
 }
 
@@ -368,6 +382,7 @@ w_err_t wind_file_remove(file_s *file)
 {
     w_err_t err = ERR_FAIL;
     WIND_ASSERT_RETURN(file != NULL,ERR_NULL_POINTER);
+    wind_debug("remove file:%s",file->path);
     wind_mutex_lock(file->mutex);
     if(file->ops->rmfile)
     err = file->ops->rmfile(file);
@@ -379,17 +394,21 @@ w_err_t wind_file_remove(file_s *file)
     return err;
 }
 
-file_s* wind_file_subfile(file_s *file,w_int32_t index)
+char* wind_file_subfile(file_s *dir,w_int32_t index)
 {
-    file_s *subfile = NULL;
-    WIND_ASSERT_RETURN(file != NULL,NULL);
-    WIND_ASSERT_RETURN(index >= 0,NULL);
-    WIND_ASSERT_RETURN(file->isdir != 0,NULL);
-    wind_mutex_lock(file->mutex);
-    if(file->ops->subfile)
-        subfile = file->ops->subfile(file,index);
-    wind_mutex_unlock(file->mutex);
-    return subfile;
+    char *subname = NULL;
+    WIND_ASSERT_RETURN(dir != NULL,NULL);
+    WIND_ASSERT_RETURN(dir >= 0,NULL);
+    WIND_ASSERT_RETURN(dir->isdir != 0,NULL);
+    if(dir->subname == NULL)
+        dir->subname = wind_malloc(WFILE_NAME_LEN);
+    WIND_ASSERT_RETURN(dir->subname != NULL,NULL);
+    wind_debug("subfile %d",index);
+    wind_mutex_lock(dir->mutex);
+    if(dir->ops->subfile)
+        subname = dir->ops->subfile(dir,index);
+    wind_mutex_unlock(dir->mutex);
+    return subname;
 }
 
 w_err_t wind_file_seek(file_s *file,w_int32_t offset)
@@ -397,6 +416,7 @@ w_err_t wind_file_seek(file_s *file,w_int32_t offset)
     w_err_t err = ERR_FAIL;
     WIND_ASSERT_RETURN(file != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(offset >= 0,ERR_INVALID_PARAM);
+    WIND_ASSERT_RETURN(!file->isdir,ERR_INVALID_PARAM);
     wind_mutex_lock(file->mutex);
     if(file->ops->seek)
         err = file->ops->seek(file,offset);

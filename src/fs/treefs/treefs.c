@@ -311,7 +311,7 @@ w_int32_t treefile_read(treefile_s* file,w_uint8_t *buff, w_int32_t size)
     w_uint8_t *src;
     WIND_ASSERT_RETURN(file != NULL,ERR_NULL_POINTER);
     WIND_ASSERT_RETURN(file->magic == TREEFILE_MAGIC,ERR_INVALID_PARAM);
-    WIND_ASSERT_RETURN(file->isdir != 0,ERR_FAIL);
+    WIND_ASSERT_RETURN(file->isdir == 0,ERR_FAIL);
     WIND_ASSERT_RETURN((file->mode & TF_FMODE_R),ERR_FAIL);
     
     WIND_ASSERT_RETURN(buff != NULL,ERR_NULL_POINTER);

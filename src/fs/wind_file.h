@@ -8,7 +8,8 @@
 #if WIND_FS_SUPPORT
 #define WIND_FS_MAGIC 0x235C79A5
 #define WIND_FILE_MAGIC 0x275972D5
-#define FS_NAME_LEN 12
+#define WFS_NAME_LEN 12
+#define WFILE_NAME_LEN 20
 #define FS_MOUNT_PATH_LEN 64
 #define FS_CUR_PATH "/"
 typedef struct __fs_ops_s fs_ops_s;
@@ -55,7 +56,7 @@ struct __fs_ops_s
     w_err_t (*open)(file_s *file,fmode_e fmode);
     w_err_t (*close)(file_s* file);
     w_err_t (*rmfile)(file_s* file);
-    file_s *(*subfile)(file_s* file,w_int32_t index);
+    char *(*subfile)(file_s* dir,w_int32_t index);
     w_err_t (*seek)(file_s* file,w_int32_t offset);
     w_err_t (*rename)(file_s* file,char *newname);
     w_int32_t (*ftell)(file_s* file);
@@ -70,8 +71,8 @@ struct __fs_ops_s
 
 struct __file_s
 {
-    //char name[32];
     char *path;
+    char *subname;
     dnode_s filenode;//链表节点
     w_uint32_t ftype:8;//文件系统类型
     w_uint32_t fmode:16;//操作模式
@@ -111,7 +112,9 @@ w_err_t wind_fs_mount(char *fsname,char *devname,char *path);
 w_err_t wind_fs_unmount(char *fsname);
 w_err_t wind_fs_format(fs_s *fs);
 
-char *wind_file_get_full_path(char *oldpath,char *newpath,w_uint16_t isdir);
+char *wind_full_path_generate(char *oldpath,char *newpath,w_uint16_t isdir);
+w_err_t wind_full_path_release(char *path);
+
 void wind_file_set_current_path(char *path);
 char *wind_file_get_current_path(void);
 
@@ -120,7 +123,7 @@ w_bool_t wind_file_existing(const char *path);
 file_s* wind_file_open(const char *path,fmode_e fmode);
 w_err_t wind_file_close(file_s *file);
 w_err_t wind_file_remove(file_s *file);
-file_s* wind_file_subfile(file_s *file,w_int32_t index);
+char* wind_file_subfile(file_s *dir,w_int32_t index);
 
 w_err_t wind_file_seek(file_s *file,w_int32_t offset);
 w_err_t wind_file_rename(file_s *file,char *newname);
