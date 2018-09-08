@@ -71,7 +71,7 @@ static w_int32_t xmodem_check(w_int32_t crcmode, const w_uint8_t *buf, w_int32_t
     w_uint8_t cks = 0;
     if(crcmode)
     {
-        crc = wind_crc16(buf, sz);
+        crc = wind_crc16(buf, sz,0);
         tcrc =(buf[sz]<<8)+buf[sz+1];
         if(crc == tcrc)
             return 1;
@@ -328,7 +328,7 @@ start_trans:
                 }  
                 if(crcmode)
                 {
-                    w_uint16_t ccrc = wind_crc16(&xbuff[3], bufsz);
+                    w_uint16_t ccrc = wind_crc16(&xbuff[3], bufsz,0);
                     xbuff[bufsz+3] =(ccrc>>8) & 0xFF;
                     xbuff[bufsz+4] = ccrc & 0xFF;
                 }  

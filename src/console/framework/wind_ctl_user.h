@@ -42,7 +42,7 @@ typedef enum __usrprio_e
 
 typedef struct __user_s
 {
-    struct __user_s *next;
+    //struct __user_s *next;
     w_int8_t name[WIND_USER_NAME_LEN];
     w_int8_t pwd[WIND_USER_PWD_LEN];
     usrprio_e prio;
@@ -50,8 +50,8 @@ typedef struct __user_s
 
 
 user_s *wind_user_create(w_int8_t *name,w_int8_t *pwd,usrprio_e prio);
-w_err_t wind_user_insert(user_s *husr);
-w_err_t wind_user_remove(user_s *husr);
+w_err_t wind_user_insert(user_s *usr);
+w_err_t wind_user_remove(user_s *usr);
 
 
 

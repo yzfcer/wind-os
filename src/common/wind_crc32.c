@@ -7,7 +7,7 @@
 **文   件   名: wind_crc32.c
 **创   建   人: Jason Zhou
 **最后修改日期: 2017.12.10
-**描        述: 
+**描        述: 32位CRC校验方法
 **              
 **--------------历史版本信息----------------------------------------------------------------------------
 ** 创建人: 
@@ -47,7 +47,7 @@ void wind_create_crc32tb(void)
     }
 }
 
-w_uint32_t wind_crc32(w_uint32_t crc, w_uint8_t *data, w_uint32_t size)
+w_uint32_t wind_crc32(w_uint8_t *data,w_uint32_t size,w_uint32_t crc)
 {
     while(size--)
         crc = (crc >> 8)^(crc32_table[(crc ^ *data++)&0xff]);
