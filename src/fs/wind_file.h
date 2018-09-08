@@ -130,7 +130,7 @@ fs##_op_fputs,\
 
 file_s *_file_malloc(void);
 
-w_err_t _wind_fs_init(void);
+w_err_t _wind_fs_mod_init(void);
 fs_s *wind_fs_get(char *name);
 w_err_t wind_fs_mount(char *fsname,char *devname,char *path);
 w_err_t wind_fs_unmount(char *fsname);

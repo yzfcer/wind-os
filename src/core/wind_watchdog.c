@@ -71,7 +71,7 @@ static void watchdog_timer(void * arg)
     wind_enable_switch();
 }
 
-w_err_t _wind_watchdog_init(void)
+w_err_t _wind_watchdog_mod_init(void)
 {
     w_err_t err;
     timer_s *timer;

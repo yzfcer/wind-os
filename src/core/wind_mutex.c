@@ -43,7 +43,7 @@ static __INLINE__ w_err_t mutex_free(void *mutex)
 {
     return wind_pool_free(mutexpool,mutex);
 }
-w_err_t _wind_mutex_init(void)
+w_err_t _wind_mutex_mod_init(void)
 {
     w_err_t err;
     err = wind_pool_create("mutex",mutexpool,sizeof(mutexpool),sizeof(mutex_s));

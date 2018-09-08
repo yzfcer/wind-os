@@ -48,7 +48,7 @@ typedef struct tagTicktimer
     void *arg;
 }timer_s;
 
-w_err_t _wind_timer_init(void);
+w_err_t _wind_timer_mod_init(void);
 void _wind_timer_event(void);
 timer_s* wind_timer_get(char *name);
 
@@ -58,8 +58,6 @@ w_err_t wind_timer_stop(timer_s* timer);
 w_err_t wind_timer_destroy(timer_s* timer);
 w_err_t wind_timer_set_period(timer_s* timer,w_uint32_t t_ms);
 
-#else
-#define _wind_timer_init()
 #endif //#if WIND_TIMER_SUPPORT
 #ifdef __cplusplus
 }

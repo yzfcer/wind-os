@@ -52,14 +52,13 @@ typedef struct _wind_watchdog
 	thread_s *thread;
 }watchdog_s;
 
-w_err_t _wind_watchdog_init(void);
+w_err_t _wind_watchdog_mod_init(void);
 watchdog_s *wind_watchdog_get(const char *name);
 watchdog_s *wind_watchdog_create(const char *name,w_uint32_t flag,w_int16_t timeout_1s);
 w_err_t wind_watchdog_destroy(watchdog_s *watchdog);
 w_err_t wind_watchdog_feed(watchdog_s *watchdog);
 w_err_t wind_watchdog_print(dlist_s *list);
-#else
-#define _wind_watchdog_init() 
+
 #endif
 #ifdef __cplusplus
 }

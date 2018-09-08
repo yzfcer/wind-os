@@ -78,7 +78,6 @@ static w_err_t treefs_op_rmfile(file_s* file)
 
 static char *treefs_op_subfile(file_s* dir,w_int32_t index)
 {
-    char *subname;
     treefile_s *tfile;
     w_int32_t len;
     tfile = treefile_readdir((treefile_s *)dir->fileobj,index);

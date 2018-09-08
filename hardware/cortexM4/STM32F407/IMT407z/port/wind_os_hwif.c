@@ -52,7 +52,7 @@ void wind_system_reset(void)
 #define HEAD1_LENTH (64*1024)
 
 //堆可自由分配的内存空间进行初始化
-void _wind_heaps_init(void)
+void _wind_heaps_mod_init(void)
 {
     wind_heap_create("heap0",HEAP1_HEAD,HEAD1_LENTH,0);
     //wind_heap_print(&g_core.heaplist);
@@ -137,7 +137,7 @@ w_pstack_t _wind_thread_stack_init(thread_run_f pfunc,void *pdata, w_pstack_t ps
     return (stk);
 }
 
-void wind_tick_init(void)
+void wind_tick_hwtimer_init(void)
 {
 	w_uint32_t reload;
  	SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK_Div8);

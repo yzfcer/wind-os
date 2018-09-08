@@ -34,7 +34,7 @@ void _wind_target_init(void);
 void wind_system_reset(void);
 
 #if WIND_HEAP_SUPPORT
-void _wind_heaps_init(void);
+void _wind_heaps_mod_init(void);
 #endif
 
 #if WIND_FS_SUPPORT

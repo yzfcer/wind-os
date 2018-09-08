@@ -43,7 +43,7 @@ softirq_fn softirq_vectors[WIND_SOFTINT_MAX_NUM];
 w_uint32_t softirq_flag[SOFT_FLAG_ARR_CNT];
 
 //初始化软中断的一些相关参数
-w_err_t _wind_softirq_init(void)
+w_err_t _wind_softirq_mod_init(void)
 {
     wind_memset(softirq_flag,0,sizeof(softirq_flag));
     wind_memset(softirq_vectors,0,sizeof(softirq_vectors));

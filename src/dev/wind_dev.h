@@ -63,7 +63,7 @@ struct __dev_ops_s
 
 #define WIND_DEV_DEF(name,devid,ops) {WIND_DEV_MAGIC,name,devid,B_FALSE,{NULL,NULL},NULL,ops}
 
-w_err_t _wind_dev_init(void);
+w_err_t _wind_dev_mod_init(void);
 w_err_t _register_devs(void);
 
 w_err_t wind_dev_register(dev_s *dev,w_int32_t count);
@@ -76,8 +76,7 @@ w_int32_t wind_dev_read(dev_s *dev,w_uint8_t *buf,w_int32_t len);
 w_int32_t wind_dev_write(dev_s *dev,w_uint8_t *buf,w_int32_t len);
 w_err_t wind_dev_close(dev_s *dev);
 w_err_t wind_dev_print(dlist_s *list);
-#else
-#define _wind_dev_init()
+
 #endif
 
 #ifdef __cplusplus

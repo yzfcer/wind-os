@@ -101,7 +101,7 @@ static char *wind_thread_status(thread_stat_e stat)
 
 //**********************************************extern functions******************************
 
-w_err_t _wind_thread_init(void)
+w_err_t _wind_thread_mod_init(void)
 {
     w_err_t err;
 #if WIND_STKPOOL_SUPPORT

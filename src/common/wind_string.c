@@ -37,7 +37,7 @@ char* wind_strcpy(char *dest,const char *src)
 char* wind_strncpy(char *dest,const char *src,w_uint32_t count)
 {
     char *tmp = dest;
-    while (count-- && (*dest++ = *src++) != '\0')
+    while (count-- && (*dest++ = *src++) != '\0');
     return tmp;
 }
 

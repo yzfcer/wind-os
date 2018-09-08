@@ -51,7 +51,7 @@ static w_err_t msgbox_free(msgbox_s *msgbox)
 
 //**********************************************extern functions******************************
 
-w_err_t _wind_msgbox_init(void)
+w_err_t _wind_msgbox_mod_init(void)
 {
     w_err_t err;
     err = wind_pool_create("msgbox",msgboxpool,sizeof(msgboxpool),sizeof(msgbox_s));

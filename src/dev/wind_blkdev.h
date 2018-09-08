@@ -65,7 +65,7 @@ struct __blkdev_ops_s
     w_int32_t (*write)(blkdev_s *blkdev,w_addr_t addr,w_uint8_t *buf,w_int32_t blkcnt);
     w_err_t   (*close)(blkdev_s *blkdev);
 };
-w_err_t _wind_blkdev_init(void);
+w_err_t _wind_blkdev_mod_init(void);
 w_err_t _register_blkdevs(void);
 
 w_err_t wind_blkdev_register(blkdev_s *blkdev,w_int32_t count);
@@ -79,8 +79,7 @@ w_err_t wind_blkdev_erase(blkdev_s *blkdev,w_addr_t blkaddr,w_int32_t blkcnt);
 w_err_t wind_blkdev_eraseall(blkdev_s *blkdev);
 w_err_t wind_blkdev_close(blkdev_s *blkdev);
 w_err_t wind_blkdev_print(dlist_s *list);
-#else
-#define _wind_blkdev_init()
+
 #endif
 
 #ifdef __cplusplus

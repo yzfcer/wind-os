@@ -86,7 +86,7 @@ w_err_t wind_blkdev_unregister(blkdev_s *blkdev)
 }
 
 
-w_err_t _wind_blkdev_init(void)
+w_err_t _wind_blkdev_mod_init(void)
 {
     _register_blkdevs();
     return ERR_OK;

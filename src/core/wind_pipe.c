@@ -53,7 +53,7 @@ static __INLINE__ w_err_t pipe_free(void *pipe)
 
 
 //**********************************************extern functions******************************
-w_err_t _wind_pipe_init(void)
+w_err_t _wind_pipe_mod_init(void)
 {
     w_err_t err;
     err = wind_pool_create("pipe",pipepool,sizeof(pipepool),sizeof(pipe_s));

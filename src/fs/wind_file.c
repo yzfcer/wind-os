@@ -134,7 +134,7 @@ static w_err_t wind_all_fs_regster(void)
     return ERR_OK;
 }
 
-w_err_t _wind_fs_init(void)
+w_err_t _wind_fs_mod_init(void)
 {
     w_err_t err;
     wind_pool_create("file",filepool,sizeof(filepool),sizeof(file_s));

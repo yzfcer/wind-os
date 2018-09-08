@@ -47,7 +47,7 @@ typedef struct _wind_sem
     w_int16_t sem_num;    //当前的信号量的值
 }sem_s;
 
-w_err_t _wind_sem_init(void);
+w_err_t _wind_sem_mod_init(void);
 sem_s *wind_sem_get(const char *name);
 sem_s *wind_sem_create(const char *name,w_int16_t semValue);
 w_err_t wind_sem_trydestroy(sem_s *sem);
@@ -58,8 +58,6 @@ w_err_t wind_sem_wait(sem_s *sem,w_uint32_t timeout);
 w_err_t wind_sem_trywait(sem_s *sem);
 
 w_err_t wind_sem_print(dlist_s *list);
-#else
-#define _wind_sem_init() 
 #endif
 #ifdef __cplusplus
 }

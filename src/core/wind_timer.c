@@ -43,7 +43,7 @@ static __INLINE__ w_err_t timer_free(void *timer)
 }
 
 
-w_err_t _wind_timer_init(void)
+w_err_t _wind_timer_mod_init(void)
 {
     w_err_t err;
     err = wind_pool_create("timer",timerpool,sizeof(timerpool),sizeof(timer_s));

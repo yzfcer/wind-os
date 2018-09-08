@@ -104,13 +104,15 @@ struct _thread_s
     w_uint16_t stksize;//堆栈大小，以栈宽度技术
     
     w_int16_t argc;
-    w_uint16_t stkpool_flag:1;
+    w_uint16_t stkpool_flag:1;//标记线程栈是否从内存池取得
+    w_uint16_t threadpool_flag:1;//标记线程结构是否从内存池获取
     w_int8_t **argv;
     w_err_t (*thread_func)(w_int32_t argc,w_int8_t **argv);
     
 
     char name[THREAD_NAME_LEN];
     w_int16_t prio;
+    w_uint16_t tid;
     
     thread_stat_e runstat;
     w_int32_t sleep_ticks;
@@ -122,12 +124,21 @@ struct _thread_s
 
 
 
-w_err_t _wind_thread_init(void);
+w_err_t _wind_thread_mod_init(void);
 w_err_t _wind_thread_wakeup(void);
 
 thread_s *wind_thread_get(const char *name);
 thread_s *wind_thread_current(void);
 char *wind_thread_curname(void);
+
+thread_s *wind_thread_init(thread_s *thread,
+                    const char *name,
+                    w_err_t (*thread_func)(w_int32_t argc,w_int8_t **argv),
+                    w_int16_t argc,
+                    w_int8_t **argv,
+                    prio_e priolevel,
+                    w_pstack_t psck,
+                    w_uint16_t stksize);
 
 thread_s *wind_thread_create(const char *name,
                     w_err_t (*thread_func)(w_int32_t argc,w_int8_t **argv),

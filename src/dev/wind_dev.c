@@ -88,7 +88,7 @@ w_err_t wind_dev_unregister(dev_s *dev)
 }
 
 
-w_err_t _wind_dev_init(void)
+w_err_t _wind_dev_mod_init(void)
 {
     _register_devs();
     return ERR_OK;

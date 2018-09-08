@@ -239,14 +239,25 @@ static void _wind_init()
     
     _wind_print_os_info();
     _wind_corevar_init();
-    _wind_thread_init();
-    _wind_mutex_init();
-    _wind_sem_init();
-    _wind_msgbox_init();
-    _wind_pipe_init();
-    _wind_timer_init();
-    _wind_softirq_init();
-    
+    _wind_thread_mod_init();
+#if WIND_MUTEX_SUPPORT
+    _wind_mutex_mod_init();
+#endif
+#if WIND_SEM_SUPPORT
+    _wind_sem_mod_init();
+#endif
+#if WIND_MSGBOX_SUPPORT
+    _wind_msgbox_mod_init();
+#endif
+#if WIND_PIPE_SUPPORT
+    _wind_pipe_mod_init();
+#endif
+#if WIND_TIMER_SUPPORT
+    _wind_timer_mod_init();
+#endif
+#if WIND_SOFTIRQ_SUPPORT
+    _wind_softirq_mod_init();
+#endif
     _wind_tick_init();//时间初始化
 }
 

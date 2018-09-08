@@ -39,17 +39,13 @@
 
 #define INIT_STK_SIZE 256
 
-void wind_tick_init(void);
+void wind_tick_hwtimer_init(void);
 #if WIND_STATI_THREAD_SUPPORT
 void _create_stati_thread(void);
-#else
-#define _create_stati_thread()
 #endif
 
 #if WIND_DAEMON_THREAD_SUPPORT
 void _create_daemon_thread(void);
-#else 
-#define _create_daemon_thread()
 #endif
 
 void _create_idle_thread(void);
@@ -83,19 +79,26 @@ extern w_err_t treefs_format(void);
 
 static w_err_t init_thread(w_int32_t argc,w_int8_t **argv)
 {   
-    wind_tick_init();
-    _wind_dev_init();
-    _wind_blkdev_init();
+    wind_tick_hwtimer_init();
+#if WIND_DRVFRAME_SUPPORT
+    _wind_dev_mod_init();
+#endif
+#if WIND_BLK_DRVFRAME_SUPPORT
+    _wind_blkdev_mod_init();
+#endif
 #if WIND_HEAP_SUPPORT
-		_wind_heaps_init();
+	_wind_heaps_mod_init();
 #endif
     
 #if WIND_DATETIME_SUPPORT
-    _wind_datetime_init();
+    _wind_datetime_mod_init();
 #endif
 #if WIND_WATCHDOG_SUPPORT
-    _wind_watchdog_init();
+    _wind_watchdog_mod_init();
 #endif
+#if WIND_FS_SUPPORT
+    _wind_fs_mod_init();
+#endif  
     _create_idle_thread();
     set_idle_cnt();
 #if WIND_SOFTIRQ_SUPPORT
@@ -104,13 +107,16 @@ static w_err_t init_thread(w_int32_t argc,w_int8_t **argv)
 #if WIND_TIMER_SUPPORT
     _create_timer_thread();
 #endif
-#if WIND_FS_SUPPORT
-    //treefs_format();
-    _wind_fs_init();
-#endif
+
+#if WIND_STATI_THREAD_SUPPORT
     _create_stati_thread();
+#endif
+#if WIND_DAEMON_THREAD_SUPPORT
     _create_daemon_thread();
+#endif
+#if WIND_CONSOLE_SUPPORT
     _create_console_thread();
+#endif
     wind_main();
     return ERR_OK;
 }

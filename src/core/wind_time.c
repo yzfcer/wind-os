@@ -430,7 +430,7 @@ w_err_t wind_datetime_get(datetime_s *datetime)
 
 
 
-void _wind_datetime_init(void)
+void _wind_datetime_mod_init(void)
 {
     datetime_s dt;
 #if WIND_RTC_SUPPORT

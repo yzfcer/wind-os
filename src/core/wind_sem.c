@@ -45,7 +45,7 @@ static __INLINE__ w_err_t sem_free(void *sem)
 }
 
 
-w_err_t _wind_sem_init(void)
+w_err_t _wind_sem_mod_init(void)
 {
     w_err_t err;
     err = wind_pool_create("sem",sempool,sizeof(sempool),sizeof(sem_s));

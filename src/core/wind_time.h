@@ -74,7 +74,7 @@ typedef struct __datetime_s
     week_e week;
 } datetime_s;
 
-void _wind_datetime_init(void);
+void _wind_datetime_mod_init(void);
 
 w_err_t wind_datetime_setdate(date_s *date);
 w_err_t wind_datetime_settime(time_s *time);
