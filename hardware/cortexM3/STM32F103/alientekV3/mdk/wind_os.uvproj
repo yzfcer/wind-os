@@ -775,11 +775,6 @@
               <FileType>5</FileType>
               <FilePath>..\port\wind_std.h</FilePath>
             </File>
-            <File>
-              <FileName>stdport.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\port\stdport.c</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>

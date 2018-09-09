@@ -40,7 +40,9 @@ extern void test_suite_err(unsigned line);
 //#define EXPECT_EQ(x,y) test_printf("FILE:%s,LINE:%d,expected %s,in fact %s\r\n",__FILE__,__LINE__,#x,#y)
 
 /**********************************************Ã¶¾Ù¶¨Òå************************************************/
+#ifndef _USE_USER_PRINT
 #include <stdio.h>
+#endif
 
 #ifndef NULL
 #define NULL (void*)0

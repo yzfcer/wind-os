@@ -26,7 +26,6 @@
 //C库
 #include <stdarg.h>
 #include <string.h>
-#include <stdio.h>
 #include <wind_type.h>
 
 
@@ -222,6 +221,7 @@ void Usart_SendString(USART_TypeDef *USARTx, unsigned char *str, unsigned short 
 *	说明：		
 ************************************************************
 */
+#if 0
 void UsartPrintf(USART_TypeDef *USARTx, char *fmt,...)
 {
 
@@ -241,7 +241,7 @@ void UsartPrintf(USART_TypeDef *USARTx, char *fmt,...)
 	}
 
 }
-
+#endif
 /*
 ************************************************************
 *	函数名称：	USART1_IRQHandler

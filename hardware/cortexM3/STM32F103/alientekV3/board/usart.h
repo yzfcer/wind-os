@@ -38,7 +38,7 @@ void USARTx_ResetMemoryBaseAddr(USART_TypeDef *USARTx, unsigned int mAddr, unsig
 
 void Usart_SendString(USART_TypeDef *USARTx, unsigned char *str, unsigned short len);
 
-void UsartPrintf(USART_TypeDef *USARTx, char *fmt,...);
+//void UsartPrintf(USART_TypeDef *USARTx, char *fmt,...);
 
 
 #endif
