@@ -1395,6 +1395,31 @@
               <FileType>5</FileType>
               <FilePath>..\..\..\..\..\src\core\wind_softirq.h</FilePath>
             </File>
+            <File>
+              <FileName>wind_event.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\core\wind_event.c</FilePath>
+            </File>
+            <File>
+              <FileName>wind_event.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\core\wind_event.h</FilePath>
+            </File>
+            <File>
+              <FileName>wind_stati.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\core\wind_stati.h</FilePath>
+            </File>
+            <File>
+              <FileName>wind_watchdog.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\core\wind_watchdog.c</FilePath>
+            </File>
+            <File>
+              <FileName>wind_watchdog.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\core\wind_watchdog.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
