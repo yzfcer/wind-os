@@ -51,19 +51,19 @@ COMMAND_MAIN(blkdev,argc,argv)
     blkdev_s *dev;
     w_uint8_t *buff;
     w_addr_t addr;
-    w_err_t err = ERR_FAIL;
+    w_err_t err = W_ERR_FAIL;
     
     if(0 == wind_strcmp(argv[1],"list"))
     {
         wind_blkdev_print(&g_core.blkdevlist);
-        return ERR_OK;
+        return W_ERR_OK;
     }
-    WIND_ASSERT_RETURN(argc == 5,ERR_INVALID_PARAM);
+    WIND_ASSERT_RETURN(argc == 5,W_ERR_INVALID);
     dev = wind_blkdev_get(argv[1]);
     wind_blkdev_open(dev);
-    WIND_ASSERT_RETURN(dev != NULL,ERR_INVALID_PARAM);
+    WIND_ASSERT_RETURN(dev != NULL,W_ERR_INVALID);
     res = wind_atoui(argv[3],(w_uint32_t*)&addr);
-    WIND_ASSERT_RETURN(res == B_TRUE,ERR_INVALID_PARAM);
+    WIND_ASSERT_RETURN(res == B_TRUE,W_ERR_INVALID);
     buff = buffer;
     wind_memset(buff,0,dev->blksize);
     if(0 == wind_strcmp(argv[2],"read"))
@@ -72,27 +72,27 @@ COMMAND_MAIN(blkdev,argc,argv)
         if(wind_strlen((char*)buff) >= sizeof(buffer))
         {
             wind_error("data is too long.\r\n");
-            err = ERR_FAIL;
+            err = W_ERR_FAIL;
         }
         else
         {
             wind_printf("%s",buff);
-            err = ERR_OK;
+            err = W_ERR_OK;
         }
     }
     else if(0 == wind_strcmp(argv[2],"write"))
     {
         wind_strcpy((char*)buff,argv[4]);
         err = wind_blkdev_write(dev,addr,buff,1);
-        err = ERR_OK;
+        err = W_ERR_OK;
     }
     else if(0 == wind_strcmp(argv[2],"write"))
     {
         err = wind_blkdev_erase(dev,addr,1);
-        err = ERR_OK;
+        err = W_ERR_OK;
     }
     else 
-        err = ERR_FAIL;
+        err = W_ERR_FAIL;
     wind_blkdev_close(dev);
     return err;
 }

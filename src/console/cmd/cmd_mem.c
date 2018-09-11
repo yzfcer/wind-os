@@ -98,14 +98,14 @@ static w_err_t display_mem(char **argv)
     w_uint32_t start,len;
     if(!get_num(argv[1],&start))
     {
-        return ERR_FAIL;
+        return W_ERR_FAIL;
     }
     else if(!get_num(argv[2],&len))
     {
-        return ERR_FAIL;
+        return W_ERR_FAIL;
     }
     print_mem(start,len);
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 static w_err_t display_stack(char **argv)
@@ -114,12 +114,12 @@ static w_err_t display_stack(char **argv)
     thread_s *thr;
     if(wind_strcmp(argv[1],"stack") != 0)
     {
-        return ERR_FAIL;
+        return W_ERR_FAIL;
     }
     thr = wind_thread_get(argv[2]);
     if(thr == NULL)
     {
-        return ERR_FAIL;
+        return W_ERR_FAIL;
     }
     start = (w_uint32_t)thr->stack_top;
     end = start + thr->stksize*sizeof(w_stack_t);
@@ -134,7 +134,7 @@ static w_err_t display_stack(char **argv)
     console_printf("stack used  :%d\r\n",used);
     if(len <= 4096)
         print_mem(cur,len);
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 
@@ -152,12 +152,12 @@ COMMAND_USAGE(mem)
 
 COMMAND_MAIN(mem,argc,argv)
 {
-    if(display_mem(argv) == ERR_OK)
-        return ERR_OK;
-    else if(display_stack(argv) == ERR_OK)
-        return ERR_OK;
+    if(display_mem(argv) == W_ERR_OK)
+        return W_ERR_OK;
+    else if(display_stack(argv) == W_ERR_OK)
+        return W_ERR_OK;
     console_printf("command [%s] format error.\r\n",argv[0]);
-    return ERR_FAIL;
+    return W_ERR_FAIL;
 }
 
 COMMAND_DEF(mem);

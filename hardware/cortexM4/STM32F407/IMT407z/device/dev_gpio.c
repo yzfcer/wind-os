@@ -31,12 +31,12 @@ static w_uint8_t ledst[3] = {0,0,0};
 w_err_t   gpio_open(dev_s *dev)
 {
     LED_Init(0x07);
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 w_err_t  gpio_ioctl(dev_s *dev,w_int32_t ctrlpoint,void *param)
 {
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 w_int32_t gpio_read(dev_s *dev,w_uint8_t *buf,w_uint16_t len)
@@ -63,7 +63,7 @@ w_int32_t gpio_write(dev_s *dev,w_uint8_t *buf,w_uint16_t len)
 
 w_err_t   gpio_close(dev_s *dev)
 {
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 const dev_ops_s gpio_ops = 

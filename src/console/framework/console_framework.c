@@ -43,7 +43,7 @@ static w_err_t get_cmd_ch(w_int8_t *ch)
 {
     w_int32_t len;
     len = wind_std_input((w_uint8_t *)ch,1);
-    return len > 0 ? ERR_OK : ERR_FAIL;
+    return len > 0 ? W_ERR_OK : W_ERR_FAIL;
 }
 
 static w_bool_t insert_ch(console_s *ctrl,char ch,w_int32_t len)
@@ -92,7 +92,7 @@ static w_bool_t handle_key_evt_up(console_s *ctrl)
         handle_BKSPACE(ctrl);
     wind_memset(ctrl->buf,0,WIND_CMD_MAX_LEN);
     err = cmd_history_get_prev(&ctrl->his,ctrl->buf);
-    if(ERR_OK == err)
+    if(W_ERR_OK == err)
     {
         ctrl->index = wind_strlen(ctrl->buf);
         console_printf("%s",ctrl->buf);
@@ -107,7 +107,7 @@ static w_bool_t handle_key_evt_down(console_s *ctrl)
         handle_BKSPACE(ctrl);
     wind_memset(ctrl->buf,0,WIND_CMD_MAX_LEN);
     err = cmd_history_get_next(&ctrl->his,ctrl->buf);
-    if(ERR_OK == err)
+    if(W_ERR_OK == err)
     {
         ctrl->index = wind_strlen(ctrl->buf);
         console_printf("%s",ctrl->buf);
@@ -214,7 +214,7 @@ w_int32_t console_read_line(console_s *ctrl,w_int32_t len)
     while(1)
     {
         err = get_cmd_ch(&ch);
-        if(err != ERR_OK)
+        if(err != W_ERR_OK)
             wind_thread_sleep(20);
         else
         {
@@ -280,7 +280,7 @@ w_err_t wind_cmd_register(cmd_s *cmd,int cnt)
     int i;
     cmd_s *old;
     dlist_s *cgl = &g_core.cmdlist;
-    WIND_ASSERT_RETURN(cmd != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(cmd != NULL,W_ERR_NULL);
     for(i = 0;i < cnt;i ++)
     {
         old = wind_cmd_get(cmd->name);
@@ -290,7 +290,7 @@ w_err_t wind_cmd_register(cmd_s *cmd,int cnt)
         dlist_insert_tail(cgl,&cmd[i].cmdnode);
         wind_enable_switch();
     }
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 w_err_t wind_cmd_print(void)
@@ -304,7 +304,7 @@ w_err_t wind_cmd_print(void)
         console_printf("%-10s : ",cmd->name);
         cmd->showdisc();
     }
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 #if USER_AUTHENTICATION_EN
@@ -313,12 +313,12 @@ static w_err_t check_user_name(console_s *ctrl)
     if(wind_strcmp(ctrl->buf,"root") != 0)
     {
         console_printf("\r\nlogin:");
-        return ERR_FAIL;
+        return W_ERR_FAIL;
     }
     wind_strcpy(ctrl->user,ctrl->buf);
     ctrl->stat = CSLSTAT_PWD;
     console_printf("\r\npasswd:");
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 
@@ -329,12 +329,12 @@ static w_err_t check_user_pwd(console_s *ctrl)
     {
         ctrl->stat = CSLSTAT_USER;
         console_printf("\r\nlogin:");
-        return ERR_FAIL;
+        return W_ERR_FAIL;
     }
     wind_strcpy(ctrl->pwd,ctrl->buf);
     ctrl->stat = CSLSTAT_CMD;
     console_printf("\r\n%s@wind-os>",ctrl->user);
-    return ERR_OK;
+    return W_ERR_OK;
 }
 #endif
 static w_int32_t find_char_index(char *str,char c)
@@ -395,8 +395,8 @@ static w_err_t spit_cmd(console_s *ctrl)
             break;
     }
     if(i >= CMD_PARAM_CNT)
-        return ERR_FAIL;
-    return ERR_OK;
+        return W_ERR_FAIL;
+    return W_ERR_OK;
 }
 
 
@@ -410,18 +410,18 @@ static w_err_t execute_cmd(console_s *ctrl)
     if(wind_strcmp(ctrl->param.argv[0],"?") == 0)
     {
         wind_cmd_print();
-        return ERR_OK;
+        return W_ERR_OK;
     }
     cmd = wind_cmd_get(ctrl->param.argv[0]);//get_matched_cmd(ctrl);
     if(cmd == NULL)
-        return ERR_FAIL;
+        return W_ERR_FAIL;
     if(wind_strcmp(ctrl->param.argv[1],"?") == 0)
     {
         cmd->showusage();
-        return ERR_OK;
+        return W_ERR_OK;
     }
     cmd->execute(ctrl->param.argc,ctrl->param.argv);
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 
@@ -430,7 +430,7 @@ w_err_t console_thread(w_int32_t argc,char **argv)
     w_int32_t len;
     console_s *ctrl;
     if(argc >= WIND_CONSOLE_COUNT)
-        return ERR_FAIL;
+        return W_ERR_FAIL;
     ctrl = &g_ctrl[argc];
     cmd_history_init(&ctrl->his);
     init_console_stat(ctrl);
@@ -483,9 +483,9 @@ w_err_t _create_console_thread(void)
     thread_s *thread;
     thread = wind_thread_create("console",console_thread,
                0,NULL,PRIO_LOW,ctrlstk,CTRL_STK_SIZE);
-    WIND_ASSERT_RETURN(thread != NULL,ERR_FAIL);
+    WIND_ASSERT_RETURN(thread != NULL,W_ERR_FAIL);
     wind_thread_set_priority(thread,32760);
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 #endif

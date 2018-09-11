@@ -42,10 +42,10 @@ w_err_t cmd_testheap_main(w_int32_t argc,char **argv)
     if(0 == wind_strcmp(argv[0],"heap"))
     {
         wind_printf("heaptest not support yet\r\n");
-        return ERR_OK;
+        return W_ERR_OK;
     }
 #endif
-    return ERR_FAIL;
+    return W_ERR_FAIL;
 }
 
 COMMAND_DISC(test)
@@ -75,7 +75,7 @@ COMMAND_MAIN(test,argc,argv)
     {
         cut_test_start(argv[1],argv[2]);
     }
-    return  ERR_FAIL;
+    return  W_ERR_FAIL;
 }
 
 COMMAND_DEF(test);

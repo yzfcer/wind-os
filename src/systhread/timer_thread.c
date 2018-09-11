@@ -46,9 +46,9 @@ w_err_t _create_timer_thread(void)
     thread_s *thread;
     thread = wind_thread_create("timer",timer_thread,
                      0,NULL,PRIO_HIGH,timerstk,TIMER_STK_SIZE);
-    WIND_ASSERT_RETURN(thread != NULL,ERR_FAIL);
+    WIND_ASSERT_RETURN(thread != NULL,W_ERR_FAIL);
     wind_thread_set_priority(thread,3);
-    return ERR_OK;
+    return W_ERR_OK;
 }
 #endif
 

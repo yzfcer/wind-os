@@ -75,21 +75,21 @@ static void core_stati_heap_print(void)
 w_err_t cmd_stat_show_pool_main(w_int32_t argc,char **argv)
 {
     core_stati_pool_print();
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 #if WIND_HEAP_SUPPORT
 w_err_t cmd_stat_show_heap_main(w_int32_t argc,char **argv)
 {
     core_stati_heap_print();
-    return ERR_OK;
+    return W_ERR_OK;
 }
 #endif
 
 w_err_t cmd_stat_show_cpuusage_main(w_int32_t argc,char **argv)
 {
     console_printf("cpu usage persage:%d%%\r\n",WIND_CPU_USAGE);
-    return ERR_OK;    
+    return W_ERR_OK;    
 }
 
 
@@ -123,7 +123,7 @@ COMMAND_MAIN(stati,argc,argv)
     {
         return cmd_stat_show_cpuusage_main(argc,argv);
     }
-    return ERR_FAIL;
+    return W_ERR_FAIL;
 }
 
 COMMAND_DEF(stati);

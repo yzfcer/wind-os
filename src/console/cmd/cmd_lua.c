@@ -64,7 +64,7 @@ COMMAND_MAIN(lua,argc,argv)
 {
     w_int32_t ret;
     ret = lua_main (argc, argv);
-    return ret == 0?ERR_OK:ERR_FAIL;
+    return ret == 0?W_ERR_OK:W_ERR_FAIL;
 }
 
 COMMAND_DEF(lua);

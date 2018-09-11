@@ -95,43 +95,43 @@ timer_s* wind_timer_create(const char *name,w_uint32_t t_ms,softimer_fn func,voi
 
 w_err_t wind_timer_start(timer_s* timer)
 {
-    WIND_ASSERT_RETURN(timer != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(timer->magic == WIND_TIMER_MAGIC,ERR_INVALID_PARAM);    
+    WIND_ASSERT_RETURN(timer != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(timer->magic == WIND_TIMER_MAGIC,W_ERR_INVALID);    
     timer->running = B_TRUE;
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 w_err_t wind_timer_stop(timer_s* timer)
 {
-    WIND_ASSERT_RETURN(timer != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(timer->magic == WIND_TIMER_MAGIC,ERR_INVALID_PARAM);    
+    WIND_ASSERT_RETURN(timer != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(timer->magic == WIND_TIMER_MAGIC,W_ERR_INVALID);    
     timer->running = B_FALSE;
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 w_err_t wind_timer_destroy(timer_s* timer)
 {
-    WIND_ASSERT_RETURN(timer != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(timer->magic == WIND_TIMER_MAGIC,ERR_INVALID_PARAM);    
+    WIND_ASSERT_RETURN(timer != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(timer->magic == WIND_TIMER_MAGIC,W_ERR_INVALID);    
     wind_disable_interrupt();
     dlist_remove(&g_core.timerlist,&timer->timernode);
     timer_free(timer);
     wind_enable_interrupt();
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 w_err_t wind_timer_set_period(timer_s* timer,w_uint32_t t_ms)
 {
     w_int32_t count;
-    WIND_ASSERT_RETURN(timer != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(timer->magic == WIND_TIMER_MAGIC,ERR_INVALID_PARAM);
+    WIND_ASSERT_RETURN(timer != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(timer->magic == WIND_TIMER_MAGIC,W_ERR_INVALID);
     count = t_ms / TIMER_PERIOD;
     if(count <= 0)
         count = 1;
-    WIND_ASSERT_RETURN(timer != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(timer != NULL,W_ERR_NULL);
     timer->init_count = count;
     timer->count = count;
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 void _wind_timer_event(void)

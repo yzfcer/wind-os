@@ -53,13 +53,13 @@ void _create_idle_thread(void);
 #if WIND_CONSOLE_SUPPORT
 w_err_t _create_console_thread(void);
 #else 
-#define create_console_thread() ERR_OK
+#define create_console_thread() W_ERR_OK
 #endif
 
 #if WIND_TIMER_SUPPORT
 w_err_t _create_timer_thread(void);
 #else 
-#define _create_timer_thread() ERR_OK
+#define _create_timer_thread() W_ERR_OK
 #endif
 
 extern w_err_t wind_main(void);
@@ -118,7 +118,7 @@ static w_err_t init_thread(w_int32_t argc,w_int8_t **argv)
     _create_console_thread();
 #endif
     wind_main();
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 w_err_t _create_init_thread(void)
@@ -126,6 +126,6 @@ w_err_t _create_init_thread(void)
     thread_s *thread;
     thread = wind_thread_create("init",init_thread,
                         0,NULL,PRIO_HIGH,initstk,INIT_STK_SIZE);
-    WIND_ASSERT_RETURN(thread != NULL,ERR_FAIL);
-    return ERR_OK;
+    WIND_ASSERT_RETURN(thread != NULL,W_ERR_FAIL);
+    return W_ERR_OK;
 }

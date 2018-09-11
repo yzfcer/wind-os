@@ -68,7 +68,7 @@ CASE_FUNC(pipeinfo)
     EXPECT_EQ(pipe->buff,pipebuf);
     EXPECT_EQ(pipe->buflen,sizeof(pipebuf));
     err = wind_pipe_destroy(pipe);
-    EXPECT_EQ(ERR_OK,err);
+    EXPECT_EQ(W_ERR_OK,err);
 
 }
 
@@ -105,7 +105,7 @@ CASE_FUNC(pipefunc)
         EXPECT_EQ(res,0);
     }
     err = wind_pipe_destroy(pipe);
-    EXPECT_EQ(ERR_OK,err);
+    EXPECT_EQ(W_ERR_OK,err);
 
 }
 

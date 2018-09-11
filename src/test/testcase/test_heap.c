@@ -65,7 +65,7 @@ CASE_FUNC(heapfunc)
     res = wind_strcmp((char*)buff,"heap test start.");
     EXPECT_EQ(res,0);
     err = wind_free(buff);
-    EXPECT_EQ(err,ERR_OK);
+    EXPECT_EQ(err,W_ERR_OK);
 }
 
 CASE_SETUP(heapmulti)
@@ -98,7 +98,7 @@ CASE_FUNC(heapmulti)
     for(i = 0;i < 12;i ++)
     {
         err = wind_free(buff[i]);
-        EXPECT_EQ(err,ERR_OK);
+        EXPECT_EQ(err,W_ERR_OK);
         wind_heapitem_print(&g_core.heaplist);
     }
 

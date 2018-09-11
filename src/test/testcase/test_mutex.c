@@ -61,7 +61,7 @@ CASE_FUNC(mutexinfo)
     EXPECT_EQ(mutexs[0]->waitlist.head,NULL);
     EXPECT_EQ(mutexs[0]->waitlist.tail,NULL);
     err = wind_mutex_destroy(mutexs[0]);
-    EXPECT_EQ(ERR_OK,err);
+    EXPECT_EQ(W_ERR_OK,err);
 }
 
 CASE_SETUP(mutexfunc)
@@ -80,15 +80,15 @@ CASE_FUNC(mutexfunc)
     mutexs[0] = wind_mutex_create("test");
     EXPECT_NE(mutexs[0],NULL);
     err = wind_mutex_lock(mutexs[0]);
-    EXPECT_EQ(ERR_OK,err);
+    EXPECT_EQ(W_ERR_OK,err);
     EXPECT_EQ(mutexs[0]->mutexed,B_TRUE);
     err = wind_mutex_unlock(mutexs[0]);
-    EXPECT_EQ(ERR_OK,err);
+    EXPECT_EQ(W_ERR_OK,err);
     EXPECT_EQ(mutexs[0]->mutexed,B_FALSE);
     EXPECT_EQ(mutexs[0]->waitlist.head,NULL);
     EXPECT_EQ(mutexs[0]->waitlist.tail,NULL);
     err = wind_mutex_destroy(mutexs[0]);
-    EXPECT_EQ(ERR_OK,err);
+    EXPECT_EQ(W_ERR_OK,err);
 }
 
 CASE_SETUP(mutexmulti)
@@ -113,7 +113,7 @@ CASE_FUNC(mutexmulti)
     for(i = 0;i < 4;i ++)
     {
         err = wind_mutex_destroy(mutexs[i]);
-        EXPECT_EQ(ERR_OK,err);
+        EXPECT_EQ(W_ERR_OK,err);
     }
 }
 

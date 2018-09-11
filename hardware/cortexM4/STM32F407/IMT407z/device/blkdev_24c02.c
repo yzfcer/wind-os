@@ -34,7 +34,7 @@ w_err_t   at24c02_open(blkdev_s *dev)
     dev->blksize = 16;
     dev->blkcnt = 16;        
     IIC_Init();
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 w_err_t   at24c02_erase(blkdev_s *dev,w_addr_t addr,w_int32_t blkcnt)
@@ -49,7 +49,7 @@ w_err_t   at24c02_erase(blkdev_s *dev,w_addr_t addr,w_int32_t blkcnt)
         AT24C02_Write((w_uint8_t)start,buf,(w_uint8_t)dev->blksize);
         start += dev->blksize;
     }
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 w_err_t   at24c02_eraseall(blkdev_s *dev)
@@ -61,7 +61,7 @@ w_err_t   at24c02_eraseall(blkdev_s *dev)
     start = (w_uint8_t)0;
     cnt = dev->blkcnt * dev->blksize;
     AT24C02_Write((w_uint8_t)start,buf,(w_uint8_t)cnt);
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 
@@ -91,7 +91,7 @@ w_int32_t at24c02_write(blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t blk
 
 w_err_t   at24c02_close(blkdev_s *dev)
 {
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 const blkdev_ops_s at24c02_ops = 

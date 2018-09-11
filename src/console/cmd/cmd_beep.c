@@ -45,24 +45,24 @@ COMMAND_MAIN(beep,argc,argv)
     w_err_t err;
     w_uint8_t stat;
     dev = wind_dev_get("beep");
-    WIND_ASSERT_RETURN(dev != NULL,ERR_INVALID_PARAM);
+    WIND_ASSERT_RETURN(dev != NULL,W_ERR_INVALID);
     if(0 == wind_strcmp(argv[1],"on"))
     {
         err = wind_dev_open(dev);
-        WIND_ASSERT_RETURN(err == ERR_OK,ERR_FAIL);
+        WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_FAIL);
         stat = 1;
         wind_dev_write(dev,&stat,1);
-        return ERR_OK;
+        return W_ERR_OK;
     }
     else if(0 == wind_strcmp(argv[1],"off"))
     {
         err = wind_dev_open(dev);
-        WIND_ASSERT_RETURN(err == ERR_OK,ERR_FAIL);
+        WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_FAIL);
         stat = 0;
         wind_dev_write(dev,&stat,1);
-        return ERR_OK;
+        return W_ERR_OK;
     }
-    return ERR_FAIL;
+    return W_ERR_FAIL;
 }
 
 COMMAND_DEF(beep);

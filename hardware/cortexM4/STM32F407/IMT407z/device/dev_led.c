@@ -32,22 +32,22 @@ static w_uint8_t ledst[3] = {0,0,0};
 w_err_t   led_open(dev_s *dev)
 {
     w_int32_t id = dev->devid;
-    WIND_ASSERT_RETURN(id >= 0,ERR_PARAM_OVERFLOW);
-    WIND_ASSERT_RETURN(id < 3,ERR_PARAM_OVERFLOW);
+    WIND_ASSERT_RETURN(id >= 0,W_ERR_OVERFLOW);
+    WIND_ASSERT_RETURN(id < 3,W_ERR_OVERFLOW);
     LED_Init(0x01 << id);
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 w_err_t  led_ioctl(dev_s *dev,w_int32_t ctrlpoint,void *param)
 {
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 w_int32_t led_read(dev_s *dev,w_uint8_t *buf,w_uint16_t len)
 {
     w_int32_t id = dev->devid;
-    WIND_ASSERT_RETURN(id >= 0,ERR_PARAM_OVERFLOW);
-    WIND_ASSERT_RETURN(id < 3,ERR_PARAM_OVERFLOW);
+    WIND_ASSERT_RETURN(id >= 0,W_ERR_OVERFLOW);
+    WIND_ASSERT_RETURN(id < 3,W_ERR_OVERFLOW);
     buf[0] = ledst[id];
     return 1;
 }
@@ -55,8 +55,8 @@ w_int32_t led_read(dev_s *dev,w_uint8_t *buf,w_uint16_t len)
 w_int32_t led_write(dev_s *dev,w_uint8_t *buf,w_uint16_t len)
 {
     w_int32_t id = dev->devid;
-    WIND_ASSERT_RETURN(id >= 0,ERR_PARAM_OVERFLOW);
-    WIND_ASSERT_RETURN(id < 3,ERR_PARAM_OVERFLOW);
+    WIND_ASSERT_RETURN(id >= 0,W_ERR_OVERFLOW);
+    WIND_ASSERT_RETURN(id < 3,W_ERR_OVERFLOW);
     buf[0]?LED_On(id):LED_Off(id);
     ledst[id] = buf[id];
     return 1;
@@ -64,7 +64,7 @@ w_int32_t led_write(dev_s *dev,w_uint8_t *buf,w_uint16_t len)
 
 w_err_t   led_close(dev_s *dev)
 {
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 const dev_ops_s led_ops = 

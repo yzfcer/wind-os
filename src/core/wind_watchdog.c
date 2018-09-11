@@ -76,10 +76,10 @@ w_err_t _wind_watchdog_mod_init(void)
     w_err_t err;
     timer_s *timer;
     err = wind_pool_create("watchdog",watchdogpool,sizeof(watchdogpool),sizeof(watchdog_s));
-    WIND_ASSERT_RETURN(err == ERR_OK,err);
+    WIND_ASSERT_RETURN(err == W_ERR_OK,err);
     timer = wind_timer_create("watchdog",1000,watchdog_timer,NULL,B_TRUE);
-    WIND_ASSERT_RETURN(timer != NULL,ERR_FAIL);
-    return ERR_OK;
+    WIND_ASSERT_RETURN(timer != NULL,W_ERR_FAIL);
+    return W_ERR_OK;
 }
 
 watchdog_s *wind_watchdog_get(const char *name)
@@ -124,8 +124,8 @@ watchdog_s *wind_watchdog_create(const char *name,w_uint32_t flag,w_int16_t time
 w_err_t wind_watchdog_destroy(watchdog_s *watchdog)
 {
     w_err_t err;
-    WIND_ASSERT_RETURN(watchdog != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(watchdog->magic == WIND_WATCHDOG_MAGIC,ERR_INVALID_PARAM);
+    WIND_ASSERT_RETURN(watchdog != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(watchdog->magic == WIND_WATCHDOG_MAGIC,W_ERR_INVALID);
     wind_notice("destroy watchdog:%s",watchdog->name);
     wind_disable_switch();
     dlist_remove(&g_core.watchdoglist,&watchdog->watchdognode);
@@ -138,12 +138,12 @@ w_err_t wind_watchdog_destroy(watchdog_s *watchdog)
 
 w_err_t wind_watchdog_feed(watchdog_s *watchdog)
 {
-    WIND_ASSERT_RETURN(watchdog != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(watchdog->magic == WIND_WATCHDOG_MAGIC,ERR_INVALID_PARAM);
+    WIND_ASSERT_RETURN(watchdog != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(watchdog->magic == WIND_WATCHDOG_MAGIC,W_ERR_INVALID);
     wind_disable_switch();
     watchdog->time_cur = watchdog->time_max;
     wind_enable_switch();
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 
@@ -152,7 +152,7 @@ w_err_t wind_watchdog_print(dlist_s *list)
 {
     dnode_s *dnode;
     watchdog_s *watchdog;
-    WIND_ASSERT_RETURN(list != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(list != NULL,W_ERR_NULL);
     wind_printf("\r\n\r\nwatchdog list as following:\r\n");
     wind_print_space(5);
     wind_printf("%-16s %-12s %-12s\r\n","watchdog","timeout_max","timeout_cur");
@@ -165,7 +165,7 @@ w_err_t wind_watchdog_print(dlist_s *list)
             watchdog->name,watchdog->time_max,watchdog->time_cur);
     }
     wind_print_space(5);
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 #endif

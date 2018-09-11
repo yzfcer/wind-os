@@ -30,17 +30,17 @@
 
 static w_err_t   null_open(blkdev_s *dev)
 {
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 static w_err_t   null_erase(blkdev_s *dev,w_addr_t addr,w_int32_t blkcnt)
 {
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 static w_err_t   null_eraseall(blkdev_s *dev)
 {
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 
@@ -56,7 +56,7 @@ static w_int32_t null_write(blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t
 
 static w_err_t   null_close(blkdev_s *dev)
 {
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 const blkdev_ops_s null_ops = 

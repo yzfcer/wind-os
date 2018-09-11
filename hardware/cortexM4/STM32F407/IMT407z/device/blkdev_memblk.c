@@ -8,7 +8,7 @@ w_err_t   memblk_init(blkdev_s *dev)
     dev->blkaddr = (w_addr_t)memblk;
     dev->blkcnt = 8;
     dev->blksize = 64;
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 w_err_t   memblk_open(blkdev_s *dev)
@@ -16,7 +16,7 @@ w_err_t   memblk_open(blkdev_s *dev)
     dev->blkaddr = (w_addr_t)memblk;
     dev->blksize = 64;
     dev->blkcnt = 8;
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 w_err_t   memblk_erase(blkdev_s *dev,w_addr_t addr,w_int32_t blkcnt)
@@ -26,7 +26,7 @@ w_err_t   memblk_erase(blkdev_s *dev,w_addr_t addr,w_int32_t blkcnt)
     start = (w_uint8_t *)((dev->blkaddr + addr) * dev->blksize);
     size = blkcnt * dev->blksize;
     wind_memset(start,0,size);
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 w_err_t   memblk_eraseall(blkdev_s *dev)
@@ -36,7 +36,7 @@ w_err_t   memblk_eraseall(blkdev_s *dev)
     start = (w_uint8_t *)(dev->blkaddr * dev->blksize);
     size = dev->blkcnt * dev->blksize;
     wind_memset(start,0,size);
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 
@@ -62,7 +62,7 @@ w_int32_t memblk_write(blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t blkc
 
 w_err_t   memblk_close(blkdev_s *dev)
 {
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 const blkdev_ops_s memblk_ops = 

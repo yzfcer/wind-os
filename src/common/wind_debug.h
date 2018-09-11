@@ -32,18 +32,18 @@ extern "C" {
 #endif
 
 //系统错误代码定义
-#define ERR_OK                 0 //正常返回结果
-#define ERR_FAIL              -1 //一般错误
-#define ERR_NULL_POINTER      -2 //指针为空
-#define ERR_PARAM_OVERFLOW    -3 //传入的参数超出了范围
-#define ERR_MEM               -4 //存储空间受到限制
-#define ERR_INVALID_PARAM     -6//参数无效
-#define ERR_TIMEOUT           -7//操作超时，返回失败
-#define ERR_STATUS            -8//当前状态错误
-#define ERR_OBJ_REPEAT        -9//特定条件下对象重复
-#define ERR_FILE_NOT_EXIT     -10//文件不存在
-#define ERR_FILE_HAS_OPENED   -11//文件已经打开
-#define ERR_FS_NOT_SUPPORT    -12//文件系统不支持
+#define W_ERR_OK                 0 //正常返回结果
+#define W_ERR_FAIL              -1 //一般错误
+#define W_ERR_NULL      -2 //指针为空
+#define W_ERR_OVERFLOW    -3 //传入的参数超出了范围
+#define W_ERR_MEM               -4 //存储空间受到限制
+#define W_ERR_INVALID     -6//参数无效
+#define W_ERR_TIMEOUT           -7//操作超时，返回失败
+#define W_ERR_STATUS            -8//当前状态错误
+#define W_ERR_REPEAT        -9//特定条件下对象重复
+#define W_ERR_NOFILE     -10//文件不存在
+#define W_ERR_FILE_OPENED   -11//文件已经打开
+#define W_ERR_NOSUPPORT    -12//文件系统不支持
 
 
 //---------------------------------------------------------------------

@@ -36,7 +36,7 @@ w_err_t _register_blkdevs(void)
     wind_blkdev_register(spi_flash_dev,2);
     wind_blkdev_register(memblk_dev,1);
     wind_blkdev_register(null_dev,1);
-    return ERR_OK;
+    return W_ERR_OK;
 }
 #endif
 

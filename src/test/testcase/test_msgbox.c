@@ -73,7 +73,7 @@ CASE_FUNC(msgboxinfo)
     EXPECT_EQ(msgbox->msglist.tail,NULL);
     EXPECT_EQ(msgbox->owner,thr);
     err = wind_msgbox_destroy(msgbox);
-    EXPECT_EQ(ERR_OK,err);
+    EXPECT_EQ(W_ERR_OK,err);
 }
 
 CASE_SETUP(msgboxfunc)
@@ -94,23 +94,23 @@ CASE_FUNC(msgboxfunc)
     tmsg1 = wind_pool_malloc(testmsg_pool);
     msgbox = wind_msgbox_create("test");
     err = wind_msgbox_wait(msgbox,&msg,100);
-    EXPECT_EQ(err,ERR_TIMEOUT);
+    EXPECT_EQ(err,W_ERR_TIMEOUT);
     wind_msg_init(&tmsg1->msg,1,sizeof(test_msg_s),tmsg1);
     tmsg1->value = 1;
     err = wind_msgbox_post(msgbox,&tmsg1->msg);
-    EXPECT_EQ(err,ERR_OK);
+    EXPECT_EQ(err,W_ERR_OK);
     err = wind_msgbox_wait(msgbox,&msg,100);
-    EXPECT_EQ(err,ERR_OK);
+    EXPECT_EQ(err,W_ERR_OK);
     tmsg = (test_msg_s *)GET_MSG(msg,test_msg_s,msg.msgnode);
     EXPECT_EQ(tmsg->msg.msg_id,1);
     EXPECT_EQ(tmsg->msg.msg_len,sizeof(test_msg_s));
     EXPECT_EQ(tmsg->msg.msg_arg,tmsg1);
     err = wind_msgbox_wait(msgbox,&msg,100);
-    EXPECT_EQ(err,ERR_TIMEOUT);
+    EXPECT_EQ(err,W_ERR_TIMEOUT);
     wind_pool_free(testmsg_pool,tmsg1);
     tmsg1 = NULL;
     err = wind_msgbox_destroy(msgbox);
-    EXPECT_EQ(ERR_OK,err);
+    EXPECT_EQ(W_ERR_OK,err);
 }
 
 CASE_SETUP(msgbox_multthread)

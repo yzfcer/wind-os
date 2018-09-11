@@ -15,7 +15,7 @@ void *treefs_malloc(w_int32_t size)
 w_err_t treefs_free(void *ptr)
 {
     if(ptr == NULL)
-        return ERR_OK;
+        return W_ERR_OK;
     return wind_free(ptr);
 }
 
@@ -185,7 +185,7 @@ w_err_t treefile_rm(treefile_s *file)
     dnode_s *dnode;
     tree_s *tree;
     treefile_s *subfile;
-    WIND_ASSERT_RETURN(file != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(file != NULL,W_ERR_NULL);
     tree = &file->tree;
     wind_printf("rm %s\r\n",file->filename);
     foreach_node(dnode,&tree->child_list)
@@ -203,7 +203,7 @@ w_err_t treefile_rm(treefile_s *file)
     }
     if(wind_strcmp(file->filename,"") != 0)
         treefs_free(file);
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 w_err_t treefs_format(void)
@@ -216,7 +216,7 @@ w_err_t treefs_format(void)
     else
         root = mk_subnode(NULL,"",1);
     if(!root)
-        return ERR_FAIL;
+        return W_ERR_FAIL;
     treefs_set_root(root);
     #if 1
     treefile_create("/var/");
@@ -241,7 +241,7 @@ w_err_t treefs_format(void)
     treefile_write(file,(w_uint8_t*)buff,wind_strlen(buff));
     treefile_close(file);
     #endif
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 
@@ -267,11 +267,11 @@ treefile_s* treefile_open(const char *path,w_uint16_t mode)
 
 w_err_t treefile_close(treefile_s* file)
 {
-    WIND_ASSERT_RETURN(file != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(file->magic == TREEFILE_MAGIC,ERR_INVALID_PARAM);
-    WIND_ASSERT_RETURN(file->mode != 0,ERR_FAIL);
+    WIND_ASSERT_RETURN(file != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(file->magic == TREEFILE_MAGIC,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(file->mode != 0,W_ERR_FAIL);
     file->mode = 0;
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 w_bool_t treefile_existing(const char *path)
@@ -285,21 +285,21 @@ w_bool_t treefile_existing(const char *path)
 
 w_err_t treefile_seek(treefile_s* file,w_int32_t offset)
 {
-    WIND_ASSERT_RETURN(file != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(file->magic == TREEFILE_MAGIC,ERR_INVALID_PARAM);
-    WIND_ASSERT_RETURN(file->mode != 0,ERR_FAIL);
+    WIND_ASSERT_RETURN(file != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(file->magic == TREEFILE_MAGIC,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(file->mode != 0,W_ERR_FAIL);
     if(offset < file->filelen)
         file->offset = offset;
     else
         file->offset = file->filelen;
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 w_int32_t treefile_ftell(treefile_s* file)
 {
-    WIND_ASSERT_RETURN(file != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(file->magic == TREEFILE_MAGIC,ERR_INVALID_PARAM);
-    WIND_ASSERT_RETURN(file->mode != 0,ERR_FAIL);
+    WIND_ASSERT_RETURN(file != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(file->magic == TREEFILE_MAGIC,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(file->mode != 0,W_ERR_FAIL);
     return file->offset;
 }
 
@@ -309,13 +309,13 @@ w_int32_t treefile_read(treefile_s* file,w_uint8_t *buff, w_int32_t size)
     w_uint32_t dataidx,bufidx;
     dnode_s *dnode;
     w_uint8_t *src;
-    WIND_ASSERT_RETURN(file != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(file->magic == TREEFILE_MAGIC,ERR_INVALID_PARAM);
-    WIND_ASSERT_RETURN(file->isdir == 0,ERR_FAIL);
-    WIND_ASSERT_RETURN((file->mode & TF_FMODE_R),ERR_FAIL);
+    WIND_ASSERT_RETURN(file != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(file->magic == TREEFILE_MAGIC,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(file->isdir == 0,W_ERR_FAIL);
+    WIND_ASSERT_RETURN((file->mode & TF_FMODE_R),W_ERR_FAIL);
     
-    WIND_ASSERT_RETURN(buff != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(size > 0,ERR_INVALID_PARAM);
+    WIND_ASSERT_RETURN(buff != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(size > 0,W_ERR_INVALID);
     
     rsize = file->filelen - file->offset > size?size:file->filelen - file->offset;
     dnode = get_node_by_offset(&file->datalist,file->offset);
@@ -346,11 +346,11 @@ w_int32_t treefile_write(treefile_s* file,w_uint8_t *buff, w_int32_t size)
     w_uint32_t dataidx,bufidx;
     dnode_s *dnode;
     w_uint8_t *dest;
-    WIND_ASSERT_RETURN(file != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(file->magic == TREEFILE_MAGIC,ERR_INVALID_PARAM);
-    WIND_ASSERT_RETURN((file->mode & (TF_FMODE_W | TF_FMODE_A)),ERR_FAIL);
-    WIND_ASSERT_RETURN(buff != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(size > 0,ERR_INVALID_PARAM);
+    WIND_ASSERT_RETURN(file != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(file->magic == TREEFILE_MAGIC,W_ERR_INVALID);
+    WIND_ASSERT_RETURN((file->mode & (TF_FMODE_W | TF_FMODE_A)),W_ERR_FAIL);
+    WIND_ASSERT_RETURN(buff != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(size > 0,W_ERR_INVALID);
     while(file->bufflen < file->filelen + size)
     {
         dnode = treefs_malloc(TREEFS_BLK_SIZE + sizeof(dnode_s));
@@ -415,11 +415,11 @@ treefile_s *treefile_readdir(treefile_s* file,w_int32_t index)
 
 w_err_t treefile_fgets(treefile_s* file,char *buff, w_int32_t maxlen)
 {
-    return ERR_OK;
+    return W_ERR_OK;
 }
 w_err_t treefile_fputs(treefile_s* file,char *buff)
 {
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 #endif

@@ -316,9 +316,9 @@ static w_err_t hwrtc_set_datetime(datetime_s *datetime)
     systick_s tick64;
 #if WIND_RTC_SUPPORT
     dev_s *dev;
-    WIND_ASSERT_RETURN(datetime != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(datetime != NULL,W_ERR_NULL);
     dev = wind_dev_get("rtc");
-    WIND_ASSERT_RETURN(dev != NULL,ERR_INVALID_PARAM);
+    WIND_ASSERT_RETURN(dev != NULL,W_ERR_INVALID);
     wind_dev_open(dev);
     wind_dev_write(dev,(w_uint8_t*)datetime,sizeof(datetime_s));
     wind_dev_close(dev);
@@ -328,16 +328,16 @@ static w_err_t hwrtc_set_datetime(datetime_s *datetime)
     systick64.second = tick64.second;
     systick64.frac = tick64.frac;
     wind_enable_interrupt();
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 static w_err_t hwrtc_get_datetime(datetime_s *datetime)
 {
 #if WIND_RTC_SUPPORT
     dev_s *dev;
-    WIND_ASSERT_RETURN(datetime != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(datetime != NULL,W_ERR_NULL);
     dev = wind_dev_get("rtc");
-    WIND_ASSERT_RETURN(dev != NULL,ERR_INVALID_PARAM);
+    WIND_ASSERT_RETURN(dev != NULL,W_ERR_INVALID);
     wind_dev_open(dev);
     wind_dev_read(dev,(w_uint8_t*)datetime,sizeof(datetime_s));
     wind_dev_close(dev);
@@ -349,16 +349,16 @@ static w_err_t hwrtc_get_datetime(datetime_s *datetime)
     wind_enable_interrupt();
     tick64_to_datetime(datetime,&tick64);
 #endif
-    return ERR_OK;
+    return W_ERR_OK;
 }
 //-------------------------------------------------------------------------------------
 
 static w_uint8_t is_leap(w_uint16_t year)
 {
     if(year & 0x03)
-        return ERR_OK;
+        return W_ERR_OK;
     else if((year % 400 == 0))
-        return ERR_OK;
+        return W_ERR_OK;
     else
         return 1;
 }
@@ -369,18 +369,18 @@ w_err_t wind_datetime_setdate(date_s *date)
 {
     datetime_s dt;
     if(is_leap(date->year) && (date->month == 2) && (date->day > 29))
-        return ERR_INVALID_PARAM;
+        return W_ERR_INVALID;
     else if((date->month >= 13)
     || (date->month == 0)
     || (date->day == 0)
     || (date->day > g_daysofmonth[date->month - 1]))
-    return ERR_INVALID_PARAM;
+    return W_ERR_INVALID;
     hwrtc_get_datetime(&dt);
     dt.date.year = date->year;
     dt.date.month = date->month;
     dt.date.day = date->day;
     hwrtc_set_datetime(&dt);
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 w_err_t wind_datetime_settime(time_s *time)
@@ -390,20 +390,20 @@ w_err_t wind_datetime_settime(time_s *time)
     || time->minute >= 60
     || time->second >= 60
     || time->msecond >= 1000)
-    return ERR_INVALID_PARAM;
+    return W_ERR_INVALID;
     hwrtc_get_datetime(&dt);
     dt.time.hour = time->hour;
     dt.time.minute = time->minute;
     dt.time.second = time->second;
     dt.time.msecond = time->msecond;
     hwrtc_set_datetime(&dt);
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 w_err_t wind_datetime_set(datetime_s *datetime)
 {
     hwrtc_set_datetime(datetime);
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 w_err_t wind_datetime_getdate(date_s * date)
@@ -411,7 +411,7 @@ w_err_t wind_datetime_getdate(date_s * date)
     datetime_s dt;
     hwrtc_get_datetime(&dt);
     wind_memcpy(date,&dt.date,sizeof(date_s));
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 w_err_t wind_datetime_gettime(time_s *time)
@@ -419,13 +419,13 @@ w_err_t wind_datetime_gettime(time_s *time)
     datetime_s dt;
     hwrtc_get_datetime(&dt);
     wind_memcpy(time,&dt.time,sizeof(time_s));
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 w_err_t wind_datetime_get(datetime_s *datetime)
 {
     hwrtc_get_datetime(datetime);
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 
@@ -454,7 +454,7 @@ void _wind_datetime_mod_init(void)
 w_err_t wind_datetime_copy(datetime_s *desdt,datetime_s *srcdt)
 {
     if(!desdt || !srcdt)
-        return ERR_INVALID_PARAM;
+        return W_ERR_INVALID;
     desdt->date.year = srcdt->date.year;
     desdt->date.month = srcdt->date.month;
     desdt->date.day = srcdt->date.day;
@@ -463,7 +463,7 @@ w_err_t wind_datetime_copy(datetime_s *desdt,datetime_s *srcdt)
     desdt->time.second = srcdt->time.second;
     desdt->time.msecond = srcdt->time.msecond;
     desdt->week = srcdt->week;
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 
@@ -484,7 +484,7 @@ static w_uint32_t g_wind_time_ms_cnt = 0;//毫秒计时
 w_err_t _wind_tick_init(void)
 {
     g_wind_time_ms_cnt = 0;
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 //获取tick计数器

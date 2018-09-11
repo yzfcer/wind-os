@@ -33,17 +33,17 @@ w_err_t   beep_init(dev_s *dev)
 {
     BEEP_Init();
     beepst[0] = 0;
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 w_err_t   beep_open(dev_s *dev)
 {
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 w_err_t  beep_ioctl(dev_s *dev,w_int32_t ctrlpoint,void *param)
 {
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 w_int32_t beep_read(dev_s *dev,w_uint8_t *buf,w_uint16_t len)
@@ -61,7 +61,7 @@ w_int32_t beep_write(dev_s *dev,w_uint8_t *buf,w_uint16_t len)
 
 w_err_t   beep_close(dev_s *dev)
 {
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 const dev_ops_s beep_ops = 

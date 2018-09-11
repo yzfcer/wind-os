@@ -105,15 +105,15 @@ w_err_t wind_heap_destroy(w_addr_t base)
 {
     heap_s *heap;
     heap = (heap_s*)(__ALIGN_R((w_addr_t)base));
-    WIND_ASSERT_RETURN(heap != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(heap->magic == WIND_HEAP_MAGIC,ERR_INVALID_PARAM);
+    WIND_ASSERT_RETURN(heap != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(heap->magic == WIND_HEAP_MAGIC,W_ERR_INVALID);
     wind_disable_switch();
     dlist_remove(&g_core.heaplist,&heap->heapnode);
     heap->magic = 0;
     wind_enable_switch();
     wind_mutex_destroy(heap->mutex);
     heap->mutex = NULL;
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 
@@ -154,13 +154,13 @@ static void *alloc_from_freeitem(heap_s* heap,heapitem_s* freeitem,w_uint32_t si
 
 static w_err_t combine_heapitem(heapitem_s* item1,heapitem_s* item2)
 {
-    WIND_ASSERT_RETURN(item1 != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(item2 != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(item1->heap == item2->heap,ERR_INVALID_PARAM);
-    WIND_ASSERT_RETURN(item1->magic == WIND_HEAPITEM_MAGIC,ERR_INVALID_PARAM);
-    WIND_ASSERT_RETURN(item2->magic == WIND_HEAPITEM_MAGIC,ERR_INVALID_PARAM);
-    WIND_ASSERT_RETURN(item1->used == 0,ERR_INVALID_PARAM);
-    WIND_ASSERT_RETURN(item2->used == 0,ERR_INVALID_PARAM);
+    WIND_ASSERT_RETURN(item1 != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(item2 != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(item1->heap == item2->heap,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(item1->magic == WIND_HEAPITEM_MAGIC,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(item2->magic == WIND_HEAPITEM_MAGIC,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(item1->used == 0,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(item2->used == 0,W_ERR_INVALID);
     if(item1->size + (w_uint32_t)item1 == (w_uint32_t)item2)
     {
         //wind_heapitem_print(&g_core.heaplist);
@@ -172,7 +172,7 @@ static w_err_t combine_heapitem(heapitem_s* item1,heapitem_s* item2)
         PRIO_DNODE_INIT(item2->itemnode);
         //wind_heapitem_print(&g_core.heaplist);
     }
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 //从内存堆中分出一块空间
@@ -256,16 +256,16 @@ w_err_t wind_heap_free(heap_s* heap,void *ptr)
     if(ptr == NULL)
     {
         wind_debug("wind_free:ptr=null");
-        return ERR_OK;
+        return W_ERR_OK;
     }
     item = ITEM_FROM_PTR(ptr);
-    WIND_ASSERT_RETURN(item->magic == WIND_HEAPITEM_MAGIC,ERR_INVALID_PARAM);
-    WIND_ASSERT_RETURN(item->used == 1,ERR_INVALID_PARAM);
-    WIND_ASSERT_RETURN(item->heap != NULL,ERR_INVALID_PARAM);
+    WIND_ASSERT_RETURN(item->magic == WIND_HEAPITEM_MAGIC,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(item->used == 1,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(item->heap != NULL,W_ERR_INVALID);
     wind_debug("heap_free %s,0x%08x",heap->name,ptr);
     heap = item->heap;
-    WIND_ASSERT_RETURN(heap != NULL,ERR_INVALID_PARAM);
-    WIND_ASSERT_RETURN(heap->magic == WIND_HEAP_MAGIC,ERR_INVALID_PARAM);
+    WIND_ASSERT_RETURN(heap != NULL,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(heap->magic == WIND_HEAP_MAGIC,W_ERR_INVALID);
     wind_mutex_lock(heap->mutex);
     dlist_remove(&heap->used_list,&item->itemnode.dnode);
     WIND_STATI_MINUS(heap->stati,item->size);
@@ -288,7 +288,7 @@ w_err_t wind_heap_free(heap_s* heap,void *ptr)
             combine_heapitem(tmpitem,item);
     }
     wind_mutex_unlock(heap->mutex);
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 w_err_t wind_heap_print(dlist_s *list)
@@ -308,7 +308,7 @@ w_err_t wind_heap_print(dlist_s *list)
             heap->is_private?"TRUE":"FALSE");
     }
     wind_print_space(7);
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 w_err_t wind_heapitem_print(dlist_s *list)
@@ -316,8 +316,8 @@ w_err_t wind_heapitem_print(dlist_s *list)
     dnode_s *dnode,*dnode1;
     heap_s *heap;
     heapitem_s *heapitem;
-    WIND_ASSERT_RETURN(list != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(list->head != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(list != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(list->head != NULL,W_ERR_NULL);
     wind_printf("\r\n\r\nheapitem list as following:\r\n");
     wind_print_space(5);
     wind_printf("%-16s %-8s %-10s\r\n","addr","size","state");
@@ -332,7 +332,7 @@ w_err_t wind_heapitem_print(dlist_s *list)
             if(heapitem->magic != WIND_HEAPITEM_MAGIC)
             {
                 wind_error("heap memory has been illegally accessed .");
-                return ERR_MEM;
+                return W_ERR_MEM;
             }
             wind_printf("0x%-14x %-8d %-10s\r\n",
                 heapitem,heapitem->size,(heapitem->used)?"uesd":"free");
@@ -343,14 +343,14 @@ w_err_t wind_heapitem_print(dlist_s *list)
             if(heapitem->magic != WIND_HEAPITEM_MAGIC)
             {
                 wind_error("heap memory:0x%x has been illegally accessed.",heapitem);
-                return ERR_MEM;
+                return W_ERR_MEM;
             }
             wind_printf("0x%-14x %-8d %-10s\r\n",
                 heapitem,heapitem->size,(heapitem->used)?"uesd":"free");
         }
     }
     wind_print_space(5);
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 void *wind_malloc(w_uint32_t size)
@@ -386,12 +386,12 @@ w_err_t wind_free(void *ptr)
     if(ptr == NULL)
     {
         wind_debug("wind_free:ptr=null");
-        return ERR_OK;
+        return W_ERR_OK;
     }
     wind_debug("wind_free:ptr=0x%x",ptr);
     item = ITEM_FROM_PTR(ptr);
-    WIND_ASSERT_RETURN(item->magic == WIND_HEAPITEM_MAGIC,ERR_INVALID_PARAM);
-    WIND_ASSERT_RETURN(item->used == 1,ERR_INVALID_PARAM);
+    WIND_ASSERT_RETURN(item->magic == WIND_HEAPITEM_MAGIC,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(item->used == 1,W_ERR_INVALID);
     return wind_heap_free(item->heap,ptr);
 }
 

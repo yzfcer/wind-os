@@ -45,28 +45,28 @@ COMMAND_MAIN(led,argc,argv)
     dev_s *led;
     w_uint8_t stat;
     char devname[8];
-    WIND_ASSERT_RETURN(argc == 3,ERR_INVALID_PARAM);
+    WIND_ASSERT_RETURN(argc == 3,W_ERR_INVALID);
     wind_memset(devname,0,sizeof(devname));
     sprintf(devname,"led%s",argv[2]);
     led = wind_dev_get(devname);
-    WIND_ASSERT_RETURN(led != NULL,ERR_INVALID_PARAM);
+    WIND_ASSERT_RETURN(led != NULL,W_ERR_INVALID);
     if(0 == wind_strcmp(argv[1],"on"))
     {
         err = wind_dev_open(led);
-        WIND_ASSERT_RETURN(err == ERR_OK,ERR_FAIL);
+        WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_FAIL);
         stat = 1;
         wind_dev_write(led,&stat,1);
-        return ERR_OK;
+        return W_ERR_OK;
     }
     else if(0 == wind_strcmp(argv[1],"off"))
     {
         err = wind_dev_open(led);
-        WIND_ASSERT_RETURN(err == ERR_OK,ERR_FAIL);
+        WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_FAIL);
         stat = 0;
         wind_dev_write(led,&stat,1);
-        return ERR_OK;
+        return W_ERR_OK;
     }
-    return ERR_FAIL;
+    return W_ERR_FAIL;
 }
 
 COMMAND_DEF(led);

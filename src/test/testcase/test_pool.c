@@ -95,11 +95,11 @@ CASE_FUNC(pool_alloc)
         EXPECT_EQ(itm->next,NULL);
     }
     err = wind_pool_free(test_pool,testblk[TNUM]);
-    EXPECT_EQ(err,ERR_NULL_POINTER);
+    EXPECT_EQ(err,W_ERR_NULL);
     err = wind_pool_free(test_pool,(void*)0xffffffff);
-    EXPECT_EQ(err,ERR_INVALID_PARAM);
+    EXPECT_EQ(err,W_ERR_INVALID);
     err = wind_pool_free(test_pool,testblk[0]);
-    EXPECT_EQ(err,ERR_INVALID_PARAM);
+    EXPECT_EQ(err,W_ERR_INVALID);
 }
 
 

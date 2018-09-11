@@ -110,7 +110,7 @@ void test_framework_init(void)
 err_t test_suite_register(test_suite_s *test_suite)
 {
     suite_list_s *tsl = &suite_list;
-    TEST_ASSERT_RETURN(test_suite == NULL,ERR_NULL_POINTER);
+    TEST_ASSERT_RETURN(test_suite == NULL,W_ERR_NULL);
     if(tsl->tail == NULL)
     {
         tsl->tail = test_suite;
@@ -123,7 +123,7 @@ err_t test_suite_register(test_suite_s *test_suite)
     }
     test_suite->next = NULL;
     tsl->cnt ++;
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 static ut_int32_t is_in_errlist(ut_uint32_t line)

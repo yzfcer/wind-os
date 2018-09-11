@@ -94,14 +94,14 @@ sem_s *wind_sem_create(const char *name,w_int16_t sem_value)
 w_err_t wind_sem_trydestroy(sem_s *sem)
 {
     dnode_s *pdnode;
-    WIND_ASSERT_RETURN(sem != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(sem->magic == WIND_SEM_MAGIC,ERR_INVALID_PARAM);
+    WIND_ASSERT_RETURN(sem != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(sem->magic == WIND_SEM_MAGIC,W_ERR_INVALID);
     wind_disable_interrupt();
     pdnode = dlist_head(&sem->waitlist);
     if(pdnode != NULL)
     {
         wind_enable_interrupt();
-        return ERR_FAIL;
+        return W_ERR_FAIL;
     }
     wind_enable_interrupt();
     return wind_sem_destroy(sem);
@@ -112,8 +112,8 @@ w_err_t wind_sem_destroy(sem_s *sem)
     w_err_t err;
     dnode_s *pdnode;
     thread_s *thread;
-    WIND_ASSERT_RETURN(sem != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(sem->magic == WIND_SEM_MAGIC,ERR_INVALID_PARAM);
+    WIND_ASSERT_RETURN(sem != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(sem->magic == WIND_SEM_MAGIC,W_ERR_INVALID);
     wind_notice("destroy sem:%s",sem->name);
     wind_disable_interrupt();
     dlist_remove(&g_core.semlist,&sem->semnode);
@@ -134,8 +134,8 @@ w_err_t wind_sem_post(sem_s *sem)
 {
     dnode_s *dnode;
     thread_s *thread;
-    WIND_ASSERT_RETURN(sem != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(sem->magic == WIND_SEM_MAGIC,ERR_INVALID_PARAM);
+    WIND_ASSERT_RETURN(sem != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(sem->magic == WIND_SEM_MAGIC,W_ERR_INVALID);
     wind_disable_interrupt();
     //无阻塞的线程，减少信号量后直接返回
     dnode = dlist_head(&sem->waitlist);
@@ -144,7 +144,7 @@ w_err_t wind_sem_post(sem_s *sem)
         if(sem->sem_num < sem->sem_tot)
             sem->sem_num ++;
         wind_enable_interrupt();
-        return ERR_OK;
+        return W_ERR_OK;
     }
     
     //激活被阻塞的线程，从睡眠队列移除,触发线程切换
@@ -156,7 +156,7 @@ w_err_t wind_sem_post(sem_s *sem)
     thread->cause = CAUSE_SEM;
     thread->runstat = THREAD_STATUS_READY;
     _wind_thread_dispatch();
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 
@@ -164,8 +164,8 @@ w_err_t wind_sem_wait(sem_s *sem,w_uint32_t timeout)
 {
     w_int32_t ticks;
     thread_s *thread;
-    WIND_ASSERT_RETURN(sem != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(sem->magic == WIND_SEM_MAGIC,ERR_INVALID_PARAM);
+    WIND_ASSERT_RETURN(sem != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(sem->magic == WIND_SEM_MAGIC,W_ERR_INVALID);
     ticks = timeout *WIND_TICK_PER_SEC / 1000;
     if(ticks == 0)
         ticks = 1;
@@ -176,10 +176,10 @@ w_err_t wind_sem_wait(sem_s *sem,w_uint32_t timeout)
     {
         sem->sem_num --;
         wind_enable_interrupt();
-        return ERR_OK; 
+        return W_ERR_OK; 
     }
     if(timeout == 0)
-        return ERR_FAIL;
+        return W_ERR_FAIL;
 
     //将当前线程加入睡眠和阻塞队列，触发线程切换
     thread = wind_thread_current();
@@ -202,25 +202,25 @@ w_err_t wind_sem_wait(sem_s *sem,w_uint32_t timeout)
         dlist_remove(&sem->waitlist,&thread->suspendnode.dnode);
     wind_enable_interrupt();
     if(thread->cause == CAUSE_SLEEP)
-        return ERR_TIMEOUT;
-    return ERR_OK;
+        return W_ERR_TIMEOUT;
+    return W_ERR_OK;
 }
 
 w_err_t wind_sem_trywait(sem_s *sem)
 {
     w_err_t err;
-    WIND_ASSERT_RETURN(sem != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(sem->magic == WIND_SEM_MAGIC,ERR_INVALID_PARAM);
+    WIND_ASSERT_RETURN(sem != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(sem->magic == WIND_SEM_MAGIC,W_ERR_INVALID);
 
     //信号量有效，直接返回
     wind_disable_interrupt();
     if (sem->sem_num > 0)
     {
         sem->sem_num --;
-        err = ERR_OK; 
+        err = W_ERR_OK; 
     }
     else
-        err = ERR_FAIL;
+        err = W_ERR_FAIL;
     wind_enable_interrupt();
     return err;
 }
@@ -230,7 +230,7 @@ w_err_t wind_sem_print(dlist_s *list)
 {
     dnode_s *dnode;
     sem_s *sem;
-    WIND_ASSERT_RETURN(list != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(list != NULL,W_ERR_NULL);
     wind_printf("\r\n\r\nsem list as following:\r\n");
     wind_print_space(5);
     wind_printf("%-16s %-8s %-10s\r\n","sem","sem_tot","sem_num");
@@ -243,7 +243,7 @@ w_err_t wind_sem_print(dlist_s *list)
             sem->name,sem->sem_tot,sem->sem_num);
     }
     wind_print_space(5);
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 #endif

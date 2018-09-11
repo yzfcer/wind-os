@@ -54,28 +54,28 @@ static w_err_t mount_param_check(char *fsname,char *blkname,char *path)
     //blkdev_s *dev;
     fs_s *fs;
     dnode_s *dnode;
-    WIND_ASSERT_RETURN(fsname != NULL,ERR_NULL_POINTER);
-    //WIND_ASSERT_RETURN(blkname != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(path != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(fsname != NULL,W_ERR_NULL);
+    //WIND_ASSERT_RETURN(blkname != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(path != NULL,W_ERR_NULL);
     //dev = wind_blkdev_get(blkname);
-    //WIND_ASSERT_RETURN(dev != NULL,ERR_INVALID_PARAM);
+    //WIND_ASSERT_RETURN(dev != NULL,W_ERR_INVALID);
     fs = wind_fs_get(fsname);
-    WIND_ASSERT_RETURN(fs != NULL,ERR_OBJ_REPEAT);
+    WIND_ASSERT_RETURN(fs != NULL,W_ERR_REPEAT);
     if(wind_strlen(path) >= FS_MOUNT_PATH_LEN)
-        return ERR_INVALID_PARAM;
+        return W_ERR_INVALID;
     if(wind_strlen(fsname) >= FS_MOUNT_PATH_LEN)
-        return ERR_INVALID_PARAM;
+        return W_ERR_INVALID;
     foreach_node(dnode,&g_core.fslist)
     {
         fs = DLIST_OBJ(dnode,fs_s,fsnode);
         if(wind_strcmp(path,fs->mount_path) == 0)
-            return ERR_OBJ_REPEAT;
+            return W_ERR_REPEAT;
         if(blkname == NULL)
             continue;
         if(wind_strcmp(blkname,fs->blkdev->name) == 0)
-            return ERR_OBJ_REPEAT;
+            return W_ERR_REPEAT;
     }
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 w_err_t wind_fs_regster(fs_s *fs,w_int32_t count)
@@ -83,11 +83,11 @@ w_err_t wind_fs_regster(fs_s *fs,w_int32_t count)
     w_int32_t i;
     fs_s *fsi;    
     w_err_t err;
-    WIND_ASSERT_RETURN(fs != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(count > 0,ERR_INVALID_PARAM);
+    WIND_ASSERT_RETURN(fs != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(count > 0,W_ERR_INVALID);
     for(i = 0;i < count;i ++)
     {
-        WIND_ASSERT_RETURN(fs[i].magic == WIND_FS_MAGIC,ERR_INVALID_PARAM);
+        WIND_ASSERT_RETURN(fs[i].magic == WIND_FS_MAGIC,W_ERR_INVALID);
         wind_notice("register fs:%s",fs[i].name);
         fsi = wind_fs_get(fs[i].name);
         if(fsi != NULL)
@@ -98,7 +98,7 @@ w_err_t wind_fs_regster(fs_s *fs,w_int32_t count)
         if(fs[i].ops->init)
         {
             err = fs[i].ops->init(&fs[i]);
-            if(err != ERR_OK)
+            if(err != W_ERR_OK)
             {
                 wind_error("fs:%s init failed:%d.",fs[i].name,err);
                 continue;
@@ -108,13 +108,13 @@ w_err_t wind_fs_regster(fs_s *fs,w_int32_t count)
         dlist_insert_tail(&g_core.fslist,&fs[i].fsnode);
         wind_enable_switch();    
     }
-    return ERR_OK;
+    return W_ERR_OK;
 }
 w_err_t wind_fs_unregster(fs_s *fs)
 {
     dnode_s *dnode;
-    WIND_ASSERT_RETURN(fs != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(fs->magic == WIND_FS_MAGIC,ERR_INVALID_PARAM);
+    WIND_ASSERT_RETURN(fs != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(fs->magic == WIND_FS_MAGIC,W_ERR_INVALID);
     wind_notice("unregister fs:%s",fs->name);
     wind_disable_switch();
     dnode = dlist_remove(&g_core.blkdevlist,dnode);
@@ -122,16 +122,16 @@ w_err_t wind_fs_unregster(fs_s *fs)
     if(dnode == NULL)
     {
         wind_error("fs has NOT been registered.\r\n");
-        return ERR_FAIL;
+        return W_ERR_FAIL;
     }
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 static w_err_t wind_all_fs_regster(void)
 {
     extern fs_s fs_treefs[1];
     wind_fs_regster(fs_treefs,1);
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 w_err_t _wind_fs_mod_init(void)
@@ -190,38 +190,38 @@ w_err_t wind_fs_mount(char *fsname,char *blkname,char *path)
     fs_s *fs;
     w_int32_t len;
     err = mount_param_check(fsname,blkname,path);
-    WIND_ASSERT_RETURN(err == ERR_OK,ERR_INVALID_PARAM);
+    WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_INVALID);
     fs = wind_fs_get(fsname);
-    WIND_ASSERT_RETURN(fs != NULL,ERR_MEM);
+    WIND_ASSERT_RETURN(fs != NULL,W_ERR_MEM);
     blkdev = wind_blkdev_get(blkname);
     len = wind_strlen(path)+1;
     fs->mount_path = wind_malloc(len);
-    WIND_ASSERT_RETURN(fs->mount_path != NULL,ERR_MEM);
+    WIND_ASSERT_RETURN(fs->mount_path != NULL,W_ERR_MEM);
     wind_strcpy(fs->mount_path,path);
     fs->blkdev = blkdev;
     if(fs->ops->init)
         fs->ops->init(fs);
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 w_err_t wind_fs_unmount(char *fsname)
 {
     fs_s *fs;
-    WIND_ASSERT_RETURN(fsname != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(fsname != NULL,W_ERR_NULL);
     fs = wind_fs_get(fsname);
-    WIND_ASSERT_RETURN(fs != NULL,ERR_INVALID_PARAM);
+    WIND_ASSERT_RETURN(fs != NULL,W_ERR_INVALID);
     fs->blkdev = NULL;
     DNODE_INIT(fs->fsnode);
     wind_free(fs->mount_path);
     fs->mount_path = NULL;
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 w_err_t wind_fs_format(fs_s *fs)
 {
-    w_err_t err = ERR_OK;
-    WIND_ASSERT_RETURN(fs != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(fs->ops != NULL,ERR_NULL_POINTER);
+    w_err_t err = W_ERR_OK;
+    WIND_ASSERT_RETURN(fs != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(fs->ops != NULL,W_ERR_NULL);
     if(fs->ops->format != NULL)
         err = fs->ops->format(fs);
     return err;
@@ -361,7 +361,7 @@ file_s* wind_file_open(const char *path,fmode_e fmode)
     file->mutex = wind_mutex_create(NULL);
     file->ops = fs->ops;
     err = file->ops->open(file,(fmode_e)file->fmode);
-    if(err != ERR_OK)
+    if(err != W_ERR_OK)
     {
         wind_mutex_destroy(file->mutex);
         _file_free(file);
@@ -381,8 +381,8 @@ file_s* wind_file_open(const char *path,fmode_e fmode)
 
 w_err_t wind_file_close(file_s *file)
 {
-    w_err_t err = ERR_FAIL;
-    WIND_ASSERT_RETURN(file != NULL,ERR_NULL_POINTER);
+    w_err_t err = W_ERR_FAIL;
+    WIND_ASSERT_RETURN(file != NULL,W_ERR_NULL);
     wind_debug("close file:%s.",file->path);
     wind_mutex_lock(file->mutex);
     if(file->ops->close)
@@ -399,8 +399,8 @@ w_err_t wind_file_close(file_s *file)
 
 w_err_t wind_file_remove(file_s *file)
 {
-    w_err_t err = ERR_FAIL;
-    WIND_ASSERT_RETURN(file != NULL,ERR_NULL_POINTER);
+    w_err_t err = W_ERR_FAIL;
+    WIND_ASSERT_RETURN(file != NULL,W_ERR_NULL);
     wind_debug("remove file:%s",file->path);
     wind_mutex_lock(file->mutex);
     if(file->ops->rmfile)
@@ -432,10 +432,10 @@ char* wind_file_subfile(file_s *dir,w_int32_t index)
 
 w_err_t wind_file_seek(file_s *file,w_int32_t offset)
 {
-    w_err_t err = ERR_FAIL;
-    WIND_ASSERT_RETURN(file != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(offset >= 0,ERR_INVALID_PARAM);
-    WIND_ASSERT_RETURN(!file->isdir,ERR_INVALID_PARAM);
+    w_err_t err = W_ERR_FAIL;
+    WIND_ASSERT_RETURN(file != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(offset >= 0,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(!file->isdir,W_ERR_INVALID);
     wind_mutex_lock(file->mutex);
     if(file->ops->seek)
         err = file->ops->seek(file,offset);
@@ -445,9 +445,9 @@ w_err_t wind_file_seek(file_s *file,w_int32_t offset)
     
 w_err_t wind_file_rename(file_s *file,char *newname)
 {
-    w_err_t err = ERR_FAIL;
-    WIND_ASSERT_RETURN(file != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(newname != NULL,ERR_NULL_POINTER);
+    w_err_t err = W_ERR_FAIL;
+    WIND_ASSERT_RETURN(file != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(newname != NULL,W_ERR_NULL);
     wind_mutex_lock(file->mutex);
     if(file->ops->rename)
         err = file->ops->rename(file,newname);
@@ -495,26 +495,26 @@ w_int32_t wind_file_write(file_s *file,w_uint8_t *buff, w_int32_t size)
 w_err_t wind_file_gets(file_s *file,char *buff, w_int32_t maxlen)
 {
     w_int32_t len = -1;
-    WIND_ASSERT_RETURN(file != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(buff != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(maxlen > 0,ERR_INVALID_PARAM);
+    WIND_ASSERT_RETURN(file != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(buff != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(maxlen > 0,W_ERR_INVALID);
     wind_mutex_lock(file->mutex);
     if(file->ops->fgets)
         len = file->ops->fgets(file,buff,maxlen);
     wind_mutex_unlock(file->mutex);
-    return len > 0?ERR_OK:ERR_FAIL;
+    return len > 0?W_ERR_OK:W_ERR_FAIL;
 }
 
 w_err_t wind_file_puts(file_s *file,char *buff)
 {
     w_int32_t len = -1;
-    WIND_ASSERT_RETURN(file != NULL,ERR_NULL_POINTER);
-    WIND_ASSERT_RETURN(buff != NULL,ERR_NULL_POINTER);
+    WIND_ASSERT_RETURN(file != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(buff != NULL,W_ERR_NULL);
     wind_mutex_lock(file->mutex);
     if(file->ops->fputs)
         len = file->ops->fputs(file,buff);
     wind_mutex_unlock(file->mutex);
-    return len > 0?ERR_OK:ERR_FAIL;
+    return len > 0?W_ERR_OK:W_ERR_FAIL;
 }
 
 #endif

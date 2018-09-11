@@ -48,31 +48,31 @@ w_err_t _wind_softirq_mod_init(void)
     wind_memset(softirq_flag,0,sizeof(softirq_flag));
     wind_memset(softirq_vectors,0,sizeof(softirq_vectors));
     wind_memset(softirq_stk,0,WIND_SOFTINT_STK_LEN * sizeof(w_stack_t));
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 
 //向软中断模块注册一个中断向量响应函数
 w_err_t wind_softirq_reg(w_uint16_t irqid,softirq_fn func)
 {
-    WIND_ASSERT_RETURN(irqid < WIND_SOFTINT_MAX_NUM,ERR_PARAM_OVERFLOW);
+    WIND_ASSERT_RETURN(irqid < WIND_SOFTINT_MAX_NUM,W_ERR_OVERFLOW);
     softirq_vectors[irqid] = func;
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 //取消一个软中断的注册
 w_err_t wind_softirq_unreg(w_int32_t irqid)
 {
-    WIND_ASSERT_RETURN(irqid < WIND_SOFTINT_MAX_NUM,ERR_PARAM_OVERFLOW);
+    WIND_ASSERT_RETURN(irqid < WIND_SOFTINT_MAX_NUM,W_ERR_OVERFLOW);
     softirq_vectors[irqid] = NULL;
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 //触发一个软件中断
 w_err_t wind_softirq_trig(w_int32_t irqid)
 {
     w_int32_t idx1,idx2;
-    WIND_ASSERT_RETURN(irqid < WIND_SOFTINT_MAX_NUM,ERR_PARAM_OVERFLOW);
+    WIND_ASSERT_RETURN(irqid < WIND_SOFTINT_MAX_NUM,W_ERR_OVERFLOW);
     wind_disable_interrupt();
     idx1 = (irqid >> 5);
     idx2 = (irqid & 0x1f);
@@ -80,7 +80,7 @@ w_err_t wind_softirq_trig(w_int32_t irqid)
     wind_thread_resume(softirq_thread);
     wind_enable_interrupt();
     _wind_switchto_thread(softirq_thread);
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 static softirq_fn get_irq_handle(void)
@@ -139,9 +139,9 @@ w_err_t _wind_create_softirq_thread(void)
     wind_notice("create soft interrupt thread.");
     softirq_thread = wind_thread_create("softirq",wind_softirq_thread,
                 0,NULL,PRIO_HIGH,softirq_stk,WIND_SOFTINT_STK_LEN);
-    WIND_ASSERT_RETURN(softirq_thread != NULL,ERR_FAIL);
+    WIND_ASSERT_RETURN(softirq_thread != NULL,W_ERR_FAIL);
     wind_thread_set_priority(softirq_thread,1);
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 

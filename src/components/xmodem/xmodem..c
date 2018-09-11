@@ -145,37 +145,37 @@ static w_err_t wait_data(void)
             info->bufsz = 128;
             info->stat = XM_RECV_DATA;
             info->idx = 1;
-            return ERR_OK;
+            return W_ERR_OK;
         case STX:
             info->bufsz = 1024;
             info->stat = XM_RECV_DATA;
             info->idx = 1;
-            return ERR_OK;
+            return W_ERR_OK;
         case EOT:
             info->stat = XM_RECV_END;
-            return ERR_OK;
+            return W_ERR_OK;
         case CAN:
             info->stat = XM_ERROR;
-            return ERR_FAIL;
+            return W_ERR_FAIL;
         default:
             info->stat = XM_ERROR;
-            return ERR_FAIL;
+            return W_ERR_FAIL;
         }  
     }  
     info->stat = XM_ERROR;
-    return ERR_FAIL;
+    return W_ERR_FAIL;
 }
 
 static w_err_t check_data_recv(void)
 {
     xmodem_info_s *info = &xm_info;
     if(info->buff[1] != (w_uint8_t)(~info->buff[2]))
-        return ERR_FAIL;
+        return W_ERR_FAIL;
     if((info->buff[1] != info->pack_no) && (info->buff[1] !=(w_uint8_t)info->pack_no - 1))
-        return ERR_FAIL;
+        return W_ERR_FAIL;
     if(!xmodem_check(info->crcmode, &info->buff[3], info->bufsz))
-        return ERR_FAIL;
-    return ERR_OK;
+        return W_ERR_FAIL;
+    return W_ERR_OK;
 }
 
 w_int32_t read_and_check_data(w_uint8_t *buff,w_int32_t len)
@@ -195,7 +195,7 @@ w_int32_t read_and_check_data(w_uint8_t *buff,w_int32_t len)
         info->idx ++;
     }
     
-    if(check_data_recv() == ERR_OK)
+    if(check_data_recv() == W_ERR_OK)
     {
         buflen = len < info->bufsz?len:info->bufsz;
         wind_memcpy(buff, &info->buff[3], buflen);

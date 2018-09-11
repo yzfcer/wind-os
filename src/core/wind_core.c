@@ -276,7 +276,7 @@ static int wind_os_lunch(void)
     _wind_thread_open();
     wind_enable_interrupt();
     wind_run();
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 

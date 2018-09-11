@@ -45,7 +45,7 @@ static w_err_t fs_cmd_pwd(void)
 {
     char *curpath = wind_file_get_current_path();
     console_printf("%s\r\n",curpath);
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 static w_err_t fs_cmd_cd(w_int32_t argc,char **argv)
@@ -54,18 +54,18 @@ static w_err_t fs_cmd_cd(w_int32_t argc,char **argv)
     char *fullpath;
     char *curpath = wind_file_get_current_path();
     if(argc < 3)
-        return ERR_FAIL;
+        return W_ERR_FAIL;
     fullpath = wind_full_path_generate(curpath,argv[2],1);
     isexist = wind_file_existing(fullpath);
     if(!isexist)
     {
         console_printf("directory:\"%s\" is NOT exist.\r\n",fullpath);
         wind_full_path_release(fullpath);
-        return ERR_FILE_NOT_EXIT;
+        return W_ERR_NOFILE;
     }
     wind_file_set_current_path(fullpath);
     wind_full_path_release(fullpath);
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 static w_err_t mknode(w_int32_t argc,char **argv,w_uint16_t isdir)
@@ -75,7 +75,7 @@ static w_err_t mknode(w_int32_t argc,char **argv,w_uint16_t isdir)
     char * fullpath;
     char *curpath = wind_file_get_current_path();
     if(argc < 3)
-        return ERR_INVALID_PARAM;
+        return W_ERR_INVALID;
     fullpath = wind_full_path_generate(curpath,argv[2],isdir);
     isexist = wind_file_existing(fullpath);
     if(isexist)
@@ -83,7 +83,7 @@ static w_err_t mknode(w_int32_t argc,char **argv,w_uint16_t isdir)
         console_printf("directory has been existing.\r\n");
         wind_full_path_release(fullpath);
         wind_file_close(file);
-        return ERR_FAIL;
+        return W_ERR_FAIL;
     }
     
     file = wind_file_open(fullpath,FMODE_CRT);
@@ -91,7 +91,7 @@ static w_err_t mknode(w_int32_t argc,char **argv,w_uint16_t isdir)
         console_printf("make directory failed.");
     wind_file_close(file);
     wind_full_path_release(fullpath);
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 static w_err_t fs_cmd_mkdir(w_int32_t argc,char **argv)
@@ -116,7 +116,7 @@ static w_err_t fs_cmd_rm(w_int32_t argc,char **argv)
     {
         console_printf("open directory or file failed.\r\n");
         wind_full_path_release(fullpath);
-        return ERR_FILE_NOT_EXIT;
+        return W_ERR_NOFILE;
     }
     err = wind_file_remove(file);
     wind_file_close(file);
@@ -134,13 +134,13 @@ static w_err_t fs_cmd_ls(w_int32_t argc,char **argv)
        fullpath = wind_full_path_generate(curpath,argv[2],1);
     else
         fullpath = wind_full_path_generate(curpath,curpath,1);
-    WIND_ASSERT_RETURN(fullpath != NULL,ERR_FAIL);
+    WIND_ASSERT_RETURN(fullpath != NULL,W_ERR_FAIL);
     file = wind_file_open(fullpath,FMODE_R);
     if(file == NULL)
     {
         console_printf("open directory or file failed.\r\n");
         wind_free(fullpath);
-        return ERR_FILE_NOT_EXIT;
+        return W_ERR_NOFILE;
     }
     for(i = 0;;i ++)
     {
@@ -154,7 +154,7 @@ static w_err_t fs_cmd_ls(w_int32_t argc,char **argv)
     console_printf("\r\n");
     wind_file_close(file);
     wind_full_path_release(fullpath);
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 static w_err_t fs_cmd_cat(w_int32_t argc,char **argv)
@@ -165,20 +165,20 @@ static w_err_t fs_cmd_cat(w_int32_t argc,char **argv)
     w_int32_t len;
     char *curpath = wind_file_get_current_path();
     if(argc < 3)
-        return ERR_INVALID_PARAM;
+        return W_ERR_INVALID;
     fullpath = wind_full_path_generate(curpath,argv[2],0);
     file = wind_file_open(fullpath,FMODE_R);
     if(file == NULL)
     {
         console_printf("open directory or file failed.\r\n",fullpath);
         wind_free(fullpath);
-        return ERR_FILE_NOT_EXIT;
+        return W_ERR_NOFILE;
     }
     buff = wind_malloc(BUF_SIZE+1);
     if(buff == NULL)
     {
         wind_free(fullpath);
-        return ERR_FAIL;
+        return W_ERR_FAIL;
     }
     console_printf("\r\n---------%s---------\r\n",fullpath);
     while(1)
@@ -194,7 +194,7 @@ static w_err_t fs_cmd_cat(w_int32_t argc,char **argv)
     wind_file_close(file);
     wind_full_path_release(fullpath);
     wind_free(buff);
-    return ERR_OK;
+    return W_ERR_OK;
 }
     
 static w_err_t fs_cmd_write(w_int32_t argc,char **argv)
@@ -204,14 +204,14 @@ static w_err_t fs_cmd_write(w_int32_t argc,char **argv)
     w_int32_t len,filelen;
     char *curpath = wind_file_get_current_path();
     if(argc < 4)
-        return ERR_INVALID_PARAM;
+        return W_ERR_INVALID;
     fullpath = wind_full_path_generate(curpath,argv[2],0);
     file = wind_file_open(fullpath,FMODE_W|FMODE_CRT);
     if(file == NULL)
     {
         console_printf("open directory or file failed.\r\n",fullpath);
         wind_full_path_release(fullpath);
-        return ERR_FILE_NOT_EXIT;
+        return W_ERR_NOFILE;
     }
 
     len = wind_strlen(argv[3]);
@@ -221,11 +221,11 @@ static w_err_t fs_cmd_write(w_int32_t argc,char **argv)
     {
         console_printf("write file OK.\r\n");
         wind_full_path_release(fullpath);
-        return ERR_OK;
+        return W_ERR_OK;
     }
     console_printf("write file failed.\r\n");
     wind_full_path_release(fullpath);
-    return ERR_FAIL;
+    return W_ERR_FAIL;
 }
 
 
@@ -256,7 +256,7 @@ COMMAND_MAIN(fs,argc,argv)
 {
     //path_init();
     if(argc < 2)
-        return ERR_FAIL;
+        return W_ERR_FAIL;
     if(wind_strcmp(argv[1],"pwd") == 0)
         return fs_cmd_pwd();
     else if(wind_strcmp(argv[1],"cd") == 0)
@@ -273,7 +273,7 @@ COMMAND_MAIN(fs,argc,argv)
         return fs_cmd_write(argc,argv);
     else if(wind_strcmp(argv[1],"rm") == 0)
         return fs_cmd_rm(argc,argv);
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 COMMAND_DEF(fs);

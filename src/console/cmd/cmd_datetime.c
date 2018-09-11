@@ -38,31 +38,31 @@ static w_err_t cmd_set_datetime(w_int32_t argc,char **argv)
     if(argc < 4)
     {
         console_printf("error:parameter is NOT enough.\r\n");
-        return ERR_INVALID_PARAM;
+        return W_ERR_INVALID;
     }
     if(wind_strlen(argv[2]) < 10)
     {
         console_printf("date format error.\r\n");
-        return ERR_INVALID_PARAM;
+        return W_ERR_INVALID;
     }
     if(wind_strlen(argv[3]) < 8)
     {
         console_printf("time format error.\r\n");
-        return ERR_INVALID_PARAM;
+        return W_ERR_INVALID;
     }
     
     cnt = sscanf(argv[2],"%4d/%02d/%02d",&dt.date.year,
                 (w_uint32_t*)&dt.date.month,(w_uint32_t*)&dt.date.day);
-    WIND_ASSERT_RETURN(cnt >= 3,ERR_INVALID_PARAM);
+    WIND_ASSERT_RETURN(cnt >= 3,W_ERR_INVALID);
     cnt = sscanf(argv[3],"%2d:%2d:%2d",(w_uint32_t*)&dt.time.hour,
                 (w_uint32_t*)&dt.time.minute,(w_uint32_t*)&dt.time.second);
-    WIND_ASSERT_RETURN(cnt >= 3,ERR_INVALID_PARAM);
+    WIND_ASSERT_RETURN(cnt >= 3,W_ERR_INVALID);
     dt.time.msecond = 0;
     wind_datetime_set(&dt);
     console_printf("system date:%4d/%02d/%02d %02d:%02d:%02d %4d\r\n",dt.date.year,
                 dt.date.month,dt.date.day,dt.time.hour,
                 dt.time.minute,dt.time.second,dt.time.msecond);
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 
@@ -71,11 +71,11 @@ static w_err_t cmd_showdatetime(w_int32_t argc,char **argv)
     w_err_t err;
     datetime_s dt;
     err = wind_datetime_get(&dt);
-    WIND_ASSERT_RETURN(err == ERR_OK,ERR_FAIL);
+    WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_FAIL);
     console_printf("system date:%4d/%02d/%02d %02d:%02d:%02d  %4d\r\n",dt.date.year,
                 dt.date.month,dt.date.day,dt.time.hour,
                 dt.time.minute,dt.time.second,dt.time.msecond);
-    return ERR_OK;
+    return W_ERR_OK;
 }
 
 
@@ -104,7 +104,7 @@ COMMAND_MAIN(datetime,argc,argv)
     else
     {
         console_printf("datetime:format error.\r\n");
-        return ERR_FAIL;
+        return W_ERR_FAIL;
     }
 }
 
