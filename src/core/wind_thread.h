@@ -110,10 +110,11 @@ struct _thread_s
     w_err_t (*thread_func)(w_int32_t argc,w_int8_t **argv);
     
 
-    char name[THREAD_NAME_LEN];
+    //char name[THREAD_NAME_LEN];
+    char *name;
     w_int16_t prio;
     w_uint16_t tid;
-    
+    w_uint32_t run_times;
     thread_stat_e runstat;
     w_int32_t sleep_ticks;
     suscause_e cause;//导致状态变化的原因

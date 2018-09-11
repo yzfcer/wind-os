@@ -126,6 +126,7 @@ static thread_s *wind_search_highthread(void)
     if(gwind_core_cnt > 0)
     {
         thread = wind_thread_current();
+        thread->run_times ++;
         wind_enable_interrupt();
         return thread;
     }
@@ -134,12 +135,13 @@ static thread_s *wind_search_highthread(void)
         thread = PRI_DLIST_OBJ(dnode,thread_s,validnode);
         if(thread->runstat == THREAD_STATUS_READY)
         {
+            thread->run_times ++;
             wind_enable_interrupt();
             return thread;
         }
     }
     wind_enable_interrupt();
-    wind_error("core NOT find valid thread!");
+    wind_critical("core NOT find valid thread!");
     return NULL;
 }
 

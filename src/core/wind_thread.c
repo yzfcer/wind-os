@@ -177,11 +177,13 @@ thread_s *wind_thread_create(const char *name,
     thread->thread_func = thread_func;
     thread->stkpool_flag = 0;
     
-    wind_strcpy(thread->name,name);
+    //wind_strcpy(thread->name,name);
+    thread->name = (char*)name;
     thread->prio = get_prio(priolevel);
     
     tmpstk = _wind_thread_stack_init(thread_entry,0,pstk + stksize -1);
     thread->stack = tmpstk;
+    thread->run_times = 0;
     thread->runstat = THREAD_STATUS_READY;
     thread->cause = CAUSE_COMMON;
     thread->sleep_ticks = 0;
@@ -418,17 +420,17 @@ w_err_t wind_thread_print(dlist_s *list)
     char *stat;
     WIND_ASSERT_RETURN(list != NULL,ERR_NULL_POINTER);
     wind_printf("\r\n\r\nthread list as following:\r\n");
-    wind_print_space(6);
-    wind_printf("%-16s %-8s %-10s %-10s\r\n","thread","prio","state","stacksize");
-    wind_print_space(6);
+    wind_print_space(7);
+    wind_printf("%-16s %-8s %-10s %-10s %-10s\r\n","thread","prio","state","stacksize","runtimes");
+    wind_print_space(7);
     foreach_node(dnode,list)
     {
         thread = PRI_DLIST_OBJ(dnode,thread_s,validnode);
         stat = wind_thread_status(thread->runstat);
-        wind_printf("%-16s %-8d %-10s %-10d\r\n",
-            thread->name,thread->prio,stat,thread->stksize);
+        wind_printf("%-16s %-8d %-10s %-10d %-10d\r\n",
+            thread->name,thread->prio,stat,thread->stksize,thread->run_times);
     }
-    wind_print_space(6);
+    wind_print_space(7);
     return ERR_OK;
 }
 
