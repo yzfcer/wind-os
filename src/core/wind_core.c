@@ -35,6 +35,7 @@
 #include "wind_pipe.h"
 #include "wind_timer.h"
 #include "wind_softirq.h"
+#include "wind_event.h"
 
 #include "wind_core.h"
 #include "wind_var.h"
@@ -251,6 +252,9 @@ static void _wind_init()
 #if WIND_MSGBOX_SUPPORT
     _wind_msgbox_mod_init();
 #endif
+#if WIND_EVENT_SUPPORT
+    _wind_event_mod_init();
+#endif
 #if WIND_PIPE_SUPPORT
     _wind_pipe_mod_init();
 #endif
@@ -260,6 +264,7 @@ static void _wind_init()
 #if WIND_SOFTIRQ_SUPPORT
     _wind_softirq_mod_init();
 #endif
+
     _wind_tick_init();//时间初始化
 }
 

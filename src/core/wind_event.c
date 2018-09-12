@@ -51,7 +51,7 @@ static w_err_t event_free(w_event_s *event)
 
 //**********************************************extern functions******************************
 
-w_err_t _wind_event_init(void)
+w_err_t _wind_event_mod_init(void)
 {
     w_err_t err;
     err = wind_pool_create("event",eventpool,sizeof(eventpool),sizeof(w_event_s));
@@ -232,5 +232,5 @@ w_err_t wind_event_print(w_dlist_s *list)
     return W_ERR_OK;
 }
 
-#endif  //WIND_MSGBOX_SUPPORT
+#endif  //WIND_EVENT_H__
 

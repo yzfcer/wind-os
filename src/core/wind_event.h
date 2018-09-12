@@ -58,7 +58,7 @@ typedef struct __event_s
 }w_event_s;
 
 
-w_err_t _wind_event_init(void);
+w_err_t _wind_event_mod_init(void);
 w_event_s *wind_event_get(const char *name);
 w_event_s *wind_event_create(const char *name);
 
@@ -68,12 +68,11 @@ w_err_t wind_event_trig(w_event_s *event,const void *arg);
 w_err_t wind_event_wait(w_event_s *event,const void *arg,w_uint32_t timeout);
 w_err_t wind_event_print(w_dlist_s *list);
 
-#else
-#define _wind_event_init()
-#endif //WIND_MSGBOX_SUPPORT
+
+#endif //WIND_EVENT_SUPPORT
 
 #ifdef __cplusplus
 }
 #endif
-#endif  //WIND_MESSAGE_H__
+#endif  //WIND_EVENT_H__
 
