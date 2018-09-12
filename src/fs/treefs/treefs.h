@@ -25,14 +25,14 @@ typedef enum
 typedef struct treefs_s
 {
     w_uint32_t magic;
-    tree_s tree;
+    w_tree_s tree;
     char *filename;
     w_uint16_t isdir:1;
     w_uint8_t mode;
     w_uint32_t offset;
     w_uint32_t filelen;
     w_uint32_t bufflen;
-    dlist_s datalist;
+    w_dlist_s datalist;
 }treefile_s;
 
 void *treefs_malloc(w_int32_t size);

@@ -28,7 +28,7 @@
 #include "24c02.h"
 #if WIND_BLK_DRVFRAME_SUPPORT
 
-w_err_t   at24c02_open(blkdev_s *dev)
+w_err_t   at24c02_open(w_blkdev_s *dev)
 {
     dev->blkaddr = 0;
     dev->blksize = 16;
@@ -37,7 +37,7 @@ w_err_t   at24c02_open(blkdev_s *dev)
     return W_ERR_OK;
 }
 
-w_err_t   at24c02_erase(blkdev_s *dev,w_addr_t addr,w_int32_t blkcnt)
+w_err_t   at24c02_erase(w_blkdev_s *dev,w_addr_t addr,w_int32_t blkcnt)
 {
     w_int32_t i;
     w_uint8_t start;
@@ -52,7 +52,7 @@ w_err_t   at24c02_erase(blkdev_s *dev,w_addr_t addr,w_int32_t blkcnt)
     return W_ERR_OK;
 }
 
-w_err_t   at24c02_eraseall(blkdev_s *dev)
+w_err_t   at24c02_eraseall(w_blkdev_s *dev)
 {
     w_int32_t cnt;
     w_uint8_t start;
@@ -65,7 +65,7 @@ w_err_t   at24c02_eraseall(blkdev_s *dev)
 }
 
 
-w_int32_t at24c02_read(blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t blkcnt)
+w_int32_t at24c02_read(w_blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t blkcnt)
 {
     w_int32_t cnt;
     w_uint8_t start;
@@ -75,7 +75,7 @@ w_int32_t at24c02_read(blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t blkc
     return blkcnt;
 }
 
-w_int32_t at24c02_write(blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t blkcnt)
+w_int32_t at24c02_write(w_blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t blkcnt)
 {   
     w_int32_t i;
     w_uint8_t start;
@@ -89,12 +89,12 @@ w_int32_t at24c02_write(blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t blk
 
 }
 
-w_err_t   at24c02_close(blkdev_s *dev)
+w_err_t   at24c02_close(w_blkdev_s *dev)
 {
     return W_ERR_OK;
 }
 
-const blkdev_ops_s at24c02_ops = 
+const w_blkdev_ops_s at24c02_ops = 
 {
     NULL,
     at24c02_open,
@@ -105,7 +105,7 @@ const blkdev_ops_s at24c02_ops =
     at24c02_close
 };
 
-blkdev_s at24c02_dev[1] = 
+w_blkdev_s at24c02_dev[1] = 
 {
     WIND_BLKDEV_DEF("at24c02",0,0,16,16,&at24c02_ops)
 };

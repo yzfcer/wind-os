@@ -80,7 +80,7 @@ COMMAND_MAIN(test,argc,argv)
 
 COMMAND_DEF(test);
 
-void wind_cmd_register_cmd_test(console_s *ctrl)
+void wind_cmd_register_cmd_test(w_console_s *ctrl)
 {
     wind_cmd_register(COMMAND(test),1);
 }

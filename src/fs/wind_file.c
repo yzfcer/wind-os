@@ -35,15 +35,15 @@
 
 #if WIND_FS_SUPPORT
 
-WIND_POOL(filepool,WIND_FILE_MAX_NUM,sizeof(file_s));
+WIND_POOL(filepool,WIND_FILE_MAX_NUM,sizeof(w_file_s));
 static char *curpath = NULL;
 
-file_s *_file_malloc(void)
+w_file_s *_file_malloc(void)
 {
     return wind_pool_malloc(filepool);
 }
 
-static w_err_t _file_free(file_s *file)
+static w_err_t _file_free(w_file_s *file)
 {
     return wind_pool_free(filepool,file);
 }
@@ -51,9 +51,9 @@ static w_err_t _file_free(file_s *file)
 
 static w_err_t mount_param_check(char *fsname,char *blkname,char *path)
 {
-    //blkdev_s *dev;
-    fs_s *fs;
-    dnode_s *dnode;
+    //w_blkdev_s *dev;
+    w_fs_s *fs;
+    w_dnode_s *dnode;
     WIND_ASSERT_RETURN(fsname != NULL,W_ERR_NULL);
     //WIND_ASSERT_RETURN(blkname != NULL,W_ERR_NULL);
     WIND_ASSERT_RETURN(path != NULL,W_ERR_NULL);
@@ -67,7 +67,7 @@ static w_err_t mount_param_check(char *fsname,char *blkname,char *path)
         return W_ERR_INVALID;
     foreach_node(dnode,&g_core.fslist)
     {
-        fs = DLIST_OBJ(dnode,fs_s,fsnode);
+        fs = DLIST_OBJ(dnode,w_fs_s,fsnode);
         if(wind_strcmp(path,fs->mount_path) == 0)
             return W_ERR_REPEAT;
         if(blkname == NULL)
@@ -78,10 +78,10 @@ static w_err_t mount_param_check(char *fsname,char *blkname,char *path)
     return W_ERR_OK;
 }
 
-w_err_t wind_fs_regster(fs_s *fs,w_int32_t count)
+w_err_t wind_fs_regster(w_fs_s *fs,w_int32_t count)
 {
     w_int32_t i;
-    fs_s *fsi;    
+    w_fs_s *fsi;    
     w_err_t err;
     WIND_ASSERT_RETURN(fs != NULL,W_ERR_NULL);
     WIND_ASSERT_RETURN(count > 0,W_ERR_INVALID);
@@ -110,9 +110,9 @@ w_err_t wind_fs_regster(fs_s *fs,w_int32_t count)
     }
     return W_ERR_OK;
 }
-w_err_t wind_fs_unregster(fs_s *fs)
+w_err_t wind_fs_unregster(w_fs_s *fs)
 {
-    dnode_s *dnode;
+    w_dnode_s *dnode;
     WIND_ASSERT_RETURN(fs != NULL,W_ERR_NULL);
     WIND_ASSERT_RETURN(fs->magic == WIND_FS_MAGIC,W_ERR_INVALID);
     wind_notice("unregister fs:%s",fs->name);
@@ -129,7 +129,7 @@ w_err_t wind_fs_unregster(fs_s *fs)
 
 static w_err_t wind_all_fs_regster(void)
 {
-    extern fs_s fs_treefs[1];
+    extern w_fs_s fs_treefs[1];
     wind_fs_regster(fs_treefs,1);
     return W_ERR_OK;
 }
@@ -137,21 +137,21 @@ static w_err_t wind_all_fs_regster(void)
 w_err_t _wind_fs_mod_init(void)
 {
     w_err_t err;
-    wind_pool_create("file",filepool,sizeof(filepool),sizeof(file_s));
+    wind_pool_create("file",filepool,sizeof(filepool),sizeof(w_file_s));
     wind_all_fs_regster();
     _wind_fs_mount_init();
     wind_file_set_current_path(FS_CUR_PATH);
     return err;
 }
 
-fs_s *wind_fs_get(char *name)
+w_fs_s *wind_fs_get(char *name)
 {
-    fs_s *fs;
-    dnode_s *dnode;
+    w_fs_s *fs;
+    w_dnode_s *dnode;
     wind_disable_switch();
     foreach_node(dnode,&g_core.fslist)
     {
-        fs = DLIST_OBJ(dnode,fs_s,fsnode);
+        fs = DLIST_OBJ(dnode,w_fs_s,fsnode);
         if(wind_strcmp(name,fs->name) == 0)
         {
             wind_enable_switch();
@@ -162,15 +162,15 @@ fs_s *wind_fs_get(char *name)
     return NULL;
 }
 
-fs_s *wind_fs_get_bypath(char *path)
+w_fs_s *wind_fs_get_bypath(char *path)
 {
-    fs_s *fs,*retfs = NULL;
-    dnode_s *dnode;
+    w_fs_s *fs,*retfs = NULL;
+    w_dnode_s *dnode;
     w_int32_t len;
     wind_disable_switch();
     foreach_node(dnode,&g_core.fslist)
     {
-        fs = DLIST_OBJ(dnode,fs_s,fsnode);
+        fs = DLIST_OBJ(dnode,w_fs_s,fsnode);
         len = wind_strlen(fs->mount_path);
         if(wind_memcmp(path,fs->mount_path,len) == 0)
         {
@@ -186,8 +186,8 @@ fs_s *wind_fs_get_bypath(char *path)
 w_err_t wind_fs_mount(char *fsname,char *blkname,char *path)
 {
     w_err_t err;
-    blkdev_s *blkdev;
-    fs_s *fs;
+    w_blkdev_s *blkdev;
+    w_fs_s *fs;
     w_int32_t len;
     err = mount_param_check(fsname,blkname,path);
     WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_INVALID);
@@ -206,7 +206,7 @@ w_err_t wind_fs_mount(char *fsname,char *blkname,char *path)
 
 w_err_t wind_fs_unmount(char *fsname)
 {
-    fs_s *fs;
+    w_fs_s *fs;
     WIND_ASSERT_RETURN(fsname != NULL,W_ERR_NULL);
     fs = wind_fs_get(fsname);
     WIND_ASSERT_RETURN(fs != NULL,W_ERR_INVALID);
@@ -217,7 +217,7 @@ w_err_t wind_fs_unmount(char *fsname)
     return W_ERR_OK;
 }
 
-w_err_t wind_fs_format(fs_s *fs)
+w_err_t wind_fs_format(w_fs_s *fs)
 {
     w_err_t err = W_ERR_OK;
     WIND_ASSERT_RETURN(fs != NULL,W_ERR_NULL);
@@ -278,14 +278,14 @@ w_err_t wind_full_path_release(char *path)
     return wind_free(path);
 }
 
-file_s *wind_file_get(fs_s *fs,const char *path)
+w_file_s *wind_file_get(w_fs_s *fs,const char *path)
 {
-    file_s *file;
-    dnode_s *dnode;
+    w_file_s *file;
+    w_dnode_s *dnode;
     wind_disable_switch();
     foreach_node(dnode,&g_core.filelist)
     {
-        file = DLIST_OBJ(dnode,file_s,filenode);
+        file = DLIST_OBJ(dnode,w_file_s,filenode);
         if((wind_strcmp(path,file->path) == 0) &&
             (file->fs == fs))
         {
@@ -299,24 +299,24 @@ file_s *wind_file_get(fs_s *fs,const char *path)
 
 w_bool_t wind_file_existing(const char *path)
 {
-    file_s *file;
+    w_file_s *file;
     w_uint32_t isdir;
-    w_bool_t exist = B_FALSE;
-    WIND_ASSERT_RETURN(path != NULL,B_FALSE);
+    w_bool_t exist = W_FALSE;
+    WIND_ASSERT_RETURN(path != NULL,W_FALSE);
     wind_debug("wind_file_existing:%s",path);
     isdir = path[wind_strlen(path)-1]=='/'?1:0;
     file = wind_file_open(path,FMODE_R);
     if((file != NULL)&&(file->isdir==isdir))
     {
-        exist = B_TRUE;
+        exist = W_TRUE;
         wind_file_close(file);
     }
     return exist;
 }
-file_s* wind_file_open(const char *path,fmode_e fmode)
+w_file_s* wind_file_open(const char *path,w_fmode_e fmode)
 {
-    file_s *file;
-    fs_s *fs;
+    w_file_s *file;
+    w_fs_s *fs;
     char *fullpath = NULL;
     char *realpath = NULL;
     w_int32_t len,len1;
@@ -360,7 +360,7 @@ file_s* wind_file_open(const char *path,fmode_e fmode)
     file->offset = 0;
     file->mutex = wind_mutex_create(NULL);
     file->ops = fs->ops;
-    err = file->ops->open(file,(fmode_e)file->fmode);
+    err = file->ops->open(file,(w_fmode_e)file->fmode);
     if(err != W_ERR_OK)
     {
         wind_mutex_destroy(file->mutex);
@@ -379,7 +379,7 @@ file_s* wind_file_open(const char *path,fmode_e fmode)
     }
 }
 
-w_err_t wind_file_close(file_s *file)
+w_err_t wind_file_close(w_file_s *file)
 {
     w_err_t err = W_ERR_FAIL;
     WIND_ASSERT_RETURN(file != NULL,W_ERR_NULL);
@@ -397,7 +397,7 @@ w_err_t wind_file_close(file_s *file)
     return err;
 }
 
-w_err_t wind_file_remove(file_s *file)
+w_err_t wind_file_remove(w_file_s *file)
 {
     w_err_t err = W_ERR_FAIL;
     WIND_ASSERT_RETURN(file != NULL,W_ERR_NULL);
@@ -413,7 +413,7 @@ w_err_t wind_file_remove(file_s *file)
     return err;
 }
 
-char* wind_file_subfile(file_s *dir,w_int32_t index)
+char* wind_file_subfile(w_file_s *dir,w_int32_t index)
 {
     char *subname = NULL;
     WIND_ASSERT_RETURN(dir != NULL,NULL);
@@ -430,7 +430,7 @@ char* wind_file_subfile(file_s *dir,w_int32_t index)
     return subname;
 }
 
-w_err_t wind_file_seek(file_s *file,w_int32_t offset)
+w_err_t wind_file_seek(w_file_s *file,w_int32_t offset)
 {
     w_err_t err = W_ERR_FAIL;
     WIND_ASSERT_RETURN(file != NULL,W_ERR_NULL);
@@ -443,7 +443,7 @@ w_err_t wind_file_seek(file_s *file,w_int32_t offset)
     return err;
 }
     
-w_err_t wind_file_rename(file_s *file,char *newname)
+w_err_t wind_file_rename(w_file_s *file,char *newname)
 {
     w_err_t err = W_ERR_FAIL;
     WIND_ASSERT_RETURN(file != NULL,W_ERR_NULL);
@@ -455,7 +455,7 @@ w_err_t wind_file_rename(file_s *file,char *newname)
     return err;
 }
 
-w_int32_t wind_file_tell(file_s *file)
+w_int32_t wind_file_tell(w_file_s *file)
 {
     w_int32_t offset = -1;
     WIND_ASSERT_RETURN(file != NULL,-1);
@@ -466,7 +466,7 @@ w_int32_t wind_file_tell(file_s *file)
     return offset;
 }
 
-w_int32_t wind_file_read(file_s *file,w_uint8_t *buff, w_int32_t size)
+w_int32_t wind_file_read(w_file_s *file,w_uint8_t *buff, w_int32_t size)
 {
     w_int32_t len = -1;
     WIND_ASSERT_RETURN(file != NULL,-1);
@@ -479,7 +479,7 @@ w_int32_t wind_file_read(file_s *file,w_uint8_t *buff, w_int32_t size)
     return len;
 }
 
-w_int32_t wind_file_write(file_s *file,w_uint8_t *buff, w_int32_t size)
+w_int32_t wind_file_write(w_file_s *file,w_uint8_t *buff, w_int32_t size)
 {
     w_int32_t len = -1;
     WIND_ASSERT_RETURN(file != NULL,-1);
@@ -492,7 +492,7 @@ w_int32_t wind_file_write(file_s *file,w_uint8_t *buff, w_int32_t size)
     return len;
 }
 
-w_err_t wind_file_gets(file_s *file,char *buff, w_int32_t maxlen)
+w_err_t wind_file_gets(w_file_s *file,char *buff, w_int32_t maxlen)
 {
     w_int32_t len = -1;
     WIND_ASSERT_RETURN(file != NULL,W_ERR_NULL);
@@ -505,7 +505,7 @@ w_err_t wind_file_gets(file_s *file,char *buff, w_int32_t maxlen)
     return len > 0?W_ERR_OK:W_ERR_FAIL;
 }
 
-w_err_t wind_file_puts(file_s *file,char *buff)
+w_err_t wind_file_puts(w_file_s *file,char *buff)
 {
     w_int32_t len = -1;
     WIND_ASSERT_RETURN(file != NULL,W_ERR_NULL);

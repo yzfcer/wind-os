@@ -44,35 +44,35 @@ extern "C" {
 
 
 /********************************************全局函数定义**********************************************/
-void atomic_inc(atomic_t atom)
+void atomic_inc(w_atomic_t atom)
 {
     wind_disable_interrupt();
     atom.value ++;
     wind_enable_interrupt();
 }
 
-void atomic_dec(atomic_t atom)
+void atomic_dec(w_atomic_t atom)
 {
     wind_disable_interrupt();
     atom.value --;
     wind_enable_interrupt();
 }
 
-void atomic_add(atomic_t atom,w_uint32_t va)
+void atomic_add(w_atomic_t atom,w_uint32_t va)
 {
     wind_disable_interrupt();
     atom.value += va;
     wind_enable_interrupt();
 }
 
-void atomic_minus(atomic_t atom,w_uint32_t value)
+void atomic_minus(w_atomic_t atom,w_uint32_t value)
 {
     wind_disable_interrupt();
     atom.value -= value;
     wind_enable_interrupt();
 }
 
-void atomic_set(atomic_t atom,w_uint32_t value)
+void atomic_set(w_atomic_t atom,w_uint32_t value)
 {
     wind_disable_interrupt();
     atom.value -= value;
@@ -80,7 +80,7 @@ void atomic_set(atomic_t atom,w_uint32_t value)
 
 }
 
-void atomic_get(atomic_t atom,w_uint32_t *value)
+void atomic_get(w_atomic_t atom,w_uint32_t *value)
 {
     wind_disable_interrupt();
     *value = atom.value;

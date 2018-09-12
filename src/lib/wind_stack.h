@@ -50,7 +50,9 @@ extern "C" {
 #define STACK_DATA_TYPE     w_uint8_t
 #endif
 
-typedef struct __stack_s{
+typedef struct __w_stack_s w_stack_s;
+struct __w_stack_s
+{
     STACK_DATA_TYPE     *out;                   /* 指向数据输出位置         */
     STACK_DATA_TYPE     *in;                    /* 指向数据输入位置         */      
     STACK_DATA_TYPE     *top;                    /* 指向Buf的结束位置        */
@@ -59,10 +61,10 @@ typedef struct __stack_s{
     w_uint8_t                item_size;                /* 元素的数据宽度 */  
     w_uint32_t              emptycnt;
     w_uint32_t              fullcnt;
-    w_err_t               (* read_empty)(struct __stack_s *pstk,void *data);     /* 读空处理函数             */
-    w_err_t               (* write_full)(struct __stack_s *pstk,void *data);        /* 写满处理函数             */
+    w_err_t               (* read_empty)(w_stack_s *pstk,void *data);     /* 读空处理函数             */
+    w_err_t               (* write_full)(w_stack_s *pstk,void *data);        /* 写满处理函数             */
     STACK_DATA_TYPE     buff[1];                 /* 存储数据的空间           */
-} stack_s,*pstack_s;
+};
 
 
 w_err_t wind_stack_create(void *mem,

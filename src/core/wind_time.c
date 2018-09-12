@@ -252,7 +252,7 @@ w_uint16_t tick32_to_ms(w_uint32_t fraction)
     return (w_uint16_t)((((double)fraction) * NTP_FRACTIONAL_TO_MS) + 0.5);
 }
 
-void tick32_to_date(long JD,date_s *date)
+void tick32_to_date(long JD,w_date_s *date)
 {
   long d, m; 
   long j = JD - 1721119;
@@ -293,7 +293,7 @@ void tick64_to_datetime(datetime_s *st, systick_s *tick64)
   st->time.hour = (w_uint8_t)(second % 24);
   second /= 24;
   JD = second + JAN_1ST_1900;
-  st->week = (week_e)((JD + 1) % 7);
+  st->week = (w_week_e)((JD + 1) % 7);
   tick32_to_date(JD, &st->date);
   st->time.msecond = tick32_to_ms(fraction);
 }
@@ -315,7 +315,7 @@ static w_err_t hwrtc_set_datetime(datetime_s *datetime)
 {
     systick_s tick64;
 #if WIND_RTC_SUPPORT
-    dev_s *dev;
+    w_chdev_s *dev;
     WIND_ASSERT_RETURN(datetime != NULL,W_ERR_NULL);
     dev = wind_dev_get("rtc");
     WIND_ASSERT_RETURN(dev != NULL,W_ERR_INVALID);
@@ -334,7 +334,7 @@ static w_err_t hwrtc_set_datetime(datetime_s *datetime)
 static w_err_t hwrtc_get_datetime(datetime_s *datetime)
 {
 #if WIND_RTC_SUPPORT
-    dev_s *dev;
+    w_chdev_s *dev;
     WIND_ASSERT_RETURN(datetime != NULL,W_ERR_NULL);
     dev = wind_dev_get("rtc");
     WIND_ASSERT_RETURN(dev != NULL,W_ERR_INVALID);
@@ -365,7 +365,7 @@ static w_uint8_t is_leap(w_uint16_t year)
 
 
 
-w_err_t wind_datetime_setdate(date_s *date)
+w_err_t wind_datetime_setdate(w_date_s *date)
 {
     datetime_s dt;
     if(is_leap(date->year) && (date->month == 2) && (date->day > 29))
@@ -383,7 +383,7 @@ w_err_t wind_datetime_setdate(date_s *date)
     return W_ERR_OK;
 }
 
-w_err_t wind_datetime_settime(time_s *time)
+w_err_t wind_datetime_settime(w_time_s *time)
 {
     datetime_s dt;
     if(time->hour >= 24
@@ -406,19 +406,19 @@ w_err_t wind_datetime_set(datetime_s *datetime)
     return W_ERR_OK;
 }
 
-w_err_t wind_datetime_getdate(date_s * date)
+w_err_t wind_datetime_getdate(w_date_s * date)
 {
     datetime_s dt;
     hwrtc_get_datetime(&dt);
-    wind_memcpy(date,&dt.date,sizeof(date_s));
+    wind_memcpy(date,&dt.date,sizeof(w_date_s));
     return W_ERR_OK;
 }
 
-w_err_t wind_datetime_gettime(time_s *time)
+w_err_t wind_datetime_gettime(w_time_s *time)
 {
     datetime_s dt;
     hwrtc_get_datetime(&dt);
-    wind_memcpy(time,&dt.time,sizeof(time_s));
+    wind_memcpy(time,&dt.time,sizeof(w_time_s));
     return W_ERR_OK;
 }
 

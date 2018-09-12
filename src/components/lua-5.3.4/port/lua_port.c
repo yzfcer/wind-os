@@ -106,8 +106,8 @@ int clock(void *ptr)
 {
     return 0;
 }
-extern console_s g_ctrl[WIND_CONSOLE_COUNT];
-extern w_int32_t console_read_line(console_s *ctrl,w_int32_t len);
+extern w_console_s g_ctrl[WIND_CONSOLE_COUNT];
+extern w_int32_t console_read_line(w_console_s *ctrl,w_int32_t len);
 
 int lua_readline(lua_State *L,char *buff,const char *prmt)
 {

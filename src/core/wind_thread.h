@@ -38,24 +38,24 @@ extern "C" {
 #define THREAD_FROM_MEMBER(ptr,type,mbr) (void*)(((char*)(ptr))-((w_uint32_t)&(((type*)0)->mbr)))
 #define SLEEP_TIMEOUT_MAX 0x7fffffff
 //线程的优先等级，
-typedef enum _PRIOLEVEL
+typedef enum _w_prio_e
 {
     PRIO_ZERO,
     PRIO_HIGH,
     PRIO_MID,
     PRIO_LOW,
     PRIO_SYS_LOW
-} prio_e;
+} w_prio_e;
 
 //线程状态列表
-typedef enum __thread_status
+typedef enum __w_thread_stat_e
 {
     THREAD_STATUS_INIT = 0,//初始化状态
     THREAD_STATUS_READY = 1,//就绪状态,可随时运行
     THREAD_STATUS_SUSPEND,//阻塞状态，需要被阻塞源唤醒
     THREAD_STATUS_SLEEP,//休眠状态，可被超时唤醒
     THREAD_STATUS_DEAD,//死亡状态，将永远不会被唤醒和调度
-}thread_stat_e;
+}w_thread_stat_e;
 
 typedef enum __suscause
 {
@@ -66,19 +66,19 @@ typedef enum __suscause
     CAUSE_MSG,
     CAUSE_LOCK,
     CAUSE_CNT
-}suscause_e;
+}w_suscause_e;
 
-typedef struct _thread_s thread_s;
-typedef struct __threadcb_s threadcb_s;
+typedef struct _w_thread_s w_thread_s;
+typedef struct __w_threadcb_s w_threadcb_s;
 
 //定义与线程相关的一些回调函数，需要配置选项支持
 #if WIND_THREAD_CALLBACK_SUPPORT
-struct __threadcb_s
+struct __w_threadcb_s
 {
-    void (*start)(thread_s *thread);
-    void (*suspend)(thread_s *thread);
-    void (*resume)(thread_s *thread);
-    void (*dead)(thread_s *thread);
+    void (*start)(w_thread_s *thread);
+    void (*suspend)(w_thread_s *thread);
+    void (*resume)(w_thread_s *thread);
+    void (*dead)(w_thread_s *thread);
 };
 #endif 
 
@@ -89,16 +89,16 @@ typedef enum __thr_evt_e
     THR_EVT_SUSPEND,
     THR_EVT_RESUME,
     THR_EVT_DEAD
-}thr_evt_e;
+}w_thr_evt_e;
 
 
 //线程对象结构
-struct _thread_s
+struct _w_thread_s
 {
     w_uint32_t magic;
-    prinode_s validnode;
-    prinode_s suspendnode;
-    prinode_s sleepnode;
+    w_prinode_s validnode;
+    w_prinode_s suspendnode;
+    w_prinode_s sleepnode;
     w_pstack_t stack;//堆栈指针
     w_pstack_t stack_top;//栈顶指针
     w_uint16_t stksize;//堆栈大小，以栈宽度技术
@@ -115,11 +115,11 @@ struct _thread_s
     w_int16_t prio;
     w_uint16_t tid;
     w_uint32_t run_times;
-    thread_stat_e runstat;
+    w_thread_stat_e runstat;
     w_int32_t sleep_ticks;
-    suscause_e cause;//导致状态变化的原因
+    w_suscause_e cause;//导致状态变化的原因
 #if WIND_THREAD_CALLBACK_SUPPORT
-    threadcb_s cb;
+    w_threadcb_s cb;
 #endif
 };
 
@@ -128,29 +128,29 @@ struct _thread_s
 w_err_t _wind_thread_mod_init(void);
 w_err_t _wind_thread_wakeup(void);
 
-thread_s *wind_thread_get(const char *name);
-thread_s *wind_thread_current(void);
+w_thread_s *wind_thread_get(const char *name);
+w_thread_s *wind_thread_current(void);
 char *wind_thread_curname(void);
 
-thread_s *wind_thread_init(thread_s *thread,
+w_thread_s *wind_thread_init(w_thread_s *thread,
                     const char *name,
                     w_err_t (*thread_func)(w_int32_t argc,w_int8_t **argv),
                     w_int16_t argc,
                     w_int8_t **argv,
-                    prio_e priolevel,
+                    w_prio_e priolevel,
                     w_pstack_t psck,
                     w_uint16_t stksize);
 
-thread_s *wind_thread_create(const char *name,
+w_thread_s *wind_thread_create(const char *name,
                     w_err_t (*thread_func)(w_int32_t argc,w_int8_t **argv),
                     w_int16_t argc,
                     w_int8_t **argv,
-                    prio_e priolevel,
+                    w_prio_e priolevel,
                     w_pstack_t psck,
                     w_uint16_t stksize);
 
 #if WIND_STKPOOL_SUPPORT
-thread_s *wind_thread_create_default(const char *name,
+w_thread_s *wind_thread_create_default(const char *name,
                     w_err_t (*thread_func)(w_int32_t argc,w_int8_t **argv),
                     w_int16_t argc,
                     w_int8_t **argv);
@@ -158,17 +158,17 @@ thread_s *wind_thread_create_default(const char *name,
 #define wind_thread_create_default(n,f,c,v) W_ERR_FAIL
 #endif
 
-w_err_t wind_thread_set_priority(thread_s *thread,w_int16_t prio);
-w_err_t wind_thread_start(thread_s *thread);
-w_err_t wind_thread_suspend(thread_s *thread);
-w_err_t wind_thread_resume(thread_s *thread);
+w_err_t wind_thread_set_priority(w_thread_s *thread,w_int16_t prio);
+w_err_t wind_thread_start(w_thread_s *thread);
+w_err_t wind_thread_suspend(w_thread_s *thread);
+w_err_t wind_thread_resume(w_thread_s *thread);
 
 w_err_t wind_thread_sleep(w_uint32_t ms);
 w_err_t wind_thread_exit(w_err_t exitcode);
 
-w_err_t wind_thread_print(dlist_s *list);
+w_err_t wind_thread_print(w_dlist_s *list);
 #if WIND_THREAD_CALLBACK_SUPPORT
-w_err_t wind_thread_callback_register(thread_s *thread,thr_evt_e id,void(*cb)(thread_s *));
+w_err_t wind_thread_callback_register(w_thread_s *thread,w_thr_evt_e id,void(*cb)(w_thread_s *));
 #endif
 
 #ifdef __cplusplus

@@ -32,9 +32,9 @@
 #include "wind_pool.h"
 #include "wind_debug.h"
 //wind-os的基本全局参数和各种内核资源的链表头
-core_var_s g_core;
+w_core_var_s g_core;
 //wind-os开始启动线程调度的标记
-volatile w_bool_t gwind_start_flag = B_FALSE;
+volatile w_bool_t gwind_start_flag = W_FALSE;
 //高优先级线程栈指针
 w_pstack_t *gwind_high_stack;
 //当前线程栈指针
@@ -44,8 +44,8 @@ void _wind_corevar_init(void)
 {
     g_core.cpu_usage = 0;
     g_core.idle_cnt = 0;
-    g_core.usrthren = B_FALSE;
-    //g_core.run_falg = B_FALSE;
+    g_core.usrthren = W_FALSE;
+    //g_core.run_falg = W_FALSE;
     g_core.ticks_cnt = 0;
     
     DLIST_INIT(g_core.threadlist);

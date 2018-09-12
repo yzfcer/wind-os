@@ -32,7 +32,7 @@ extern "C" {
 #define TEST_CASE_NAME_LEN 24
 #define TEST_SUITE_NAME_LEN 24
 #define TEST_FAIL_LIST_CNT 100
-extern void test_suite_err(unsigned line);
+extern void test_suite_err(w_uint32_t line);
 
 #define FAIL_EXPECT_OUT(x,y,than) test_printf("failed expection:FUNCTION:%s,LINE:%d:which expected "#x" %s "#y"\r\n",__FUNCTION__,__LINE__,than)
 
@@ -47,7 +47,7 @@ extern void test_suite_err(unsigned line);
 #ifndef NULL
 #define NULL (void*)0
 #endif
-#define err_t ut_uint32_t
+#define err_t w_uint32_t
 #define ERR_OK 0
 #define ERR_FAIL -1
 #define TEST_ASSERT_RETURN(x,y)
@@ -55,15 +55,15 @@ extern void test_suite_err(unsigned line);
 
 /*********************************************结构体定义***********************************************/
 //全局的test suite列表
-typedef struct __test_case_s test_case_s;
-typedef struct __test_suite_s test_suite_s;
-typedef struct __suite_list_s suite_list_s;
-typedef struct __test_stati_s test_stati_s;
-typedef struct __fail_info_s fail_info_s;
-typedef struct __stati_info_s stati_info_s;
+typedef struct __w_test_case_s w_test_case_s;
+typedef struct __w_test_suite_s w_test_suite_s;
+typedef struct __w_suite_list_s w_suite_list_s;
+typedef struct __w_test_stati_s w_test_stati_s;
+typedef struct __w_fail_info_s w_fail_info_s;
+typedef struct __w_stati_info_s w_stati_info_s;
 
 //测试用例结构
-struct __test_case_s
+struct __w_test_case_s
 {
     char name[TEST_CASE_NAME_LEN];
     void (*setup)(void);
@@ -72,64 +72,64 @@ struct __test_case_s
 };
 
 //测试套结构
-struct __test_suite_s
+struct __w_test_suite_s
 {
     char name[TEST_SUITE_NAME_LEN];
-    ut_uint32_t case_cnt;//测试用例的数量
-    test_case_s *tcase;
+    w_uint32_t case_cnt;//测试用例的数量
+    w_test_case_s *tcase;
     //void (*init)(void);
     void (*setup)(void);
     void (*teardown)(void);
-    struct __test_suite_s *next;
+    w_test_suite_s *next;
 };
 
 
-struct __suite_list_s
+struct __w_suite_list_s
 {
-    test_suite_s *head;
-    test_suite_s *tail;
-    ut_uint32_t cnt;
+    w_test_suite_s *head;
+    w_test_suite_s *tail;
+    w_uint32_t cnt;
 };
 
 //执行失败的信息
-struct __fail_info_s
+struct __w_fail_info_s
 {
-    test_suite_s *suite;
-    test_case_s *tcase;
-    ut_uint32_t line;
-    fail_info_s *next;
+    w_test_suite_s *suite;
+    w_test_case_s *tcase;
+    w_uint32_t line;
+    w_fail_info_s *next;
 };
 
 //用例执行结果统计信息
-struct __test_stati_s
+struct __w_test_stati_s
 {
-    ut_uint32_t tot_suite;
-    ut_uint32_t tot_case;
-    ut_uint32_t passed_suite;
-    ut_uint32_t failed_suite;
-    ut_uint32_t passed_case;
-    ut_uint32_t failed_case;
-    fail_info_s fail_obj[TEST_FAIL_LIST_CNT];
+    w_uint32_t tot_suite;
+    w_uint32_t tot_case;
+    w_uint32_t passed_suite;
+    w_uint32_t failed_suite;
+    w_uint32_t passed_case;
+    w_uint32_t failed_case;
+    w_fail_info_s fail_obj[TEST_FAIL_LIST_CNT];
 };
 
 
 
 
-struct __stati_info_s
+struct __w_stati_info_s
 {
     //统计信息
-    test_stati_s stat;
+    w_test_stati_s stat;
 
     //错误信息列表
-    fail_info_s *failhead;
-    fail_info_s *lastfail;
-    ut_uint32_t failcnt;
+    w_fail_info_s *failhead;
+    w_fail_info_s *lastfail;
+    w_uint32_t failcnt;
 
     //当前测试信息
-    test_suite_s *suite;
-    test_case_s *tcase;
-    ut_uint32_t case_err;
-    ut_uint32_t suite_err;
+    w_test_suite_s *suite;
+    w_test_case_s *tcase;
+    w_uint32_t case_err;
+    w_uint32_t suite_err;
 };
 
 /********************************************全局变量申明**********************************************/
@@ -137,11 +137,11 @@ struct __stati_info_s
 
 
 /********************************************全局函数申明**********************************************/
-static ut_int32_t stringlenth(char *str);
-ut_int32_t stringcmp(const char *cs,const char *ct);
+static w_int32_t stringlenth(char *str);
+w_int32_t stringcmp(const char *cs,const char *ct);
 
 
-err_t test_suite_register(test_suite_s *test_suite);
+err_t test_suite_register(w_test_suite_s *test_suite);
 void show_test_suites(void);
 void cut_test_start(char* testsuite,char *testcase);
 

@@ -29,10 +29,10 @@ static void treefs_set_root(treefile_s *root)
     treefile_rootnode = root;
 }
 
-static dnode_s *get_node_by_offset(dlist_s *list,w_uint32_t offset)
+static w_dnode_s *get_node_by_offset(w_dlist_s *list,w_uint32_t offset)
 {
     int idx;
-    dnode_s *dnode;
+    w_dnode_s *dnode;
     w_int32_t nodeidx = offset / TREEFS_BLK_SIZE;
     idx = 0;
     foreach_node(dnode,list)
@@ -111,7 +111,7 @@ static treefile_s *search_node(const char *path,w_bool_t create)
     w_int32_t len,cnt,i;
     w_uint8_t isdir,dir_f;
     w_bool_t flag;
-    dnode_s *dnode;
+    w_dnode_s *dnode;
     treefile_s *fsnode = NULL,*parent = NULL;
     char **nameseg;
     char *pathname;
@@ -131,18 +131,18 @@ static treefile_s *search_node(const char *path,w_bool_t create)
         goto SEARCH_COMPLETE;
     for(i = 1;i < cnt;i ++)
     {
-        flag = B_FALSE;
+        flag = W_FALSE;
         foreach_node(dnode,&parent->tree.child_list)
         {
             fsnode = DLIST_OBJ(dnode,treefile_s,tree.treenode);
             if(wind_strcmp(fsnode->filename,nameseg[i]) == 0)
             {
                 parent = fsnode;
-                flag = B_TRUE;
+                flag = W_TRUE;
                 break;
             }
         }
-        if(flag == B_FALSE)
+        if(flag == W_FALSE)
         {
             if(create)
             {
@@ -173,7 +173,7 @@ treefile_s *treefile_create(const char *path)
 {
     w_int32_t len;
     treefile_s *fsnode = NULL;
-    fsnode = search_node(path,B_TRUE);
+    fsnode = search_node(path,W_TRUE);
     WIND_ASSERT_RETURN(fsnode != NULL,NULL);
     len = wind_strlen(path);
     fsnode->isdir = path[len-1] == '/'?1:0;
@@ -182,8 +182,8 @@ treefile_s *treefile_create(const char *path)
 
 w_err_t treefile_rm(treefile_s *file)
 {
-    dnode_s *dnode;
-    tree_s *tree;
+    w_dnode_s *dnode;
+    w_tree_s *tree;
     treefile_s *subfile;
     WIND_ASSERT_RETURN(file != NULL,W_ERR_NULL);
     tree = &file->tree;
@@ -250,7 +250,7 @@ treefile_s* treefile_open(const char *path,w_uint16_t mode)
     w_bool_t is_crt;
     treefile_s *file;
 
-    is_crt = (mode & TF_FMODE_CRT)?B_TRUE:B_FALSE;
+    is_crt = (mode & TF_FMODE_CRT)?W_TRUE:W_FALSE;
     file = search_node(path,is_crt);
     WIND_ASSERT_RETURN(file != NULL,NULL);
     WIND_ASSERT_RETURN(file->magic == TREEFILE_MAGIC,NULL);
@@ -277,10 +277,10 @@ w_err_t treefile_close(treefile_s* file)
 w_bool_t treefile_existing(const char *path)
 {
     treefile_s *file;
-    file = search_node(path,B_FALSE);
+    file = search_node(path,W_FALSE);
     if(file != NULL)
-        return B_TRUE;
-    return B_FALSE;
+        return W_TRUE;
+    return W_FALSE;
 }
 
 w_err_t treefile_seek(treefile_s* file,w_int32_t offset)
@@ -307,7 +307,7 @@ w_int32_t treefile_read(treefile_s* file,w_uint8_t *buff, w_int32_t size)
 {
     w_int32_t rsize,len,si;
     w_uint32_t dataidx,bufidx;
-    dnode_s *dnode;
+    w_dnode_s *dnode;
     w_uint8_t *src;
     WIND_ASSERT_RETURN(file != NULL,W_ERR_NULL);
     WIND_ASSERT_RETURN(file->magic == TREEFILE_MAGIC,W_ERR_INVALID);
@@ -326,7 +326,7 @@ w_int32_t treefile_read(treefile_s* file,w_uint8_t *buff, w_int32_t size)
     for(;dnode != NULL;dnode = dnode_next(dnode))
     {
         src = (w_uint8_t*)dnode;
-        src += sizeof(dnode_s);
+        src += sizeof(w_dnode_s);
         src += dataidx;
         len = TREEFS_BLK_SIZE - dataidx;
         len = si > len?len:si;
@@ -344,7 +344,7 @@ w_int32_t treefile_write(treefile_s* file,w_uint8_t *buff, w_int32_t size)
 {
     w_int32_t wsize,len,si;
     w_uint32_t dataidx,bufidx;
-    dnode_s *dnode;
+    w_dnode_s *dnode;
     w_uint8_t *dest;
     WIND_ASSERT_RETURN(file != NULL,W_ERR_NULL);
     WIND_ASSERT_RETURN(file->magic == TREEFILE_MAGIC,W_ERR_INVALID);
@@ -353,7 +353,7 @@ w_int32_t treefile_write(treefile_s* file,w_uint8_t *buff, w_int32_t size)
     WIND_ASSERT_RETURN(size > 0,W_ERR_INVALID);
     while(file->bufflen < file->filelen + size)
     {
-        dnode = treefs_malloc(TREEFS_BLK_SIZE + sizeof(dnode_s));
+        dnode = treefs_malloc(TREEFS_BLK_SIZE + sizeof(w_dnode_s));
         WIND_ASSERT_RETURN(dnode != NULL,-1);
         dlist_insert_tail(&file->datalist,dnode);
         file->bufflen += TREEFS_BLK_SIZE;
@@ -369,7 +369,7 @@ w_int32_t treefile_write(treefile_s* file,w_uint8_t *buff, w_int32_t size)
     for(;dnode != NULL;dnode = dnode_next(dnode))
     {
         dest = (w_uint8_t*)dnode;
-        dest += sizeof(dnode_s);
+        dest += sizeof(w_dnode_s);
         dest += dataidx;
         len = TREEFS_BLK_SIZE - dataidx;
         len = si > len?len:si;
@@ -395,7 +395,7 @@ w_int32_t treefile_write(treefile_s* file,w_uint8_t *buff, w_int32_t size)
 treefile_s *treefile_readdir(treefile_s* file,w_int32_t index)
 {
     int idx;
-    dnode_s *dnode;
+    w_dnode_s *dnode;
     treefile_s *sub;
     WIND_ASSERT_RETURN(file != NULL,NULL);
     WIND_ASSERT_RETURN(file->magic == TREEFILE_MAGIC,NULL);

@@ -34,12 +34,12 @@ static w_bool_t str2int(const char *str,w_uint32_t *value)
     while(*str != 0)
     {
         if ((*str < '0') || (*str > '9'))  //如果当前字符不是数字
-            return B_FALSE;
+            return W_FALSE;
         temp = temp *10 + (*str - '0'); //如果当前字符是数字则计算数值
         str++;      //移到下一个字符
     }
     *value = temp;
-    return B_TRUE;
+    return W_TRUE;
 }
 
 static w_bool_t strh2int(const char *str,w_uint32_t *value)
@@ -55,11 +55,11 @@ static w_bool_t strh2int(const char *str,w_uint32_t *value)
         else if ((*str >= 'A') && (*str <= 'F'))  
             temp = temp *16 + (*str - 'A' + 10);
         else
-            return B_FALSE;
+            return W_FALSE;
         str++;     
     }
     *value = temp;
-    return B_TRUE;
+    return W_TRUE;
 }
 
 
@@ -111,7 +111,7 @@ static w_err_t display_mem(char **argv)
 static w_err_t display_stack(char **argv)
 {
     w_uint32_t start,end,cur,len,used;
-    thread_s *thr;
+    w_thread_s *thr;
     if(wind_strcmp(argv[1],"stack") != 0)
     {
         return W_ERR_FAIL;

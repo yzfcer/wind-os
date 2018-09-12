@@ -37,38 +37,38 @@ extern "C" {
 
 #if WIND_MSGBOX_SUPPORT
 #define WIND_MSGBOX_MAGIC 0x378A523B
-typedef struct _wind_message
+typedef struct _w_msg_s
 {
-    dnode_s msgnode;
+    w_dnode_s msgnode;
     w_uint16_t msg_id;
     w_uint16_t msg_len;
     void *msg_arg;
-}msg_s; 
+}w_msg_s; 
 
-typedef struct __msgbox_s
+typedef struct __w_msgbox_s
 {
     w_uint32_t magic;//魔术字
     const char *name;
-    dnode_s msgboxnode;
-    dlist_s msglist;//消息队列
+    w_dnode_s msgboxnode;
+    w_dlist_s msglist;//消息队列
     int msgnum;//消息的数量
-    thread_s *owner;
-}msgbox_s;
+    w_thread_s *owner;
+}w_msgbox_s;
 
 
 #define GET_MSG(nodeptr,msgtype,msgnode) (void*)(((char*)(nodeptr))-((w_uint32_t)&(((msgtype*)0)->msgnode)))
 
-void wind_msg_init(msg_s *msg,w_uint16_t msg_id,w_uint16_t msg_len,void *msg_arg);
+void wind_msg_init(w_msg_s *msg,w_uint16_t msg_id,w_uint16_t msg_len,void *msg_arg);
 w_err_t _wind_msgbox_mod_init(void);
-msgbox_s *wind_msgbox_get(const char *name);
-msgbox_s *wind_msgbox_create(const char *name);
-w_err_t wind_msgbox_trydestroy(msgbox_s *msgbox);
-w_err_t wind_msgbox_destroy(msgbox_s *msgbox);
+w_msgbox_s *wind_msgbox_get(const char *name);
+w_msgbox_s *wind_msgbox_create(const char *name);
+w_err_t wind_msgbox_trydestroy(w_msgbox_s *msgbox);
+w_err_t wind_msgbox_destroy(w_msgbox_s *msgbox);
 
-w_err_t wind_msgbox_post(msgbox_s *msgbox,msg_s *pmsg);
-w_err_t wind_msgbox_wait(msgbox_s *msgbox,msg_s **pmsg,w_uint32_t timeout);
-w_err_t wind_msgbox_trywait(msgbox_s *msgbox,msg_s **pmsg);
-w_err_t wind_msgbox_print(dlist_s *list);
+w_err_t wind_msgbox_post(w_msgbox_s *msgbox,w_msg_s *pmsg);
+w_err_t wind_msgbox_wait(w_msgbox_s *msgbox,w_msg_s **pmsg,w_uint32_t timeout);
+w_err_t wind_msgbox_trywait(w_msgbox_s *msgbox,w_msg_s **pmsg);
+w_err_t wind_msgbox_print(w_dlist_s *list);
 
 #endif //WIND_MSGBOX_SUPPORT
 

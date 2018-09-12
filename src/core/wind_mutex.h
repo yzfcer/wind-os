@@ -34,26 +34,26 @@ extern "C" {
 #endif
 #if WIND_MUTEX_SUPPORT
 
-typedef struct _wind_mutex
+typedef struct _w_mutex_s
 {
     w_uint32_t magic;
     const char *name;
-    dnode_s mutexnode;
+    w_dnode_s mutexnode;
     w_bool_t mutexed;     //当前的信号量的值
     w_uint16_t nest;
-    thread_s *owner;
-    dlist_s waitlist;  //等待线程队列
-}mutex_s;
+    w_thread_s *owner;
+    w_dlist_s waitlist;  //等待线程队列
+}w_mutex_s;
 
 w_err_t _wind_mutex_mod_init(void);
-mutex_s *wind_mutex_get(const char *name);
-mutex_s *wind_mutex_create(const char *name);
-w_err_t wind_mutex_trydestroy(mutex_s *mutex);
-w_err_t wind_mutex_destroy(mutex_s *mutex);
-w_err_t wind_mutex_lock(mutex_s *mutex);
-w_err_t wind_mutex_trylock(mutex_s *mutex);
-w_err_t wind_mutex_unlock(mutex_s *mutex);
-w_err_t wind_mutex_print(dlist_s *list);
+w_mutex_s *wind_mutex_get(const char *name);
+w_mutex_s *wind_mutex_create(const char *name);
+w_err_t wind_mutex_trydestroy(w_mutex_s *mutex);
+w_err_t wind_mutex_destroy(w_mutex_s *mutex);
+w_err_t wind_mutex_lock(w_mutex_s *mutex);
+w_err_t wind_mutex_trylock(w_mutex_s *mutex);
+w_err_t wind_mutex_unlock(w_mutex_s *mutex);
+w_err_t wind_mutex_print(w_dlist_s *list);
 
 #endif
 

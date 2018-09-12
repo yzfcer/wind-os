@@ -38,7 +38,7 @@ typedef struct __stat_s
     w_uint32_t used;
     w_uint32_t max;
     w_uint32_t err;
-}stati_s;
+}w_stati_s;
 
 #define WIND_STATI_INIT(stati,totel) \
             do{stati.tot = totel;\

@@ -28,9 +28,9 @@
 #include "w25qxx.h"
 #if WIND_BLK_DRVFRAME_SUPPORT
 
-w_err_t   spi_flash_open(blkdev_s *dev)
+w_err_t   spi_flash_open(w_blkdev_s *dev)
 {
-    static w_bool_t init_flag = B_FALSE;
+    static w_bool_t init_flag = W_FALSE;
     if(wind_strcmp(dev->name,"spi_flash0") == 0)
     {
         dev->blkaddr = 0;
@@ -46,12 +46,12 @@ w_err_t   spi_flash_open(blkdev_s *dev)
     if(!init_flag)
     {
         W25QXX_Init();
-        init_flag = B_TRUE;
+        init_flag = W_TRUE;
     }
     return W_ERR_OK;
 }
 
-w_err_t   spi_flash_erase(blkdev_s *dev,w_addr_t addr,w_int32_t blkcnt)
+w_err_t   spi_flash_erase(w_blkdev_s *dev,w_addr_t addr,w_int32_t blkcnt)
 {
     w_int32_t i;
     w_uint8_t *start;
@@ -61,14 +61,14 @@ w_err_t   spi_flash_erase(blkdev_s *dev,w_addr_t addr,w_int32_t blkcnt)
     return W_ERR_OK;
 }
 
-w_err_t   spi_flash_eraseall(blkdev_s *dev)
+w_err_t   spi_flash_eraseall(w_blkdev_s *dev)
 {
     W25QXX_Erase_Chip();
     return W_ERR_OK;
 }
 
 
-w_int32_t spi_flash_read(blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t blkcnt)
+w_int32_t spi_flash_read(w_blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t blkcnt)
 {
     w_int32_t i;
     w_uint8_t *start;
@@ -78,7 +78,7 @@ w_int32_t spi_flash_read(blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t bl
     return W_ERR_OK;
 }
 
-w_int32_t spi_flash_write(blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t blkcnt)
+w_int32_t spi_flash_write(w_blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t blkcnt)
 {   
     w_int32_t i;
     w_uint8_t *start;
@@ -88,12 +88,12 @@ w_int32_t spi_flash_write(blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t b
     return W_ERR_OK;
 }
 
-w_err_t   spi_flash_close(blkdev_s *dev)
+w_err_t   spi_flash_close(w_blkdev_s *dev)
 {
     return W_ERR_OK;
 }
 
-const blkdev_ops_s spi_flash_ops = 
+const w_blkdev_ops_s spi_flash_ops = 
 {
     NULL,
     spi_flash_open,
@@ -104,7 +104,7 @@ const blkdev_ops_s spi_flash_ops =
     spi_flash_close
 };
 
-blkdev_s spi_flash_dev[2] = 
+w_blkdev_s spi_flash_dev[2] = 
 {
     WIND_BLKDEV_DEF("spi_flash0",0,0,16384,512,&spi_flash_ops),
     WIND_BLKDEV_DEF("spi_flash1",1,16384,16384,512,&spi_flash_ops)

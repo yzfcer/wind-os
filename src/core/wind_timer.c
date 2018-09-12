@@ -30,11 +30,11 @@
 #include "wind_pool.h"
 
 #if WIND_TIMER_SUPPORT
-static WIND_POOL(timerpool,WIND_TIMER_MAX_NUM,sizeof(timer_s));
+static WIND_POOL(timerpool,WIND_TIMER_MAX_NUM,sizeof(w_timer_s));
 
-static __INLINE__ timer_s *timer_malloc(void)
+static __INLINE__ w_timer_s *timer_malloc(void)
 {
-    return (timer_s*)wind_pool_malloc(timerpool);
+    return (w_timer_s*)wind_pool_malloc(timerpool);
 }
 
 static __INLINE__ w_err_t timer_free(void *timer)
@@ -46,17 +46,17 @@ static __INLINE__ w_err_t timer_free(void *timer)
 w_err_t _wind_timer_mod_init(void)
 {
     w_err_t err;
-    err = wind_pool_create("timer",timerpool,sizeof(timerpool),sizeof(timer_s));
+    err = wind_pool_create("timer",timerpool,sizeof(timerpool),sizeof(w_timer_s));
     return err;
 }
-timer_s* wind_timer_get(char *name)
+w_timer_s* wind_timer_get(char *name)
 {
-    timer_s *timer;
-    dnode_s *dnode;
+    w_timer_s *timer;
+    w_dnode_s *dnode;
     wind_disable_switch();
     foreach_node(dnode,&g_core.timerlist)
     {
-        timer = DLIST_OBJ(dnode,timer_s,timernode);
+        timer = DLIST_OBJ(dnode,w_timer_s,timernode);
         if(wind_strcmp(name,timer->name) == 0)
         {
             wind_enable_switch();
@@ -68,9 +68,9 @@ timer_s* wind_timer_get(char *name)
 }
 
 
-timer_s* wind_timer_create(const char *name,w_uint32_t t_ms,softimer_fn func,void *arg,w_bool_t run)
+w_timer_s* wind_timer_create(const char *name,w_uint32_t t_ms,w_timer_fn func,void *arg,w_bool_t run)
 {
-    timer_s* timer;
+    w_timer_s* timer;
     w_int32_t count = t_ms / TIMER_PERIOD;
     if(count <= 0)
         count = 1;
@@ -93,23 +93,23 @@ timer_s* wind_timer_create(const char *name,w_uint32_t t_ms,softimer_fn func,voi
     return timer; 
 }
 
-w_err_t wind_timer_start(timer_s* timer)
+w_err_t wind_timer_start(w_timer_s* timer)
 {
     WIND_ASSERT_RETURN(timer != NULL,W_ERR_NULL);
     WIND_ASSERT_RETURN(timer->magic == WIND_TIMER_MAGIC,W_ERR_INVALID);    
-    timer->running = B_TRUE;
+    timer->running = W_TRUE;
     return W_ERR_OK;
 }
 
-w_err_t wind_timer_stop(timer_s* timer)
+w_err_t wind_timer_stop(w_timer_s* timer)
 {
     WIND_ASSERT_RETURN(timer != NULL,W_ERR_NULL);
     WIND_ASSERT_RETURN(timer->magic == WIND_TIMER_MAGIC,W_ERR_INVALID);    
-    timer->running = B_FALSE;
+    timer->running = W_FALSE;
     return W_ERR_OK;
 }
 
-w_err_t wind_timer_destroy(timer_s* timer)
+w_err_t wind_timer_destroy(w_timer_s* timer)
 {
     WIND_ASSERT_RETURN(timer != NULL,W_ERR_NULL);
     WIND_ASSERT_RETURN(timer->magic == WIND_TIMER_MAGIC,W_ERR_INVALID);    
@@ -120,7 +120,7 @@ w_err_t wind_timer_destroy(timer_s* timer)
     return W_ERR_OK;
 }
 
-w_err_t wind_timer_set_period(timer_s* timer,w_uint32_t t_ms)
+w_err_t wind_timer_set_period(w_timer_s* timer,w_uint32_t t_ms)
 {
     w_int32_t count;
     WIND_ASSERT_RETURN(timer != NULL,W_ERR_NULL);
@@ -136,11 +136,11 @@ w_err_t wind_timer_set_period(timer_s* timer,w_uint32_t t_ms)
 
 void _wind_timer_event(void)
 {
-    timer_s* ptmr;
-    dnode_s *pdnode;
+    w_timer_s* ptmr;
+    w_dnode_s *pdnode;
     foreach_node(pdnode,&g_core.timerlist)
     {
-        ptmr = DLIST_OBJ(pdnode,timer_s,timernode);
+        ptmr = DLIST_OBJ(pdnode,w_timer_s,timernode);
         if(ptmr->count > 0)
             ptmr->count --;
         if(ptmr->count == 0 && ptmr->running)

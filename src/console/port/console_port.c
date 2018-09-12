@@ -51,7 +51,7 @@ CMD_DECLARE(beep);
 CMD_DECLARE(led);
 #endif
 
-void _wind_register_all_cmd(console_s *ctrl)
+void _wind_register_all_cmd(w_console_s *ctrl)
 {
     wind_cmd_register(COMMAND(list),1);
     wind_cmd_register(COMMAND(stati),1);

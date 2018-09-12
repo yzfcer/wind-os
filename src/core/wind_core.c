@@ -53,7 +53,7 @@ extern void wind_start_switch(void);
 //允许创建用户线程
 static void _wind_thread_open()
 {
-    g_core.usrthren = B_TRUE;
+    g_core.usrthren = W_TRUE;
 }
 
 //查看是否允许创建用户线程
@@ -103,7 +103,7 @@ void wind_enable_interrupt(void)
 
 void wind_enter_irq(void)
 {
-    if(RUN_FLAG == B_FALSE)
+    if(RUN_FLAG == W_FALSE)
     {
         wind_error("enter not rd.");
         return;
@@ -115,13 +115,13 @@ void wind_enter_irq(void)
 
 static w_bool_t is_switch_enable(void)
 {
-    return gwind_core_cnt>0?B_FALSE:B_TRUE;
+    return gwind_core_cnt>0?W_FALSE:W_TRUE;
 }
 
-static thread_s *wind_search_highthread(void)
+static w_thread_s *wind_search_highthread(void)
 {
-    dnode_s *dnode;
-    thread_s *thread = NULL;
+    w_dnode_s *dnode;
+    w_thread_s *thread = NULL;
     wind_disable_interrupt();
     if(gwind_core_cnt > 0)
     {
@@ -132,7 +132,7 @@ static thread_s *wind_search_highthread(void)
     }
     foreach_node(dnode,&g_core.threadlist)
     {
-        thread = PRI_DLIST_OBJ(dnode,thread_s,validnode);
+        thread = PRI_DLIST_OBJ(dnode,w_thread_s,validnode);
         if(thread->runstat == THREAD_STATUS_READY)
         {
             thread->run_times ++;
@@ -147,8 +147,8 @@ static thread_s *wind_search_highthread(void)
 
 void wind_exit_irq(void)
 {
-    thread_s *thread;
-    if(RUN_FLAG == B_FALSE)
+    w_thread_s *thread;
+    if(RUN_FLAG == W_FALSE)
     {
         wind_error("exit not rd %d",RUN_FLAG);
         return;
@@ -172,7 +172,7 @@ void wind_exit_irq(void)
 //系统调度开始启动运行
 static void wind_run()
 {
-    thread_s *thread;
+    w_thread_s *thread;
     thread = wind_search_highthread();
     wind_notice("wind multple thread mode.");
     gwind_high_stack = &thread->stack;
@@ -185,8 +185,8 @@ static void wind_run()
 #if WIND_REALTIME_CORE_SUPPORT
 void _wind_thread_dispatch(void)
 {
-    thread_s *thread;
-    if(RUN_FLAG == B_FALSE)
+    w_thread_s *thread;
+    if(RUN_FLAG == W_FALSE)
         return;
     wind_disable_interrupt();
     if(!is_switch_enable())
@@ -214,7 +214,7 @@ void _wind_thread_dispatch(void){}
 #endif
 
 
-void _wind_switchto_thread(thread_s *thread)
+void _wind_switchto_thread(w_thread_s *thread)
 {
     wind_disable_interrupt();
     if(thread == wind_thread_current())
@@ -235,7 +235,7 @@ void _wind_switchto_thread(thread_s *thread)
 //操作系统初始化
 static void _wind_init()
 {
-    g_core.usrthren = B_FALSE;
+    g_core.usrthren = W_FALSE;
     _wind_target_init();//目标机运行环境初始化
     _wind_std_init();//调试端口初始化
     

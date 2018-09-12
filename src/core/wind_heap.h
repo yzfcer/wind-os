@@ -45,51 +45,51 @@ extern "C" {
 #define __ALIGN_R(size) (((size + 7) >> 3) << 3)
 #define __ALIGN_L(size) (((size) >> 3) << 3)
 
-#define WIND_HEAP_SIZE         __ALIGN_R(sizeof(heapitem_s), WIND_HEAP_ALIGN_SIZE)
+#define WIND_HEAP_SIZE         __ALIGN_R(sizeof(w_heapitem_s), WIND_HEAP_ALIGN_SIZE)
 
 
-typedef struct __heapitem_s heapitem_s;
-typedef struct __heap_s heap_s;
-struct __heapitem_s
+typedef struct __w_heapitem_s w_heapitem_s;
+typedef struct __w_heap_s w_heap_s;
+struct __w_heapitem_s
 {
     w_uint32_t magic:28;
     w_uint32_t used:1;
-    heap_s *heap;
-    prinode_s itemnode;
+    w_heap_s *heap;
+    w_prinode_s itemnode;
     w_int32_t size;
 };
 
 
-struct __heap_s
+struct __w_heap_s
 {
     w_uint32_t magic:28;
     w_uint32_t is_private:1;
     const char *name;
     void *addr;
-    stati_s stati;
-    dnode_s heapnode;
-    dlist_s used_list;
-    dlist_s free_list;
+    w_stati_s stati;
+    w_dnode_s heapnode;
+    w_dlist_s used_list;
+    w_dlist_s free_list;
     void *mutex; 
 };
 
-heap_s *wind_heap_get(const char *name);
+w_heap_s *wind_heap_get(const char *name);
 
-heap_s *wind_heap_create(const char *name,
+w_heap_s *wind_heap_create(const char *name,
              w_addr_t base,w_uint32_t size,w_uint32_t is_private);
 
 w_err_t wind_heap_destroy(w_addr_t base);
 
 
-void *wind_heap_malloc(heap_s* heap, w_uint32_t size);
+void *wind_heap_malloc(w_heap_s* heap, w_uint32_t size);
 
-void *wind_heap_realloc(heap_s* heap, void* ptr, w_uint32_t newsize);
+void *wind_heap_realloc(w_heap_s* heap, void* ptr, w_uint32_t newsize);
 
-w_err_t wind_heap_free(heap_s* heap,void *ptr);
+w_err_t wind_heap_free(w_heap_s* heap,void *ptr);
 
-w_err_t wind_heap_print(dlist_s *list);
+w_err_t wind_heap_print(w_dlist_s *list);
 
-w_err_t wind_heapitem_print(dlist_s *list);
+w_err_t wind_heapitem_print(w_dlist_s *list);
 
 
 void *wind_malloc(w_uint32_t size);

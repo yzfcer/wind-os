@@ -35,7 +35,7 @@ extern "C" {
 /*********************************************头文件定义***********************************************/
 /********************************************内部变量定义**********************************************/
 
-console_s g_ctrl[WIND_CONSOLE_COUNT];
+w_console_s g_ctrl[WIND_CONSOLE_COUNT];
 
 
 /********************************************内部函数定义*********************************************/
@@ -46,7 +46,7 @@ static w_err_t get_cmd_ch(w_int8_t *ch)
     return len > 0 ? W_ERR_OK : W_ERR_FAIL;
 }
 
-static w_bool_t insert_ch(console_s *ctrl,char ch,w_int32_t len)
+static w_bool_t insert_ch(w_console_s *ctrl,char ch,w_int32_t len)
 {
     ctrl->buf[ctrl->index] = ch;
     ctrl->index ++;
@@ -54,19 +54,19 @@ static w_bool_t insert_ch(console_s *ctrl,char ch,w_int32_t len)
     {
         ctrl->index --;
         ctrl->buf[ctrl->index] = 0;
-        return B_FALSE;
+        return W_FALSE;
     }
-    return B_TRUE;
+    return W_TRUE;
 }
 
-static w_bool_t handle_LF(console_s *ctrl)
+static w_bool_t handle_LF(w_console_s *ctrl)
 {
     ctrl->buf[ctrl->index] = 0;
     console_printf("\r\n");
-    return B_TRUE;
+    return W_TRUE;
 }
 
-static w_bool_t handle_BKSPACE(console_s *ctrl)
+static w_bool_t handle_BKSPACE(w_console_s *ctrl)
 {
     if(ctrl->index > 0)
     {
@@ -74,18 +74,18 @@ static w_bool_t handle_BKSPACE(console_s *ctrl)
         console_printf("%c",WVK_BACKSPACE);
         console_printf(VT100_ERASE_END);
     }
-    return B_FALSE;
+    return W_FALSE;
 }
 
-static w_bool_t handle_ESC(console_s *ctrl)
+static w_bool_t handle_ESC(w_console_s *ctrl)
 {
     ctrl->key_evt_f = 1;
     ctrl->key_evt_len = 1;
     ctrl->key_evt_id = 0x1b;
-    return B_FALSE;
+    return W_FALSE;
 }
 
-static w_bool_t handle_key_evt_up(console_s *ctrl)
+static w_bool_t handle_key_evt_up(w_console_s *ctrl)
 {
     w_err_t err;
     while(ctrl->index > 0)
@@ -97,10 +97,10 @@ static w_bool_t handle_key_evt_up(console_s *ctrl)
         ctrl->index = wind_strlen(ctrl->buf);
         console_printf("%s",ctrl->buf);
     }
-    return B_FALSE;
+    return W_FALSE;
 }
 
-static w_bool_t handle_key_evt_down(console_s *ctrl)
+static w_bool_t handle_key_evt_down(w_console_s *ctrl)
 {
     w_err_t err;
     while(ctrl->index > 0)
@@ -112,14 +112,14 @@ static w_bool_t handle_key_evt_down(console_s *ctrl)
         ctrl->index = wind_strlen(ctrl->buf);
         console_printf("%s",ctrl->buf);
     }
-    return B_FALSE;
+    return W_FALSE;
 }
 
 
-static w_bool_t handle_key_evt(console_s *ctrl,char ch)
+static w_bool_t handle_key_evt(w_console_s *ctrl,char ch)
 {
     if(!ctrl->key_evt_f)
-        return B_FALSE;
+        return W_FALSE;
     ctrl->key_evt_id <<= 8;
     ctrl->key_evt_id += ch;
     ctrl->key_evt_len ++;
@@ -157,27 +157,27 @@ key_evt_done:
     ctrl->key_evt_len = 0;
     ctrl->key_evt_id = 0;
 key_evt_ret:
-    return B_TRUE;
+    return W_TRUE;
     
 }
 
 
 
-static w_bool_t handle_default(console_s *ctrl,char ch)
+static w_bool_t handle_default(w_console_s *ctrl,char ch)
 {
     if(ctrl->stat != CSLSTAT_PWD)
         console_printf("%c",ch);
-    return B_FALSE;
+    return W_FALSE;
 }
 
 //返回true则表示有一个完整的命令
 //返回false表示命令不完整
-static w_bool_t console_prehandle_char(console_s *ctrl,char ch,w_int32_t len)
+static w_bool_t console_prehandle_char(w_console_s *ctrl,char ch,w_int32_t len)
 {
     w_bool_t ret;
     ret = handle_key_evt(ctrl,ch);
-    if(B_TRUE == ret)
-        return B_FALSE;
+    if(W_TRUE == ret)
+        return W_FALSE;
     if(ch == WVK_BACKSPACE)
     {
         return handle_BKSPACE(ctrl);
@@ -194,19 +194,19 @@ static w_bool_t console_prehandle_char(console_s *ctrl,char ch,w_int32_t len)
     {
         handle_default(ctrl,ch);
         ret = insert_ch(ctrl,ch,len);
-        if(B_TRUE == ret)
-            return B_FALSE;
-        return B_TRUE;
+        if(W_TRUE == ret)
+            return W_FALSE;
+        return W_TRUE;
     }
 }
 
-static void console_clear_buf(console_s *ctrl)
+static void console_clear_buf(w_console_s *ctrl)
 {
     ctrl->index = 0;
     wind_memset(ctrl->buf,0,WIND_CMD_MAX_LEN);
 }
 
-w_int32_t console_read_line(console_s *ctrl,w_int32_t len)
+w_int32_t console_read_line(w_console_s *ctrl,w_int32_t len)
 {
     w_err_t err;
     char ch;
@@ -225,7 +225,7 @@ w_int32_t console_read_line(console_s *ctrl,w_int32_t len)
 }
 
 
-static void init_console_stat(console_s *ctrl)
+static void init_console_stat(w_console_s *ctrl)
 {
 #if USER_AUTHENTICATION_EN
     ctrl->stat = CSLSTAT_USER;
@@ -251,20 +251,20 @@ static void init_console_stat(console_s *ctrl)
 
 /********************************************全局函数定义**********************************************/
 
-void wind_cmd_init(console_s *ctrl)
+void wind_cmd_init(w_console_s *ctrl)
 {
     DLIST_INIT(g_core.cmdlist);
     _wind_register_all_cmd(ctrl);
 }
 
-cmd_s *wind_cmd_get(const char *name)
+w_cmd_s *wind_cmd_get(const char *name)
 {
-    cmd_s *cmd;
-    dnode_s *dnode;
+    w_cmd_s *cmd;
+    w_dnode_s *dnode;
     wind_disable_switch();
     foreach_node(dnode,&g_core.cmdlist)
     {
-        cmd = DLIST_OBJ(dnode,cmd_s,cmdnode);
+        cmd = DLIST_OBJ(dnode,w_cmd_s,cmdnode);
         if(wind_strcmp(name,cmd->name) == 0)
         {
             wind_enable_switch();
@@ -275,11 +275,11 @@ cmd_s *wind_cmd_get(const char *name)
     return NULL;
 }
 
-w_err_t wind_cmd_register(cmd_s *cmd,int cnt)
+w_err_t wind_cmd_register(w_cmd_s *cmd,int cnt)
 {
     int i;
-    cmd_s *old;
-    dlist_s *cgl = &g_core.cmdlist;
+    w_cmd_s *old;
+    w_dlist_s *cgl = &g_core.cmdlist;
     WIND_ASSERT_RETURN(cmd != NULL,W_ERR_NULL);
     for(i = 0;i < cnt;i ++)
     {
@@ -295,12 +295,12 @@ w_err_t wind_cmd_register(cmd_s *cmd,int cnt)
 
 w_err_t wind_cmd_print(void)
 {
-    dnode_s *dnode;
-    cmd_s *cmd;
+    w_dnode_s *dnode;
+    w_cmd_s *cmd;
     wind_printf("\r\ncommand list as following:\r\n");
     foreach_node(dnode,&g_core.cmdlist)
     {
-        cmd = DLIST_OBJ(dnode,cmd_s,cmdnode);
+        cmd = DLIST_OBJ(dnode,w_cmd_s,cmdnode);
         console_printf("%-10s : ",cmd->name);
         cmd->showdisc();
     }
@@ -308,7 +308,7 @@ w_err_t wind_cmd_print(void)
 }
 
 #if USER_AUTHENTICATION_EN
-static w_err_t check_user_name(console_s *ctrl)
+static w_err_t check_user_name(w_console_s *ctrl)
 {
     if(wind_strcmp(ctrl->buf,"root") != 0)
     {
@@ -322,7 +322,7 @@ static w_err_t check_user_name(console_s *ctrl)
 }
 
 
-static w_err_t check_user_pwd(console_s *ctrl)
+static w_err_t check_user_pwd(w_console_s *ctrl)
 {
     if(wind_strcmp(ctrl->user,"root") != 0 ||
         wind_strcmp(ctrl->buf,"wind") != 0)
@@ -380,10 +380,10 @@ static w_int32_t get_string(char *str,w_int32_t idx,char ** arg)
     return i + 1;
 }
 
-static w_err_t spit_cmd(console_s *ctrl)
+static w_err_t spit_cmd(w_console_s *ctrl)
 {
     w_err_t idx = 0,i;
-    cmd_param_s *prm = &ctrl->param;
+    w_cmd_param_s *prm = &ctrl->param;
     prm->argc = 0;
     for(i = 0;i < CMD_PARAM_CNT;i ++)
     {
@@ -400,10 +400,10 @@ static w_err_t spit_cmd(console_s *ctrl)
 }
 
 
-static w_err_t execute_cmd(console_s *ctrl)
+static w_err_t execute_cmd(w_console_s *ctrl)
 {
     w_err_t err;
-    cmd_s *cmd;
+    w_cmd_s *cmd;
     err = spit_cmd(ctrl);
     if(err < 0)
         return err;
@@ -428,7 +428,7 @@ static w_err_t execute_cmd(console_s *ctrl)
 w_err_t console_thread(w_int32_t argc,char **argv)
 {
     w_int32_t len;
-    console_s *ctrl;
+    w_console_s *ctrl;
     if(argc >= WIND_CONSOLE_COUNT)
         return W_ERR_FAIL;
     ctrl = &g_ctrl[argc];
@@ -480,7 +480,7 @@ w_err_t console_thread(w_int32_t argc,char **argv)
 static w_stack_t ctrlstk[CTRL_STK_SIZE];//主任务堆栈
 w_err_t _create_console_thread(void)
 {
-    thread_s *thread;
+    w_thread_s *thread;
     thread = wind_thread_create("console",console_thread,
                0,NULL,PRIO_LOW,ctrlstk,CTRL_STK_SIZE);
     WIND_ASSERT_RETURN(thread != NULL,W_ERR_FAIL);

@@ -44,12 +44,12 @@ CASE_TEARDOWN(pool_info)
 
 CASE_FUNC(pool_info)
 {
-    pool_s *pool = (pool_s *)test_pool;
+    w_pool_s *pool = (w_pool_s *)test_pool;
     EXPECT_EQ(pool->magic,WIND_POOL_MAGIC);
     EXPECT_STR_EQ(pool->name,"test_pool");
-    EXPECT_EQ(pool->size,sizeof(test_pool)-sizeof(pool_s));
+    EXPECT_EQ(pool->size,sizeof(test_pool)-sizeof(w_pool_s));
     EXPECT_EQ(pool->itemnum,TNUM);
-    EXPECT_EQ(pool->itemsize,(((TSIZE+3)>>2)<<2)+sizeof(pool_item_s));
+    EXPECT_EQ(pool->itemsize,(((TSIZE+3)>>2)<<2)+sizeof(w_pool_item_s));
 }
 
 
@@ -75,12 +75,12 @@ CASE_FUNC(pool_alloc)
 {
     int i;
     w_err_t err;
-    pool_item_s* itm;
+    w_pool_item_s* itm;
     for(i = 0;i < TNUM;i ++)
     {
         testblk[i] = wind_pool_malloc(test_pool);
         EXPECT_NE(testblk[i],NULL);
-        itm = (pool_item_s*)((w_uint32_t)testblk[i] - sizeof(pool_item_s*));
+        itm = (w_pool_item_s*)((w_uint32_t)testblk[i] - sizeof(w_pool_item_s*));
         EXPECT_EQ(itm->flag,POOL_BLK_USED);
         EXPECT_EQ(itm->next,NULL);
     }
@@ -90,7 +90,7 @@ CASE_FUNC(pool_alloc)
     for(i = 0;i < TNUM;i ++)
     {
         wind_pool_free(test_pool,testblk[i]);
-        itm = (pool_item_s*)((w_uint32_t)testblk[i] - sizeof(pool_item_s*));
+        itm = (w_pool_item_s*)((w_uint32_t)testblk[i] - sizeof(w_pool_item_s*));
         EXPECT_EQ(itm->flag,POOL_BLK_FREE);
         EXPECT_EQ(itm->next,NULL);
     }

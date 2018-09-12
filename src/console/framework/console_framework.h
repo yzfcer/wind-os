@@ -56,34 +56,23 @@ extern "C" {
 
 /*********************************************结构体定义***********************************************/
 
-typedef enum __cslstat_e
+typedef enum __w_cslstat_e
 {
     CSLSTAT_USER,//需要输入用户名
     CSLSTAT_PWD,//需要输入密码
     CSLSTAT_CMD,//在命令行模式
     CSLSTAT_APP //运行于应用程序模式,暂时无用
-} cslstat_e;
+} w_ctlstat_e;
 
-typedef struct __cmd_s
+typedef struct __w_cmd_s
 {
     //struct __cmd_s *next;
-    dnode_s cmdnode;
+    w_dnode_s cmdnode;
     char* name;//命令的名称
     void (*showdisc)(void);//简要功能说明
     void (*showusage)(void);//详细的帮助说明
     w_err_t (*execute)(w_int32_t argc,char **argv);//命令的入口函数
-}cmd_s;
-
-
-#if 0
-//全局的cmd列表
-typedef struct __cmd_list
-{
-    cmd_s *head;
-    cmd_s *tail;
-    w_uint32_t cnt;
-}cmd_list_s;
-#endif
+}w_cmd_s;
 
 
 //得到分解后的参数列表
@@ -91,12 +80,12 @@ typedef struct __cmd_param_s
 {
     w_uint32_t argc;
     char *argv[CMD_PARAM_CNT];
-}cmd_param_s;
+}w_cmd_param_s;
 
 
 typedef struct __console_s
 {
-    cslstat_e stat;//当前的解析状态
+    w_ctlstat_e stat;//当前的解析状态
     w_int32_t index;//命令的下一个字符下标
     w_int8_t key_evt_f;
     w_int8_t key_evt_len;
@@ -105,10 +94,10 @@ typedef struct __console_s
     char user[WIND_CTL_USRNAME_LEN];//用户名
     char pwd[WIND_CTL_PWD_LEN];//密码的值
     
-    cmd_his_s his;
-    cmd_param_s param;
-    dlist_s cmd_list;
-}console_s;
+    w_cmd_his_s his;
+    w_cmd_param_s param;
+    w_dlist_s cmd_list;
+}w_console_s;
 
 
 /********************************************全局变量申明**********************************************/
@@ -118,13 +107,13 @@ typedef struct __console_s
 /********************************************全局函数申明**********************************************/
 
 //输出命令列表
-void wind_cmd_init(console_s *ctrl);
+void wind_cmd_init(w_console_s *ctrl);
 w_err_t _create_console_thread(void);
-cmd_s *wind_cmd_get(const char *name);
-w_err_t wind_cmd_register(cmd_s *cmd,int cnt);
+w_cmd_s *wind_cmd_get(const char *name);
+w_err_t wind_cmd_register(w_cmd_s *cmd,int cnt);
 w_err_t wind_cmd_print(void);
-void _wind_register_all_cmd(console_s *ctrl);
-extern void wind_cmd_register_cmd_test(console_s *ctrl);
+void _wind_register_all_cmd(w_console_s *ctrl);
+extern void wind_cmd_register_cmd_test(w_console_s *ctrl);
 
 #endif
 #ifdef __cplusplus

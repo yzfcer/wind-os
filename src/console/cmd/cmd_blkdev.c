@@ -48,7 +48,7 @@ static w_uint8_t buffer[512];
 COMMAND_MAIN(blkdev,argc,argv)
 {
     w_bool_t res;
-    blkdev_s *dev;
+    w_blkdev_s *dev;
     w_uint8_t *buff;
     w_addr_t addr;
     w_err_t err = W_ERR_FAIL;
@@ -63,7 +63,7 @@ COMMAND_MAIN(blkdev,argc,argv)
     wind_blkdev_open(dev);
     WIND_ASSERT_RETURN(dev != NULL,W_ERR_INVALID);
     res = wind_atoui(argv[3],(w_uint32_t*)&addr);
-    WIND_ASSERT_RETURN(res == B_TRUE,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(res == W_TRUE,W_ERR_INVALID);
     buff = buffer;
     wind_memset(buff,0,dev->blksize);
     if(0 == wind_strcmp(argv[2],"read"))

@@ -31,13 +31,13 @@
 #include "wind_string.h"
 #include "wind_heap.h"
 #if WIND_FS_SUPPORT
-static w_err_t treefs_op_init(fs_s *fs)
+static w_err_t treefs_op_init(w_fs_s *fs)
 {
     treefs_format();
     return W_ERR_OK;
 }
 
-static w_err_t treefs_op_format(fs_s *fs)
+static w_err_t treefs_op_format(w_fs_s *fs)
 {
     return W_ERR_OK;
 }
@@ -48,7 +48,7 @@ static w_err_t treefs_op_mkdir(const char *path)
     return W_ERR_FAIL;
 }
 */
-static w_err_t treefs_op_open(file_s *file,fmode_e fmode)
+static w_err_t treefs_op_open(w_file_s *file,w_fmode_e fmode)
 {
     treefile_s *tfile;
     WIND_ASSERT_RETURN(file != NULL,W_ERR_NULL);
@@ -64,19 +64,19 @@ static w_err_t treefs_op_open(file_s *file,fmode_e fmode)
     return W_ERR_OK;
 }
 
-static w_err_t treefs_op_close(file_s* file)
+static w_err_t treefs_op_close(w_file_s* file)
 {
     WIND_ASSERT_RETURN(file != NULL,W_ERR_NULL);
     return treefile_close((treefile_s *)file->fileobj);
 }
 
-static w_err_t treefs_op_rmfile(file_s* file)
+static w_err_t treefs_op_rmfile(w_file_s* file)
 {
     WIND_ASSERT_RETURN(file != NULL,W_ERR_NULL);
     return treefile_rm((treefile_s *)file->fileobj);
 }
 
-static char *treefs_op_subfile(file_s* dir,w_int32_t index)
+static char *treefs_op_subfile(w_file_s* dir,w_int32_t index)
 {
     treefile_s *tfile;
     w_int32_t len;
@@ -94,13 +94,13 @@ static char *treefs_op_subfile(file_s* dir,w_int32_t index)
     return dir->subname;
 }
 
-static w_err_t treefs_op_seek(file_s* file,w_int32_t offset)
+static w_err_t treefs_op_seek(w_file_s* file,w_int32_t offset)
 {
     WIND_ASSERT_RETURN(file != NULL,W_ERR_NULL);
     return treefile_seek((treefile_s *)file->fileobj,offset);
 }
 
-static w_err_t treefs_op_rename(file_s* file,char *newname)
+static w_err_t treefs_op_rename(w_file_s* file,char *newname)
 {
     treefile_s *tfile;
     char *name;
@@ -116,35 +116,35 @@ static w_err_t treefs_op_rename(file_s* file,char *newname)
     return W_ERR_OK;
 }
 
-static w_int32_t treefs_op_ftell(file_s* file)
+static w_int32_t treefs_op_ftell(w_file_s* file)
 {
     WIND_ASSERT_RETURN(file != NULL,W_ERR_NULL);
     return treefile_ftell((treefile_s *)file->fileobj);
 }
 
-static w_int32_t treefs_op_read(file_s* file,w_uint8_t *buff, w_int32_t size)
+static w_int32_t treefs_op_read(w_file_s* file,w_uint8_t *buff, w_int32_t size)
 {
     WIND_ASSERT_RETURN(file != NULL,W_ERR_NULL);
     return treefile_read((treefile_s *)file->fileobj,buff,size);
 }
 
-static w_int32_t treefs_op_write(file_s* file,w_uint8_t *buff, w_int32_t size)
+static w_int32_t treefs_op_write(w_file_s* file,w_uint8_t *buff, w_int32_t size)
 {
     WIND_ASSERT_RETURN(file != NULL,W_ERR_NULL);
     return treefile_write((treefile_s *)file->fileobj,buff,size);
 }
-static w_err_t treefs_op_fgets(file_s* file,char *buff, w_int32_t maxlen)
+static w_err_t treefs_op_fgets(w_file_s* file,char *buff, w_int32_t maxlen)
 {
     return W_ERR_FAIL;
 }
-static w_err_t treefs_op_fputs(file_s* file,char *buff)
+static w_err_t treefs_op_fputs(w_file_s* file,char *buff)
 {
     return W_ERR_FAIL;
 }
 
 FS_OPS_DEF(treefs);
 
-fs_s fs_treefs[1] = 
+w_fs_s fs_treefs[1] = 
 {
     WIND_FS_DEF(treefs,FSTYPE_TREEFS,fs_ops),
 };

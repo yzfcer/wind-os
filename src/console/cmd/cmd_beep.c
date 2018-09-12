@@ -41,7 +41,7 @@ COMMAND_USAGE(beep)
 
 COMMAND_MAIN(beep,argc,argv)
 {
-    dev_s *dev;
+    w_chdev_s *dev;
     w_err_t err;
     w_uint8_t stat;
     dev = wind_dev_get("beep");

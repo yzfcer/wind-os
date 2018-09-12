@@ -41,22 +41,22 @@ extern "C" {
 #define DAY_AM 0
 #define DAY_PM 1
 
-typedef struct __time_s
+typedef struct __w_time_s
 {
     w_uint8_t hour;
     w_uint8_t minute;
     w_uint8_t second;
     w_uint16_t msecond;
-}time_s;
+}w_time_s;
 
-typedef struct __date_s
+typedef struct __w_date_s
 {
     w_uint16_t year;
     w_uint8_t month;
     w_uint8_t day;
-}date_s;
+}w_date_s;
 
-typedef enum __week_e
+typedef enum __w_week_e
 {
     SUN = 0,
     MON = 1,
@@ -65,23 +65,23 @@ typedef enum __week_e
     THU = 4,
     FRI = 5,
     SAT = 6,
-}week_e;
+}w_week_e;
 
 typedef struct __datetime_s
 {
-    date_s date;
-    time_s time;
-    week_e week;
+    w_date_s date;
+    w_time_s time;
+    w_week_e week;
 } datetime_s;
 
 void _wind_datetime_mod_init(void);
 
-w_err_t wind_datetime_setdate(date_s *date);
-w_err_t wind_datetime_settime(time_s *time);
+w_err_t wind_datetime_setdate(w_date_s *date);
+w_err_t wind_datetime_settime(w_time_s *time);
 w_err_t wind_datetime_set(datetime_s *datetime);
 
-w_err_t wind_datetime_getdate(date_s * date);
-w_err_t wind_datetime_gettime(time_s *time);
+w_err_t wind_datetime_getdate(w_date_s * date);
+w_err_t wind_datetime_gettime(w_time_s *time);
 w_err_t wind_datetime_get(datetime_s *datetime);
 
 w_err_t wind_datetime_copy(datetime_s *desdt,datetime_s *srcdt);

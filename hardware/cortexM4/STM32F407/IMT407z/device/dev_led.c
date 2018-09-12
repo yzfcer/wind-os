@@ -29,7 +29,7 @@
 #if WIND_DRVFRAME_SUPPORT
 
 static w_uint8_t ledst[3] = {0,0,0};
-w_err_t   led_open(dev_s *dev)
+w_err_t   led_open(w_chdev_s *dev)
 {
     w_int32_t id = dev->devid;
     WIND_ASSERT_RETURN(id >= 0,W_ERR_OVERFLOW);
@@ -38,12 +38,12 @@ w_err_t   led_open(dev_s *dev)
     return W_ERR_OK;
 }
 
-w_err_t  led_ioctl(dev_s *dev,w_int32_t ctrlpoint,void *param)
+w_err_t  led_ioctl(w_chdev_s *dev,w_int32_t ctrlpoint,void *param)
 {
     return W_ERR_OK;
 }
 
-w_int32_t led_read(dev_s *dev,w_uint8_t *buf,w_uint16_t len)
+w_int32_t led_read(w_chdev_s *dev,w_uint8_t *buf,w_uint16_t len)
 {
     w_int32_t id = dev->devid;
     WIND_ASSERT_RETURN(id >= 0,W_ERR_OVERFLOW);
@@ -52,7 +52,7 @@ w_int32_t led_read(dev_s *dev,w_uint8_t *buf,w_uint16_t len)
     return 1;
 }
 
-w_int32_t led_write(dev_s *dev,w_uint8_t *buf,w_uint16_t len)
+w_int32_t led_write(w_chdev_s *dev,w_uint8_t *buf,w_uint16_t len)
 {
     w_int32_t id = dev->devid;
     WIND_ASSERT_RETURN(id >= 0,W_ERR_OVERFLOW);
@@ -62,12 +62,12 @@ w_int32_t led_write(dev_s *dev,w_uint8_t *buf,w_uint16_t len)
     return 1;
 }
 
-w_err_t   led_close(dev_s *dev)
+w_err_t   led_close(w_chdev_s *dev)
 {
     return W_ERR_OK;
 }
 
-const dev_ops_s led_ops = 
+const w_chdev_ops_s led_ops = 
 {
     NULL,
     led_open,
@@ -77,7 +77,7 @@ const dev_ops_s led_ops =
     led_close
 };
 
-dev_s led_dev[3] = 
+w_chdev_s led_dev[3] = 
 {
     WIND_DEV_DEF("led0",0,&led_ops),
     WIND_DEV_DEF("led1",1,&led_ops),

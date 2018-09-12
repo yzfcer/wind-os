@@ -27,7 +27,7 @@
 #include "cmd_history.h"
 #include "wind_cmd.h"
 
-void cmd_history_print(cmd_his_s *his)
+void cmd_history_print(w_cmd_his_s *his)
 {
     int i;
     for(i = 0;i < CMD_HISTORY_COUNT;i ++)
@@ -36,7 +36,7 @@ void cmd_history_print(cmd_his_s *his)
     }
 }
 
-w_err_t cmd_history_init(cmd_his_s *his)
+w_err_t cmd_history_init(w_cmd_his_s *his)
 {
     w_int32_t i;
     his->hiscnt = 0;
@@ -49,7 +49,7 @@ w_err_t cmd_history_init(cmd_his_s *his)
     return W_ERR_OK;
 }
 
-static w_err_t remove_old_history(cmd_his_s *his)
+static w_err_t remove_old_history(w_cmd_his_s *his)
 {
     w_int32_t i;
     w_int32_t len;
@@ -71,7 +71,7 @@ static w_err_t remove_old_history(cmd_his_s *his)
     return W_ERR_OK;
 }
 
-static w_err_t add_hiscmd(cmd_his_s *his,char *cmd)
+static w_err_t add_hiscmd(w_cmd_his_s *his,char *cmd)
 {
     w_int32_t len;
     char *buf;
@@ -90,7 +90,7 @@ static w_err_t add_hiscmd(cmd_his_s *his,char *cmd)
     
 }
 
-w_err_t cmd_history_append(cmd_his_s *his,char *cmd)
+w_err_t cmd_history_append(w_cmd_his_s *his,char *cmd)
 {
     w_err_t err;
     w_int32_t rest;
@@ -115,7 +115,7 @@ w_err_t cmd_history_append(cmd_his_s *his,char *cmd)
     return W_ERR_FAIL;
 }
 
-w_err_t cmd_history_get_next(cmd_his_s *his,char *cmd)
+w_err_t cmd_history_get_next(w_cmd_his_s *his,char *cmd)
 {
     if(his->curidx < his->hiscnt - 1)
         his->curidx += 1;
@@ -135,7 +135,7 @@ w_err_t cmd_history_get_next(cmd_his_s *his,char *cmd)
     return W_ERR_OK;
 }
 
-w_err_t cmd_history_get_prev(cmd_his_s *his,char *cmd)
+w_err_t cmd_history_get_prev(w_cmd_his_s *his,char *cmd)
 {
     
     if(his->curidx < 0)

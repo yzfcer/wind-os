@@ -28,38 +28,38 @@
 #include "24c02.h"
 #if WIND_BLK_DRVFRAME_SUPPORT
 
-static w_err_t   null_open(blkdev_s *dev)
+static w_err_t   null_open(w_blkdev_s *dev)
 {
     return W_ERR_OK;
 }
 
-static w_err_t   null_erase(blkdev_s *dev,w_addr_t addr,w_int32_t blkcnt)
+static w_err_t   null_erase(w_blkdev_s *dev,w_addr_t addr,w_int32_t blkcnt)
 {
     return W_ERR_OK;
 }
 
-static w_err_t   null_eraseall(blkdev_s *dev)
+static w_err_t   null_eraseall(w_blkdev_s *dev)
 {
     return W_ERR_OK;
 }
 
 
-static w_int32_t null_read(blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t blkcnt)
+static w_int32_t null_read(w_blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t blkcnt)
 {
     return blkcnt;
 }
 
-static w_int32_t null_write(blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t blkcnt)
+static w_int32_t null_write(w_blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t blkcnt)
 {   
     return blkcnt;
 }
 
-static w_err_t   null_close(blkdev_s *dev)
+static w_err_t   null_close(w_blkdev_s *dev)
 {
     return W_ERR_OK;
 }
 
-const blkdev_ops_s null_ops = 
+const w_blkdev_ops_s null_ops = 
 {
     NULL,
     null_open,
@@ -70,7 +70,7 @@ const blkdev_ops_s null_ops =
     null_close
 };
 
-blkdev_s null_dev[1] = 
+w_blkdev_s null_dev[1] = 
 {
     WIND_BLKDEV_DEF("null",0,0,0,0,&null_ops)
 };

@@ -29,7 +29,7 @@ extern "C" {
 /********************************************内部变量定义**********************************************/
 #if WIND_MUTEX_SUPPORT
 
-static mutex_s *mutexs[4];
+static w_mutex_s *mutexs[4];
 
 
 /********************************************内部函数定义*********************************************/
@@ -57,7 +57,7 @@ CASE_FUNC(mutexinfo)
     w_err_t err;
     mutexs[0] = wind_mutex_create("test");
     EXPECT_NE(mutexs[0],NULL);
-    EXPECT_EQ(mutexs[0]->mutexed,B_FALSE);
+    EXPECT_EQ(mutexs[0]->mutexed,W_FALSE);
     EXPECT_EQ(mutexs[0]->waitlist.head,NULL);
     EXPECT_EQ(mutexs[0]->waitlist.tail,NULL);
     err = wind_mutex_destroy(mutexs[0]);
@@ -81,10 +81,10 @@ CASE_FUNC(mutexfunc)
     EXPECT_NE(mutexs[0],NULL);
     err = wind_mutex_lock(mutexs[0]);
     EXPECT_EQ(W_ERR_OK,err);
-    EXPECT_EQ(mutexs[0]->mutexed,B_TRUE);
+    EXPECT_EQ(mutexs[0]->mutexed,W_TRUE);
     err = wind_mutex_unlock(mutexs[0]);
     EXPECT_EQ(W_ERR_OK,err);
-    EXPECT_EQ(mutexs[0]->mutexed,B_FALSE);
+    EXPECT_EQ(mutexs[0]->mutexed,W_FALSE);
     EXPECT_EQ(mutexs[0]->waitlist.head,NULL);
     EXPECT_EQ(mutexs[0]->waitlist.tail,NULL);
     err = wind_mutex_destroy(mutexs[0]);

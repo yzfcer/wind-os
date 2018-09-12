@@ -106,8 +106,8 @@ typedef char w_str256_t[256] ;
 #ifndef w_bool_t
 typedef enum __w_bool_t
 {
-    B_FALSE = 0,
-    B_TRUE = 1
+    W_FALSE = 0,
+    W_TRUE = 1
 } w_bool_t;
 #endif
 

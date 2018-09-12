@@ -31,7 +31,7 @@ typedef struct
 {
     char name[12];
     w_int32_t layer;
-    tree_s tree;
+    w_tree_s tree;
 }test_tree_s;
 
 WIND_POOL(test_tree,TREENUM,sizeof(test_tree_s));
@@ -58,7 +58,7 @@ CASE_TEARDOWN(tree_case)
         trees[i] = 0;
 }
 
-void set_layer(tree_s *tree)
+void set_layer(w_tree_s *tree)
 {
     w_int32_t layer = 0;
     test_tree_s *tt,*tp;
@@ -75,7 +75,7 @@ void set_layer(tree_s *tree)
     }
         
 }
-void print_layer(tree_s *tree)
+void print_layer(w_tree_s *tree)
 {
     w_int32_t i;
     test_tree_s *tt;

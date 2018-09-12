@@ -35,28 +35,28 @@ extern "C" {
 #if WIND_TIMER_SUPPORT
 #define TIMER_PERIOD 10
 #define WIND_TIMER_MAGIC 0x34F574B2
-typedef void (*softimer_fn)(void *arg);
-typedef struct tagTicktimer
+typedef void (*w_timer_fn)(void *arg);
+typedef struct __w_timer_s
 {
     w_uint32_t magic;
     const char *name;
-    dnode_s timernode;
+    w_dnode_s timernode;
     w_bool_t running;
     w_uint32_t count;
     w_uint32_t init_count;
-    softimer_fn handle;
+    w_timer_fn handle;
     void *arg;
-}timer_s;
+}w_timer_s;
 
 w_err_t _wind_timer_mod_init(void);
 void _wind_timer_event(void);
-timer_s* wind_timer_get(char *name);
+w_timer_s* wind_timer_get(char *name);
 
-timer_s* wind_timer_create(const char *name,w_uint32_t t_ms,softimer_fn func,void *arg,w_bool_t run);
-w_err_t wind_timer_start(timer_s* timer);
-w_err_t wind_timer_stop(timer_s* timer);
-w_err_t wind_timer_destroy(timer_s* timer);
-w_err_t wind_timer_set_period(timer_s* timer,w_uint32_t t_ms);
+w_timer_s* wind_timer_create(const char *name,w_uint32_t t_ms,w_timer_fn func,void *arg,w_bool_t run);
+w_err_t wind_timer_start(w_timer_s* timer);
+w_err_t wind_timer_stop(w_timer_s* timer);
+w_err_t wind_timer_destroy(w_timer_s* timer);
+w_err_t wind_timer_set_period(w_timer_s* timer,w_uint32_t t_ms);
 
 #endif //#if WIND_TIMER_SUPPORT
 #ifdef __cplusplus

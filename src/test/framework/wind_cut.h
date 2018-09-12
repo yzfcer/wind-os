@@ -76,18 +76,18 @@
 #define CASE_TEARDOWN(testcase) static void case_teardown_##testcase(void)
 #define CASE_FUNC(testcase) static void case_func_##testcase(void)
 
-#define TEST_CASES_START(testsuite) static test_case_s test_cases_##testsuite[] = {
+#define TEST_CASES_START(testsuite) static w_test_case_s test_cases_##testsuite[] = {
 #define TEST_CASE(tc) {#tc,case_setup_##tc,case_teardown_##tc,case_func_##tc},
 #define TEST_CASES_END };
 
-#define TEST_SUITE(ts) test_suite_s suite_##ts = {#ts,\
-sizeof(test_cases_##ts)/sizeof(test_case_s),\
+#define TEST_SUITE(ts) w_test_suite_s suite_##ts = {#ts,\
+sizeof(test_cases_##ts)/sizeof(w_test_case_s),\
 test_cases_##ts,\
 suite_setup_##ts,\
 suite_teardown_##ts,\
 NULL};
     
-#define DECLARE_SUITE(ts) extern test_suite_s suite_##ts
+#define DECLARE_SUITE(ts) extern w_test_suite_s suite_##ts
 #define REGSTER_SUITE(ts) test_suite_register(&suite_##ts)
 
 

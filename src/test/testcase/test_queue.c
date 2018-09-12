@@ -57,7 +57,7 @@ CASE_TEARDOWN(queueinfo)
 CASE_FUNC(queueinfo)
 {
     w_err_t err;
-    queue_s *q = (queue_s *)queuebuf;
+    w_queue_s *q = (w_queue_s *)queuebuf;
     err = wind_queue_create(queuebuf,sizeof(queuebuf),sizeof(w_int32_t));
     EXPECT_NE(err,W_ERR_OK);
     EXPECT_EQ(q->magic,WIND_QUEUE_MAGIC);
@@ -65,7 +65,7 @@ CASE_FUNC(queueinfo)
     EXPECT_EQ(q->wr,q->buf);
     EXPECT_EQ(q->itemsize,sizeof(w_int32_t));
     EXPECT_EQ(q->count,0);
-    EXPECT_EQ(q->capacity,(sizeof(queuebuf) - (w_uint32_t)(((queue_s *)0)->buf)) / q->itemsize);
+    EXPECT_EQ(q->capacity,(sizeof(queuebuf) - (w_uint32_t)(((w_queue_s *)0)->buf)) / q->itemsize);
     EXPECT_EQ(q->end,q->buf + q->capacity * q->itemsize);
     err = wind_queue_destory(q);
     EXPECT_EQ(W_ERR_OK,err);
@@ -88,7 +88,7 @@ CASE_FUNC(queuefunc)
     w_int32_t i;
     w_int32_t res;
     w_int32_t va = 100;
-    queue_s *queue;
+    w_queue_s *queue;
     err = wind_queue_create(queuebuf,sizeof(queuebuf),sizeof(w_int32_t));
     EXPECT_NE(err,W_ERR_OK);
     for(i = 0;i < 50;i ++)

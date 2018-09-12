@@ -43,7 +43,7 @@ static w_err_t timer_thread(w_int32_t argc,w_int8_t **argv)
 
 w_err_t _create_timer_thread(void)
 {
-    thread_s *thread;
+    w_thread_s *thread;
     thread = wind_thread_create("timer",timer_thread,
                      0,NULL,PRIO_HIGH,timerstk,TIMER_STK_SIZE);
     WIND_ASSERT_RETURN(thread != NULL,W_ERR_FAIL);

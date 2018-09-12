@@ -38,23 +38,23 @@ extern "C" {
 #define WIND_PIPE_MAGIC 0x56384c6a
 #define PIPE_NAME_LEN 12
 
-typedef struct __WIND_PIPE
+typedef struct __w_pipe_s
 {
     w_uint32_t magic;
     const char *name;
-    dnode_s pipenode;
+    w_dnode_s pipenode;
     w_bool_t used;
     void *buff;
     w_uint32_t buflen;
-}pipe_s;
+}w_pipe_s;
 
 w_err_t _wind_pipe_mod_init(void);
-w_err_t _wind_pipe_print(dlist_s* list);
-pipe_s* wind_pipe_get(const char *name);
-pipe_s* wind_pipe_create(const char *name,void *buff,w_uint32_t buflen);
-w_int32_t wind_pipe_read(pipe_s* pipe,w_int8_t *str,w_int16_t len);
-w_int32_t wind_pipe_write(pipe_s* pipe,w_int8_t *str,w_int16_t len);
-w_err_t wind_pipe_destroy(pipe_s* pipe);
+w_err_t _wind_pipe_print(w_dlist_s* list);
+w_pipe_s* wind_pipe_get(const char *name);
+w_pipe_s* wind_pipe_create(const char *name,void *buff,w_uint32_t buflen);
+w_int32_t wind_pipe_read(w_pipe_s* pipe,w_int8_t *str,w_int16_t len);
+w_int32_t wind_pipe_write(w_pipe_s* pipe,w_int8_t *str,w_int16_t len);
+w_err_t wind_pipe_destroy(w_pipe_s* pipe);
 
 
 #endif //WIND_PIPE_SUPPORT

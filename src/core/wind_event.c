@@ -31,14 +31,14 @@
 
 #if WIND_EVENT_SUPPORT
 extern void _wind_thread_dispatch(void);
-WIND_POOL(eventpool,WIND_EVENT_MAX_NUM,sizeof(event_s));
+WIND_POOL(eventpool,WIND_EVENT_MAX_NUM,sizeof(w_event_s));
 
-static event_s *event_malloc(void)
+static w_event_s *event_malloc(void)
 {
     return wind_pool_malloc(eventpool);
 }
 
-static w_err_t event_free(event_s *event)
+static w_err_t event_free(w_event_s *event)
 {
     return wind_pool_free(eventpool,event);
 }
@@ -54,19 +54,19 @@ static w_err_t event_free(event_s *event)
 w_err_t _wind_event_init(void)
 {
     w_err_t err;
-    err = wind_pool_create("event",eventpool,sizeof(eventpool),sizeof(event_s));
+    err = wind_pool_create("event",eventpool,sizeof(eventpool),sizeof(w_event_s));
     return err;
 }
 
 
-event_s *wind_event_get(const char *name)
+w_event_s *wind_event_get(const char *name)
 {
-    event_s *event;
-    dnode_s *dnode;
+    w_event_s *event;
+    w_dnode_s *dnode;
     wind_disable_switch();
     foreach_node(dnode,&g_core.eventlist)
     {
-        event = DLIST_OBJ(dnode,event_s,eventnode);
+        event = DLIST_OBJ(dnode,w_event_s,eventnode);
         if(wind_strcmp(name,event->name) == 0)
         {
             wind_enable_switch();
@@ -78,9 +78,9 @@ event_s *wind_event_get(const char *name)
 }
 
 //创建邮箱，创建邮箱的那个线程才能从中读取消息
-event_s *wind_event_create(const char *name)
+w_event_s *wind_event_create(const char *name)
 {
-    event_s *event;
+    w_event_s *event;
     wind_notice("create event:%s",name);
     event = event_malloc();
     WIND_ASSERT_RETURN(event != NULL,NULL);
@@ -99,10 +99,10 @@ event_s *wind_event_create(const char *name)
 
 
 
-w_err_t wind_event_destroy(event_s *event)
+w_err_t wind_event_destroy(w_event_s *event)
 {
-    dnode_s *dnode;
-    thread_s *thread;
+    w_dnode_s *dnode;
+    w_thread_s *thread;
     WIND_ASSERT_RETURN(event != NULL,W_ERR_NULL);
     WIND_ASSERT_RETURN(event->magic == WIND_EVENT_MAGIC,W_ERR_INVALID);
     thread = wind_thread_current();
@@ -128,9 +128,9 @@ w_err_t wind_event_destroy(event_s *event)
     return W_ERR_OK;
 }
 
-w_err_t wind_event_trig(event_s *event,const void *arg)
+w_err_t wind_event_trig(w_event_s *event,const void *arg)
 {
-    thread_s *thread;
+    w_thread_s *thread;
     WIND_ASSERT_RETURN(event != NULL,W_ERR_NULL);
     WIND_ASSERT_RETURN(pmsg != NULL,W_ERR_NULL);
     WIND_ASSERT_RETURN(event->magic == WIND_EVENT_MAGIC,W_ERR_FAIL);
@@ -155,12 +155,12 @@ w_err_t wind_event_trig(event_s *event,const void *arg)
 }
 
 
-w_err_t wind_event_wait(event_s *event,void **arg,w_uint32_t timeout)
+w_err_t wind_event_wait(w_event_s *event,void **arg,w_uint32_t timeout)
 {
     w_err_t err;
     w_uint32_t ticks;
-    dnode_s *dnode;
-    thread_s *thread;
+    w_dnode_s *dnode;
+    w_thread_s *thread;
     WIND_ASSERT_RETURN(event != NULL,W_ERR_NULL);
     WIND_ASSERT_RETURN(pmsg != NULL,W_ERR_NULL);
     WIND_ASSERT_RETURN(event->magic == WIND_EVENT_MAGIC,W_ERR_FAIL);
@@ -212,10 +212,10 @@ w_err_t wind_event_wait(event_s *event,void **arg,w_uint32_t timeout)
 }
 
 
-w_err_t wind_event_print(dlist_s *list)
+w_err_t wind_event_print(w_dlist_s *list)
 {
-    dnode_s *dnode;
-    event_s *event;
+    w_dnode_s *dnode;
+    w_event_s *event;
     WIND_ASSERT_RETURN(list != NULL,W_ERR_NULL);
     wind_printf("\r\n\r\nevent list as following:\r\n");
     wind_print_space(6);
@@ -224,7 +224,7 @@ w_err_t wind_event_print(dlist_s *list)
 
     foreach_node(dnode,list)
     {
-        event = (event_s *)DLIST_OBJ(dnode,event_s,eventnode);
+        event = (w_event_s *)DLIST_OBJ(dnode,w_event_s,eventnode);
         wind_printf("%-16s %-8d %-16s\r\n",
             event->name,event->msgnum,event->owner->name);
     }

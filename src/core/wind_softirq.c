@@ -38,8 +38,8 @@
 #define SOFT_FLAG_ARR_CNT ((WIND_SOFTINT_MAX_NUM + 31) >> 5)
 //软中断线程的堆栈
 static w_stack_t softirq_stk[WIND_SOFTINT_STK_LEN];
-static thread_s *softirq_thread = NULL;
-softirq_fn softirq_vectors[WIND_SOFTINT_MAX_NUM];
+static w_thread_s *softirq_thread = NULL;
+w_softirq_fn softirq_vectors[WIND_SOFTINT_MAX_NUM];
 w_uint32_t softirq_flag[SOFT_FLAG_ARR_CNT];
 
 //初始化软中断的一些相关参数
@@ -53,7 +53,7 @@ w_err_t _wind_softirq_mod_init(void)
 
 
 //向软中断模块注册一个中断向量响应函数
-w_err_t wind_softirq_reg(w_uint16_t irqid,softirq_fn func)
+w_err_t wind_softirq_reg(w_uint16_t irqid,w_softirq_fn func)
 {
     WIND_ASSERT_RETURN(irqid < WIND_SOFTINT_MAX_NUM,W_ERR_OVERFLOW);
     softirq_vectors[irqid] = func;
@@ -83,7 +83,7 @@ w_err_t wind_softirq_trig(w_int32_t irqid)
     return W_ERR_OK;
 }
 
-static softirq_fn get_irq_handle(void)
+static w_softirq_fn get_irq_handle(void)
 {
     w_int32_t i,j;
     w_int32_t idx1,idx2;
@@ -109,13 +109,13 @@ static softirq_fn get_irq_handle(void)
 
 static w_err_t wind_softirq_thread(w_int32_t argc,w_int8_t **argv)
 {
-    softirq_fn func;
+    w_softirq_fn func;
     softirq_thread->cause = CAUSE_COMMON;
     softirq_thread->runstat = THREAD_STATUS_SUSPEND;
-    while(B_TRUE)
+    while(W_TRUE)
     {
         _wind_thread_dispatch();
-        while(B_TRUE)
+        while(W_TRUE)
         {
             wind_disable_interrupt();
             func = get_irq_handle();

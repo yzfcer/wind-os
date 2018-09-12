@@ -36,11 +36,11 @@
 
 #if WIND_WATCHDOG_SUPPORT
 //extern void _wind_thread_dispatch(void);
-static WIND_POOL(watchdogpool,WIND_WATCHDOG_MAX_NUM,sizeof(watchdog_s));
+static WIND_POOL(watchdogpool,WIND_WATCHDOG_MAX_NUM,sizeof(w_watchdog_s));
 
-static __INLINE__ watchdog_s *watchdog_malloc(void)
+static __INLINE__ w_watchdog_s *watchdog_malloc(void)
 {
-    return (watchdog_s*)wind_pool_malloc(watchdogpool);
+    return (w_watchdog_s*)wind_pool_malloc(watchdogpool);
 }
 
 static __INLINE__ w_err_t watchdog_free(void *watchdog)
@@ -50,12 +50,12 @@ static __INLINE__ w_err_t watchdog_free(void *watchdog)
 
 static void watchdog_timer(void * arg)
 {
-    dnode_s *dnode;
-    watchdog_s *watchdog;
+    w_dnode_s *dnode;
+    w_watchdog_s *watchdog;
     wind_disable_switch();
     foreach_node(dnode,&g_core.watchdoglist)
     {
-        watchdog = DLIST_OBJ(dnode,watchdog_s,watchdognode);
+        watchdog = DLIST_OBJ(dnode,w_watchdog_s,watchdognode);
         wind_disable_interrupt();
         watchdog->time_cur --;
         wind_enable_interrupt();
@@ -74,22 +74,22 @@ static void watchdog_timer(void * arg)
 w_err_t _wind_watchdog_mod_init(void)
 {
     w_err_t err;
-    timer_s *timer;
-    err = wind_pool_create("watchdog",watchdogpool,sizeof(watchdogpool),sizeof(watchdog_s));
+    w_timer_s *timer;
+    err = wind_pool_create("watchdog",watchdogpool,sizeof(watchdogpool),sizeof(w_watchdog_s));
     WIND_ASSERT_RETURN(err == W_ERR_OK,err);
-    timer = wind_timer_create("watchdog",1000,watchdog_timer,NULL,B_TRUE);
+    timer = wind_timer_create("watchdog",1000,watchdog_timer,NULL,W_TRUE);
     WIND_ASSERT_RETURN(timer != NULL,W_ERR_FAIL);
     return W_ERR_OK;
 }
 
-watchdog_s *wind_watchdog_get(const char *name)
+w_watchdog_s *wind_watchdog_get(const char *name)
 {
-    watchdog_s *watchdog;
-    dnode_s *dnode;
+    w_watchdog_s *watchdog;
+    w_dnode_s *dnode;
     wind_disable_switch();
     foreach_node(dnode,&g_core.watchdoglist)
     {
-        watchdog = DLIST_OBJ(dnode,watchdog_s,watchdognode);
+        watchdog = DLIST_OBJ(dnode,w_watchdog_s,watchdognode);
         if(wind_strcmp(name,watchdog->name) == 0)
         {
             wind_enable_switch();
@@ -100,9 +100,9 @@ watchdog_s *wind_watchdog_get(const char *name)
     return NULL;
 }
 
-watchdog_s *wind_watchdog_create(const char *name,w_uint32_t flag,w_int16_t timeout_1s)
+w_watchdog_s *wind_watchdog_create(const char *name,w_uint32_t flag,w_int16_t timeout_1s)
 {
-    watchdog_s *watchdog;
+    w_watchdog_s *watchdog;
     wind_notice("create watchdog:%s",name);
     watchdog = watchdog_malloc();
     WIND_ASSERT_RETURN(watchdog != NULL,NULL);
@@ -121,7 +121,7 @@ watchdog_s *wind_watchdog_create(const char *name,w_uint32_t flag,w_int16_t time
 }
 
 
-w_err_t wind_watchdog_destroy(watchdog_s *watchdog)
+w_err_t wind_watchdog_destroy(w_watchdog_s *watchdog)
 {
     w_err_t err;
     WIND_ASSERT_RETURN(watchdog != NULL,W_ERR_NULL);
@@ -136,7 +136,7 @@ w_err_t wind_watchdog_destroy(watchdog_s *watchdog)
     return err;    
 }
 
-w_err_t wind_watchdog_feed(watchdog_s *watchdog)
+w_err_t wind_watchdog_feed(w_watchdog_s *watchdog)
 {
     WIND_ASSERT_RETURN(watchdog != NULL,W_ERR_NULL);
     WIND_ASSERT_RETURN(watchdog->magic == WIND_WATCHDOG_MAGIC,W_ERR_INVALID);
@@ -148,10 +148,10 @@ w_err_t wind_watchdog_feed(watchdog_s *watchdog)
 
 
 
-w_err_t wind_watchdog_print(dlist_s *list)
+w_err_t wind_watchdog_print(w_dlist_s *list)
 {
-    dnode_s *dnode;
-    watchdog_s *watchdog;
+    w_dnode_s *dnode;
+    w_watchdog_s *watchdog;
     WIND_ASSERT_RETURN(list != NULL,W_ERR_NULL);
     wind_printf("\r\n\r\nwatchdog list as following:\r\n");
     wind_print_space(5);
@@ -160,7 +160,7 @@ w_err_t wind_watchdog_print(dlist_s *list)
 
     foreach_node(dnode,list)
     {
-        watchdog = (watchdog_s *)DLIST_OBJ(dnode,watchdog_s,watchdognode);
+        watchdog = (w_watchdog_s *)DLIST_OBJ(dnode,w_watchdog_s,watchdognode);
         wind_printf("%-16s %-12d %-12d\r\n",
             watchdog->name,watchdog->time_max,watchdog->time_cur);
     }

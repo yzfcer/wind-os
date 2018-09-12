@@ -38,44 +38,44 @@ extern "C" {
 #if WIND_DRVFRAME_SUPPORT
 
 #define WIND_DEV_MAGIC 0x68353D6A
-typedef struct __dev_s dev_s;
-typedef struct __dev_ops_s dev_ops_s;
-struct __dev_s
+typedef struct __w_chdev_s w_chdev_s;
+typedef struct __w_chdev_ops_s w_chdev_ops_s;
+struct __w_chdev_s
 {
     w_uint32_t magic;
     char name[12];
     w_int8_t devid;
     w_bool_t opened;
-    dnode_s devnode;
-    mutex_s *mutex;
-    const dev_ops_s *ops;
+    w_dnode_s devnode;
+    w_mutex_s *mutex;
+    const w_chdev_ops_s *ops;
 };
 
-struct __dev_ops_s
+struct __w_chdev_ops_s
 {
-    w_err_t   (*init)(dev_s *dev);
-    w_err_t   (*open)(dev_s *dev);
-    w_err_t   (*ioctl)(dev_s *dev,w_int32_t cmd,void *param);
-    w_int32_t (*read)(dev_s *dev,w_uint8_t *buf,w_uint16_t len);
-    w_int32_t (*write)(dev_s *dev,w_uint8_t *buf,w_uint16_t len);
-    w_err_t   (*close)(dev_s *dev);
+    w_err_t   (*init)(w_chdev_s *dev);
+    w_err_t   (*open)(w_chdev_s *dev);
+    w_err_t   (*ioctl)(w_chdev_s *dev,w_int32_t cmd,void *param);
+    w_int32_t (*read)(w_chdev_s *dev,w_uint8_t *buf,w_uint16_t len);
+    w_int32_t (*write)(w_chdev_s *dev,w_uint8_t *buf,w_uint16_t len);
+    w_err_t   (*close)(w_chdev_s *dev);
 };
 
-#define WIND_DEV_DEF(name,devid,ops) {WIND_DEV_MAGIC,name,devid,B_FALSE,{NULL,NULL},NULL,ops}
+#define WIND_DEV_DEF(name,devid,ops) {WIND_DEV_MAGIC,name,devid,W_FALSE,{NULL,NULL},NULL,ops}
 
 w_err_t _wind_dev_mod_init(void);
 w_err_t _register_devs(void);
 
-w_err_t wind_dev_register(dev_s *dev,w_int32_t count);
-w_err_t wind_dev_unregister(dev_s *dev);
+w_err_t wind_dev_register(w_chdev_s *dev,w_int32_t count);
+w_err_t wind_dev_unregister(w_chdev_s *dev);
 
-dev_s *wind_dev_get(char *name);
-w_err_t wind_dev_open(dev_s *dev);
-w_err_t wind_dev_ioctl(dev_s *dev,w_int32_t cmd,void *param);
-w_int32_t wind_dev_read(dev_s *dev,w_uint8_t *buf,w_int32_t len);
-w_int32_t wind_dev_write(dev_s *dev,w_uint8_t *buf,w_int32_t len);
-w_err_t wind_dev_close(dev_s *dev);
-w_err_t wind_dev_print(dlist_s *list);
+w_chdev_s *wind_dev_get(char *name);
+w_err_t wind_dev_open(w_chdev_s *dev);
+w_err_t wind_dev_ioctl(w_chdev_s *dev,w_int32_t cmd,void *param);
+w_int32_t wind_dev_read(w_chdev_s *dev,w_uint8_t *buf,w_int32_t len);
+w_int32_t wind_dev_write(w_chdev_s *dev,w_uint8_t *buf,w_int32_t len);
+w_err_t wind_dev_close(w_chdev_s *dev);
+w_err_t wind_dev_print(w_dlist_s *list);
 
 #endif
 

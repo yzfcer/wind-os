@@ -31,14 +31,14 @@
 
 #if WIND_MSGBOX_SUPPORT
 extern void _wind_thread_dispatch(void);
-WIND_POOL(msgboxpool,WIND_MBOX_MAX_NUM,sizeof(msgbox_s));
+WIND_POOL(msgboxpool,WIND_MBOX_MAX_NUM,sizeof(w_msgbox_s));
 
-static msgbox_s *msgbox_malloc(void)
+static w_msgbox_s *msgbox_malloc(void)
 {
     return wind_pool_malloc(msgboxpool);
 }
 
-static w_err_t msgbox_free(msgbox_s *msgbox)
+static w_err_t msgbox_free(w_msgbox_s *msgbox)
 {
     return wind_pool_free(msgboxpool,msgbox);
 }
@@ -54,11 +54,11 @@ static w_err_t msgbox_free(msgbox_s *msgbox)
 w_err_t _wind_msgbox_mod_init(void)
 {
     w_err_t err;
-    err = wind_pool_create("msgbox",msgboxpool,sizeof(msgboxpool),sizeof(msgbox_s));
+    err = wind_pool_create("msgbox",msgboxpool,sizeof(msgboxpool),sizeof(w_msgbox_s));
     return err;
 }
 
-void wind_msg_init(msg_s *msg,w_uint16_t msg_id,w_uint16_t msg_len,void *msg_arg)
+void wind_msg_init(w_msg_s *msg,w_uint16_t msg_id,w_uint16_t msg_len,void *msg_arg)
 {
     msg->msg_id = msg_id;
     msg->msg_len = msg_len;
@@ -66,14 +66,14 @@ void wind_msg_init(msg_s *msg,w_uint16_t msg_id,w_uint16_t msg_len,void *msg_arg
     DNODE_INIT(msg->msgnode);
 }
 
-msgbox_s *wind_msgbox_get(const char *name)
+w_msgbox_s *wind_msgbox_get(const char *name)
 {
-    msgbox_s *msgbox;
-    dnode_s *dnode;
+    w_msgbox_s *msgbox;
+    w_dnode_s *dnode;
     wind_disable_switch();
     foreach_node(dnode,&g_core.msgboxlist)
     {
-        msgbox = DLIST_OBJ(dnode,msgbox_s,msgboxnode);
+        msgbox = DLIST_OBJ(dnode,w_msgbox_s,msgboxnode);
         if(wind_strcmp(name,msgbox->name) == 0)
         {
             wind_enable_switch();
@@ -85,9 +85,9 @@ msgbox_s *wind_msgbox_get(const char *name)
 }
 
 //创建邮箱，创建邮箱的那个线程才能从中读取消息
-msgbox_s *wind_msgbox_create(const char *name)
+w_msgbox_s *wind_msgbox_create(const char *name)
 {
-    msgbox_s *msgbox;
+    w_msgbox_s *msgbox;
     wind_notice("create msgbox:%s",name);
     msgbox = msgbox_malloc();
     WIND_ASSERT_RETURN(msgbox != NULL,NULL);
@@ -105,10 +105,10 @@ msgbox_s *wind_msgbox_create(const char *name)
 }
 
 
-w_err_t wind_msgbox_trydestroy(msgbox_s *msgbox)
+w_err_t wind_msgbox_trydestroy(w_msgbox_s *msgbox)
 {
-    dnode_s *pdnode;
-    thread_s *thread;
+    w_dnode_s *pdnode;
+    w_thread_s *thread;
     WIND_ASSERT_RETURN(msgbox != NULL,W_ERR_NULL);
     WIND_ASSERT_RETURN(msgbox->magic == WIND_MSGBOX_MAGIC,W_ERR_INVALID);
     thread = wind_thread_current();
@@ -124,10 +124,10 @@ w_err_t wind_msgbox_trydestroy(msgbox_s *msgbox)
     return wind_msgbox_destroy(msgbox);
 }
 
-w_err_t wind_msgbox_destroy(msgbox_s *msgbox)
+w_err_t wind_msgbox_destroy(w_msgbox_s *msgbox)
 {
-    dnode_s *dnode;
-    thread_s *thread;
+    w_dnode_s *dnode;
+    w_thread_s *thread;
     WIND_ASSERT_RETURN(msgbox != NULL,W_ERR_NULL);
     WIND_ASSERT_RETURN(msgbox->magic == WIND_MSGBOX_MAGIC,W_ERR_INVALID);
     thread = wind_thread_current();
@@ -153,9 +153,9 @@ w_err_t wind_msgbox_destroy(msgbox_s *msgbox)
     return W_ERR_OK;
 }
 
-w_err_t wind_msgbox_post(msgbox_s *msgbox,msg_s *pmsg)
+w_err_t wind_msgbox_post(w_msgbox_s *msgbox,w_msg_s *pmsg)
 {
-    thread_s *thread;
+    w_thread_s *thread;
     WIND_ASSERT_RETURN(msgbox != NULL,W_ERR_NULL);
     WIND_ASSERT_RETURN(pmsg != NULL,W_ERR_NULL);
     WIND_ASSERT_RETURN(msgbox->magic == WIND_MSGBOX_MAGIC,W_ERR_FAIL);
@@ -180,12 +180,12 @@ w_err_t wind_msgbox_post(msgbox_s *msgbox,msg_s *pmsg)
 }
 
 
-w_err_t wind_msgbox_wait(msgbox_s *msgbox,msg_s **pmsg,w_uint32_t timeout)
+w_err_t wind_msgbox_wait(w_msgbox_s *msgbox,w_msg_s **pmsg,w_uint32_t timeout)
 {
     w_err_t err;
     w_uint32_t ticks;
-    dnode_s *dnode;
-    thread_s *thread;
+    w_dnode_s *dnode;
+    w_thread_s *thread;
     WIND_ASSERT_RETURN(msgbox != NULL,W_ERR_NULL);
     WIND_ASSERT_RETURN(pmsg != NULL,W_ERR_NULL);
     WIND_ASSERT_RETURN(msgbox->magic == WIND_MSGBOX_MAGIC,W_ERR_FAIL);
@@ -198,7 +198,7 @@ w_err_t wind_msgbox_wait(msgbox_s *msgbox,msg_s **pmsg,w_uint32_t timeout)
     {
         msgbox->msgnum --;
         dnode = dlist_remove_head(&msgbox->msglist);
-        *pmsg = DLIST_OBJ(dnode,msg_s,msgnode);
+        *pmsg = DLIST_OBJ(dnode,w_msg_s,msgnode);
         wind_enable_interrupt();
         return W_ERR_OK;
     }
@@ -222,7 +222,7 @@ w_err_t wind_msgbox_wait(msgbox_s *msgbox,msg_s **pmsg,w_uint32_t timeout)
             return W_ERR_NULL;
         }
         dnode = dlist_remove_head(&msgbox->msglist);
-        *pmsg = DLIST_OBJ(dnode,msg_s,msgnode);
+        *pmsg = DLIST_OBJ(dnode,w_msg_s,msgnode);
         wind_enable_interrupt();
         err = W_ERR_OK;
     }
@@ -236,11 +236,11 @@ w_err_t wind_msgbox_wait(msgbox_s *msgbox,msg_s **pmsg,w_uint32_t timeout)
     return err;
 }
 
-w_err_t wind_msgbox_trywait(msgbox_s *msgbox,msg_s **pmsg)
+w_err_t wind_msgbox_trywait(w_msgbox_s *msgbox,w_msg_s **pmsg)
 {
     w_err_t err;
-    dnode_s *dnode;
-    thread_s *thread;
+    w_dnode_s *dnode;
+    w_thread_s *thread;
     WIND_ASSERT_RETURN(msgbox != NULL,W_ERR_NULL);
     WIND_ASSERT_RETURN(pmsg != NULL,W_ERR_NULL);
     WIND_ASSERT_RETURN(msgbox->magic == WIND_MSGBOX_MAGIC,W_ERR_FAIL);
@@ -253,7 +253,7 @@ w_err_t wind_msgbox_trywait(msgbox_s *msgbox,msg_s **pmsg)
     {
         msgbox->msgnum --;
         dnode = dlist_remove_head(&msgbox->msglist);
-        *pmsg = DLIST_OBJ(dnode,msg_s,msgnode);
+        *pmsg = DLIST_OBJ(dnode,w_msg_s,msgnode);
         err = W_ERR_OK;
     }
     else
@@ -265,10 +265,10 @@ w_err_t wind_msgbox_trywait(msgbox_s *msgbox,msg_s **pmsg)
     return err;
 }
 
-w_err_t wind_msgbox_print(dlist_s *list)
+w_err_t wind_msgbox_print(w_dlist_s *list)
 {
-    dnode_s *dnode;
-    msgbox_s *msgbox;
+    w_dnode_s *dnode;
+    w_msgbox_s *msgbox;
     WIND_ASSERT_RETURN(list != NULL,W_ERR_NULL);
     wind_printf("\r\n\r\nmsgbox list as following:\r\n");
     wind_print_space(5);
@@ -277,7 +277,7 @@ w_err_t wind_msgbox_print(dlist_s *list)
 
     foreach_node(dnode,list)
     {
-        msgbox = (msgbox_s *)DLIST_OBJ(dnode,msgbox_s,msgboxnode);
+        msgbox = (w_msgbox_s *)DLIST_OBJ(dnode,w_msgbox_s,msgboxnode);
         wind_printf("%-16s %-8d %-16s\r\n",
             msgbox->name,msgbox->msgnum,msgbox->owner->name);
     }

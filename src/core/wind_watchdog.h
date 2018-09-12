@@ -46,18 +46,18 @@ typedef struct _wind_watchdog
     w_uint32_t magic:24;
     w_uint32_t flag;
     const char* name;
-    dnode_s watchdognode;
+    w_dnode_s watchdognode;
     w_int16_t time_max;    //初始化的信号量的值
     w_int16_t time_cur;    //当前的信号量的值
-	thread_s *thread;
-}watchdog_s;
+	w_thread_s *thread;
+}w_watchdog_s;
 
 w_err_t _wind_watchdog_mod_init(void);
-watchdog_s *wind_watchdog_get(const char *name);
-watchdog_s *wind_watchdog_create(const char *name,w_uint32_t flag,w_int16_t timeout_1s);
-w_err_t wind_watchdog_destroy(watchdog_s *watchdog);
-w_err_t wind_watchdog_feed(watchdog_s *watchdog);
-w_err_t wind_watchdog_print(dlist_s *list);
+w_watchdog_s *wind_watchdog_get(const char *name);
+w_watchdog_s *wind_watchdog_create(const char *name,w_uint32_t flag,w_int16_t timeout_1s);
+w_err_t wind_watchdog_destroy(w_watchdog_s *watchdog);
+w_err_t wind_watchdog_feed(w_watchdog_s *watchdog);
+w_err_t wind_watchdog_print(w_dlist_s *list);
 
 #endif
 #ifdef __cplusplus

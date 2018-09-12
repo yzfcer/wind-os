@@ -71,7 +71,7 @@ static w_err_t fs_cmd_cd(w_int32_t argc,char **argv)
 static w_err_t mknode(w_int32_t argc,char **argv,w_uint16_t isdir)
 {
     w_bool_t isexist;
-    file_s *file;
+    w_file_s *file;
     char * fullpath;
     char *curpath = wind_file_get_current_path();
     if(argc < 3)
@@ -107,7 +107,7 @@ static w_err_t fs_cmd_touch(w_int32_t argc,char **argv)
 static w_err_t fs_cmd_rm(w_int32_t argc,char **argv)
 {
     w_err_t err;
-    file_s *file;
+    w_file_s *file;
     w_bool_t isexist;
     char *curpath = wind_file_get_current_path();
     char * fullpath = wind_full_path_generate(curpath,argv[2],1);
@@ -127,7 +127,7 @@ static w_err_t fs_cmd_rm(w_int32_t argc,char **argv)
 static w_err_t fs_cmd_ls(w_int32_t argc,char **argv)
 {
     w_int32_t i;
-    file_s *file;
+    w_file_s *file;
     char *fullpath,*sub;
     char *curpath = wind_file_get_current_path();
     if(argc >= 3)
@@ -159,7 +159,7 @@ static w_err_t fs_cmd_ls(w_int32_t argc,char **argv)
 
 static w_err_t fs_cmd_cat(w_int32_t argc,char **argv)
 {
-    file_s *file;
+    w_file_s *file;
     char * fullpath;
     w_uint8_t *buff;
     w_int32_t len;
@@ -199,7 +199,7 @@ static w_err_t fs_cmd_cat(w_int32_t argc,char **argv)
     
 static w_err_t fs_cmd_write(w_int32_t argc,char **argv)
 {
-    file_s *file;
+    w_file_s *file;
     char * fullpath;
     w_int32_t len,filelen;
     char *curpath = wind_file_get_current_path();

@@ -38,12 +38,12 @@ w_bool_t wind_atoi(char *str,w_int32_t *value)
         if(str[i] <= '9' && str[i] >= '0')
             num = num *10 + str[i] - '0';
         else if(str[i] != 0)
-            return B_FALSE;
+            return W_FALSE;
         else
             break;
     }
     *value = sign?-num:num;
-    return B_TRUE;
+    return W_TRUE;
 }
 
 void wind_itoa(char *str,w_int32_t value)
@@ -83,12 +83,12 @@ w_bool_t wind_atoui(char *str,w_uint32_t *value)
         if(str[i] <= '9' && str[i] >= '0')
             num = num *10 + str[i] - '0';
         else if(str[i] != 0)
-            return B_FALSE;
+            return W_FALSE;
         else
             break;
     }
     *value = num;
-    return B_TRUE;
+    return W_TRUE;
 }
 
 void wind_uitoa(char *str,w_uint32_t value)
@@ -143,13 +143,13 @@ w_bool_t wind_htoi(char *hex,w_uint32_t *value)
     {  
         temp = c2i( *(hex + i));
         if(temp < 0)
-            return B_FALSE;
+            return W_FALSE;
         bits = (len - i - 1) *4;  
         temp = temp << bits;  
         num = num | temp;  
     }
     *value = num;
-    return B_TRUE;  
+    return W_TRUE;  
 }  
 
 void wind_itoh(char *hex,w_uint32_t value)

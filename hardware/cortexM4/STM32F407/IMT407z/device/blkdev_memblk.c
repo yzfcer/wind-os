@@ -3,7 +3,7 @@
 #include "wind_string.h"
 #if WIND_BLK_DRVFRAME_SUPPORT
 static w_uint8_t memblk[8*64];
-w_err_t   memblk_init(blkdev_s *dev)
+w_err_t   memblk_init(w_blkdev_s *dev)
 {
     dev->blkaddr = (w_addr_t)memblk;
     dev->blkcnt = 8;
@@ -11,7 +11,7 @@ w_err_t   memblk_init(blkdev_s *dev)
     return W_ERR_OK;
 }
 
-w_err_t   memblk_open(blkdev_s *dev)
+w_err_t   memblk_open(w_blkdev_s *dev)
 {
     dev->blkaddr = (w_addr_t)memblk;
     dev->blksize = 64;
@@ -19,7 +19,7 @@ w_err_t   memblk_open(blkdev_s *dev)
     return W_ERR_OK;
 }
 
-w_err_t   memblk_erase(blkdev_s *dev,w_addr_t addr,w_int32_t blkcnt)
+w_err_t   memblk_erase(w_blkdev_s *dev,w_addr_t addr,w_int32_t blkcnt)
 {
     w_uint8_t *start;
     w_int32_t size;
@@ -29,7 +29,7 @@ w_err_t   memblk_erase(blkdev_s *dev,w_addr_t addr,w_int32_t blkcnt)
     return W_ERR_OK;
 }
 
-w_err_t   memblk_eraseall(blkdev_s *dev)
+w_err_t   memblk_eraseall(w_blkdev_s *dev)
 {
     w_uint8_t *start;
     w_int32_t size;
@@ -40,7 +40,7 @@ w_err_t   memblk_eraseall(blkdev_s *dev)
 }
 
 
-w_int32_t memblk_read(blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t blkcnt)
+w_int32_t memblk_read(w_blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t blkcnt)
 {
     w_uint8_t *start;
     w_int32_t size;
@@ -50,7 +50,7 @@ w_int32_t memblk_read(blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t blkcn
     return blkcnt;
 }
 
-w_int32_t memblk_write(blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t blkcnt)
+w_int32_t memblk_write(w_blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t blkcnt)
 {
     w_uint8_t *start;
     w_int32_t size;
@@ -60,12 +60,12 @@ w_int32_t memblk_write(blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t blkc
     return blkcnt;
 }
 
-w_err_t   memblk_close(blkdev_s *dev)
+w_err_t   memblk_close(w_blkdev_s *dev)
 {
     return W_ERR_OK;
 }
 
-const blkdev_ops_s memblk_ops = 
+const w_blkdev_ops_s memblk_ops = 
 {
     memblk_init,
     memblk_open,
@@ -76,7 +76,7 @@ const blkdev_ops_s memblk_ops =
     memblk_close
 };
 
-blkdev_s memblk_dev[1] = 
+w_blkdev_s memblk_dev[1] = 
 {
     WIND_BLKDEV_DEF("memblk",0,0,0,0,&memblk_ops)
 };

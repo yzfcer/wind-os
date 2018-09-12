@@ -30,10 +30,10 @@ extern "C" {
 
 #if WIND_MSGBOX_SUPPORT
 /********************************************内部变量定义**********************************************/
-static msgbox_s *msgbox;
+static w_msgbox_s *msgbox;
 typedef struct 
 {
-    msg_s msg;
+    w_msg_s msg;
     int value;
 }test_msg_s;
 
@@ -63,7 +63,7 @@ CASE_TEARDOWN(msgboxinfo)
 CASE_FUNC(msgboxinfo)
 {
     w_err_t err;
-    thread_s *thr;
+    w_thread_s *thr;
     thr = wind_thread_current();
     msgbox = wind_msgbox_create("test");
     EXPECT_NE(msgbox,NULL);
@@ -89,7 +89,7 @@ CASE_TEARDOWN(msgboxfunc)
 CASE_FUNC(msgboxfunc)
 {
     w_err_t err;
-    msg_s *msg;
+    w_msg_s *msg;
     test_msg_s *tmsg,*tmsg1;
     tmsg1 = wind_pool_malloc(testmsg_pool);
     msgbox = wind_msgbox_create("test");

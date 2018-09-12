@@ -29,13 +29,13 @@
 
 #if WIND_STACK_SUPPORT
 
-static w_err_t defaultreadempty(pstack_s pstk,void *data)
+static w_err_t defaultreadempty(w_stack_s* pstk,void *data)
 {
     pstk->emptycnt ++;
     return STACK_EMPTY;
 }
 
-static w_err_t defaultwritefull(pstack_s pstk,void *data)
+static w_err_t defaultwritefull(w_stack_s* pstk,void *data)
 {
     pstk->fullcnt ++;
     return STACK_FULL;
@@ -64,14 +64,14 @@ static w_err_t defaultwritefull(pstack_s pstk,void *data)
 w_err_t wind_stack_create(void *mem,
                           w_uint32_t size,
                           w_uint16_t item_size,
-                          w_err_t (* ReadEmpty)(pstack_s pstk,void *data),
-                          w_err_t (* WriteFull)(pstack_s pstk,void *data)
+                          w_err_t (* ReadEmpty)(w_stack_s* pstk,void *data),
+                          w_err_t (* WriteFull)(w_stack_s* pstk,void *data)
                           )
 {
-    pstack_s pstk;
-    if ((mem != NULL) && (size >= sizeof(stack_s)))        // && 判断参数是否有效 
+    w_stack_s* pstk;
+    if ((mem != NULL) && (size >= sizeof(w_stack_s)))        // && 判断参数是否有效 
     {
-        pstk = (pstack_s )mem;
+        pstk = (w_stack_s* )mem;
 
         wind_disable_interrupt();
         if(ReadEmpty)                                                        // 初始化结构体数据 
@@ -83,7 +83,7 @@ w_err_t wind_stack_create(void *mem,
         else
             pstk->write_full = defaultwritefull;
          // 计算堆栈可以存储的数据数目     
-        pstk->item_max = (size - (w_uint32_t)(((pstack_s)0)->buff)) / sizeof(STACK_DATA_TYPE);
+        pstk->item_max = (size - (w_uint32_t)(((w_stack_s*)0)->buff)) / sizeof(STACK_DATA_TYPE);
                                        
         pstk->top = pstk->buff + pstk->item_max;               // 计算数据缓冲的结束地址 
         pstk->out = pstk->buff;
@@ -124,13 +124,13 @@ w_err_t wind_stack_read(void *mem,void *Ret)
 {
     w_err_t err;
     w_int8_t i;
-    pstack_s pstk;
+    w_stack_s* pstk;
     //w_uint8_t *pEnd;
     w_uint8_t *ret = (w_uint8_t *)Ret;
     err = STACK_ERR;
     if (mem != NULL)                                            /* 堆栈是否有效 */
     {                                                           /* 有效 */
-        pstk = (pstack_s)mem;
+        pstk = (w_stack_s*)mem;
         
         wind_disable_interrupt();
         if (pstk->item_cnt >= pstk->item_size)                     /* 堆栈是否为空 */
@@ -180,13 +180,13 @@ w_err_t wind_stack_write(void *mem, void *Data)
 {
     w_err_t err;
     w_int8_t i;
-    pstack_s pstk;
+    w_stack_s* pstk;
     //w_uint8_t *pEnd;
     w_uint8_t *data = (w_uint8_t *)Data;
     err = STACK_ERR;
     if (mem != NULL)                                                    /* 堆栈是否有效 */
     {
-        pstk = (pstack_s )mem;
+        pstk = (w_stack_s* )mem;
         wind_disable_interrupt();
         if (pstk->item_cnt <= pstk->item_max - pstk->item_size)                              /* 堆栈是否满  */
         {                                                               /* 不满        */
@@ -239,7 +239,7 @@ w_uint16_t wind_stack_datalen(void *mem)
     if (mem != NULL)
     {
         wind_disable_interrupt();
-        temp = ((pstack_s )mem)->item_cnt / ((pstack_s )mem)->item_size;
+        temp = ((w_stack_s* )mem)->item_cnt / ((w_stack_s* )mem)->item_size;
         wind_enable_interrupt();
     }
     return temp;
@@ -270,7 +270,7 @@ w_uint16_t wind_stack_size(void *mem)
     if (mem != NULL)
     {
         wind_disable_interrupt();
-        temp = ((pstack_s )mem)->item_max / ((pstack_s )mem)->item_size;
+        temp = ((w_stack_s* )mem)->item_max / ((w_stack_s* )mem)->item_size;
         wind_enable_interrupt();
     }
     return temp;
@@ -297,10 +297,10 @@ w_uint16_t wind_stack_size(void *mem)
 
 void wind_stack_flush(void *mem)
 {
-    pstack_s pstk;
+    w_stack_s* pstk;
     if (mem != NULL)                                                /* 堆栈是否有效 */
     {                                                               /* 有效         */
-        pstk = (pstack_s)mem;
+        pstk = (w_stack_s*)mem;
         wind_disable_interrupt();
         pstk->item_cnt = 0;                                           /* 数据数目为0 */
         pstk->top = pstk->buff + pstk->item_max;               // 计算数据缓冲的结束地址 

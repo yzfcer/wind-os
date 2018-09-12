@@ -41,7 +41,7 @@ static w_err_t idle_thread(w_int32_t argc,w_int8_t **argv)
 
 w_err_t _create_idle_thread(void)
 {
-    thread_s *thread;
+    w_thread_s *thread;
     thread = wind_thread_create("idle",idle_thread,
                     0,NULL,PRIO_LOW,idlestk,IDLE_STK_SIZE);
     WIND_ASSERT_RETURN(thread != NULL,W_ERR_FAIL);

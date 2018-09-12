@@ -42,7 +42,7 @@ COMMAND_USAGE(led)
 COMMAND_MAIN(led,argc,argv)
 {
     w_err_t err;
-    dev_s *led;
+    w_chdev_s *led;
     w_uint8_t stat;
     char devname[8];
     WIND_ASSERT_RETURN(argc == 3,W_ERR_INVALID);

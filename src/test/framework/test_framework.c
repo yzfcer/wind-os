@@ -29,14 +29,14 @@ extern "C" {
 
 
 /********************************************内部变量定义**********************************************/
-static suite_list_s suite_list;
-stati_info_s stati_info;
+static w_suite_list_s suite_list;
+w_stati_info_s stati_info;
 
 /********************************************内部函数定义*********************************************/
 
-ut_int32_t stringlenth(char *str)
+w_int32_t stringlenth(char *str)
 {
-    ut_int32_t i;
+    w_int32_t i;
     for(i = 0;i < 65535;i ++)
     {
         if(str[i] == 0)
@@ -45,7 +45,7 @@ ut_int32_t stringlenth(char *str)
     return i;
 }
 
-ut_int32_t stringcmp(const char *cs,const char *ct)
+w_int32_t stringcmp(const char *cs,const char *ct)
 {
     char __res;
     while (1) {
@@ -59,10 +59,10 @@ ut_int32_t stringcmp(const char *cs,const char *ct)
 /********************************************全局变量定义**********************************************/
 
 /********************************************全局函数定义**********************************************/
-static void test_stati_init(test_stati_s *tst)
+static void test_stati_init(w_test_stati_s *tst)
 {
     int i;
-    fail_info_s *fail;
+    w_fail_info_s *fail;
     tst->tot_suite = 0;
     tst->tot_case = 0;
     tst->failed_case = 0;
@@ -80,7 +80,7 @@ static void test_stati_init(test_stati_s *tst)
     }
 }
 
-static void stati_info_init(stati_info_s *sti)
+static void stati_info_init(w_stati_info_s *sti)
 {
     test_stati_init(&sti->stat);
     
@@ -96,8 +96,8 @@ static void stati_info_init(stati_info_s *sti)
 
 void test_framework_init(void)
 {
-    stati_info_s *sti;
-    suite_list_s *tsl = &suite_list;
+    w_stati_info_s *sti;
+    w_suite_list_s *tsl = &suite_list;
 
     tsl->head = NULL;
     tsl->tail = NULL;
@@ -107,9 +107,9 @@ void test_framework_init(void)
     stati_info_init(sti);
 }
 
-err_t test_suite_register(test_suite_s *test_suite)
+err_t test_suite_register(w_test_suite_s *test_suite)
 {
-    suite_list_s *tsl = &suite_list;
+    w_suite_list_s *tsl = &suite_list;
     TEST_ASSERT_RETURN(test_suite == NULL,W_ERR_NULL);
     if(tsl->tail == NULL)
     {
@@ -126,11 +126,11 @@ err_t test_suite_register(test_suite_s *test_suite)
     return W_ERR_OK;
 }
 
-static ut_int32_t is_in_errlist(ut_uint32_t line)
+static w_int32_t is_in_errlist(w_uint32_t line)
 {
-    stati_info_s *sti;
-    fail_info_s *fail;
-    ut_int32_t match = 0;
+    w_stati_info_s *sti;
+    w_fail_info_s *fail;
+    w_int32_t match = 0;
     sti = &stati_info;
     if(sti->failhead == NULL)
         return 0;
@@ -152,10 +152,10 @@ static ut_int32_t is_in_errlist(ut_uint32_t line)
     return 0;
 }
 
-static void save_fail_info(ut_uint32_t line)
+static void save_fail_info(w_uint32_t line)
 {
-    stati_info_s *sti;
-    fail_info_s *fail;
+    w_stati_info_s *sti;
+    w_fail_info_s *fail;
     sti = &stati_info;
     if(sti->failcnt >= TEST_FAIL_LIST_CNT)
         return;
@@ -178,9 +178,9 @@ static void save_fail_info(ut_uint32_t line)
     fail->next = NULL;
 }
 
-void test_suite_err(ut_uint32_t line)
+void test_suite_err(w_uint32_t line)
 {
-    stati_info_s *sti;
+    w_stati_info_s *sti;
     sti = &stati_info;
     sti->suite_err ++;
     sti->case_err ++;
@@ -189,7 +189,7 @@ void test_suite_err(ut_uint32_t line)
 
 void test_case_done(void)
 {
-    stati_info_s *sti;
+    w_stati_info_s *sti;
 
     sti = &stati_info;
     if(sti->case_err > 0)
@@ -204,7 +204,7 @@ void test_case_done(void)
 
 void test_suite_done(void)
 {
-    stati_info_s *sti;
+    w_stati_info_s *sti;
 
     sti = &stati_info;
     if(sti->suite_err > 0)
@@ -219,10 +219,10 @@ void test_suite_done(void)
 
 
 
-void print_header(ut_uint32_t space_cnt)
+void print_header(w_uint32_t space_cnt)
 {
     char space[20];
-    ut_uint32_t i,len;
+    w_uint32_t i,len;
     len = space_cnt > 20?20:space_cnt;
     for(i = 0;i < len;i ++)
         space[i] = ' ';
@@ -236,10 +236,10 @@ void print_header(ut_uint32_t space_cnt)
     test_printf("%-6s\r\n","LINE");
 }
 
-void print_fail_info(fail_info_s *fail,ut_uint32_t space_cnt)
+void print_fail_info(w_fail_info_s *fail,w_uint32_t space_cnt)
 {
     char space[20];
-    ut_uint32_t i,len;
+    w_uint32_t i,len;
     len = space_cnt > 20?20:space_cnt;
     for(i = 0;i < len;i ++)
         space[i] = ' ';
@@ -255,10 +255,10 @@ void print_fail_info(fail_info_s *fail,ut_uint32_t space_cnt)
 
 void test_framework_summit(void)
 {
-    stati_info_s *sti;
-    ut_uint32_t i;
-    fail_info_s *fail;
-    ut_uint32_t space_cnt = 4;
+    w_stati_info_s *sti;
+    w_uint32_t i;
+    w_fail_info_s *fail;
+    w_uint32_t space_cnt = 4;
     sti = &stati_info;
     test_printf("\r\n\r\n[************ALL TEST SUMMARY************]\r\n");
     test_printf("total  suites:%d\r\n",sti->stat.tot_suite);
@@ -288,9 +288,9 @@ void test_framework_summit(void)
     }
 }
 
-ut_int32_t do_match(char *str,char *filter,ut_int32_t idx,ut_int32_t len)
+w_int32_t do_match(char *str,char *filter,w_int32_t idx,w_int32_t len)
 {
-    ut_int32_t i;
+    w_int32_t i;
     for(i = 0;i < len;i ++)
     {
         if(str[i + idx] != filter[i])
@@ -299,10 +299,10 @@ ut_int32_t do_match(char *str,char *filter,ut_int32_t idx,ut_int32_t len)
     return i;
 }
 
-ut_int32_t is_contain(char *str,char *filter,ut_int32_t len1,ut_int32_t len2)
+w_int32_t is_contain(char *str,char *filter,w_int32_t len1,w_int32_t len2)
 {
-    ut_int32_t i;
-    ut_int32_t idx;
+    w_int32_t i;
+    w_int32_t idx;
     if(len2 > len1)
         return 0;
     for(i = 0;i < len1;i++)
@@ -316,9 +316,9 @@ ut_int32_t is_contain(char *str,char *filter,ut_int32_t len1,ut_int32_t len2)
     return 0;
 }
 
-ut_int32_t do_match_end(char *str,char *filter,ut_int32_t len1,ut_int32_t len2)
+w_int32_t do_match_end(char *str,char *filter,w_int32_t len1,w_int32_t len2)
 {
-    ut_int32_t i;
+    w_int32_t i;
     if(len2 > len1)
         return 0;
     for(i = 0;i < len2;i ++)
@@ -329,9 +329,9 @@ ut_int32_t do_match_end(char *str,char *filter,ut_int32_t len1,ut_int32_t len2)
     return 1;
 }
 
-ut_int32_t do_match_head(char *str,char *filter,ut_int32_t len1,ut_int32_t len2)
+w_int32_t do_match_head(char *str,char *filter,w_int32_t len1,w_int32_t len2)
 {
-    ut_int32_t i;
+    w_int32_t i;
     if(len2 > len1)
         return 0;
     for(i = 0;i < len2;i ++)
@@ -343,9 +343,9 @@ ut_int32_t do_match_head(char *str,char *filter,ut_int32_t len1,ut_int32_t len2)
 }
 
 
-ut_int32_t do_match_all(char *str,char *filter,ut_int32_t len1,ut_int32_t len2)
+w_int32_t do_match_all(char *str,char *filter,w_int32_t len1,w_int32_t len2)
 {
-    ut_int32_t i;
+    w_int32_t i;
     if(len2 != len1)
         return 0;
     for(i = 0;i < len2;i ++)
@@ -358,9 +358,9 @@ ut_int32_t do_match_all(char *str,char *filter,ut_int32_t len1,ut_int32_t len2)
 
 
 
-ut_int32_t is_match_str(char *str,char *filter)
+w_int32_t is_match_str(char *str,char *filter)
 {
-    ut_int32_t len1,len2;
+    w_int32_t len1,len2;
     len1 = stringlenth(str);
     len2 = stringlenth(filter);
 
@@ -381,7 +381,7 @@ ut_int32_t is_match_str(char *str,char *filter)
         return do_match_all(str,filter,len1,len2);
     }
 }
-void show_test_cases(test_suite_s *ts)
+void show_test_cases(w_test_suite_s *ts)
 {
     int i;
     for(i = 0;i < ts->case_cnt;i ++)
@@ -392,8 +392,8 @@ void show_test_cases(test_suite_s *ts)
 
 void show_test_suites(void)
 {
-    ut_uint32_t i;
-    test_suite_s *ts;
+    w_uint32_t i;
+    w_test_suite_s *ts;
     test_printf("\r\nTest Suites List As Following:\r\n");
     if(suite_list.head == NULL)
     {
@@ -410,9 +410,9 @@ void show_test_suites(void)
 }
 
 
-static void execute_one_case(test_suite_s *ts,test_case_s *tc)
+static void execute_one_case(w_test_suite_s *ts,w_test_case_s *tc)
 {
-    stati_info_s *sti = &stati_info;
+    w_stati_info_s *sti = &stati_info;
     
     sti->tcase = tc;
     sti->stat.tot_case ++;
@@ -427,11 +427,11 @@ static void execute_one_case(test_suite_s *ts,test_case_s *tc)
     
 }
 
-static void execute_one_suite(test_suite_s *ts,char *casefilter)
+static void execute_one_suite(w_test_suite_s *ts,char *casefilter)
 {
-    ut_uint32_t i;
-    test_case_s *tc;
-    stati_info_s *sti = &stati_info;
+    w_uint32_t i;
+    w_test_case_s *tc;
+    w_stati_info_s *sti = &stati_info;
     sti->stat.tot_suite ++;
     sti->suite_err = 0;
     test_printf("\r\n\r\n[------------ Test Suite:%s ------------]\r\n",ts->name);
@@ -451,8 +451,8 @@ static void execute_one_suite(test_suite_s *ts,char *casefilter)
 
 void execute_all_suites(char* suitefilter,char *casefilter)
 {
-    test_suite_s *ts;
-    stati_info_s *sti;
+    w_test_suite_s *ts;
+    w_stati_info_s *sti;
     sti = &stati_info;
     ts = suite_list.head;
     stati_info_init(sti);

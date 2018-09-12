@@ -32,10 +32,10 @@
 #include "wind_var.h"
 #if WIND_BLK_DRVFRAME_SUPPORT
 
-w_err_t wind_blkdev_register(blkdev_s *blkdev,w_int32_t count)
+w_err_t wind_blkdev_register(w_blkdev_s *blkdev,w_int32_t count)
 {
     w_int32_t i;
-    blkdev_s *devi;    
+    w_blkdev_s *devi;    
     w_err_t err;
     WIND_ASSERT_RETURN(blkdev != NULL,W_ERR_NULL);
     WIND_ASSERT_RETURN(count > 0,W_ERR_INVALID);
@@ -66,9 +66,9 @@ w_err_t wind_blkdev_register(blkdev_s *blkdev,w_int32_t count)
     return W_ERR_OK;
 }
 
-w_err_t wind_blkdev_unregister(blkdev_s *blkdev)
+w_err_t wind_blkdev_unregister(w_blkdev_s *blkdev)
 {
-    dnode_s *dnode;
+    w_dnode_s *dnode;
     WIND_ASSERT_RETURN(blkdev != NULL,W_ERR_NULL);
     WIND_ASSERT_RETURN(blkdev->magic == WIND_BLKDEV_MAGIC,W_ERR_INVALID);
     wind_notice("unregister blkdev:%s",blkdev->name);
@@ -92,14 +92,14 @@ w_err_t _wind_blkdev_mod_init(void)
     return W_ERR_OK;
 }
 
-blkdev_s *wind_blkdev_get(char *name)
+w_blkdev_s *wind_blkdev_get(char *name)
 {
-    blkdev_s *blkdev = NULL;
-    dnode_s *dnode;
+    w_blkdev_s *blkdev = NULL;
+    w_dnode_s *dnode;
     wind_disable_switch();
     foreach_node(dnode,&g_core.blkdevlist)
     {
-        blkdev = DLIST_OBJ(dnode,blkdev_s,blkdevnode);
+        blkdev = DLIST_OBJ(dnode,w_blkdev_s,blkdevnode);
         if(wind_strcmp(blkdev->name,name) == 0)
         {
             wind_enable_switch();
@@ -110,7 +110,7 @@ blkdev_s *wind_blkdev_get(char *name)
     return NULL;
 }
 
-w_err_t wind_blkdev_open(blkdev_s *blkdev)
+w_err_t wind_blkdev_open(w_blkdev_s *blkdev)
 {
     w_err_t err = W_ERR_FAIL;
     WIND_ASSERT_RETURN(blkdev != NULL,W_ERR_NULL);
@@ -122,14 +122,14 @@ w_err_t wind_blkdev_open(blkdev_s *blkdev)
     if(blkdev->ops->open != NULL)
     {
         err = blkdev->ops->open(blkdev);
-        blkdev->opened = (err == W_ERR_OK)?B_TRUE:B_FALSE;
+        blkdev->opened = (err == W_ERR_OK)?W_TRUE:W_FALSE;
     }
     wind_mutex_unlock(blkdev->mutex);
     return err;
 }
 
 
-w_int32_t wind_blkdev_read(blkdev_s *blkdev,w_addr_t blkaddr,w_uint8_t *buf,w_int32_t blkcnt)
+w_int32_t wind_blkdev_read(w_blkdev_s *blkdev,w_addr_t blkaddr,w_uint8_t *buf,w_int32_t blkcnt)
 {
     w_int32_t cnt = -1;
     WIND_ASSERT_RETURN(blkdev != NULL,W_ERR_NULL);
@@ -140,7 +140,7 @@ w_int32_t wind_blkdev_read(blkdev_s *blkdev,w_addr_t blkaddr,w_uint8_t *buf,w_in
     
     WIND_ASSERT_RETURN(blkdev->magic == WIND_BLKDEV_MAGIC,W_ERR_INVALID);
     WIND_ASSERT_RETURN(blkdev->ops != NULL,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(blkdev->opened == B_TRUE,W_ERR_STATUS);
+    WIND_ASSERT_RETURN(blkdev->opened == W_TRUE,W_ERR_STATUS);
     
     wind_mutex_lock(blkdev->mutex);
     if(blkdev->ops->read != NULL)
@@ -149,7 +149,7 @@ w_int32_t wind_blkdev_read(blkdev_s *blkdev,w_addr_t blkaddr,w_uint8_t *buf,w_in
     return cnt;
 }
 
-w_int32_t wind_blkdev_write(blkdev_s *blkdev,w_addr_t blkaddr,w_uint8_t *buf,w_int32_t blkcnt)
+w_int32_t wind_blkdev_write(w_blkdev_s *blkdev,w_addr_t blkaddr,w_uint8_t *buf,w_int32_t blkcnt)
 {
     w_int32_t cnt = -1;
     WIND_ASSERT_RETURN(blkdev != NULL,W_ERR_NULL);
@@ -159,7 +159,7 @@ w_int32_t wind_blkdev_write(blkdev_s *blkdev,w_addr_t blkaddr,w_uint8_t *buf,w_i
     WIND_ASSERT_RETURN(blkaddr + blkcnt <= blkdev->blkcnt,W_ERR_INVALID);
     WIND_ASSERT_RETURN(blkdev->magic == WIND_BLKDEV_MAGIC,W_ERR_INVALID);
     WIND_ASSERT_RETURN(blkdev->ops != NULL,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(blkdev->opened == B_TRUE,W_ERR_STATUS);
+    WIND_ASSERT_RETURN(blkdev->opened == W_TRUE,W_ERR_STATUS);
     wind_mutex_lock(blkdev->mutex);
     if(blkdev->ops->write != NULL)
         cnt = blkdev->ops->write(blkdev,blkaddr,buf,blkcnt);
@@ -167,14 +167,14 @@ w_int32_t wind_blkdev_write(blkdev_s *blkdev,w_addr_t blkaddr,w_uint8_t *buf,w_i
     return cnt;
 }
 
-w_err_t wind_blkdev_erase(blkdev_s *blkdev,w_addr_t blkaddr,w_int32_t blkcnt)
+w_err_t wind_blkdev_erase(w_blkdev_s *blkdev,w_addr_t blkaddr,w_int32_t blkcnt)
 {
     w_err_t err = W_ERR_FAIL;
     WIND_ASSERT_RETURN(blkdev != NULL,W_ERR_NULL);
     WIND_ASSERT_RETURN(blkcnt > 0,W_ERR_INVALID);
     WIND_ASSERT_RETURN(blkdev->magic == WIND_BLKDEV_MAGIC,W_ERR_INVALID);
     WIND_ASSERT_RETURN(blkdev->ops != NULL,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(blkdev->opened == B_TRUE,W_ERR_STATUS);
+    WIND_ASSERT_RETURN(blkdev->opened == W_TRUE,W_ERR_STATUS);
     wind_mutex_lock(blkdev->mutex);
     if(blkdev->ops->erase!= NULL)
         err = blkdev->ops->erase(blkdev,blkaddr,blkcnt);
@@ -182,13 +182,13 @@ w_err_t wind_blkdev_erase(blkdev_s *blkdev,w_addr_t blkaddr,w_int32_t blkcnt)
     return err;
 }
 
-w_err_t wind_blkdev_eraseall(blkdev_s *blkdev)
+w_err_t wind_blkdev_eraseall(w_blkdev_s *blkdev)
 {
     w_err_t err = W_ERR_FAIL;
     WIND_ASSERT_RETURN(blkdev != NULL,W_ERR_NULL);
     WIND_ASSERT_RETURN(blkdev->magic == WIND_BLKDEV_MAGIC,W_ERR_INVALID);
     WIND_ASSERT_RETURN(blkdev->ops != NULL,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(blkdev->opened == B_TRUE,W_ERR_STATUS);
+    WIND_ASSERT_RETURN(blkdev->opened == W_TRUE,W_ERR_STATUS);
     wind_mutex_lock(blkdev->mutex);
     if(blkdev->ops->eraseall!= NULL)
         err = blkdev->ops->eraseall(blkdev);
@@ -196,7 +196,7 @@ w_err_t wind_blkdev_eraseall(blkdev_s *blkdev)
     return err;
 }
 
-w_err_t wind_blkdev_close(blkdev_s *blkdev)
+w_err_t wind_blkdev_close(w_blkdev_s *blkdev)
 {
     w_err_t err;
     WIND_ASSERT_RETURN(blkdev != NULL,W_ERR_NULL);
@@ -208,17 +208,17 @@ w_err_t wind_blkdev_close(blkdev_s *blkdev)
     if(blkdev->ops->close != NULL)
     {
         err = blkdev->ops->close(blkdev);
-        blkdev->opened = (err != W_ERR_OK)?B_TRUE:B_FALSE;
+        blkdev->opened = (err != W_ERR_OK)?W_TRUE:W_FALSE;
     }
     wind_mutex_unlock(blkdev->mutex);
     return err;
 }
 
 
-w_err_t wind_blkdev_print(dlist_s *list)
+w_err_t wind_blkdev_print(w_dlist_s *list)
 {
-    dnode_s *dnode;
-    blkdev_s *blkdev;
+    w_dnode_s *dnode;
+    w_blkdev_s *blkdev;
     WIND_ASSERT_RETURN(list != NULL,W_ERR_NULL);
     wind_printf("\r\n\r\nblock device list as following:\r\n");
     wind_print_space(5);
@@ -227,7 +227,7 @@ w_err_t wind_blkdev_print(dlist_s *list)
 
     foreach_node(dnode,list)
     {
-        blkdev = (blkdev_s *)DLIST_OBJ(dnode,blkdev_s,blkdevnode);
+        blkdev = (w_blkdev_s *)DLIST_OBJ(dnode,w_blkdev_s,blkdevnode);
         wind_printf("%-16s %-12d %-10d\r\n",
             blkdev->name,blkdev->blkcnt,blkdev->blksize);
     }

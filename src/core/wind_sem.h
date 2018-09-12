@@ -36,28 +36,28 @@ extern "C" {
 
 #if WIND_SEM_SUPPORT
 #define WIND_SEM_MAGIC 0x36F7A854
-typedef struct _wind_sem
+typedef struct _w_sem_s
 {
     w_uint32_t magic;
     const char* name;
-    dnode_s semnode;
-    dlist_s waitlist;  //等待线程队列
-    //dlist_s ownerlist;  //拥有信号量线程队列
+    w_dnode_s semnode;
+    w_dlist_s waitlist;  //等待线程队列
+    //w_dlist_s ownerlist;  //拥有信号量线程队列
     w_int16_t sem_tot;    //初始化的信号量的值
     w_int16_t sem_num;    //当前的信号量的值
-}sem_s;
+}w_sem_s;
 
 w_err_t _wind_sem_mod_init(void);
-sem_s *wind_sem_get(const char *name);
-sem_s *wind_sem_create(const char *name,w_int16_t semValue);
-w_err_t wind_sem_trydestroy(sem_s *sem);
-w_err_t wind_sem_destroy(sem_s *sem);
+w_sem_s *wind_sem_get(const char *name);
+w_sem_s *wind_sem_create(const char *name,w_int16_t semValue);
+w_err_t wind_sem_trydestroy(w_sem_s *sem);
+w_err_t wind_sem_destroy(w_sem_s *sem);
 
-w_err_t wind_sem_post(sem_s *sem);
-w_err_t wind_sem_wait(sem_s *sem,w_uint32_t timeout);
-w_err_t wind_sem_trywait(sem_s *sem);
+w_err_t wind_sem_post(w_sem_s *sem);
+w_err_t wind_sem_wait(w_sem_s *sem,w_uint32_t timeout);
+w_err_t wind_sem_trywait(w_sem_s *sem);
 
-w_err_t wind_sem_print(dlist_s *list);
+w_err_t wind_sem_print(w_dlist_s *list);
 #endif
 #ifdef __cplusplus
 }

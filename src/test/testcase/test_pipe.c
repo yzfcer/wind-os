@@ -59,12 +59,12 @@ CASE_TEARDOWN(pipeinfo)
 CASE_FUNC(pipeinfo)
 {
     w_err_t err;
-    pipe_s *pipe;
+    w_pipe_s *pipe;
     pipe = wind_pipe_create("test",pipebuf,sizeof(pipebuf));
     EXPECT_NE(pipe,NULL);
     EXPECT_EQ(pipe->magic,WIND_PIPE_MAGIC);
     EXPECT_STR_EQ(pipe->name,"test");
-    EXPECT_EQ(pipe->used,B_TRUE);
+    EXPECT_EQ(pipe->used,W_TRUE);
     EXPECT_EQ(pipe->buff,pipebuf);
     EXPECT_EQ(pipe->buflen,sizeof(pipebuf));
     err = wind_pipe_destroy(pipe);
@@ -90,7 +90,7 @@ CASE_FUNC(pipefunc)
     w_err_t err;
     w_int32_t i;
     w_int32_t res;
-    pipe_s *pipe;
+    w_pipe_s *pipe;
     w_int8_t buf[14];
     pipe = wind_pipe_create("test",pipebuf,sizeof(pipebuf));
     EXPECT_NE(pipe,NULL);
