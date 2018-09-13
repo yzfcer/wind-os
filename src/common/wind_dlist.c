@@ -29,7 +29,7 @@
 // 在链表头部插入一个节点
 void dlist_insert_head(w_dlist_s *dlist,w_dnode_s *dnode)
 {
-    dnode->prev = NULL;
+    dnode->prev = W_NULL;
     dnode->next = dlist->head;
     if(dlist->head)
         dlist->head->prev = dnode;
@@ -41,7 +41,7 @@ void dlist_insert_head(w_dlist_s *dlist,w_dnode_s *dnode)
 //在链 表尾部插入一个节点
 void dlist_insert_tail(w_dlist_s *dlist,w_dnode_s *dnode)
 {
-    dnode->next = NULL;
+    dnode->next = W_NULL;
     dnode->prev = dlist->tail;
     if(dlist->tail)
         dlist->tail->next = dnode;
@@ -72,14 +72,14 @@ w_dnode_s *dlist_remove_head(w_dlist_s *dlist)
     if(dlist->head) {
         w_dnode_s *dnode = dlist->head;
         if(dlist->head->next)
-            dlist->head->next->prev = NULL;
+            dlist->head->next->prev = W_NULL;
         else
-            dlist->tail = NULL;
+            dlist->tail = W_NULL;
         dlist->head = dlist->head->next;
-        dnode->prev = dnode->next = NULL;
+        dnode->prev = dnode->next = W_NULL;
         return dnode;
     } else {
-        return NULL;
+        return W_NULL;
     }
 }
 
@@ -89,14 +89,14 @@ w_dnode_s *dlist_remove_tail(w_dlist_s *dlist)
     if(dlist->tail) {
         w_dnode_s *dnode = dlist->tail;
         if(dlist->tail->prev)
-            dlist->tail->prev->next = NULL;
+            dlist->tail->prev->next = W_NULL;
         else
-            dlist->head = NULL;
+            dlist->head = W_NULL;
         dlist->tail = dlist->tail->prev;
-        dnode->prev = dnode->next = NULL;
+        dnode->prev = dnode->next = W_NULL;
         return dnode;
     } else {
-        return NULL;
+        return W_NULL;
     }
 }
 
@@ -147,8 +147,8 @@ w_dlist_s *dlist_combine(w_dlist_s *dlist1,w_dlist_s *dlist2)
         dlist1->head = dlist2->head;
         dlist1->tail = dlist2->tail;
     }
-        dlist2->head = NULL;
-        dlist2->tail = NULL;
+        dlist2->head = W_NULL;
+        dlist2->tail = W_NULL;
     }
     return dlist1;
 }
@@ -156,11 +156,11 @@ w_dlist_s *dlist_combine(w_dlist_s *dlist1,w_dlist_s *dlist2)
 // 在链表插入一个带优先级节点
 void dlist_insert_prio(w_dlist_s *dlist, w_prinode_s *prinode,w_uint32_t prio)
 {
-    w_prinode_s *prin = NULL;
+    w_prinode_s *prin = W_NULL;
     w_dnode_s *dnode;
     prinode->prio = prio;
     dnode = dlist_head(dlist);
-    if(dnode == NULL)
+    if(dnode == W_NULL)
     {
         dlist_insert_tail(dlist,&prinode->dnode);
         return;
@@ -173,7 +173,7 @@ void dlist_insert_prio(w_dlist_s *dlist, w_prinode_s *prinode,w_uint32_t prio)
         else
             break;
     }
-    if(dnode == NULL)
+    if(dnode == W_NULL)
         dlist_insert_tail(dlist,&prinode->dnode);
     else 
     {

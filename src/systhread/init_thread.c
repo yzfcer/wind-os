@@ -125,7 +125,7 @@ w_err_t _create_init_thread(void)
 {
     w_thread_s *thread;
     thread = wind_thread_create("init",init_thread,
-                        0,NULL,PRIO_HIGH,initstk,INIT_STK_SIZE);
-    WIND_ASSERT_RETURN(thread != NULL,W_ERR_FAIL);
+                        0,W_NULL,PRIO_HIGH,initstk,INIT_STK_SIZE);
+    WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_FAIL);
     return W_ERR_OK;
 }

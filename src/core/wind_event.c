@@ -74,7 +74,7 @@ w_event_s *wind_event_get(const char *name)
         }
     }
     wind_enable_switch();
-    return NULL;
+    return W_NULL;
 }
 
 //创建邮箱，创建邮箱的那个线程才能从中读取消息
@@ -83,7 +83,7 @@ w_event_s *wind_event_create(const char *name)
     w_event_s *event;
     wind_notice("create event:%s",name);
     event = event_malloc();
-    WIND_ASSERT_RETURN(event != NULL,NULL);
+    WIND_ASSERT_RETURN(event != W_NULL,W_NULL);
 
     event->name = name;
     DNODE_INIT(event->eventnode);
@@ -103,7 +103,7 @@ w_err_t wind_event_destroy(w_event_s *event)
 {
     w_dnode_s *dnode;
     w_thread_s *thread;
-    WIND_ASSERT_RETURN(event != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(event != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(event->magic == WIND_EVENT_MAGIC,W_ERR_INVALID);
     thread = wind_thread_current();
     WIND_ASSERT_RETURN(event->owner == thread,W_ERR_FAIL);
@@ -120,7 +120,7 @@ w_err_t wind_event_destroy(w_event_s *event)
 
     event->magic = 0;
     dnode = dlist_head(&event->msglist);
-    if(dnode != NULL)
+    if(dnode != W_NULL)
     {
         wind_warn("event:%s is NOT empty while destroying it.",event->name);
     }
@@ -131,8 +131,8 @@ w_err_t wind_event_destroy(w_event_s *event)
 w_err_t wind_event_trig(w_event_s *event,const void *arg)
 {
     w_thread_s *thread;
-    WIND_ASSERT_RETURN(event != NULL,W_ERR_NULL);
-    WIND_ASSERT_RETURN(pmsg != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(event != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(pmsg != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(event->magic == WIND_EVENT_MAGIC,W_ERR_FAIL);
     WIND_ASSERT_RETURN(event->owner,W_ERR_FAIL);
     //将消息加入邮箱
@@ -161,8 +161,8 @@ w_err_t wind_event_wait(w_event_s *event,void **arg,w_uint32_t timeout)
     w_uint32_t ticks;
     w_dnode_s *dnode;
     w_thread_s *thread;
-    WIND_ASSERT_RETURN(event != NULL,W_ERR_NULL);
-    WIND_ASSERT_RETURN(pmsg != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(event != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(pmsg != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(event->magic == WIND_EVENT_MAGIC,W_ERR_FAIL);
     WIND_ASSERT_RETURN(event->owner,W_ERR_FAIL);
     thread = wind_thread_current();
@@ -194,7 +194,7 @@ w_err_t wind_event_wait(w_event_s *event,void **arg,w_uint32_t timeout)
         if(event->msgnum <= 0)
         {
             thread->runstat = THREAD_STATUS_READY;
-            return W_ERR_NULL;
+            return W_ERR_PTR_NULL;
         }
         dnode = dlist_remove_head(&event->msglist);
         *pmsg = DLIST_OBJ(dnode,listener_s,msgnode);
@@ -216,7 +216,7 @@ w_err_t wind_event_print(w_dlist_s *list)
 {
     w_dnode_s *dnode;
     w_event_s *event;
-    WIND_ASSERT_RETURN(list != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(list != W_NULL,W_ERR_PTR_NULL);
     wind_printf("\r\n\r\nevent list as following:\r\n");
     wind_print_space(6);
     wind_printf("%-16s %-8s %-16s \r\n","event","msg_num","owner");

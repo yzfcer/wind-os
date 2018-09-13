@@ -73,7 +73,7 @@ void _wind_fs_mount_init(void)
 w_pstack_t _wind_thread_stack_init(thread_run_f pfunc,void *pdata, w_pstack_t pstkbt)
 {
     w_pstack_t stk;
-    stk = pstkbt;                            /* Load stack pointer                                 */
+    stk = pstkbt;                            /* Load stack pointer  */
 
 #if (__FPU_PRESENT==1)&&(__FPU_USED==1)	
     *(--stk) = (w_uint32_t)0x00000000L; //No Name Register  
@@ -98,7 +98,7 @@ w_pstack_t _wind_thread_stack_init(thread_run_f pfunc,void *pdata, w_pstack_t ps
                                          /* Registers stacked as if auto-saved on exception    */
     *(stk)    = (w_uint32_t)0x01000000L;             /* xPSR                                               */
     *(--stk)  = (w_uint32_t)pfunc;                    /* Entry Point                                        */
-    *(--stk)  = (w_uint32_t)NULL;//OS_TaskReturn;           /* R14 (LR) (init value will cause fault if ever used)*/
+    *(--stk)  = (w_uint32_t)W_NULL;  /* R14 (LR) (init value will cause fault if ever used)*/
     *(--stk)  = (w_uint32_t)0x12121212L;             /* R12                                                */
     *(--stk)  = (w_uint32_t)0x03030303L;             /* R3                                                 */
     *(--stk)  = (w_uint32_t)0x02020202L;             /* R2                                                 */

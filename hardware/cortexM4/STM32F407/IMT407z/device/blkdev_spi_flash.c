@@ -95,7 +95,7 @@ w_err_t   spi_flash_close(w_blkdev_s *dev)
 
 const w_blkdev_ops_s spi_flash_ops = 
 {
-    NULL,
+    W_NULL,
     spi_flash_open,
     spi_flash_erase,
     spi_flash_eraseall,

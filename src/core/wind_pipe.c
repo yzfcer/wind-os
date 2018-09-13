@@ -75,7 +75,7 @@ w_pipe_s *wind_pipe_get(const char *name)
         }
     }
     wind_enable_switch();
-    return NULL;
+    return W_NULL;
 }
 
 
@@ -85,13 +85,13 @@ w_pipe_s* wind_pipe_create(const char *name,void *buff,w_uint32_t buflen)
     w_err_t err;
     
     wind_notice("create pipe:%s",name);
-    WIND_ASSERT_RETURN((buff != NULL),NULL);
-    WIND_ASSERT_RETURN(buflen > 0,NULL);
+    WIND_ASSERT_RETURN((buff != W_NULL),W_NULL);
+    WIND_ASSERT_RETURN(buflen > 0,W_NULL);
     err = wind_queue_create(buff,buflen,1);
-    WIND_ASSERT_RETURN(err == W_ERR_OK,NULL);
+    WIND_ASSERT_RETURN(err == W_ERR_OK,W_NULL);
     
     pipe = pipe_malloc();
-    WIND_ASSERT_RETURN(pipe != NULL,NULL);
+    WIND_ASSERT_RETURN(pipe != W_NULL,W_NULL);
     pipe->magic = WIND_PIPE_MAGIC;
     pipe->name = name;
     DNODE_INIT(pipe->pipenode)
@@ -108,8 +108,8 @@ w_pipe_s* wind_pipe_create(const char *name,void *buff,w_uint32_t buflen)
 w_int32_t wind_pipe_read(w_pipe_s* pipe,w_int8_t *str,w_int16_t len)
 {
     w_int32_t count = -1;
-    WIND_ASSERT_RETURN(pipe != NULL,W_ERR_NULL);
-    WIND_ASSERT_RETURN(str != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(pipe != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(str != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(len > 0,W_ERR_INVALID);
     WIND_ASSERT_RETURN(pipe->magic == WIND_PIPE_MAGIC,W_ERR_INVALID);
     wind_disable_interrupt();
@@ -121,9 +121,9 @@ w_int32_t wind_pipe_read(w_pipe_s* pipe,w_int8_t *str,w_int16_t len)
 w_int32_t wind_pipe_write(w_pipe_s* pipe,w_int8_t *str,w_int16_t len)
 {
     w_int32_t cnt = -1;
-    WIND_ASSERT_RETURN(pipe != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(pipe != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(pipe->magic == WIND_PIPE_MAGIC,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(str != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(str != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(len > 0,W_ERR_INVALID);
     wind_disable_interrupt();
     cnt = wind_queue_write(pipe->buff,str,len);
@@ -133,14 +133,14 @@ w_int32_t wind_pipe_write(w_pipe_s* pipe,w_int8_t *str,w_int16_t len)
 
 w_err_t wind_pipe_destroy(w_pipe_s* pipe)
 {
-    WIND_ASSERT_RETURN(pipe != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(pipe != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(pipe->magic == WIND_PIPE_MAGIC,W_ERR_INVALID);
     wind_notice("destroy pipe:%s",pipe->name);
     wind_disable_interrupt();
     dlist_remove(&g_core.pipelist,&pipe->pipenode);
     pipe->magic = 0;
     pipe->used = W_FALSE;
-    pipe->name = NULL;
+    pipe->name = W_NULL;
     pipe_free(pipe);
     wind_enable_interrupt();
     return W_ERR_OK;
@@ -152,7 +152,7 @@ w_err_t _wind_pipe_print(w_dlist_s* list)
     w_pipe_s *pipe;
     w_queue_s *queue;
     w_int32_t size,used;
-    WIND_ASSERT_RETURN(list != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(list != W_NULL,W_ERR_PTR_NULL);
     wind_printf("\r\n\r\npipe list as following:\r\n");
     wind_print_space(5);
     wind_printf("%-16s %-8s %-10s\r\n","pipe","lenth","used");

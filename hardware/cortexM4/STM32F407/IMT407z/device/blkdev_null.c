@@ -61,7 +61,7 @@ static w_err_t   null_close(w_blkdev_s *dev)
 
 const w_blkdev_ops_s null_ops = 
 {
-    NULL,
+    W_NULL,
     null_open,
     null_erase,
     null_eraseall,

@@ -53,14 +53,14 @@ struct __w_dlist_s
 
 
 
-#define DNODE_INIT(dnode) {dnode.prev = NULL;dnode.next = NULL;}
-#define PRIO_DNODE_INIT(prionode) {prionode.dnode.prev = NULL;prionode.dnode.next = NULL;prionode.prio = 0;}
-#define DLIST_INIT(dlist) {dlist.head = NULL;dlist.tail = NULL;}
+#define DNODE_INIT(dnode) {dnode.prev = W_NULL;dnode.next = W_NULL;}
+#define PRIO_DNODE_INIT(prionode) {prionode.dnode.prev = W_NULL;prionode.dnode.next = W_NULL;prionode.prio = 0;}
+#define DLIST_INIT(dlist) {dlist.head = W_NULL;dlist.tail = W_NULL;}
 
 #define DLIST_OBJ(ptr,type,mbrnode) (void*)(((char*)(ptr))-((w_uint32_t)&(((type*)0)->mbrnode)))
 #define PRI_DLIST_OBJ(ptr,type,mbrnode) (void*)(((char*)(ptr))-((w_uint32_t)&(((type*)0)->mbrnode.dnode)))
 
-#define foreach_node(dnode,list) for(dnode = dlist_head(list);dnode != NULL;dnode = dnode_next(dnode))
+#define foreach_node(dnode,list) for(dnode = dlist_head(list);dnode != W_NULL;dnode = dnode_next(dnode))
 
 //获取链表头部节点
 static __INLINE__ 

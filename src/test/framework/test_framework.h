@@ -44,8 +44,8 @@ extern void test_suite_err(w_uint32_t line);
 #include <stdio.h>
 #endif
 
-#ifndef NULL
-#define NULL (void*)0
+#ifndef W_NULL
+#define W_NULL (void*)0
 #endif
 #define err_t w_uint32_t
 #define ERR_OK 0

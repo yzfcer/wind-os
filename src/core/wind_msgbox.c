@@ -81,7 +81,7 @@ w_msgbox_s *wind_msgbox_get(const char *name)
         }
     }
     wind_enable_switch();
-    return NULL;
+    return W_NULL;
 }
 
 //创建邮箱，创建邮箱的那个线程才能从中读取消息
@@ -90,7 +90,7 @@ w_msgbox_s *wind_msgbox_create(const char *name)
     w_msgbox_s *msgbox;
     wind_notice("create msgbox:%s",name);
     msgbox = msgbox_malloc();
-    WIND_ASSERT_RETURN(msgbox != NULL,NULL);
+    WIND_ASSERT_RETURN(msgbox != W_NULL,W_NULL);
 
     msgbox->name = name;
     DNODE_INIT(msgbox->msgboxnode);
@@ -109,13 +109,13 @@ w_err_t wind_msgbox_trydestroy(w_msgbox_s *msgbox)
 {
     w_dnode_s *pdnode;
     w_thread_s *thread;
-    WIND_ASSERT_RETURN(msgbox != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(msgbox != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(msgbox->magic == WIND_MSGBOX_MAGIC,W_ERR_INVALID);
     thread = wind_thread_current();
     WIND_ASSERT_RETURN(msgbox->owner == thread,W_ERR_FAIL);
     wind_disable_interrupt();
     pdnode = dlist_head(&msgbox->msglist);
-    if(pdnode != NULL)
+    if(pdnode != W_NULL)
     {
         wind_enable_interrupt();
         return W_ERR_FAIL;
@@ -128,7 +128,7 @@ w_err_t wind_msgbox_destroy(w_msgbox_s *msgbox)
 {
     w_dnode_s *dnode;
     w_thread_s *thread;
-    WIND_ASSERT_RETURN(msgbox != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(msgbox != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(msgbox->magic == WIND_MSGBOX_MAGIC,W_ERR_INVALID);
     thread = wind_thread_current();
     WIND_ASSERT_RETURN(msgbox->owner == thread,W_ERR_FAIL);
@@ -145,7 +145,7 @@ w_err_t wind_msgbox_destroy(w_msgbox_s *msgbox)
 
     msgbox->magic = 0;
     dnode = dlist_head(&msgbox->msglist);
-    if(dnode != NULL)
+    if(dnode != W_NULL)
     {
         wind_warn("msgbox:%s is NOT empty while destroying it.",msgbox->name);
     }
@@ -156,8 +156,8 @@ w_err_t wind_msgbox_destroy(w_msgbox_s *msgbox)
 w_err_t wind_msgbox_post(w_msgbox_s *msgbox,w_msg_s *pmsg)
 {
     w_thread_s *thread;
-    WIND_ASSERT_RETURN(msgbox != NULL,W_ERR_NULL);
-    WIND_ASSERT_RETURN(pmsg != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(msgbox != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(pmsg != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(msgbox->magic == WIND_MSGBOX_MAGIC,W_ERR_FAIL);
     WIND_ASSERT_RETURN(msgbox->owner,W_ERR_FAIL);
     //将消息加入邮箱
@@ -186,8 +186,8 @@ w_err_t wind_msgbox_wait(w_msgbox_s *msgbox,w_msg_s **pmsg,w_uint32_t timeout)
     w_uint32_t ticks;
     w_dnode_s *dnode;
     w_thread_s *thread;
-    WIND_ASSERT_RETURN(msgbox != NULL,W_ERR_NULL);
-    WIND_ASSERT_RETURN(pmsg != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(msgbox != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(pmsg != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(msgbox->magic == WIND_MSGBOX_MAGIC,W_ERR_FAIL);
     WIND_ASSERT_RETURN(msgbox->owner,W_ERR_FAIL);
     thread = wind_thread_current();
@@ -219,7 +219,7 @@ w_err_t wind_msgbox_wait(w_msgbox_s *msgbox,w_msg_s **pmsg,w_uint32_t timeout)
         if(msgbox->msgnum <= 0)
         {
             thread->runstat = THREAD_STATUS_READY;
-            return W_ERR_NULL;
+            return W_ERR_PTR_NULL;
         }
         dnode = dlist_remove_head(&msgbox->msglist);
         *pmsg = DLIST_OBJ(dnode,w_msg_s,msgnode);
@@ -241,8 +241,8 @@ w_err_t wind_msgbox_trywait(w_msgbox_s *msgbox,w_msg_s **pmsg)
     w_err_t err;
     w_dnode_s *dnode;
     w_thread_s *thread;
-    WIND_ASSERT_RETURN(msgbox != NULL,W_ERR_NULL);
-    WIND_ASSERT_RETURN(pmsg != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(msgbox != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(pmsg != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(msgbox->magic == WIND_MSGBOX_MAGIC,W_ERR_FAIL);
     WIND_ASSERT_RETURN(msgbox->owner,W_ERR_FAIL);
     thread = wind_thread_current();
@@ -258,7 +258,7 @@ w_err_t wind_msgbox_trywait(w_msgbox_s *msgbox,w_msg_s **pmsg)
     }
     else
     {
-        *pmsg = NULL;
+        *pmsg = W_NULL;
         err = W_ERR_FAIL;
     }
     wind_enable_interrupt();
@@ -269,7 +269,7 @@ w_err_t wind_msgbox_print(w_dlist_s *list)
 {
     w_dnode_s *dnode;
     w_msgbox_s *msgbox;
-    WIND_ASSERT_RETURN(list != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(list != W_NULL,W_ERR_PTR_NULL);
     wind_printf("\r\n\r\nmsgbox list as following:\r\n");
     wind_print_space(5);
     wind_printf("%-16s %-8s %-16s\r\n","msgbox","msg_num","owner");

@@ -62,7 +62,7 @@ void set_layer(w_tree_s *tree)
 {
     w_int32_t layer = 0;
     test_tree_s *tt,*tp;
-    if(tree->parent == NULL)
+    if(tree->parent == W_NULL)
     {
         tt = DLIST_OBJ(tree,test_tree_s,tree);
         tt->layer = layer;

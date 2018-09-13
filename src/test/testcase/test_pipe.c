@@ -61,7 +61,7 @@ CASE_FUNC(pipeinfo)
     w_err_t err;
     w_pipe_s *pipe;
     pipe = wind_pipe_create("test",pipebuf,sizeof(pipebuf));
-    EXPECT_NE(pipe,NULL);
+    EXPECT_NE(pipe,W_NULL);
     EXPECT_EQ(pipe->magic,WIND_PIPE_MAGIC);
     EXPECT_STR_EQ(pipe->name,"test");
     EXPECT_EQ(pipe->used,W_TRUE);
@@ -93,7 +93,7 @@ CASE_FUNC(pipefunc)
     w_pipe_s *pipe;
     w_int8_t buf[14];
     pipe = wind_pipe_create("test",pipebuf,sizeof(pipebuf));
-    EXPECT_NE(pipe,NULL);
+    EXPECT_NE(pipe,W_NULL);
     for(i = 0;i < 10;i ++)
     {
         wind_memset(buf,0,14);

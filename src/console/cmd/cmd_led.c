@@ -49,7 +49,7 @@ COMMAND_MAIN(led,argc,argv)
     wind_memset(devname,0,sizeof(devname));
     sprintf(devname,"led%s",argv[2]);
     led = wind_dev_get(devname);
-    WIND_ASSERT_RETURN(led != NULL,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(led != W_NULL,W_ERR_INVALID);
     if(0 == wind_strcmp(argv[1],"on"))
     {
         err = wind_dev_open(led);

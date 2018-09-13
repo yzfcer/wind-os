@@ -77,8 +77,8 @@ w_err_t _wind_watchdog_mod_init(void)
     w_timer_s *timer;
     err = wind_pool_create("watchdog",watchdogpool,sizeof(watchdogpool),sizeof(w_watchdog_s));
     WIND_ASSERT_RETURN(err == W_ERR_OK,err);
-    timer = wind_timer_create("watchdog",1000,watchdog_timer,NULL,W_TRUE);
-    WIND_ASSERT_RETURN(timer != NULL,W_ERR_FAIL);
+    timer = wind_timer_create("watchdog",1000,watchdog_timer,W_NULL,W_TRUE);
+    WIND_ASSERT_RETURN(timer != W_NULL,W_ERR_FAIL);
     return W_ERR_OK;
 }
 
@@ -97,7 +97,7 @@ w_watchdog_s *wind_watchdog_get(const char *name)
         }
     }
     wind_enable_switch();
-    return NULL;
+    return W_NULL;
 }
 
 w_watchdog_s *wind_watchdog_create(const char *name,w_uint32_t flag,w_int16_t timeout_1s)
@@ -105,8 +105,8 @@ w_watchdog_s *wind_watchdog_create(const char *name,w_uint32_t flag,w_int16_t ti
     w_watchdog_s *watchdog;
     wind_notice("create watchdog:%s",name);
     watchdog = watchdog_malloc();
-    WIND_ASSERT_RETURN(watchdog != NULL,NULL);
-    WIND_ASSERT_RETURN(timeout_1s > 0,NULL);
+    WIND_ASSERT_RETURN(watchdog != W_NULL,W_NULL);
+    WIND_ASSERT_RETURN(timeout_1s > 0,W_NULL);
     watchdog->magic = WIND_WATCHDOG_MAGIC;
     watchdog->flag = flag;
     watchdog->name = name;
@@ -124,21 +124,21 @@ w_watchdog_s *wind_watchdog_create(const char *name,w_uint32_t flag,w_int16_t ti
 w_err_t wind_watchdog_destroy(w_watchdog_s *watchdog)
 {
     w_err_t err;
-    WIND_ASSERT_RETURN(watchdog != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(watchdog != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(watchdog->magic == WIND_WATCHDOG_MAGIC,W_ERR_INVALID);
     wind_notice("destroy watchdog:%s",watchdog->name);
     wind_disable_switch();
     dlist_remove(&g_core.watchdoglist,&watchdog->watchdognode);
     wind_enable_switch();
     watchdog->magic = 0;
-    watchdog->thread = NULL;
+    watchdog->thread = W_NULL;
     err = watchdog_free(watchdog);
     return err;    
 }
 
 w_err_t wind_watchdog_feed(w_watchdog_s *watchdog)
 {
-    WIND_ASSERT_RETURN(watchdog != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(watchdog != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(watchdog->magic == WIND_WATCHDOG_MAGIC,W_ERR_INVALID);
     wind_disable_switch();
     watchdog->time_cur = watchdog->time_max;
@@ -152,7 +152,7 @@ w_err_t wind_watchdog_print(w_dlist_s *list)
 {
     w_dnode_s *dnode;
     w_watchdog_s *watchdog;
-    WIND_ASSERT_RETURN(list != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(list != W_NULL,W_ERR_PTR_NULL);
     wind_printf("\r\n\r\nwatchdog list as following:\r\n");
     wind_print_space(5);
     wind_printf("%-16s %-12s %-12s\r\n","watchdog","timeout_max","timeout_cur");

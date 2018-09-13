@@ -72,7 +72,7 @@ static void thread_entry(void *args)
     w_thread_s *thread;
     thread = wind_thread_current();
     wind_notice("run thread:%s.",thread->name);
-    if(thread != NULL)
+    if(thread != W_NULL)
     {
         err = thread->thread_func(thread->argc,thread->argv);
         wind_thread_exit(err);
@@ -127,7 +127,7 @@ w_thread_s *wind_thread_get(const char *name)
         }
     }
     wind_enable_switch();
-    return NULL;
+    return W_NULL;
 }
 
 w_thread_s *wind_thread_current(void)
@@ -156,13 +156,13 @@ w_thread_s *wind_thread_create(const char *name,
     w_pstack_t tmpstk;
 
     wind_notice("create thread:%s",name);
-    WIND_ASSERT_RETURN(name != NULL,NULL);
-    WIND_ASSERT_RETURN(thread_func != NULL,NULL);
-    WIND_ASSERT_RETURN(pstk != NULL,NULL);
-    WIND_ASSERT_RETURN(stksize > 0,NULL);
-    WIND_ASSERT_RETURN(priolevel < PRIO_SYS_LOW && priolevel > PRIO_ZERO,NULL);
+    WIND_ASSERT_RETURN(name != W_NULL,W_NULL);
+    WIND_ASSERT_RETURN(thread_func != W_NULL,W_NULL);
+    WIND_ASSERT_RETURN(pstk != W_NULL,W_NULL);
+    WIND_ASSERT_RETURN(stksize > 0,W_NULL);
+    WIND_ASSERT_RETURN(priolevel < PRIO_SYS_LOW && priolevel > PRIO_ZERO,W_NULL);
     thread = thread_malloc();
-    WIND_ASSERT_RETURN(thread != NULL,NULL);
+    WIND_ASSERT_RETURN(thread != W_NULL,W_NULL);
     thread->magic = WIND_THREAD_MAGIC;
     PRIO_DNODE_INIT(thread->validnode);
     PRIO_DNODE_INIT(thread->suspendnode);
@@ -210,9 +210,9 @@ w_thread_s *wind_thread_create_default(const w_int8_t *name,
     priol = PRIO_MID;
     stksize = WIND_STK_SIZE;
     pstk = wind_pool_malloc(stkbufpool);
-    WIND_ASSERT_RETURN(pstk != NULL,NULL);
+    WIND_ASSERT_RETURN(pstk != W_NULL,W_NULL);
     thread = wind_thread_create(name,thread_func,argc,argv,priol,pstk,stksize);
-    WIND_ASSERT_RETURN(thread != NULL,NULL);
+    WIND_ASSERT_RETURN(thread != W_NULL,W_NULL);
     thread->stkpool_flag = 1;
     return thread;
 }
@@ -220,11 +220,11 @@ w_thread_s *wind_thread_create_default(const w_int8_t *name,
 
 w_err_t wind_thread_destroy(w_thread_s *thread)
 {
-    WIND_ASSERT_RETURN(thread != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(thread->magic == WIND_THREAD_MAGIC,W_ERR_INVALID);
     wind_notice("distroy thread:%s",thread->name);
 #if WIND_THREAD_CALLBACK_SUPPORT
-        if(thread->cb.dead != NULL)
+        if(thread->cb.dead != W_NULL)
             thread->cb.dead(thread);
 #endif
     wind_disable_interrupt();
@@ -243,7 +243,7 @@ w_err_t wind_thread_set_priority(w_thread_s *thread,w_int16_t prio)
 {
     w_int16_t minlim = 0,maxlim = 32767;
     extern w_bool_t  wind_thread_isopen(void);
-    WIND_ASSERT_RETURN(thread != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(thread->magic == WIND_THREAD_MAGIC,W_ERR_INVALID);
     WIND_ASSERT_RETURN((prio >= minlim) && (prio <= maxlim),W_ERR_OVERFLOW);
     //如何防止用户强制修改为禁用的优先级?
@@ -266,11 +266,11 @@ w_err_t wind_thread_set_priority(w_thread_s *thread,w_int16_t prio)
 
 w_err_t wind_thread_start(w_thread_s *thread)
 {
-    WIND_ASSERT_RETURN(thread != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(thread->magic == WIND_THREAD_MAGIC,W_ERR_INVALID);
     wind_disable_interrupt();   
 #if WIND_THREAD_CALLBACK_SUPPORT
-    if(thread->cb.start != NULL)
+    if(thread->cb.start != W_NULL)
         thread->cb.start(thread);
 #endif
     thread->runstat = THREAD_STATUS_READY;
@@ -283,11 +283,11 @@ w_err_t wind_thread_start(w_thread_s *thread)
 
 w_err_t wind_thread_suspend(w_thread_s *thread)
 {
-    WIND_ASSERT_RETURN(thread != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(thread->magic == WIND_THREAD_MAGIC,W_ERR_INVALID);
     wind_disable_interrupt();
 #if WIND_THREAD_CALLBACK_SUPPORT
-    if(thread->cb.suspend != NULL)
+    if(thread->cb.suspend != W_NULL)
         thread->cb.suspend(thread);
 #endif
     thread->runstat = THREAD_STATUS_SUSPEND;
@@ -300,11 +300,11 @@ w_err_t wind_thread_suspend(w_thread_s *thread)
 
 w_err_t wind_thread_resume(w_thread_s *thread)
 {
-    WIND_ASSERT_RETURN(thread != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(thread->magic == WIND_THREAD_MAGIC,W_ERR_INVALID);
     wind_disable_interrupt();
 #if WIND_THREAD_CALLBACK_SUPPORT
-    if(thread->cb.resume != NULL)
+    if(thread->cb.resume != W_NULL)
         thread->cb.resume(thread);
 #endif
     thread->runstat = THREAD_STATUS_READY;
@@ -330,7 +330,7 @@ w_err_t wind_thread_exit(w_err_t exitcode)
 w_err_t wind_thread_sleep(w_uint32_t ms)
 {
     w_uint16_t stcnt;
-    w_thread_s *thread = NULL;
+    w_thread_s *thread = W_NULL;
     stcnt = ms *WIND_TICK_PER_SEC / 1000;
     if(0 == stcnt)
         stcnt = 1;
@@ -386,7 +386,7 @@ w_err_t _wind_thread_wakeup(void)
 #if WIND_THREAD_CALLBACK_SUPPORT
 w_err_t wind_thread_callback_register(w_thread_s *thread,w_thr_evt_e id,void(*cb)(w_thread_s *))
 {
-    WIND_ASSERT_RETURN(thread != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(thread->magic == WIND_THREAD_MAGIC,W_ERR_INVALID);
 
     switch(id)
@@ -418,7 +418,7 @@ w_err_t wind_thread_print(w_dlist_s *list)
     w_dnode_s *dnode;
     w_thread_s *thread;
     char *stat;
-    WIND_ASSERT_RETURN(list != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(list != W_NULL,W_ERR_PTR_NULL);
     wind_printf("\r\n\r\nthread list as following:\r\n");
     wind_print_space(7);
     wind_printf("%-16s %-8s %-10s %-10s %-10s\r\n","thread","prio","state","stacksize","runtimes");

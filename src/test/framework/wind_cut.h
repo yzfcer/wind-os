@@ -85,7 +85,7 @@ sizeof(test_cases_##ts)/sizeof(w_test_case_s),\
 test_cases_##ts,\
 suite_setup_##ts,\
 suite_teardown_##ts,\
-NULL};
+W_NULL};
     
 #define DECLARE_SUITE(ts) extern w_test_suite_s suite_##ts
 #define REGSTER_SUITE(ts) test_suite_register(&suite_##ts)

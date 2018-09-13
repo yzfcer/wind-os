@@ -53,7 +53,7 @@ struct __w_blkdev_s
     const w_blkdev_ops_s *ops;
 };
 #define WIND_BLKDEV_DEF(name,devid,addr,blkcnt,blksize,ops) \
-{WIND_BLKDEV_MAGIC,name,devid,addr,blkcnt,blksize,W_FALSE,{NULL,NULL},NULL,ops}
+{WIND_BLKDEV_MAGIC,name,devid,addr,blkcnt,blksize,W_FALSE,{W_NULL,W_NULL},W_NULL,ops}
 
 struct __w_blkdev_ops_s
 {

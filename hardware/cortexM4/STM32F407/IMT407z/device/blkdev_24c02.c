@@ -96,7 +96,7 @@ w_err_t   at24c02_close(w_blkdev_s *dev)
 
 const w_blkdev_ops_s at24c02_ops = 
 {
-    NULL,
+    W_NULL,
     at24c02_open,
     at24c02_erase,
     at24c02_eraseall,

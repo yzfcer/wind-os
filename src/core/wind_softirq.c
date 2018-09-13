@@ -38,7 +38,7 @@
 #define SOFT_FLAG_ARR_CNT ((WIND_SOFTINT_MAX_NUM + 31) >> 5)
 //软中断线程的堆栈
 static w_stack_t softirq_stk[WIND_SOFTINT_STK_LEN];
-static w_thread_s *softirq_thread = NULL;
+static w_thread_s *softirq_thread = W_NULL;
 w_softirq_fn softirq_vectors[WIND_SOFTINT_MAX_NUM];
 w_uint32_t softirq_flag[SOFT_FLAG_ARR_CNT];
 
@@ -64,7 +64,7 @@ w_err_t wind_softirq_reg(w_uint16_t irqid,w_softirq_fn func)
 w_err_t wind_softirq_unreg(w_int32_t irqid)
 {
     WIND_ASSERT_RETURN(irqid < WIND_SOFTINT_MAX_NUM,W_ERR_OVERFLOW);
-    softirq_vectors[irqid] = NULL;
+    softirq_vectors[irqid] = W_NULL;
     return W_ERR_OK;
 }
 
@@ -104,7 +104,7 @@ static w_softirq_fn get_irq_handle(void)
             }
         }
     }
-    return NULL;
+    return W_NULL;
 }
 
 static w_err_t wind_softirq_thread(w_int32_t argc,w_int8_t **argv)
@@ -119,7 +119,7 @@ static w_err_t wind_softirq_thread(w_int32_t argc,w_int8_t **argv)
         {
             wind_disable_interrupt();
             func = get_irq_handle();
-            if(func == NULL)
+            if(func == W_NULL)
             {
                 softirq_thread->cause = CAUSE_COMMON;
                 softirq_thread->runstat = THREAD_STATUS_SUSPEND;
@@ -127,7 +127,7 @@ static w_err_t wind_softirq_thread(w_int32_t argc,w_int8_t **argv)
                 break;
             }
             wind_enable_interrupt();
-            if(func != NULL)
+            if(func != W_NULL)
                 func();
         }
     }
@@ -138,8 +138,8 @@ w_err_t _wind_create_softirq_thread(void)
 {
     wind_notice("create soft interrupt thread.");
     softirq_thread = wind_thread_create("softirq",wind_softirq_thread,
-                0,NULL,PRIO_HIGH,softirq_stk,WIND_SOFTINT_STK_LEN);
-    WIND_ASSERT_RETURN(softirq_thread != NULL,W_ERR_FAIL);
+                0,W_NULL,PRIO_HIGH,softirq_stk,WIND_SOFTINT_STK_LEN);
+    WIND_ASSERT_RETURN(softirq_thread != W_NULL,W_ERR_FAIL);
     wind_thread_set_priority(softirq_thread,1);
     return W_ERR_OK;
 }

@@ -61,7 +61,7 @@ COMMAND_MAIN(blkdev,argc,argv)
     WIND_ASSERT_RETURN(argc == 5,W_ERR_INVALID);
     dev = wind_blkdev_get(argv[1]);
     wind_blkdev_open(dev);
-    WIND_ASSERT_RETURN(dev != NULL,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(dev != W_NULL,W_ERR_INVALID);
     res = wind_atoui(argv[3],(w_uint32_t*)&addr);
     WIND_ASSERT_RETURN(res == W_TRUE,W_ERR_INVALID);
     buff = buffer;

@@ -44,16 +44,16 @@ static w_err_t treefs_op_format(w_fs_s *fs)
 /*
 static w_err_t treefs_op_mkdir(const char *path)
 {
-    WIND_ASSERT_RETURN(path != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(path != W_NULL,W_ERR_PTR_NULL);
     return W_ERR_FAIL;
 }
 */
 static w_err_t treefs_op_open(w_file_s *file,w_fmode_e fmode)
 {
     treefile_s *tfile;
-    WIND_ASSERT_RETURN(file != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
     tfile = treefile_open(file->path,(tf_fmode_e)fmode);
-    if(tfile == NULL)
+    if(tfile == W_NULL)
         return W_ERR_FAIL;
     if(file->isdir != tfile->isdir)
     {
@@ -66,13 +66,13 @@ static w_err_t treefs_op_open(w_file_s *file,w_fmode_e fmode)
 
 static w_err_t treefs_op_close(w_file_s* file)
 {
-    WIND_ASSERT_RETURN(file != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
     return treefile_close((treefile_s *)file->fileobj);
 }
 
 static w_err_t treefs_op_rmfile(w_file_s* file)
 {
-    WIND_ASSERT_RETURN(file != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
     return treefile_rm((treefile_s *)file->fileobj);
 }
 
@@ -81,22 +81,22 @@ static char *treefs_op_subfile(w_file_s* dir,w_int32_t index)
     treefile_s *tfile;
     w_int32_t len;
     tfile = treefile_readdir((treefile_s *)dir->fileobj,index);
-    if(tfile == NULL)
-        return NULL;
+    if(tfile == W_NULL)
+        return W_NULL;
     len = wind_strlen(tfile->filename)+1;
     if(len >= WFILE_NAME_LEN)
     {
         wind_error("file name:\"%s\" is too long.",tfile->filename);
-        return NULL;
+        return W_NULL;
     }
-    WIND_ASSERT_RETURN(dir->subname != NULL,NULL);
+    WIND_ASSERT_RETURN(dir->subname != W_NULL,W_NULL);
     wind_strcpy(dir->subname,tfile->filename);
     return dir->subname;
 }
 
 static w_err_t treefs_op_seek(w_file_s* file,w_int32_t offset)
 {
-    WIND_ASSERT_RETURN(file != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
     return treefile_seek((treefile_s *)file->fileobj,offset);
 }
 
@@ -105,12 +105,12 @@ static w_err_t treefs_op_rename(w_file_s* file,char *newname)
     treefile_s *tfile;
     char *name;
     w_int32_t len;
-    WIND_ASSERT_RETURN(file != NULL,W_ERR_NULL);
-    WIND_ASSERT_RETURN(newname != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(newname != W_NULL,W_ERR_PTR_NULL);
     tfile = (treefile_s *)file->fileobj;
     len = wind_strlen(newname) + 1;
     name = wind_malloc(len);
-    WIND_ASSERT_RETURN(name != NULL,W_ERR_MEM);
+    WIND_ASSERT_RETURN(name != W_NULL,W_ERR_MEM);
     wind_free(tfile->filename);
     tfile->filename = name;
     return W_ERR_OK;
@@ -118,19 +118,19 @@ static w_err_t treefs_op_rename(w_file_s* file,char *newname)
 
 static w_int32_t treefs_op_ftell(w_file_s* file)
 {
-    WIND_ASSERT_RETURN(file != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
     return treefile_ftell((treefile_s *)file->fileobj);
 }
 
 static w_int32_t treefs_op_read(w_file_s* file,w_uint8_t *buff, w_int32_t size)
 {
-    WIND_ASSERT_RETURN(file != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
     return treefile_read((treefile_s *)file->fileobj,buff,size);
 }
 
 static w_int32_t treefs_op_write(w_file_s* file,w_uint8_t *buff, w_int32_t size)
 {
-    WIND_ASSERT_RETURN(file != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
     return treefile_write((treefile_s *)file->fileobj,buff,size);
 }
 static w_err_t treefs_op_fgets(w_file_s* file,char *buff, w_int32_t maxlen)

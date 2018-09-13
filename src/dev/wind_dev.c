@@ -37,14 +37,14 @@ w_err_t wind_dev_register(w_chdev_s *dev,w_int32_t count)
     w_int32_t i;
     w_chdev_s *devi;    
     w_err_t err;
-    WIND_ASSERT_RETURN(dev != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(dev != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(count > 0,W_ERR_INVALID);
     for(i = 0;i < count;i ++)
     {
         WIND_ASSERT_RETURN(dev[i].magic == WIND_DEV_MAGIC,W_ERR_INVALID);
         wind_notice("register dev:%s",dev[i].name);
         devi = wind_dev_get(dev[i].name);
-        if(devi != NULL)
+        if(devi != W_NULL)
         {
             wind_error("device has been registered.\r\n");
             continue;
@@ -71,19 +71,19 @@ w_err_t wind_dev_register(w_chdev_s *dev,w_int32_t count)
 w_err_t wind_dev_unregister(w_chdev_s *dev)
 {
     w_dnode_s *dnode;
-    WIND_ASSERT_RETURN(dev != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(dev != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(dev->magic == WIND_DEV_MAGIC,W_ERR_INVALID);
     wind_notice("unregister dev:%s",dev->name);
     wind_disable_switch();
     dnode = dlist_remove(&g_core.devlist,dnode);
     wind_enable_switch();
-    if(dnode == NULL)
+    if(dnode == W_NULL)
     {
         wind_error("device has NOT been registered.\r\n");
         return W_ERR_FAIL;
     }
     wind_mutex_destroy(dev->mutex);
-    dev->mutex = NULL;
+    dev->mutex = W_NULL;
     return W_ERR_OK;
 }
 
@@ -96,7 +96,7 @@ w_err_t _wind_dev_mod_init(void)
 
 w_chdev_s *wind_dev_get(char *name)
 {
-    w_chdev_s *dev = NULL;
+    w_chdev_s *dev = W_NULL;
     w_dnode_s *dnode;
     wind_disable_switch();
     foreach_node(dnode,&g_core.devlist)
@@ -109,19 +109,19 @@ w_chdev_s *wind_dev_get(char *name)
         }
     }
     wind_enable_switch();
-    return NULL;
+    return W_NULL;
 }
 
 w_err_t wind_dev_open(w_chdev_s *dev)
 {
     w_err_t err = W_ERR_FAIL;
-    WIND_ASSERT_RETURN(dev != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(dev != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(dev->magic == WIND_DEV_MAGIC,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(dev->ops != NULL,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(dev->ops != W_NULL,W_ERR_INVALID);
     if(dev->opened)
         return W_ERR_OK;
     wind_mutex_lock(dev->mutex);
-    if(dev->ops->open != NULL)
+    if(dev->ops->open != W_NULL)
     {
         err = dev->ops->open(dev);
         dev->opened = (err == W_ERR_OK)?W_TRUE:W_FALSE;
@@ -133,12 +133,12 @@ w_err_t wind_dev_open(w_chdev_s *dev)
 w_err_t wind_dev_ioctl(w_chdev_s *dev,w_int32_t cmd,void *param)
 {
     w_err_t err = W_ERR_FAIL;
-    WIND_ASSERT_RETURN(dev != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(dev != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(dev->magic == WIND_DEV_MAGIC,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(dev->ops != NULL,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(dev->ops != W_NULL,W_ERR_INVALID);
     WIND_ASSERT_RETURN(dev->opened == W_TRUE,W_ERR_STATUS);
     wind_mutex_lock(dev->mutex);
-    if(dev->ops->open != NULL)
+    if(dev->ops->open != W_NULL)
         err = dev->ops->ioctl(dev,cmd,param);
     wind_mutex_unlock(dev->mutex);
     return err;
@@ -147,12 +147,12 @@ w_err_t wind_dev_ioctl(w_chdev_s *dev,w_int32_t cmd,void *param)
 w_int32_t wind_dev_read(w_chdev_s *dev,w_uint8_t *buf,w_int32_t len)
 {
     w_err_t err = W_ERR_FAIL;
-    WIND_ASSERT_RETURN(dev != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(dev != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(dev->magic == WIND_DEV_MAGIC,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(dev->ops != NULL,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(dev->ops != W_NULL,W_ERR_INVALID);
     WIND_ASSERT_RETURN(dev->opened == W_TRUE,W_ERR_STATUS);
     wind_mutex_lock(dev->mutex);
-    if(dev->ops->read != NULL)
+    if(dev->ops->read != W_NULL)
         err = dev->ops->read(dev,buf,len);
     wind_mutex_unlock(dev->mutex);
     return err;
@@ -161,12 +161,12 @@ w_int32_t wind_dev_read(w_chdev_s *dev,w_uint8_t *buf,w_int32_t len)
 w_int32_t wind_dev_write(w_chdev_s *dev,w_uint8_t *buf,w_int32_t len)
 {
     w_err_t err = W_ERR_FAIL;
-    WIND_ASSERT_RETURN(dev != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(dev != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(dev->magic == WIND_DEV_MAGIC,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(dev->ops != NULL,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(dev->ops != W_NULL,W_ERR_INVALID);
     WIND_ASSERT_RETURN(dev->opened == W_TRUE,W_ERR_STATUS);
     wind_mutex_lock(dev->mutex);
-    if(dev->ops->write != NULL)
+    if(dev->ops->write != W_NULL)
         err = dev->ops->write(dev,buf,len);
     wind_mutex_unlock(dev->mutex);
     return err;
@@ -175,13 +175,13 @@ w_int32_t wind_dev_write(w_chdev_s *dev,w_uint8_t *buf,w_int32_t len)
 w_err_t wind_dev_close(w_chdev_s *dev)
 {
     w_err_t err;
-    WIND_ASSERT_RETURN(dev != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(dev != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(dev->magic == WIND_DEV_MAGIC,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(dev->ops != NULL,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(dev->ops != W_NULL,W_ERR_INVALID);
     if(!dev->opened)
         return W_ERR_OK;
     wind_mutex_lock(dev->mutex);
-    if(dev->ops->close != NULL)
+    if(dev->ops->close != W_NULL)
     {
         err = dev->ops->close(dev);
         dev->opened = (err != W_ERR_OK)?W_TRUE:W_FALSE;
@@ -195,7 +195,7 @@ w_err_t wind_dev_print(w_dlist_s *list)
     w_dnode_s *dnode;
     w_chdev_s *dev;
     int cnt = 0;
-    WIND_ASSERT_RETURN(list != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(list != W_NULL,W_ERR_PTR_NULL);
     wind_printf("\r\ndev list as following:\r\n");
     
     foreach_node(dnode,list)

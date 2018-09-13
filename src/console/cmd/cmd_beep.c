@@ -45,7 +45,7 @@ COMMAND_MAIN(beep,argc,argv)
     w_err_t err;
     w_uint8_t stat;
     dev = wind_dev_get("beep");
-    WIND_ASSERT_RETURN(dev != NULL,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(dev != W_NULL,W_ERR_INVALID);
     if(0 == wind_strcmp(argv[1],"on"))
     {
         err = wind_dev_open(dev);

@@ -58,12 +58,12 @@ CASE_FUNC(seminfo)
 {
     w_err_t err;
     sems[0] = wind_sem_create("test",3);
-    EXPECT_NE(sems[0],NULL);
+    EXPECT_NE(sems[0],W_NULL);
     EXPECT_STR_EQ(sems[0]->name,"test");
     EXPECT_EQ(sems[0]->sem_tot,3);
     EXPECT_EQ(sems[0]->sem_num,3);
-    EXPECT_EQ(sems[0]->waitlist.head,NULL);
-    EXPECT_EQ(sems[0]->waitlist.tail,NULL);
+    EXPECT_EQ(sems[0]->waitlist.head,W_NULL);
+    EXPECT_EQ(sems[0]->waitlist.tail,W_NULL);
     err = wind_sem_destroy(sems[0]);
     EXPECT_EQ(W_ERR_OK,err);
 
@@ -84,7 +84,7 @@ CASE_FUNC(semfunc)
     w_int32_t i;
     w_err_t err;
     sems[0] = wind_sem_create("test",3);
-    EXPECT_NE(sems[0],NULL);
+    EXPECT_NE(sems[0],W_NULL);
     for(i = 0;i < 3;i ++)
     {
         err = wind_sem_wait(sems[0],1000);
@@ -123,7 +123,7 @@ CASE_FUNC(semmulti)
     for(i = 0;i < 4;i ++)
     {
         sems[i] = wind_sem_create("test",1);
-        EXPECT_NE(sems[0],NULL);
+        EXPECT_NE(sems[0],W_NULL);
     }
     for(i = 0;i < 4;i ++)
     {

@@ -88,7 +88,7 @@ static w_err_t cmd_xmodem_put(int argc,char **argv)
         return W_ERR_INVALID;
     }
     file = treefile_open(argv[2],TF_FMODE_R);
-    if(file == NULL)
+    if(file == W_NULL)
     {
         wind_error("file is NOT exist.");
         return W_ERR_NOFILE;

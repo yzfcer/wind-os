@@ -272,7 +272,7 @@ w_cmd_s *wind_cmd_get(const char *name)
         }
     }
     wind_enable_switch();
-    return NULL;
+    return W_NULL;
 }
 
 w_err_t wind_cmd_register(w_cmd_s *cmd,int cnt)
@@ -280,11 +280,11 @@ w_err_t wind_cmd_register(w_cmd_s *cmd,int cnt)
     int i;
     w_cmd_s *old;
     w_dlist_s *cgl = &g_core.cmdlist;
-    WIND_ASSERT_RETURN(cmd != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(cmd != W_NULL,W_ERR_PTR_NULL);
     for(i = 0;i < cnt;i ++)
     {
         old = wind_cmd_get(cmd->name);
-        if(old != NULL)
+        if(old != W_NULL)
             continue;
         wind_disable_switch();
         dlist_insert_tail(cgl,&cmd[i].cmdnode);
@@ -387,7 +387,7 @@ static w_err_t spit_cmd(w_console_s *ctrl)
     prm->argc = 0;
     for(i = 0;i < CMD_PARAM_CNT;i ++)
     {
-        prm->argv[i] = NULL;
+        prm->argv[i] = W_NULL;
         idx = get_string(ctrl->buf,idx,&prm->argv[i]);
         if(idx > 0)
             prm->argc ++;
@@ -413,7 +413,7 @@ static w_err_t execute_cmd(w_console_s *ctrl)
         return W_ERR_OK;
     }
     cmd = wind_cmd_get(ctrl->param.argv[0]);//get_matched_cmd(ctrl);
-    if(cmd == NULL)
+    if(cmd == W_NULL)
         return W_ERR_FAIL;
     if(wind_strcmp(ctrl->param.argv[1],"?") == 0)
     {
@@ -482,8 +482,8 @@ w_err_t _create_console_thread(void)
 {
     w_thread_s *thread;
     thread = wind_thread_create("console",console_thread,
-               0,NULL,PRIO_LOW,ctrlstk,CTRL_STK_SIZE);
-    WIND_ASSERT_RETURN(thread != NULL,W_ERR_FAIL);
+               0,W_NULL,PRIO_LOW,ctrlstk,CTRL_STK_SIZE);
+    WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_FAIL);
     wind_thread_set_priority(thread,32760);
     return W_ERR_OK;
 }

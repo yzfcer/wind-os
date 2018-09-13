@@ -69,27 +69,27 @@ typedef void (*rbTreeAccess)(w_rbtree_node_s *node,void *arg);
 
 
 /********************************************全局函数申明**********************************************/
-//w_rbtree_node_s* rbTreeParent(w_rbtree_node_s *z); //返回某结点的父母 
-//w_rbtree_node_s* rbTreeLeft(w_rbtree_node_s *z); //返回左子树 
-//w_rbtree_node_s *rbTreeRight(w_rbtree_node_s *z); //返回右子树 
+//w_rbtree_node_s* rbtree_parent(w_rbtree_node_s *z); //返回某结点的父母 
+//w_rbtree_node_s* rbtree_left(w_rbtree_node_s *z); //返回左子树 
+//w_rbtree_node_s *rbtree_right(w_rbtree_node_s *z); //返回右子树 
 
 /*
 * 删除一个指定的节点
 */
-w_int32_t rbTreeInsert(w_rbtree_s *tree, w_rbtree_node_s *z) ;
+w_int32_t rbt_insert(w_rbtree_s *tree, w_rbtree_node_s *z) ;
 /*
 * 插入一个新节点
 */
-w_int32_t rbTreeInsert(w_rbtree_s *tree, w_rbtree_node_s *z) ; 
+w_int32_t rbt_insert(w_rbtree_s *tree, w_rbtree_node_s *z) ; 
 
 /*
 * 查找特定的节点，需要外部加锁
 */
-w_rbtree_node_s* rbTreeSearch(w_rbtree_s *tree, w_rbtree_node_s *z,rbTreeAccess access,void *arg) ;
+w_rbtree_node_s* rbt_search(w_rbtree_s *tree, w_rbtree_node_s *z,rbTreeAccess access,void *arg) ;
 /*
 * 查找特定的节点，需要外部加锁
 */
-void rbTreeMidTranverse(w_rbtree_s *tree,rbTreeAccess access,void *arg);
+void rbt_middle_tranverse(w_rbtree_s *tree,rbTreeAccess access,void *arg);
 
 
 #ifdef __cplusplus

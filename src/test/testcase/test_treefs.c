@@ -42,19 +42,19 @@ CASE_FUNC(treefs_create)
     w_err_t err;
     treefile_s *file;
     file = treefile_open("/test.txt",FMODE_CRT);
-    EXPECT_NE(file,NULL);
+    EXPECT_NE(file,W_NULL);
     err = treefile_close(file);
     EXPECT_EQ(err,W_ERR_OK);
     err = treefile_rm(file);
     EXPECT_EQ(err,W_ERR_OK);
     file = treefile_open("/test1.txt",FMODE_CRT);
-    EXPECT_NE(file,NULL);
+    EXPECT_NE(file,W_NULL);
     err = treefile_close(file);
     EXPECT_EQ(err,W_ERR_OK);
     err = treefile_rm(file);
     EXPECT_EQ(err,W_ERR_OK);
     file = treefile_open("/test2.txt",FMODE_CRT);
-    EXPECT_NE(file,NULL);
+    EXPECT_NE(file,W_NULL);
     err = treefile_close(file);
     EXPECT_EQ(err,W_ERR_OK);
     err = treefile_rm(file);
@@ -79,7 +79,7 @@ CASE_FUNC(treefs_readwrite)
     treefile_s *file;
     char *str = "this is a file test string.";
     file = treefile_open("/test.txt",FMODE_CRT | FMODE_W);
-    EXPECT_NE(file,NULL);
+    EXPECT_NE(file,W_NULL);
     len = treefile_write(file,(w_uint8_t*)str,wind_strlen(str));
     EXPECT_EQ(len,wind_strlen(str));
     err = treefile_close(file);
@@ -87,7 +87,7 @@ CASE_FUNC(treefs_readwrite)
 
     wind_memset(buff,0,32);
     file = treefile_open("/test.txt",FMODE_R);
-    EXPECT_NE(file,NULL);
+    EXPECT_NE(file,W_NULL);
     len = treefile_read(file,buff,32);
     EXPECT_EQ(len,wind_strlen(str));
     len = wind_strcmp(str,(char*)buff);

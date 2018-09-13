@@ -67,7 +67,7 @@ w_sem_s *wind_sem_get(const char *name)
         }
     }
     wind_enable_switch();
-    return NULL;
+    return W_NULL;
 }
 
 w_sem_s *wind_sem_create(const char *name,w_int16_t sem_value)
@@ -75,8 +75,8 @@ w_sem_s *wind_sem_create(const char *name,w_int16_t sem_value)
     w_sem_s *sem;
     wind_notice("create sem:%s",name);
     sem = sem_malloc();
-    WIND_ASSERT_RETURN(sem != NULL,NULL);
-    WIND_ASSERT_RETURN(sem_value >= 0,NULL);
+    WIND_ASSERT_RETURN(sem != W_NULL,W_NULL);
+    WIND_ASSERT_RETURN(sem_value >= 0,W_NULL);
     sem->magic = WIND_SEM_MAGIC;
     sem->name = name;
     DNODE_INIT(sem->semnode);
@@ -94,11 +94,11 @@ w_sem_s *wind_sem_create(const char *name,w_int16_t sem_value)
 w_err_t wind_sem_trydestroy(w_sem_s *sem)
 {
     w_dnode_s *pdnode;
-    WIND_ASSERT_RETURN(sem != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(sem != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(sem->magic == WIND_SEM_MAGIC,W_ERR_INVALID);
     wind_disable_interrupt();
     pdnode = dlist_head(&sem->waitlist);
-    if(pdnode != NULL)
+    if(pdnode != W_NULL)
     {
         wind_enable_interrupt();
         return W_ERR_FAIL;
@@ -112,7 +112,7 @@ w_err_t wind_sem_destroy(w_sem_s *sem)
     w_err_t err;
     w_dnode_s *pdnode;
     w_thread_s *thread;
-    WIND_ASSERT_RETURN(sem != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(sem != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(sem->magic == WIND_SEM_MAGIC,W_ERR_INVALID);
     wind_notice("destroy sem:%s",sem->name);
     wind_disable_interrupt();
@@ -134,12 +134,12 @@ w_err_t wind_sem_post(w_sem_s *sem)
 {
     w_dnode_s *dnode;
     w_thread_s *thread;
-    WIND_ASSERT_RETURN(sem != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(sem != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(sem->magic == WIND_SEM_MAGIC,W_ERR_INVALID);
     wind_disable_interrupt();
     //无阻塞的线程，减少信号量后直接返回
     dnode = dlist_head(&sem->waitlist);
-    if(dnode == NULL)
+    if(dnode == W_NULL)
     {
         if(sem->sem_num < sem->sem_tot)
             sem->sem_num ++;
@@ -164,7 +164,7 @@ w_err_t wind_sem_wait(w_sem_s *sem,w_uint32_t timeout)
 {
     w_int32_t ticks;
     w_thread_s *thread;
-    WIND_ASSERT_RETURN(sem != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(sem != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(sem->magic == WIND_SEM_MAGIC,W_ERR_INVALID);
     ticks = timeout *WIND_TICK_PER_SEC / 1000;
     if(ticks == 0)
@@ -209,7 +209,7 @@ w_err_t wind_sem_wait(w_sem_s *sem,w_uint32_t timeout)
 w_err_t wind_sem_trywait(w_sem_s *sem)
 {
     w_err_t err;
-    WIND_ASSERT_RETURN(sem != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(sem != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(sem->magic == WIND_SEM_MAGIC,W_ERR_INVALID);
 
     //信号量有效，直接返回
@@ -230,7 +230,7 @@ w_err_t wind_sem_print(w_dlist_s *list)
 {
     w_dnode_s *dnode;
     w_sem_s *sem;
-    WIND_ASSERT_RETURN(list != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(list != W_NULL,W_ERR_PTR_NULL);
     wind_printf("\r\n\r\nsem list as following:\r\n");
     wind_print_space(5);
     wind_printf("%-16s %-8s %-10s\r\n","sem","sem_tot","sem_num");

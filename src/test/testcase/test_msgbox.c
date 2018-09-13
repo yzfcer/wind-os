@@ -66,11 +66,11 @@ CASE_FUNC(msgboxinfo)
     w_thread_s *thr;
     thr = wind_thread_current();
     msgbox = wind_msgbox_create("test");
-    EXPECT_NE(msgbox,NULL);
+    EXPECT_NE(msgbox,W_NULL);
     EXPECT_EQ(msgbox->magic,WIND_MSGBOX_MAGIC);
     EXPECT_EQ(msgbox->msgnum,0);
-    EXPECT_EQ(msgbox->msglist.head,NULL);
-    EXPECT_EQ(msgbox->msglist.tail,NULL);
+    EXPECT_EQ(msgbox->msglist.head,W_NULL);
+    EXPECT_EQ(msgbox->msglist.tail,W_NULL);
     EXPECT_EQ(msgbox->owner,thr);
     err = wind_msgbox_destroy(msgbox);
     EXPECT_EQ(W_ERR_OK,err);
@@ -108,7 +108,7 @@ CASE_FUNC(msgboxfunc)
     err = wind_msgbox_wait(msgbox,&msg,100);
     EXPECT_EQ(err,W_ERR_TIMEOUT);
     wind_pool_free(testmsg_pool,tmsg1);
-    tmsg1 = NULL;
+    tmsg1 = W_NULL;
     err = wind_msgbox_destroy(msgbox);
     EXPECT_EQ(W_ERR_OK,err);
 }

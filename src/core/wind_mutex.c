@@ -65,7 +65,7 @@ w_mutex_s *wind_mutex_get(const char *name)
         }
     }
     wind_enable_switch();
-    return NULL;
+    return W_NULL;
 }
 
 //创建一个mutex对象，并加入所有mutex列表
@@ -74,13 +74,13 @@ w_mutex_s *wind_mutex_create(const char *name)
     w_mutex_s *mutex;
     //wind_notice("create mutex:%s",name);
     mutex = mutex_malloc();
-    WIND_ASSERT_TODO(mutex != NULL,wind_enable_interrupt(),NULL);
+    WIND_ASSERT_TODO(mutex != W_NULL,wind_enable_interrupt(),W_NULL);
     mutex->magic = WIND_MUTEX_MAGIC;
     DNODE_INIT(mutex->mutexnode);
     mutex->name = name;
     mutex->mutexed = W_FALSE;
     mutex->nest = 0;
-    mutex->owner = NULL;
+    mutex->owner = W_NULL;
     DLIST_INIT(mutex->waitlist);
     
     wind_disable_interrupt();
@@ -92,7 +92,7 @@ w_mutex_s *wind_mutex_create(const char *name)
 //试图销毁一个互斥锁，如果有线程被阻塞，则销毁将终止
 w_err_t wind_mutex_trydestroy(w_mutex_s *mutex)
 {
-    WIND_ASSERT_RETURN(mutex != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(mutex != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(mutex->magic == WIND_MUTEX_MAGIC,W_ERR_INVALID);
     wind_disable_interrupt();
     WIND_ASSERT_TODO(mutex->mutexed == W_FALSE,wind_enable_interrupt(),W_ERR_FAIL);
@@ -106,7 +106,7 @@ w_err_t wind_mutex_destroy(w_mutex_s *mutex)
 {
     w_dnode_s *dnode;
     w_thread_s *thread;
-    WIND_ASSERT_RETURN(mutex != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(mutex != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(mutex->magic == WIND_MUTEX_MAGIC,W_ERR_INVALID);
     //wind_notice("destroy mutex:%s",mutex->name);
     wind_disable_interrupt();
@@ -128,7 +128,7 @@ w_err_t wind_mutex_destroy(w_mutex_s *mutex)
 w_err_t wind_mutex_lock(w_mutex_s *mutex)
 {
     w_thread_s *thread;
-    WIND_ASSERT_RETURN(mutex != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(mutex != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(mutex->magic == WIND_MUTEX_MAGIC,W_ERR_INVALID);
     wind_disable_interrupt();
     thread = wind_thread_current();
@@ -162,7 +162,7 @@ w_err_t wind_mutex_lock(w_mutex_s *mutex)
 w_err_t wind_mutex_trylock(w_mutex_s *mutex)
 {
     w_err_t err;
-    WIND_ASSERT_RETURN(mutex != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(mutex != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(mutex->magic == WIND_MUTEX_MAGIC,W_ERR_INVALID);
     wind_disable_interrupt();
     if (mutex->mutexed == W_FALSE)
@@ -183,7 +183,7 @@ w_err_t wind_mutex_unlock(w_mutex_s *mutex)
 {
     w_dnode_s *dnode;
     w_thread_s *thread;
-    WIND_ASSERT_RETURN(mutex != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(mutex != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(mutex->magic == WIND_MUTEX_MAGIC,W_ERR_INVALID);
     wind_disable_interrupt();
     WIND_ASSERT_TODO(mutex->mutexed,wind_enable_interrupt(),W_ERR_OK);
@@ -197,10 +197,10 @@ w_err_t wind_mutex_unlock(w_mutex_s *mutex)
         return W_ERR_OK;
     }
     dnode = dlist_head(&mutex->waitlist);
-    if (dnode == NULL)
+    if (dnode == W_NULL)
     {
         mutex->mutexed = W_FALSE;
-        mutex->owner = NULL;
+        mutex->owner = W_NULL;
         wind_enable_interrupt();
         return W_ERR_OK; //信号量有效，直接返回效，
     }
@@ -219,7 +219,7 @@ w_err_t wind_mutex_print(w_dlist_s *list)
 {
     w_dnode_s *dnode;
     w_mutex_s *mutex;
-    WIND_ASSERT_RETURN(list != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(list != W_NULL,W_ERR_PTR_NULL);
     wind_printf("\r\n\r\nmutex list as following:\r\n");
     wind_print_space(5);
     wind_printf("%-16s %-8s %-16s \r\n","mutex","status","owner");
@@ -229,7 +229,7 @@ w_err_t wind_mutex_print(w_dlist_s *list)
         mutex = (w_mutex_s *)DLIST_OBJ(dnode,w_mutex_s,mutexnode);
         wind_printf("%-16s %-8s %-16s \r\n",
             mutex->name,mutex->mutexed?"lock":"unlock",
-            mutex->owner != NULL?mutex->owner->name:"null");
+            mutex->owner != W_NULL?mutex->owner->name:"null");
     }
     wind_print_space(5);
     return W_ERR_OK;

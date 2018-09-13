@@ -64,7 +64,7 @@ w_timer_s* wind_timer_get(char *name)
         }
     }
     wind_enable_switch();
-    return NULL;
+    return W_NULL;
 }
 
 
@@ -75,9 +75,9 @@ w_timer_s* wind_timer_create(const char *name,w_uint32_t t_ms,w_timer_fn func,vo
     if(count <= 0)
         count = 1;
     wind_notice("create timer %s:%d ms",name,t_ms);
-    WIND_ASSERT_RETURN(func != NULL,NULL);
+    WIND_ASSERT_RETURN(func != W_NULL,W_NULL);
     timer = timer_malloc();
-    WIND_ASSERT_RETURN(timer != NULL,NULL);
+    WIND_ASSERT_RETURN(timer != W_NULL,W_NULL);
     timer->magic = WIND_TIMER_MAGIC;
     timer->name = name;
     DNODE_INIT(timer->timernode);
@@ -95,7 +95,7 @@ w_timer_s* wind_timer_create(const char *name,w_uint32_t t_ms,w_timer_fn func,vo
 
 w_err_t wind_timer_start(w_timer_s* timer)
 {
-    WIND_ASSERT_RETURN(timer != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(timer != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(timer->magic == WIND_TIMER_MAGIC,W_ERR_INVALID);    
     timer->running = W_TRUE;
     return W_ERR_OK;
@@ -103,7 +103,7 @@ w_err_t wind_timer_start(w_timer_s* timer)
 
 w_err_t wind_timer_stop(w_timer_s* timer)
 {
-    WIND_ASSERT_RETURN(timer != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(timer != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(timer->magic == WIND_TIMER_MAGIC,W_ERR_INVALID);    
     timer->running = W_FALSE;
     return W_ERR_OK;
@@ -111,7 +111,7 @@ w_err_t wind_timer_stop(w_timer_s* timer)
 
 w_err_t wind_timer_destroy(w_timer_s* timer)
 {
-    WIND_ASSERT_RETURN(timer != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(timer != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(timer->magic == WIND_TIMER_MAGIC,W_ERR_INVALID);    
     wind_disable_interrupt();
     dlist_remove(&g_core.timerlist,&timer->timernode);
@@ -123,12 +123,12 @@ w_err_t wind_timer_destroy(w_timer_s* timer)
 w_err_t wind_timer_set_period(w_timer_s* timer,w_uint32_t t_ms)
 {
     w_int32_t count;
-    WIND_ASSERT_RETURN(timer != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(timer != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(timer->magic == WIND_TIMER_MAGIC,W_ERR_INVALID);
     count = t_ms / TIMER_PERIOD;
     if(count <= 0)
         count = 1;
-    WIND_ASSERT_RETURN(timer != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(timer != W_NULL,W_ERR_PTR_NULL);
     timer->init_count = count;
     timer->count = count;
     return W_ERR_OK;

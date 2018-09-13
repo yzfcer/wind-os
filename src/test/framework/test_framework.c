@@ -74,9 +74,9 @@ static void test_stati_init(w_test_stati_s *tst)
     {
         fail = &tst->fail_obj[i];
         fail->line = 0;
-        fail->next = NULL;
-        fail->suite = NULL;
-        fail->tcase = NULL;
+        fail->next = W_NULL;
+        fail->suite = W_NULL;
+        fail->tcase = W_NULL;
     }
 }
 
@@ -84,11 +84,11 @@ static void stati_info_init(w_stati_info_s *sti)
 {
     test_stati_init(&sti->stat);
     
-    sti->failhead = NULL;
-    sti->lastfail = NULL;
+    sti->failhead = W_NULL;
+    sti->lastfail = W_NULL;
     sti->failcnt = 0;
-    sti->suite = NULL;
-    sti->tcase = NULL;
+    sti->suite = W_NULL;
+    sti->tcase = W_NULL;
     sti->case_err = 0;
     sti->suite_err = 0;
     
@@ -99,8 +99,8 @@ void test_framework_init(void)
     w_stati_info_s *sti;
     w_suite_list_s *tsl = &suite_list;
 
-    tsl->head = NULL;
-    tsl->tail = NULL;
+    tsl->head = W_NULL;
+    tsl->tail = W_NULL;
     tsl->cnt = 0;
     
     sti = &stati_info;
@@ -110,8 +110,8 @@ void test_framework_init(void)
 err_t test_suite_register(w_test_suite_s *test_suite)
 {
     w_suite_list_s *tsl = &suite_list;
-    TEST_ASSERT_RETURN(test_suite == NULL,W_ERR_NULL);
-    if(tsl->tail == NULL)
+    TEST_ASSERT_RETURN(test_suite == W_NULL,W_ERR_PTR_NULL);
+    if(tsl->tail == W_NULL)
     {
         tsl->tail = test_suite;
         tsl->head = test_suite;
@@ -121,7 +121,7 @@ err_t test_suite_register(w_test_suite_s *test_suite)
         tsl->tail->next = test_suite;
         tsl->tail = test_suite;
     }
-    test_suite->next = NULL;
+    test_suite->next = W_NULL;
     tsl->cnt ++;
     return W_ERR_OK;
 }
@@ -132,9 +132,9 @@ static w_int32_t is_in_errlist(w_uint32_t line)
     w_fail_info_s *fail;
     w_int32_t match = 0;
     sti = &stati_info;
-    if(sti->failhead == NULL)
+    if(sti->failhead == W_NULL)
         return 0;
-    for(fail = sti->failhead;fail != NULL;fail = fail->next)
+    for(fail = sti->failhead;fail != W_NULL;fail = fail->next)
     {
         do 
         {
@@ -165,7 +165,7 @@ static void save_fail_info(w_uint32_t line)
     fail->suite = sti->suite;
     fail->tcase = sti->tcase;
     fail->line = line;
-    if(sti->lastfail == NULL)
+    if(sti->lastfail == W_NULL)
     {
         sti->failhead = fail;
         sti->lastfail = fail;
@@ -175,7 +175,7 @@ static void save_fail_info(w_uint32_t line)
         sti->lastfail->next = fail;
         sti->lastfail = fail;
     }
-    fail->next = NULL;
+    fail->next = W_NULL;
 }
 
 void test_suite_err(w_uint32_t line)
@@ -269,7 +269,7 @@ void test_framework_summit(void)
     test_printf("passed cases:%d\r\n",sti->stat.passed_case);
     test_printf("failed cases:%d\r\n",sti->stat.failed_case);
 
-    if(sti->failhead != NULL)
+    if(sti->failhead != W_NULL)
     {
         test_printf("\r\nfailture list as following:\r\n\r\n",sti->stat.tot_case);
         fail = sti->failhead;
@@ -280,7 +280,7 @@ void test_framework_summit(void)
         {
             print_fail_info(fail,space_cnt);
             fail = fail->next;
-            if(fail == NULL)
+            if(fail == W_NULL)
                 break;
         }
         test_printf("--------------------------------------\r\n");
@@ -395,7 +395,7 @@ void show_test_suites(void)
     w_uint32_t i;
     w_test_suite_s *ts;
     test_printf("\r\nTest Suites List As Following:\r\n");
-    if(suite_list.head == NULL)
+    if(suite_list.head == W_NULL)
     {
         test_framework_init();
         test_suite_register_all();

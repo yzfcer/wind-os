@@ -87,7 +87,7 @@ static w_err_t mknode(w_int32_t argc,char **argv,w_uint16_t isdir)
     }
     
     file = wind_file_open(fullpath,FMODE_CRT);
-    if(file == NULL)
+    if(file == W_NULL)
         console_printf("make directory failed.");
     wind_file_close(file);
     wind_full_path_release(fullpath);
@@ -134,9 +134,9 @@ static w_err_t fs_cmd_ls(w_int32_t argc,char **argv)
        fullpath = wind_full_path_generate(curpath,argv[2],1);
     else
         fullpath = wind_full_path_generate(curpath,curpath,1);
-    WIND_ASSERT_RETURN(fullpath != NULL,W_ERR_FAIL);
+    WIND_ASSERT_RETURN(fullpath != W_NULL,W_ERR_FAIL);
     file = wind_file_open(fullpath,FMODE_R);
-    if(file == NULL)
+    if(file == W_NULL)
     {
         console_printf("open directory or file failed.\r\n");
         wind_free(fullpath);
@@ -145,7 +145,7 @@ static w_err_t fs_cmd_ls(w_int32_t argc,char **argv)
     for(i = 0;;i ++)
     {
         sub = wind_file_subfile(file,i);
-        if(sub == NULL)
+        if(sub == W_NULL)
             break;
         console_printf("%-24s ",sub);
         if(i%4 == 3)
@@ -168,14 +168,14 @@ static w_err_t fs_cmd_cat(w_int32_t argc,char **argv)
         return W_ERR_INVALID;
     fullpath = wind_full_path_generate(curpath,argv[2],0);
     file = wind_file_open(fullpath,FMODE_R);
-    if(file == NULL)
+    if(file == W_NULL)
     {
         console_printf("open directory or file failed.\r\n",fullpath);
         wind_free(fullpath);
         return W_ERR_NOFILE;
     }
     buff = wind_malloc(BUF_SIZE+1);
-    if(buff == NULL)
+    if(buff == W_NULL)
     {
         wind_free(fullpath);
         return W_ERR_FAIL;
@@ -207,7 +207,7 @@ static w_err_t fs_cmd_write(w_int32_t argc,char **argv)
         return W_ERR_INVALID;
     fullpath = wind_full_path_generate(curpath,argv[2],0);
     file = wind_file_open(fullpath,FMODE_W|FMODE_CRT);
-    if(file == NULL)
+    if(file == W_NULL)
     {
         console_printf("open directory or file failed.\r\n",fullpath);
         wind_full_path_release(fullpath);

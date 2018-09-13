@@ -69,7 +69,7 @@ w_err_t   led_close(w_chdev_s *dev)
 
 const w_chdev_ops_s led_ops = 
 {
-    NULL,
+    W_NULL,
     led_open,
     led_ioctl,
     led_read,

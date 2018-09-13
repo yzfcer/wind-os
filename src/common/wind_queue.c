@@ -31,7 +31,7 @@
 w_err_t wind_queue_create(void *mem,w_uint32_t size,w_uint16_t itemsize)
 {
     w_queue_s *q;
-    WIND_ASSERT_RETURN(mem != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(mem != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(size > sizeof(w_queue_s),W_ERR_INVALID);
     WIND_ASSERT_RETURN(itemsize > 0,W_ERR_INVALID);
 
@@ -57,8 +57,8 @@ w_int32_t wind_queue_read(void *queue,void *buf,w_uint32_t len)
     w_uint32_t lenth;
     
     q = (w_queue_s *)queue;
-    WIND_ASSERT_RETURN(buf != NULL,W_ERR_NULL);
-    WIND_ASSERT_RETURN(queue != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(buf != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(queue != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(len % q->itemsize == 0,W_ERR_INVALID);
     
     q = (w_queue_s *)queue;
@@ -89,8 +89,8 @@ w_int32_t wind_queue_write(void *queue,void *buf,w_uint32_t len)
     w_uint32_t lenth;
 
     q = (w_queue_s *)queue;
-    WIND_ASSERT_RETURN(buf != NULL,W_ERR_NULL);
-    WIND_ASSERT_RETURN(queue != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(buf != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(queue != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(len % q->itemsize == 0,W_ERR_INVALID);
 
     q = (w_queue_s *)queue;
@@ -115,7 +115,7 @@ w_int32_t wind_queue_write(void *queue,void *buf,w_uint32_t len)
 w_int32_t wind_queue_data_count(void *queue)
 {
     w_queue_s *q;
-    WIND_ASSERT_RETURN(queue != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(queue != W_NULL,W_ERR_PTR_NULL);
     q = (w_queue_s *)queue;
     WIND_ASSERT_RETURN(q->magic == WIND_QUEUE_MAGIC,W_ERR_INVALID);
     return q->count;
@@ -127,7 +127,7 @@ w_int32_t wind_queue_data_count(void *queue)
 w_int32_t wind_queue_max_count(void *queue)
 {
     w_queue_s *q;
-    WIND_ASSERT_RETURN(queue != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(queue != W_NULL,W_ERR_PTR_NULL);
     q = (w_queue_s *)queue;
     WIND_ASSERT_RETURN(q->magic == WIND_QUEUE_MAGIC,W_ERR_INVALID);
     return q->capacity;
@@ -138,7 +138,7 @@ w_int32_t wind_queue_max_count(void *queue)
 w_err_t wind_queue_clean(void *queue)
 {
     w_queue_s *q;
-    WIND_ASSERT_RETURN(queue != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(queue != W_NULL,W_ERR_PTR_NULL);
 
     q = (w_queue_s *)queue;
     WIND_ASSERT_RETURN(q->magic == WIND_QUEUE_MAGIC,W_ERR_INVALID);
@@ -151,7 +151,7 @@ w_err_t wind_queue_clean(void *queue)
 w_err_t wind_queue_destory(void *queue)
 {
     w_queue_s *q;
-    WIND_ASSERT_RETURN(queue != NULL,W_ERR_NULL);
+    WIND_ASSERT_RETURN(queue != W_NULL,W_ERR_PTR_NULL);
 
     q = (w_queue_s *)queue;
     WIND_ASSERT_RETURN(q->magic == WIND_QUEUE_MAGIC,W_ERR_INVALID);

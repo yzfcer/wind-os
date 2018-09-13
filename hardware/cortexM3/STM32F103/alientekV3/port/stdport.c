@@ -5,8 +5,8 @@
 #include "lua.h"
 #define LUA_MAXINPUT 512
 typedef int FILEHANDLE;
-#ifndef NULL
-#define NULL (void*)0
+#ifndef W_NULL
+#define W_NULL (void*)0
 #endif
 
 #pragma import(__use_no_semihosting_swi)
@@ -93,7 +93,7 @@ int remove(const char *filename)
 
 char *_sys_command_string(char *cmd, int len)
 {
-     return NULL;
+     return W_NULL;
 }
 
 int fputc(int ch, FILE *f)

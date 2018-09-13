@@ -79,23 +79,23 @@ CASE_FUNC(pool_alloc)
     for(i = 0;i < TNUM;i ++)
     {
         testblk[i] = wind_pool_malloc(test_pool);
-        EXPECT_NE(testblk[i],NULL);
+        EXPECT_NE(testblk[i],W_NULL);
         itm = (w_pool_item_s*)((w_uint32_t)testblk[i] - sizeof(w_pool_item_s*));
         EXPECT_EQ(itm->flag,POOL_BLK_USED);
-        EXPECT_EQ(itm->next,NULL);
+        EXPECT_EQ(itm->next,W_NULL);
     }
     testblk[TNUM] = wind_pool_malloc(test_pool);
-    EXPECT_EQ(testblk[TNUM],NULL);
+    EXPECT_EQ(testblk[TNUM],W_NULL);
     
     for(i = 0;i < TNUM;i ++)
     {
         wind_pool_free(test_pool,testblk[i]);
         itm = (w_pool_item_s*)((w_uint32_t)testblk[i] - sizeof(w_pool_item_s*));
         EXPECT_EQ(itm->flag,POOL_BLK_FREE);
-        EXPECT_EQ(itm->next,NULL);
+        EXPECT_EQ(itm->next,W_NULL);
     }
     err = wind_pool_free(test_pool,testblk[TNUM]);
-    EXPECT_EQ(err,W_ERR_NULL);
+    EXPECT_EQ(err,W_ERR_PTR_NULL);
     err = wind_pool_free(test_pool,(void*)0xffffffff);
     EXPECT_EQ(err,W_ERR_INVALID);
     err = wind_pool_free(test_pool,testblk[0]);

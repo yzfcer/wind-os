@@ -117,7 +117,7 @@ static w_err_t display_stack(char **argv)
         return W_ERR_FAIL;
     }
     thr = wind_thread_get(argv[2]);
-    if(thr == NULL)
+    if(thr == W_NULL)
     {
         return W_ERR_FAIL;
     }

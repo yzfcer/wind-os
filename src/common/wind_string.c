@@ -97,7 +97,7 @@ char* wind_strchr(const char *s, w_uint32_t c)
 {
     for(; *s != (char) c; ++s)
         if (*s == '\0')
-            return (char*)NULL;
+            return (char*)W_NULL;
     return (char *) s;
 }
 
@@ -108,7 +108,7 @@ char *wind_strrchr(const char *s, w_uint32_t c)
        if (*p == (char)c)
            return (char *)p;
        } while (--p >= s);
-       return (char*)NULL;
+       return (char*)W_NULL;
 }
 
 
@@ -157,7 +157,7 @@ char *wind_strpbrk(const char *cs,const char *ct)
                 return (char *) sc1;
         }
     }
-    return NULL;
+    return W_NULL;
 }
 
 
@@ -256,6 +256,6 @@ char *wind_strstr(const char *s1,const char *s2)
             return (char *) s1;
         s1++;
     }
-    return NULL;
+    return W_NULL;
 }
 

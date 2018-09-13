@@ -102,7 +102,7 @@ void xmodem_recv_start(void)
     info->stat = XM_RECV_DATA_FIRST;
     info->trychar = 'C';
     info->crcmode = 1;
-    if(info->buff == NULL)
+    if(info->buff == W_NULL)
     info->buff = wind_malloc(1030);
     info->bufsz = 0;
     info->idx = 0;
@@ -114,9 +114,9 @@ void xmodem_recv_start(void)
 void xmodem_recv_end(void)
 {
     xmodem_info_s *info = &xm_info;
-    if(info->buff != NULL)
+    if(info->buff != W_NULL)
         wind_free(info->buff);
-    info->buff = NULL;
+    info->buff = W_NULL;
     info->stat = XM_RECV_INIT;
 }
 

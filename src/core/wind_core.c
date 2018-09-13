@@ -122,7 +122,7 @@ static w_bool_t is_switch_enable(void)
 static w_thread_s *wind_search_highthread(void)
 {
     w_dnode_s *dnode;
-    w_thread_s *thread = NULL;
+    w_thread_s *thread = W_NULL;
     wind_disable_interrupt();
     if(gwind_core_cnt > 0)
     {
@@ -143,7 +143,7 @@ static w_thread_s *wind_search_highthread(void)
     }
     wind_enable_interrupt();
     wind_critical("core NOT find valid thread!");
-    return NULL;
+    return W_NULL;
 }
 
 void wind_exit_irq(void)

@@ -126,7 +126,7 @@ fs##_op_fputs,\
 }
 
 #define WIND_FS_DEF(name,type,ops) \
-{WIND_FS_MAGIC,#name,NULL,{NULL,NULL},type,NULL,&ops}
+{WIND_FS_MAGIC,#name,W_NULL,{W_NULL,W_NULL},type,W_NULL,&ops}
 
 w_file_s *_file_malloc(void);
 

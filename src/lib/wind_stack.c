@@ -69,7 +69,7 @@ w_err_t wind_stack_create(void *mem,
                           )
 {
     w_stack_s* pstk;
-    if ((mem != NULL) && (size >= sizeof(w_stack_s)))        // && 判断参数是否有效 
+    if ((mem != W_NULL) && (size >= sizeof(w_stack_s)))        // && 判断参数是否有效 
     {
         pstk = (w_stack_s* )mem;
 
@@ -128,7 +128,7 @@ w_err_t wind_stack_read(void *mem,void *Ret)
     //w_uint8_t *pEnd;
     w_uint8_t *ret = (w_uint8_t *)Ret;
     err = STACK_ERR;
-    if (mem != NULL)                                            /* 堆栈是否有效 */
+    if (mem != W_NULL)                                            /* 堆栈是否有效 */
     {                                                           /* 有效 */
         pstk = (w_stack_s*)mem;
         
@@ -184,7 +184,7 @@ w_err_t wind_stack_write(void *mem, void *Data)
     //w_uint8_t *pEnd;
     w_uint8_t *data = (w_uint8_t *)Data;
     err = STACK_ERR;
-    if (mem != NULL)                                                    /* 堆栈是否有效 */
+    if (mem != W_NULL)                                                    /* 堆栈是否有效 */
     {
         pstk = (w_stack_s* )mem;
         wind_disable_interrupt();
@@ -202,7 +202,7 @@ w_err_t wind_stack_write(void *mem, void *Data)
         else
         {                                                               /* 满           */
             err = STACK_FULL;
-            if (pstk->write_full != NULL)                               /* 调用用户处理函数 */
+            if (pstk->write_full != W_NULL)                               /* 调用用户处理函数 */
             {
                 err = pstk->write_full(pstk, Data);
             }
@@ -236,7 +236,7 @@ w_uint16_t wind_stack_datalen(void *mem)
 {
     w_uint16_t temp;
     temp = 0;                                                   /* 堆栈无效返回0 */
-    if (mem != NULL)
+    if (mem != W_NULL)
     {
         wind_disable_interrupt();
         temp = ((w_stack_s* )mem)->item_cnt / ((w_stack_s* )mem)->item_size;
@@ -267,7 +267,7 @@ w_uint16_t wind_stack_size(void *mem)
 {
     w_uint16_t temp;
     temp = 0;                                                   /* 堆栈无效返回0 */
-    if (mem != NULL)
+    if (mem != W_NULL)
     {
         wind_disable_interrupt();
         temp = ((w_stack_s* )mem)->item_max / ((w_stack_s* )mem)->item_size;
@@ -298,7 +298,7 @@ w_uint16_t wind_stack_size(void *mem)
 void wind_stack_flush(void *mem)
 {
     w_stack_s* pstk;
-    if (mem != NULL)                                                /* 堆栈是否有效 */
+    if (mem != W_NULL)                                                /* 堆栈是否有效 */
     {                                                               /* 有效         */
         pstk = (w_stack_s*)mem;
         wind_disable_interrupt();

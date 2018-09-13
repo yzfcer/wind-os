@@ -99,8 +99,8 @@ typedef char w_str256_t[256] ;
 #endif
 
 
-#ifndef NULL
-#define NULL ((void *)0)
+#ifndef W_NULL
+#define W_NULL ((void *)0)
 #endif
 
 #ifndef w_bool_t

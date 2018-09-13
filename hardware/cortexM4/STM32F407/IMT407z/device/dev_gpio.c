@@ -68,7 +68,7 @@ w_err_t   gpio_close(w_chdev_s *dev)
 
 const w_chdev_ops_s gpio_ops = 
 {
-    NULL,
+    W_NULL,
     gpio_open,
     gpio_ioctl,
     gpio_read,

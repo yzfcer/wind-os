@@ -61,7 +61,7 @@ struct __w_chdev_ops_s
     w_err_t   (*close)(w_chdev_s *dev);
 };
 
-#define WIND_DEV_DEF(name,devid,ops) {WIND_DEV_MAGIC,name,devid,W_FALSE,{NULL,NULL},NULL,ops}
+#define WIND_DEV_DEF(name,devid,ops) {WIND_DEV_MAGIC,name,devid,W_FALSE,{W_NULL,W_NULL},W_NULL,ops}
 
 w_err_t _wind_dev_mod_init(void);
 w_err_t _register_devs(void);

@@ -42,9 +42,9 @@ w_err_t cmd_history_init(w_cmd_his_s *his)
     his->hiscnt = 0;
     his->buf_used = 0;
     his->curidx = -1;
-    his->curcmd = NULL;
+    his->curcmd = W_NULL;
     for(i =0 ;i < CMD_HISTORY_COUNT;i ++)
-        his->hiscmd[i] = NULL;
+        his->hiscmd[i] = W_NULL;
     wind_memset(his->cmdbuf,0,CMD_HSIBUF_LENTH);
     return W_ERR_OK;
 }
@@ -62,7 +62,7 @@ static w_err_t remove_old_history(w_cmd_his_s *his)
         for(i = 0;i < his->hiscnt -1 ;i ++)
             his->hiscmd[i] = his->hiscmd[i+1] - len;
     }
-    his->hiscmd[his->hiscnt-1] = NULL;
+    his->hiscmd[his->hiscnt-1] = W_NULL;
     his->hiscnt -= 1;
     his->buf_used -= len;
     wind_memset(&his->cmdbuf[his->buf_used],0,len);
@@ -95,8 +95,8 @@ w_err_t cmd_history_append(w_cmd_his_s *his,char *cmd)
     w_err_t err;
     w_int32_t rest;
     w_int32_t len;
-    if(his == NULL || cmd == NULL)
-        return W_ERR_NULL;
+    if(his == W_NULL || cmd == W_NULL)
+        return W_ERR_PTR_NULL;
     if(cmd[0] == 0 || cmd[0] == 0x1b)
         return W_ERR_INVALID;
     len = wind_strlen(cmd);
@@ -122,12 +122,12 @@ w_err_t cmd_history_get_next(w_cmd_his_s *his,char *cmd)
     if(his->curidx >= his->hiscnt)
     {
         his->curidx = his->hiscnt;
-        his->curcmd = NULL;
+        his->curcmd = W_NULL;
         cmd[0] = 0; 
         return W_ERR_FAIL;
     }
     his->curcmd = his->hiscmd[his->curidx];
-    if(his->curcmd == NULL)
+    if(his->curcmd == W_NULL)
         return W_ERR_FAIL;
     //console_printf("next cmd:%s\r\n",his->curcmd);
     wind_strcpy(cmd,his->curcmd);
@@ -141,12 +141,12 @@ w_err_t cmd_history_get_prev(w_cmd_his_s *his,char *cmd)
     if(his->curidx < 0)
     {
         his->curidx = -1;
-        his->curcmd = NULL;
+        his->curcmd = W_NULL;
         cmd[0] = 0; 
         return W_ERR_FAIL;
     }
     his->curcmd = his->hiscmd[his->curidx];
-    if(his->curcmd == NULL)
+    if(his->curcmd == W_NULL)
         return W_ERR_FAIL;
     //console_printf("prev cmd:%s\r\n",his->curcmd);
     wind_strcpy(cmd,his->curcmd);

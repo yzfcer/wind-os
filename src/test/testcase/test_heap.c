@@ -59,7 +59,7 @@ CASE_FUNC(heapfunc)
     w_err_t err;
     w_uint8_t *buff;
     buff = (w_uint8_t*)wind_malloc(64);
-    EXPECT_NE(buff,NULL);
+    EXPECT_NE(buff,W_NULL);
     wind_memset(buff,0,64);
     wind_strcpy((char*)buff,"heap test start.");
     res = wind_strcmp((char*)buff,"heap test start.");
@@ -89,7 +89,7 @@ CASE_FUNC(heapmulti)
     {
         len += 8;
         buff[i] = (char*)wind_malloc(len);
-        EXPECT_NE(buff[i],NULL);
+        EXPECT_NE(buff[i],W_NULL);
         wind_memset(buff[i],0,len);
         wind_strcpy((char*)buff[i],"heap test start.");
         res = wind_strcmp((char*)buff[i],"heap test start.");
