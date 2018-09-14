@@ -30,6 +30,7 @@ CMD_DECLARE(stati);
 CMD_DECLARE(reset);
 CMD_DECLARE(echo);
 CMD_DECLARE(mem);
+CMD_DECLARE(thread);
 #if WIND_DATETIME_SUPPORT
 CMD_DECLARE(datetime);
 #endif
@@ -58,6 +59,7 @@ void _wind_register_all_cmd(w_console_s *ctrl)
     wind_cmd_register(COMMAND(reset),1);
     wind_cmd_register(COMMAND(echo),1);
     wind_cmd_register(COMMAND(mem),1);
+    wind_cmd_register(COMMAND(thread),1);
     wind_cmd_register(COMMAND(test),1);
 #if WIND_DATETIME_SUPPORT
     wind_cmd_register(COMMAND(datetime),1);

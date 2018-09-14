@@ -162,6 +162,7 @@ w_err_t wind_thread_set_priority(w_thread_s *thread,w_int16_t prio);
 w_err_t wind_thread_start(w_thread_s *thread);
 w_err_t wind_thread_suspend(w_thread_s *thread);
 w_err_t wind_thread_resume(w_thread_s *thread);
+w_err_t wind_thread_destroy(w_thread_s *thread);
 
 w_err_t wind_thread_sleep(w_uint32_t ms);
 w_err_t wind_thread_exit(w_err_t exitcode);
