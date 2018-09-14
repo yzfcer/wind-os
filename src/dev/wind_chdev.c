@@ -25,14 +25,14 @@
 #include "wind_config.h"
 #include "wind_type.h"
 #include "wind_debug.h"
-#include "wind_dev.h"
+#include "wind_chdev.h"
 #include "wind_mutex.h"
 #include "wind_core.h"
 #include "wind_string.h"
 #include "wind_var.h"
 #if WIND_DRVFRAME_SUPPORT
 
-w_err_t wind_dev_register(w_chdev_s *dev,w_int32_t count)
+w_err_t wind_chdev_register(w_chdev_s *dev,w_int32_t count)
 {
     w_int32_t i;
     w_chdev_s *devi;    
@@ -43,7 +43,7 @@ w_err_t wind_dev_register(w_chdev_s *dev,w_int32_t count)
     {
         WIND_ASSERT_RETURN(dev[i].magic == WIND_DEV_MAGIC,W_ERR_INVALID);
         wind_notice("register dev:%s",dev[i].name);
-        devi = wind_dev_get(dev[i].name);
+        devi = wind_chdev_get(dev[i].name);
         if(devi != W_NULL)
         {
             wind_error("device has been registered.\r\n");
@@ -68,33 +68,35 @@ w_err_t wind_dev_register(w_chdev_s *dev,w_int32_t count)
     return W_ERR_OK;
 }
 
-w_err_t wind_dev_unregister(w_chdev_s *dev)
+w_err_t wind_chdev_unregister(w_chdev_s *dev)
 {
     w_dnode_s *dnode;
     WIND_ASSERT_RETURN(dev != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(dev->magic == WIND_DEV_MAGIC,W_ERR_INVALID);
     wind_notice("unregister dev:%s",dev->name);
     wind_disable_switch();
-    dnode = dlist_remove(&g_core.devlist,dnode);
+    dnode = dlist_remove(&g_core.devlist,&dev->devnode);
     wind_enable_switch();
     if(dnode == W_NULL)
     {
         wind_error("device has NOT been registered.\r\n");
         return W_ERR_FAIL;
     }
+    if(dev->ops->deinit)
+        dev->ops->deinit(dev);
     wind_mutex_destroy(dev->mutex);
     dev->mutex = W_NULL;
     return W_ERR_OK;
 }
 
 
-w_err_t _wind_dev_mod_init(void)
+w_err_t _wind_chdev_mod_init(void)
 {
-    _register_devs();
+    _register_chdevs();
     return W_ERR_OK;
 }
 
-w_chdev_s *wind_dev_get(char *name)
+w_chdev_s *wind_chdev_get(char *name)
 {
     w_chdev_s *dev = W_NULL;
     w_dnode_s *dnode;
@@ -112,7 +114,7 @@ w_chdev_s *wind_dev_get(char *name)
     return W_NULL;
 }
 
-w_err_t wind_dev_open(w_chdev_s *dev)
+w_err_t wind_chdev_open(w_chdev_s *dev)
 {
     w_err_t err = W_ERR_FAIL;
     WIND_ASSERT_RETURN(dev != W_NULL,W_ERR_PTR_NULL);
@@ -130,7 +132,7 @@ w_err_t wind_dev_open(w_chdev_s *dev)
     return err;
 }
 
-w_err_t wind_dev_ioctl(w_chdev_s *dev,w_int32_t cmd,void *param)
+w_err_t wind_chdev_ioctl(w_chdev_s *dev,w_int32_t cmd,void *param)
 {
     w_err_t err = W_ERR_FAIL;
     WIND_ASSERT_RETURN(dev != W_NULL,W_ERR_PTR_NULL);
@@ -144,7 +146,7 @@ w_err_t wind_dev_ioctl(w_chdev_s *dev,w_int32_t cmd,void *param)
     return err;
 }
 
-w_int32_t wind_dev_read(w_chdev_s *dev,w_uint8_t *buf,w_int32_t len)
+w_int32_t wind_chdev_read(w_chdev_s *dev,w_uint8_t *buf,w_int32_t len)
 {
     w_err_t err = W_ERR_FAIL;
     WIND_ASSERT_RETURN(dev != W_NULL,W_ERR_PTR_NULL);
@@ -158,7 +160,7 @@ w_int32_t wind_dev_read(w_chdev_s *dev,w_uint8_t *buf,w_int32_t len)
     return err;
 }
 
-w_int32_t wind_dev_write(w_chdev_s *dev,w_uint8_t *buf,w_int32_t len)
+w_int32_t wind_chdev_write(w_chdev_s *dev,w_uint8_t *buf,w_int32_t len)
 {
     w_err_t err = W_ERR_FAIL;
     WIND_ASSERT_RETURN(dev != W_NULL,W_ERR_PTR_NULL);
@@ -172,7 +174,7 @@ w_int32_t wind_dev_write(w_chdev_s *dev,w_uint8_t *buf,w_int32_t len)
     return err;
 }
 
-w_err_t wind_dev_close(w_chdev_s *dev)
+w_err_t wind_chdev_close(w_chdev_s *dev)
 {
     w_err_t err;
     WIND_ASSERT_RETURN(dev != W_NULL,W_ERR_PTR_NULL);
@@ -190,7 +192,7 @@ w_err_t wind_dev_close(w_chdev_s *dev)
     return err;
 }
 
-w_err_t wind_dev_print(w_dlist_s *list)
+w_err_t wind_chdev_print(w_dlist_s *list)
 {
     w_dnode_s *dnode;
     w_chdev_s *dev;

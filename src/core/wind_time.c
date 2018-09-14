@@ -30,7 +30,7 @@
 #include "wind_time.h"
 #include "wind_var.h"
 #include "wind_string.h"
-#include "wind_dev.h"
+#include "wind_chdev.h"
 #if WIND_DATETIME_SUPPORT
 #define JAN_1ST_1900 2415021
 #define NTP_FRACTIONAL_TO_MS (((double)1000.0)/0xFFFFFFFF)
@@ -317,11 +317,11 @@ static w_err_t hwrtc_set_datetime(datetime_s *datetime)
 #if WIND_RTC_SUPPORT
     w_chdev_s *dev;
     WIND_ASSERT_RETURN(datetime != W_NULL,W_ERR_PTR_NULL);
-    dev = wind_dev_get("rtc");
+    dev = wind_chdev_get("rtc");
     WIND_ASSERT_RETURN(dev != W_NULL,W_ERR_INVALID);
-    wind_dev_open(dev);
-    wind_dev_write(dev,(w_uint8_t*)datetime,sizeof(datetime_s));
-    wind_dev_close(dev);
+    wind_chdev_open(dev);
+    wind_chdev_write(dev,(w_uint8_t*)datetime,sizeof(datetime_s));
+    wind_chdev_close(dev);
 #endif
     datetime_to_tick64(&tick64,datetime);
     wind_disable_interrupt();
@@ -336,11 +336,11 @@ static w_err_t hwrtc_get_datetime(datetime_s *datetime)
 #if WIND_RTC_SUPPORT
     w_chdev_s *dev;
     WIND_ASSERT_RETURN(datetime != W_NULL,W_ERR_PTR_NULL);
-    dev = wind_dev_get("rtc");
+    dev = wind_chdev_get("rtc");
     WIND_ASSERT_RETURN(dev != W_NULL,W_ERR_INVALID);
-    wind_dev_open(dev);
-    wind_dev_read(dev,(w_uint8_t*)datetime,sizeof(datetime_s));
-    wind_dev_close(dev);
+    wind_chdev_open(dev);
+    wind_chdev_read(dev,(w_uint8_t*)datetime,sizeof(datetime_s));
+    wind_chdev_close(dev);
 #else
     systick_s tick64;
     wind_disable_interrupt();

@@ -22,7 +22,7 @@
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
-#include "wind_dev.h"
+#include "wind_chdev.h"
 #include "wind_debug.h"
 #include "led.h"
 
@@ -68,6 +68,7 @@ w_err_t   gpio_close(w_chdev_s *dev)
 
 const w_chdev_ops_s gpio_ops = 
 {
+    W_NULL,
     W_NULL,
     gpio_open,
     gpio_ioctl,

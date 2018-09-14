@@ -24,7 +24,7 @@
 *******************************************************************************************************/
 #include "wind_config.h"
 #include "wind_debug.h"
-#include "wind_dev.h"
+#include "wind_chdev.h"
 #include "led.h"
 #if WIND_DRVFRAME_SUPPORT
 
@@ -69,6 +69,7 @@ w_err_t   led_close(w_chdev_s *dev)
 
 const w_chdev_ops_s led_ops = 
 {
+    W_NULL,
     W_NULL,
     led_open,
     led_ioctl,

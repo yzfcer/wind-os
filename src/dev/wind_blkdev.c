@@ -73,13 +73,15 @@ w_err_t wind_blkdev_unregister(w_blkdev_s *blkdev)
     WIND_ASSERT_RETURN(blkdev->magic == WIND_BLKDEV_MAGIC,W_ERR_INVALID);
     wind_notice("unregister blkdev:%s",blkdev->name);
     wind_disable_switch();
-    dnode = dlist_remove(&g_core.blkdevlist,dnode);
+    dnode = dlist_remove(&g_core.blkdevlist,&blkdev->blkdevnode);
     wind_enable_switch();
     if(dnode == W_NULL)
     {
         wind_error("blkdevice has NOT been registered.\r\n");
         return W_ERR_FAIL;
     }
+    if(blkdev->ops->deinit)
+        blkdev->ops->deinit(blkdev);
     wind_mutex_destroy(blkdev->mutex);
     blkdev->mutex = W_NULL;
     return W_ERR_OK;

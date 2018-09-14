@@ -28,7 +28,7 @@
 #include "wind_softirq.h"
 #include "wind_heap.h"
 #include "wind_watchdog.h"
-#include "wind_dev.h"
+#include "wind_chdev.h"
 #include "wind_blkdev.h"
 #include "wind_time.h"
 #include "wind_debug.h"
@@ -81,7 +81,7 @@ static w_err_t init_thread(w_int32_t argc,w_int8_t **argv)
 {   
     wind_tick_hwtimer_init();
 #if WIND_DRVFRAME_SUPPORT
-    _wind_dev_mod_init();
+    _wind_chdev_mod_init();
 #endif
 #if WIND_BLK_DRVFRAME_SUPPORT
     _wind_blkdev_mod_init();

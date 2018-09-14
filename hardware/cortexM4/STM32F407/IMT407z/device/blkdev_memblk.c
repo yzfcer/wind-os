@@ -68,6 +68,7 @@ w_err_t   memblk_close(w_blkdev_s *dev)
 const w_blkdev_ops_s memblk_ops = 
 {
     memblk_init,
+    W_NULL,
     memblk_open,
     memblk_erase,
     memblk_eraseall,

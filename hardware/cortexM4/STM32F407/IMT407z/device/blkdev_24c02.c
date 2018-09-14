@@ -98,6 +98,7 @@ const w_blkdev_ops_s at24c02_ops =
 {
     W_NULL,
     at24c02_open,
+    W_NULL,
     at24c02_erase,
     at24c02_eraseall,
     at24c02_read,

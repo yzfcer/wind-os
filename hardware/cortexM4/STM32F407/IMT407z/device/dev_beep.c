@@ -24,7 +24,7 @@
 *******************************************************************************************************/
 #include "wind_config.h"
 #include "wind_debug.h"
-#include "wind_dev.h"
+#include "wind_chdev.h"
 #include "beep.h"
 #if WIND_DRVFRAME_SUPPORT
 
@@ -67,6 +67,7 @@ w_err_t   beep_close(w_chdev_s *dev)
 const w_chdev_ops_s beep_ops = 
 {
     beep_init,
+    W_NULL,
     beep_open,
     beep_ioctl,
     beep_read,

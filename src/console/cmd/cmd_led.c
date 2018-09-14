@@ -24,7 +24,7 @@
 *******************************************************************************************************/
 #include <stdio.h>
 #include "wind_cmd.h"
-#include "wind_dev.h"
+#include "wind_chdev.h"
 #if WIND_CONSOLE_SUPPORT
 #if WIND_DRVFRAME_SUPPORT
 
@@ -48,22 +48,22 @@ COMMAND_MAIN(led,argc,argv)
     WIND_ASSERT_RETURN(argc == 3,W_ERR_INVALID);
     wind_memset(devname,0,sizeof(devname));
     sprintf(devname,"led%s",argv[2]);
-    led = wind_dev_get(devname);
+    led = wind_chdev_get(devname);
     WIND_ASSERT_RETURN(led != W_NULL,W_ERR_INVALID);
     if(0 == wind_strcmp(argv[1],"on"))
     {
-        err = wind_dev_open(led);
+        err = wind_chdev_open(led);
         WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_FAIL);
         stat = 1;
-        wind_dev_write(led,&stat,1);
+        wind_chdev_write(led,&stat,1);
         return W_ERR_OK;
     }
     else if(0 == wind_strcmp(argv[1],"off"))
     {
-        err = wind_dev_open(led);
+        err = wind_chdev_open(led);
         WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_FAIL);
         stat = 0;
-        wind_dev_write(led,&stat,1);
+        wind_chdev_write(led,&stat,1);
         return W_ERR_OK;
     }
     return W_ERR_FAIL;

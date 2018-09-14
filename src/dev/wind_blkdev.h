@@ -58,6 +58,7 @@ struct __w_blkdev_s
 struct __w_blkdev_ops_s
 {
     w_err_t   (*init)(w_blkdev_s *blkdev);
+    w_err_t   (*deinit)(w_blkdev_s *blkdev);
     w_err_t   (*open)(w_blkdev_s *blkdev);
     w_err_t   (*erase)(w_blkdev_s *blkdev,w_addr_t addr,w_int32_t blkcnt);
     w_err_t   (*eraseall)(w_blkdev_s *blkdev);

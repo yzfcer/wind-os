@@ -4,7 +4,7 @@
 **                                       yzfcer@163.com
 **
 **--------------文件信息--------------------------------------------------------------------------------
-**文   件   名: wind_dev.h
+**文   件   名: wind_chdev.h
 **创   建   人: 周江村
 **最后修改日期: 
 **描        述: 字符设备标准化API接口
@@ -27,7 +27,7 @@
 
 #include "wind_config.h"
 #include "wind_type.h"
-#include "wind_dev.h"
+#include "wind_chdev.h"
 #include "wind_dlist.h"
 #include "wind_mutex.h"
 
@@ -54,6 +54,7 @@ struct __w_chdev_s
 struct __w_chdev_ops_s
 {
     w_err_t   (*init)(w_chdev_s *dev);
+    w_err_t   (*deinit)(w_chdev_s *dev);
     w_err_t   (*open)(w_chdev_s *dev);
     w_err_t   (*ioctl)(w_chdev_s *dev,w_int32_t cmd,void *param);
     w_int32_t (*read)(w_chdev_s *dev,w_uint8_t *buf,w_uint16_t len);
@@ -63,19 +64,19 @@ struct __w_chdev_ops_s
 
 #define WIND_DEV_DEF(name,devid,ops) {WIND_DEV_MAGIC,name,devid,W_FALSE,{W_NULL,W_NULL},W_NULL,ops}
 
-w_err_t _wind_dev_mod_init(void);
-w_err_t _register_devs(void);
+w_err_t _wind_chdev_mod_init(void);
+w_err_t _register_chdevs(void);
 
-w_err_t wind_dev_register(w_chdev_s *dev,w_int32_t count);
-w_err_t wind_dev_unregister(w_chdev_s *dev);
+w_err_t wind_chdev_register(w_chdev_s *dev,w_int32_t count);
+w_err_t wind_chdev_unregister(w_chdev_s *dev);
 
-w_chdev_s *wind_dev_get(char *name);
-w_err_t wind_dev_open(w_chdev_s *dev);
-w_err_t wind_dev_ioctl(w_chdev_s *dev,w_int32_t cmd,void *param);
-w_int32_t wind_dev_read(w_chdev_s *dev,w_uint8_t *buf,w_int32_t len);
-w_int32_t wind_dev_write(w_chdev_s *dev,w_uint8_t *buf,w_int32_t len);
-w_err_t wind_dev_close(w_chdev_s *dev);
-w_err_t wind_dev_print(w_dlist_s *list);
+w_chdev_s *wind_chdev_get(char *name);
+w_err_t wind_chdev_open(w_chdev_s *dev);
+w_err_t wind_chdev_ioctl(w_chdev_s *dev,w_int32_t cmd,void *param);
+w_int32_t wind_chdev_read(w_chdev_s *dev,w_uint8_t *buf,w_int32_t len);
+w_int32_t wind_chdev_write(w_chdev_s *dev,w_uint8_t *buf,w_int32_t len);
+w_err_t wind_chdev_close(w_chdev_s *dev);
+w_err_t wind_chdev_print(w_dlist_s *list);
 
 #endif
 

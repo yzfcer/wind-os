@@ -31,7 +31,7 @@
 #include "wind_pool.h"
 #include "wind_msgbox.h"
 #include "wind_heap.h"
-#include "wind_dev.h"
+#include "wind_chdev.h"
 #include "wind_blkdev.h"
 #include "wind_pipe.h"
 #include "wind_watchdog.h"
@@ -63,7 +63,7 @@ COMMAND_USAGE(list)
     console_printf("list heapitem:show all heapitems infomation.\r\n");
 #endif
 #if WIND_DRVFRAME_SUPPORT
-    console_printf("list dev:show all character devices list.\r\n");
+    console_printf("list chdev:show all character devices list.\r\n");
 #endif
 #if WIND_BLK_DRVFRAME_SUPPORT
     console_printf("list blkdev:show all block devices list.\r\n");
@@ -125,9 +125,9 @@ COMMAND_MAIN(list,argc,argv)
     }
 #endif
 #if WIND_DRVFRAME_SUPPORT
-    else if(0 == wind_strcmp(argv[1],"dev"))
+    else if(0 == wind_strcmp(argv[1],"chdev"))
     {
-        wind_dev_print(&g_core.devlist);
+        wind_chdev_print(&g_core.devlist);
         return W_ERR_FAIL;
     }
 #endif
