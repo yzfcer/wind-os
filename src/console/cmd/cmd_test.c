@@ -34,7 +34,7 @@
 #include "wind_cmd.h"
 #include "test_framework.h"
 
-#if (WIND_CONSOLE_SUPPORT && CMD_CUTEST_SUPPORT)
+#if (WIND_CONSOLE_SUPPORT && CMD_TEST_SUPPORT)
 
 COMMAND_DISC(test)
 {

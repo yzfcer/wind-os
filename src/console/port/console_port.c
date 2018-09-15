@@ -71,9 +71,7 @@ CMD_DECLARE(beep);
 #if CMD_LED_SUPPORT
 CMD_DECLARE(led);
 #endif
-#if CMD_CUTEST_SUPPORT
-    CMD_DECLARE(test);
-#endif
+
 
 void _wind_register_all_cmd(w_console_s *ctrl)
 {
@@ -118,9 +116,6 @@ void _wind_register_all_cmd(w_console_s *ctrl)
 #endif
 #if CMD_LED_SUPPORT
     wind_cmd_register(COMMAND(led),1);
-#endif
-#if CMD_CUTEST_SUPPORT
-    wind_cmd_register(COMMAND(test),1);
 #endif
 
 }

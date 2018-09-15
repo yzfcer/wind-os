@@ -1527,6 +1527,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\test\testcase\test_pool.c</FilePath>
             </File>
+            <File>
+              <FileName>test_treefs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\test\testcase\test_treefs.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

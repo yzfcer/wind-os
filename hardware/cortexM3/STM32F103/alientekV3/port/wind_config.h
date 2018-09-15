@@ -112,7 +112,7 @@
 #define CMD_STATI_SUPPORT 1 //是否支持统计命令
 #define CMD_THREAD_SUPPORT 1 //是否支持线程操作命令
 #define CMD_XMODEM_SUPPORT 0 //是否支持xmodem协议命令
-#define CMD_CUTEST_SUPPORT 1 //是否支持单元测试命令
+#define CMD_TEST_SUPPORT 1 //是否支持单元测试命令
 
 #define CMD_BEEP_SUPPORT 0 //是否支持蜂鸣器命令
 #define CMD_LED_SUPPORT 0 //是否支持LED操作命令
@@ -120,15 +120,15 @@
 //-------------------------------------------------------------------------------
 //单元测试功能定制，前提是内核支持单元测试框架,并且支持对应的功能模块
 //-------------------------------------------------------------------------------
-#define TEST_HEAP_SUPPORT 0 //是否支持
-#define TEST_MSGBOX_SUPPORT 1 //是否支持
-#define TEST_MUTEX_SUPPORT 1 //是否支持
-#define TEST_PIPE_SUPPORT 1 //是否支持
-#define TEST_POOL_SUPPORT 1 //是否支持
-#define TEST_QUEUE_SUPPORT 1 //是否支持
-#define TEST_SEM_SUPPORT 1 //是否支持
-#define TEST_SOFTIRQ_SUPPORT 1 //是否支持
-#define TEST_TREE_SUPPORT 1 //是否支持
-#define TEST_TREEFS_SUPPORT 1 //是否支持
+#define TEST_HEAP_SUPPORT 0 //是否支持内存堆测试
+#define TEST_MSGBOX_SUPPORT 1 //是否支持消息邮箱测试
+#define TEST_MUTEX_SUPPORT 1 //是否支持互斥所测试
+#define TEST_PIPE_SUPPORT 1 //是否支持管道测试
+#define TEST_POOL_SUPPORT 1 //是否支持内存池测试
+#define TEST_QUEUE_SUPPORT 1 //是否支持队列测试
+#define TEST_SEM_SUPPORT 1 //是否支持信号量测试
+#define TEST_SOFTIRQ_SUPPORT 1 //是否支持软中断测试
+#define TEST_TREE_SUPPORT 1 //是否支持树形结构对象测试
+#define TEST_TREEFS_SUPPORT 0 //是否支持treefs文件系统测试
 
 #endif
