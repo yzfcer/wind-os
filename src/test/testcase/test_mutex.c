@@ -21,13 +21,13 @@
 /*********************************************头文件定义***********************************************/
 #include "wind_cut.h"
 #include "wind_mutex.h"
+#if (WIND_CUTEST_SUPPORT && TEST_MUTEX_SUPPORT)
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
 
 
 /********************************************内部变量定义**********************************************/
-#if WIND_MUTEX_SUPPORT
 
 static w_mutex_s *mutexs[4];
 
@@ -135,7 +135,7 @@ TEST_CASE(mutexmulti)
 TEST_CASES_END
 TEST_SUITE(test_mutex)
 
-#endif
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus
+#endif

@@ -22,6 +22,7 @@
 #include "wind_tree.h"
 #include "wind_pool.h"
 #include "wind_string.h"
+#if (WIND_CUTEST_SUPPORT && TEST_TREE_SUPPORT)
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
@@ -130,3 +131,4 @@ TEST_SUITE(test_tree)
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus
+#endif

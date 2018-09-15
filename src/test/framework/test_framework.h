@@ -21,7 +21,9 @@
 #ifndef __TEST_FRAMEWORK_H__
 #define __TEST_FRAMEWORK_H__
 /*********************************************头文件定义***********************************************/
+#include "wind_config.h"
 #include "test_port.h"
+#if WIND_CUTEST_SUPPORT
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
@@ -143,10 +145,10 @@ w_int32_t stringcmp(const char *cs,const char *ct);
 
 err_t test_suite_register(w_test_suite_s *test_suite);
 void show_test_suites(void);
-void cut_test_start(char* testsuite,char *testcase);
-
+w_int32_t cutest_main(w_int32_t argc,char **argv);
 
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus
-#endif // #ifndef __TEST_FRAMEWORK_H__
+#endif 
+#endif 

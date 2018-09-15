@@ -434,7 +434,7 @@ w_err_t console_thread(w_int32_t argc,char **argv)
     ctrl = &g_ctrl[argc];
     cmd_history_init(&ctrl->his);
     init_console_stat(ctrl);
-    wind_cmd_register_cmd_test(ctrl);
+
     //console_printf("\r\nlogin:");
     while(1)
     {

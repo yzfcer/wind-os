@@ -1152,6 +1152,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\console\cmd\cmd_thread.c</FilePath>
             </File>
+            <File>
+              <FileName>cmd_test.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\console\cmd\cmd_test.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1451,11 +1456,6 @@
               <FileName>test_framework.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\..\..\..\src\test\framework\test_framework.h</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_test.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\test\framework\cmd_test.c</FilePath>
             </File>
             <File>
               <FileName>wind_cut.h</FileName>

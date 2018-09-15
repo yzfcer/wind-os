@@ -21,12 +21,11 @@
 /*********************************************头文件定义***********************************************/
 #include "wind_cut.h"
 #include "wind_softirq.h"
+#if (WIND_CUTEST_SUPPORT && TEST_SOFTIRQ_SUPPORT)
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
 
-
-#if WIND_SOFTIRQ_SUPPORT
 /********************************************内部变量定义**********************************************/
 //softirq_s *softirqs[4];
 
@@ -100,7 +99,7 @@ TEST_CASE(softirqfunc)
 TEST_CASES_END
 TEST_SUITE(test_softirq)
 
-#endif
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus
+#endif

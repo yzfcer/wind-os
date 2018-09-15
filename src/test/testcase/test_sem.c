@@ -21,12 +21,12 @@
 /*********************************************头文件定义***********************************************/
 #include "wind_cut.h"
 #include "wind_sem.h"
+#if (WIND_CUTEST_SUPPORT && TEST_SEM_SUPPORT)
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
 
 
-#if WIND_SEM_SUPPORT
 /********************************************内部变量定义**********************************************/
 w_sem_s *sems[4];
 
@@ -151,7 +151,7 @@ TEST_CASE(semmulti)
 TEST_CASES_END
 TEST_SUITE(test_sem)
 
-#endif
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus
+#endif

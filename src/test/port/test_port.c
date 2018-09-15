@@ -20,61 +20,62 @@
 *******************************************************************************************************/
 #include "test_port.h"
 #include "wind_cut.h"
+#if WIND_CUTEST_SUPPORT
 
-//DECLARE_SUITE(TestSuite1);
-//DECLARE_SUITE(TestSuite2);
+
+#if TEST_POOL_SUPPORT
 DECLARE_SUITE(test_pool);
+#endif
+#if TEST_TREE_SUPPORT
 DECLARE_SUITE(test_tree);
-#if WIND_MUTEX_SUPPORT
+#endif
+#if TEST_MUTEX_SUPPORT
 DECLARE_SUITE(test_mutex);
 #endif
-#if WIND_SEM_SUPPORT
+#if TEST_SEM_SUPPORT
 DECLARE_SUITE(test_sem);
 #endif
-#if WIND_PIPE_SUPPORT
+#if TEST_PIPE_SUPPORT
 DECLARE_SUITE(test_pipe);
 #endif
-#if WIND_MSGBOX_SUPPORT
+#if TEST_MSGBOX_SUPPORT
 DECLARE_SUITE(test_msgbox);
 #endif
-#if WIND_HEAP_SUPPORT
+#if TEST_HEAP_SUPPORT
 DECLARE_SUITE(test_heap);
 #endif
-#if WIND_SOFTIRQ_SUPPORT
+#if TEST_SOFTIRQ_SUPPORT
 DECLARE_SUITE(test_softirq);
 #endif
-#if WIND_FS_SUPPORT
-//DECLARE_SUITE(test_treefs);
-#endif
+
 
 void test_suite_register_all(void)
 {
-    //REGSTER_SUITE(TestSuite1);
-    //REGSTER_SUITE(TestSuite2);
+#if TEST_POOL_SUPPORT
     REGSTER_SUITE(test_pool);
+#endif
+#if TEST_TREE_SUPPORT
     REGSTER_SUITE(test_tree);
-#if WIND_MUTEX_SUPPORT
+#endif
+#if TEST_MUTEX_SUPPORT
     REGSTER_SUITE(test_mutex);
 #endif
-#if WIND_SEM_SUPPORT
+#if TEST_SEM_SUPPORT
     REGSTER_SUITE(test_sem);
 #endif
-#if WIND_PIPE_SUPPORT
+#if TEST_PIPE_SUPPORT
     REGSTER_SUITE(test_pipe);
 #endif
-#if WIND_MSGBOX_SUPPORT
+#if TEST_MSGBOX_SUPPORT
     REGSTER_SUITE(test_msgbox);
 #endif
-#if WIND_HEAP_SUPPORT
+#if TEST_HEAP_SUPPORT
     REGSTER_SUITE(test_heap);
 #endif
-#if WIND_SOFTIRQ_SUPPORT
+#if TEST_SOFTIRQ_SUPPORT
     REGSTER_SUITE(test_softirq);
-#endif
-#if WIND_FS_SUPPORT
-//    REGSTER_SUITE(test_treefs);
 #endif
 }
 
-
+#endif
 

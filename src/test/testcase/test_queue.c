@@ -23,6 +23,7 @@
 #include "wind_queue.h"
 #include "wind_string.h"
 #include "wind_queue.h"
+#if (WIND_CUTEST_SUPPORT && TEST_QUEUE_SUPPORT)
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
@@ -135,3 +136,4 @@ TEST_SUITE(test_queue)
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus
+#endif 

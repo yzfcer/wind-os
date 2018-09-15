@@ -20,6 +20,7 @@
 *******************************************************************************************************/
 /*********************************************头文件定义***********************************************/
 #include "test_framework.h"
+#if WIND_CUTEST_SUPPORT
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
@@ -468,14 +469,18 @@ void execute_all_suites(char* suitefilter,char *casefilter)
 }
 
 
-void cut_test_start(char* suitefilter,char *casefilter)
+w_int32_t cutest_main(w_int32_t argc,char **argv)
 {
+    if(argc < 3)
+        return -1;
     test_framework_init();
     test_suite_register_all();
     show_test_suites();
-    execute_all_suites(suitefilter,casefilter);
+    execute_all_suites(argv[1],argv[2]);
+    return 0;
 }
 
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus
+#endif

@@ -34,19 +34,7 @@
 #include "wind_cmd.h"
 #include "test_framework.h"
 
-#if WIND_CONSOLE_SUPPORT
-
-w_err_t cmd_testheap_main(w_int32_t argc,char **argv)
-{
-#if WIND_HEAP_SUPPORT
-    if(0 == wind_strcmp(argv[0],"heap"))
-    {
-        wind_printf("heaptest not support yet\r\n");
-        return W_ERR_OK;
-    }
-#endif
-    return W_ERR_FAIL;
-}
+#if (WIND_CONSOLE_SUPPORT && CMD_CUTEST_SUPPORT)
 
 COMMAND_DISC(test)
 {
@@ -63,27 +51,18 @@ COMMAND_USAGE(test)
 
 COMMAND_MAIN(test,argc,argv)
 {
-    if(0 == wind_strcmp(argv[1],"heap"))
-    {
-        return cmd_testheap_main(argc,argv);
-    }
-    else if(0 == wind_strcmp(argv[1],"show"))
+    if(0 == wind_strcmp(argv[1],"show"))
     {
         show_test_suites();
     }
     else if(argc >= 3)
     {
-        cut_test_start(argv[1],argv[2]);
+        return cutest_main(argc,argv);
     }
     return  W_ERR_FAIL;
 }
 
 COMMAND_DEF(test);
-
-void wind_cmd_register_cmd_test(w_console_s *ctrl)
-{
-    wind_cmd_register(COMMAND(test),1);
-}
 
 
 #endif

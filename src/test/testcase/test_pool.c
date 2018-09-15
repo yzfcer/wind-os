@@ -20,6 +20,7 @@
 *******************************************************************************************************/
 #include "wind_cut.h"
 #include "wind_pool.h"
+#if (WIND_CUTEST_SUPPORT && TEST_POOL_SUPPORT)
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
@@ -114,7 +115,7 @@ TEST_CASE(pool_alloc)
 TEST_CASES_END
 TEST_SUITE(test_pool)
 
-
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus
+#endif

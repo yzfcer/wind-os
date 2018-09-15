@@ -23,12 +23,12 @@
 #include "wind_pool.h"
 #include "wind_thread.h"
 #include "wind_msgbox.h"
+#if (WIND_CUTEST_SUPPORT && TEST_MSGBOX_SUPPORT)
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
 
 
-#if WIND_MSGBOX_SUPPORT
 /********************************************内部变量定义**********************************************/
 static w_msgbox_s *msgbox;
 typedef struct 
@@ -145,7 +145,7 @@ TEST_CASE(msgbox_multthread)
 TEST_CASES_END
 TEST_SUITE(test_msgbox)
 
-#endif 
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus
+#endif 

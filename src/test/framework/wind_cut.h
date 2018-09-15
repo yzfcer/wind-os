@@ -25,6 +25,7 @@
 #ifndef WIND_CUT_H__
 #define WIND_CUT_H__
 #include "test_framework.h"
+#if WIND_CUTEST_SUPPORT
 
 //¶ÏÑÔx == y
 #define EXPECT_EQ(x,y) \
@@ -92,4 +93,5 @@ W_NULL};
 
 
 
+#endif
 #endif

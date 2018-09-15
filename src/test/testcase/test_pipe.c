@@ -24,12 +24,12 @@
 #include "wind_string.h"
 #include "wind_queue.h"
 
+#if (WIND_CUTEST_SUPPORT && TEST_PIPE_SUPPORT)
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
 
 
-#if WIND_PIPE_SUPPORT
 /********************************************内部变量定义**********************************************/
 
 w_uint8_t pipebuf[128];
@@ -130,7 +130,7 @@ TEST_CASE(pipefunc)
 TEST_CASES_END
 TEST_SUITE(test_pipe)
 
-#endif
 #ifdef __cplusplus
 }
-#endif // #ifdef __cplusplus
+#endif
+#endif 
