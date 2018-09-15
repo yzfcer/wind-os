@@ -37,13 +37,13 @@ static void core_stati_pool_print(void)
     w_pool_s *pool;
     w_dlist_s *list;
     wind_print_space(7);
-    wind_printf("%-16s %-8s %-8s %-8s %-8s\r\n","pool","tot","used","maxused","err");
+    console_printf("%-16s %-8s %-8s %-8s %-8s\r\n","pool","tot","used","maxused","err");
     wind_print_space(7);
     list = &g_core.poollist;
     foreach_node(dnode,list)
     {
         pool = (w_pool_s*)DLIST_OBJ(dnode,w_pool_s,poolnode);
-        wind_printf("%-16s %-8d %-8d %-8d %-8d\r\n",pool->name,pool->stati.tot,
+        console_printf("%-16s %-8d %-8d %-8d %-8d\r\n",pool->name,pool->stati.tot,
             pool->stati.used,pool->stati.max,pool->stati.err);
     }
     wind_print_space(7);
@@ -56,14 +56,14 @@ static void core_stati_heap_print(void)
     w_heap_s *heap;
     w_dlist_s *list;
     wind_print_space(7);
-    wind_printf("%-16s %-8s %-8s %-8s %-8s\r\n","heap","tot","used","maxused","err");
+    console_printf("%-16s %-8s %-8s %-8s %-8s\r\n","heap","tot","used","maxused","err");
     wind_print_space(7);
 
     list = &g_core.heaplist;
     foreach_node(dnode,list)
     {
         heap = (w_heap_s*)DLIST_OBJ(dnode,w_heap_s,heapnode);
-        wind_printf("%-16s %-8d %-8d %-8d %-8d\r\n",heap->name,heap->stati.tot,
+        console_printf("%-16s %-8d %-8d %-8d %-8d\r\n",heap->name,heap->stati.tot,
             heap->stati.used,heap->stati.max,heap->stati.err);
     }
    

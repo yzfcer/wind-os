@@ -75,7 +75,7 @@ COMMAND_MAIN(blkdev,argc,argv)
         }
         else
         {
-            wind_printf("%s",buff);
+            console_printf("%s",buff);
             err = W_ERR_OK;
         }
     }
