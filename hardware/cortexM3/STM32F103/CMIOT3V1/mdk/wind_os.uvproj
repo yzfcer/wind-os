@@ -364,7 +364,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F40_41xxx,USE_STDPERIPH_DRIVER,_USE_USER_PRINT,STM32F10X_HD, USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\board;..\..\driver;..\port;..\start;..\..\..\..\..\src\api;..\..\..\..\..\src\app;..\..\..\..\..\src\common;..\..\..\..\..\src\console\framework;..\..\..\..\..\src\core;..\..\..\..\..\src\driver;..\..\..\..\..\src\entry;..\..\..\..\..\src\lib;..\..\..\..\..\src\xlib;..\..\..\..\..\src\console\cmd;..\..\..\..\..\src\test\framework;..\..\..\..\..\src\test\port;..\..\..\..\..\src\test\case;..\..\..\..\..\src\dev;..\..\..\..\..\src\components\lua-5.3.4\src;..\..\..\..\..\src\fs\treefs</IncludePath>
+              <IncludePath>..\board;..\..\driver;..\port;..\start;..\..\..\..\..\src\api;..\..\..\..\..\src\app;..\..\..\..\..\src\common;..\..\..\..\..\src\console\framework;..\..\..\..\..\src\core;..\..\..\..\..\src\driver;..\..\..\..\..\src\entry;..\..\..\..\..\src\lib;..\..\..\..\..\src\xlib;..\..\..\..\..\src\console\cmd;..\..\..\..\..\src\cutest\framework;..\..\..\..\..\src\cutest\port;..\..\..\..\..\src\cutest\case;..\..\..\..\..\src\dev;..\..\..\..\..\src\components\lua-5.3.4\src;..\..\..\..\..\src\fs\treefs</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1131,9 +1131,9 @@
               <FilePath>..\..\..\..\..\src\console\cmd\cmd_thread.c</FilePath>
             </File>
             <File>
-              <FileName>cmd_test.c</FileName>
+              <FileName>cmd_cutest.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\console\cmd\cmd_test.c</FilePath>
+              <FilePath>..\..\..\..\..\src\console\cmd\cmd_cutest.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1438,17 +1438,17 @@
             <File>
               <FileName>test_framework.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\test\framework\test_framework.c</FilePath>
+              <FilePath>..\..\..\..\..\src\cutest\framework\test_framework.c</FilePath>
             </File>
             <File>
               <FileName>test_framework.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\test\framework\test_framework.h</FilePath>
+              <FilePath>..\..\..\..\..\src\cutest\framework\test_framework.h</FilePath>
             </File>
             <File>
               <FileName>wind_cut.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\test\framework\wind_cut.h</FilePath>
+              <FilePath>..\..\..\..\..\src\cutest\framework\wind_cut.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -1458,12 +1458,12 @@
             <File>
               <FileName>test_port.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\test\port\test_port.c</FilePath>
+              <FilePath>..\..\..\..\..\src\cutest\port\test_port.c</FilePath>
             </File>
             <File>
               <FileName>test_port.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\test\port\test_port.h</FilePath>
+              <FilePath>..\..\..\..\..\src\cutest\port\test_port.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -1471,54 +1471,54 @@
           <GroupName>test_case</GroupName>
           <Files>
             <File>
-              <FileName>test_tree.c</FileName>
+              <FileName>test_heap.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\test\testcase\test_tree.c</FilePath>
-            </File>
-            <File>
-              <FileName>test_sem.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\test\testcase\test_sem.c</FilePath>
-            </File>
-            <File>
-              <FileName>test_pipe.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\test\testcase\test_pipe.c</FilePath>
-            </File>
-            <File>
-              <FileName>test_queue.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\test\testcase\test_queue.c</FilePath>
+              <FilePath>..\..\..\..\..\src\cutest\testcase\test_heap.c</FilePath>
             </File>
             <File>
               <FileName>test_msgbox.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\test\testcase\test_msgbox.c</FilePath>
+              <FilePath>..\..\..\..\..\src\cutest\testcase\test_msgbox.c</FilePath>
             </File>
             <File>
               <FileName>test_mutex.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\test\testcase\test_mutex.c</FilePath>
+              <FilePath>..\..\..\..\..\src\cutest\testcase\test_mutex.c</FilePath>
             </File>
             <File>
-              <FileName>test_heap.c</FileName>
+              <FileName>test_pipe.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\test\testcase\test_heap.c</FilePath>
-            </File>
-            <File>
-              <FileName>test_softirq.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\test\testcase\test_softirq.c</FilePath>
+              <FilePath>..\..\..\..\..\src\cutest\testcase\test_pipe.c</FilePath>
             </File>
             <File>
               <FileName>test_pool.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\test\testcase\test_pool.c</FilePath>
+              <FilePath>..\..\..\..\..\src\cutest\testcase\test_pool.c</FilePath>
+            </File>
+            <File>
+              <FileName>test_queue.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\cutest\testcase\test_queue.c</FilePath>
+            </File>
+            <File>
+              <FileName>test_sem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\cutest\testcase\test_sem.c</FilePath>
+            </File>
+            <File>
+              <FileName>test_softirq.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\cutest\testcase\test_softirq.c</FilePath>
+            </File>
+            <File>
+              <FileName>test_tree.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\cutest\testcase\test_tree.c</FilePath>
             </File>
             <File>
               <FileName>test_treefs.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\test\testcase\test_treefs.c</FilePath>
+              <FilePath>..\..\..\..\..\src\cutest\testcase\test_treefs.c</FilePath>
             </File>
           </Files>
         </Group>

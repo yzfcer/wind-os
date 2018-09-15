@@ -4,7 +4,7 @@
 **                                       yzfcer@163.com
 **
 **--------------文件信息--------------------------------------------------------------------------------
-**文   件   名: cmd_test.c
+**文   件   名: cmd_cutest.c
 **创   建   人: 周江村
 **最后修改日期: 2013.11.06
 **描        述: 系统的控制台命令test处理函数，提供一些系统内核测试的命令的响应函数
@@ -34,22 +34,22 @@
 #include "wind_cmd.h"
 #include "test_framework.h"
 
-#if (WIND_CONSOLE_SUPPORT && CMD_TEST_SUPPORT)
+#if (WIND_CONSOLE_SUPPORT && CMD_CUTEST_SUPPORT)
 
-COMMAND_DISC(test)
+COMMAND_DISC(cutest)
 {
     wind_printf("to test some test cases.\r\n");
 }
 
-COMMAND_USAGE(test)
+COMMAND_USAGE(cutest)
 {
-    wind_printf("test show:to show all test suites and cases list.\r\n");
-    wind_printf("test <suitename> <casename>:to test some appointed test cases.\r\n");
+    wind_printf("cutest show:to show all test suites and cases list.\r\n");
+    wind_printf("cutest <suitename> <casename>:to test some appointed test cases.\r\n");
     wind_printf("suitename:use *to test all test suite.\r\n");
     wind_printf("casename:use *to test all test suite.\r\n");
 }
 
-COMMAND_MAIN(test,argc,argv)
+COMMAND_MAIN(cutest,argc,argv)
 {
     if(0 == wind_strcmp(argv[1],"show"))
     {
@@ -62,7 +62,7 @@ COMMAND_MAIN(test,argc,argv)
     return  W_ERR_FAIL;
 }
 
-COMMAND_DEF(test);
+COMMAND_DEF(cutest);
 
 
 #endif

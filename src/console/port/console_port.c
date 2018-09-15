@@ -50,8 +50,8 @@ CMD_DECLARE(thread);
 #if CMD_DATETIME_SUPPORT
 CMD_DECLARE(datetime);
 #endif
-#if CMD_TEST_SUPPORT
-CMD_DECLARE(test);
+#if CMD_CUTEST_SUPPORT
+CMD_DECLARE(cutest);
 #endif
 #if CMD_BLKDEV_SUPPORT
 CMD_DECLARE(blkdev);
@@ -93,8 +93,8 @@ void _wind_register_all_cmd(w_console_s *ctrl)
 #if CMD_THREAD_SUPPORT
     wind_cmd_register(COMMAND(thread),1);
 #endif
-#if CMD_TEST_SUPPORT
-    wind_cmd_register(COMMAND(test),1);
+#if CMD_CUTEST_SUPPORT
+    wind_cmd_register(COMMAND(cutest),1);
 #endif
 #if CMD_DATETIME_SUPPORT
     wind_cmd_register(COMMAND(datetime),1);

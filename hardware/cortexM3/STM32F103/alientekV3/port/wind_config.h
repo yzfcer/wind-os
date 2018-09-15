@@ -94,7 +94,7 @@
 
 #define WIND_XMODEM_SUPPORT 1 //是否支持XMODEM协议
 
-#define WIND_CUTEST_SUPPORT 1 //是否支持单元测试框架
+#define WIND_CUTEST_SUPPORT 0 //是否支持单元测试框架
 
 #define HARD_STACK_SIZE 40 //为硬件堆栈保留的空间大小，在某些硬件里可以不需要
 
@@ -112,7 +112,7 @@
 #define CMD_STATI_SUPPORT 1 //是否支持统计命令
 #define CMD_THREAD_SUPPORT 1 //是否支持线程操作命令
 #define CMD_XMODEM_SUPPORT 0 //是否支持xmodem协议命令
-#define CMD_TEST_SUPPORT 1 //是否支持单元测试命令
+#define CMD_CUTEST_SUPPORT 0 //是否支持单元测试命令
 
 #define CMD_BEEP_SUPPORT 0 //是否支持蜂鸣器命令
 #define CMD_LED_SUPPORT 0 //是否支持LED操作命令

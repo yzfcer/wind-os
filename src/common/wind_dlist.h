@@ -57,6 +57,10 @@ struct __w_dlist_s
 #define PRIO_DNODE_INIT(prionode) {prionode.dnode.prev = W_NULL;prionode.dnode.next = W_NULL;prionode.prio = 0;}
 #define DLIST_INIT(dlist) {dlist.head = W_NULL;dlist.tail = W_NULL;}
 
+#define PDNODE_INIT(pdnode) {pdnode->prev = W_NULL;pdnode->next = W_NULL;}
+#define PPRIO_DNODE_INIT(pprionode) {pprionode->dnode.prev = W_NULL;pprionode->dnode.next = W_NULL;pprionode->prio = 0;}
+#define PDLIST_INIT(pdlist) {pdlist->head = W_NULL;pdlist->tail = W_NULL;}
+
 #define DLIST_OBJ(ptr,type,mbrnode) (void*)(((char*)(ptr))-((w_uint32_t)&(((type*)0)->mbrnode)))
 #define PRI_DLIST_OBJ(ptr,type,mbrnode) (void*)(((char*)(ptr))-((w_uint32_t)&(((type*)0)->mbrnode.dnode)))
 
