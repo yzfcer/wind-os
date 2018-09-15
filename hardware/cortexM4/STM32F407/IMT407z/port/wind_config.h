@@ -33,6 +33,10 @@
 #define WIND_THREAD_MAX_NUM 8 //需要的线程总数,建议根据需要来定义
 #define WIND_THREAD_CALLBACK_SUPPORT 1  //是否支持线程事件毁回调函数
 
+#define WIND_STKPOOL_SUPPORT 1 //是否支持线程堆栈通过内存池分配
+#define WIND_STK_MAX_NUM 4//堆栈的数量
+#define WIND_STK_SIZE 512 //堆栈大小
+
 #define WIND_MUTEX_SUPPORT 1 //是否支持互斥锁
 #define WIND_MUTEX_MAX_NUM 20 //互斥锁的数量
 
@@ -56,10 +60,6 @@
 
 #define WIND_SOFTIRQ_SUPPORT 1 //是否支持软中断功能
 #define WIND_SOFTINT_MAX_NUM 256 //软中断向量表的长度
-
-#define WIND_STKPOOL_SUPPORT 1 //是否支持线程堆栈通过内存池分配
-#define WIND_STK_MAX_NUM 4//堆栈的数量
-#define WIND_STK_SIZE 512 //堆栈大小
 
 #define WIND_FS_SUPPORT 1 //是否支持内存文件系统
 #define WIND_FS_MAX_NUM 5 //允许支持的文件系统的数量

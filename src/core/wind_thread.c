@@ -230,9 +230,10 @@ w_err_t wind_thread_destroy(w_thread_s *thread)
     wind_disable_interrupt();
     dlist_remove(&g_core.threadlist,&thread->validnode.dnode);
     //这里需要先释放一些与这个线程相关的一些东西后才能释放这个thread
+#if WIND_STKPOOL_SUPPORT
     if(thread->stkpool_flag)
         wind_pool_free(stkbufpool,thread->stack_top);
-    
+#endif    
     thread_free(thread);
     wind_enable_interrupt();
     _wind_thread_dispatch();
