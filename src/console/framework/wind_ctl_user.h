@@ -26,6 +26,7 @@
 #define WIND_USER_H__
 #include "wind_config.h"
 #include "wind_type.h"
+#if WIND_CONSOLE_SUPPORT
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -60,6 +61,5 @@ w_err_t wind_user_remove(user_s *usr);
 #ifdef __cplusplus
 }
 #endif
-
-
+#endif
 #endif

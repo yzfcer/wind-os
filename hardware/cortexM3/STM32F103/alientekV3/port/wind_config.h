@@ -28,6 +28,8 @@
 
 
 //-------------------------------------------------------------------------------
+//内核基本功能定制
+//-------------------------------------------------------------------------------
 #define WIND_THREAD_MAX_NUM 8 //需要的线程总数,建议根据需要来定义
 #define WIND_THREAD_CALLBACK_SUPPORT 1  //是否支持线程事件毁回调函数
 
@@ -93,5 +95,24 @@
 #define WIND_XMODEM_SUPPORT 1 //是否支持XMODEM协议
 
 #define HARD_STACK_SIZE 40 //为硬件堆栈保留的空间大小，在某些硬件里可以不需要
+
+//-------------------------------------------------------------------------------
+//调试命令定制，前提是内核支持控制台功能
+//-------------------------------------------------------------------------------
+#define CMD_BLKDEV_SUPPORT 0 //是否支持块设备操作命令
+#define CMD_DATETIME_SUPPORT 0 //是否支持日期时间命令
+#define CMD_ECHO_SUPPORT 1 //是否支持回显命令
+#define CMD_FS_SUPPORT 0 //是否支持文件系统命令
+#define CMD_LIST_SUPPORT 1 //是否支持内核对象列表命令
+#define CMD_LUA_SUPPORT 0 //是否支持lua脚本命令
+#define CMD_MEM_SUPPORT 1 //是否支持内存值查看命令
+#define CMD_RESET_SUPPORT 1 //是否支持系统复位命令
+#define CMD_STATI_SUPPORT 1 //是否支持统计命令
+#define CMD_THREAD_SUPPORT 1 //是否支持线程操作命令
+#define CMD_XMODEM_SUPPORT 0 //是否支持xmodem协议命令
+
+#define CMD_BEEP_SUPPORT 0 //是否支持蜂鸣器命令
+#define CMD_LED_SUPPORT 0 //是否支持LED操作命令
+
 
 #endif

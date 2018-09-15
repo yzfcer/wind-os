@@ -24,9 +24,15 @@
 *******************************************************************************************************/
 #ifndef CMD_HISTORY_H__
 #define CMD_HISTORY_H__
+#include "wind_config.h"
 #include "wind_type.h"
+#if WIND_CONSOLE_SUPPORT
+#ifdef __cplusplus
+extern "C" {
+#endif
 #define CMD_HISTORY_COUNT 10
 #define CMD_HSIBUF_LENTH 256
+
 struct __cmd_his_s;
 typedef struct __w_cmd_his_s w_cmd_his_s;
 struct __w_cmd_his_s
@@ -47,4 +53,8 @@ w_err_t cmd_history_append(w_cmd_his_s *his,char *cmd);
 w_err_t cmd_history_get_next(w_cmd_his_s *his,char *cmd);
 w_err_t cmd_history_get_prev(w_cmd_his_s *his,char *cmd);
 
+#ifdef __cplusplus
+}
+#endif
+#endif
 #endif

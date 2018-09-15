@@ -26,6 +26,10 @@
 #include "wind_string.h"
 #include "cmd_history.h"
 #include "wind_cmd.h"
+#if WIND_CONSOLE_SUPPORT
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 void cmd_history_print(w_cmd_his_s *his)
 {
@@ -155,5 +159,7 @@ w_err_t cmd_history_get_prev(w_cmd_his_s *his,char *cmd)
     return W_ERR_OK;
 }
 
-
-
+#ifdef __cplusplus
+}
+#endif
+#endif

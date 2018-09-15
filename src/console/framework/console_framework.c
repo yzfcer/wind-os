@@ -26,11 +26,11 @@
 #include "wind_cmd.h"
 #include "wind_std.h"
 #include "wind_core.h"
+#if WIND_CONSOLE_SUPPORT
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
 
-#if WIND_CONSOLE_SUPPORT
 
 /*********************************************头文件定义***********************************************/
 /********************************************内部变量定义**********************************************/
@@ -488,7 +488,7 @@ w_err_t _create_console_thread(void)
     return W_ERR_OK;
 }
 
-#endif
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus
+#endif

@@ -24,8 +24,7 @@
 *******************************************************************************************************/
 #include "wind_cmd.h"
 #include "wind_chdev.h"
-#if WIND_CONSOLE_SUPPORT
-#if WIND_DRVFRAME_SUPPORT
+#if (WIND_CONSOLE_SUPPORT && CMD_BEEP_SUPPORT)
 
 
 COMMAND_DISC(beep)
@@ -67,6 +66,5 @@ COMMAND_MAIN(beep,argc,argv)
 
 COMMAND_DEF(beep);
 
-#endif
 #endif
 

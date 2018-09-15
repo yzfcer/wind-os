@@ -29,6 +29,7 @@
 #include "wind_type.h"
 #include "wind_debug.h"
 #include "console_framework.h"
+#if WIND_CONSOLE_SUPPORT
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -45,8 +46,9 @@ cmd_##cmdname##_help,cmd_##cmdname##_main}
 #define CMD_DECLARE(cmdname) extern w_cmd_s g_cmd_##cmdname
 #define COMMAND(cmdname) &g_cmd_##cmdname
 
-#endif//ifndef WIND_CONSOLE_H__
 #ifdef __cplusplus
 }
 #endif
+#endif
+#endif//ifndef WIND_CONSOLE_H__
 

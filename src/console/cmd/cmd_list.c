@@ -37,7 +37,7 @@
 #include "wind_watchdog.h"
 #include "wind_timer.h"
 
-#if WIND_CONSOLE_SUPPORT
+#if (WIND_CONSOLE_SUPPORT && CMD_LIST_SUPPORT)
 
 COMMAND_DISC(list)
 {
