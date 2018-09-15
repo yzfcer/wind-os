@@ -101,10 +101,7 @@ CASE_FUNC(treefs_readwrite)
 
 SUITE_SETUP(test_treefs)
 {
-    //treefile_s *file;
     treefs_format();
-    //file = treefile_open("/",FMODE_CRT);
-    //treefile_close(file);
 }
 
 SUITE_TEARDOWN(test_treefs)

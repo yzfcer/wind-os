@@ -195,14 +195,13 @@ w_err_t treefile_rm(treefile_s *file)
     }
     if(file->tree.parent)
         wind_tree_remove_child(file->tree.parent,&file->tree);
-    treefs_free(file->filename);
     foreach_node(dnode,&file->datalist)
     {
         dlist_remove(&file->datalist,dnode);
         treefs_free(dnode);
     }
-    if(wind_strcmp(file->filename,"") != 0)
-        treefs_free(file);
+    treefs_free(file->filename);
+    treefs_free(file);
     return W_ERR_OK;
 }
 
@@ -213,8 +212,7 @@ w_err_t treefs_format(void)
     treefile_s *root = treefs_get_root();
     if(root != W_NULL)
         treefile_rm(root);
-    else
-        root = mk_subnode(W_NULL,"",1);
+    root = mk_subnode(W_NULL,"",1);
     if(!root)
         return W_ERR_FAIL;
     treefs_set_root(root);

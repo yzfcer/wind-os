@@ -80,6 +80,7 @@ static char *treefs_op_subfile(w_file_s* dir,w_int32_t index)
 {
     treefile_s *tfile;
     w_int32_t len;
+    WIND_ASSERT_RETURN(dir->subname != W_NULL,W_NULL);
     tfile = treefile_readdir((treefile_s *)dir->fileobj,index);
     if(tfile == W_NULL)
         return W_NULL;
@@ -89,7 +90,6 @@ static char *treefs_op_subfile(w_file_s* dir,w_int32_t index)
         wind_error("file name:\"%s\" is too long.",tfile->filename);
         return W_NULL;
     }
-    WIND_ASSERT_RETURN(dir->subname != W_NULL,W_NULL);
     wind_strcpy(dir->subname,tfile->filename);
     return dir->subname;
 }
