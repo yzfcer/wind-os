@@ -77,7 +77,7 @@ w_err_t _wind_watchdog_mod_init(void)
     w_timer_s *timer;
     err = wind_pool_create("watchdog",watchdogpool,sizeof(watchdogpool),sizeof(w_watchdog_s));
     WIND_ASSERT_RETURN(err == W_ERR_OK,err);
-    timer = wind_timer_create("watchdog",1000,watchdog_timer,W_NULL,W_TRUE);
+    timer = wind_timer_create("watchdog",1000,watchdog_timer,W_NULL,1,1);
     WIND_ASSERT_RETURN(timer != W_NULL,W_ERR_FAIL);
     return W_ERR_OK;
 }

@@ -286,7 +286,7 @@ static int wind_os_lunch(void)
 
 
 //C程序的入口
-int main(void)
+int main(int argc,char **argv)
 {
     wind_os_lunch();
     return 0;

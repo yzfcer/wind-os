@@ -42,7 +42,6 @@ typedef struct _w_sem_s
     const char* name;
     w_dnode_s semnode;
     w_dlist_s waitlist;  //等待线程队列
-    //w_dlist_s ownerlist;  //拥有信号量线程队列
     w_int16_t sem_tot;    //初始化的信号量的值
     w_int16_t sem_num;    //当前的信号量的值
 }w_sem_s;

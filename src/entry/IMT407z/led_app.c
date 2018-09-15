@@ -30,7 +30,7 @@ void led_start(void)
     w_chdev_s *dev;
     dev = wind_chdev_get("led0");
     wind_chdev_open(dev);
-    ledtmr = wind_timer_create("led0tmr",100,led0_timer,W_NULL,W_TRUE);
+    ledtmr = wind_timer_create("led0tmr",100,led0_timer,W_NULL,1,1);
 }
 #else
 void led_start(void) {}

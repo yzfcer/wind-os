@@ -35,6 +35,7 @@
 #include "wind_blkdev.h"
 #include "wind_pipe.h"
 #include "wind_watchdog.h"
+#include "wind_timer.h"
 
 #if WIND_CONSOLE_SUPPORT
 
@@ -62,6 +63,10 @@ COMMAND_USAGE(list)
     console_printf("list heap:show all heap map infomation.\r\n");
     console_printf("list heapitem:show all heapitems infomation.\r\n");
 #endif
+#if WIND_TIMER_SUPPORT
+    console_printf("list timer:show all timer infomation.\r\n");
+#endif
+
 #if WIND_DRVFRAME_SUPPORT
     console_printf("list chdev:show all character devices list.\r\n");
 #endif
@@ -121,6 +126,13 @@ COMMAND_MAIN(list,argc,argv)
     else if(0 == wind_strcmp(argv[1],"heapitem"))
     {
         wind_heapitem_print(&g_core.heaplist);
+        return W_ERR_FAIL;
+    }
+#endif
+#if WIND_TIMER_SUPPORT
+    else if(0 == wind_strcmp(argv[1],"timer"))
+    {
+        wind_timer_print(&g_core.timerlist);
         return W_ERR_FAIL;
     }
 #endif
