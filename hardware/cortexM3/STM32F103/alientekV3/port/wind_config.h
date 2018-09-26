@@ -38,7 +38,7 @@
 #define WIND_STK_SIZE 512 //堆栈大小
 
 #define WIND_MUTEX_SUPPORT 1 //是否支持互斥锁
-#define WIND_MUTEX_MAX_NUM 3 //互斥锁的数量
+#define WIND_MUTEX_MAX_NUM 10 //互斥锁的数量
 
 #define WIND_SEM_SUPPORT 1 //是否支持信号量
 #define WIND_SEM_MAX_NUM 3 //最大的信号量的数量
@@ -61,8 +61,8 @@
 #define WIND_SOFTIRQ_SUPPORT 1 //是否支持软中断功能
 #define WIND_SOFTINT_MAX_NUM 256 //软中断向量表的长度
 
-#define WIND_FS_SUPPORT 0 //是否支持内存文件系统
-#define WIND_FS_MAX_NUM 5 //允许支持的文件系统的数量
+#define WIND_FS_SUPPORT 1 //是否支持内存文件系统
+#define WIND_FS_MAX_NUM 2 //允许支持的文件系统的数量
 #define WIND_FILE_MAX_NUM 5 //允许打开的文件的数量
 
 #define WIND_TICK_PER_SEC 500 //一秒钟所经历的的时间街节拍
@@ -75,7 +75,7 @@
 
 #define WIND_STACK_SUPPORT 0   //是否支持堆栈
 
-#define WIND_HEAP_SUPPORT 0   //是否支持内存堆的分配
+#define WIND_HEAP_SUPPORT 1   //是否支持内存堆的分配
 
 #define WIND_RTC_SUPPORT 0  //是否支持实时时间
 #define WIND_DATETIME_SUPPORT 0  //是否支持系统时间
@@ -88,7 +88,7 @@
 
 #define WIND_DRVFRAME_SUPPORT 0  //是否字符驱动框架
 
-#define WIND_BLK_DRVFRAME_SUPPORT 0  //是否块驱动框架
+#define WIND_BLK_DRVFRAME_SUPPORT 1  //是否块驱动框架
 
 #define WIND_LUA_SUPPORT 0 //是否支持lua脚本语言
 
@@ -104,7 +104,7 @@
 #define CMD_BLKDEV_SUPPORT 0 //是否支持块设备操作命令
 #define CMD_DATETIME_SUPPORT 0 //是否支持日期时间命令
 #define CMD_ECHO_SUPPORT 1 //是否支持回显命令
-#define CMD_FS_SUPPORT 0 //是否支持文件系统命令
+#define CMD_FS_SUPPORT 1 //是否支持文件系统命令
 #define CMD_LIST_SUPPORT 1 //是否支持内核对象列表命令
 #define CMD_LUA_SUPPORT 0 //是否支持lua脚本命令
 #define CMD_MEM_SUPPORT 1 //是否支持内存值查看命令

@@ -101,7 +101,7 @@ char* wind_strchr(const char *s, w_uint32_t c)
     return (char *) s;
 }
 
-char *wind_strrchr(const char *s, w_uint32_t c)
+char *wind_strrchr(const char *s, char c)
 {
        const char *p = (const char *)(s + wind_strlen(s));
        do {

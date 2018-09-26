@@ -89,7 +89,7 @@ void GPIO_bits_OUT(GPIO_TypeDef* GPIOx, w_uint8_t start_bit, w_uint8_t bit_size,
   w_uint8_t i=0;
 	w_uint16_t bu1=0;w_uint16_t middata=1;
 
-	if( bit_size>(16-start_bit) ) 
+	if( bit_size>(16-start_bit)) 
      bit_size=16-start_bit;
 	
 	i=start_bit;

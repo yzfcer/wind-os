@@ -334,7 +334,7 @@
               <OCR_RVCT9>
                 <Type>0</Type>
                 <StartAddress>0x20000000</StartAddress>
-                <Size>0x10000</Size>
+                <Size>0xc000</Size>
               </OCR_RVCT9>
               <OCR_RVCT10>
                 <Type>0</Type>
@@ -364,7 +364,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F40_41xxx,USE_STDPERIPH_DRIVER,_USE_USER_PRINT,STM32F10X_HD, USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\board;..\..\driver;..\port;..\start;..\..\..\..\..\src\api;..\..\..\..\..\src\app;..\..\..\..\..\src\common;..\..\..\..\..\src\console\framework;..\..\..\..\..\src\core;..\..\..\..\..\src\driver;..\..\..\..\..\src\entry;..\..\..\..\..\src\lib;..\..\..\..\..\src\xlib;..\..\..\..\..\src\console\cmd;..\..\..\..\..\src\cutest\framework;..\..\..\..\..\src\cutest\port;..\..\..\..\..\src\cutest\case;..\..\..\..\..\src\dev;..\..\..\..\..\src\components\lua-5.3.4\src;..\..\..\..\..\src\fs\treefs</IncludePath>
+              <IncludePath>..\board;..\..\driver;..\port;..\start;..\..\..\..\..\src\api;..\..\..\..\..\src\app;..\..\..\..\..\src\common;..\..\..\..\..\src\console\framework;..\..\..\..\..\src\core;..\..\..\..\..\src\driver;..\..\..\..\..\src\entry;..\..\..\..\..\src\lib;..\..\..\..\..\src\xlib;..\..\..\..\..\src\console\cmd;..\..\..\..\..\src\cutest\framework;..\..\..\..\..\src\cutest\port;..\..\..\..\..\src\cutest\case;..\..\..\..\..\src\dev;..\..\..\..\..\src\components\lua-5.3.4\src;..\..\..\..\..\src\fs;..\..\..\..\..\src\fs\treefs</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -736,6 +736,18 @@
         </Group>
         <Group>
           <GroupName>device</GroupName>
+          <Files>
+            <File>
+              <FileName>blkdev_null.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\device\blkdev_null.c</FilePath>
+            </File>
+            <File>
+              <FileName>list_blkdev.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\device\list_blkdev.c</FilePath>
+            </File>
+          </Files>
         </Group>
         <Group>
           <GroupName>port</GroupName>
@@ -974,6 +986,11 @@
               <FileName>cmd_cutest.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\console\cmd\cmd_cutest.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_fs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\console\cmd\cmd_fs.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1364,6 +1381,41 @@
         </Group>
         <Group>
           <GroupName>lua</GroupName>
+        </Group>
+        <Group>
+          <GroupName>fs</GroupName>
+          <Files>
+            <File>
+              <FileName>adapter_treefs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\fs\adapter_treefs.c</FilePath>
+            </File>
+            <File>
+              <FileName>adapter_treefs.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\fs\adapter_treefs.h</FilePath>
+            </File>
+            <File>
+              <FileName>wind_file.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\fs\wind_file.c</FilePath>
+            </File>
+            <File>
+              <FileName>wind_file.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\fs\wind_file.h</FilePath>
+            </File>
+            <File>
+              <FileName>wind_filepath.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\fs\wind_filepath.c</FilePath>
+            </File>
+            <File>
+              <FileName>wind_filepath.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\fs\wind_filepath.h</FilePath>
+            </File>
+          </Files>
         </Group>
         <Group>
           <GroupName>fs_treefs</GroupName>

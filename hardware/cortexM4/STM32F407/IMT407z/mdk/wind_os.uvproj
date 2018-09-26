@@ -1857,6 +1857,16 @@
               <FileType>5</FileType>
               <FilePath>..\..\..\..\..\src\fs\wind_file.h</FilePath>
             </File>
+            <File>
+              <FileName>wind_filepath.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\fs\wind_filepath.c</FilePath>
+            </File>
+            <File>
+              <FileName>wind_filepath.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\fs\wind_filepath.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

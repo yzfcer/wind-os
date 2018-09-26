@@ -45,20 +45,27 @@ void wind_system_reset(void)
     NVIC_SystemReset();
 }
 
+#if WIND_FS_SUPPORT
+#include "wind_file.h"
+void _wind_fs_mount_init(void)
+{
+    wind_fs_mount("treefs","null","/");
+}
+#endif
 
 
 #if WIND_HEAP_SUPPORT
 #include "wind_heap.h"
 #include "wind_var.h"
-#define HEAP1_HEAD  0x10000000
-#define HEAD1_LENTH (64*1024)
+#define HEAP1_HEAD  0x2000C000
+#define HEAD1_LENTH (16*1024)
 
 //堆可自由分配的内存空间进行初始化
 void _wind_heaps_mod_init(void)
 {
     wind_heap_create("heap0",HEAP1_HEAD,HEAD1_LENTH,0);
-    wind_heap_print(&g_core.heaplist);
-    wind_heapitem_print(&g_core.heaplist);
+    //wind_heap_print(&g_core.heaplist);
+    //wind_heapitem_print(&g_core.heaplist);
 }
 
 #endif
@@ -102,11 +109,8 @@ void wind_tick_hwtimer_init(void)
 
 	w_uint32_t reload;
  	SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK_Div8);
-	//fac_us=SYSCLK/8;		//不论是否使用ucos,fac_us都需要使用
 	reload=SYSCLK/8;		//每秒钟的计数次数 单位为K	   
 	reload*=1000000/WIND_TICK_PER_SEC;//根据OS_TICKS_PER_SEC设定溢出时间
-	//reload为24位寄存器,最大值:16777216,在168M下,约合0.7989s左右	
-	//fac_ms=1000/WIND_TICK_PER_SEC;//代表ucos可以延时的最少单位	   
 	SysTick->CTRL|=SysTick_CTRL_TICKINT_Msk;   	//开启SYSTICK中断
 	SysTick->LOAD=reload; 	//每1/OS_TICKS_PER_SEC秒中断一次	
 	SysTick->CTRL|=SysTick_CTRL_ENABLE_Msk;   	//开启SYSTICK

@@ -128,6 +128,7 @@ void *wind_pool_malloc(void *mem)
         return W_NULL;
     }
     item = pm->free_head;
+    WIND_ASSERT_RETURN(item != W_NULL,W_NULL);
     if(item->flag != POOL_BLK_FREE)
     {
         WIND_STATI_ERR_INC(pm->stati);

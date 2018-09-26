@@ -68,7 +68,7 @@ static w_err_t fs_cmd_cd(w_int32_t argc,char **argv)
     return W_ERR_OK;
 }
 
-static w_err_t mknode(w_int32_t argc,char **argv,w_uint16_t isdir)
+static w_err_t mk_dir_file(w_int32_t argc,char **argv,w_uint16_t isdir)
 {
     w_bool_t isexist;
     w_file_s *file;
@@ -96,12 +96,12 @@ static w_err_t mknode(w_int32_t argc,char **argv,w_uint16_t isdir)
 
 static w_err_t fs_cmd_mkdir(w_int32_t argc,char **argv)
 {
-    return mknode(argc,argv,1);
+    return mk_dir_file(argc,argv,1);
 }
 
 static w_err_t fs_cmd_touch(w_int32_t argc,char **argv)
 {
-    return mknode(argc,argv,0);
+    return mk_dir_file(argc,argv,0);
 }
 
 static w_err_t fs_cmd_rm(w_int32_t argc,char **argv)
@@ -111,8 +111,8 @@ static w_err_t fs_cmd_rm(w_int32_t argc,char **argv)
     w_bool_t isexist;
     char *curpath = wind_file_get_current_path();
     char * fullpath = wind_full_path_generate(curpath,argv[2],1);
-    isexist = wind_file_existing(fullpath);
-    if(!isexist)
+    file = wind_file_open(fullpath,FMODE_R);
+    if(file == W_NULL)
     {
         console_printf("open directory or file failed.\r\n");
         wind_full_path_release(fullpath);

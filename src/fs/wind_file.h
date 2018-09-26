@@ -4,7 +4,7 @@
 **                                       yzfcer@163.com
 **
 **--------------文件信息--------------------------------------------------------------------------------
-**文   件   名: wind_chdev.h
+**文   件   名: wind_file.h
 **创   建   人: 周江村
 **最后修改日期: 
 **描        述: 文件系统标准化API接口
@@ -28,6 +28,7 @@
 #include "wind_type.h"
 #include "wind_dlist.h"
 #include "wind_blkdev.h"
+#include "wind_filepath.h"
 
 #if WIND_FS_SUPPORT
 #define WIND_FS_MAGIC 0x235C79A5
@@ -136,8 +137,6 @@ w_err_t wind_fs_mount(char *fsname,char *devname,char *path);
 w_err_t wind_fs_unmount(char *fsname);
 w_err_t wind_fs_format(w_fs_s *fs);
 
-char *wind_full_path_generate(char *oldpath,char *newpath,w_uint16_t isdir);
-w_err_t wind_full_path_release(char *path);
 
 void wind_file_set_current_path(char *path);
 char *wind_file_get_current_path(void);

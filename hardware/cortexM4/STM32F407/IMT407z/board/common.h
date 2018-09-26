@@ -89,7 +89,7 @@ void MSR_MSP(w_uint32_t addr);	 //…Ë÷√∂—’ªµÿ÷∑
 
 void GPIO_group_OUT(_gpio_group *group,w_uint16_t outdata);
 void GPIO_bits_OUT(GPIO_TypeDef* GPIOx, w_uint8_t start_bit, w_uint8_t bit_size,w_uint16_t outdata);
-	
+
 void delay_init(void);
 void delay_ms(w_uint16_t nms);
 void delay_us(w_uint32_t nus);

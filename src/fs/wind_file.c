@@ -4,7 +4,7 @@
 **                                       yzfcer@163.com
 **
 **--------------文件信息--------------------------------------------------------------------------------
-**文   件   名: wind_chdev.h
+**文   件   名: wind_file.h
 **创   建   人: 周江村
 **最后修改日期: 
 **描        述: 文件系统标准化API接口
@@ -241,42 +241,7 @@ void wind_file_set_current_path(char *path)
     wind_memcpy(curpath,path,len+1);
 }
 
-char *wind_full_path_generate(char *pre_path,char *relative_path,w_uint16_t isdir)
-{
-    char *path;
-    w_int32_t len,len1;
-    w_int32_t ap = 0;
-    len = wind_strlen(relative_path) + 1;
-    if(isdir)
-        len += 1;
-    if(relative_path[0] == '/')
-    {
-        path = wind_malloc(len+ap);
-        wind_memset(path,0,len+ap);
-        wind_strcpy(path,relative_path);
-    }
-    else
-    {
-        len1 = wind_strlen(pre_path) + 1;
-        len += len1;
-        path = wind_malloc(len);
-        wind_memset(path,0,len);
-        wind_strcpy(path,pre_path);
-        if(pre_path[len1-1] != '/')
-            path[len1] = '/';
-        wind_strcat(path,relative_path);
-    }
-    
-    len = wind_strlen(path);
-    if(isdir && (path[len-1] != '/'))
-        path[len] = '/';
-    return path;
-}
 
-w_err_t wind_full_path_release(char *path)
-{
-    return wind_free(path);
-}
 
 w_file_s *wind_file_get(w_fs_s *fs,const char *path)
 {
