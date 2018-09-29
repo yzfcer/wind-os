@@ -205,7 +205,7 @@ w_thread_s *wind_thread_create(const char *name,
     w_thread_s *thread;
     thread = thread_malloc();
     WIND_ASSERT_RETURN(thread != W_NULL,W_NULL);
-    wind_thread_init(thread,name,thread_func,argc,argv,priolevel,pstk,stksize);
+    err = wind_thread_init(thread,name,thread_func,argc,argv,priolevel,pstk,stksize);
     if(err == W_ERR_OK)
     {
         thread->threadpool_flag = 1;
