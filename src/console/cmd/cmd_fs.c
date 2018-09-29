@@ -108,9 +108,14 @@ static w_err_t fs_cmd_rm(w_int32_t argc,char **argv)
 {
     w_err_t err;
     w_file_s *file;
-    w_bool_t isexist;
-    char *curpath = wind_file_get_current_path();
-    char * fullpath = wind_full_path_generate(curpath,argv[2],1);
+    w_int32_t len;
+    char *curpath;
+    char * fullpath;
+    if(argc < 3)
+        return W_ERR_INVALID;
+    curpath = wind_file_get_current_path();
+    len = wind_strlen(argv[2]);
+    fullpath = wind_full_path_generate(curpath,argv[2],argv[2][len-1] == '/'?1:0);
     file = wind_file_open(fullpath,FMODE_R);
     if(file == W_NULL)
     {

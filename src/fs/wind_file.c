@@ -162,7 +162,7 @@ w_fs_s *wind_fs_get(char *name)
     return W_NULL;
 }
 
-w_fs_s *wind_fs_get_bypath(char *path)
+static w_fs_s *wind_fs_get_bypath(const char *path)
 {
     w_fs_s *fs,*retfs = W_NULL;
     w_dnode_s *dnode;
@@ -282,33 +282,37 @@ w_file_s* wind_file_open(const char *path,w_fmode_e fmode)
 {
     w_file_s *file;
     w_fs_s *fs;
-    char *fullpath = W_NULL;
+    //char *fullpath = W_NULL;
     char *realpath = W_NULL;
     w_int32_t len,len1;
-    w_uint16_t isdir;
+    //w_uint16_t isdir;
     w_err_t err;
     WIND_ASSERT_RETURN(path != W_NULL,W_NULL);
     wind_debug("open file:%s",path);
     len = wind_strlen(path);
     WIND_ASSERT_RETURN(len > 0,W_NULL);
-    isdir = path[len-1] == '/'?1:0;
-    fullpath = wind_full_path_generate(curpath,(char*)path,isdir);
-    fs = wind_fs_get_bypath(fullpath);
+    //isdir = path[len-1] == '/'?1:0;
+    //fullpath = wind_full_path_generate(curpath,(char*)path,isdir);
+    //fs = wind_fs_get_bypath(fullpath);
+    fs = wind_fs_get_bypath(path);
     if(fs == W_NULL)
     {
-        wind_error("path:%s NOT exsit.",fullpath);
-        wind_full_path_release(fullpath);
+        //wind_error("path:%s NOT exsit.",fullpath);
+        wind_error("path:%s NOT exsit.",path);
+        //wind_full_path_release(fullpath);
         return W_NULL;
     }
     len1 = wind_strlen(fs->mount_path);
     realpath = wind_malloc(len-len1+1);
-    wind_strcpy(realpath,(const char*)&fullpath[len1-1]);
+    //wind_strcpy(realpath,(const char*)&fullpath[len1-1]);
+    wind_strcpy(realpath,(const char*)&path[len1-1]);
     
-    file = wind_file_get(fs,fullpath);
+    //file = wind_file_get(fs,fullpath);
+    file = wind_file_get(fs,path);
     if(file != W_NULL)
     {
         wind_error("file has been opened.");
-        wind_full_path_release(fullpath);
+        //wind_full_path_release(fullpath);
         wind_free(realpath);
         return W_NULL;
     }
@@ -319,7 +323,8 @@ w_file_s* wind_file_open(const char *path,w_fmode_e fmode)
     DNODE_INIT(file->filenode);
     file->ftype = fs->fstype;
     file->fmode = fmode;
-    file->isdir = fullpath[len-1] == '/'?1:0;
+    //file->isdir = fullpath[len-1] == '/'?1:0;
+    file->isdir = path[len-1] == '/'?1:0;
     file->fs = fs;
     file->fileobj = W_NULL;
     file->offset = 0;
@@ -331,7 +336,7 @@ w_file_s* wind_file_open(const char *path,w_fmode_e fmode)
         wind_mutex_destroy(file->mutex);
         _file_free(file);
         wind_free(realpath);
-        wind_full_path_release(fullpath);
+        //wind_full_path_release(fullpath);
         return W_NULL;
     }
     else
@@ -339,7 +344,7 @@ w_file_s* wind_file_open(const char *path,w_fmode_e fmode)
         wind_disable_switch();
         dlist_insert_tail(&g_core.filelist,&file->filenode);
         wind_enable_switch();
-        wind_full_path_release(fullpath);
+        //wind_full_path_release(fullpath);
         return file;
     }
 }
@@ -351,7 +356,7 @@ w_err_t wind_file_close(w_file_s *file)
     wind_debug("close file:%s.",file->path);
     wind_mutex_lock(file->mutex);
     if(file->ops->close)
-    err = file->ops->close(file);
+        err = file->ops->close(file);
     wind_mutex_unlock(file->mutex);
     dlist_remove(&g_core.filelist,&file->filenode);
     wind_mutex_destroy(file->mutex);
@@ -369,7 +374,7 @@ w_err_t wind_file_remove(w_file_s *file)
     wind_debug("remove file:%s",file->path);
     wind_mutex_lock(file->mutex);
     if(file->ops->rmfile)
-    err = file->ops->rmfile(file);
+        err = file->ops->rmfile(file);
     wind_mutex_unlock(file->mutex);
     dlist_remove(&g_core.filelist,&file->filenode);
     wind_mutex_destroy(file->mutex);

@@ -29,13 +29,22 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#define WIND_CORE_VERSION "1.1.23"
+#define WIND_OS_VERSION 0x00010117
+typedef struct 
+{
+    char *archname;
+    char *cpuname;
+    char *boardname;
+    w_uint32_t os_ver;
+    w_uint32_t hw_ver;
+    w_uint32_t soft_ver;
+}w_sysinfo_s;
 
-const char *wind_get_core_version_info(void);
+w_err_t wind_sysinfo_init(void);
 
-const char *wind_get_core_version(void);
+void wind_os_print_logo(void);
 
-void _wind_print_os_info(void);
+void _wind_print_sysinfo(void);
 
 
 

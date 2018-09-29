@@ -26,44 +26,54 @@
 #include "wind_type.h"
 #include "wind_version.h"
 #include "wind_debug.h"
+#include "wind_os_hwif.h"
 const char* versioninfo = \
 "E-mail:yzfcer@163.com.\r\n";
 
-char *g_wind_logo[4] = 
+
+
+w_sysinfo_s g_sysinfo = 
 {
-    " _    __    _",
-    " \\\\  //\\\\  // ",
-    "  \\\\//  \\\\//  ",
-    "   \\/    \\/   "   
+    ARCH_NAME,
+    CPU_NAME,
+    BOARD_NAME,
+    WIND_OS_VERSION,
+    HW_VERSION,
+    SOFT_VERSION
 };
 
-const char *wind_get_core_version_info(void)
-{
-    return versioninfo;
-}
 
-const char *wind_get_core_version(void)
-{
-    return WIND_CORE_VERSION;
-}
 
-static void output_logo(void)
+void wind_os_print_logo(void)
 {
     int i;
+    char *logo[4] = 
+    {
+        " _    __    _",
+        " \\\\  //\\\\  // ",
+        "  \\\\//  \\\\//  ",
+        "   \\/    \\/   "   
+    };
+    wind_printf("\r\n");
     for(i = 0;i < 4;i++)
     {
-        wind_printf("%s\r\n",g_wind_logo[i]);
+        wind_printf("%s\r\n",logo[i]);
     }
 }
 
-void _wind_print_os_info(void)
+
+
+void _wind_print_sysinfo(void)
 {
-    const char *str;
-    wind_printf("\r\n\r\nwind_os version:%s\r\n",wind_get_core_version());
-    output_logo();
-    wind_printf("core created on:%s @ chongqing,china.\r\n",__DATE__);
-    str = wind_get_core_version_info();
-    wind_printf(str);
-    wind_printf("core is built at %s %s\r\n\r\n",__TIME__,__DATE__);
+    wind_printf("ARCH  : %s\r\n",g_sysinfo.archname);
+    wind_printf("CPU   : %s\r\n",g_sysinfo.cpuname);
+    wind_printf("BOARD : %s\r\n",g_sysinfo.boardname);
+    wind_printf("os ver  :%d.%d.%d\r\n",(g_sysinfo.os_ver>>16)&0xff,
+        (g_sysinfo.os_ver>>8)&0xff,(g_sysinfo.os_ver>>0)&0xff);
+    wind_printf("soft ver:%d.%d.%d\r\n",(g_sysinfo.soft_ver>>16)&0xff,
+        (g_sysinfo.soft_ver>>8)&0xff,(g_sysinfo.soft_ver>>0)&0xff);
+    wind_printf("hard ver:%d.%d.%d\r\n",(g_sysinfo.hw_ver>>16)&0xff,
+        (g_sysinfo.hw_ver>>8)&0xff,(g_sysinfo.hw_ver>>0)&0xff);
+    wind_printf("build time:%s %s\r\n\r\n",__TIME__,__DATE__);
 }
 

@@ -1157,6 +1157,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\console\cmd\cmd_cutest.c</FilePath>
             </File>
+            <File>
+              <FileName>cmd_sysinfo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\console\cmd\cmd_sysinfo.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

@@ -109,8 +109,6 @@ struct _w_thread_s
     w_int8_t **argv;
     w_err_t (*thread_func)(w_int32_t argc,w_int8_t **argv);
     
-
-    //char name[THREAD_NAME_LEN];
     char *name;
     w_int16_t prio;
     w_uint16_t tid;

@@ -239,8 +239,9 @@ static void _wind_init()
     g_core.usrthren = W_FALSE;
     _wind_target_init();//目标机运行环境初始化
     _wind_std_init();//调试端口初始化
-    
-    _wind_print_os_info();
+
+    wind_os_print_logo();
+    _wind_print_sysinfo();
     _wind_corevar_init();
     _wind_thread_mod_init();
 #if WIND_MUTEX_SUPPORT

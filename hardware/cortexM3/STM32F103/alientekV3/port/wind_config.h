@@ -112,6 +112,7 @@
 #define CMD_STATI_SUPPORT 1 //是否支持统计命令
 #define CMD_THREAD_SUPPORT 1 //是否支持线程操作命令
 #define CMD_XMODEM_SUPPORT 0 //是否支持xmodem协议命令
+#define CMD_SYSINFO_SUPPORT 1 //是否支持系统信息命令
 #define CMD_CUTEST_SUPPORT 0 //是否支持单元测试命令
 
 #define CMD_BEEP_SUPPORT 0 //是否支持蜂鸣器命令

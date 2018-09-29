@@ -30,6 +30,13 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+#define ARCH_NAME "Cortex-M4"
+#define CPU_NAME "STM32F407ZGT6"
+#define BOARD_NAME "IMT407Z"
+#define HW_VERSION 0x000201
+#define SOFT_VERSION 0x000102
+
 void _wind_target_init(void);
 void wind_system_reset(void);
 

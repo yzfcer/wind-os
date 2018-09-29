@@ -29,6 +29,9 @@
 extern "C" {
 #endif // #ifdef __cplusplus
 
+#if CMD_SYSINFO_SUPPORT
+CMD_DECLARE(sysinfo);
+#endif
 #if CMD_LIST_SUPPORT
 CMD_DECLARE(list);
 #endif
@@ -75,6 +78,9 @@ CMD_DECLARE(led);
 
 void _wind_register_all_cmd(w_console_s *ctrl)
 {
+#if CMD_SYSINFO_SUPPORT
+    wind_cmd_register(COMMAND(sysinfo),1);
+#endif
 #if CMD_LIST_SUPPORT
     wind_cmd_register(COMMAND(list),1);
 #endif
