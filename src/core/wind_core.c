@@ -275,6 +275,7 @@ static void _wind_init()
 int _create_init_thread(void);
 
 static int wind_os_lunch(void)
+	
 {
     wind_disable_interrupt();
     _wind_init();

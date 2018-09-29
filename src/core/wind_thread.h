@@ -106,8 +106,8 @@ struct _w_thread_s
     w_int16_t argc;
     w_uint16_t stkpool_flag:1;//标记线程栈是否从内存池取得
     w_uint16_t threadpool_flag:1;//标记线程结构是否从内存池获取
-    w_int8_t **argv;
-    w_err_t (*thread_func)(w_int32_t argc,w_int8_t **argv);
+    char **argv;
+    w_err_t (*thread_func)(w_int32_t argc,char **argv);
     
     char *name;
     w_int16_t prio;
@@ -130,28 +130,28 @@ w_thread_s *wind_thread_get(const char *name);
 w_thread_s *wind_thread_current(void);
 char *wind_thread_curname(void);
 
-w_thread_s *wind_thread_init(w_thread_s *thread,
+w_err_t wind_thread_init(w_thread_s *thread,
                     const char *name,
-                    w_err_t (*thread_func)(w_int32_t argc,w_int8_t **argv),
+                    w_err_t (*thread_func)(w_int32_t argc,char **argv),
                     w_int16_t argc,
-                    w_int8_t **argv,
+                    char **argv,
                     w_prio_e priolevel,
                     w_pstack_t psck,
                     w_uint16_t stksize);
 
 w_thread_s *wind_thread_create(const char *name,
-                    w_err_t (*thread_func)(w_int32_t argc,w_int8_t **argv),
+                    w_err_t (*thread_func)(w_int32_t argc,char **argv),
                     w_int16_t argc,
-                    w_int8_t **argv,
+                    char **argv,
                     w_prio_e priolevel,
                     w_pstack_t psck,
                     w_uint16_t stksize);
 
 #if WIND_STKPOOL_SUPPORT
 w_thread_s *wind_thread_create_default(const char *name,
-                    w_err_t (*thread_func)(w_int32_t argc,w_int8_t **argv),
+                    w_err_t (*thread_func)(w_int32_t argc,char **argv),
                     w_int16_t argc,
-                    w_int8_t **argv);
+                    char **argv);
 #else 
 #define wind_thread_create_default(n,f,c,v) W_ERR_FAIL
 #endif

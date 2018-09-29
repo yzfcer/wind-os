@@ -67,18 +67,15 @@ w_mutex_s *wind_mutex_get(const char *name)
     wind_enable_switch();
     return W_NULL;
 }
-
-//创建一个mutex对象，并加入所有mutex列表
-w_mutex_s *wind_mutex_create(const char *name)
+w_err_t wind_mutex_init(w_mutex_s *mutex,const char *name)
 {
-    w_mutex_s *mutex;
-    //wind_notice("create mutex:%s",name);
-    mutex = mutex_malloc();
-    WIND_ASSERT_TODO(mutex != W_NULL,wind_enable_interrupt(),W_NULL);
+    WIND_ASSERT_RETURN(mutex != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(name != W_NULL,W_ERR_PTR_NULL);
     mutex->magic = WIND_MUTEX_MAGIC;
     DNODE_INIT(mutex->mutexnode);
     mutex->name = name;
-    mutex->mutexed = W_FALSE;
+    mutex->mutexed = 0;
+    mutex->pool_flag = 0;
     mutex->nest = 0;
     mutex->owner = W_NULL;
     DLIST_INIT(mutex->waitlist);
@@ -86,7 +83,24 @@ w_mutex_s *wind_mutex_create(const char *name)
     wind_disable_interrupt();
     dlist_insert_tail(&g_core.mutexlist,&mutex->mutexnode);
     wind_enable_interrupt();
-    return mutex;
+    return W_ERR_OK;
+}
+
+//创建一个mutex对象，并加入所有mutex列表
+w_mutex_s *wind_mutex_create(const char *name)
+{
+    w_err_t err;
+    w_mutex_s *mutex;
+    mutex = mutex_malloc();
+    WIND_ASSERT_RETURN(mutex != W_NULL,W_NULL);
+    err = wind_mutex_init(mutex,name);
+    if(err == W_ERR_OK)
+    {
+        mutex->pool_flag = 1;
+        return mutex;
+    }
+    mutex_free(mutex);
+    return W_NULL;
 }
 
 //试图销毁一个互斥锁，如果有线程被阻塞，则销毁将终止
@@ -120,7 +134,8 @@ w_err_t wind_mutex_destroy(w_mutex_s *mutex)
     }
     wind_enable_interrupt();
     mutex->magic = 0;
-    mutex_free(mutex);
+    if(mutex->pool_flag)
+        mutex_free(mutex);
     return W_ERR_OK;
 }
 

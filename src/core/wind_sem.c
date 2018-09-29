@@ -69,25 +69,38 @@ w_sem_s *wind_sem_get(const char *name)
     wind_enable_switch();
     return W_NULL;
 }
-
-w_sem_s *wind_sem_create(const char *name,w_int16_t sem_value)
+w_err_t wind_sem_init(w_sem_s *sem,const char *name,w_int8_t sem_value)
 {
-    w_sem_s *sem;
     wind_notice("create sem:%s",name);
-    sem = sem_malloc();
-    WIND_ASSERT_RETURN(sem != W_NULL,W_NULL);
-    WIND_ASSERT_RETURN(sem_value >= 0,W_NULL);
+    WIND_ASSERT_RETURN(sem != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(sem_value >= 0,W_ERR_INVALID);
     sem->magic = WIND_SEM_MAGIC;
     sem->name = name;
     DNODE_INIT(sem->semnode);
     sem->sem_num = sem_value;
     sem->sem_tot = sem_value;
     DLIST_INIT(sem->waitlist);
-    //DLIST_INIT(sem->ownerlist);
+    sem->pool_flag = 0;
     wind_disable_interrupt();
     dlist_insert_tail(&g_core.semlist,&sem->semnode);
     wind_enable_interrupt();
-    return sem;
+    return W_ERR_OK;
+}
+
+w_sem_s *wind_sem_create(const char *name,w_int8_t sem_value)
+{
+    w_err_t err;
+    w_sem_s *sem;
+    sem = sem_malloc();
+    WIND_ASSERT_RETURN(sem != W_NULL,W_NULL);
+    err = wind_sem_init(sem,name,sem_value);
+    if(err == W_ERR_OK)
+    {
+        sem->pool_flag = 1;
+        return sem;
+    }
+    sem_free(sem);
+    return W_NULL;
 }
 
 //试图销毁一个信号量，如果有线程被阻塞，则释放将终止
@@ -126,7 +139,8 @@ w_err_t wind_sem_destroy(w_sem_s *sem)
         thread->cause = CAUSE_SEM;
     }
     wind_enable_interrupt();
-    err = sem_free(sem);
+    if(sem->pool_flag)
+        err = sem_free(sem);
     return err;    
 }
 

@@ -142,27 +142,23 @@ char *wind_thread_curname(void)
     return thread->name;
 }
 
-//创建一个线程
-w_thread_s *wind_thread_create(const char *name,
-                    w_err_t (*thread_func)(w_int32_t argc,w_int8_t **argv),
+w_err_t wind_thread_init(w_thread_s *thread,
+                    const char *name,
+                    w_err_t (*thread_func)(w_int32_t argc,char **argv),
                     w_int16_t argc,
-                    w_int8_t **argv,
+                    char **argv,
                     w_prio_e priolevel,
                     w_pstack_t pstk,
                     w_uint16_t stksize)
 {
     w_uint16_t i;
-    w_thread_s *thread;
     w_pstack_t tmpstk;
-
     wind_notice("create thread:%s",name);
-    WIND_ASSERT_RETURN(name != W_NULL,W_NULL);
-    WIND_ASSERT_RETURN(thread_func != W_NULL,W_NULL);
-    WIND_ASSERT_RETURN(pstk != W_NULL,W_NULL);
-    WIND_ASSERT_RETURN(stksize > 0,W_NULL);
-    WIND_ASSERT_RETURN(priolevel < PRIO_SYS_LOW && priolevel > PRIO_ZERO,W_NULL);
-    thread = thread_malloc();
-    WIND_ASSERT_RETURN(thread != W_NULL,W_NULL);
+    WIND_ASSERT_RETURN(name != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(thread_func != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(pstk != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(stksize > 0,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(priolevel < PRIO_SYS_LOW && priolevel > PRIO_ZERO,W_ERR_INVALID);
     thread->magic = WIND_THREAD_MAGIC;
     PRIO_DNODE_INIT(thread->validnode);
     PRIO_DNODE_INIT(thread->suspendnode);
@@ -176,8 +172,8 @@ w_thread_s *wind_thread_create(const char *name,
     thread->argv = argv;
     thread->thread_func = thread_func;
     thread->stkpool_flag = 0;
+    thread->threadpool_flag = 0;
     
-    //wind_strcpy(thread->name,name);
     thread->name = (char*)name;
     thread->prio = get_prio(priolevel);
     
@@ -193,15 +189,37 @@ w_thread_s *wind_thread_create(const char *name,
     wind_disable_interrupt();
     dlist_insert_prio(&g_core.threadlist,&thread->validnode,thread->prio);
     wind_enable_interrupt();
-    //wind_thread_print(&g_core.threadlist);
-    return thread;
+    return W_ERR_OK;
+}
+
+//创建一个线程
+w_thread_s *wind_thread_create(const char *name,
+                    w_err_t (*thread_func)(w_int32_t argc,char **argv),
+                    w_int16_t argc,
+                    char **argv,
+                    w_prio_e priolevel,
+                    w_pstack_t pstk,
+                    w_uint16_t stksize)
+{
+    w_err_t err;
+    w_thread_s *thread;
+    thread = thread_malloc();
+    WIND_ASSERT_RETURN(thread != W_NULL,W_NULL);
+    wind_thread_init(thread,name,thread_func,argc,argv,priolevel,pstk,stksize);
+    if(err == W_ERR_OK)
+    {
+        thread->threadpool_flag = 1;
+        return thread;
+    }
+    thread_free(thread);
+    return W_NULL;
 }
 
 #if WIND_STKPOOL_SUPPORT
-w_thread_s *wind_thread_create_default(const w_int8_t *name,
-                    w_err_t (*thread_func)(w_int32_t argc,w_int8_t **argv),
+w_thread_s *wind_thread_create_default(const char *name,
+                    w_err_t (*thread_func)(w_int32_t argc,char **argv),
                     w_int16_t argc,
-                    w_int8_t **argv)
+                    char **argv)
 {
     w_prio_e priol;
     w_pstack_t pstk;
@@ -212,9 +230,13 @@ w_thread_s *wind_thread_create_default(const w_int8_t *name,
     pstk = wind_pool_malloc(stkbufpool);
     WIND_ASSERT_RETURN(pstk != W_NULL,W_NULL);
     thread = wind_thread_create(name,thread_func,argc,argv,priol,pstk,stksize);
-    WIND_ASSERT_RETURN(thread != W_NULL,W_NULL);
-    thread->stkpool_flag = 1;
-    return thread;
+    if(thread == W_NULL)
+    {
+        thread->stkpool_flag = 1;
+        return thread;
+    }
+    wind_pool_free(stkbufpool,pstk);
+    return W_NULL;
 }
 #endif
 
@@ -233,8 +255,9 @@ w_err_t wind_thread_destroy(w_thread_s *thread)
 #if WIND_STKPOOL_SUPPORT
     if(thread->stkpool_flag)
         wind_pool_free(stkbufpool,thread->stack_top);
-#endif    
-    thread_free(thread);
+#endif
+    if(thread->threadpool_flag)
+        thread_free(thread);
     wind_enable_interrupt();
     _wind_thread_dispatch();
     return W_ERR_OK;

@@ -45,19 +45,19 @@ typedef unsigned long long w_uint64_t;
 #endif
 
 #ifndef w_int8_t
-typedef char w_int8_t; 
+typedef signed char w_int8_t; 
 #endif
 
 #ifndef w_int16_t
-typedef short w_int16_t; 
+typedef signed short w_int16_t; 
 #endif
 
 #ifndef w_int32_t
-typedef long w_int32_t; 
+typedef signed long w_int32_t; 
 #endif
 
 #ifndef w_int64_t
-typedef long long w_int64_t; 
+typedef signed long long w_int64_t; 
 #endif
 
 

@@ -107,7 +107,7 @@ static w_softirq_fn get_irq_handle(void)
     return W_NULL;
 }
 
-static w_err_t wind_softirq_thread(w_int32_t argc,w_int8_t **argv)
+static w_err_t wind_softirq_thread(w_int32_t argc,char **argv)
 {
     w_softirq_fn func;
     softirq_thread->cause = CAUSE_COMMON;

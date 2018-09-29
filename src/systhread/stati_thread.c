@@ -30,7 +30,7 @@
 
 #define STATI_STK_SIZE 256
 static w_stack_t statisstk[STATI_STK_SIZE];
-static w_err_t stati_thread(w_int32_t argc,w_int8_t **argv)
+static w_err_t stati_thread(w_int32_t argc,char **argv)
 {
     w_uint32_t statcnt = 0;
     w_uint32_t stati_ms = 1000;

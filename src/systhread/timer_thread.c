@@ -32,7 +32,7 @@
 #define TIMER_STK_SIZE 256
 
 static w_stack_t timerstk[TIMER_STK_SIZE];
-static w_err_t timer_thread(w_int32_t argc,w_int8_t **argv)
+static w_err_t timer_thread(w_int32_t argc,char **argv)
 {
     while(1)
     {

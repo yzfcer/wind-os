@@ -39,7 +39,7 @@ w_console_s g_ctrl[WIND_CONSOLE_COUNT];
 
 
 /********************************************内部函数定义*********************************************/
-static w_err_t get_cmd_ch(w_int8_t *ch)
+static w_err_t get_cmd_ch(char *ch)
 {
     w_int32_t len;
     len = wind_std_input((w_uint8_t *)ch,1);

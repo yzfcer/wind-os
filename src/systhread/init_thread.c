@@ -77,7 +77,7 @@ static void set_idle_cnt(void)
 
 extern w_err_t treefs_format(void);
 
-static w_err_t init_thread(w_int32_t argc,w_int8_t **argv)
+static w_err_t init_thread(w_int32_t argc,char **argv)
 {   
     wind_tick_hwtimer_init();
 #if WIND_DRVFRAME_SUPPORT

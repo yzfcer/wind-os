@@ -32,7 +32,7 @@
 static w_stack_t daemonstk[DAEMON_STK_SIZE];
 
 
-static w_err_t daemon_thread(w_int32_t argc,w_int8_t **argv)
+static w_err_t daemon_thread(w_int32_t argc,char **argv)
 {
     (void)argc;
     //wind_watchdog_create("daemon",0,10);
