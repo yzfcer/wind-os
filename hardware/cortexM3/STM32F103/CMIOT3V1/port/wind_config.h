@@ -38,10 +38,10 @@
 #define WIND_STK_SIZE 512 //堆栈大小
 
 #define WIND_MUTEX_SUPPORT 1 //是否支持互斥锁
-#define WIND_MUTEX_MAX_NUM 3 //互斥锁的数量
+#define WIND_MUTEX_MAX_NUM 8 //互斥锁的数量
 
 #define WIND_SEM_SUPPORT 1 //是否支持信号量
-#define WIND_SEM_MAX_NUM 3 //最大的信号量的数量
+#define WIND_SEM_MAX_NUM 8 //最大的信号量的数量
 
 #define WIND_PIPE_SUPPORT 1  //是否支持管道机制
 #define WIND_PIPE_MAX_NUM 2  //最大的管道数量
@@ -94,7 +94,7 @@
 
 #define WIND_XMODEM_SUPPORT 0 //是否支持XMODEM协议
 
-#define WIND_CUTEST_SUPPORT 0 //是否支持单元测试框架
+#define WIND_CUTEST_SUPPORT 1 //是否支持单元测试框架
 
 #define HARD_STACK_SIZE 40 //为硬件堆栈保留的空间大小，在某些硬件里可以不需要
 
@@ -113,7 +113,7 @@
 #define CMD_THREAD_SUPPORT 1 //是否支持线程操作命令
 #define CMD_XMODEM_SUPPORT 0 //是否支持xmodem协议命令
 #define CMD_SYSINFO_SUPPORT 1 //是否支持系统信息命令
-#define CMD_CUTEST_SUPPORT 0 //是否支持单元测试命令
+#define CMD_CUTEST_SUPPORT 1 //是否支持单元测试命令
 
 #define CMD_BEEP_SUPPORT 0 //是否支持蜂鸣器命令
 #define CMD_LED_SUPPORT 0 //是否支持LED操作命令

@@ -471,13 +471,22 @@ void execute_all_suites(char* suitefilter,char *casefilter)
 
 w_int32_t cutest_main(w_int32_t argc,char **argv)
 {
-    if(argc < 3)
+    if(argc < 2)
         return -1;
-    test_framework_init();
-    test_suite_register_all();
-    show_test_suites();
-    execute_all_suites(argv[1],argv[2]);
-    return 0;
+    if(0 == stringcmp(argv[1],"show"))
+    {
+        show_test_suites();
+        return 0;
+    }
+    else if(argc >= 3)
+    {
+        test_framework_init();
+        test_suite_register_all();
+        show_test_suites();
+        execute_all_suites(argv[1],argv[2]);
+        return 0;
+    }
+    return -1;
 }
 
 #ifdef __cplusplus

@@ -51,15 +51,7 @@ COMMAND_USAGE(cutest)
 
 COMMAND_MAIN(cutest,argc,argv)
 {
-    if(0 == wind_strcmp(argv[1],"show"))
-    {
-        show_test_suites();
-    }
-    else if(argc >= 3)
-    {
-        return cutest_main(argc,argv);
-    }
-    return  W_ERR_FAIL;
+    return cutest_main(argc,argv);
 }
 
 COMMAND_DEF(cutest);
