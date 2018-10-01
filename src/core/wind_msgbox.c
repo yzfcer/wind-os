@@ -78,24 +78,40 @@ w_msgbox_s *wind_msgbox_get(const char *name)
     return W_NULL;
 }
 
-//创建邮箱，创建邮箱的那个线程才能从中读取消息
-w_msgbox_s *wind_msgbox_create(const char *name)
+w_err_t wind_msgbox_init(w_msgbox_s *msgbox,const char *name)
 {
-    w_msgbox_s *msgbox;
-    wind_notice("create msgbox:%s",name);
-    msgbox = msgbox_malloc();
-    WIND_ASSERT_RETURN(msgbox != W_NULL,W_NULL);
-
+    WIND_ASSERT_RETURN(msgbox != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(name != W_NULL,W_ERR_PTR_NULL);
+    msgbox->magic = WIND_MSGBOX_MAGIC;
     msgbox->name = name;
     DNODE_INIT(msgbox->msgboxnode);
     DLIST_INIT(msgbox->msglist);
     msgbox->msgnum = 0;
-    msgbox->magic = WIND_MSGBOX_MAGIC;
+    msgbox->flag_pool = 0;
     msgbox->owner = wind_thread_current();
     wind_disable_interrupt();
     dlist_insert_tail(&g_core.msgboxlist,&msgbox->msgboxnode);
     wind_enable_interrupt();
-    return msgbox;
+    return W_ERR_OK;
+}
+
+
+//创建邮箱，创建邮箱的那个线程才能从中读取消息
+w_msgbox_s *wind_msgbox_create(const char *name)
+{
+    w_err_t err;
+    w_msgbox_s *msgbox;
+    wind_notice("create msgbox:%s",name);
+    msgbox = msgbox_malloc();
+    WIND_ASSERT_RETURN(msgbox != W_NULL,W_NULL);
+    err = wind_msgbox_init(msgbox,name);
+    if(err == W_ERR_OK)
+    {
+        msgbox->flag_pool = 1;
+        return msgbox;
+    }
+    msgbox_free(msgbox);
+    return W_NULL;
 }
 
 
@@ -143,7 +159,8 @@ w_err_t wind_msgbox_destroy(w_msgbox_s *msgbox)
     {
         wind_warn("msgbox:%s is NOT empty while destroying it.",msgbox->name);
     }
-    msgbox_free(msgbox);
+    if(msgbox->flag_pool)
+        msgbox_free(msgbox);
     return W_ERR_OK;
 }
 

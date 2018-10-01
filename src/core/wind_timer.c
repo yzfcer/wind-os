@@ -67,22 +67,19 @@ w_timer_s* wind_timer_get(char *name)
     return W_NULL;
 }
 
-
-w_timer_s* wind_timer_create(const char *name,
+w_err_t wind_timer_init(w_timer_s* timer,
+                            const char *name,
                             w_uint32_t period_ms,
                             w_timer_fn func,
                             void *arg,
                             w_uint32_t flag_run,
                             w_uint32_t flag_repeat)
 {
-    w_timer_s* timer;
-    w_int32_t count = period_ms / TIMER_PERIOD;
+    w_int32_t count;
+    count = period_ms / TIMER_PERIOD;
     if(count <= 0)
         count = 1;
     wind_notice("create timer %s:%d ms",name,period_ms);
-    WIND_ASSERT_RETURN(func != W_NULL,W_NULL);
-    timer = timer_malloc();
-    WIND_ASSERT_RETURN(timer != W_NULL,W_NULL);
     timer->magic = WIND_TIMER_MAGIC;
     timer->name = name;
     DNODE_INIT(timer->timernode);
@@ -91,12 +88,37 @@ w_timer_s* wind_timer_create(const char *name,
     timer->period = count;
     timer->flag_running = flag_run?1:0;
     timer->flag_repeat = flag_repeat?1:0;
+    timer->flag_pool = 1;
     timer->arg = arg;
     timer->handle = func;
     wind_disable_interrupt();
     dlist_insert_tail(&g_core.timerlist,&timer->timernode);
     wind_enable_interrupt();
-    return timer; 
+    return W_ERR_OK;
+    
+}
+
+
+w_timer_s* wind_timer_create(const char *name,
+                            w_uint32_t period_ms,
+                            w_timer_fn func,
+                            void *arg,
+                            w_uint32_t flag_run,
+                            w_uint32_t flag_repeat)
+{
+    w_err_t err;
+    w_timer_s* timer;
+    WIND_ASSERT_RETURN(func != W_NULL,W_NULL);
+    timer = timer_malloc();
+    WIND_ASSERT_RETURN(timer != W_NULL,W_NULL);
+    err = wind_timer_init(timer,name,period_ms,func,arg,flag_run,flag_repeat);
+    if(err == W_ERR_OK)
+    {
+        timer->flag_pool = 1;
+        return timer;
+    }
+    timer_free(timer);
+    return W_NULL; 
 }
 
 w_err_t wind_timer_start(w_timer_s* timer)
@@ -121,8 +143,9 @@ w_err_t wind_timer_destroy(w_timer_s* timer)
     WIND_ASSERT_RETURN(timer->magic == WIND_TIMER_MAGIC,W_ERR_INVALID);    
     wind_disable_interrupt();
     dlist_remove(&g_core.timerlist,&timer->timernode);
-    timer_free(timer);
     wind_enable_interrupt();
+    if(timer->flag_pool)
+        timer_free(timer);
     return W_ERR_OK;
 }
 

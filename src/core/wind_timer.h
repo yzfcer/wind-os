@@ -45,6 +45,7 @@ typedef struct __w_timer_s
     w_uint32_t period;
     w_uint32_t flag_running:1;
     w_uint32_t flag_repeat:1;
+    w_uint32_t flag_pool:1;
     w_timer_fn handle;
     void *arg;
 }w_timer_s;
@@ -52,6 +53,13 @@ typedef struct __w_timer_s
 w_err_t _wind_timer_mod_init(void);
 void _wind_timer_event(void);
 w_timer_s* wind_timer_get(char *name);
+w_err_t wind_timer_init(w_timer_s* timer,
+                            const char *name,
+                            w_uint32_t period_ms,
+                            w_timer_fn func,
+                            void *arg,
+                            w_uint32_t flag_run,
+                            w_uint32_t flag_repeat);
 
 w_timer_s* wind_timer_create(const char *name,
                             w_uint32_t period_ms,

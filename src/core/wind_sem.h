@@ -42,7 +42,7 @@ typedef struct _w_sem_s
     const char* name;//信号量的名称
     w_dnode_s semnode;//信号量的节点，用于加入链表
     w_dlist_s waitlist;  //等待线程队列
-    w_uint16_t pool_flag:1;    //是否从内存池获取对象
+    w_uint16_t flag_pool:1;    //是否从内存池获取对象
     w_int8_t sem_tot;    //初始化的信号量的值
     w_int8_t sem_num;    //当前的信号量的值
 }w_sem_s;

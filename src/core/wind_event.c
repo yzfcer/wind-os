@@ -79,7 +79,7 @@ w_err_t wind_event_init(w_event_s *event,const char *name)
     event->name = name;
     DNODE_INIT(event->eventnode);
     DLIST_INIT(event->cblist);
-    event->pool_flag = 0;
+    event->flag_pool = 0;
     wind_disable_interrupt();
     dlist_insert_tail(&g_core.eventlist,&event->eventnode);
     wind_enable_interrupt();
@@ -95,7 +95,7 @@ w_event_s *wind_event_create(const char *name)
     err = wind_event_init(event,name);
     if(err == W_ERR_OK)
     {
-        event->pool_flag = 1;
+        event->flag_pool = 1;
         return event;
     }
     event_free(event);
@@ -120,7 +120,7 @@ w_err_t wind_event_destroy(w_event_s *event)
     {
         wind_warn("event:%s is NOT empty while destroying it.",event->name);
     }
-    if(event->pool_flag)
+    if(event->flag_pool)
         event_free(event);
     return W_ERR_OK;
 }

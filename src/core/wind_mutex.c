@@ -75,7 +75,7 @@ w_err_t wind_mutex_init(w_mutex_s *mutex,const char *name)
     DNODE_INIT(mutex->mutexnode);
     mutex->name = name;
     mutex->mutexed = 0;
-    mutex->pool_flag = 0;
+    mutex->flag_pool = 0;
     mutex->nest = 0;
     mutex->owner = W_NULL;
     DLIST_INIT(mutex->waitlist);
@@ -96,7 +96,7 @@ w_mutex_s *wind_mutex_create(const char *name)
     err = wind_mutex_init(mutex,name);
     if(err == W_ERR_OK)
     {
-        mutex->pool_flag = 1;
+        mutex->flag_pool = 1;
         return mutex;
     }
     mutex_free(mutex);
@@ -134,7 +134,7 @@ w_err_t wind_mutex_destroy(w_mutex_s *mutex)
     }
     wind_enable_interrupt();
     mutex->magic = 0;
-    if(mutex->pool_flag)
+    if(mutex->flag_pool)
         mutex_free(mutex);
     return W_ERR_OK;
 }

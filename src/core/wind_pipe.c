@@ -69,30 +69,46 @@ w_pipe_s *wind_pipe_get(const char *name)
     return W_NULL;
 }
 
-
-w_pipe_s* wind_pipe_create(const char *name,void *buff,w_uint32_t buflen)
+w_err_t wind_pipe_init(w_pipe_s* pipe,const char *name,void *buff,w_uint32_t buflen)
 {
-    w_pipe_s* pipe;
     w_err_t err;
-    
     wind_notice("create pipe:%s",name);
-    WIND_ASSERT_RETURN((buff != W_NULL),W_NULL);
-    WIND_ASSERT_RETURN(buflen > 0,W_NULL);
+    WIND_ASSERT_RETURN((pipe != W_NULL),W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN((name != W_NULL),W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN((buff != W_NULL),W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(buflen > 0,W_ERR_INVALID);
     err = wind_queue_create(buff,buflen,1);
-    WIND_ASSERT_RETURN(err == W_ERR_OK,W_NULL);
-    
-    pipe = pipe_malloc();
-    WIND_ASSERT_RETURN(pipe != W_NULL,W_NULL);
+    WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_FAIL);
     pipe->magic = WIND_PIPE_MAGIC;
     pipe->name = name;
     DNODE_INIT(pipe->pipenode)
     pipe->used = W_TRUE;
     pipe->buff = buff;
     pipe->buflen = buflen;
+    pipe->flag_pool = 0;
     wind_disable_interrupt();
     dlist_insert_tail(&g_core.pipelist,&pipe->pipenode);
     wind_enable_interrupt();
-    return pipe;
+    return W_ERR_OK;
+    
+}
+
+w_pipe_s* wind_pipe_create(const char *name,void *buff,w_uint32_t buflen)
+{
+    w_pipe_s* pipe;
+    w_err_t err;
+    
+    
+    pipe = pipe_malloc();
+    WIND_ASSERT_RETURN(pipe != W_NULL,W_NULL);
+    err = wind_pipe_init(pipe,name,buff,buflen);
+    if(err == W_ERR_OK)
+    {
+        pipe->flag_pool = 1;
+        return pipe;
+    }
+    pipe_free(pipe);
+    return W_NULL;
 }
 
 
@@ -132,7 +148,8 @@ w_err_t wind_pipe_destroy(w_pipe_s* pipe)
     pipe->magic = 0;
     pipe->used = W_FALSE;
     pipe->name = W_NULL;
-    pipe_free(pipe);
+    if(pipe->flag_pool)
+        pipe_free(pipe);
     wind_enable_interrupt();
     return W_ERR_OK;
 }

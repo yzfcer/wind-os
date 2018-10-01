@@ -52,7 +52,7 @@ struct __w_event_s
     const char *name;
     w_dnode_s eventnode;
     w_dlist_s cblist;//消息队列
-    w_uint16_t pool_flag:1;
+    w_uint16_t flag_pool:1;
 };
 
 

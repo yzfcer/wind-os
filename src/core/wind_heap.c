@@ -80,8 +80,6 @@ w_heap_s *wind_heap_create(const char *name,w_addr_t base,w_uint32_t size,w_uint
     
     hp->magic = WIND_HEAP_MAGIC;
     hp->is_private = is_private?1:0;
-    //if(flag & WIND_HEAP_PRIVATE)
-    //    hp->magic |= WIND_HEAP_PRIVATE;
     hp->name = name;
     hp->addr = OFFSET_ADDR(hp,sizeof(w_heap_s));
     WIND_STATI_INIT(hp->stati,hpsize);

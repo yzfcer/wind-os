@@ -104,8 +104,8 @@ struct _w_thread_s
     w_uint16_t stksize;//堆栈大小，以栈宽度技术
     
     w_int16_t argc;
-    w_uint16_t stkpool_flag:1;//标记线程栈是否从内存池取得
-    w_uint16_t threadpool_flag:1;//标记线程结构是否从内存池获取
+    w_uint16_t flag_stkpool:1;//标记线程栈是否从内存池取得
+    w_uint16_t flag_threadpool:1;//标记线程结构是否从内存池获取
     char **argv;
     w_err_t (*thread_func)(w_int32_t argc,char **argv);
     

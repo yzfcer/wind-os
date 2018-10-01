@@ -61,10 +61,10 @@ static void watchdog_timer(void * arg)
         wind_enable_interrupt();
         if(watchdog->time_cur < 0)
         {
-            if(watchdog->flag == WDOG_WARN)
+            if(watchdog->flag_warn)
                 wind_printf("watchdog:thread %s is timeout.\r\n",watchdog->thread->name);
-            else if(watchdog->flag == WDOG_RESET)
-               wind_system_reset();
+            else if(watchdog->flag_reset)
+                wind_system_reset();
             watchdog->time_cur = watchdog->time_max;
         }
     }
@@ -100,15 +100,14 @@ w_watchdog_s *wind_watchdog_get(const char *name)
     return W_NULL;
 }
 
-w_watchdog_s *wind_watchdog_create(const char *name,w_uint32_t flag,w_int16_t timeout_1s)
+w_err_t wind_watchdog_init(w_watchdog_s *watchdog,const char *name,w_uint32_t flag,w_int16_t timeout_1s)
 {
-    w_watchdog_s *watchdog;
-    wind_notice("create watchdog:%s",name);
-    watchdog = watchdog_malloc();
-    WIND_ASSERT_RETURN(watchdog != W_NULL,W_NULL);
-    WIND_ASSERT_RETURN(timeout_1s > 0,W_NULL);
+    WIND_ASSERT_RETURN(watchdog > 0,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(timeout_1s > 0,W_ERR_INVALID);
     watchdog->magic = WIND_WATCHDOG_MAGIC;
-    watchdog->flag = flag;
+    watchdog->flag_warn = (flag&WDOG_WARN)?1:0;
+    watchdog->flag_reset = (flag&WDOG_RESET)?1:0;
+    watchdog->flag_pool = 0;
     watchdog->name = name;
     DNODE_INIT(watchdog->watchdognode);
     watchdog->time_cur = timeout_1s;
@@ -117,13 +116,30 @@ w_watchdog_s *wind_watchdog_create(const char *name,w_uint32_t flag,w_int16_t ti
     wind_disable_switch();
     dlist_insert_tail(&g_core.watchdoglist,&watchdog->watchdognode);
     wind_enable_switch();
-    return watchdog;
+    return W_ERR_OK;
+}
+
+
+w_watchdog_s *wind_watchdog_create(const char *name,w_uint32_t flag,w_int16_t timeout_1s)
+{
+    w_err_t err;
+    w_watchdog_s *watchdog;
+    wind_notice("create watchdog:%s",name);
+    watchdog = watchdog_malloc();
+    WIND_ASSERT_RETURN(watchdog != W_NULL,W_NULL);
+    err = wind_watchdog_init(watchdog,name,flag,timeout_1s);
+    if(err == W_ERR_OK)
+    {
+        watchdog->flag_pool = 1;
+        return watchdog;
+    }
+    watchdog_free(watchdog);
+    return W_NULL;
 }
 
 
 w_err_t wind_watchdog_destroy(w_watchdog_s *watchdog)
 {
-    w_err_t err;
     WIND_ASSERT_RETURN(watchdog != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(watchdog->magic == WIND_WATCHDOG_MAGIC,W_ERR_INVALID);
     wind_notice("destroy watchdog:%s",watchdog->name);
@@ -132,8 +148,9 @@ w_err_t wind_watchdog_destroy(w_watchdog_s *watchdog)
     wind_enable_switch();
     watchdog->magic = 0;
     watchdog->thread = W_NULL;
-    err = watchdog_free(watchdog);
-    return err;    
+    if(watchdog->flag_pool)
+        watchdog_free(watchdog);
+    return W_ERR_OK;    
 }
 
 w_err_t wind_watchdog_feed(w_watchdog_s *watchdog)

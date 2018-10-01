@@ -76,7 +76,7 @@ CASE_FUNC(eventinfo)
     
     EXPECT_EQ(events[0]->cblist.head,W_NULL);
     EXPECT_EQ(events[0]->cblist.tail,W_NULL);
-    EXPECT_EQ(events[0]->pool_flag,1);
+    EXPECT_EQ(events[0]->flag_pool,1);
     err = wind_event_destroy(events[0]);
     EXPECT_EQ(W_ERR_OK,err);
     EXPECT_EQ(events[0]->magic,0);

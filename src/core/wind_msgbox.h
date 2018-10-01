@@ -51,7 +51,8 @@ typedef struct __w_msgbox_s
     const char *name;
     w_dnode_s msgboxnode;
     w_dlist_s msglist;//消息队列
-    int msgnum;//消息的数量
+    w_int16_t msgnum;//消息的数量
+    w_uint16_t flag_pool:1;//消息的数量
     w_thread_s *owner;
 }w_msgbox_s;
 
@@ -61,6 +62,7 @@ typedef struct __w_msgbox_s
 void wind_msg_init(w_msg_s *msg,w_uint16_t msg_id,w_uint16_t msg_len,void *msg_arg);
 w_err_t _wind_msgbox_mod_init(void);
 w_msgbox_s *wind_msgbox_get(const char *name);
+w_err_t wind_msgbox_init(w_msgbox_s *msgbox,const char *name);
 w_msgbox_s *wind_msgbox_create(const char *name);
 w_err_t wind_msgbox_trydestroy(w_msgbox_s *msgbox);
 w_err_t wind_msgbox_destroy(w_msgbox_s *msgbox);
