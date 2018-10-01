@@ -1447,6 +1447,16 @@
               <FileType>5</FileType>
               <FilePath>..\..\..\..\..\src\core\wind_watchdog.h</FilePath>
             </File>
+            <File>
+              <FileName>wind_event.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\core\wind_event.c</FilePath>
+            </File>
+            <File>
+              <FileName>wind_event.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\core\wind_event.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1536,6 +1546,11 @@
               <FileName>test_treefs.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\cutest\testcase\test_treefs.c</FilePath>
+            </File>
+            <File>
+              <FileName>test_event.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\cutest\testcase\test_event.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -57,6 +57,9 @@ void _wind_corevar_init(void)
 #if WIND_MUTEX_SUPPORT
     DLIST_INIT(g_core.mutexlist);
 #endif
+#if WIND_EVENT_SUPPORT
+    DLIST_INIT(g_core.eventlist);
+#endif
 #if WIND_MSGBOX_SUPPORT
     DLIST_INIT(g_core.msgboxlist);
 #endif

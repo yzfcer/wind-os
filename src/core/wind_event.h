@@ -37,35 +37,35 @@ extern "C" {
 
 #if WIND_EVENT_SUPPORT
 #define WIND_EVENT_MAGIC 0x5A9C524C
+typedef struct __w_event_s w_event_s;
+typedef void (*w_event_cb_fn)(w_event_s *event,void *arg);
 	
-#if 0	
-typedef struct __event_s
-typedef struct _wind_event
+typedef struct _w_event_cb
 {
     w_dnode_s listenernode;
-    
-}listener_s; 
-#endif
+    w_event_cb_fn cb_fn;
+}w_event_cb; 
 
-typedef struct __event_s
+struct __w_event_s
 {
     w_uint32_t magic;//魔术字
     const char *name;
     w_dnode_s eventnode;
-    w_dlist_s msglist;//消息队列
-    int msgnum;//消息的数量
-    w_thread_s *owner;
-}w_event_s;
+    w_dlist_s cblist;//消息队列
+    w_uint16_t pool_flag:1;
+};
 
 
 w_err_t _wind_event_mod_init(void);
 w_event_s *wind_event_get(const char *name);
+w_err_t wind_event_init(w_event_s *event,const char *name);
 w_event_s *wind_event_create(const char *name);
 
 w_err_t wind_event_destroy(w_event_s *event);
 
-w_err_t wind_event_trig(w_event_s *event,const void *arg);
-w_err_t wind_event_wait(w_event_s *event,const void *arg,w_uint32_t timeout);
+w_err_t wind_event_regcb(w_event_s *event,w_event_cb *cb);
+w_err_t wind_event_unregcb(w_event_s *event,w_event_cb *cb);
+w_err_t wind_event_trig(w_event_s *event,void *arg);
 w_err_t wind_event_print(w_dlist_s *list);
 
 

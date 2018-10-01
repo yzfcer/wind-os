@@ -33,7 +33,6 @@
 #if (WIND_PIPE_SUPPORT)
 
 static WIND_POOL(pipepool,WIND_PIPE_MAX_NUM,sizeof(w_pipe_s));
-//********************************************internal functions******************************
 
 static __INLINE__ w_pipe_s *pipe_malloc(void)
 {
@@ -45,14 +44,6 @@ static __INLINE__ w_err_t pipe_free(void *pipe)
     return wind_pool_free(pipepool,pipe);
 }
 
-
-
-//********************************************internal functions******************************
-
-
-
-
-//**********************************************extern functions******************************
 w_err_t _wind_pipe_mod_init(void)
 {
     w_err_t err;

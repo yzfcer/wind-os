@@ -49,7 +49,7 @@
 #define WIND_MSGBOX_SUPPORT 1  //是否支持消息机制
 #define WIND_MBOX_MAX_NUM 2//邮箱的数量
 
-#define WIND_EVENT_SUPPORT 0  //是否支持事件机制
+#define WIND_EVENT_SUPPORT 1  //是否支持事件机制
 #define WIND_EVENT_MAX_NUM 5//事件的数量
 
 #define WIND_WATCHDOG_SUPPORT 1 //是否支持线程级看门狗
@@ -80,11 +80,7 @@
 #define WIND_RTC_SUPPORT 0  //是否支持实时时间
 #define WIND_DATETIME_SUPPORT 0  //是否支持系统时间
 
-#define WIND_CONSOLE_SUPPORT 1 //是否支持控制台模块
-
 #define WIND_DEBUG_SUPPORT 1 //是否支持调试输出模块
-
-
 
 #define WIND_DRVFRAME_SUPPORT 0  //是否字符驱动框架
 
@@ -94,13 +90,13 @@
 
 #define WIND_XMODEM_SUPPORT 0 //是否支持XMODEM协议
 
-#define WIND_CUTEST_SUPPORT 1 //是否支持单元测试框架
-
 #define HARD_STACK_SIZE 40 //为硬件堆栈保留的空间大小，在某些硬件里可以不需要
 
 //-------------------------------------------------------------------------------
 //调试命令定制，前提是内核支持控制台功能
 //-------------------------------------------------------------------------------
+#define WIND_CONSOLE_SUPPORT 1 //是否支持控制台模块
+
 #define CMD_BLKDEV_SUPPORT 0 //是否支持块设备操作命令
 #define CMD_DATETIME_SUPPORT 0 //是否支持日期时间命令
 #define CMD_ECHO_SUPPORT 1 //是否支持回显命令
@@ -121,6 +117,8 @@
 //-------------------------------------------------------------------------------
 //单元测试功能定制，前提是内核支持单元测试框架,并且支持对应的功能模块
 //-------------------------------------------------------------------------------
+#define WIND_CUTEST_SUPPORT 1 //是否支持单元测试框架
+
 #define TEST_HEAP_SUPPORT 0 //是否支持内存堆测试
 #define TEST_MSGBOX_SUPPORT 1 //是否支持消息邮箱测试
 #define TEST_MUTEX_SUPPORT 1 //是否支持互斥所测试
@@ -128,6 +126,7 @@
 #define TEST_POOL_SUPPORT 1 //是否支持内存池测试
 #define TEST_QUEUE_SUPPORT 1 //是否支持队列测试
 #define TEST_SEM_SUPPORT 1 //是否支持信号量测试
+#define TEST_EVENT_SUPPORT 1 //是否支持事件测试
 #define TEST_SOFTIRQ_SUPPORT 1 //是否支持软中断测试
 #define TEST_TREE_SUPPORT 1 //是否支持树形结构对象测试
 #define TEST_TREEFS_SUPPORT 0 //是否支持treefs文件系统测试

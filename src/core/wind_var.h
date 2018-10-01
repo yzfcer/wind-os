@@ -45,6 +45,9 @@ typedef struct __w_core_var_s
 #if WIND_MUTEX_SUPPORT
     w_dlist_s mutexlist;
 #endif
+#if WIND_EVENT_SUPPORT
+    w_dlist_s eventlist;
+#endif
 #if WIND_MSGBOX_SUPPORT
     w_dlist_s msgboxlist;
 #endif

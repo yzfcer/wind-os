@@ -35,6 +35,9 @@ DECLARE_SUITE(test_mutex);
 #if TEST_SEM_SUPPORT
 DECLARE_SUITE(test_sem);
 #endif
+#if TEST_EVENT_SUPPORT
+DECLARE_SUITE(test_event);
+#endif
 #if TEST_PIPE_SUPPORT
 DECLARE_SUITE(test_pipe);
 #endif
@@ -64,6 +67,9 @@ void test_suite_register_all(void)
 #endif
 #if TEST_SEM_SUPPORT
     REGSTER_SUITE(test_sem);
+#endif
+#if TEST_EVENT_SUPPORT
+    REGSTER_SUITE(test_event);
 #endif
 #if TEST_PIPE_SUPPORT
     REGSTER_SUITE(test_pipe);

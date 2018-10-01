@@ -1382,6 +1382,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\cutest\testcase\test_treefs.c</FilePath>
             </File>
+            <File>
+              <FileName>test_event.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\cutest\testcase\test_event.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

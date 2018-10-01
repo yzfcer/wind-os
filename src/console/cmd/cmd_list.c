@@ -26,6 +26,7 @@
 #include "wind_string.h"
 #include "wind_thread.h"
 #include "wind_sem.h"
+#include "wind_event.h"
 #include "wind_mutex.h"
 #include "wind_var.h"
 #include "wind_pool.h"
@@ -51,7 +52,10 @@ COMMAND_USAGE(list)
     console_printf("list pool:show all core object pools.\r\n");
     
 #if WIND_SEM_SUPPORT
-    console_printf("list sem:show sem infomation.\r\n");
+        console_printf("list sem:show sem infomation.\r\n");
+#endif
+#if WIND_EVENT_SUPPORT
+    console_printf("list event:show event infomation.\r\n");
 #endif
 #if WIND_PIPE_SUPPORT
     console_printf("list pipe:show all pipe infomation.\r\n");
@@ -100,6 +104,13 @@ COMMAND_MAIN(list,argc,argv)
     else if(0 == wind_strcmp(argv[1],"sem"))
     {
         wind_sem_print(&g_core.semlist);
+        return W_ERR_FAIL;
+    }
+#endif
+#if WIND_EVENT_SUPPORT
+    else if(0 == wind_strcmp(argv[1],"event"))
+    {
+        wind_event_print(&g_core.semlist);
         return W_ERR_FAIL;
     }
 #endif

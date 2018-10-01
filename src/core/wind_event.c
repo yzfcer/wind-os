@@ -44,13 +44,6 @@ static w_err_t event_free(w_event_s *event)
 }
 
 
-//********************************************internal functions******************************
-
-//********************************************internal functions******************************
-
-
-//**********************************************extern functions******************************
-
 w_err_t _wind_event_mod_init(void)
 {
     w_err_t err;
@@ -77,23 +70,35 @@ w_event_s *wind_event_get(const char *name)
     return W_NULL;
 }
 
-//创建邮箱，创建邮箱的那个线程才能从中读取消息
-w_event_s *wind_event_create(const char *name)
+w_err_t wind_event_init(w_event_s *event,const char *name)
 {
-    w_event_s *event;
     wind_notice("create event:%s",name);
-    event = event_malloc();
-    WIND_ASSERT_RETURN(event != W_NULL,W_NULL);
-
+    WIND_ASSERT_RETURN(event != W_NULL,W_ERR_PTR_NULL);
+    //WIND_ASSERT_RETURN(name != W_NULL,W_ERR_PTR_NULL);
+    event->magic = WIND_EVENT_MAGIC;
     event->name = name;
     DNODE_INIT(event->eventnode);
-    DLIST_INIT(event->msglist);
-    event->msgnum = 0;
-    event->magic = WIND_EVENT_MAGIC;
-    event->owner = wind_thread_current();
+    DLIST_INIT(event->cblist);
+    event->pool_flag = 0;
     wind_disable_interrupt();
     dlist_insert_tail(&g_core.eventlist,&event->eventnode);
     wind_enable_interrupt();
+    return W_ERR_OK;
+}
+
+w_event_s *wind_event_create(const char *name)
+{
+    w_err_t err;
+    w_event_s *event;
+    event = event_malloc();
+    WIND_ASSERT_RETURN(event != W_NULL,W_NULL);
+    err = wind_event_init(event,name);
+    if(err == W_ERR_OK)
+    {
+        event->pool_flag = 1;
+        return event;
+    }
+    event_free(event);
     return event;
 }
 
@@ -102,113 +107,59 @@ w_event_s *wind_event_create(const char *name)
 w_err_t wind_event_destroy(w_event_s *event)
 {
     w_dnode_s *dnode;
-    w_thread_s *thread;
+    wind_notice("destroy event:%s",event->name);
     WIND_ASSERT_RETURN(event != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(event->magic == WIND_EVENT_MAGIC,W_ERR_INVALID);
-    thread = wind_thread_current();
-    WIND_ASSERT_RETURN(event->owner == thread,W_ERR_FAIL);
-    wind_notice("destroy event:%s",event->name);
     wind_disable_interrupt();
     dlist_remove_tail(&g_core.eventlist);
     wind_enable_interrupt();
-    thread = event->owner;
-    if((event->owner->runstat == THREAD_STATUS_SLEEP) 
-       && (event->owner->cause == CAUSE_MSG))
-    {
-        thread->runstat = THREAD_STATUS_READY;
-    }
 
     event->magic = 0;
-    dnode = dlist_head(&event->msglist);
+    dnode = dlist_head(&event->cblist);
     if(dnode != W_NULL)
     {
         wind_warn("event:%s is NOT empty while destroying it.",event->name);
     }
-    event_free(event);
+    if(event->pool_flag)
+        event_free(event);
     return W_ERR_OK;
 }
 
-w_err_t wind_event_trig(w_event_s *event,const void *arg)
+w_err_t wind_event_regcb(w_event_s *event,w_event_cb *cb)
 {
-    w_thread_s *thread;
     WIND_ASSERT_RETURN(event != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(pmsg != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(event->magic == WIND_EVENT_MAGIC,W_ERR_FAIL);
-    WIND_ASSERT_RETURN(event->owner,W_ERR_FAIL);
-    //将消息加入邮箱
+    WIND_ASSERT_RETURN(cb != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(event->magic == WIND_EVENT_MAGIC,W_ERR_INVALID);
     wind_disable_interrupt();
-    dlist_insert_tail(&event->msglist,&pmsg->msgnode);
-    event->msgnum ++;
-
-    //激活被阻塞的线程
-    thread = event->owner;
-    if((thread->runstat != THREAD_STATUS_SLEEP) 
-       || (thread->cause != CAUSE_MSG))
-    {
-        wind_enable_interrupt();
-        return W_ERR_OK;
-    }
-    event->owner->runstat = THREAD_STATUS_READY;
+    dlist_insert_tail(&event->cblist,&cb->listenernode);
     wind_enable_interrupt();
-    _wind_thread_dispatch();//切换线程
     return W_ERR_OK;
 }
 
-
-w_err_t wind_event_wait(w_event_s *event,void **arg,w_uint32_t timeout)
+w_err_t wind_event_unregcb(w_event_s *event,w_event_cb *cb)
 {
-    w_err_t err;
-    w_uint32_t ticks;
+    WIND_ASSERT_RETURN(event != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(cb != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(event->magic == WIND_EVENT_MAGIC,W_ERR_INVALID);
+    wind_disable_interrupt();
+    dlist_remove(&event->cblist,&cb->listenernode);
+    wind_enable_interrupt();
+    return W_ERR_OK;
+}
+
+w_err_t wind_event_trig(w_event_s *event,void *arg)
+{
     w_dnode_s *dnode;
-    w_thread_s *thread;
+    w_event_cb *cb;
     WIND_ASSERT_RETURN(event != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(pmsg != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(event->magic == WIND_EVENT_MAGIC,W_ERR_FAIL);
-    WIND_ASSERT_RETURN(event->owner,W_ERR_FAIL);
-    thread = wind_thread_current();
-    WIND_ASSERT_RETURN(event->owner == thread,W_ERR_FAIL);
-    //如果邮箱中有消息，就直接返回消息
-    wind_disable_interrupt();
-    if(event->msgnum > 0)
+    foreach_node(dnode,&event->cblist)
     {
-        event->msgnum --;
-        dnode = dlist_remove_head(&event->msglist);
-        *pmsg = DLIST_OBJ(dnode,listener_s,msgnode);
-        wind_enable_interrupt();
-        return W_ERR_OK;
+        cb = DLIST_OBJ(dnode,w_event_cb,listenernode);
+        if(cb != W_NULL)
+            cb->cb_fn(event,arg);
     }
-
-    //否则将线程加入睡眠队列
-    ticks = timeout *WIND_TICK_PER_SEC / 1000;
-    if(ticks == 0)
-        ticks = 1;
-    thread = event->owner;
-    thread->runstat = THREAD_STATUS_SLEEP;
-    thread->cause = CAUSE_MSG;
-    dlist_insert_tail(&g_core.sleeplist,&thread->sleepnode.dnode);
-    wind_enable_interrupt();
-    
-    _wind_thread_dispatch();
-    if(thread->cause == CAUSE_MSG)
-    {
-        if(event->msgnum <= 0)
-        {
-            thread->runstat = THREAD_STATUS_READY;
-            return W_ERR_PTR_NULL;
-        }
-        dnode = dlist_remove_head(&event->msglist);
-        *pmsg = DLIST_OBJ(dnode,listener_s,msgnode);
-        wind_enable_interrupt();
-        err = W_ERR_OK;
-    }
-    else if(thread->cause == CAUSE_SLEEP)
-    {
-        err = W_ERR_TIMEOUT;
-    }
-    else
-        err = W_ERR_FAIL;
-    
-    return err;
+    return W_ERR_OK;
 }
 
 
@@ -218,17 +169,16 @@ w_err_t wind_event_print(w_dlist_s *list)
     w_event_s *event;
     WIND_ASSERT_RETURN(list != W_NULL,W_ERR_PTR_NULL);
     wind_printf("\r\n\r\nevent list as following:\r\n");
-    wind_print_space(6);
-    wind_printf("%-16s %-8s %-16s \r\n","event","msg_num","owner");
-    wind_print_space(6);
+    wind_print_space(2);
+    wind_printf("%-16s\r\n","event");
+    wind_print_space(2);
 
     foreach_node(dnode,list)
     {
         event = (w_event_s *)DLIST_OBJ(dnode,w_event_s,eventnode);
-        wind_printf("%-16s %-8d %-16s\r\n",
-            event->name,event->msgnum,event->owner->name);
+        wind_printf("%-16s\r\n",event->name?event->name:"null");            
     }
-    wind_print_space(6);
+    wind_print_space(2);
     return W_ERR_OK;
 }
 

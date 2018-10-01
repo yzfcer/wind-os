@@ -49,7 +49,6 @@ static w_uint16_t get_prio(w_prio_e priolevel)
     return prio;
 }
 
-//********************************************internal functions******************************
 static WIND_POOL(threadpool,WIND_THREAD_MAX_NUM,sizeof(w_thread_s));
 #if WIND_STKPOOL_SUPPORT
 WIND_POOL(stkbufpool,WIND_STK_MAX_NUM,WIND_STK_SIZE *sizeof(w_stack_t));
@@ -95,11 +94,6 @@ static char *wind_thread_status(w_thread_stat_e stat)
             return "unkown";
     }
 }
-
-//********************************************internal functions******************************
-
-
-//**********************************************extern functions******************************
 
 w_err_t _wind_thread_mod_init(void)
 {
