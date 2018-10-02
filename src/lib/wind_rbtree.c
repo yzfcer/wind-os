@@ -19,7 +19,7 @@
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
 /*********************************************Í·ÎÄ¼þ¶¨Òå***********************************************/
-#include "RBTree.h"
+#include "wind_rbtree.h"
 #include "wind_debug.h"
 #ifdef __cplusplus
 extern "C" {
@@ -31,8 +31,8 @@ extern "C" {
 #endif
 
 /********************************************ÄÚ²¿±äÁ¿¶¨Òå**********************************************/
-static w_rbtree_node_s __nil;
-static w_rbtree_node_s *nil = W_NULL; //ÎªÁË±ÜÃâÌÖÂÛ½áµãµÄ±ß½çÇé¿ö£¬¶¨ÒåÒ»¸önil½áµã´úÌæËùÓÐµÄNULL 
+static w_rbt_node_s __nil;
+static w_rbt_node_s *nil = W_NULL; //ÎªÁË±ÜÃâÌÖÂÛ½áµãµÄ±ß½çÇé¿ö£¬¶¨ÒåÒ»¸önil½áµã´úÌæËùÓÐµÄNULL 
 
 #define rbt_set_black(node) (node)->color=TREE_BLACK
 #define rbt_set_red(node) (node)->color=TREE_RED
@@ -42,31 +42,32 @@ static w_rbtree_node_s *nil = W_NULL; //ÎªÁË±ÜÃâÌÖÂÛ½áµãµÄ±ß½çÇé¿ö£¬¶¨ÒåÒ»¸önil½
 #define rbt_right_rotate(root,node) right_rotate(root,node)
 #define rbt_copy_color(n1,n2) (n1)->color = (n2)->color
 #define RBT_SUCCESS 0
+#define RBT_FAIL -1
 
 
 /********************************************ÄÚ²¿º¯Êý¶¨Òå*********************************************/
 
-w_rbtree_node_s* rbtree_parent(w_rbtree_node_s *z) //·µ»ØÄ³½áµãµÄ¸¸Ä¸ 
+w_rbt_node_s* rbt_parent(w_rbt_node_s *z) //·µ»ØÄ³½áµãµÄ¸¸Ä¸ 
 { 
     return z->parent; 
 } 
-static w_rbtree_node_s* rbtree_left(w_rbtree_node_s *z) //·µ»Ø×ó×ÓÊ÷ 
+static w_rbt_node_s* rbt_left(w_rbt_node_s *z) //·µ»Ø×ó×ÓÊ÷ 
 { 
     return z->left; 
 } 
-static w_rbtree_node_s *rbtree_right(w_rbtree_node_s *z) //·µ»ØÓÒ×ÓÊ÷ 
+static w_rbt_node_s *rbt_right(w_rbt_node_s *z) //·µ»ØÓÒ×ÓÊ÷ 
 { 
     return z->right; 
 } 
-static void left_rotate(w_rbtree_node_s **root, w_rbtree_node_s *x) //×óÐý×ª£º½áµãxÔ­À´µÄÓÒ×ÓÊ÷yÐý×ª³ÉÎªxµÄ¸¸Ä¸ 
+static void left_rotate(w_rbt_node_s **root, w_rbt_node_s *x) //×óÐý×ª£º½áµãxÔ­À´µÄÓÒ×ÓÊ÷yÐý×ª³ÉÎªxµÄ¸¸Ä¸ 
 { 
-    w_rbtree_node_s *y;
+    w_rbt_node_s *y;
 
     if(root == W_NULL || x == W_NULL) 
         return;
     if( x-> right == nil ) 
         return;
-    y = rbtree_right(x); 
+    y = rbt_right(x); 
     x->right=y->left; 
     if(y->left != nil) 
     { 
@@ -79,7 +80,7 @@ static void left_rotate(w_rbtree_node_s **root, w_rbtree_node_s *x) //×óÐý×ª£º½á
     } 
     else 
     { 
-        if( x == rbtree_left(rbtree_parent(x)) ) 
+        if( x == rbt_left(rbt_parent(x)) ) 
         { 
             x->parent->left=y; 
         } 
@@ -92,9 +93,9 @@ static void left_rotate(w_rbtree_node_s **root, w_rbtree_node_s *x) //×óÐý×ª£º½á
     x->parent=y; 
 } 
 
-static void right_rotate(w_rbtree_node_s **root, w_rbtree_node_s *x) //ÓÒÐý×ª£º½áµãxÔ­À´µÄ×ó×ÓÊ÷yÐý×ª³ÉÎªxµÄ¸¸Ä¸ 
+static void right_rotate(w_rbt_node_s **root, w_rbt_node_s *x) //ÓÒÐý×ª£º½áµãxÔ­À´µÄ×ó×ÓÊ÷yÐý×ª³ÉÎªxµÄ¸¸Ä¸ 
 { 
-    w_rbtree_node_s *y;
+    w_rbt_node_s *y;
 
     if(root == W_NULL || x == W_NULL) 
     { 
@@ -103,7 +104,7 @@ static void right_rotate(w_rbtree_node_s **root, w_rbtree_node_s *x) //ÓÒÐý×ª£º½
     if( x->left == nil ) 
         return;
 
-    y=rbtree_left(x); 
+    y=rbt_left(x); 
     x->left=y->right; 
     if( y->right != nil ) 
     { 
@@ -116,7 +117,7 @@ static void right_rotate(w_rbtree_node_s **root, w_rbtree_node_s *x) //ÓÒÐý×ª£º½
     } 
     else 
     { 
-        if(x == rbtree_left(rbtree_parent(x)) ) 
+        if(x == rbt_left(rbt_parent(x)) ) 
         { 
             x->parent->left=y; 
         } 
@@ -129,16 +130,16 @@ static void right_rotate(w_rbtree_node_s **root, w_rbtree_node_s *x) //ÓÒÐý×ª£º½
     x->parent=y; 
 }
 
-static void insert_fixup(w_rbtree_node_s **root, w_rbtree_node_s *z) //²åÈë½áµãºó, ÒªÎ¬³ÖºìºÚÊ÷ËÄÌõÐÔÖÊµÄ²»±äÐÔ 
+static void insert_fixup(w_rbt_node_s **root, w_rbt_node_s *z) //²åÈë½áµãºó, ÒªÎ¬³ÖºìºÚÊ÷ËÄÌõÐÔÖÊµÄ²»±äÐÔ 
 { 
-    w_rbtree_node_s *y; 
+    w_rbt_node_s *y; 
     if(root == W_NULL || z == W_NULL) 
         return;
-    while( rbtree_parent(z)->color == TREE_RED ) //ÒòÎª²åÈëµÄ½áµãÊÇºìÉ«µÄ£¬ËùÒÔÖ»¿ÉÄÜÎ¥±³ÐÔÖÊ3,¼´¼ÙÈç¸¸½áµãÒ²ÊÇºìÉ«µÄ£¬Òª×öµ÷Õû 
+    while( rbt_parent(z)->color == TREE_RED ) //ÒòÎª²åÈëµÄ½áµãÊÇºìÉ«µÄ£¬ËùÒÔÖ»¿ÉÄÜÎ¥±³ÐÔÖÊ3,¼´¼ÙÈç¸¸½áµãÒ²ÊÇºìÉ«µÄ£¬Òª×öµ÷Õû 
     { 
-        if( rbtree_parent(rbtree_parent(z))->left == rbtree_parent(z) ) //Èç¹ûÒª²åÈëµÄ½áµãzÊÇÆä¸¸½áµãµÄ×ó×ÓÊ÷ 
+        if( rbt_parent(rbt_parent(z))->left == rbt_parent(z) ) //Èç¹ûÒª²åÈëµÄ½áµãzÊÇÆä¸¸½áµãµÄ×ó×ÓÊ÷ 
         { 
-            y=rbtree_parent(rbtree_parent(z))->right; // yÉèÖÃÎªzµÄÊå¸¸½áµã 
+            y=rbt_parent(rbt_parent(z))->right; // yÉèÖÃÎªzµÄÊå¸¸½áµã 
             if( y->color == TREE_RED ) //case 1: Èç¹ûyµÄÑÕÉ«ÎªºìÉ«£¬ÄÇÃ´½«yÓëzµÄ¸¸Ç×Í¬Ê±×ÅÎªºÚÉ«£¬È»ºó°ÑzµÄ 
             { //×æ¸¸±äÎªºìÉ«£¬ÕâÑù×ÓzµÄ×æ¸¸½áµã¿ÉÄÜÎ¥±³ÐÔÖÊ3,½«zÉÏÒÆ³ÉzµÄ×æ¸¸½áµã 
                 y->color=TREE_BLACK; 
@@ -160,7 +161,7 @@ static void insert_fixup(w_rbtree_node_s **root, w_rbtree_node_s *z) //²åÈë½áµãº
         } 
         else //ÓëÇ°Ò»ÖÖÇé¿ö¶Ô³Æ£¬Òª²åÈëµÄ½áµãzÊÇÆä¸¸½áµãµÄÓÒ×ÓÊ÷,×¢ÊÍÂÔÈ¥ 
         { 
-            y=rbtree_parent(rbtree_parent(z))->left; 
+            y=rbt_parent(rbt_parent(z))->left; 
             if( y->color == TREE_RED) 
             { 
                 z->parent->color=TREE_BLACK; 
@@ -184,11 +185,11 @@ static void insert_fixup(w_rbtree_node_s **root, w_rbtree_node_s *z) //²åÈë½áµãº
     (*root)->color=TREE_BLACK; //×îºóÈç¹ûÉÏÉýÎªrootµÄ¸ùµÄ»°£¬°ÑrootµÄÑÕÉ«ÉèÖÃÎªºÚÉ« 
 } 
 
-static w_rbtree_node_s* successor(w_rbtree_s *tree, w_rbtree_node_s *x) //Ñ°ÕÒ½áµãxµÄÖÐÐòºó¼Ì 
+static w_rbt_node_s* successor(w_rbt_s *tree, w_rbt_node_s *x) //Ñ°ÕÒ½áµãxµÄÖÐÐòºó¼Ì 
 { 
-    w_rbtree_node_s *q; 
-    w_rbtree_node_s *p; 
-    w_rbtree_node_s *y; 
+    w_rbt_node_s *q; 
+    w_rbt_node_s *p; 
+    w_rbt_node_s *y; 
     if( x->right != nil ) //Èç¹ûxµÄÓÒ×ÓÊ÷²»Îª¿Õ£¬ÄÇÃ´ÎªÓÒ×ÓÊ÷ÖÐ×î×ó±ßµÄ½áµã 
     { 
         q=nil; 
@@ -212,9 +213,9 @@ static w_rbtree_node_s* successor(w_rbtree_s *tree, w_rbtree_node_s *x) //Ñ°ÕÒ½á
     } 
 } 
 
-w_int32_t rbt_delete_fixup(w_rbtree_node_s **root, w_rbtree_node_s *node)
+w_int32_t rbt_delete_fixup(w_rbt_node_s **root, w_rbt_node_s *node)
 { 
-    w_rbtree_node_s *parent = W_NULL, *brother = W_NULL;  
+    w_rbt_node_s *parent = W_NULL, *brother = W_NULL;  
 
     while(rbt_is_black(node) && ((*root) != node))  
     {           /* Set parent and brother */     
@@ -300,9 +301,9 @@ w_int32_t rbt_delete_fixup(w_rbtree_node_s **root, w_rbtree_node_s *node)
 }
 
 
-w_int32_t _rb_delete(w_rbtree_node_s **root, w_rbtree_node_s *dnode)
+w_int32_t _rb_delete(w_rbt_node_s **root, w_rbt_node_s *dnode)
 {   
-    w_rbtree_node_s *next = W_NULL, *refer = W_NULL;    /* ²éÕÒdnodeµÄºó¼Ì½áµãnext */    
+    w_rbt_node_s *next = W_NULL, *refer = W_NULL;    /* ²éÕÒdnodeµÄºó¼Ì½áµãnext */    
 
     if((nil == dnode->left) || (nil == dnode->right))   
     {   
@@ -356,7 +357,7 @@ w_int32_t _rb_delete(w_rbtree_node_s **root, w_rbtree_node_s *dnode)
 /*
 * ²éÕÒÌØ¶¨µÄ½Úµã£¬ÐèÒªÍâ²¿¼ÓËø
 */
-static void __rbt_middle_tranverse(w_rbtree_node_s **root,rbTreeAccess access,void *arg)
+static void __rbt_middle_tranverse(w_rbt_node_s **root,rbt_access_fn access,void *arg)
 { 
 
     if(root == W_NULL)
@@ -373,9 +374,9 @@ static void __rbt_middle_tranverse(w_rbtree_node_s **root,rbTreeAccess access,vo
 /*
 * ²éÕÒÌØ¶¨µÄ½Úµã£¬ÐèÒªÍâ²¿¼ÓËø
 */
-w_rbtree_node_s* __rbt_search(w_rbtree_node_s **root,w_rbtree_node_s *z,rbTreeAccess access,void *arg)
+w_rbt_node_s* __rbt_search(w_rbt_node_s **root,w_rbt_node_s *z,rbt_access_fn access,void *arg)
 { 
-    //w_rbtree_node_s **root = &tree->root;
+    //w_rbt_node_s **root = &tree->root;
 
     if(root == W_NULL)
         return W_NULL;
@@ -410,11 +411,11 @@ w_rbtree_node_s* __rbt_search(w_rbtree_node_s **root,w_rbtree_node_s *z,rbTreeAc
 
 
 
-w_int32_t rbt_insert(w_rbtree_s *tree, w_rbtree_node_s *z) //²åÈë½áµã 
+w_int32_t rbt_insert(w_rbt_s *tree, w_rbt_node_s *z) //²åÈë½áµã 
 { 
-    w_rbtree_node_s *x; //ÓÃx±£´æµ±Ç°¶¥µãµÄ¸¸Ä¸½áµã£¬ÓÃp±£´æµ±Ç°µÄ½áµã 
-    w_rbtree_node_s *p; 
-    w_rbtree_node_s **root = &tree->root;
+    w_rbt_node_s *x; //ÓÃx±£´æµ±Ç°¶¥µãµÄ¸¸Ä¸½áµã£¬ÓÃp±£´æµ±Ç°µÄ½áµã 
+    w_rbt_node_s *p; 
+    w_rbt_node_s **root = &tree->root;
 
     if(root == W_NULL || z == W_NULL) 
     { 
@@ -476,10 +477,10 @@ w_int32_t rbt_insert(w_rbtree_s *tree, w_rbtree_node_s *z) //²åÈë½áµã
 
 
 
-w_int32_t rbt_delete(w_rbtree_s *tree, w_rbtree_node_s *z) //ÔÚºìºÚÊ÷rootÖÐÉ¾³ý½áµãz 
+w_int32_t rbt_delete(w_rbt_s *tree, w_rbt_node_s *z) //ÔÚºìºÚÊ÷rootÖÐÉ¾³ý½áµãz 
 {    
-    w_rbtree_node_s *node;// = *root;
-    w_rbtree_node_s **root = &tree->root;
+    w_rbt_node_s *node;// = *root;
+    w_rbt_node_s **root = &tree->root;
     node = *root;
 
     if(nil == node)  
@@ -510,10 +511,10 @@ w_int32_t rbt_delete(w_rbtree_s *tree, w_rbtree_node_s *z) //ÔÚºìºÚÊ÷rootÖÐÉ¾³ý½
 
 
 
-w_rbtree_node_s* rbt_search(w_rbtree_s *tree,w_rbtree_node_s *z,rbTreeAccess access,void *arg)
+w_rbt_node_s* rbt_search(w_rbt_s *tree,w_rbt_node_s *z,rbt_access_fn access,void *arg)
 {
-    w_rbtree_node_s *node = W_NULL;
-    w_rbtree_node_s **root = &tree->root;
+    w_rbt_node_s *node = W_NULL;
+    w_rbt_node_s **root = &tree->root;
 
     RB_TREE_LOCK(tree->treeLock);
     node = __rbt_search(root,z,access,arg);
@@ -522,26 +523,26 @@ w_rbtree_node_s* rbt_search(w_rbtree_s *tree,w_rbtree_node_s *z,rbTreeAccess acc
 }
 
 
-void rbt_middle_tranverse(w_rbtree_s *tree,rbTreeAccess access,void *arg)
+void rbt_middle_tranverse(w_rbt_s *tree,rbt_access_fn access,void *arg)
 {
-    w_rbtree_node_s **root = &tree->root;
+    w_rbt_node_s **root = &tree->root;
 
     RB_TREE_LOCK(tree->treeLock);
     __rbt_middle_tranverse(root,access,arg);
     RB_TREE_UNLOCK(tree->treeLock);
 }
 
-void access(w_rbtree_node_s *node,void *arg)
+void access(w_rbt_node_s *node,void *arg)
 {
     wind_printf("%d ",node->key);
 }
 
-w_rbtree_s tree;
+w_rbt_s tree;
 
 void rbt_test(void)
 {
-    //w_rbtree_node_s *tree = W_NULL;
-    w_rbtree_node_s tnode[20];
+    //w_rbt_node_s *tree = W_NULL;
+    w_rbt_node_s tnode[20];
     w_int32_t i;
 
     for(i = 0;i < 20;i ++)
