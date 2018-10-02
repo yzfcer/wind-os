@@ -425,7 +425,7 @@ static w_err_t execute_cmd(w_console_s *ctrl)
 }
 
 
-w_err_t console_thread(w_int32_t argc,char **argv)
+w_err_t thread_console(w_int32_t argc,char **argv)
 {
     w_int32_t len;
     w_console_s *ctrl;
@@ -478,10 +478,10 @@ w_err_t console_thread(w_int32_t argc,char **argv)
 
 #define CTRL_STK_SIZE 2048
 static w_stack_t ctrlstk[CTRL_STK_SIZE];//Ö÷ÈÎÎñ¶ÑÕ»
-w_err_t _create_console_thread(void)
+w_err_t _create_thread_console(void)
 {
     w_thread_s *thread;
-    thread = wind_thread_create("console",console_thread,
+    thread = wind_thread_create("console",thread_console,
                0,W_NULL,PRIO_LOW,ctrlstk,CTRL_STK_SIZE);
     WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_FAIL);
     wind_thread_set_priority(thread,32760);

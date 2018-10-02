@@ -107,7 +107,7 @@ static w_softirq_fn get_irq_handle(void)
     return W_NULL;
 }
 
-static w_err_t wind_softirq_thread(w_int32_t argc,char **argv)
+static w_err_t thread_softirq(w_int32_t argc,char **argv)
 {
     w_softirq_fn func;
     softirq_thread->cause = CAUSE_COMMON;
@@ -134,10 +134,10 @@ static w_err_t wind_softirq_thread(w_int32_t argc,char **argv)
 }
 
 //创建软件中断线程
-w_err_t _wind_create_softirq_thread(void)
+w_err_t _wind_create_thread_softirq(void)
 {
     wind_notice("create soft interrupt thread.");
-    softirq_thread = wind_thread_create("softirq",wind_softirq_thread,
+    softirq_thread = wind_thread_create("softirq",thread_softirq,
                 0,W_NULL,PRIO_HIGH,softirq_stk,WIND_SOFTINT_STK_LEN);
     WIND_ASSERT_RETURN(softirq_thread != W_NULL,W_ERR_FAIL);
     wind_thread_set_priority(softirq_thread,1);

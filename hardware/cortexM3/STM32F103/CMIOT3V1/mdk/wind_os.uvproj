@@ -364,7 +364,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F40_41xxx,USE_STDPERIPH_DRIVER,_USE_USER_PRINT,STM32F10X_HD, USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\board;..\..\driver;..\port;..\start;..\..\..\..\..\src\api;..\..\..\..\..\src\app;..\..\..\..\..\src\common;..\..\..\..\..\src\core;..\..\..\..\..\src\driver;..\..\..\..\..\src\entry;..\..\..\..\..\src\dev;..\..\..\..\..\src\lib;..\..\..\..\..\src\components\console\framework;..\..\..\..\..\src\components\console\cmd;..\..\..\..\..\src\components\cutest\framework;..\..\..\..\..\src\components\cutest\port;..\..\..\..\..\src\components\cutest\case;..\..\..\..\..\src\components\lua-5.3.4\src;..\..\..\..\..\src\fs\treefs;..\..\..\..\..\src\components\xmodem</IncludePath>
+              <IncludePath>..\board;..\port;..\start;..\..\driver;..\..\..\..\..\src\api;..\..\..\..\..\src\app;..\..\..\..\..\src\common;..\..\..\..\..\src\core;..\..\..\..\..\src\driver;..\..\..\..\..\src\entry;..\..\..\..\..\src\dev;..\..\..\..\..\src\lib;..\..\..\..\..\src\components\console\framework;..\..\..\..\..\src\components\console\cmd;..\..\..\..\..\src\components\cutest\framework;..\..\..\..\..\src\components\cutest\port;..\..\..\..\..\src\components\cutest\case;..\..\..\..\..\src\components\lua-5.3.4\src;..\..\..\..\..\src\fs\treefs;..\..\..\..\..\src\components\xmodem</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1241,29 +1241,29 @@
           <GroupName>os_systhread</GroupName>
           <Files>
             <File>
-              <FileName>daemon_thread.c</FileName>
+              <FileName>thread_daemon.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\systhread\daemon_thread.c</FilePath>
+              <FilePath>..\..\..\..\..\src\core\systhread\thread_daemon.c</FilePath>
             </File>
             <File>
-              <FileName>idle_thread.c</FileName>
+              <FileName>thread_idle.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\systhread\idle_thread.c</FilePath>
+              <FilePath>..\..\..\..\..\src\core\systhread\thread_idle.c</FilePath>
             </File>
             <File>
-              <FileName>init_thread.c</FileName>
+              <FileName>thread_init.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\systhread\init_thread.c</FilePath>
+              <FilePath>..\..\..\..\..\src\core\systhread\thread_init.c</FilePath>
             </File>
             <File>
-              <FileName>stati_thread.c</FileName>
+              <FileName>thread_stati.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\systhread\stati_thread.c</FilePath>
+              <FilePath>..\..\..\..\..\src\core\systhread\thread_stati.c</FilePath>
             </File>
             <File>
-              <FileName>timer_thread.c</FileName>
+              <FileName>thread_timer.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\systhread\timer_thread.c</FilePath>
+              <FilePath>..\..\..\..\..\src\core\systhread\thread_timer.c</FilePath>
             </File>
           </Files>
         </Group>

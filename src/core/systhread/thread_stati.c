@@ -4,10 +4,10 @@
 **                                       yzfcer@163.com
 **
 **--------------文件信息--------------------------------------------------------------------------------
-**文   件   名: daemon_thread.c
+**文   件   名: thread_stati.c
 **创   建   人: 周江村
 **最后修改日期: 
-**描        述: 系统监视线程，监控一些可能出现异常的系统状态
+**描        述: 统计线程，目前主要计算CPU占用率
 **              
 **--------------历史版本信息----------------------------------------------------------------------------
 ** 创建人: 
@@ -23,34 +23,35 @@
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
 #include "wind_type.h"
+#include "wind_var.h"
 #include "wind_thread.h"
 #include "wind_debug.h"
-//#include "wind_watchdog.h"
+#if WIND_STATI_THREAD_SUPPORT
 
-#if WIND_DAEMON_THREAD_SUPPORT 
-#define DAEMON_STK_SIZE 256
-static w_stack_t daemonstk[DAEMON_STK_SIZE];
-
-
-static w_err_t daemon_thread(w_int32_t argc,char **argv)
+#define STATI_STK_SIZE 256
+static w_stack_t statisstk[STATI_STK_SIZE];
+static w_err_t thread_stati(w_int32_t argc,char **argv)
 {
-    (void)argc;
-    //wind_watchdog_create("daemon",0,10);
-	
+    w_uint32_t statcnt = 0;
+    w_uint32_t stati_ms = 1000;
     while(1)
     {
-        wind_thread_sleep(1000);
+        statcnt = g_core.idle_cnt;
+        wind_thread_sleep(stati_ms);
+        statcnt = g_core.idle_cnt - statcnt;
+        WIND_CPU_USAGE = (IDLE_CNT_PER_SEC - statcnt) *100 / IDLE_CNT_PER_SEC;
+        if(WIND_CPU_USAGE > 100)
+            WIND_CPU_USAGE = 0;
     }
 }
 
-w_err_t _create_daemon_thread(void)
+w_err_t _create_thread_stati(void)
 {
     w_thread_s *thread;
-    thread = wind_thread_create("daemon",daemon_thread,
-                     0,W_NULL,PRIO_HIGH,daemonstk,DAEMON_STK_SIZE);
+    thread = wind_thread_create("statistics",thread_stati,
+                     0,W_NULL,PRIO_HIGH,statisstk,STATI_STK_SIZE);
     WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_FAIL);
+    wind_thread_set_priority(thread,5);
     return W_ERR_OK;
 }
-
 #endif
-

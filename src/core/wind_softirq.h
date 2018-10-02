@@ -37,7 +37,7 @@ extern "C" {
 typedef void (*w_softirq_fn)(void);
 
 w_err_t _wind_softirq_mod_init(void);
-w_err_t _wind_create_softirq_thread(void);
+w_err_t _wind_create_thread_softirq(void);
 
 w_err_t wind_softirq_reg(w_uint16_t irqid,w_softirq_fn func);
 w_err_t wind_softirq_unreg(w_int32_t irqid);

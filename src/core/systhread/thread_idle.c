@@ -4,7 +4,7 @@
 **                                       yzfcer@163.com
 **
 **--------------文件信息--------------------------------------------------------------------------------
-**文   件   名: idle_thread.c
+**文   件   名: thread_idle.c
 **创   建   人: 周江村
 **最后修改日期: 
 **描        述: 空闲线程
@@ -30,7 +30,7 @@
 
 #define IDLE_STK_SIZE 64
 static w_stack_t idlestk[IDLE_STK_SIZE];//空闲任务堆栈
-static w_err_t idle_thread(w_int32_t argc,char **argv)
+static w_err_t thread_idle(w_int32_t argc,char **argv)
 {    
     while(1)
     {
@@ -39,10 +39,10 @@ static w_err_t idle_thread(w_int32_t argc,char **argv)
 }
 
 
-w_err_t _create_idle_thread(void)
+w_err_t _create_thread_idle(void)
 {
     w_thread_s *thread;
-    thread = wind_thread_create("idle",idle_thread,
+    thread = wind_thread_create("idle",thread_idle,
                     0,W_NULL,PRIO_LOW,idlestk,IDLE_STK_SIZE);
     WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_FAIL);
     wind_thread_set_priority(thread,32767);

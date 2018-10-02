@@ -49,6 +49,7 @@ volatile w_int8_t gwind_core_cnt = 0;//全局的禁止切换计数值
 extern void wind_thread_switch(void);
 extern void wind_interrupt_switch(void);
 extern void wind_start_switch(void);
+extern int _create_thread_init(void);
 
 
 //允许创建用户线程
@@ -272,14 +273,13 @@ static void _wind_init()
 
 
 //****************************wind_entry***********************************************
-int _create_init_thread(void);
 
 static int wind_os_lunch(void)
 	
 {
     wind_disable_interrupt();
     _wind_init();
-    _create_init_thread();
+    _create_thread_init();
     _wind_thread_open();
     wind_enable_interrupt();
     wind_run();
