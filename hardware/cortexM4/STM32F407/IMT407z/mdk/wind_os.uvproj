@@ -1398,11 +1398,6 @@
               <FilePath>..\..\..\..\..\src\components\console\framework\wind_cmd.h</FilePath>
             </File>
             <File>
-              <FileName>wind_ctl_user.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\components\console\framework\wind_ctl_user.h</FilePath>
-            </File>
-            <File>
               <FileName>wind_key.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\..\..\..\src\components\console\framework\wind_key.h</FilePath>
@@ -1476,11 +1471,6 @@
               <FileName>cmd_thread.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\components\console\cmd\cmd_thread.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_user.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\components\console\cmd\cmd_user.c</FilePath>
             </File>
             <File>
               <FileName>cmd_xmodem.c</FileName>
