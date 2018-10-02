@@ -54,11 +54,12 @@ w_mutex_s *wind_mutex_get(const char *name)
 {
     w_mutex_s *mutex;
     w_dnode_s *dnode;
+    WIND_ASSERT_RETURN(name != W_NULL,W_NULL);
     wind_disable_switch();
     foreach_node(dnode,&g_core.mutexlist)
     {
         mutex = DLIST_OBJ(dnode,w_mutex_s,mutexnode);
-        if(wind_strcmp(name,mutex->name) == 0)
+        if(mutex->name && (wind_strcmp(name,mutex->name) == 0))
         {
             wind_enable_switch();
             return mutex;
@@ -70,7 +71,6 @@ w_mutex_s *wind_mutex_get(const char *name)
 w_err_t wind_mutex_init(w_mutex_s *mutex,const char *name)
 {
     WIND_ASSERT_RETURN(mutex != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(name != W_NULL,W_ERR_PTR_NULL);
     mutex->magic = WIND_MUTEX_MAGIC;
     DNODE_INIT(mutex->mutexnode);
     mutex->name = name;
@@ -122,7 +122,6 @@ w_err_t wind_mutex_destroy(w_mutex_s *mutex)
     w_thread_s *thread;
     WIND_ASSERT_RETURN(mutex != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(mutex->magic == WIND_MUTEX_MAGIC,W_ERR_INVALID);
-    //wind_notice("destroy mutex:%s",mutex->name);
     wind_disable_interrupt();
     dlist_remove(&g_core.mutexlist,&mutex->mutexnode);
     foreach_node(dnode,&mutex->waitlist)
@@ -243,7 +242,7 @@ w_err_t wind_mutex_print(w_dlist_s *list)
     {
         mutex = (w_mutex_s *)DLIST_OBJ(dnode,w_mutex_s,mutexnode);
         wind_printf("%-16s %-8s %-16s \r\n",
-            mutex->name,mutex->mutexed?"lock":"unlock",
+            mutex->name?mutex->name:"null",mutex->mutexed?"lock":"unlock",
             mutex->owner != W_NULL?mutex->owner->name:"null");
     }
     wind_print_space(5);

@@ -86,11 +86,12 @@ w_watchdog_s *wind_watchdog_get(const char *name)
 {
     w_watchdog_s *watchdog;
     w_dnode_s *dnode;
+    WIND_ASSERT_RETURN(name != W_NULL,W_NULL);
     wind_disable_switch();
     foreach_node(dnode,&g_core.watchdoglist)
     {
         watchdog = DLIST_OBJ(dnode,w_watchdog_s,watchdognode);
-        if(wind_strcmp(name,watchdog->name) == 0)
+        if(watchdog->name && (wind_strcmp(name,watchdog->name) == 0))
         {
             wind_enable_switch();
             return watchdog;

@@ -31,6 +31,7 @@ extern "C" {
 
 /********************************************内部变量定义**********************************************/
 static w_msgbox_s *msgbox;
+static w_msgbox_s test_mb;
 typedef struct 
 {
     w_msg_s msg;
@@ -49,6 +50,43 @@ WIND_POOL(testmsg_pool,4,sizeof(test_msg_s));
 
 
 /********************************************全局函数定义**********************************************/
+
+CASE_SETUP(msgboxinit)
+{
+
+}
+
+CASE_TEARDOWN(msgboxinit)
+{
+
+}
+
+CASE_FUNC(msgboxinit)
+{
+    w_err_t err;
+    w_thread_s *thr;
+    thr = wind_thread_current();
+    err = wind_msgbox_init(&test_mb,"test");
+    EXPECT_EQ(err,W_ERR_OK);
+    msgbox = wind_msgbox_get("test");
+    EXPECT_NE(msgbox,W_NULL);
+    EXPECT_EQ(msgbox->magic,WIND_MSGBOX_MAGIC);
+    EXPECT_EQ(msgbox->msgnum,0);
+    EXPECT_EQ(msgbox->flag_pool,0);
+    EXPECT_EQ(msgbox->msglist.head,W_NULL);
+    EXPECT_EQ(msgbox->msglist.tail,W_NULL);
+    EXPECT_EQ(msgbox->owner,thr);
+    err = wind_msgbox_destroy(msgbox);
+    EXPECT_EQ(W_ERR_OK,err);
+
+    err = wind_msgbox_init(&test_mb,W_NULL);
+    EXPECT_EQ(err,W_ERR_OK);
+    msgbox = wind_msgbox_get(W_NULL);
+    EXPECT_EQ(msgbox,W_NULL);
+    err = wind_msgbox_destroy(&test_mb);
+    EXPECT_EQ(W_ERR_OK,err);
+    EXPECT_EQ(test_mb.magic,0);
+}
 
 CASE_SETUP(msgboxinfo)
 {
@@ -69,6 +107,7 @@ CASE_FUNC(msgboxinfo)
     EXPECT_NE(msgbox,W_NULL);
     EXPECT_EQ(msgbox->magic,WIND_MSGBOX_MAGIC);
     EXPECT_EQ(msgbox->msgnum,0);
+    EXPECT_EQ(msgbox->flag_pool,1);
     EXPECT_EQ(msgbox->msglist.head,W_NULL);
     EXPECT_EQ(msgbox->msglist.tail,W_NULL);
     EXPECT_EQ(msgbox->owner,thr);
@@ -139,6 +178,7 @@ SUITE_TEARDOWN(test_msgbox)
 
 
 TEST_CASES_START(test_msgbox)
+TEST_CASE(msgboxinit)
 TEST_CASE(msgboxinfo)
 TEST_CASE(msgboxfunc)
 TEST_CASE(msgbox_multthread)

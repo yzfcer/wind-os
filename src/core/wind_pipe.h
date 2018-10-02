@@ -43,7 +43,6 @@ typedef struct __w_pipe_s
     w_uint32_t magic;
     const char *name;
     w_dnode_s pipenode;
-    w_bool_t used;
     void *buff;
     w_uint16_t buflen;
     w_uint16_t flag_pool:1;

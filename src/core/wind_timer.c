@@ -53,11 +53,12 @@ w_timer_s* wind_timer_get(char *name)
 {
     w_timer_s *timer;
     w_dnode_s *dnode;
+    WIND_ASSERT_RETURN(name != W_NULL,W_NULL);
     wind_disable_switch();
     foreach_node(dnode,&g_core.timerlist)
     {
         timer = DLIST_OBJ(dnode,w_timer_s,timernode);
-        if(wind_strcmp(name,timer->name) == 0)
+        if(timer->name && (wind_strcmp(name,timer->name) == 0))
         {
             wind_enable_switch();
             return timer;

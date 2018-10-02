@@ -48,11 +48,12 @@ w_heap_s *wind_heap_get(const char *name)
 {
     w_heap_s *heap;
     w_dnode_s *dnode;
+    WIND_ASSERT_RETURN(name != W_NULL,W_NULL);
     wind_disable_switch();
     foreach_node(dnode,&g_core.heaplist)
     {
         heap = DLIST_OBJ(dnode,w_heap_s,heapnode);
-        if(wind_strcmp(name,heap->name) == 0)
+        if(heap->name && (wind_strcmp(name,heap->name) == 0))
         {
             wind_enable_switch();
             return heap;
@@ -69,10 +70,9 @@ w_heap_s *wind_heap_create(const char *name,w_addr_t base,w_uint32_t size,w_uint
     w_heap_s* hp;
     w_uint32_t hpsize;
     
-    WIND_ASSERT_RETURN(name != W_NULL,W_NULL);
     WIND_ASSERT_RETURN(size > WIND_HEAP_MIN_SIZE,W_NULL);
     
-    wind_notice("create heap:%s",name);
+    wind_notice("create heap:%s",name?name:"null");
     hp = (w_heap_s*)(__ALIGN_R((w_addr_t)base));
     hpsize = size;
     hpsize += (w_uint32_t)(((w_addr_t)hp) - base);
@@ -105,6 +105,7 @@ w_err_t wind_heap_destroy(w_addr_t base)
     heap = (w_heap_s*)(__ALIGN_R((w_addr_t)base));
     WIND_ASSERT_RETURN(heap != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(heap->magic == WIND_HEAP_MAGIC,W_ERR_INVALID);
+    wind_notice("destroy heap:%s",heap->name?heap->name:"null");
     wind_disable_switch();
     dlist_remove(&g_core.heaplist,&heap->heapnode);
     heap->magic = 0;
@@ -260,7 +261,7 @@ w_err_t wind_heap_free(w_heap_s* heap,void *ptr)
     WIND_ASSERT_RETURN(item->magic == WIND_HEAPITEM_MAGIC,W_ERR_INVALID);
     WIND_ASSERT_RETURN(item->used == 1,W_ERR_INVALID);
     WIND_ASSERT_RETURN(item->heap != W_NULL,W_ERR_INVALID);
-    wind_debug("heap_free %s,0x%08x",heap->name,ptr);
+    wind_debug("heap_free %s,0x%08x",heap->name?heap->name:"null",ptr);
     heap = item->heap;
     WIND_ASSERT_RETURN(heap != W_NULL,W_ERR_INVALID);
     WIND_ASSERT_RETURN(heap->magic == WIND_HEAP_MAGIC,W_ERR_INVALID);
@@ -302,7 +303,7 @@ w_err_t wind_heap_print(w_dlist_s *list)
     {
         heap = (w_heap_s *)DLIST_OBJ(dnode,w_heap_s,heapnode);
         wind_printf("%-16s 0x%08x %-12d %-10s\r\n",
-            heap->name,heap->addr,heap->stati.tot,
+            heap->name?heap->name:"null",heap->addr,heap->stati.tot,
             heap->is_private?"TRUE":"FALSE");
     }
     wind_print_space(7);

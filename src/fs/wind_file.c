@@ -51,14 +51,10 @@ static w_err_t _file_free(w_file_s *file)
 
 static w_err_t mount_param_check(char *fsname,char *blkname,char *path)
 {
-    //w_blkdev_s *dev;
     w_fs_s *fs;
     w_dnode_s *dnode;
     WIND_ASSERT_RETURN(fsname != W_NULL,W_ERR_PTR_NULL);
-    //WIND_ASSERT_RETURN(blkname != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(path != W_NULL,W_ERR_PTR_NULL);
-    //dev = wind_blkdev_get(blkname);
-    //WIND_ASSERT_RETURN(dev != W_NULL,W_ERR_INVALID);
     fs = wind_fs_get(fsname);
     WIND_ASSERT_RETURN(fs != W_NULL,W_ERR_REPEAT);
     if(wind_strlen(path) >= FS_MOUNT_PATH_LEN)

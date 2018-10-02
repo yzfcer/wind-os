@@ -56,11 +56,12 @@ w_event_s *wind_event_get(const char *name)
 {
     w_event_s *event;
     w_dnode_s *dnode;
+    WIND_ASSERT_RETURN(name != W_NULL,W_NULL);
     wind_disable_switch();
     foreach_node(dnode,&g_core.eventlist)
     {
         event = DLIST_OBJ(dnode,w_event_s,eventnode);
-        if(wind_strcmp(name,event->name) == 0)
+        if(event->name && (wind_strcmp(name,event->name) == 0))
         {
             wind_enable_switch();
             return event;
@@ -72,9 +73,8 @@ w_event_s *wind_event_get(const char *name)
 
 w_err_t wind_event_init(w_event_s *event,const char *name)
 {
-    wind_notice("create event:%s",name);
+    wind_notice("create event:%s",name?name:"null");
     WIND_ASSERT_RETURN(event != W_NULL,W_ERR_PTR_NULL);
-    //WIND_ASSERT_RETURN(name != W_NULL,W_ERR_PTR_NULL);
     event->magic = WIND_EVENT_MAGIC;
     event->name = name;
     DNODE_INIT(event->eventnode);
@@ -107,7 +107,7 @@ w_event_s *wind_event_create(const char *name)
 w_err_t wind_event_destroy(w_event_s *event)
 {
     w_dnode_s *dnode;
-    wind_notice("destroy event:%s",event->name);
+    wind_notice("destroy event:%s",event->name?event->name:"null");
     WIND_ASSERT_RETURN(event != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(event->magic == WIND_EVENT_MAGIC,W_ERR_INVALID);
     wind_disable_interrupt();
@@ -118,7 +118,8 @@ w_err_t wind_event_destroy(w_event_s *event)
     dnode = dlist_head(&event->cblist);
     if(dnode != W_NULL)
     {
-        wind_warn("event:%s is NOT empty while destroying it.",event->name);
+        wind_warn("event:%s is NOT empty while destroying it.",
+            event->name?event->name:"null");
     }
     if(event->flag_pool)
         event_free(event);

@@ -64,11 +64,12 @@ w_msgbox_s *wind_msgbox_get(const char *name)
 {
     w_msgbox_s *msgbox;
     w_dnode_s *dnode;
+    WIND_ASSERT_RETURN(name != W_NULL,W_NULL);
     wind_disable_switch();
     foreach_node(dnode,&g_core.msgboxlist)
     {
         msgbox = DLIST_OBJ(dnode,w_msgbox_s,msgboxnode);
-        if(wind_strcmp(name,msgbox->name) == 0)
+        if(msgbox->name && (wind_strcmp(name,msgbox->name) == 0))
         {
             wind_enable_switch();
             return msgbox;
@@ -80,8 +81,8 @@ w_msgbox_s *wind_msgbox_get(const char *name)
 
 w_err_t wind_msgbox_init(w_msgbox_s *msgbox,const char *name)
 {
+    wind_notice("create msgbox:%s",name?name:"null");
     WIND_ASSERT_RETURN(msgbox != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(name != W_NULL,W_ERR_PTR_NULL);
     msgbox->magic = WIND_MSGBOX_MAGIC;
     msgbox->name = name;
     DNODE_INIT(msgbox->msgboxnode);
@@ -101,7 +102,7 @@ w_msgbox_s *wind_msgbox_create(const char *name)
 {
     w_err_t err;
     w_msgbox_s *msgbox;
-    wind_notice("create msgbox:%s",name);
+    
     msgbox = msgbox_malloc();
     WIND_ASSERT_RETURN(msgbox != W_NULL,W_NULL);
     err = wind_msgbox_init(msgbox,name);
@@ -140,9 +141,10 @@ w_err_t wind_msgbox_destroy(w_msgbox_s *msgbox)
     w_thread_s *thread;
     WIND_ASSERT_RETURN(msgbox != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(msgbox->magic == WIND_MSGBOX_MAGIC,W_ERR_INVALID);
+    wind_notice("destroy msgbox:%s",msgbox->name?msgbox->name:"null");
     thread = wind_thread_current();
     WIND_ASSERT_RETURN(msgbox->owner == thread,W_ERR_FAIL);
-    wind_notice("destroy msgbox:%s",msgbox->name);
+    
     wind_disable_interrupt();
     dlist_remove_tail(&g_core.msgboxlist);
     wind_enable_interrupt();
@@ -157,7 +159,7 @@ w_err_t wind_msgbox_destroy(w_msgbox_s *msgbox)
     dnode = dlist_head(&msgbox->msglist);
     if(dnode != W_NULL)
     {
-        wind_warn("msgbox:%s is NOT empty while destroying it.",msgbox->name);
+        wind_warn("msgbox:%s is NOT empty while destroying it.",msgbox->name?msgbox->name:"null");
     }
     if(msgbox->flag_pool)
         msgbox_free(msgbox);
@@ -290,7 +292,8 @@ w_err_t wind_msgbox_print(w_dlist_s *list)
     {
         msgbox = (w_msgbox_s *)DLIST_OBJ(dnode,w_msgbox_s,msgboxnode);
         wind_printf("%-16s %-8d %-16s\r\n",
-            msgbox->name,msgbox->msgnum,msgbox->owner->name);
+            msgbox->name?msgbox->name:"null",msgbox->msgnum,
+            msgbox->owner->name?msgbox->owner->name:"null");
     }
     wind_print_space(5);
     return W_ERR_OK;

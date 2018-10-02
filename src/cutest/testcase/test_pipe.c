@@ -33,6 +33,7 @@ extern "C" {
 /********************************************内部变量定义**********************************************/
 
 w_uint8_t pipebuf[128];
+w_pipe_s test_pp;
 
 
 /********************************************内部函数定义*********************************************/
@@ -44,7 +45,40 @@ w_uint8_t pipebuf[128];
 
 
 /********************************************全局函数定义**********************************************/
+CASE_SETUP(pipeinit)
+{
 
+}
+
+CASE_TEARDOWN(pipeinit)
+{
+
+}
+
+CASE_FUNC(pipeinit)
+{
+    w_err_t err;
+    w_pipe_s *pipe;
+    err = wind_pipe_init(&test_pp,"test",pipebuf,sizeof(pipebuf));
+    EXPECT_EQ(err,W_ERR_OK);
+    pipe = wind_pipe_get("test");
+    EXPECT_NE(pipe,W_NULL);
+    EXPECT_EQ(pipe->magic,WIND_PIPE_MAGIC);
+    EXPECT_STR_EQ(pipe->name,"test");
+    EXPECT_EQ(pipe->flag_pool,0);
+    EXPECT_EQ(pipe->buff,pipebuf);
+    EXPECT_EQ(pipe->buflen,sizeof(pipebuf));
+    err = wind_pipe_destroy(pipe);
+    EXPECT_EQ(W_ERR_OK,err);
+
+    err = wind_pipe_init(&test_pp,W_NULL,pipebuf,sizeof(pipebuf));
+    EXPECT_EQ(err,W_ERR_OK);
+    pipe = wind_pipe_get(W_NULL);
+    EXPECT_EQ(pipe,W_NULL);
+    err = wind_pipe_destroy(&test_pp);
+    EXPECT_EQ(W_ERR_OK,err);
+    EXPECT_EQ(test_pp.magic,0);
+}
 
 CASE_SETUP(pipeinfo)
 {
@@ -64,12 +98,11 @@ CASE_FUNC(pipeinfo)
     EXPECT_NE(pipe,W_NULL);
     EXPECT_EQ(pipe->magic,WIND_PIPE_MAGIC);
     EXPECT_STR_EQ(pipe->name,"test");
-    EXPECT_EQ(pipe->used,W_TRUE);
+    EXPECT_EQ(pipe->flag_pool,1);
     EXPECT_EQ(pipe->buff,pipebuf);
     EXPECT_EQ(pipe->buflen,sizeof(pipebuf));
     err = wind_pipe_destroy(pipe);
     EXPECT_EQ(W_ERR_OK,err);
-
 }
 
 
@@ -125,6 +158,7 @@ SUITE_TEARDOWN(test_pipe)
 
 
 TEST_CASES_START(test_pipe)
+TEST_CASE(pipeinit)
 TEST_CASE(pipeinfo)
 TEST_CASE(pipefunc)
 TEST_CASES_END

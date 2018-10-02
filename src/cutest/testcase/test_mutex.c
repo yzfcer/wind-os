@@ -30,6 +30,7 @@ extern "C" {
 /********************************************内部变量定义**********************************************/
 
 static w_mutex_s *mutexs[4];
+static w_mutex_s test_mtx;
 
 
 /********************************************内部函数定义*********************************************/
@@ -41,6 +42,40 @@ static w_mutex_s *mutexs[4];
 
 
 /********************************************全局函数定义**********************************************/
+CASE_SETUP(mutexinit)
+{
+
+}
+
+CASE_TEARDOWN(mutexinit)
+{
+
+}
+
+CASE_FUNC(mutexinit)
+{
+    w_err_t err;
+    err = wind_mutex_init(&test_mtx,"test");
+    EXPECT_EQ(err,W_ERR_OK);
+    mutexs[0] = wind_mutex_get("test");
+    EXPECT_NE(mutexs[0],W_NULL);
+    EXPECT_EQ(mutexs[0]->mutexed,0);
+    EXPECT_EQ(mutexs[0]->flag_pool,0);
+    EXPECT_EQ(mutexs[0]->waitlist.head,W_NULL);
+    EXPECT_EQ(mutexs[0]->waitlist.tail,W_NULL);
+    err = wind_mutex_destroy(mutexs[0]);
+    EXPECT_EQ(W_ERR_OK,err);
+
+    err = wind_mutex_init(&test_mtx,W_NULL);
+    EXPECT_EQ(err,W_ERR_OK);
+    mutexs[0] = wind_mutex_get(W_NULL);
+    EXPECT_EQ(mutexs[0],W_NULL);
+    err = wind_mutex_destroy(&test_mtx);
+    EXPECT_EQ(W_ERR_OK,err);
+    EXPECT_EQ(test_mtx.magic,0);
+
+}
+
 
 CASE_SETUP(mutexinfo)
 {
@@ -57,7 +92,8 @@ CASE_FUNC(mutexinfo)
     w_err_t err;
     mutexs[0] = wind_mutex_create("test");
     EXPECT_NE(mutexs[0],W_NULL);
-    EXPECT_EQ(mutexs[0]->mutexed,W_FALSE);
+    EXPECT_EQ(mutexs[0]->mutexed,0);
+    EXPECT_EQ(mutexs[0]->flag_pool,1);
     EXPECT_EQ(mutexs[0]->waitlist.head,W_NULL);
     EXPECT_EQ(mutexs[0]->waitlist.tail,W_NULL);
     err = wind_mutex_destroy(mutexs[0]);
@@ -129,6 +165,7 @@ SUITE_TEARDOWN(test_mutex)
 
 
 TEST_CASES_START(test_mutex)
+TEST_CASE(mutexinit)
 TEST_CASE(mutexinfo)
 TEST_CASE(mutexfunc)
 TEST_CASE(mutexmulti)

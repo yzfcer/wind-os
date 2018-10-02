@@ -37,11 +37,12 @@ w_pool_s *wind_pool_get(const char *name)
 {
     w_pool_s *pool;
     w_dnode_s *dnode;
+    WIND_ASSERT_RETURN(name != W_NULL,W_NULL);
     wind_disable_switch();
     foreach_node(dnode,&g_core.poollist)
     {
         pool = DLIST_OBJ(dnode,w_pool_s,poolnode);
-        if(wind_strcmp(name,pool->name) == 0)
+        if(pool->name && (wind_strcmp(name,pool->name) == 0))
         {
             wind_enable_switch();
             return pool;
@@ -56,7 +57,7 @@ w_err_t wind_pool_create(const char *name,void *mem,w_uint32_t memsize,w_uint32_
     w_uint32_t i,si;
     w_pool_item_s* item;
     w_pool_s *pm;
-    wind_notice("create pool:%s",name);
+    wind_notice("create pool:%s",name?name:"null");
     WIND_ASSERT_RETURN(mem != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(memsize > 0,W_ERR_INVALID);
     WIND_ASSERT_RETURN(itemsize > 0,W_ERR_INVALID);
@@ -102,7 +103,7 @@ w_err_t wind_pool_destroy(void *mem)
     WIND_ASSERT_RETURN(mem != W_NULL,W_ERR_PTR_NULL);
     pm = (w_pool_s *)WIND_MPOOL_ALIGN_R((w_uint32_t)mem);
     WIND_ASSERT_RETURN(pm->magic == WIND_POOL_MAGIC,W_ERR_INVALID);
-    wind_notice("destroy pool:%s",pm->name);
+    wind_notice("destroy pool:%s",pm->name?pm->name:"null");
     wind_disable_interrupt();
     dlist_remove(&g_core.poollist,&pm->poolnode);
     wind_enable_interrupt();
@@ -190,7 +191,7 @@ void _wind_pool_print_list(w_dlist_s *list)
     {
         pm = DLIST_OBJ(pdnode,w_pool_s,poolnode);
         wind_printf("%-12s 0x%-10x %-8d %-8d %-8d\r\n",
-            pm->name,pm->head,pm->size,pm->itemnum,pm->itemsize);
+            pm->name?pm->name:"null",pm->head,pm->size,pm->itemnum,pm->itemsize);
     }
     wind_print_space(7);
 }

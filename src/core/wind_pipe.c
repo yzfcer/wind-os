@@ -55,11 +55,12 @@ w_pipe_s *wind_pipe_get(const char *name)
 {
     w_pipe_s *pipe;
     w_dnode_s *dnode;
+    WIND_ASSERT_RETURN(name != W_NULL,W_NULL);
     wind_disable_switch();
     foreach_node(dnode,&g_core.pipelist)
     {
         pipe = DLIST_OBJ(dnode,w_pipe_s,pipenode);
-        if(wind_strcmp(name,pipe->name) == 0)
+        if(pipe->name && (wind_strcmp(name,pipe->name) == 0))
         {
             wind_enable_switch();
             return pipe;
@@ -72,9 +73,8 @@ w_pipe_s *wind_pipe_get(const char *name)
 w_err_t wind_pipe_init(w_pipe_s* pipe,const char *name,void *buff,w_uint32_t buflen)
 {
     w_err_t err;
-    wind_notice("create pipe:%s",name);
+    wind_notice("create pipe:%s",name?name:"null");
     WIND_ASSERT_RETURN((pipe != W_NULL),W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN((name != W_NULL),W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN((buff != W_NULL),W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(buflen > 0,W_ERR_INVALID);
     err = wind_queue_create(buff,buflen,1);
@@ -82,7 +82,6 @@ w_err_t wind_pipe_init(w_pipe_s* pipe,const char *name,void *buff,w_uint32_t buf
     pipe->magic = WIND_PIPE_MAGIC;
     pipe->name = name;
     DNODE_INIT(pipe->pipenode)
-    pipe->used = W_TRUE;
     pipe->buff = buff;
     pipe->buflen = buflen;
     pipe->flag_pool = 0;
@@ -146,7 +145,6 @@ w_err_t wind_pipe_destroy(w_pipe_s* pipe)
     wind_disable_interrupt();
     dlist_remove(&g_core.pipelist,&pipe->pipenode);
     pipe->magic = 0;
-    pipe->used = W_FALSE;
     pipe->name = W_NULL;
     if(pipe->flag_pool)
         pipe_free(pipe);
@@ -172,7 +170,7 @@ w_err_t _wind_pipe_print(w_dlist_s* list)
         size = wind_queue_max_count(queue);
         used = wind_queue_data_count(queue);
         wind_printf("%-16s %-8d %-10d\r\n",
-            pipe->name,size,used);
+            pipe->name?pipe->name:"null",size,used);
     }
     wind_print_space(5);
     return W_ERR_OK;

@@ -110,11 +110,12 @@ w_thread_s *wind_thread_get(const char *name)
 {
     w_thread_s *thread;
     w_dnode_s *dnode;
+    WIND_ASSERT_RETURN(name != W_NULL,W_NULL);
     wind_disable_switch();
     foreach_node(dnode,&g_core.threadlist)
     {
         thread = DLIST_OBJ(dnode,w_thread_s,validnode);
-        if(wind_strcmp(name,thread->name) == 0)
+        if(thread->name && (wind_strcmp(name,thread->name) == 0))
         {
             wind_enable_switch();
             return thread;
@@ -148,7 +149,7 @@ w_err_t wind_thread_init(w_thread_s *thread,
     w_uint16_t i;
     w_pstack_t tmpstk;
     wind_notice("create thread:%s",name);
-    WIND_ASSERT_RETURN(name != W_NULL,W_ERR_PTR_NULL);
+    //WIND_ASSERT_RETURN(name != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(thread_func != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(pstk != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(stksize > 0,W_ERR_INVALID);

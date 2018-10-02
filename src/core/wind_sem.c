@@ -56,11 +56,12 @@ w_sem_s *wind_sem_get(const char *name)
 {
     w_sem_s *sem;
     w_dnode_s *dnode;
+    WIND_ASSERT_RETURN(name != W_NULL,W_NULL);
     wind_disable_switch();
     foreach_node(dnode,&g_core.semlist)
     {
         sem = DLIST_OBJ(dnode,w_sem_s,semnode);
-        if(wind_strcmp(name,sem->name) == 0)
+        if(sem->name && (wind_strcmp(name,sem->name) == 0))
         {
             wind_enable_switch();
             return sem;

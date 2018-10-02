@@ -29,6 +29,7 @@ extern "C" {
 
 /********************************************内部变量定义**********************************************/
 w_sem_s *sems[4];
+w_sem_s test_sm;
 
 
 
@@ -43,6 +44,40 @@ w_sem_s *sems[4];
 
 /********************************************全局函数定义**********************************************/
 
+CASE_SETUP(seminit)
+{
+
+}
+
+CASE_TEARDOWN(seminit)
+{
+
+}
+
+CASE_FUNC(seminit)
+{
+    w_err_t err;
+    err = wind_sem_init(&test_sm,"test",3);
+    EXPECT_EQ(err,W_ERR_OK);
+    sems[0] = wind_sem_get("test");
+    EXPECT_NE(sems[0],W_NULL);
+    EXPECT_STR_EQ(sems[0]->name,"test");
+    EXPECT_EQ(sems[0]->sem_tot,3);
+    EXPECT_EQ(sems[0]->flag_pool,0);
+    EXPECT_EQ(sems[0]->sem_num,3);
+    EXPECT_EQ(sems[0]->waitlist.head,W_NULL);
+    EXPECT_EQ(sems[0]->waitlist.tail,W_NULL);
+    err = wind_sem_destroy(sems[0]);
+    EXPECT_EQ(W_ERR_OK,err);
+
+    err = wind_sem_init(&test_sm,W_NULL,3);
+    EXPECT_EQ(err,W_ERR_OK);
+    sems[0] = wind_sem_get(W_NULL);
+    EXPECT_EQ(sems[0],W_NULL);
+    err = wind_sem_destroy(&test_sm);
+    EXPECT_EQ(W_ERR_OK,err);
+    EXPECT_EQ(test_sm.magic,0);
+}
 
 CASE_SETUP(seminfo)
 {
@@ -62,6 +97,7 @@ CASE_FUNC(seminfo)
     EXPECT_STR_EQ(sems[0]->name,"test");
     EXPECT_EQ(sems[0]->sem_tot,3);
     EXPECT_EQ(sems[0]->sem_num,3);
+    EXPECT_EQ(sems[0]->flag_pool,1);
     EXPECT_EQ(sems[0]->waitlist.head,W_NULL);
     EXPECT_EQ(sems[0]->waitlist.tail,W_NULL);
     err = wind_sem_destroy(sems[0]);
@@ -145,6 +181,7 @@ SUITE_TEARDOWN(test_sem)
 
 
 TEST_CASES_START(test_sem)
+TEST_CASE(seminit)
 TEST_CASE(seminfo)
 TEST_CASE(semfunc)
 TEST_CASE(semmulti)
