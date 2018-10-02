@@ -364,7 +364,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F40_41xxx,USE_STDPERIPH_DRIVER,_USE_USER_PRINT,__USE_C99_MATH</Define>
               <Undefine></Undefine>
-              <IncludePath>..\board;..\driver;..\port;..\start;..\..\..\..\..\src\api;..\..\..\..\..\src\app;..\..\..\..\..\src\common;..\..\..\..\..\src\console\framework;..\..\..\..\..\src\core;..\..\..\..\..\src\driver;..\..\..\..\..\src\entry;..\..\..\..\..\src\lib;..\..\..\..\..\src\console\cmd;..\..\..\..\..\src\cutest\framework;..\..\..\..\..\src\cutest\port;..\..\..\..\..\src\cutest\case;..\..\..\..\..\src\dev;..\..\..\..\..\src\components\lua-5.3.4\src;..\..\..\..\..\src\fs;..\..\..\..\..\src\fs\treefs;..\..\..\..\..\src\components\xmodem</IncludePath>
+              <IncludePath>..\board;..\driver;..\port;..\start;..\..\..\..\..\src\api;..\..\..\..\..\src\app;..\..\..\..\..\src\common;..\..\..\..\..\src\core;..\..\..\..\..\src\driver;..\..\..\..\..\src\entry;..\..\..\..\..\src\dev;..\..\..\..\..\src\lib;..\..\..\..\..\src\components\console\framework;..\..\..\..\..\src\components\console\cmd;..\..\..\..\..\src\components\cutest\framework;..\..\..\..\..\src\components\cutest\port;..\..\..\..\..\src\components\cutest\case;..\..\..\..\..\src\components\lua-5.3.4\src;..\..\..\..\..\src\fs;..\..\..\..\..\src\fs\treefs;..\..\..\..\..\src\components\xmodem</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1000,146 +1000,6 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>console_framework</GroupName>
-          <Files>
-            <File>
-              <FileName>console_framework.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\console\framework\console_framework.c</FilePath>
-            </File>
-            <File>
-              <FileName>console_framework.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\console\framework\console_framework.h</FilePath>
-            </File>
-            <File>
-              <FileName>wind_console.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\console\framework\wind_console.h</FilePath>
-            </File>
-            <File>
-              <FileName>wind_ctl_user.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\console\framework\wind_ctl_user.h</FilePath>
-            </File>
-            <File>
-              <FileName>wind_key.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\console\framework\wind_key.h</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_history.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\console\framework\cmd_history.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_history.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\console\framework\cmd_history.h</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>console_cmd</GroupName>
-          <Files>
-            <File>
-              <FileName>cmd_list.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\console\cmd\cmd_list.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_echo.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\console\cmd\cmd_echo.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_datetime.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\console\cmd\cmd_datetime.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_mem.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\console\cmd\cmd_mem.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_user.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\console\cmd\cmd_user.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_stati.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\console\cmd\cmd_stati.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_reset.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\console\cmd\cmd_reset.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_led.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\console\cmd\cmd_led.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_blkdev.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\console\cmd\cmd_blkdev.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_lua.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\console\cmd\cmd_lua.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_xmodem.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\console\cmd\cmd_xmodem.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_beep.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\console\cmd\cmd_beep.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_fs.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\console\cmd\cmd_fs.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_thread.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\console\cmd\cmd_thread.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_cutest.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\console\cmd\cmd_cutest.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_sysinfo.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\console\cmd\cmd_sysinfo.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>console_port</GroupName>
-          <Files>
-            <File>
-              <FileName>console_port.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\console\port\console_port.c</FilePath>
-            </File>
-            <File>
-              <FileName>console_port.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\console\port\console_port.h</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>os_port</GroupName>
           <Files>
             <File>
@@ -1455,102 +1315,282 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>cutest_framwwork</GroupName>
+          <GroupName>fs</GroupName>
           <Files>
             <File>
-              <FileName>test_framework.c</FileName>
+              <FileName>adapter_treefs.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\cutest\framework\test_framework.c</FilePath>
+              <FilePath>..\..\..\..\..\src\fs\adapter_treefs.c</FilePath>
             </File>
             <File>
-              <FileName>test_framework.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\cutest\framework\test_framework.h</FilePath>
+              <FileName>wind_file.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\fs\wind_file.c</FilePath>
             </File>
             <File>
-              <FileName>wind_cut.h</FileName>
+              <FileName>wind_file.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\cutest\framework\wind_cut.h</FilePath>
+              <FilePath>..\..\..\..\..\src\fs\wind_file.h</FilePath>
+            </File>
+            <File>
+              <FileName>wind_filepath.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\fs\wind_filepath.c</FilePath>
+            </File>
+            <File>
+              <FileName>wind_filepath.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\fs\wind_filepath.h</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>cutest_port</GroupName>
+          <GroupName>fs_treefs</GroupName>
+          <Files>
+            <File>
+              <FileName>treefs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\fs\treefs\treefs.c</FilePath>
+            </File>
+            <File>
+              <FileName>treefs.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\fs\treefs\treefs.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>component_console</GroupName>
+          <Files>
+            <File>
+              <FileName>console_port.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\components\console\port\console_port.c</FilePath>
+            </File>
+            <File>
+              <FileName>console_port.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\components\console\port\console_port.h</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_history.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\components\console\framework\cmd_history.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_history.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\components\console\framework\cmd_history.h</FilePath>
+            </File>
+            <File>
+              <FileName>console_framework.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\components\console\framework\console_framework.c</FilePath>
+            </File>
+            <File>
+              <FileName>console_framework.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\components\console\framework\console_framework.h</FilePath>
+            </File>
+            <File>
+              <FileName>wind_cmd.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\components\console\framework\wind_cmd.h</FilePath>
+            </File>
+            <File>
+              <FileName>wind_ctl_user.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\components\console\framework\wind_ctl_user.h</FilePath>
+            </File>
+            <File>
+              <FileName>wind_key.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\components\console\framework\wind_key.h</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_beep.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\components\console\cmd\cmd_beep.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_blkdev.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\components\console\cmd\cmd_blkdev.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_cutest.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\components\console\cmd\cmd_cutest.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_datetime.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\components\console\cmd\cmd_datetime.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_echo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\components\console\cmd\cmd_echo.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_fs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\components\console\cmd\cmd_fs.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_led.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\components\console\cmd\cmd_led.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_list.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\components\console\cmd\cmd_list.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_lua.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\components\console\cmd\cmd_lua.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_mem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\components\console\cmd\cmd_mem.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_reset.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\components\console\cmd\cmd_reset.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_stati.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\components\console\cmd\cmd_stati.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_sysinfo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\components\console\cmd\cmd_sysinfo.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_thread.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\components\console\cmd\cmd_thread.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_user.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\components\console\cmd\cmd_user.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_xmodem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\components\console\cmd\cmd_xmodem.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>component_cutest</GroupName>
           <Files>
             <File>
               <FileName>test_port.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\cutest\port\test_port.c</FilePath>
+              <FilePath>..\..\..\..\..\src\components\cutest\port\test_port.c</FilePath>
             </File>
             <File>
               <FileName>test_port.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\cutest\port\test_port.h</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>cutest_case</GroupName>
-          <Files>
-            <File>
-              <FileName>test_heap.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\cutest\testcase\test_heap.c</FilePath>
+              <FilePath>..\..\..\..\..\src\components\cutest\port\test_port.h</FilePath>
             </File>
             <File>
-              <FileName>test_msgbox.c</FileName>
+              <FileName>test_framework.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\cutest\testcase\test_msgbox.c</FilePath>
+              <FilePath>..\..\..\..\..\src\components\cutest\framework\test_framework.c</FilePath>
             </File>
             <File>
-              <FileName>test_mutex.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\cutest\testcase\test_mutex.c</FilePath>
+              <FileName>test_framework.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\components\cutest\framework\test_framework.h</FilePath>
             </File>
             <File>
-              <FileName>test_pipe.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\cutest\testcase\test_pipe.c</FilePath>
-            </File>
-            <File>
-              <FileName>test_pool.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\cutest\testcase\test_pool.c</FilePath>
-            </File>
-            <File>
-              <FileName>test_queue.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\cutest\testcase\test_queue.c</FilePath>
-            </File>
-            <File>
-              <FileName>test_sem.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\cutest\testcase\test_sem.c</FilePath>
-            </File>
-            <File>
-              <FileName>test_softirq.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\cutest\testcase\test_softirq.c</FilePath>
-            </File>
-            <File>
-              <FileName>test_tree.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\cutest\testcase\test_tree.c</FilePath>
-            </File>
-            <File>
-              <FileName>test_treefs.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\cutest\testcase\test_treefs.c</FilePath>
+              <FileName>wind_cut.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\components\cutest\framework\wind_cut.h</FilePath>
             </File>
             <File>
               <FileName>test_event.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\cutest\testcase\test_event.c</FilePath>
+              <FilePath>..\..\..\..\..\src\components\cutest\testcase\test_event.c</FilePath>
+            </File>
+            <File>
+              <FileName>test_heap.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\components\cutest\testcase\test_heap.c</FilePath>
+            </File>
+            <File>
+              <FileName>test_msgbox.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\components\cutest\testcase\test_msgbox.c</FilePath>
+            </File>
+            <File>
+              <FileName>test_mutex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\components\cutest\testcase\test_mutex.c</FilePath>
+            </File>
+            <File>
+              <FileName>test_pipe.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\components\cutest\testcase\test_pipe.c</FilePath>
+            </File>
+            <File>
+              <FileName>test_pool.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\components\cutest\testcase\test_pool.c</FilePath>
+            </File>
+            <File>
+              <FileName>test_queue.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\components\cutest\testcase\test_queue.c</FilePath>
+            </File>
+            <File>
+              <FileName>test_sem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\components\cutest\testcase\test_sem.c</FilePath>
+            </File>
+            <File>
+              <FileName>test_softirq.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\components\cutest\testcase\test_softirq.c</FilePath>
+            </File>
+            <File>
+              <FileName>test_tree.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\components\cutest\testcase\test_tree.c</FilePath>
+            </File>
+            <File>
+              <FileName>test_treefs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\components\cutest\testcase\test_treefs.c</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>lua</GroupName>
+          <GroupName>component_xmodem</GroupName>
+          <Files>
+            <File>
+              <FileName>xmodem..c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\components\xmodem\xmodem..c</FilePath>
+            </File>
+            <File>
+              <FileName>xmodem.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\components\xmodem\xmodem.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>component_lua</GroupName>
           <Files>
             <File>
               <FileName>lapi.c</FileName>
@@ -1851,61 +1891,6 @@
               <FileName>lua_port.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\components\lua-5.3.4\port\lua_port.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>fs</GroupName>
-          <Files>
-            <File>
-              <FileName>adapter_treefs.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\fs\adapter_treefs.c</FilePath>
-            </File>
-            <File>
-              <FileName>wind_file.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\fs\wind_file.c</FilePath>
-            </File>
-            <File>
-              <FileName>wind_file.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\fs\wind_file.h</FilePath>
-            </File>
-            <File>
-              <FileName>wind_filepath.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\fs\wind_filepath.c</FilePath>
-            </File>
-            <File>
-              <FileName>wind_filepath.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\fs\wind_filepath.h</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>fs_treefs</GroupName>
-          <Files>
-            <File>
-              <FileName>treefs.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\fs\treefs\treefs.c</FilePath>
-            </File>
-            <File>
-              <FileName>treefs.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\fs\treefs\treefs.h</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>xmodem</GroupName>
-          <Files>
-            <File>
-              <FileName>xmodem..c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\components\xmodem\xmodem..c</FilePath>
             </File>
           </Files>
         </Group>
