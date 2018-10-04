@@ -35,8 +35,21 @@
 #define SYSCLK 72    //系统时钟
 #endif
 
-void _wind_target_init(void)
+void _wind_enter_main_hook(void)
 {
+
+}
+
+void wind_enter_thread_hook(void)
+{
+
+	w_uint32_t reload;
+ 	SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK_Div8);
+	reload=SYSCLK/8;		//每秒钟的计数次数 单位为K	   
+	reload*=1000000/WIND_TICK_PER_SEC;//根据OS_TICKS_PER_SEC设定溢出时间
+	SysTick->CTRL|=SysTick_CTRL_TICKINT_Msk;   	//开启SYSTICK中断
+	SysTick->LOAD=reload; 	//每1/OS_TICKS_PER_SEC秒中断一次	
+	SysTick->CTRL|=SysTick_CTRL_ENABLE_Msk;   	//开启SYSTICK
 
 }
 
@@ -64,8 +77,7 @@ void _wind_fs_mount_init(void)
 void _wind_heaps_mod_init(void)
 {
     wind_heap_create("heap0",HEAP1_HEAD,HEAD1_LENTH,0);
-    //wind_heap_print(&g_core.heaplist);
-    //wind_heapitem_print(&g_core.heaplist);
+    //wind_heap_create("heap1",HEAP2_HEAD,HEAD3_LENTH,0);
 }
 
 #endif
@@ -73,9 +85,9 @@ void _wind_heaps_mod_init(void)
 
 
 
-w_pstack_t _wind_thread_stack_init(thread_run_f pfunc,void *pdata, w_pstack_t pstkbt)
+w_stack_t *_wind_thread_stack_init(thread_run_f pfunc,void *pdata, w_stack_t *pstkbt)
 {
-    w_pstack_t stk;
+    w_stack_t *stk;
     stk = pstkbt;  
                                   
     stk       = pstkbt;                            /* Load stack pointer                                 */
@@ -104,16 +116,4 @@ w_pstack_t _wind_thread_stack_init(thread_run_f pfunc,void *pdata, w_pstack_t ps
 
 
 
-void wind_tick_hwtimer_init(void)
-{
-
-	w_uint32_t reload;
- 	SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK_Div8);
-	reload=SYSCLK/8;		//每秒钟的计数次数 单位为K	   
-	reload*=1000000/WIND_TICK_PER_SEC;//根据OS_TICKS_PER_SEC设定溢出时间
-	SysTick->CTRL|=SysTick_CTRL_TICKINT_Msk;   	//开启SYSTICK中断
-	SysTick->LOAD=reload; 	//每1/OS_TICKS_PER_SEC秒中断一次	
-	SysTick->CTRL|=SysTick_CTRL_ENABLE_Msk;   	//开启SYSTICK
-
-}
 

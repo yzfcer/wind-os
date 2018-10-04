@@ -143,11 +143,11 @@ w_err_t wind_thread_init(w_thread_s *thread,
                     w_int16_t argc,
                     char **argv,
                     w_prio_e priolevel,
-                    w_pstack_t pstk,
+                    w_stack_t *pstk,
                     w_uint16_t stksize)
 {
     w_uint16_t i;
-    w_pstack_t tmpstk;
+    w_stack_t *tmpstk;
     wind_notice("create thread:%s",name);
     //WIND_ASSERT_RETURN(name != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(thread_func != W_NULL,W_ERR_PTR_NULL);
@@ -178,9 +178,6 @@ w_err_t wind_thread_init(w_thread_s *thread,
     thread->runstat = THREAD_STATUS_READY;
     thread->cause = CAUSE_COMMON;
     thread->sleep_ticks = 0;
-#if WIND_THREAD_CALLBACK_SUPPORT
-    wind_memset(&thread->cb,0,sizeof(thread->cb));
-#endif
     wind_disable_interrupt();
     dlist_insert_prio(&g_core.threadlist,&thread->validnode,thread->prio);
     wind_enable_interrupt();
@@ -193,7 +190,7 @@ w_thread_s *wind_thread_create(const char *name,
                     w_int16_t argc,
                     char **argv,
                     w_prio_e priolevel,
-                    w_pstack_t pstk,
+                    w_stack_t *pstk,
                     w_uint16_t stksize)
 {
     w_err_t err;
@@ -217,7 +214,7 @@ w_thread_s *wind_thread_create_default(const char *name,
                     char **argv)
 {
     w_prio_e priol;
-    w_pstack_t pstk;
+    w_stack_t *pstk;
     int stksize;
     w_thread_s *thread;
     priol = PRIO_MID;
@@ -240,10 +237,6 @@ w_err_t wind_thread_destroy(w_thread_s *thread)
     WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(thread->magic == WIND_THREAD_MAGIC,W_ERR_INVALID);
     wind_notice("distroy thread:%s",thread->name);
-#if WIND_THREAD_CALLBACK_SUPPORT
-        if(thread->cb.dead != W_NULL)
-            thread->cb.dead(thread);
-#endif
     wind_disable_interrupt();
     dlist_remove(&g_core.threadlist,&thread->validnode.dnode);
     //这里需要先释放一些与这个线程相关的一些东西后才能释放这个thread
@@ -288,10 +281,6 @@ w_err_t wind_thread_start(w_thread_s *thread)
     WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(thread->magic == WIND_THREAD_MAGIC,W_ERR_INVALID);
     wind_disable_interrupt();   
-#if WIND_THREAD_CALLBACK_SUPPORT
-    if(thread->cb.start != W_NULL)
-        thread->cb.start(thread);
-#endif
     thread->runstat = THREAD_STATUS_READY;
     thread->cause = CAUSE_COMMON;
     wind_enable_interrupt();
@@ -305,10 +294,6 @@ w_err_t wind_thread_suspend(w_thread_s *thread)
     WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(thread->magic == WIND_THREAD_MAGIC,W_ERR_INVALID);
     wind_disable_interrupt();
-#if WIND_THREAD_CALLBACK_SUPPORT
-    if(thread->cb.suspend != W_NULL)
-        thread->cb.suspend(thread);
-#endif
     thread->runstat = THREAD_STATUS_SUSPEND;
     thread->cause = CAUSE_COMMON;
     wind_enable_interrupt();
@@ -322,10 +307,6 @@ w_err_t wind_thread_resume(w_thread_s *thread)
     WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(thread->magic == WIND_THREAD_MAGIC,W_ERR_INVALID);
     wind_disable_interrupt();
-#if WIND_THREAD_CALLBACK_SUPPORT
-    if(thread->cb.resume != W_NULL)
-        thread->cb.resume(thread);
-#endif
     thread->runstat = THREAD_STATUS_READY;
     thread->cause = CAUSE_COMMON;
     wind_enable_interrupt();
@@ -401,34 +382,6 @@ w_err_t _wind_thread_wakeup(void)
     wind_enable_interrupt();
     return W_ERR_OK;
 }
-
-#if WIND_THREAD_CALLBACK_SUPPORT
-w_err_t wind_thread_callback_register(w_thread_s *thread,w_thr_evt_e id,void(*cb)(w_thread_s *))
-{
-    WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(thread->magic == WIND_THREAD_MAGIC,W_ERR_INVALID);
-
-    switch(id)
-    {
-    case THR_EVT_START:
-        thread->cb.start = cb;
-        break;
-    case THR_EVT_SUSPEND:
-        thread->cb.suspend = cb;
-        break;
-    case THR_EVT_RESUME:
-        thread->cb.resume = cb;
-        break;
-    case THR_EVT_DEAD:
-        thread->cb.dead = cb;
-        break;
-    default:
-        break;
-    }
-    return W_ERR_OK;
-
-}
-#endif
 
 
 //调试时用到的函数，打印当前的系统中的线程的信息

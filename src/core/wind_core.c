@@ -238,9 +238,7 @@ void _wind_switchto_thread(w_thread_s *thread)
 static void _wind_init()
 {
     g_core.usrthren = W_FALSE;
-    _wind_target_init();//目标机运行环境初始化
     _wind_std_init();//调试端口初始化
-
     wind_os_print_logo();
     _wind_print_sysinfo();
     _wind_corevar_init();
@@ -277,6 +275,8 @@ static void _wind_init()
 static int wind_os_lunch(void)
 	
 {
+    
+    _wind_enter_main_hook();
     wind_disable_interrupt();
     _wind_init();
     _create_thread_init();

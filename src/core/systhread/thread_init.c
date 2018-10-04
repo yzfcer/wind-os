@@ -39,7 +39,7 @@
 
 #define INIT_STK_SIZE 256
 
-void wind_tick_hwtimer_init(void);
+void wind_enter_thread_hook(void);
 #if WIND_STATI_THREAD_SUPPORT
 void _create_thread_stati(void);
 #endif
@@ -75,7 +75,7 @@ extern w_err_t treefs_format(void);
 
 static w_err_t thread_init(w_int32_t argc,char **argv)
 {   
-    wind_tick_hwtimer_init();
+    wind_enter_thread_hook();
 #if WIND_DRVFRAME_SUPPORT
     _wind_chdev_mod_init();
 #endif

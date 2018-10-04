@@ -31,13 +31,37 @@
 #include "usart1.h"
 #include "core_cm4.h"
 
-//目标硬件的最初阶段初始化
-void _wind_target_init(void)
+/*
+ * 设备进入main函数的初始化处理的钩子函数，在某些情况下，设备在
+ * 进入main函数时，需要做一些类似系统时钟初始化之类的动作，可以
+ * 在这个函数实现。
+ */
+void _wind_enter_main_hook(void)
 {
 
 }
 
-//设备重启
+/*
+ * 设备进入多线程模式后函数的初始化处理的钩子函数，为了保证tick
+ * 中断的稳定，一般配置系统tick中断会放到系统进入线程状态时开始
+ * 执行，在进入线程之前，不让tick触发中断级线程切换。
+ */
+void wind_enter_thread_hook(void)
+{
+	w_uint32_t reload;
+ 	SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK_Div8);
+	reload=SYSCLK/8;		//每秒钟的计数次数 单位为K	   
+	reload*=1000000/WIND_TICK_PER_SEC;//根据OS_TICKS_PER_SEC设定溢出时间
+	SysTick->CTRL|=SysTick_CTRL_TICKINT_Msk;   	//开启SYSTICK中断
+	SysTick->LOAD=reload; 	//每1/OS_TICKS_PER_SEC秒中断一次	
+	SysTick->CTRL|=SysTick_CTRL_ENABLE_Msk;   	//开启SYSTICK
+}
+
+
+/*
+ * 触发CPU设备重启,一般的MCU都有软件触发重启的功能，在这个函数实现即可，
+ * 这个功能不是必须的,如无必要可以不用实现，直接空置即可。
+ */
 void wind_system_reset(void)
 {
     NVIC_SystemReset();
@@ -46,21 +70,29 @@ void wind_system_reset(void)
 
 
 #if WIND_HEAP_SUPPORT
+/*
+ * 在系统需要支持内存堆功能时，需要内存堆的起始地址和对的大小，
+ * wind-os可以支持创建多个不连续的内存堆，并且可以在内存对中
+ * 申请一块空间创建一个嵌套的内存堆，用于某些特定的目的
+ */ 
 #include "wind_heap.h"
 #include "wind_var.h"
 #define HEAP1_HEAD  0x10000000
 #define HEAD1_LENTH (64*1024)
-
-//堆可自由分配的内存空间进行初始化
+//#define HEAP2_HEAD  0x10000000
+//#define HEAD2_LENTH (64*1024)
 void _wind_heaps_mod_init(void)
 {
     wind_heap_create("heap0",HEAP1_HEAD,HEAD1_LENTH,0);
-    //wind_heap_print(&g_core.heaplist);
-    //wind_heapitem_print(&g_core.heaplist);
+    //wind_heap_create("heap1",HEAP2_HEAD,HEAD3_LENTH,0);
 }
 #endif
 
 #if WIND_FS_SUPPORT
+/*
+ * 在系统需要支持文件系统功能时，需要在这里初始化mount的规则，
+ * 在不需要文件系统时，可以不实现
+ */ 
 #include "wind_file.h"
 void _wind_fs_mount_init(void)
 {
@@ -69,12 +101,15 @@ void _wind_fs_mount_init(void)
 #endif
 
 
+/*
+ * 初始化线程栈，主要用于线程初次切换时，从栈里面取出初始化参数
+ * 
+ */ 
 
-w_pstack_t _wind_thread_stack_init(thread_run_f pfunc,void *pdata, w_pstack_t pstkbt)
+w_stack_t *_wind_thread_stack_init(thread_run_f pfunc,void *pdata, w_stack_t *pstkbt)
 {
-    w_pstack_t stk;
+    w_stack_t *stk;
     stk = pstkbt;                            /* Load stack pointer  */
-
 #if (__FPU_PRESENT==1)&&(__FPU_USED==1)	
     *(--stk) = (w_uint32_t)0x00000000L; //No Name Register  
     *(--stk) = (w_uint32_t)0x00001000L; //FPSCR
@@ -124,7 +159,7 @@ w_pstack_t _wind_thread_stack_init(thread_run_f pfunc,void *pdata, w_pstack_t ps
     *(--stk) = (w_uint32_t)0x00000016L; //s16
 #endif
 
-                                        /* Remaining registers saved on process stack         */
+                                        /* Remaining registers saved on process stack */
     *(--stk)  = (w_uint32_t)0x11111111L;             /* R11                                                */
     *(--stk)  = (w_uint32_t)0x10101010L;             /* R10                                                */
     *(--stk)  = (w_uint32_t)0x09090909L;             /* R9                                                 */
@@ -137,15 +172,4 @@ w_pstack_t _wind_thread_stack_init(thread_run_f pfunc,void *pdata, w_pstack_t ps
     return (stk);
 }
 
-void wind_tick_hwtimer_init(void)
-{
-	w_uint32_t reload;
- 	SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK_Div8);
-	reload=SYSCLK/8;		//每秒钟的计数次数 单位为K	   
-	reload*=1000000/WIND_TICK_PER_SEC;//根据OS_TICKS_PER_SEC设定溢出时间
-	SysTick->CTRL|=SysTick_CTRL_TICKINT_Msk;   	//开启SYSTICK中断
-	SysTick->LOAD=reload; 	//每1/OS_TICKS_PER_SEC秒中断一次	
-	SysTick->CTRL|=SysTick_CTRL_ENABLE_Msk;   	//开启SYSTICK
-
-}
 

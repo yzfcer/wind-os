@@ -88,8 +88,8 @@ typedef struct __w_core_var_s
 extern w_core_var_s g_core;//内核相关的参数集
 extern volatile w_bool_t gwind_start_flag;//开始调度的标志
 
-extern w_pstack_t *gwind_high_stack;
-extern w_pstack_t *gwind_cur_stack;
+extern w_stack_t **gwind_high_stack;
+extern w_stack_t **gwind_cur_stack;
 
 void _wind_corevar_init(void);
 

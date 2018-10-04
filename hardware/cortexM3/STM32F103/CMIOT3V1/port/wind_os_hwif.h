@@ -38,7 +38,7 @@ extern "C" {
 #define SOFT_VERSION 0x000102
 
 
-void _wind_target_init(void);
+void _wind_enter_main_hook(void);
 void wind_system_reset(void);
 
 #if WIND_HEAP_SUPPORT
@@ -47,7 +47,7 @@ void _wind_heaps_mod_init(void);
 
 typedef  void (*thread_run_f)(void *pargs);
 //线程堆栈的初始化入口，移植需要重新实现
-w_pstack_t _wind_thread_stack_init(thread_run_f pfunc,void *pdata, w_pstack_t pstkbt);
+w_stack_t *_wind_thread_stack_init(thread_run_f pfunc,void *pdata, w_stack_t *pstkbt);
 
 
 #ifdef __cplusplus

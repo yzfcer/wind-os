@@ -125,7 +125,7 @@ static w_err_t display_stack(char **argv)
     end = start + thr->stksize*sizeof(w_stack_t);
     cur = (w_uint32_t)thr->stack;
     len = (end - cur);
-    used = (end - cur) / sizeof(w_pstack_t);
+    used = (end - cur) / sizeof(w_stack_t*);
     
     console_printf("stack start :0x%08X\r\n",start);
     console_printf("stack end   :0x%08X\r\n",end);

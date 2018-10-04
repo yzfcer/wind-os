@@ -69,18 +69,6 @@ typedef enum __suscause
 }w_suscause_e;
 
 typedef struct _w_thread_s w_thread_s;
-typedef struct __w_threadcb_s w_threadcb_s;
-
-//定义与线程相关的一些回调函数，需要配置选项支持
-#if WIND_THREAD_CALLBACK_SUPPORT
-struct __w_threadcb_s
-{
-    void (*start)(w_thread_s *thread);
-    void (*suspend)(w_thread_s *thread);
-    void (*resume)(w_thread_s *thread);
-    void (*dead)(w_thread_s *thread);
-};
-#endif 
 
 typedef enum __thr_evt_e
 {
@@ -99,8 +87,8 @@ struct _w_thread_s
     w_prinode_s validnode;
     w_prinode_s suspendnode;
     w_prinode_s sleepnode;
-    w_pstack_t stack;//堆栈指针
-    w_pstack_t stack_top;//栈顶指针
+    w_stack_t *stack;//堆栈指针
+    w_stack_t *stack_top;//栈顶指针
     w_uint16_t stksize;//堆栈大小，以栈宽度技术
     
     w_int16_t argc;
@@ -116,9 +104,7 @@ struct _w_thread_s
     w_thread_stat_e runstat;
     w_int32_t sleep_ticks;
     w_suscause_e cause;//导致状态变化的原因
-#if WIND_THREAD_CALLBACK_SUPPORT
-    w_threadcb_s cb;
-#endif
+
 };
 
 
@@ -136,7 +122,7 @@ w_err_t wind_thread_init(w_thread_s *thread,
                     w_int16_t argc,
                     char **argv,
                     w_prio_e priolevel,
-                    w_pstack_t psck,
+                    w_stack_t *psck,
                     w_uint16_t stksize);
 
 w_thread_s *wind_thread_create(const char *name,
@@ -144,7 +130,7 @@ w_thread_s *wind_thread_create(const char *name,
                     w_int16_t argc,
                     char **argv,
                     w_prio_e priolevel,
-                    w_pstack_t psck,
+                    w_stack_t *psck,
                     w_uint16_t stksize);
 
 #if WIND_STKPOOL_SUPPORT
@@ -166,9 +152,7 @@ w_err_t wind_thread_sleep(w_uint32_t ms);
 w_err_t wind_thread_exit(w_err_t exitcode);
 
 w_err_t wind_thread_print(w_dlist_s *list);
-#if WIND_THREAD_CALLBACK_SUPPORT
-w_err_t wind_thread_callback_register(w_thread_s *thread,w_thr_evt_e id,void(*cb)(w_thread_s *));
-#endif
+
 
 #ifdef __cplusplus
 }
