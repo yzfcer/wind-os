@@ -146,7 +146,7 @@
             <UsePdscDebugDescription>1</UsePdscDebugDescription>
           </Target>
           <RunDebugAfterBuild>0</RunDebugAfterBuild>
-          <TargetSelection>6</TargetSelection>
+          <TargetSelection>11</TargetSelection>
           <SimDlls>
             <CpuDll></CpuDll>
             <CpuDllArguments></CpuDllArguments>
@@ -160,7 +160,7 @@
             <PeripheralDll></PeripheralDll>
             <PeripheralDllArguments></PeripheralDllArguments>
             <InitializationFile></InitializationFile>
-            <Driver>Segger\JL2CM3.dll</Driver>
+            <Driver>STLink\ST-LINKIII-KEIL_SWO.dll</Driver>
           </TargetDlls>
         </DebugOption>
         <Utilities>
@@ -1103,16 +1103,6 @@
               <FilePath>..\..\..\..\..\src\core\wind_var.h</FilePath>
             </File>
             <File>
-              <FileName>wind_version.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\core\wind_version.c</FilePath>
-            </File>
-            <File>
-              <FileName>wind_version.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\core\wind_version.h</FilePath>
-            </File>
-            <File>
               <FileName>wind_timer.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\core\wind_timer.c</FilePath>
@@ -1191,6 +1181,16 @@
               <FileName>wind_event.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\..\..\..\src\core\wind_event.h</FilePath>
+            </File>
+            <File>
+              <FileName>wind_sysinfo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\core\wind_sysinfo.c</FilePath>
+            </File>
+            <File>
+              <FileName>wind_sysinfo.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\core\wind_sysinfo.h</FilePath>
             </File>
           </Files>
         </Group>

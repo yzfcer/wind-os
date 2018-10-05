@@ -943,16 +943,6 @@
               <FilePath>..\..\..\..\..\src\core\wind_var.h</FilePath>
             </File>
             <File>
-              <FileName>wind_version.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\core\wind_version.c</FilePath>
-            </File>
-            <File>
-              <FileName>wind_version.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\core\wind_version.h</FilePath>
-            </File>
-            <File>
               <FileName>wind_timer.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\core\wind_timer.c</FilePath>
@@ -1036,6 +1026,16 @@
               <FileName>wind_watchdog.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\..\..\..\src\core\wind_watchdog.h</FilePath>
+            </File>
+            <File>
+              <FileName>wind_sysinfo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\core\wind_sysinfo.c</FilePath>
+            </File>
+            <File>
+              <FileName>wind_sysinfo.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\core\wind_sysinfo.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -1406,6 +1406,11 @@
               <FileName>test_treefs.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\components\cutest\testcase\test_treefs.c</FilePath>
+            </File>
+            <File>
+              <FileName>test_fs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\components\cutest\testcase\test_fs.c</FilePath>
             </File>
           </Files>
         </Group>

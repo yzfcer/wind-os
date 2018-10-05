@@ -5,18 +5,18 @@
 **
 **--------------文件信息--------------------------------------------------------------------------------
 **文   件   名: wind_os_hwif.c
-**创   建   人: 周江村
+**创   建   人: Jason Zhou
 **最后修改日期: 2012.09.26
 **描        述: wind os的CPU体系相关的代码
 **              
 **--------------历史版本信息----------------------------------------------------------------------------
-** 创建人: 周江村
+** 创建人: Jason Zhou
 ** 版  本: v1.0
 ** 日　期: 2012.09.26
 ** 描　述: 原始版本
 **
 **--------------当前版本修订----------------------------------------------------------------------------
-** 修改人: 周江村
+** 修改人: Jason Zhou
 ** 日　期: 2012.10.20
 ** 描　述: 
 **
@@ -34,12 +34,21 @@
 #ifndef SYSCLK
 #define SYSCLK 72    //系统时钟
 #endif
-
+/*
+ * 设备进入main函数的初始化处理的钩子函数，在某些情况下，设备在
+ * 进入main函数时，需要做一些类似系统时钟初始化之类的动作，可以
+ * 在这个函数实现。
+ */
 void _wind_enter_main_hook(void)
 {
 
 }
 
+/*
+ * 设备进入多线程模式后函数的初始化处理的钩子函数，为了保证tick
+ * 中断的稳定，一般配置系统tick中断会放到系统进入线程状态时开始
+ * 执行，在进入线程之前，不让tick触发中断级线程切换。
+ */
 void wind_enter_thread_hook(void)
 {
 
@@ -53,12 +62,23 @@ void wind_enter_thread_hook(void)
 
 }
 
+/*
+ * 触发CPU设备重启,一般的MCU都有软件触发重启的功能，在这个函数实现即可，
+ * 这个功能不是必须的,如无必要可以不用实现，直接空置即可。
+ */
 void wind_system_reset(void)
 {
     NVIC_SystemReset();
 }
 
 #if WIND_FS_SUPPORT
+
+
+/*
+ * 在系统需要支持文件系统功能时，需要在这里初始化mount的规则，
+ * 在不需要文件系统时，可以不实现
+ */ 
+
 #include "wind_file.h"
 void _wind_fs_mount_init(void)
 {
@@ -68,12 +88,16 @@ void _wind_fs_mount_init(void)
 
 
 #if WIND_HEAP_SUPPORT
+/*
+ * 在系统需要支持内存堆功能时，需要内存堆的起始地址和对的大小，
+ * wind-os可以支持创建多个不连续的内存堆，并且可以在内存对中
+ * 申请一块空间创建一个嵌套的内存堆，用于某些特定的目的
+ */ 
+
 #include "wind_heap.h"
 #include "wind_var.h"
 #define HEAP1_HEAD  0x2000C000
 #define HEAD1_LENTH (16*1024)
-
-//堆可自由分配的内存空间进行初始化
 void _wind_heaps_mod_init(void)
 {
     wind_heap_create("heap0",HEAP1_HEAD,HEAD1_LENTH,0);
@@ -84,7 +108,10 @@ void _wind_heaps_mod_init(void)
 
 
 
-
+/*
+ * 初始化线程栈，用于线程初次切换时，从栈里面取出初始化参数
+ * 填入参数的顺序可以参考相应的CPU线程进出栈的顺序
+ */ 
 w_stack_t *_wind_thread_stack_init(thread_run_f pfunc,void *pdata, w_stack_t *pstkbt)
 {
     w_stack_t *stk;

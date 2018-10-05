@@ -27,6 +27,22 @@
 #include "wind_string.h"
 #include "wind_heap.h"
 #if WIND_FS_SUPPORT
+static char *curpath = W_NULL;
+
+char *wind_file_get_current_path(void)
+{
+    return curpath;
+}
+
+void wind_file_set_current_path(char *path)
+{
+    w_int32_t len = wind_strlen(path);
+    if(curpath != W_NULL)
+        wind_free(curpath);
+    curpath = wind_malloc(len +1);
+    wind_memcpy(curpath,path,len+1);
+}
+
 char *wind_full_path_generate(char *pre_path,char *relative_path,w_uint16_t isdir)
 {
     char *path;

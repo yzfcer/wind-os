@@ -1,14 +1,14 @@
 /****************************************Copyright (c)**************************************************
 **                                       清  风  海  岸
-** 文   件   名: test_treefs.c
+** 文   件   名: test_fs.c
 ** 创   建   人: Jason Zhou
-** 最后修改日期: 2017/10/22 16:29:55
-** 描        述: treefs文件系统单元测试
+** 最后修改日期: 2018/10/04 16:29:55
+** 描        述: fs文件系统接口单元测试
 **  
 **--------------历史版本信息----------------------------------------------------------------------------
 ** 创建人: Jason Zhou
 ** 版  本: v1.0
-** 日　期: 2017/10/22 16:29:55
+** 日　期: 2018/10/04 16:37:55
 ** 描　述: 原始版本
 **
 **--------------当前版本修订----------------------------------------------------------------------------
@@ -20,102 +20,105 @@
 *******************************************************************************************************/
 #include "wind_cut.h"
 #include "wind_string.h"
-#include "treefs.h"
-#if (WIND_CUTEST_SUPPORT && TEST_TREEFS_SUPPORT)
+#include "wind_file.h"
+#if (WIND_CUTEST_SUPPORT && TEST_FS_SUPPORT)
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
 
-CASE_SETUP(treefs_create)
+CASE_SETUP(fs_create)
 {
 
 }
 
 
-CASE_TEARDOWN(treefs_create)
+CASE_TEARDOWN(fs_create)
 {
 
 }
 
-CASE_FUNC(treefs_create)
+CASE_FUNC(fs_create)
 {
     w_err_t err;
-    treefile_s *file;
-    file = treefile_open("/test.txt",TF_FMODE_CRT);
+    w_file_s *file;
+    file = wind_file_open("/test.txt",FMODE_CRT);
     EXPECT_NE(file,W_NULL);
-    err = treefile_close(file);
+    err = wind_file_close(file);
     EXPECT_EQ(err,W_ERR_OK);
-    err = treefile_rm(file);
+    err = wind_file_remove(file);
     EXPECT_EQ(err,W_ERR_OK);
-    file = treefile_open("/test1.txt",TF_FMODE_CRT);
+    file = wind_file_open("/test1.txt",FMODE_CRT);
     EXPECT_NE(file,W_NULL);
-    err = treefile_close(file);
+    err = wind_file_close(file);
     EXPECT_EQ(err,W_ERR_OK);
-    err = treefile_rm(file);
+    err = wind_file_remove(file);
     EXPECT_EQ(err,W_ERR_OK);
-    file = treefile_open("/test2.txt",TF_FMODE_CRT);
+    file = wind_file_open("/test2.txt",FMODE_CRT);
     EXPECT_NE(file,W_NULL);
-    err = treefile_close(file);
+    err = wind_file_close(file);
     EXPECT_EQ(err,W_ERR_OK);
-    err = treefile_rm(file);
+    err = wind_file_remove(file);
     EXPECT_EQ(err,W_ERR_OK);
 }
 
 
-CASE_SETUP(treefs_readwrite)
+CASE_SETUP(fs_readwrite)
 {
 }
 
-CASE_TEARDOWN(treefs_readwrite)
+CASE_TEARDOWN(fs_readwrite)
 {
     
 }
 
 static w_uint8_t buff[32];
-CASE_FUNC(treefs_readwrite)
+CASE_FUNC(fs_readwrite)
 {
     w_int32_t len;
     w_err_t err;
-    treefile_s *file;
+    w_file_s *file;
     char *str = "this is a file test string.";
-    file = treefile_open("/test.txt",TF_FMODE_CRT | TF_FMODE_W);
+    file = wind_file_open("/test.txt",FMODE_CRT | FMODE_W);
     EXPECT_NE(file,W_NULL);
-    len = treefile_write(file,(w_uint8_t*)str,wind_strlen(str));
+    len = wind_file_write(file,(w_uint8_t*)str,wind_strlen(str));
     EXPECT_EQ(len,wind_strlen(str));
-    err = treefile_close(file);
+    err = wind_file_close(file);
     EXPECT_EQ(err,W_ERR_OK);
 
     wind_memset(buff,0,32);
-    file = treefile_open("/test.txt",TF_FMODE_R);
+    file = wind_file_open("/test.txt",FMODE_R);
     EXPECT_NE(file,W_NULL);
-    len = treefile_read(file,buff,32);
+    len = wind_file_read(file,buff,32);
     EXPECT_EQ(len,wind_strlen(str));
     len = wind_strcmp(str,(char*)buff);
     EXPECT_EQ(len,0);
-    err = treefile_close(file);
+    err = wind_file_close(file);
     EXPECT_EQ(err,W_ERR_OK);
-    err = treefile_rm(file);
+    err = wind_file_remove(file);
     EXPECT_EQ(err,W_ERR_OK);
     
 }
 
-SUITE_SETUP(test_treefs)
+SUITE_SETUP(test_fs)
 {
-    treefs_format();
+    w_fs_s *fs;
+    fs = wind_fs_get("treefs");
+    if(fs != W_NULL)
+        wind_fs_format(fs);
 }
 
-SUITE_TEARDOWN(test_treefs)
+SUITE_TEARDOWN(test_fs)
 {
 
 }
 
 
 
-TEST_CASES_START(test_treefs)
-TEST_CASE(treefs_create)
-TEST_CASE(treefs_readwrite)
+TEST_CASES_START(test_fs)
+TEST_CASE(fs_create)
+TEST_CASE(fs_readwrite)
 TEST_CASES_END
-TEST_SUITE(test_treefs)
+TEST_SUITE(test_fs)
 
 #ifdef __cplusplus
 }

@@ -5,18 +5,18 @@
 **
 **--------------文件信息--------------------------------------------------------------------------------
 **文   件   名: wind_pipe.c
-**创   建   人: 周江村
+**创   建   人: Jason Zhou
 **最后修改日期: 2012.09.26
 **描        述: wind os的管道相关的代码,管道是一种数据通信机制，不是线程同步机制
 **              
 **--------------历史版本信息----------------------------------------------------------------------------
-** 创建人: 周江村
+** 创建人: Jason Zhou
 ** 版  本: v1.0
 ** 日　期: 2012.09.26
 ** 描　述: 原始版本
 **
 **--------------当前版本修订----------------------------------------------------------------------------
-** 修改人: 周江村
+** 修改人: Jason Zhou
 ** 日　期: 2012.10.20
 ** 描　述: 
 **
@@ -141,7 +141,7 @@ w_err_t wind_pipe_destroy(w_pipe_s* pipe)
 {
     WIND_ASSERT_RETURN(pipe != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(pipe->magic == WIND_PIPE_MAGIC,W_ERR_INVALID);
-    wind_notice("destroy pipe:%s",pipe->name);
+    wind_notice("destroy pipe:%s",pipe->name?pipe->name:"null");
     wind_disable_interrupt();
     dlist_remove(&g_core.pipelist,&pipe->pipenode);
     pipe->magic = 0;

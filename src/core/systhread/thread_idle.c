@@ -5,7 +5,7 @@
 **
 **--------------文件信息--------------------------------------------------------------------------------
 **文   件   名: thread_idle.c
-**创   建   人: 周江村
+**创   建   人: Jason Zhou
 **最后修改日期: 
 **描        述: 空闲线程
 **              
@@ -39,7 +39,7 @@ static w_err_t thread_idle(w_int32_t argc,char **argv)
 }
 
 
-w_err_t _create_thread_idle(void)
+w_err_t _create_thread_idle(void)	
 {
     w_thread_s *thread;
     thread = wind_thread_create("idle",thread_idle,

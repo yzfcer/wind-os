@@ -53,6 +53,9 @@ DECLARE_SUITE(test_softirq);
 #if TEST_TREEFS_SUPPORT
 DECLARE_SUITE(test_treefs);
 #endif
+#if TEST_FS_SUPPORT
+DECLARE_SUITE(test_fs);
+#endif
 
 void test_suite_register_all(void)
 {
@@ -83,8 +86,8 @@ void test_suite_register_all(void)
 #if TEST_SOFTIRQ_SUPPORT
     REGSTER_SUITE(test_softirq);
 #endif
-#if TEST_TREEFS_SUPPORT
-    REGSTER_SUITE(test_treefs);
+#if TEST_FS_SUPPORT
+    REGSTER_SUITE(test_fs);
 #endif
 }
 

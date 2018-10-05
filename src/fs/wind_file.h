@@ -5,7 +5,7 @@
 **
 **--------------文件信息--------------------------------------------------------------------------------
 **文   件   名: wind_file.h
-**创   建   人: 周江村
+**创   建   人: Jason Zhou
 **最后修改日期: 
 **描        述: 文件系统标准化API接口
 **              
@@ -80,7 +80,7 @@ struct __w_fs_ops_s
     w_err_t (*format)(w_fs_s *fs);
     w_err_t (*open)(w_file_s *file,w_fmode_e fmode);
     w_err_t (*close)(w_file_s* file);
-    w_err_t (*rmfile)(w_file_s* file);
+    w_err_t (*remove)(w_file_s* file);
     char *(*subfile)(w_file_s* dir,w_int32_t index);
     w_err_t (*seek)(w_file_s* file,w_int32_t offset);
     w_err_t (*rename)(w_file_s* file,char *newname);

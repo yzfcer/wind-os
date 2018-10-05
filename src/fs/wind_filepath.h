@@ -5,7 +5,7 @@
 **
 **--------------文件信息--------------------------------------------------------------------------------
 **文   件   名: wind_filepath.h
-**创   建   人: 周江村
+**创   建   人: Jason Zhou
 **最后修改日期: 
 **描        述: 文件路径处理相关函数
 **              
@@ -29,6 +29,8 @@
 #if WIND_FS_SUPPORT
 char *wind_full_path_generate(char *oldpath,char *newpath,w_uint16_t isdir);
 w_err_t wind_full_path_release(char *path);
+char *wind_file_get_current_path(void);
+void wind_file_set_current_path(char *path);
 
 #endif
 #endif

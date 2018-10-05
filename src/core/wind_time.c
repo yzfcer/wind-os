@@ -5,18 +5,18 @@
 **
 **--------------文件信息--------------------------------------------------------------------------------
 **文   件   名: wind_time.c
-**创   建   人: 周江村
+**创   建   人: Jason Zhou
 **最后修改日期: 2012.09.26
 **描        述: wind os的时间管理代码
 **              
 **--------------历史版本信息----------------------------------------------------------------------------
-** 创建人: 周江村
+** 创建人: Jason Zhou
 ** 版  本: v1.0
 ** 日　期: 2012.09.26
 ** 描　述: 原始版本
 **
 **--------------当前版本修订----------------------------------------------------------------------------
-** 修改人: 周江村
+** 修改人: Jason Zhou
 ** 日　期: 2012.10.20
 ** 描　述: 
 **
@@ -302,7 +302,7 @@ void tick64_to_datetime(datetime_s *st, systick_s *tick64)
 
 systick_s systick64;
 static w_uint16_t systick_ms;
-static w_uint8_t g_daysofmonth[12] = {31,28,31,30,31,30,31,31,30,31,30,31};
+static w_uint8_t daysofmonth[12] = {31,28,31,30,31,30,31,31,30,31,30,31};
 static w_uint32_t tick_cnt_for_time;
 
 //-------------------------------------------------------------------------------------
@@ -373,7 +373,7 @@ w_err_t wind_datetime_setdate(w_date_s *date)
     else if((date->month >= 13)
     || (date->month == 0)
     || (date->day == 0)
-    || (date->day > g_daysofmonth[date->month - 1]))
+    || (date->day > daysofmonth[date->month - 1]))
     return W_ERR_INVALID;
     hwrtc_get_datetime(&dt);
     dt.date.year = date->year;
@@ -479,11 +479,12 @@ void wind_msecond_inc(void)
     wind_enable_interrupt();
 }
 #endif
-
+static w_uint32_t g_wind_sec_count = 0;
 static w_uint32_t g_wind_time_ms_cnt = 0;//毫秒计时
 w_err_t _wind_tick_init(void)
 {
     g_wind_time_ms_cnt = 0;
+    g_wind_sec_count = 0;
     return W_ERR_OK;
 }
 
@@ -493,11 +494,18 @@ w_uint32_t wind_get_tick(void)
     return g_wind_time_ms_cnt;
 }
 
+w_uint32_t wind_get_seconds(void)
+{
+    return g_wind_sec_count;
+}
+
 //tick中断调用的函数
 void wind_tick_callback(void)
 {
     TICKS_CNT ++;//更新tick计数器
     g_wind_time_ms_cnt ++;
+    if(g_wind_time_ms_cnt % WIND_TICK_PER_SEC == 0)
+        g_wind_sec_count ++;
 #if WIND_DATETIME_SUPPORT
     wind_disable_interrupt();
     tick_cnt_for_time ++;
