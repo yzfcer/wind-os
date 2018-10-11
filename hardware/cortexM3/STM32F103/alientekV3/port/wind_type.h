@@ -66,7 +66,7 @@ typedef float w_fp32_t;
 #endif
 
 #ifndef w_fp64_t
-typedef float w_fp64_t;
+typedef double w_fp64_t;
 #endif
 
 #ifndef w_addr_t
