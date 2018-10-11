@@ -22,6 +22,7 @@
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
+#include "wind_type.h"
 #include "wind_string.h"
 //把字符串转换成带符号整数
 w_bool_t wind_atoi(char *str,w_int32_t *value)
@@ -171,3 +172,101 @@ void wind_itoh(char *hex,w_uint32_t value)
         *end-- = tmp;  
     }
 }
+
+
+
+
+
+w_bool_t wind_from_uint16(w_uint8_t *arr,w_uint16_t value)
+{
+    int i;
+    for(i = 0;i < 2;i ++)
+    {
+        arr[i] = (w_uint8_t)(value >> (i*8));
+    }
+    return W_TRUE;
+}
+
+w_bool_t wind_from_uint32(w_uint8_t *arr,w_uint32_t value)
+{
+    int i;
+    for(i = 0;i < 4;i ++)
+    {
+        arr[i] = (w_uint8_t)(value >> (i*8));
+    }
+    return W_TRUE;
+}
+
+w_bool_t wind_from_uint64(w_uint8_t *arr,w_uint64_t value)
+{
+    int i;
+    for(i = 0;i < 8;i ++)
+    {
+        arr[i] = (w_uint8_t)(value >> (i*8));
+    }
+    return W_TRUE;
+}
+
+
+w_bool_t wind_from_float32(w_uint8_t *arr,w_fp32_t value)
+{
+    w_uint32_t *pvalue = (w_uint32_t*)&value;
+    return wind_from_uint32(arr,*pvalue);
+}
+
+w_bool_t wind_from_float64(w_uint8_t *arr,w_fp64_t value)
+{
+    w_uint64_t *pvalue = (w_uint64_t*)&value;
+    return wind_from_uint64(arr,*pvalue);
+}
+
+
+w_bool_t wind_to_uint16(w_uint8_t *arr,w_uint16_t *value)
+{
+    int i;
+    w_uint16_t va = 0;
+    for(i = 1;i >= 0;i --)
+    {
+        va = (va * 256) + arr[i];
+    }
+    *value = va;
+    return W_TRUE;
+}
+
+w_bool_t wind_to_uint32(w_uint8_t *arr,w_uint32_t *value)
+{
+    int i;
+    w_uint32_t va = 0;
+    for(i = 3;i >= 0;i --)
+    {
+        va = (va * 256) + arr[i];
+    }
+    *value = va;
+    return W_TRUE;
+}
+
+w_bool_t wind_to_uint64(w_uint8_t *arr,w_uint64_t *value)
+{
+    int i;
+    w_uint64_t va = 0;
+    for(i = 7;i >= 0;i --)
+    {
+        va = (va * 256) + arr[i];
+    }
+    *value = va;
+    return W_TRUE;
+}
+
+w_bool_t wind_to_float32(w_uint8_t *arr,w_fp32_t *value)
+{
+    w_uint32_t *pvalue = (w_uint32_t*)value;
+    return wind_to_uint32(arr,pvalue);
+}
+
+w_bool_t wind_to_float64(w_uint8_t *arr,w_fp64_t *value)
+{
+    w_uint64_t *pvalue = (w_uint64_t*)value;
+    return wind_to_uint64(arr,pvalue);
+}
+
+
