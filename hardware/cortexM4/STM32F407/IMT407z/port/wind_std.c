@@ -60,7 +60,7 @@ void wind_stdin_irq(char data)
         uartbuf.wridx = 0;
 }
 
-void _wind_std_init(void)
+void wind_std_init(void)
 {
     uartbuf_init();
     uart1_init(115200);

@@ -78,7 +78,7 @@ typedef char w_str16_t[16] ;
 #endif
 
 #ifndef w_str32_t
-typedef char w_str32_t[32] ;
+typedef char w_str32_t[32];
 #endif
 
 

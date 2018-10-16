@@ -25,16 +25,20 @@
 #ifndef WIND_STD_H_
 #define WIND_STD_H_
 #include "wind_type.h"
+#include "wind_core.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 #if WIND_DEBUG_SUPPORT
-void      _wind_std_init(void);
+#define wind_std_lock() wind_disable_interrupt()
+#define wind_std_unlock() wind_enable_interrupt()
+
+void      wind_std_init(void);
 w_int32_t wind_std_input(w_uint8_t *str,w_int32_t len);
 w_int32_t wind_std_output(w_uint8_t *str,w_int32_t len);
 #else
-#define _wind_std_init()
+#define wind_std_init()
 #endif
 
 #ifdef __cplusplus

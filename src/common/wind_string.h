@@ -51,7 +51,7 @@ extern char *wind_strrchr(const char *s, char c);
 
 extern w_int32_t wind_strlen(const char *str);
 
-extern w_uint32_t wind_strnlen(const char *s, w_uint32_t count);
+extern w_int32_t wind_strnlen(const char *s, w_uint32_t count);
 
 extern w_uint32_t wind_strspn(const char *s, const char *accept);
 

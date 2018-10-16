@@ -72,25 +72,25 @@ char* wind_strncat(char *dest, const char *src, w_uint32_t count)
 
 w_int32_t wind_strcmp(const char *cs,const char *ct)
 {
-    char ret;
+    char err;
     while (1) {
-        if ((ret = (char)(*cs - *ct++)) != 0 || !*cs++)
+        if ((err = (char)(*cs - *ct++)) != 0 || !*cs++)
             break;
     }
-    return ret;
+    return err;
 }
 
 w_int32_t wind_strncmp(const char* cs,const char *ct,w_uint32_t count)
 {
-    char ret = 0;
+    char err = 0;
 
     while (count) {
-        if ((ret = *cs - *ct++) != 0 || !*cs++)
+        if ((err = *cs - *ct++) != 0 || !*cs++)
             break;
         count--;
     }
 
-    return ret;
+    return err;
 }
 
 char* wind_strchr(const char *s, w_uint32_t c)
@@ -119,7 +119,7 @@ w_int32_t wind_strlen(const char *s)
     return (w_int32_t)(sc - s);
 }
 
-w_uint32_t wind_strnlen(const char *s, w_uint32_t count)
+w_int32_t wind_strnlen(const char *s, w_uint32_t count)
 {
     const char *sc;
 

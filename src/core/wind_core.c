@@ -238,7 +238,7 @@ void _wind_switchto_thread(w_thread_s *thread)
 static void _wind_init()
 {
     g_core.usrthren = W_FALSE;
-    _wind_std_init();//调试端口初始化
+    wind_std_init();//调试端口初始化
     wind_os_print_logo();
     _wind_print_sysinfo();
     _wind_corevar_init();
