@@ -4,39 +4,61 @@
 **                                       yzfcer@163.com
 **
 **--------------文件信息--------------------------------------------------------------------------------
-**文   件   名: wind_crc32.h
+**文   件   名: wind_os_hwif.c
 **创   建   人: Jason Zhou
-**最后修改日期: 2017.12.10
-**描        述: 32位CRC校验方法
+**最后修改日期: 2012.09.26
+**描        述: wind os的CPU体系相关的代码
 **              
 **--------------历史版本信息----------------------------------------------------------------------------
-** 创建人: 
+** 创建人: Jason Zhou
 ** 版  本: v1.0
-** 日　期: 2017.12.10
+** 日　期: 2012.09.26
 ** 描　述: 原始版本
 **
 **--------------当前版本修订----------------------------------------------------------------------------
-** 修改人: 
-** 日　期: 2017.12.10
+** 修改人: Jason Zhou
+** 日　期: 2012.10.20
 ** 描　述: 
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
-#ifndef WIND_CRC32_H__
-#define WIND_CRC32_H__
-
+//#include "boot_config.h"
+#include <stdio.h>
 #include "wind_type.h"
+#include "wind_std.h"
+#include "wind_debug.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-void wind_crc32_init(void);
-
-w_uint32_t wind_crc32(w_uint8_t *data,w_uint32_t size,w_uint32_t crc);
-
-
-#ifdef __cplusplus
+void wind_std_init(void)
+{
 }
-#endif
 
-#endif
+w_int32_t wind_std_output(w_uint8_t *buf,w_int32_t len)
+{
+    w_int32_t i;
+    for(i = 0;i < len;i ++)
+    {
+        putchar(buf[i]);
+    }
+    return len;
+}
+
+w_int32_t wind_std_input(w_uint8_t *buff,w_int32_t len)
+{
+    char c;
+    w_int32_t i;
+    for(i = 0;i < len;i ++)
+    {
+        c = _kbhit();
+        if(c)
+        {
+            buff[i] = getch();
+        }
+        else
+            return i;
+    }
+    return len;
+}
+
+
+
+
