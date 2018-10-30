@@ -196,7 +196,7 @@ w_int32_t wind_vsprintf(char *buf, const char *fmt, wind_va_list args)
     w_uint32_t num;
     w_int32_t i, base;
     char *str;
-    w_fp32_t vargfloat;
+    w_fp64_t vargdouble;
     w_uint32_t vargint;
     const char *s;
     w_int32_t flags;      /* flags to wind_number() */
@@ -344,10 +344,10 @@ w_int32_t wind_vsprintf(char *buf, const char *fmt, wind_va_list args)
             break;
         case 'f':
             
-            vargfloat = (w_fp64_t)wind_va_arg(args, w_fp64_t);
+            vargdouble = (w_fp64_t)wind_va_arg(args, w_fp64_t);
             /*va_arg(ap, type), if type is narrow type (char, short, float) an error is given in strict ANSI
             mode, or a warning otherwise.In non-strict ANSI mode, 'type' is allowed to be any expression. */
-            str = wind_fp64(str,vargfloat);
+            str = wind_fp64(str,vargdouble);
             break;
         default:
             *str++ = '%';

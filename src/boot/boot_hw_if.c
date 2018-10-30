@@ -11,12 +11,13 @@
        Author:
        Modification:
 **********************************************************************************/
+#include "wind_config.h"
 #include "boot_port.h"
+#include "wind_std.h"
 #include "wind_debug.h"
 #include "boot_hw_if.h"
 #include "boot_param.h"
 #include <stdarg.h>
-#include "wind_config.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -44,7 +45,7 @@ w_err_t wait_for_key_input(w_int32_t to_sec,char *ch,w_int32_t print_flag)
     while(1)
     {
         feed_watchdog();
-        if(wind_std_input(ch,1) > 0)
+        if(wind_std_input((w_uint8_t*)ch,1) > 0)
         {
             err = W_ERR_OK;
             break;

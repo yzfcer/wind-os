@@ -24,6 +24,7 @@
 *******************************************************************************************************/
 //#include "boot_config.h"
 #include <stdio.h>
+#include <conio.h>
 #include "wind_type.h"
 #include "wind_std.h"
 #include "wind_debug.h"

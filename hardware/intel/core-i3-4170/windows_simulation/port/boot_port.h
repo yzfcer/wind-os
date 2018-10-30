@@ -25,10 +25,6 @@
 w_err_t   boot_enter_main_hook(void);
 w_err_t   boot_exit_hook(void);
 
-void      wind_std_port_init(void);
-w_int32_t wind_std_output(w_uint8_t *buf,w_int32_t len);
-w_int32_t wind_std_input(w_uint8_t *buf,w_int32_t len);
-
 w_int32_t boot_receive_img(w_part_s *part);
 
 w_uint32_t boot_get_sys_ms(void);
