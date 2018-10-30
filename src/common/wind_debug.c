@@ -379,13 +379,13 @@ w_int32_t wind_printf(const char *fmt, ...)
     static char buff[512];
     wind_va_list args;
     w_int32_t count;
-    wind_disable_interrupt();
+    wind_std_lock();
     wind_memset(buff,0,sizeof(buff));
     wind_va_start(args, fmt);
     count = wind_vsprintf(buff, fmt, args);
     wind_va_end(args);
     wind_std_output((w_uint8_t *)buff, count);
-    wind_enable_interrupt();
+    wind_std_unlock();
     return count;
 }
 

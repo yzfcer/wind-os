@@ -22,6 +22,7 @@
 #define __TEST_FRAMEWORK_H__
 /*********************************************头文件定义***********************************************/
 #include "wind_config.h"
+#include "wind_debug.h"
 #include "test_port.h"
 #if WIND_CUTEST_SUPPORT
 #ifdef __cplusplus
@@ -42,9 +43,7 @@ extern void test_suite_err(w_uint32_t line);
 //#define EXPECT_EQ(x,y) test_printf("FILE:%s,LINE:%d,expected %s,in fact %s\r\n",__FILE__,__LINE__,#x,#y)
 
 /**********************************************枚举定义************************************************/
-#ifndef _USE_USER_PRINT
-#include <stdio.h>
-#endif
+
 
 #ifndef W_NULL
 #define W_NULL (void*)0

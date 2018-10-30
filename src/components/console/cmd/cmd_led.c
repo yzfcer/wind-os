@@ -22,7 +22,6 @@
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
-#include <stdio.h>
 #include "wind_cmd.h"
 #include "wind_chdev.h"
 #if (WIND_CONSOLE_SUPPORT && CMD_LED_SUPPORT)
@@ -46,7 +45,7 @@ COMMAND_MAIN(led,argc,argv)
     char devname[8];
     WIND_ASSERT_RETURN(argc == 3,W_ERR_INVALID);
     wind_memset(devname,0,sizeof(devname));
-    sprintf(devname,"led%s",argv[2]);
+    wind_sprintf(devname,"led%s",argv[2]);
     led = wind_chdev_get(devname);
     WIND_ASSERT_RETURN(led != W_NULL,W_ERR_INVALID);
     if(0 == wind_strcmp(argv[1],"on"))

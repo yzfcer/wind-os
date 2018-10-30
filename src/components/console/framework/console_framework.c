@@ -435,7 +435,6 @@ w_err_t thread_console(w_int32_t argc,char **argv)
     cmd_history_init(&ctrl->his);
     init_console_stat(ctrl);
 
-    //console_printf("\r\nlogin:");
     while(1)
     {
         len = console_read_line(ctrl,WIND_CMD_MAX_LEN);

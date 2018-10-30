@@ -364,7 +364,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F40_41xxx,USE_STDPERIPH_DRIVER,_USE_USER_PRINT,STM32F10X_HD, USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\board;..\..\driver;..\port;..\start;..\..\..\..\..\src\api;..\..\..\..\..\src\app;..\..\..\..\..\src\common;..\..\..\..\..\src\core;..\..\..\..\..\src\driver;..\..\..\..\..\src\entry;..\..\..\..\..\src\lib;..\..\..\..\..\src\dev;..\..\..\..\..\src\components\console\framework;..\..\..\..\..\src\components\console\cmd;..\..\..\..\..\src\components\cutest\framework;..\..\..\..\..\src\components\cutest\port;..\..\..\..\..\src\components\cutest\case;..\..\..\..\..\src\components\lua-5.3.4\src;..\..\..\..\..\src\fs;..\..\..\..\..\src\fs\treefs;..\..\..\..\..\src\components\xmodem</IncludePath>
+              <IncludePath>..\board;..\..\driver;..\port;..\start;..\..\..\..\..\src\common;..\..\..\..\..\src\core;..\..\..\..\..\src\hal;..\..\..\..\..\src\lib;..\..\..\..\..\src\components\console\framework;..\..\..\..\..\src\components\console\cmd;..\..\..\..\..\src\components\cutest\framework;..\..\..\..\..\src\components\cutest\port;..\..\..\..\..\src\components\cutest\case;..\..\..\..\..\src\components\lua-5.3.4\src;..\..\..\..\..\src\components\xmodem;..\..\..\..\..\src\fs;..\..\..\..\..\src\fs\treefs</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1120,37 +1120,37 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>os_dev</GroupName>
+          <GroupName>os_hal</GroupName>
           <Files>
             <File>
               <FileName>wind_blkdev.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\dev\wind_blkdev.c</FilePath>
+              <FilePath>..\..\..\..\..\src\hal\wind_blkdev.c</FilePath>
             </File>
             <File>
               <FileName>wind_blkdev.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\dev\wind_blkdev.h</FilePath>
+              <FilePath>..\..\..\..\..\src\hal\wind_blkdev.h</FilePath>
             </File>
             <File>
               <FileName>wind_chdev.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\dev\wind_chdev.c</FilePath>
+              <FilePath>..\..\..\..\..\src\hal\wind_chdev.c</FilePath>
             </File>
             <File>
               <FileName>wind_chdev.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\dev\wind_chdev.h</FilePath>
+              <FilePath>..\..\..\..\..\src\hal\wind_chdev.h</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>os_entry</GroupName>
+          <GroupName>application</GroupName>
           <Files>
             <File>
               <FileName>user_entry.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\entry\CMIOT3V1\user_entry.c</FilePath>
+              <FilePath>..\..\..\..\..\src\application\alientekV3\user_entry.c</FilePath>
             </File>
           </Files>
         </Group>

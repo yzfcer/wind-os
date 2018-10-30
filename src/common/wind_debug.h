@@ -48,7 +48,10 @@ extern "C" {
 
 //---------------------------------------------------------------------
 //打印函数的定义
+#ifndef WIND_DEBUG_SUPPORT
 #define WIND_DEBUG_SUPPORT 1
+#endif
+
 #if WIND_DEBUG_SUPPORT
 typedef char *  wind_va_list;
 extern w_int32_t wind_std_output(w_uint8_t *str,w_int32_t len);
