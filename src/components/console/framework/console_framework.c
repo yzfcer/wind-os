@@ -25,6 +25,7 @@
 #include "wind_var.h"
 #include "wind_cmd.h"
 #include "wind_std.h"
+#include "wind_conv.h"
 #include "wind_core.h"
 #if WIND_CONSOLE_SUPPORT
 #ifdef __cplusplus
@@ -405,7 +406,7 @@ static w_err_t execute_cmd(w_console_s *ctrl)
     w_err_t err;
     w_cmd_s *cmd;
     err = spit_cmd(ctrl);
-    if(err < 0)
+    if((err < 0) || (ctrl->param.argc == 0))
         return err;
     if(wind_strcmp(ctrl->param.argv[0],"?") == 0)
     {
@@ -428,10 +429,15 @@ static w_err_t execute_cmd(w_console_s *ctrl)
 w_err_t thread_console(w_int32_t argc,char **argv)
 {
     w_int32_t len;
+    w_uint32_t index = 0;
     w_console_s *ctrl;
-    if(argc >= WIND_CONSOLE_COUNT)
-        return W_ERR_FAIL;
-    ctrl = &g_ctrl[argc];
+    if(argc >= 2)
+        wind_to_uint32(argv[1],&index);
+    else 
+        index = 0;
+    WIND_ASSERT_RETURN(index >= 0,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(index < WIND_CONSOLE_COUNT,W_ERR_INVALID);
+    ctrl = &g_ctrl[index];
     cmd_history_init(&ctrl->his);
     init_console_stat(ctrl);
 
