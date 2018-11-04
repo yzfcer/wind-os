@@ -129,7 +129,7 @@ w_err_t cmd_history_append(w_cmd_his_s *his,char *cmd)
         return W_ERR_PTR_NULL;
     if(cmd[0] == 0 || cmd[0] == 0x1b)
         return W_ERR_INVALID;
-    remove_exist_cmd(his,cmd);
+    //remove_exist_cmd(his,cmd);
     len = wind_strlen(cmd);
     if(his->hiscnt >= CMD_HISTORY_COUNT)
         remove_old_history(his);
