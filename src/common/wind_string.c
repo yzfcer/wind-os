@@ -25,6 +25,7 @@
 #include "wind_type.h"
 #include "wind_string.h"
 #include "wind_debug.h"
+#include "wind_macro.h"
 
 
 char* wind_strcpy(char *dest,const char *src)
@@ -171,7 +172,29 @@ char *wind_strpbrk(const char *cs,const char *ct)
     return W_NULL;
 }
 
+char *wind_str2upper(char *dest)
+{
+    w_int32_t i;
+    for(i = 0;;i ++)
+    {
+        dest[i] = UPCASE(dest[i]);
+        if(dest[i] == '\0')
+            break;
+    }
+    return dest;
+}
 
+extern char *wind_str2lower(char *dest)
+{
+    w_int32_t i;
+    for(i = 0;;i ++)
+    {
+        dest[i] = LOWERCASE(dest[i]);
+        if(dest[i] == '\0')
+            break;
+    }
+    return dest;
+}
 
 void *wind_memset(void *s,char c,w_uint32_t count)
 {

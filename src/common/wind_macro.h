@@ -82,7 +82,7 @@ extern {
 #define UPCASE(c) (((c) >= 'a' && (c) <= 'z')?((c) - 0x20):(c))
 
 ////将一个字母转换为大写
-#define DOWNCASE(c) (((c) >= 'A' && (c) <= 'Z')?((c) + 0x20):(c))
+#define LOWERCASE(c) (((c) >= 'A' && (c) <= 'Z')?((c) + 0x20):(c))
 
 //判断字符是不是10进值的数字
 #define DECCHK(c) ((c) >= '0' && (c) <= '9')

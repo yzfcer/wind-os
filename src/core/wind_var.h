@@ -63,9 +63,7 @@ typedef struct __w_core_var_s
 #if WIND_WATCHDOG_SUPPORT
     w_dlist_s watchdoglist;
 #endif
-#if WIND_CONSOLE_SUPPORT
-    w_dlist_s cmdlist;
-#endif
+
 #if WIND_DRVFRAME_SUPPORT
     w_dlist_s devlist;
 #endif
@@ -77,7 +75,6 @@ typedef struct __w_core_var_s
     w_dlist_s filelist;
 #endif
     
-    //volatile w_bool_t run_falg;//多线程调度开始的标志
     w_bool_t usrthren;/*用户线程允许创建的标志 */
     
     volatile w_uint32_t idle_cnt;//空闲计算器

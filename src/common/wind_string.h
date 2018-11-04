@@ -57,6 +57,11 @@ extern w_uint32_t wind_strspn(const char *s, const char *accept);
 
 extern char *wind_strpbrk(const char *cs,const char *ct);
 
+extern char *wind_str2upper(char *cs);
+
+extern char *wind_str2lower(char *cs);
+
+
 extern void *wind_memset(void *s,char c,w_uint32_t count);
 
 extern char *wind_bcopy(const char *src, char *dest, w_uint32_t count);

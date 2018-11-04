@@ -78,6 +78,7 @@ struct __w_fs_ops_s
 {
     w_err_t (*init)(w_fs_s *fs);
     w_err_t (*format)(w_fs_s *fs);
+    
     w_err_t (*open)(w_file_s *file,w_fmode_e fmode);
     w_err_t (*close)(w_file_s* file);
     w_err_t (*remove)(w_file_s* file);
