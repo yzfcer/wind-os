@@ -1,4 +1,4 @@
-/****************************************Copyright (c)**************************************************
+﻿/****************************************Copyright (c)**************************************************
 **                                       清  风  海  岸
 **
 **                                       yzfcer@163.com
@@ -75,6 +75,35 @@ static w_err_t remove_old_history(w_cmd_his_s *his)
     return W_ERR_OK;
 }
 
+static w_err_t remove_exist_cmd(w_cmd_his_s *his,char *cmd)
+{
+    w_int32_t i,j,len;
+    WIND_ASSERT_RETURN(his != W_NULL,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(cmd != W_NULL,W_ERR_INVALID);
+    if(his->hiscnt <= 0)
+        return W_ERR_OK;
+    for(i = 0;i < his->hiscnt;i ++)
+    {
+        if(wind_strcmp(his->hiscmd[i],cmd) == 0)
+        {
+            len = wind_strlen(his->hiscmd[i])+1;
+            wind_memcpy(&his->hiscmd[i],his->hiscmd[i+1],his->buf_used-(w_uint32_t)his->hiscmd[i+1]);
+            for(j = i + 1;j < his->hiscnt -1 ;j ++)
+                his->hiscmd[i] = his->hiscmd[i+1] - len;
+            his->hiscmd[his->hiscnt-1] = W_NULL;
+            his->hiscnt -= 1;
+            his->buf_used -= len;
+            wind_memset(&his->cmdbuf[his->buf_used],0,len);
+            his->curidx =his->hiscnt - 1;
+            his->curcmd = his->hiscmd[his->curidx];
+            break;
+        }
+    }
+    
+    return W_ERR_OK;
+}
+
+
 static w_err_t add_hiscmd(w_cmd_his_s *his,char *cmd)
 {
     w_int32_t len;
@@ -88,10 +117,7 @@ static w_err_t add_hiscmd(w_cmd_his_s *his,char *cmd)
     his->hiscnt ++;
     his->curcmd = buf;
     his->curidx = his->hiscnt - 1;
-    //console_printf("add cmd:%s\r\n",cmd);
-    //cmd_history_print(his);
     return W_ERR_OK;
-    
 }
 
 w_err_t cmd_history_append(w_cmd_his_s *his,char *cmd)
@@ -103,6 +129,7 @@ w_err_t cmd_history_append(w_cmd_his_s *his,char *cmd)
         return W_ERR_PTR_NULL;
     if(cmd[0] == 0 || cmd[0] == 0x1b)
         return W_ERR_INVALID;
+    remove_exist_cmd(his,cmd);
     len = wind_strlen(cmd);
     if(his->hiscnt >= CMD_HISTORY_COUNT)
         remove_old_history(his);
@@ -114,7 +141,6 @@ w_err_t cmd_history_append(w_cmd_his_s *his,char *cmd)
             return err;
         rest = CMD_HSIBUF_LENTH - his->buf_used;
     }
-    //console_printf("append cmd:%s\r\n",cmd);
     add_hiscmd(his,cmd);
     return W_ERR_FAIL;
 }
@@ -133,9 +159,7 @@ w_err_t cmd_history_get_next(w_cmd_his_s *his,char *cmd)
     his->curcmd = his->hiscmd[his->curidx];
     if(his->curcmd == W_NULL)
         return W_ERR_FAIL;
-    //console_printf("next cmd:%s\r\n",his->curcmd);
     wind_strcpy(cmd,his->curcmd);
-    
     return W_ERR_OK;
 }
 
@@ -152,7 +176,6 @@ w_err_t cmd_history_get_prev(w_cmd_his_s *his,char *cmd)
     his->curcmd = his->hiscmd[his->curidx];
     if(his->curcmd == W_NULL)
         return W_ERR_FAIL;
-    //console_printf("prev cmd:%s\r\n",his->curcmd);
     wind_strcpy(cmd,his->curcmd);
     if(his->curidx > 0)
         his->curidx -= 1;

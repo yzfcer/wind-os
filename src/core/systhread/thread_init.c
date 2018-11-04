@@ -51,7 +51,20 @@ void _create_thread_daemon(void);
 void _create_thread_idle(void);
 
 #if WIND_CONSOLE_SUPPORT
-w_err_t _create_thread_console(void);
+#define CTRL_STK_SIZE 2048
+static w_stack_t ctrlstk[CTRL_STK_SIZE];//Ö÷ÈÎÎñ¶ÑÕ»
+extern w_err_t thread_console(w_int32_t argc,char **argv);
+
+w_err_t _create_thread_console(void)
+{
+    w_thread_s *thread;
+    thread = wind_thread_create("console",thread_console,
+               0,W_NULL,PRIO_LOW,ctrlstk,CTRL_STK_SIZE);
+    WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_FAIL);
+    wind_thread_set_priority(thread,32760);
+    return W_ERR_OK;
+}
+
 #endif
 
 #if WIND_TIMER_SUPPORT

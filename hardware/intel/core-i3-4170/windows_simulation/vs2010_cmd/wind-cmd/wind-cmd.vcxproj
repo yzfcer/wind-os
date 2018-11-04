@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\..\src\common\wind_conv.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\common\wind_debug.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\common\wind_dlist.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\common\wind_string.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\components\console\adapter\win32\console_adapter.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\components\console\cmd\cmd_echo.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\components\console\framework\cmd_history.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\components\console\framework\console_framework.c" />
+    <ClCompile Include="..\..\port\wind_std.c" />
+    <ClCompile Include="cmd_main.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\..\..\src\common\wind_conv.h" />
+    <ClInclude Include="..\..\..\..\..\..\src\common\wind_debug.h" />
+    <ClInclude Include="..\..\..\..\..\..\src\common\wind_dlist.h" />
+    <ClInclude Include="..\..\..\..\..\..\src\common\wind_string.h" />
+    <ClInclude Include="..\..\..\..\..\..\src\components\console\adapter\win32\console_adapter.h" />
+    <ClInclude Include="..\..\..\..\..\..\src\components\console\framework\cmd_history.h" />
+    <ClInclude Include="..\..\..\..\..\..\src\components\console\framework\console_framework.h" />
+    <ClInclude Include="..\..\..\..\..\..\src\components\console\framework\wind_cmd.h" />
+    <ClInclude Include="..\..\..\..\..\..\src\components\console\framework\wind_key.h" />
+    <ClInclude Include="..\..\port\wind_config.h" />
+    <ClInclude Include="..\..\port\wind_std.h" />
+    <ClInclude Include="..\..\port\wind_type.h" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{43D4A2B2-E9DB-4326-A0DD-C2071A7D02A4}</ProjectGuid>
+    <RootNamespace>sboot</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>$(ProjectDir)..\..\..\..\..\..\src\components\console\cmd;$(ProjectDir)..\..\..\..\..\..\src\components\console\adapter\win32;$(ProjectDir)..\..\..\..\..\..\src\components\console\framework;$(ProjectDir)..\..\..\..\..\..\hardware\intel\core-i3-4170\windows_simulation\port;$(ProjectDir)..\..\..\..\..\..\src\common;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

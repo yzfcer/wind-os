@@ -1,45 +1,46 @@
-/****************************************Copyright (c)**************************************************
-**                                       Çå  ·ç  º£  °¶
-** ÎÄ   ¼þ   Ãû: console_framework.h / console_framework.c
-** ´´   ½¨   ÈË: Jason Zhou
-** ×îºóÐÞ¸ÄÈÕÆÚ: 2015/1/24 20:08:03
-** Ãè        Êö: ÄÜ¹»Ö§³Ö±ê×¼ÊäÈëÊä³öµÄ¿ØÖÆÌ¨µÄ¿ò¼Ü
+ï»¿/****************************************Copyright (c)**************************************************
+**                                       æ¸…  é£Ž  æµ·  å²¸
+** æ–‡   ä»¶   å: console_framework.h / console_framework.c
+** åˆ›   å»º   äºº: Jason Zhou
+** æœ€åŽä¿®æ”¹æ—¥æœŸ: 2015/1/24 20:08:03
+** æ        è¿°: èƒ½å¤Ÿæ”¯æŒæ ‡å‡†è¾“å…¥è¾“å‡ºçš„æŽ§åˆ¶å°çš„æ¡†æž¶
 **  
-**--------------ÀúÊ·°æ±¾ÐÅÏ¢----------------------------------------------------------------------------
-** ´´½¨ÈË: Jason Zhou
-** °æ  ±¾: v1.0
-** ÈÕ¡¡ÆÚ: 2015/1/24 20:08:03
-** Ãè¡¡Êö: Ô­Ê¼°æ±¾
+**--------------åŽ†å²ç‰ˆæœ¬ä¿¡æ¯----------------------------------------------------------------------------
+** åˆ›å»ºäºº: Jason Zhou
+** ç‰ˆ  æœ¬: v1.0
+** æ—¥ã€€æœŸ: 2015/1/24 20:08:03
+** æã€€è¿°: åŽŸå§‹ç‰ˆæœ¬
 **
-**--------------µ±Ç°°æ±¾ÐÞ¶©----------------------------------------------------------------------------
-** ÐÞ¸ÄÈË: 
-** ÈÕ¡¡ÆÚ: 
-** Ãè¡¡Êö: 
-** ±¾ÎÄ¼þÓÉCÓïÑÔÔ´ÎÄ¼þÄ£°åÈí¼þÉú³É¡£------------Çå·çº£°¶³öÆ·£¬±ØÊô¾«Æ·£¡------------
+**--------------å½“å‰ç‰ˆæœ¬ä¿®è®¢----------------------------------------------------------------------------
+** ä¿®æ”¹äºº: 
+** æ—¥ã€€æœŸ: 
+** æã€€è¿°: 
+** æœ¬æ–‡ä»¶ç”±Cè¯­è¨€æºæ–‡ä»¶æ¨¡æ¿è½¯ä»¶ç”Ÿæˆã€‚------------æ¸…é£Žæµ·å²¸å‡ºå“ï¼Œå¿…å±žç²¾å“ï¼------------
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
 #include "wind_config.h"
 #include "wind_type.h"
 #include "console_framework.h"
 #include "wind_debug.h"
-#include "wind_var.h"
+//#include "wind_var.h"
 #include "wind_cmd.h"
 #include "wind_std.h"
 #include "wind_conv.h"
-#include "wind_core.h"
+//#include "wind_core.h"
 #if WIND_CONSOLE_SUPPORT
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
 
 
-/*********************************************Í·ÎÄ¼þ¶¨Òå***********************************************/
-/********************************************ÄÚ²¿±äÁ¿¶¨Òå**********************************************/
+/*********************************************å¤´æ–‡ä»¶å®šä¹‰***********************************************/
+/********************************************å†…éƒ¨å˜é‡å®šä¹‰**********************************************/
 
+w_dlist_s g_cmdlist;
 w_console_s g_ctrl[WIND_CONSOLE_COUNT];
 
 
-/********************************************ÄÚ²¿º¯Êý¶¨Òå*********************************************/
+/********************************************å†…éƒ¨å‡½æ•°å®šä¹‰*********************************************/
 static w_err_t get_cmd_ch(char *ch)
 {
     w_int32_t len;
@@ -171,8 +172,8 @@ static w_bool_t handle_default(w_console_s *ctrl,char ch)
     return W_FALSE;
 }
 
-//·µ»ØtrueÔò±íÊ¾ÓÐÒ»¸öÍêÕûµÄÃüÁî
-//·µ»Øfalse±íÊ¾ÃüÁî²»ÍêÕû
+//è¿”å›žtrueåˆ™è¡¨ç¤ºæœ‰ä¸€ä¸ªå®Œæ•´çš„å‘½ä»¤
+//è¿”å›žfalseè¡¨ç¤ºå‘½ä»¤ä¸å®Œæ•´
 static w_bool_t console_prehandle_char(w_console_s *ctrl,char ch,w_int32_t len)
 {
     w_bool_t ret;
@@ -246,15 +247,15 @@ static void init_console_stat(w_console_s *ctrl)
 
 
 
-/********************************************È«¾Ö±äÁ¿¶¨Òå**********************************************/
+/********************************************å…¨å±€å˜é‡å®šä¹‰**********************************************/
 
 
 
-/********************************************È«¾Öº¯Êý¶¨Òå**********************************************/
+/********************************************å…¨å±€å‡½æ•°å®šä¹‰**********************************************/
 
 void wind_cmd_init(w_console_s *ctrl)
 {
-    DLIST_INIT(g_core.cmdlist);
+    DLIST_INIT(g_cmdlist);
     _wind_register_all_cmd(ctrl);
 }
 
@@ -263,7 +264,7 @@ w_cmd_s *wind_cmd_get(const char *name)
     w_cmd_s *cmd;
     w_dnode_s *dnode;
     wind_disable_switch();
-    foreach_node(dnode,&g_core.cmdlist)
+    foreach_node(dnode,&g_cmdlist)
     {
         cmd = DLIST_OBJ(dnode,w_cmd_s,cmdnode);
         if(wind_strcmp(name,cmd->name) == 0)
@@ -280,7 +281,7 @@ w_err_t wind_cmd_register(w_cmd_s *cmd,int cnt)
 {
     int i;
     w_cmd_s *old;
-    w_dlist_s *cgl = &g_core.cmdlist;
+    w_dlist_s *cgl = &g_cmdlist;
     WIND_ASSERT_RETURN(cmd != W_NULL,W_ERR_PTR_NULL);
     for(i = 0;i < cnt;i ++)
     {
@@ -299,7 +300,7 @@ w_err_t wind_cmd_print(void)
     w_dnode_s *dnode;
     w_cmd_s *cmd;
     wind_printf("\r\ncommand list as following:\r\n");
-    foreach_node(dnode,&g_core.cmdlist)
+    foreach_node(dnode,&g_cmdlist)
     {
         cmd = DLIST_OBJ(dnode,w_cmd_s,cmdnode);
         console_printf("%-10s : ",cmd->name);
@@ -354,10 +355,10 @@ static w_int32_t find_char_index(char *str,char c)
 static w_int32_t get_string(char *str,w_int32_t idx,char ** arg)
 {
     int i = idx,index;
-    /*Ìø¹ý¿Õ¸ñ*/
+    /*è·³è¿‡ç©ºæ ¼*/
     while(str[i] == ' ') i ++;
     if(str[i] == '\"')
-    {/*ÒýºÅÄÚµÄ¿Õ¸ñ²»·Ö¸î£¬È¥µôÒýºÅ*/
+    {/*å¼•å·å†…çš„ç©ºæ ¼ä¸åˆ†å‰²ï¼ŒåŽ»æŽ‰å¼•å·*/
         i ++;
         *arg = &str[i];
         index = find_char_index(&str[i],'\"');
@@ -383,7 +384,8 @@ static w_int32_t get_string(char *str,w_int32_t idx,char ** arg)
 
 static w_err_t spit_cmd(w_console_s *ctrl)
 {
-    w_err_t idx = 0,i;
+    w_err_t i;
+    w_int32_t idx = 0;
     w_cmd_param_s *prm = &ctrl->param;
     prm->argc = 0;
     for(i = 0;i < CMD_PARAM_CNT;i ++)
@@ -481,17 +483,6 @@ w_err_t thread_console(w_int32_t argc,char **argv)
 
 
 
-#define CTRL_STK_SIZE 2048
-static w_stack_t ctrlstk[CTRL_STK_SIZE];//Ö÷ÈÎÎñ¶ÑÕ»
-w_err_t _create_thread_console(void)
-{
-    w_thread_s *thread;
-    thread = wind_thread_create("console",thread_console,
-               0,W_NULL,PRIO_LOW,ctrlstk,CTRL_STK_SIZE);
-    WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_FAIL);
-    wind_thread_set_priority(thread,32760);
-    return W_ERR_OK;
-}
 
 #ifdef __cplusplus
 }

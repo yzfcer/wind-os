@@ -92,6 +92,27 @@ extern "C" {
 //iamge文件加密密钥
 #define ENCRYPT_KEY {0x23,0x34,0x56,0x78,0x90,0xab,0xcd,0xef,0x01,0x23,0x45,0x67}
 
+//-------------------------------------------------------------------------------
+//调试命令定制，前提是内核支持控制台功能
+//-------------------------------------------------------------------------------
+#define WIND_CONSOLE_SUPPORT 1 //是否支持控制台模块
+
+#define CMD_BLKDEV_SUPPORT 0 //是否支持块设备操作命令
+#define CMD_DATETIME_SUPPORT 0 //是否支持日期时间命令
+#define CMD_ECHO_SUPPORT 1 //是否支持回显命令
+#define CMD_FS_SUPPORT 0 //是否支持文件系统命令
+#define CMD_LIST_SUPPORT 0 //是否支持内核对象列表命令
+#define CMD_LUA_SUPPORT 0 //是否支持lua脚本命令
+#define CMD_MEM_SUPPORT 0 //是否支持内存值查看命令
+#define CMD_RESET_SUPPORT 0 //是否支持系统复位命令
+#define CMD_STATI_SUPPORT 0 //是否支持统计命令
+#define CMD_THREAD_SUPPORT 0 //是否支持线程操作命令
+#define CMD_XMODEM_SUPPORT 0 //是否支持xmodem协议命令
+#define CMD_SYSINFO_SUPPORT 0 //是否支持系统信息命令
+#define CMD_CUTEST_SUPPORT 0 //是否支持单元测试命令
+
+#define CMD_BEEP_SUPPORT 0 //是否支持蜂鸣器命令
+#define CMD_LED_SUPPORT 0 //是否支持LED操作命令
 
 #ifdef __cplusplus
 }

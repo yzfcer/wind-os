@@ -32,20 +32,20 @@
 
 
 #ifdef  __cplusplus
-#define _ADDRESSOF(v)   (&reinterpret_cast<const char &>(v) )
+#define _WIND_ADDRESSOF(v)   (&reinterpret_cast<const char &>(v) )
 #else
-#define _ADDRESSOF(v)   (&(v))
+#define _WIND_ADDRESSOF(v)   (&(v))
 #endif
 
-#define _INTSIZEOF(n)   ((sizeof(n) + sizeof(w_int32_t) - 1) & ~(sizeof(w_int32_t) - 1))
+#define _WIND_INTSIZEOF(n)   ((sizeof(n) + sizeof(w_int32_t) - 1) & ~(sizeof(w_int32_t) - 1))
 
-#define _crt_va_start(ap,v)  ( ap = (wind_va_list)_ADDRESSOF(v) + _INTSIZEOF(v) )
-#define _crt_va_arg(ap,t)    ( *(t *)((ap += _INTSIZEOF(t)) - _INTSIZEOF(t)) )
-#define _crt_va_end(ap)      ( ap = (wind_va_list)0 )
+#define _wind_crt_va_start(ap,v)  ( ap = (wind_va_list)_WIND_ADDRESSOF(v) + _WIND_INTSIZEOF(v) )
+#define _wind_crt_va_arg(ap,t)    ( *(t *)((ap += _WIND_INTSIZEOF(t)) - _WIND_INTSIZEOF(t)) )
+#define _wind_crt_va_end(ap)      ( ap = (wind_va_list)0 )
 
-#define wind_va_start _crt_va_start /* windows stdarg.h */
-#define wind_va_arg _crt_va_arg
-#define wind_va_end _crt_va_end
+#define wind_va_start _wind_crt_va_start /* windows stdarg.h */
+#define wind_va_arg _wind_crt_va_arg
+#define wind_va_end _wind_crt_va_end
 #define do_div(n,base) _div(&n,base)
 
 #define ZEROPAD 1       
@@ -64,7 +64,7 @@ w_int32_t _div(w_int32_t* n,unsigned base)
      return __res;
 }
 
-static w_int32_t isdigit(w_int32_t ch)
+static w_int32_t wind_isdigit(w_int32_t ch)
 {
     return (ch >= '0') && (ch <= '9');
 }
@@ -73,7 +73,7 @@ static w_int32_t skip_atoi(const char **s)
 {
     w_int32_t i = 0;
 
-    while (isdigit(**s))
+    while (wind_isdigit(**s))
         i = i * 10 + *((*s)++) - '0';
     return i;
 }
@@ -235,7 +235,7 @@ w_int32_t wind_vsprintf(char *buf, const char *fmt, wind_va_list args)
 
         /* get field width */
         field_width = -1;
-        if (isdigit(*fmt))
+        if (wind_isdigit(*fmt))
             field_width = skip_atoi(&fmt);
         else if (*fmt == '*') {
             ++fmt;
@@ -251,7 +251,7 @@ w_int32_t wind_vsprintf(char *buf, const char *fmt, wind_va_list args)
         precision = -1;
         if (*fmt == '.') {
             ++fmt;
-            if (isdigit(*fmt))
+            if (wind_isdigit(*fmt))
                 precision = skip_atoi(&fmt);
             else if (*fmt == '*') {
                 ++fmt;

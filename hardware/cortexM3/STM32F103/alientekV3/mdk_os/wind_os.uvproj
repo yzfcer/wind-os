@@ -1210,12 +1210,12 @@
             <File>
               <FileName>console_port.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\components\console\port\console_port.c</FilePath>
+              <FilePath>..\..\..\..\..\src\components\console\adapter\wind\console_port.c</FilePath>
             </File>
             <File>
               <FileName>console_port.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\components\console\port\console_port.h</FilePath>
+              <FilePath>..\..\..\..\..\src\components\console\adapter\wind\console_port.h</FilePath>
             </File>
             <File>
               <FileName>cmd_history.c</FileName>

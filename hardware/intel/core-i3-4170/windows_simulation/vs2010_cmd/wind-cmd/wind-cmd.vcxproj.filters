@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="framework">
+      <UniqueIdentifier>{400122d4-bcde-4b43-8367-61e749480d2f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="port">
+      <UniqueIdentifier>{9cd207be-ba4b-49d7-8d94-e40f6028ffb2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common">
+      <UniqueIdentifier>{70ba3370-c4ba-4c84-92ea-075f254977fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cmd">
+      <UniqueIdentifier>{d89b0e2e-78ed-4240-8738-41a2de3e1dc8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="adapter">
+      <UniqueIdentifier>{fa0d4a37-1592-40d7-8fd6-02e2533ad499}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="cmd_main.c" />
+    <ClCompile Include="..\..\port\wind_std.c">
+      <Filter>port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\common\wind_dlist.c">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\common\wind_string.c">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\common\wind_debug.c">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\common\wind_conv.c">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\components\console\adapter\win32\console_adapter.c">
+      <Filter>adapter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\components\console\cmd\cmd_echo.c">
+      <Filter>cmd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\components\console\framework\cmd_history.c">
+      <Filter>framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\components\console\framework\console_framework.c">
+      <Filter>framework</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\port\wind_config.h">
+      <Filter>port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\port\wind_std.h">
+      <Filter>port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\port\wind_type.h">
+      <Filter>port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\src\common\wind_dlist.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\src\common\wind_string.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\src\common\wind_debug.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\src\common\wind_conv.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\src\components\console\adapter\win32\console_adapter.h">
+      <Filter>adapter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\src\components\console\framework\cmd_history.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\src\components\console\framework\console_framework.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\src\components\console\framework\wind_cmd.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\src\components\console\framework\wind_key.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

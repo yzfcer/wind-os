@@ -29,27 +29,38 @@
 
 char* wind_strcpy(char *dest,const char *src)
 {
-    char *tmp = dest;
-    while ((*dest++ = *src++) != '\0');
-    return tmp;
+    w_int32_t i;
+    for(i = 0;;i ++)
+    {
+        dest[i] = src[i];
+        if(dest[i] == '\0')
+            break;
+    }
+    return dest;
 }
 
 char* wind_strncpy(char *dest,const char *src,w_uint32_t count)
 {
-    char *tmp = dest;
-    while (count-- && (*dest++ = *src++) != '\0');
-    return tmp;
+    w_int32_t i;
+    for(i = 0;i < count;i ++)
+        dest[i] = src[i];
+    dest[count -1] = '\0';
+    return dest;
 }
 
 
 
 char *wind_strcat(char *dest, const char *src)
 {
-    char *tmp = dest;
-    while (*dest)
-        dest++;
-    while ((*dest++ = *src++) != '\0');
-    return tmp;
+    w_int32_t i,j;
+    i = wind_strlen(dest);
+    for(j = i;;j ++,i++)
+    {
+        dest[i] = src[j];
+        if(dest[i] == '\0')
+            break;
+    }
+    return dest;
 }
 
 
@@ -184,11 +195,10 @@ char *wind_bcopy(const char *src, char *dest, w_uint32_t count)
 
 void *wind_memcpy(void *dest,const void *src,w_uint32_t count)
 {
-    char *tmp = (char *) dest, *s = (char *) src;
-
+    char *tmp = (char *)dest;
+    char *s = (char *) src;
     while (count--)
         *tmp++ = *s++;
-
     return dest;
 }
 
@@ -211,7 +221,6 @@ void *wind_memmove(void *dest,const void *src,w_uint32_t count)
         while (count--)
             *--tmp = *--s;
     }
-
     return dest;
 }
 
