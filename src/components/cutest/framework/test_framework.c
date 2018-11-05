@@ -46,11 +46,11 @@ w_int32_t stringlenth(char *str)
     return i;
 }
 
-w_int32_t stringcmp(const char *cs,const char *ct)
+w_int32_t stringcmp(const char *dest,const char *src)
 {
     char __res;
     while (1) {
-        if ((__res = (char)(*cs - *ct++)) != 0 || !*cs++)
+        if ((__res = (char)(*dest - *src++)) != 0 || !*dest++)
             break;
     }
     return __res;

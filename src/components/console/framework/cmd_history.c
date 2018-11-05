@@ -1,4 +1,4 @@
-﻿/****************************************Copyright (c)**************************************************
+/****************************************Copyright (c)**************************************************
 **                                       清  风  海  岸
 **
 **                                       yzfcer@163.com
@@ -49,58 +49,51 @@ w_err_t cmd_history_init(w_cmd_his_s *his)
     his->curcmd = W_NULL;
     for(i =0 ;i < CMD_HISTORY_COUNT;i ++)
         his->hiscmd[i] = W_NULL;
-    wind_memset(his->cmdbuf,0,CMD_HSIBUF_LENTH);
+    wind_memset(his->cmdbuf,0,CMD_HISBUF_LENTH);
     return W_ERR_OK;
 }
 
-static w_err_t remove_old_history(w_cmd_his_s *his)
+
+static w_int32_t get_cmd_index(w_cmd_his_s *his,char *cmd)
 {
     w_int32_t i;
-    w_int32_t len;
-    if(his->hiscnt <= 0)
-        return W_ERR_FAIL;
-    len = wind_strlen(his->hiscmd[0])+1;
-    if(his->hiscnt > 1)
+    for(i = 0;i < his->hiscnt;i ++)
     {
-        wind_memcpy(&his->cmdbuf[0],his->hiscmd[1],his->buf_used-len);
-        for(i = 0;i < his->hiscnt -1 ;i ++)
-            his->hiscmd[i] = his->hiscmd[i+1] - len;
+        if(wind_strcmp(his->hiscmd[i],cmd) == 0)
+            return i;
     }
+    return -1;
+}
+
+static w_err_t remove_cmd_index(w_cmd_his_s *his,w_int32_t index)
+{
+    w_int32_t i,cmdlen,mvlen;
+    cmdlen = wind_strlen(his->hiscmd[index])+1;
+    mvlen = ((w_uint32_t)&his->hiscmd[0]) + CMD_HISBUF_LENTH;
+    mvlen -= (((w_uint32_t)&his->hiscmd[index]) + cmdlen);
+    wind_memcpy(his->hiscmd[index],his->hiscmd[index]+cmdlen,mvlen);
+    for(i = index;i < his->hiscnt - 1 ;i ++)
+        his->hiscmd[i] = his->hiscmd[i+1] - cmdlen;
     his->hiscmd[his->hiscnt-1] = W_NULL;
     his->hiscnt -= 1;
-    his->buf_used -= len;
-    wind_memset(&his->cmdbuf[his->buf_used],0,len);
-    his->curidx =his->hiscnt - 1;
+    his->buf_used -= cmdlen;
+    wind_memset(&his->cmdbuf[his->buf_used],0,cmdlen);
+    his->curidx = his->hiscnt - 1;
     his->curcmd = his->hiscmd[his->curidx];
     return W_ERR_OK;
 }
 
 static w_err_t remove_exist_cmd(w_cmd_his_s *his,char *cmd)
 {
-    w_int32_t i,j,len;
+    w_int32_t index;
     WIND_ASSERT_RETURN(his != W_NULL,W_ERR_INVALID);
     WIND_ASSERT_RETURN(cmd != W_NULL,W_ERR_INVALID);
     if(his->hiscnt <= 0)
         return W_ERR_OK;
-    for(i = 0;i < his->hiscnt;i ++)
-    {
-        if(wind_strcmp(his->hiscmd[i],cmd) == 0)
-        {
-            len = wind_strlen(his->hiscmd[i])+1;
-            wind_memcpy(&his->hiscmd[i],his->hiscmd[i+1],his->buf_used-(w_uint32_t)his->hiscmd[i+1]);
-            for(j = i + 1;j < his->hiscnt -1 ;j ++)
-                his->hiscmd[i] = his->hiscmd[i+1] - len;
-            his->hiscmd[his->hiscnt-1] = W_NULL;
-            his->hiscnt -= 1;
-            his->buf_used -= len;
-            wind_memset(&his->cmdbuf[his->buf_used],0,len);
-            his->curidx =his->hiscnt - 1;
-            his->curcmd = his->hiscmd[his->curidx];
-            break;
-        }
-    }
-    
-    return W_ERR_OK;
+    index = get_cmd_index(his,cmd);
+    if(index < 0)
+        return W_ERR_OK;
+    return remove_cmd_index(his,index);
 }
 
 
@@ -129,17 +122,17 @@ w_err_t cmd_history_append(w_cmd_his_s *his,char *cmd)
         return W_ERR_PTR_NULL;
     if(cmd[0] == 0 || cmd[0] == 0x1b)
         return W_ERR_INVALID;
-    //remove_exist_cmd(his,cmd);
+    remove_exist_cmd(his,cmd);
     len = wind_strlen(cmd);
     if(his->hiscnt >= CMD_HISTORY_COUNT)
-        remove_old_history(his);
-    rest = CMD_HSIBUF_LENTH - his->buf_used;
+        remove_cmd_index(his,0);
+    rest = CMD_HISBUF_LENTH - his->buf_used;
     while(rest < len + 1)
     {
-        err = remove_old_history(his);
+        err = remove_cmd_index(his,0);
         if(err != W_ERR_OK)
             return err;
-        rest = CMD_HSIBUF_LENTH - his->buf_used;
+        rest = CMD_HISBUF_LENTH - his->buf_used;
     }
     add_hiscmd(his,cmd);
     return W_ERR_FAIL;

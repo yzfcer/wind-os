@@ -82,22 +82,22 @@ char* wind_strncat(char *dest, const char *src, w_uint32_t count)
     return tmp;
 }
 
-w_int32_t wind_strcmp(const char *cs,const char *ct)
+w_int32_t wind_strcmp(const char *dest,const char *src)
 {
     char err;
     while (1) {
-        if ((err = (char)(*cs - *ct++)) != 0 || !*cs++)
+        if ((err = (char)(*dest - *src++)) != 0 || !*dest++)
             break;
     }
     return err;
 }
 
-w_int32_t wind_strncmp(const char* cs,const char *ct,w_uint32_t count)
+w_int32_t wind_strncmp(const char* dest,const char *src,w_uint32_t count)
 {
     char err = 0;
 
     while (count) {
-        if ((err = *cs - *ct++) != 0 || !*cs++)
+        if ((err = *dest - *src++) != 0 || !*dest++)
             break;
         count--;
     }
@@ -159,12 +159,12 @@ w_uint32_t wind_strspn(const char *s, const char *accept)
     return count;
 }
 
-char *wind_strpbrk(const char *cs,const char *ct)
+char *wind_strpbrk(const char *dest,const char *src)
 {
     const char *sc1,*sc2;
 
-    for( sc1 = cs; *sc1 != '\0'; ++sc1) {
-        for( sc2 = ct; *sc2 != '\0'; ++sc2) {
+    for( sc1 = dest; *sc1 != '\0'; ++sc1) {
+        for( sc2 = src; *sc2 != '\0'; ++sc2) {
             if (*sc1 == *sc2)
                 return (char *) sc1;
         }
@@ -172,7 +172,7 @@ char *wind_strpbrk(const char *cs,const char *ct)
     return W_NULL;
 }
 
-char *wind_str2upper(char *dest)
+char *wind_strupper(char *dest)
 {
     w_int32_t i;
     for(i = 0;;i ++)
@@ -184,7 +184,7 @@ char *wind_str2upper(char *dest)
     return dest;
 }
 
-extern char *wind_str2lower(char *dest)
+extern char *wind_strlower(char *dest)
 {
     w_int32_t i;
     for(i = 0;;i ++)
@@ -247,12 +247,12 @@ void *wind_memmove(void *dest,const void *src,w_uint32_t count)
     return dest;
 }
 
-w_int32_t wind_memcmp(const void *cs,const void *ct,w_uint32_t count)
+w_int32_t wind_memcmp(const void *dest,const void *src,w_uint32_t count)
 {
     const w_uint8_t *su1, *su2;
     signed char res = 0;
 
-    for( su1 = cs, su2 = ct; 0 < count; ++su1, ++su2, count--)
+    for( su1 = dest, su2 = src; 0 < count; ++su1, ++su2, count--)
         if ((res = *su1 - *su2) != 0)
             break;
     return res;

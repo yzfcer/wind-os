@@ -31,7 +31,7 @@
 extern "C" {
 #endif
 #define CMD_HISTORY_COUNT 10
-#define CMD_HSIBUF_LENTH 256
+#define CMD_HISBUF_LENTH 256
 
 struct __cmd_his_s;
 typedef struct __w_cmd_his_s w_cmd_his_s;
@@ -44,7 +44,7 @@ struct __w_cmd_his_s
     char *curcmd;
     
     char *hiscmd[CMD_HISTORY_COUNT];
-    char cmdbuf[CMD_HSIBUF_LENTH];
+    char cmdbuf[CMD_HISBUF_LENTH];
 };
 
 

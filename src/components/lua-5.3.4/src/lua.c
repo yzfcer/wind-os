@@ -305,7 +305,7 @@ static int incomplete (lua_State *L, int status) {
 ** Prompt the user, read a line, and push it into the Lua stack.
 */
 extern  int lua_readline(lua_State *L,char *buff,const char *prmt);
-extern w_int32_t wind_memcmp(const void *cs,const void *ct,w_uint32_t count);
+extern w_int32_t wind_memcmp(const void *dest,const void *src,w_uint32_t count);
 
 static int pushline (lua_State *L, int firstline) {
   char buffer[LUA_MAXINPUT];

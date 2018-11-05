@@ -43,7 +43,7 @@ extern char* wind_strncat(char *dest, const char *src, w_uint32_t count);
 
 extern w_int32_t wind_strcmp(const char *dest,const char *src);
 
-extern w_int32_t wind_strncmp(const char* cs,const char *ct,w_uint32_t count);
+extern w_int32_t wind_strncmp(const char* dest,const char *src,w_uint32_t count);
 
 extern char* wind_strchr(const char *s, w_uint32_t c);
 
@@ -55,11 +55,11 @@ extern w_int32_t wind_strnlen(const char *s, w_uint32_t count);
 
 extern w_uint32_t wind_strspn(const char *s, const char *accept);
 
-extern char *wind_strpbrk(const char *cs,const char *ct);
+extern char *wind_strpbrk(const char *dest,const char *src);
 
-extern char *wind_str2upper(char *cs);
+extern char *wind_strupper(char *dest);
 
-extern char *wind_str2lower(char *cs);
+extern char *wind_strlower(char *dest);
 
 
 extern void *wind_memset(void *s,char c,w_uint32_t count);
@@ -70,7 +70,7 @@ extern void *wind_memcpy(void *dest,const void *src,w_uint32_t count);
 
 extern void *wind_memmove(void *dest,const void *src,w_uint32_t count);
 
-extern w_int32_t wind_memcmp(const void *cs,const void *ct,w_uint32_t count);
+extern w_int32_t wind_memcmp(const void *dest,const void *src,w_uint32_t count);
 
 extern void *wind_memscan(void *addr, w_uint32_t c, w_uint32_t size);
 
