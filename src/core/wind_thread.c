@@ -30,7 +30,6 @@
 #include "wind_string.h"
 #include "wind_debug.h"
 #include "wind_pool.h"
-#include "wind_var.h"
 #include "wind_heap.h"
 #include "wind_os_hwif.h"
 //用来表示

@@ -22,7 +22,6 @@
 #include "wind_cut.h"
 #include "wind_heap.h"
 #include "wind_string.h"
-#include "wind_var.h"
 
 #if (WIND_CUTEST_SUPPORT && TEST_HEAP_SUPPORT)
 #ifdef __cplusplus

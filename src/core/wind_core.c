@@ -40,7 +40,6 @@
 #include "wind_event.h"
 
 #include "wind_core.h"
-#include "wind_var.h"
 #include "wind_time.h"
 #include "wind_std.h"
 #include "wind_debug.h"
@@ -52,6 +51,20 @@ extern void wind_thread_switch(void);
 extern void wind_interrupt_switch(void);
 extern void wind_start_switch(void);
 extern int _create_thread_init(void);
+
+
+w_core_var_s g_core;//wind-os的基本全局参数和各种内核资源的链表头
+volatile w_bool_t gwind_start_flag = W_FALSE;//wind-os开始启动线程调度的标记
+w_stack_t **gwind_high_stack;//高优先级线程栈指针
+w_stack_t **gwind_cur_stack;//当前线程栈指针
+
+void _wind_corevar_init(void)
+{
+    g_core.cpu_usage = 0;
+    g_core.idle_cnt = 0;
+    g_core.usrthren = W_FALSE;
+    g_core.ticks_cnt = 0;
+}
 
 
 //允许创建用户线程

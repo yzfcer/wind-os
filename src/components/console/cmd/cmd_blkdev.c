@@ -25,7 +25,6 @@
 #include "wind_cmd.h"
 #include "wind_blkdev.h"
 #include "wind_conv.h"
-#include "wind_var.h"
 #include "wind_heap.h"
 #if (WIND_CONSOLE_SUPPORT && CMD_BLKDEV_SUPPORT)
 

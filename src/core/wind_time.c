@@ -28,7 +28,6 @@
 #include "wind_thread.h"
 #include "wind_core.h"
 #include "wind_time.h"
-#include "wind_var.h"
 #include "wind_string.h"
 #include "wind_chdev.h"
 #if WIND_DATETIME_SUPPORT

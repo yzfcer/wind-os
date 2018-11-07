@@ -25,7 +25,6 @@
 #include "wind_watchdog.h"
 #include "wind_thread.h"
 #include "wind_debug.h"
-#include "wind_var.h"
 #include "wind_core.h"
 #include "wind_string.h"
 #include "wind_pool.h"

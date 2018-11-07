@@ -25,7 +25,7 @@
 #include "wind_cmd.h"
 #include "wind_string.h"
 #include "wind_stati.h"
-#include "wind_var.h"
+#include "wind_core.h"
 #include "wind_pool.h"
 #include "wind_heap.h"
 

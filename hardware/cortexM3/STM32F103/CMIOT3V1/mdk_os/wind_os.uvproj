@@ -1081,16 +1081,6 @@
               <FilePath>..\..\..\..\..\src\core\wind_time.h</FilePath>
             </File>
             <File>
-              <FileName>wind_var.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\core\wind_var.c</FilePath>
-            </File>
-            <File>
-              <FileName>wind_var.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\core\wind_var.h</FilePath>
-            </File>
-            <File>
               <FileName>wind_timer.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\core\wind_timer.c</FilePath>

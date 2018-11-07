@@ -27,7 +27,6 @@
 #include "wind_mutex.h"
 #include "wind_debug.h"
 #include "wind_string.h"
-#include "wind_var.h"
 #include "wind_core.h"
 #include "wind_os_hwif.h"
 

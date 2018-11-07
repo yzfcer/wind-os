@@ -95,7 +95,6 @@ void _wind_fs_mount_init(void)
  */ 
 
 #include "wind_heap.h"
-#include "wind_var.h"
 #define HEAP1_HEAD  0x2000C000
 #define HEAD1_LENTH (16*1024)
 void _wind_heaps_create(void)

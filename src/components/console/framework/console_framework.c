@@ -1,4 +1,4 @@
-﻿/****************************************Copyright (c)**************************************************
+/****************************************Copyright (c)**************************************************
 **                                       清  风  海  岸
 ** 文   件   名: console_framework.h / console_framework.c
 ** 创   建   人: Jason Zhou
@@ -22,7 +22,6 @@
 #include "wind_type.h"
 #include "console_framework.h"
 #include "wind_debug.h"
-//#include "wind_var.h"
 #include "wind_cmd.h"
 #include "wind_std.h"
 #include "wind_conv.h"

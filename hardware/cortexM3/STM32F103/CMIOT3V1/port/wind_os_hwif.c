@@ -82,7 +82,6 @@ void wind_system_reset(void)
  * 申请一块空间创建一个嵌套的内存堆，用于某些特定的目的
  */ 
 #include "wind_heap.h"
-#include "wind_var.h"
 #define HEAP1_HEAD  0x10000000
 #define HEAD1_LENTH (64*1024)
 

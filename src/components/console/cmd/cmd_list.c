@@ -28,7 +28,6 @@
 #include "wind_sem.h"
 #include "wind_event.h"
 #include "wind_mutex.h"
-#include "wind_var.h"
 #include "wind_pool.h"
 #include "wind_msgbox.h"
 #include "wind_heap.h"
