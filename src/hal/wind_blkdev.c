@@ -31,6 +31,7 @@
 #include "wind_string.h"
 #include "wind_var.h"
 #if WIND_BLK_DRVFRAME_SUPPORT
+static w_dlist_s blkdevlist;
 
 w_err_t wind_blkdev_register(w_blkdev_s *blkdev,w_int32_t count)
 {
@@ -60,7 +61,7 @@ w_err_t wind_blkdev_register(w_blkdev_s *blkdev,w_int32_t count)
         }
         blkdev[i].mutex = wind_mutex_create(blkdev[i].name);
         wind_disable_switch();
-        dlist_insert_tail(&g_core.blkdevlist,&blkdev[i].blkdevnode);
+        dlist_insert_tail(&blkdevlist,&blkdev[i].blkdevnode);
         wind_enable_switch();    
     }
     return W_ERR_OK;
@@ -73,7 +74,7 @@ w_err_t wind_blkdev_unregister(w_blkdev_s *blkdev)
     WIND_ASSERT_RETURN(blkdev->magic == WIND_BLKDEV_MAGIC,W_ERR_INVALID);
     wind_notice("unregister blkdev:%s",blkdev->name);
     wind_disable_switch();
-    dnode = dlist_remove(&g_core.blkdevlist,&blkdev->blkdevnode);
+    dnode = dlist_remove(&blkdevlist,&blkdev->blkdevnode);
     wind_enable_switch();
     if(dnode == W_NULL)
     {
@@ -90,6 +91,7 @@ w_err_t wind_blkdev_unregister(w_blkdev_s *blkdev)
 
 w_err_t _wind_blkdev_mod_init(void)
 {
+    DLIST_INIT(blkdevlist);
     _register_blkdevs();
     return W_ERR_OK;
 }
@@ -99,7 +101,7 @@ w_blkdev_s *wind_blkdev_get(char *name)
     w_blkdev_s *blkdev = W_NULL;
     w_dnode_s *dnode;
     wind_disable_switch();
-    foreach_node(dnode,&g_core.blkdevlist)
+    foreach_node(dnode,&blkdevlist)
     {
         blkdev = DLIST_OBJ(dnode,w_blkdev_s,blkdevnode);
         if(wind_strcmp(blkdev->name,name) == 0)
@@ -217,11 +219,11 @@ w_err_t wind_blkdev_close(w_blkdev_s *blkdev)
 }
 
 
-w_err_t wind_blkdev_print(w_dlist_s *list)
+w_err_t wind_blkdev_print(void)
 {
     w_dnode_s *dnode;
     w_blkdev_s *blkdev;
-    WIND_ASSERT_RETURN(list != W_NULL,W_ERR_PTR_NULL);
+    w_dlist_s *list = &blkdevlist;
     wind_printf("\r\n\r\nblock device list as following:\r\n");
     wind_print_space(5);
     wind_printf("%-16s %-12s %-10s\r\n","blkdev","blockcnt","blocksize");

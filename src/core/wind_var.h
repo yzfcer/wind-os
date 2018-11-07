@@ -36,24 +36,14 @@ extern "C" {
 typedef struct __w_core_var_s
 {
     //内核对象列表
-    w_dlist_s threadlist;
-    w_dlist_s sleeplist;
-    w_dlist_s poollist;
+    
 
-
-#if WIND_DRVFRAME_SUPPORT
-    w_dlist_s devlist;
-#endif
-#if WIND_BLK_DRVFRAME_SUPPORT
-    w_dlist_s blkdevlist;
-#endif
 #if WIND_FS_SUPPORT
     w_dlist_s fslist;
     w_dlist_s filelist;
 #endif
     
     w_bool_t usrthren;/*用户线程允许创建的标志 */
-    
     volatile w_uint32_t idle_cnt;//空闲计算器
     w_uint32_t ticks_cnt;//tick计时
     w_uint32_t idle_cnt_max;//在一段时间内的idle任务的计数值

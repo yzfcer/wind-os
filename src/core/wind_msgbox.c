@@ -30,8 +30,7 @@
 #include "wind_pool.h"
 
 #if WIND_MSGBOX_SUPPORT
-extern void _wind_thread_dispatch(void);
-w_dlist_s msgboxlist;
+static w_dlist_s msgboxlist;
 WIND_POOL(msgboxpool,WIND_MBOX_MAX_NUM,sizeof(w_msgbox_s));
 
 static w_msgbox_s *msgbox_malloc(void)
@@ -201,6 +200,7 @@ w_err_t wind_msgbox_wait(w_msgbox_s *msgbox,w_msg_s **pmsg,w_uint32_t timeout)
     w_uint32_t ticks;
     w_dnode_s *dnode;
     w_thread_s *thread;
+    w_dlist_s *sleeplist = _wind_thread_sleep_list();
     WIND_ASSERT_RETURN(msgbox != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(pmsg != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(msgbox->magic == WIND_MSGBOX_MAGIC,W_ERR_FAIL);
@@ -225,7 +225,7 @@ w_err_t wind_msgbox_wait(w_msgbox_s *msgbox,w_msg_s **pmsg,w_uint32_t timeout)
     thread = msgbox->owner;
     thread->runstat = THREAD_STATUS_SLEEP;
     thread->cause = CAUSE_MSG;
-    dlist_insert_tail(&g_core.sleeplist,&thread->sleepnode.dnode);
+    dlist_insert_tail(sleeplist,&thread->sleepnode.dnode);
     wind_enable_interrupt();
     
     _wind_thread_dispatch();

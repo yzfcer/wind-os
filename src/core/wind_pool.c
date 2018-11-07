@@ -32,14 +32,20 @@
 #define WIND_MPOOL_ALIGN_L(x) ((x) & (~0x03))
 
 #define WIND_MPOOL_DEBUG(...) 
+static w_dlist_s poollist;
 
+w_err_t _wind_pool_mod_init(void)
+{
+    DLIST_INIT(poollist);
+    return W_ERR_OK;
+}
 w_pool_s *wind_pool_get(const char *name)
 {
     w_pool_s *pool;
     w_dnode_s *dnode;
     WIND_ASSERT_RETURN(name != W_NULL,W_NULL);
     wind_disable_switch();
-    foreach_node(dnode,&g_core.poollist)
+    foreach_node(dnode,&poollist)
     {
         pool = DLIST_OBJ(dnode,w_pool_s,poolnode);
         if(pool->name && (wind_strcmp(name,pool->name) == 0))
@@ -90,7 +96,7 @@ w_err_t wind_pool_create(const char *name,void *mem,w_uint32_t memsize,w_uint32_
     item->next = W_NULL;
     WIND_STATI_INIT(pm->stati,pm->itemnum);
     wind_disable_interrupt();
-    dlist_insert_tail(&g_core.poollist,&pm->poolnode);
+    dlist_insert_tail(&poollist,&pm->poolnode);
     wind_enable_interrupt();
     pm->magic = WIND_POOL_MAGIC;
     //_wind_pool_print_list(&g_core.poollist);
@@ -105,7 +111,7 @@ w_err_t wind_pool_destroy(void *mem)
     WIND_ASSERT_RETURN(pm->magic == WIND_POOL_MAGIC,W_ERR_INVALID);
     wind_notice("destroy pool:%s",pm->name?pm->name:"null");
     wind_disable_interrupt();
-    dlist_remove(&g_core.poollist,&pm->poolnode);
+    dlist_remove(&poollist,&pm->poolnode);
     wind_enable_interrupt();
     pm->magic = 0;
     return W_ERR_OK;
@@ -179,10 +185,11 @@ w_err_t wind_pool_free(void *mem,void *block)
 }
 
 
-void _wind_pool_print_list(w_dlist_s *list)
+void _wind_pool_print_list(void)
 {
     w_dnode_s *pdnode;
     w_pool_s *pm;
+    w_dlist_s *list = &poollist;
     wind_printf("\r\n\r\nmpool list as following:\r\n");
     wind_print_space(7);
     wind_printf("%-12s %-12s %-8s %-8s %-8s\r\n","name","head","size","itemnum","itemsize");
@@ -196,5 +203,22 @@ void _wind_pool_print_list(w_dlist_s *list)
     wind_print_space(7);
 }
 
+void wind_pool_stati_print(void)
+{
+    w_dnode_s *dnode;
+    w_pool_s *pool;
+    w_dlist_s *list;
+    wind_print_space(7);
+    wind_printf("%-16s %-8s %-8s %-8s %-8s\r\n","pool","tot","used","maxused","err");
+    wind_print_space(7);
+    list = &poollist;
+    foreach_node(dnode,list)
+    {
+        pool = (w_pool_s*)DLIST_OBJ(dnode,w_pool_s,poolnode);
+        wind_printf("%-16s %-8d %-8d %-8d %-8d\r\n",pool->name,pool->stati.tot,
+            pool->stati.used,pool->stati.max,pool->stati.err);
+    }
+    wind_print_space(7);
+}
 
 

@@ -65,6 +65,9 @@ struct __w_pool_s
 //定义内存池的方法
 #define WIND_POOL_ALIGN(size) (((size)+3) & (~0x03))
 #define WIND_POOL(pool,itemnum,itemsize) w_uint8_t pool[sizeof(w_pool_s) + itemnum *(WIND_POOL_ALIGN(itemsize) + sizeof(w_pool_item_s))+8]
+
+w_err_t _wind_pool_mod_init(void);
+
 w_pool_s *wind_pool_get(const char *name);
 
 w_err_t wind_pool_create(const char *name,void *mem,w_uint32_t memsize,w_uint32_t itemsize);
@@ -75,7 +78,9 @@ void   *wind_pool_malloc(void *mem);
 
 w_err_t wind_pool_free(void *mem,void *block);
 
-void _wind_pool_print_list(w_dlist_s *list);
+void _wind_pool_print_list(void);
+
+void wind_pool_stati_print(void);
 
 #ifdef __cplusplus
 }

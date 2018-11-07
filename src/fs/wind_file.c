@@ -112,7 +112,7 @@ w_err_t wind_fs_unregster(w_fs_s *fs)
     WIND_ASSERT_RETURN(fs->magic == WIND_FS_MAGIC,W_ERR_INVALID);
     wind_notice("unregister fs:%s",fs->name);
     wind_disable_switch();
-    dnode = dlist_remove(&g_core.blkdevlist,dnode);
+    dnode = dlist_remove(&g_core.fslist,&fs->fsnode);
     wind_enable_switch();
     if(dnode == W_NULL)
     {

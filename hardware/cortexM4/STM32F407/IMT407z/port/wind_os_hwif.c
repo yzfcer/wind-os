@@ -81,7 +81,7 @@ void wind_system_reset(void)
 #define HEAD1_LENTH (64*1024)
 //#define HEAP2_HEAD  0x10000000
 //#define HEAD2_LENTH (64*1024)
-void _wind_heaps_mod_init(void)
+void _wind_heaps_create(void)
 {
     wind_heap_create("heap0",HEAP1_HEAD,HEAD1_LENTH,0);
     //wind_heap_create("heap1",HEAP2_HEAD,HEAD3_LENTH,0);

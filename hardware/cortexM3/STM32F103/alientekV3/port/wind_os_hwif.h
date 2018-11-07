@@ -42,7 +42,7 @@ void _wind_enter_main_hook(void);
 void wind_system_reset(void);
 
 #if WIND_HEAP_SUPPORT
-void _wind_heaps_mod_init(void);
+void _wind_heaps_create(void);
 #endif
 
 #if WIND_FS_SUPPORT

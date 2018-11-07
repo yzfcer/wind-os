@@ -31,6 +31,7 @@
 #include "wind_string.h"
 #include "wind_var.h"
 #if WIND_DRVFRAME_SUPPORT
+static w_dlist_s devlist;
 
 w_err_t wind_chdev_register(w_chdev_s *dev,w_int32_t count)
 {
@@ -60,7 +61,7 @@ w_err_t wind_chdev_register(w_chdev_s *dev,w_int32_t count)
         }
         dev[i].mutex = wind_mutex_create(dev[i].name);
         wind_disable_switch();
-        dlist_insert_tail(&g_core.devlist,&dev[i].devnode);
+        dlist_insert_tail(&devlist,&dev[i].devnode);
         wind_enable_switch();
     }
     
@@ -75,7 +76,7 @@ w_err_t wind_chdev_unregister(w_chdev_s *dev)
     WIND_ASSERT_RETURN(dev->magic == WIND_DEV_MAGIC,W_ERR_INVALID);
     wind_notice("unregister dev:%s",dev->name);
     wind_disable_switch();
-    dnode = dlist_remove(&g_core.devlist,&dev->devnode);
+    dnode = dlist_remove(&devlist,&dev->devnode);
     wind_enable_switch();
     if(dnode == W_NULL)
     {
@@ -92,6 +93,7 @@ w_err_t wind_chdev_unregister(w_chdev_s *dev)
 
 w_err_t _wind_chdev_mod_init(void)
 {
+    DLIST_INIT(devlist);
     _register_chdevs();
     return W_ERR_OK;
 }
@@ -101,7 +103,7 @@ w_chdev_s *wind_chdev_get(char *name)
     w_chdev_s *dev = W_NULL;
     w_dnode_s *dnode;
     wind_disable_switch();
-    foreach_node(dnode,&g_core.devlist)
+    foreach_node(dnode,&devlist)
     {
         dev = DLIST_OBJ(dnode,w_chdev_s,devnode);
         if(wind_strcmp(dev->name,name) == 0)
@@ -192,11 +194,12 @@ w_err_t wind_chdev_close(w_chdev_s *dev)
     return err;
 }
 
-w_err_t wind_chdev_print(w_dlist_s *list)
+w_err_t wind_chdev_print(void)
 {
     w_dnode_s *dnode;
     w_chdev_s *dev;
     int cnt = 0;
+    w_dlist_s *list = &devlist;
     WIND_ASSERT_RETURN(list != W_NULL,W_ERR_PTR_NULL);
     wind_printf("\r\ndev list as following:\r\n");
     

@@ -111,6 +111,8 @@ struct _w_thread_s
 
 w_err_t _wind_thread_mod_init(void);
 w_err_t _wind_thread_wakeup(void);
+w_dlist_s *_wind_thread_list(void);
+w_dlist_s *_wind_thread_sleep_list(void);
 
 w_thread_s *wind_thread_get(const char *name);
 w_thread_s *wind_thread_current(void);
@@ -151,7 +153,7 @@ w_err_t wind_thread_destroy(w_thread_s *thread);
 w_err_t wind_thread_sleep(w_uint32_t ms);
 w_err_t wind_thread_exit(w_err_t exitcode);
 
-w_err_t wind_thread_print(w_dlist_s *list);
+w_err_t wind_thread_print(void);
 
 
 #ifdef __cplusplus

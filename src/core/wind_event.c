@@ -30,7 +30,6 @@
 #include "wind_pool.h"
 
 #if WIND_EVENT_SUPPORT
-extern void _wind_thread_dispatch(void);
 static w_dlist_s eventlist;
 WIND_POOL(eventpool,WIND_EVENT_MAX_NUM,sizeof(w_event_s));
 

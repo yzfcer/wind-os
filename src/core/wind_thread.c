@@ -37,6 +37,8 @@
 
 #define WIND_THREAD_PRIO_MIN_LIM 100//优先级的最小值
 #define WIND_THREAD_PRIO_MAX_LIM 30000//优先级的最大值
+static w_dlist_s threadlist;
+static w_dlist_s sleeplist;
 
 static w_uint16_t get_prio(w_prio_e priolevel)
 {
@@ -98,6 +100,9 @@ static char *wind_thread_status(w_thread_stat_e stat)
 w_err_t _wind_thread_mod_init(void)
 {
     w_err_t err;
+    
+    DLIST_INIT(threadlist);
+    DLIST_INIT(sleeplist);
 #if WIND_STKPOOL_SUPPORT
     err = wind_pool_create("stkbuf",stkbufpool,sizeof(stkbufpool),WIND_STK_SIZE *sizeof(w_stack_t));
     WIND_ASSERT_RETURN(err == W_ERR_OK,err);
@@ -112,7 +117,7 @@ w_thread_s *wind_thread_get(const char *name)
     w_dnode_s *dnode;
     WIND_ASSERT_RETURN(name != W_NULL,W_NULL);
     wind_disable_switch();
-    foreach_node(dnode,&g_core.threadlist)
+    foreach_node(dnode,&threadlist)
     {
         thread = DLIST_OBJ(dnode,w_thread_s,validnode);
         if(thread->name && (wind_strcmp(name,thread->name) == 0))
@@ -179,7 +184,7 @@ w_err_t wind_thread_init(w_thread_s *thread,
     thread->cause = CAUSE_COMMON;
     thread->sleep_ticks = 0;
     wind_disable_interrupt();
-    dlist_insert_prio(&g_core.threadlist,&thread->validnode,thread->prio);
+    dlist_insert_prio(&threadlist,&thread->validnode,thread->prio);
     wind_enable_interrupt();
     return W_ERR_OK;
 }
@@ -238,7 +243,7 @@ w_err_t wind_thread_destroy(w_thread_s *thread)
     WIND_ASSERT_RETURN(thread->magic == WIND_THREAD_MAGIC,W_ERR_INVALID);
     wind_notice("distroy thread:%s",thread->name);
     wind_disable_interrupt();
-    dlist_remove(&g_core.threadlist,&thread->validnode.dnode);
+    dlist_remove(&threadlist,&thread->validnode.dnode);
     //这里需要先释放一些与这个线程相关的一些东西后才能释放这个thread
 #if WIND_STKPOOL_SUPPORT
     if(thread->flag_stkpool)
@@ -267,9 +272,9 @@ w_err_t wind_thread_set_priority(w_thread_s *thread,w_int16_t prio)
 
     wind_debug("change prio %s:%d\r\n",thread->name,prio);
     wind_disable_interrupt();
-    dlist_remove(&g_core.threadlist,&thread->validnode.dnode);
+    dlist_remove(&threadlist,&thread->validnode.dnode);
     thread->prio = prio;
-    dlist_insert_prio(&g_core.threadlist,&thread->validnode,prio);
+    dlist_insert_prio(&threadlist,&thread->validnode,prio);
     wind_enable_interrupt();
     return W_ERR_OK;
 }
@@ -339,16 +344,16 @@ w_err_t wind_thread_sleep(w_uint32_t ms)
     thread->runstat = THREAD_STATUS_SLEEP;
     thread->cause = CAUSE_SLEEP;
     thread->sleep_ticks = stcnt;
-    dlist_insert_prio(&g_core.sleeplist,&thread->sleepnode,thread->prio);
+    dlist_insert_prio(&sleeplist,&thread->sleepnode,thread->prio);
 
     wind_enable_interrupt();
 #if 0
-    foreach_node(dnode,&g_core.sleeplist)
+    foreach_node(dnode,&sleeplist)
     {
         thread = PRI_DLIST_OBJ(dnode,w_thread_s,sleepnode);
         if(thread->prio < 0)
         {
-            wind_thread_print(&g_core.sleeplist);
+            wind_thread_print(&sleeplist);
             wind_error("sleep err");
             break;
         }
@@ -364,7 +369,7 @@ w_err_t _wind_thread_wakeup(void)
     w_thread_s *thread;
     wind_disable_interrupt();
     WIND_ASSERT_TODO(RUN_FLAG,wind_enable_interrupt(),W_ERR_OK);
-    foreach_node(dnode,&g_core.sleeplist)
+    foreach_node(dnode,&sleeplist)
     {
         thread = PRI_DLIST_OBJ(dnode,w_thread_s,sleepnode);
         if(thread->sleep_ticks > 0)
@@ -375,22 +380,31 @@ w_err_t _wind_thread_wakeup(void)
             {
                 thread->runstat = THREAD_STATUS_READY;
                 thread->cause = CAUSE_SLEEP;
-                dlist_remove(&g_core.sleeplist,&thread->sleepnode.dnode);
+                dlist_remove(&sleeplist,&thread->sleepnode.dnode);
             }
         }
     }
     wind_enable_interrupt();
     return W_ERR_OK;
 }
+w_dlist_s *_wind_thread_list(void)
+{
+    return &threadlist;
+}
+
+w_dlist_s *_wind_thread_sleep_list(void)
+{
+    return &sleeplist;
+}
 
 
 //调试时用到的函数，打印当前的系统中的线程的信息
-w_err_t wind_thread_print(w_dlist_s *list)
+w_err_t wind_thread_print(void)
 {
     w_dnode_s *dnode;
     w_thread_s *thread;
     char *stat;
-    WIND_ASSERT_RETURN(list != W_NULL,W_ERR_PTR_NULL);
+    w_dlist_s *list = &threadlist;
     wind_printf("\r\n\r\nthread list as following:\r\n");
     wind_print_space(7);
     wind_printf("%-16s %-8s %-10s %-10s %-10s\r\n","thread","prio","state","stacksize","runtimes");

@@ -29,6 +29,7 @@
 #include "wind_string.h"
 #include "wind_var.h"
 #include "wind_core.h"
+#include "wind_os_hwif.h"
 
 #if WIND_HEAP_SUPPORT
 static w_dlist_s heaplist;
@@ -48,6 +49,7 @@ static void heapitem_init(w_heapitem_s *item,w_heap_s *hp,w_int32_t size,w_uint3
 w_err_t _wind_heap_mod_init(void)
 {
     DLIST_INIT(heaplist);
+    _wind_heaps_create();
     return W_ERR_OK;
 }
 

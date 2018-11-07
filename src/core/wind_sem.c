@@ -31,7 +31,6 @@
 #include "wind_pool.h"
 
 #if WIND_SEM_SUPPORT
-extern void _wind_thread_dispatch(void);
 static w_dlist_s semlist;
 static WIND_POOL(sempool,WIND_SEM_MAX_NUM,sizeof(w_sem_s));
 
@@ -150,6 +149,7 @@ w_err_t wind_sem_post(w_sem_s *sem)
 {
     w_dnode_s *dnode;
     w_thread_s *thread;
+    w_dlist_s *sleeplist = _wind_thread_sleep_list();
     WIND_ASSERT_RETURN(sem != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(sem->magic == WIND_SEM_MAGIC,W_ERR_INVALID);
     wind_disable_interrupt();
@@ -167,7 +167,7 @@ w_err_t wind_sem_post(w_sem_s *sem)
     dlist_remove(&sem->waitlist,dnode);
     thread = PRI_DLIST_OBJ(dnode,w_thread_s,suspendnode);
     if(thread->runstat == THREAD_STATUS_SLEEP)
-        dlist_remove(&g_core.sleeplist,&thread->sleepnode.dnode);
+        dlist_remove(sleeplist,&thread->sleepnode.dnode);
     wind_enable_interrupt();
     thread->cause = CAUSE_SEM;
     thread->runstat = THREAD_STATUS_READY;
@@ -180,6 +180,7 @@ w_err_t wind_sem_wait(w_sem_s *sem,w_uint32_t timeout)
 {
     w_int32_t ticks;
     w_thread_s *thread;
+    w_dlist_s *sleeplist = _wind_thread_sleep_list();
     WIND_ASSERT_RETURN(sem != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(sem->magic == WIND_SEM_MAGIC,W_ERR_INVALID);
     ticks = timeout *WIND_TICK_PER_SEC / 1000;
@@ -204,7 +205,7 @@ w_err_t wind_sem_wait(w_sem_s *sem,w_uint32_t timeout)
     {
         thread->runstat = THREAD_STATUS_SLEEP;
         thread->sleep_ticks = ticks;
-        dlist_insert_prio(&g_core.sleeplist,&thread->sleepnode,thread->prio);
+        dlist_insert_prio(sleeplist,&thread->sleepnode,thread->prio);
     }
     else
         thread->runstat = THREAD_STATUS_SUSPEND;

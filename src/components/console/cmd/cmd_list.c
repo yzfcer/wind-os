@@ -87,7 +87,7 @@ COMMAND_MAIN(list,argc,argv)
     WIND_ASSERT_RETURN(argc == 2,W_ERR_INVALID);
     if(0 == wind_strcmp(argv[1],"thread"))
     {
-        wind_thread_print(&g_core.threadlist);
+        wind_thread_print();
         return W_ERR_OK;
     }
     else if(0 == wind_strcmp(argv[1],"mutex"))
@@ -97,7 +97,7 @@ COMMAND_MAIN(list,argc,argv)
     }
     else if(0 == wind_strcmp(argv[1],"pool"))
     {
-        _wind_pool_print_list(&g_core.poollist);
+        _wind_pool_print_list();
         return W_ERR_FAIL;
     }
 #if WIND_SEM_SUPPORT
@@ -150,14 +150,14 @@ COMMAND_MAIN(list,argc,argv)
 #if WIND_DRVFRAME_SUPPORT
     else if(0 == wind_strcmp(argv[1],"chdev"))
     {
-        wind_chdev_print(&g_core.devlist);
+        wind_chdev_print();
         return W_ERR_FAIL;
     }
 #endif
 #if WIND_BLK_DRVFRAME_SUPPORT
     else if(0 == wind_strcmp(argv[1],"blkdev"))
     {
-        wind_blkdev_print(&g_core.blkdevlist);
+        wind_blkdev_print();
         return W_ERR_FAIL;
     }
 #endif

@@ -96,7 +96,7 @@ static w_err_t thread_init(w_int32_t argc,char **argv)
     _wind_blkdev_mod_init();
 #endif
 #if WIND_HEAP_SUPPORT
-	_wind_heaps_mod_init();
+	_wind_heap_mod_init();
 #endif
     
 #if WIND_DATETIME_SUPPORT

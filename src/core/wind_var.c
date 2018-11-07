@@ -47,20 +47,13 @@ void _wind_corevar_init(void)
     g_core.usrthren = W_FALSE;
     g_core.ticks_cnt = 0;
     
-    DLIST_INIT(g_core.threadlist);
-    DLIST_INIT(g_core.sleeplist);
-    DLIST_INIT(g_core.poollist);
 
 
 
 
 
-#if WIND_DRVFRAME_SUPPORT
-    DLIST_INIT(g_core.devlist);
-#endif
-#if WIND_BLK_DRVFRAME_SUPPORT
-    DLIST_INIT(g_core.blkdevlist);
-#endif
+
+
 #if WIND_FS_SUPPORT
     DLIST_INIT(g_core.fslist);
     DLIST_INIT(g_core.filelist);

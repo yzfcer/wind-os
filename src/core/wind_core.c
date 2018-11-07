@@ -32,6 +32,7 @@
 #include "wind_mutex.h"
 #include "wind_sem.h"
 #include "wind_heap.h"
+#include "wind_pool.h"
 #include "wind_msgbox.h"
 #include "wind_pipe.h"
 #include "wind_timer.h"
@@ -124,6 +125,8 @@ static w_thread_s *wind_search_highthread(void)
 {
     w_dnode_s *dnode;
     w_thread_s *thread = W_NULL;
+    w_dlist_s *threadlist;
+    threadlist = _wind_thread_list();
     wind_disable_interrupt();
     if(gwind_core_cnt > 0)
     {
@@ -132,7 +135,7 @@ static w_thread_s *wind_search_highthread(void)
         wind_enable_interrupt();
         return thread;
     }
-    foreach_node(dnode,&g_core.threadlist)
+    foreach_node(dnode,threadlist)
     {
         thread = PRI_DLIST_OBJ(dnode,w_thread_s,validnode);
         if(thread->runstat == THREAD_STATUS_READY)
@@ -243,9 +246,8 @@ static void _wind_init()
     _wind_print_sysinfo();
     _wind_corevar_init();
     _wind_thread_mod_init();
-#if WIND_HEAP_SUPPORT
-    _wind_heap_mod_init();
-#endif
+    _wind_pool_mod_init();
+
 #if WIND_MUTEX_SUPPORT
     _wind_mutex_mod_init();
 #endif

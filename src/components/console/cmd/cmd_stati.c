@@ -31,30 +31,14 @@
 
 #if (WIND_CONSOLE_SUPPORT && CMD_STATI_SUPPORT)
 
-static void core_stati_pool_print(void)
-{
-    w_dnode_s *dnode;
-    w_pool_s *pool;
-    w_dlist_s *list;
-    wind_print_space(7);
-    console_printf("%-16s %-8s %-8s %-8s %-8s\r\n","pool","tot","used","maxused","err");
-    wind_print_space(7);
-    list = &g_core.poollist;
-    foreach_node(dnode,list)
-    {
-        pool = (w_pool_s*)DLIST_OBJ(dnode,w_pool_s,poolnode);
-        console_printf("%-16s %-8d %-8d %-8d %-8d\r\n",pool->name,pool->stati.tot,
-            pool->stati.used,pool->stati.max,pool->stati.err);
-    }
-    wind_print_space(7);
-}
+
 
 
 
 
 w_err_t cmd_stat_show_pool_main(w_int32_t argc,char **argv)
 {
-    core_stati_pool_print();
+    wind_pool_stati_print();
     return W_ERR_OK;
 }
 
