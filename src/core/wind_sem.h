@@ -58,7 +58,7 @@ w_err_t wind_sem_post(w_sem_s *sem);
 w_err_t wind_sem_wait(w_sem_s *sem,w_uint32_t timeout);
 w_err_t wind_sem_trywait(w_sem_s *sem);
 
-w_err_t wind_sem_print(w_dlist_s *list);
+w_err_t wind_sem_print(void);
 #endif
 #ifdef __cplusplus
 }

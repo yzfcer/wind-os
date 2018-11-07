@@ -31,6 +31,7 @@
 #include "wind_thread.h"
 #include "wind_mutex.h"
 #include "wind_sem.h"
+#include "wind_heap.h"
 #include "wind_msgbox.h"
 #include "wind_pipe.h"
 #include "wind_timer.h"
@@ -98,8 +99,7 @@ void wind_enable_interrupt(void)
     sreg_t cpu_sr;
     if(sreg_idx > 0)
         sreg_idx --;
-    cpu_sr = ssr[sreg_idx];
-    
+    cpu_sr = ssr[sreg_idx];   
     wind_restore_sr(cpu_sr);
 }
 
@@ -243,6 +243,9 @@ static void _wind_init()
     _wind_print_sysinfo();
     _wind_corevar_init();
     _wind_thread_mod_init();
+#if WIND_HEAP_SUPPORT
+    _wind_heap_mod_init();
+#endif
 #if WIND_MUTEX_SUPPORT
     _wind_mutex_mod_init();
 #endif

@@ -39,30 +39,7 @@ typedef struct __w_core_var_s
     w_dlist_s threadlist;
     w_dlist_s sleeplist;
     w_dlist_s poollist;
-#if WIND_SEM_SUPPORT
-    w_dlist_s semlist;
-#endif
-#if WIND_MUTEX_SUPPORT
-    w_dlist_s mutexlist;
-#endif
-#if WIND_EVENT_SUPPORT
-    w_dlist_s eventlist;
-#endif
-#if WIND_MSGBOX_SUPPORT
-    w_dlist_s msgboxlist;
-#endif
-#if WIND_TIMER_SUPPORT
-    w_dlist_s timerlist;
-#endif
-#if WIND_HEAP_SUPPORT
-    w_dlist_s heaplist;
-#endif
-#if WIND_PIPE_SUPPORT
-    w_dlist_s pipelist;
-#endif
-#if WIND_WATCHDOG_SUPPORT
-    w_dlist_s watchdoglist;
-#endif
+
 
 #if WIND_DRVFRAME_SUPPORT
     w_dlist_s devlist;

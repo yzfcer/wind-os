@@ -31,6 +31,7 @@
 
 #if WIND_EVENT_SUPPORT
 extern void _wind_thread_dispatch(void);
+static w_dlist_s eventlist;
 WIND_POOL(eventpool,WIND_EVENT_MAX_NUM,sizeof(w_event_s));
 
 static w_event_s *event_malloc(void)
@@ -47,6 +48,7 @@ static w_err_t event_free(w_event_s *event)
 w_err_t _wind_event_mod_init(void)
 {
     w_err_t err;
+    DLIST_INIT(eventlist);
     err = wind_pool_create("event",eventpool,sizeof(eventpool),sizeof(w_event_s));
     return err;
 }
@@ -58,7 +60,7 @@ w_event_s *wind_event_get(const char *name)
     w_dnode_s *dnode;
     WIND_ASSERT_RETURN(name != W_NULL,W_NULL);
     wind_disable_switch();
-    foreach_node(dnode,&g_core.eventlist)
+    foreach_node(dnode,&eventlist)
     {
         event = DLIST_OBJ(dnode,w_event_s,eventnode);
         if(event->name && (wind_strcmp(name,event->name) == 0))
@@ -81,7 +83,7 @@ w_err_t wind_event_init(w_event_s *event,const char *name)
     DLIST_INIT(event->cblist);
     event->flag_pool = 0;
     wind_disable_interrupt();
-    dlist_insert_tail(&g_core.eventlist,&event->eventnode);
+    dlist_insert_tail(&eventlist,&event->eventnode);
     wind_enable_interrupt();
     return W_ERR_OK;
 }
@@ -111,7 +113,7 @@ w_err_t wind_event_destroy(w_event_s *event)
     WIND_ASSERT_RETURN(event != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(event->magic == WIND_EVENT_MAGIC,W_ERR_INVALID);
     wind_disable_interrupt();
-    dlist_remove_tail(&g_core.eventlist);
+    dlist_remove_tail(&eventlist);
     wind_enable_interrupt();
 
     event->magic = 0;
@@ -164,10 +166,11 @@ w_err_t wind_event_trig(w_event_s *event,void *arg)
 }
 
 
-w_err_t wind_event_print(w_dlist_s *list)
+w_err_t wind_event_print(void)
 {
     w_dnode_s *dnode;
     w_event_s *event;
+    w_dlist_s *list = &eventlist;
     WIND_ASSERT_RETURN(list != W_NULL,W_ERR_PTR_NULL);
     wind_printf("\r\n\r\nevent list as following:\r\n");
     wind_print_space(2);

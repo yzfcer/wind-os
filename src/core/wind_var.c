@@ -50,27 +50,11 @@ void _wind_corevar_init(void)
     DLIST_INIT(g_core.threadlist);
     DLIST_INIT(g_core.sleeplist);
     DLIST_INIT(g_core.poollist);
-#if WIND_SEM_SUPPORT
-    DLIST_INIT(g_core.semlist);
-#endif
-#if WIND_MUTEX_SUPPORT
-    DLIST_INIT(g_core.mutexlist);
-#endif
-#if WIND_EVENT_SUPPORT
-    DLIST_INIT(g_core.eventlist);
-#endif
-#if WIND_MSGBOX_SUPPORT
-    DLIST_INIT(g_core.msgboxlist);
-#endif
-#if WIND_TIMER_SUPPORT
-    DLIST_INIT(g_core.timerlist);
-#endif
-#if WIND_HEAP_SUPPORT
-    DLIST_INIT(g_core.heaplist);
-#endif
-#if WIND_PIPE_SUPPORT
-    DLIST_INIT(g_core.pipelist);
-#endif
+
+
+
+
+
 #if WIND_DRVFRAME_SUPPORT
     DLIST_INIT(g_core.devlist);
 #endif

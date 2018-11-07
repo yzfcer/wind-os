@@ -31,6 +31,7 @@
 
 #if WIND_MSGBOX_SUPPORT
 extern void _wind_thread_dispatch(void);
+w_dlist_s msgboxlist;
 WIND_POOL(msgboxpool,WIND_MBOX_MAX_NUM,sizeof(w_msgbox_s));
 
 static w_msgbox_s *msgbox_malloc(void)
@@ -48,6 +49,7 @@ static w_err_t msgbox_free(w_msgbox_s *msgbox)
 w_err_t _wind_msgbox_mod_init(void)
 {
     w_err_t err;
+    DLIST_INIT(msgboxlist);
     err = wind_pool_create("msgbox",msgboxpool,sizeof(msgboxpool),sizeof(w_msgbox_s));
     return err;
 }
@@ -66,7 +68,7 @@ w_msgbox_s *wind_msgbox_get(const char *name)
     w_dnode_s *dnode;
     WIND_ASSERT_RETURN(name != W_NULL,W_NULL);
     wind_disable_switch();
-    foreach_node(dnode,&g_core.msgboxlist)
+    foreach_node(dnode,&msgboxlist)
     {
         msgbox = DLIST_OBJ(dnode,w_msgbox_s,msgboxnode);
         if(msgbox->name && (wind_strcmp(name,msgbox->name) == 0))
@@ -91,7 +93,7 @@ w_err_t wind_msgbox_init(w_msgbox_s *msgbox,const char *name)
     msgbox->flag_pool = 0;
     msgbox->owner = wind_thread_current();
     wind_disable_interrupt();
-    dlist_insert_tail(&g_core.msgboxlist,&msgbox->msgboxnode);
+    dlist_insert_tail(&msgboxlist,&msgbox->msgboxnode);
     wind_enable_interrupt();
     return W_ERR_OK;
 }
@@ -146,7 +148,7 @@ w_err_t wind_msgbox_destroy(w_msgbox_s *msgbox)
     WIND_ASSERT_RETURN(msgbox->owner == thread,W_ERR_FAIL);
     
     wind_disable_interrupt();
-    dlist_remove_tail(&g_core.msgboxlist);
+    dlist_remove_tail(&msgboxlist);
     wind_enable_interrupt();
     thread = msgbox->owner;
     if((msgbox->owner->runstat == THREAD_STATUS_SLEEP) 
@@ -278,10 +280,11 @@ w_err_t wind_msgbox_trywait(w_msgbox_s *msgbox,w_msg_s **pmsg)
     return err;
 }
 
-w_err_t wind_msgbox_print(w_dlist_s *list)
+w_err_t wind_msgbox_print(void)
 {
     w_dnode_s *dnode;
     w_msgbox_s *msgbox;
+    w_dlist_s *list = &msgboxlist;
     WIND_ASSERT_RETURN(list != W_NULL,W_ERR_PTR_NULL);
     wind_printf("\r\n\r\nmsgbox list as following:\r\n");
     wind_print_space(5);

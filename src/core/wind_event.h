@@ -66,7 +66,7 @@ w_err_t wind_event_destroy(w_event_s *event);
 w_err_t wind_event_regcb(w_event_s *event,w_event_cb *cb);
 w_err_t wind_event_unregcb(w_event_s *event,w_event_cb *cb);
 w_err_t wind_event_trig(w_event_s *event,void *arg);
-w_err_t wind_event_print(w_dlist_s *list);
+w_err_t wind_event_print(void);
 
 
 #endif //WIND_EVENT_SUPPORT

@@ -30,6 +30,7 @@
 #include "wind_pool.h"
 
 #if WIND_TIMER_SUPPORT
+static w_dlist_s timerlist;
 static WIND_POOL(timerpool,WIND_TIMER_MAX_NUM,sizeof(w_timer_s));
 
 static __INLINE__ w_timer_s *timer_malloc(void)
@@ -46,6 +47,7 @@ static __INLINE__ w_err_t timer_free(void *timer)
 w_err_t _wind_timer_mod_init(void)
 {
     w_err_t err;
+    DLIST_INIT(timerlist);
     err = wind_pool_create("timer",timerpool,sizeof(timerpool),sizeof(w_timer_s));
     return err;
 }
@@ -55,7 +57,7 @@ w_timer_s* wind_timer_get(char *name)
     w_dnode_s *dnode;
     WIND_ASSERT_RETURN(name != W_NULL,W_NULL);
     wind_disable_switch();
-    foreach_node(dnode,&g_core.timerlist)
+    foreach_node(dnode,&timerlist)
     {
         timer = DLIST_OBJ(dnode,w_timer_s,timernode);
         if(timer->name && (wind_strcmp(name,timer->name) == 0))
@@ -93,7 +95,7 @@ w_err_t wind_timer_init(w_timer_s* timer,
     timer->arg = arg;
     timer->handle = func;
     wind_disable_interrupt();
-    dlist_insert_tail(&g_core.timerlist,&timer->timernode);
+    dlist_insert_tail(&timerlist,&timer->timernode);
     wind_enable_interrupt();
     return W_ERR_OK;
     
@@ -143,7 +145,7 @@ w_err_t wind_timer_destroy(w_timer_s* timer)
     WIND_ASSERT_RETURN(timer != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(timer->magic == WIND_TIMER_MAGIC,W_ERR_INVALID);    
     wind_disable_interrupt();
-    dlist_remove(&g_core.timerlist,&timer->timernode);
+    dlist_remove(&timerlist,&timer->timernode);
     wind_enable_interrupt();
     if(timer->flag_pool)
         timer_free(timer);
@@ -164,10 +166,11 @@ w_err_t wind_timer_set_period(w_timer_s* timer,w_uint32_t period_ms)
     return W_ERR_OK;
 }
 
-w_err_t wind_timer_print(w_dlist_s *list)
+w_err_t wind_timer_print(void)
 {
     w_dnode_s *dnode;
     w_timer_s *timer;
+    w_dlist_s *list = &timerlist;
     WIND_ASSERT_RETURN(list != W_NULL,W_ERR_PTR_NULL);
     wind_printf("\r\n\r\ntimer list as following:\r\n");
     wind_print_space(7);
@@ -190,7 +193,8 @@ void _wind_timer_event(void)
 {
     w_timer_s* timer;
     w_dnode_s *pdnode;
-    foreach_node(pdnode,&g_core.timerlist)
+    w_dlist_s *list = &timerlist;
+    foreach_node(pdnode,list)
     {
         timer = DLIST_OBJ(pdnode,w_timer_s,timernode);
         if(timer->value > 0)

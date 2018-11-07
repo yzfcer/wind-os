@@ -32,6 +32,7 @@
 
 #if WIND_SEM_SUPPORT
 extern void _wind_thread_dispatch(void);
+static w_dlist_s semlist;
 static WIND_POOL(sempool,WIND_SEM_MAX_NUM,sizeof(w_sem_s));
 
 static __INLINE__ w_sem_s *sem_malloc(void)
@@ -48,6 +49,7 @@ static __INLINE__ w_err_t sem_free(void *sem)
 w_err_t _wind_sem_mod_init(void)
 {
     w_err_t err;
+    DLIST_INIT(semlist);
     err = wind_pool_create("sem",sempool,sizeof(sempool),sizeof(w_sem_s));
     return err;
 }
@@ -58,7 +60,7 @@ w_sem_s *wind_sem_get(const char *name)
     w_dnode_s *dnode;
     WIND_ASSERT_RETURN(name != W_NULL,W_NULL);
     wind_disable_switch();
-    foreach_node(dnode,&g_core.semlist)
+    foreach_node(dnode,&semlist)
     {
         sem = DLIST_OBJ(dnode,w_sem_s,semnode);
         if(sem->name && (wind_strcmp(name,sem->name) == 0))
@@ -83,7 +85,7 @@ w_err_t wind_sem_init(w_sem_s *sem,const char *name,w_int8_t sem_value)
     DLIST_INIT(sem->waitlist);
     sem->flag_pool = 0;
     wind_disable_interrupt();
-    dlist_insert_tail(&g_core.semlist,&sem->semnode);
+    dlist_insert_tail(&semlist,&sem->semnode);
     wind_enable_interrupt();
     return W_ERR_OK;
 }
@@ -129,7 +131,7 @@ w_err_t wind_sem_destroy(w_sem_s *sem)
     WIND_ASSERT_RETURN(sem->magic == WIND_SEM_MAGIC,W_ERR_INVALID);
     wind_notice("destroy sem:%s",sem->name);
     wind_disable_interrupt();
-    dlist_remove(&g_core.semlist,&sem->semnode);
+    dlist_remove(&semlist,&sem->semnode);
     sem->magic = 0;
     foreach_node(pdnode,&sem->waitlist)
     {
@@ -240,10 +242,11 @@ w_err_t wind_sem_trywait(w_sem_s *sem)
 }
 
 
-w_err_t wind_sem_print(w_dlist_s *list)
+w_err_t wind_sem_print(void)
 {
     w_dnode_s *dnode;
     w_sem_s *sem;
+    w_dlist_s *list = &semlist;
     WIND_ASSERT_RETURN(list != W_NULL,W_ERR_PTR_NULL);
     wind_printf("\r\n\r\nsem list as following:\r\n");
     wind_print_space(5);

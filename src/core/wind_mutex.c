@@ -32,6 +32,7 @@
 
 #if WIND_MUTEX_SUPPORT
 #define WIND_MUTEX_MAGIC 0x37AD490F
+w_dlist_s mutexlist;
 static WIND_POOL(mutexpool,WIND_MUTEX_MAX_NUM,sizeof(w_mutex_s));
 
 static __INLINE__ w_mutex_s *mutex_malloc(void)
@@ -46,6 +47,7 @@ static __INLINE__ w_err_t mutex_free(void *mutex)
 w_err_t _wind_mutex_mod_init(void)
 {
     w_err_t err;
+    DLIST_INIT(mutexlist);
     err = wind_pool_create("mutex",mutexpool,sizeof(mutexpool),sizeof(w_mutex_s));
     return err;
 }
@@ -56,7 +58,7 @@ w_mutex_s *wind_mutex_get(const char *name)
     w_dnode_s *dnode;
     WIND_ASSERT_RETURN(name != W_NULL,W_NULL);
     wind_disable_switch();
-    foreach_node(dnode,&g_core.mutexlist)
+    foreach_node(dnode,&mutexlist)
     {
         mutex = DLIST_OBJ(dnode,w_mutex_s,mutexnode);
         if(mutex->name && (wind_strcmp(name,mutex->name) == 0))
@@ -81,7 +83,7 @@ w_err_t wind_mutex_init(w_mutex_s *mutex,const char *name)
     DLIST_INIT(mutex->waitlist);
     
     wind_disable_interrupt();
-    dlist_insert_tail(&g_core.mutexlist,&mutex->mutexnode);
+    dlist_insert_tail(&mutexlist,&mutex->mutexnode);
     wind_enable_interrupt();
     return W_ERR_OK;
 }
@@ -123,7 +125,7 @@ w_err_t wind_mutex_destroy(w_mutex_s *mutex)
     WIND_ASSERT_RETURN(mutex != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(mutex->magic == WIND_MUTEX_MAGIC,W_ERR_INVALID);
     wind_disable_interrupt();
-    dlist_remove(&g_core.mutexlist,&mutex->mutexnode);
+    dlist_remove(&mutexlist,&mutex->mutexnode);
     foreach_node(dnode,&mutex->waitlist)
     {
         dlist_remove(&mutex->waitlist,dnode);
@@ -229,10 +231,11 @@ w_err_t wind_mutex_unlock(w_mutex_s *mutex)
 }
 
 
-w_err_t wind_mutex_print(w_dlist_s *list)
+w_err_t wind_mutex_print(void)
 {
     w_dnode_s *dnode;
     w_mutex_s *mutex;
+    w_dlist_s *list = &mutexlist;
     WIND_ASSERT_RETURN(list != W_NULL,W_ERR_PTR_NULL);
     wind_printf("\r\n\r\nmutex list as following:\r\n");
     wind_print_space(5);

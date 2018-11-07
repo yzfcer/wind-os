@@ -72,6 +72,7 @@ struct __w_heap_s
     w_dlist_s free_list;
     void *mutex; 
 };
+w_err_t _wind_heap_mod_init(void);
 
 w_heap_s *wind_heap_get(const char *name);
 
@@ -87,9 +88,11 @@ void *wind_heap_realloc(w_heap_s* heap, void* ptr, w_uint32_t newsize);
 
 w_err_t wind_heap_free(w_heap_s* heap,void *ptr);
 
-w_err_t wind_heap_print(w_dlist_s *list);
+w_err_t wind_heap_print(void);
 
-w_err_t wind_heapitem_print(w_dlist_s *list);
+w_err_t wind_heapitem_print(void);
+
+w_err_t wind_heap_stati_print(void);
 
 
 void *wind_malloc(w_uint32_t size);

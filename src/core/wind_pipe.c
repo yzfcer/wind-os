@@ -31,7 +31,7 @@
 #include "wind_pool.h"
 
 #if (WIND_PIPE_SUPPORT)
-
+static w_dlist_s pipelist;
 static WIND_POOL(pipepool,WIND_PIPE_MAX_NUM,sizeof(w_pipe_s));
 
 static __INLINE__ w_pipe_s *pipe_malloc(void)
@@ -47,6 +47,7 @@ static __INLINE__ w_err_t pipe_free(void *pipe)
 w_err_t _wind_pipe_mod_init(void)
 {
     w_err_t err;
+    DLIST_INIT(pipelist);
     err = wind_pool_create("pipe",pipepool,sizeof(pipepool),sizeof(w_pipe_s));
     return err;
 }
@@ -57,7 +58,7 @@ w_pipe_s *wind_pipe_get(const char *name)
     w_dnode_s *dnode;
     WIND_ASSERT_RETURN(name != W_NULL,W_NULL);
     wind_disable_switch();
-    foreach_node(dnode,&g_core.pipelist)
+    foreach_node(dnode,&pipelist)
     {
         pipe = DLIST_OBJ(dnode,w_pipe_s,pipenode);
         if(pipe->name && (wind_strcmp(name,pipe->name) == 0))
@@ -86,7 +87,7 @@ w_err_t wind_pipe_init(w_pipe_s* pipe,const char *name,void *buff,w_uint32_t buf
     pipe->buflen = buflen;
     pipe->flag_pool = 0;
     wind_disable_interrupt();
-    dlist_insert_tail(&g_core.pipelist,&pipe->pipenode);
+    dlist_insert_tail(&pipelist,&pipe->pipenode);
     wind_enable_interrupt();
     return W_ERR_OK;
     
@@ -143,7 +144,7 @@ w_err_t wind_pipe_destroy(w_pipe_s* pipe)
     WIND_ASSERT_RETURN(pipe->magic == WIND_PIPE_MAGIC,W_ERR_INVALID);
     wind_notice("destroy pipe:%s",pipe->name?pipe->name:"null");
     wind_disable_interrupt();
-    dlist_remove(&g_core.pipelist,&pipe->pipenode);
+    dlist_remove(&pipelist,&pipe->pipenode);
     pipe->magic = 0;
     pipe->name = W_NULL;
     if(pipe->flag_pool)
@@ -152,12 +153,13 @@ w_err_t wind_pipe_destroy(w_pipe_s* pipe)
     return W_ERR_OK;
 }
 
-w_err_t _wind_pipe_print(w_dlist_s* list)
+w_err_t _wind_pipe_print(void)
 {
     w_dnode_s *dnode;
     w_pipe_s *pipe;
     w_queue_s *queue;
     w_int32_t size,used;
+    w_dlist_s* list = &pipelist;
     WIND_ASSERT_RETURN(list != W_NULL,W_ERR_PTR_NULL);
     wind_printf("\r\n\r\npipe list as following:\r\n");
     wind_print_space(5);

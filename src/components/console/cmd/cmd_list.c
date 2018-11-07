@@ -92,7 +92,7 @@ COMMAND_MAIN(list,argc,argv)
     }
     else if(0 == wind_strcmp(argv[1],"mutex"))
     {
-        wind_mutex_print(&g_core.mutexlist);
+        wind_mutex_print();
         return W_ERR_FAIL;
     }
     else if(0 == wind_strcmp(argv[1],"pool"))
@@ -103,47 +103,47 @@ COMMAND_MAIN(list,argc,argv)
 #if WIND_SEM_SUPPORT
     else if(0 == wind_strcmp(argv[1],"sem"))
     {
-        wind_sem_print(&g_core.semlist);
+        wind_sem_print();
         return W_ERR_FAIL;
     }
 #endif
 #if WIND_EVENT_SUPPORT
     else if(0 == wind_strcmp(argv[1],"event"))
     {
-        wind_event_print(&g_core.semlist);
+        wind_event_print();
         return W_ERR_FAIL;
     }
 #endif
 #if WIND_PIPE_SUPPORT
     else if(0 == wind_strcmp(argv[1],"pipe"))
     {
-        _wind_pipe_print(&g_core.pipelist);
+        _wind_pipe_print();
         return W_ERR_FAIL;
     }
 #endif
 #if WIND_MSGBOX_SUPPORT
     else if(0 == wind_strcmp(argv[1],"msgbox"))
     {
-        wind_msgbox_print(&g_core.msgboxlist);
+        wind_msgbox_print();
         return W_ERR_FAIL;
     }
 #endif
 #if WIND_HEAP_SUPPORT
     else if(0 == wind_strcmp(argv[1],"heap"))
     {
-        wind_heap_print(&g_core.heaplist);
+        wind_heap_print();
         return W_ERR_FAIL;
     }
     else if(0 == wind_strcmp(argv[1],"heapitem"))
     {
-        wind_heapitem_print(&g_core.heaplist);
+        wind_heapitem_print();
         return W_ERR_FAIL;
     }
 #endif
 #if WIND_TIMER_SUPPORT
     else if(0 == wind_strcmp(argv[1],"timer"))
     {
-        wind_timer_print(&g_core.timerlist);
+        wind_timer_print();
         return W_ERR_FAIL;
     }
 #endif
@@ -164,7 +164,7 @@ COMMAND_MAIN(list,argc,argv)
 #if WIND_WATCHDOG_SUPPORT
         else if(0 == wind_strcmp(argv[1],"watchdog"))
         {
-            wind_watchdog_print(&g_core.watchdoglist);
+            wind_watchdog_print();
             return W_ERR_FAIL;
         }
 #endif

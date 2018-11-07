@@ -49,27 +49,7 @@ static void core_stati_pool_print(void)
     wind_print_space(7);
 }
 
-#if WIND_HEAP_SUPPORT
-static void core_stati_heap_print(void)
-{
-    w_dnode_s *dnode;
-    w_heap_s *heap;
-    w_dlist_s *list;
-    wind_print_space(7);
-    console_printf("%-16s %-8s %-8s %-8s %-8s\r\n","heap","tot","used","maxused","err");
-    wind_print_space(7);
 
-    list = &g_core.heaplist;
-    foreach_node(dnode,list)
-    {
-        heap = (w_heap_s*)DLIST_OBJ(dnode,w_heap_s,heapnode);
-        console_printf("%-16s %-8d %-8d %-8d %-8d\r\n",heap->name,heap->stati.tot,
-            heap->stati.used,heap->stati.max,heap->stati.err);
-    }
-   
-    wind_print_space(7);
-}
-#endif
 
 
 w_err_t cmd_stat_show_pool_main(w_int32_t argc,char **argv)
@@ -81,7 +61,7 @@ w_err_t cmd_stat_show_pool_main(w_int32_t argc,char **argv)
 #if WIND_HEAP_SUPPORT
 w_err_t cmd_stat_show_heap_main(w_int32_t argc,char **argv)
 {
-    core_stati_heap_print();
+    wind_heap_stati_print();
     return W_ERR_OK;
 }
 #endif

@@ -71,7 +71,7 @@ w_err_t wind_timer_start(w_timer_s* timer);
 w_err_t wind_timer_stop(w_timer_s* timer);
 w_err_t wind_timer_destroy(w_timer_s* timer);
 w_err_t wind_timer_set_period(w_timer_s* timer,w_uint32_t period_ms);
-w_err_t wind_timer_print(w_dlist_s *list);
+w_err_t wind_timer_print(void);
 
 #endif //#if WIND_TIMER_SUPPORT
 #ifdef __cplusplus
