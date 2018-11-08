@@ -72,8 +72,8 @@ static w_bool_t handle_BKSPACE(w_console_s *ctrl)
     if(ctrl->index > 0)
     {
         ctrl->index --;
-        console_printf("%c",WVK_BACKSPACE);
-        console_printf(VT100_ERASE_END);
+        console_printf("\b \b");
+        //console_printf(VT100_ERASE_END);
     }
     return W_FALSE;
 }
@@ -83,6 +83,14 @@ static w_bool_t handle_ESC(w_console_s *ctrl)
     ctrl->key_evt_f = 1;
     ctrl->key_evt_len = 1;
     ctrl->key_evt_id = 0x1b;
+    return W_FALSE;
+}
+
+static w_bool_t handle_DIR(w_console_s *ctrl)
+{
+    ctrl->key_evt_f = 1;
+    ctrl->key_evt_len = 1;
+    ctrl->key_value= 0xE0;
     return W_FALSE;
 }
 
@@ -123,18 +131,23 @@ static w_bool_t handle_key_evt(w_console_s *ctrl,char ch)
         return W_FALSE;
     ctrl->key_evt_id <<= 8;
     ctrl->key_evt_id += ch;
+    ctrl->key_value <<= 8;
+    ctrl->key_value += ch;
     ctrl->key_evt_len ++;
+    if((ctrl->key_evt_id == KEY_EVT_UP)||(ctrl->key_value == KEY_UP_PRT))
+    {
+        handle_key_evt_up(ctrl);
+        goto key_evt_done;
+    }
+    if((ctrl->key_evt_id == KEY_EVT_DOWN)||(ctrl->key_value == KEY_DOWN_PRT))
+    {
+        handle_key_evt_down(ctrl);
+        goto key_evt_done;
+    }
 
         
     switch(ctrl->key_evt_id)
-    {
-        case KEY_EVT_UP:
-            handle_key_evt_up(ctrl);
-            goto key_evt_done;
-        case KEY_EVT_DOWN:
-            handle_key_evt_down(ctrl);
-            goto key_evt_done;
-            
+    {            
         case KEY_EVT_LEFT://         0x1B5B44
         case KEY_EVT_RIGHT://        0x1B5B43
 
@@ -144,6 +157,7 @@ static w_bool_t handle_key_evt(w_console_s *ctrl,char ch)
         case KEY_EVT_END://          0x1B5B347E
         case KEY_EVT_PGUP://         0x1B5B357E
         case KEY_EVT_PGDN://         0x1B5B367E
+            console_printf("key:0x%x\r\n",ctrl->key_evt_id);
             goto key_evt_done;
         default:
             if(ctrl->key_evt_len >= 4)
@@ -157,6 +171,7 @@ key_evt_done:
     ctrl->key_evt_f = 0;
     ctrl->key_evt_len = 0;
     ctrl->key_evt_id = 0;
+    ctrl->key_value= 0;
 key_evt_ret:
     return W_TRUE;
     
@@ -173,9 +188,10 @@ static w_bool_t handle_default(w_console_s *ctrl,char ch)
 
 //返回true则表示有一个完整的命令
 //返回false表示命令不完整
-static w_bool_t console_prehandle_char(w_console_s *ctrl,char ch,w_int32_t len)
+static w_bool_t console_prehandle_char(w_console_s *ctrl,w_uint8_t ch,w_int32_t len)
 {
     w_bool_t ret;
+
     ret = handle_key_evt(ctrl,ch);
     if(W_TRUE == ret)
         return W_FALSE;
@@ -190,6 +206,10 @@ static w_bool_t console_prehandle_char(w_console_s *ctrl,char ch,w_int32_t len)
     else if(ch == WVK_ESCAPE)
     {
         return handle_ESC(ctrl);
+    }
+    else if(ch == 0xE0)
+    {
+        return handle_DIR(ctrl);
     }
     else
     {
@@ -237,6 +257,7 @@ static void init_console_stat(w_console_s *ctrl)
     ctrl->key_evt_f = 0;
     ctrl->key_evt_len = 0;
     ctrl->key_evt_id = 0;
+    ctrl->key_value = 0;
     wind_memset(ctrl->buf,0,WIND_CMD_MAX_LEN);
     wind_memset(ctrl->user,0,WIND_CTL_USRNAME_LEN);
     wind_memset(ctrl->pwd,0,WIND_CTL_PWD_LEN);
@@ -430,10 +451,10 @@ static w_err_t execute_cmd(w_console_s *ctrl)
 w_err_t thread_console(w_int32_t argc,char **argv)
 {
     w_int32_t len;
-    w_uint32_t index = 0;
+    w_int32_t index = 0;
     w_console_s *ctrl;
     if(argc >= 2)
-        wind_to_uint32(argv[1],&index);
+        wind_to_uint32((w_uint8_t*)argv[1],(w_uint32_t*)&index);
     else 
         index = 0;
     WIND_ASSERT_RETURN(index >= 0,W_ERR_INVALID);

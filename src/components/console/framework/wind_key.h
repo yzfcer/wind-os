@@ -137,6 +137,13 @@ extern "C" {
 #define KEY_EVT_LEFT         0x1B5B44
 #define KEY_EVT_RIGHT        0x1B5B43
 
+//KEY event
+#define KEY_UP_PRT           0xE048
+#define KEY_DOWN_PRT         0xE050
+#define KEY_LEFT_PRT         0xE04B
+#define KEY_RIGHT_PRT        0xE04D
+
+
 #define KEY_EVT_HOME         0x1B5B317E
 #define KEY_EVT_INS          0x1B5B327E
 #define KEY_EVT_DEL          0x1B5B337E

@@ -284,7 +284,6 @@ w_err_t wind_msgbox_print(void)
     w_dnode_s *dnode;
     w_msgbox_s *msgbox;
     w_dlist_s *list = &msgboxlist;
-    WIND_ASSERT_RETURN(list != W_NULL,W_ERR_PTR_NULL);
     wind_printf("\r\n\r\nmsgbox list as following:\r\n");
     wind_print_space(5);
     wind_printf("%-16s %-8s %-16s\r\n","msgbox","msg_num","owner");

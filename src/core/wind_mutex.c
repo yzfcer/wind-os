@@ -235,7 +235,6 @@ w_err_t wind_mutex_print(void)
     w_dnode_s *dnode;
     w_mutex_s *mutex;
     w_dlist_s *list = &mutexlist;
-    WIND_ASSERT_RETURN(list != W_NULL,W_ERR_PTR_NULL);
     wind_printf("\r\n\r\nmutex list as following:\r\n");
     wind_print_space(5);
     wind_printf("%-16s %-8s %-16s \r\n","mutex","status","owner");

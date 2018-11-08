@@ -33,7 +33,7 @@ typedef unsigned char w_uint8_t;
 #endif
 
 #ifndef w_uint16_t
-typedef unsigned int w_uint16_t;
+typedef unsigned short w_uint16_t;
 #endif
 
 #ifndef w_uint32_t
@@ -49,7 +49,7 @@ typedef char w_int8_t;
 #endif
 
 #ifndef w_int16_t
-typedef int w_int16_t; 
+typedef short w_int16_t; 
 #endif
 
 #ifndef w_int32_t

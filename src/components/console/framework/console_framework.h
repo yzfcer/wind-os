@@ -88,6 +88,7 @@ typedef struct __console_s
     w_int8_t key_evt_f;
     w_int8_t key_evt_len;
     w_uint32_t key_evt_id;
+    w_uint16_t key_value;
     char buf[WIND_CMD_MAX_LEN];//接收的数据缓存区
     char user[WIND_CTL_USRNAME_LEN];//用户名
     char pwd[WIND_CTL_PWD_LEN];//密码的值

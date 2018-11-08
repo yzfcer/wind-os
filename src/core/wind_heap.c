@@ -322,7 +322,6 @@ w_err_t wind_heapitem_print(void)
     w_heap_s *heap;
     w_heapitem_s *heapitem;
     w_dlist_s *list = &heaplist;
-    WIND_ASSERT_RETURN(list != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(list->head != W_NULL,W_ERR_PTR_NULL);
     wind_printf("\r\n\r\nheapitem list as following:\r\n");
     wind_print_space(5);
