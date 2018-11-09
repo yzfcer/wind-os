@@ -17,6 +17,7 @@
     <ClCompile Include="..\..\..\..\..\..\src\common\wind_string.c" />
     <ClCompile Include="..\..\..\..\..\..\src\components\console\adapter\win32\console_adapter.c" />
     <ClCompile Include="..\..\..\..\..\..\src\components\console\cmd\cmd_echo.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\components\console\cmd\cmd_mkfs.c" />
     <ClCompile Include="..\..\..\..\..\..\src\components\console\framework\cmd_history.c" />
     <ClCompile Include="..\..\..\..\..\..\src\components\console\framework\console_framework.c" />
     <ClCompile Include="..\..\port\wind_std.c" />

@@ -1,14 +1,14 @@
 /****************************************Copyright (c)**************************************************
 **                                       清  风  海  岸
-** 文   件   名: cmd_echo.c
+** 文   件   名: cmd_mkfs.c
 ** 创   建   人: Jason Zhou
-** 最后修改日期: 2015/1/24 20:24:37
-** 描        述: 回声输出命令
+** 最后修改日期: 2018/11/09 20:24:37
+** 描        述: 创建文件系统命令
 **  
 **--------------历史版本信息----------------------------------------------------------------------------
 ** 创建人: Jason Zhou
 ** 版  本: v1.0
-** 日　期: 2015/1/24 20:24:37
+** 日　期: 2018/11/09 20:24:37
 ** 描　述: 原始版本
 **
 **--------------当前版本修订----------------------------------------------------------------------------
@@ -42,26 +42,26 @@ extern "C" {
 
 
 /********************************************全局函数定义**********************************************/
-COMMAND_DISC(echo)
+COMMAND_DISC(mkfs)
 {
-    console_printf("to display echo string that you input.\r\n");
+    console_printf("to display mkfs string that you input.\r\n");
 }
 
-COMMAND_USAGE(echo)
+COMMAND_USAGE(mkfs)
 {
-    console_printf("echo <str>:to show str on your std displaying device.\r\n");
+    console_printf("mkfs <str>:to  make a file system image.\r\n");
 }
 
-COMMAND_MAIN(echo,argc,argv)
+COMMAND_MAIN(mkfs,argc,argv)
 {
     char *str;
     WIND_ASSERT_RETURN(argc >= 2,W_ERR_INVALID);
     str = argv[1];
-    console_printf("%s",str);
+    console_printf("mkfs is NOT support.");
     return W_ERR_OK;
 }
 
-COMMAND_DEF(echo);
+COMMAND_DEF(mkfs);
 
 #endif
 #ifdef __cplusplus

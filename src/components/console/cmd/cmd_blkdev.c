@@ -51,11 +51,13 @@ COMMAND_MAIN(blkdev,argc,argv)
     w_addr_t addr;
     w_err_t err = W_ERR_FAIL;
     
+    WIND_ASSERT_RETURN(argc>= 2,W_ERR_INVALID);
     if(0 == wind_strcmp(argv[1],"list"))
     {
         wind_blkdev_print();
         return W_ERR_OK;
     }
+    
     WIND_ASSERT_RETURN(argc == 5,W_ERR_INVALID);
     dev = wind_blkdev_get(argv[1]);
     wind_blkdev_open(dev);

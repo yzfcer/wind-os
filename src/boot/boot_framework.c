@@ -318,7 +318,7 @@ boot_step_s g_status_handTB[] =
 
 
 
-void boot_loop(void)
+void boot_main(w_int32_t argc,char **argv)
 {
     w_int32_t i;
     w_err_t err;
@@ -347,9 +347,9 @@ void boot_loop(void)
 }
 
 
-w_int32_t main(void)
+w_int32_t main(w_int32_t argc,char **argv)
 {
-    boot_loop();
+    boot_main(argc,argv);
     return 0;
 }
 

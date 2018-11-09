@@ -260,8 +260,7 @@ COMMAND_USAGE(fs)
 COMMAND_MAIN(fs,argc,argv)
 {
     //path_init();
-    if(argc < 2)
-        return W_ERR_FAIL;
+    WIND_ASSERT_RETURN(argc >= 2,W_ERR_INVALID);
     if(wind_strcmp(argv[1],"pwd") == 0)
         return fs_cmd_pwd();
     else if(wind_strcmp(argv[1],"cd") == 0)

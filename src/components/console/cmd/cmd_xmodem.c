@@ -120,8 +120,7 @@ COMMAND_USAGE(xmodem)
 
 COMMAND_MAIN(xmodem,argc,argv)
 {
-    if(argc < 3)
-        return W_ERR_FAIL;
+    WIND_ASSERT_RETURN(argc >= 3,W_ERR_INVALID);
     if(wind_strcmp(argv[1],"get") == 0)
         return cmd_xmodem_get(argc,argv);
     if(wind_strcmp(argv[1],"put") == 0)

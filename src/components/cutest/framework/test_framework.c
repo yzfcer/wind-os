@@ -471,8 +471,7 @@ void execute_all_suites(char* suitefilter,char *casefilter)
 
 w_int32_t cutest_main(w_int32_t argc,char **argv)
 {
-    if(argc < 2)
-        return -1;
+    WIND_ASSERT_RETURN(argc >= 2,-1);
     if(0 == stringcmp(argv[1],"show"))
     {
         show_test_suites();

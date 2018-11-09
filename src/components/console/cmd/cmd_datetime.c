@@ -92,6 +92,7 @@ COMMAND_USAGE(datetime)
 
 COMMAND_MAIN(datetime,argc,argv)
 {
+    WIND_ASSERT_RETURN(argc >= 2,W_ERR_INVALID);
     if(wind_strcmp(argv[1],"set") == 0)
     {
         return cmd_set_datetime(argc,argv);

@@ -43,6 +43,8 @@ COMMAND_MAIN(beep,argc,argv)
     w_chdev_s *dev;
     w_err_t err;
     w_uint8_t stat;
+    if(argc < 2)
+        return W_ERR_FAIL;
     dev = wind_chdev_get("beep");
     WIND_ASSERT_RETURN(dev != W_NULL,W_ERR_INVALID);
     if(0 == wind_strcmp(argv[1],"on"))

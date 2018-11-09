@@ -73,7 +73,6 @@ static w_bool_t handle_BKSPACE(w_console_s *ctrl)
     {
         ctrl->index --;
         console_printf("\b \b");
-        //console_printf(VT100_ERASE_END);
     }
     return W_FALSE;
 }
@@ -438,7 +437,7 @@ static w_err_t execute_cmd(w_console_s *ctrl)
     cmd = wind_cmd_get(ctrl->param.argv[0]);//get_matched_cmd(ctrl);
     if(cmd == W_NULL)
         return W_ERR_FAIL;
-    if(wind_strcmp(ctrl->param.argv[1],"?") == 0)
+    if((ctrl->param.argc >= 2)&&(wind_strcmp(ctrl->param.argv[1],"?") == 0))
     {
         cmd->showusage();
         return W_ERR_OK;

@@ -96,6 +96,7 @@ static void print_mem(w_uint32_t start,w_uint32_t len)
 static w_err_t display_mem(char **argv)
 {
     w_uint32_t start,len;
+    WIND_ASSERT_RETURN(argc >= 3,W_ERR_INVALID);
     if(!get_num(argv[1],&start))
     {
         return W_ERR_FAIL;
@@ -112,6 +113,7 @@ static w_err_t display_stack(char **argv)
 {
     w_uint32_t start,end,cur,len,used;
     w_thread_s *thr;
+    WIND_ASSERT_RETURN(argc >= 3,W_ERR_INVALID);
     if(wind_strcmp(argv[1],"stack") != 0)
     {
         return W_ERR_FAIL;

@@ -50,6 +50,9 @@
     <ClCompile Include="..\..\..\..\..\..\src\components\console\framework\console_framework.c">
       <Filter>framework</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\components\console\cmd\cmd_mkfs.c">
+      <Filter>cmd</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\port\wind_config.h">

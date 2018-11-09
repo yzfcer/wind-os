@@ -73,6 +73,7 @@ COMMAND_USAGE(stati)
 
 COMMAND_MAIN(stati,argc,argv)
 {
+    WIND_ASSERT_RETURN(argc >= 2,W_ERR_INVALID);
     if(0 == wind_strcmp(argv[1],"pool"))
     {
         return cmd_stat_show_pool_main(argc,argv);

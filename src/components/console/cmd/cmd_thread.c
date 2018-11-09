@@ -62,8 +62,7 @@ COMMAND_MAIN(thread,argc,argv)
     w_bool_t res;
     w_int32_t prio;
     w_thread_s *thread;
-    if(argc < 3)
-        return W_ERR_FAIL;
+    WIND_ASSERT_RETURN(argc >= 3,W_ERR_INVALID);
 	thread = wind_thread_get(argv[2]);
     if(thread == W_NULL)
     {
@@ -87,8 +86,7 @@ COMMAND_MAIN(thread,argc,argv)
     }
     else if(wind_strcmp(argv[1],"setprio") == 0)
     {
-        if(argc < 4)
-            return W_ERR_FAIL;
+        WIND_ASSERT_RETURN(argc >= 4,W_ERR_INVALID);
         res = wind_atoi(argv[3],&prio);
         if(res != W_TRUE)
             return W_ERR_INVALID;

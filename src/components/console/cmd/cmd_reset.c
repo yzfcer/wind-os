@@ -39,6 +39,7 @@ COMMAND_USAGE(reset)
 
 COMMAND_MAIN(reset,argc,argv)
 {
+    WIND_ASSERT_RETURN(argc >= 1,W_ERR_INVALID);
     console_printf("system will reset now!\r\n");
     wind_thread_sleep(1000);
     wind_system_reset();

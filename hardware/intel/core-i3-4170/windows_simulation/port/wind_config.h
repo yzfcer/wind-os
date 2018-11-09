@@ -11,8 +11,8 @@
        Author:
        Modification:
 **********************************************************************************/
-#ifndef BOOT_CONFIG_H__
-#define BOOT_CONFIG_H__
+#ifndef WIND_CONFIG_H__
+#define WIND_CONFIG_H__
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -110,6 +110,7 @@ extern "C" {
 #define CMD_XMODEM_SUPPORT 0 //是否支持xmodem协议命令
 #define CMD_SYSINFO_SUPPORT 0 //是否支持系统信息命令
 #define CMD_CUTEST_SUPPORT 0 //是否支持单元测试命令
+#define CMD_MKFS_SUPPORT 1 //是否支持创建文件系统镜像命令
 
 #define CMD_BEEP_SUPPORT 0 //是否支持蜂鸣器命令
 #define CMD_LED_SUPPORT 0 //是否支持LED操作命令
