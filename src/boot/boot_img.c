@@ -25,7 +25,7 @@
 #include "wind_encrypt.h"
 #include "wind_string.h"
 #include "wind_conv.h"
-#include "wind_pack.h"
+#include "boot_imghead.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
