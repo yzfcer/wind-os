@@ -55,7 +55,7 @@ char *wind_strcat(char *dest, const char *src)
 {
     w_int32_t i,j;
     i = wind_strlen(dest);
-    for(j = i;;j ++,i++)
+    for(j = 0;;j ++,i++)
     {
         dest[i] = src[j];
         if(dest[i] == '\0')
@@ -289,5 +289,54 @@ char *wind_strstr(const char *s1,const char *s2)
         s1++;
     }
     return W_NULL;
+}
+
+char *wind_strskip(char *str,char *charr,w_int32_t count)
+{
+    w_int32_t i,j;
+    for(;;)
+    {
+        for(j = 0;j < count;j ++)
+        {
+            if(*str == charr[j])
+            {
+                str ++;
+                break;
+            }
+                
+        }
+        if(j >= count)
+            break;
+    }
+    if(*str == '\0')
+        return W_NULL;
+    return str;
+}
+
+w_int32_t wind_strsplit(char *str,char ch,char **substr,w_int32_t maxcnt)
+{
+    w_int32_t i,j,cnt = 0;
+    int len = wind_strlen(str)+1;
+    j = 0;
+    for(i = 0;i < maxcnt;i ++)
+    {
+        if(cnt >= maxcnt)
+            return -1;
+        substr[i] = &str[j];
+        for(;j < len;j ++)
+        {
+            if((str[j] == ch) || (str[j] == '\0'))
+            {
+                cnt ++;
+                str[j] = 0;
+                j ++;
+                break;
+            }
+        }
+        if(j >= len)
+            break;
+    }
+    cnt = (substr[cnt-1][0] != 0?cnt:cnt -1);
+    return cnt;
 }
 

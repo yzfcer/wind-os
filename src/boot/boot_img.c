@@ -25,6 +25,7 @@
 #include "wind_encrypt.h"
 #include "wind_string.h"
 #include "wind_conv.h"
+#include "wind_pack.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -32,87 +33,7 @@ img_head_s img_head;
 static w_encypt_ctx_s ctx;
 static w_uint8_t keys[] = ENCRYPT_KEY;
 
-static void print_img_head(img_head_s *head)
-{
-    static char *encty_type[4] = 
-    {
-        "no encrypt",
-        "RC4"
-        "AES",
-        "DES",
-    };
-    wind_printf("img head info:\r\n");
-    wind_printf("board name     : %s\r\n",(char*)head->board_name);
-    wind_printf("cpu arch       : %s\r\n",(char*)head->arch_name);
-    wind_printf("CPU model      : %s\r\n",(char*)head->cpu_name);
-    wind_printf("img file name  : %s\r\n",(char*)head->img_name);
-    wind_printf("img file lenth : %d\r\n",head->img_len);
-    wind_printf("soft version   : %s\r\n",head->bin_ver);
-    if(head->encrypt_type < 4);
-        wind_printf("encrypt type   : %s\r\n",encty_type[head->encrypt_type]);
-    wind_printf("\r\n");
-}
 
-static w_err_t get_img_head(w_part_s *part)
-{
-    w_int32_t len;
-    w_uint32_t crc;
-    w_int32_t index = 0;
-    img_head_s *head = &img_head;
-    w_uint8_t *buff = get_common_buffer();
-    wind_memset(head,0,sizeof(img_head_s));
-    boot_part_seek(part,0);
-    len = boot_part_read(part,buff,COMMBUF_SIZE);
-    WIND_ASSERT_RETURN(len > 0,W_ERR_FAIL);
-    head->magic = 0;
-    wind_to_uint32(&buff[index],&head->magic);
-
-    //这种情况应该是bin文件没有包含头部结构
-    if(head->magic != IMG_MAGIC)
-        return W_ERR_OK;
-    index += 4;
-    wind_to_uint32(&buff[index],&head->img_len);
-    index += 4;
-    wind_to_uint32(&buff[index],&head->head_len);
-    index += 4;
-    wind_to_uint32(&buff[index],&head->head_ver);
-    index += 4;
-    wind_to_uint32(&buff[index],&head->bin_ver);
-    index += 4;
-    wind_to_uint32(&buff[index],&head->bin_crc);
-    index += 4;
-    wind_to_uint32(&buff[index],&head->bin_offset);
-    index += 4;
-    wind_to_uint32(&buff[index],&head->encrypt_type);
-    index += 4;
-    wind_memset(head->img_name,0,sizeof(head->img_name));
-    wind_strcpy(head->img_name,(const char*)&buff[index]);
-    index += sizeof(head->img_name);
-
-    wind_memset(head->board_name,0,sizeof(head->board_name));
-    wind_strcpy(head->board_name,(const char*)&buff[index]);
-    index += sizeof(head->board_name);
-    
-    wind_memset(head->arch_name,0,sizeof(head->arch_name));
-    wind_strcpy(head->arch_name,(const char*)&buff[index]);
-    index += sizeof(head->arch_name);
-
-    wind_memset(head->cpu_name,0,sizeof(head->cpu_name));
-    wind_strcpy(head->cpu_name,(const char*)&buff[index]);
-    index += sizeof(head->cpu_name);
-
-    wind_to_uint32(&buff[head->head_len-4],&head->head_crc);
-    crc = wind_crc32(buff,head->head_len - 4,0xffffffff);
-    if(crc != head->head_crc)
-    {
-        head->magic = 0;
-        wind_error("img head crc error.");
-        return W_ERR_INVALID;
-    }
-    print_img_head(head);
-    return W_ERR_OK;
-
-}
 
 static w_part_s * get_old_part(void)
 {
@@ -315,12 +236,19 @@ w_err_t boot_img_flush_cache_to_part(w_part_s **part,w_int32_t count)
     w_err_t err;
     w_part_s *cache;
     img_head_s *head = &img_head;
+    w_int32_t len;
+    w_uint8_t *buff;
 
     err = flush_bin_file(part,count,1);
     WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_FAIL);
     
     cache = boot_part_get(PART_CACHE);
-    err = get_img_head(cache);
+    buff = get_common_buffer();
+    boot_part_seek(cache,0);
+    len = boot_part_read(cache,buff,COMMBUF_SIZE);
+    WIND_ASSERT_RETURN(len > 0,W_ERR_FAIL);
+    wind_memset(head,0,sizeof(img_head_s));
+    err = boot_img_head_get(head,buff);
     if(err != W_ERR_OK)
     {
         if(head->magic != IMG_MAGIC)

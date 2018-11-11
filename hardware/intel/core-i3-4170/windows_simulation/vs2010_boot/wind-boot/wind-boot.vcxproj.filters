@@ -73,6 +73,9 @@
     <ClInclude Include="..\..\port\wind_config.h">
       <Filter>port</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\src\boot\boot_imghead.h">
+      <Filter>boot</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\port\boot_port.c">
@@ -134,6 +137,9 @@
     </ClCompile>
     <ClCompile Include="..\..\port\wind_std.c">
       <Filter>port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\boot\boot_imghead.c">
+      <Filter>boot</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
