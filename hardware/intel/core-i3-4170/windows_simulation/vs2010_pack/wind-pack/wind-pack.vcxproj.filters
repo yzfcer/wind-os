@@ -41,6 +41,9 @@
     <ClCompile Include="..\..\..\..\..\..\src\common\wind_crc32.c">
       <Filter>common</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\common\wind_encrypt.c">
+      <Filter>common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\port\wind_config.h">
@@ -71,6 +74,9 @@
       <Filter>framework</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\src\common\wind_crc32.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\src\common\wind_encrypt.h">
       <Filter>common</Filter>
     </ClInclude>
   </ItemGroup>

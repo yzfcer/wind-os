@@ -27,6 +27,8 @@
 #include "wind_string.h"
 #include "wind_conv.h"
 #include "boot_imghead.h"
+#include "wind_encrypt.h"
+#include "wind_crc32.h"
 #include <stdio.h>
 #include <malloc.h>
 
@@ -87,6 +89,7 @@ typedef struct
 
 typedef struct
 {
+    char       cfgname[128];
     char       output_file[128];
     char       board_name[32];
     char       arch_name[32];
@@ -99,10 +102,10 @@ typedef struct
     infile_info_s fileinfo[10];
 }pack_info_s;
 
-static char cfgname[128];
-static char databuff[4096];
-pack_info_s cfg_info;
 
+static char databuff[4096];
+static pack_info_s cfg_info;
+static img_head_s imghead;
 static w_err_t read_bin_files(void)
 {
     w_int32_t i,flen;
@@ -134,8 +137,8 @@ static void release_file_buff(void)
 static void pack_info_init(void)
 {
     w_int32_t i;
-    wind_memset(cfgname,0,sizeof(cfgname));
     wind_memset(databuff,0,sizeof(databuff));
+    wind_memset(&imghead,0,sizeof(imghead));
     if(cfg_info.file_cnt > 0)
     {
         for(i = 0;i < cfg_info.file_cnt;i ++)
@@ -147,16 +150,14 @@ static void pack_info_init(void)
 static w_err_t get_cfginfo(char *boradname,char *buff,w_int32_t size)
 {
     w_uint32_t len;
-    wind_memset(cfgname,0,sizeof(cfgname));
-    wind_memset(buff,0,size);
-    wind_strcpy(cfgname,boradname);
-    wind_strcat(cfgname,".cfg");
-    len = read_cfg_file(cfgname,buff,size);
+    wind_strcpy(cfg_info.cfgname,boradname);
+    wind_strcat(cfg_info.cfgname,".cfg");
+    len = read_cfg_file(cfg_info.cfgname,buff,size);
     WIND_ASSERT_RETURN(len > 0,W_ERR_FAIL);
     return W_ERR_OK;    
 }
 
-char *get_line(char *buff)
+char *get_line_from_buff(char *buff)
 {
     char *ch = buff;
     char charr[] = {'\r','\n','\t',' '};
@@ -235,7 +236,7 @@ static w_err_t parse_input_file(pack_info_s *info,char *hwstr)
     WIND_ASSERT_RETURN(cnt == 2,W_ERR_FAIL);
     WIND_ASSERT_RETURN(arr[0][0] == '0',W_ERR_FAIL);
     WIND_ASSERT_RETURN((arr[0][1] == 'x')||(arr[i][1] == 'X'),W_ERR_FAIL);
-    wind_htoi(arr[0],&value);
+    wind_htoi(&arr[0][2],&value);
     index = info->file_cnt;
     info->fileinfo[index].offset = (w_int32_t)value;
     wind_strcpy(info->fileinfo[index].input_file,arr[1]);
@@ -244,7 +245,7 @@ static w_err_t parse_input_file(pack_info_s *info,char *hwstr)
 }
 
 
-w_err_t line_parse(char *buff,pack_info_s *info)
+w_err_t parse_line(char *buff,pack_info_s *info)
 {
     w_int32_t cnt;
     char *str[2];
@@ -269,7 +270,7 @@ w_err_t line_parse(char *buff,pack_info_s *info)
     return W_ERR_OK;
 }
 
-w_err_t cfg_parse(char *buff,pack_info_s *info)
+w_err_t parse_file(char *buff,pack_info_s *info)
 {
     w_int32_t index,len;
     char *str;
@@ -278,14 +279,14 @@ w_err_t cfg_parse(char *buff,pack_info_s *info)
     str = buff;
     for(;;)
     {
-        str = get_line(&str[index]);
+        str = get_line_from_buff(&str[index]);
         if(str == W_NULL)
             break;
         len = wind_strlen(str);
         if((len > 0)&&(str[0] != '#'))
         {
             wind_printf("str:%s\r\n",str);
-            line_parse(str,info);
+            parse_line(str,info);
         }
             
         index = len + 1;
@@ -312,18 +313,77 @@ static w_int32_t calc_img_lenth(void)
 
 static w_err_t pack_files(pack_info_s *info)
 {
+    w_int32_t i;
     w_uint8_t *buff;
-    w_int32_t len = calc_img_lenth();
-    buff = wind_malloc(len);
+    img_head_s *head;
+    w_encypt_ctx_s ctx;
+    w_uint32_t crc;
+
+    infile_info_s *finfo;
+    w_int32_t imglen = calc_img_lenth();
+    buff = wind_malloc(imglen);
     WIND_ASSERT_RETURN(buff != W_NULL,W_ERR_MEM);
+    WIND_ASSERT_RETURN(info->fileinfo[0].offset >= IMG_HEAD_LEN,W_ERR_FAIL);
+    for(i = 0;i < cfg_info.file_cnt;i ++)
+    {
+        finfo = &cfg_info.fileinfo[i];
+        wind_memcpy(&buff[finfo->offset],finfo->buff,finfo->flen);
+    }
+    wind_encrypt_init(&ctx,cfg_info.keys,cfg_info.key_len);
+    wind_encrypt(&ctx,&buff[IMG_HEAD_LEN],imglen - IMG_HEAD_LEN);
+    crc = wind_crc32(&buff[IMG_HEAD_LEN],imglen - IMG_HEAD_LEN,0xffffffff);
+    head = &imghead;
+    head->magic = IMG_MAGIC;
+    head->img_len = imglen;
+    head->head_len = IMG_HEAD_LEN;
+    head->head_ver = IMG_HEAD_VER;
+    
     
     return W_ERR_OK;
 }
 
 static void sort_input_file(void)
 {
-    wind_error("sort error");
+    w_int32_t i,j;
+    infile_info_s info;
+    if(cfg_info.file_cnt <= 1)
+        return;
+    for(i = 0;i < cfg_info.file_cnt - 1;i ++)
+    {
+        for(j = i+1;j < cfg_info.file_cnt;j ++)
+        {
+            if(cfg_info.fileinfo[i].offset > cfg_info.fileinfo[j].offset)
+            {
+                wind_memcpy(&info,&cfg_info.fileinfo[i],sizeof(infile_info_s));
+                wind_memcpy(&cfg_info.fileinfo[i],&cfg_info.fileinfo[j],sizeof(infile_info_s));
+                wind_memcpy(&cfg_info.fileinfo[j],&info,sizeof(infile_info_s));
+            }
+        }
+    }
+    
 }
+
+w_err_t check_file_space(void)
+{
+    w_int32_t i,j;
+    infile_info_s info;
+    if(cfg_info.file_cnt <= 1)
+        return;
+    for(i = 0;i < cfg_info.file_cnt - 1;i ++)
+    {
+        for(j = i+1;j < cfg_info.file_cnt;j ++)
+        {
+            if(cfg_info.fileinfo[i].offset + cfg_info.fileinfo[i].flen > cfg_info.fileinfo[j].offset)
+            {
+                wind_error("file %s is too long",cfg_info.fileinfo[i].input_file);
+                return W_ERR_FAIL;
+            }
+        }
+    }
+    return W_ERR_OK;
+}
+
+
 w_int32_t pack_main(w_int32_t argc,char **argv)
 {
     w_err_t err;
@@ -333,9 +393,11 @@ w_int32_t pack_main(w_int32_t argc,char **argv)
     err = get_cfginfo(argv[1],databuff,sizeof(databuff));
     WIND_ASSERT_RETURN(err == W_ERR_OK,-1);
     wind_printf(databuff);
-    err = cfg_parse(databuff,&cfg_info);
+    err = parse_file(databuff,&cfg_info);
     WIND_ASSERT_RETURN(err == W_ERR_OK,-1);
     sort_input_file();
+    err = check_file_space();
+    WIND_ASSERT_TODO(err == W_ERR_OK,release_file_buff(),err);
     err = read_bin_files();
     WIND_ASSERT_TODO(err == W_ERR_OK,release_file_buff(),err);
     err = pack_files(&cfg_info);

@@ -30,6 +30,7 @@
 
 #define IMG_MAGIC 0x4528AB6D
 #define IMG_HEAD_VER 0x01
+#define IMG_HEAD_LEN 512
 typedef struct __img_head_s img_head_s;
 struct __img_head_s
 {

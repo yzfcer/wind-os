@@ -140,7 +140,7 @@ w_bool_t wind_htoi(char *hex,w_uint32_t *value)
     w_int32_t i;  
 
     len = wind_strlen(hex);  
-    for (i=0, temp=0; i<len; i++, temp=0)  
+    for (i=0, temp=0; i<len; i++, temp=0)
     {  
         temp = c2i( *(hex + i));
         if(temp < 0)
