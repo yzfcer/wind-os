@@ -30,13 +30,60 @@
 #include <stdio.h>
 #include <malloc.h>
 
+
+
+static void *wind_malloc(w_uint32_t size)
+{
+    return malloc(size);
+}
+static void wind_free(void *ptr)
+{
+    free(ptr);
+}
+
+static w_uint32_t read_cfg_file(char *filename,char *buff,w_int32_t size)
+{
+    FILE *file;
+    w_uint32_t len;
+    file = fopen(filename,"rb");
+    WIND_ASSERT_RETURN(file != W_NULL,0);
+    len = fread(buff,1,size,file);
+    WIND_ASSERT_TODO(len > 0,fclose(file),W_ERR_FAIL);
+    fclose(file);
+    return len;
+}
+
+
+static w_int32_t read_bin_file(char *path,w_uint8_t **buff)
+{
+    FILE*fp;
+    w_int32_t flen;
+    fp=fopen(path,"rb");
+    WIND_ASSERT_RETURN(fp != W_NULL,W_ERR_INVALID);
+    fseek(fp,0L,SEEK_END); 
+    flen=ftell(fp); 
+    *buff = (w_uint8_t*)wind_malloc(flen); 
+    WIND_ASSERT_RETURN(*buff != W_NULL,W_ERR_MEM);
+    fseek(fp,0L,SEEK_SET); 
+    flen = fread(*buff,flen,1,fp); 
+    return flen;
+}
+
+static w_err_t write_img_file(char *path,w_uint8_t *data,w_int32_t len)
+{
+    return W_ERR_OK;
+}
+
+//--------------------------------------------------------------------
+//--------------------------------------------------------------------
+
 typedef struct 
 {
     char input_file[128];
     w_int32_t offset;
     w_int32_t flen;
     w_uint8_t *buff;
-}file_info_s;
+}infile_info_s;
 
 typedef struct
 {
@@ -49,55 +96,39 @@ typedef struct
     w_uint8_t keys[36];
     w_uint32_t hw_version;
     w_int32_t  file_cnt;
-    file_info_s fileinfo[10];
-}cfg_info_s;
+    infile_info_s fileinfo[10];
+}pack_info_s;
 
 static char cfgname[128];
-static char databuff[4096000];
-cfg_info_s cfg_info;
+static char databuff[4096];
+pack_info_s cfg_info;
 
-static void *wind_malloc(w_uint32_t size)
+static w_err_t read_bin_files(void)
 {
-    return malloc(size);
-}
-static void wind_free(void *ptr)
-{
-    free(ptr);
-}
-
-static w_uint32_t read_file(char *filename,char *buff,w_int32_t size)
-{
-    FILE *file;
-    w_uint32_t len;
-    file = fopen(cfgname,"rb");
-    WIND_ASSERT_RETURN(file != W_NULL,0);
-    len = fread(buff,1,size,file);
-    WIND_ASSERT_TODO(len > 0,fclose(file),W_ERR_FAIL);
-    fclose(file);
-    return len;
-}
-
-
-static w_int32_t get_file_lenth(char *filename)
-{
-    FILE*fp;
-    w_int32_t flen;
-    w_int8_t *p;
-    fp=fopen(filename,"rb");// localfile文件名       
-    fseek(fp,0L,SEEK_END); /* 定位到文件末尾 */
-    flen=ftell(fp); /* 得到文件大小 */
-    p=(char *)wind_malloc(flen+1); /* 根据文件大小动态分配内存空间 */
-    if(p==NULL)
+    w_int32_t i,flen;
+    w_err_t err;
+    infile_info_s *info;
+    for(i = 0;i < cfg_info.file_cnt;i ++)
     {
-        fclose(fp);
-        return 0;
+        info = &cfg_info.fileinfo[i];
+        flen = read_bin_file(info->input_file,&info->buff);
+        WIND_ASSERT_RETURN(flen > 0,W_ERR_FAIL);
     }
-    fseek(fp,0L,SEEK_SET); /* 定位到文件开头 */
-    fread(p,flen,1,fp); /* 一次性读取全部文件内容 */
-    p[flen]=0; /* 字符串结束标志 */
+    return W_ERR_OK; 
 }
 
-
+static void release_file_buff(void)
+{
+    w_int32_t i;
+    for(i = 0;i < cfg_info.file_cnt;i ++)
+    {
+        if(cfg_info.fileinfo[i].buff)
+        {
+            wind_free(cfg_info.fileinfo[i].buff);
+            cfg_info.fileinfo[i].buff = W_NULL;
+        }
+    }    
+}
 
 
 static void pack_info_init(void)
@@ -120,7 +151,7 @@ static w_err_t get_cfginfo(char *boradname,char *buff,w_int32_t size)
     wind_memset(buff,0,size);
     wind_strcpy(cfgname,boradname);
     wind_strcat(cfgname,".cfg");
-    len = read_file(boradname,buff,size);
+    len = read_cfg_file(cfgname,buff,size);
     WIND_ASSERT_RETURN(len > 0,W_ERR_FAIL);
     return W_ERR_OK;    
 }
@@ -149,7 +180,7 @@ char *get_line(char *buff)
     return buff;    
 }
 
-static w_err_t parse_hw_version(cfg_info_s *info,char *hwstr)
+static w_err_t parse_hw_version(pack_info_s *info,char *hwstr)
 {
     w_int32_t i,cnt;
     w_uint32_t hw_version = 0;
@@ -166,7 +197,7 @@ static w_err_t parse_hw_version(cfg_info_s *info,char *hwstr)
     return W_ERR_OK;
 }
 
-static w_err_t parse_encrypt_type(cfg_info_s *info,char *hwstr)
+static w_err_t parse_encrypt_type(pack_info_s *info,char *hwstr)
 {
     if(wind_strcmp(hwstr,"none") == 0)
         info->encrypt_type = 0;
@@ -177,7 +208,7 @@ static w_err_t parse_encrypt_type(cfg_info_s *info,char *hwstr)
     return info->encrypt_type == 255?W_ERR_FAIL:W_ERR_OK;
 }
 
-static w_err_t parse_encrypt_key(cfg_info_s *info,char *hwstr)
+static w_err_t parse_encrypt_key(pack_info_s *info,char *hwstr)
 {
     w_int32_t i,cnt;
     char *arr[32];
@@ -195,7 +226,7 @@ static w_err_t parse_encrypt_key(cfg_info_s *info,char *hwstr)
     return W_ERR_OK;
 }
 
-static w_err_t parse_input_file(cfg_info_s *info,char *hwstr)
+static w_err_t parse_input_file(pack_info_s *info,char *hwstr)
 {
     w_int32_t i,cnt,index;
     char *arr[4];
@@ -205,7 +236,6 @@ static w_err_t parse_input_file(cfg_info_s *info,char *hwstr)
     WIND_ASSERT_RETURN(arr[0][0] == '0',W_ERR_FAIL);
     WIND_ASSERT_RETURN((arr[0][1] == 'x')||(arr[i][1] == 'X'),W_ERR_FAIL);
     wind_htoi(arr[0],&value);
-    //info->keys[i] = (w_uint8_t)value;
     index = info->file_cnt;
     info->fileinfo[index].offset = (w_int32_t)value;
     wind_strcpy(info->fileinfo[index].input_file,arr[1]);
@@ -214,7 +244,7 @@ static w_err_t parse_input_file(cfg_info_s *info,char *hwstr)
 }
 
 
-w_err_t line_parse(char *buff,cfg_info_s *info)
+w_err_t line_parse(char *buff,pack_info_s *info)
 {
     w_int32_t cnt;
     char *str[2];
@@ -239,7 +269,7 @@ w_err_t line_parse(char *buff,cfg_info_s *info)
     return W_ERR_OK;
 }
 
-w_err_t cfg_parse(char *buff,cfg_info_s *info)
+w_err_t cfg_parse(char *buff,pack_info_s *info)
 {
     w_int32_t index,len;
     char *str;
@@ -251,7 +281,6 @@ w_err_t cfg_parse(char *buff,cfg_info_s *info)
         str = get_line(&str[index]);
         if(str == W_NULL)
             break;
-        
         len = wind_strlen(str);
         if((len > 0)&&(str[0] != '#'))
         {
@@ -264,6 +293,37 @@ w_err_t cfg_parse(char *buff,cfg_info_s *info)
     return W_ERR_OK;
 }
 
+static w_int32_t calc_img_lenth(void)
+{
+    w_int32_t i,maxlen = 0;
+    infile_info_s *info,*ifo;
+    for(i = 0;i < cfg_info.file_cnt;i ++)
+    {
+        info = &cfg_info.fileinfo[i];
+        if(info->offset > maxlen)
+        {
+            maxlen = info->offset;
+            ifo = info;
+        }
+    }
+    maxlen += ifo->flen;
+    return maxlen;
+}
+
+static w_err_t pack_files(pack_info_s *info)
+{
+    w_uint8_t *buff;
+    w_int32_t len = calc_img_lenth();
+    buff = wind_malloc(len);
+    WIND_ASSERT_RETURN(buff != W_NULL,W_ERR_MEM);
+    
+    return W_ERR_OK;
+}
+
+static void sort_input_file(void)
+{
+    wind_error("sort error");
+}
 w_int32_t pack_main(w_int32_t argc,char **argv)
 {
     w_err_t err;
@@ -275,8 +335,13 @@ w_int32_t pack_main(w_int32_t argc,char **argv)
     wind_printf(databuff);
     err = cfg_parse(databuff,&cfg_info);
     WIND_ASSERT_RETURN(err == W_ERR_OK,-1);
-
+    sort_input_file();
+    err = read_bin_files();
+    WIND_ASSERT_TODO(err == W_ERR_OK,release_file_buff(),err);
+    err = pack_files(&cfg_info);
+    WIND_ASSERT_TODO(err == W_ERR_OK,release_file_buff(),-1);
     
+    release_file_buff();
     system("pause");
     return 0;
 }
