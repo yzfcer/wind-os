@@ -67,7 +67,7 @@ static w_int32_t read_bin_file(char *path,w_uint8_t **buff)
     *buff = (w_uint8_t*)wind_malloc(flen); 
     WIND_ASSERT_RETURN(*buff != W_NULL,W_ERR_MEM);
     fseek(fp,0L,SEEK_SET); 
-    flen = fread(*buff,flen,1,fp); 
+    flen = fread(*buff,1,flen,fp); 
     return flen;
 }
 
@@ -116,7 +116,6 @@ static img_head_s imghead;
 static w_err_t read_bin_files(void)
 {
     w_int32_t i,flen;
-    //w_err_t err;
     infile_info_s *info;
     pack_info_s *pkinfo = &pack_info;
     for(i = 0;i < pkinfo->file_cnt;i ++)
@@ -124,6 +123,7 @@ static w_err_t read_bin_files(void)
         info = &pkinfo->fileinfo[i];
         flen = read_bin_file(info->input_file,&info->buff);
         WIND_ASSERT_RETURN(flen > 0,W_ERR_FAIL);
+        info->flen = flen;
     }
     return W_ERR_OK; 
 }

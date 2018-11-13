@@ -135,11 +135,11 @@ static w_err_t decrypt_img(w_part_s *img)
     img_head_s *head = &img_head;
     if(head->magic != IMG_MAGIC)
         return W_ERR_FAIL;
-    offset = head->img_len;
+    offset = head->head_len;
     fsize = head->img_len;
     boot_part_seek(img,offset);
     buff = get_common_buffer();
-    offset = 0;
+    //offset = 0;
     wind_encrypt_init(&ctx,keys,sizeof(keys));
     while(1)
     {
@@ -316,8 +316,8 @@ w_err_t boot_img_flush_cache(void)
         count = 1;
     }
 
-    err = boot_img_download();
-    WIND_ASSERT_RETURN(err == W_ERR_OK,err);
+    //err = boot_img_download();
+    //WIND_ASSERT_RETURN(err == W_ERR_OK,err);
     return boot_img_flush_cache_to_part(part,count);
 }
 
