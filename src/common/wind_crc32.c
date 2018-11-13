@@ -23,7 +23,7 @@
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
 #include "wind_type.h"
-w_uint32_t crc32_table[256];
+static w_uint32_t crc32_table[256];
 void wind_crc32_init(void)
 {
     w_uint32_t c;
@@ -49,6 +49,12 @@ void wind_crc32_init(void)
 
 w_uint32_t wind_crc32(w_uint8_t *data,w_uint32_t size,w_uint32_t crc)
 {
+    static w_int32_t init_flag = 0;
+    if(!init_flag)
+    {
+        wind_crc32_init();
+        init_flag = 1;
+    }
     while(size--)
         crc = (crc >> 8)^(crc32_table[(crc ^ *data++)&0xff]);
     return crc;
