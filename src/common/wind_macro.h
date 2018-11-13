@@ -73,6 +73,13 @@ extern {
 #define WORD_LO(x) ((w_uint8_t) ((w_uint16_t)(x) & 0xff))
 #define WORD_HI(x) ((w_uint8_t) ((w_uint16_t)(x) >> 8))
 
+//获取一个长整型的各个字节
+#define DWORD_HBYTE1(x) ((w_uint8_t)((((w_uint32_t)(x)) >> 24) & 0xff))
+#define DWORD_HBYTE2(x) ((w_uint8_t)((((w_uint32_t)(x)) >> 16) & 0xff))
+#define DWORD_HBYTE3(x) ((w_uint8_t)((((w_uint32_t)(x)) >> 8) & 0xff))
+#define DWORD_HBYTE4(x) ((w_uint8_t)((((w_uint32_t)(x)) >> 0) & 0xff))
+
+
 //将整形数字向右对齐，align为2的N次方
 #define RIGHT_ALIGN(x,align) ((((x) + (align-1)) / (align) ) *(align))
 //将整形数字向左对齐，align为2的N次方

@@ -27,6 +27,15 @@
 #include "wind_conv.h"
 #include "wind_string.h"
 #include "wind_debug.h"
+#include "wind_macro.h"
+static w_err_t parse_version(w_uint32_t version,char *buff,w_int32_t len)
+{
+    wind_memset(buff, 0, len);
+    wind_sprintf(buff, "%d.%d.%d",DWORD_HBYTE2(version),
+        DWORD_HBYTE3(version),DWORD_HBYTE4(version));
+    return W_ERR_OK;
+}
+
 void boot_img_head_print(img_head_s *head)
 {
     static char *encty_type[4] = 
@@ -34,14 +43,18 @@ void boot_img_head_print(img_head_s *head)
         "no encrypt",
         "RC4"
     };
+    char buff[16];
     wind_printf("img head info:\r\n");
     wind_printf("board name     : %s\r\n",(char*)head->board_name);
     wind_printf("cpu arch       : %s\r\n",(char*)head->arch_name);
     wind_printf("CPU model      : %s\r\n",(char*)head->cpu_name);
     wind_printf("img file name  : %s\r\n",(char*)head->img_name);
     wind_printf("img file lenth : %d\r\n",head->img_len);
-	wind_printf("hard version   : %s\r\n",head->hard_ver);
-    wind_printf("soft version   : %s\r\n",head->soft_ver);
+	parse_version(head->hard_ver, buff,sizeof(buff));
+	wind_printf("hard version   : %s\r\n",buff);
+    
+    parse_version(head->soft_ver, buff,sizeof(buff));
+    wind_printf("soft version   : %s\r\n",buff);
     if(head->encrypt_type < 2)
         wind_printf("encrypt type   : %s\r\n",encty_type[head->encrypt_type]);
     else

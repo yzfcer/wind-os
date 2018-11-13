@@ -17,9 +17,9 @@
 #include "boot_part.h"
 #include <stdio.h>
 
-#define ARCH_NAME  "Intel x86_64"
-#define CPU_NAME   "Intel core i3-4170"
-#define BOARD_NAME "windows simulation"
+#define ARCH_NAME  "Intel-x86_64"
+#define CPU_NAME   "core-i3-4170"
+#define BOARD_NAME "win-simulation"
 
 
 w_err_t   boot_enter_main_hook(void);
