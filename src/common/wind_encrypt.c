@@ -55,7 +55,7 @@ static w_int32_t rc4_crypt(w_encypt_ctx_s *ctx,w_uint8_t *data, w_int32_t len)
 w_err_t wind_encrypt_init(w_encypt_ctx_s *ctx,w_uint8_t *passwd, w_int32_t len)
 {
     WIND_ASSERT_RETURN(passwd != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(len > ENCRYPT_PASSWD_MIN_LEN,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(len >= ENCRYPT_PASSWD_MIN_LEN,W_ERR_INVALID);
     rc4_init(ctx->sbox,passwd,len);
     return W_ERR_OK;
 

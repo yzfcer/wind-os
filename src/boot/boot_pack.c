@@ -31,7 +31,7 @@
 #include "wind_crc32.h"
 #include <stdio.h>
 #include <malloc.h>
-
+#include <stdlib.h>
 
 
 static void *wind_malloc(w_uint32_t size)
@@ -71,9 +71,15 @@ static w_int32_t read_bin_file(char *path,w_uint8_t **buff)
     return flen;
 }
 
-static w_err_t write_img_file(char *path,w_uint8_t *data,w_int32_t len)
+static w_err_t write_img_file(char *filename,w_uint8_t *data,w_int32_t len)
 {
-    return W_ERR_OK;
+    FILE *file;
+    //w_uint32_t len;
+    file = fopen(filename,"wb");
+    WIND_ASSERT_RETURN(file != W_NULL,0);
+    len = fwrite(data,1,len,file);
+    fclose(file);
+    return len > 0?W_ERR_OK:W_ERR_FAIL;
 }
 
 //--------------------------------------------------------------------
@@ -98,22 +104,24 @@ typedef struct
     w_uint8_t key_len;
     w_uint8_t keys[36];
     w_uint32_t hw_version;
+    w_uint32_t sw_version;
     w_int32_t  file_cnt;
     infile_info_s fileinfo[10];
 }pack_info_s;
 
 
 static char databuff[4096];
-static pack_info_s cfg_info;
+static pack_info_s pack_info;
 static img_head_s imghead;
 static w_err_t read_bin_files(void)
 {
     w_int32_t i,flen;
-    w_err_t err;
+    //w_err_t err;
     infile_info_s *info;
-    for(i = 0;i < cfg_info.file_cnt;i ++)
+    pack_info_s *pkinfo = &pack_info;
+    for(i = 0;i < pkinfo->file_cnt;i ++)
     {
-        info = &cfg_info.fileinfo[i];
+        info = &pkinfo->fileinfo[i];
         flen = read_bin_file(info->input_file,&info->buff);
         WIND_ASSERT_RETURN(flen > 0,W_ERR_FAIL);
     }
@@ -123,12 +131,13 @@ static w_err_t read_bin_files(void)
 static void release_file_buff(void)
 {
     w_int32_t i;
-    for(i = 0;i < cfg_info.file_cnt;i ++)
+    pack_info_s *pkinfo = &pack_info;
+    for(i = 0;i < pkinfo->file_cnt;i ++)
     {
-        if(cfg_info.fileinfo[i].buff)
+        if(pkinfo->fileinfo[i].buff)
         {
-            wind_free(cfg_info.fileinfo[i].buff);
-            cfg_info.fileinfo[i].buff = W_NULL;
+            wind_free(pkinfo->fileinfo[i].buff);
+            pkinfo->fileinfo[i].buff = W_NULL;
         }
     }    
 }
@@ -137,22 +146,24 @@ static void release_file_buff(void)
 static void pack_info_init(void)
 {
     w_int32_t i;
+    pack_info_s *pkinfo = &pack_info;
     wind_memset(databuff,0,sizeof(databuff));
     wind_memset(&imghead,0,sizeof(imghead));
-    if(cfg_info.file_cnt > 0)
+    if(pkinfo->file_cnt > 0)
     {
-        for(i = 0;i < cfg_info.file_cnt;i ++)
-            wind_free(cfg_info.fileinfo[i].buff);
+        for(i = 0;i < pkinfo->file_cnt;i ++)
+            wind_free(pkinfo->fileinfo[i].buff);
     }
-    wind_memset(&cfg_info,0,sizeof(cfg_info));
+    wind_memset(&pack_info,0,sizeof(pack_info));
 }
 
 static w_err_t get_cfginfo(char *boradname,char *buff,w_int32_t size)
 {
     w_uint32_t len;
-    wind_strcpy(cfg_info.cfgname,boradname);
-    wind_strcat(cfg_info.cfgname,".cfg");
-    len = read_cfg_file(cfg_info.cfgname,buff,size);
+    pack_info_s *pkinfo = &pack_info;
+    wind_strcpy(pkinfo->cfgname,boradname);
+    wind_strcat(pkinfo->cfgname,".cfg");
+    len = read_cfg_file(pkinfo->cfgname,buff,size);
     WIND_ASSERT_RETURN(len > 0,W_ERR_FAIL);
     return W_ERR_OK;    
 }
@@ -181,20 +192,20 @@ char *get_line_from_buff(char *buff)
     return buff;    
 }
 
-static w_err_t parse_hw_version(pack_info_s *info,char *hwstr)
+static w_err_t parse_version(w_uint32_t *version,char *versionstr)
 {
     w_int32_t i,cnt;
-    w_uint32_t hw_version = 0;
+    w_uint32_t ver = 0;
     char *arr[8];
-    cnt = wind_strsplit(hwstr,'.',arr,8);
+    cnt = wind_strsplit(versionstr,'.',arr,8);
     WIND_ASSERT_RETURN(cnt > 0,W_ERR_FAIL);
     WIND_ASSERT_RETURN(cnt <= 4,W_ERR_FAIL);
     for(i = 0;i < cnt;i ++)
     {
-        hw_version << 8;
-        hw_version += (*arr[i] - 0x30);
+        ver <<= 8;
+        ver += (*arr[i] - 0x30);
     }
-    info->hw_version = hw_version;
+    *version = ver;
     return W_ERR_OK;
 }
 
@@ -229,13 +240,13 @@ static w_err_t parse_encrypt_key(pack_info_s *info,char *hwstr)
 
 static w_err_t parse_input_file(pack_info_s *info,char *hwstr)
 {
-    w_int32_t i,cnt,index;
+    w_int32_t cnt,index;
     char *arr[4];
     w_uint32_t value;
     cnt = wind_strsplit(hwstr,',',arr,4);
     WIND_ASSERT_RETURN(cnt == 2,W_ERR_FAIL);
     WIND_ASSERT_RETURN(arr[0][0] == '0',W_ERR_FAIL);
-    WIND_ASSERT_RETURN((arr[0][1] == 'x')||(arr[i][1] == 'X'),W_ERR_FAIL);
+    WIND_ASSERT_RETURN((arr[0][1] == 'x')||(arr[0][1] == 'X'),W_ERR_FAIL);
     wind_htoi(&arr[0][2],&value);
     index = info->file_cnt;
     info->fileinfo[index].offset = (w_int32_t)value;
@@ -258,7 +269,9 @@ w_err_t parse_line(char *buff,pack_info_s *info)
     else if(wind_strcmp(str[0],"board") == 0)
         wind_strcpy(info->board_name,str[1]);
     else if(wind_strcmp(str[0],"hardversion") == 0)
-        parse_hw_version(info,str[1]);
+        parse_version(&info->hw_version,str[1]);
+    else if(wind_strcmp(str[0],"softversion") == 0)
+        parse_version(&info->sw_version,str[1]);
     else if(wind_strcmp(str[0],"encrypt") == 0)
         parse_encrypt_type(info,str[1]);
     else if(wind_strcmp(str[0],"encryptkey") == 0)
@@ -298,9 +311,10 @@ static w_int32_t calc_img_lenth(void)
 {
     w_int32_t i,maxlen = 0;
     infile_info_s *info,*ifo;
-    for(i = 0;i < cfg_info.file_cnt;i ++)
+    pack_info_s *pkinfo = &pack_info;
+    for(i = 0;i < pkinfo->file_cnt;i ++)
     {
-        info = &cfg_info.fileinfo[i];
+        info = &pkinfo->fileinfo[i];
         if(info->offset > maxlen)
         {
             maxlen = info->offset;
@@ -315,21 +329,25 @@ static w_err_t pack_files(pack_info_s *info)
 {
     w_int32_t i;
     w_uint8_t *buff;
+    char *img;
+    w_err_t err;
     img_head_s *head;
     w_encypt_ctx_s ctx;
     w_uint32_t crc;
+    pack_info_s *pkinfo = &pack_info;
 
     infile_info_s *finfo;
     w_int32_t imglen = calc_img_lenth();
     buff = wind_malloc(imglen);
     WIND_ASSERT_RETURN(buff != W_NULL,W_ERR_MEM);
+    wind_memset(buff, 0, imglen);
     WIND_ASSERT_RETURN(info->fileinfo[0].offset >= IMG_HEAD_LEN,W_ERR_FAIL);
-    for(i = 0;i < cfg_info.file_cnt;i ++)
+    for(i = 0;i < pkinfo->file_cnt;i ++)
     {
-        finfo = &cfg_info.fileinfo[i];
+        finfo = &pkinfo->fileinfo[i];
         wind_memcpy(&buff[finfo->offset],finfo->buff,finfo->flen);
     }
-    wind_encrypt_init(&ctx,cfg_info.keys,cfg_info.key_len);
+    wind_encrypt_init(&ctx,pkinfo->keys,pkinfo->key_len);
     wind_encrypt(&ctx,&buff[IMG_HEAD_LEN],imglen - IMG_HEAD_LEN);
     crc = wind_crc32(&buff[IMG_HEAD_LEN],imglen - IMG_HEAD_LEN,0xffffffff);
     head = &imghead;
@@ -337,45 +355,65 @@ static w_err_t pack_files(pack_info_s *info)
     head->img_len = imglen;
     head->head_len = IMG_HEAD_LEN;
     head->head_ver = IMG_HEAD_VER;
+    head->hard_ver = pkinfo->hw_version;
+    head->soft_ver = pkinfo->sw_version;
+    head->bin_crc = crc;
+    head->bin_offset = IMG_HEAD_LEN;
+    head->encrypt_type = pkinfo->encrypt_type;
+    img = wind_strrchr(pkinfo->output_file, '\\');
+    if(img == W_NULL)
+        img = wind_strrchr(pkinfo->output_file, '/');
+    if(img == W_NULL)
+        img = pkinfo->output_file;
+    else
+        img ++;
+    wind_strncpy(head->img_name, img, 64);
+    wind_strncpy(head->board_name, pkinfo->board_name, 32);
+    wind_strncpy(head->cpu_name, pkinfo->cpu_name, 32);
+    wind_strncpy(head->arch_name, pkinfo->arch_name, 32);
+    boot_img_head_set(head,buff);
     
-    
-    return W_ERR_OK;
+    err = write_img_file(pkinfo->output_file, buff,imglen);
+    wind_free(buff);
+    return err;
 }
 
 static void sort_input_file(void)
 {
     w_int32_t i,j;
     infile_info_s info;
-    if(cfg_info.file_cnt <= 1)
+    pack_info_s *pkinfo = &pack_info;
+    if(pkinfo->file_cnt <= 1)
         return;
-    for(i = 0;i < cfg_info.file_cnt - 1;i ++)
+    for(i = 0;i < pkinfo->file_cnt - 1;i ++)
     {
-        for(j = i+1;j < cfg_info.file_cnt;j ++)
+        for(j = i+1;j < pkinfo->file_cnt;j ++)
         {
-            if(cfg_info.fileinfo[i].offset > cfg_info.fileinfo[j].offset)
+            if(pkinfo->fileinfo[i].offset > pkinfo->fileinfo[j].offset)
             {
-                wind_memcpy(&info,&cfg_info.fileinfo[i],sizeof(infile_info_s));
-                wind_memcpy(&cfg_info.fileinfo[i],&cfg_info.fileinfo[j],sizeof(infile_info_s));
-                wind_memcpy(&cfg_info.fileinfo[j],&info,sizeof(infile_info_s));
+                wind_memcpy(&info,&pkinfo->fileinfo[i],sizeof(infile_info_s));
+                wind_memcpy(&pkinfo->fileinfo[i],&pkinfo->fileinfo[j],sizeof(infile_info_s));
+                wind_memcpy(&pkinfo->fileinfo[j],&info,sizeof(infile_info_s));
             }
         }
     }
     
 }
 
-w_err_t check_file_space(void)
+static w_err_t check_file_space(void)
 {
     w_int32_t i,j;
-    infile_info_s info;
-    if(cfg_info.file_cnt <= 1)
-        return;
-    for(i = 0;i < cfg_info.file_cnt - 1;i ++)
+    //infile_info_s info;
+    pack_info_s *pkinfo = &pack_info;
+    if(pkinfo->file_cnt <= 1)
+        return W_ERR_OK;
+    for(i = 0;i < pkinfo->file_cnt - 1;i ++)
     {
-        for(j = i+1;j < cfg_info.file_cnt;j ++)
+        for(j = i+1;j < pkinfo->file_cnt;j ++)
         {
-            if(cfg_info.fileinfo[i].offset + cfg_info.fileinfo[i].flen > cfg_info.fileinfo[j].offset)
+            if(pkinfo->fileinfo[i].offset + pkinfo->fileinfo[i].flen > pkinfo->fileinfo[j].offset)
             {
-                wind_error("file %s is too long",cfg_info.fileinfo[i].input_file);
+                wind_error("file %s is too long",pkinfo->fileinfo[i].input_file);
                 return W_ERR_FAIL;
             }
         }
@@ -387,20 +425,21 @@ w_err_t check_file_space(void)
 w_int32_t pack_main(w_int32_t argc,char **argv)
 {
     w_err_t err;
+    pack_info_s *pkinfo = &pack_info;
     wind_printf("boot pack start.\r\n");
     WIND_ASSERT_RETURN(argc >= 2,W_ERR_INVALID);
     pack_info_init();
     err = get_cfginfo(argv[1],databuff,sizeof(databuff));
     WIND_ASSERT_RETURN(err == W_ERR_OK,-1);
     wind_printf(databuff);
-    err = parse_file(databuff,&cfg_info);
+    err = parse_file(databuff,&pack_info);
     WIND_ASSERT_RETURN(err == W_ERR_OK,-1);
     sort_input_file();
     err = check_file_space();
     WIND_ASSERT_TODO(err == W_ERR_OK,release_file_buff(),err);
     err = read_bin_files();
     WIND_ASSERT_TODO(err == W_ERR_OK,release_file_buff(),err);
-    err = pack_files(&cfg_info);
+    err = pack_files(&pack_info);
     WIND_ASSERT_TODO(err == W_ERR_OK,release_file_buff(),-1);
     
     release_file_buff();

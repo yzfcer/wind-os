@@ -42,7 +42,7 @@ char* wind_strcpy(char *dest,const char *src)
 
 char* wind_strncpy(char *dest,const char *src,w_uint32_t count)
 {
-    w_int32_t i;
+    w_uint32_t i;
     for(i = 0;i < count;i ++)
         dest[i] = src[i];
     dest[count -1] = '\0';
@@ -293,19 +293,19 @@ char *wind_strstr(const char *s1,const char *s2)
 
 char *wind_strskip(char *str,char *charr,w_int32_t count)
 {
-    w_int32_t i,j;
+    w_int32_t i;
     for(;;)
     {
-        for(j = 0;j < count;j ++)
+        for(i = 0;i < count;i ++)
         {
-            if(*str == charr[j])
+            if(*str == charr[i])
             {
                 str ++;
                 break;
             }
                 
         }
-        if(j >= count)
+        if(i >= count)
             break;
     }
     if(*str == '\0')

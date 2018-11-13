@@ -38,7 +38,8 @@ struct __img_head_s
     w_uint32_t img_len;
     w_uint32_t head_len;
     w_uint32_t head_ver;
-    w_uint32_t bin_ver;
+    w_uint32_t hard_ver;
+    w_uint32_t soft_ver;
     w_uint32_t bin_crc;
     w_uint32_t bin_offset;
     w_uint32_t encrypt_type;

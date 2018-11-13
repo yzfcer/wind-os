@@ -40,7 +40,8 @@ void boot_img_head_print(img_head_s *head)
     wind_printf("CPU model      : %s\r\n",(char*)head->cpu_name);
     wind_printf("img file name  : %s\r\n",(char*)head->img_name);
     wind_printf("img file lenth : %d\r\n",head->img_len);
-    wind_printf("soft version   : %s\r\n",head->bin_ver);
+	wind_printf("hard version   : %s\r\n",head->hard_ver);
+    wind_printf("soft version   : %s\r\n",head->soft_ver);
     if(head->encrypt_type < 2)
         wind_printf("encrypt type   : %s\r\n",encty_type[head->encrypt_type]);
     else
@@ -65,7 +66,9 @@ w_err_t boot_img_head_get(img_head_s *head,w_uint8_t *buff)
     index += 4;
     wind_to_uint32(&buff[index],&head->head_ver);
     index += 4;
-    wind_to_uint32(&buff[index],&head->bin_ver);
+    wind_to_uint32(&buff[index],&head->hard_ver);
+    index += 4;
+    wind_to_uint32(&buff[index],&head->soft_ver);
     index += 4;
     wind_to_uint32(&buff[index],&head->bin_crc);
     index += 4;
@@ -116,7 +119,9 @@ w_err_t boot_img_head_set(img_head_s *head,w_uint8_t *buff)
     index += 4;
     wind_from_uint32(&buff[index],head->head_ver);
     index += 4;
-    wind_from_uint32(&buff[index],head->bin_ver);
+    wind_from_uint32(&buff[index],head->hard_ver);
+    index += 4;
+    wind_from_uint32(&buff[index],head->soft_ver);
     index += 4;
     wind_from_uint32(&buff[index],head->bin_crc);
     index += 4;
