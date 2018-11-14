@@ -100,6 +100,7 @@ static w_err_t download_to_fs_part(void)
     w_err_t err;
     w_part_s *part = boot_part_get(PART_FS);
     WIND_ASSERT_RETURN(part != W_NULL,W_ERR_NOT_SUPPORT);
+    wind_notice("download to part:%s",part->name);
     err = boot_img_download();
     WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_FAIL);
     return boot_img_flush_cache_to_part(&part,1);
@@ -110,6 +111,7 @@ static w_err_t download_to_sysrun(void)
     w_err_t err;
     w_part_s *part = boot_part_get(PART_SYSRUN);
     WIND_ASSERT_RETURN(part != W_NULL,W_ERR_NOT_SUPPORT);
+    wind_notice("download to part:%s",part->name);
     err = boot_img_download();
     WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_FAIL);
     err = boot_img_flush_cache_to_part(&part,1);
@@ -151,6 +153,7 @@ static w_err_t download_to_any_part(void)
     wind_printf("now download to part:%s\r\n",part[index-1].name);
     part = boot_part_get(part[index-1].name);
     WIND_ASSERT_RETURN(part != W_NULL,W_ERR_NOT_SUPPORT);
+    wind_notice("download to part:%s",part->name);
     err = boot_img_download();
     WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_FAIL);
     return boot_img_flush_cache_to_part(&part,1);

@@ -72,8 +72,8 @@ static share_param_s *get_share_data_from_part(void)
     w_part_s *part = boot_part_get(PART_SHARE);
     WIND_ASSERT_RETURN(part != W_NULL,(share_param_s *)W_NULL);
     WIND_ASSERT_RETURN(COMMBUF_SIZE >= part->size,(share_param_s *)W_NULL);
-    boot_part_seek(part,0);
-    len = boot_part_read(part,buff,sizeof(share_param_s)+4);
+    //boot_part_seek(part,0);
+    len = boot_part_read(part,0,buff,sizeof(share_param_s)+4,1);
     WIND_ASSERT_RETURN(len > 0,(share_param_s *)W_NULL);
     err = check_share_param(buff);
     if(err == W_ERR_OK)
@@ -95,8 +95,8 @@ w_err_t share_param_flush(share_param_s *sp)
     wind_notice("flush share param");
     wind_memcpy(buff,sp,sizeof(share_param_s));
     update_share_crc(buff);
-    boot_part_seek(part,0);
-    len = boot_part_write(part,(w_uint8_t*)sp,sizeof(share_param_s)+4);
+    //boot_part_seek(part,0);
+    len = boot_part_write(part,0,(w_uint8_t*)sp,sizeof(share_param_s)+4);
     WIND_ASSERT_RETURN(len > 0,W_ERR_FAIL);
     return W_ERR_OK;
 }

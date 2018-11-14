@@ -41,7 +41,7 @@ typedef struct
     w_uint32_t size;
     w_uint32_t blksize;
     w_uint32_t datalen;
-    w_uint32_t offset;
+    //w_uint32_t offset;
     w_uint32_t crc;
 }w_part_s;
 w_uint8_t *get_common_buffer(void);          
@@ -49,10 +49,10 @@ w_uint8_t *get_common_buffer(void);
 w_err_t boot_part_init(void);
 w_bool_t  boot_part_create(const char *name,w_media_s *media,w_uint32_t size,w_uint8_t encrypt);
 w_part_s *boot_part_get(const char *name);
-w_err_t boot_part_seek(w_part_s *part,w_int32_t offset);
+//w_err_t boot_part_seek(w_part_s *part,w_int32_t offset);
 w_err_t boot_part_calc_crc(w_part_s *part,w_int32_t offset,w_int32_t len,w_bool_t set);
-w_int32_t boot_part_read(w_part_s *part,w_uint8_t *data,w_uint32_t datalen);
-w_int32_t boot_part_write(w_part_s *part,w_uint8_t *data,w_uint32_t datalen);
+w_int32_t boot_part_read(w_part_s *part,w_int32_t offset,w_uint8_t *data,w_uint32_t datalen,w_bool_t read_space);
+w_int32_t boot_part_write(w_part_s *part,w_int32_t offset,w_uint8_t *data,w_uint32_t datalen);
 w_err_t boot_part_erase(w_part_s *part);
 void    boot_part_reset_ram(void);
 

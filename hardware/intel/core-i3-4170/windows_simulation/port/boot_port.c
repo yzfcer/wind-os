@@ -36,17 +36,23 @@ w_err_t boot_exit_hook(void)
 w_int32_t boot_receive_img(w_part_s *part)
 {
     FILE *file;
-    w_int32_t len;
+    w_int32_t len,offset;
     w_uint8_t *buff = get_common_buffer();
     file = fopen("imgfile.none.img","rb");
     if(!file)
         return -1;
-    boot_part_seek(part,0);
+    //boot_part_seek(part,0);
+    offset = 0;
     while(1)
     {
         len = fread((w_uint8_t*)buff,1,COMMBUF_SIZE,file);
         if(len > 0)
-            boot_part_write(part,buff,len);
+        {
+            len = boot_part_write(part,offset,buff,len);
+            WIND_ASSERT_TODO(len > 0,fclose(file),-1);
+            offset += len;
+        }
+            
         else
             break;
     }

@@ -135,19 +135,20 @@ static w_err_t decrypt_img(w_part_s *img)
     img_head_s *head = &img_head;
     if(head->magic != IMG_MAGIC)
         return W_ERR_FAIL;
+    wind_notice("decrypt part:%s",img->name);
     offset = head->head_len;
     fsize = head->img_len;
-    boot_part_seek(img,offset);
+    //boot_part_seek(img,offset);
     buff = get_common_buffer();
-    //offset = 0;
+    
     wind_encrypt_init(&ctx,keys,sizeof(keys));
     while(1)
     {
-        len = boot_part_read(img,buff,COMMBUF_SIZE);
+        len = boot_part_read(img,offset,buff,COMMBUF_SIZE,W_FALSE);
         WIND_ASSERT_RETURN(len > 0,W_ERR_FAIL);
         len = (fsize - offset) > len?len:fsize - offset;
         wind_decrypt(&ctx,buff,len);
-        boot_part_write(img,buff,COMMBUF_SIZE);
+        boot_part_write(img,offset,buff,COMMBUF_SIZE);
         offset += len;
         if(offset >= fsize)
             break;
@@ -163,15 +164,17 @@ static w_err_t check_img_file_crc(w_part_s *cache)
     w_uint32_t offset;
     w_uint32_t crc = 0xffffffff;
     WIND_ASSERT_RETURN(cache != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(cache->datalen > 0,W_ERR_INVALID);
     buff = get_common_buffer();
     blkcnt = COMMBUF_SIZE / cache->blksize;
     WIND_ASSERT_RETURN(blkcnt > 0,W_ERR_FAIL);
     size = blkcnt * cache->blksize;
     offset = 0;
-    boot_part_seek(cache,0);
-    while(cache->offset < cache->datalen)
+    //boot_part_seek(cache,0);
+    //while(cache->offset < cache->datalen)
+    while(offset < cache->datalen)
     {
-        size = boot_part_read(cache,buff,COMMBUF_SIZE);
+        size = boot_part_read(cache,offset,buff,COMMBUF_SIZE,W_FALSE);
         WIND_ASSERT_RETURN(size > 0,W_ERR_FAIL);
         crc = wind_crc32(buff,size,crc);
         offset += size;
@@ -218,6 +221,7 @@ static w_err_t flush_bin_file(w_part_s **part,w_int32_t count,w_uint8_t encrypt)
         if((part[i]->encrypt && encrypt) ||
             !(part[i]->encrypt || encrypt))
         {
+            wind_notice("flush bin file to part:%s",part[i]->name);
             err = boot_part_copy_data(cache,part[i]);
             if(0 != err)
             {
@@ -244,8 +248,8 @@ w_err_t boot_img_flush_cache_to_part(w_part_s **part,w_int32_t count)
     
     cache = boot_part_get(PART_CACHE);
     buff = get_common_buffer();
-    boot_part_seek(cache,0);
-    len = boot_part_read(cache,buff,COMMBUF_SIZE);
+    //boot_part_seek(cache,0);
+    len = boot_part_read(cache,0,buff,COMMBUF_SIZE,W_FALSE);
     WIND_ASSERT_RETURN(len > 0,W_ERR_FAIL);
     wind_memset(head,0,sizeof(img_head_s));
     err = boot_img_head_get(head,buff);
@@ -310,14 +314,14 @@ w_err_t boot_img_flush_cache(void)
         part[0] = part[1];
         part[1] = tmp;
         count = 2;
+        wind_notice("download to part:%s",part[0]->name,part[1]->name);
     }
     else
     {
         count = 1;
+        wind_notice("download to part:%s",part[0]->name);
     }
-
-    //err = boot_img_download();
-    //WIND_ASSERT_RETURN(err == W_ERR_OK,err);
+    
     return boot_img_flush_cache_to_part(part,count);
 }
 
