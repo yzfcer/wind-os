@@ -62,9 +62,9 @@ extern "C" {
 #define WIND_DEBUG_SUPPORT 1
 //º”√‹∑Ω Ω
 #define ENCRYPT_NONE 0
-#define ENCRYPT_AES 1
-#define ENCRYPT_DES 2
-#define ENCRYPT_RC4 3
+#define ENCRYPT_RC4 1
+#define ENCRYPT_AES 2
+#define ENCRYPT_DES 3
 #define ENCRYPT_TYPE ENCRYPT_RC4
 
 

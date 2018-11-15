@@ -15,38 +15,45 @@
 #include "wind_debug.h"
 #include "wind_encrypt.h"
 
-static void rc4_init(w_uint8_t *sbox, w_uint8_t *key, w_int32_t len)
+static void rc4_init(w_encypt_ctx_s *ctx, w_uint8_t *key, w_int32_t len)
 {
     w_int32_t i = 0, j = 0;
     w_uint8_t k[256] = { 0 };
     w_uint8_t tmp = 0;
+    //wind_printf("keys:");
+    //for (i = 0; i<len; i++)
+    //    wind_printf("%2x ",key[i]);
+    //wind_printf("\r\n");
+    ctx->i = 0;
+    ctx->j = 0;
     for (i = 0; i<256; i++)
     {
-        sbox[i] = (w_uint8_t)i;
+        ctx->sbox[i] = (w_uint8_t)i;
         k[i] = key[i%len];
     }
     for (i = 0; i<256; i++)
     {
-        j = (j + sbox[i] + k[i]) % 256;
-        tmp = sbox[i];
-        sbox[i] = sbox[j];
-        sbox[j] = tmp;
+        j = (j + ctx->sbox[i] + k[i]) % 256;
+        tmp = ctx->sbox[i];
+        ctx->sbox[i] = ctx->sbox[j];
+        ctx->sbox[j] = tmp;
     }
 }
 
 static w_int32_t rc4_crypt(w_encypt_ctx_s *ctx,w_uint8_t *data, w_int32_t len)
 {
-    w_int32_t i = 0, j = 0, t = 0;
+    //w_int32_t i = 0, j = 0, t = 0;
+    w_int32_t t;
     w_int32_t k = 0;
     w_uint8_t tmp;
     for (k = 0; k<len; k++)
     {
-        i = (i + 1) % 256;
-        j = (j + ctx->sbox[i]) % 256;
-        tmp = ctx->sbox[i];
-        ctx->sbox[i] = ctx->sbox[j];
-        ctx->sbox[j] = tmp;
-        t = (ctx->sbox[i] + ctx->sbox[j]) % 256;
+        ctx->i = (ctx->i + 1) % 256;
+        ctx->j = (ctx->j + ctx->sbox[ctx->i]) % 256;
+        tmp = ctx->sbox[ctx->i];
+        ctx->sbox[ctx->i] = ctx->sbox[ctx->j];
+        ctx->sbox[ctx->j] = tmp;
+        t = (ctx->sbox[ctx->i] + ctx->sbox[ctx->j]) % 256;
         data[k] ^= ctx->sbox[t];
     }
     return len;
@@ -56,7 +63,8 @@ w_err_t wind_encrypt_init(w_encypt_ctx_s *ctx,w_uint8_t *passwd, w_int32_t len)
 {
     WIND_ASSERT_RETURN(passwd != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(len >= ENCRYPT_PASSWD_MIN_LEN,W_ERR_INVALID);
-    rc4_init(ctx->sbox,passwd,len);
+    rc4_init(ctx,passwd,len);
+    
     return W_ERR_OK;
 
 }

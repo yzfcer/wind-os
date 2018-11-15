@@ -272,10 +272,10 @@ w_err_t parse_line(char *buff,pack_info_s *info)
         parse_version(&info->hw_version,str[1]);
     else if(wind_strcmp(str[0],"softversion") == 0)
         parse_version(&info->sw_version,str[1]);
-    else if(wind_strcmp(str[0],"encrypt") == 0)
-        parse_encrypt_type(info,str[1]);
-    else if(wind_strcmp(str[0],"encryptkey") == 0)
-        parse_encrypt_key(info,str[1]);
+    //else if(wind_strcmp(str[0],"encrypt") == 0)
+    //    parse_encrypt_type(info,str[1]);
+    //else if(wind_strcmp(str[0],"encryptkey") == 0)
+    //    parse_encrypt_key(info,str[1]);
     else if(wind_strcmp(str[0],"inputfile") == 0)
         parse_input_file(info,str[1]);
     else if(wind_strcmp(str[0],"outputfile") == 0)
@@ -334,6 +334,7 @@ static w_err_t pack_files(pack_info_s *info)
     img_head_s *head;
     w_encypt_ctx_s ctx;
     w_uint32_t crc;
+    w_uint8_t key[] = ENCRYPT_KEY;
     pack_info_s *pkinfo = &pack_info;
 
     infile_info_s *finfo;
@@ -347,8 +348,14 @@ static w_err_t pack_files(pack_info_s *info)
         finfo = &pkinfo->fileinfo[i];
         wind_memcpy(&buff[finfo->offset],finfo->buff,finfo->flen);
     }
-    wind_encrypt_init(&ctx,pkinfo->keys,pkinfo->key_len);
-    wind_encrypt(&ctx,&buff[IMG_HEAD_LEN],imglen - IMG_HEAD_LEN);
+    if(ENCRYPT_TYPE)
+    {
+        pkinfo->encrypt_type = ENCRYPT_TYPE;
+        wind_memcpy(pkinfo->keys,key,sizeof(key));
+        pkinfo->key_len = sizeof(key);
+        wind_encrypt_init(&ctx,pkinfo->keys,pkinfo->key_len);
+        wind_encrypt(&ctx,&buff[IMG_HEAD_LEN],imglen - IMG_HEAD_LEN);
+    }
     crc = wind_crc32(&buff[IMG_HEAD_LEN],imglen - IMG_HEAD_LEN,0xffffffff);
     head = &imghead;
     head->magic = IMG_MAGIC;
@@ -425,6 +432,7 @@ static w_err_t check_file_space(void)
 w_int32_t pack_main(w_int32_t argc,char **argv)
 {
     w_err_t err;
+    
     pack_info_s *pkinfo = &pack_info;
     wind_printf("boot pack start.\r\n");
     WIND_ASSERT_RETURN(argc >= 2,W_ERR_INVALID);

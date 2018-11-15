@@ -16,9 +16,12 @@
 #include "wind_debug.h"
 #include "boot_part.h"
 #include "boot_test.h"
+#include "boot_part.h"
 #include "boot_share_param.h"
 #include "boot_hw_if.h"
 #include "boot_img.h"
+#include "wind_encrypt.h"
+#include "wind_string.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -89,6 +92,27 @@ void test_upgrade(void)
     return;
 }
 
+void test_encrypt(void)
+{
+    w_int32_t i;
+    w_encypt_ctx_s ctx;
+    w_uint8_t key[] = ENCRYPT_KEY;
+    w_uint8_t *buff = get_common_buffer();
+    wind_memset(buff,0x41,COMMBUF_SIZE);
+    wind_encrypt_init(&ctx,key,sizeof(key));
+    wind_encrypt(&ctx,buff,COMMBUF_SIZE);
+    wind_encrypt_init(&ctx,key,sizeof(key));
+    wind_decrypt(&ctx,buff,COMMBUF_SIZE);
+    for(i = 0;i < COMMBUF_SIZE;i ++)
+    {
+        if(buff[i] != 0x41)
+        {
+            wind_error("decrypt error");
+            return;
+        }
+    }
+    wind_notice("decrypt OK");
+}
 
 boot_test_s g_boottest[] = 
 {
@@ -96,6 +120,7 @@ boot_test_s g_boottest[] =
     {'2',"test program bak error",test_probak_error},
     {'3',"test running program error",test_run_error},
     {'4',"test upgrade program",test_upgrade},
+    {'5',"test encrypt",test_encrypt},
 };
 
 void print32_t_boottest(void)

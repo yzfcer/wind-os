@@ -17,6 +17,7 @@
 #define ENCRYPT_PASSWD_MIN_LEN 12
 typedef struct 
 {
+    w_int32_t i, j;
     w_uint8_t sbox[256];
 }w_encypt_ctx_s;
 

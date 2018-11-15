@@ -135,6 +135,8 @@ static w_err_t decrypt_img(w_part_s *img)
     img_head_s *head = &img_head;
     if(head->magic != IMG_MAGIC)
         return W_ERR_FAIL;
+    if(!ENCRYPT_TYPE)
+        return W_ERR_OK;
     wind_notice("decrypt part:%s",img->name);
     offset = head->head_len;
     fsize = head->img_len;
