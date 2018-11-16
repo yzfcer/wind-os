@@ -30,7 +30,6 @@ typedef enum
 typedef struct 
 {
     char name[PART_NAME_LEN];
-    //w_media_s *media;
     char media_name[MEDIA_NAME_LEN];
     w_uint8_t mtype:1;
     w_uint8_t used:1;

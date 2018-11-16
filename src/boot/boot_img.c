@@ -380,15 +380,17 @@ static w_err_t repair_program(void)
 
 w_err_t boot_img_check(void)
 {
-    w_int32_t idx = 0;
+    //w_int32_t idx = 0;
     w_err_t err = 0;
     w_part_s *code[3];
     w_int32_t error_flag = 0,i;
     w_bool_t is_ok;
     
-    code[idx++] = boot_part_get(PART_IMG1);
-    code[idx++] = boot_part_get(PART_IMG2);
-    code[idx++] = boot_part_get(PART_SYSRUN);
+    code[0] = boot_part_get(PART_IMG1);
+    code[1] = boot_part_get(PART_IMG2);
+    code[2] = boot_part_get(PART_SYSRUN);
+    if(code[2]->mtype == MEDIA_TYPE_RAM)
+        code[2] = W_NULL;
     for(i = 0;i < sizeof(code)/sizeof(w_part_s*);i ++)
     {
         if(!code[i])

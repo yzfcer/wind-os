@@ -132,6 +132,7 @@ w_err_t boot_part_calc_crc(w_part_s *part,w_int32_t offset,w_int32_t len,w_bool_
         part->crc = crc;
         return W_ERR_OK;
     }
+    wind_notice("part calc crc %s",part->crc == crc?"OK":"ERROR");
     return part->crc == crc?W_ERR_OK:W_ERR_FAIL;
 }
 
