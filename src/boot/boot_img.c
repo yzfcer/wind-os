@@ -45,20 +45,27 @@ static w_part_s * get_old_part(void)
     if(!(part[0] && part[1]))
     {
         if(part[0] && (part[0]->status == MEM_NORMAL))
+        {
+            part[0]->time_mark ++;
             return part[0];
+        }
+            
         if(part[1] && (part[1]->status == MEM_NORMAL))
+        {
+            part[1]->time_mark ++;
             return part[1];
+        }
         return (w_part_s *)W_NULL;
     }
     if((part[0]->status != MEM_NORMAL) && (part[1]->status == MEM_NORMAL))
     {
-        part[0] = part[1] + 1;
+        part[0]->time_mark = part[1]->time_mark + 1;
         return part[0];
         
     }
     if((part[1]->status != MEM_NORMAL) && (part[0]->status == MEM_NORMAL))
     {
-        part[1] = part[0] + 1;
+        part[1]->time_mark = part[0]->time_mark + 1;
         return part[1];
     }
     if(part[0]->time_mark <= part[1]->time_mark)

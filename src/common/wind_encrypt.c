@@ -20,10 +20,6 @@ static void rc4_init(w_encypt_ctx_s *ctx, w_uint8_t *key, w_int32_t len)
     w_int32_t i = 0, j = 0;
     w_uint8_t k[256] = { 0 };
     w_uint8_t tmp = 0;
-    //wind_printf("keys:");
-    //for (i = 0; i<len; i++)
-    //    wind_printf("%2x ",key[i]);
-    //wind_printf("\r\n");
     ctx->i = 0;
     ctx->j = 0;
     for (i = 0; i<256; i++)

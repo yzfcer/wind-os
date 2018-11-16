@@ -149,6 +149,7 @@ w_int32_t boot_part_read(w_part_s *part,w_int32_t offset,w_uint8_t *data,w_uint3
     WIND_ASSERT_RETURN(data != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(datalen > 0,W_ERR_INVALID);
     WIND_ASSERT_RETURN(0 == (offset & (part->blksize-1)),W_ERR_INVALID);
+    wind_debug("read part:%s,offset:%d,lenth:%d",part->name,offset,datalen);
     size = datalen;
     if(size + offset > part->size)
         size = part->datalen - offset;
@@ -171,6 +172,7 @@ w_int32_t boot_part_write(w_part_s *part,w_int32_t offset,w_uint8_t *data,w_uint
     WIND_ASSERT_RETURN(datalen < part->size,W_ERR_INVALID);
     WIND_ASSERT_RETURN(datalen + offset < part->size,W_ERR_INVALID);
     WIND_ASSERT_RETURN(0 == (offset&(part->blksize-1)),W_ERR_INVALID);
+    wind_debug("write part:%s,offset:%d,lenth:%d",part->name,offset,datalen);
     size = datalen;
     media = boot_media_get(part->media_name);
     blkcnt = (size + part->blksize - 1)/ part->blksize;
@@ -250,9 +252,27 @@ w_part_s *boot_part_get_list(void)
 
 static void print_copy_percents(w_int32_t numerator, w_int32_t denominator,w_int32_t del)
 {
-    if(del)
-        wind_printf("%c%c%c%c",8,8,8,8);
-    wind_printf("%3d%%",numerator*100/denominator);
+    #define STATGE_LEN 100
+    static char stage[STATGE_LEN+3];
+    w_int32_t i,cnt;
+    w_int32_t persent;
+    WIND_ASSERT_RETURN(denominator > 0,W_ERR_INVALID);
+    persent = numerator*100/denominator;
+    if(PRINT_LEVEL <= PRINT_LV_DEBUG)
+        return;
+    cnt = persent * STATGE_LEN / 100;
+    wind_memset(stage,' ',STATGE_LEN+3);
+    stage[0] = '[';
+    stage[STATGE_LEN+1] = ']';
+    stage[STATGE_LEN+2] = 0;
+    for(i = 0;i < cnt;i ++)
+        stage[i+1] = '=';
+    if(cnt < 25)
+        stage[cnt] = '>';
+    wind_printf("\r%s",stage);
+    //if(del)
+    //    wind_printf("%c%c%c%c",8,8,8,8);
+    //wind_printf("%3d%%",persent);
     feed_watchdog();
 }
 
@@ -268,6 +288,7 @@ w_err_t boot_part_copy_data(w_part_s *src,w_part_s *dest)
         wind_warn("space is NOT enough.");
         return W_ERR_FAIL;
     }
+    boot_part_erase(dest);
     wind_notice("copy data from \"%s\" to \"%s\" lenth %d.",
                 src->name,dest->name,src->datalen);
     wind_debug("source part %s,addr 0x%x,lenth %d dest part,%s,addr 0x%x,lenth %d.",
@@ -275,14 +296,14 @@ w_err_t boot_part_copy_data(w_part_s *src,w_part_s *dest)
                 src->name,dest->base,dest->size);
     offset = 0;
     blocks = (src->datalen + COMMBUF_SIZE - 1) / COMMBUF_SIZE;
-    wind_printf("complete:");
+    //wind_printf("complete:\r\n");
     print_copy_percents(0,1,0);
     for(i = 0;i < blocks;i ++)
     {    
         for(times = 0;times < 3;times ++)
         {
             wind_memset(buff,offset,COMMBUF_SIZE);
-            len1 = boot_part_read(src,0,buff,COMMBUF_SIZE,0);
+            len1 = boot_part_read(src,offset,buff,COMMBUF_SIZE,0);
             if(len1 > 0)
                 break;            
         }
