@@ -147,7 +147,6 @@ static w_err_t decrypt_img(w_part_s *img)
     wind_notice("decrypt part:%s",img->name);
     offset = head->head_len;
     fsize = head->img_len;
-    //boot_part_seek(img,offset);
     buff = get_common_buffer();
     
     wind_encrypt_init(&ctx,keys,sizeof(keys));
@@ -179,8 +178,6 @@ static w_err_t check_img_file_crc(w_part_s *cache)
     WIND_ASSERT_RETURN(blkcnt > 0,W_ERR_FAIL);
     size = blkcnt * cache->blksize;
     offset = 0;
-    //boot_part_seek(cache,0);
-    //while(cache->offset < cache->datalen)
     while(offset < cache->datalen)
     {
         size = boot_part_read(cache,offset,buff,COMMBUF_SIZE,W_FALSE);
@@ -257,7 +254,6 @@ w_err_t boot_img_flush_cache_to_part(w_part_s **part,w_int32_t count)
     
     cache = boot_part_get(PART_CACHE);
     buff = get_common_buffer();
-    //boot_part_seek(cache,0);
     len = boot_part_read(cache,0,buff,COMMBUF_SIZE,W_FALSE);
     WIND_ASSERT_RETURN(len > 0,W_ERR_FAIL);
     wind_memset(head,0,sizeof(img_head_s));

@@ -140,7 +140,6 @@ w_err_t boot_param_read(void)
     {
         for(j = 0;j < 3;j ++)
         {
-            //boot_part_seek(part[i],0);
             len = boot_part_read(part[i],0,buff,param_lenth()+4,W_TRUE);
             if(len >= sizeof(boot_param_s))
                 break;

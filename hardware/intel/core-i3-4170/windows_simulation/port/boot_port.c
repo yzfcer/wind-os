@@ -41,7 +41,6 @@ w_int32_t boot_receive_img(w_part_s *part)
     file = fopen("imgfile.none.img","rb");
     if(!file)
         return -1;
-    //boot_part_seek(part,0);
     offset = 0;
     while(1)
     {

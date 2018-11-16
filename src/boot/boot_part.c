@@ -90,16 +90,6 @@ w_part_s *boot_part_get(const char *name)
     return NULL;
 }
 
-#if 0
-w_err_t boot_part_seek(w_part_s *part,w_int32_t offset)
-{
-    WIND_ASSERT_RETURN(part != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(offset >= 0,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(offset < part->size,W_ERR_INVALID);
-    part->offset = offset;
-    return W_ERR_OK;
-}
-#endif
 
 w_err_t boot_part_calc_crc(w_part_s *part,w_int32_t offset,w_int32_t len,w_bool_t set)
 {
@@ -119,7 +109,6 @@ w_err_t boot_part_calc_crc(w_part_s *part,w_int32_t offset,w_int32_t len,w_bool_
     blkcnt = COMMBUF_SIZE / part->blksize;
     WIND_ASSERT_RETURN(blkcnt > 0,W_ERR_FAIL);
     size = blkcnt * part->blksize;
-    //boot_part_seek(part,offset);
     while(offset < part->datalen)
     {
         size = boot_part_read(part,offset,buff,COMMBUF_SIZE,W_FALSE);
@@ -132,7 +121,7 @@ w_err_t boot_part_calc_crc(w_part_s *part,w_int32_t offset,w_int32_t len,w_bool_
         part->crc = crc;
         return W_ERR_OK;
     }
-    wind_notice("part calc crc %s",part->crc == crc?"OK":"ERROR");
+    wind_notice("part %s calc crc %s",part->name,part->crc == crc?"OK":"ERROR");
     return part->crc == crc?W_ERR_OK:W_ERR_FAIL;
 }
 
