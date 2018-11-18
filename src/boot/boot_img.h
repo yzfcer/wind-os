@@ -25,7 +25,6 @@ w_part_s *get_old_part(void);
 w_part_s *boot_img_get_new_normal_img(void);
 
 w_err_t boot_img_download(void);
-w_err_t boot_img_flush_cache(void);
 w_err_t boot_img_flush_cache_to_part(w_part_s **part,w_int32_t count);
 
 w_err_t boot_img_clear_all(void);

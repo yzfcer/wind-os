@@ -29,6 +29,7 @@
 #include "boot_imghead.h"
 #include "wind_encrypt.h"
 #include "wind_crc32.h"
+#include "wind_macro.h"
 #include <stdio.h>
 #include <malloc.h>
 #include <stdlib.h>
@@ -121,6 +122,7 @@ static w_err_t read_bin_files(void)
     for(i = 0;i < pkinfo->file_cnt;i ++)
     {
         info = &pkinfo->fileinfo[i];
+        wind_notice("read file:%s",info->input_file);
         flen = read_bin_file(info->input_file,&info->buff);
         WIND_ASSERT_RETURN(flen > 0,W_ERR_FAIL);
         info->flen = flen;
@@ -163,8 +165,10 @@ static w_err_t get_cfginfo(char *boradname,char *buff,w_int32_t size)
     pack_info_s *pkinfo = &pack_info;
     wind_strcpy(pkinfo->cfgname,boradname);
     wind_strcat(pkinfo->cfgname,".cfg");
+    wind_notice("read config file:%s",pkinfo->cfgname);
     len = read_cfg_file(pkinfo->cfgname,buff,size);
     WIND_ASSERT_RETURN(len > 0,W_ERR_FAIL);
+    wind_notice("config file:%s",pkinfo->cfgname);
     return W_ERR_OK;    
 }
 
@@ -251,6 +255,7 @@ static w_err_t parse_input_file(pack_info_s *info,char *hwstr)
     index = info->file_cnt;
     info->fileinfo[index].offset = (w_int32_t)value;
     wind_strcpy(info->fileinfo[index].input_file,arr[1]);
+    wind_notice("inputfile : %s",info->fileinfo[index].input_file);
     info->file_cnt ++;
     return W_ERR_OK;
 }
@@ -263,23 +268,45 @@ w_err_t parse_line(char *buff,pack_info_s *info)
     cnt = wind_strsplit(buff,'=',str,2);
     WIND_ASSERT_RETURN(cnt == 2,W_ERR_FAIL);
     if(wind_strcmp(str[0],"arch") == 0)
+    {
         wind_strcpy(info->arch_name,str[1]);
+        wind_notice("arch  : %s",info->arch_name);
+    }
     else if(wind_strcmp(str[0],"cpu") == 0)
+    {
         wind_strcpy(info->cpu_name,str[1]);
+        wind_notice("cpu   : %s",info->cpu_name);
+    }
     else if(wind_strcmp(str[0],"board") == 0)
+    {
         wind_strcpy(info->board_name,str[1]);
+        wind_notice("board : %s",info->board_name);
+    }
     else if(wind_strcmp(str[0],"hardversion") == 0)
+    {
         parse_version(&info->hw_version,str[1]);
+        wind_notice("hard_version : %d.%d.%d",DWORD_HBYTE2(info->hw_version),
+            DWORD_HBYTE3(info->hw_version),DWORD_HBYTE4(info->hw_version));
+    }
     else if(wind_strcmp(str[0],"softversion") == 0)
+    {
         parse_version(&info->sw_version,str[1]);
+        wind_notice("soft_version : %d.%d.%d",DWORD_HBYTE2(info->sw_version),
+            DWORD_HBYTE3(info->sw_version),DWORD_HBYTE4(info->sw_version));
+    }
     //else if(wind_strcmp(str[0],"encrypt") == 0)
     //    parse_encrypt_type(info,str[1]);
     //else if(wind_strcmp(str[0],"encryptkey") == 0)
     //    parse_encrypt_key(info,str[1]);
     else if(wind_strcmp(str[0],"inputfile") == 0)
+    {
         parse_input_file(info,str[1]);
+    }
     else if(wind_strcmp(str[0],"outputfile") == 0)
+    {
         wind_strcpy(info->output_file,str[1]);
+        wind_notice("outputfile : %s",info->output_file);
+    }
     return W_ERR_OK;
 }
 
@@ -298,7 +325,7 @@ w_err_t parse_file(char *buff,pack_info_s *info)
         len = wind_strlen(str);
         if((len > 0)&&(str[0] != '#'))
         {
-            wind_printf("str:%s\r\n",str);
+            //wind_printf("str:%s\r\n",str);
             parse_line(str,info);
         }
             
@@ -410,7 +437,6 @@ static void sort_input_file(void)
 static w_err_t check_file_space(void)
 {
     w_int32_t i,j;
-    //infile_info_s info;
     pack_info_s *pkinfo = &pack_info;
     if(pkinfo->file_cnt <= 1)
         return W_ERR_OK;
@@ -425,6 +451,7 @@ static w_err_t check_file_space(void)
             }
         }
     }
+    wind_notice("check file space OK");
     return W_ERR_OK;
 }
 
@@ -439,7 +466,6 @@ w_int32_t pack_main(w_int32_t argc,char **argv)
     pack_info_init();
     err = get_cfginfo(argv[1],databuff,sizeof(databuff));
     WIND_ASSERT_RETURN(err == W_ERR_OK,-1);
-    wind_printf(databuff);
     err = parse_file(databuff,&pack_info);
     WIND_ASSERT_RETURN(err == W_ERR_OK,-1);
     sort_input_file();

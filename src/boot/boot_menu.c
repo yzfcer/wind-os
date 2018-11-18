@@ -90,9 +90,16 @@ w_int32_t get_menu_go_direction(void)
 static w_err_t download_to_img_part(void)
 {
     w_err_t err;
+    w_part_s *part[2];
+    w_int32_t count;
     err = boot_img_download();
     WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_FAIL);
-    return boot_img_flush_cache();
+    
+    part[0] = boot_part_get(PART_SYSRUN);
+    WIND_ASSERT_RETURN(part[0] != W_NULL,W_ERR_FAIL);
+    part[1] = get_old_part();
+    count = part[1] == W_NULL?1:2;
+    return boot_img_flush_cache_to_part(&part,count);
 }
 
 static w_err_t download_to_fs_part(void)

@@ -45,7 +45,7 @@ static part_info_init(w_part_s *part)
 {
     part->used = 1;
     part->status = MEM_NULL;
-    part->time_mark = 0;
+    //part->time_mark = 0;
     part->datalen = 0;
     part->crc = 0;
 }
@@ -121,6 +121,7 @@ w_err_t boot_part_calc_crc(w_part_s *part,w_int32_t offset,w_int32_t len,w_bool_
         part->crc = crc;
         return W_ERR_OK;
     }
+    wind_debug("part %s crc:0x%x,calc crc 0x%x",part->name,part->crc,crc);
     wind_notice("part %s calc crc %s",part->name,part->crc == crc?"OK":"ERROR");
     return part->crc == crc?W_ERR_OK:W_ERR_FAIL;
 }
@@ -136,10 +137,12 @@ w_int32_t boot_part_read(w_part_s *part,w_int32_t offset,w_uint8_t *data,w_uint3
     WIND_ASSERT_RETURN(offset < part->size,W_ERR_INVALID);
     if(!read_space)
         WIND_ASSERT_RETURN(offset < part->datalen,W_ERR_INVALID);
+    else
+        WIND_ASSERT_RETURN(offset < part->size,W_ERR_INVALID);
     WIND_ASSERT_RETURN(data != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(datalen > 0,W_ERR_INVALID);
     WIND_ASSERT_RETURN(0 == (offset & (part->blksize-1)),W_ERR_INVALID);
-    wind_debug("read part:%s,offset:%d,lenth:%d",part->name,offset,datalen);
+    //wind_debug("read part:%s,offset:%d,lenth:%d",part->name,offset,datalen);
     size = datalen;
     if(size + offset > part->size)
         size = part->datalen - offset;
@@ -147,6 +150,8 @@ w_int32_t boot_part_read(w_part_s *part,w_int32_t offset,w_uint8_t *data,w_uint3
     blkcnt = (size + part->blksize - 1)/ part->blksize;
     blkcnt = media->ops->read_blk(media,part->base + offset,data,blkcnt);
     WIND_ASSERT_RETURN(blkcnt > 0,W_ERR_FAIL);
+    if(!read_space)
+        return offset + size > part->datalen?part->datalen - offset:size;
     return size;
 }
 
@@ -162,7 +167,7 @@ w_int32_t boot_part_write(w_part_s *part,w_int32_t offset,w_uint8_t *data,w_uint
     WIND_ASSERT_RETURN(datalen < part->size,W_ERR_INVALID);
     WIND_ASSERT_RETURN(datalen + offset < part->size,W_ERR_INVALID);
     WIND_ASSERT_RETURN(0 == (offset&(part->blksize-1)),W_ERR_INVALID);
-    wind_debug("write part:%s,offset:%d,lenth:%d",part->name,offset,datalen);
+    //wind_debug("write part:%s,offset:%d,lenth:%d",part->name,offset,datalen);
     size = datalen;
     media = boot_media_get(part->media_name);
     blkcnt = (size + part->blksize - 1)/ part->blksize;
@@ -180,6 +185,7 @@ w_err_t boot_part_erase(w_part_s *part)
     WIND_ASSERT_RETURN(part != NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(part->size > 0,W_ERR_INVALID);
     WIND_ASSERT_RETURN(part->blksize > 0,W_ERR_INVALID);
+    wind_notice("erase part:%s",part->name);
     media = boot_media_get(part->media_name);
     blkcnt = part->size / part->blksize;
     blkcnt = media->ops->erase_blk(media,part->base,blkcnt);

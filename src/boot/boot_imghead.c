@@ -70,8 +70,8 @@ w_err_t boot_img_head_get(img_head_s *head,w_uint8_t *buff)
     wind_to_uint32(&buff[index],&head->magic);
 
     //这种情况应该是bin文件没有包含头部结构
-    if(head->magic != IMG_MAGIC)
-        return W_ERR_OK;
+    //if(head->magic != IMG_MAGIC)
+    //    return W_ERR_OK;
     index += 4;
     wind_to_uint32(&buff[index],&head->img_len);
     index += 4;

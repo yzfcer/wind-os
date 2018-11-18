@@ -35,7 +35,7 @@ static w_uint8_t keys[] = ENCRYPT_KEY;
 
 
 
-static w_part_s * get_old_part(void)
+w_part_s * get_old_part(void)
 {
     w_part_s *part[2];
     part[0] = boot_part_get(PART_IMG1);
@@ -145,6 +145,7 @@ static w_err_t decrypt_img(w_part_s *img)
     if(!ENCRYPT_TYPE)
         return W_ERR_OK;
     wind_notice("decrypt part:%s",img->name);
+    wind_debug("part:%s,data lenth:%d",img->name,img->datalen);
     offset = head->head_len;
     fsize = head->img_len;
     buff = get_common_buffer();
@@ -156,28 +157,34 @@ static w_err_t decrypt_img(w_part_s *img)
         WIND_ASSERT_RETURN(len > 0,W_ERR_FAIL);
         len = (fsize - offset) > len?len:fsize - offset;
         wind_decrypt(&ctx,buff,len);
-        boot_part_write(img,offset,buff,COMMBUF_SIZE);
+        boot_part_write(img,offset - IMG_HEAD_LEN,buff,COMMBUF_SIZE);
         offset += len;
         if(offset >= fsize)
             break;
     }
+    img->datalen -= IMG_HEAD_LEN;
+    boot_part_calc_crc(img,0,img->datalen,W_TRUE);
     return W_ERR_OK;
 }
 
 static w_err_t check_img_file_crc(w_part_s *cache)
 {
-    w_int32_t blkcnt;
+    //w_int32_t blkcnt;
     w_int32_t size;    
     w_uint8_t *buff;
+    img_head_s *head;
     w_uint32_t offset;
     w_uint32_t crc = 0xffffffff;
+
+    
+
     WIND_ASSERT_RETURN(cache != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(cache->datalen > 0,W_ERR_INVALID);
     buff = get_common_buffer();
-    blkcnt = COMMBUF_SIZE / cache->blksize;
-    WIND_ASSERT_RETURN(blkcnt > 0,W_ERR_FAIL);
-    size = blkcnt * cache->blksize;
-    offset = 0;
+    //blkcnt = COMMBUF_SIZE / cache->blksize;
+    //WIND_ASSERT_RETURN(blkcnt > 0,W_ERR_FAIL);
+    //size = blkcnt * cache->blksize;
+    offset = IMG_HEAD_LEN;
     while(offset < cache->datalen)
     {
         size = boot_part_read(cache,offset,buff,COMMBUF_SIZE,W_FALSE);
@@ -185,21 +192,28 @@ static w_err_t check_img_file_crc(w_part_s *cache)
         crc = wind_crc32(buff,size,crc);
         offset += size;
     }
-    return cache->crc == crc?W_ERR_OK:W_ERR_FAIL;
+    
+    head = &img_head;
+    wind_debug("bin file crc:0x%x,calc crc 0x%x,size:%d",head->bin_crc,crc,offset);
+    return head->bin_crc == crc?W_ERR_OK:W_ERR_FAIL;
 }
 
 static w_err_t check_img_valid(w_part_s *cache)
 {
     img_head_s *head;
+    w_int32_t len;
+    w_uint8_t *buff;
     w_err_t err;
     feed_watchdog();
     head = &img_head;
+    cache = boot_part_get(PART_CACHE);
+    buff = get_common_buffer();
+    len = boot_part_read(cache,0,buff,COMMBUF_SIZE,W_FALSE);
+    WIND_ASSERT_RETURN(len > 0,W_ERR_FAIL);
+    wind_memset(head,0,sizeof(img_head_s));
+    err = boot_img_head_get(head,buff);
+    WIND_ASSERT_RETURN(head->magic == IMG_MAGIC,W_ERR_FAIL);
 
-    if(head->magic != IMG_MAGIC)
-    {
-        wind_notice("image file has no head.");
-        return W_ERR_OK;
-    }
     if(W_ERR_OK != check_img_hwinfo(head))
     {
         wind_warn("hardware is NOT matched.");
@@ -208,7 +222,6 @@ static w_err_t check_img_valid(w_part_s *cache)
     
     feed_watchdog();
     err = check_img_file_crc(cache);
-
     feed_watchdog();
     WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_FAIL);
     wind_notice("img file verify OK.");
@@ -249,8 +262,6 @@ w_err_t boot_img_flush_cache_to_part(w_part_s **part,w_int32_t count)
     w_int32_t len;
     w_uint8_t *buff;
 
-    err = flush_bin_file(part,count,1);
-    WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_FAIL);
     
     cache = boot_part_get(PART_CACHE);
     buff = get_common_buffer();
@@ -258,30 +269,21 @@ w_err_t boot_img_flush_cache_to_part(w_part_s **part,w_int32_t count)
     WIND_ASSERT_RETURN(len > 0,W_ERR_FAIL);
     wind_memset(head,0,sizeof(img_head_s));
     err = boot_img_head_get(head,buff);
-    if(err != W_ERR_OK)
-    {
-        if(head->magic != IMG_MAGIC)
-            return flush_bin_file(part,count,0);
-        else
-            return err;
-    }
-    else
-    {
-        err = check_img_valid(cache);
-        WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_INVALID);
-        if(head->magic == IMG_MAGIC)
-        {
-            err = decrypt_img(cache);
-            WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_FAIL);
-        }
-        
-        return flush_bin_file(part,count,0);
-    }
+    
+    WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_FAIL);
+    
+    err = flush_bin_file(part,count,1);
+    WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_FAIL);
+    
+    err = decrypt_img(cache);
+    WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_FAIL);
+    return flush_bin_file(part,count,0);
 
 }
 
 w_err_t boot_img_download(void)
 {
+    w_err_t err;
     w_int32_t len;
     w_part_s *cache;
     boot_param_s *bp = (boot_param_s*)boot_param_get();
@@ -291,8 +293,10 @@ w_err_t boot_img_download(void)
         wind_notice("device can NOT download in debug mode ,set it to normal mode first");
         return W_ERR_FAIL;
     }
+    wind_memset(&img_head,0,sizeof(img_head));
     cache = boot_part_get(PART_CACHE);
     wind_notice("receive file data,please wait.\r\n");
+    boot_part_erase(cache);
     len = boot_receive_img(cache);
     if(len <= 0)
     {
@@ -300,36 +304,12 @@ w_err_t boot_img_download(void)
         return W_ERR_FAIL;
     }
     cache->datalen = (w_uint32_t)len;
+    err = check_img_valid(cache);
+    WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_FAIL);
     boot_part_calc_crc(cache,0,0,W_TRUE);
     wind_notice("cache file lenth:%d",cache->datalen);
     return W_ERR_OK;
 }
-
-w_err_t boot_img_flush_cache(void)
-{
-    w_err_t err;
-    w_part_s *part[2],*tmp;
-    w_int32_t count;
-    part[0] = boot_part_get(PART_SYSRUN);
-    WIND_ASSERT_RETURN(part[0] != W_NULL,W_ERR_FAIL);
-    part[1] = get_old_part();
-    if(part[1] != W_NULL)
-    {
-        tmp = part[0];
-        part[0] = part[1];
-        part[1] = tmp;
-        count = 2;
-        wind_notice("download to part:%s",part[0]->name,part[1]->name);
-    }
-    else
-    {
-        count = 1;
-        wind_notice("download to part:%s",part[0]->name);
-    }
-    
-    return boot_img_flush_cache_to_part(part,count);
-}
-
 
 
 w_err_t boot_img_clear_all(void)
@@ -376,7 +356,6 @@ static w_err_t repair_program(void)
 
 w_err_t boot_img_check(void)
 {
-    //w_int32_t idx = 0;
     w_err_t err = 0;
     w_part_s *code[3];
     w_int32_t error_flag = 0,i;
@@ -384,6 +363,7 @@ w_err_t boot_img_check(void)
     
     code[0] = boot_part_get(PART_IMG1);
     code[1] = boot_part_get(PART_IMG2);
+
     code[2] = boot_part_get(PART_SYSRUN);
     if(code[2]->mtype == MEDIA_TYPE_RAM)
         code[2] = W_NULL;
