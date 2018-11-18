@@ -21,7 +21,7 @@ extern "C" {
 #endif
 
 
-w_part_s *get_old_part(void);
+w_part_s *boot_img_get_old_part(void);
 w_part_s *boot_img_get_new_normal_img(void);
 
 w_err_t boot_img_download(void);

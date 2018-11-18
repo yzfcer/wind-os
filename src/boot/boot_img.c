@@ -35,7 +35,7 @@ static w_uint8_t keys[] = ENCRYPT_KEY;
 
 
 
-w_part_s * get_old_part(void)
+w_part_s * boot_img_get_old_part(void)
 {
     w_part_s *part[2];
     part[0] = boot_part_get(PART_IMG1);

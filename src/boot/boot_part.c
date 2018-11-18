@@ -263,12 +263,12 @@ static void print_copy_percents(w_int32_t numerator, w_int32_t denominator,w_int
     stage[STATGE_LEN+2] = 0;
     for(i = 0;i < cnt;i ++)
         stage[i+1] = '=';
-    if(cnt < 25)
+    if(cnt < STATGE_LEN)
         stage[cnt] = '>';
+    if(del)
+        wind_printf("%c%c%c%c",8,8,8,8);
     wind_printf("\r%s",stage);
-    //if(del)
-    //    wind_printf("%c%c%c%c",8,8,8,8);
-    //wind_printf("%3d%%",persent);
+    wind_printf(" %3d%%",persent);
     feed_watchdog();
 }
 
@@ -298,7 +298,7 @@ w_err_t boot_part_copy_data(w_part_s *src,w_part_s *dest)
     {    
         for(times = 0;times < 3;times ++)
         {
-            wind_memset(buff,offset,COMMBUF_SIZE);
+            wind_memset(buff,0,COMMBUF_SIZE);
             len1 = boot_part_read(src,offset,buff,COMMBUF_SIZE,0);
             if(len1 > 0)
                 break;            

@@ -377,13 +377,16 @@ static w_err_t pack_files(pack_info_s *info)
     }
     if(ENCRYPT_TYPE)
     {
+        wind_notice("encrypt bin file");
         pkinfo->encrypt_type = ENCRYPT_TYPE;
         wind_memcpy(pkinfo->keys,key,sizeof(key));
         pkinfo->key_len = sizeof(key);
         wind_encrypt_init(&ctx,pkinfo->keys,pkinfo->key_len);
         wind_encrypt(&ctx,&buff[IMG_HEAD_LEN],imglen - IMG_HEAD_LEN);
     }
+    wind_notice("calc bin file crc");
     crc = wind_crc32(&buff[IMG_HEAD_LEN],imglen - IMG_HEAD_LEN,0xffffffff);
+    wind_notice("generate img file head info");
     head = &imghead;
     head->magic = IMG_MAGIC;
     head->img_len = imglen;
@@ -406,7 +409,7 @@ static w_err_t pack_files(pack_info_s *info)
     wind_strncpy(head->cpu_name, pkinfo->cpu_name, 32);
     wind_strncpy(head->arch_name, pkinfo->arch_name, 32);
     boot_img_head_set(head,buff);
-    
+    wind_notice("flush image file");
     err = write_img_file(pkinfo->output_file, buff,imglen);
     wind_free(buff);
     return err;
@@ -461,7 +464,7 @@ w_int32_t pack_main(w_int32_t argc,char **argv)
     w_err_t err;
     
     pack_info_s *pkinfo = &pack_info;
-    wind_printf("boot pack start.\r\n");
+    wind_notice("boot pack start.\r\n");
     WIND_ASSERT_RETURN(argc >= 2,W_ERR_INVALID);
     pack_info_init();
     err = get_cfginfo(argv[1],databuff,sizeof(databuff));

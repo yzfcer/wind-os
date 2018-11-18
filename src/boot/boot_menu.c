@@ -97,7 +97,7 @@ static w_err_t download_to_img_part(void)
     
     part[0] = boot_part_get(PART_SYSRUN);
     WIND_ASSERT_RETURN(part[0] != W_NULL,W_ERR_FAIL);
-    part[1] = get_old_part();
+    part[1] = boot_img_get_old_part();
     count = part[1] == W_NULL?1:2;
     return boot_img_flush_cache_to_part(&part,count);
 }

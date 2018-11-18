@@ -65,7 +65,7 @@ extern "C" {
 #define ENCRYPT_RC4 1
 #define ENCRYPT_AES 2
 #define ENCRYPT_DES 3
-#define ENCRYPT_TYPE ENCRYPT_NONE//ENCRYPT_RC4
+#define ENCRYPT_TYPE ENCRYPT_RC4//ENCRYPT_NONE//
 
 //iamgeŒƒº˛º”√‹√‹‘ø
 #define ENCRYPT_KEY {0x23,0x34,0x56,0x78,0x90,0xab,0xcd,0xef,0x01,0x23,0x45,0x67}

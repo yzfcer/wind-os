@@ -153,7 +153,7 @@ static w_err_t  boot_upgrade_check(void)
     wind_notice("handling upgrade event,please wait");
     part[0] = boot_part_get(PART_SYSRUN);
     WIND_ASSERT_RETURN(part[0] != W_NULL,W_ERR_FAIL);
-    part[1] = get_old_part();
+    part[1] = boot_img_get_old_part();
     count = part[1] == W_NULL?1:2;
     err = boot_img_flush_cache_to_part(&part,count);
     if(0 != err)
@@ -329,7 +329,6 @@ void boot_main(w_int32_t argc,char **argv)
     w_err_t err;
     boot_enter_main_hook();
     print_boot_info();
-    wind_error("--------------------------part erase");
     while(1)
     {
         for(i = 0;i < sizeof(g_status_handTB)/sizeof(boot_step_s);i ++)
