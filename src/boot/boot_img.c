@@ -144,7 +144,7 @@ static w_err_t decrypt_img(w_part_s *img)
         return W_ERR_FAIL;
     if(!ENCRYPT_TYPE)
         return W_ERR_OK;
-    wind_notice("decrypt part:%s",img->name);
+    //wind_notice("decrypt part:%s",img->name);
     wind_debug("part:%s,data lenth:%d",img->name,img->datalen);
     offset = head->head_len;
     fsize = head->img_len;
@@ -267,18 +267,25 @@ w_err_t boot_img_flush_cache_to_part(w_part_s **part,w_int32_t count)
     buff = get_common_buffer();
     len = boot_part_read(cache,0,buff,COMMBUF_SIZE,W_FALSE);
     WIND_ASSERT_RETURN(len > 0,W_ERR_FAIL);
-    wind_memset(head,0,sizeof(img_head_s));
-    err = boot_img_head_get(head,buff);
-    
-    WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_FAIL);
+    if(head->magic != IMG_MAGIC)
+    {
+        wind_memset(head,0,sizeof(img_head_s));
+        err = boot_img_head_get(head,buff);
+        wind_notice("get image file head %s",err == W_ERR_OK?"OK":"ERROR");
+        WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_FAIL);
+    }
     
     err = flush_bin_file(part,count,1);
+    wind_notice("flush encrypt image file %s",err == W_ERR_OK?"OK":"ERROR");
     WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_FAIL);
     
     err = decrypt_img(cache);
-    WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_FAIL);
-    return flush_bin_file(part,count,0);
 
+    wind_notice("decrypt image file %s",err == W_ERR_OK?"OK":"ERROR");
+    WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_FAIL);
+    err = flush_bin_file(part,count,0);
+    wind_notice("flush decrypt image file %s",err == W_ERR_OK?"OK":"ERROR");
+    return err;
 }
 
 w_err_t boot_img_download(void)
@@ -303,11 +310,13 @@ w_err_t boot_img_download(void)
         wind_error("receive cache data failed.");
         return W_ERR_FAIL;
     }
+    wind_notice("image file lenth:%d",len);
     cache->datalen = (w_uint32_t)len;
     err = check_img_valid(cache);
+    wind_notice("check image file valid %s",err == W_ERR_OK?"OK":"ERROR");
     WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_FAIL);
     boot_part_calc_crc(cache,0,0,W_TRUE);
-    wind_notice("cache file lenth:%d",cache->datalen);
+    //wind_notice("cache file lenth:%d",cache->datalen);
     return W_ERR_OK;
 }
 
