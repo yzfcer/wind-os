@@ -64,7 +64,7 @@ void boot_img_head_print(img_head_s *head)
 
 w_err_t boot_img_head_get(img_head_s *head,w_uint8_t *buff)
 {
-    w_uint32_t crc;
+    w_uint32_t crc_calc,crc_read;
     w_int32_t index = 0;
     head->magic = 0;
     wind_to_uint32(&buff[index],&head->magic);
@@ -93,10 +93,6 @@ w_err_t boot_img_head_get(img_head_s *head,w_uint8_t *buff)
     wind_strcpy(head->img_name,(const char*)&buff[index]);
     index += sizeof(head->img_name);
 
-    wind_memset(head->board_name,0,sizeof(head->board_name));
-    wind_strcpy(head->board_name,(const char*)&buff[index]);
-    index += sizeof(head->board_name);
-    
     wind_memset(head->arch_name,0,sizeof(head->arch_name));
     wind_strcpy(head->arch_name,(const char*)&buff[index]);
     index += sizeof(head->arch_name);
@@ -104,13 +100,17 @@ w_err_t boot_img_head_get(img_head_s *head,w_uint8_t *buff)
     wind_memset(head->cpu_name,0,sizeof(head->cpu_name));
     wind_strcpy(head->cpu_name,(const char*)&buff[index]);
     index += sizeof(head->cpu_name);
+    
+    wind_memset(head->board_name,0,sizeof(head->board_name));
+    wind_strcpy(head->board_name,(const char*)&buff[index]);
+    index += sizeof(head->board_name);
 
-    wind_to_uint32(&buff[head->head_len-4],&head->head_crc);
-    crc = wind_crc32(buff,head->head_len - 4,0xffffffff);
-    if(crc != head->head_crc)
+    wind_to_uint32(&buff[head->head_len-4],&crc_read);
+    crc_calc = wind_crc32(buff,head->head_len - 4,0xffffffff);
+    if(crc_calc != crc_read)
     {
         head->magic = 0;
-        wind_error("img head crc error.");
+        wind_error("img head crc_calc error.");
         return W_ERR_INVALID;
     }
     boot_img_head_print(head);
@@ -145,15 +145,15 @@ w_err_t boot_img_head_set(img_head_s *head,w_uint8_t *buff)
     wind_strcpy(&buff[index],(const char*)head->img_name);
     index += sizeof(head->img_name);
 
-    wind_strcpy(&buff[index],(const char*)head->board_name);
-    index += sizeof(head->board_name);
-    
     wind_strcpy(&buff[index],(const char*)head->arch_name);
     index += sizeof(head->arch_name);
 
     wind_strcpy(&buff[index],(const char*)head->cpu_name);
     index += sizeof(head->cpu_name);
 
+    wind_strcpy(&buff[index],(const char*)head->board_name);
+    index += sizeof(head->board_name);
+    
     crc = wind_crc32(buff,head->head_len - 4,0xffffffff);
     index = head->head_len - 4;
     wind_from_uint32(&buff[index],crc);

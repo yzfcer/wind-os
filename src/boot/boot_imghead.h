@@ -44,10 +44,9 @@ struct __img_head_s
     w_uint32_t bin_offset;
     w_uint32_t encrypt_type;
     char       img_name[64];
-    char       board_name[32];
     char       arch_name[32];
     char       cpu_name[32];
-    w_uint32_t head_crc;
+    char       board_name[32];
 };
 
 void boot_img_head_print(img_head_s *head);
