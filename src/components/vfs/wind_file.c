@@ -247,13 +247,13 @@ w_file_s *wind_file_get(w_fs_s *fs,const char *path)
     return W_NULL;
 }
 
-w_bool_t wind_file_existing(const char *path)
+w_bool_t wind_fcheck(const char *path)
 {
     w_file_s *file;
     w_uint32_t isdir;
     w_bool_t exist = W_FALSE;
     WIND_ASSERT_RETURN(path != W_NULL,W_FALSE);
-    wind_debug("wind_file_existing:%s",path);
+    wind_debug("wind_fcheck:%s",path);
     isdir = path[wind_strlen(path)-1]=='/'?1:0;
     file = wind_fopen(path,FMODE_R);
     if((file != W_NULL)&&(file->isdir==isdir))

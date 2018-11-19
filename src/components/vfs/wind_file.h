@@ -138,12 +138,7 @@ w_err_t wind_fs_mount(char *fsname,char *devname,char *path);
 w_err_t wind_fs_unmount(char *fsname);
 w_err_t wind_fs_format(w_fs_s *fs);
 
-
-void wind_file_set_current_path(char *path);
-char *wind_file_get_current_path(void);
-
-
-w_bool_t wind_file_existing(const char *path);
+w_bool_t wind_fcheck(const char *path);
 w_file_s* wind_fopen(const char *path,w_fmode_e fmode);
 w_err_t wind_fclose(w_file_s *file);
 w_err_t wind_fremove(w_file_s *file);

@@ -56,7 +56,7 @@ static w_err_t fs_cmd_cd(w_int32_t argc,char **argv)
     if(argc < 3)
         return W_ERR_FAIL;
     fullpath = wind_full_path_generate(curpath,argv[2],1);
-    isexist = wind_file_existing(fullpath);
+    isexist = wind_fcheck(fullpath);
     if(!isexist)
     {
         console_printf("directory:\"%s\" is NOT exist.\r\n",fullpath);
@@ -77,7 +77,7 @@ static w_err_t mk_dir_file(w_int32_t argc,char **argv,w_uint16_t isdir)
     if(argc < 3)
         return W_ERR_INVALID;
     fullpath = wind_full_path_generate(curpath,argv[2],isdir);
-    isexist = wind_file_existing(fullpath);
+    isexist = wind_fcheck(fullpath);
     if(isexist)
     {
         console_printf("directory has been existing.\r\n");
