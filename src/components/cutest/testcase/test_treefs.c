@@ -20,8 +20,8 @@
 *******************************************************************************************************/
 #include "wind_cut.h"
 #include "wind_string.h"
-#include "treefs.h"
 #if (WIND_CUTEST_SUPPORT && TEST_TREEFS_SUPPORT)
+#include "treefs.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus

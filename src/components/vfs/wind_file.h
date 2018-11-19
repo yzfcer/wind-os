@@ -144,18 +144,18 @@ char *wind_file_get_current_path(void);
 
 
 w_bool_t wind_file_existing(const char *path);
-w_file_s* wind_file_open(const char *path,w_fmode_e fmode);
-w_err_t wind_file_close(w_file_s *file);
-w_err_t wind_file_remove(w_file_s *file);
-char* wind_file_subfile(w_file_s *dir,w_int32_t index);
+w_file_s* wind_fopen(const char *path,w_fmode_e fmode);
+w_err_t wind_fclose(w_file_s *file);
+w_err_t wind_fremove(w_file_s *file);
+char* wind_fchild(w_file_s *dir,w_int32_t index);
 
-w_err_t wind_file_seek(w_file_s *file,w_int32_t offset);
-w_err_t wind_file_rename(w_file_s *file,char *newname);
-w_int32_t wind_file_tell(w_file_s *file);
-w_int32_t wind_file_read(w_file_s *file,w_uint8_t *buff, w_int32_t size);
-w_int32_t wind_file_write(w_file_s *file,w_uint8_t *buff, w_int32_t size);
-w_err_t wind_file_gets(w_file_s *file,char *buff, w_int32_t maxlen);
-w_err_t wind_file_puts(w_file_s *file,char *buff);
+w_err_t wind_fseek(w_file_s *file,w_int32_t offset);
+w_int32_t wind_ftell(w_file_s *file);
+w_int32_t wind_fread(w_file_s *file,w_uint8_t *buff, w_int32_t size);
+w_int32_t wind_fwrite(w_file_s *file,w_uint8_t *buff, w_int32_t size);
+w_err_t wind_fgets(w_file_s *file,char *buff, w_int32_t maxlen);
+w_err_t wind_fputs(w_file_s *file,char *buff);
+w_err_t wind_frename(w_file_s *file,char *newname);
 #endif
 #endif
 

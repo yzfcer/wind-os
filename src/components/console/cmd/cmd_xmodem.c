@@ -20,9 +20,9 @@
 *******************************************************************************************************/
 #include "wind_cmd.h"
 #include "wind_heap.h"
-#include "treefs.h"
 #include "xmodem.h"
 #if WIND_XMODEM_SUPPORT
+#include "treefs.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus

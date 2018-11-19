@@ -364,7 +364,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F40_41xxx,USE_STDPERIPH_DRIVER,_USE_USER_PRINT,STM32F10X_HD, USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\board;..\port;..\start;..\..\driver;..\..\..\..\..\src\common;..\..\..\..\..\src\core;..\..\..\..\..\src\hal;..\..\..\..\..\src\lib;..\..\..\..\..\src\components\console\framework;..\..\..\..\..\src\components\console\cmd;..\..\..\..\..\src\components\cutest\framework;..\..\..\..\..\src\components\cutest\port;..\..\..\..\..\src\components\cutest\case;..\..\..\..\..\src\components\lua-5.3.4\src;..\..\..\..\..\src\components\xmodem;..\..\..\..\..\src\fs\treefs</IncludePath>
+              <IncludePath>..\board;..\port;..\start;..\..\driver;..\..\..\..\..\src\common;..\..\..\..\..\src\core;..\..\..\..\..\src\hal;..\..\..\..\..\src\lib;..\..\..\..\..\src\components\console\framework;..\..\..\..\..\src\components\console\cmd;..\..\..\..\..\src\components\cutest\framework;..\..\..\..\..\src\components\cutest\port;..\..\..\..\..\src\components\cutest\case;..\..\..\..\..\src\components\lua-5.3.4\src;..\..\..\..\..\src\components\xmodem</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1294,21 +1294,6 @@
         </Group>
         <Group>
           <GroupName>lua</GroupName>
-        </Group>
-        <Group>
-          <GroupName>fs_treefs</GroupName>
-          <Files>
-            <File>
-              <FileName>treefs.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\fs\treefs\treefs.c</FilePath>
-            </File>
-            <File>
-              <FileName>treefs.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\fs\treefs\treefs.h</FilePath>
-            </File>
-          </Files>
         </Group>
         <Group>
           <GroupName>component_console</GroupName>

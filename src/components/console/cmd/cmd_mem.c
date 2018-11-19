@@ -93,7 +93,7 @@ static void print_mem(w_uint32_t start,w_uint32_t len)
     console_printf("\r\n");
 }
 
-static w_err_t display_mem(char **argv)
+static w_err_t display_mem(w_int32_t argc,char **argv)
 {
     w_uint32_t start,len;
     WIND_ASSERT_RETURN(argc >= 3,W_ERR_INVALID);
@@ -109,7 +109,7 @@ static w_err_t display_mem(char **argv)
     return W_ERR_OK;
 }
 
-static w_err_t display_stack(char **argv)
+static w_err_t display_stack(w_int32_t argc,char **argv)
 {
     w_uint32_t start,end,cur,len,used;
     w_thread_s *thr;
@@ -154,9 +154,9 @@ COMMAND_USAGE(mem)
 
 COMMAND_MAIN(mem,argc,argv)
 {
-    if(display_mem(argv) == W_ERR_OK)
+    if(display_mem(argc,argv) == W_ERR_OK)
         return W_ERR_OK;
-    else if(display_stack(argv) == W_ERR_OK)
+    else if(display_stack(argc,argv) == W_ERR_OK)
         return W_ERR_OK;
     console_printf("command [%s] format error.\r\n",argv[0]);
     return W_ERR_FAIL;

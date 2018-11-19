@@ -255,15 +255,15 @@ w_bool_t wind_file_existing(const char *path)
     WIND_ASSERT_RETURN(path != W_NULL,W_FALSE);
     wind_debug("wind_file_existing:%s",path);
     isdir = path[wind_strlen(path)-1]=='/'?1:0;
-    file = wind_file_open(path,FMODE_R);
+    file = wind_fopen(path,FMODE_R);
     if((file != W_NULL)&&(file->isdir==isdir))
     {
         exist = W_TRUE;
-        wind_file_close(file);
+        wind_fclose(file);
     }
     return exist;
 }
-w_file_s* wind_file_open(const char *path,w_fmode_e fmode)
+w_file_s* wind_fopen(const char *path,w_fmode_e fmode)
 {
     w_file_s *file;
     w_fs_s *fs;
@@ -321,7 +321,7 @@ w_file_s* wind_file_open(const char *path,w_fmode_e fmode)
     }
 }
 
-w_err_t wind_file_close(w_file_s *file)
+w_err_t wind_fclose(w_file_s *file)
 {
     w_err_t err = W_ERR_FAIL;
     WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
@@ -339,7 +339,7 @@ w_err_t wind_file_close(w_file_s *file)
     return err;
 }
 
-w_err_t wind_file_remove(w_file_s *file)
+w_err_t wind_fremove(w_file_s *file)
 {
     w_err_t err = W_ERR_FAIL;
     WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
@@ -355,7 +355,7 @@ w_err_t wind_file_remove(w_file_s *file)
     return err;
 }
 
-char* wind_file_subfile(w_file_s *dir,w_int32_t index)
+char* wind_fchild(w_file_s *dir,w_int32_t index)
 {
     char *subname = W_NULL;
     WIND_ASSERT_RETURN(dir != W_NULL,W_NULL);
@@ -372,7 +372,7 @@ char* wind_file_subfile(w_file_s *dir,w_int32_t index)
     return subname;
 }
 
-w_err_t wind_file_seek(w_file_s *file,w_int32_t offset)
+w_err_t wind_fseek(w_file_s *file,w_int32_t offset)
 {
     w_err_t err = W_ERR_FAIL;
     WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
@@ -385,7 +385,7 @@ w_err_t wind_file_seek(w_file_s *file,w_int32_t offset)
     return err;
 }
     
-w_err_t wind_file_rename(w_file_s *file,char *newname)
+w_err_t wind_frename(w_file_s *file,char *newname)
 {
     w_err_t err = W_ERR_FAIL;
     WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
@@ -397,7 +397,7 @@ w_err_t wind_file_rename(w_file_s *file,char *newname)
     return err;
 }
 
-w_int32_t wind_file_tell(w_file_s *file)
+w_int32_t wind_ftell(w_file_s *file)
 {
     w_int32_t offset = -1;
     WIND_ASSERT_RETURN(file != W_NULL,-1);
@@ -408,7 +408,7 @@ w_int32_t wind_file_tell(w_file_s *file)
     return offset;
 }
 
-w_int32_t wind_file_read(w_file_s *file,w_uint8_t *buff, w_int32_t size)
+w_int32_t wind_fread(w_file_s *file,w_uint8_t *buff, w_int32_t size)
 {
     w_int32_t len = -1;
     WIND_ASSERT_RETURN(file != W_NULL,-1);
@@ -421,7 +421,7 @@ w_int32_t wind_file_read(w_file_s *file,w_uint8_t *buff, w_int32_t size)
     return len;
 }
 
-w_int32_t wind_file_write(w_file_s *file,w_uint8_t *buff, w_int32_t size)
+w_int32_t wind_fwrite(w_file_s *file,w_uint8_t *buff, w_int32_t size)
 {
     w_int32_t len = -1;
     WIND_ASSERT_RETURN(file != W_NULL,-1);
@@ -434,7 +434,7 @@ w_int32_t wind_file_write(w_file_s *file,w_uint8_t *buff, w_int32_t size)
     return len;
 }
 
-w_err_t wind_file_gets(w_file_s *file,char *buff, w_int32_t maxlen)
+w_err_t wind_fgets(w_file_s *file,char *buff, w_int32_t maxlen)
 {
     w_int32_t len = -1;
     WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
@@ -447,7 +447,7 @@ w_err_t wind_file_gets(w_file_s *file,char *buff, w_int32_t maxlen)
     return len > 0?W_ERR_OK:W_ERR_FAIL;
 }
 
-w_err_t wind_file_puts(w_file_s *file,char *buff)
+w_err_t wind_fputs(w_file_s *file,char *buff)
 {
     w_int32_t len = -1;
     WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
