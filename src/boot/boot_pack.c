@@ -35,57 +35,6 @@
 #include <stdlib.h>
 #include "file_port.h"
 
-#if 0
-static void *wind_malloc(w_uint32_t size)
-{
-    return malloc(size);
-}
-
-static void wind_free(void *ptr)
-{
-    free(ptr);
-}
-
-static w_uint32_t read_cfg_file(char *filename,char *buff,w_int32_t size)
-{
-    FILE *file;
-    w_uint32_t len;
-    file = fopen(filename,"rb");
-    WIND_ASSERT_RETURN(file != W_NULL,0);
-    len = fread(buff,1,size,file);
-    WIND_ASSERT_TODO(len > 0,fclose(file),W_ERR_FAIL);
-    fclose(file);
-    return len;
-}
-
-
-static w_int32_t read_bin_file(char *path,w_uint8_t **buff)
-{
-    FILE*fp;
-    w_int32_t flen;
-    fp=fopen(path,"rb");
-    WIND_ASSERT_RETURN(fp != W_NULL,W_ERR_INVALID);
-    fseek(fp,0L,SEEK_END); 
-    flen=ftell(fp); 
-    *buff = (w_uint8_t*)wind_malloc(flen); 
-    WIND_ASSERT_RETURN(*buff != W_NULL,W_ERR_MEM);
-    fseek(fp,0L,SEEK_SET); 
-    flen = fread(*buff,1,flen,fp); 
-    return flen;
-}
-
-static w_err_t write_img_file(char *filename,w_uint8_t *data,w_int32_t len)
-{
-    FILE *file;
-    //w_uint32_t len;
-    file = fopen(filename,"wb");
-    WIND_ASSERT_RETURN(file != W_NULL,0);
-    len = fwrite(data,1,len,file);
-    fclose(file);
-    return len > 0?W_ERR_OK:W_ERR_FAIL;
-}
-#endif
-
 //--------------------------------------------------------------------
 //--------------------------------------------------------------------
 
@@ -126,7 +75,7 @@ static w_err_t read_bin_files(void)
     {
         info = &pkinfo->fileinfo[i];
         wind_notice("read file:%s",info->input_file);
-        flen = read_long_file(info->input_file,&info->buff);
+        flen = read_long_file(info->input_file,0,&info->buff);
         WIND_ASSERT_RETURN(flen > 0,W_ERR_FAIL);
         info->flen = flen;
     }
@@ -169,7 +118,7 @@ static w_err_t get_cfginfo(char *boradname,char *buff,w_int32_t size)
     wind_strcpy(pkinfo->cfgname,boradname);
     wind_strcat(pkinfo->cfgname,".cfg");
     wind_notice("read config file:%s",pkinfo->cfgname);
-    len = read_file(pkinfo->cfgname,buff,size);
+    len = read_file(pkinfo->cfgname,0,buff,size);
     WIND_ASSERT_RETURN(len > 0,W_ERR_FAIL);
     wind_notice("config file:%s",pkinfo->cfgname);
     return W_ERR_OK;    
@@ -413,7 +362,7 @@ static w_err_t pack_files(pack_info_s *info)
     wind_strncpy(head->arch_name, pkinfo->arch_name, 32);
     boot_img_head_set(head,buff);
     wind_notice("flush image file");
-    err = write_file(pkinfo->output_file, buff,imglen);
+    err = write_file(pkinfo->output_file,0, buff,imglen);
     wind_free(buff);
     return err;
 }

@@ -17,9 +17,10 @@ void *wind_malloc(w_uint32_t size);
 
 void wind_free(void *ptr);
 
-w_int32_t read_file(char *filename,w_uint8_t *buff,w_int32_t size);
+w_int32_t read_file(char *filename,w_int32_t offset,w_uint8_t *buff,w_int32_t size);
 
-w_int32_t write_file(char *filename,w_uint8_t *data,w_int32_t len);
+w_int32_t read_long_file(char *path,w_int32_t offset,w_uint8_t **buff);
 
-w_int32_t read_long_file(char *path,w_uint8_t **buff);
+w_int32_t write_file(char *filename,w_int32_t offset,w_uint8_t *data,w_int32_t len);
+
 
