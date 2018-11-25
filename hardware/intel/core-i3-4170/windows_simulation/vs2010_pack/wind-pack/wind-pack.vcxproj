@@ -19,6 +19,7 @@
     <ClCompile Include="..\..\..\..\..\..\src\common\wind_dlist.c" />
     <ClCompile Include="..\..\..\..\..\..\src\common\wind_encrypt.c" />
     <ClCompile Include="..\..\..\..\..\..\src\common\wind_string.c" />
+    <ClCompile Include="..\..\port\file_port.c" />
     <ClCompile Include="..\..\port\wind_std.c" />
     <ClCompile Include="pack_main.c" />
   </ItemGroup>
@@ -31,6 +32,7 @@
     <ClInclude Include="..\..\..\..\..\..\src\common\wind_dlist.h" />
     <ClInclude Include="..\..\..\..\..\..\src\common\wind_encrypt.h" />
     <ClInclude Include="..\..\..\..\..\..\src\common\wind_string.h" />
+    <ClInclude Include="..\..\port\file_port.h" />
     <ClInclude Include="..\..\port\wind_config.h" />
     <ClInclude Include="..\..\port\wind_std.h" />
     <ClInclude Include="..\..\port\wind_type.h" />

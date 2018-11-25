@@ -142,13 +142,13 @@ w_err_t boot_img_head_set(img_head_s *head,w_uint8_t *buff)
     index += 4;
     wind_from_uint32(&buff[index],head->encrypt_type);
     index += 4;
-    wind_strcpy(&buff[index],(const char*)head->img_name);
+    wind_strcpy((char*)&buff[index],(const char*)head->img_name);
     index += sizeof(head->img_name);
 
-    wind_strcpy(&buff[index],(const char*)head->arch_name);
+    wind_strcpy((char*)&buff[index],(const char*)head->arch_name);
     index += sizeof(head->arch_name);
 
-    wind_strcpy(&buff[index],(const char*)head->cpu_name);
+    wind_strcpy((char*)&buff[index],(const char*)head->cpu_name);
     index += sizeof(head->cpu_name);
 
     wind_strcpy(&buff[index],(const char*)head->board_name);
