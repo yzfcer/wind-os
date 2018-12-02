@@ -1,6 +1,7 @@
 /*****************************************************************************/
 #include "interface.h"
 #include "file_port.h"
+#include "wind_debug.h"
 /*****************************************************************************/
 #define SEC_COUNT 10240
 #define SEC_SIZE 512
@@ -13,6 +14,7 @@
 static w_uint8_t blkbuf[SEC_COUNT*SEC_SIZE];
 eint16 if_initInterface(hwInterface* hwif, eint8* hwifName)
 {
+    wind_debug("if_initInterface if_name:%s",hwifName);
     hwif->sectorCount = SEC_COUNT;
     hwif->offset = 0;
 	return(1);
@@ -23,6 +25,7 @@ esint8 if_erase(hwInterface* hwif,euint32 address,euint32 count)
 {
     euint32 offset = address * SEC_SIZE;
     euint32 size = count * SEC_SIZE;
+    wind_debug("if_erase addr:%d,count:%d",address,count);
     wind_memset(&blkbuf[offset],0,size);
     return (1);
 }
@@ -35,6 +38,7 @@ esint8 if_erase(hwInterface* hwif,euint32 address,euint32 count)
 esint8 if_readBuf(hwInterface* hwif,euint32 address,euint8* buf)
 {
     euint32 offset = address * SEC_SIZE;
+    wind_debug("if_readBuf addr:%d",address);
     wind_memcpy(buf,&blkbuf[offset],SEC_SIZE);
 	return(0);
 }
@@ -49,6 +53,7 @@ esint8 if_readBuf(hwInterface* hwif,euint32 address,euint8* buf)
 esint8 if_writeBuf(hwInterface* hwif,euint32 address,euint8* buf)
 {
     euint32 offset = address * SEC_SIZE;
+    wind_debug("if_writeBuf addr:%d",address);
     wind_memcpy(&blkbuf[offset],buf,SEC_SIZE);
 	return(0);
 }
@@ -63,6 +68,7 @@ esint8 if_writeBuf(hwInterface* hwif,euint32 address,euint8* buf)
 eint16 if_setPos(hwInterface* hwif,euint32 address)
 {
     euint32 offset = address * SEC_SIZE;
+    wind_debug("if_setPos addr:%d",address);
     hwif->offset = offset;
 	return(0);
 }
@@ -71,6 +77,7 @@ eint16 if_setPos(hwInterface* hwif,euint32 address)
 eint16 if_load(hwInterface* hwif)
 {
     esint32 len;
+    wind_debug("if_load");
     wind_memset(blkbuf,0,sizeof(blkbuf));
     len = read_file("fat32.img",0,blkbuf,sizeof(blkbuf));
     if(len <= 0)
@@ -83,6 +90,7 @@ eint16 if_load(hwInterface* hwif)
 
 eint16 if_flush(hwInterface* hwif)
 {
+    wind_debug("if_flush");
     write_file("fat32.img",0,blkbuf,sizeof(blkbuf));
     return (0);
 }

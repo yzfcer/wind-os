@@ -12,7 +12,7 @@
 */
 
 /*#define HW_ENDPOINT_LINUX*/
-#define HW_ENDPOINT_ATMEGA128_SD
+//#define HW_ENDPOINT_ATMEGA128_SD
 /*#define HW_ENDPOINT_DSP_TI6713_SD*/
 
 
@@ -26,7 +26,7 @@
  * but it will work for sure.
 */
 
-	#define BYTE_ALIGNMENT
+#define BYTE_ALIGNMENT
 
 /* Cache configuration
    -------------------
@@ -40,9 +40,9 @@
  * you will have to pass a pointer to the memory as the last argument of
  * ioman_init.
 */
-	#define IOMAN_NUMBUFFER 1
-	#define IOMAN_NUMITERATIONS 3
-	#define IOMAN_DO_MEMALLOC
+#define IOMAN_NUMBUFFER 1
+#define IOMAN_NUMITERATIONS 3
+#define IOMAN_DO_MEMALLOC
 
 /* Cluster pre-allocation 
    ----------------------
@@ -59,8 +59,8 @@
  * The first option is for preallocating files, the other is used when enlarging
  * a directory to accomodate more files
 */
-      #define CLUSTER_PREALLOC_FILE 0
-      #define CLUSTER_PREALLOC_DIRECTORY 0
+#define CLUSTER_PREALLOC_FILE 0
+#define CLUSTER_PREALLOC_DIRECTORY 0
 
 
 /* Endianess configuration
@@ -71,7 +71,7 @@
  * So if you have a big endian system the library has to convert all figures to
  * big endian in order to work.
  */
-	#define LITTLE_ENDIAN
+#define LITTLE_ENDIAN
 	
 
 /* Date and Time support
@@ -127,10 +127,10 @@
  * to the clock & baudrate.
 */
 
-	/* #define SCK	7372800 */
-	#define SCK	8000000
-	/* #define SCK	14745600 */
-	/* #define SCK	16000000 */
+//#define SCK	7372800
+//#define SCK	8000000
+//#define SCK	14745600
+//#define SCK	16000000
 
 
 /* Baudrate setting
@@ -140,7 +140,7 @@
  * baudrate that will be used..
 */
 
-	#define BAUDRATE	9600
+#define BAUDRATE	9600
 
 
 

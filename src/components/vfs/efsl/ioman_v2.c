@@ -148,7 +148,8 @@ esint8 ioman_pop(IOManager *ioman,euint16 bufplace)
 esint8 ioman_push(IOManager *ioman,euint16 bufplace)
 {
 	if(bufplace>=ioman->numbuf)return(-1);
-	if(ioman->itptr[bufplace]>=IOMAN_NUMITERATIONS)return(-1);
+	if(ioman->itptr[bufplace]>=IOMAN_NUMITERATIONS)
+        return(-1);
 	ioman->itptr[bufplace]++;
 	ioman->stack[bufplace][ioman->itptr[bufplace]].sector = ioman->sector[bufplace];
 	ioman->stack[bufplace][ioman->itptr[bufplace]].status = ioman->status[bufplace];

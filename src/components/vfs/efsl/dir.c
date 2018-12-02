@@ -235,9 +235,9 @@ euint32 dir_findinRootArea(FileSystem *fs,eint8* fatname, FileLocation *loc, eui
 	euint8 *buf=0;
 	
 	if((fs->type != FAT12) && (fs->type != FAT16))return(0);
-	//yzfcer modify
-	//for(c=fs->FirstSectorRootDir;c<(fs->FirstSectorRootDir+fs->volumeId.RootEntryCount/32);c++){
-    for(c=fs->FirstSectorRootDir;c<=(fs->FirstSectorRootDir+fs->volumeId.RootEntryCount/32);c++){
+	//yzfcer modify£¬maybe a bug occured
+    //for(c=fs->FirstSectorRootDir;c<=(fs->FirstSectorRootDir+fs->volumeId.RootEntryCount/32);c++){
+	for(c=fs->FirstSectorRootDir;c<(fs->FirstSectorRootDir+fs->volumeId.RootEntryCount/32);c++){
 		buf = part_getSect(fs->part,c,IOM_MODE_READONLY);
 		if((fclus=dir_findinBuf(buf,fatname,loc,mode))){
 			loc->Sector=c;

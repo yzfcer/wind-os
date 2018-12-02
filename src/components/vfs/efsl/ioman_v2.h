@@ -39,6 +39,7 @@
 #define IOM_MODE_READONLY 0
 #define IOM_MODE_READWRITE 1
 
+
 struct IOManStack{
 	euint32 sector;
 	euint8  status;

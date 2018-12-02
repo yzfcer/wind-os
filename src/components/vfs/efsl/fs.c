@@ -176,6 +176,7 @@ void fs_countDataSectors(FileSystem *fs)
 */
 void fs_determineFatType(FileSystem *fs)
 {
+#if 0
 	if(fs->DataClusterCount < 4085)
 	{
 		fs->type=FAT12;
@@ -190,6 +191,9 @@ void fs_determineFatType(FileSystem *fs)
 	{
 		fs->type=FAT32;
 	}
+#else
+    fs->type=FAT32;
+#endif
 }
 /*****************************************************************************/ 
 

@@ -42,6 +42,7 @@ static w_uint8_t FAT32_Buffer[512];
 w_err_t fat32_format(EmbeddedFileSystem *fs,char *blkname)
 {
 	w_uint32_t sec_tot,sec_fat,sec_reserve;
+    wind_notice("fat32_format start");
 
     if(!if_initInterface(&fs->myCard,blkname))
     {
@@ -52,7 +53,7 @@ w_err_t fat32_format(EmbeddedFileSystem *fs,char *blkname)
 	if(sec_tot)
 	{	
 		sec_fat = sec_tot/1026+1;
-		sec_reserve = 0x26;
+		sec_reserve = 0x8;
 		fat32_root[15] = (w_uint8_t)(((w_uint16_t)sec_reserve&0xFF00)>>8); 
 		fat32_root[14] = (w_uint8_t)((w_uint16_t)sec_reserve&0x00FF); 
 		fat32_root[35] = (w_uint8_t)((sec_tot&0xFF000000)>>24); 
@@ -64,7 +65,7 @@ w_err_t fat32_format(EmbeddedFileSystem *fs,char *blkname)
 		fat32_root[37] = (w_uint8_t)((sec_fat&0x0000FF00)>>8); 
 		fat32_root[36] = (w_uint8_t)((sec_fat&0x000000FF)); 		     //FAT±íÉÈÇøÊý
 		if_writeBuf(&fs->myCard,0,fat32_root);
-		if_writeBuf(&fs->myCard,0x06,fat32_root);
+		if_writeBuf(&fs->myCard,0x02,fat32_root);
 
         if_erase(&fs->myCard,sec_reserve,sec_reserve+(sec_fat*2)+8);
         wind_memset(FAT32_Buffer,0,512);

@@ -79,10 +79,10 @@
     <ClCompile Include="..\..\..\..\..\..\src\components\vfs\efsl\fat32_format.c">
       <Filter>efsl</Filter>
     </ClCompile>
+    <ClCompile Include="efsl_main.c" />
     <ClCompile Include="..\..\..\..\..\..\src\components\vfs\efsl\ioman.c">
       <Filter>efsl</Filter>
     </ClCompile>
-    <ClCompile Include="efsl_main.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\port\interface.h">
