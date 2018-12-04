@@ -20,6 +20,9 @@
     <Filter Include="adapter">
       <UniqueIdentifier>{fa0d4a37-1592-40d7-8fd6-02e2533ad499}</UniqueIdentifier>
     </Filter>
+    <Filter Include="efsl">
+      <UniqueIdentifier>{bca2b4c9-37a5-4f71-afdb-6a3862ea8ff2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cmd_main.c" />
@@ -52,6 +55,60 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\src\components\console\cmd\cmd_mkfs.c">
       <Filter>cmd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\components\vfs\efsl\debug.c">
+      <Filter>efsl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\components\vfs\efsl\dir.c">
+      <Filter>efsl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\components\vfs\efsl\disc.c">
+      <Filter>efsl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\components\vfs\efsl\efs.c">
+      <Filter>efsl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\components\vfs\efsl\error.c">
+      <Filter>efsl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\components\vfs\efsl\extract.c">
+      <Filter>efsl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\components\vfs\efsl\fat.c">
+      <Filter>efsl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\components\vfs\efsl\fat32_format.c">
+      <Filter>efsl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\components\vfs\efsl\file.c">
+      <Filter>efsl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\components\vfs\efsl\fs.c">
+      <Filter>efsl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\components\vfs\efsl\ioman.c">
+      <Filter>efsl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\components\vfs\efsl\mkfs.c">
+      <Filter>efsl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\components\vfs\efsl\partition.c">
+      <Filter>efsl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\components\vfs\efsl\plibc.c">
+      <Filter>efsl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\components\vfs\efsl\time.c">
+      <Filter>efsl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\components\vfs\efsl\ui.c">
+      <Filter>efsl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\port\interface.c">
+      <Filter>port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\port\file_port.c">
+      <Filter>port</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -90,6 +147,63 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\src\components\console\framework\wind_key.h">
       <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\src\components\vfs\efsl\config.h">
+      <Filter>efsl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\src\components\vfs\efsl\debug.h">
+      <Filter>efsl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\src\components\vfs\efsl\dir.h">
+      <Filter>efsl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\src\components\vfs\efsl\disc.h">
+      <Filter>efsl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\src\components\vfs\efsl\efs.h">
+      <Filter>efsl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\src\components\vfs\efsl\error.h">
+      <Filter>efsl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\src\components\vfs\efsl\extract.h">
+      <Filter>efsl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\src\components\vfs\efsl\fat.h">
+      <Filter>efsl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\src\components\vfs\efsl\file.h">
+      <Filter>efsl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\src\components\vfs\efsl\fs.h">
+      <Filter>efsl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\src\components\vfs\efsl\ioman.h">
+      <Filter>efsl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\src\components\vfs\efsl\mkfs.h">
+      <Filter>efsl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\src\components\vfs\efsl\partition.h">
+      <Filter>efsl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\src\components\vfs\efsl\plibc.h">
+      <Filter>efsl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\src\components\vfs\efsl\time.h">
+      <Filter>efsl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\src\components\vfs\efsl\types.h">
+      <Filter>efsl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\src\components\vfs\efsl\ui.h">
+      <Filter>efsl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\port\interface.h">
+      <Filter>port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\port\file_port.h">
+      <Filter>port</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -19,6 +19,7 @@
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
 #include "wind_cmd.h"
+#include "efs.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
@@ -30,6 +31,7 @@ extern "C" {
 
 /********************************************内部变量定义**********************************************/
 static EmbeddedFileSystem efs;
+extern w_err_t fat32_format(EmbeddedFileSystem *fs,char *blkname);
 static void mkfat32(char *dev,char *path)
 {
     dev = fat32_format(&efs,dev);
@@ -52,7 +54,7 @@ COMMAND_DISC(mkfs)
 
 COMMAND_USAGE(mkfs)
 {
-    console_printf("mkfs <str>:to  make a file system image.\r\n");
+    console_printf("mkfs fat32 <dev> <fsfile>:to  make a file system image.\r\n");
 }
 
 //mkfs fat32 <dev> <fsfile>

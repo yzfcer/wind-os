@@ -20,6 +20,24 @@
     <ClCompile Include="..\..\..\..\..\..\src\components\console\cmd\cmd_mkfs.c" />
     <ClCompile Include="..\..\..\..\..\..\src\components\console\framework\cmd_history.c" />
     <ClCompile Include="..\..\..\..\..\..\src\components\console\framework\console_framework.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\components\vfs\efsl\debug.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\components\vfs\efsl\dir.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\components\vfs\efsl\disc.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\components\vfs\efsl\efs.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\components\vfs\efsl\error.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\components\vfs\efsl\extract.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\components\vfs\efsl\fat.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\components\vfs\efsl\fat32_format.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\components\vfs\efsl\file.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\components\vfs\efsl\fs.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\components\vfs\efsl\ioman.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\components\vfs\efsl\mkfs.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\components\vfs\efsl\partition.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\components\vfs\efsl\plibc.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\components\vfs\efsl\time.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\components\vfs\efsl\ui.c" />
+    <ClCompile Include="..\..\port\file_port.c" />
+    <ClCompile Include="..\..\port\interface.c" />
     <ClCompile Include="..\..\port\wind_std.c" />
     <ClCompile Include="cmd_main.c" />
   </ItemGroup>
@@ -33,6 +51,25 @@
     <ClInclude Include="..\..\..\..\..\..\src\components\console\framework\console_framework.h" />
     <ClInclude Include="..\..\..\..\..\..\src\components\console\framework\wind_cmd.h" />
     <ClInclude Include="..\..\..\..\..\..\src\components\console\framework\wind_key.h" />
+    <ClInclude Include="..\..\..\..\..\..\src\components\vfs\efsl\config.h" />
+    <ClInclude Include="..\..\..\..\..\..\src\components\vfs\efsl\debug.h" />
+    <ClInclude Include="..\..\..\..\..\..\src\components\vfs\efsl\dir.h" />
+    <ClInclude Include="..\..\..\..\..\..\src\components\vfs\efsl\disc.h" />
+    <ClInclude Include="..\..\..\..\..\..\src\components\vfs\efsl\efs.h" />
+    <ClInclude Include="..\..\..\..\..\..\src\components\vfs\efsl\error.h" />
+    <ClInclude Include="..\..\..\..\..\..\src\components\vfs\efsl\extract.h" />
+    <ClInclude Include="..\..\..\..\..\..\src\components\vfs\efsl\fat.h" />
+    <ClInclude Include="..\..\..\..\..\..\src\components\vfs\efsl\file.h" />
+    <ClInclude Include="..\..\..\..\..\..\src\components\vfs\efsl\fs.h" />
+    <ClInclude Include="..\..\..\..\..\..\src\components\vfs\efsl\ioman.h" />
+    <ClInclude Include="..\..\..\..\..\..\src\components\vfs\efsl\mkfs.h" />
+    <ClInclude Include="..\..\..\..\..\..\src\components\vfs\efsl\partition.h" />
+    <ClInclude Include="..\..\..\..\..\..\src\components\vfs\efsl\plibc.h" />
+    <ClInclude Include="..\..\..\..\..\..\src\components\vfs\efsl\time.h" />
+    <ClInclude Include="..\..\..\..\..\..\src\components\vfs\efsl\types.h" />
+    <ClInclude Include="..\..\..\..\..\..\src\components\vfs\efsl\ui.h" />
+    <ClInclude Include="..\..\port\file_port.h" />
+    <ClInclude Include="..\..\port\interface.h" />
     <ClInclude Include="..\..\port\wind_config.h" />
     <ClInclude Include="..\..\port\wind_std.h" />
     <ClInclude Include="..\..\port\wind_type.h" />
@@ -64,7 +101,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(ProjectDir)..\..\..\..\..\..\src\components\console\cmd;$(ProjectDir)..\..\..\..\..\..\src\components\console\adapter\win32;$(ProjectDir)..\..\..\..\..\..\src\components\console\framework;$(ProjectDir)..\..\..\..\..\..\hardware\intel\core-i3-4170\windows_simulation\port;$(ProjectDir)..\..\..\..\..\..\src\common;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\..\..\..\..\..\src\components\console\cmd;$(ProjectDir)..\..\..\..\..\..\src\components\console\adapter\win32;$(ProjectDir)..\..\..\..\..\..\src\components\console\framework;$(ProjectDir)..\..\..\..\..\..\hardware\intel\core-i3-4170\windows_simulation\port;$(ProjectDir)..\..\..\..\..\..\src\common;$(ProjectDir)..\..\..\..\..\..\src\components\vfs\efsl;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
