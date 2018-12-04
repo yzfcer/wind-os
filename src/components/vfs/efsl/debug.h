@@ -25,12 +25,7 @@
 /*****************************************************************************/
 #include "types.h"
 #include "config.h"
+#include "wind_debug.h"
 /*****************************************************************************/
-
-//#if DEBUG 
 	#define TXT(x) ;
-	#define DBG(x) ;
-	#define FUNC_IN(x) ;
-	#define FUNC_OUT(x);
-//#endif
 #endif

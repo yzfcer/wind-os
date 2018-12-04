@@ -137,7 +137,7 @@ void fat_setNextClusterAddress(FileSystem *fs,euint32 cluster_addr,euint32 next_
 	
 	sector=fat_getSectorAddressFatEntry(fs,cluster_addr);
 	if(fs->FatSectorCount<sector){
-		DBG((TXT("HARDERROR:::fat_getNextClusterAddress READ PAST FAT BOUNDARY\n")));
+		wind_debug("HARDERROR:::fat_getNextClusterAddress READ PAST FAT BOUNDARY\n");
 		return;
 	}
 	
@@ -361,8 +361,7 @@ esint16 fat_getNextClusterChain(FileSystem *fs, ClusterChain *Cache)
 
 	if(Cache->DiscCluster==0)
 	{
-		DBG((TXT("fat_getNextClusterChain :: HARDERROR, called with invalid Cache\n")));
-		FUNC_OUT((TXT("")));
+		wind_debug("fat_getNextClusterChain :: HARDERROR, called with invalid Cache\n");
 		return(-1);
 	}
 

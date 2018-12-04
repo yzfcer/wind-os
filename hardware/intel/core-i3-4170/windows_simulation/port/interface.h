@@ -25,7 +25,7 @@ esint8 if_erase(hwInterface* hwif,euint32 address,euint32 count);
 esint8 if_readBuf(hwInterface* hwif,euint32 address,euint8* buf);
 esint8 if_writeBuf(hwInterface* hwif,euint32 address,euint8* buf);
 eint16 if_setPos(hwInterface* hwif,euint32 address);
-eint16 if_load(hwInterface* hwif);
-eint16 if_flush(hwInterface* hwif);
+eint16 if_load(hwInterface* hwif,char *filename);
+eint16 if_flush(hwInterface* hwif,char *filename);
 
 #endif

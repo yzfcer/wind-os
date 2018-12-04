@@ -442,7 +442,7 @@ void CAN_SlaveStartBank(uint8_t CAN_BankNumber)
 }
 
 /**
-  * @brief  Enables or disables the DBG Freeze for CAN.
+  * @brief  Enables or disables the wind_debug Freeze for CAN.
   * @param  CANx:     where x can be 1 or 2 to to select the CAN peripheral.
   * @param  NewState: new state of the CAN peripheral. This parameter can 
   *                   be: ENABLE or DISABLE.

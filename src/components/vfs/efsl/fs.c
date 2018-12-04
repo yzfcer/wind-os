@@ -339,7 +339,8 @@ esint8 fs_findFile(FileSystem *fs,eint8* filename,FileLocation *loc,euint32 *las
 	if(lastDir)*lastDir=fccd;
 	
 	while((next=file_normalToFatName(filename,ffname))!=0){
-		if((tmpclus=dir_findinDir(fs,ffname,fccd,loc,DIRFIND_FILE))==0)return(0);
+		if((tmpclus=dir_findinDir(fs,ffname,fccd,loc,DIRFIND_FILE))==0)
+            return(0);
 		it++;
 		if(loc->attrib&ATTR_DIRECTORY){
 			fccd = tmpclus;

@@ -175,9 +175,9 @@ esint8 ioman_readSector(IOManager *ioman,euint32 address,euint8* buf)
 {
 	esint8 r;
 
-	/*DBG((TXT("ioman_readSector::Requesting address %u to be put in %p.\n"),address,buf));*/
+	/*wind_debug("ioman_readSector::Requesting address %u to be put in %p.\n",address,buf);*/
 	if(buf==0){
-		/*DBG((TXT("Refused to read sector, buf=0\n")));*/
+		/*wind_debug("Refused to read sector, buf=0\n");*/
 		return(-1);
 	}
 	
@@ -378,15 +378,15 @@ void ioman_printStatus(IOManager *ioman)
 {
 	euint16 c;
 	
-	DBG((TXT("IO-Manager -- Report\n====================\n\n")));
-	DBG((TXT("Buffer is %i sectors, from %p to %p\n"),
-	          ioman->numbuf,ioman->bufptr,ioman->bufptr+(ioman->numbuf*512)));
+	wind_debug("IO-Manager -- Report\n====================\n\n");
+	wind_debug("Buffer is %i sectors, from %p to %p\n",
+	          ioman->numbuf,ioman->bufptr,ioman->bufptr+(ioman->numbuf*512));
 	for(c=0;c<ioman->numbuf;c++){
 		if(ioman_isValid(c)){
-			DBG((TXT("BP %3i\t SC %i\t\t US %i\t RF %i\t %s %s\n"),
+			wind_debug("BP %3i\t SC %i\t\t US %i\t RF %i\t %s %s\n",
 			c,ioman->sector[c],ioman_getUseCnt(ioman,c),ioman_getRefCnt(ioman,c),
 			ioman_isUserBuf(c) ? "USRBUF" : "      ",
-			ioman_isWritable(c) ? "WRITABLE" : "READONLY"));
+			ioman_isWritable(c) ? "WRITABLE" : "READONLY");
 		}
 	}
 }

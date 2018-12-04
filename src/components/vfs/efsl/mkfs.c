@@ -11,7 +11,7 @@ signed short mkfs_makevfat(Partition *part)
 	ns=part->disc->partitions[part->activePartition].numSectors;
 	
 	if( ns < 66581 ){
-		DBG((TXT("This is not possible due to insufficient sectors. Sorry\n")));
+		wind_debug("This is not possible due to insufficient sectors. Sorry\n");
 		return(MKFS_ERR_TOOLITTLESECTORS);
 	}
 	

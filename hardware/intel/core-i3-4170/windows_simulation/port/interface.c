@@ -74,24 +74,24 @@ eint16 if_setPos(hwInterface* hwif,euint32 address)
 }
 
 
-eint16 if_load(hwInterface* hwif)
+eint16 if_load(hwInterface* hwif,char *filename)
 {
     esint32 len;
     wind_debug("if_load");
     wind_memset(blkbuf,0,sizeof(blkbuf));
-    len = read_file("fat32.img",0,blkbuf,sizeof(blkbuf));
+    len = read_file(filename,0,blkbuf,sizeof(blkbuf));
     if(len <= 0)
     {
         wind_memset(blkbuf,0,sizeof(blkbuf));
-        write_file("fat32.img",0,blkbuf,sizeof(blkbuf));
+        write_file(filename,0,blkbuf,sizeof(blkbuf));
     }
     return (0);
 }
 
-eint16 if_flush(hwInterface* hwif)
+eint16 if_flush(hwInterface* hwif,char *filename)
 {
     wind_debug("if_flush");
-    write_file("fat32.img",0,blkbuf,sizeof(blkbuf));
+    write_file(filename,0,blkbuf,sizeof(blkbuf));
     return (0);
 }
 

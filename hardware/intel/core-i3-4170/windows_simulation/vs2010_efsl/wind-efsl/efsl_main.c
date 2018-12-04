@@ -17,7 +17,7 @@
 //#define File1Name "/test/test_framework.txt"
 #define File1Name "test1/test2/testT/Test1111.txt"
 #define File2Name "test1/test2/testT/Test2222.txt"
-#define File3Name "test1/test2/testT/Test3222.txt"
+#define File3Name "test1/test2/testT/Test6666.txt"
 
 
 eint32 fat32_format(EmbeddedFileSystem *fs,char *blkname);
@@ -82,6 +82,7 @@ void file_test(void)
         wind_memset(buf,0,sizeof(buf));
         
         test_read_file(filename[i],buf,sizeof(buf));
+        wind_printf("######## file content:\r\n");
         wind_printf("%s\r\n",buf);
     }
     
@@ -95,7 +96,7 @@ int main(int argc, char** argv)
 	File *fw=0;
 	
 	
-    if_load(NULL);
+    if_load(NULL,"fat32.img");
     res = efs_init(&efs,"test");
     wind_notice("efs_init %s",res == 0?"OK":"ERROR");
     if(res != 0)
@@ -111,7 +112,7 @@ int main(int argc, char** argv)
     }
     file_test();
     fs_flushFs(&efs.myFs);
-    if_flush(&efs.myCard);
+    if_flush(&efs.myCard,"fat32.img");
     system("pause");
 }
 

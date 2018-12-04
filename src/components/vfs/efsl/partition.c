@@ -80,7 +80,7 @@ esint8 part_readBuf(Partition *part, euint32 address, euint8* buf)
 */
 eint16 part_writeBuf(Partition *part,euint32 address,euint8* buf)
 {
-	/*DBG((TXT("part_writeBuf :: %li\n"),address));*/
+	/*wind_debug("part_writeBuf :: %li\n",address);*/
 	return(if_writeBuf(part->disc->ioman->iface,part_getRealLBA(part,address),buf));
 }
 /*****************************************************************************/ 

@@ -29,8 +29,11 @@ extern "C" {
 #if (WIND_CONSOLE_SUPPORT && CMD_ECHO_SUPPORT)
 
 /********************************************内部变量定义**********************************************/
-
-
+static EmbeddedFileSystem efs;
+static void mkfat32(char *dev,char *path)
+{
+    dev = fat32_format(&efs,dev);
+}
 
 
 /********************************************内部函数定义*********************************************/
@@ -52,6 +55,7 @@ COMMAND_USAGE(mkfs)
     console_printf("mkfs <str>:to  make a file system image.\r\n");
 }
 
+//mkfs fat32 <dev> <fsfile>
 COMMAND_MAIN(mkfs,argc,argv)
 {
     char *str;
