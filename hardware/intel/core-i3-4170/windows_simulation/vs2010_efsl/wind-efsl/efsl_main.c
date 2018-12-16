@@ -15,9 +15,9 @@
 #include "wind_debug.h"
 #include "wind_string.h"
 //#define File1Name "/test/test_framework.txt"
-#define File1Name "test1/test2/testT/Test1111.txt"
-#define File2Name "test1/test2/testT/Test2222.txt"
-#define File3Name "test1/test2/testT/Test6666.txt"
+#define File1Name "/test1/test2/testT/Test1111.txt"
+#define File2Name "/test1/test2/testT/Test2222.txt"
+#define File3Name "/test1/test2/testT/Test6666.txt"
 
 
 eint32 fat32_format(EmbeddedFileSystem *fs,char *blkname);
@@ -65,9 +65,9 @@ void file_test(void)
     w_int32_t i,len;
     char *filename[3] = {File1Name,File2Name,File3Name};
     w_uint8_t buf[4096];
-    mkdir(&efs.myFs,"test1");
-    mkdir(&efs.myFs,"test1/test2");
-    mkdir(&efs.myFs,"test1/test2/testT");
+    mkdir(&efs.myFs,"/test1");
+    mkdir(&efs.myFs,"/test1/test2");
+    mkdir(&efs.myFs,"/test1/test2/testT");
     for(i = 0;i < 3;i ++)
     {
         wind_memset(buf,0,sizeof(buf));

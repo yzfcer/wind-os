@@ -112,7 +112,7 @@ fln:通带下边界频率
 fhn:通带上边界频率
 wn:窗函数的类型1-7分别对应7中不同的窗函数
 h:长度为n+1,存放滤波器的系数
-fs:采样频率
+fst32_fsobj:采样频率
 beta:如果滤波器采用凯瑟窗，就表示生成凯塞窗的系数，对其他穿函数无效*/
 
 void firGen(int n,int band,double fln,double fhn,int wn,double *h,double beta)

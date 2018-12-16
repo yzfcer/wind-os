@@ -240,24 +240,24 @@ static w_err_t fs_cmd_write(w_int32_t argc,char **argv)
 
 
 /********************************************全局函数定义**********************************************/
-COMMAND_DISC(fs)
+COMMAND_DISC(fst32_fsobj)
 {
-    console_printf("to operate fs file system.\r\n");
+    console_printf("to operate fst32_fsobj file system.\r\n");
 }
 
-COMMAND_USAGE(fs)
+COMMAND_USAGE(fst32_fsobj)
 {
-    console_printf("fs pwd:to show current user path.\r\n");
-    console_printf("fs cd:to change current user path.\r\n");
-    console_printf("fs mkdir:to make a directory path.\r\n");
-    console_printf("fs touch:to make a file.\r\n");
-    console_printf("fs rm:to remove a directory or file.\r\n");
-    console_printf("fs ls:to show files in a directory.\r\n");
-    console_printf("fs cat:to show file context.\r\n");
-    console_printf("fs write:to write context into a file.\r\n");
+    console_printf("fst32_fsobj pwd:to show current user path.\r\n");
+    console_printf("fst32_fsobj cd:to change current user path.\r\n");
+    console_printf("fst32_fsobj mkdir:to make a directory path.\r\n");
+    console_printf("fst32_fsobj touch:to make a file.\r\n");
+    console_printf("fst32_fsobj rm:to remove a directory or file.\r\n");
+    console_printf("fst32_fsobj ls:to show files in a directory.\r\n");
+    console_printf("fst32_fsobj cat:to show file context.\r\n");
+    console_printf("fst32_fsobj write:to write context into a file.\r\n");
 }
 
-COMMAND_MAIN(fs,argc,argv)
+COMMAND_MAIN(fst32_fsobj,argc,argv)
 {
     //path_init();
     WIND_ASSERT_RETURN(argc >= 2,W_ERR_INVALID);
@@ -280,7 +280,7 @@ COMMAND_MAIN(fs,argc,argv)
     return W_ERR_OK;
 }
 
-COMMAND_DEF(fs);
+COMMAND_DEF(fst32_fsobj);
 
 #endif
 #ifdef __cplusplus

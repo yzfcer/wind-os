@@ -196,6 +196,89 @@ extern char *wind_strlower(char *dest)
     return dest;
 }
 
+//描述:从字符串中查找特定的子串
+//s1     : 原字符串
+//s2     : 需要查找的子串
+//返回值 : 第一个匹配的位置
+char *wind_strstr(const char *s1,const char *s2)
+{
+    w_int32_t l1, l2;
+
+    l2 = wind_strlen(s2);
+    if (!l2)
+        return (char *) s1;
+    l1 = wind_strlen(s1);
+    while (l1 >= l2) {
+        l1--;
+        if (!wind_memcmp(s1,s2,l2))
+            return (char *) s1;
+        s1++;
+    }
+    return W_NULL;
+}
+
+
+//描述:从字符串中跳过特定的子串
+//str    : 原字符串
+//charr  : 需要跳过的子串
+//count  : 原字符串最大长度
+//返回值 : 跳过子串后的新字符串
+char *wind_strskip(char *str,char *charr,w_int32_t count)
+{
+    w_int32_t i;
+    for(;;)
+    {
+        for(i = 0;i < count;i ++)
+        {
+            if(*str == charr[i])
+            {
+                str ++;
+                break;
+            }
+                
+        }
+        if(i >= count)
+            break;
+    }
+    if(*str == '\0')
+        return W_NULL;
+    return str;
+}
+
+//描述:将字符串按照特定字符分割，最多分割成maxcnt个字符串
+//str : 原字符串
+//ch  : 指定的分隔字符
+//substr : 返回分割后的子串
+//maxcnt : 最多分割的子串数量
+//返回值 : 实际分割的子串数量
+w_int32_t wind_strsplit(char *str,char ch,char **substr,w_int32_t maxcnt)
+{
+    w_int32_t i,j,cnt = 0;
+    int len = wind_strlen(str)+1;
+    j = 0;
+    for(i = 0;i < maxcnt;i ++)
+    {
+        if(cnt >= maxcnt)
+            return -1;
+        substr[i] = &str[j];
+        for(;j < len;j ++)
+        {
+            if((str[j] == ch) || (str[j] == '\0'))
+            {
+                cnt ++;
+                str[j] = 0;
+                j ++;
+                break;
+            }
+        }
+        if(j >= len)
+            break;
+    }
+    cnt = (substr[cnt-1][0] != 0?cnt:cnt -1);
+    return cnt;
+}
+
+
 void *wind_memset(void *s,char c,w_uint32_t count)
 {
     char *xs = (char *) s;
@@ -258,9 +341,6 @@ w_int32_t wind_memcmp(const void *dest,const void *src,w_uint32_t count)
     return res;
 }
 
-/*
- *find the first occurrence of byte 'c', or 1 past the area if none
- */
 void *wind_memscan(void *addr, w_uint32_t c, w_uint32_t size)
 {
     w_uint8_t *p = (w_uint8_t *) addr;
@@ -272,71 +352,5 @@ void *wind_memscan(void *addr, w_uint32_t c, w_uint32_t size)
         size--;
     }
     return (void *) p;
-}
-
-char *wind_strstr(const char *s1,const char *s2)
-{
-    w_int32_t l1, l2;
-
-    l2 = wind_strlen(s2);
-    if (!l2)
-        return (char *) s1;
-    l1 = wind_strlen(s1);
-    while (l1 >= l2) {
-        l1--;
-        if (!wind_memcmp(s1,s2,l2))
-            return (char *) s1;
-        s1++;
-    }
-    return W_NULL;
-}
-
-char *wind_strskip(char *str,char *charr,w_int32_t count)
-{
-    w_int32_t i;
-    for(;;)
-    {
-        for(i = 0;i < count;i ++)
-        {
-            if(*str == charr[i])
-            {
-                str ++;
-                break;
-            }
-                
-        }
-        if(i >= count)
-            break;
-    }
-    if(*str == '\0')
-        return W_NULL;
-    return str;
-}
-
-w_int32_t wind_strsplit(char *str,char ch,char **substr,w_int32_t maxcnt)
-{
-    w_int32_t i,j,cnt = 0;
-    int len = wind_strlen(str)+1;
-    j = 0;
-    for(i = 0;i < maxcnt;i ++)
-    {
-        if(cnt >= maxcnt)
-            return -1;
-        substr[i] = &str[j];
-        for(;j < len;j ++)
-        {
-            if((str[j] == ch) || (str[j] == '\0'))
-            {
-                cnt ++;
-                str[j] = 0;
-                j ++;
-                break;
-            }
-        }
-        if(j >= len)
-            break;
-    }
-    cnt = (substr[cnt-1][0] != 0?cnt:cnt -1);
-    return cnt;
 }
 

@@ -40,7 +40,7 @@ extern "C" {
 #define WIND_CMD_NAME_LEN 12//一个命令标示的最大长度
 #define WIND_CTL_USRNAME_LEN 20//用户名的长度
 #define WIND_CTL_PWD_LEN 20//密码的最大长度
-#define WIND_CONSOLE_COUNT 1//支持的控制套终端的数量
+#define WIND_SHELL_CTX_COUNT 1//支持的控制套终端的数量
 #define CMD_PARAM_CNT 10
 
 #define USER_AUTHENTICATION_EN 0
@@ -96,7 +96,7 @@ typedef struct __console_s
     w_cmd_his_s his;
     w_cmd_param_s param;
     w_dlist_s cmd_list;
-}w_console_s;
+}w_shell_ctx_s;
 
 
 /********************************************全局变量申明**********************************************/
@@ -106,13 +106,13 @@ typedef struct __console_s
 /********************************************全局函数申明**********************************************/
 
 //输出命令列表
-void wind_cmd_init(w_console_s *ctrl);
+void wind_cmd_init(w_shell_ctx_s *ctrl);
 w_err_t _create_console_thread(void);
 w_cmd_s *wind_cmd_get(const char *name);
 w_err_t wind_cmd_register(w_cmd_s *cmd,int cnt);
 w_err_t wind_cmd_print(void);
-void _wind_register_all_cmd(w_console_s *ctrl);
-extern void wind_cmd_register_cmd_test(w_console_s *ctrl);
+void _wind_register_all_cmd(w_shell_ctx_s *ctrl);
+extern void wind_cmd_register_cmd_test(w_shell_ctx_s *ctrl);
 
 #endif
 #ifdef __cplusplus

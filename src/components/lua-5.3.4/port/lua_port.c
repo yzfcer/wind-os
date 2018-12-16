@@ -106,15 +106,15 @@ int clock(void *ptr)
 {
     return 0;
 }
-extern w_console_s g_ctrl[WIND_CONSOLE_COUNT];
-extern w_int32_t console_read_line(w_console_s *ctrl,w_int32_t len);
+extern w_shell_ctx_s g_shell_ctx[WIND_SHELL_CTX_COUNT];
+extern w_int32_t console_read_line(w_shell_ctx_s *ctrl,w_int32_t len);
 
 int lua_readline(lua_State *L,char *buff,const char *prmt)
 {
     int len;
     wind_std_output((w_uint8_t*)prmt,wind_strlen(prmt));
-    len = console_read_line(&g_ctrl[0],LUA_MAXINPUT);
-    wind_strcpy(buff,g_ctrl[0].buf);
+    len = console_read_line(&g_shell_ctx[0],LUA_MAXINPUT);
+    wind_strcpy(buff,g_shell_ctx[0].buf);
     buff[len] = '\n';
     buff[len+1] = '\0';
     return 1;
