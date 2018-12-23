@@ -14,6 +14,12 @@
     <Filter Include="fatfs">
       <UniqueIdentifier>{fa0d4a37-1592-40d7-8fd6-02e2533ad499}</UniqueIdentifier>
     </Filter>
+    <Filter Include="hal">
+      <UniqueIdentifier>{deb76de2-b7f7-4ec5-9828-3443316b0841}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="device">
+      <UniqueIdentifier>{905c23da-1737-45d5-b768-9f14afa6f30f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\port\file_port.c">
@@ -44,6 +50,18 @@
       <Filter>fatfs</Filter>
     </ClCompile>
     <ClCompile Include="fatfs_main.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\hal\wind_blkdev.c">
+      <Filter>hal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\common\wind_dlist.c">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\device\blkdev_memblk.c">
+      <Filter>device</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\device\list_blkdev.c">
+      <Filter>device</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\port\file_port.h">
@@ -69,6 +87,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\src\components\vfs\fatfs\ffconf.h">
       <Filter>fatfs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\src\hal\wind_blkdev.h">
+      <Filter>hal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\src\common\wind_dlist.h">
+      <Filter>common</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -4,9 +4,9 @@
 #include "ff.h"
 #include "file_port.h"
 //#define File1Name "/test/test_framework.txt"
-#define File1Name "/test1/test2/testT/Test1111.txt"
-#define File2Name "/test1/test2/testT/Test2222.txt"
-#define File3Name "/test1/test2/testT/Test3333.txt"
+#define File1Name "/test1/test2/testT/Test00001111111.txt"
+#define File2Name "/test1/test2/testT/Test00002222222.txt"
+#define File3Name "/test1/test2/testT/Test00003322233.txt"
 FATFS fat32_fsobj;           /* Filesystem object */
 
 w_err_t test_write_file(char *path,w_uint8_t *data,w_int32_t lenth)
@@ -27,6 +27,7 @@ w_err_t test_write_file(char *path,w_uint8_t *data,w_int32_t lenth)
     res = f_write(&fil,data, lenth,&bw);
     WIND_ASSERT_RETURN(res == 0,W_ERR_FAIL);
     f_close(&fil);
+    return W_ERR_OK;
 }
 
 w_err_t test_read_file(char *path,w_uint8_t *data,w_int32_t lenth)
@@ -78,16 +79,13 @@ void file_test(void)
 }
 
 static BYTE work[FF_MAX_SS]; /* Work area (larger is better for processing time) */
-
+extern w_err_t _register_blkdevs(void);
 int main(int argc, char** argv)
 {
-    FIL fil;            /* File object */
     FRESULT res;        /* API result code */
-    UINT bw;            /* Bytes written */
-    BYTE buff[32];
     //disk_load(0,"fatfs.img");
-
-    res = f_mkfs("/test2", 2048, work, sizeof(work));
+	_register_blkdevs();
+    res = f_mkfs("/test2", 0, work, sizeof(work));
     if (res != FR_OK)
     {
         wind_error("mkfs failed.");

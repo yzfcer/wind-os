@@ -30,8 +30,6 @@ DSTATUS disk_status (
 	BYTE pdrv		/* Physical drive nmuber to identify the drive */
 )
 {
-	DSTATUS stat = 0;
-	int result;
 	return STA_OK;
 }
 
@@ -46,8 +44,6 @@ DSTATUS disk_initialize (
 )
 
 {
-	DSTATUS stat;
-	int result;
     wind_debug("disk_initialize pdrv:%d",pdrv);
 	return STA_OK;
 }
@@ -65,8 +61,6 @@ DRESULT disk_read (
 	UINT count		/* Number of sectors to read */
 )
 {
-	DRESULT res;
-	int result;
     DWORD offset = sector * SEC_SIZE * count;
     wind_debug("disk_read sector:%d,count:%d",sector,count);
     wind_memcpy(buff,&blkbuf[offset],SEC_SIZE);
@@ -88,8 +82,6 @@ DRESULT disk_write (
 	UINT count			/* Number of sectors to write */
 )
 {
-	DRESULT res;
-	int result;
     DWORD offset = sector * SEC_SIZE * count;
     wind_debug("disk_write sector:%d,count:%d",sector,count);
     wind_memcpy(&blkbuf[offset],buff,SEC_SIZE);
@@ -109,8 +101,6 @@ DRESULT disk_ioctl (
 	void *buff		/* Buffer to send/receive control data */
 )
 {
-	DRESULT res;
-	int result;
 	wind_debug("ioctl cmd:%d",cmd);
     switch(cmd)
     {

@@ -5,6 +5,7 @@
 
 
 #include "ff.h"
+#include "file_port.h"
 
 
 #if FF_USE_LFN == 3	/* Dynamic memory allocation */
@@ -17,7 +18,7 @@ void* ff_memalloc (	/* Returns pointer to the allocated memory block (null if no
 	UINT msize		/* Number of bytes to allocate */
 )
 {
-	return wind_malloc(msize);	/* Allocate a new memory block with POSIX API */
+	return (void*)wind_malloc(msize);	/* Allocate a new memory block with POSIX API */
 }
 
 

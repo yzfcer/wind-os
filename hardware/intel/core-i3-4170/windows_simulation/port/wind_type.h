@@ -69,6 +69,10 @@ typedef float w_fp32_t;
 typedef double w_fp64_t;
 #endif
 
+#ifndef w_addr_t
+typedef unsigned long w_addr_t; 
+#endif
+
 #ifndef __INLINE__
 #define __INLINE__ 
 #endif

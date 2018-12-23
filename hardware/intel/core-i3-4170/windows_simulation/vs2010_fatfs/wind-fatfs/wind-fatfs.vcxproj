@@ -12,22 +12,28 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\..\..\src\common\wind_debug.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\common\wind_dlist.c" />
     <ClCompile Include="..\..\..\..\..\..\src\common\wind_encrypt.c" />
     <ClCompile Include="..\..\..\..\..\..\src\common\wind_string.c" />
     <ClCompile Include="..\..\..\..\..\..\src\components\vfs\fatfs\diskio.c" />
     <ClCompile Include="..\..\..\..\..\..\src\components\vfs\fatfs\ff.c" />
     <ClCompile Include="..\..\..\..\..\..\src\components\vfs\fatfs\ffsystem.c" />
     <ClCompile Include="..\..\..\..\..\..\src\components\vfs\fatfs\ffunicode.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\hal\wind_blkdev.c" />
+    <ClCompile Include="..\..\device\blkdev_memblk.c" />
+    <ClCompile Include="..\..\device\list_blkdev.c" />
     <ClCompile Include="..\..\port\file_port.c" />
     <ClCompile Include="..\..\port\wind_std.c" />
     <ClCompile Include="fatfs_main.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\..\..\src\common\wind_debug.h" />
+    <ClInclude Include="..\..\..\..\..\..\src\common\wind_dlist.h" />
     <ClInclude Include="..\..\..\..\..\..\src\common\wind_string.h" />
     <ClInclude Include="..\..\..\..\..\..\src\components\vfs\fatfs\diskio.h" />
     <ClInclude Include="..\..\..\..\..\..\src\components\vfs\fatfs\ff.h" />
     <ClInclude Include="..\..\..\..\..\..\src\components\vfs\fatfs\ffconf.h" />
+    <ClInclude Include="..\..\..\..\..\..\src\hal\wind_blkdev.h" />
     <ClInclude Include="..\..\port\file_port.h" />
     <ClInclude Include="..\..\port\wind_std.h" />
     <ClInclude Include="..\..\port\wind_type.h" />
@@ -59,7 +65,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(ProjectDir)..\..\..\..\..\..\src\components\vfs\fatfs;$(ProjectDir)..\..\port;$(ProjectDir)..\..\..\..\..\..\src\common;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\..\..\..\..\..\src\components\vfs\fatfs;$(ProjectDir)..\..\port;$(ProjectDir)..\..\..\..\..\..\src\common;$(ProjectDir)..\..\..\..\..\..\src\hal;$(ProjectDir)..\..\os_adapter;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
