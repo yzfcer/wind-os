@@ -31,16 +31,6 @@
 
 /* Limits and boundaries */
 #define MAX_DIR		0x200000		/* Max size of FAT directory */
-#define MAX_DIR_EX	0x10000000		/* Max size of exFAT directory */
-#define MAX_FAT12	0xFF5			/* Max FAT12 clusters (differs from specs, but right for real DOS/Windows behavior) */
-
-
-/* yzfcer modify */
-//#define MAX_FAT16	0xFFF5			/* Max FAT16 clusters (differs from specs, but right for real DOS/Windows behavior) */
-#define MAX_FAT16	0x1F5			/* Max FAT16 clusters (differs from specs, but right for real DOS/Windows behavior) */
-#define MAX_FAT32	0x0FFFFFF5		/* Max FAT32 clusters (not specified, practical limit) */
-#define MAX_EXFAT	0x7FFFFFFD		/* Max exFAT clusters (differs from specs, implementation limit) */
-
 
 /* Character code support macros */
 #define IsUpper(c)		((c) >= 'A' && (c) <= 'Z')
@@ -73,16 +63,6 @@
 #define NS_DOT		0x20	/* Dot entry */
 #define NS_NOLFN	0x40	/* Do not find LFN */
 #define NS_NONAME	0x80	/* Not followed */
-
-
-/* exFAT directory entry types */
-#define	ET_BITMAP	0x81	/* Allocation bitmap */
-#define	ET_UPCASE	0x82	/* Up-case table */
-#define	ET_VLABEL	0x83	/* Volume label */
-#define	ET_FILEDIR	0x85	/* File and directory */
-#define	ET_STREAM	0xC0	/* Stream extension */
-#define	ET_FILENAME	0xC1	/* Name extension */
-
 
 /* FatFs refers the FAT structure as simple byte array instead of structure member
 / because the C structure is not binary compatible between different platforms */
@@ -158,27 +138,7 @@
 #define LDIR_Type			12		/* LFN: Entry type (BYTE) */
 #define LDIR_Chksum			13		/* LFN: Checksum of the SFN (BYTE) */
 #define LDIR_FstClusLO		26		/* LFN: MBZ field (WORD) */
-#define XDIR_Type			0		/* exFAT: Type of exFAT directory entry (BYTE) */
-#define XDIR_NumLabel		1		/* exFAT: Number of volume label characters (BYTE) */
-#define XDIR_Label			2		/* exFAT: Volume label (11-WORD) */
-#define XDIR_CaseSum		4		/* exFAT: Sum of case conversion table (DWORD) */
-#define XDIR_NumSec			1		/* exFAT: Number of secondary entries (BYTE) */
-#define XDIR_SetSum			2		/* exFAT: Sum of the set of directory entries (WORD) */
-#define XDIR_Attr			4		/* exFAT: File attribute (WORD) */
-#define XDIR_CrtTime		8		/* exFAT: Created time (DWORD) */
-#define XDIR_ModTime		12		/* exFAT: Modified time (DWORD) */
-#define XDIR_AccTime		16		/* exFAT: Last accessed time (DWORD) */
-#define XDIR_CrtTime10		20		/* exFAT: Created time subsecond (BYTE) */
-#define XDIR_ModTime10		21		/* exFAT: Modified time subsecond (BYTE) */
-#define XDIR_CrtTZ			22		/* exFAT: Created timezone (BYTE) */
-#define XDIR_ModTZ			23		/* exFAT: Modified timezone (BYTE) */
-#define XDIR_AccTZ			24		/* exFAT: Last accessed timezone (BYTE) */
-#define XDIR_GenFlags		33		/* exFAT: General secondary flags (BYTE) */
-#define XDIR_NumName		35		/* exFAT: Number of file name characters (BYTE) */
-#define XDIR_NameHash		36		/* exFAT: Hash of file name (WORD) */
-#define XDIR_ValidFileSize	40		/* exFAT: Valid file size (QWORD) */
-#define XDIR_FstClus		52		/* exFAT: First cluster of the file data (DWORD) */
-#define XDIR_FileSize		56		/* exFAT: File/Directory size (QWORD) */
+
 
 #define SZDIRE				32		/* Size of a directory entry */
 #define DDEM				0xE5	/* Deleted directory entry mark set to DIR_Name[0] */
@@ -577,7 +537,8 @@ static DWORD ld_dword (const BYTE* ptr)	/* Load a 4-byte little-endian word */
 
 static void st_word (BYTE* ptr, WORD val)	/* Store a 2-byte word in little-endian */
 {
-	*ptr++ = (BYTE)val; val >>= 8;
+	*ptr++ = (BYTE)val; 
+    val >>= 8;
 	*ptr++ = (BYTE)val;
 }
 
@@ -601,12 +562,12 @@ static void mem_cpy (void* dst, const void* src, UINT cnt)
 {
 	BYTE *d = (BYTE*)dst;
 	const BYTE *s = (const BYTE*)src;
-
-	if (cnt != 0) {
-		do {
-			*d++ = *s++;
-		} while (--cnt);
-	}
+    if(cnt <= 0)
+        return;
+	do 
+    {
+		*d++ = *s++;
+	} while (--cnt);
 }
 
 
@@ -614,8 +575,8 @@ static void mem_cpy (void* dst, const void* src, UINT cnt)
 static void mem_set (void* dst, int val, UINT cnt)
 {
 	BYTE *d = (BYTE*)dst;
-
-	do {
+	do 
+    {
 		*d++ = (BYTE)val;
 	} while (--cnt);
 }
@@ -626,11 +587,10 @@ static int mem_cmp (const void* dst, const void* src, UINT cnt)	/* ZR:same, NZ:d
 {
 	const BYTE *d = (const BYTE *)dst, *s = (const BYTE *)src;
 	int r = 0;
-
-	do {
+	do 
+    {
 		r = *d++ - *s++;
 	} while (--cnt && r == 0);
-
 	return r;
 }
 
@@ -638,7 +598,8 @@ static int mem_cmp (const void* dst, const void* src, UINT cnt)	/* ZR:same, NZ:d
 /* Check if chr is contained in the string */
 static int chk_chr (const char* str, int chr)	/* NZ:contained, ZR:not contained */
 {
-	while (*str && *str != chr) str++;
+	while (*str && *str != chr) 
+        str++;
 	return *str;
 }
 
@@ -4540,9 +4501,7 @@ FRESULT f_mkfs (
 		//sz_rsv = 32;	/* Number of reserved sectors */
 		sz_rsv = 4;	/* Number of reserved sectors */
 		sz_dir = 0;		/* No static directory */
-		if (n_clst <= MAX_FAT16 || n_clst > MAX_FAT32) 
-            LEAVE_MKFS(FR_MKFS_ABORTED);
-        
+       
 		b_fat = b_vol + sz_rsv;						/* FAT base */
 		b_data = b_fat + sz_fat * n_fats + sz_dir;	/* Data base */
 
@@ -4556,13 +4515,6 @@ FRESULT f_mkfs (
 		if (sz_vol < b_data + szs_clst * 16 - b_vol) 
             LEAVE_MKFS(FR_MKFS_ABORTED);    /* Too small volume */
 		n_clst = (sz_vol - sz_rsv - sz_fat * n_fats - sz_dir) / szs_clst;
-		if (n_clst <= MAX_FAT16) 
-        {   /* Too few clusters for FAT32 */
-			if (au == 0 && (au = szs_clst / 2) != 0) 
-                continue;   /* Adjust cluster size and retry */
-			LEAVE_MKFS(FR_MKFS_ABORTED);
-		}
-
 		/* Ok, it is the valid cluster configuration */
 		break;
 	} while (1);

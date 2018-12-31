@@ -199,7 +199,7 @@
 /  defined by FF_NORTC_MON, FF_NORTC_MDAY and FF_NORTC_YEAR in local time.
 /  To enable timestamp function (FF_FS_NORTC = 0), get_fattime() function need to be
 /  added to the project to read current time form real-time clock. FF_NORTC_MON,
-/  FF_NORTC_MDAY and FF_NORTC_YEAR have no effect.
+/  FF_NORTC_MDAY and FF_NORTC_YEAR have no effect.*/
 
 
 #define FF_FS_LOCK		0
@@ -214,8 +214,8 @@
 
 
 /* #include <somertos.h>	// O/S definitions */
-#define FF_FS_REENTRANT	0
-#define FF_FS_TIMEOUT	1000
+#define FF_FS_REENTRANT	1
+#define FF_FS_TIMEOUT	2000
 #define FF_SYNC_t		HANDLE
 /* The option FF_FS_REENTRANT switches the re-entrancy (thread safe) of the FatFs
 /  module itself. Note that regardless of this option, file access to different
