@@ -29,11 +29,6 @@
 
 ---------------------------------------------------------------------------*/
 
-#if FF_DEFINED != 86604	/* Revision ID */
-#error Wrong include file (ff.h).
-#endif
-
-
 /* Limits and boundaries */
 #define MAX_DIR		0x200000		/* Max size of FAT directory */
 #define MAX_DIR_EX	0x10000000		/* Max size of exFAT directory */
@@ -1573,7 +1568,7 @@ static int cmp_lfn (		/* 1:matched, 0:not matched */
 }
 
 
-#if FF_FS_MINIMIZE <= 1 || FF_FS_RPATH >= 2 || FF_USE_LABEL
+
 /*-----------------------------------------------------*/
 /* FAT-LFN: Pick a part of file name from an LFN entry */
 /*-----------------------------------------------------*/
@@ -1608,7 +1603,7 @@ static int pick_lfn (	/* 1:succeeded, 0:buffer overflow or invalid LFN entry */
 
 	return 1;		/* The part of LFN is valid */
 }
-#endif
+
 
 
 /*-----------------------------------------*/
@@ -1726,7 +1721,6 @@ static BYTE sum_sfn (
 
 
 
-#if FF_FS_MINIMIZE <= 1 || FF_FS_RPATH >= 2 || FF_USE_LABEL 
 /*-----------------------------------------------------------------------*/
 /* Read an object from the directory                                     */
 /*-----------------------------------------------------------------------*/
@@ -1788,7 +1782,6 @@ static FRESULT dir_read (
 	return res;
 }
 
-#endif	/* FF_FS_MINIMIZE <= 1 || FF_USE_LABEL || FF_FS_RPATH >= 2 */
 
 
 
@@ -1922,9 +1915,6 @@ static FRESULT dir_register (	/* FR_OK:succeeded, FR_DENIED:no free entry or too
 }
 
 
-
-
-#if FF_FS_MINIMIZE == 0
 /*-----------------------------------------------------------------------*/
 /* Remove an object from the directory                                   */
 /*-----------------------------------------------------------------------*/
@@ -1964,11 +1954,9 @@ static FRESULT dir_remove (	/* FR_OK:Succeeded, FR_DISK_ERR:A disk error */
 	return res;
 }
 
-#endif /*FF_FS_MINIMIZE == 0 */
 
 
 
-#if FF_FS_MINIMIZE <= 1 || FF_FS_RPATH >= 2
 /*-----------------------------------------------------------------------*/
 /* Get file information from directory entry                             */
 /*-----------------------------------------------------------------------*/
@@ -2062,11 +2050,9 @@ static void get_fileinfo (
 	fno->fdate = ld_word(dp->dir + DIR_ModTime + 2);	/* Date */
 }
 
-#endif /* FF_FS_MINIMIZE <= 1 || FF_FS_RPATH >= 2 */
 
 
 
-#if FF_USE_FIND && FF_FS_MINIMIZE <= 1
 /*-----------------------------------------------------------------------*/
 /* Pattern matching                                                      */
 /*-----------------------------------------------------------------------*/
@@ -2141,7 +2127,6 @@ static int pattern_matching (	/* 0:not matched, 1:matched */
 	return 0;
 }
 
-#endif /* FF_USE_FIND && FF_FS_MINIMIZE <= 1 */
 
 
 
@@ -2977,7 +2962,6 @@ FRESULT f_read (
 					cc = fs->csize - csect;
 				}
 				if (disk_read(fs->pdrv, rbuff, sect, cc) != RES_OK) ABORT(fs, FR_DISK_ERR);
-#if FF_FS_MINIMIZE <= 2		/* Replace one of the read sectors with cached data if it contains a dirty sector */
 #if FF_FS_TINY
 				if (fs->wflag && fs->winsect - sect < cc) {
 					mem_cpy(rbuff + ((fs->winsect - sect) * SS(fs)), fs->win, SS(fs));
@@ -2986,7 +2970,6 @@ FRESULT f_read (
 				if ((fp->flag & FA_DIRTY) && fp->sect - sect < cc) {
 					mem_cpy(rbuff + ((fp->sect - sect) * SS(fs)), fp->buf, SS(fs));
 				}
-#endif
 #endif
 				rcnt = SS(fs) * cc;				/* Number of bytes transferred */
 				continue;
@@ -3087,7 +3070,6 @@ FRESULT f_write (
 					cc = fs->csize - csect;
 				}
 				if (disk_write(fs->pdrv, wbuff, sect, cc) != RES_OK) ABORT(fs, FR_DISK_ERR);
-#if FF_FS_MINIMIZE <= 2
 #if FF_FS_TINY
 				if (fs->winsect - sect < cc) {	/* Refill sector cache if it gets invalidated by the direct write */
 					mem_cpy(fs->win, wbuff + ((fs->winsect - sect) * SS(fs)), SS(fs));
@@ -3098,7 +3080,6 @@ FRESULT f_write (
 					mem_cpy(fp->buf, wbuff + ((fp->sect - sect) * SS(fs)), SS(fs));
 					fp->flag &= (BYTE)~FA_DIRTY;
 				}
-#endif
 #endif
 				wcnt = SS(fs) * cc;		/* Number of bytes transferred */
 				continue;
@@ -3384,7 +3365,6 @@ FRESULT f_getcwd (
 
 
 
-#if FF_FS_MINIMIZE <= 2
 /*-----------------------------------------------------------------------*/
 /* Seek File Read/Write Pointer                                          */
 /*-----------------------------------------------------------------------*/
@@ -3526,7 +3506,6 @@ FRESULT f_lseek (
 
 
 
-#if FF_FS_MINIMIZE <= 1
 /*-----------------------------------------------------------------------*/
 /* Create a Directory Object                                             */
 /*-----------------------------------------------------------------------*/
@@ -3650,7 +3629,6 @@ FRESULT f_readdir (
 
 
 
-#if FF_USE_FIND
 /*-----------------------------------------------------------------------*/
 /* Find Next File                                                        */
 /*-----------------------------------------------------------------------*/
@@ -3667,7 +3645,7 @@ FRESULT f_findnext (
 		res = f_readdir(dp, fno);		/* Get a directory item */
 		if (res != FR_OK || !fno || !fno->fname[0]) break;	/* Terminate if any error or end of directory */
 		if (pattern_matching(dp->pat, fno->fname, 0, 0)) break;		/* Test for the file name */
-#if FF_USE_LFN && FF_USE_FIND == 2
+#if FF_USE_LFN
 		if (pattern_matching(dp->pat, fno->altname, 0, 0)) break;	/* Test for alternative name if exist */
 #endif
 	}
@@ -3698,11 +3676,9 @@ FRESULT f_findfirst (
 	return res;
 }
 
-#endif	/* FF_USE_FIND */
 
 
 
-#if FF_FS_MINIMIZE == 0
 /*-----------------------------------------------------------------------*/
 /* Get File Status                                                       */
 /*-----------------------------------------------------------------------*/
@@ -4069,13 +4045,10 @@ FRESULT f_rename (
 	LEAVE_FF(fs, res);
 }
 
-#endif /* FF_FS_MINIMIZE == 0 */
-#endif /* FF_FS_MINIMIZE <= 1 */
-#endif /* FF_FS_MINIMIZE <= 2 */
 
 
 
-#if FF_USE_CHMOD 
+
 /*-----------------------------------------------------------------------*/
 /* Change Attribute                                                      */
 /*-----------------------------------------------------------------------*/
@@ -4155,7 +4128,6 @@ FRESULT f_utime (
 	LEAVE_FF(fs, res);
 }
 
-#endif	/* FF_USE_CHMOD */
 
 
 
@@ -4322,7 +4294,6 @@ FRESULT f_setlabel (
 
 
 
-#if FF_USE_EXPAND
 /*-----------------------------------------------------------------------*/
 /* Allocate a Contiguous Blocks to the File                              */
 /*-----------------------------------------------------------------------*/
@@ -4390,7 +4361,6 @@ FRESULT f_expand (
 	LEAVE_FF(fs, res);
 }
 
-#endif /* FF_USE_EXPAND */
 
 
 
@@ -4463,7 +4433,6 @@ FRESULT f_forward (
 
 
 
-#if FF_USE_MKFS
 /*-----------------------------------------------------------------------*/
 /* Create an FAT/exFAT volume                                            */
 /*-----------------------------------------------------------------------*/
@@ -4800,7 +4769,6 @@ FRESULT f_fdisk (
 }
 
 #endif /* FF_MULTI_PARTITION */
-#endif /* FF_USE_MKFS */
 
 
 

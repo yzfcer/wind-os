@@ -17,20 +17,11 @@
 / by use of this software.
 /
 /----------------------------------------------------------------------------*/
-
-
-#ifndef FF_DEFINED
-#define FF_DEFINED	86604	/* Revision ID */
-
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 #include "ffconf.h"		/* FatFs configuration options */
-
-#if FF_DEFINED != FFCONF_DEF
-#error Wrong configuration file (ffconf.h).
-#endif
 
 
 /* Integer types used for FatFs API */
@@ -199,9 +190,7 @@ typedef struct {
 #if FF_USE_LFN
 	DWORD	blk_ofs;		/* Offset of current entry block being processed (0xFFFFFFFF:Invalid) */
 #endif
-#if FF_USE_FIND
 	const TCHAR* pat;		/* Pointer to the name matching pattern */
-#endif
 } DIR;
 
 
@@ -365,4 +354,3 @@ int ff_del_syncobj (FF_SYNC_t sobj);	/* Delete a sync object */
 }
 #endif
 
-#endif /* FF_DEFINED */

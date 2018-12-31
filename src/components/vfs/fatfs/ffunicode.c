@@ -27,9 +27,6 @@
 
 #if FF_USE_LFN	/* This module will be blanked at non-LFN configuration */
 
-#if FF_DEFINED != 86604	/* Revision ID */
-#error Wrong include file (ff.h).
-#endif
 
 #define MERGE2(a, b) a ## b
 #define CVTBL(tbl, cp) MERGE2(tbl, cp)
