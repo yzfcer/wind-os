@@ -8,11 +8,6 @@
 / Function Configurations
 /---------------------------------------------------------------------------*/
 
-#define FF_FS_READONLY	0
-/* This option switches read-only configuration. (0:Read/Write or 1:Read-only)
-/  Read-only configuration removes writing API functions, f_write(), f_sync(),
-/  f_unlink(), f_mkdir(), f_chmod(), f_rename(), f_truncate(), f_getfree()
-/  and optional writing functions as well. */
 
 
 #define FF_FS_MINIMIZE	0
@@ -52,7 +47,7 @@
 
 #define FF_USE_CHMOD	0
 /* This option switches attribute manipulation functions, f_chmod() and f_utime().
-/  (0:Disable or 1:Enable) Also FF_FS_READONLY needs to be 0 to enable this option. */
+/  (0:Disable or 1:Enable) */
 
 
 #define FF_USE_LABEL	0
@@ -240,13 +235,11 @@
 /  To enable timestamp function (FF_FS_NORTC = 0), get_fattime() function need to be
 /  added to the project to read current time form real-time clock. FF_NORTC_MON,
 /  FF_NORTC_MDAY and FF_NORTC_YEAR have no effect.
-/  These options have no effect at read-only configuration (FF_FS_READONLY = 1). */
 
 
 #define FF_FS_LOCK		0
 /* The option FF_FS_LOCK switches file lock function to control duplicated file open
-/  and illegal operation to open objects. This option must be 0 when FF_FS_READONLY
-/  is 1.
+/  and illegal operation to open objects. 
 /
 /  0:  Disable file lock function. To avoid volume corruption, application program
 /      should avoid illegal open, remove and rename to the open objects.

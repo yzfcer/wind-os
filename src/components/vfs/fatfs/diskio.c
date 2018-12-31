@@ -73,7 +73,6 @@ DRESULT disk_read (
 /* Write Sector(s)                                                       */
 /*-----------------------------------------------------------------------*/
 
-#if FF_FS_READONLY == 0
 
 DRESULT disk_write (
 	BYTE pdrv,			/* Physical drive nmuber to identify the drive */
@@ -88,7 +87,6 @@ DRESULT disk_write (
 	return RES_OK;
 }
 
-#endif
 
 
 /*-----------------------------------------------------------------------*/

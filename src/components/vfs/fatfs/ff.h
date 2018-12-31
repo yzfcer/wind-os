@@ -133,10 +133,8 @@ typedef struct {
 #if FF_FS_REENTRANT
 	FF_SYNC_t	sobj;		/* Identifier of sync object */
 #endif
-#if !FF_FS_READONLY
 	DWORD	last_clst;		/* Last allocated cluster */
 	DWORD	free_clst;		/* Number of free clusters */
-#endif
 #if FF_FS_RPATH
 	DWORD	cdir;			/* Current directory start cluster (0:root) */
 #endif
@@ -177,10 +175,8 @@ typedef struct {
 	FSIZE_t	fptr;			/* File read/write pointer (Zeroed on file open) */
 	DWORD	clust;			/* Current cluster of fpter (invalid when fptr is 0) */
 	DWORD	sect;			/* Sector number appearing in buf[] (0:invalid) */
-#if !FF_FS_READONLY
 	DWORD	dir_sect;		/* Sector number containing the directory entry (not used at exFAT) */
 	BYTE*	dir_ptr;		/* Pointer to the directory entry in the win[] (not used at exFAT) */
-#endif
 #if FF_USE_FASTSEEK
 	DWORD*	cltbl;			/* Pointer to the cluster link map table (nulled on open, set by application) */
 #endif
@@ -312,7 +308,7 @@ TCHAR* f_gets (TCHAR* buff, int len, FIL* fp);						/* Get a string from the fil
 /* Additional user defined functions                            */
 
 /* RTC function */
-#if !FF_FS_READONLY && !FF_FS_NORTC
+#if  !FF_FS_NORTC
 DWORD get_fattime (void);
 #endif
 
