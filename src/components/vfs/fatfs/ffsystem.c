@@ -49,7 +49,7 @@ void ff_memfree (
 //const osMutexDef_t Mutex[FF_VOLUMES];	/* Table of CMSIS-RTOS mutex */
 
 
-int ff_cre_syncobj (	/* 1:Function succeeded, 0:Could not create the sync object */
+int ff_create_syncobj (	/* 1:Function succeeded, 0:Could not create the sync object */
 	BYTE vol,			/* Corresponding volume (logical drive number) */
 	FF_SYNC_t* sobj		/* Pointer to return the created sync object */
 )
@@ -63,11 +63,11 @@ int ff_cre_syncobj (	/* 1:Function succeeded, 0:Could not create the sync object
 /* Delete a Synchronization Object                                        */
 /*------------------------------------------------------------------------*/
 /* This function is called in f_mount() function to delete a synchronization
-/  object that created with ff_cre_syncobj() function. When a 0 is returned,
+/  object that created with ff_create_syncobj() function. When a 0 is returned,
 /  the f_mount() function fails with FR_INT_ERR.
 */
 
-int ff_del_syncobj (	/* 1:Function succeeded, 0:Could not delete due to an error */
+int ff_delete_syncobj (	/* 1:Function succeeded, 0:Could not delete due to an error */
 	FF_SYNC_t sobj		/* Sync object tied to the logical drive to be deleted */
 )
 {

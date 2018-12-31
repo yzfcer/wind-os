@@ -225,7 +225,7 @@
 /
 /   0: Disable re-entrancy. FF_FS_TIMEOUT and FF_SYNC_t have no effect.
 /   1: Enable re-entrancy. Also user provided synchronization handlers,
-/      ff_req_grant(), ff_rel_grant(), ff_del_syncobj() and ff_cre_syncobj()
+/      ff_req_grant(), ff_rel_grant(), ff_delete_syncobj() and ff_create_syncobj()
 /      function, must be added to the project. Samples are available in
 /      option/syscall.c.
 /
