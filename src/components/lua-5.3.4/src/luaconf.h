@@ -602,10 +602,15 @@
 @@ l_sprintf is equivalent to 'snprintf' or 'sprintf' in C89.
 ** (All uses in Lua have only one format item.)
 */
+#if 0
 #if !defined(LUA_USE_C89)
 #define l_sprintf(s,sz,f,i)	snprintf(s,sz,f,i)
 #else
 #define l_sprintf(s,sz,f,i)	((void)(sz), sprintf(s,f,i))
+#endif
+#else
+#include "wind_debug.h"
+#define l_sprintf(s,sz,f,i)	wind_sprintf(s,f,i)
 #endif
 
 

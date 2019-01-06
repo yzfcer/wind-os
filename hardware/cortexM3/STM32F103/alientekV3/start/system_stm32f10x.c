@@ -1080,6 +1080,7 @@ static void SetSysClockTo72(void)
 }
 #endif
 
+
 /**
   * @}
   */

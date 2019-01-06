@@ -290,8 +290,7 @@ static void _wind_init()
 
 //****************************wind_entry***********************************************
 
-static int wind_os_lunch(void)
-	
+int wind_os_lunch(void)
 {
     
     _wind_enter_main_hook();
@@ -304,12 +303,5 @@ static int wind_os_lunch(void)
     return W_ERR_OK;
 }
 
-
-//C程序的入口
-int main(int argc,char **argv)
-{
-    wind_os_lunch();
-    return 0;
-}
 
 

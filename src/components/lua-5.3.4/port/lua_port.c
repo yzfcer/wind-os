@@ -8,7 +8,7 @@ typedef int FILEHANDLE;
 #ifndef NULL
 #define NULL (void*)0
 #endif
-#if 1
+#if 0
 #pragma import(__use_no_semihosting_swi)
 
 #pragma import(_main_redirection)
@@ -106,6 +106,7 @@ int clock(void *ptr)
 {
     return 0;
 }
+#endif
 extern w_shell_ctx_s g_shell_ctx[WIND_SHELL_CTX_COUNT];
 extern w_int32_t console_read_line(w_shell_ctx_s *ctrl,w_int32_t len);
 
@@ -120,4 +121,4 @@ int lua_readline(lua_State *L,char *buff,const char *prmt)
     return 1;
 }
 
-#endif
+

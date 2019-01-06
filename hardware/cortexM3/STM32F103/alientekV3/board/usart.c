@@ -26,16 +26,10 @@
 //C库
 #include <stdarg.h>
 #include <string.h>
-#include <wind_type.h>
+#include "wind_type.h"
 
 
 ALTER_INFO alterInfo;
-
-
-#if(USART_DMA_TX_EN == 1)
-unsigned char UsartPrintfBuf[128];
-#endif
-
 
 /*
 ************************************************************
@@ -207,41 +201,7 @@ void Usart_SendString(USART_TypeDef *USARTx, unsigned char *str, unsigned short 
 
 }
 
-/*
-************************************************************
-*	函数名称：	UsartPrintf
-*
-*	函数功能：	格式化打印
-*
-*	入口参数：	USARTx：串口组
-*				fmt：不定长参
-*
-*	返回参数：	无
-*
-*	说明：		
-************************************************************
-*/
-#if 0
-void UsartPrintf(USART_TypeDef *USARTx, char *fmt,...)
-{
 
-	va_list ap;
-	unsigned char UsartPrintfBuf[128];
-	
-	unsigned char *pStr = UsartPrintfBuf;
-	va_start(ap, fmt);
-	vsprintf((char *)UsartPrintfBuf, fmt, ap);							//格式化
-	va_end(ap);
-	
-
-	while(*pStr != 0)
-	{
-		USART_SendData(USARTx, *pStr++);
-		while(USART_GetFlagStatus(USARTx, USART_FLAG_TC) == RESET);
-	}
-
-}
-#endif
 /*
 ************************************************************
 *	函数名称：	USART1_IRQHandler
