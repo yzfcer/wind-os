@@ -23,8 +23,6 @@
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
-#ifndef WIND_OS_HWIF_H_
-#define WIND_OS_HWIF_H_
 #include "wind_type.h"
 
 #ifdef __cplusplus
@@ -45,21 +43,21 @@ void data_bss_init(void)
     extern w_uint32_t Image$$ER_IROM1$$RW$$Base[];
     extern w_uint32_t Image$$ER_IROM1$$ZI$$Base[];
 
-    extern w_uint32_t Image$$ER_RW$$RW$$Base[];
-    extern w_uint32_t Image$$ER_RW$$ZI$$Base[];
+    extern w_uint32_t Image$$ER_DATA$$RW$$Base[];
+    extern w_uint32_t Image$$ER_DATA$$ZI$$Base[];
 
-    extern w_uint32_t Image$$ER_ZI$$RW$$Base[];
-    extern w_uint32_t Image$$ER_ZI$$ZI$$Base[];
+    extern w_uint32_t Image$$ER_HEAP$$RW$$Base[];
+    extern w_uint32_t Image$$ER_HEAP$$ZI$$Base[];
     
     src = (w_uint32_t *)Image$$ER_IROM1$$RW$$Base;
-    dest = (w_uint32_t *)Image$$ER_RW$$RW$$Base;
-    limit = ((w_uint32_t)Image$$ER_ZI$$RW$$Base - (w_uint32_t)Image$$ER_RW$$RW$$Base)/sizeof(w_uint32_t);
+    dest = (w_uint32_t *)Image$$ER_DATA$$RW$$Base;
+    limit = ((w_uint32_t)Image$$ER_HEAP$$RW$$Base - (w_uint32_t)Image$$ER_DATA$$ZI$$Base)/sizeof(w_uint32_t);
     for(i =0;i < limit;i ++)
     {
         dest[i] = src[i];
     }
     dest = Image$$ER_IROM1$$ZI$$Base;
-    limit = ((w_uint32_t)Image$$ER_ZI$$ZI$$Base - (w_uint32_t)Image$$ER_RW$$ZI$$Base)/sizeof(w_uint32_t);
+    limit = ((w_uint32_t)Image$$ER_HEAP$$RW$$Base - (w_uint32_t)Image$$ER_DATA$$ZI$$Base)/sizeof(w_uint32_t);
     for(i =0;i < limit;i ++)
     {
         dest[i] = 0;
@@ -89,4 +87,3 @@ void wind_os_prelunch(void)
 }
 #endif
 
-#endif
