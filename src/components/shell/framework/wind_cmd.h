@@ -1,4 +1,4 @@
-﻿/****************************************Copyright (c)**************************************************
+/****************************************Copyright (c)**************************************************
 **                                       清  风  海  岸
 **
 **                                       yzfcer@163.com
@@ -28,7 +28,7 @@
 #include "wind_config.h"
 #include "wind_type.h"
 #include "wind_debug.h"
-#include "console_framework.h"
+#include "shell_framework.h"
 #if WIND_CONSOLE_SUPPORT
 #ifdef __cplusplus
 extern "C" {

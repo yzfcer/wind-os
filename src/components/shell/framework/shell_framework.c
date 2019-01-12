@@ -1,6 +1,6 @@
 /****************************************Copyright (c)**************************************************
 **                                       清  风  海  岸
-** 文   件   名: console_framework.h / console_framework.c
+** 文   件   名: shell_framework.h / shell_framework.c
 ** 创   建   人: Jason Zhou
 ** 最后修改日期: 2015/1/24 20:08:03
 ** 描        述: 能够支持标准输入输出的控制台的框架
@@ -20,7 +20,7 @@
 *******************************************************************************************************/
 #include "wind_config.h"
 #include "wind_type.h"
-#include "console_framework.h"
+#include "shell_framework.h"
 #include "wind_debug.h"
 #include "wind_cmd.h"
 #include "wind_std.h"
