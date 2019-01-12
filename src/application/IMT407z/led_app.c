@@ -3,7 +3,7 @@
 #include "wind_chdev.h"
 #if (WIND_TIMER_SUPPORT && WIND_DRVFRAME_SUPPORT)
 w_timer_s *ledtmr = W_NULL;
-void led0_timer(void *arg)
+void led0_timer(w_timer_s *timer,void *arg)
 {
     w_chdev_s *dev;
     w_uint8_t stat;

@@ -35,8 +35,9 @@ extern "C" {
 #if WIND_TIMER_SUPPORT
 #define TIMER_PERIOD 10
 #define WIND_TIMER_MAGIC 0x34F574B2
-typedef void (*w_timer_fn)(void *arg);
-typedef struct __w_timer_s
+typedef struct __w_timer_s w_timer_s;
+typedef void (*w_timer_fn)(w_timer_s* timer,void *arg);
+struct __w_timer_s
 {
     w_uint32_t magic;
     const char *name;
@@ -48,7 +49,7 @@ typedef struct __w_timer_s
     w_uint32_t flag_pool:1;
     w_timer_fn handle;
     void *arg;
-}w_timer_s;
+};
 
 w_err_t _wind_timer_mod_init(void);
 void _wind_timer_event(void);

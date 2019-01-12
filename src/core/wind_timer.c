@@ -97,7 +97,6 @@ w_err_t wind_timer_init(w_timer_s* timer,
     dlist_insert_tail(&timerlist,&timer->timernode);
     wind_enable_interrupt();
     return W_ERR_OK;
-    
 }
 
 
@@ -200,7 +199,7 @@ void _wind_timer_event(void)
             timer->value --;
         if(timer->value == 0 && timer->flag_running)
         {
-            timer->handle(timer->arg);
+            timer->handle(timer,timer->arg);
             if(timer->flag_repeat)
                 timer->value = timer->period;
             else

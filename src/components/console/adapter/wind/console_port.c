@@ -76,7 +76,7 @@ CMD_DECLARE(led);
 #endif
 
 
-void _wind_register_all_cmd(w_shell_ctx_s *ctrl)
+void _wind_register_all_cmd(w_shell_ctx_s *ctx)
 {
 #if CMD_SYSINFO_SUPPORT
     wind_cmd_register(COMMAND(sysinfo),1);

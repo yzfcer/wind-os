@@ -47,105 +47,105 @@ static w_err_t get_cmd_ch(char *ch)
     return len > 0 ? W_ERR_OK : W_ERR_FAIL;
 }
 
-static w_bool_t insert_ch(w_shell_ctx_s *ctrl,char ch,w_int32_t len)
+static w_bool_t insert_ch(w_shell_ctx_s *ctx,char ch,w_int32_t len)
 {
-    ctrl->buf[ctrl->index] = ch;
-    ctrl->index ++;
-    if(ctrl->index >= len)
+    ctx->buf[ctx->index] = ch;
+    ctx->index ++;
+    if(ctx->index >= len)
     {
-        ctrl->index --;
-        ctrl->buf[ctrl->index] = 0;
+        ctx->index --;
+        ctx->buf[ctx->index] = 0;
         return W_FALSE;
     }
     return W_TRUE;
 }
 
-static w_bool_t handle_LF(w_shell_ctx_s *ctrl)
+static w_bool_t handle_LF(w_shell_ctx_s *ctx)
 {
-    ctrl->buf[ctrl->index] = 0;
+    ctx->buf[ctx->index] = 0;
     console_printf("\r\n");
     return W_TRUE;
 }
 
-static w_bool_t handle_BKSPACE(w_shell_ctx_s *ctrl)
+static w_bool_t handle_BKSPACE(w_shell_ctx_s *ctx)
 {
-    if(ctrl->index > 0)
+    if(ctx->index > 0)
     {
-        ctrl->index --;
+        ctx->index --;
         console_printf("\b \b");
     }
     return W_FALSE;
 }
 
-static w_bool_t handle_ESC(w_shell_ctx_s *ctrl)
+static w_bool_t handle_ESC(w_shell_ctx_s *ctx)
 {
-    ctrl->key_evt_f = 1;
-    ctrl->key_evt_len = 1;
-    ctrl->key_evt_id = 0x1b;
+    ctx->key_evt_f = 1;
+    ctx->key_evt_len = 1;
+    ctx->key_evt_id = 0x1b;
     return W_FALSE;
 }
 
-static w_bool_t handle_DIR(w_shell_ctx_s *ctrl)
+static w_bool_t handle_DIR(w_shell_ctx_s *ctx)
 {
-    ctrl->key_evt_f = 1;
-    ctrl->key_evt_len = 1;
-    ctrl->key_value= 0xE0;
+    ctx->key_evt_f = 1;
+    ctx->key_evt_len = 1;
+    ctx->key_value= 0xE0;
     return W_FALSE;
 }
 
-static w_bool_t handle_key_evt_up(w_shell_ctx_s *ctrl)
+static w_bool_t handle_key_evt_up(w_shell_ctx_s *ctx)
 {
     w_err_t err;
-    while(ctrl->index > 0)
-        handle_BKSPACE(ctrl);
-    wind_memset(ctrl->buf,0,WIND_CMD_MAX_LEN);
-    err = cmd_history_get_prev(&ctrl->his,ctrl->buf);
+    while(ctx->index > 0)
+        handle_BKSPACE(ctx);
+    wind_memset(ctx->buf,0,WIND_CMD_MAX_LEN);
+    err = cmd_history_get_prev(&ctx->his,ctx->buf);
     if(W_ERR_OK == err)
     {
-        ctrl->index = wind_strlen(ctrl->buf);
-        console_printf("%s",ctrl->buf);
+        ctx->index = wind_strlen(ctx->buf);
+        console_printf("%s",ctx->buf);
     }
     return W_FALSE;
 }
 
-static w_bool_t handle_key_evt_down(w_shell_ctx_s *ctrl)
+static w_bool_t handle_key_evt_down(w_shell_ctx_s *ctx)
 {
     w_err_t err;
-    while(ctrl->index > 0)
-        handle_BKSPACE(ctrl);
-    wind_memset(ctrl->buf,0,WIND_CMD_MAX_LEN);
-    err = cmd_history_get_next(&ctrl->his,ctrl->buf);
+    while(ctx->index > 0)
+        handle_BKSPACE(ctx);
+    wind_memset(ctx->buf,0,WIND_CMD_MAX_LEN);
+    err = cmd_history_get_next(&ctx->his,ctx->buf);
     if(W_ERR_OK == err)
     {
-        ctrl->index = wind_strlen(ctrl->buf);
-        console_printf("%s",ctrl->buf);
+        ctx->index = wind_strlen(ctx->buf);
+        console_printf("%s",ctx->buf);
     }
     return W_FALSE;
 }
 
 
-static w_bool_t handle_key_evt(w_shell_ctx_s *ctrl,char ch)
+static w_bool_t handle_key_evt(w_shell_ctx_s *ctx,char ch)
 {
-    if(!ctrl->key_evt_f)
+    if(!ctx->key_evt_f)
         return W_FALSE;
-    ctrl->key_evt_id <<= 8;
-    ctrl->key_evt_id += ch;
-    ctrl->key_value <<= 8;
-    ctrl->key_value += ch;
-    ctrl->key_evt_len ++;
-    if((ctrl->key_evt_id == KEY_EVT_UP)||(ctrl->key_value == KEY_UP_PRT))
+    ctx->key_evt_id <<= 8;
+    ctx->key_evt_id += ch;
+    ctx->key_value <<= 8;
+    ctx->key_value += ch;
+    ctx->key_evt_len ++;
+    if((ctx->key_evt_id == KEY_EVT_UP)||(ctx->key_value == KEY_UP_PRT))
     {
-        handle_key_evt_up(ctrl);
+        handle_key_evt_up(ctx);
         goto key_evt_done;
     }
-    if((ctrl->key_evt_id == KEY_EVT_DOWN)||(ctrl->key_value == KEY_DOWN_PRT))
+    if((ctx->key_evt_id == KEY_EVT_DOWN)||(ctx->key_value == KEY_DOWN_PRT))
     {
-        handle_key_evt_down(ctrl);
+        handle_key_evt_down(ctx);
         goto key_evt_done;
     }
 
         
-    switch(ctrl->key_evt_id)
+    switch(ctx->key_evt_id)
     {            
         case KEY_EVT_LEFT://         0x1B5B44
         case KEY_EVT_RIGHT://        0x1B5B43
@@ -156,21 +156,21 @@ static w_bool_t handle_key_evt(w_shell_ctx_s *ctrl,char ch)
         case KEY_EVT_END://          0x1B5B347E
         case KEY_EVT_PGUP://         0x1B5B357E
         case KEY_EVT_PGDN://         0x1B5B367E
-            console_printf("key:0x%x\r\n",ctrl->key_evt_id);
+            console_printf("key:0x%x\r\n",ctx->key_evt_id);
             goto key_evt_done;
         default:
-            if(ctrl->key_evt_len >= 4)
+            if(ctx->key_evt_len >= 4)
             {
-                console_printf("unknown KEY event:0x%X\r\n",ctrl->key_evt_id);
+                console_printf("unknown KEY event:0x%X\r\n",ctx->key_evt_id);
                 goto key_evt_done;
             }
             goto key_evt_ret;
     }
 key_evt_done:
-    ctrl->key_evt_f = 0;
-    ctrl->key_evt_len = 0;
-    ctrl->key_evt_id = 0;
-    ctrl->key_value= 0;
+    ctx->key_evt_f = 0;
+    ctx->key_evt_len = 0;
+    ctx->key_evt_id = 0;
+    ctx->key_value= 0;
 key_evt_ret:
     return W_TRUE;
     
@@ -178,59 +178,59 @@ key_evt_ret:
 
 
 
-static w_bool_t handle_default(w_shell_ctx_s *ctrl,char ch)
+static w_bool_t handle_default(w_shell_ctx_s *ctx,char ch)
 {
-    if(ctrl->stat != CSLSTAT_PWD)
+    if(ctx->stat != CSLSTAT_PWD)
         console_printf("%c",ch);
     return W_FALSE;
 }
 
 //返回true则表示有一个完整的命令
 //返回false表示命令不完整
-static w_bool_t console_prehandle_char(w_shell_ctx_s *ctrl,w_uint8_t ch,w_int32_t len)
+static w_bool_t console_prehandle_char(w_shell_ctx_s *ctx,w_uint8_t ch,w_int32_t len)
 {
     w_bool_t ret;
 
-    ret = handle_key_evt(ctrl,ch);
+    ret = handle_key_evt(ctx,ch);
     if(W_TRUE == ret)
         return W_FALSE;
     if(ch == WVK_BACKSPACE)
     {
-        return handle_BKSPACE(ctrl);
+        return handle_BKSPACE(ctx);
     }
     else if(ch == WVK_ENTER)
     {
-        return handle_LF(ctrl);
+        return handle_LF(ctx);
     }
     else if(ch == WVK_ESCAPE)
     {
-        return handle_ESC(ctrl);
+        return handle_ESC(ctx);
     }
     else if(ch == 0xE0)
     {
-        return handle_DIR(ctrl);
+        return handle_DIR(ctx);
     }
     else
     {
-        handle_default(ctrl,ch);
-        ret = insert_ch(ctrl,ch,len);
+        handle_default(ctx,ch);
+        ret = insert_ch(ctx,ch,len);
         if(W_TRUE == ret)
             return W_FALSE;
         return W_TRUE;
     }
 }
 
-static void console_clear_buf(w_shell_ctx_s *ctrl)
+static void console_clear_buf(w_shell_ctx_s *ctx)
 {
-    ctrl->index = 0;
-    wind_memset(ctrl->buf,0,WIND_CMD_MAX_LEN);
+    ctx->index = 0;
+    wind_memset(ctx->buf,0,WIND_CMD_MAX_LEN);
 }
 
-w_int32_t console_read_line(w_shell_ctx_s *ctrl,w_int32_t len)
+w_int32_t console_read_line(w_shell_ctx_s *ctx,w_int32_t len)
 {
     w_err_t err;
     char ch;
-    console_clear_buf(ctrl);
+    console_clear_buf(ctx);
     while(1)
     {
         err = get_cmd_ch(&ch);
@@ -238,30 +238,31 @@ w_int32_t console_read_line(w_shell_ctx_s *ctrl,w_int32_t len)
             wind_thread_sleep(20);
         else
         {
-            if(console_prehandle_char(ctrl,ch,len))
-                return ctrl->index;
+            if(console_prehandle_char(ctx,ch,len))
+                return ctx->index;
         }
     }
 }
 
 
-static void init_console_stat(w_shell_ctx_s *ctrl)
+static void context_stat_init(w_shell_ctx_s *ctx)
 {
 #if USER_AUTHENTICATION_EN
-    ctrl->stat = CSLSTAT_USER;
+    ctx->stat = CSLSTAT_USER;
 #else
-    ctrl->stat = CSLSTAT_CMD;
+    ctx->stat = CSLSTAT_CMD;
 #endif
-    ctrl->index = 0;
-    ctrl->key_evt_f = 0;
-    ctrl->key_evt_len = 0;
-    ctrl->key_evt_id = 0;
-    ctrl->key_value = 0;
-    wind_memset(ctrl->buf,0,WIND_CMD_MAX_LEN);
-    wind_memset(ctrl->user,0,WIND_CTL_USRNAME_LEN);
-    wind_memset(ctrl->pwd,0,WIND_CTL_PWD_LEN);
-    cmd_history_init(&ctrl->his);
-    wind_cmd_init(ctrl);
+    ctx->index = 0;
+    ctx->key_evt_f = 0;
+    ctx->key_evt_len = 0;
+    ctx->key_evt_id = 0;
+    ctx->key_value = 0;
+    wind_memset(ctx->buf,0,WIND_CMD_MAX_LEN);
+    wind_memset(ctx->user,0,WIND_CTL_USRNAME_LEN);
+    wind_strcpy(ctx->user,"client");
+    wind_memset(ctx->pwd,0,WIND_CTL_PWD_LEN);
+    cmd_history_init(&ctx->his);
+    wind_cmd_init(ctx);
 }
 
 
@@ -272,10 +273,10 @@ static void init_console_stat(w_shell_ctx_s *ctrl)
 
 /********************************************全局函数定义**********************************************/
 
-void wind_cmd_init(w_shell_ctx_s *ctrl)
+void wind_cmd_init(w_shell_ctx_s *ctx)
 {
     DLIST_INIT(g_cmdlist);
-    _wind_register_all_cmd(ctrl);
+    _wind_register_all_cmd(ctx);
 }
 
 w_cmd_s *wind_cmd_get(const char *name)
@@ -329,32 +330,32 @@ w_err_t wind_cmd_print(void)
 }
 
 #if USER_AUTHENTICATION_EN
-static w_err_t check_user_name(w_shell_ctx_s *ctrl)
+static w_err_t check_user_name(w_shell_ctx_s *ctx)
 {
-    if(wind_strcmp(ctrl->buf,"root") != 0)
+    if(wind_strcmp(ctx->buf,"root") != 0)
     {
         console_printf("\r\nlogin:");
         return W_ERR_FAIL;
     }
-    wind_strcpy(ctrl->user,ctrl->buf);
-    ctrl->stat = CSLSTAT_PWD;
+    wind_strcpy(ctx->user,ctx->buf);
+    ctx->stat = CSLSTAT_PWD;
     console_printf("\r\npasswd:");
     return W_ERR_OK;
 }
 
 
-static w_err_t check_user_pwd(w_shell_ctx_s *ctrl)
+static w_err_t check_user_pwd(w_shell_ctx_s *ctx)
 {
-    if(wind_strcmp(ctrl->user,"root") != 0 ||
-        wind_strcmp(ctrl->buf,"wind") != 0)
+    if(wind_strcmp(ctx->user,"root") != 0 ||
+        wind_strcmp(ctx->buf,"wind") != 0)
     {
-        ctrl->stat = CSLSTAT_USER;
+        ctx->stat = CSLSTAT_USER;
         console_printf("\r\nlogin:");
         return W_ERR_FAIL;
     }
-    wind_strcpy(ctrl->pwd,ctrl->buf);
-    ctrl->stat = CSLSTAT_CMD;
-    console_printf("\r\n%s@wind-os>",ctrl->user);
+    wind_strcpy(ctx->pwd,ctx->buf);
+    ctx->stat = CSLSTAT_CMD;
+    console_printf("\r\n%s@wind-os>",ctx->user);
     return W_ERR_OK;
 }
 #endif
@@ -401,16 +402,16 @@ static w_int32_t get_string(char *str,w_int32_t idx,char ** arg)
     return i + 1;
 }
 
-static w_err_t spit_cmd(w_shell_ctx_s *ctrl)
+static w_err_t spit_cmd(w_shell_ctx_s *ctx)
 {
     w_err_t i;
     w_int32_t idx = 0;
-    w_cmd_param_s *prm = &ctrl->param;
+    w_cmd_param_s *prm = &ctx->param;
     prm->argc = 0;
     for(i = 0;i < CMD_PARAM_CNT;i ++)
     {
         prm->argv[i] = W_NULL;
-        idx = get_string(ctrl->buf,idx,&prm->argv[i]);
+        idx = get_string(ctx->buf,idx,&prm->argv[i]);
         if(idx > 0)
             prm->argc ++;
         else
@@ -422,27 +423,27 @@ static w_err_t spit_cmd(w_shell_ctx_s *ctrl)
 }
 
 
-static w_err_t execute_cmd(w_shell_ctx_s *ctrl)
+static w_err_t execute_cmd(w_shell_ctx_s *ctx)
 {
     w_err_t err;
     w_cmd_s *cmd;
-    err = spit_cmd(ctrl);
-    if((err < 0) || (ctrl->param.argc == 0))
+    err = spit_cmd(ctx);
+    if((err < 0) || (ctx->param.argc == 0))
         return err;
-    if(wind_strcmp(ctrl->param.argv[0],"?") == 0)
+    if(wind_strcmp(ctx->param.argv[0],"?") == 0)
     {
         wind_cmd_print();
         return W_ERR_OK;
     }
-    cmd = wind_cmd_get(ctrl->param.argv[0]);//get_matched_cmd(ctrl);
+    cmd = wind_cmd_get(ctx->param.argv[0]);//get_matched_cmd(ctx);
     if(cmd == W_NULL)
         return W_ERR_FAIL;
-    if((ctrl->param.argc >= 2)&&(wind_strcmp(ctrl->param.argv[1],"?") == 0))
+    if((ctx->param.argc >= 2)&&(wind_strcmp(ctx->param.argv[1],"?") == 0))
     {
         cmd->showusage();
         return W_ERR_OK;
     }
-    cmd->execute(ctrl->param.argc,ctrl->param.argv);
+    cmd->execute(ctx->param.argc,ctx->param.argv);
     return W_ERR_OK;
 }
 
@@ -451,48 +452,48 @@ w_err_t thread_console(w_int32_t argc,char **argv)
 {
     w_int32_t len;
     w_int32_t index = 0;
-    w_shell_ctx_s *ctrl;
+    w_shell_ctx_s *ctx;
     if(argc >= 2)
         wind_to_uint32((w_uint8_t*)argv[1],(w_uint32_t*)&index);
     else 
         index = 0;
     WIND_ASSERT_RETURN(index >= 0,W_ERR_INVALID);
     WIND_ASSERT_RETURN(index < WIND_SHELL_CTX_COUNT,W_ERR_INVALID);
-    ctrl = &g_shell_ctx[index];
-    cmd_history_init(&ctrl->his);
-    init_console_stat(ctrl);
+    ctx = &g_shell_ctx[index];
+    cmd_history_init(&ctx->his);
+    context_stat_init(ctx);
 
     while(1)
     {
-        len = console_read_line(ctrl,WIND_CMD_MAX_LEN);
+        len = console_read_line(ctx,WIND_CMD_MAX_LEN);
         if(len >= 0)
         {
-            switch(ctrl->stat)
+            switch(ctx->stat)
             {
 #if USER_AUTHENTICATION_EN
                 case CSLSTAT_USER:
-                    check_user_name(ctrl);
+                    check_user_name(ctx);
                     break;
                 case CSLSTAT_PWD:
-                    check_user_pwd(ctrl);
+                    check_user_pwd(ctx);
                     break;
 #endif 
                 case CSLSTAT_CMD:
-                    cmd_history_append(&ctrl->his,ctrl->buf);
-                    execute_cmd(ctrl);
+                    cmd_history_append(&ctx->his,ctx->buf);
+                    execute_cmd(ctx);
 #if USER_AUTHENTICATION_EN
-                    if(wind_strcmp(ctrl->buf,"exit") == 0)
+                    if(wind_strcmp(ctx->buf,"exit") == 0)
                     {
-                        ctrl->stat = CSLSTAT_USER;
+                        ctx->stat = CSLSTAT_USER;
                         console_printf("\r\nlogin:");
                     }
                     else
 #endif
-                        console_printf("\r\n%s@wind-os>",ctrl->user);
+                        console_printf("\r\n%s@wind-os>",ctx->user);
                     break;
                 default:
                     console_printf("\r\nlogin:");
-                    ctrl->stat = CSLSTAT_USER;
+                    ctx->stat = CSLSTAT_USER;
                     break;
             }
         }
