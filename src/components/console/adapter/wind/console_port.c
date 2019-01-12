@@ -63,7 +63,7 @@ CMD_DECLARE(blkdev);
 CMD_DECLARE(lua);
 #endif
 #if CMD_FS_SUPPORT
-CMD_DECLARE(fst32_fsobj);
+CMD_DECLARE(fs);
 #endif
 #if CMD_XMODEM_SUPPORT
 CMD_DECLARE(xmodem);
@@ -112,7 +112,7 @@ void _wind_register_all_cmd(w_shell_ctx_s *ctrl)
     wind_cmd_register(COMMAND(lua),1);
 #endif
 #if CMD_FS_SUPPORT
-    wind_cmd_register(COMMAND(fst32_fsobj),1);
+    wind_cmd_register(COMMAND(fs),1);
 #endif
 #if CMD_XMODEM_SUPPORT
     wind_cmd_register(COMMAND(xmodem),1);

@@ -8,13 +8,10 @@ LR_IROM1 0x08000000 0x00080000  {    ; load region size_region
    ;*(InRoot$$Sections)
    .ANY (+RO)
   }
-  ER_DATA 0x20000000  {  ; RW data
+  ER_DATA 0x20000000  0x10000 {  ; RW data
    .ANY (+RW,+ZI)
   }
-  ;ER_ZI +0 {  ; RW data
-  ; .ANY (+ZI)
-  ;}
-  ER_HEAP +0  {  ; RW data
-  
+  ER_HEAP +0 UNINIT {  ; RW data
+	
   }
 }

@@ -292,8 +292,6 @@ static void _wind_init()
 
 int wind_os_lunch(void)
 {
-    
-    _wind_enter_main_hook();
     wind_disable_interrupt();
     _wind_init();
     _create_thread_init();

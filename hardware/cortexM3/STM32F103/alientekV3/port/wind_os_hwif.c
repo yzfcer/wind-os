@@ -34,15 +34,6 @@
 #ifndef SYSCLK
 #define SYSCLK 72    //系统时钟
 #endif
-/*
- * 设备进入main函数的初始化处理的钩子函数，在某些情况下，设备在
- * 进入main函数时，需要做一些类似系统时钟初始化之类的动作，可以
- * 在这个函数实现。
- */
-void _wind_enter_main_hook(void)
-{
-
-}
 
 /*
  * 设备进入多线程模式后函数的初始化处理的钩子函数，为了保证tick
@@ -93,15 +84,17 @@ void _wind_fs_mount_init(void)
  * wind-os可以支持创建多个不连续的内存堆，并且可以在内存对中
  * 申请一块空间创建一个嵌套的内存堆，用于某些特定的目的
  */ 
-
 #include "wind_heap.h"
-#define HEAP1_HEAD  0x2000C000
-#define HEAD1_LENTH (16*1024)
+extern unsigned char Image$$ER_HEAP$$ZI$$Base;
+extern unsigned char Image$$ER_DATA$$Length;
+extern unsigned char Image$$ER_DATA$$ZI$$Base;
+#define HEAP1_HEAD ((w_addr_t)&Image$$ER_HEAP$$ZI$$Base+8)
+#define HEAD1_LENTH ((w_addr_t)&Image$$ER_DATA$$ZI$$Base+0x10000-8-(w_addr_t)&Image$$ER_HEAP$$ZI$$Base)
 void _wind_heaps_create(void)
 {
-    wind_heap_create("heap0",HEAP1_HEAD,HEAD1_LENTH,0);
-    //wind_heap_create("heap1",HEAP2_HEAD,HEAD3_LENTH,0);
+    wind_heap_create("heap1",(w_addr_t)(HEAP1_HEAD),HEAD1_LENTH,0);
 }
+
 
 #endif
 

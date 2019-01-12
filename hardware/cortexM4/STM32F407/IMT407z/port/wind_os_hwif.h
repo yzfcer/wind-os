@@ -37,7 +37,6 @@ extern "C" {
 #define HW_VERSION 0x000201
 #define SOFT_VERSION 0x000102
 
-void _wind_enter_main_hook(void);
 void wind_system_reset(void);
 
 #if WIND_HEAP_SUPPORT
