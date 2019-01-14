@@ -38,9 +38,9 @@ extern "C" {
 
 
 /********************************************内部函数定义*********************************************/
-extern w_int32_t xmodem_send(w_uint8_t *src, w_int32_t srcsz);
-extern w_int32_t xmodem_recv_bak(w_uint8_t *dest, w_int32_t destsz);
-
+//extern w_int32_t xmodem_send(w_uint8_t *src, w_int32_t srcsz);
+//extern w_int32_t xmodem_recv_bak(w_uint8_t *dest, w_int32_t destsz);
+static xm_ctx_s ctx;
 static w_err_t cmd_xmodem_get(int argc,char **argv)
 {
     w_err_t err = W_ERR_OK;
@@ -52,13 +52,13 @@ static w_err_t cmd_xmodem_get(int argc,char **argv)
         wind_error("unknown file path.");
         return W_ERR_INVALID;
     }
-    xmodem_recv_start();
+    xmodem_start(&ctx,XM_RECV);
     buff = wind_malloc(4096);
     file = treefile_open(argv[2],TF_FMODE_CRT | TF_FMODE_W);
     for(;;)
     {
         wind_memset(buff,0,4096);
-        len = xmodem_recv_data(buff,4096);
+        len = xmodem_recv(&ctx,buff,4096);
         if(len < 0)
         {
             wind_error("xmodem receive failed.");
@@ -71,7 +71,7 @@ static w_err_t cmd_xmodem_get(int argc,char **argv)
         }
         treefile_write(file,buff,len);
     }
-    xmodem_recv_end();
+    xmodem_end(&ctx);
     treefile_close(file);
     wind_free(buff);
     return err;
@@ -93,10 +93,12 @@ static w_err_t cmd_xmodem_put(int argc,char **argv)
         wind_error("file is NOT exist.");
         return W_ERR_NOFILE;
     }
+    xmodem_start(&ctx,XM_SEND);
     buff = wind_malloc(file->filelen);
     wind_memset(buff,0,file->filelen);
     len = treefile_read(file,buff,file->filelen);
-    len = xmodem_send(buff,len);
+    len = xmodem_send(&ctx,buff,len);
+    xmodem_end(&ctx);
     treefile_close(file);
     wind_free(buff);
     return W_ERR_OK;

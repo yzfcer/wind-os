@@ -53,7 +53,7 @@ static w_int32_t xmodem_check(w_int32_t crc, const w_uint8_t *buf, w_int32_t sz)
     return 0;
 }  
   
-static void flush_data(void)
+static void xm_flush_data(void)
 {
 
 }  
@@ -87,7 +87,7 @@ w_int32_t xmodem_recv(w_uint8_t *dest, w_int32_t destsz)
                     bufsz = 1024;
                     goto start_recv;
                 case EOT:
-                    flush_data();
+                    xm_flush_data();
                     port_write(ACK);
                     return len;
                 case CAN:
@@ -95,7 +95,7 @@ w_int32_t xmodem_recv(w_uint8_t *dest, w_int32_t destsz)
   
                     if(c == CAN)
                     {
-                        flush_data();
+                        xm_flush_data();
                         port_write(ACK);
                         return -1;
                     }  
@@ -110,7 +110,7 @@ w_int32_t xmodem_recv(w_uint8_t *dest, w_int32_t destsz)
             trychar = NAK;
             continue;
         }  
-        flush_data();
+        xm_flush_data();
         port_write(CAN);
         port_write(CAN);
         port_write(CAN);
@@ -148,7 +148,7 @@ start_recv:
             }  
             if(--retrans <= 0)
             {
-                flush_data();
+                xm_flush_data();
                 port_write(CAN);
                 port_write(CAN);
                 port_write(CAN);
@@ -158,7 +158,7 @@ start_recv:
             continue;
         }  
 reject:
-        flush_data();
+        xm_flush_data();
         port_write(NAK);
     }
 }  
@@ -191,7 +191,7 @@ w_int32_t xmodem_send(w_uint8_t *src, w_int32_t srcsz)
                     if(c == CAN)
                     {
                         port_write(ACK);
-                        flush_data();
+                        xm_flush_data();
                         return -1;
                     }  
                     break;
@@ -203,7 +203,7 @@ w_int32_t xmodem_send(w_uint8_t *src, w_int32_t srcsz)
         port_write(CAN);
         port_write(CAN);
         port_write(CAN);
-        flush_data();
+        xm_flush_data();
         return -2;
   
         for(;;)
@@ -263,7 +263,7 @@ start_trans:
                             if( c == CAN)
                             {
                                 port_write(ACK);
-                                flush_data();
+                                xm_flush_data();
                                 return -1;
                             }  
                             break;
@@ -276,7 +276,7 @@ start_trans:
                 port_write(CAN);
                 port_write(CAN);
                 port_write(CAN);
-                flush_data();
+                xm_flush_data();
                 return -4;
             }  
             else  
@@ -288,7 +288,7 @@ start_trans:
                     if(c == ACK) 
                         break;
                 }  
-                flush_data();
+                xm_flush_data();
                 return(c == ACK)?len:-5;
             }  
         }  
