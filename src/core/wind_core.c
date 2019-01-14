@@ -103,7 +103,7 @@ void wind_disable_interrupt(void)
     ssr[sreg_idx++] = cpu_sr;
     if(sreg_idx >= 32)
     {
-        wind_critical("int nest error.");
+        //wind_critical("int nest error.");
         wind_system_reset();
     }
 }
