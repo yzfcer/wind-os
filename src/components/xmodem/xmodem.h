@@ -20,7 +20,7 @@ typedef enum
 }xm_dir_e;
 
 
-typedef w_int32_t (*xm_write_fn)(w_uint8_t trychar);
+typedef w_int32_t (*xm_write_fn)(w_uint8_t ch);
 typedef w_int32_t (*xm_read_fn)(w_uint8_t *ch,w_uint32_t time_out);
 
 typedef struct 

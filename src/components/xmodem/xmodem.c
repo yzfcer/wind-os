@@ -15,9 +15,6 @@
 #define DLY_1S 1000
 #define MAXRETRANS 25
 
-
-
-
 static w_int32_t xmodem_check(w_int32_t crcmode, const w_uint8_t *buf, w_int32_t sz)
 {
     w_uint16_t crc,tcrc;
@@ -47,11 +44,6 @@ static void xm_flush_data(void)
     static w_uint16_t flush_cnt = 0;
     flush_cnt ++;
 }
-
-
-
-
-
 
 static w_err_t xm_wait_data(xm_ctx_s *ctx)
 {
@@ -142,6 +134,21 @@ static w_int32_t xm_read_and_check_data(xm_ctx_s *ctx,w_uint8_t *buff,w_int32_t 
     return 0;
 }
 
+static void xm_send_eot(xm_ctx_s *ctx,w_uint8_t *ack)
+{
+    w_int32_t cnt;
+    *ack = 0;
+    for(ctx->retry = 0;ctx->retry < 10;ctx->retry++)
+    {
+        ctx->write(EOT);
+        cnt = ctx->read(ack,(DLY_1S)<<1);
+        if((cnt > 0)&&(*ack == ACK))
+            return;
+    }  
+    xm_flush_data();
+}
+
+
 w_err_t xmodem_init_port(xm_ctx_s *ctx,xm_write_fn write,xm_read_fn read)
 {
     WIND_ASSERT_RETURN(write != W_NULL,W_ERR_PTR_NULL);
@@ -205,15 +212,10 @@ w_int32_t xmodem_recv(xm_ctx_s *ctx,w_uint8_t *data, w_int32_t size)
                 return idx;
             break;
         case XM_RECV_END:
-            //xmodem_end();
             return idx;
         case XM_ERROR:
-            //xmodem_end(ctx);
-            //wind_error("xmodem error.");
             return -1;
         default:
-            //xmodem_end();
-            //wind_error("unknown xmodem status.");
             return 0;
         }
     }
@@ -230,7 +232,7 @@ w_int32_t xmodem_send(xm_ctx_s *ctx,w_uint8_t *src, w_int32_t size)
     w_uint16_t ccrc;
     for(;;)
     {
-        for(ctx->retry = 0;ctx->retry < 16;++ctx->retry)
+        for(ctx->retry = 0;ctx->retry < 16;ctx->retry++)
         {
             cnt = ctx->read(&ch,(DLY_1S)<<1);
             if(cnt > 0) 
@@ -250,7 +252,7 @@ w_int32_t xmodem_send(xm_ctx_s *ctx,w_uint8_t *src, w_int32_t size)
                         ctx->write(ACK);
                         xm_flush_data();
                         return -1;
-                    }  
+                    }
                     break;
                 default:
                     break;
@@ -266,31 +268,23 @@ w_int32_t xmodem_send(xm_ctx_s *ctx,w_uint8_t *src, w_int32_t size)
         for(;;)
         {
 start_trans:
-            ctx->buff[0] = SOH;ctx->bufsz = 128;
-            ctx->buff[1] = ctx->pack_no;
-            ctx->buff[2] = ~ctx->pack_no;
             rest = size - len;
             if(rest > ctx->bufsz) 
                 rest = ctx->bufsz;
-            if(rest >= 0)
+            if(rest > 0)
             {
-                wind_memset(&ctx->buff[3], 0, ctx->bufsz);
-                if(rest == 0)
-                {
-                    ctx->buff[3] = CTRLZ;
-                }  
-                else  
-                {
-                    wind_memcpy(&ctx->buff[3], &src[len], rest);
-                    if(rest < ctx->bufsz) 
-                        ctx->buff[3+rest] = CTRLZ;
-                }  
+                ctx->buff[0] = SOH;
+                ctx->bufsz = 128;
+                ctx->buff[1] = ctx->pack_no;
+                ctx->buff[2] = ~ctx->pack_no;
+                wind_memset(&ctx->buff[3], CTRLZ, ctx->bufsz);
+                wind_memcpy(&ctx->buff[3], &src[len], rest);
                 if(ctx->crcmode)
                 {
                     ccrc = wind_crc16(&ctx->buff[3], ctx->bufsz,0);
                     ctx->buff[ctx->bufsz+3] =(ccrc>>8) & 0xFF;
                     ctx->buff[ctx->bufsz+4] = ccrc & 0xFF;
-                }  
+                }
                 else  
                 {
                     w_uint8_t ccks = 0;
@@ -338,15 +332,7 @@ start_trans:
             }  
             else  
             {
-                for(ctx->retry = 0;ctx->retry < 10;++ctx->retry)
-                {
-                    ctx->write(EOT);
-                    cnt = ctx->read(&ch,(DLY_1S)<<1);
-                    if((cnt > 0)&&(ch == ACK))
-                    if(ch == ACK) 
-                        break;
-                }  
-                xm_flush_data();
+                xm_send_eot(ctx,&ch);
                 return(ch == ACK)?len:-5;
             }  
         }  

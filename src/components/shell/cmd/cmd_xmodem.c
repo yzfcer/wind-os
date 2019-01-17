@@ -43,9 +43,9 @@ extern "C" {
 //extern w_int32_t xmodem_recv_bak(w_uint8_t *dest, w_int32_t destsz);
 static xm_ctx_s ctx;
 
-w_int32_t xm_write(w_uint8_t trychar)
+w_int32_t xm_write(w_uint8_t ch)
 {
-    return wind_std_output(&trychar,1);
+    return wind_std_output(&ch,1);
 }
 
 static w_int32_t xm_read(w_uint8_t *ch,w_uint32_t time_out)
