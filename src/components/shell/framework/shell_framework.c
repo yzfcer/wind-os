@@ -259,7 +259,7 @@ static void context_stat_init(w_shell_ctx_s *ctx)
     ctx->key_value = 0;
     wind_memset(ctx->buf,0,WIND_CMD_MAX_LEN);
     wind_memset(ctx->user,0,WIND_CTL_USRNAME_LEN);
-    wind_strcpy(ctx->user,"client");
+    wind_strcpy(ctx->user,"anonymous");
     wind_memset(ctx->pwd,0,WIND_CTL_PWD_LEN);
     cmd_history_init(&ctx->his);
     wind_cmd_init(ctx);
@@ -355,7 +355,7 @@ static w_err_t check_user_pwd(w_shell_ctx_s *ctx)
     }
     wind_strcpy(ctx->pwd,ctx->buf);
     ctx->stat = CSLSTAT_CMD;
-    console_printf("\r\n%s@wind-os>",ctx->user);
+    console_printf("\r\n%s@%s>",ctx->user,BOARD_NAME);
     return W_ERR_OK;
 }
 #endif
@@ -435,7 +435,7 @@ static w_err_t execute_cmd(w_shell_ctx_s *ctx)
         wind_cmd_print();
         return W_ERR_OK;
     }
-    cmd = wind_cmd_get(ctx->param.argv[0]);//get_matched_cmd(ctx);
+    cmd = wind_cmd_get(ctx->param.argv[0]);
     if(cmd == W_NULL)
         return W_ERR_FAIL;
     if((ctx->param.argc >= 2)&&(wind_strcmp(ctx->param.argv[1],"?") == 0))
@@ -443,7 +443,9 @@ static w_err_t execute_cmd(w_shell_ctx_s *ctx)
         cmd->showusage();
         return W_ERR_OK;
     }
-    cmd->execute(ctx->param.argc,ctx->param.argv);
+    err = cmd->execute(ctx->param.argc,ctx->param.argv);
+    if(err != W_ERR_OK)
+        cmd->showusage();
     return W_ERR_OK;
 }
 
@@ -489,7 +491,7 @@ w_err_t thread_console(w_int32_t argc,char **argv)
                     }
                     else
 #endif
-                        console_printf("\r\n%s@wind-os>",ctx->user);
+                        console_printf("\r\n%s@%s>",ctx->user,BOARD_NAME);
                     break;
                 default:
                     console_printf("\r\nlogin:");

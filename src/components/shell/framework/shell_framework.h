@@ -43,7 +43,7 @@ extern "C" {
 #define WIND_SHELL_CTX_COUNT 1//支持的控制套终端的数量
 #define CMD_PARAM_CNT 10
 
-#define USER_AUTHENTICATION_EN 1
+#define USER_AUTHENTICATION_EN 0
     
 
 
@@ -107,12 +107,10 @@ typedef struct __console_s
 
 //输出命令列表
 void wind_cmd_init(w_shell_ctx_s *ctx);
-w_err_t _create_console_thread(void);
 w_cmd_s *wind_cmd_get(const char *name);
 w_err_t wind_cmd_register(w_cmd_s *cmd,int cnt);
 w_err_t wind_cmd_print(void);
 void _wind_register_all_cmd(w_shell_ctx_s *ctx);
-extern void wind_cmd_register_cmd_test(w_shell_ctx_s *ctx);
 
 #endif
 #ifdef __cplusplus

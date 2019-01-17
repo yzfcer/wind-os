@@ -31,13 +31,6 @@
 extern "C" {
 #endif
 
-#define ARCH_NAME "Cortex-M3"
-#define CPU_NAME "STM42F103ZET6"
-#define BOARD_NAME "ALIENTEKV3"
-#define HW_VERSION 0x000003
-#define SOFT_VERSION 0x000102
-
-
 void wind_system_reset(void);
 
 #if WIND_HEAP_SUPPORT

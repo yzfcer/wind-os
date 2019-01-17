@@ -47,7 +47,7 @@ static __INLINE__ w_err_t watchdog_free(void *watchdog)
     return wind_pool_free(watchdogpool,watchdog);
 }
 
-static void watchdog_timer(void * arg)
+static void watchdog_timer(w_timer_s *timer,void * arg)
 {
     w_dnode_s *dnode;
     w_watchdog_s *watchdog;
