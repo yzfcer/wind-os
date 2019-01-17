@@ -3,6 +3,7 @@
 #include "wind_config.h"
 #include "wind_type.h"  
 #if WIND_XMODEM_SUPPORT
+#define XMODEM_BUFF_LEN 1030
 typedef enum 
 {
     XM_INIT = 0,
@@ -18,6 +19,10 @@ typedef enum
     XM_SEND = 1,
 }xm_dir_e;
 
+
+typedef w_int32_t (*xm_write_fn)(w_uint8_t trychar);
+typedef w_int32_t (*xm_read_fn)(w_uint8_t *ch,w_uint32_t time_out);
+
 typedef struct 
 {
     xm_stat_e stat;
@@ -29,9 +34,13 @@ typedef struct
     w_int8_t  pack_no;
     w_int32_t crcmode;
     w_int32_t retry;
+    xm_write_fn write;
+    xm_read_fn read;
 }xm_ctx_s;  
 
-w_err_t xmodem_start(xm_ctx_s *ctx,xm_dir_e dir);
+w_err_t xmodem_init_port(xm_ctx_s *ctx,xm_write_fn write,xm_read_fn read);
+
+w_err_t xmodem_start(xm_ctx_s *ctx,xm_dir_e dir,w_uint8_t *buff,w_int32_t buflen);
 
 w_int32_t xmodem_recv(xm_ctx_s *ctx,w_uint8_t *data, w_int32_t size);
 

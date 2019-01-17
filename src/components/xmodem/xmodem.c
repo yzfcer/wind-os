@@ -1,12 +1,7 @@
-#include "wind_config.h"
-#include "wind_type.h"  
+#include "xmodem.h"  
 #include "wind_string.h"  
 #include "wind_debug.h"  
-#include "wind_std.h"  
-#include "wind_thread.h"  
 #include "wind_crc16.h"  
-#include "wind_heap.h"  
-#include "xmodem.h"  
 #if WIND_XMODEM_SUPPORT
 
 #define SOH  0x01
@@ -20,25 +15,6 @@
 #define DLY_1S 1000
 #define MAXRETRANS 25
 
-void xm_write(w_uint8_t trychar)
-{
-    wind_std_output(&trychar,1);
-}
-
-static w_int32_t xm_read(w_uint8_t *ch,w_uint32_t time_out)
-{
-    w_int32_t cnt;
-    w_uint32_t i;
-    w_uint32_t tick = time_out / 10;
-    for(i = 0;i < tick;i ++)
-    {
-        cnt = wind_std_input(ch,1);
-        if(cnt >= 1)
-            return 1;
-        wind_thread_sleep(10);
-    }
-    return 0;
-}
 
 
 
@@ -84,14 +60,14 @@ static w_err_t xm_wait_data(xm_ctx_s *ctx)
     wind_memset(ctx->buff,0,1030);
     for(i = 0;i < 30;i ++)
     {
-        xm_write(ctx->trychar);
+        ctx->write(ctx->trychar);
         if(i >= 15)
         {
             ctx->trychar = NAK;
             ctx->crcmode = 0;
         }
             
-        if(xm_read(&ctx->buff[0],(DLY_1S)<<1) <= 0)
+        if(ctx->read(&ctx->buff[0],(DLY_1S)<<1) <= 0)
             continue;
         switch(ctx->buff[0])
         {
@@ -138,12 +114,11 @@ static w_int32_t xm_read_and_check_data(xm_ctx_s *ctx,w_uint8_t *buff,w_int32_t 
     buflen = (ctx->bufsz+(ctx->crcmode?1:0)+3);
     for(i = 0;i < buflen;i++)
     {
-        if(xm_read(&ctx->buff[ctx->idx],(DLY_1S)<<1) <= 0)
+        if(ctx->read(&ctx->buff[ctx->idx],(DLY_1S)<<1) <= 0)
         {
             ctx->stat = XM_ERROR;
             return -1;
         }
-            
         ctx->idx ++;
     }
     
@@ -167,29 +142,37 @@ static w_int32_t xm_read_and_check_data(xm_ctx_s *ctx,w_uint8_t *buff,w_int32_t 
     return 0;
 }
 
-w_err_t xmodem_start(xm_ctx_s *ctx,xm_dir_e dir)
+w_err_t xmodem_init_port(xm_ctx_s *ctx,xm_write_fn write,xm_read_fn read)
+{
+    WIND_ASSERT_RETURN(write != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(read != W_NULL,W_ERR_PTR_NULL);
+    ctx->read = read;
+    ctx->write = write;
+    return W_ERR_OK;
+}
+
+
+w_err_t xmodem_start(xm_ctx_s *ctx,xm_dir_e dir,w_uint8_t *buff,w_int32_t buflen)
 {
     WIND_ASSERT_RETURN(ctx != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(buflen >= XMODEM_BUFF_LEN,W_ERR_INVALID);
+    
     ctx->stat = XM_RECV_DATA_FIRST;
     ctx->dir = dir;
     ctx->trychar = 'C';
     ctx->crcmode = 1;
-    if(ctx->buff == W_NULL)
-        ctx->buff = wind_malloc(1030);
-    WIND_ASSERT_RETURN(ctx->buff != W_NULL,W_ERR_MEM);
+    ctx->buff = buff;
     ctx->bufsz = 0;
     ctx->idx = 0;
     ctx->pack_no = 1;
     ctx->retry = MAXRETRANS;
-    xm_write(CAN);
+    ctx->write(CAN);
     return W_ERR_OK;
 }
 
 w_err_t xmodem_end(xm_ctx_s *ctx)
 {
     WIND_ASSERT_RETURN(ctx != W_NULL,W_ERR_PTR_NULL);
-    if(ctx->buff != W_NULL)
-        wind_free(ctx->buff);
     ctx->buff = W_NULL;
     ctx->stat = XM_INIT;
     return W_ERR_OK;
@@ -226,7 +209,7 @@ w_int32_t xmodem_recv(xm_ctx_s *ctx,w_uint8_t *data, w_int32_t size)
             return idx;
         case XM_ERROR:
             //xmodem_end(ctx);
-            wind_error("xmodem error.");
+            //wind_error("xmodem error.");
             return -1;
         default:
             //xmodem_end();
@@ -249,7 +232,7 @@ w_int32_t xmodem_send(xm_ctx_s *ctx,w_uint8_t *src, w_int32_t size)
     {
         for(ctx->retry = 0;ctx->retry < 16;++ctx->retry)
         {
-            cnt = xm_read(&ch,(DLY_1S)<<1);
+            cnt = ctx->read(&ch,(DLY_1S)<<1);
             if(cnt > 0) 
             {
                 switch(ch)
@@ -261,10 +244,10 @@ w_int32_t xmodem_send(xm_ctx_s *ctx,w_uint8_t *src, w_int32_t size)
                     ctx->crcmode = 0;
                     goto start_trans;
                 case CAN:
-                    cnt = xm_read(&ch,DLY_1S);
+                    cnt = ctx->read(&ch,DLY_1S);
                     if((cnt > 0)&&(ch == CAN))
                     {
-                        xm_write(ACK);
+                        ctx->write(ACK);
                         xm_flush_data();
                         return -1;
                     }  
@@ -274,9 +257,9 @@ w_int32_t xmodem_send(xm_ctx_s *ctx,w_uint8_t *src, w_int32_t size)
                 }  
             }  
         }  
-        xm_write(CAN);
-        xm_write(CAN);
-        xm_write(CAN);
+        ctx->write(CAN);
+        ctx->write(CAN);
+        ctx->write(CAN);
         xm_flush_data();
         return -2;
   
@@ -321,9 +304,9 @@ start_trans:
                 {
                     for(i = 0;i < ctx->bufsz+4+(ctx->crcmode?1:0);++i)
                     {
-                        xm_write(ctx->buff[i]);
+                        ctx->write(ctx->buff[i]);
                     }  
-                    cnt = xm_read(&ch,DLY_1S);
+                    cnt = ctx->read(&ch,DLY_1S);
                     if(cnt > 0)
                     {
                         switch(ch)
@@ -333,10 +316,10 @@ start_trans:
                             len += ctx->bufsz;
                             goto start_trans;
                         case CAN:
-                            cnt = xm_read(&ch,DLY_1S);
+                            cnt = ctx->read(&ch,DLY_1S);
                             if((cnt > 0)&&(ch == CAN))
                             {
-                                xm_write(ACK);
+                                ctx->write(ACK);
                                 xm_flush_data();
                                 return -1;
                             }  
@@ -347,9 +330,9 @@ start_trans:
                         }  
                     }  
                 }  
-                xm_write(CAN);
-                xm_write(CAN);
-                xm_write(CAN);
+                ctx->write(CAN);
+                ctx->write(CAN);
+                ctx->write(CAN);
                 xm_flush_data();
                 return -4;
             }  
@@ -357,8 +340,8 @@ start_trans:
             {
                 for(ctx->retry = 0;ctx->retry < 10;++ctx->retry)
                 {
-                    xm_write(EOT);
-                    cnt = xm_read(&ch,(DLY_1S)<<1);
+                    ctx->write(EOT);
+                    cnt = ctx->read(&ch,(DLY_1S)<<1);
                     if((cnt > 0)&&(ch == ACK))
                     if(ch == ACK) 
                         break;

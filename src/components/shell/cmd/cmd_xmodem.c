@@ -20,6 +20,7 @@
 *******************************************************************************************************/
 #include "wind_cmd.h"
 #include "wind_heap.h"
+#include "wind_std.h"
 #include "xmodem.h"
 #if WIND_XMODEM_SUPPORT
 #include "treefs.h"
@@ -41,20 +42,47 @@ extern "C" {
 //extern w_int32_t xmodem_send(w_uint8_t *src, w_int32_t srcsz);
 //extern w_int32_t xmodem_recv_bak(w_uint8_t *dest, w_int32_t destsz);
 static xm_ctx_s ctx;
+
+w_int32_t xm_write(w_uint8_t trychar)
+{
+    return wind_std_output(&trychar,1);
+}
+
+static w_int32_t xm_read(w_uint8_t *ch,w_uint32_t time_out)
+{
+    w_int32_t cnt;
+    w_uint32_t i;
+    w_uint32_t tick = time_out / 10;
+    for(i = 0;i < tick;i ++)
+    {
+        cnt = wind_std_input(ch,1);
+        if(cnt >= 1)
+            return 1;
+        wind_thread_sleep(10);
+    }
+    return 0;
+}
+
+
+
 static w_err_t cmd_xmodem_get(int argc,char **argv)
 {
     w_err_t err = W_ERR_OK;
     w_int32_t len;
     treefile_s *file;
-    w_uint8_t *buff;
+    w_uint8_t *buff,*xbuff;
     if(argv[2][0] != '/')
     {
         wind_error("unknown file path.");
         return W_ERR_INVALID;
     }
-    xmodem_start(&ctx,XM_RECV);
     buff = wind_malloc(4096);
+    WIND_ASSERT_RETURN(buff != W_NULL,W_ERR_MEM);
+    xbuff = wind_malloc(XMODEM_BUFF_LEN);
+    WIND_ASSERT_TODO(xbuff != W_NULL,wind_free(buff),W_ERR_MEM);
     file = treefile_open(argv[2],TF_FMODE_CRT | TF_FMODE_W);
+    xmodem_init_port(&ctx,xm_write,xm_read);
+    xmodem_start(&ctx,XM_RECV,xbuff,XMODEM_BUFF_LEN);
     for(;;)
     {
         wind_memset(buff,0,4096);
@@ -74,6 +102,7 @@ static w_err_t cmd_xmodem_get(int argc,char **argv)
     xmodem_end(&ctx);
     treefile_close(file);
     wind_free(buff);
+    wind_free(xbuff);
     return err;
 }
 
@@ -81,7 +110,7 @@ static w_err_t cmd_xmodem_put(int argc,char **argv)
 {
     w_int32_t len;
     treefile_s *file;
-    w_uint8_t *buff;
+    w_uint8_t *buff,*xbuff;
     if(argv[2][0] != '/')
     {
         wind_error("unknown file path.");
@@ -93,8 +122,13 @@ static w_err_t cmd_xmodem_put(int argc,char **argv)
         wind_error("file is NOT exist.");
         return W_ERR_NOFILE;
     }
-    xmodem_start(&ctx,XM_SEND);
     buff = wind_malloc(file->filelen);
+    WIND_ASSERT_RETURN(buff != W_NULL,W_ERR_MEM);
+    xbuff = wind_malloc(XMODEM_BUFF_LEN);
+    WIND_ASSERT_TODO(xbuff != W_NULL,wind_free(buff),W_ERR_MEM);
+    
+    xmodem_init_port(&ctx,xm_write,xm_read);
+    xmodem_start(&ctx,XM_SEND,xbuff,XMODEM_BUFF_LEN);
     wind_memset(buff,0,file->filelen);
     len = treefile_read(file,buff,file->filelen);
     len = xmodem_send(&ctx,buff,len);
