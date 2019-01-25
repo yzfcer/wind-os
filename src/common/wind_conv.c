@@ -225,60 +225,6 @@ w_fp64_t wind_strtod(const char *str,char **endptr)
     return (sign == '-' ? -value : value); 
 } 
 
-#if 0
-double strtod(const char *str,char **endptr) 
-{ const  char*  p    = str; 
-long double  value = 0.L; 
-int          sign  = 0; 
-long double  factor; 
-
-while ( *p==' ' )
-p++;
-if(*p == '-' || *p == '+') 
-sign = *p++;
-while (*p <='9'&&*p>='0' )   
-value = value*10 + (*p++ - '0'); 
-if ( *p == '.' ) 
-{ 
-factor = 1; 
-p++; 
-while ( *p <='9'&&*p>='0' ) 
-{ 
-factor *= 0.1; 
-value  += (*p++ - '0') * factor; 
-} 
-} 
-if(*p=='e'||*p=='E') 
-{ int ispositive;
-int zhi_shu=0;
-p++;
-if((*p)=='-') 
-{  
-ispositive=0;
-}
-if((*p)=='+') 
-{ 
-ispositive=1; 
-}
-while(*++p) 
-{  
-zhi_shu+=zhi_shu*10+*p-'0';
-}
-
-if(ispositive==0)
-{
-for(int i=0;i <zhi_shu;i++) 
-value*=0.1; 
-}
-else
-for(int i=0;i <zhi_shu;i++) 
-value*=10; 
-} 
-return (sign == '-' ? -value : value); 
-} 
-
-#endif
-
 
 w_bool_t wind_from_uint16(w_uint8_t *arr,w_uint16_t value)
 {
