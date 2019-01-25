@@ -92,79 +92,79 @@ COMMAND_MAIN(list,argc,argv)
     else if(0 == wind_strcmp(argv[1],"mutex"))
     {
         wind_mutex_print();
-        return W_ERR_FAIL;
+        return W_ERR_OK;
     }
     else if(0 == wind_strcmp(argv[1],"pool"))
     {
         _wind_pool_print_list();
-        return W_ERR_FAIL;
+        return W_ERR_OK;
     }
 #if WIND_SEM_SUPPORT
     else if(0 == wind_strcmp(argv[1],"sem"))
     {
         wind_sem_print();
-        return W_ERR_FAIL;
+        return W_ERR_OK;
     }
 #endif
 #if WIND_EVENT_SUPPORT
     else if(0 == wind_strcmp(argv[1],"event"))
     {
         wind_event_print();
-        return W_ERR_FAIL;
+        return W_ERR_OK;
     }
 #endif
 #if WIND_PIPE_SUPPORT
     else if(0 == wind_strcmp(argv[1],"pipe"))
     {
         _wind_pipe_print();
-        return W_ERR_FAIL;
+        return W_ERR_OK;
     }
 #endif
 #if WIND_MSGBOX_SUPPORT
     else if(0 == wind_strcmp(argv[1],"msgbox"))
     {
         wind_msgbox_print();
-        return W_ERR_FAIL;
+        return W_ERR_OK;
     }
 #endif
 #if WIND_HEAP_SUPPORT
     else if(0 == wind_strcmp(argv[1],"heap"))
     {
         wind_heap_print();
-        return W_ERR_FAIL;
+        return W_ERR_OK;
     }
     else if(0 == wind_strcmp(argv[1],"heapitem"))
     {
         wind_heapitem_print();
-        return W_ERR_FAIL;
+        return W_ERR_OK;
     }
 #endif
 #if WIND_TIMER_SUPPORT
     else if(0 == wind_strcmp(argv[1],"timer"))
     {
         wind_timer_print();
-        return W_ERR_FAIL;
+        return W_ERR_OK;
     }
 #endif
 #if WIND_DRVFRAME_SUPPORT
     else if(0 == wind_strcmp(argv[1],"chdev"))
     {
         wind_chdev_print();
-        return W_ERR_FAIL;
+        return W_ERR_OK;
     }
 #endif
 #if WIND_BLK_DRVFRAME_SUPPORT
     else if(0 == wind_strcmp(argv[1],"blkdev"))
     {
         wind_blkdev_print();
-        return W_ERR_FAIL;
+        return W_ERR_OK;
     }
 #endif
 #if WIND_WATCHDOG_SUPPORT
         else if(0 == wind_strcmp(argv[1],"watchdog"))
         {
             wind_watchdog_print();
-            return W_ERR_FAIL;
+            return W_ERR_OK;
         }
 #endif
     else

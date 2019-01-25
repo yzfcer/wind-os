@@ -41,7 +41,7 @@ extern "C" {
 /********************************************内部函数定义*********************************************/
 //extern w_int32_t xmodem_send(w_uint8_t *src, w_int32_t srcsz);
 //extern w_int32_t xmodem_recv_bak(w_uint8_t *dest, w_int32_t destsz);
-static xm_ctx_s ctx;
+xm_ctx_s ctx;
 
 w_int32_t xm_write(w_uint8_t ch)
 {
@@ -81,8 +81,7 @@ static w_err_t cmd_xmodem_get(int argc,char **argv)
     xbuff = wind_malloc(XMODEM_BUFF_LEN);
     WIND_ASSERT_TODO(xbuff != W_NULL,wind_free(buff),W_ERR_MEM);
     file = treefile_open(argv[2],TF_FMODE_CRT | TF_FMODE_W);
-    xmodem_init_port(&ctx,xm_write,xm_read);
-    xmodem_start(&ctx,XM_RECV,xbuff,XMODEM_BUFF_LEN);
+    xmodem_init(&ctx,XM_DIR_RECV,xbuff,XMODEM_BUFF_LEN,xm_write,xm_read);
     for(;;)
     {
         wind_memset(buff,0,4096);
@@ -127,8 +126,7 @@ static w_err_t cmd_xmodem_put(int argc,char **argv)
     xbuff = wind_malloc(XMODEM_BUFF_LEN);
     WIND_ASSERT_TODO(xbuff != W_NULL,wind_free(buff),W_ERR_MEM);
     
-    xmodem_init_port(&ctx,xm_write,xm_read);
-    xmodem_start(&ctx,XM_SEND,xbuff,XMODEM_BUFF_LEN);
+    xmodem_init(&ctx,XM_DIR_SEND,xbuff,XMODEM_BUFF_LEN,xm_write,xm_read);
     wind_memset(buff,0,file->filelen);
     len = treefile_read(file,buff,file->filelen);
     len = xmodem_send(&ctx,buff,len);
@@ -143,18 +141,18 @@ static w_err_t cmd_xmodem_put(int argc,char **argv)
 
 
 /********************************************全局函数定义**********************************************/
-COMMAND_DISC(xmodem)
+COMMAND_DISC(xm)
 {
     console_printf("to translate file data via xmodem protocol.\r\n");
 }
 
-COMMAND_USAGE(xmodem)
+COMMAND_USAGE(xm)
 {
-    console_printf("xmodem get <localfile>:to receive a file save as localfile.\r\n");
-    console_printf("xmodem put <localfile>:to send localfile to remote host via xmodem.\r\n");
+    console_printf("xm get <localfile>:to receive a file save as localfile.\r\n");
+    console_printf("xm put <localfile>:to send localfile to remote host via xmodem.\r\n");
 }
 
-COMMAND_MAIN(xmodem,argc,argv)
+COMMAND_MAIN(xm,argc,argv)
 {
     WIND_ASSERT_RETURN(argc >= 3,W_ERR_INVALID);
     if(wind_strcmp(argv[1],"get") == 0)
@@ -164,7 +162,7 @@ COMMAND_MAIN(xmodem,argc,argv)
     return W_ERR_OK;
 }
 
-COMMAND_DEF(xmodem);
+COMMAND_DEF(xm);
 
 #endif
 #ifdef __cplusplus

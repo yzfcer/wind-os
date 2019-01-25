@@ -53,17 +53,48 @@ extern "C" {
 #endif
 
 #if WIND_DEBUG_SUPPORT
+#ifdef  __cplusplus
+#define _WIND_ADDRESSOF(v)   (&reinterpret_cast<const char &>(v) )
+#else
+#define _WIND_ADDRESSOF(v)   (&(v))
+#endif
+
+#define _WIND_INTSIZEOF(n)   ((sizeof(n) + sizeof(w_int32_t) - 1) & ~(sizeof(w_int32_t) - 1))
+
+#define _wind_crt_va_start(ap,v)  ( ap = (wind_va_list)_WIND_ADDRESSOF(v) + _WIND_INTSIZEOF(v) )
+#define _wind_crt_va_arg(ap,t)    ( *(t *)((ap += _WIND_INTSIZEOF(t)) - _WIND_INTSIZEOF(t)) )
+#define _wind_crt_va_end(ap)      ( ap = (wind_va_list)0 )
+
+#define wind_va_start _wind_crt_va_start /* windows stdarg.h */
+#define wind_va_arg _wind_crt_va_arg
+#define wind_va_end _wind_crt_va_end
+#define do_div(n,base) _div(&n,base)
+
+
+
+
 typedef char *  wind_va_list;
-extern w_int32_t wind_std_output(w_uint8_t *str,w_int32_t len);
+extern w_int32_t wind_std_output(w_uint8_t *buff,w_int32_t len);
+extern w_int32_t wind_std_input(w_uint8_t *buff,w_int32_t len);
 w_int32_t wind_vsprintf(char *buf, const char *fmt, wind_va_list args);
 w_int32_t wind_printf(const char *fmt, ...);
 w_int32_t wind_sprintf(char *buff, const char *fmt, ...);
+
+w_int32_t wind_vsscanf(const char *buf, const char *fmt, wind_va_list args);
+w_int32_t wind_scanf(const char *fmt,...);
+w_int32_t wind_sscanf(const char *buff, const char *fmt,...);
+
 void wind_print_space(w_int32_t space8_cnt);
 #else
 #define wind_printf(fmt, ...) 0
 #define wind_vsprintf(buf, fmt, args) 0
 #define wind_printf(fmt, ...) 0
 #define wind_sprintf(buff,fmt, ...) 0
+
+#define wind_vsscanf(buf, fmt, args) 0
+#define wind_scanf(fmt, ...) 0
+#define wind_sscanf(buff,fmt, ...) 0
+
 #define wind_print_space(a)
 #endif
 

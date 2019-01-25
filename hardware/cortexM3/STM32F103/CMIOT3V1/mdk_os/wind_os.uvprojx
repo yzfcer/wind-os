@@ -82,7 +82,7 @@
           <AfterMake>
             <RunUserProg1>1</RunUserProg1>
             <RunUserProg2>0</RunUserProg2>
-            <UserProg1Name>C:/Keil_v5/ARM/ARMCC/bin/fromelf.exe --bin -o ./bin/wind_os.bin ./obj/wind_os.axf</UserProg1Name>
+            <UserProg1Name>D:/Program Files/Keil_v5/ARM/ARMCC/bin/fromelf.exe --bin -o ./bin/wind_os.bin ./obj/wind_os.axf</UserProg1Name>
             <UserProg2Name></UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
             <UserProg2Dos16Mode>0</UserProg2Dos16Mode>
@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F40_41xxx,USE_STDPERIPH_DRIVER,_USE_USER_PRINT,STM32F10X_HD, USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\board;..\port;..\start;..\..\driver;..\..\..\..\..\src\common;..\..\..\..\..\src\core;..\..\..\..\..\src\hal;..\..\..\..\..\src\lib;..\..\..\..\..\src\components\shell\framework;..\..\..\..\..\src\components\shell\cmd;..\..\..\..\..\src\components\cutest\framework;..\..\..\..\..\src\components\cutest\port;..\..\..\..\..\src\components\cutest\case;..\..\..\..\..\src\components\lua-5.3.4\src;..\..\..\..\..\src\components\xmodem</IncludePath>
+              <IncludePath>..\board;..\port;..\start;..\..\driver;..\..\..\..\..\src\common;..\..\..\..\..\src\core;..\..\..\..\..\src\hal;..\..\..\..\..\src\lib;..\..\..\..\..\src\components\shell\framework;..\..\..\..\..\src\components\shell\cmd;..\..\..\..\..\src\components\cutest\framework;..\..\..\..\..\src\components\cutest\port;..\..\..\..\..\src\components\cutest\case;..\..\..\..\..\src\components\lua-5.3.4\src;..\..\..\..\..\src\components\xmodem;..\..\..\..\..\src\components\vfs</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1479,14 +1479,14 @@
           <GroupName>component_xmodem</GroupName>
           <Files>
             <File>
-              <FileName>xmodem..c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\components\xmodem\xmodem..c</FilePath>
-            </File>
-            <File>
               <FileName>xmodem.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\..\..\..\src\components\xmodem\xmodem.h</FilePath>
+            </File>
+            <File>
+              <FileName>xmodem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\components\xmodem\xmodem.c</FilePath>
             </File>
           </Files>
         </Group>

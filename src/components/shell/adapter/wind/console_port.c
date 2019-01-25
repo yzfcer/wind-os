@@ -66,7 +66,7 @@ CMD_DECLARE(lua);
 CMD_DECLARE(fs);
 #endif
 #if CMD_XMODEM_SUPPORT
-CMD_DECLARE(xmodem);
+CMD_DECLARE(xm);
 #endif
 #if CMD_BEEP_SUPPORT
 CMD_DECLARE(beep);
@@ -115,7 +115,7 @@ void _wind_register_all_cmd(w_shell_ctx_s *ctx)
     wind_cmd_register(COMMAND(fs),1);
 #endif
 #if CMD_XMODEM_SUPPORT
-    wind_cmd_register(COMMAND(xmodem),1);
+    wind_cmd_register(COMMAND(xm),1);
 #endif
 #if CMD_BEEP_SUPPORT
     wind_cmd_register(COMMAND(beep),1);

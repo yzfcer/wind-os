@@ -392,7 +392,6 @@ w_int32_t treefile_write(treefile_s* file,w_uint8_t *buff, w_int32_t size)
         file->bufflen += TREEFS_BLK_SIZE;
     }
     
-    //wsize = file->filelen - file->offset > size?size:file->filelen - file->offset;
     wsize = size;
     dnode = get_node_by_offset(&file->datalist,file->offset);
     dataidx = get_dataidx_by_offset(file->offset);

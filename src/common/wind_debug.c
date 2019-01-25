@@ -26,27 +26,13 @@
 #include "wind_type.h"
 #include "wind_debug.h"
 #include "wind_string.h"
+#include "wind_conv.h"
 #include "wind_std.h"
 
 #if WIND_DEBUG_SUPPORT
 
 
-#ifdef  __cplusplus
-#define _WIND_ADDRESSOF(v)   (&reinterpret_cast<const char &>(v) )
-#else
-#define _WIND_ADDRESSOF(v)   (&(v))
-#endif
 
-#define _WIND_INTSIZEOF(n)   ((sizeof(n) + sizeof(w_int32_t) - 1) & ~(sizeof(w_int32_t) - 1))
-
-#define _wind_crt_va_start(ap,v)  ( ap = (wind_va_list)_WIND_ADDRESSOF(v) + _WIND_INTSIZEOF(v) )
-#define _wind_crt_va_arg(ap,t)    ( *(t *)((ap += _WIND_INTSIZEOF(t)) - _WIND_INTSIZEOF(t)) )
-#define _wind_crt_va_end(ap)      ( ap = (wind_va_list)0 )
-
-#define wind_va_start _wind_crt_va_start /* windows stdarg.h */
-#define wind_va_arg _wind_crt_va_arg
-#define wind_va_end _wind_crt_va_end
-#define do_div(n,base) _div(&n,base)
 
 #define ZEROPAD 1       
 #define SIGN    2       
@@ -374,290 +360,6 @@ w_int32_t wind_vsprintf(char *buf, const char *fmt, wind_va_list args)
     *str = '\0';
     return str - buf;
 }
-#if 0
-#include "wind_macro.h"
-#define isspace(c) ((c) == ' '?W_TRUE:W_FALSE)
-#define TOLOWER(c) LOWERCASE(c)
-#define isdigit(c) DECCHK(c)
-#define isxdigit(c) HEXCHK(c)
-#define unlikely(x) (x)
-#define _tolower(x) LOWERCASE(x)
-const char *skip_spaces(const char *str)
-{
-    while(*str == ' ')
-        ++str;
-    return str;
-}
-
-static unsigned int simple_guess_base(const char *cp)
-{
- if (cp[0] == '0') {
-  if (TOLOWER(cp[1]) == 'x' && isxdigit(cp[2]))
-   return 16;
-  else
-   return 8;
- } else {
-  return 10;
- }
-}
-
-unsigned long long simple_strtoull(const char *cp, char **endp, unsigned int base)
-{
-    unsigned long long result;
-    unsigned int rv;
-
-    cp = _parse_integer_fixup_radix(cp, &base);
-    rv = _parse_integer(cp, base, &result);
-    /* FIXME */
-    cp += (rv & ~KSTRTOX_OVERFLOW);
-
-    if (endp)
-        *endp = (char *)cp;
-
-    return result;
-}
-
-unsigned long simple_strtoul(const char *cp, char **endp, unsigned int base)
-{
-    return simple_strtoull(cp, endp, base);
-}
-
-long long simple_strtoll(const char *cp, char **endp, unsigned int base)
-{
-    if (*cp == '-')
-        return -simple_strtoull(cp + 1, endp, base);
-    return simple_strtoull(cp, endp, base);
-}
-
-long simple_strtol(const char *cp, char **endp, unsigned int base)
-{
-    if (*cp == '-')
-        return -simple_strtoul(cp + 1, endp, base);
-    return simple_strtoul(cp, endp, base);
-}
-
-int wind_vsscanf(const char *buf, const char *fmt, wind_va_list args)
-{
-    const char *str = buf;
-    char *next;
-    char digit;
-    int num = 0;
-    w_uint8_t qualifier;
-    unsigned int base;
-    union {
-        long long s;
-        unsigned long long u;
-    } val;
-    w_int16_t field_width;
-    w_bool_t is_sign;
-
-    while (*fmt) {
-        /* skip any white space in format */
-        /* white space in format matchs any amount of
-         * white space, including none, in the input.
-         */
-        if (isspace(*fmt)) {
-            fmt = skip_spaces(++fmt);
-            str = skip_spaces(str);
-        }
-
-        /* anything that is not a conversion must match exactly */
-        if (*fmt != '%' && *fmt) {
-            if (*fmt++ != *str++)
-                break;
-            continue;
-        }
-
-        if (!*fmt)
-            break;
-        ++fmt;
-
-        /* skip this conversion.
-         * advance both strings to next white space
-         */
-        if (*fmt == '*') {
-            if (!*str)
-                break;
-            while (!isspace(*fmt) && *fmt != '%' && *fmt)
-                fmt++;
-            while (!isspace(*str) && *str)
-                str++;
-            continue;
-        }
-
-        /* get field width */
-        field_width = -1;
-        if (isdigit(*fmt)) {
-            field_width = skip_atoi(&fmt);
-            if (field_width <= 0)
-                break;
-        }
-
-        /* get conversion qualifier */
-        qualifier = -1;
-        if (*fmt == 'h' || _tolower(*fmt) == 'l' ||
-            _tolower(*fmt) == 'z') {
-            qualifier = *fmt++;
-            if (unlikely(qualifier == *fmt)) {
-                if (qualifier == 'h') {
-                    qualifier = 'H';
-                    fmt++;
-                } else if (qualifier == 'l') {
-                    qualifier = 'L';
-                    fmt++;
-                }
-            }
-        }
-
-        if (!*fmt)
-            break;
-
-        if (*fmt == 'n') {
-            /* return number of characters read so far */
-            *wind_va_arg(args, int *) = str - buf;
-            ++fmt;
-            continue;
-        }
-
-        if (!*str)
-            break;
-
-        base = 10;
-        is_sign = W_FALSE;
-
-        switch (*fmt++) {
-        case 'c':
-        {
-            char *s = (char *)wind_va_arg(args, char*);
-            if (field_width == -1)
-                field_width = 1;
-            do {
-                *s++ = *str++;
-            } while (--field_width > 0 && *str);
-            num++;
-        }
-        continue;
-        case 's':
-        {
-            char *s = (char *)wind_va_arg(args, char *);
-            if (field_width == -1)
-                field_width = SHRT_MAX;
-            /* first, skip leading white space in buffer */
-            str = skip_spaces(str);
-
-            /* now copy until next white space */
-            while (*str && !isspace(*str) && field_width--)
-                *s++ = *str++;
-            *s = '\0';
-            num++;
-        }
-        continue;
-        case 'o':
-            base = 8;
-            break;
-        case 'x':
-        case 'X':
-            base = 16;
-            break;
-        case 'i':
-            base = 0;
-        case 'd':
-            is_sign = W_TRUE;
-        case 'u':
-            break;
-        case '%':
-            /* looking for '%' in str */
-            if (*str++ != '%')
-                return num;
-            continue;
-        default:
-            /* invalid format; stop here */
-            return num;
-        }
-
-        /* have some sort of integer conversion.
-         * first, skip white space in buffer.
-         */
-        str = skip_spaces(str);
-
-        digit = *str;
-        if (is_sign && digit == '-')
-            digit = *(str + 1);
-
-        if (!digit
-            || (base == 16 && !isxdigit(digit))
-            || (base == 10 && !isdigit(digit))
-            || (base == 8 && (!isdigit(digit) || digit > '7'))
-            || (base == 0 && !isdigit(digit)))
-            break;
-
-        if (is_sign)
-            val.s = qualifier != 'L' ?
-                simple_strtol(str, &next, base) :
-                simple_strtoll(str, &next, base);
-        else
-            val.u = qualifier != 'L' ?
-                simple_strtoul(str, &next, base) :
-                simple_strtoull(str, &next, base);
-
-        if (field_width > 0 && next - str > field_width) {
-            if (base == 0)
-                _parse_integer_fixup_radix(str, &base);
-            while (next - str > field_width) {
-                if (is_sign)
-                    val.s = div_s64(val.s, base);
-                else
-                    val.u = div_u64(val.u, base);
-                --next;
-            }
-        }
-
-        switch (qualifier) {
-        case 'H':    /* that's 'hh' in format */
-            if (is_sign)
-                *wind_va_arg(args, signed char *) = val.s;
-            else
-                *wind_va_arg(args, unsigned char *) = val.u;
-            break;
-        case 'h':
-            if (is_sign)
-                *wind_va_arg(args, short *) = val.s;
-            else
-                *wind_va_arg(args, unsigned short *) = val.u;
-            break;
-        case 'l':
-            if (is_sign)
-                *wind_va_arg(args, long *) = val.s;
-            else
-                *wind_va_arg(args, unsigned long *) = val.u;
-            break;
-        case 'L':
-            if (is_sign)
-                *wind_va_arg(args, long long *) = val.s;
-            else
-                *wind_va_arg(args, unsigned long long *) = val.u;
-            break;
-        //case 'Z':
-        //case 'z':
-        //    *wind_va_arg(args, size_t*) = val.u;
-        //    break;
-        default:
-            if (is_sign)
-                *wind_va_arg(args, int *) = val.s;
-            else
-                *wind_va_arg(args, unsigned int *) = val.u;
-            break;
-        }
-        num++;
-
-        if (!next)
-            break;
-        str = next;
-    }
-
-    return num;
-}
-#endif
  
 w_int32_t wind_printf(const char *fmt, ...)
 {
@@ -691,6 +393,528 @@ void wind_print_space(w_int32_t space8_cnt)
         wind_printf("--------");
     wind_printf("\r\n");
 }
+
+#ifndef HUGE_VAL
+#define HUGE_VAL (99.e99)
+#endif /* HUGE_VAL */
+
+enum _WVSCANF__flag
+{
+    WVSCANF_Suppress = 0x2U,      /*!< Suppress Flag. */
+    WVSCANF_DestMask = 0x7cU,     /*!< Destination Mask. */
+    WVSCANF_DestChar = 0x4U,      /*!< Destination Char Flag. */
+    WVSCANF_DestString = 0x8U,    /*!< Destination String FLag. */
+    WVSCANF_DestSet = 0x10U,      /*!< Destination Set Flag. */
+    WVSCANF_DestInt = 0x20U,      /*!< Destination Int Flag. */
+    WVSCANF_DestFloat = 0x30U,    /*!< Destination Float Flag. */
+    WVSCANF_LengthMask = 0x1f00U, /*!< Length Mask Flag. */
+    WVSCANF_LengthChar = 0x100U,        /*!< Length Char Flag. */
+    WVSCANF_LengthShortInt = 0x200U,    /*!< Length ShortInt Flag. */
+    WVSCANF_LengthLongInt = 0x400U,     /*!< Length LongInt Flag. */
+    WVSCANF_LengthLongLongInt = 0x800U, /*!< Length LongLongInt Flag. */
+    WVSCANF_LengthLongLongDouble = 0x1000U, /*!< Length LongLongDuoble Flag. */
+    WVSCANF_TypeSinged = 0x2000U,           /*!< TypeSinged Flag. */
+};
+
+
+static w_uint32_t skip_space(const char **s)
+{
+    w_uint8_t count = 0;
+    w_uint8_t c;
+    c = **s;
+    while ((c == ' ') || (c == '\t') || (c == '\n') || (c == '\r') || (c == '\v') || (c == '\f'))
+    {
+        count++;
+        (*s)++;
+        c = **s;
+    }
+    return count;
+}
+
+
+w_int32_t wind_vsscanf(const char *str, const char *format, wind_va_list args)
+{
+    static w_fp64_t fnum = 0.0;
+    w_uint8_t base;
+    w_int8_t neg;
+    const char *c = format;
+    char temp;
+    char *buf;
+    w_uint32_t flag = 0;
+    w_uint32_t field_width;
+    w_uint32_t nassigned = 0;
+    w_uint32_t n_decode = 0;
+    w_int32_t val;
+    const char *s;
+    const char *p = str;
+
+    if (*p == '\0')
+    {
+        return -1;
+    }
+
+    /* Decode directives. */
+    while ((*c) && (*p))
+    {
+        /* Ignore all white-spaces in the format strings. */
+        if (skip_space((const char **)&c))
+        {
+            n_decode += skip_space(&p);
+        }
+        else if ((*c != '%') || ((*c == '%') && (*(c + 1) == '%')))
+        {
+            /* Ordinary characters. */
+            c++;
+            if (*p == *c)
+            {
+                n_decode++;
+                p++;
+                c++;
+            }
+            else
+            {
+                /* Match failure. Misalignment with C99, the unmatched characters need to be pushed back to stream.
+                 * However, it is deserted now. */
+                break;
+            }
+        }
+        else
+        {
+            /* convernsion specification */
+            c++;
+            /* Reset. */
+            flag = 0;
+            field_width = 0;
+            base = 0;
+
+            /* Loop to get full conversion specification. */
+            while ((*c) && (!(flag & WVSCANF_DestMask)))
+            {
+                switch (*c)
+                {
+
+                    case '*':
+                        if (flag & WVSCANF_Suppress)
+                        {
+                            /* Match failure. */
+                            return nassigned;
+                        }
+                        flag |= WVSCANF_Suppress;
+                        c++;
+                        break;
+                    case 'h':
+                        if (flag & WVSCANF_LengthMask)
+                        {
+                            /* Match failure. */
+                            return nassigned;
+                        }
+
+                        if (c[1] == 'h')
+                        {
+                            flag |= WVSCANF_LengthChar;
+                            c++;
+                        }
+                        else
+                        {
+                            flag |= WVSCANF_LengthShortInt;
+                        }
+                        c++;
+                        break;
+                    case 'l':
+                        if (flag & WVSCANF_LengthMask)
+                        {
+                            /* Match failure. */
+                            return nassigned;
+                        }
+
+                        if (c[1] == 'l')
+                        {
+                            flag |= WVSCANF_LengthLongLongInt;
+                            c++;
+                        }
+                        else
+                        {
+                            flag |= WVSCANF_LengthLongInt;
+                        }
+                        c++;
+                        break;
+
+                    case 'L':
+                        if (flag & WVSCANF_LengthMask)
+                        {
+                            /* Match failure. */
+                            return nassigned;
+                        }
+                        flag |= WVSCANF_LengthLongLongDouble;
+                        c++;
+                        break;
+                    case '0':
+                    case '1':
+                    case '2':
+                    case '3':
+                    case '4':
+                    case '5':
+                    case '6':
+                    case '7':
+                    case '8':
+                    case '9':
+                        if (field_width)
+                        {
+                            /* Match failure. */
+                            return nassigned;
+                        }
+                        do
+                        {
+                            field_width = field_width * 10 + *c - '0';
+                            c++;
+                        } while ((*c >= '0') && (*c <= '9'));
+                        break;
+                    case 'd':
+                        base = 10;
+                        flag |= WVSCANF_TypeSinged;
+                        flag |= WVSCANF_DestInt;
+                        c++;
+                        break;
+                    case 'u':
+                        base = 10;
+                        flag |= WVSCANF_DestInt;
+                        c++;
+                        break;
+                    case 'o':
+                        base = 8;
+                        flag |= WVSCANF_DestInt;
+                        c++;
+                        break;
+                    case 'x':
+                    case 'X':
+                        base = 16;
+                        flag |= WVSCANF_DestInt;
+                        c++;
+                        break;
+                    case 'i':
+                        base = 0;
+                        flag |= WVSCANF_DestInt;
+                        c++;
+                        break;
+                    case 'a':
+                    case 'A':
+                    case 'e':
+                    case 'E':
+                    case 'f':
+                    case 'F':
+                    case 'g':
+                    case 'G':
+                        flag |= WVSCANF_DestFloat;
+                        c++;
+                        break;
+                    case 'c':
+                        flag |= WVSCANF_DestChar;
+                        if (!field_width)
+                        {
+                            field_width = 1;
+                        }
+                        c++;
+                        break;
+                    case 's':
+                        flag |= WVSCANF_DestString;
+                        c++;
+                        break;
+                    default:
+                        return nassigned;
+                }
+            }
+
+            if (!(flag & WVSCANF_DestMask))
+            {
+                /* Format strings are exhausted. */
+                return nassigned;
+            }
+
+            if (!field_width)
+            {
+                /* Large than length of a line. */
+                field_width = 99;
+            }
+
+            /* Matching strings in input streams and assign to argument. */
+            switch (flag & WVSCANF_DestMask)
+            {
+                case WVSCANF_DestChar:
+                    s = (const char *)p;
+                    buf = wind_va_arg(args, char *);
+                    while ((field_width--) && (*p))
+                    {
+                        if (!(flag & WVSCANF_Suppress))
+                        {
+                            *buf++ = *p++;
+                        }
+                        else
+                        {
+                            p++;
+                        }
+                        n_decode++;
+                    }
+
+                    if ((!(flag & WVSCANF_Suppress)) && (s != p))
+                    {
+                        nassigned++;
+                    }
+                    break;
+                case WVSCANF_DestString:
+                    n_decode += skip_space(&p);
+                    s = p;
+                    buf = wind_va_arg(args, char *);
+                    while ((field_width--) && (*p != '\0') && (*p != ' ') && (*p != '\t') && (*p != '\n') &&
+                           (*p != '\r') && (*p != '\v') && (*p != '\f'))
+                    {
+                        if (flag & WVSCANF_Suppress)
+                        {
+                            p++;
+                        }
+                        else
+                        {
+                            *buf++ = *p++;
+                        }
+                        n_decode++;
+                    }
+
+                    if ((!(flag & WVSCANF_Suppress)) && (s != p))
+                    {
+                        /* Add NULL to end of string. */
+                        *buf = '\0';
+                        nassigned++;
+                    }
+                    break;
+                case WVSCANF_DestInt:
+                    n_decode += skip_space(&p);
+                    s = p;
+                    val = 0;
+                    if ((base == 0) || (base == 16))
+                    {
+                        if ((s[0] == '0') && ((s[1] == 'x') || (s[1] == 'X')))
+                        {
+                            base = 16;
+                            if (field_width >= 1)
+                            {
+                                p += 2;
+                                n_decode += 2;
+                                field_width -= 2;
+                            }
+                        }
+                    }
+
+                    if (base == 0)
+                    {
+                        if (s[0] == '0')
+                        {
+                            base = 8;
+                        }
+                        else
+                        {
+                            base = 10;
+                        }
+                    }
+
+                    neg = 1;
+                    switch (*p)
+                    {
+                        case '-':
+                            neg = -1;
+                            n_decode++;
+                            p++;
+                            field_width--;
+                            break;
+                        case '+':
+                            neg = 1;
+                            n_decode++;
+                            p++;
+                            field_width--;
+                            break;
+                        default:
+                            break;
+                    }
+
+                    while ((*p) && (field_width--))
+                    {
+                        if ((*p <= '9') && (*p >= '0'))
+                        {
+                            temp = *p - '0';
+                        }
+                        else if ((*p <= 'f') && (*p >= 'a'))
+                        {
+                            temp = *p - 'a' + 10;
+                        }
+                        else if ((*p <= 'F') && (*p >= 'A'))
+                        {
+                            temp = *p - 'A' + 10;
+                        }
+                        else
+                        {
+                            temp = base;
+                        }
+
+                        if (temp >= base)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            val = base * val + temp;
+                        }
+                        p++;
+                        n_decode++;
+                    }
+                    val *= neg;
+                    if (!(flag & WVSCANF_Suppress))
+                    {
+                        switch (flag & WVSCANF_LengthMask)
+                        {
+                            case WVSCANF_LengthChar:
+                                if (flag & WVSCANF_TypeSinged)
+                                {
+                                    *wind_va_arg(args, signed char *) = (signed char)val;
+                                }
+                                else
+                                {
+                                    *wind_va_arg(args, unsigned char *) = (unsigned char)val;
+                                }
+                                break;
+                            case WVSCANF_LengthShortInt:
+                                if (flag & WVSCANF_TypeSinged)
+                                {
+                                    *wind_va_arg(args, signed short *) = (signed short)val;
+                                }
+                                else
+                                {
+                                    *wind_va_arg(args, unsigned short *) = (unsigned short)val;
+                                }
+                                break;
+                            case WVSCANF_LengthLongInt:
+                                if (flag & WVSCANF_TypeSinged)
+                                {
+                                    *wind_va_arg(args, signed long int *) = (signed long int)val;
+                                }
+                                else
+                                {
+                                    *wind_va_arg(args, unsigned long int *) = (unsigned long int)val;
+                                }
+                                break;
+                            case WVSCANF_LengthLongLongInt:
+                                if (flag & WVSCANF_TypeSinged)
+                                {
+                                    *wind_va_arg(args, signed long long int *) = (signed long long int)val;
+                                }
+                                else
+                                {
+                                    *wind_va_arg(args, unsigned long long int *) = (unsigned long long int)val;
+                                }
+                                break;
+                            default:
+                                /* The default type is the type int. */
+                                if (flag & WVSCANF_TypeSinged)
+                                {
+                                    *wind_va_arg(args, signed int *) = (signed int)val;
+                                }
+                                else
+                                {
+                                    *wind_va_arg(args, unsigned int *) = (unsigned int)val;
+                                }
+                                break;
+                        }
+
+                        nassigned++;
+                    }
+                    break;
+                case WVSCANF_DestFloat:
+                    n_decode += skip_space(&p);
+                    fnum = wind_strtod(p, (char **)&s);
+
+                    if ((fnum >= HUGE_VAL) || (fnum <= -HUGE_VAL))
+                    {
+                        break;
+                    }
+
+                    n_decode += (int)(s) - (int)(p);
+                    p = s;
+                    if (!(flag & WVSCANF_Suppress))
+                    {
+                        if (flag & WVSCANF_LengthLongLongDouble)
+                        {
+                            *wind_va_arg(args, double *) = fnum;
+                        }
+                        else
+                        {
+                            *wind_va_arg(args, float *) = (float)fnum;
+                        }
+                        nassigned++;
+                    }
+                    break;
+                default:
+                    return nassigned;
+            }
+        }
+    }
+    return nassigned;
+}
+
+
+#if 1
+static w_int32_t scan_read_line(char *buff,w_int32_t maxlen)
+{
+    char ch;
+    w_int32_t i,len = 0;
+    while(1)
+    {
+        len = wind_std_input((w_uint8_t*)&ch,1);
+        if(len <= 0)
+            wind_thread_sleep(10);
+        else
+        {
+            
+            if((ch == 0x0d) || (ch == 0x0a))
+            {
+                buff[i] = '\0';
+                return i;
+            }
+            else
+            {
+                buff[i++] = ch;
+                if(i >= maxlen)
+                {
+                    buff[maxlen-1] = '\0';
+                    return maxlen;
+                }
+            }
+        }
+    }
+}
+
+w_int32_t wind_scanf(const char *fmt,...)
+{
+    static char buff[512];
+    wind_va_list args;
+    w_int32_t count;
+    wind_std_lock();
+    count = scan_read_line(buff,sizeof(buff));
+    wind_va_start(args,fmt);
+    count = wind_vsscanf(buff,fmt,args);
+    wind_va_end(args);
+    wind_std_unlock();
+    return count;
+}
+#endif
+
+w_int32_t wind_sscanf(const char *buff, const char *fmt,...)
+{
+    wind_va_list args;
+    w_int32_t count;
+    wind_va_start(args, fmt);
+    count = wind_vsscanf(buff, fmt, args);
+    wind_va_end(args);
+    return count;
+}
+
+
 
 
 

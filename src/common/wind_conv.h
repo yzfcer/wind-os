@@ -35,6 +35,8 @@ void wind_itoa(char *str,w_int32_t value);
 void wind_uitoa(char *str,w_uint32_t value);
 void wind_itoh(char *hex,w_uint32_t value);
 
+w_fp64_t wind_strtod(const char *str,char **endptr);
+
 //数值与字节数组之间的转换
 w_bool_t wind_from_uint16(w_uint8_t *arr,w_uint16_t value);
 w_bool_t wind_from_uint32(w_uint8_t *arr,w_uint32_t value);

@@ -86,20 +86,21 @@ COMMAND_DISC(datetime)
 
 COMMAND_USAGE(datetime)
 {
+    console_printf("datetime:to show the system date and time infomation.\r\n");
     console_printf("datetime set <datetime>:to set the system date infomation.format:YYYY/MM/DD HH:mm:SS\r\n");
-    console_printf("datetime show:to show the system date and time infomation.\r\n");
 }
 
 COMMAND_MAIN(datetime,argc,argv)
 {
     WIND_ASSERT_RETURN(argc >= 2,W_ERR_INVALID);
+    if(argc == 1)
+    {
+        return cmd_showdatetime(argc,argv);
+    }
+    WIND_ASSERT_RETURN(argc >= 2,W_ERR_INVALID);
     if(wind_strcmp(argv[1],"set") == 0)
     {
         return cmd_set_datetime(argc,argv);
-    }
-    else if(wind_strcmp(argv[1],"show") == 0)
-    {
-        return cmd_showdatetime(argc,argv);
     }
     else
     {

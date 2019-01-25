@@ -173,8 +173,111 @@ void wind_itoh(char *hex,w_uint32_t value)
     }
 }
 
+w_fp64_t wind_strtod(const char *str,char **endptr) 
+{
+    const  char*  p    = str; 
+    w_lfp64_t value = 0.L; 
+    w_lfp64_t  factor; 
+    w_int32_t i,sign  = 0; 
+    w_int32_t ispositive = 1;
+    w_int32_t exp=0;
+    while ( *p==' ' )
+        p++;
+    if(*p == '-' || *p == '+') 
+        sign = *p++;
+    while (*p <='9'&&*p>='0' )   
+        value = value*10 + (*p++ - '0'); 
+    if ( *p == '.' ) 
+    { 
+        factor = 1; 
+        p++; 
+        while ( *p <='9'&&*p>='0' ) 
+        { 
+            factor *= 0.1; 
+            value  += (*p++ - '0') * factor; 
+        } 
+    } 
+    if(*p=='e'||*p=='E') 
+    { 
+        p++;
+        if((*p)=='-') 
+        {  
+            ispositive=0;
+        }
+        if((*p)=='+') 
+        { 
+            ispositive=1; 
+        }
+        while(*++p) 
+        {  
+            exp+=exp*10+*p-'0';
+        }
 
+        if(ispositive==0)
+        {
+            for(i=0;i <exp;i++) 
+                value*=0.1; 
+        }
+        else
+            for(i=0;i <exp;i++) 
+                value*=10; 
+    } 
+    return (sign == '-' ? -value : value); 
+} 
 
+#if 0
+double strtod(const char *str,char **endptr) 
+{ const  char*  p    = str; 
+long double  value = 0.L; 
+int          sign  = 0; 
+long double  factor; 
+
+while ( *p==' ' )
+p++;
+if(*p == '-' || *p == '+') 
+sign = *p++;
+while (*p <='9'&&*p>='0' )   
+value = value*10 + (*p++ - '0'); 
+if ( *p == '.' ) 
+{ 
+factor = 1; 
+p++; 
+while ( *p <='9'&&*p>='0' ) 
+{ 
+factor *= 0.1; 
+value  += (*p++ - '0') * factor; 
+} 
+} 
+if(*p=='e'||*p=='E') 
+{ int ispositive;
+int zhi_shu=0;
+p++;
+if((*p)=='-') 
+{  
+ispositive=0;
+}
+if((*p)=='+') 
+{ 
+ispositive=1; 
+}
+while(*++p) 
+{  
+zhi_shu+=zhi_shu*10+*p-'0';
+}
+
+if(ispositive==0)
+{
+for(int i=0;i <zhi_shu;i++) 
+value*=0.1; 
+}
+else
+for(int i=0;i <zhi_shu;i++) 
+value*=10; 
+} 
+return (sign == '-' ? -value : value); 
+} 
+
+#endif
 
 
 w_bool_t wind_from_uint16(w_uint8_t *arr,w_uint16_t value)
