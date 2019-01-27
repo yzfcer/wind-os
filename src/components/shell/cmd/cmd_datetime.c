@@ -50,10 +50,10 @@ static w_err_t cmd_set_datetime(w_int32_t argc,char **argv)
         return W_ERR_INVALID;
     }
     
-    cnt = sscanf(argv[2],"%4d/%02d/%02d",&dt.date.year,
+    cnt = wind_sscanf(argv[2],"%4d/%02d/%02d",&dt.date.year,
                 (w_uint32_t*)&dt.date.month,(w_uint32_t*)&dt.date.day);
     WIND_ASSERT_RETURN(cnt >= 3,W_ERR_INVALID);
-    cnt = sscanf(argv[3],"%2d:%2d:%2d",(w_uint32_t*)&dt.time.hour,
+    cnt = wind_sscanf(argv[3],"%2d:%2d:%2d",(w_uint32_t*)&dt.time.hour,
                 (w_uint32_t*)&dt.time.minute,(w_uint32_t*)&dt.time.second);
     WIND_ASSERT_RETURN(cnt >= 3,W_ERR_INVALID);
     dt.time.msecond = 0;

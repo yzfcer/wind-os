@@ -54,6 +54,7 @@ w_err_t wind_log_close(void)
 {
     WIND_ASSERT_RETURN(tf != W_NULL,W_ERR_FAIL);
     treefile_close(tf);
+    tf = W_NULL;
     return W_ERR_OK;
 }
 #endif

@@ -168,14 +168,14 @@ static w_err_t fs_cmd_cat(w_int32_t argc,char **argv)
     char * fullpath;
     w_uint8_t *buff;
     w_int32_t len;
-    char *curpath = wind_file_get_current_path();
-    if(argc < 3)
-        return W_ERR_INVALID;
+    char *curpath;
+    WIND_ASSERT_RETURN(argc >= 3,W_ERR_INVALID);
+    curpath = wind_file_get_current_path();
     fullpath = wind_full_path_generate(curpath,argv[2],0);
     file = wind_fopen(fullpath,FMODE_R);
     if(file == W_NULL)
     {
-        console_printf("open directory or file failed.\r\n",fullpath);
+        console_printf("open file %s failed.\r\n",fullpath);
         wind_free(fullpath);
         return W_ERR_NOFILE;
     }

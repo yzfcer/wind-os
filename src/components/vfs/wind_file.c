@@ -58,18 +58,33 @@ static w_err_t mount_param_check(char *fsname,char *blkname,char *path)
     fs = wind_fs_get(fsname);
     WIND_ASSERT_RETURN(fs != W_NULL,W_ERR_REPEAT);
     if(wind_strlen(path) >= FS_MOUNT_PATH_LEN)
+    {
+        wind_error("mount path is too long");
         return W_ERR_INVALID;
-    if(wind_strlen(fsname) >= FS_MOUNT_PATH_LEN)
+    }
+        
+    if(wind_strlen(fsname) >= WFS_NAME_LEN)
+    {
+        wind_error("fs name is too long");
         return W_ERR_INVALID;
+    }
     foreach_node(dnode,&fslist)
     {
         fs = DLIST_OBJ(dnode,w_fs_s,fsnode);
         if(wind_strcmp(path,fs->mount_path) == 0)
+        {
+            wind_error("mount path has been used");
             return W_ERR_REPEAT;
+        }
+            
         if(blkname == W_NULL)
             continue;
         if(wind_strcmp(blkname,fs->blkdev->name) == 0)
+        {
+            wind_error("block device has been used");
             return W_ERR_REPEAT;
+        }
+            
     }
     return W_ERR_OK;
 }
@@ -281,7 +296,7 @@ w_file_s* wind_fopen(const char *path,w_fmode_e fmode)
         return W_NULL;
     }
     len1 = wind_strlen(fs->mount_path);
-    realpath = wind_malloc(len-len1+1);
+    realpath = wind_malloc(len-len1+2);
     wind_strcpy(realpath,(const char*)&path[len1-1]);
     
     file = wind_file_get(fs,path);
@@ -307,6 +322,7 @@ w_file_s* wind_fopen(const char *path,w_fmode_e fmode)
     err = file->ops->open(file,(w_fmode_e)file->fmode);
     if(err != W_ERR_OK)
     {
+        wind_error("open file err:%d",err);
         wind_mutex_destroy(file->mutex);
         _file_free(file);
         wind_free(realpath);

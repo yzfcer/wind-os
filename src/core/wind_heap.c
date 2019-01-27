@@ -394,7 +394,7 @@ void *wind_malloc(w_uint32_t size)
             ptr = wind_heap_malloc(heap, size);
             if(ptr)
             {
-                wind_debug("ptr=0x%x",ptr);
+                wind_debug("wind_malloc:ptr=0x%x",ptr);
                 return ptr;
             }
                 
@@ -408,9 +408,9 @@ void *wind_malloc(w_uint32_t size)
 w_err_t wind_free(void *ptr)
 {
     w_heapitem_s *item;
+    wind_debug("wind_free:ptr=null");
     if(ptr == W_NULL)
     {
-        wind_debug("wind_free:ptr=null");
         return W_ERR_OK;
     }
     wind_debug("wind_free:ptr=0x%x",ptr);

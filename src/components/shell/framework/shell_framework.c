@@ -440,12 +440,17 @@ static w_err_t execute_cmd(w_shell_ctx_s *ctx)
         return W_ERR_FAIL;
     if((ctx->param.argc >= 2)&&(wind_strcmp(ctx->param.argv[1],"?") == 0))
     {
+        console_printf("\r\ncmd %s usage:\r\n",cmd->name);
         cmd->showusage();
         return W_ERR_OK;
     }
     err = cmd->execute(ctx->param.argc,ctx->param.argv);
     if(err != W_ERR_OK)
+    {
+        console_printf("\r\ncmd %s usage:\r\n",cmd->name);
         cmd->showusage();
+    }
+        
     return W_ERR_OK;
 }
 

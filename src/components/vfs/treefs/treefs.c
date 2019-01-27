@@ -37,8 +37,7 @@ static w_dnode_s *get_node_by_offset(w_dlist_s *list,w_uint32_t offset)
     idx = 0;
     foreach_node(dnode,list)
     {
-        if(dnode == W_NULL)
-            return W_NULL;
+        WIND_ASSERT_RETURN(dnode != W_NULL,W_NULL);
         if(idx == nodeidx)
             return dnode;
         idx ++;
@@ -58,11 +57,14 @@ int split_path(char *path,char **layers,w_int32_t layercnt)
     w_int32_t i,j,cnt = 0;
     int len = wind_strlen(path)+1;
     j = 0;
-    //wind_printf("path:%s\r\n",path);
     for(i = 0;i < layercnt;i ++)
     {
         if(cnt >= layercnt)
+        {
+            wind_error("path is too deep");
             return -1;
+        }
+            
         layers[i] = &path[j];
         for(;j < len;j ++)
         {
@@ -132,24 +134,41 @@ static treefile_s *search_node(const char *path)
     treefile_s *file = W_NULL;
     char **nameseg;
     char *pathname;
+    wind_debug("search node path:%s",path);
     nameseg = (char **)treefs_malloc(TREEFS_DIR_LAYCNT * sizeof(char*));
     len = wind_strlen(path);
     pathname = treefs_malloc(len+1);
     if(pathname == W_NULL || nameseg == W_NULL)
+    {
+        wind_error("alloc memory error");
         goto SEARCH_COMPLETE;
+    }
+        
+    wind_memset(pathname,0,len+1);
     wind_strcpy(pathname,path);
     pathname[len] = 0;
     cnt = split_path(pathname,nameseg,TREEFS_DIR_LAYCNT);
     if(cnt < 0)
+    {
+        wind_error("split path failed");
         goto SEARCH_COMPLETE;
+    }
+        
     file = treefs_get_root();
     if(cnt == 1)
+    {
+        wind_error("get treefs root failed");
         goto SEARCH_COMPLETE;
+    }
+        
     for(i = 1;i < cnt;i ++)
     {
         file = get_childnode(&file->tree,nameseg[i]);
         if(file == W_NULL)
-            return W_NULL;
+        {
+            wind_debug("get child node failed");
+            goto SEARCH_COMPLETE;
+        }
     }
 SEARCH_COMPLETE:
     if(pathname)
@@ -180,6 +199,7 @@ static treefile_s *make_node(const char *path)
     ptr = wind_strrchr(dirname,'/');
     if(ptr == W_NULL)
     {
+        wind_error("get dir failed,path:%s",path);
         treefs_free(dirname);
         return W_NULL;
     }
@@ -188,6 +208,7 @@ static treefile_s *make_node(const char *path)
     file = search_node(dirname);
     if(file == W_NULL)
     {
+        wind_error("search filenode failed");
         treefs_free(dirname);
         return W_NULL;
     }
@@ -247,7 +268,11 @@ w_err_t treefs_format(void)
         treefile_rm(root);
     root = mk_subnode(W_NULL,"",1);
     if(!root)
+    {
+        wind_error("make treefs root failed");
         return W_ERR_FAIL;
+    }
+        
     treefs_set_root(root);
     #if 1
     treefile_create("/var/");
@@ -264,7 +289,7 @@ w_err_t treefs_format(void)
     treefile_write(file,(w_uint8_t*)buff,wind_strlen(buff));
     buff = "version=1.1.23\r\n";
     treefile_write(file,(w_uint8_t*)buff,wind_strlen(buff));
-    buff = "path=/;/mnt/;/usr/;;\r\n";
+    buff = "path=/;/mnt/;/usr/;\r\n";
     treefile_write(file,(w_uint8_t*)buff,wind_strlen(buff));
     buff = "usr=root;wind;\r\n";
     treefile_write(file,(w_uint8_t*)buff,wind_strlen(buff));
@@ -284,7 +309,11 @@ treefile_s* treefile_open(const char *path,w_uint16_t mode)
     is_crt = (mode & TF_FMODE_CRT)?W_TRUE:W_FALSE;
     file = search_node(path);
     if((file == W_NULL) && !is_crt)
+    {
+        wind_error("open file is not existing");
         return W_NULL;
+    }
+        
     if(file == W_NULL)
         file = make_node(path);
     WIND_ASSERT_RETURN(file != W_NULL,W_NULL);

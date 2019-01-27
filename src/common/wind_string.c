@@ -44,7 +44,11 @@ char* wind_strncpy(char *dest,const char *src,w_uint32_t count)
 {
     w_uint32_t i;
     for(i = 0;i < count;i ++)
+    {
         dest[i] = src[i];
+        if(dest[i] == '\0')
+            break;
+    }
     dest[count -1] = '\0';
     return dest;
 }
