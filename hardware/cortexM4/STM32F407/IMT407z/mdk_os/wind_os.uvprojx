@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F40_41xxx,USE_STDPERIPH_DRIVER,_USE_USER_PRINT,__USE_C99_MATH</Define>
               <Undefine></Undefine>
-              <IncludePath>..\board;..\driver;..\port;..\start;..\..\..\..\..\src\api;..\..\..\..\..\src\application;..\..\..\..\..\src\common;..\..\..\..\..\src\core;..\..\..\..\..\src\driver;..\..\..\..\..\src\hal;..\..\..\..\..\src\lib;..\..\..\..\..\src\components\shell\framework;..\..\..\..\..\src\components\shell\cmd;..\..\..\..\..\src\components\cutest\framework;..\..\..\..\..\src\components\cutest\port;..\..\..\..\..\src\components\cutest\case;..\..\..\..\..\src\components\lua-5.3.4\src;..\..\..\..\..\src\components\xmodem;..\..\..\..\..\src\components\vfs;..\..\..\..\..\src\components\vfs\treefs</IncludePath>
+              <IncludePath>..\board;..\driver;..\port;..\start;..\..\..\..\..\src\api;..\..\..\..\..\src\application;..\..\..\..\..\src\common;..\..\..\..\..\src\core;..\..\..\..\..\src\driver;..\..\..\..\..\src\hal;..\..\..\..\..\src\lib;..\..\..\..\..\src\components\shell\framework;..\..\..\..\..\src\components\shell\cmd;..\..\..\..\..\src\components\cutest\framework;..\..\..\..\..\src\components\cutest\port;..\..\..\..\..\src\components\cutest\case;..\..\..\..\..\src\components\lua-5.3.4\src;..\..\..\..\..\src\components\vfs;..\..\..\..\..\src\components\vfs\treefs</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -972,6 +972,16 @@
               <FileType>5</FileType>
               <FilePath>..\..\..\..\..\src\common\wind_tree.h</FilePath>
             </File>
+            <File>
+              <FileName>wind_xmodem.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\common\wind_xmodem.h</FilePath>
+            </File>
+            <File>
+              <FileName>wind_xmodem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\common\wind_xmodem.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1541,21 +1551,6 @@
               <FileName>test_treefs.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\components\cutest\testcase\test_treefs.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>component_xmodem</GroupName>
-          <Files>
-            <File>
-              <FileName>xmodem.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\components\xmodem\xmodem.h</FilePath>
-            </File>
-            <File>
-              <FileName>xmodem.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\components\xmodem\xmodem.c</FilePath>
             </File>
           </Files>
         </Group>

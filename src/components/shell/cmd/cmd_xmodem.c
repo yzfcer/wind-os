@@ -19,11 +19,7 @@
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
 #include "wind_cmd.h"
-#include "wind_heap.h"
-#include "wind_std.h"
-#include "xmodem.h"
-#if WIND_XMODEM_SUPPORT
-#include "treefs.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
@@ -32,7 +28,10 @@ extern "C" {
 /*********************************************头文件定义***********************************************/
 
 #if (WIND_CONSOLE_SUPPORT && CMD_XMODEM_SUPPORT)
-
+#include "wind_heap.h"
+#include "wind_std.h"
+#include "wind_xmodem.h"
+#include "treefs.h"
 /********************************************内部变量定义**********************************************/
 
 
@@ -210,4 +209,3 @@ COMMAND_DEF(xm);
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus
-#endif

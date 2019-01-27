@@ -98,9 +98,6 @@
 
 #define WIND_LUA_SUPPORT 0 //是否支持lua脚本语言
 
-#define WIND_XMODEM_SUPPORT 0 //是否支持XMODEM协议
-
-
 #define HARD_STACK_SIZE 40 //为硬件堆栈保留的空间大小，在某些硬件里可以不需要
 
 //-------------------------------------------------------------------------------

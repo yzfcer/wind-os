@@ -1,9 +1,8 @@
-#include "xmodem.h"  
+#include "wind_xmodem.h"  
 #include "wind_string.h"  
 #include "wind_debug.h"  
 #include "wind_crc16.h"  
 #include "wind_log.h"  
-#if WIND_XMODEM_SUPPORT
 
 #define SOH  0x01
 #define STX  0x02
@@ -474,8 +473,6 @@ w_int32_t xmodem_send(xm_ctx_s *ctx,w_uint8_t *data, w_int32_t size)
                 return size;
             }
             break;
-        //case XM_SEND_EOT:
-        //    break;
         case XM_ERROR:
             wind_log_notice("XM_ERROR");
             xmodem_end(ctx);
@@ -509,5 +506,4 @@ w_err_t xmodem_end(xm_ctx_s *ctx)
 }
 
 
-#endif
 
