@@ -34,8 +34,6 @@
 extern "C" {
 #endif
 
-#define console_printf(fmt,...) wind_printf(fmt,##__VA_ARGS__)
-
 #define COMMAND_DISC(cmdname) static void cmd_##cmdname##_disc(void)
 #define COMMAND_USAGE(cmdname) static void cmd_##cmdname##_help(void)
 #define COMMAND_MAIN(cmdname,argc,argv) static w_err_t cmd_##cmdname##_main(w_int32_t argc,char **argv)

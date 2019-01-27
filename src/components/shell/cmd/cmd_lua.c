@@ -44,19 +44,19 @@ extern "C" {
 /********************************************全局函数定义**********************************************/
 COMMAND_DISC(lua)
 {
-    console_printf("enter lua shell mode.\r\n");
+    wind_printf("enter lua shell mode.\r\n");
 }
 
 COMMAND_USAGE(lua)
 {
-    console_printf("lua:to run into lua application.\r\n");
+    wind_printf("lua:to run into lua application.\r\n");
 }
 #if 1
 extern int lua_main (int argc, char **argv);
 #else
 int lua_main (int argc, char **argv)
 {
-    console_printf("NOT support.\n");
+    wind_printf("NOT support.\n");
     return 0;
 }
 #endif

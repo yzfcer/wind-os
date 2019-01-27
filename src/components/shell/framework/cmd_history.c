@@ -36,7 +36,7 @@ void cmd_history_print(w_cmd_his_s *his)
     int i;
     for(i = 0;i < CMD_HISTORY_COUNT;i ++)
     {
-        console_printf("cmd:%s\r\n",his->hiscmd[i]);
+        wind_printf("cmd:%s\r\n",his->hiscmd[i]);
     }
 }
 

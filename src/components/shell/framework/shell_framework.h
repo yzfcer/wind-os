@@ -43,7 +43,9 @@ extern "C" {
 #define WIND_SHELL_CTX_COUNT 1//支持的控制套终端的数量
 #define CMD_PARAM_CNT 10
 
-#define USER_AUTHENTICATION_EN 0
+#define USER_AUTH_ENABLE 1
+#define USER_AUTH_ERR_MAX 5
+#define USER_AUTH_WAIT_SEC 60
     
 
 
@@ -81,14 +83,15 @@ typedef struct __cmd_param_s
 }w_cmd_param_s;
 
 
-typedef struct __console_s
+typedef struct __w_shell_ctx_s
 {
     w_ctlstat_e stat;//当前的解析状态
     w_int32_t index;//命令的下一个字符下标
     w_int8_t key_evt_f;
     w_int8_t key_evt_len;
-    w_uint32_t key_evt_id;
     w_uint16_t key_value;
+    w_uint32_t key_evt_id;
+    w_int8_t autherr_cnt;
     char buf[WIND_CMD_MAX_LEN];//接收的数据缓存区
     char user[WIND_CTL_USRNAME_LEN];//用户名
     char pwd[WIND_CTL_PWD_LEN];//密码的值

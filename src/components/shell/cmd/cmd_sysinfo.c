@@ -45,12 +45,12 @@ extern "C" {
 /********************************************全局函数定义**********************************************/
 COMMAND_DISC(sysinfo)
 {
-    console_printf("to display system infomation.\r\n");
+    wind_printf("to display system infomation.\r\n");
 }
 
 COMMAND_USAGE(sysinfo)
 {
-    console_printf("sysinfo:to show system infomation of the device.\r\n");
+    wind_printf("sysinfo:to show system infomation of the device.\r\n");
 }
 
 COMMAND_MAIN(sysinfo,argc,argv)

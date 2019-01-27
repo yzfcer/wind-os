@@ -30,15 +30,15 @@
 
 COMMAND_DISC(blkdev)
 {
-    console_printf("conreol one block device.\r\n");
+    wind_printf("conreol one block device.\r\n");
 }
 
 COMMAND_USAGE(blkdev)
 {
-    console_printf("blkdev list:to show all block devices.\r\n");
-    console_printf("blkdev <dev> read <addr> <blknum>:to read date from the block device.\r\n");
-    console_printf("blkdev <dev> write <addr> <string>:to write into the block device.\r\n");
-    console_printf("blkdev <dev> erase <addr> <blknum>:to erase the block device sectors.\r\n");
+    wind_printf("blkdev list:to show all block devices.\r\n");
+    wind_printf("blkdev <dev> read <addr> <blknum>:to read date from the block device.\r\n");
+    wind_printf("blkdev <dev> write <addr> <string>:to write into the block device.\r\n");
+    wind_printf("blkdev <dev> erase <addr> <blknum>:to erase the block device sectors.\r\n");
 }
 
 
@@ -76,7 +76,7 @@ COMMAND_MAIN(blkdev,argc,argv)
         }
         else
         {
-            console_printf("%s",buff);
+            wind_printf("%s",buff);
             err = W_ERR_OK;
         }
     }

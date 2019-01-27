@@ -52,23 +52,23 @@ w_err_t cmd_stat_show_heap_main(w_int32_t argc,char **argv)
 
 w_err_t cmd_stat_show_cpuusage_main(w_int32_t argc,char **argv)
 {
-    console_printf("cpu usage persage:%d%%\r\n",WIND_CPU_USAGE);
+    wind_printf("cpu usage persage:%d%%\r\n",WIND_CPU_USAGE);
     return W_ERR_OK;    
 }
 
 
 COMMAND_DISC(stati)
 {
-    console_printf("show some statistics infomation.\r\n");
+    wind_printf("show some statistics infomation.\r\n");
 }
 
 COMMAND_USAGE(stati)
 {
-    console_printf("stati pool:to show system pools statistics info.\r\n");
+    wind_printf("stati pool:to show system pools statistics info.\r\n");
 #if WIND_HEAP_SUPPORT
-    console_printf("stati heap:to show system heaps statistics info.\r\n");
+    wind_printf("stati heap:to show system heaps statistics info.\r\n");
 #endif
-    console_printf("stati cpuusage:to show current cpu usage persent.\r\n");
+    wind_printf("stati cpuusage:to show current cpu usage persent.\r\n");
 }
 
 COMMAND_MAIN(stati,argc,argv)

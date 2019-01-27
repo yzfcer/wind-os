@@ -80,17 +80,17 @@ static void print_mem(w_uint32_t start,w_uint32_t len)
     w_uint32_t i,va;
     start = ((start >> 2) << 2);
     len = ((len + 3) >> 2);
-    console_printf("memory 0x%0x %d\r\n",start,len);
+    wind_printf("memory 0x%0x %d\r\n",start,len);
     for(i = 0;i < len;i ++)
     {
         if((i & 0x03) == 0)
-            console_printf("0x%08x:  ",start+i*4);
+            wind_printf("0x%08x:  ",start+i*4);
         va = *(w_uint32_t*)((void*)(start+i*4));
-        console_printf("%08x ",va);
+        wind_printf("%08x ",va);
         if(((i+1) & 0x03) == 0)
-            console_printf("\r\n");
+            wind_printf("\r\n");
     }
-    console_printf("\r\n");
+    wind_printf("\r\n");
 }
 
 static w_err_t display_mem(w_int32_t argc,char **argv)
@@ -129,11 +129,11 @@ static w_err_t display_stack(w_int32_t argc,char **argv)
     len = (end - cur);
     used = (end - cur) / sizeof(w_stack_t*);
     
-    console_printf("stack start :0x%08X\r\n",start);
-    console_printf("stack end   :0x%08X\r\n",end);
-    console_printf("stack cur   :0x%08X\r\n",cur);
-    console_printf("stack size  :%d\r\n",thr->stksize);
-    console_printf("stack used  :%d\r\n",used);
+    wind_printf("stack start :0x%08X\r\n",start);
+    wind_printf("stack end   :0x%08X\r\n",end);
+    wind_printf("stack cur   :0x%08X\r\n",cur);
+    wind_printf("stack size  :%d\r\n",thr->stksize);
+    wind_printf("stack used  :%d\r\n",used);
     if(len <= 4096)
         print_mem(cur,len);
     return W_ERR_OK;
@@ -143,13 +143,13 @@ static w_err_t display_stack(w_int32_t argc,char **argv)
 
 COMMAND_DISC(mem)
 {
-    console_printf("show memory data values.\r\n");
+    wind_printf("show memory data values.\r\n");
 }
 
 COMMAND_USAGE(mem)
 {
-    console_printf("mem <start> <lenth>:to show thread infomation.\r\n");
-    console_printf("mem stack <threadname>:to show thread stack infomation.\r\n");
+    wind_printf("mem <start> <lenth>:to show thread infomation.\r\n");
+    wind_printf("mem stack <threadname>:to show thread stack infomation.\r\n");
 }
 
 COMMAND_MAIN(mem,argc,argv)
@@ -158,7 +158,7 @@ COMMAND_MAIN(mem,argc,argv)
         return W_ERR_OK;
     else if(display_stack(argc,argv) == W_ERR_OK)
         return W_ERR_OK;
-    console_printf("command [%s] format error.\r\n",argv[0]);
+    wind_printf("command [%s] format error.\r\n",argv[0]);
     return W_ERR_FAIL;
 }
 

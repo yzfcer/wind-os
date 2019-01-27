@@ -46,15 +46,15 @@ extern "C" {
 /********************************************全局函数定义**********************************************/
 COMMAND_DISC(thread)
 {
-    console_printf("to control thread status.\r\n");
+    wind_printf("to control thread status.\r\n");
 }
 
 COMMAND_USAGE(thread)
 {
-    console_printf("thread start <threadname>:to start a thread.\r\n");
-    console_printf("thread suspend <threadname>:to suspend a thread.\r\n");
-    console_printf("thread kill <threadname>:to kill a thread.\r\n");
-    console_printf("thread setprio <threadname> <prio>:to change a thread priority.\r\n");
+    wind_printf("thread start <threadname>:to start a thread.\r\n");
+    wind_printf("thread suspend <threadname>:to suspend a thread.\r\n");
+    wind_printf("thread kill <threadname>:to kill a thread.\r\n");
+    wind_printf("thread setprio <threadname> <prio>:to change a thread priority.\r\n");
 }
 
 COMMAND_MAIN(thread,argc,argv)

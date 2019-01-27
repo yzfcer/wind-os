@@ -28,13 +28,13 @@
 
 COMMAND_DISC(led)
 {
-    console_printf("control a led device.\r\n");
+    wind_printf("control a led device.\r\n");
 }
 
 COMMAND_USAGE(led)
 {
-    console_printf("led on <ledindex>:to open a led device.\r\n");
-    console_printf("led off <ledindex>:to close a led device.\r\n");
+    wind_printf("led on <ledindex>:to open a led device.\r\n");
+    wind_printf("led off <ledindex>:to close a led device.\r\n");
 }
 
 COMMAND_MAIN(led,argc,argv)

@@ -44,12 +44,12 @@ extern "C" {
 /********************************************全局函数定义**********************************************/
 COMMAND_DISC(echo)
 {
-    console_printf("to display echo string that you input.\r\n");
+    wind_printf("to display echo string that you input.\r\n");
 }
 
 COMMAND_USAGE(echo)
 {
-    console_printf("echo <str>:to show str on your std displaying device.\r\n");
+    wind_printf("echo <str>:to show str on your std displaying device.\r\n");
 }
 
 COMMAND_MAIN(echo,argc,argv)
@@ -57,7 +57,7 @@ COMMAND_MAIN(echo,argc,argv)
     char *str;
     WIND_ASSERT_RETURN(argc >= 2,W_ERR_INVALID);
     str = argv[1];
-    console_printf("%s",str);
+    wind_printf("%s",str);
     return W_ERR_OK;
 }
 

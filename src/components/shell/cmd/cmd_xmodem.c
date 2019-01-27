@@ -184,13 +184,13 @@ XM_PUT_END:
 /********************************************全局函数定义**********************************************/
 COMMAND_DISC(xm)
 {
-    console_printf("to translate file data via xmodem protocol.\r\n");
+    wind_printf("to translate file data via xmodem protocol.\r\n");
 }
 
 COMMAND_USAGE(xm)
 {
-    console_printf("xm get <localfile>:to receive a file save as localfile.\r\n");
-    console_printf("xm put <localfile>:to send localfile to remote host via xmodem.\r\n");
+    wind_printf("xm get <localfile>:to receive a file save as localfile.\r\n");
+    wind_printf("xm put <localfile>:to send localfile to remote host via xmodem.\r\n");
 }
 
 COMMAND_MAIN(xm,argc,argv)

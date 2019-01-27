@@ -70,7 +70,7 @@ static int copy_dir(char *root_dir,char *path)
     File_Handle = _findfirst(newpath,&fileinfo);
     if(File_Handle==-1)
     {
-        console_printf("dir is NOT exist.\n");
+        wind_printf("dir is NOT exist.\n");
         return 0;
     }
     do
@@ -79,12 +79,12 @@ static int copy_dir(char *root_dir,char *path)
         wind_sprintf(newpath,"%s\\%s",path,fileinfo.name);
         if(_A_ARCH & fileinfo.attrib)
         {
-            //console_printf("FILE : %s\\%s\n",path,fileinfo.name);
+            //wind_printf("FILE : %s\\%s\n",path,fileinfo.name);
             mk_fat32_file(root_dir,&fileinfo,newpath);
         }
         else if(_A_SUBDIR & fileinfo.attrib)
         {
-            //console_printf("DIR  : %s\\%s\n",path,fileinfo.name);
+            //wind_printf("DIR  : %s\\%s\n",path,fileinfo.name);
             mk_fat32_dir(root_dir,&fileinfo,newpath);
             if((wind_strcmp(".",fileinfo.name) != 0)&&(wind_strcmp("..",fileinfo.name) != 0))
             {
@@ -131,12 +131,12 @@ static w_err_t mkfs_fat32(w_int32_t argc,char **argv)
 /********************************************全局函数定义**********************************************/
 COMMAND_DISC(mkfs)
 {
-    console_printf("to display mkfs string that you input.\r\n");
+    wind_printf("to display mkfs string that you input.\r\n");
 }
 
 COMMAND_USAGE(mkfs)
 {
-    console_printf("mkfs fat32 <dir> <fsfile> <fssize>:to  make a file system image.\r\n");
+    wind_printf("mkfs fat32 <dir> <fsfile> <fssize>:to  make a file system image.\r\n");
 }
 
 //mkfs fat32 <dir> <fsfile> <fssize> 
@@ -156,7 +156,7 @@ COMMAND_MAIN(mkfs,argc,argv)
         copy_dir("F:\\color","F:\\color");
     }
     else
-        console_printf("mkfs command invalid.\r\n");
+        wind_printf("mkfs command invalid.\r\n");
     wind_free(buff);
     buff = W_NULL;
     return err;

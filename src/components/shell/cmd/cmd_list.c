@@ -41,43 +41,43 @@
 
 COMMAND_DISC(list)
 {
-    console_printf("show core objects infomation.\r\n");
+    wind_printf("show core objects infomation.\r\n");
 }
 
 COMMAND_USAGE(list)
 {
-    console_printf("list thread:show thread infomation.\r\n");
-    console_printf("list mutex:show all mutex status.\r\n");
-    console_printf("list pool:show all core object pools.\r\n");
+    wind_printf("list thread:show thread infomation.\r\n");
+    wind_printf("list mutex:show all mutex status.\r\n");
+    wind_printf("list pool:show all core object pools.\r\n");
     
 #if WIND_SEM_SUPPORT
-        console_printf("list sem:show sem infomation.\r\n");
+        wind_printf("list sem:show sem infomation.\r\n");
 #endif
 #if WIND_EVENT_SUPPORT
-    console_printf("list event:show event infomation.\r\n");
+    wind_printf("list event:show event infomation.\r\n");
 #endif
 #if WIND_PIPE_SUPPORT
-    console_printf("list pipe:show all pipe infomation.\r\n");
+    wind_printf("list pipe:show all pipe infomation.\r\n");
 #endif
 #if WIND_MSGBOX_SUPPORT
-    console_printf("list msgbox:show all message box infomation.\r\n");
+    wind_printf("list msgbox:show all message box infomation.\r\n");
 #endif
 #if WIND_HEAP_SUPPORT
-    console_printf("list heap:show all heap map infomation.\r\n");
-    console_printf("list heapitem:show all heapitems infomation.\r\n");
+    wind_printf("list heap:show all heap map infomation.\r\n");
+    wind_printf("list heapitem:show all heapitems infomation.\r\n");
 #endif
 #if WIND_TIMER_SUPPORT
-    console_printf("list timer:show all timer infomation.\r\n");
+    wind_printf("list timer:show all timer infomation.\r\n");
 #endif
 
 #if WIND_DRVFRAME_SUPPORT
-    console_printf("list chdev:show all character devices list.\r\n");
+    wind_printf("list chdev:show all character devices list.\r\n");
 #endif
 #if WIND_BLK_DRVFRAME_SUPPORT
-    console_printf("list blkdev:show all block devices list.\r\n");
+    wind_printf("list blkdev:show all block devices list.\r\n");
 #endif
 #if WIND_WATCHDOG_SUPPORT
-    console_printf("list watchdog:show all thread watchdog.\r\n");
+    wind_printf("list watchdog:show all thread watchdog.\r\n");
 #endif
 }
 

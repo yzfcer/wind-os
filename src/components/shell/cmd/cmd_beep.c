@@ -29,13 +29,13 @@
 
 COMMAND_DISC(beep)
 {
-    console_printf("control the beep device.\r\n");
+    wind_printf("control the beep device.\r\n");
 }
 
 COMMAND_USAGE(beep)
 {
-    console_printf("beep on:to open the beep device.\r\n");
-    console_printf("beep off:to close the beep device.\r\n");
+    wind_printf("beep on:to open the beep device.\r\n");
+    wind_printf("beep off:to close the beep device.\r\n");
 }
 
 COMMAND_MAIN(beep,argc,argv)

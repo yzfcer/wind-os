@@ -1,6 +1,6 @@
 #include "stdio.h"
 #include "wind_std.h"
-#include "console_framework.h"
+#include "shell_framework.h"
 #include "wind_string.h"
 #include "lua.h"
 #define LUA_MAXINPUT 512
