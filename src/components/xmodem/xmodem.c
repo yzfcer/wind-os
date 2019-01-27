@@ -64,6 +64,12 @@ static w_err_t xm_check_recv_data(xm_ctx_s *ctx)
     return W_ERR_OK;
 }
 
+static void xm_write_cancel(xm_ctx_s *ctx)
+{
+    ctx->write(CAN);
+    ctx->write(CAN);
+    ctx->write(CAN);
+}
 
 static w_err_t xm_handle_head(xm_ctx_s *ctx)
 {
@@ -105,7 +111,6 @@ static w_err_t xm_handle_head(xm_ctx_s *ctx)
 static w_err_t xm_recv_wait_head(xm_ctx_s *ctx)
 {
     w_int32_t i;
-    ctx->pack_no = 1;
     wind_memset(ctx->frbuff,0,XMODEM_BUFF_LEN);
     for(i = 0;i < WAIT_START_SEC;i ++)
     {
@@ -166,7 +171,6 @@ static w_err_t xm_recv_copy_data(xm_ctx_s *ctx)
     if(ctx->retry <= MAXRETRANS)
     {
         wind_log_notice("retry times:%d",ctx->retry);
-        //ctx->retry = 0;
         ctx->ack = NAK;
         ctx->stat = XM_RECV_ACK;
         return W_ERR_FAIL;
@@ -207,6 +211,8 @@ w_err_t xmodem_init(xm_ctx_s *ctx,xm_dir_e dir,
     WIND_ASSERT_RETURN(frbuffsize >= XMODEM_BUFF_LEN,W_ERR_INVALID);
     WIND_ASSERT_RETURN(write != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(read != W_NULL,W_ERR_PTR_NULL);
+    wind_log_open();
+    wind_log_notice("--------------------------");
     wind_memset(ctx,0,sizeof(xm_ctx_s));
     if(dir == XM_DIR_RECV)
         ctx->stat = XM_RECV_WAIT_HEAD;
@@ -215,6 +221,7 @@ w_err_t xmodem_init(xm_ctx_s *ctx,xm_dir_e dir,
     ctx->dir = dir;
     ctx->crcmode = 1;
     ctx->trychar = 'C';
+    ctx->pack_no = 1;
     
     ctx->frbuff = frbuff;
     ctx->frbuffsize = frbuffsize;
@@ -222,26 +229,11 @@ w_err_t xmodem_init(xm_ctx_s *ctx,xm_dir_e dir,
     ctx->read = read;
     ctx->write = write;
     ctx->write(CAN);
-    wind_log_open();
     return W_ERR_OK;
 }
 
 
-w_err_t xmodem_end(xm_ctx_s *ctx)
-{
-    WIND_ASSERT_RETURN(ctx != W_NULL,W_ERR_PTR_NULL);
-    wind_log_close();
-    if(ctx->stat != XM_IDLE)
-    {
-        ctx->write(CAN);
-        ctx->write(CAN);
-        ctx->write(CAN);
-    }
-    ctx->stat = XM_IDLE;
-    ctx->frbuff = W_NULL;
-    ctx->dir = XM_DIR_INIT;
-    return W_ERR_OK;
-}
+
 
 w_int32_t xmodem_recv(xm_ctx_s *ctx,w_uint8_t *data, w_int32_t size)
 {
@@ -306,17 +298,21 @@ static w_err_t xm_send_wait_start(xm_ctx_s *ctx)
         switch(ch)
         {
         case 'C':
+            wind_log_notice("receive C,crc mode");
             ctx->crcmode = 1;
             ctx->stat = XM_SEND_PACK_DATA;
             return W_ERR_OK;
         case NAK:
+            wind_log_notice("receive NAK,sum mode");
             ctx->crcmode = 0;
             ctx->stat = XM_SEND_PACK_DATA;
             return W_ERR_OK;
         default:
+            wind_log_notice("unexepcted req:0x%x",ch);
             break;    
         }  
     } 
+    wind_log_error("wait send req failed");
     ctx->stat = XM_ERROR;
     return W_ERR_FAIL;
 }
@@ -328,22 +324,31 @@ static w_err_t xm_send_wait_ack(xm_ctx_s *ctx)
     for(i = 0;i < 10;i++)
     {
         cnt = ctx->read(&ch,(DLY_1S)<<1);
-        if(cnt <= 0) 
+        if(cnt <= 0)
             continue;
         switch(ch)
         {
         case ACK:
+            wind_log_notice("receive ACK");
             ctx->pack_no ++;
+            ctx->buffidx += ctx->frdatalen;
             ctx->stat = XM_SEND_PACK_DATA;
             return W_ERR_OK;
         case NAK:
-            ctx->stat = XM_SEND_PACK_DATA;
+            wind_log_notice("receive NAK,retry");
+            ctx->retry ++;
+            if(ctx->retry >= MAXRETRANS)
+                ctx->stat = XM_ERROR;
+            else
+                ctx->stat = XM_SEND_PACK_DATA;
             return W_ERR_OK;
         case CAN:
+            wind_log_notice("receive CAN,answer and stop");
             ctx->write(ACK);
             ctx->stat = XM_IDLE;
             return W_ERR_FAIL;
         default:
+            wind_log_notice("unexepcted req:0x%x",ch);
             break;
         }  
     } 
@@ -360,18 +365,20 @@ static w_int32_t xm_send_set_data_verify(xm_ctx_s *ctx)
     if(ctx->crcmode)
     {
         ccrc = wind_crc16(&ctx->frbuff[3], ctx->frdatalen,0);
-        ctx->frbuff[ctx->frdatalen+3] =(ccrc>>8) & 0xFF;
-        ctx->frbuff[ctx->frdatalen+4] = ccrc & 0xFF;
-        return ctx->frdatalen+5;
+        ctx->frbuff[ctx->frdatalen+3] =((ccrc>>8) & 0xFF);
+        ctx->frbuff[ctx->frdatalen+4] = (ccrc & 0xFF);
+        ctx->frlen = ctx->frdatalen+5;
+        return ctx->frlen;
     }
     else  
     {
-        for(i = 3;i < ctx->frdatalen+3;++i)
+        for(i = 0;i < ctx->frdatalen;i++)
         {
-            sum += ctx->frbuff[i];
+            sum += ctx->frbuff[i+3];
         }
         ctx->frbuff[ctx->frdatalen+3] = sum;
-        return ctx->frdatalen+4;
+        ctx->frlen = ctx->frdatalen+4;
+        return ctx->frlen;
     }
 
 }
@@ -379,18 +386,30 @@ static w_int32_t xm_send_set_data_verify(xm_ctx_s *ctx)
 static w_int32_t xm_send_pack_data(xm_ctx_s *ctx)
 {
     w_int32_t len;
-    if(ctx->bufflen - ctx->buffidx >= 128)
+
+    if(ctx->buffidx >= ctx->bufflen)
+    {
+        wind_log_error("pack no data");
+        ctx->stat = XM_ERROR;
+        return -1;
+    }
+    wind_log_notice("pack no:%d",ctx->pack_no);
+    if(ctx->bufflen >= ctx->buffidx + 128)
         len = 128;
     else
         len = ctx->bufflen - ctx->buffidx;
-    ctx->frbuff[0] = SOH;
     ctx->frdatalen = 128;
+    ctx->frlen = 128 + 4;
+    if(ctx->crcmode)
+        ctx->frlen ++;
+    ctx->frbuff[0] = SOH;
     ctx->frbuff[1] = ctx->pack_no;
     ctx->frbuff[2] = ~ctx->pack_no;
     wind_memset(&ctx->frbuff[3], CTRLZ, ctx->frdatalen);
     wind_memcpy(&ctx->frbuff[3], &ctx->buff[ctx->buffidx],len);
-    ctx->buffidx += len;
-    return xm_send_set_data_verify(ctx);
+    xm_send_set_data_verify(ctx);
+    ctx->stat = XM_SEND_DATA;
+    return ctx->frlen;
 }
 
 
@@ -398,63 +417,97 @@ static w_int32_t xm_send_pack_data(xm_ctx_s *ctx)
 static void xm_send_data(xm_ctx_s *ctx)
 {
     w_int32_t i;
-    for(i = 0;i < ctx->frbuffsize;i ++)
+    wind_log_notice("xm_send_data %d",ctx->frlen);
+    for(i = 0;i < ctx->frlen;i ++)
         ctx->write(ctx->frbuff[i]);
+    ctx->stat = XM_SEND_WAIT_ACK;
 }
 
 static w_err_t xm_send_eot(xm_ctx_s *ctx)
 {
     w_int32_t i,cnt;
-    w_uint8_t ack = 0;
+    w_uint8_t ch = 0;
     for(i = 0;i < 10;i++)
     {
         ctx->write(EOT);
-        cnt = ctx->read(&ack,(DLY_1S)<<1);
-        if((cnt > 0)&&(ack == ACK))
+        cnt = ctx->read(&ch,(DLY_1S)<<1);
+        if(cnt <= 0)
+            continue;
+        wind_log_notice("xm_send_eot recv 0x%x",ch);
+        if(ch == ACK)
             return W_ERR_OK;
     }
+    wind_log_error("xm_send_eot failed");
     return W_ERR_FAIL;
 }
 
 w_int32_t xmodem_send(xm_ctx_s *ctx,w_uint8_t *data, w_int32_t size)
 {
-    w_err_t err;
     WIND_ASSERT_RETURN(ctx != W_NULL,-1);
     WIND_ASSERT_RETURN(data != W_NULL,-1);
     WIND_ASSERT_RETURN(size > 0,-1);
     ctx->buff = data;
     ctx->bufflen = size;
+    ctx->buffidx = 0;
     for(;;)
     {
         switch(ctx->stat)
         {
         case XM_SEND_WAIT_START:
+            wind_log_notice("XM_SEND_WAIT_START");
             xm_send_wait_start(ctx);
             break;
         case XM_SEND_PACK_DATA:
+            wind_log_notice("XM_SEND_PACK_DATA");
             xm_send_pack_data(ctx);
             break;
         case XM_SEND_DATA:
+            wind_log_notice("XM_SEND_DATA");
             xm_send_data(ctx);
-            if(ctx->buffidx >= ctx->bufflen)
-                return ctx->buffidx;
             break;
         case XM_SEND_WAIT_ACK:
+            wind_log_notice("XM_SEND_WAIT_ACK");
             xm_send_wait_ack(ctx);
+            if(ctx->buffidx >= size)
+            {
+                wind_log_notice("send block:%d",size);
+                return size;
+            }
             break;
-        case XM_SEND_EOT:
-            err = xm_send_eot(ctx);
-            if(err == W_ERR_OK)
-                return ctx->buffidx;
-            break;
+        //case XM_SEND_EOT:
+        //    break;
         case XM_ERROR:
+            wind_log_notice("XM_ERROR");
             xmodem_end(ctx);
             return -1;
+        case XM_IDLE:
         default:
             return 0;
         }
     }  
 }  
+
+w_err_t xmodem_end(xm_ctx_s *ctx)
+{
+    WIND_ASSERT_RETURN(ctx != W_NULL,W_ERR_PTR_NULL);
+    wind_log_notice("xmodem_end");
+    if((ctx->stat == XM_SEND_PACK_DATA)&&(ctx->dir == XM_DIR_SEND))
+    {
+        wind_log_notice("send eot req");
+        xm_send_eot(ctx);
+    }
+    else if(ctx->stat != XM_IDLE)
+    {
+        wind_log_notice("send cancel req");
+        xm_write_cancel(ctx);
+    }
+    ctx->stat = XM_IDLE;
+    ctx->frbuff = W_NULL;
+    ctx->dir = XM_DIR_INIT;
+    wind_log_close();
+    return W_ERR_OK;
+}
+
 
 #endif
 

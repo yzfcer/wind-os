@@ -144,7 +144,8 @@ void wind_print_space(w_int32_t space8_cnt);
 //---------------------------------------------------------------------
 //ÅÐ¶ÏÌõ¼þ¶ÏÑÔ
 #define WIND_ASSERT_RETURN(cond,res) do{if(!(cond)) {wind_error("ASSERT(%s)",#cond);return res;}}while(0)
-#define WIND_ASSERT_TODO(cond,todo,res) do{if(!(cond)) {todo;return res;}}while(0)
+#define WIND_ASSERT_TODO_RETURN(cond,todo,res) do{if(!(cond)) {todo;return res;}}while(0)
+#define WIND_ASSERT_TODO(cond,todo) do{if(!(cond)) {todo;}}while(0)
     
         
 

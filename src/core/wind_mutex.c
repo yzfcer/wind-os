@@ -110,7 +110,7 @@ w_err_t wind_mutex_trydestroy(w_mutex_s *mutex)
     WIND_ASSERT_RETURN(mutex != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(mutex->magic == WIND_MUTEX_MAGIC,W_ERR_INVALID);
     wind_disable_interrupt();
-    WIND_ASSERT_TODO(mutex->mutexed == W_FALSE,wind_enable_interrupt(),W_ERR_FAIL);
+    WIND_ASSERT_TODO_RETURN(mutex->mutexed == W_FALSE,wind_enable_interrupt(),W_ERR_FAIL);
     wind_mutex_destroy(mutex);
     wind_enable_interrupt();
     return W_ERR_OK;    
@@ -201,9 +201,9 @@ w_err_t wind_mutex_unlock(w_mutex_s *mutex)
     WIND_ASSERT_RETURN(mutex != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(mutex->magic == WIND_MUTEX_MAGIC,W_ERR_INVALID);
     wind_disable_interrupt();
-    WIND_ASSERT_TODO(mutex->mutexed,wind_enable_interrupt(),W_ERR_OK);
+    WIND_ASSERT_TODO_RETURN(mutex->mutexed,wind_enable_interrupt(),W_ERR_OK);
     thread = wind_thread_current();
-    WIND_ASSERT_TODO(mutex->owner == thread,wind_enable_interrupt(),W_ERR_FAIL);
+    WIND_ASSERT_TODO_RETURN(mutex->owner == thread,wind_enable_interrupt(),W_ERR_FAIL);
     if(mutex->nest > 0)
         mutex->nest --;
     if(mutex->nest > 0)

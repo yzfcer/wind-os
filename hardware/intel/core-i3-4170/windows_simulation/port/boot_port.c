@@ -48,7 +48,7 @@ w_int32_t boot_receive_img(w_part_s *part)
         if(len > 0)
         {
             len = boot_part_write(part,offset,buff,len);
-            WIND_ASSERT_TODO(len > 0,fclose(file),-1);
+            WIND_ASSERT_TODO_RETURN(len > 0,fclose(file),-1);
             offset += len;
         }
         else

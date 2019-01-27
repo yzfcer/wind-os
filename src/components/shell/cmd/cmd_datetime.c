@@ -92,7 +92,7 @@ COMMAND_USAGE(datetime)
 
 COMMAND_MAIN(datetime,argc,argv)
 {
-    WIND_ASSERT_RETURN(argc >= 2,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(argc >= 1,W_ERR_INVALID);
     if(argc == 1)
     {
         return cmd_showdatetime(argc,argv);

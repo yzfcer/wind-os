@@ -367,7 +367,7 @@ w_err_t _wind_thread_wakeup(void)
     w_dnode_s *dnode;
     w_thread_s *thread;
     wind_disable_interrupt();
-    WIND_ASSERT_TODO(RUN_FLAG,wind_enable_interrupt(),W_ERR_OK);
+    WIND_ASSERT_TODO_RETURN(RUN_FLAG,wind_enable_interrupt(),W_ERR_OK);
     foreach_node(dnode,&sleeplist)
     {
         thread = PRI_DLIST_OBJ(dnode,w_thread_s,sleepnode);

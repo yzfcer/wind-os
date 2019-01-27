@@ -91,7 +91,7 @@ static treefile_s *mk_subnode(treefile_s *parent,char *nodename,w_uint8_t isdir)
     fsnode = treefs_malloc(sizeof(treefile_s));
     WIND_ASSERT_RETURN(fsnode != W_NULL,W_NULL);
     fsnode->filename = treefs_malloc(len+1);
-    WIND_ASSERT_TODO(fsnode->filename != W_NULL,treefs_free(fsnode),W_NULL);
+    WIND_ASSERT_TODO_RETURN(fsnode->filename != W_NULL,treefs_free(fsnode),W_NULL);
     
     fsnode->magic = TREEFILE_MAGIC;
     wind_tree_init(&fsnode->tree);

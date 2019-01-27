@@ -69,18 +69,32 @@ static w_err_t cmd_xmodem_get(int argc,char **argv)
 {
     w_err_t err = W_ERR_OK;
     w_int32_t len;
-    treefile_s *file;
-    w_uint8_t *buff,*xbuff;
+    treefile_s *file = W_NULL;
+    w_uint8_t *buff = W_NULL,*xbuff = W_NULL;
     if(argv[2][0] != '/')
     {
         wind_error("unknown file path.");
         return W_ERR_INVALID;
     }
     buff = wind_malloc(4096);
-    WIND_ASSERT_RETURN(buff != W_NULL,W_ERR_MEM);
+    if(buff == W_NULL)
+    {
+        err = W_ERR_MEM;
+        goto XM_GET_END;
+    }
     xbuff = wind_malloc(XMODEM_BUFF_LEN);
-    WIND_ASSERT_TODO(xbuff != W_NULL,wind_free(buff),W_ERR_MEM);
+    if(xbuff == W_NULL)
+    {
+        err = W_ERR_MEM;
+        goto XM_GET_END;
+    }
     file = treefile_open(argv[2],TF_FMODE_CRT | TF_FMODE_W);
+    if(file == W_NULL)
+    {
+        err = W_ERR_INVALID;
+        goto XM_GET_END;
+    }
+    
     xmodem_init(&ctx,XM_DIR_RECV,xbuff,XMODEM_BUFF_LEN,xm_write,xm_read);
     for(;;)
     {
@@ -99,6 +113,7 @@ static w_err_t cmd_xmodem_get(int argc,char **argv)
         treefile_write(file,buff,len);
     }
     xmodem_end(&ctx);
+XM_GET_END:
     treefile_close(file);
     wind_free(buff);
     wind_free(xbuff);
@@ -107,33 +122,60 @@ static w_err_t cmd_xmodem_get(int argc,char **argv)
 
 static w_err_t cmd_xmodem_put(int argc,char **argv)
 {
+    w_err_t err = W_ERR_OK;
     w_int32_t len;
-    treefile_s *file;
-    w_uint8_t *buff,*xbuff;
+    treefile_s *file = W_NULL;
+    w_uint8_t *buff = W_NULL,*xbuff = W_NULL;
     if(argv[2][0] != '/')
     {
         wind_error("unknown file path.");
         return W_ERR_INVALID;
     }
+    
+    buff = wind_malloc(4096);
+    if(buff == W_NULL)
+    {
+        err = W_ERR_MEM;
+        goto XM_PUT_END;
+    }
+    xbuff = wind_malloc(XMODEM_BUFF_LEN);
+    if(xbuff == W_NULL)
+    {
+        err = W_ERR_MEM;
+        goto XM_PUT_END;
+    }
     file = treefile_open(argv[2],TF_FMODE_R);
     if(file == W_NULL)
     {
-        wind_error("file is NOT exist.");
-        return W_ERR_NOFILE;
+        err = W_ERR_INVALID;
+        goto XM_PUT_END;
     }
-    buff = wind_malloc(file->filelen);
-    WIND_ASSERT_RETURN(buff != W_NULL,W_ERR_MEM);
-    xbuff = wind_malloc(XMODEM_BUFF_LEN);
-    WIND_ASSERT_TODO(xbuff != W_NULL,wind_free(buff),W_ERR_MEM);
     
     xmodem_init(&ctx,XM_DIR_SEND,xbuff,XMODEM_BUFF_LEN,xm_write,xm_read);
-    wind_memset(buff,0,file->filelen);
-    len = treefile_read(file,buff,file->filelen);
-    len = xmodem_send(&ctx,buff,len);
+    for(;;)
+    {
+        wind_memset(buff,0,4096);
+        len = treefile_read(file,buff,4096);
+        if(len <= 0)
+            break;
+        len = xmodem_send(&ctx,buff,len);
+        if(len <= 0)
+        {
+            wind_error("xmodem send failed.");
+            err = W_ERR_FAIL;
+            break;
+        }
+    }
     xmodem_end(&ctx);
-    treefile_close(file);
-    wind_free(buff);
-    return W_ERR_OK;
+XM_PUT_END:
+    if(file != W_NULL)
+        treefile_close(file);
+    if(buff != W_NULL)
+        wind_free(buff);
+    if(xbuff != W_NULL)
+        wind_free(xbuff);
+    return err;
+
 }
 
 /********************************************全局变量定义**********************************************/
