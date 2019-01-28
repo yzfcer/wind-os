@@ -42,11 +42,11 @@ COMMAND_MAIN(led,argc,argv)
     w_err_t err;
     w_chdev_s *led;
     w_uint8_t stat;
-    char devname[8];
+    //char devname[8];
     WIND_ASSERT_RETURN(argc == 3,W_ERR_INVALID);
-    wind_memset(devname,0,sizeof(devname));
-    wind_sprintf(devname,"led%s",argv[2]);
-    led = wind_chdev_get(devname);
+    //wind_memset(devname,0,sizeof(devname));
+    //wind_sprintf(devname,"led%s",argv[2]);
+    led = wind_chdev_get(argv[2]);
     WIND_ASSERT_RETURN(led != W_NULL,W_ERR_INVALID);
     if(0 == wind_strcmp(argv[1],"on"))
     {

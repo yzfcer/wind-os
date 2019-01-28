@@ -310,7 +310,7 @@ w_err_t wind_heap_print(void)
         heap = (w_heap_s *)DLIST_OBJ(dnode,w_heap_s,heapnode);
         wind_printf("%-16s 0x%08x %-12d %-10s\r\n",
             heap->name?heap->name:"null",heap->addr,heap->stati.tot,
-            heap->is_private?"TRUE":"FALSE");
+            heap->is_private?"YES":"NO");
     }
     wind_print_space(7);
     return W_ERR_OK;

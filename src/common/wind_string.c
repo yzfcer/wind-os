@@ -40,9 +40,9 @@ char* wind_strcpy(char *dest,const char *src)
     return dest;
 }
 
-char* wind_strncpy(char *dest,const char *src,w_uint32_t count)
+char* wind_strncpy(char *dest,const char *src,w_int32_t count)
 {
-    w_uint32_t i;
+    w_int32_t i;
     for(i = 0;i < count;i ++)
     {
         dest[i] = src[i];
@@ -69,7 +69,7 @@ char *wind_strcat(char *dest, const char *src)
 }
 
 
-char* wind_strncat(char *dest, const char *src, w_uint32_t count)
+char* wind_strncat(char *dest, const char *src, w_int32_t count)
 {
     char *tmp = dest;
     if (count) {
@@ -88,18 +88,17 @@ char* wind_strncat(char *dest, const char *src, w_uint32_t count)
 
 w_int32_t wind_strcmp(const char *dest,const char *src)
 {
-    char err;
+    w_int32_t err;
     while (1) {
-        if ((err = (char)(*dest - *src++)) != 0 || !*dest++)
+        if ((err = (*dest - *src++)) != 0 || !*dest++)
             break;
     }
     return err;
 }
 
-w_int32_t wind_strncmp(const char* dest,const char *src,w_uint32_t count)
+w_int32_t wind_strncmp(const char* dest,const char *src,w_int32_t count)
 {
-    char err = 0;
-
+    w_int32_t err = 0;
     while (count) {
         if ((err = *dest - *src++) != 0 || !*dest++)
             break;
@@ -135,7 +134,7 @@ w_int32_t wind_strlen(const char *s)
     return (w_int32_t)(sc - s);
 }
 
-w_int32_t wind_strnlen(const char *s, w_uint32_t count)
+w_int32_t wind_strnlen(const char *s, w_int32_t count)
 {
     const char *sc;
 
@@ -293,7 +292,7 @@ void *wind_memset(void *s,char c,w_uint32_t count)
     return s;
 }
 
-char *wind_bcopy(const char *src, char *dest, w_uint32_t count)
+char *wind_bcopy(const char *src, char *dest, w_int32_t count)
 {
     char *tmp = dest;
 
@@ -303,7 +302,7 @@ char *wind_bcopy(const char *src, char *dest, w_uint32_t count)
     return dest;
 }
 
-void *wind_memcpy(void *dest,const void *src,w_uint32_t count)
+void *wind_memcpy(void *dest,const void *src,w_int32_t count)
 {
     char *tmp = (char *)dest;
     char *s = (char *) src;
@@ -313,7 +312,7 @@ void *wind_memcpy(void *dest,const void *src,w_uint32_t count)
 }
 
 
-void *wind_memmove(void *dest,const void *src,w_uint32_t count)
+void *wind_memmove(void *dest,const void *src,w_int32_t count)
 {
     char *tmp, *s;
 
@@ -334,7 +333,7 @@ void *wind_memmove(void *dest,const void *src,w_uint32_t count)
     return dest;
 }
 
-w_int32_t wind_memcmp(const void *dest,const void *src,w_uint32_t count)
+w_int32_t wind_memcmp(const void *dest,const void *src,w_int32_t count)
 {
     const w_uint8_t *su1, *su2;
     signed char res = 0;
@@ -345,7 +344,7 @@ w_int32_t wind_memcmp(const void *dest,const void *src,w_uint32_t count)
     return res;
 }
 
-void *wind_memscan(void *addr, w_uint32_t c, w_uint32_t size)
+void *wind_memscan(void *addr, w_uint32_t c, w_int32_t size)
 {
     w_uint8_t *p = (w_uint8_t *) addr;
 

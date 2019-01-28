@@ -298,6 +298,30 @@ w_cmd_s *wind_cmd_get(const char *name)
     return W_NULL;
 }
 
+static w_err_t insert_cmd(w_dlist_s *list,w_cmd_s *cmd)
+{
+    w_dnode_s *dnode;
+    w_cmd_s *lcmd;
+    w_int32_t res;
+    foreach_node(dnode,list)
+    {
+        lcmd = DLIST_OBJ(dnode,w_cmd_s,cmdnode);
+        res = wind_strcmp(cmd->name,lcmd->name);
+        if(res == 0)
+        {
+            wind_error("command \"%s\" has been in the command list",cmd->name);
+            return W_ERR_FAIL;
+        }
+        else if (res < 0)
+        {
+            dlist_insert(list,dnode->prev,&cmd->cmdnode);
+            return W_ERR_OK;
+        }
+    }
+    dlist_insert_tail(list,&cmd->cmdnode);
+    return W_ERR_OK;
+}
+
 w_err_t wind_cmd_register(w_cmd_s *cmd,int cnt)
 {
     int i;
@@ -310,7 +334,8 @@ w_err_t wind_cmd_register(w_cmd_s *cmd,int cnt)
         if(old != W_NULL)
             continue;
         wind_disable_switch();
-        dlist_insert_tail(cgl,&cmd[i].cmdnode);
+        //dlist_insert_tail(cgl,&cmd[i].cmdnode);
+        insert_cmd(cgl,&cmd[i]);
         wind_enable_switch();
     }
     return W_ERR_OK;

@@ -148,6 +148,7 @@ COMMAND_DISC(mem)
 
 COMMAND_USAGE(mem)
 {
+    wind_printf("--WARNING--:this command is NOT safe for product.\r\n");
     wind_printf("mem <start> <lenth>:to show thread infomation.\r\n");
     wind_printf("mem stack <threadname>:to show thread stack infomation.\r\n");
 }

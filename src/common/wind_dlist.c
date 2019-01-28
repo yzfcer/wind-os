@@ -53,7 +53,8 @@ void dlist_insert_tail(w_dlist_s *dlist,w_dnode_s *dnode)
 // 在指定节点后插入一个节点
 void dlist_insert(w_dlist_s *dlist,w_dnode_s *prenode,w_dnode_s *dnode) 
 {
-    if(prenode) {
+    if(prenode) 
+    {
         if(prenode->next)
             prenode->next->prev = dnode;
         else
@@ -61,7 +62,9 @@ void dlist_insert(w_dlist_s *dlist,w_dnode_s *prenode,w_dnode_s *dnode)
         dnode->prev = prenode;
         dnode->next = prenode->next;
         prenode->next = dnode;
-    } else {
+    } 
+    else 
+    {
         dlist_insert_head(dlist, dnode);
     }
 }
@@ -69,7 +72,8 @@ void dlist_insert(w_dlist_s *dlist,w_dnode_s *prenode,w_dnode_s *dnode)
 // 从链表头部弹出一个节点
 w_dnode_s *dlist_remove_head(w_dlist_s *dlist) 
 {
-    if(dlist->head) {
+    if(dlist->head) 
+    {
         w_dnode_s *dnode = dlist->head;
         if(dlist->head->next)
             dlist->head->next->prev = W_NULL;
@@ -78,7 +82,9 @@ w_dnode_s *dlist_remove_head(w_dlist_s *dlist)
         dlist->head = dlist->head->next;
         dnode->prev = dnode->next = W_NULL;
         return dnode;
-    } else {
+    } 
+    else 
+    {
         return W_NULL;
     }
 }
@@ -86,7 +92,8 @@ w_dnode_s *dlist_remove_head(w_dlist_s *dlist)
 // 从链表尾部弹出一个节点
 w_dnode_s *dlist_remove_tail(w_dlist_s *dlist) 
 {
-    if(dlist->tail) {
+    if(dlist->tail) 
+    {
         w_dnode_s *dnode = dlist->tail;
         if(dlist->tail->prev)
             dlist->tail->prev->next = W_NULL;
@@ -95,7 +102,9 @@ w_dnode_s *dlist_remove_tail(w_dlist_s *dlist)
         dlist->tail = dlist->tail->prev;
         dnode->prev = dnode->next = W_NULL;
         return dnode;
-    } else {
+    } 
+    else 
+    {
         return W_NULL;
     }
 }
@@ -128,8 +137,9 @@ w_int32_t dlist_get_count(w_dlist_s *dlist)
 {
     w_int32_t count = 0;
     w_dnode_s *dnode = dlist_head(dlist);
-    while(dnode) {
-        ++ count;
+    while(dnode) 
+    {
+        count ++;
         dnode = dnode_next(dnode);
     }
     return count;
@@ -138,15 +148,19 @@ w_int32_t dlist_get_count(w_dlist_s *dlist)
 //合并两个链表
 w_dlist_s *dlist_combine(w_dlist_s *dlist1,w_dlist_s *dlist2) 
 {
-    if(!dlist_is_empty(dlist2)) {
-        if(!dlist_is_empty(dlist1)) {
+    if(!dlist_is_empty(dlist2)) 
+    {
+        if(!dlist_is_empty(dlist1)) 
+        {
             dlist1->tail->next = dlist2->head;
             dlist2->head->prev = dlist1->tail;
             dlist1->tail = dlist2->tail;
-    } else {
-        dlist1->head = dlist2->head;
-        dlist1->tail = dlist2->tail;
-    }
+        } 
+        else 
+        {
+            dlist1->head = dlist2->head;
+            dlist1->tail = dlist2->tail;
+        }
         dlist2->head = W_NULL;
         dlist2->tail = W_NULL;
     }
