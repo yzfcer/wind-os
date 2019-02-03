@@ -1172,6 +1172,16 @@
               <FileType>5</FileType>
               <FilePath>..\..\..\..\..\src\core\wind_sysinfo.h</FilePath>
             </File>
+            <File>
+              <FileName>wind_dbgpoint.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\core\wind_dbgpoint.c</FilePath>
+            </File>
+            <File>
+              <FileName>wind_dbgpoint.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\core\wind_dbgpoint.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1466,6 +1476,11 @@
               <FileName>cmd_xmodem.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\components\shell\cmd\cmd_xmodem.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_dbgpoint.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\components\shell\cmd\cmd_dbgpoint.c</FilePath>
             </File>
           </Files>
         </Group>

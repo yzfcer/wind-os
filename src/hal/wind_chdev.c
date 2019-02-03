@@ -63,8 +63,6 @@ w_err_t wind_chdev_register(w_chdev_s *dev,w_int32_t count)
         dlist_insert_tail(&devlist,&dev[i].devnode);
         wind_enable_switch();
     }
-    
-    wind_enable_switch();
     return W_ERR_OK;
 }
 

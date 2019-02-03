@@ -75,6 +75,8 @@
 #define WIND_FS_MAX_NUM 5 //允许支持的文件系统的数量
 #define WIND_FILE_MAX_NUM 5 //允许打开的文件的数量
 
+#define WIND_DBGPOINT_SUPPORT 1//是否支持调试点文件系统
+
 #define WIND_TICK_PER_SEC 500 //一秒钟所经历的的时间街节拍
 
 #define WIND_REALTIME_CORE_SUPPORT 1 //是否支持实时内核，即抢占式切换
@@ -119,6 +121,7 @@
 #define CMD_SYSINFO_SUPPORT 1 //是否支持系统信息命令
 #define CMD_CUTEST_SUPPORT 1 //是否支持单元测试命令
 #define CMD_MKFS_SUPPORT 0 //是否支持创建文件系统镜像命令
+#define CMD_DBGPOINT_SUPPORT 1 //是否支持系统调试点功能命令
 
 #define CMD_BEEP_SUPPORT 1 //是否支持蜂鸣器命令
 #define CMD_LED_SUPPORT 1 //是否支持LED操作命令

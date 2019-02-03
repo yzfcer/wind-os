@@ -32,6 +32,7 @@
 #include "wind_blkdev.h"
 #include "wind_time.h"
 #include "wind_debug.h"
+#include "wind_dbgpoint.h"
 #include "wind_os_hwif.h"
 #if WIND_FS_SUPPORT
 #include "wind_file.h"
@@ -107,6 +108,9 @@ static w_err_t thread_init(w_int32_t argc,char **argv)
 #endif
 #if WIND_FS_SUPPORT
     _wind_fs_mod_init();
+#endif  
+#if WIND_DBGPOINT_SUPPORT
+        _wind_dbgpoint_mod_init();
 #endif  
     _create_thread_idle();
     set_idle_cnt();

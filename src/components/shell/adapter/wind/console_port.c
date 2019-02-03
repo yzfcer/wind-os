@@ -68,6 +68,10 @@ CMD_DECLARE(fs);
 #if CMD_XMODEM_SUPPORT
 CMD_DECLARE(xm);
 #endif
+#if CMD_DBGPOINT_SUPPORT
+CMD_DECLARE(dbgp);
+#endif
+
 #if CMD_BEEP_SUPPORT
 CMD_DECLARE(beep);
 #endif
@@ -117,6 +121,10 @@ void _wind_register_all_cmd(w_shell_ctx_s *ctx)
 #if CMD_XMODEM_SUPPORT
     wind_cmd_register(COMMAND(xm),1);
 #endif
+#if CMD_DBGPOINT_SUPPORT
+    wind_cmd_register(COMMAND(dbgp),1);
+#endif
+
 #if CMD_BEEP_SUPPORT
     wind_cmd_register(COMMAND(beep),1);
 #endif

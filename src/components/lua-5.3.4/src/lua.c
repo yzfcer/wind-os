@@ -598,7 +598,7 @@ static int pmain (lua_State *L) {
 }
 
 #if 1
-int lua_main (int argc, char **argv) 
+int lua_run(int argc, char **argv)
 {
   int status, result;
   lua_State *L = luaL_newstate();  /* create state */
@@ -615,8 +615,8 @@ int lua_main (int argc, char **argv)
   lua_close(L);
   return (result && status == LUA_OK) ? EXIT_SUCCESS : EXIT_FAILURE;
 }
-#else
-const char lua_test[] = {   
+
+const char lua_test_cmd[] = {   
     "print(\"Hello,I am lua!\")\r\n"  
     "print(\"this is newline printf\")\r\n"
     "function foo()\r\n"  
@@ -634,14 +634,29 @@ const char lua_test[] = {
 };  
   
 /* ??Lua */  
-void lua_main(void)  
+void lua_test(void)  
 {  
     lua_State *L;  
-      
     L = luaL_newstate(); /* ??Lua???? */  
     luaL_openlibs(L);  
     luaopen_base(L);  
-    luaL_dostring(L, lua_test); /* ??Lua?? */  
+    luaL_dostring(L, lua_test_cmd); /* ??Lua?? */  
     lua_close(L);  
 }  
+
+int lua_main (int argc, char **argv)
+{
+    if(argc == 1)
+    {
+        lua_run(argc,argv);
+    }
+    else if((argc == 2)&&(strcmp(argv[1],"test") == 0))
+    {
+        lua_test();
+    }
+    return 0;
+}
+
+#else
+
 #endif
