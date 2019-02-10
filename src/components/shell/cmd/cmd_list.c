@@ -96,7 +96,7 @@ COMMAND_MAIN(list,argc,argv)
     }
     else if(0 == wind_strcmp(argv[1],"pool"))
     {
-        _wind_pool_print_list();
+        wind_pool_print_list();
         return W_ERR_OK;
     }
 #if WIND_SEM_SUPPORT
@@ -116,7 +116,7 @@ COMMAND_MAIN(list,argc,argv)
 #if WIND_PIPE_SUPPORT
     else if(0 == wind_strcmp(argv[1],"pipe"))
     {
-        _wind_pipe_print();
+        wind_pipe_print();
         return W_ERR_OK;
     }
 #endif

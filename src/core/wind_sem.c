@@ -72,7 +72,7 @@ w_sem_s *wind_sem_get(const char *name)
 }
 w_err_t wind_sem_init(w_sem_s *sem,const char *name,w_int8_t sem_value)
 {
-    wind_notice("create sem:%s",name);
+    wind_notice("init sem:%s",name);
     WIND_ASSERT_RETURN(sem != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(sem_value >= 0,W_ERR_INVALID);
     sem->magic = WIND_SEM_MAGIC;

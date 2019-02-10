@@ -425,11 +425,11 @@ w_int32_t pack_main(w_int32_t argc,char **argv)
     WIND_ASSERT_RETURN(err == W_ERR_OK,-1);
     sort_input_file();
     err = check_file_space();
-    WIND_ASSERT_TODO(err == W_ERR_OK,release_file_buff(),err);
+    WIND_ASSERT_TODO_RETURN(err == W_ERR_OK,release_file_buff(),err);
     err = read_bin_files();
-    WIND_ASSERT_TODO(err == W_ERR_OK,release_file_buff(),err);
+    WIND_ASSERT_TODO_RETURN(err == W_ERR_OK,release_file_buff(),err);
     err = pack_files(&pack_info);
-    WIND_ASSERT_TODO(err == W_ERR_OK,release_file_buff(),-1);
+    WIND_ASSERT_TODO_RETURN(err == W_ERR_OK,release_file_buff(),-1);
     
     release_file_buff();
     system("pause");

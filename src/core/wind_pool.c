@@ -98,7 +98,7 @@ w_err_t wind_pool_create(const char *name,void *mem,w_uint32_t memsize,w_uint32_
     dlist_insert_tail(&poollist,&pm->poolnode);
     wind_enable_interrupt();
     pm->magic = WIND_POOL_MAGIC;
-    //_wind_pool_print_list(&g_core.poollist);
+    //wind_pool_print_list(&g_core.poollist);
     return W_ERR_OK;
 }
 
@@ -184,7 +184,7 @@ w_err_t wind_pool_free(void *mem,void *block)
 }
 
 
-void _wind_pool_print_list(void)
+void wind_pool_print_list(void)
 {
     w_dnode_s *pdnode;
     w_pool_s *pm;

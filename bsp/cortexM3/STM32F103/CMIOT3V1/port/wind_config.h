@@ -71,6 +71,9 @@
 #define WIND_SOFTIRQ_SUPPORT 1 //是否支持软中断功能
 #define WIND_SOFTINT_MAX_NUM 256 //软中断向量表的长度
 
+#define WIND_USER_SUPPORT 1 //是否支持用户账号功能
+#define WIND_USER_MAX_NUM 5 //用户账号的数量
+
 #define WIND_FS_SUPPORT 0 //是否支持内存文件系统
 #define WIND_FS_MAX_NUM 5 //允许支持的文件系统的数量
 #define WIND_FILE_MAX_NUM 5 //允许打开的文件的数量
@@ -122,6 +125,7 @@
 #define CMD_CUTEST_SUPPORT 1 //是否支持单元测试命令
 #define CMD_MKFS_SUPPORT 0 //是否支持创建文件系统镜像命令
 #define CMD_DBGPOINT_SUPPORT 1 //是否支持系统调试点功能命令
+#define CMD_USER_SUPPORT 1 //是否支持用户管理命令
 
 #define CMD_BEEP_SUPPORT 0 //是否支持蜂鸣器命令
 #define CMD_LED_SUPPORT 0 //是否支持LED操作命令

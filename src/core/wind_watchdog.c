@@ -103,6 +103,7 @@ w_watchdog_s *wind_watchdog_get(const char *name)
 
 w_err_t wind_watchdog_init(w_watchdog_s *watchdog,const char *name,w_uint32_t flag,w_int16_t timeout_1s)
 {
+    wind_notice("init watchdog:%s",name);
     WIND_ASSERT_RETURN(watchdog > 0,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(timeout_1s > 0,W_ERR_INVALID);
     watchdog->magic = WIND_WATCHDOG_MAGIC;
@@ -125,7 +126,6 @@ w_watchdog_s *wind_watchdog_create(const char *name,w_uint32_t flag,w_int16_t ti
 {
     w_err_t err;
     w_watchdog_s *watchdog;
-    wind_notice("create watchdog:%s",name);
     watchdog = watchdog_malloc();
     WIND_ASSERT_RETURN(watchdog != W_NULL,W_NULL);
     err = wind_watchdog_init(watchdog,name,flag,timeout_1s);

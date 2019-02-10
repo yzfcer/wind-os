@@ -28,6 +28,8 @@
 #include "wind_softirq.h"
 #include "wind_heap.h"
 #include "wind_watchdog.h"
+#include "wind_dbgpoint.h"
+#include "wind_user.h"
 #include "wind_chdev.h"
 #include "wind_blkdev.h"
 #include "wind_time.h"
@@ -110,7 +112,10 @@ static w_err_t thread_init(w_int32_t argc,char **argv)
     _wind_fs_mod_init();
 #endif  
 #if WIND_DBGPOINT_SUPPORT
-        _wind_dbgpoint_mod_init();
+    _wind_dbgpoint_mod_init();
+#endif  
+#if WIND_USER_SUPPORT
+    _wind_user_mod_init();
 #endif  
     _create_thread_idle();
     set_idle_cnt();

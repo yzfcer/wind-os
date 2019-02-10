@@ -78,9 +78,9 @@ w_heap_s *wind_heap_create(const char *name,w_addr_t base,w_uint32_t size,w_uint
     w_heap_s* hp;
     w_uint32_t hpsize;
     
+    wind_notice("create heap:%s,base:0x%08x,size:%d",name?name:"null",base,size);
     WIND_ASSERT_RETURN(size > WIND_HEAP_MIN_SIZE,W_NULL);
     
-    wind_notice("create heap:%s,base:0x%08x,size:%d",name?name:"null",base,size);
     hp = (w_heap_s*)(__ALIGN_R((w_addr_t)base));
     hpsize = size;
     hpsize += (w_uint32_t)(((w_addr_t)hp) - base);

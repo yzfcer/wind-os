@@ -81,7 +81,7 @@ w_msgbox_s *wind_msgbox_get(const char *name)
 
 w_err_t wind_msgbox_init(w_msgbox_s *msgbox,const char *name)
 {
-    wind_notice("create msgbox:%s",name?name:"null");
+    wind_notice("init msgbox:%s",name?name:"null");
     WIND_ASSERT_RETURN(msgbox != W_NULL,W_ERR_PTR_NULL);
     msgbox->magic = WIND_MSGBOX_MAGIC;
     msgbox->name = name;

@@ -71,6 +71,9 @@ CMD_DECLARE(xm);
 #if CMD_DBGPOINT_SUPPORT
 CMD_DECLARE(dbgp);
 #endif
+#if CMD_USER_SUPPORT
+CMD_DECLARE(user);
+#endif
 
 #if CMD_BEEP_SUPPORT
 CMD_DECLARE(beep);
@@ -123,6 +126,9 @@ void _wind_register_all_cmd(w_shell_ctx_s *ctx)
 #endif
 #if CMD_DBGPOINT_SUPPORT
     wind_cmd_register(COMMAND(dbgp),1);
+#endif
+#if CMD_USER_SUPPORT
+    wind_cmd_register(COMMAND(user),1);
 #endif
 
 #if CMD_BEEP_SUPPORT

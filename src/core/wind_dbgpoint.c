@@ -23,13 +23,10 @@
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
 #include "wind_dbgpoint.h"
-//#include "wind_thread.h"
 #include "wind_debug.h"
 #include "wind_core.h"
 #include "wind_string.h"
-#include "wind_pool.h"
 #include "wind_mutex.h"
-//#include "wind_timer.h"
 #include "wind_os_hwif.h"
 
 

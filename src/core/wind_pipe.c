@@ -73,7 +73,7 @@ w_pipe_s *wind_pipe_get(const char *name)
 w_err_t wind_pipe_init(w_pipe_s* pipe,const char *name,void *buff,w_uint32_t buflen)
 {
     w_err_t err;
-    wind_notice("create pipe:%s",name?name:"null");
+    wind_notice("init pipe:%s",name?name:"null");
     WIND_ASSERT_RETURN((pipe != W_NULL),W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN((buff != W_NULL),W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(buflen > 0,W_ERR_INVALID);
@@ -152,7 +152,7 @@ w_err_t wind_pipe_destroy(w_pipe_s* pipe)
     return W_ERR_OK;
 }
 
-w_err_t _wind_pipe_print(void)
+w_err_t wind_pipe_print(void)
 {
     w_dnode_s *dnode;
     w_pipe_s *pipe;

@@ -73,7 +73,7 @@ w_event_s *wind_event_get(const char *name)
 
 w_err_t wind_event_init(w_event_s *event,const char *name)
 {
-    wind_notice("create event:%s",name?name:"null");
+    wind_notice("init event:%s",name?name:"null");
     WIND_ASSERT_RETURN(event != W_NULL,W_ERR_PTR_NULL);
     event->magic = WIND_EVENT_MAGIC;
     event->name = name;
