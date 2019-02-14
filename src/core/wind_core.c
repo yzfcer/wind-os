@@ -79,6 +79,11 @@ w_bool_t wind_thread_isopen()
     return g_core.usrthren;
 }
 
+static w_bool_t is_switch_enable(void)
+{
+    return gwind_core_cnt>0?W_FALSE:W_TRUE;
+}
+
 void wind_disable_switch(void)
 {
     gwind_core_cnt ++;
@@ -91,14 +96,14 @@ void wind_enable_switch(void)
 }
 
 //SREG，CPU状态寄存器对应的数据位宽，当关闭中断时需要保存这个寄存器
-typedef unsigned int sreg_t;
-extern sreg_t  wind_save_sr(void);
-extern void   wind_restore_sr(sreg_t cpu_sr);
-static sreg_t ssr[32];
+typedef unsigned int w_sreg_t;
+extern w_sreg_t  wind_save_sr(void);
+extern void   wind_restore_sr(w_sreg_t cpu_sr);
+static w_sreg_t ssr[32];
 static w_int32_t sreg_idx = 0;
 void wind_disable_interrupt(void)
 {
-    sreg_t cpu_sr;
+    w_sreg_t cpu_sr;
     cpu_sr = wind_save_sr();
     ssr[sreg_idx++] = cpu_sr;
     if(sreg_idx >= 32)
@@ -110,7 +115,7 @@ void wind_disable_interrupt(void)
 
 void wind_enable_interrupt(void)
 {
-    sreg_t cpu_sr;
+    w_sreg_t cpu_sr;
     if(sreg_idx > 0)
         sreg_idx --;
     cpu_sr = ssr[sreg_idx];   
@@ -129,10 +134,7 @@ void wind_enter_irq(void)
     return;
 }
 
-static w_bool_t is_switch_enable(void)
-{
-    return gwind_core_cnt>0?W_FALSE:W_TRUE;
-}
+
 
 static w_thread_s *wind_search_highthread(void)
 {

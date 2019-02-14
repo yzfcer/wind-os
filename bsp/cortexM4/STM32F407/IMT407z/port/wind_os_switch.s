@@ -1,7 +1,6 @@
 	IMPORT  gwind_start_flag 
 	IMPORT  gwind_cur_stack
 	IMPORT  gwind_high_stack
-	;IMPORT  wind_sw_hook
 	   
 	EXPORT  wind_start_switch               
 	EXPORT  wind_thread_switch
@@ -116,7 +115,7 @@ PendSV_Handler
     MRS     R0, PSP                                             ; PSP is process stack pointer 如果在用PSP堆栈,则可以忽略保存寄存器,参考CM3权威中的双堆栈-白菜注
     CBZ     R0, PendSV_Handler_Nosave		                    ; Skip register save the first time
 	
-	;Is the task using the FPU context? If so, push high vfp registers.
+	;Is the thread using the FPU context? If so, push high vfp registers.
 	TST 	R14, #0x10
 	IT 		EQ
 	VSTMDBEQ R0!, {S16-S31} 
@@ -130,26 +129,16 @@ PendSV_Handler
 
                                                                 ; At this point, entire context of process has been saved
 PendSV_Handler_Nosave
-    PUSH    {R14}                                               ; Save LR exc_return value
-    ;LDR     R0, =wind_sw_hook                                  ; wind_sw_hook();
-    ;BLX     R0
-    POP     {R14} 
-
-    ;LDR     R0, =OSPrioCur                                      ; OSPrioCur = OSPrioHighRdy;
-    ;LDR     R1, =OSPrioHighRdy
-    ;LDRB    R2, [R1]
-    ;STRB    R2, [R0]
-
     LDR     R0, =gwind_cur_stack                                       ; gwind_cur_stack  = gwind_high_stack;
     LDR     R1, =gwind_high_stack
     LDR     R2, [R1]
     STR     R2, [R0]
 
-    LDR     R0, [R2]                                            ; R0 is new process SP; SP = gwind_high_stack->OSTCBStkPtr;
+    LDR     R0, [R2]                                            ; R0 is new process SP; SP = gwind_high_stack;
     LDM     R0, {R4-R11}                                        ; Restore r4-11 from new process stack
     ADDS    R0, R0, #0x20
 
-	;Is the task using the FPU context? If so, push high vfp registers.
+	;Is the thread using the FPU context? If so, push high vfp registers.
 	TST 	R14, #0x10
 	IT 		EQ
 	VLDMIAEQ R0!, {S16-S31} 
@@ -158,6 +147,6 @@ PendSV_Handler_Nosave
     ORR     LR, LR, #0x04                                       ; Ensure exception return uses process stack
     CPSIE   I
     BX      LR                                                  ; Exception return will restore remaining context
-	NOP
-    end  
+	;NOP
+	end
 	
