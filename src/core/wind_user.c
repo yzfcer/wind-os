@@ -140,6 +140,7 @@ w_err_t wind_user_destroy(w_user_s *user)
     w_dnode_s *dnode;
     WIND_ASSERT_RETURN(user != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(user->magic == WIND_USER_MAGIC,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(user->usertype != USER_SUPER,W_ERR_FAIL);
     wind_disable_switch();
     dnode = dlist_remove(&userlist,&user->usernode);
     wind_enable_switch();
