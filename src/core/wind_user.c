@@ -27,8 +27,9 @@
 #include "wind_core.h"
 #include "wind_string.h"
 #include "wind_pool.h"
-#include "wind_mutex.h"
-#include "wind_os_hwif.h"
+#include "wind_macro.h"
+//#include "wind_mutex.h"
+//#include "wind_os_hwif.h"
 
 #if WIND_USER_SUPPORT
 static w_dlist_s userlist;
@@ -44,6 +45,18 @@ static __INLINE__ w_err_t user_free(void *user)
     return wind_pool_free(userpool,user);
 }
 
+static w_err_t check_user_name(const char *name)
+{
+    w_int32_t i;
+    WIND_ASSERT_RETURN(CHARCHK(name[0]),W_ERR_INVALID);
+    for(i = 1;i < USER_NAME_LEN;i ++)
+    {
+        if(name[i] == 0)
+            return W_ERR_OK;
+        WIND_ASSERT_RETURN(CHARCHK(name[i])||DECCHK(name[i]),W_ERR_INVALID);
+    }
+    return W_ERR_FAIL;
+}
 
 w_err_t _wind_user_mod_init(void)
 {
@@ -86,6 +99,7 @@ w_err_t wind_user_init(w_user_s *user,w_user_e usertype,const char *username,con
     namelen = wind_strlen(username);
     WIND_ASSERT_RETURN(namelen > 0,W_ERR_INVALID);
     WIND_ASSERT_RETURN(namelen < USER_NAME_LEN-1,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(check_user_name(username) == W_ERR_OK,W_ERR_INVALID);
     
     pwdlen = wind_strlen(passwd);
     WIND_ASSERT_RETURN(pwdlen >= 6,W_ERR_INVALID);
