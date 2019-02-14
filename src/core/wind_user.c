@@ -54,7 +54,7 @@ w_err_t _wind_user_mod_init(void)
     WIND_ASSERT_RETURN(err == W_ERR_OK,err);
     user = wind_user_create(USER_SUPER,"root","123456");
     WIND_ASSERT_RETURN(user != W_NULL,W_ERR_FAIL);
-    user = wind_user_create(USER_SUPER,"wind","123456");
+    user = wind_user_create(USER_ADMIN,"wind","123456");
     WIND_ASSERT_RETURN(user != W_NULL,W_ERR_FAIL);
     return err;
 }
@@ -146,7 +146,9 @@ w_err_t wind_user_modify_passwd(w_user_s *user,const char *newpasswd)
     pwdlen = wind_strlen(newpasswd);
     WIND_ASSERT_RETURN(pwdlen >= 6,W_ERR_INVALID);
     WIND_ASSERT_RETURN(pwdlen < PASSWD_LEN-1,W_ERR_INVALID);
+    wind_disable_switch();
     wind_strcpy(user->passwd,newpasswd);
+    wind_enable_switch();
     return W_ERR_OK;
 }
 
@@ -156,18 +158,20 @@ w_err_t wind_user_print(void)
 {
     w_dnode_s *dnode;
     w_user_s *user;
-    int cnt = 0;
     w_dlist_s *list = &userlist;
     WIND_ASSERT_RETURN(list != W_NULL,W_ERR_PTR_NULL);
     wind_printf("\r\ndev list as following:\r\n");
+    wind_disable_switch();
+    wind_print_space(3);
+    wind_printf("%-12s %-4s\r\n","user","group");
+    wind_print_space(3);
     foreach_node(dnode,list)
     {
         user = (w_user_s *)DLIST_OBJ(dnode,w_user_s,usernode);
-        wind_printf("%-12s ",user->name);
-        cnt ++;
-        if((cnt & 0x03) == 0)
-            wind_printf("\r\n");
+        wind_printf("%-12s %-4d\r\n",user->name,user->usertype);
     }
+    wind_print_space(3);
+    wind_enable_switch();
     return W_ERR_OK;
 }
 

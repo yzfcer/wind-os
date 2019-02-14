@@ -19,6 +19,7 @@
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
 #include "wind_cmd.h"
+#include "wind_user.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
@@ -36,15 +37,33 @@ extern "C" {
 /********************************************内部函数定义*********************************************/
 static w_err_t add_user(w_int32_t argc,char ** argv)
 {
+    w_user_s *user;
+    WIND_ASSERT_RETURN(argc >= 4,W_ERR_FAIL);
+    user = wind_user_create(USER_COMMON,argv[2],argv[3]);
+    WIND_ASSERT_RETURN(user != W_NULL,W_ERR_FAIL);
     return W_ERR_OK;
 }
+
 static w_err_t del_user(w_int32_t argc,char ** argv)
 {
-    return W_ERR_OK;
+    w_err_t err;
+    w_user_s *user;
+    WIND_ASSERT_RETURN(argc >= 3,W_ERR_FAIL);
+    user = wind_user_get(argv[2]);
+    WIND_ASSERT_RETURN(user != W_NULL,W_ERR_FAIL);
+    err = wind_user_destroy(user);
+    return err;
 }
+
 static w_err_t modify_user(w_int32_t argc,char ** argv)
 {
-    return W_ERR_OK;
+    w_err_t err;
+    w_user_s *user;
+    WIND_ASSERT_RETURN(argc >= 4,W_ERR_FAIL);
+    user = wind_user_get(argv[2]);
+    WIND_ASSERT_RETURN(user != W_NULL,W_ERR_FAIL);
+    err = wind_user_modify_passwd(user,argv[3]);
+    return err;
 }
 
 
@@ -60,15 +79,21 @@ COMMAND_DISC(user)
 
 COMMAND_USAGE(user)
 {
-    wind_printf("user add <name> <passwd>:to add a new user account.\r\n");
-    wind_printf("user del <name>:to delete an existing user account.\r\n");
-    wind_printf("user modify <name>:to modify an existing user's password.\r\n");
+    wind_printf("user list:to show all user information.\r\n");
+    wind_printf("user add <name> <passwd>:add a new user account.\r\n");
+    wind_printf("user del <name>:delete an existing user account.\r\n");
+    wind_printf("user modify <name>:modify an existing user's password.\r\n");
 }
 
 COMMAND_MAIN(user,argc,argv)
 {
-    WIND_ASSERT_RETURN(argc >= 3,W_ERR_INVALID);
-    if(wind_strcmp(argv[1],"add") == 0)
+    WIND_ASSERT_RETURN(argc >= 2,W_ERR_INVALID);
+    
+    if(wind_strcmp(argv[1],"list") == 0)
+    {
+        return wind_user_print();
+    }
+    else if(wind_strcmp(argv[1],"add") == 0)
     {
         return add_user(argc,argv);
     }
