@@ -356,7 +356,7 @@ w_err_t wind_cmd_print(void)
 }
 
 #if USER_AUTH_ENABLE
-static w_err_t check_user_account(w_shell_ctx_s *ctx)
+static w_err_t match_user_account(w_shell_ctx_s *ctx)
 {
     if(wind_strcmp(ctx->buf,"root") != 0)
     {
@@ -369,7 +369,7 @@ static w_err_t check_user_account(w_shell_ctx_s *ctx)
     return W_ERR_OK;
 }
 
-static w_err_t auth_err_suspend(w_shell_ctx_s *ctx)
+static w_err_t match_fail_suspend(w_shell_ctx_s *ctx)
 {
     w_int32_t i;
     wind_printf("\r\nyouhave input error for %d times.\r\n",USER_AUTH_ERR_MAX);
@@ -385,7 +385,7 @@ static w_err_t auth_err_suspend(w_shell_ctx_s *ctx)
 }
 
 
-static w_err_t check_user_passwd(w_shell_ctx_s *ctx)
+static w_err_t match_user_passwd(w_shell_ctx_s *ctx)
 {
     w_int32_t wait_sec = USER_AUTH_ERR_MAX;
     if(wait_sec >= 99)
@@ -395,7 +395,7 @@ static w_err_t check_user_passwd(w_shell_ctx_s *ctx)
     {
         ctx->autherr_cnt ++;
         if(ctx->autherr_cnt >= USER_AUTH_ERR_MAX)
-            auth_err_suspend(ctx);
+            match_fail_suspend(ctx);
         ctx->stat = CSLSTAT_USER;
         wind_printf("\r\nlogin:");
         return W_ERR_OK;
@@ -530,10 +530,10 @@ w_err_t thread_shell(w_int32_t argc,char **argv)
             {
 #if USER_AUTH_ENABLE
                 case CSLSTAT_USER:
-                    check_user_account(ctx);
+                    match_user_account(ctx);
                     break;
                 case CSLSTAT_PWD:
-                    check_user_passwd(ctx);
+                    match_user_passwd(ctx);
                     break;
 #endif 
                 case CSLSTAT_CMD:

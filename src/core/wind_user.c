@@ -45,18 +45,44 @@ static __INLINE__ w_err_t user_free(void *user)
     return wind_pool_free(userpool,user);
 }
 
-static w_err_t check_user_name(const char *name)
+static w_err_t check_user_name_format(const char *username)
 {
     w_int32_t i;
-    WIND_ASSERT_RETURN(CHARCHK(name[0]),W_ERR_INVALID);
-    for(i = 1;i < USER_NAME_LEN;i ++)
+    w_int32_t namelen;
+    WIND_ASSERT_RETURN(username != W_NULL,W_ERR_PTR_NULL);
+    namelen = wind_strlen(username);
+    WIND_ASSERT_RETURN(namelen > 0,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(namelen < USER_NAME_MAXLEN,W_ERR_INVALID);
+
+    WIND_ASSERT_RETURN(IS_ALPHABET(username[0]),W_ERR_INVALID);
+    for(i = 1;i < USER_NAME_MAXLEN;i ++)
     {
-        if(name[i] == 0)
+        if(username[i] == 0)
             return W_ERR_OK;
-        WIND_ASSERT_RETURN(CHARCHK(name[i])||DECCHK(name[i]),W_ERR_INVALID);
+        WIND_ASSERT_RETURN(IS_ALPHABET(username[i])||IS_DECIMAL(username[i]),W_ERR_INVALID);
     }
     return W_ERR_FAIL;
 }
+
+static w_err_t check_passwd_format(const char *passwd)
+{
+    w_int32_t i;
+    w_int32_t pwdlen;
+    WIND_ASSERT_RETURN(passwd != W_NULL,W_ERR_PTR_NULL);
+    pwdlen = wind_strlen(passwd);
+    WIND_ASSERT_RETURN(pwdlen >= 6,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(pwdlen < PASSWD_MAXLEN,W_ERR_INVALID);
+    
+    for(i = 1;i < USER_NAME_MAXLEN;i ++)
+    {
+        if(passwd[i] == 0)
+            return W_ERR_OK;
+        WIND_ASSERT_RETURN(passwd[i] >= 0x20,W_ERR_INVALID);
+        WIND_ASSERT_RETURN(passwd[i] < 0x7f,W_ERR_INVALID);
+    }
+    return W_ERR_FAIL;
+}
+
 
 w_err_t _wind_user_mod_init(void)
 {
@@ -93,17 +119,10 @@ w_user_s *wind_user_get(const char *name)
 
 w_err_t wind_user_init(w_user_s *user,w_user_e usertype,const char *username,const char *passwd)
 {
-    w_int32_t namelen,pwdlen;
-    WIND_ASSERT_RETURN(username != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(passwd != W_NULL,W_ERR_PTR_NULL);
-    namelen = wind_strlen(username);
-    WIND_ASSERT_RETURN(namelen > 0,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(namelen < USER_NAME_LEN-1,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(check_user_name(username) == W_ERR_OK,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(user != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(check_user_name_format(username) == W_ERR_OK,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(check_passwd_format(passwd) == W_ERR_OK,W_ERR_INVALID);
     
-    pwdlen = wind_strlen(passwd);
-    WIND_ASSERT_RETURN(pwdlen >= 6,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(pwdlen < PASSWD_LEN-1,W_ERR_INVALID);
 
     user->magic = WIND_USER_MAGIC;
     wind_strcpy(user->name,username);
@@ -156,11 +175,11 @@ w_err_t wind_user_modify_passwd(w_user_s *user,const char *newpasswd)
     w_int32_t pwdlen;
     WIND_ASSERT_RETURN(user != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(user->magic == WIND_USER_MAGIC,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(newpasswd != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(check_passwd_format(newpasswd) == W_ERR_OK,W_ERR_INVALID);
     
     pwdlen = wind_strlen(newpasswd);
     WIND_ASSERT_RETURN(pwdlen >= 6,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(pwdlen < PASSWD_LEN-1,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(pwdlen < PASSWD_MAXLEN-1,W_ERR_INVALID);
     wind_disable_switch();
     wind_strcpy(user->passwd,newpasswd);
     wind_enable_switch();

@@ -30,15 +30,9 @@
 没有创建，则用户程序将不会再次被执行到。因为wind_main函数只会被系统调用一次
 */
 
-#include "beep.h"
 #include "wind_debug.h"
-#include "wind_sem.h"
-#include "wind_mutex.h"
-#include "wind_pipe.h"
 extern led_start(void);
-#if WIND_PIPE_SUPPORT
-w_uint8_t pipebuff[128];
-#endif
+
 
 
 
@@ -46,6 +40,5 @@ w_err_t wind_main(void)
 {
     wind_notice("enter wind main.");
     led_start();
-    BEEP_Init();
     return 0;
 }

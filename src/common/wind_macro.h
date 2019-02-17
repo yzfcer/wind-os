@@ -92,16 +92,18 @@ extern {
 #define LOWERCASE(c) (((c) >= 'A' && (c) <= 'Z')?((c) + 0x20):(c))
 
 //判断字符是不是10进值的数字
-#define DECCHK(c) ((c) >= '0' && (c) <= '9')
-
-//判断字符是不是字母
-#define CHARCHK(c) (((c) >= 'A' && (c) <= 'Z')||((c) >= 'a' && (c) <= 'z'))
-
+#define IS_DECIMAL(c) ((c) >= '0' && (c) <= '9')
 
 //判断字符是不是16进值的数字
-#define HEXCHK( c ) (((c) >= '0' && (c) <= '9') ||\
+#define IS_HEX( c ) (((c) >= '0' && (c) <= '9') ||\
 ((c) >= 'A' && (c) <= 'F') ||\
 ((c) >= 'a' && (c) <= 'f'))
+
+//判断字符是不是字母
+#define IS_ALPHABET(c) (((c) >= 'A' && (c) <= 'Z')||((c) >= 'a' && (c) <= 'z'))
+
+
+
 
 //防止溢出的一个方法
 #define INC_SAT(val) (val=((val)+1>(val))?(val)+1:(val))

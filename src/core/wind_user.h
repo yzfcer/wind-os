@@ -35,8 +35,8 @@ extern "C" {
 #endif
 
 #if WIND_USER_SUPPORT
-#define USER_NAME_LEN 32
-#define PASSWD_LEN 32
+#define USER_NAME_MAXLEN 32
+#define PASSWD_MAXLEN 32
 
 #define WIND_USER_MAGIC 0x3A6372A9
 typedef enum
@@ -49,8 +49,8 @@ typedef enum
 typedef struct _wind_user
 {
     w_uint32_t magic;
-    char name[USER_NAME_LEN];
-    char passwd[PASSWD_LEN];
+    char name[USER_NAME_MAXLEN];
+    char passwd[PASSWD_MAXLEN];
     w_user_e usertype;
     w_uint32_t flag_pool:1;
     w_dnode_s usernode;

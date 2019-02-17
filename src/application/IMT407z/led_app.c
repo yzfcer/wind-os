@@ -2,7 +2,7 @@
 #include "wind_debug.h"
 #include "wind_timer.h"
 #include "wind_chdev.h"
-#if (WIND_TIMER_SUPPORT && WIND_DRVFRAME_SUPPORT)
+
 void led0_timer(w_timer_s *timer,void *arg)
 {
     w_chdev_s *dev;
@@ -35,6 +35,4 @@ void led_start(void)
     if(ledtmr == W_NULL)
         wind_error("create led timer failed.");
 }
-#else
-void led_start(void) {}
-#endif
+
