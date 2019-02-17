@@ -94,7 +94,7 @@ typedef struct __w_shell_ctx_s
     w_int8_t autherr_cnt;
     char buf[WIND_CMD_MAX_LEN];//接收的数据缓存区
     char user[WIND_CTL_USRNAME_LEN];//用户名
-    char pwd[WIND_CTL_PWD_LEN];//密码的值
+    char passwd[WIND_CTL_PWD_LEN];//密码的值
     
     w_cmd_his_s his;
     w_cmd_param_s param;

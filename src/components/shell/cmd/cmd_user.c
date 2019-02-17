@@ -59,10 +59,12 @@ static w_err_t modify_user(w_int32_t argc,char ** argv)
 {
     w_err_t err;
     w_user_s *user;
-    WIND_ASSERT_RETURN(argc >= 4,W_ERR_FAIL);
+    WIND_ASSERT_RETURN(argc >= 5,W_ERR_FAIL);
     user = wind_user_get(argv[2]);
     WIND_ASSERT_RETURN(user != W_NULL,W_ERR_FAIL);
-    err = wind_user_modify_passwd(user,argv[3]);
+    if(wind_strcmp(user->passwd,argv[3]) != 0)
+        return W_ERR_FAIL;
+    err = wind_user_modify_passwd(user,argv[4]);
     return err;
 }
 
@@ -82,7 +84,7 @@ COMMAND_USAGE(user)
     wind_printf("user list:to show all user information.\r\n");
     wind_printf("user add <name> <passwd>:add a new user account.\r\n");
     wind_printf("user del <name>:delete an existing user account.\r\n");
-    wind_printf("user modify <name>:modify an existing user's password.\r\n");
+    wind_printf("user chpwd <name> <oldpwd> <newpwd>:modify an existing user's password.\r\n");
 }
 
 COMMAND_MAIN(user,argc,argv)
@@ -101,7 +103,7 @@ COMMAND_MAIN(user,argc,argv)
     {
         return del_user(argc,argv);
     }
-    else if(wind_strcmp(argv[1],"modify") == 0)
+    else if(wind_strcmp(argv[1],"chpwd") == 0)
     {
         return modify_user(argc,argv);
     }

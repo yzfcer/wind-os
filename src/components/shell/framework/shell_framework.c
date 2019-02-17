@@ -261,7 +261,7 @@ static void shell_stat_init(w_shell_ctx_s *ctx)
     wind_memset(ctx->buf,0,WIND_CMD_MAX_LEN);
     wind_memset(ctx->user,0,WIND_CTL_USRNAME_LEN);
     wind_strcpy(ctx->user,"anonymous");
-    wind_memset(ctx->pwd,0,WIND_CTL_PWD_LEN);
+    wind_memset(ctx->passwd,0,WIND_CTL_PWD_LEN);
     cmd_history_init(&ctx->his);
     wind_cmd_init(ctx);
 }
@@ -356,14 +356,57 @@ w_err_t wind_cmd_print(void)
 }
 
 #if USER_AUTH_ENABLE
-static w_err_t match_user_account(w_shell_ctx_s *ctx)
+#if WIND_USER_SUPPORT
+#include "wind_user.h"
+w_err_t match_user_name(w_shell_ctx_s *ctx)
 {
-    if(wind_strcmp(ctx->buf,"root") != 0)
+    w_user_s *user;
+    user = wind_user_get(ctx->user);
+    if(user == W_NULL)
+        return W_ERR_FAIL;
+    return W_ERR_OK;
+}
+
+w_err_t match_user_passwd(w_shell_ctx_s *ctx)
+{
+    w_user_s *user;
+    user = wind_user_get(ctx->user);
+    if(user == W_NULL)
+        return W_ERR_FAIL;
+    if(wind_strcmp(ctx->passwd,user->passwd) != 0)
+        return W_ERR_FAIL;
+    return W_ERR_OK;
+}
+#else
+w_err_t match_user_name(w_shell_ctx_s *ctx)
+{
+    if(wind_strcmp(ctx->user,"root") != 0)
+        return W_ERR_OK;
+    return W_ERR_FAIL;
+}
+
+w_err_t match_user_passwd(w_shell_ctx_s *ctx)
+{
+    if(wind_strcmp(ctx->passwd,"wind") != 0)
+        return W_ERR_OK;
+    return W_ERR_FAIL;
+}
+#endif
+static w_err_t record_user_name(w_shell_ctx_s *ctx)
+{
+    if(wind_strlen(ctx->buf) >= WIND_CTL_USRNAME_LEN)
     {
         wind_printf("\r\nlogin:");
         return W_ERR_FAIL;
     }
+    wind_memset(ctx->user,0,WIND_CTL_USRNAME_LEN);
     wind_strcpy(ctx->user,ctx->buf);
+    if(match_user_name(ctx) != W_ERR_OK)
+    {
+        wind_memset(ctx->user,0,WIND_CTL_USRNAME_LEN);
+        wind_printf("\r\nlogin:");
+        return W_ERR_FAIL;
+    }
     ctx->stat = CSLSTAT_PWD;
     wind_printf("\r\npasswd:");
     return W_ERR_OK;
@@ -385,13 +428,12 @@ static w_err_t match_fail_suspend(w_shell_ctx_s *ctx)
 }
 
 
-static w_err_t match_user_passwd(w_shell_ctx_s *ctx)
+static w_err_t record_user_passwd(w_shell_ctx_s *ctx)
 {
     w_int32_t wait_sec = USER_AUTH_ERR_MAX;
     if(wait_sec >= 99)
         wait_sec = 99;
-    if(wind_strcmp(ctx->user,"root") != 0 ||
-        wind_strcmp(ctx->buf,"wind") != 0)
+    if(wind_strlen(ctx->buf) >= WIND_CTL_PWD_LEN)
     {
         ctx->autherr_cnt ++;
         if(ctx->autherr_cnt >= USER_AUTH_ERR_MAX)
@@ -400,7 +442,19 @@ static w_err_t match_user_passwd(w_shell_ctx_s *ctx)
         wind_printf("\r\nlogin:");
         return W_ERR_OK;
     }
-    wind_strcpy(ctx->pwd,ctx->buf);
+    wind_memset(ctx->passwd,0,WIND_CTL_PWD_LEN);
+    wind_strcpy(ctx->passwd,ctx->buf);
+    
+    if(match_user_passwd(ctx) != W_ERR_OK)
+    {
+        ctx->autherr_cnt ++;
+        if(ctx->autherr_cnt >= USER_AUTH_ERR_MAX)
+            match_fail_suspend(ctx);
+        ctx->stat = CSLSTAT_USER;
+        wind_printf("\r\nlogin:");
+        return W_ERR_OK;
+    }
+    wind_strcpy(ctx->passwd,ctx->buf);
     ctx->autherr_cnt = 0;
     ctx->stat = CSLSTAT_CMD;
     wind_printf("\r\n%s@%s>",ctx->user,BOARD_NAME);
@@ -530,10 +584,10 @@ w_err_t thread_shell(w_int32_t argc,char **argv)
             {
 #if USER_AUTH_ENABLE
                 case CSLSTAT_USER:
-                    match_user_account(ctx);
+                    record_user_name(ctx);
                     break;
                 case CSLSTAT_PWD:
-                    match_user_passwd(ctx);
+                    record_user_passwd(ctx);
                     break;
 #endif 
                 case CSLSTAT_CMD:
