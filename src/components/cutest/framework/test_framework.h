@@ -37,7 +37,7 @@ extern "C" {
 #define TEST_FAIL_LIST_CNT 100
 extern void test_suite_err(w_uint32_t line);
 
-#define FAIL_EXPECT_FALSE_OUT(x) test_printf("failed expection:FUNCTION:%s,LINE:%d:which expected "#x"\r\n",__FUNCTION__,__LINE__)
+#define FAIL_EXPECT_FALSE_OUT(x,res) test_printf("failed expection:FUNCTION:%s,LINE:%d:which expected "#x"is %s\r\n",__FUNCTION__,__LINE__,res)
 
 #define FAIL_EXPECT_OUT(x,y,than) test_printf("failed expection:FUNCTION:%s,LINE:%d:which expected "#x" %s "#y"\r\n",__FUNCTION__,__LINE__,than)
 

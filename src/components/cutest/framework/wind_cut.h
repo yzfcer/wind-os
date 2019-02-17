@@ -27,11 +27,18 @@
 #include "test_framework.h"
 #if WIND_CUTEST_SUPPORT
 
-//断言x为真
+//断言命题x为真
 #define EXPECT_TRUE(x) \
     do{if(!(x)) \
-    {FAIL_EXPECT_FALSE_OUT(x);test_suite_err(__LINE__);}\
+    {FAIL_EXPECT_FALSE_OUT(x,"TRUE");test_suite_err(__LINE__);}\
     }while(0)
+
+//断言命题x为假
+#define EXPECT_FALSE(x) \
+    do{if(x) \
+    {FAIL_EXPECT_FALSE_OUT(x,"FALSE");test_suite_err(__LINE__);}\
+    }while(0)
+    
 
 //断言x == y
 #define EXPECT_EQ(x,y) \
