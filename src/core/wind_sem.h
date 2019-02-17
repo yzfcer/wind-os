@@ -37,7 +37,7 @@ extern "C" {
 #if WIND_SEM_SUPPORT
 #define WIND_SEM_MAGIC 0x36F7A854
 
-#define F_SEM_POOL 0x01
+#define F_SEM_POOL (0x01 << 0) //标记sem对象是否通过内存池分配
 #define IS_F_SEM_POOL(sem) ((sem->flag & F_SEM_POOL) == F_SEM_POOL)
 #define SET_F_SEM_POOL(sem) (sem->flag |= F_SEM_POOL)
 #define CLR_F_SEM_POOL(sem) (sem->flag &= (~F_SEM_POOL))

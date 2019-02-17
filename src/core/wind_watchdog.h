@@ -41,17 +41,17 @@ extern "C" {
 #define WDOG_WARN  0x00
 #define WDOG_RESET 0x01
 
-#define F_WATCHDOG_POOL 0x01 
+#define F_WATCHDOG_POOL (0x01 << 0)  //标记watchdog对象是否通过内存池分配
 #define IS_F_WATCHDOG_POOL(watchdog) ((watchdog->flag & F_WATCHDOG_POOL) == F_WATCHDOG_POOL)
 #define SET_F_WATCHDOG_POOL(watchdog) (watchdog->flag |= F_WATCHDOG_POOL)
 #define CLR_F_WATCHDOG_POOL(watchdog) (watchdog->flag &= (~F_WATCHDOG_POOL))
 
-#define F_WATCHDOG_WARN 0x02
+#define F_WATCHDOG_WARN (0x01 << 1) //标记watchdog超时后是否告警
 #define IS_F_WATCHDOG_WARN(watchdog) ((watchdog->flag & F_WATCHDOG_WARN) == F_WATCHDOG_WARN)
 #define SET_F_WATCHDOG_WARN(watchdog) (watchdog->flag |= F_WATCHDOG_WARN)
 #define CLR_F_WATCHDOG_WARN(watchdog) (watchdog->flag &= (~F_WATCHDOG_WARN))
 
-#define F_WATCHDOG_RESET 0x03
+#define F_WATCHDOG_RESET (0x01 << 2) //标记watchdog超时后是否重启
 #define IS_F_WATCHDOG_RESET(watchdog) ((watchdog->flag & F_WATCHDOG_RESET) == F_WATCHDOG_RESET)
 #define SET_F_WATCHDOG_RESET(watchdog) (watchdog->flag |= F_WATCHDOG_RESET)
 #define CLR_F_WATCHDOG_RESET(watchdog) (watchdog->flag &= (~F_WATCHDOG_RESET))

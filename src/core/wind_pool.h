@@ -37,8 +37,14 @@ extern "C" {
 #define POOL_BLK_FREE 0x52d6e300
 #define POOL_BLK_USED (POOL_BLK_FREE | 0xA5)
 
+#define F_POOLITEM_USED (0x01 << 0) //标记sem对象是否通过内存池分配
+#define IS_F_POOLITEM_USED(sem) ((sem->flag & F_POOLITEM_USED) == F_POOLITEM_USED)
+#define SET_F_POOLITEM_USED(sem) (sem->flag |= F_POOLITEM_USED)
+#define CLR_F_POOLITEM_USED(sem) (sem->flag &= (~F_POOLITEM_USED))
+
 typedef struct __w_pool_item_s w_pool_item_s;
 typedef struct __w_pool_s w_pool_s;
+
 
 //一个基本的内存池链结构体
 struct __w_pool_item_s

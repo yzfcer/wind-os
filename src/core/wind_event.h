@@ -38,7 +38,7 @@ extern "C" {
 #if WIND_EVENT_SUPPORT
 #define WIND_EVENT_MAGIC 0x5A9C524C
 
-#define F_EVENT_POOL 0x01
+#define F_EVENT_POOL (0x01 << 0) //标记event对象是否通过内存池分配
 #define IS_F_EVENT_POOL(event) ((event->flag & F_EVENT_POOL) == F_EVENT_POOL)
 #define SET_F_EVENT_POOL(event) (event->flag |= F_EVENT_POOL)
 #define CLR_F_EVENT_POOL(event) (event->flag &= (~F_EVENT_POOL))

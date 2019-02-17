@@ -64,8 +64,8 @@ w_err_t wind_pool_create(const char *name,void *mem,w_uint32_t memsize,w_uint32_
     w_pool_s *pm;
     wind_notice("create pool:%s",name?name:"null");
     WIND_ASSERT_RETURN(mem != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(memsize > 0,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(itemsize > 0,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(itemsize > sizeof(w_pool_item_s),W_ERR_INVALID);
+    WIND_ASSERT_RETURN(memsize > sizeof(w_pool_s)+itemsize,W_ERR_INVALID);
     
     pm = (w_pool_s *)WIND_MPOOL_ALIGN_R((w_uint32_t)mem);
     if(pm != (w_pool_s *)mem)

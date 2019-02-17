@@ -34,12 +34,12 @@ extern "C" {
 #endif
 #if WIND_MUTEX_SUPPORT
 
-#define F_MUTEX_POOL 0x01
+#define F_MUTEX_POOL (0x01 << 0) //标记mutex对象是否通过内存池分配
 #define IS_F_MUTEX_POOL(mutex) ((mutex->flag & F_MUTEX_POOL) == F_MUTEX_POOL)
 #define SET_F_MUTEX_POOL(mutex) (mutex->flag |= F_MUTEX_POOL)
 #define CLR_F_MUTEX_POOL(mutex) (mutex->flag &= (~F_MUTEX_POOL))
 
-#define F_MUTEX_LOCKED 0x02
+#define F_MUTEX_LOCKED (0x01 << 1) //标记mutex对象当前的锁定状态
 #define IS_F_MUTEX_LOCKED(mutex) ((mutex->flag & F_MUTEX_LOCKED) == F_MUTEX_LOCKED)
 #define SET_F_MUTEX_LOCKED(mutex) (mutex->flag |= F_MUTEX_LOCKED)
 #define CLR_F_MUTEX_LOCKED(mutex) (mutex->flag &= (~F_MUTEX_LOCKED))

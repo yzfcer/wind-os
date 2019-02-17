@@ -38,12 +38,12 @@ extern "C" {
 #define THREAD_FROM_MEMBER(ptr,type,mbr) (void*)(((char*)(ptr))-((w_uint32_t)&(((type*)0)->mbr)))
 #define SLEEP_TIMEOUT_MAX 0x7fffffff
 
-#define F_THREAD_POOL 0x01
+#define F_THREAD_POOL (0x01 << 0) //标记thread对象是否通过内存池分配
 #define IS_F_THREAD_POOL(thread) ((thread->flag & F_THREAD_POOL) == F_THREAD_POOL)
 #define SET_F_THREAD_POOL(thread) (thread->flag |= F_THREAD_POOL)
 #define CLR_F_THREAD_POOL(thread) (thread->flag &= (~F_THREAD_POOL))
 
-#define F_THREAD_STKPOOL 0x02
+#define F_THREAD_STKPOOL (0x01 << 1) //标记thread对象的堆栈是否通过内存池分配
 #define IS_F_THREAD_STKPOOL(thread) ((thread->flag & F_THREAD_STKPOOL) == F_THREAD_STKPOOL)
 #define SET_F_THREAD_STKPOOL(thread) (thread->flag |= F_THREAD_STKPOOL)
 #define CLR_F_THREAD_STKPOOL(thread) (thread->flag &= (~F_THREAD_STKPOOL))

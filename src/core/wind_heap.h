@@ -47,12 +47,12 @@ extern "C" {
 
 
 
-#define F_HEAP_PRIVATE 0x01
+#define F_HEAP_PRIVATE (0x01 << 0) //标记heap对象是否通过内存池分配
 #define IS_F_HEAP_PRIVATE(heap) ((heap->flag & F_HEAP_PRIVATE) == F_HEAP_PRIVATE)
 #define SET_F_HEAP_PRIVATE(heap) (heap->flag |= F_HEAP_PRIVATE)
 #define CLR_F_HEAP_PRIVATE(heap) (heap->flag &= (~F_HEAP_PRIVATE))
 
-#define F_HEAPITEM_USED 0x01
+#define F_HEAPITEM_USED (0x01 << 0) //标记heapitem对象是否通过内存池分配
 #define IS_F_HEAPITEM_USED(heapitem) ((heapitem->flag & F_HEAPITEM_USED) == F_HEAPITEM_USED)
 #define SET_F_HEAPITEM_USED(heapitem) (heapitem->flag |= F_HEAPITEM_USED)
 #define CLR_F_HEAPITEM_USED(heapitem) (heapitem->flag &= (~F_HEAPITEM_USED))

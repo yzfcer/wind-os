@@ -40,7 +40,7 @@ extern "C" {
 
 #define WIND_USER_MAGIC 0x3A6372A9
 
-#define F_USER_POOL 0x01
+#define F_USER_POOL (0x01 << 0) //标记user对象是否通过内存池分配
 #define IS_F_USER_POOL(user) ((user->flag & F_USER_POOL) == F_USER_POOL)
 #define SET_F_USER_POOL(user) (user->flag |= F_USER_POOL)
 #define CLR_F_USER_POOL(user) (user->flag &= (~F_USER_POOL))

@@ -77,6 +77,8 @@ w_err_t wind_timer_init(w_timer_s* timer,
                             w_uint32_t flag)
 {
     w_int32_t count;
+    WIND_ASSERT_RETURN(timer != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(func != W_NULL,W_ERR_PTR_NULL);
     count = period_ms / TIMER_PERIOD;
     if(count <= 0)
         count = 1;
@@ -108,7 +110,6 @@ w_timer_s* wind_timer_create(const char *name,
 {
     w_err_t err;
     w_timer_s* timer;
-    WIND_ASSERT_RETURN(func != W_NULL,W_NULL);
     timer = timer_malloc();
     WIND_ASSERT_RETURN(timer != W_NULL,W_NULL);
     err = wind_timer_init(timer,name,period_ms,func,arg,flag);
@@ -157,11 +158,28 @@ w_err_t wind_timer_set_period(w_timer_s* timer,w_uint32_t period_ms)
     count = period_ms / TIMER_PERIOD;
     if(count <= 0)
         count = 1;
-    WIND_ASSERT_RETURN(timer != W_NULL,W_ERR_PTR_NULL);
     timer->period = count;
     timer->value = count;
     return W_ERR_OK;
 }
+
+w_err_t wind_timer_set_flag(w_timer_s* timer,w_uint32_t flag)
+{
+    WIND_ASSERT_RETURN(timer != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(timer->magic == WIND_TIMER_MAGIC,W_ERR_INVALID);
+    if(flag & F_TIMER_REPEAT)
+        SET_F_TIMER_REPEAT(timer);
+    if(flag & F_TIMER_RUN)
+    {
+        if(!IS_F_TIMER_RUN(timer))
+        {
+            timer->value = timer->period;
+            SET_F_TIMER_RUN(timer);
+        }
+    }
+    return W_ERR_OK;
+}
+
 
 w_err_t wind_timer_print(void)
 {
@@ -203,7 +221,7 @@ void _wind_timer_event(void)
                 timer->value = timer->period;
             else
             {
-                wind_timer_destroy(timer);
+                wind_timer_stop(timer);
             }
         }
     }

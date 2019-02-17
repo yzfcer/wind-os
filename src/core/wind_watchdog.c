@@ -60,10 +60,10 @@ static void watchdog_timer(w_timer_s *timer,void * arg)
         wind_enable_interrupt();
         if(watchdog->time_cur < 0)
         {
-            if(IS_F_WATCHDOG_WARN(watchdog))
-                wind_printf("watchdog:thread %s is timeout.\r\n",watchdog->thread->name);
-            else if(IS_F_WATCHDOG_RESET(watchdog))
+            if(IS_F_WATCHDOG_RESET(watchdog))
                 wind_system_reset();
+            else if(IS_F_WATCHDOG_WARN(watchdog))
+                wind_printf("watchdog:thread %s is timeout.\r\n",watchdog->thread->name);
             watchdog->time_cur = watchdog->time_max;
         }
     }

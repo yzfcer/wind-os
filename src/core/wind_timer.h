@@ -36,17 +36,17 @@ extern "C" {
 #define TIMER_PERIOD 10
 #define WIND_TIMER_MAGIC 0x34F574B2
 
-#define F_TIMER_POOL 0x01
+#define F_TIMER_POOL (0x01 << 0) //标记timer对象是否通过内存池分配
 #define IS_F_TIMER_POOL(timer) ((timer->flag & F_TIMER_POOL) == F_TIMER_POOL)
 #define SET_F_TIMER_POOL(timer) (timer->flag |= F_TIMER_POOL)
 #define CLR_F_TIMER_POOL(timer) (timer->flag &= (~F_TIMER_POOL))
 
-#define F_TIMER_RUN 0x02
+#define F_TIMER_RUN (0x01 << 1) //标记timer对象是否处于启动运行状态
 #define IS_F_TIMER_RUN(timer) ((timer->flag & F_TIMER_RUN) == F_TIMER_RUN)
 #define SET_F_TIMER_RUN(timer) (timer->flag |= F_TIMER_RUN)
 #define CLR_F_TIMER_RUN(timer) (timer->flag &= (~F_TIMER_RUN))
 
-#define F_TIMER_REPEAT 0x03
+#define F_TIMER_REPEAT (0x01 << 2) //标记timer对象是否重复触发
 #define IS_F_TIMER_REPEAT(timer) ((timer->flag & F_TIMER_REPEAT) == F_TIMER_REPEAT)
 #define SET_F_TIMER_REPEAT(timer) (timer->flag |= F_TIMER_REPEAT)
 #define CLR_F_TIMER_REPEAT(timer) (timer->flag &= (~F_TIMER_REPEAT))
@@ -84,6 +84,7 @@ w_err_t wind_timer_start(w_timer_s* timer);
 w_err_t wind_timer_stop(w_timer_s* timer);
 w_err_t wind_timer_destroy(w_timer_s* timer);
 w_err_t wind_timer_set_period(w_timer_s* timer,w_uint32_t period_ms);
+w_err_t wind_timer_set_flag(w_timer_s* timer,w_uint32_t flag);
 w_err_t wind_timer_print(void);
 
 #endif //#if WIND_TIMER_SUPPORT

@@ -38,7 +38,7 @@ extern "C" {
 #define WIND_PIPE_MAGIC 0x56384c6a
 #define PIPE_NAME_LEN 12
 
-#define F_PIPE_POOL 0x01
+#define F_PIPE_POOL (0x01 << 0) //标记pipe对象是否通过内存池分配
 #define IS_F_PIPE_POOL(pipe) ((pipe->flag & F_PIPE_POOL) == F_PIPE_POOL)
 #define SET_F_PIPE_POOL(pipe) (pipe->flag |= F_PIPE_POOL)
 #define CLR_F_PIPE_POOL(pipe) (pipe->flag &= (~F_PIPE_POOL))
