@@ -127,6 +127,8 @@ w_err_t wind_user_init(w_user_s *user,w_user_e usertype,const char *username,con
     user->magic = WIND_USER_MAGIC;
     wind_strcpy(user->name,username);
     wind_strcpy(user->passwd,passwd);
+    user->flag = 0;
+    CLR_F_USER_POOL(user);
     user->usertype = usertype;
     DNODE_INIT(user->usernode);
     
@@ -147,7 +149,7 @@ w_user_s *wind_user_create(w_user_e usertype,const char *username,const char *pa
     err = wind_user_init(user,usertype,username,passwd);
     if(err == W_ERR_OK)
     {
-        user->flag_pool = 1;
+        SET_F_USER_POOL(user);
         return user;
     }
     user_free(user);
@@ -165,8 +167,8 @@ w_err_t wind_user_destroy(w_user_s *user)
     wind_enable_switch();
     WIND_ASSERT_RETURN(dnode != W_NULL,W_ERR_INVALID);
     user->magic = 0;
-    user_free(user);
-
+    if(IS_F_USER_POOL(user))
+        user_free(user);
     return W_ERR_OK;  
 }
 

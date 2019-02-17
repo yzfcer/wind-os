@@ -80,7 +80,6 @@ void _wind_heaps_create(void)
 {
     wind_heap_create("heap1",(w_addr_t)(HEAP1_HEAD),HEAD1_LENTH,0);
     wind_heap_create("heap2",(w_addr_t)(HEAP2_HEAD),HEAD2_LENTH,0);
-    //wind_heap_create("heap1",HEAP2_HEAD,HEAD3_LENTH,0);
 }
 #endif
 

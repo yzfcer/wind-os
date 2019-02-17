@@ -39,6 +39,12 @@ extern "C" {
 #define PASSWD_MAXLEN 32
 
 #define WIND_USER_MAGIC 0x3A6372A9
+
+#define F_USER_POOL 0x01
+#define IS_F_USER_POOL(user) ((user->flag & F_USER_POOL) == F_USER_POOL)
+#define SET_F_USER_POOL(user) (user->flag |= F_USER_POOL)
+#define CLR_F_USER_POOL(user) (user->flag &= (~F_USER_POOL))
+
 typedef enum
 {
     USER_SUPER = 0,
@@ -51,8 +57,8 @@ typedef struct _wind_user
     w_uint32_t magic;
     char name[USER_NAME_MAXLEN];
     char passwd[PASSWD_MAXLEN];
+    w_uint32_t flag;
     w_user_e usertype;
-    w_uint32_t flag_pool:1;
     w_dnode_s usernode;
 }w_user_s;
 

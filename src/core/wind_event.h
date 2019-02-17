@@ -37,6 +37,12 @@ extern "C" {
 
 #if WIND_EVENT_SUPPORT
 #define WIND_EVENT_MAGIC 0x5A9C524C
+
+#define F_EV_POOL 0x01
+#define IS_F_EV_POOL(event) ((event->flag & F_EV_POOL) == F_EV_POOL)
+#define SET_F_EV_POOL(event) (event->flag |= F_EV_POOL)
+#define CLR_F_EV_POOL(event) (event->flag &= (~F_EV_POOL))
+
 typedef struct __w_event_s w_event_s;
 typedef void (*w_event_cb_fn)(w_event_s *event,void *arg);
 	
@@ -52,7 +58,7 @@ struct __w_event_s
     const char *name;
     w_dnode_s eventnode;
     w_dlist_s cblist;//消息队列
-    w_uint16_t flag_pool:1;
+    w_uint32_t flag;
 };
 
 

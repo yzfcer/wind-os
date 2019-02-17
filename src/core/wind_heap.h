@@ -38,22 +38,33 @@ extern "C" {
 
 
 #define WIND_HEAP_MIN_SIZE    256
-//#define WIND_HEAP_MINIALLOC    12
 #define WIND_HEAP_MAGIC        0x0a5e8749
-#define WIND_HEAPITEM_MAGIC    0x01ea01ea
+#define WIND_HEAPITEM_MAGIC    0xA1ea
 
 #define __ALIGN_R(size) (((size + 7) >> 3) << 3)
 #define __ALIGN_L(size) (((size) >> 3) << 3)
-
 #define WIND_HEAP_SIZE         __ALIGN_R(sizeof(w_heapitem_s), WIND_HEAP_ALIGN_SIZE)
+
+
+
+#define F_HEAP_PRIVATE 0x01
+#define IS_F_HEAP_PRIVATE(heap) ((heap->flag & F_HEAP_PRIVATE) == F_HEAP_PRIVATE)
+#define SET_F_HEAP_PRIVATE(heap) (heap->flag |= F_HEAP_PRIVATE)
+#define CLR_F_HEAP_PRIVATE(heap) (heap->flag &= (~F_HEAP_PRIVATE))
+
+#define F_HEAPITEM_USED 0x01
+#define IS_F_HEAPITEM_USED(heapitem) ((heapitem->flag & F_HEAPITEM_USED) == F_HEAPITEM_USED)
+#define SET_F_HEAPITEM_USED(heapitem) (heapitem->flag |= F_HEAPITEM_USED)
+#define CLR_F_HEAPITEM_USED(heapitem) (heapitem->flag &= (~F_HEAPITEM_USED))
+
 
 
 typedef struct __w_heapitem_s w_heapitem_s;
 typedef struct __w_heap_s w_heap_s;
 struct __w_heapitem_s
 {
-    w_uint32_t magic:28;
-    w_uint32_t used:1;
+    w_uint16_t magic;
+    w_uint16_t flag;
     w_heap_s *heap;
     w_prinode_s itemnode;
     w_int32_t size;
@@ -62,12 +73,12 @@ struct __w_heapitem_s
 
 struct __w_heap_s
 {
-    w_uint32_t magic:28;
-    w_uint32_t is_private:1;
+    w_uint32_t magic;
     const char *name;
-    void *addr;
-    w_stati_s stati;
     w_dnode_s heapnode;
+    void *addr;
+    w_uint32_t flag;
+    w_stati_s stati;
     w_dlist_s used_list;
     w_dlist_s free_list;
     void *mutex; 

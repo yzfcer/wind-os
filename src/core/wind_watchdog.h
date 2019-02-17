@@ -36,19 +36,32 @@ extern "C" {
 #endif
 
 #if WIND_WATCHDOG_SUPPORT
-#define WIND_WATCHDOG_MAGIC 0x33FA81
+#define WIND_WATCHDOG_MAGIC 0x33FA81A6
 
 #define WDOG_WARN  0x00
 #define WDOG_RESET 0x01
 
+#define F_WATCHDOG_POOL 0x01 
+#define IS_F_WATCHDOG_POOL(watchdog) ((watchdog->flag & F_WATCHDOG_POOL) == F_WATCHDOG_POOL)
+#define SET_F_WATCHDOG_POOL(watchdog) (watchdog->flag |= F_WATCHDOG_POOL)
+#define CLR_F_WATCHDOG_POOL(watchdog) (watchdog->flag &= (~F_WATCHDOG_POOL))
+
+#define F_WATCHDOG_WARN 0x02
+#define IS_F_WATCHDOG_WARN(watchdog) ((watchdog->flag & F_WATCHDOG_WARN) == F_WATCHDOG_WARN)
+#define SET_F_WATCHDOG_WARN(watchdog) (watchdog->flag |= F_WATCHDOG_WARN)
+#define CLR_F_WATCHDOG_WARN(watchdog) (watchdog->flag &= (~F_WATCHDOG_WARN))
+
+#define F_WATCHDOG_RESET 0x03
+#define IS_F_WATCHDOG_RESET(watchdog) ((watchdog->flag & F_WATCHDOG_RESET) == F_WATCHDOG_RESET)
+#define SET_F_WATCHDOG_RESET(watchdog) (watchdog->flag |= F_WATCHDOG_RESET)
+#define CLR_F_WATCHDOG_RESET(watchdog) (watchdog->flag &= (~F_WATCHDOG_RESET))
+
 typedef struct _wind_watchdog
 {
-    w_uint32_t magic:24;
-    w_uint32_t flag_warn:1;
-    w_uint32_t flag_reset:1;
-    w_uint32_t flag_pool:1;
+    w_uint32_t magic;
     const char* name;
     w_dnode_s watchdognode;
+    w_uint32_t flag;
     w_int16_t time_max;    //初始化的信号量的值
     w_int16_t time_cur;    //当前的信号量的值
 	w_thread_s *thread;
@@ -56,8 +69,8 @@ typedef struct _wind_watchdog
 
 w_err_t _wind_watchdog_mod_init(void);
 w_watchdog_s *wind_watchdog_get(const char *name);
-w_err_t wind_watchdog_init(w_watchdog_s *watchdog,const char *name,w_uint32_t flag,w_int16_t timeout_1s);
-w_watchdog_s *wind_watchdog_create(const char *name,w_uint32_t flag,w_int16_t timeout_1s);
+w_err_t wind_watchdog_init(w_watchdog_s *watchdog,const char *name,w_int16_t timeout_1s,w_uint32_t flag);
+w_watchdog_s *wind_watchdog_create(const char *name,w_int16_t timeout_1s,w_uint32_t flag);
 w_err_t wind_watchdog_destroy(w_watchdog_s *watchdog);
 w_err_t wind_watchdog_feed(w_watchdog_s *watchdog);
 w_err_t wind_watchdog_print(void);

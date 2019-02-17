@@ -84,7 +84,8 @@ w_err_t wind_pipe_init(w_pipe_s* pipe,const char *name,void *buff,w_uint32_t buf
     DNODE_INIT(pipe->pipenode)
     pipe->buff = buff;
     pipe->buflen = buflen;
-    pipe->flag_pool = 0;
+    pipe->flag = 0;
+    CLR_F_PIPE_POOL(pipe);
     wind_disable_interrupt();
     dlist_insert_tail(&pipelist,&pipe->pipenode);
     wind_enable_interrupt();
@@ -103,7 +104,7 @@ w_pipe_s* wind_pipe_create(const char *name,void *buff,w_uint32_t buflen)
     err = wind_pipe_init(pipe,name,buff,buflen);
     if(err == W_ERR_OK)
     {
-        pipe->flag_pool = 1;
+        SET_F_PIPE_POOL(pipe);
         return pipe;
     }
     pipe_free(pipe);
@@ -146,7 +147,7 @@ w_err_t wind_pipe_destroy(w_pipe_s* pipe)
     dlist_remove(&pipelist,&pipe->pipenode);
     pipe->magic = 0;
     pipe->name = W_NULL;
-    if(pipe->flag_pool)
+    if(IS_F_PIPE_POOL(pipe))
         pipe_free(pipe);
     wind_enable_interrupt();
     return W_ERR_OK;

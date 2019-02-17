@@ -34,13 +34,23 @@ extern "C" {
 #endif
 #if WIND_MUTEX_SUPPORT
 
+#define F_MUTEX_POOL 0x01
+#define IS_F_MUTEX_POOL(mutex) ((mutex->flag & F_MUTEX_POOL) == F_MUTEX_POOL)
+#define SET_F_MUTEX_POOL(mutex) (mutex->flag |= F_MUTEX_POOL)
+#define CLR_F_MUTEX_POOL(mutex) (mutex->flag &= (~F_MUTEX_POOL))
+
+#define F_MUTEX_LOCKED 0x02
+#define IS_F_MUTEX_LOCKED(mutex) ((mutex->flag & F_MUTEX_LOCKED) == F_MUTEX_LOCKED)
+#define SET_F_MUTEX_LOCKED(mutex) (mutex->flag |= F_MUTEX_LOCKED)
+#define CLR_F_MUTEX_LOCKED(mutex) (mutex->flag &= (~F_MUTEX_LOCKED))
+
+
 typedef struct _w_mutex_s
 {
     w_uint32_t magic;//魔术字
     const char *name;//互斥锁的名字
     w_dnode_s mutexnode;//互斥锁的节点，用于加入链表
-    w_uint16_t mutexed:1;     //当前的锁的状态
-    w_uint16_t flag_pool:1;  //是否由内存池分配对象
+    w_uint32_t flag;
     w_uint16_t nest;  //同一线程互斥锁嵌套层次
     w_thread_s *owner;//当前持有互斥锁的线程
     w_dlist_s waitlist;  //等待线程队列

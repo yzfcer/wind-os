@@ -36,13 +36,19 @@ extern "C" {
 
 #if WIND_SEM_SUPPORT
 #define WIND_SEM_MAGIC 0x36F7A854
+
+#define F_SEM_POOL 0x01
+#define IS_F_SEM_POOL(sem) ((sem->flag & F_SEM_POOL) == F_SEM_POOL)
+#define SET_F_SEM_POOL(sem) (sem->flag |= F_SEM_POOL)
+#define CLR_F_SEM_POOL(sem) (sem->flag &= (~F_SEM_POOL))
+
 typedef struct _w_sem_s
 {
     w_uint32_t magic;//魔术字
     const char* name;//信号量的名称
     w_dnode_s semnode;//信号量的节点，用于加入链表
     w_dlist_s waitlist;  //等待线程队列
-    w_uint16_t flag_pool:1;    //是否从内存池获取对象
+    w_uint16_t flag;    //是否从内存池获取对象
     w_int8_t sem_tot;    //初始化的信号量的值
     w_int8_t sem_num;    //当前的信号量的值
 }w_sem_s;

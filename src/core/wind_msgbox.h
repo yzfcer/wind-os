@@ -37,6 +37,12 @@ extern "C" {
 
 #if WIND_MSGBOX_SUPPORT
 #define WIND_MSGBOX_MAGIC 0x378A523B
+
+#define F_MSGBOX_POOL 0x01
+#define IS_F_MSGBOX_POOL(msgbox) ((msgbox->flag & F_MSGBOX_POOL) == F_MSGBOX_POOL)
+#define SET_F_MSGBOX_POOL(msgbox) (msgbox->flag |= F_MSGBOX_POOL)
+#define CLR_F_MSGBOX_POOL(msgbox) (msgbox->flag &= (~F_MSGBOX_POOL))
+
 typedef struct _w_msg_s
 {
     w_dnode_s msgnode;
@@ -52,7 +58,7 @@ typedef struct __w_msgbox_s
     w_dnode_s msgboxnode;
     w_dlist_s msglist;//消息队列
     w_int16_t msgnum;//消息的数量
-    w_uint16_t flag_pool:1;//消息的数量
+    w_uint16_t flag;//消息的数量
     w_thread_s *owner;
 }w_msgbox_s;
 

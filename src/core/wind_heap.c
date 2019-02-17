@@ -36,10 +36,10 @@ static w_dlist_s heaplist;
 #define OFFSET_ADDR(base,offset) (void*)(((char*)(base))+(offset))
 #define ITEM_FROM_PTR(ptr) (void*)((w_uint32_t)ptr - sizeof(w_heapitem_s))
 
-static void heapitem_init(w_heapitem_s *item,w_heap_s *hp,w_int32_t size,w_uint32_t used)
+static void heapitem_init(w_heapitem_s *item,w_heap_s *hp,w_int32_t size,w_uint32_t flag)
 {
     item->magic = WIND_HEAPITEM_MAGIC;
-    item->used = used;
+    item->flag = flag;
     item->heap = hp;
     PRIO_DNODE_INIT(item->itemnode);
     item->size = size;
@@ -72,7 +72,7 @@ w_heap_s *wind_heap_get(const char *name)
 }
 
 
-w_heap_s *wind_heap_create(const char *name,w_addr_t base,w_uint32_t size,w_uint32_t is_private)
+w_heap_s *wind_heap_create(const char *name,w_addr_t base,w_uint32_t size,w_uint32_t flag)
 {
     w_heapitem_s* item;
     w_heap_s* hp;
@@ -87,7 +87,7 @@ w_heap_s *wind_heap_create(const char *name,w_addr_t base,w_uint32_t size,w_uint
     hpsize = __ALIGN_L(hpsize);
     
     hp->magic = WIND_HEAP_MAGIC;
-    hp->is_private = is_private?1:0;
+    hp->flag = flag;
     hp->name = name;
     hp->addr = OFFSET_ADDR(hp,sizeof(w_heap_s));
     WIND_STATI_INIT(hp->stati,hpsize);
@@ -166,8 +166,8 @@ static w_err_t combine_heapitem(w_heapitem_s* item1,w_heapitem_s* item2)
     WIND_ASSERT_RETURN(item1->heap == item2->heap,W_ERR_INVALID);
     WIND_ASSERT_RETURN(item1->magic == WIND_HEAPITEM_MAGIC,W_ERR_INVALID);
     WIND_ASSERT_RETURN(item2->magic == WIND_HEAPITEM_MAGIC,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(item1->used == 0,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(item2->used == 0,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(!IS_F_HEAPITEM_USED(item1),W_ERR_INVALID);
+    WIND_ASSERT_RETURN(!IS_F_HEAPITEM_USED(item2),W_ERR_INVALID);
     if(item1->size + (w_uint32_t)item1 == (w_uint32_t)item2)
     {
         dlist_remove(&item1->heap->free_list,&item2->itemnode.dnode);
@@ -228,7 +228,7 @@ void *wind_heap_realloc(w_heap_s* heap, void* ptr, w_uint32_t newsize)
         return wind_heap_malloc(heap,newsize);
     old = ITEM_FROM_PTR(ptr);
     WIND_ASSERT_RETURN(old->magic == WIND_HEAPITEM_MAGIC,W_NULL);
-    WIND_ASSERT_RETURN(old->used == 1,W_NULL);
+    WIND_ASSERT_RETURN(IS_F_HEAPITEM_USED(old),W_NULL);
     WIND_ASSERT_RETURN(old->heap == heap,W_NULL);       
     size = newsize + sizeof(w_heapitem_s);
     wind_mutex_lock(heap->mutex);
@@ -264,7 +264,7 @@ w_err_t wind_heap_free(w_heap_s* heap,void *ptr)
     }
     item = ITEM_FROM_PTR(ptr);
     WIND_ASSERT_RETURN(item->magic == WIND_HEAPITEM_MAGIC,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(item->used == 1,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(IS_F_HEAPITEM_USED(item),W_ERR_INVALID);
     WIND_ASSERT_RETURN(item->heap != W_NULL,W_ERR_INVALID);
     wind_debug("heap_free %s,0x%08x",heap->name?heap->name:"null",ptr);
     heap = item->heap;
@@ -310,7 +310,7 @@ w_err_t wind_heap_print(void)
         heap = (w_heap_s *)DLIST_OBJ(dnode,w_heap_s,heapnode);
         wind_printf("%-16s 0x%08x %-12d %-10s\r\n",
             heap->name?heap->name:"null",heap->addr,heap->stati.tot,
-            heap->is_private?"YES":"NO");
+            IS_F_HEAP_PRIVATE(heap)?"YES":"NO");
     }
     wind_print_space(7);
     return W_ERR_OK;
@@ -340,7 +340,7 @@ w_err_t wind_heapitem_print(void)
                 return W_ERR_MEM;
             }
             wind_printf("0x%-14x %-8d %-10s\r\n",
-                heapitem,heapitem->size,(heapitem->used)?"uesd":"free");
+                heapitem,heapitem->size,IS_F_HEAPITEM_USED(heapitem)?"uesd":"free");
         }
         foreach_node(dnode1,&heap->used_list)
         {
@@ -351,7 +351,7 @@ w_err_t wind_heapitem_print(void)
                 return W_ERR_MEM;
             }
             wind_printf("0x%-14x %-8d %-10s\r\n",
-                heapitem,heapitem->size,(heapitem->used)?"uesd":"free");
+                heapitem,heapitem->size,IS_F_HEAPITEM_USED(heapitem)?"uesd":"free");
         }
     }
     wind_print_space(5);
@@ -389,7 +389,7 @@ void *wind_malloc(w_uint32_t size)
     {
         heap = DLIST_OBJ(dnode,w_heap_s,heapnode);
         wind_debug("malloc in heap:0x%x",heap);
-        if(!heap->is_private)
+        if(!IS_F_HEAP_PRIVATE(heap))
         {
             ptr = wind_heap_malloc(heap, size);
             if(ptr)
@@ -416,7 +416,7 @@ w_err_t wind_free(void *ptr)
     wind_debug("wind_free:ptr=0x%x",ptr);
     item = ITEM_FROM_PTR(ptr);
     WIND_ASSERT_RETURN(item->magic == WIND_HEAPITEM_MAGIC,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(item->used == 1,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(IS_F_HEAPITEM_USED(item),W_ERR_INVALID);
     return wind_heap_free(item->heap,ptr);
 }
 
@@ -433,7 +433,7 @@ void *wind_realloc(void *ptr, w_uint32_t newsize)
     foreach_node(dnode,&heaplist)
     {
         heap = DLIST_OBJ(dnode,w_heap_s,heapnode);
-        if(!heap->is_private)
+        if(!IS_F_HEAP_PRIVATE(heap))
         {
             pnew = wind_heap_realloc(heap,ptr,newsize);
             if(pnew)

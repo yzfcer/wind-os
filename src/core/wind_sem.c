@@ -81,7 +81,8 @@ w_err_t wind_sem_init(w_sem_s *sem,const char *name,w_int8_t sem_value)
     sem->sem_num = sem_value;
     sem->sem_tot = sem_value;
     DLIST_INIT(sem->waitlist);
-    sem->flag_pool = 0;
+    sem->flag = 0;
+    CLR_F_SEM_POOL(sem);
     wind_disable_interrupt();
     dlist_insert_tail(&semlist,&sem->semnode);
     wind_enable_interrupt();
@@ -97,7 +98,7 @@ w_sem_s *wind_sem_create(const char *name,w_int8_t sem_value)
     err = wind_sem_init(sem,name,sem_value);
     if(err == W_ERR_OK)
     {
-        sem->flag_pool = 1;
+        SET_F_SEM_POOL(sem);
         return sem;
     }
     sem_free(sem);
@@ -139,7 +140,7 @@ w_err_t wind_sem_destroy(w_sem_s *sem)
         thread->cause = CAUSE_SEM;
     }
     wind_enable_interrupt();
-    if(sem->flag_pool)
+    if(IS_F_SEM_POOL(sem))
         sem_free(sem);
     return W_ERR_OK;    
 }

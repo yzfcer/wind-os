@@ -31,7 +31,7 @@ void led_start(void)
     w_chdev_s *dev;
     dev = wind_chdev_get("led0");
     wind_chdev_open(dev);
-    ledtmr = wind_timer_create("led0tmr",100,led0_timer,W_NULL,1,1);
+    ledtmr = wind_timer_create("led0tmr",100,led0_timer,W_NULL,F_TIMER_RUN | F_TIMER_REPEAT);
     if(ledtmr == W_NULL)
         wind_error("create led timer failed.");
 }

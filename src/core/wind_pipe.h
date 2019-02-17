@@ -38,6 +38,11 @@ extern "C" {
 #define WIND_PIPE_MAGIC 0x56384c6a
 #define PIPE_NAME_LEN 12
 
+#define F_PIPE_POOL 0x01
+#define IS_F_PIPE_POOL(pipe) ((pipe->flag & F_PIPE_POOL) == F_PIPE_POOL)
+#define SET_F_PIPE_POOL(pipe) (pipe->flag |= F_PIPE_POOL)
+#define CLR_F_PIPE_POOL(pipe) (pipe->flag &= (~F_PIPE_POOL))
+
 typedef struct __w_pipe_s
 {
     w_uint32_t magic;
@@ -45,7 +50,7 @@ typedef struct __w_pipe_s
     w_dnode_s pipenode;
     void *buff;
     w_uint16_t buflen;
-    w_uint16_t flag_pool:1;
+    w_uint16_t flag;
 }w_pipe_s;
 
 w_err_t _wind_pipe_mod_init(void);

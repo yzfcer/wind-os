@@ -59,8 +59,8 @@ CASE_FUNC(mutexinit)
     EXPECT_EQ(err,W_ERR_OK);
     mutexs[0] = wind_mutex_get("test");
     EXPECT_NE(mutexs[0],W_NULL);
-    EXPECT_EQ(mutexs[0]->mutexed,0);
-    EXPECT_EQ(mutexs[0]->flag_pool,0);
+    EXPECT_TRUE(!IS_F_MUTEX_LOCKED(mutexs[0]));
+    EXPECT_TRUE(!IS_F_MUTEX_POOL(mutexs[0]));
     EXPECT_EQ(mutexs[0]->waitlist.head,W_NULL);
     EXPECT_EQ(mutexs[0]->waitlist.tail,W_NULL);
     err = wind_mutex_destroy(mutexs[0]);
@@ -92,8 +92,8 @@ CASE_FUNC(mutexinfo)
     w_err_t err;
     mutexs[0] = wind_mutex_create("test");
     EXPECT_NE(mutexs[0],W_NULL);
-    EXPECT_EQ(mutexs[0]->mutexed,0);
-    EXPECT_EQ(mutexs[0]->flag_pool,1);
+    EXPECT_TRUE(!IS_F_MUTEX_LOCKED(mutexs[0]));
+    EXPECT_TRUE(IS_F_MUTEX_POOL(mutexs[0]));
     EXPECT_EQ(mutexs[0]->waitlist.head,W_NULL);
     EXPECT_EQ(mutexs[0]->waitlist.tail,W_NULL);
     err = wind_mutex_destroy(mutexs[0]);
@@ -117,10 +117,10 @@ CASE_FUNC(mutexfunc)
     EXPECT_NE(mutexs[0],W_NULL);
     err = wind_mutex_lock(mutexs[0]);
     EXPECT_EQ(W_ERR_OK,err);
-    EXPECT_EQ(mutexs[0]->mutexed,W_TRUE);
+    EXPECT_TRUE(IS_F_MUTEX_LOCKED(mutexs[0]));
     err = wind_mutex_unlock(mutexs[0]);
     EXPECT_EQ(W_ERR_OK,err);
-    EXPECT_EQ(mutexs[0]->mutexed,W_FALSE);
+    EXPECT_TRUE(!IS_F_MUTEX_LOCKED(mutexs[0]));
     EXPECT_EQ(mutexs[0]->waitlist.head,W_NULL);
     EXPECT_EQ(mutexs[0]->waitlist.tail,W_NULL);
     err = wind_mutex_destroy(mutexs[0]);

@@ -37,6 +37,17 @@ extern "C" {
 #define THREAD_NAME_LEN 20 //线程名的最大长度，包括 '\0'
 #define THREAD_FROM_MEMBER(ptr,type,mbr) (void*)(((char*)(ptr))-((w_uint32_t)&(((type*)0)->mbr)))
 #define SLEEP_TIMEOUT_MAX 0x7fffffff
+
+#define F_THREAD_THRPOOL 0x01
+#define IS_F_THREAD_THRPOOL(thread) ((thread->flag & F_THREAD_THRPOOL) == F_THREAD_THRPOOL)
+#define SET_F_THREAD_THRPOOL(thread) (thread->flag |= F_THREAD_THRPOOL)
+#define CLR_F_THREAD_THRPOOL(thread) (thread->flag &= (~F_THREAD_THRPOOL))
+
+#define F_THREAD_STKPOOL 0x02
+#define IS_F_THREAD_STKPOOL(thread) ((thread->flag & F_THREAD_STKPOOL) == F_THREAD_STKPOOL)
+#define SET_F_THREAD_STKPOOL(thread) (thread->flag |= F_THREAD_STKPOOL)
+#define CLR_F_THREAD_STKPOOL(thread) (thread->flag &= (~F_THREAD_STKPOOL))
+
 //线程的优先等级，
 typedef enum _w_prio_e
 {
@@ -92,8 +103,8 @@ struct _w_thread_s
     w_uint16_t stksize;//堆栈大小，以栈宽度技术
     
     w_int16_t argc;
-    w_uint16_t flag_stkpool:1;//标记线程栈是否从内存池取得
-    w_uint16_t flag_threadpool:1;//标记线程结构是否从内存池获取
+    w_int16_t flag;
+    
     char **argv;
     w_err_t (*thread_func)(w_int32_t argc,char **argv);
     

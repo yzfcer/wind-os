@@ -30,7 +30,6 @@ struct __w_tree_s
 {
     w_tree_s *parent;
     w_dlist_s child_list;
-    //w_dnode_s child_node;
     w_dnode_s treenode;
 };
 

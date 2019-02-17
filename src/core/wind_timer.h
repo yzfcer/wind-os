@@ -35,6 +35,22 @@ extern "C" {
 #if WIND_TIMER_SUPPORT
 #define TIMER_PERIOD 10
 #define WIND_TIMER_MAGIC 0x34F574B2
+
+#define F_TIMER_POOL 0x01
+#define IS_F_TIMER_POOL(timer) ((timer->flag & F_TIMER_POOL) == F_TIMER_POOL)
+#define SET_F_TIMER_POOL(timer) (timer->flag |= F_TIMER_POOL)
+#define CLR_F_TIMER_POOL(timer) (timer->flag &= (~F_TIMER_POOL))
+
+#define F_TIMER_RUN 0x02
+#define IS_F_TIMER_RUN(timer) ((timer->flag & F_TIMER_RUN) == F_TIMER_RUN)
+#define SET_F_TIMER_RUN(timer) (timer->flag |= F_TIMER_RUN)
+#define CLR_F_TIMER_RUN(timer) (timer->flag &= (~F_TIMER_RUN))
+
+#define F_TIMER_REPEAT 0x03
+#define IS_F_TIMER_REPEAT(timer) ((timer->flag & F_TIMER_REPEAT) == F_TIMER_REPEAT)
+#define SET_F_TIMER_REPEAT(timer) (timer->flag |= F_TIMER_REPEAT)
+#define CLR_F_TIMER_REPEAT(timer) (timer->flag &= (~F_TIMER_REPEAT))
+
 typedef struct __w_timer_s w_timer_s;
 typedef void (*w_timer_fn)(w_timer_s* timer,void *arg);
 struct __w_timer_s
@@ -44,9 +60,7 @@ struct __w_timer_s
     w_dnode_s timernode;
     w_uint32_t value;
     w_uint32_t period;
-    w_uint32_t flag_running:1;
-    w_uint32_t flag_repeat:1;
-    w_uint32_t flag_pool:1;
+    w_uint32_t flag;
     w_timer_fn handle;
     void *arg;
 };
@@ -59,15 +73,13 @@ w_err_t wind_timer_init(w_timer_s* timer,
                             w_uint32_t period_ms,
                             w_timer_fn func,
                             void *arg,
-                            w_uint32_t flag_run,
-                            w_uint32_t flag_repeat);
+                            w_uint32_t flag);
 
 w_timer_s* wind_timer_create(const char *name,
                             w_uint32_t period_ms,
                             w_timer_fn func,
                             void *arg,
-                            w_uint32_t flag_run,
-                            w_uint32_t flag_repeat);
+                            w_uint32_t flag);
 w_err_t wind_timer_start(w_timer_s* timer);
 w_err_t wind_timer_stop(w_timer_s* timer);
 w_err_t wind_timer_destroy(w_timer_s* timer);

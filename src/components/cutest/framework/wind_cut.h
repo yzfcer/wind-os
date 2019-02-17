@@ -27,11 +27,19 @@
 #include "test_framework.h"
 #if WIND_CUTEST_SUPPORT
 
+//¶ÏÑÔxÎªÕæ
+#define EXPECT_TRUE(x) \
+    do{if(!(x)) \
+    {FAIL_EXPECT_FALSE_OUT(x);test_suite_err(__LINE__);}\
+    }while(0)
+
 //¶ÏÑÔx == y
 #define EXPECT_EQ(x,y) \
     do{if((x) != (y)) \
     {FAIL_EXPECT_OUT(x,y,"==");test_suite_err(__LINE__);}\
     }while(0)
+
+
 
 //¶ÏÑÔx != y
 #define EXPECT_NE(x,y) \

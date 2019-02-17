@@ -170,8 +170,9 @@ w_err_t wind_thread_init(w_thread_s *thread,
     thread->argc = argc;
     thread->argv = argv;
     thread->thread_func = thread_func;
-    thread->flag_stkpool = 0;
-    thread->flag_threadpool = 0;
+    thread->flag = 0;
+    CLR_F_THREAD_STKPOOL(thread);
+    CLR_F_THREAD_THRPOOL(thread);
     
     thread->name = (char*)name;
     thread->prio = get_prio(priolevel);
@@ -204,7 +205,7 @@ w_thread_s *wind_thread_create(const char *name,
     err = wind_thread_init(thread,name,thread_func,argc,argv,priolevel,pstk,stksize);
     if(err == W_ERR_OK)
     {
-        thread->flag_threadpool = 1;
+        SET_F_THREAD_THRPOOL(thread);
         return thread;
     }
     thread_free(thread);
@@ -228,7 +229,7 @@ w_thread_s *wind_thread_create_default(const char *name,
     thread = wind_thread_create(name,thread_func,argc,argv,priol,pstk,stksize);
     if(thread == W_NULL)
     {
-        thread->flag_stkpool = 1;
+        SET_F_THREAD_STKPOOL(thread);
         return thread;
     }
     wind_pool_free(stkbufpool,pstk);
@@ -245,10 +246,10 @@ w_err_t wind_thread_destroy(w_thread_s *thread)
     dlist_remove(&threadlist,&thread->validnode.dnode);
     //这里需要先释放一些与这个线程相关的一些东西后才能释放这个thread
 #if WIND_STKPOOL_SUPPORT
-    if(thread->flag_stkpool)
+    if(IS_F_THREAD_STKPOOL(thread))
         wind_pool_free(stkbufpool,thread->stack_top);
 #endif
-    if(thread->flag_threadpool)
+    if(IS_F_THREAD_THRPOOL(thread))
         thread_free(thread);
     wind_enable_interrupt();
     _wind_thread_dispatch();
