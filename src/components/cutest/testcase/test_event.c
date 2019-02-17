@@ -78,7 +78,7 @@ CASE_FUNC(eventinit)
     
     EXPECT_EQ(events[0]->cblist.head,W_NULL);
     EXPECT_EQ(events[0]->cblist.tail,W_NULL);
-    EXPECT_TRUE(!IS_F_EV_POOL(events[0]));
+    EXPECT_TRUE(!IS_F_EVENT_POOL(events[0]));
     err = wind_event_destroy(events[0]);
     EXPECT_EQ(W_ERR_OK,err);
     EXPECT_EQ(events[0]->magic,0);
@@ -116,7 +116,7 @@ CASE_FUNC(eventinfo)
     
     EXPECT_EQ(events[0]->cblist.head,W_NULL);
     EXPECT_EQ(events[0]->cblist.tail,W_NULL);
-    EXPECT_TRUE(IS_F_EV_POOL(events[0]));
+    EXPECT_TRUE(IS_F_EVENT_POOL(events[0]));
     err = wind_event_destroy(events[0]);
     EXPECT_EQ(W_ERR_OK,err);
     EXPECT_EQ(events[0]->magic,0);

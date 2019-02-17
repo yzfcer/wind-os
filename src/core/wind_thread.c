@@ -172,7 +172,7 @@ w_err_t wind_thread_init(w_thread_s *thread,
     thread->thread_func = thread_func;
     thread->flag = 0;
     CLR_F_THREAD_STKPOOL(thread);
-    CLR_F_THREAD_THRPOOL(thread);
+    CLR_F_THREAD_POOL(thread);
     
     thread->name = (char*)name;
     thread->prio = get_prio(priolevel);
@@ -205,7 +205,7 @@ w_thread_s *wind_thread_create(const char *name,
     err = wind_thread_init(thread,name,thread_func,argc,argv,priolevel,pstk,stksize);
     if(err == W_ERR_OK)
     {
-        SET_F_THREAD_THRPOOL(thread);
+        SET_F_THREAD_POOL(thread);
         return thread;
     }
     thread_free(thread);
@@ -249,7 +249,7 @@ w_err_t wind_thread_destroy(w_thread_s *thread)
     if(IS_F_THREAD_STKPOOL(thread))
         wind_pool_free(stkbufpool,thread->stack_top);
 #endif
-    if(IS_F_THREAD_THRPOOL(thread))
+    if(IS_F_THREAD_POOL(thread))
         thread_free(thread);
     wind_enable_interrupt();
     _wind_thread_dispatch();
