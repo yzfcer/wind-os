@@ -36,7 +36,7 @@ wind_restore_sr
 ;/**************************************************************************************
 ;* 函数名称: wind_start_switch
 ;*
-;* 功能描述: 使用调度器运行第一个任务
+;* 功能描述: 启动第一个线程
 ;* 
 ;* 参    数: None
 ;*
@@ -55,7 +55,7 @@ wind_start_switch
 	MOV     R5, #1
 	STRB    R5, [R4]
 
-								   ;切换到最高优先级的任务
+								   ;切换到最高优先级的线程
 	LDR     R4, =NVIC_INT_CTRL     ;trigger the PendSV exception (causes context switch)
 	LDR     R5, =NVIC_PENDSVSET
 	STR     R5, [R4]
@@ -65,9 +65,9 @@ WIND_OS_HANG
 	B       WIND_OS_HANG            ;should never get here
 
 ;/**************************************************************************************
-;* 函数名称: wind_proc_switch
+;* 函数名称: wind_thread_switch
 ;*
-;* 功能描述: 任务级上下文切换         
+;* 功能描述: 线程级上下文切换         
 ;*
 ;* 参    数: None
 ;*
@@ -85,7 +85,7 @@ wind_thread_switch
 ;/**************************************************************************************
 ;* 函数名称: wind_interrupt_switch
 ;*
-;* 功能描述: 中断级任务切换
+;* 功能描述: 中断级线程切换
 ;*
 ;* 参    数: None
 ;*
@@ -104,7 +104,7 @@ wind_interrupt_switch
 ;/**************************************************************************************
 ;* 函数名称: PendSV_Handler
 ;*
-;* 功能描述: OSPendSV is used to cause a context switch.
+;* 功能描述: PendSV is used to cause a context switch.
 ;*
 ;* 参    数: None
 ;*
@@ -130,22 +130,12 @@ PendSV_Handler
 
                                                                 ; At this point, entire context of process has been saved
 PendSV_Handler_Nosave
-    PUSH    {R14}                                               ; Save LR exc_return value
-    ;LDR     R0, =wind_sw_hook                                  ; wind_sw_hook();
-    ;BLX     R0
-    POP     {R14} 
-
-    ;LDR     R0, =OSPrioCur                                      ; OSPrioCur = OSPrioHighRdy;
-    ;LDR     R1, =OSPrioHighRdy
-    ;LDRB    R2, [R1]
-    ;STRB    R2, [R0]
-
     LDR     R0, =gwind_cur_stack                                       ; gwind_cur_stack  = gwind_high_stack;
     LDR     R1, =gwind_high_stack
     LDR     R2, [R1]
     STR     R2, [R0]
 
-    LDR     R0, [R2]                                            ; R0 is new process SP; SP = gwind_high_stack->OSTCBStkPtr;
+    LDR     R0, [R2]                                            ; R0 is new process SP; SP = gwind_high_stack
     LDM     R0, {R4-R11}                                        ; Restore r4-11 from new process stack
     ADDS    R0, R0, #0x20
 

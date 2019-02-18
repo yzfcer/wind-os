@@ -331,6 +331,7 @@ w_int32_t wind_vsprintf(char *buf, const char *fmt, wind_va_list args)
         case 'u':
             break;
         case 'f':
+        case 'g':
             
             vargdouble = (w_fp64_t)wind_va_arg(args, w_fp64_t);
             /*wind_va_arg(ap, type), if type is narrow type (char, short, float) an error is given in strict ANSI

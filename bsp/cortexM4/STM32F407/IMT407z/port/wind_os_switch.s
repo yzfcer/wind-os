@@ -35,7 +35,7 @@ wind_restore_sr
 ;/**************************************************************************************
 ;* 函数名称: wind_start_switch
 ;*
-;* 功能描述: 使用调度器运行第一个任务
+;* 功能描述: 启动运行第一个线程
 ;* 
 ;* 参    数: None
 ;*
@@ -54,7 +54,7 @@ wind_start_switch
 	MOV     R5, #1
 	STRB    R5, [R4]
 
-								   ;切换到最高优先级的任务
+								   ;切换到最高优先级的线程
 	LDR     R4, =NVIC_INT_CTRL     ;trigger the PendSV exception (causes context switch)
 	LDR     R5, =NVIC_PENDSVSET
 	STR     R5, [R4]
@@ -64,9 +64,9 @@ WIND_OS_HANG
 	B       WIND_OS_HANG            ;should never get here
 
 ;/**************************************************************************************
-;* 函数名称: wind_proc_switch
+;* 函数名称: wind_thread_switch
 ;*
-;* 功能描述: 任务级上下文切换         
+;* 功能描述: 线程级上下文切换         
 ;*
 ;* 参    数: None
 ;*
@@ -84,7 +84,7 @@ wind_thread_switch
 ;/**************************************************************************************
 ;* 函数名称: wind_interrupt_switch
 ;*
-;* 功能描述: 中断级任务切换
+;* 功能描述: 中断级线程切换
 ;*
 ;* 参    数: None
 ;*
@@ -103,7 +103,7 @@ wind_interrupt_switch
 ;/**************************************************************************************
 ;* 函数名称: PendSV_Handler
 ;*
-;* 功能描述: OSPendSV is used to cause a context switch.
+;* 功能描述: PendSV is used to cause a context switch.
 ;*
 ;* 参    数: None
 ;*
