@@ -30,16 +30,12 @@
 typedef struct { 
     w_uint32_t state[4];        /* state (ABCD) */ 
     w_uint32_t count[2]; /* number of bits, modulo 2^64 (lsb first) */ 
-    unsigned char buffer[64];      /* input buffer */ 
+    w_uint8_t buffer[64];      /* input buffer */ 
 } w_md5_ctx_s; 
    
-void MD5Init (w_md5_ctx_s *context); 
-void MD5Update (w_md5_ctx_s *context, unsigned char*input, unsigned int inputLen); 
-//void MD5UpdaterString(w_md5_ctx_s *context,const char *string); 
-//int MD5FileUpdateFile(w_md5_ctx_s *context,char*filename); 
-void MD5Final (w_md5_ctx_s *context,unsigned char digest[16]); 
-//void MDString (char*string,unsigned char digest[16]); 
-//int MD5File (char *filename,unsigned char digest[16]);
+void wind_md5_init   (w_md5_ctx_s *ctx); 
+void wind_md5_update (w_md5_ctx_s *ctx,w_uint8_t *data, w_uint32_t len); 
+void wind_md5_final  (w_md5_ctx_s *ctx,w_uint8_t digest[16]); 
 
 
 #endif
