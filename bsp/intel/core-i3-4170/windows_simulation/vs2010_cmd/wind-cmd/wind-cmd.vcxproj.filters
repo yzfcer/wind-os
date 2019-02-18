@@ -26,9 +26,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cmd_main.c" />
-    <ClCompile Include="..\..\port\wind_std.c">
-      <Filter>port</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\src\common\wind_dlist.c">
       <Filter>common</Filter>
     </ClCompile>
@@ -40,21 +37,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\src\common\wind_conv.c">
       <Filter>common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\src\components\console\adapter\win32\console_adapter.c">
-      <Filter>adapter</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\src\components\console\cmd\cmd_echo.c">
-      <Filter>cmd</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\src\components\console\framework\cmd_history.c">
-      <Filter>framework</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\src\components\console\framework\console_framework.c">
-      <Filter>framework</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\src\components\console\cmd\cmd_mkfs.c">
-      <Filter>cmd</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\src\components\vfs\efsl\debug.c">
       <Filter>efsl</Filter>
@@ -104,23 +86,32 @@
     <ClCompile Include="..\..\..\..\..\..\src\components\vfs\efsl\ui.c">
       <Filter>efsl</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\port\interface.c">
+    <ClCompile Include="..\..\..\..\..\..\src\components\shell\framework\cmd_history.c">
+      <Filter>framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\components\shell\framework\shell_framework.c">
+      <Filter>framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\port\wind_std.c">
       <Filter>port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\components\shell\cmd\cmd_echo.c">
+      <Filter>cmd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\components\shell\cmd\x86_cmd_mkfs.c">
+      <Filter>cmd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\components\shell\adapter\win32\console_adapter.c">
+      <Filter>adapter</Filter>
     </ClCompile>
     <ClCompile Include="..\..\port\file_port.c">
       <Filter>port</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\port\interface.c">
+      <Filter>port</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\port\wind_config.h">
-      <Filter>port</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\port\wind_std.h">
-      <Filter>port</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\port\wind_type.h">
-      <Filter>port</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\src\common\wind_dlist.h">
       <Filter>common</Filter>
     </ClInclude>
@@ -132,21 +123,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\src\common\wind_conv.h">
       <Filter>common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\src\components\console\adapter\win32\console_adapter.h">
-      <Filter>adapter</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\src\components\console\framework\cmd_history.h">
-      <Filter>framework</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\src\components\console\framework\console_framework.h">
-      <Filter>framework</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\src\components\console\framework\wind_cmd.h">
-      <Filter>framework</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\src\components\console\framework\wind_key.h">
-      <Filter>framework</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\src\components\vfs\efsl\config.h">
       <Filter>efsl</Filter>
@@ -199,10 +175,34 @@
     <ClInclude Include="..\..\..\..\..\..\src\components\vfs\efsl\ui.h">
       <Filter>efsl</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\port\interface.h">
+    <ClInclude Include="..\..\..\..\..\..\src\components\shell\framework\cmd_history.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\src\components\shell\framework\shell_framework.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\src\components\shell\framework\wind_cmd.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\src\components\shell\framework\wind_key.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\port\wind_config.h">
       <Filter>port</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\port\wind_std.h">
+      <Filter>port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\port\wind_type.h">
+      <Filter>port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\src\components\shell\adapter\win32\console_adapter.h">
+      <Filter>adapter</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\port\file_port.h">
+      <Filter>port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\port\interface.h">
       <Filter>port</Filter>
     </ClInclude>
   </ItemGroup>

@@ -15,11 +15,11 @@
     <ClCompile Include="..\..\..\..\..\..\src\common\wind_debug.c" />
     <ClCompile Include="..\..\..\..\..\..\src\common\wind_dlist.c" />
     <ClCompile Include="..\..\..\..\..\..\src\common\wind_string.c" />
-    <ClCompile Include="..\..\..\..\..\..\src\components\console\adapter\win32\console_adapter.c" />
-    <ClCompile Include="..\..\..\..\..\..\src\components\console\cmd\cmd_echo.c" />
-    <ClCompile Include="..\..\..\..\..\..\src\components\console\cmd\cmd_mkfs.c" />
-    <ClCompile Include="..\..\..\..\..\..\src\components\console\framework\cmd_history.c" />
-    <ClCompile Include="..\..\..\..\..\..\src\components\console\framework\console_framework.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\components\shell\adapter\win32\console_adapter.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\components\shell\cmd\cmd_echo.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\components\shell\cmd\x86_cmd_mkfs.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\components\shell\framework\cmd_history.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\components\shell\framework\shell_framework.c" />
     <ClCompile Include="..\..\..\..\..\..\src\components\vfs\efsl\debug.c" />
     <ClCompile Include="..\..\..\..\..\..\src\components\vfs\efsl\dir.c" />
     <ClCompile Include="..\..\..\..\..\..\src\components\vfs\efsl\disc.c" />
@@ -46,11 +46,11 @@
     <ClInclude Include="..\..\..\..\..\..\src\common\wind_debug.h" />
     <ClInclude Include="..\..\..\..\..\..\src\common\wind_dlist.h" />
     <ClInclude Include="..\..\..\..\..\..\src\common\wind_string.h" />
-    <ClInclude Include="..\..\..\..\..\..\src\components\console\adapter\win32\console_adapter.h" />
-    <ClInclude Include="..\..\..\..\..\..\src\components\console\framework\cmd_history.h" />
-    <ClInclude Include="..\..\..\..\..\..\src\components\console\framework\console_framework.h" />
-    <ClInclude Include="..\..\..\..\..\..\src\components\console\framework\wind_cmd.h" />
-    <ClInclude Include="..\..\..\..\..\..\src\components\console\framework\wind_key.h" />
+    <ClInclude Include="..\..\..\..\..\..\src\components\shell\adapter\win32\console_adapter.h" />
+    <ClInclude Include="..\..\..\..\..\..\src\components\shell\framework\cmd_history.h" />
+    <ClInclude Include="..\..\..\..\..\..\src\components\shell\framework\shell_framework.h" />
+    <ClInclude Include="..\..\..\..\..\..\src\components\shell\framework\wind_cmd.h" />
+    <ClInclude Include="..\..\..\..\..\..\src\components\shell\framework\wind_key.h" />
     <ClInclude Include="..\..\..\..\..\..\src\components\vfs\efsl\config.h" />
     <ClInclude Include="..\..\..\..\..\..\src\components\vfs\efsl\debug.h" />
     <ClInclude Include="..\..\..\..\..\..\src\components\vfs\efsl\dir.h" />
@@ -101,7 +101,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(ProjectDir)..\..\..\..\..\..\src\components\console\cmd;$(ProjectDir)..\..\..\..\..\..\src\components\console\adapter\win32;$(ProjectDir)..\..\..\..\..\..\src\components\console\framework;$(ProjectDir)..\..\..\..\..\..\hardware\intel\core-i3-4170\windows_simulation\port;$(ProjectDir)..\..\..\..\..\..\src\common;$(ProjectDir)..\..\..\..\..\..\src\components\vfs\efsl;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\..\..\..\..\..\src\components\shell\cmd;$(ProjectDir)..\..\..\..\..\..\src\components\shell\adapter\win32;$(ProjectDir)..\..\..\..\..\..\src\components\shell\framework;$(ProjectDir)..\..\..\..\..\..\bsp\intel\core-i3-4170\windows_simulation\port;$(ProjectDir)..\..\..\..\..\..\src\common;$(ProjectDir)..\..\..\..\..\..\src\components\vfs\efsl;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
