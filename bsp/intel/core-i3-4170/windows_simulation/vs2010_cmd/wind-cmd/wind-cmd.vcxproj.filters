@@ -110,6 +110,9 @@
     <ClCompile Include="..\..\port\interface.c">
       <Filter>port</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\common\wind_md5.c">
+      <Filter>common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\..\..\src\common\wind_dlist.h">
@@ -204,6 +207,9 @@
     </ClInclude>
     <ClInclude Include="..\..\port\interface.h">
       <Filter>port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\src\common\wind_md5.h">
+      <Filter>common</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

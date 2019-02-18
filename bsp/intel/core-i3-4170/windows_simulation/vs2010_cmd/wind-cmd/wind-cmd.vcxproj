@@ -14,6 +14,7 @@
     <ClCompile Include="..\..\..\..\..\..\src\common\wind_conv.c" />
     <ClCompile Include="..\..\..\..\..\..\src\common\wind_debug.c" />
     <ClCompile Include="..\..\..\..\..\..\src\common\wind_dlist.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\common\wind_md5.c" />
     <ClCompile Include="..\..\..\..\..\..\src\common\wind_string.c" />
     <ClCompile Include="..\..\..\..\..\..\src\components\shell\adapter\win32\console_adapter.c" />
     <ClCompile Include="..\..\..\..\..\..\src\components\shell\cmd\cmd_echo.c" />
@@ -45,6 +46,7 @@
     <ClInclude Include="..\..\..\..\..\..\src\common\wind_conv.h" />
     <ClInclude Include="..\..\..\..\..\..\src\common\wind_debug.h" />
     <ClInclude Include="..\..\..\..\..\..\src\common\wind_dlist.h" />
+    <ClInclude Include="..\..\..\..\..\..\src\common\wind_md5.h" />
     <ClInclude Include="..\..\..\..\..\..\src\common\wind_string.h" />
     <ClInclude Include="..\..\..\..\..\..\src\components\shell\adapter\win32\console_adapter.h" />
     <ClInclude Include="..\..\..\..\..\..\src\components\shell\framework\cmd_history.h" />
