@@ -48,6 +48,17 @@ extern "C" {
 #define SET_F_THREAD_STKPOOL(thread) (thread->flag |= F_THREAD_STKPOOL)
 #define CLR_F_THREAD_STKPOOL(thread) (thread->flag &= (~F_THREAD_STKPOOL))
 
+#define F_THREAD_NO_KILL (0x01 << 2) //标记thread对象的能否被杀死
+#define IS_F_THREAD_NO_KILL(thread) ((thread->flag & F_THREAD_NO_KILL) == F_THREAD_NO_KILL)
+#define SET_F_THREAD_NO_KILL(thread) (thread->flag |= F_THREAD_NO_KILL)
+#define CLR_F_THREAD_NO_KILL(thread) (thread->flag &= (~F_THREAD_NO_KILL))
+
+#define F_THREAD_DAEMON (0x01 << 3) //标记thread对象是否加入后台守护
+#define IS_F_THREAD_DAEMON(thread) ((thread->flag & F_THREAD_DAEMON) == F_THREAD_DAEMON)
+#define SET_F_THREAD_DAEMON(thread) (thread->flag |= F_THREAD_DAEMON)
+#define CLR_F_THREAD_DAEMON(thread) (thread->flag &= (~F_THREAD_DAEMON))
+
+
 //线程的优先等级，
 typedef enum _w_prio_e
 {
@@ -160,6 +171,9 @@ w_err_t wind_thread_start(w_thread_s *thread);
 w_err_t wind_thread_suspend(w_thread_s *thread);
 w_err_t wind_thread_resume(w_thread_s *thread);
 w_err_t wind_thread_destroy(w_thread_s *thread);
+
+w_err_t wind_thread_setflag(w_thread_s *thread,w_int16_t flag);
+w_err_t wind_thread_clrflag(w_thread_s *thread,w_int16_t flag);
 
 w_err_t wind_thread_sleep(w_uint32_t ms);
 w_err_t wind_thread_exit(w_err_t exitcode);

@@ -192,23 +192,23 @@ static void md5_transform (w_uint32_t state[4], w_uint8_t block[64])
 
 void wind_md5_init (w_md5_ctx_s *ctx)          /* ctx */ 
 { 
-    ctx->count[0] = 0;
-    ctx->count[1] = 0; 
+    ctx->bits[0] = 0;
+    ctx->bits[1] = 0; 
     ctx->state[0] = 0x67452301; 
     ctx->state[1] = 0xefcdab89; 
     ctx->state[2] = 0x98badcfe; 
     ctx->state[3] = 0x10325476; 
-} 
+}
 
 void wind_md5_update (w_md5_ctx_s *ctx, w_uint8_t*data, w_uint32_t len) 
 { 
     w_uint32_t i, index, part_len; 
-    index = (w_uint32_t)((ctx->count[0] >> 3) & 0x3F); 
+    index = (w_uint32_t)((ctx->bits[0] >> 3) & 0x3F); 
 
-    if((ctx->count[0] += ((w_uint32_t)len << 3)) 
+    if((ctx->bits[0] += ((w_uint32_t)len << 3)) 
         < ((w_uint32_t)len << 3)) 
-        ctx->count[1]++; 
-    ctx->count[1] += ((w_uint32_t)len >> 29); 
+        ctx->bits[1]++; 
+    ctx->bits[1] += ((w_uint32_t)len >> 29); 
 
     part_len = 64 - index; 
 
@@ -231,9 +231,9 @@ void wind_md5_final (w_md5_ctx_s *ctx,w_uint8_t digest[16])
     w_uint8_t bits[8]; 
     w_uint32_t index, pad_len; 
 
-    encode (bits, ctx->count, 8); 
+    encode (bits, ctx->bits, 8); 
 
-    index = (w_uint32_t)((ctx->count[0] >> 3) & 0x3f); 
+    index = (w_uint32_t)((ctx->bits[0] >> 3) & 0x3f); 
     pad_len = (index < 56) ? (56 - index) : (120 - index); 
     wind_md5_update (ctx, PADDING, pad_len); 
 

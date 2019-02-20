@@ -141,6 +141,7 @@ w_err_t _wind_create_thread_softirq(void)
                 0,W_NULL,PRIO_HIGH,softirq_stk,WIND_SOFTINT_STK_LEN);
     WIND_ASSERT_RETURN(softirq_thread != W_NULL,W_ERR_FAIL);
     wind_thread_set_priority(softirq_thread,1);
+    wind_thread_setflag(softirq_thread,F_THREAD_NO_KILL);
     return W_ERR_OK;
 }
 

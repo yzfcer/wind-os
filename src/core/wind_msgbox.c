@@ -149,6 +149,7 @@ w_err_t wind_msgbox_destroy(w_msgbox_s *msgbox)
     wind_disable_interrupt();
     dlist_remove_tail(&msgboxlist);
     wind_enable_interrupt();
+    msgbox->magic = 0;
     thread = msgbox->owner;
     if((msgbox->owner->runstat == THREAD_STATUS_SLEEP) 
        && (msgbox->owner->cause == CAUSE_MSG))
@@ -156,7 +157,6 @@ w_err_t wind_msgbox_destroy(w_msgbox_s *msgbox)
         thread->runstat = THREAD_STATUS_READY;
     }
 
-    msgbox->magic = 0;
     dnode = dlist_head(&msgbox->msglist);
     if(dnode != W_NULL)
     {

@@ -241,6 +241,11 @@ w_err_t wind_thread_destroy(w_thread_s *thread)
 {
     WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(thread->magic == WIND_THREAD_MAGIC,W_ERR_INVALID);
+    if(IS_F_THREAD_NO_KILL(thread))
+    {
+        wind_printf("kill thread refused\r\n");
+        return W_ERR_FAIL;
+    }
     wind_notice("distroy thread:%s",thread->name);
     wind_disable_interrupt();
     dlist_remove(&threadlist,&thread->validnode.dnode);
@@ -251,10 +256,34 @@ w_err_t wind_thread_destroy(w_thread_s *thread)
 #endif
     if(IS_F_THREAD_POOL(thread))
         thread_free(thread);
+    thread->magic = 0;
     wind_enable_interrupt();
     _wind_thread_dispatch();
     return W_ERR_OK;
 }
+
+w_err_t wind_thread_setflag(w_thread_s *thread,w_int16_t flag)
+{
+    WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(thread->magic == WIND_THREAD_MAGIC,W_ERR_INVALID);
+    if(flag & F_THREAD_NO_KILL)
+        SET_F_THREAD_NO_KILL(thread);
+    if(flag & F_THREAD_DAEMON)
+        SET_F_THREAD_DAEMON(thread);
+    return W_ERR_OK;
+}
+
+w_err_t wind_thread_clrflag(w_thread_s *thread,w_int16_t flag)
+{
+    WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(thread->magic == WIND_THREAD_MAGIC,W_ERR_INVALID);
+    if(flag & F_THREAD_NO_KILL)
+        CLR_F_THREAD_NO_KILL(thread);
+    if(flag & F_THREAD_DAEMON)
+        CLR_F_THREAD_DAEMON(thread);
+    return W_ERR_OK;
+}
+
 
 w_err_t wind_thread_set_priority(w_thread_s *thread,w_int16_t prio)
 {
@@ -324,7 +353,10 @@ w_err_t wind_thread_exit(w_err_t exitcode)
 {
     w_thread_s *thread;
     thread = wind_thread_current();
+    WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(thread->magic == WIND_THREAD_MAGIC,W_ERR_INVALID);
     wind_notice("exit thread:%s,exitcode:%d",thread->name,exitcode);
+    CLR_F_THREAD_NO_KILL(thread);
     wind_thread_destroy(thread);
     _wind_thread_dispatch();
     return W_ERR_OK;

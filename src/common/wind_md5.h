@@ -28,9 +28,9 @@
    
 
 typedef struct { 
-    w_uint32_t state[4];        /* state (ABCD) */ 
-    w_uint32_t count[2]; /* number of bits, modulo 2^64 (lsb first) */ 
-    w_uint8_t buffer[64];      /* input buffer */ 
+    w_uint32_t state[4];
+    w_uint32_t bits[2];
+    w_uint8_t  buffer[64];
 } w_md5_ctx_s; 
    
 void wind_md5_init   (w_md5_ctx_s *ctx); 

@@ -52,6 +52,7 @@ w_err_t _create_thread_stati(void)
                      0,W_NULL,PRIO_HIGH,statisstk,STATI_STK_SIZE);
     WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_FAIL);
     wind_thread_set_priority(thread,5);
+    wind_thread_setflag(thread,F_THREAD_NO_KILL);
     return W_ERR_OK;
 }
 #endif

@@ -81,6 +81,9 @@ CMD_DECLARE(beep);
 #if CMD_LED_SUPPORT
 CMD_DECLARE(led);
 #endif
+#if CMD_WATCHDOG_SUPPORT
+CMD_DECLARE(wdog);
+#endif
 
 
 void _wind_register_all_cmd(w_shell_ctx_s *ctx)
@@ -136,6 +139,9 @@ void _wind_register_all_cmd(w_shell_ctx_s *ctx)
 #endif
 #if CMD_LED_SUPPORT
     wind_cmd_register(COMMAND(led),1);
+#endif
+#if CMD_WATCHDOG_SUPPORT
+    wind_cmd_register(COMMAND(wdog),1);
 #endif
 
 }

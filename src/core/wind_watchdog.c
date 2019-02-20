@@ -55,15 +55,17 @@ static void watchdog_timer(w_timer_s *timer,void * arg)
     foreach_node(dnode,&watchdoglist)
     {
         watchdog = DLIST_OBJ(dnode,w_watchdog_s,watchdognode);
+        if(!IS_F_WATCHDOG_ENABLE(watchdog))
+            continue;
         wind_disable_interrupt();
         watchdog->time_cur --;
         wind_enable_interrupt();
         if(watchdog->time_cur < 0)
         {
+            if(IS_F_WATCHDOG_WARN(watchdog))
+                wind_printf("watchdog:thread %s is timeout.\r\n",watchdog->thread->name);
             if(IS_F_WATCHDOG_RESET(watchdog))
                 wind_system_reset();
-            else if(IS_F_WATCHDOG_WARN(watchdog))
-                wind_printf("watchdog:thread %s is timeout.\r\n",watchdog->thread->name);
             watchdog->time_cur = watchdog->time_max;
         }
     }
@@ -101,14 +103,16 @@ w_watchdog_s *wind_watchdog_get(const char *name)
     return W_NULL;
 }
 
-w_err_t wind_watchdog_init(w_watchdog_s *watchdog,const char *name,w_int16_t timeout_1s,w_uint32_t flag)
+w_err_t wind_watchdog_init(w_watchdog_s *watchdog,const char *name,w_int16_t timeout_1s)
 {
     wind_notice("init watchdog:%s",name);
     WIND_ASSERT_RETURN(watchdog > 0,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(timeout_1s > 0,W_ERR_INVALID);
     watchdog->magic = WIND_WATCHDOG_MAGIC;
-    watchdog->flag = flag;
+    watchdog->flag = 0;
     CLR_F_WATCHDOG_POOL(watchdog);
+    SET_F_WATCHDOG_ENABLE(watchdog);
+    SET_F_WATCHDOG_WARN(watchdog);
     watchdog->name = name;
     DNODE_INIT(watchdog->watchdognode);
     watchdog->time_cur = timeout_1s;
@@ -121,13 +125,13 @@ w_err_t wind_watchdog_init(w_watchdog_s *watchdog,const char *name,w_int16_t tim
 }
 
 
-w_watchdog_s *wind_watchdog_create(const char *name,w_int16_t timeout_1s,w_uint32_t flag)
+w_watchdog_s *wind_watchdog_create(const char *name,w_int16_t timeout_1s)
 {
     w_err_t err;
     w_watchdog_s *watchdog;
     watchdog = watchdog_malloc();
     WIND_ASSERT_RETURN(watchdog != W_NULL,W_NULL);
-    err = wind_watchdog_init(watchdog,name,timeout_1s,flag);
+    err = wind_watchdog_init(watchdog,name,timeout_1s);
     if(err == W_ERR_OK)
     {
         SET_F_WATCHDOG_POOL(watchdog);
@@ -163,6 +167,31 @@ w_err_t wind_watchdog_feed(w_watchdog_s *watchdog)
     return W_ERR_OK;
 }
 
+w_err_t wind_watchdog_setflag(w_watchdog_s *watchdog,w_uint32_t flag)
+{
+    WIND_ASSERT_RETURN(watchdog != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(watchdog->magic == WIND_WATCHDOG_MAGIC,W_ERR_INVALID);
+    if(flag & F_WATCHDOG_ENABLE)
+        SET_F_WATCHDOG_ENABLE(watchdog);
+    if(flag & F_WATCHDOG_WARN)
+        CLR_F_WATCHDOG_WARN(watchdog);
+    if(flag & F_WATCHDOG_RESET)
+        CLR_F_WATCHDOG_RESET(watchdog);
+    return W_ERR_OK;
+}
+
+w_err_t wind_watchdog_clrflag(w_watchdog_s *watchdog,w_uint32_t flag)
+{
+    WIND_ASSERT_RETURN(watchdog != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(watchdog->magic == WIND_WATCHDOG_MAGIC,W_ERR_INVALID);
+    if(flag & F_WATCHDOG_ENABLE)
+        CLR_F_WATCHDOG_ENABLE(watchdog);
+    if(flag & F_WATCHDOG_WARN)
+        CLR_F_WATCHDOG_WARN(watchdog);
+    if(flag & F_WATCHDOG_RESET)
+        CLR_F_WATCHDOG_RESET(watchdog);
+    return W_ERR_OK;
+}
 
 
 w_err_t wind_watchdog_print(void)

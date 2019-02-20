@@ -1327,6 +1327,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\components\shell\cmd\cmd_user.c</FilePath>
             </File>
+            <File>
+              <FileName>cmd_watchdog.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\components\shell\cmd\cmd_watchdog.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

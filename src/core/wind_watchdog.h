@@ -46,12 +46,18 @@ extern "C" {
 #define SET_F_WATCHDOG_POOL(watchdog) (watchdog->flag |= F_WATCHDOG_POOL)
 #define CLR_F_WATCHDOG_POOL(watchdog) (watchdog->flag &= (~F_WATCHDOG_POOL))
 
-#define F_WATCHDOG_WARN (0x01 << 1) //标记watchdog超时后是否告警
+#define F_WATCHDOG_ENABLE (0x01 << 1)  //标记watchdog对象是否通过内存池分配
+#define IS_F_WATCHDOG_ENABLE(watchdog) ((watchdog->flag & F_WATCHDOG_ENABLE) == F_WATCHDOG_ENABLE)
+#define SET_F_WATCHDOG_ENABLE(watchdog) (watchdog->flag |= F_WATCHDOG_ENABLE)
+#define CLR_F_WATCHDOG_ENABLE(watchdog) (watchdog->flag &= (~F_WATCHDOG_ENABLE))
+
+
+#define F_WATCHDOG_WARN (0x01 << 2) //标记watchdog超时后是否告警
 #define IS_F_WATCHDOG_WARN(watchdog) ((watchdog->flag & F_WATCHDOG_WARN) == F_WATCHDOG_WARN)
 #define SET_F_WATCHDOG_WARN(watchdog) (watchdog->flag |= F_WATCHDOG_WARN)
 #define CLR_F_WATCHDOG_WARN(watchdog) (watchdog->flag &= (~F_WATCHDOG_WARN))
 
-#define F_WATCHDOG_RESET (0x01 << 2) //标记watchdog超时后是否重启
+#define F_WATCHDOG_RESET (0x01 << 3) //标记watchdog超时后是否重启
 #define IS_F_WATCHDOG_RESET(watchdog) ((watchdog->flag & F_WATCHDOG_RESET) == F_WATCHDOG_RESET)
 #define SET_F_WATCHDOG_RESET(watchdog) (watchdog->flag |= F_WATCHDOG_RESET)
 #define CLR_F_WATCHDOG_RESET(watchdog) (watchdog->flag &= (~F_WATCHDOG_RESET))
@@ -69,10 +75,12 @@ typedef struct _wind_watchdog
 
 w_err_t _wind_watchdog_mod_init(void);
 w_watchdog_s *wind_watchdog_get(const char *name);
-w_err_t wind_watchdog_init(w_watchdog_s *watchdog,const char *name,w_int16_t timeout_1s,w_uint32_t flag);
-w_watchdog_s *wind_watchdog_create(const char *name,w_int16_t timeout_1s,w_uint32_t flag);
+w_err_t wind_watchdog_init(w_watchdog_s *watchdog,const char *name,w_int16_t timeout_1s);
+w_watchdog_s *wind_watchdog_create(const char *name,w_int16_t timeout_1s);
 w_err_t wind_watchdog_destroy(w_watchdog_s *watchdog);
 w_err_t wind_watchdog_feed(w_watchdog_s *watchdog);
+w_err_t wind_watchdog_setflag(w_watchdog_s *watchdog,w_uint32_t flag);
+w_err_t wind_watchdog_clrflag(w_watchdog_s *watchdog,w_uint32_t flag);
 w_err_t wind_watchdog_print(void);
 
 #endif
