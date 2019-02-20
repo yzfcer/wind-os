@@ -77,7 +77,7 @@ static w_err_t disable_watchdog(w_int32_t argc,char **argv)
 /********************************************全局函数定义**********************************************/
 COMMAND_DISC(wdog)
 {
-    wind_printf("to manege watchdog module status.\r\n");
+    wind_printf("to manage watchdog module status.\r\n");
 }
 
 COMMAND_USAGE(wdog)

@@ -41,7 +41,7 @@
 
 COMMAND_DISC(list)
 {
-    wind_printf("show core objects infomation.\r\n");
+    wind_printf("to show core objects infomation.\r\n");
 }
 
 COMMAND_USAGE(list)

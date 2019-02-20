@@ -143,7 +143,7 @@ static w_err_t display_stack(w_int32_t argc,char **argv)
 
 COMMAND_DISC(mem)
 {
-    wind_printf("show memory data values.\r\n");
+    wind_printf("to show memory data values.\r\n");
 }
 
 COMMAND_USAGE(mem)

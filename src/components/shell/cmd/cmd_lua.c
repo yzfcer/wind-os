@@ -44,7 +44,7 @@ extern "C" {
 /********************************************全局函数定义**********************************************/
 COMMAND_DISC(lua)
 {
-    wind_printf("enter lua shell mode.\r\n");
+    wind_printf("to enter lua shell mode.\r\n");
 }
 
 COMMAND_USAGE(lua)

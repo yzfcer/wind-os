@@ -28,7 +28,7 @@
 
 COMMAND_DISC(led)
 {
-    wind_printf("control a led device.\r\n");
+    wind_printf("to control a led device.\r\n");
 }
 
 COMMAND_USAGE(led)

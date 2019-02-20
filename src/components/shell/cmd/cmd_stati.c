@@ -59,7 +59,7 @@ w_err_t cmd_stat_show_cpuusage_main(w_int32_t argc,char **argv)
 
 COMMAND_DISC(stati)
 {
-    wind_printf("show some statistics infomation.\r\n");
+    wind_printf("to show system statistics infomation.\r\n");
 }
 
 COMMAND_USAGE(stati)
