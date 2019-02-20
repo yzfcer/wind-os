@@ -52,9 +52,9 @@ COMMAND_DISC(dbgp)
 
 COMMAND_USAGE(dbgp)
 {
-    wind_printf("dbgp list:to set a dbgpoint status via str.\r\n");
-    wind_printf("dbgp read <dbgpoint>:to set a dbgpoint status via str.\r\n");
-    wind_printf("dbgp write <dbgpoint> <str>:to set a dbgpoint status via str.\r\n");
+    wind_printf("dbgp list:--to set a dbgpoint status via str.\r\n");
+    wind_printf("dbgp read <dbgpoint>:--to set a dbgpoint status via str.\r\n");
+    wind_printf("dbgp write <dbgpoint> <str>:--to set a dbgpoint status via str.\r\n");
 }
 
 COMMAND_MAIN(dbgp,argc,argv)

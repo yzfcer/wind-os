@@ -34,7 +34,7 @@ COMMAND_DISC(reset)
 
 COMMAND_USAGE(reset)
 {
-    wind_printf("reset:to reset system.\r\n");
+    wind_printf("reset:--to reset system.\r\n");
 }
 
 COMMAND_MAIN(reset,argc,argv)

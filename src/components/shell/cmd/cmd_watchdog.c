@@ -82,11 +82,11 @@ COMMAND_DISC(wdog)
 
 COMMAND_USAGE(wdog)
 {
-    wind_printf("wdog list:to enable a watchdog function.\r\n");
-    wind_printf("wdog enable:to enable all watchdog function.\r\n");
-    wind_printf("wdog disable:to disable all watchdog function.\r\n");
-    wind_printf("wdog enable <wdogname>:to enable a watchdog function.\r\n");
-    wind_printf("wdog disable <wdogname>:to disable a watchdog function.\r\n");
+    wind_printf("wdog list:--to enable a watchdog function.\r\n");
+    wind_printf("wdog enable:--to enable all watchdog function.\r\n");
+    wind_printf("wdog disable:--to disable all watchdog function.\r\n");
+    wind_printf("wdog enable <wdogname>:--to enable a watchdog function.\r\n");
+    wind_printf("wdog disable <wdogname>:--to disable a watchdog function.\r\n");
 }
 
 COMMAND_MAIN(wdog,argc,argv)

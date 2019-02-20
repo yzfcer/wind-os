@@ -189,8 +189,8 @@ COMMAND_DISC(xm)
 
 COMMAND_USAGE(xm)
 {
-    wind_printf("xm get <localfile>:to receive a file save as localfile.\r\n");
-    wind_printf("xm put <localfile>:to send localfile to remote host via xmodem.\r\n");
+    wind_printf("xm get <localfile>:--to receive a file save as localfile.\r\n");
+    wind_printf("xm put <localfile>:--to send localfile to remote host via xmodem.\r\n");
 }
 
 COMMAND_MAIN(xm,argc,argv)

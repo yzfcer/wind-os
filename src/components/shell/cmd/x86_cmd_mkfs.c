@@ -136,7 +136,7 @@ COMMAND_DISC(mkfs)
 
 COMMAND_USAGE(mkfs)
 {
-    wind_printf("mkfs fat32 <dir> <fsfile> <fssize>:to  make a file system image.\r\n");
+    wind_printf("mkfs fat32 <dir> <fsfile> <fssize>:--to  make a file system image.\r\n");
 }
 
 //mkfs fat32 <dir> <fsfile> <fssize> 

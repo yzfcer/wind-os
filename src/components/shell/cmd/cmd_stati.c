@@ -64,11 +64,11 @@ COMMAND_DISC(stati)
 
 COMMAND_USAGE(stati)
 {
-    wind_printf("stati pool:to show system pools statistics info.\r\n");
+    wind_printf("stati pool:--to show system pools statistics info.\r\n");
 #if WIND_HEAP_SUPPORT
-    wind_printf("stati heap:to show system heaps statistics info.\r\n");
+    wind_printf("stati heap:--to show system heaps statistics info.\r\n");
 #endif
-    wind_printf("stati cpuusage:to show current cpu usage persent.\r\n");
+    wind_printf("stati cpuusage:--to show current cpu usage persent.\r\n");
 }
 
 COMMAND_MAIN(stati,argc,argv)

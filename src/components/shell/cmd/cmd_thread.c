@@ -51,10 +51,10 @@ COMMAND_DISC(thread)
 
 COMMAND_USAGE(thread)
 {
-    wind_printf("thread start <threadname>:to start a thread.\r\n");
-    wind_printf("thread suspend <threadname>:to suspend a thread.\r\n");
-    wind_printf("thread kill <threadname>:to kill a thread.\r\n");
-    wind_printf("thread setprio <threadname> <prio>:to change a thread priority.\r\n");
+    wind_printf("thread start <threadname>:--to start a thread.\r\n");
+    wind_printf("thread suspend <threadname>:--to suspend a thread.\r\n");
+    wind_printf("thread kill <threadname>:--to kill a thread.\r\n");
+    wind_printf("thread setprio <threadname> <prio>:--to change a thread priority.\r\n");
 }
 
 COMMAND_MAIN(thread,argc,argv)

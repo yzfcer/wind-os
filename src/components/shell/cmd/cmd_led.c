@@ -33,8 +33,8 @@ COMMAND_DISC(led)
 
 COMMAND_USAGE(led)
 {
-    wind_printf("led on <ledindex>:to open a led device.\r\n");
-    wind_printf("led off <ledindex>:to close a led device.\r\n");
+    wind_printf("led on <ledname>:--to open a led device.\r\n");
+    wind_printf("led off <ledname>:--to close a led device.\r\n");
 }
 
 COMMAND_MAIN(led,argc,argv)
@@ -42,10 +42,7 @@ COMMAND_MAIN(led,argc,argv)
     w_err_t err;
     w_chdev_s *led;
     w_uint8_t stat;
-    //char devname[8];
     WIND_ASSERT_RETURN(argc == 3,W_ERR_INVALID);
-    //wind_memset(devname,0,sizeof(devname));
-    //wind_sprintf(devname,"led%s",argv[2]);
     led = wind_chdev_get(argv[2]);
     WIND_ASSERT_RETURN(led != W_NULL,W_ERR_INVALID);
     if(0 == wind_strcmp(argv[1],"on"))

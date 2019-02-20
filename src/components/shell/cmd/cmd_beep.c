@@ -34,8 +34,8 @@ COMMAND_DISC(beep)
 
 COMMAND_USAGE(beep)
 {
-    wind_printf("beep on:to open the beep device.\r\n");
-    wind_printf("beep off:to close the beep device.\r\n");
+    wind_printf("beep on:--to open the beep device.\r\n");
+    wind_printf("beep off:--to close the beep device.\r\n");
 }
 
 COMMAND_MAIN(beep,argc,argv)

@@ -247,14 +247,14 @@ COMMAND_DISC(fs)
 
 COMMAND_USAGE(fs)
 {
-    wind_printf("fs pwd:to show current user path.\r\n");
-    wind_printf("fs cd:to change current user path.\r\n");
-    wind_printf("fs mkdir:to make a directory path.\r\n");
-    wind_printf("fs touch:to make a file.\r\n");
-    wind_printf("fs rm:to remove a directory or file.\r\n");
-    wind_printf("fs ls:to show files in a directory.\r\n");
-    wind_printf("fs cat:to show file context.\r\n");
-    wind_printf("fs write:to write context into a file.\r\n");
+    wind_printf("fs pwd:--to show current user path.\r\n");
+    wind_printf("fs cd:--to change current user path.\r\n");
+    wind_printf("fs mkdir:--to make a directory path.\r\n");
+    wind_printf("fs touch:--to make a file.\r\n");
+    wind_printf("fs rm:--to remove a directory or file.\r\n");
+    wind_printf("fs ls:--to show files in a directory.\r\n");
+    wind_printf("fs cat:--to show file context.\r\n");
+    wind_printf("fs write:--to write context into a file.\r\n");
 }
 
 COMMAND_MAIN(fs,argc,argv)

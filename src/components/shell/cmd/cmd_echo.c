@@ -49,7 +49,7 @@ COMMAND_DISC(echo)
 
 COMMAND_USAGE(echo)
 {
-    wind_printf("echo <str>:to show str on your std displaying device.\r\n");
+    wind_printf("echo <str>:--to show str on your std displaying device.\r\n");
 }
 
 COMMAND_MAIN(echo,argc,argv)

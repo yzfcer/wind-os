@@ -86,8 +86,8 @@ COMMAND_DISC(datetime)
 
 COMMAND_USAGE(datetime)
 {
-    wind_printf("datetime:to show the system date and time infomation.\r\n");
-    wind_printf("datetime set <datetime>:to set the system date infomation.format:YYYY/MM/DD HH:mm:SS\r\n");
+    wind_printf("datetime:--to show the system date and time infomation.\r\n");
+    wind_printf("datetime set <datetime>:--to set the system date infomation.format:YYYY/MM/DD HH:mm:SS\r\n");
 }
 
 COMMAND_MAIN(datetime,argc,argv)

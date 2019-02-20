@@ -50,7 +50,7 @@ COMMAND_DISC(sysinfo)
 
 COMMAND_USAGE(sysinfo)
 {
-    wind_printf("sysinfo:to show system infomation of the device.\r\n");
+    wind_printf("sysinfo:--to show system infomation of the device.\r\n");
 }
 
 COMMAND_MAIN(sysinfo,argc,argv)
