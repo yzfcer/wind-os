@@ -51,15 +51,8 @@ COMMAND_USAGE(lua)
 {
     wind_printf("lua:to run into lua application.\r\n");
 }
-#if 1
+
 extern int lua_main (int argc, char **argv);
-#else
-int lua_main (int argc, char **argv)
-{
-    wind_printf("NOT support.\n");
-    return 0;
-}
-#endif
 COMMAND_MAIN(lua,argc,argv)
 {
     w_int32_t ret;
