@@ -72,7 +72,7 @@ CASE_FUNC(msgboxinit)
     EXPECT_NE(msgbox,W_NULL);
     EXPECT_EQ(msgbox->magic,WIND_MSGBOX_MAGIC);
     EXPECT_EQ(msgbox->msgnum,0);
-    EXPECT_TRUE(!IS_F_MSGBOX_POOL(msgbox));
+    EXPECT_FALSE(IS_F_MSGBOX_POOL(msgbox));
     EXPECT_EQ(msgbox->msglist.head,W_NULL);
     EXPECT_EQ(msgbox->msglist.tail,W_NULL);
     EXPECT_EQ(msgbox->owner,thr);

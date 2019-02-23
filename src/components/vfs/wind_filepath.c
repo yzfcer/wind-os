@@ -86,7 +86,6 @@ w_int32_t wind_split_path(char *path,char **layers,w_int32_t layercnt)
     w_int32_t i,j,cnt = 0;
     int len = wind_strlen(path)+1;
     j = 0;
-    //wind_printf("path:%s\r\n",path);
     for(i = 0;i < layercnt;i ++)
     {
         if(cnt >= layercnt)

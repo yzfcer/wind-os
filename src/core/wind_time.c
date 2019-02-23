@@ -284,7 +284,7 @@ void tick64_to_datetime(datetime_s *st, systick_s *tick64)
   w_uint32_t second,fraction;
   second = tick64->second;
   fraction = tick64->frac;
-  //wind_printf("sec:0x%x,frac:0x%x\r\n",second,fraction);
+  wind_debug("sec:0x%x,frac:0x%x\r\n",second,fraction);
   st->time.second = (w_uint8_t)(second % 60);
   second /= 60;
   st->time.minute = (w_uint8_t)(second % 60);

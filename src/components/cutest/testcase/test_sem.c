@@ -63,7 +63,7 @@ CASE_FUNC(seminit)
     EXPECT_NE(sems[0],W_NULL);
     EXPECT_STR_EQ(sems[0]->name,"test");
     EXPECT_EQ(sems[0]->sem_tot,3);
-    EXPECT_TRUE(!IS_F_SEM_POOL(sems[0]));
+    EXPECT_FALSE(IS_F_SEM_POOL(sems[0]));
     EXPECT_EQ(sems[0]->sem_num,3);
     EXPECT_EQ(sems[0]->waitlist.head,W_NULL);
     EXPECT_EQ(sems[0]->waitlist.tail,W_NULL);

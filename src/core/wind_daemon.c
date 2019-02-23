@@ -115,6 +115,9 @@ w_daemon_s *wind_daemon_create(const char *name,w_daemon_fn daemon_func)
 {
     w_err_t err;
     w_daemon_s *daemon;
+    daemon = wind_daemon_get(name);
+    if(daemon != W_NULL)
+        return daemon;
     daemon = daemon_malloc();
     WIND_ASSERT_RETURN(daemon != W_NULL,W_NULL);
     err = wind_daemon_init(daemon,name,daemon_func);

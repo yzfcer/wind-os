@@ -38,14 +38,15 @@ typedef struct __w_core_var_s
     volatile w_uint32_t idle_cnt;//空闲计算器
     volatile w_int32_t irq_nest;//全局的中断嵌套计数值
     volatile w_int32_t switch_nest;//全局的禁止线程切换嵌套计数值
-    w_uint32_t sec_count;
-    w_uint32_t ms_cnt;//毫秒计时
-    w_uint32_t ticks_cnt;//tick计时
-    w_uint32_t idle_cnt_max;//在一段时间内的idle任务的计数值
-    w_uint32_t cpu_usage;
+    volatile w_uint32_t sec_count;
+    volatile w_uint32_t ms_cnt;//毫秒计时
+    volatile w_uint32_t ticks_cnt;//tick计时
+    volatile w_uint32_t idle_cnt_max;//在一段时间内的idle任务的计数值
+    volatile w_uint32_t cpu_usage;
+    volatile w_int32_t sreg_idx;
     w_sreg_t ssr[32];
-    w_int32_t sreg_idx;
 }w_core_var_s;
+
 extern w_core_var_s g_core;//内核相关的参数集
 extern volatile w_bool_t gwind_start_flag;//开始调度的标志
 extern w_stack_t **gwind_high_stack;

@@ -79,12 +79,12 @@ static int copy_dir(char *root_dir,char *path)
         wind_sprintf(newpath,"%s\\%s",path,fileinfo.name);
         if(_A_ARCH & fileinfo.attrib)
         {
-            //wind_printf("FILE : %s\\%s\n",path,fileinfo.name);
+            wind_debug("FILE : %s\\%s\n",path,fileinfo.name);
             mk_fat32_file(root_dir,&fileinfo,newpath);
         }
         else if(_A_SUBDIR & fileinfo.attrib)
         {
-            //wind_printf("DIR  : %s\\%s\n",path,fileinfo.name);
+            wind_debug("DIR  : %s\\%s\n",path,fileinfo.name);
             mk_fat32_dir(root_dir,&fileinfo,newpath);
             if((wind_strcmp(".",fileinfo.name) != 0)&&(wind_strcmp("..",fileinfo.name) != 0))
             {
