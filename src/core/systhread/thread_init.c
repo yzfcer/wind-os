@@ -137,6 +137,7 @@ static w_err_t thread_init(w_int32_t argc,char **argv)
 #if WIND_CONSOLE_SUPPORT
     _create_thread_shell();
 #endif
+    _wind_thread_set_usrmode();
     wind_main();
     return W_ERR_OK;
 }

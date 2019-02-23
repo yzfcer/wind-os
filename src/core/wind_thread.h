@@ -134,6 +134,7 @@ struct _w_thread_s
 
 w_err_t _wind_thread_mod_init(void);
 w_err_t _wind_thread_wakeup(void);
+void _wind_thread_set_usrmode(void);
 w_dlist_s *_wind_thread_list(void);
 w_dlist_s *_wind_thread_sleep_list(void);
 

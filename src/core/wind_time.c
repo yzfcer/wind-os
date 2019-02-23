@@ -299,9 +299,9 @@ void tick64_to_datetime(datetime_s *st, systick_s *tick64)
 
 
 
-systick_s systick64;
 static w_uint16_t systick_ms;
 static w_uint8_t daysofmonth[12] = {31,28,31,30,31,30,31,31,30,31,30,31};
+systick_s systick64;
 static w_uint32_t tick_cnt_for_time;
 
 //-------------------------------------------------------------------------------------
@@ -309,6 +309,7 @@ static w_uint32_t get_ms(void)
 {
     return (w_uint32_t)(tick_cnt_for_time * 1000.0 / WIND_TICK_PER_SEC);
 }
+
 
 static w_err_t hwrtc_set_datetime(datetime_s *datetime)
 {
@@ -477,34 +478,9 @@ void wind_msecond_inc(void)
     }
     wind_enable_interrupt();
 }
-#endif
-static w_uint32_t g_wind_sec_count = 0;
-static w_uint32_t g_wind_time_ms_cnt = 0;//毫秒计时
-w_err_t _wind_tick_init(void)
-{
-    g_wind_time_ms_cnt = 0;
-    g_wind_sec_count = 0;
-    return W_ERR_OK;
-}
 
-//获取tick计数器
-w_uint32_t wind_get_tick(void)
+void wind_time_tick_isr(void)
 {
-    return g_wind_time_ms_cnt;
-}
-
-w_uint32_t wind_get_seconds(void)
-{
-    return g_wind_sec_count;
-}
-
-//tick中断调用的函数
-void wind_tick_callback(void)
-{
-    TICKS_CNT ++;//更新tick计数器
-    g_wind_time_ms_cnt ++;
-    if(g_wind_time_ms_cnt % WIND_TICK_PER_SEC == 0)
-        g_wind_sec_count ++;
 #if WIND_DATETIME_SUPPORT
     wind_disable_interrupt();
     tick_cnt_for_time ++;
@@ -517,14 +493,10 @@ void wind_tick_callback(void)
     }
     wind_enable_interrupt();
 #endif
-    _wind_thread_wakeup();
 }
 
-void wind_tick_isr(void)
-{				   
-    wind_enter_irq();
-    wind_tick_callback();
-    wind_exit_irq();       
-}
+#endif
+
+
 
 

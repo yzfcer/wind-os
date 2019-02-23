@@ -45,8 +45,6 @@
 #include "wind_std.h"
 #include "wind_debug.h"
 
-volatile w_int32_t gwind_int_nest = 0;//全局的中断嵌套计数值
-volatile w_int32_t gwind_switch_nest = 0;//全局的禁止线程切换嵌套计数值
 
 extern void wind_thread_switch(void);
 extern void wind_interrupt_switch(void);
@@ -55,64 +53,51 @@ extern int _create_thread_init(void);
 
 
 w_core_var_s g_core;//wind-os的基本全局参数和各种内核资源的链表头
-volatile w_bool_t gwind_start_flag = W_FALSE;//wind-os开始启动线程调度的标记
-w_stack_t **gwind_high_stack;//高优先级线程栈指针
+volatile w_bool_t gwind_start_flag = W_FALSE;//wind-os开始启动线程调度的标记w_stack_t **gwind_high_stack;//高优先级线程栈指针
+w_stack_t **gwind_high_stack;//高优先级线程栈指针w_stack_t **gwind_cur_stack;//当前线程栈指针
 w_stack_t **gwind_cur_stack;//当前线程栈指针
-
 void _wind_corevar_init(void)
 {
+    g_core.irq_nest = 0;
+    g_core.switch_nest = 0;
     g_core.cpu_usage = 0;
     g_core.idle_cnt = 0;
-    g_core.usrthren = W_FALSE;
     g_core.ticks_cnt = 0;
-}
-
-
-//允许创建用户线程
-static void _wind_thread_open()
-{
-    g_core.usrthren = W_TRUE;
-}
-
-//查看是否允许创建用户线程
-w_bool_t wind_thread_isopen()
-{
-    return g_core.usrthren;
+    g_core.ms_cnt = 0;
+    g_core.sec_count = 0;
+    g_core.sreg_idx = 0;
 }
 
 static w_bool_t is_switch_enable(void)
 {
-    return gwind_switch_nest>0?W_FALSE:W_TRUE;
+    return g_core.switch_nest>0?W_FALSE:W_TRUE;
 }
 
 void wind_disable_switch(void)
 {
     wind_disable_interrupt();
-    gwind_switch_nest ++;
+    g_core.switch_nest ++;
     wind_enable_interrupt();
 }
 
 void wind_enable_switch(void)
 {
     wind_disable_interrupt();
-    if(gwind_switch_nest > 0)
-        gwind_switch_nest --;
+    if(g_core.switch_nest > 0)
+        g_core.switch_nest --;
     wind_enable_interrupt();
         _wind_thread_dispatch();
 }
 
-//SREG，CPU状态寄存器对应的数据位宽，当关闭中断时需要保存这个寄存器
-typedef unsigned int w_sreg_t;
 extern w_sreg_t  wind_save_sr(void);
 extern void   wind_restore_sr(w_sreg_t cpu_sr);
-static w_sreg_t ssr[32];
-static w_int32_t sreg_idx = 0;
+
 void wind_disable_interrupt(void)
 {
     w_sreg_t cpu_sr;
     cpu_sr = wind_save_sr();
-    ssr[sreg_idx++] = cpu_sr;
-    if(sreg_idx >= 32)
+    g_core.ssr[g_core.sreg_idx++] = cpu_sr;
+    if(g_core.sreg_idx >= 32)
     {
         wind_system_reset();
     }
@@ -121,9 +106,9 @@ void wind_disable_interrupt(void)
 void wind_enable_interrupt(void)
 {
     w_sreg_t cpu_sr;
-    if(sreg_idx > 0)
-        sreg_idx --;
-    cpu_sr = ssr[sreg_idx];   
+    if(g_core.sreg_idx > 0)
+        g_core.sreg_idx --;
+    cpu_sr = g_core.ssr[g_core.sreg_idx];   
     wind_restore_sr(cpu_sr);
 }
 
@@ -134,8 +119,8 @@ void wind_enter_irq(void)
         wind_error("enter not rd.");
         return;
     }
-    if(gwind_int_nest < 255)
-        gwind_int_nest ++;
+    if(g_core.irq_nest < 255)
+        g_core.irq_nest ++;
     return;
 }
 
@@ -148,7 +133,7 @@ static w_thread_s *wind_search_highthread(void)
     w_dlist_s *threadlist;
     threadlist = _wind_thread_list();
     wind_disable_interrupt();
-    if(gwind_switch_nest > 0)
+    if(g_core.switch_nest > 0)
     {
         thread = wind_thread_current();
         thread->run_times ++;
@@ -179,10 +164,10 @@ void wind_exit_irq(void)
         return;
     }
     wind_disable_interrupt();
-    if(gwind_int_nest > 0)
-        gwind_int_nest --;
+    if(g_core.irq_nest > 0)
+        g_core.irq_nest --;
     
-    if((gwind_int_nest <= 0) && is_switch_enable())
+    if((g_core.irq_nest <= 0) && is_switch_enable())
     {
         thread = wind_search_highthread();
         gwind_high_stack = &thread->stack;
@@ -259,14 +244,46 @@ void _wind_switchto_thread(w_thread_s *thread)
 }
 
 
+
+//获取tick计数器
+w_uint32_t wind_get_tick(void)
+{
+    return g_core.ms_cnt;
+}
+
+w_uint32_t wind_get_seconds(void)
+{
+    return g_core.sec_count;
+}
+
+//tick中断调用的函数
+void wind_tick_callback(void)
+{
+    g_core.ticks_cnt ++;//更新tick计数器
+    g_core.ms_cnt ++;
+    if(g_core.ms_cnt % WIND_TICK_PER_SEC == 0)
+        g_core.sec_count ++;
+#if WIND_DATETIME_SUPPORT
+    wind_time_tick_isr();
+#endif
+    _wind_thread_wakeup();
+}
+
+void wind_tick_isr(void)
+{				   
+    wind_enter_irq();
+    wind_tick_callback();
+    wind_exit_irq();       
+}
+
+
 //操作系统初始化
 static void _wind_init()
 {
-    g_core.usrthren = W_FALSE;
+    _wind_corevar_init();
     wind_std_init();//调试端口初始化
     wind_os_print_logo();
     _wind_print_sysinfo();
-    _wind_corevar_init();
     _wind_thread_mod_init();
     _wind_pool_mod_init();
 
@@ -296,7 +313,6 @@ static void _wind_init()
 #endif
 
 
-    _wind_tick_init();//时间初始化
 }
 
 
@@ -308,7 +324,6 @@ int wind_os_lunch(void)
     wind_disable_interrupt();
     _wind_init();
     _create_thread_init();
-    _wind_thread_open();
     wind_enable_interrupt();
     wind_run();
     return W_ERR_OK;

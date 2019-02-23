@@ -32,13 +32,21 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+//SREG，CPU状态寄存器对应的数据位宽，当关闭中断时需要保存这个寄存器
+typedef w_uint32_t w_sreg_t;
+
 typedef struct __w_core_var_s
 {
-    w_bool_t usrthren;/*用户线程允许创建的标志 */
     volatile w_uint32_t idle_cnt;//空闲计算器
+    volatile w_int32_t irq_nest;//全局的中断嵌套计数值
+    volatile w_int32_t switch_nest;//全局的禁止线程切换嵌套计数值
+    w_uint32_t sec_count;
+    w_uint32_t ms_cnt;//毫秒计时
     w_uint32_t ticks_cnt;//tick计时
     w_uint32_t idle_cnt_max;//在一段时间内的idle任务的计数值
     w_uint32_t cpu_usage;
+    w_sreg_t ssr[32];
+    w_int32_t sreg_idx;
 }w_core_var_s;
 extern w_core_var_s g_core;//内核相关的参数集
 extern volatile w_bool_t gwind_start_flag;//开始调度的标志
@@ -50,9 +58,9 @@ void _wind_corevar_init(void);
 #define WIND_CPU_USAGE (g_core.cpu_usage)
 #define IDLE_CNT_PER_SEC (g_core.idle_cnt_max)
 #define RUN_FLAG (gwind_start_flag)
-#define TICKS_CNT (g_core.ticks_cnt)
 
-
+w_uint32_t wind_get_tick(void);
+w_uint32_t wind_get_seconds(void);
 
 void _wind_thread_dispatch(void);
 void _wind_switchto_thread(w_thread_s *thread);
