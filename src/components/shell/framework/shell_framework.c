@@ -555,6 +555,7 @@ static w_err_t execute_cmd(w_shell_ctx_s *ctx)
 
 w_err_t thread_shell(w_int32_t argc,char **argv)
 {
+    w_err_t err;
     w_int32_t len;
     w_int32_t index = 0;
     w_shell_ctx_s *ctx;
@@ -585,9 +586,9 @@ w_err_t thread_shell(w_int32_t argc,char **argv)
 #endif 
                 case CSLSTAT_CMD:
                     cmd_history_append(&ctx->his,ctx->buf);
-                    execute_cmd(ctx);
+                    err = execute_cmd(ctx);
 #if USER_AUTH_ENABLE
-                    if(wind_strcmp(ctx->buf,"exit") == 0)
+                    if((err != W_ERR_OK) && (wind_strcmp(ctx->buf,"exit") == 0))
                     {
                         ctx->stat = CSLSTAT_USER;
                         wind_printf("\r\nlogin:");

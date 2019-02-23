@@ -29,7 +29,7 @@
 #include "wind_std.h"
 #include "wind_debug.h"
 
-void wind_std_init(void)
+void _wind_std_init(void)
 {
 }
 

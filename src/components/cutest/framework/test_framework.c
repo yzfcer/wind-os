@@ -477,19 +477,19 @@ w_err_t cutest_main(w_int32_t argc,char **argv)
     if(0 == stringcmp(argv[1],"list"))
     {
         show_test_suites();
-        return 0;
+        return W_ERR_OK;
     }
     else if(argc == 2)
     {
         execute_all_suites(argv[1],"*");
-        return 0;
+        return W_ERR_OK;
     }
     else if(argc >= 3)
     {
         execute_all_suites(argv[1],argv[2]);
-        return 0;
+        return W_ERR_OK;
     }
-    return -1;
+    return W_ERR_FAIL;
 }
 
 #ifdef __cplusplus

@@ -42,7 +42,7 @@ typedef struct
 
 w_err_t wind_sysinfo_init(void);
 
-void wind_os_print_logo(void);
+void _wind_os_print_logo(void);
 
 void _wind_print_sysinfo(void);
 

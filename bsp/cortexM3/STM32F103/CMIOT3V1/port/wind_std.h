@@ -34,7 +34,7 @@ extern "C" {
 #define wind_std_lock() wind_disable_interrupt()
 #define wind_std_unlock() wind_enable_interrupt()
 
-void      wind_std_init(void);
+void      _wind_std_init(void);
 w_int32_t wind_std_input(w_uint8_t *str,w_int32_t len);
 w_int32_t wind_std_output(w_uint8_t *str,w_int32_t len);
 #else

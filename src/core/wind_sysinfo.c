@@ -41,7 +41,7 @@ w_sysinfo_s g_sysinfo =
     SOFT_VERSION
 };
 
-void wind_os_print_logo(void)
+void _wind_os_print_logo(void)
 {
     int i;
     char *logo[4] = 

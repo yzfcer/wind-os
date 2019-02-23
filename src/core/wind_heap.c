@@ -233,7 +233,6 @@ void *wind_heap_realloc(w_heap_s* heap, void* ptr, w_uint32_t newsize)
     p = wind_heap_malloc(heap,size);
     if(p != W_NULL)
     {
-        //WIND_STATI_ADD(heap->stati,size);
         size = old->size - sizeof(w_heapitem_s) > newsize?newsize:old->size - sizeof(w_heapitem_s);
         wind_memcpy(p,ptr,size);
     }

@@ -278,8 +278,8 @@ void wind_tick_isr(void)
 static void _wind_init()
 {
     _wind_corevar_init();
-    wind_std_init();//调试端口初始化
-    wind_os_print_logo();
+    _wind_std_init();//调试端口初始化
+    _wind_os_print_logo();
     _wind_print_sysinfo();
     _wind_thread_mod_init();
     _wind_pool_mod_init();

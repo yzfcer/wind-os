@@ -91,7 +91,7 @@ typedef enum __thr_evt_e
     THR_EVT_RESUME,
     THR_EVT_DEAD
 }w_thr_evt_e;
-
+#if 0
 typedef struct __w_thrparam_s
 {
     const char *name;
@@ -102,6 +102,7 @@ typedef struct __w_thrparam_s
     w_stack_t *pstk;
     w_uint16_t stksize;
 }w_thrparam_s;
+#endif
 
 //线程对象结构
 struct _w_thread_s
