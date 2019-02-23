@@ -43,7 +43,7 @@ COMMAND_DISC(cutest)
 
 COMMAND_USAGE(cutest)
 {
-    wind_printf("cutest show:--to show all test suites and cases list.\r\n");
+    wind_printf("cutest list:--to show all test suites and cases list.\r\n");
     wind_printf("cutest <suitename> <casename>:--to test some appointed test cases.\r\n");
     wind_printf("       suitename:--use *to test all test suite.\r\n");
     wind_printf("       casename:--use *to test all test suite.\r\n");

@@ -146,7 +146,7 @@ w_int32_t stringcmp(const char *cs,const char *ct);
 
 err_t test_suite_register(w_test_suite_s *test_suite);
 void show_test_suites(void);
-w_int32_t cutest_main(w_int32_t argc,char **argv);
+w_err_t cutest_main(w_int32_t argc,char **argv);
 
 #ifdef __cplusplus
 }
