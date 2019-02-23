@@ -269,7 +269,10 @@ w_err_t wind_thread_setflag(w_thread_s *thread,w_int16_t flag)
     if(flag & F_THREAD_NO_KILL)
         SET_F_THREAD_NO_KILL(thread);
     if(flag & F_THREAD_DAEMON)
+    {
         SET_F_THREAD_DAEMON(thread);
+    }
+        
     return W_ERR_OK;
 }
 

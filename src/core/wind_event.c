@@ -112,7 +112,7 @@ w_err_t wind_event_destroy(w_event_s *event)
     WIND_ASSERT_RETURN(event != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(event->magic == WIND_EVENT_MAGIC,W_ERR_INVALID);
     wind_disable_interrupt();
-    dlist_remove_tail(&eventlist);
+    dlist_remove(&eventlist,&event->eventnode);
     wind_enable_interrupt();
 
     event->magic = 0;

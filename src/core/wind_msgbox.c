@@ -147,7 +147,7 @@ w_err_t wind_msgbox_destroy(w_msgbox_s *msgbox)
     WIND_ASSERT_RETURN(msgbox->owner == thread,W_ERR_FAIL);
     
     wind_disable_interrupt();
-    dlist_remove_tail(&msgboxlist);
+    dlist_remove(&msgboxlist,&msgbox->msgboxnode);
     wind_enable_interrupt();
     msgbox->magic = 0;
     thread = msgbox->owner;

@@ -1175,6 +1175,16 @@
               <FileType>5</FileType>
               <FilePath>..\..\..\..\..\src\core\wind_user.h</FilePath>
             </File>
+            <File>
+              <FileName>wind_daemon.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\core\wind_daemon.c</FilePath>
+            </File>
+            <File>
+              <FileName>wind_daemon.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\core\wind_daemon.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

@@ -25,6 +25,7 @@
 #include "wind_config.h"
 #include "wind_type.h"
 #include "wind_thread.h"
+#include "wind_daemon.h"
 #include "wind_timer.h"
 #include "wind_debug.h"
 
@@ -48,7 +49,7 @@ w_err_t _create_thread_timer(void)
                      0,W_NULL,PRIO_HIGH,timerstk,TIMER_STK_SIZE);
     WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_FAIL);
     wind_thread_set_priority(thread,3);
-    wind_thread_setflag(thread,F_THREAD_NO_KILL);
+    wind_daemon_create("timer",_create_thread_timer);
     return W_ERR_OK;
 }
 #endif

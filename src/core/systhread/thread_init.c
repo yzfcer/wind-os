@@ -29,6 +29,7 @@
 #include "wind_heap.h"
 #include "wind_watchdog.h"
 #include "wind_dbgpoint.h"
+#include "wind_daemon.h"
 #include "wind_user.h"
 #include "wind_chdev.h"
 #include "wind_blkdev.h"
@@ -47,7 +48,7 @@ void wind_enter_thread_hook(void);
 void _create_thread_stati(void);
 #endif
 
-#if WIND_DAEMON_THREAD_SUPPORT
+#if WIND_DAEMON_SUPPORT
 void _create_thread_daemon(void);
 #endif
 
@@ -65,6 +66,7 @@ w_err_t _create_thread_shell(void)
                0,W_NULL,PRIO_LOW,ctrlstk,CTRL_STK_SIZE);
     WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_FAIL);
     wind_thread_set_priority(thread,32760);
+    wind_daemon_create("shell",_create_thread_shell);
     return W_ERR_OK;
 }
 
@@ -129,7 +131,7 @@ static w_err_t thread_init(w_int32_t argc,char **argv)
 #if WIND_STATI_THREAD_SUPPORT
     _create_thread_stati();
 #endif
-#if WIND_DAEMON_THREAD_SUPPORT
+#if WIND_DAEMON_SUPPORT
     _create_thread_daemon();
 #endif
 #if WIND_CONSOLE_SUPPORT

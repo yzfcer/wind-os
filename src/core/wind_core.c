@@ -37,6 +37,7 @@
 #include "wind_pipe.h"
 #include "wind_timer.h"
 #include "wind_softirq.h"
+#include "wind_daemon.h"
 #include "wind_event.h"
 
 #include "wind_core.h"
@@ -284,6 +285,10 @@ static void _wind_init()
 #if WIND_SOFTIRQ_SUPPORT
     _wind_softirq_mod_init();
 #endif
+#if WIND_DAEMON_SUPPORT
+    _wind_daemon_mod_init();
+#endif
+
 
     _wind_tick_init();//时间初始化
 }

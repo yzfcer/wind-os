@@ -26,6 +26,7 @@
 #include "wind_string.h"
 #include "wind_thread.h"
 #include "wind_sem.h"
+#include "wind_daemon.h"
 #include "wind_event.h"
 #include "wind_mutex.h"
 #include "wind_pool.h"
@@ -78,6 +79,9 @@ COMMAND_USAGE(list)
 #endif
 #if WIND_WATCHDOG_SUPPORT
     wind_printf("list watchdog:--show all thread watchdog.\r\n");
+#endif
+#if WIND_WATCHDOG_SUPPORT
+    wind_printf("list daemon:--show all thread that under daemon.\r\n");
 #endif
 }
 
@@ -167,6 +171,14 @@ COMMAND_MAIN(list,argc,argv)
             return W_ERR_OK;
         }
 #endif
+#if WIND_WATCHDOG_SUPPORT
+    else if(0 == wind_strcmp(argv[1],"daemon"))
+    {
+        wind_daemon_print();
+        return W_ERR_OK;
+    }
+#endif
+
     else
         wind_error("command is NOT support on device.");
     return W_ERR_FAIL;
