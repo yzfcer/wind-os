@@ -33,20 +33,20 @@
 #include "wind_heap.h"
 #include "wind_os_hwif.h"
 //用来表示
+#define SYS_PRIO_START 1
+#define SYS_PRIO_END   32767
+#define USER_PRIO_START 20000
+#define USER_PRIO_END   30000
 
-#define WIND_THREAD_PRIO_MIN_LIM 100//优先级的最小值
-#define WIND_THREAD_PRIO_MAX_LIM 30000//优先级的最大值
 static w_dlist_s threadlist;
 static w_dlist_s sleeplist;
 
-static w_uint16_t get_prio(w_prio_e priolevel)
+static w_int16_t get_prio(void)
 {
-    static w_uint16_t threadcnt = 0;
-    w_uint16_t prio;
-    threadcnt ++;
-    if(threadcnt >= 10000)
-        threadcnt = 0;
-    prio = (priolevel - 1) *10000 + threadcnt;
+    static w_int16_t prio = USER_PRIO_START;
+    prio ++;
+    if(prio >= USER_PRIO_END)
+        prio = USER_PRIO_START;
     return prio;
 }
 
@@ -146,7 +146,6 @@ w_err_t wind_thread_init(w_thread_s *thread,
                     w_err_t (*thread_func)(w_int32_t argc,char **argv),
                     w_int16_t argc,
                     char **argv,
-                    w_prio_e priolevel,
                     w_stack_t *pstk,
                     w_uint16_t stksize)
 {
@@ -157,7 +156,7 @@ w_err_t wind_thread_init(w_thread_s *thread,
     WIND_ASSERT_RETURN(thread_func != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(pstk != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(stksize > 0,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(priolevel < PRIO_SYS_LOW && priolevel > PRIO_ZERO,W_ERR_INVALID);
+    //WIND_ASSERT_RETURN(priolevel < PRIO_SYS_LOW && priolevel > PRIO_ZERO,W_ERR_INVALID);
     thread->magic = WIND_THREAD_MAGIC;
     PRIO_DNODE_INIT(thread->validnode);
     PRIO_DNODE_INIT(thread->suspendnode);
@@ -175,7 +174,7 @@ w_err_t wind_thread_init(w_thread_s *thread,
     CLR_F_THREAD_POOL(thread);
     
     thread->name = (char*)name;
-    thread->prio = get_prio(priolevel);
+    thread->prio = get_prio();
     
     tmpstk = _wind_thread_stack_init(thread_entry,0,pstk + stksize -1);
     thread->stack = tmpstk;
@@ -194,7 +193,6 @@ w_thread_s *wind_thread_create(const char *name,
                     w_err_t (*thread_func)(w_int32_t argc,char **argv),
                     w_int16_t argc,
                     char **argv,
-                    w_prio_e priolevel,
                     w_stack_t *pstk,
                     w_uint16_t stksize)
 {
@@ -202,7 +200,7 @@ w_thread_s *wind_thread_create(const char *name,
     w_thread_s *thread;
     thread = thread_malloc();
     WIND_ASSERT_RETURN(thread != W_NULL,W_NULL);
-    err = wind_thread_init(thread,name,thread_func,argc,argv,priolevel,pstk,stksize);
+    err = wind_thread_init(thread,name,thread_func,argc,argv,pstk,stksize);
     if(err == W_ERR_OK)
     {
         SET_F_THREAD_POOL(thread);
@@ -218,15 +216,13 @@ w_thread_s *wind_thread_create_default(const char *name,
                     w_int16_t argc,
                     char **argv)
 {
-    w_prio_e priol;
     w_stack_t *pstk;
     int stksize;
     w_thread_s *thread;
-    priol = PRIO_MID;
     stksize = WIND_STK_SIZE;
     pstk = wind_pool_malloc(stkbufpool);
     WIND_ASSERT_RETURN(pstk != W_NULL,W_NULL);
-    thread = wind_thread_create(name,thread_func,argc,argv,priol,pstk,stksize);
+    thread = wind_thread_create(name,thread_func,argc,argv,pstk,stksize);
     if(thread == W_NULL)
     {
         SET_F_THREAD_STKPOOL(thread);
@@ -298,8 +294,8 @@ w_err_t wind_thread_set_priority(w_thread_s *thread,w_int16_t prio)
     //如何防止用户强制修改为禁用的优先级?
     if(wind_thread_isopen())
     {
-        minlim = WIND_THREAD_PRIO_MIN_LIM;
-        maxlim = WIND_THREAD_PRIO_MAX_LIM;
+        minlim = USER_PRIO_START;
+        maxlim = USER_PRIO_END;
     }
 
     wind_debug("change prio %s:%d\r\n",thread->name,prio);

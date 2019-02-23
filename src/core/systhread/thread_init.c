@@ -63,7 +63,7 @@ w_err_t _create_thread_shell(void)
 {
     w_thread_s *thread;
     thread = wind_thread_create("shell",thread_shell,
-               0,W_NULL,PRIO_LOW,ctrlstk,CTRL_STK_SIZE);
+               0,W_NULL,ctrlstk,CTRL_STK_SIZE);
     WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_FAIL);
     wind_thread_set_priority(thread,32760);
     wind_daemon_create("shell",_create_thread_shell);
@@ -145,7 +145,7 @@ w_err_t _create_thread_init(void)
 {
     w_thread_s *thread;
     thread = wind_thread_create("init",thread_init,
-                        0,W_NULL,PRIO_HIGH,initstk,INIT_STK_SIZE);
+                        0,W_NULL,initstk,INIT_STK_SIZE);
     WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_FAIL);
     return W_ERR_OK;
 }

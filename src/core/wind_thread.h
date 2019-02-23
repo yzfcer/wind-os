@@ -38,6 +38,7 @@ extern "C" {
 #define THREAD_FROM_MEMBER(ptr,type,mbr) (void*)(((char*)(ptr))-((w_uint32_t)&(((type*)0)->mbr)))
 #define SLEEP_TIMEOUT_MAX 0x7fffffff
 
+
 #define F_THREAD_POOL (0x01 << 0) //标记thread对象是否通过内存池分配
 #define IS_F_THREAD_POOL(thread) ((thread->flag & F_THREAD_POOL) == F_THREAD_POOL)
 #define SET_F_THREAD_POOL(thread) (thread->flag |= F_THREAD_POOL)
@@ -58,16 +59,6 @@ extern "C" {
 #define SET_F_THREAD_DAEMON(thread) (thread->flag |= F_THREAD_DAEMON)
 #define CLR_F_THREAD_DAEMON(thread) (thread->flag &= (~F_THREAD_DAEMON))
 
-
-//线程的优先等级，
-typedef enum _w_prio_e
-{
-    PRIO_ZERO,
-    PRIO_HIGH,
-    PRIO_MID,
-    PRIO_LOW,
-    PRIO_SYS_LOW
-} w_prio_e;
 
 //线程状态列表
 typedef enum __w_thread_stat_e
@@ -107,7 +98,7 @@ typedef struct __w_thrparam_s
     w_err_t (*thread_func)(w_int32_t argc,char **argv);
     w_int16_t argc;
     char **argv;
-    w_prio_e priolevel;
+    w_int16_t prio;
     w_stack_t *pstk;
     w_uint16_t stksize;
 }w_thrparam_s;
@@ -155,7 +146,6 @@ w_err_t wind_thread_init(w_thread_s *thread,
                     w_err_t (*thread_func)(w_int32_t argc,char **argv),
                     w_int16_t argc,
                     char **argv,
-                    w_prio_e priolevel,
                     w_stack_t *psck,
                     w_uint16_t stksize);
 
@@ -163,7 +153,6 @@ w_thread_s *wind_thread_create(const char *name,
                     w_err_t (*thread_func)(w_int32_t argc,char **argv),
                     w_int16_t argc,
                     char **argv,
-                    w_prio_e priolevel,
                     w_stack_t *psck,
                     w_uint16_t stksize);
 

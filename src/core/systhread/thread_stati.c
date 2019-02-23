@@ -49,7 +49,7 @@ w_err_t _create_thread_stati(void)
 {
     w_thread_s *thread;
     thread = wind_thread_create("statistics",thread_stati,
-                     0,W_NULL,PRIO_HIGH,statisstk,STATI_STK_SIZE);
+                     0,W_NULL,statisstk,STATI_STK_SIZE);
     WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_FAIL);
     wind_thread_set_priority(thread,5);
     wind_thread_setflag(thread,F_THREAD_NO_KILL);
