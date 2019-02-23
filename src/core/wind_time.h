@@ -85,11 +85,9 @@ w_err_t wind_datetime_gettime(w_time_s *time);
 w_err_t wind_datetime_get(datetime_s *datetime);
 
 w_err_t wind_datetime_copy(datetime_s *desdt,datetime_s *srcdt);
-void wind_second_inc(void);
 void wind_msecond_inc(void);
-void wind_time_tick_isr(void);
-#else
-#define _wind_datetime_init() 
+void _wind_datetime_tick_isr(void);
+
 #endif
 
 

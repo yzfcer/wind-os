@@ -479,9 +479,8 @@ void wind_msecond_inc(void)
     wind_enable_interrupt();
 }
 
-void wind_time_tick_isr(void)
+void _wind_datetime_tick_isr(void)
 {
-#if WIND_DATETIME_SUPPORT
     wind_disable_interrupt();
     tick_cnt_for_time ++;
     if(tick_cnt_for_time >= WIND_TICK_PER_SEC)
@@ -492,7 +491,6 @@ void wind_time_tick_isr(void)
 #endif    
     }
     wind_enable_interrupt();
-#endif
 }
 
 #endif

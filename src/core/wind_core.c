@@ -50,6 +50,8 @@ extern void wind_thread_switch(void);
 extern void wind_interrupt_switch(void);
 extern void wind_start_switch(void);
 extern int _create_thread_init(void);
+extern w_sreg_t  wind_save_sr(void);
+extern void   wind_restore_sr(w_sreg_t cpu_sr);
 
 
 w_core_var_s g_core;//wind-os的基本全局参数和各种内核资源的链表头
@@ -89,8 +91,6 @@ void wind_enable_switch(void)
         _wind_thread_dispatch();
 }
 
-extern w_sreg_t  wind_save_sr(void);
-extern void   wind_restore_sr(w_sreg_t cpu_sr);
 
 void wind_disable_interrupt(void)
 {
@@ -193,9 +193,9 @@ static void wind_run()
 
 
 //在线程中切换到高优先级的线程
-#if WIND_REALTIME_CORE_SUPPORT
 void _wind_thread_dispatch(void)
 {
+#if WIND_REALTIME_CORE_SUPPORT
     w_thread_s *thread;
     if(RUN_FLAG == W_FALSE)
         return;
@@ -219,11 +219,8 @@ void _wind_thread_dispatch(void)
     }
     else
         wind_enable_interrupt();
-}
-#else
-void _wind_thread_dispatch(void)
-{}
 #endif
+}
 
 
 void _wind_switchto_thread(w_thread_s *thread)
@@ -264,7 +261,7 @@ void wind_tick_callback(void)
     if(g_core.ms_cnt % WIND_TICK_PER_SEC == 0)
         g_core.sec_count ++;
 #if WIND_DATETIME_SUPPORT
-    wind_time_tick_isr();
+    _wind_datetime_tick_isr();
 #endif
     _wind_thread_wakeup();
 }
