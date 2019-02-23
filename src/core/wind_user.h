@@ -57,7 +57,7 @@ typedef struct _wind_user
     w_uint32_t magic;
     char name[USER_NAME_MAXLEN];
     char passwd[PASSWD_MAXLEN];
-    w_uint32_t flag;
+    w_uint16_t flag;
     w_user_e usertype;
     w_dnode_s usernode;
 }w_user_s;

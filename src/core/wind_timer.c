@@ -74,7 +74,7 @@ w_err_t wind_timer_init(w_timer_s* timer,
                             w_uint32_t period_ms,
                             w_timer_fn func,
                             void *arg,
-                            w_uint32_t flag)
+                            w_uint16_t flag)
 {
     w_int32_t count;
     WIND_ASSERT_RETURN(timer != W_NULL,W_ERR_PTR_NULL);
@@ -106,7 +106,7 @@ w_timer_s* wind_timer_create(const char *name,
                             w_uint32_t period_ms,
                             w_timer_fn func,
                             void *arg,
-                            w_uint32_t flag)
+                            w_uint16_t flag)
 {
     w_err_t err;
     w_timer_s* timer;
@@ -163,7 +163,7 @@ w_err_t wind_timer_set_period(w_timer_s* timer,w_uint32_t period_ms)
     return W_ERR_OK;
 }
 
-w_err_t wind_timer_setflag(w_timer_s* timer,w_uint32_t flag)
+w_err_t wind_timer_setflag(w_timer_s* timer,w_uint16_t flag)
 {
     WIND_ASSERT_RETURN(timer != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(timer->magic == WIND_TIMER_MAGIC,W_ERR_INVALID);
@@ -180,7 +180,7 @@ w_err_t wind_timer_setflag(w_timer_s* timer,w_uint32_t flag)
     return W_ERR_OK;
 }
 
-w_err_t wind_timer_clrflag(w_timer_s* timer,w_uint32_t flag)
+w_err_t wind_timer_clrflag(w_timer_s* timer,w_uint16_t flag)
 {
     WIND_ASSERT_RETURN(timer != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(timer->magic == WIND_TIMER_MAGIC,W_ERR_INVALID);

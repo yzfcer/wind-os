@@ -77,7 +77,7 @@ struct __w_heap_s
     const char *name;
     w_dnode_s heapnode;
     void *addr;
-    w_uint32_t flag;
+    w_uint16_t flag;
     w_stati_s stati;
     w_dlist_s used_list;
     w_dlist_s free_list;
@@ -87,8 +87,7 @@ w_err_t _wind_heap_mod_init(void);
 
 w_heap_s *wind_heap_get(const char *name);
 
-w_heap_s *wind_heap_create(const char *name,
-             w_addr_t base,w_uint32_t size,w_uint32_t is_private);
+w_heap_s *wind_heap_create(const char *name,w_addr_t base,w_uint32_t size,w_uint16_t flag);
 
 w_err_t wind_heap_destroy(w_addr_t base);
 

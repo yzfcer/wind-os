@@ -113,8 +113,8 @@ extern "C" {
 #define WIND_SOFTIRQ_SUPPORT 1 //是否支持软中断功能
 #define WIND_SOFTINT_MAX_NUM 256 //软中断向量表的长度
 
-#define WIND_DAEMON_SUPPORT 1    //是否支持守护线程
-#define WIND_DAEMON_MAX_NUM 5    //是否支持守护线程
+#define WIND_DAEMON_SUPPORT 1    //是否支持线程守护功能
+#define WIND_DAEMON_MAX_NUM 5    //支持可守护线程数量
 
 #define WIND_USER_SUPPORT 0 //是否支持用户账号功能
 #define WIND_USER_MAX_NUM 5 //用户账号的数量
@@ -172,6 +172,7 @@ extern "C" {
 #define CMD_DBGPOINT_SUPPORT 0 //是否支持系统调试点功能命令
 #define CMD_USER_SUPPORT 0 //是否支持用户管理命令
 #define CMD_WATCHDOG_SUPPORT 1 //是否支持软件看门狗命令
+#define CMD_DAEMON_SUPPORT 1 //是否支持线程守护命令
 
 #define CMD_BEEP_SUPPORT 0 //是否支持蜂鸣器命令
 #define CMD_LED_SUPPORT 0 //是否支持LED操作命令

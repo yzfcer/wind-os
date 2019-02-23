@@ -58,7 +58,7 @@ struct __w_event_s
     const char *name;
     w_dnode_s eventnode;
     w_dlist_s cblist;//消息队列
-    w_uint32_t flag;
+    w_uint16_t flag;
 };
 
 

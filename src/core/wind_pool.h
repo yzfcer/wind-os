@@ -34,7 +34,7 @@
 extern "C" {
 #endif
 #define WIND_POOL_MAGIC 0x5d9c843e
-#define POOL_BLK_FREE 0x52d6e300
+#define POOL_BLK_FREE 0x6300
 #define POOL_BLK_USED (POOL_BLK_FREE | 0xA5)
 
 #define F_POOLITEM_USED (0x01 << 0) //标记sem对象是否通过内存池分配
@@ -49,7 +49,7 @@ typedef struct __w_pool_s w_pool_s;
 //一个基本的内存池链结构体
 struct __w_pool_item_s
 {
-    w_uint32_t flag;
+    w_uint16_t flag;
     w_pool_item_s* next;
 };
 

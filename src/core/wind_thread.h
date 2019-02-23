@@ -101,6 +101,16 @@ typedef enum __thr_evt_e
     THR_EVT_DEAD
 }w_thr_evt_e;
 
+typedef struct __w_thrparam_s
+{
+    const char *name;
+    w_err_t (*thread_func)(w_int32_t argc,char **argv);
+    w_int16_t argc;
+    char **argv;
+    w_prio_e priolevel;
+    w_stack_t *pstk;
+    w_uint16_t stksize;
+}w_thrparam_s;
 
 //线程对象结构
 struct _w_thread_s

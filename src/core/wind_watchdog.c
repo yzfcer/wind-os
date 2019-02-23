@@ -167,7 +167,7 @@ w_err_t wind_watchdog_feed(w_watchdog_s *watchdog)
     return W_ERR_OK;
 }
 
-w_err_t wind_watchdog_setflag(w_watchdog_s *watchdog,w_uint32_t flag)
+w_err_t wind_watchdog_setflag(w_watchdog_s *watchdog,w_uint16_t flag)
 {
     WIND_ASSERT_RETURN(watchdog != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(watchdog->magic == WIND_WATCHDOG_MAGIC,W_ERR_INVALID);
@@ -180,7 +180,7 @@ w_err_t wind_watchdog_setflag(w_watchdog_s *watchdog,w_uint32_t flag)
     return W_ERR_OK;
 }
 
-w_err_t wind_watchdog_clrflag(w_watchdog_s *watchdog,w_uint32_t flag)
+w_err_t wind_watchdog_clrflag(w_watchdog_s *watchdog,w_uint16_t flag)
 {
     WIND_ASSERT_RETURN(watchdog != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(watchdog->magic == WIND_WATCHDOG_MAGIC,W_ERR_INVALID);

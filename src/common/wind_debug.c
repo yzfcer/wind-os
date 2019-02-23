@@ -441,7 +441,7 @@ w_int32_t wind_vsscanf(const char *str, const char *format, wind_va_list args)
     const char *c = format;
     char temp;
     char *buf;
-    w_uint32_t flag = 0;
+    w_uint16_t flag = 0;
     w_uint32_t field_width;
     w_uint32_t nassigned = 0;
     w_uint32_t n_decode = 0;

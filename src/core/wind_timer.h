@@ -60,7 +60,7 @@ struct __w_timer_s
     w_dnode_s timernode;
     w_uint32_t value;
     w_uint32_t period;
-    w_uint32_t flag;
+    w_uint16_t flag;
     w_timer_fn handle;
     void *arg;
 };
@@ -73,19 +73,19 @@ w_err_t wind_timer_init(w_timer_s* timer,
                             w_uint32_t period_ms,
                             w_timer_fn func,
                             void *arg,
-                            w_uint32_t flag);
+                            w_uint16_t flag);
 
 w_timer_s* wind_timer_create(const char *name,
                             w_uint32_t period_ms,
                             w_timer_fn func,
                             void *arg,
-                            w_uint32_t flag);
+                            w_uint16_t flag);
 w_err_t wind_timer_start(w_timer_s* timer);
 w_err_t wind_timer_stop(w_timer_s* timer);
 w_err_t wind_timer_destroy(w_timer_s* timer);
 w_err_t wind_timer_set_period(w_timer_s* timer,w_uint32_t period_ms);
-w_err_t wind_timer_setflag(w_timer_s* timer,w_uint32_t flag);
-w_err_t wind_timer_clrflag(w_timer_s* timer,w_uint32_t flag);
+w_err_t wind_timer_setflag(w_timer_s* timer,w_uint16_t flag);
+w_err_t wind_timer_clrflag(w_timer_s* timer,w_uint16_t flag);
 w_err_t wind_timer_print(void);
 
 #endif //#if WIND_TIMER_SUPPORT

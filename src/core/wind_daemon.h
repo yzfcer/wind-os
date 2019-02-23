@@ -56,7 +56,7 @@ struct __w_daemon_s
     w_uint32_t magic;//Ä§Êõ×Ö
     const char *name;
     w_dnode_s daemonnode;
-    w_uint32_t flag;
+    w_uint16_t flag;
     w_daemon_fn daemon_func;
 };
 

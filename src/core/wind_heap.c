@@ -36,7 +36,7 @@ static w_dlist_s heaplist;
 #define OFFSET_ADDR(base,offset) (void*)(((char*)(base))+(offset))
 #define ITEM_FROM_PTR(ptr) (void*)((w_uint32_t)ptr - sizeof(w_heapitem_s))
 
-static void heapitem_init(w_heapitem_s *item,w_heap_s *hp,w_int32_t size,w_uint32_t flag)
+static void heapitem_init(w_heapitem_s *item,w_heap_s *hp,w_int32_t size,w_uint16_t flag)
 {
     item->magic = WIND_HEAPITEM_MAGIC;
     item->flag = flag;
@@ -72,7 +72,7 @@ w_heap_s *wind_heap_get(const char *name)
 }
 
 
-w_heap_s *wind_heap_create(const char *name,w_addr_t base,w_uint32_t size,w_uint32_t flag)
+w_heap_s *wind_heap_create(const char *name,w_addr_t base,w_uint32_t size,w_uint16_t flag)
 {
     w_heapitem_s* item;
     w_heap_s* hp;

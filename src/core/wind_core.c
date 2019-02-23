@@ -45,8 +45,8 @@
 #include "wind_std.h"
 #include "wind_debug.h"
 
-volatile w_int8_t gwind_int_nest = 0;//全局的中断嵌套计数值
-volatile w_int8_t gwind_core_cnt = 0;//全局的禁止切换计数值
+volatile w_int32_t gwind_int_nest = 0;//全局的中断嵌套计数值
+volatile w_int32_t gwind_switch_nest = 0;//全局的禁止线程切换嵌套计数值
 
 extern void wind_thread_switch(void);
 extern void wind_interrupt_switch(void);
@@ -82,18 +82,23 @@ w_bool_t wind_thread_isopen()
 
 static w_bool_t is_switch_enable(void)
 {
-    return gwind_core_cnt>0?W_FALSE:W_TRUE;
+    return gwind_switch_nest>0?W_FALSE:W_TRUE;
 }
 
 void wind_disable_switch(void)
 {
-    gwind_core_cnt ++;
+    wind_disable_interrupt();
+    gwind_switch_nest ++;
+    wind_enable_interrupt();
 }
 
 void wind_enable_switch(void)
 {
-    if(gwind_core_cnt > 0)
-        gwind_core_cnt --;
+    wind_disable_interrupt();
+    if(gwind_switch_nest > 0)
+        gwind_switch_nest --;
+    wind_enable_interrupt();
+        _wind_thread_dispatch();
 }
 
 //SREG，CPU状态寄存器对应的数据位宽，当关闭中断时需要保存这个寄存器
@@ -109,7 +114,6 @@ void wind_disable_interrupt(void)
     ssr[sreg_idx++] = cpu_sr;
     if(sreg_idx >= 32)
     {
-        //wind_critical("int nest error.");
         wind_system_reset();
     }
 }
@@ -144,7 +148,7 @@ static w_thread_s *wind_search_highthread(void)
     w_dlist_s *threadlist;
     threadlist = _wind_thread_list();
     wind_disable_interrupt();
-    if(gwind_core_cnt > 0)
+    if(gwind_switch_nest > 0)
     {
         thread = wind_thread_current();
         thread->run_times ++;
@@ -177,7 +181,8 @@ void wind_exit_irq(void)
     wind_disable_interrupt();
     if(gwind_int_nest > 0)
         gwind_int_nest --;
-    if((gwind_int_nest == 0) && is_switch_enable())
+    
+    if((gwind_int_nest <= 0) && is_switch_enable())
     {
         thread = wind_search_highthread();
         gwind_high_stack = &thread->stack;
@@ -231,7 +236,8 @@ void _wind_thread_dispatch(void)
         wind_enable_interrupt();
 }
 #else
-void _wind_thread_dispatch(void){}
+void _wind_thread_dispatch(void)
+{}
 #endif
 
 
