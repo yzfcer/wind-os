@@ -84,6 +84,9 @@ CMD_DECLARE(led);
 #if CMD_WATCHDOG_SUPPORT
 CMD_DECLARE(wdog);
 #endif
+#if CMD_DIAGNOSE_SUPPORT
+CMD_DECLARE(diagnose);
+#endif
 
 
 void _wind_register_all_cmd(w_shell_ctx_s *ctx)
@@ -143,7 +146,9 @@ void _wind_register_all_cmd(w_shell_ctx_s *ctx)
 #if CMD_WATCHDOG_SUPPORT
     wind_cmd_register(COMMAND(wdog),1);
 #endif
-
+#if CMD_DIAGNOSE_SUPPORT
+    wind_cmd_register(COMMAND(diagnose),1);
+#endif
 }
 
 #ifdef __cplusplus

@@ -1352,6 +1352,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\components\shell\cmd\cmd_watchdog.c</FilePath>
             </File>
+            <File>
+              <FileName>cmd_diagnose.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\components\shell\cmd\cmd_diagnose.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

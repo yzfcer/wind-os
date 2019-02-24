@@ -64,7 +64,7 @@ w_err_t wind_diagnose_register(w_diagnose_s *diagnose)
 {
     w_diagnose_s *diag;    
     WIND_ASSERT_RETURN(diagnose != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(diagnose->magic == WIND_DIAGNOSE_MAGIC,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(diagnose->magic == (~WIND_DIAGNOSE_MAGIC),W_ERR_INVALID);
     wind_notice("register diagnose:%s",diagnose->name);
     diag = wind_diagnose_get(diagnose->name);
     if(diag != W_NULL)
@@ -72,7 +72,8 @@ w_err_t wind_diagnose_register(w_diagnose_s *diagnose)
         wind_notice("diagnose has been registered.\r\n");
         return W_ERR_OK;
     }
-
+    
+    diagnose->magic = WIND_DIAGNOSE_MAGIC;
     wind_disable_switch();
     dlist_insert_tail(&diagnoselist,&diagnose->diagnosenode);
     wind_enable_switch();
@@ -120,7 +121,7 @@ w_err_t wind_diagnose_check(void)
         diagnose->result = diagnose_check(diagnose);
     }
     wind_printf("--------------------------------------------------------\r\n");
-    wind_printf("all result:\r\n");
+    wind_printf("diagnose check result:\r\n");
     foreach_node(dnode,&diagnoselist)
     {
         diagnose = (w_diagnose_s*)DLIST_OBJ(dnode,w_diagnose_s,diagnosenode);

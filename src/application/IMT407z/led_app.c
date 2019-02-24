@@ -14,7 +14,7 @@ void led0_timer(w_timer_s *timer,void *arg)
     {
         stat = 0;
         wind_chdev_write(dev,&stat,1);
-        wind_timer_set_period(timer,1000);
+        wind_timer_set_period(timer,1500);
     }
     else
     {

@@ -131,6 +131,7 @@
 #define CMD_USER_SUPPORT 1 //是否支持用户管理命令
 #define CMD_WATCHDOG_SUPPORT 1 //是否支持软件看门狗命令
 #define CMD_DAEMON_SUPPORT 1 //是否支持线程守护命令
+#define CMD_DIAGNOSE_SUPPORT 1 //是否支持系统诊断命令
 
 #define CMD_BEEP_SUPPORT 0 //是否支持蜂鸣器命令
 #define CMD_LED_SUPPORT 0 //是否支持LED操作命令

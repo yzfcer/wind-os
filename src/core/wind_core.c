@@ -282,6 +282,9 @@ static void _wind_init()
     _wind_std_init();//调试端口初始化
     _wind_os_print_logo();
     _wind_print_sysinfo();
+#if WIND_DIAGNOSE_SUPPORT
+    _wind_diagnose_mod_init();
+#endif
     _wind_thread_mod_init();
     _wind_pool_mod_init();
 
@@ -308,9 +311,6 @@ static void _wind_init()
 #endif
 #if WIND_DAEMON_SUPPORT
     _wind_daemon_mod_init();
-#endif
-#if WIND_DIAGNOSE_SUPPORT
-    _wind_diagnose_mod_init();
 #endif
 
 

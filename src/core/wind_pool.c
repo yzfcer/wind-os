@@ -26,6 +26,7 @@
 #include "wind_debug.h"
 #include "wind_core.h"
 #include "wind_string.h"
+#include "wind_diagnose.h"
 
 #define WIND_MPOOL_ALIGN_R(x) (((x)+7) & (~0x07))
 #define WIND_MPOOL_ALIGN_L(x) ((x) & (~0x07))
@@ -34,18 +35,88 @@
 static w_dlist_s poollist;
 
 
+
+#if WIND_DIAGNOSE_SUPPORT
+static w_int32_t poolitem_diagnose(w_pool_s *pool)
+{
+    w_int32_t i;
+    w_dnode_s *dnode;
+    w_poolitem_s *poolitem;
+    w_uint16_t magic = 0;
+    pool = (w_pool_s*)DLIST_OBJ(dnode,w_pool_s,poolnode);
+    //foreach_node(dnode1,&pool->free_list)
+    for(i = 0;i < pool->itemnum;i ++)
+    {
+        poolitem = (w_poolitem_s *)((w_addr_t)pool->head + i * pool->itemsize);
+        if(magic == 0)
+            magic = poolitem->head.magic;
+        if((poolitem->head.magic != (w_uint16_t)(~WIND_POOLITEM_MAGIC)) &&
+            (poolitem->head.magic != (w_uint16_t)WIND_POOLITEM_MAGIC))
+        {
+            wind_error("poolitem magic error,ptr=0x%x",poolitem);
+            return DIAG_RES_OBJ_MAGIC_ERROR;
+        }
+    }
+    return DIAG_RES_OK;
+}
+
+static w_int32_t pool_diagnose(void)
+{
+    w_int32_t res;
+    w_dnode_s *dnode;
+    w_pool_s *pool;
+    w_dlist_s *list = &poollist;
+    wind_disable_switch();
+    foreach_node(dnode,list)
+    {
+        pool = (w_pool_s*)DLIST_OBJ(dnode,w_pool_s,poolnode);
+        if(pool->magic != WIND_POOL_MAGIC)
+        {
+            wind_enable_switch();
+            wind_error("pool magic error,ptr=0x%x",pool);
+            return DIAG_RES_OBJ_MAGIC_ERROR;
+        }
+        res = poolitem_diagnose(pool);
+        if(res != DIAG_RES_OK)
+        {
+            wind_enable_switch();
+            wind_notice("check pool %-16s [ERROR]",pool->name);
+            return res;
+        }
+        else
+        {
+            wind_notice("check pool %-16s [OK]",pool->name);
+        }
+    }
+    wind_enable_switch();
+    return DIAG_RES_OK;
+}
+
+static w_err_t pool_diagnose_init(void)
+{
+    w_err_t err;
+    DIAGNOSENOSE_DEF(pool,pool_diagnose);
+    err = wind_diagnose_register(DIAGNOSENOSE(pool));
+    return err;
+}
+#else
+#define pool_diagnose_init() W_ERR_OK
+#endif
+
+w_err_t _wind_pool_mod_init(void)
+{
+    w_err_t err;
+    DLIST_INIT(poollist);
+    err = pool_diagnose_init();
+    return err;
+}
+
 w_pool_s *wind_pool_get_by_mem(void *mem)
 {
     w_pool_s *pm;
     WIND_ASSERT_RETURN(mem != W_NULL,W_NULL);
     pm = (w_pool_s *)WIND_MPOOL_ALIGN_R((w_uint32_t)mem);
     return pm;
-}
-
-w_err_t _wind_pool_mod_init(void)
-{
-    DLIST_INIT(poollist);
-    return W_ERR_OK;
 }
 
 w_pool_s *wind_pool_get(const char *name)
@@ -93,7 +164,7 @@ w_err_t wind_pool_create(const char *name,void *mem,w_uint32_t memsize,w_uint32_
     for(i = 0;i < pm->itemnum;i ++)
     {
         pm->free_end = item;
-        item->head.magic = (~WIND_POOLITM_MAGIC);
+        item->head.magic = (~WIND_POOLITEM_MAGIC);
         item->head.flag = 0;
         CLR_F_POOLITEM_USED(item);
         item->head.next = (w_poolitem_s*)((w_addr_t)item + pm->itemsize);
@@ -154,7 +225,7 @@ void *wind_pool_malloc(void *mem)
         return W_NULL;
     }
     WIND_STATI_INC(pm->stati);
-    item->head.magic = WIND_POOLITM_MAGIC;
+    item->head.magic = WIND_POOLITEM_MAGIC;
     SET_F_POOLITEM_USED(item);
     item->head.next = W_NULL;
     p = (void*)(item->buff);
@@ -171,10 +242,10 @@ w_err_t wind_pool_free(void *mem,void *block)
     WIND_ASSERT_RETURN(pm != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(block != W_NULL,W_ERR_PTR_NULL);    
     item = (w_poolitem_s*)POOL_ITEM(block,w_poolitem_s,buff);
-    WIND_ASSERT_RETURN(item->head.magic == WIND_POOLITM_MAGIC,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(item->head.magic == WIND_POOLITEM_MAGIC,W_ERR_INVALID);
     WIND_ASSERT_RETURN(IS_F_POOLITEM_USED(item),W_ERR_INVALID);
     wind_disable_interrupt();
-    item->head.magic = (w_uint16_t)(~WIND_POOLITM_MAGIC);
+    item->head.magic = (w_uint16_t)(~WIND_POOLITEM_MAGIC);
     CLR_F_POOLITEM_USED(item);
     item->head.next = W_NULL;
     if(pm->free_end == W_NULL)

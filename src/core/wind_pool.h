@@ -34,7 +34,7 @@
 extern "C" {
 #endif
 #define WIND_POOL_MAGIC 0x5d9c843e
-#define WIND_POOLITM_MAGIC 0x507c
+#define WIND_POOLITEM_MAGIC 0x507c
 
 #define F_POOLITEM_USED (0x01 << 0) //标记sem对象是否通过内存池分配
 #define IS_F_POOLITEM_USED(item) ((item->head.flag & F_POOLITEM_USED) == F_POOLITEM_USED)
