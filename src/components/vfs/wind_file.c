@@ -103,7 +103,7 @@ w_err_t wind_fs_regster(w_fs_s *fs,w_int32_t count)
         fsi = wind_fs_get(fs[i].name);
         if(fsi != W_NULL)
         {
-            wind_error("fs %s has been registered.\r\n",fsi->name);
+            wind_notice("fs %s has been registered.\r\n",fsi->name);
             continue;
         }
         if(fs[i].ops->init)

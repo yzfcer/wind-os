@@ -69,7 +69,7 @@ w_err_t wind_dbgpoint_register(w_dbgpoint_s *dbgpoint)
     dbgp = wind_dbgpoint_get(dbgpoint->name);
     if(dbgp != W_NULL)
     {
-        wind_error("dbgpoint has been registered.\r\n");
+        wind_notice("dbgpoint has been registered.\r\n");
         return W_ERR_OK;
     }
 
@@ -95,6 +95,7 @@ w_err_t wind_dbgpoint_unregister(w_dbgpoint_s *dbgpoint)
         wind_mutex_destroy(dbgp->mutex);
     return W_ERR_OK;  
 }
+
 w_int32_t wind_dbgpoint_read(w_dbgpoint_s *dbgpoint,w_uint8_t *buff,w_int32_t len)
 {
     w_int32_t lenth = -1;
@@ -132,7 +133,7 @@ w_err_t wind_dbgpoint_print(void)
     int cnt = 0;
     w_dlist_s *list = &dbgpointlist;
     WIND_ASSERT_RETURN(list != W_NULL,W_ERR_PTR_NULL);
-    wind_printf("\r\ndev list as following:\r\n");
+    wind_printf("\r\n\r\ndebug point list as following:\r\n");
     foreach_node(dnode,list)
     {
         dbgpoint = (w_dbgpoint_s *)DLIST_OBJ(dnode,w_dbgpoint_s,dbgpointnode);

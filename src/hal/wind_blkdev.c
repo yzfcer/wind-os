@@ -46,7 +46,7 @@ w_err_t wind_blkdev_register(w_blkdev_s *blkdev,w_int32_t count)
         devi = wind_blkdev_get(blkdev[i].name);
         if(devi != W_NULL)
         {
-            wind_error("device has been registered.\r\n");
+            wind_notice("device has been registered.\r\n");
             continue;
         }
         if(blkdev[i].ops->init)

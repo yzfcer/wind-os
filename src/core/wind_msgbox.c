@@ -149,7 +149,7 @@ w_err_t wind_msgbox_destroy(w_msgbox_s *msgbox)
     wind_disable_interrupt();
     dlist_remove(&msgboxlist,&msgbox->msgboxnode);
     wind_enable_interrupt();
-    msgbox->magic = 0;
+    msgbox->magic = (~WIND_MSGBOX_MAGIC);
     thread = msgbox->owner;
     if((msgbox->owner->runstat == THREAD_STATUS_SLEEP) 
        && (msgbox->owner->cause == CAUSE_MSG))

@@ -115,7 +115,7 @@ w_err_t wind_event_destroy(w_event_s *event)
     dlist_remove(&eventlist,&event->eventnode);
     wind_enable_interrupt();
 
-    event->magic = 0;
+    event->magic = (~WIND_EVENT_MAGIC);
     dnode = dlist_head(&event->cblist);
     if(dnode != W_NULL)
     {

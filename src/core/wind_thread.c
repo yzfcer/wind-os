@@ -252,7 +252,7 @@ w_err_t wind_thread_destroy(w_thread_s *thread)
 #endif
     if(IS_F_THREAD_POOL(thread))
         thread_free(thread);
-    thread->magic = 0;
+    thread->magic = (~WIND_THREAD_MAGIC);
     wind_enable_interrupt();
     _wind_thread_dispatch();
     return W_ERR_OK;

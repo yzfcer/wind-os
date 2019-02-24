@@ -150,7 +150,7 @@ w_err_t wind_watchdog_destroy(w_watchdog_s *watchdog)
     wind_disable_switch();
     dlist_remove(&watchdoglist,&watchdog->watchdognode);
     wind_enable_switch();
-    watchdog->magic = 0;
+    watchdog->magic = (~WIND_WATCHDOG_MAGIC);
     watchdog->thread = W_NULL;
     if(IS_F_WATCHDOG_POOL(watchdog))
         watchdog_free(watchdog);

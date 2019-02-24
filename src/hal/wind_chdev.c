@@ -46,7 +46,7 @@ w_err_t wind_chdev_register(w_chdev_s *dev,w_int32_t count)
         devi = wind_chdev_get(dev[i].name);
         if(devi != W_NULL)
         {
-            wind_error("device has been registered.\r\n");
+            wind_notice("device has been registered.\r\n");
             continue;
         }
         if(dev[i].ops->init)
@@ -198,7 +198,7 @@ w_err_t wind_chdev_print(void)
     int cnt = 0;
     w_dlist_s *list = &devlist;
     WIND_ASSERT_RETURN(list != W_NULL,W_ERR_PTR_NULL);
-    wind_printf("\r\ndev list as following:\r\n");
+    wind_printf("\r\n\r\nchdev list as following:\r\n");
     
     foreach_node(dnode,list)
     {

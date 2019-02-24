@@ -166,7 +166,7 @@ w_err_t wind_user_destroy(w_user_s *user)
     dnode = dlist_remove(&userlist,&user->usernode);
     wind_enable_switch();
     WIND_ASSERT_RETURN(dnode != W_NULL,W_ERR_INVALID);
-    user->magic = 0;
+    user->magic = (~WIND_USER_MAGIC);
     if(IS_F_USER_POOL(user))
         user_free(user);
     return W_ERR_OK;  
@@ -196,7 +196,7 @@ w_err_t wind_user_print(void)
     w_user_s *user;
     w_dlist_s *list = &userlist;
     WIND_ASSERT_RETURN(list != W_NULL,W_ERR_PTR_NULL);
-    wind_printf("\r\ndev list as following:\r\n");
+    wind_printf("\r\n\r\nuser list as following:\r\n");
     wind_disable_switch();
     wind_print_space(3);
     wind_printf("%-12s %-4s\r\n","user","group");

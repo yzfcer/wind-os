@@ -66,7 +66,7 @@ w_err_t boot_img_head_get(img_head_s *head,w_uint8_t *buff)
 {
     w_uint32_t crc_calc,crc_read;
     w_int32_t index = 0;
-    head->magic = 0;
+    head->magic = (~IMG_MAGIC);
     wind_to_uint32(&buff[index],&head->magic);
 
     //这种情况应该是bin文件没有包含头部结构
@@ -109,7 +109,7 @@ w_err_t boot_img_head_get(img_head_s *head,w_uint8_t *buff)
     crc_calc = wind_crc32(buff,head->head_len - 4,0xffffffff);
     if(crc_calc != crc_read)
     {
-        head->magic = 0;
+        head->magic = (~IMG_MAGIC);
         wind_error("img head crc_calc error.");
         return W_ERR_INVALID;
     }

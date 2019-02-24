@@ -131,7 +131,7 @@ w_err_t wind_sem_destroy(w_sem_s *sem)
     wind_notice("destroy sem:%s",sem->name);
     wind_disable_interrupt();
     dlist_remove(&semlist,&sem->semnode);
-    sem->magic = 0;
+    sem->magic = (~WIND_SEM_MAGIC);
     foreach_node(pdnode,&sem->waitlist)
     {
         dlist_remove(&sem->waitlist,pdnode);

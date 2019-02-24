@@ -145,7 +145,7 @@ w_err_t wind_pipe_destroy(w_pipe_s* pipe)
     wind_notice("destroy pipe:%s",pipe->name?pipe->name:"null");
     wind_disable_interrupt();
     dlist_remove(&pipelist,&pipe->pipenode);
-    pipe->magic = 0;
+    pipe->magic = (~WIND_PIPE_MAGIC);
     pipe->name = W_NULL;
     if(IS_F_PIPE_POOL(pipe))
         pipe_free(pipe);

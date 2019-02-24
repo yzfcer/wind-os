@@ -75,10 +75,6 @@ extern "C" {
 //用于数据拷贝的缓存buf大小
 #define COMMBUF_SIZE 4096
 
-
-
-
-
 //-------------------------------------------------------------------------------
 //操作系统内核基本功能定制
 //-------------------------------------------------------------------------------
@@ -139,6 +135,8 @@ extern "C" {
 #define WIND_DATETIME_SUPPORT 0  //是否支持系统时间
 
 #define WIND_DEBUG_SUPPORT 1 //是否支持调试输出模块
+
+#define WIND_DIAGNOSE_SUPPORT 1 //是否支持系统诊断功能
 
 #define WIND_DRVFRAME_SUPPORT 0  //是否字符驱动框架
 

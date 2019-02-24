@@ -144,7 +144,7 @@ w_err_t wind_daemon_destroy(w_daemon_s *daemon)
     thread = wind_thread_get(daemon->name);
     WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_INVALID);
     wind_thread_clrflag(thread,F_THREAD_DAEMON);
-    daemon->magic = 0;
+    daemon->magic = (~WIND_DAEMON_MAGIC);
     if(IS_F_DAEMON_POOL(daemon))
         daemon_free(daemon);
     return W_ERR_OK;

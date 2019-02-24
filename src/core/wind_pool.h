@@ -43,6 +43,7 @@ extern "C" {
 #define POOL_ITEM(ptr,type,mbrnode) (void*)(((char*)(ptr))-((w_uint32_t)&(((type*)0)->mbrnode)))
 typedef struct __w_poolitem_s w_poolitem_s;
 typedef struct __w_pool_s w_pool_s;
+#define WIND_POOL_ALIGN(size) (((size)+7) & (~0x07))
 
 typedef struct
 {
@@ -74,7 +75,6 @@ struct __w_pool_s
 };
 
 //定义内存池的方法
-#define WIND_POOL_ALIGN(size) (((size)+7) & (~0x07))
 #define WIND_POOL(pool,itemnum,itemsize) w_uint8_t pool[sizeof(w_pool_s) + itemnum *(WIND_POOL_ALIGN(itemsize) + sizeof(w_pihead_s))+8]
 
 w_err_t _wind_pool_mod_init(void);

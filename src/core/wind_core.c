@@ -31,6 +31,7 @@
 #include "wind_thread.h"
 #include "wind_mutex.h"
 #include "wind_sem.h"
+#include "wind_event.h"
 #include "wind_heap.h"
 #include "wind_pool.h"
 #include "wind_msgbox.h"
@@ -38,7 +39,7 @@
 #include "wind_timer.h"
 #include "wind_softirq.h"
 #include "wind_daemon.h"
-#include "wind_event.h"
+#include "wind_diagnose.h"
 
 #include "wind_core.h"
 #include "wind_time.h"
@@ -307,6 +308,9 @@ static void _wind_init()
 #endif
 #if WIND_DAEMON_SUPPORT
     _wind_daemon_mod_init();
+#endif
+#if WIND_DIAGNOSE_SUPPORT
+    _wind_diagnose_mod_init();
 #endif
 
 

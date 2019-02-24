@@ -116,7 +116,7 @@ w_err_t wind_heap_destroy(w_addr_t base)
     wind_notice("destroy heap:%s",heap->name?heap->name:"null");
     wind_disable_switch();
     dlist_remove(&heaplist,&heap->heapnode);
-    heap->magic = 0;
+    heap->magic = (~WIND_HEAP_MAGIC);
     wind_enable_switch();
     wind_mutex_destroy(heap->mutex);
     heap->mutex = W_NULL;
@@ -172,7 +172,7 @@ static w_err_t combine_heapitem(w_heapitem_s* item1,w_heapitem_s* item2)
     {
         dlist_remove(&item1->heap->free_list,&item2->itemnode.dnode);
         item1->size += item2->size;
-        item2->magic = 0;
+        item2->magic = (w_uint16_t)(~WIND_HEAPITEM_MAGIC);
         item2->heap = W_NULL;
         PRIO_DNODE_INIT(item2->itemnode);
     }

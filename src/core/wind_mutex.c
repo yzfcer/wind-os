@@ -134,7 +134,7 @@ w_err_t wind_mutex_destroy(w_mutex_s *mutex)
         thread->cause = CAUSE_LOCK;
     }
     wind_enable_interrupt();
-    mutex->magic = 0;
+    mutex->magic = (~WIND_MUTEX_MAGIC);
     if(IS_F_MUTEX_POOL(mutex))
         mutex_free(mutex);
     return W_ERR_OK;

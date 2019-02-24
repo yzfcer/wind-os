@@ -81,7 +81,7 @@ w_err_t wind_pool_create(const char *name,void *mem,w_uint32_t memsize,w_uint32_
     memsize = WIND_MPOOL_ALIGN_L(memsize - 8);
 
     item = (w_poolitem_s*)((w_uint32_t)pm + sizeof(w_pool_s));
-    pm->magic = 0;
+    pm->magic = (~WIND_POOL_MAGIC);
     pm->head = item;
     pm->name = name;
     DNODE_INIT(pm->poolnode);
@@ -93,7 +93,7 @@ w_err_t wind_pool_create(const char *name,void *mem,w_uint32_t memsize,w_uint32_
     for(i = 0;i < pm->itemnum;i ++)
     {
         pm->free_end = item;
-        item->head.magic = 0;
+        item->head.magic = (~WIND_POOLITM_MAGIC);
         item->head.flag = 0;
         CLR_F_POOLITEM_USED(item);
         item->head.next = (w_poolitem_s*)((w_addr_t)item + pm->itemsize);
@@ -120,7 +120,7 @@ w_err_t wind_pool_destroy(void *mem)
     wind_disable_interrupt();
     dlist_remove(&poollist,&pm->poolnode);
     wind_enable_interrupt();
-    pm->magic = 0;
+    pm->magic = (~WIND_POOL_MAGIC);
     return W_ERR_OK;
 }
 
@@ -174,7 +174,7 @@ w_err_t wind_pool_free(void *mem,void *block)
     WIND_ASSERT_RETURN(item->head.magic == WIND_POOLITM_MAGIC,W_ERR_INVALID);
     WIND_ASSERT_RETURN(IS_F_POOLITEM_USED(item),W_ERR_INVALID);
     wind_disable_interrupt();
-    item->head.magic = 0;
+    item->head.magic = (w_uint16_t)(~WIND_POOLITM_MAGIC);
     CLR_F_POOLITEM_USED(item);
     item->head.next = W_NULL;
     if(pm->free_end == W_NULL)
@@ -198,7 +198,7 @@ void wind_pool_print_list(void)
     w_dnode_s *pdnode;
     w_pool_s *pm;
     w_dlist_s *list = &poollist;
-    wind_printf("\r\n\r\nmpool list as following:\r\n");
+    wind_printf("\r\n\r\nmemory pool list as following:\r\n");
     wind_print_space(7);
     wind_printf("%-12s %-12s %-8s %-8s %-8s\r\n","name","head","size","itemnum","itemsize");
     wind_print_space(7);

@@ -155,7 +155,7 @@ w_err_t wind_queue_destory(void *queue)
 
     q = (w_queue_s *)queue;
     WIND_ASSERT_RETURN(q->magic == WIND_QUEUE_MAGIC,W_ERR_INVALID);
-    q->magic = 0;
+    q->magic = (~WIND_QUEUE_MAGIC);
     return W_ERR_OK;
 }
 
