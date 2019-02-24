@@ -370,7 +370,7 @@ w_err_t wind_heap_print(void)
     w_dnode_s *dnode;
     w_heap_s* heap;
     w_dlist_s *list = &heaplist;
-    wind_printf("heap list:\r\n");
+    wind_printf("\r\n\r\nheap list:\r\n");
     wind_print_space(7);
     wind_printf("%-16s %-10s %-12s %-10s \r\n","heap","base","size","isprivate");
     wind_print_space(7);
@@ -393,7 +393,7 @@ w_err_t wind_heapitem_print(void)
     w_heapitem_s *heapitem;
     w_dlist_s *list = &heaplist;
     WIND_ASSERT_RETURN(list->head != W_NULL,W_ERR_PTR_NULL);
-    wind_printf("\r\n\r\nheapitem list as following:\r\n");
+    wind_printf("\r\n\r\nheapitem list:\r\n");
     wind_print_space(5);
     wind_printf("%-16s %-8s %-10s\r\n","addr","size","state");
     wind_print_space(5);

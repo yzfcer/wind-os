@@ -133,7 +133,7 @@ w_err_t wind_dbgpoint_print(void)
     int cnt = 0;
     w_dlist_s *list = &dbgpointlist;
     WIND_ASSERT_RETURN(list != W_NULL,W_ERR_PTR_NULL);
-    wind_printf("\r\n\r\ndebug point list as following:\r\n");
+    wind_printf("\r\n\r\ndebug point list:\r\n");
     foreach_node(dnode,list)
     {
         dbgpoint = (w_dbgpoint_s *)DLIST_OBJ(dnode,w_dbgpoint_s,dbgpointnode);

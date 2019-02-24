@@ -199,7 +199,7 @@ w_err_t wind_watchdog_print(void)
     w_dnode_s *dnode;
     w_watchdog_s *watchdog;
     w_dlist_s *list = &watchdoglist;
-    wind_printf("\r\n\r\nwatchdog list as following:\r\n");
+    wind_printf("\r\n\r\nwatchdog list:\r\n");
     wind_print_space(5);
     wind_printf("%-16s %-12s %-12s\r\n","watchdog","timeout_max","timeout_cur");
     wind_print_space(5);

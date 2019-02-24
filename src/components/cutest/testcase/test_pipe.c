@@ -77,7 +77,7 @@ CASE_FUNC(pipeinit)
     EXPECT_EQ(pipe,W_NULL);
     err = wind_pipe_destroy(&test_pp);
     EXPECT_EQ(W_ERR_OK,err);
-    EXPECT_EQ(test_pp.magic,0);
+    EXPECT_EQ(test_pp.magic,(~WIND_PIPE_MAGIC));
 }
 
 CASE_SETUP(pipeinfo)

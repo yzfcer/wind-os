@@ -81,7 +81,7 @@ CASE_FUNC(eventinit)
     EXPECT_FALSE(IS_F_EVENT_POOL(events[0]));
     err = wind_event_destroy(events[0]);
     EXPECT_EQ(W_ERR_OK,err);
-    EXPECT_EQ(events[0]->magic,0);
+    EXPECT_EQ(events[0]->magic,(~WIND_EVENT_MAGIC));
 
     err = wind_event_init(&test_ev,W_NULL);
     EXPECT_EQ(err,W_ERR_OK);
@@ -89,7 +89,7 @@ CASE_FUNC(eventinit)
     EXPECT_EQ(events[0],W_NULL);
     err = wind_event_destroy(&test_ev);
     EXPECT_EQ(W_ERR_OK,err);
-    EXPECT_EQ(test_ev.magic,0);
+    EXPECT_EQ(test_ev.magic,(~WIND_EVENT_MAGIC));
 
 }
 
@@ -119,7 +119,7 @@ CASE_FUNC(eventinfo)
     EXPECT_TRUE(IS_F_EVENT_POOL(events[0]));
     err = wind_event_destroy(events[0]);
     EXPECT_EQ(W_ERR_OK,err);
-    EXPECT_EQ(events[0]->magic,0);
+    EXPECT_EQ(events[0]->magic,(~WIND_EVENT_MAGIC));
 
 }
 

@@ -30,7 +30,6 @@
 #include "wind_string.h"
 
 #if WIND_MUTEX_SUPPORT
-#define WIND_MUTEX_MAGIC 0x37AD490F
 static w_dlist_s mutexlist;
 static WIND_POOL(mutexpool,WIND_MUTEX_MAX_NUM,sizeof(w_mutex_s));
 
@@ -236,7 +235,7 @@ w_err_t wind_mutex_print(void)
     w_dnode_s *dnode;
     w_mutex_s *mutex;
     w_dlist_s *list = &mutexlist;
-    wind_printf("\r\n\r\nmutex list as following:\r\n");
+    wind_printf("\r\n\r\nmutex list:\r\n");
     wind_print_space(5);
     wind_printf("%-16s %-8s %-16s \r\n","mutex","status","owner");
     wind_print_space(5);

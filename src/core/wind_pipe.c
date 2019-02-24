@@ -160,7 +160,7 @@ w_err_t wind_pipe_print(void)
     w_queue_s *queue;
     w_int32_t size,used;
     w_dlist_s* list = &pipelist;
-    wind_printf("\r\n\r\npipe list as following:\r\n");
+    wind_printf("\r\n\r\npipe list:\r\n");
     wind_print_space(5);
     wind_printf("%-16s %-8s %-10s\r\n","pipe","lenth","used");
     wind_print_space(5);

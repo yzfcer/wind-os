@@ -198,7 +198,7 @@ w_err_t wind_timer_print(void)
     w_timer_s *timer;
     w_dlist_s *list = &timerlist;
     WIND_ASSERT_RETURN(list != W_NULL,W_ERR_PTR_NULL);
-    wind_printf("\r\n\r\ntimer list as following:\r\n");
+    wind_printf("\r\n\r\ntimer list:\r\n");
     wind_print_space(7);
     wind_printf("%-16s %-10s %-10s %-10s %-10s\r\n","timer","period","value","status","repeat");
     wind_print_space(7);

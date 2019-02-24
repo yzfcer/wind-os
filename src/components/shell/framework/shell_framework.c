@@ -345,7 +345,7 @@ w_err_t wind_cmd_print(void)
 {
     w_dnode_s *dnode;
     w_cmd_s *cmd;
-    wind_printf("\r\ncommand list as following:\r\n");
+    wind_printf("\r\n\r\ncommand list:\r\n");
     foreach_node(dnode,&g_cmdlist)
     {
         cmd = DLIST_OBJ(dnode,w_cmd_s,cmdnode);

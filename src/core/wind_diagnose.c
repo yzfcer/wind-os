@@ -121,7 +121,7 @@ w_err_t wind_diagnose_check(void)
         diagnose->result = diagnose_check(diagnose);
     }
     wind_printf("--------------------------------------------------------\r\n");
-    wind_printf("diagnose check result:\r\n");
+    wind_printf("\r\ndiagnose check result:\r\n");
     foreach_node(dnode,&diagnoselist)
     {
         diagnose = (w_diagnose_s*)DLIST_OBJ(dnode,w_diagnose_s,diagnosenode);
@@ -140,7 +140,7 @@ w_err_t wind_diagnose_print(void)
     int cnt = 0;
     w_dlist_s *list = &diagnoselist;
     WIND_ASSERT_RETURN(list != W_NULL,W_ERR_PTR_NULL);
-    wind_printf("\r\ndiagnose list as following:\r\n");
+    wind_printf("\r\n\r\ndiagnose list:\r\n");
     foreach_node(dnode,list)
     {
         diagnose = (w_diagnose_s *)DLIST_OBJ(dnode,w_diagnose_s,diagnosenode);

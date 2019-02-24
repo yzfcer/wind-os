@@ -272,7 +272,7 @@ void test_framework_summit(void)
 
     if(sti->failhead != W_NULL)
     {
-        test_printf("\r\nfailture list as following:\r\n\r\n",sti->stat.tot_case);
+        test_printf("\r\ntest failture list:\r\n",sti->stat.tot_case);
         fail = sti->failhead;
         test_printf("--------------------------------------\r\n");
         print_header(space_cnt);

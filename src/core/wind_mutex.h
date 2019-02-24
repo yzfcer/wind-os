@@ -33,6 +33,7 @@
 extern "C" {
 #endif
 #if WIND_MUTEX_SUPPORT
+#define WIND_MUTEX_MAGIC 0x37AD490F
 
 #define F_MUTEX_POOL (0x01 << 0) //标记mutex对象是否通过内存池分配
 #define IS_F_MUTEX_POOL(mutex) ((mutex->flag & F_MUTEX_POOL) == F_MUTEX_POOL)

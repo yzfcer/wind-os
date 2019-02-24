@@ -269,7 +269,7 @@ void wind_pool_print_list(void)
     w_dnode_s *pdnode;
     w_pool_s *pm;
     w_dlist_s *list = &poollist;
-    wind_printf("\r\n\r\nmemory pool list as following:\r\n");
+    wind_printf("\r\n\r\nmemory pool list:\r\n");
     wind_print_space(7);
     wind_printf("%-12s %-12s %-8s %-8s %-8s\r\n","name","head","size","itemnum","itemsize");
     wind_print_space(7);

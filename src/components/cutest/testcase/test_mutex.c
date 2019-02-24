@@ -59,6 +59,7 @@ CASE_FUNC(mutexinit)
     EXPECT_EQ(err,W_ERR_OK);
     mutexs[0] = wind_mutex_get("test");
     EXPECT_NE(mutexs[0],W_NULL);
+    EXPECT_EQ(mutexs[0]->magic,WIND_MUTEX_MAGIC);
     EXPECT_FALSE(IS_F_MUTEX_LOCKED(mutexs[0]));
     EXPECT_FALSE(IS_F_MUTEX_POOL(mutexs[0]));
     EXPECT_EQ(mutexs[0]->waitlist.head,W_NULL);
@@ -72,7 +73,7 @@ CASE_FUNC(mutexinit)
     EXPECT_EQ(mutexs[0],W_NULL);
     err = wind_mutex_destroy(&test_mtx);
     EXPECT_EQ(W_ERR_OK,err);
-    EXPECT_EQ(test_mtx.magic,0);
+    EXPECT_EQ(test_mtx.magic,(~WIND_MUTEX_MAGIC));
 
 }
 

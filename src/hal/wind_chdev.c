@@ -198,7 +198,7 @@ w_err_t wind_chdev_print(void)
     int cnt = 0;
     w_dlist_s *list = &devlist;
     WIND_ASSERT_RETURN(list != W_NULL,W_ERR_PTR_NULL);
-    wind_printf("\r\n\r\nchdev list as following:\r\n");
+    wind_printf("\r\n\r\nchdev list:\r\n");
     
     foreach_node(dnode,list)
     {

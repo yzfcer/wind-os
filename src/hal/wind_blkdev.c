@@ -223,7 +223,7 @@ w_err_t wind_blkdev_print(void)
     w_dnode_s *dnode;
     w_blkdev_s *blkdev;
     w_dlist_s *list = &blkdevlist;
-    wind_printf("\r\n\r\nblock device list as following:\r\n");
+    wind_printf("\r\n\r\nblock device list:\r\n");
     wind_print_space(5);
     wind_printf("%-16s %-12s %-10s\r\n","blkdev","blockcnt","blocksize");
     wind_print_space(5);

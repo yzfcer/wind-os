@@ -441,7 +441,7 @@ w_err_t wind_thread_print(void)
     w_thread_s *thread;
     char *stat;
     w_dlist_s *list = &threadlist;
-    wind_printf("\r\n\r\nthread list as following:\r\n");
+    wind_printf("\r\n\r\nthread list:\r\n");
     wind_print_space(7);
     wind_printf("%-16s %-8s %-10s %-10s %-10s\r\n","thread","prio","state","stacksize","runtimes");
     wind_print_space(7);

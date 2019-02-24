@@ -59,7 +59,7 @@ CASE_SETUP(pool_alloc)
     int i;
     wind_pool_create("test_pool",test_pool,
                      sizeof(test_pool),TSIZE);
-    wind_pool_print_list();
+    //wind_pool_print_list();
     for(i = 0;i < TNUM+1;i ++)
         testblk[i] = 0;
 }

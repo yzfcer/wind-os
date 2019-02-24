@@ -85,7 +85,7 @@ CASE_FUNC(msgboxinit)
     EXPECT_EQ(msgbox,W_NULL);
     err = wind_msgbox_destroy(&test_mb);
     EXPECT_EQ(W_ERR_OK,err);
-    EXPECT_EQ(test_mb.magic,0);
+    EXPECT_EQ(test_mb.magic,(~WIND_MSGBOX_MAGIC));
 }
 
 CASE_SETUP(msgboxinfo)

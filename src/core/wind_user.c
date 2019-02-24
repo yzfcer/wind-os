@@ -196,7 +196,7 @@ w_err_t wind_user_print(void)
     w_user_s *user;
     w_dlist_s *list = &userlist;
     WIND_ASSERT_RETURN(list != W_NULL,W_ERR_PTR_NULL);
-    wind_printf("\r\n\r\nuser list as following:\r\n");
+    wind_printf("\r\n\r\nuser list:\r\n");
     wind_disable_switch();
     wind_print_space(3);
     wind_printf("%-12s %-4s\r\n","user","group");

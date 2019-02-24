@@ -170,7 +170,7 @@ w_err_t wind_event_print(void)
     w_dnode_s *dnode;
     w_event_s *event;
     w_dlist_s *list = &eventlist;
-    wind_printf("\r\n\r\nevent list as following:\r\n");
+    wind_printf("\r\n\r\nevent list:\r\n");
     wind_print_space(2);
     wind_printf("%-16s\r\n","event");
     wind_print_space(2);

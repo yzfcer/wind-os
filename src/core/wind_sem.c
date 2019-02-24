@@ -248,7 +248,7 @@ w_err_t wind_sem_print(void)
     w_dnode_s *dnode;
     w_sem_s *sem;
     w_dlist_s *list = &semlist;
-    wind_printf("\r\n\r\nsem list as following:\r\n");
+    wind_printf("\r\n\r\nsem list:\r\n");
     wind_print_space(5);
     wind_printf("%-16s %-8s %-10s\r\n","sem","sem_tot","sem_num");
     wind_print_space(5);

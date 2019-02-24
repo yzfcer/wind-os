@@ -156,7 +156,7 @@ w_err_t wind_daemon_print(void)
     w_dnode_s *dnode;
     w_daemon_s *daemon;
     w_dlist_s *list = &daemonlist;
-    wind_printf("\r\n\r\ndaemon thread list as following:\r\n");
+    wind_printf("\r\n\r\ndaemon thread list:\r\n");
     wind_print_space(2);
     wind_printf("%-16s\r\n","thread");
     wind_print_space(2);

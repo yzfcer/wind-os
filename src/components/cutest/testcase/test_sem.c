@@ -76,7 +76,7 @@ CASE_FUNC(seminit)
     EXPECT_EQ(sems[0],W_NULL);
     err = wind_sem_destroy(&test_sm);
     EXPECT_EQ(W_ERR_OK,err);
-    EXPECT_EQ(test_sm.magic,0);
+    EXPECT_EQ(test_sm.magic,(~WIND_SEM_MAGIC));
 }
 
 CASE_SETUP(seminfo)
