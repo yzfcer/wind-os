@@ -54,7 +54,7 @@ void _create_thread_daemon(void);
 
 void _create_thread_idle(void);
 
-#if WIND_CONSOLE_SUPPORT
+#if WIND_SHELL_SUPPORT
 #define CTRL_STK_SIZE 2048
 static w_stack_t ctrlstk[CTRL_STK_SIZE];//Ö÷ÈÎÎñ¶ÑÕ»
 extern w_err_t thread_shell(w_int32_t argc,char **argv);
@@ -134,7 +134,7 @@ static w_err_t thread_init(w_int32_t argc,char **argv)
 #if WIND_DAEMON_SUPPORT
     _create_thread_daemon();
 #endif
-#if WIND_CONSOLE_SUPPORT
+#if WIND_SHELL_SUPPORT
     _create_thread_shell();
 #endif
     _wind_thread_set_usrmode();

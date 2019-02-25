@@ -111,6 +111,7 @@ static w_err_t diagnose_check(w_diagnose_s *diagnose)
 
 w_err_t wind_diagnose_check(void)
 {
+    w_err_t err = W_ERR_OK;
     w_dnode_s *dnode;
     w_diagnose_s *diagnose;
     wind_disable_switch();
@@ -125,12 +126,14 @@ w_err_t wind_diagnose_check(void)
     foreach_node(dnode,&diagnoselist)
     {
         diagnose = (w_diagnose_s*)DLIST_OBJ(dnode,w_diagnose_s,diagnosenode);
+        if(diagnose->result != DIAG_RES_OK)
+            err = W_ERR_FAIL;
         wind_printf("%-12s status %-6s errorcode %d\r\n",diagnose->name,
             diagnose->result==0?"OK":"ERROR",diagnose->result);
     }
     wind_printf("--------------------------------------------------------\r\n");
     wind_enable_switch();
-    return W_ERR_OK;
+    return err;
 }
 
 w_err_t wind_diagnose_print(void)

@@ -26,7 +26,7 @@ extern "C" {
 
 /*********************************************头文件定义***********************************************/
 
-#if (WIND_CONSOLE_SUPPORT && CMD_WATCHDOG_SUPPORT)
+#if (CMD_WATCHDOG_SUPPORT)
 #include "wind_watchdog.h"
 #include "wind_timer.h"
 

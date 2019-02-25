@@ -29,7 +29,7 @@
 #include "wind_pool.h"
 #include "wind_heap.h"
 
-#if (WIND_CONSOLE_SUPPORT && CMD_STATI_SUPPORT)
+#if (CMD_STATI_SUPPORT)
 
 
 

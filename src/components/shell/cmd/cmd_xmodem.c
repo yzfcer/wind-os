@@ -27,7 +27,7 @@ extern "C" {
 
 /*********************************************头文件定义***********************************************/
 
-#if (WIND_CONSOLE_SUPPORT && CMD_XMODEM_SUPPORT)
+#if (CMD_XMODEM_SUPPORT)
 #include "wind_heap.h"
 #include "wind_std.h"
 #include "wind_xmodem.h"

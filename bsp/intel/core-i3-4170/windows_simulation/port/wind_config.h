@@ -151,8 +151,9 @@ extern "C" {
 //-------------------------------------------------------------------------------
 //调试命令定制，前提是内核支持控制台功能
 //-------------------------------------------------------------------------------
-#define WIND_CONSOLE_SUPPORT 1 //是否支持控制台模块
+#define WIND_SHELL_SUPPORT 1 //是否支持控制台模块
 
+#if WIND_SHELL_SUPPORT
 #define CMD_BLKDEV_SUPPORT 0 //是否支持块设备操作命令
 #define CMD_DATETIME_SUPPORT 0 //是否支持日期时间命令
 #define CMD_ECHO_SUPPORT 1 //是否支持回显命令
@@ -175,13 +176,14 @@ extern "C" {
 
 #define CMD_BEEP_SUPPORT 0 //是否支持蜂鸣器命令
 #define CMD_LED_SUPPORT 0 //是否支持LED操作命令
-
+#endif
 
 //-------------------------------------------------------------------------------
 //单元测试功能定制，前提是内核支持单元测试框架,并且支持对应的功能模块
 //-------------------------------------------------------------------------------
-#define WIND_CUTEST_SUPPORT 1 //是否支持单元测试框架
+#define WIND_CUTEST_SUPPORT 0 //是否支持单元测试框架
 
+#if WIND_CUTEST_SUPPORT
 #define TEST_HEAP_SUPPORT 0 //是否支持内存堆测试
 #define TEST_MSGBOX_SUPPORT 1 //是否支持消息邮箱测试
 #define TEST_MUTEX_SUPPORT 1 //是否支持互斥所测试
@@ -194,7 +196,7 @@ extern "C" {
 #define TEST_TREE_SUPPORT 1 //是否支持树形结构对象测试
 #define TEST_TREEFS_SUPPORT 1 //是否支持treefs文件系统测试
 #define TEST_FS_SUPPORT 1 //是否支持fs文件系统接口测试
-
+#endif
 
 
 #ifdef __cplusplus

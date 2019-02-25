@@ -24,7 +24,7 @@
 *******************************************************************************************************/
 #include "wind_cmd.h"
 #include "wind_chdev.h"
-#if (WIND_CONSOLE_SUPPORT && CMD_LED_SUPPORT)
+#if (CMD_LED_SUPPORT)
 
 COMMAND_DISC(led)
 {

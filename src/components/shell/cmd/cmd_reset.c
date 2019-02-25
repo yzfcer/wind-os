@@ -25,7 +25,7 @@
 #include "wind_cmd.h"
 #include "wind_os_hwif.h"
 #include "wind_thread.h"
-#if (WIND_CONSOLE_SUPPORT && CMD_RESET_SUPPORT)
+#if (CMD_RESET_SUPPORT)
 
 COMMAND_DISC(reset)
 {

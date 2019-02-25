@@ -26,7 +26,7 @@
 #include "wind_string.h"
 #include "cmd_history.h"
 #include "wind_cmd.h"
-#if WIND_CONSOLE_SUPPORT
+#if WIND_SHELL_SUPPORT
 #ifdef __cplusplus
 extern "C" {
 #endif

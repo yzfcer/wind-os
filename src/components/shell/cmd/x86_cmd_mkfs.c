@@ -33,7 +33,7 @@ extern "C" {
 
 /*********************************************头文件定义***********************************************/
 
-#if (WIND_CONSOLE_SUPPORT && CMD_MKFS_SUPPORT)
+#if (CMD_MKFS_SUPPORT)
 static EmbeddedFileSystem efs;
 #define BUFF_LEN 0x10000
 static w_uint8_t *buff = W_NULL;

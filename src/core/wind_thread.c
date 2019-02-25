@@ -31,6 +31,7 @@
 #include "wind_debug.h"
 #include "wind_pool.h"
 #include "wind_heap.h"
+#include "wind_diagnose.h"
 #include "wind_os_hwif.h"
 //用来表示
 #define SYS_PRIO_START 1
@@ -97,6 +98,43 @@ static char *wind_thread_status(w_thread_stat_e stat)
     }
 }
 
+#if WIND_DIAGNOSE_SUPPORT
+static w_int32_t thread_diagnose(void)
+{
+    w_dnode_s *dnode;
+    w_thread_s *thread;
+    w_dlist_s *list = &threadlist;
+    wind_disable_switch();
+    foreach_node(dnode,list)
+    {
+        thread = (w_thread_s*)DLIST_OBJ(dnode,w_thread_s,validnode.dnode);
+        if(thread->stack_top[0] != WIND_THREAD_STK_MARK)
+        {
+            wind_enable_switch();
+            wind_error("thread %s stack overflow,ptr=0x%x",thread->name,thread->stack_top);
+            wind_notice("check thread %-16s [ERROR]",thread->name);
+            return DIAG_RES_OBJ_MAGIC_ERROR;
+        }
+        else
+            wind_notice("check thread %-16s [OK]",thread->name);
+    }
+    wind_enable_switch();
+    return DIAG_RES_OK;
+}
+
+static w_err_t thread_diagnose_init(void)
+{
+    w_err_t err;
+    DIAGNOSENOSE_DEF(thread,thread_diagnose);
+    err = wind_diagnose_register(DIAGNOSENOSE(thread));
+    return err;
+}
+#else
+#define thread_diagnose_init() W_ERR_OK
+#endif
+
+
+
 w_err_t _wind_thread_mod_init(void)
 {
     w_err_t err;
@@ -108,6 +146,8 @@ w_err_t _wind_thread_mod_init(void)
     WIND_ASSERT_RETURN(err == W_ERR_OK,err);
 #endif    
     err = wind_pool_create("thread",threadpool,sizeof(threadpool),sizeof(w_thread_s));
+    WIND_ASSERT_RETURN(err == W_ERR_OK,err);
+    err = thread_diagnose_init();
     return err;
 }
 
@@ -166,6 +206,7 @@ w_err_t wind_thread_init(w_thread_s *thread,
     thread->stksize = stksize;
     for(i = 0;i < stksize;i ++)
         thread->stack[i] = 0;
+    thread->stack_top[0] = WIND_THREAD_STK_MARK;
     thread->argc = argc;
     thread->argv = argv;
     thread->thread_func = thread_func;

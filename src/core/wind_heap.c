@@ -118,7 +118,7 @@ w_err_t _wind_heap_mod_init(void)
 
 static void heapitem_init(w_heapitem_s *item,w_heap_s *hp,w_uint16_t magic,w_int32_t size,w_uint16_t flag)
 {
-    item->magic = WIND_HEAPITEM_MAGIC;
+    item->magic = magic;
     item->flag = flag;
     item->heap = hp;
     PRIO_DNODE_INIT(item->itemnode);
@@ -238,8 +238,8 @@ static w_err_t combine_heapitem(w_heapitem_s* item1,w_heapitem_s* item2)
     WIND_ASSERT_RETURN(item1 != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(item2 != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(item1->heap == item2->heap,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(item1->magic == WIND_HEAPITEM_MAGIC,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(item2->magic == WIND_HEAPITEM_MAGIC,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(item1->magic == (w_uint16_t)(~WIND_HEAPITEM_MAGIC),W_ERR_INVALID);
+    WIND_ASSERT_RETURN(item2->magic == (w_uint16_t)(~WIND_HEAPITEM_MAGIC),W_ERR_INVALID);
     WIND_ASSERT_RETURN(!IS_F_HEAPITEM_USED(item1),W_ERR_INVALID);
     WIND_ASSERT_RETURN(!IS_F_HEAPITEM_USED(item2),W_ERR_INVALID);
     if(item1->size + (w_uint32_t)item1 == (w_uint32_t)item2)

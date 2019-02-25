@@ -24,7 +24,7 @@
 *******************************************************************************************************/
 #include "wind_type.h"
 #include "wind_cmd.h"
-#if WIND_CONSOLE_SUPPORT
+#if WIND_SHELL_SUPPORT
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
