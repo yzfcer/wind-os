@@ -38,7 +38,7 @@
  * 中断的稳定，一般配置系统tick中断会放到系统进入线程状态时开始
  * 执行，在进入线程之前，不让tick触发中断级线程切换。
  */
-void wind_enter_thread_hook(void)
+ void wind_enter_thread_hook(void)
 {
 	w_uint32_t reload;
  	SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK_Div8);

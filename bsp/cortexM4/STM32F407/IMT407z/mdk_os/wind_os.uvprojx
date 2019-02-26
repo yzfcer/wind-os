@@ -1423,16 +1423,6 @@
               <FilePath>..\..\..\..\..\src\components\shell\framework\wind_key.h</FilePath>
             </File>
             <File>
-              <FileName>console_port.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\components\shell\adapter\wind\console_port.c</FilePath>
-            </File>
-            <File>
-              <FileName>console_port.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\components\shell\adapter\wind\console_port.h</FilePath>
-            </File>
-            <File>
               <FileName>cmd_beep.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\components\shell\cmd\cmd_beep.c</FilePath>
@@ -1526,6 +1516,11 @@
               <FileName>cmd_diagnose.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\components\shell\cmd\cmd_diagnose.c</FilePath>
+            </File>
+            <File>
+              <FileName>shell_cmd_regif.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\components\shell\cmd\shell_cmd_regif.c</FilePath>
             </File>
           </Files>
         </Group>
