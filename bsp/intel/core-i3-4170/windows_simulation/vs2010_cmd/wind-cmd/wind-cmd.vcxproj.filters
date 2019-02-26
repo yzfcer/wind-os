@@ -17,9 +17,6 @@
     <Filter Include="cmd">
       <UniqueIdentifier>{d89b0e2e-78ed-4240-8738-41a2de3e1dc8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="adapter">
-      <UniqueIdentifier>{fa0d4a37-1592-40d7-8fd6-02e2533ad499}</UniqueIdentifier>
-    </Filter>
     <Filter Include="efsl">
       <UniqueIdentifier>{bca2b4c9-37a5-4f71-afdb-6a3862ea8ff2}</UniqueIdentifier>
     </Filter>
@@ -101,9 +98,6 @@
     <ClCompile Include="..\..\..\..\..\..\src\components\shell\cmd\x86_cmd_mkfs.c">
       <Filter>cmd</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\src\components\shell\adapter\win32\console_adapter.c">
-      <Filter>adapter</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\port\file_port.c">
       <Filter>port</Filter>
     </ClCompile>
@@ -111,6 +105,24 @@
       <Filter>port</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\src\common\wind_md5.c">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\components\shell\cmd\shell_cmd_regif.c">
+      <Filter>cmd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\common\wind_crc16.c">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\common\wind_crc32.c">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\common\wind_encrypt.c">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\common\wind_queue.c">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\common\wind_tree.c">
       <Filter>common</Filter>
     </ClCompile>
   </ItemGroup>
@@ -199,9 +211,6 @@
     <ClInclude Include="..\..\port\wind_type.h">
       <Filter>port</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\src\components\shell\adapter\win32\console_adapter.h">
-      <Filter>adapter</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\port\file_port.h">
       <Filter>port</Filter>
     </ClInclude>
@@ -209,6 +218,24 @@
       <Filter>port</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\src\common\wind_md5.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\src\common\wind_crc16.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\src\common\wind_crc32.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\src\common\wind_encrypt.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\src\common\wind_macro.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\src\common\wind_queue.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\src\common\wind_tree.h">
       <Filter>common</Filter>
     </ClInclude>
   </ItemGroup>

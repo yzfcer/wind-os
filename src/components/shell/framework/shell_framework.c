@@ -380,14 +380,14 @@ w_err_t match_user_passwd(w_shell_ctx_s *ctx)
 #else
 w_err_t match_user_name(w_shell_ctx_s *ctx)
 {
-    if(wind_strcmp(ctx->user,"root") != 0)
+    if(wind_strcmp(ctx->user,"root") == 0)
         return W_ERR_OK;
     return W_ERR_FAIL;
 }
 
 w_err_t match_user_passwd(w_shell_ctx_s *ctx)
 {
-    if(wind_strcmp(ctx->passwd,"wind") != 0)
+    if(wind_strcmp(ctx->passwd,"wind") == 0)
         return W_ERR_OK;
     return W_ERR_FAIL;
 }
@@ -572,6 +572,7 @@ w_err_t thread_shell(w_int32_t argc,char **argv)
     while(1)
     {
         len = shell_read_line(ctx,WIND_CMD_MAX_LEN);
+
         if(len >= 0)
         {
             switch(ctx->stat)

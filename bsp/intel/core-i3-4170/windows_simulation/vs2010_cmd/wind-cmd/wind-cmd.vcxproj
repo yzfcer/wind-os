@@ -12,12 +12,17 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\..\..\src\common\wind_conv.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\common\wind_crc16.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\common\wind_crc32.c" />
     <ClCompile Include="..\..\..\..\..\..\src\common\wind_debug.c" />
     <ClCompile Include="..\..\..\..\..\..\src\common\wind_dlist.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\common\wind_encrypt.c" />
     <ClCompile Include="..\..\..\..\..\..\src\common\wind_md5.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\common\wind_queue.c" />
     <ClCompile Include="..\..\..\..\..\..\src\common\wind_string.c" />
-    <ClCompile Include="..\..\..\..\..\..\src\components\shell\adapter\win32\console_adapter.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\common\wind_tree.c" />
     <ClCompile Include="..\..\..\..\..\..\src\components\shell\cmd\cmd_echo.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\components\shell\cmd\shell_cmd_regif.c" />
     <ClCompile Include="..\..\..\..\..\..\src\components\shell\cmd\x86_cmd_mkfs.c" />
     <ClCompile Include="..\..\..\..\..\..\src\components\shell\framework\cmd_history.c" />
     <ClCompile Include="..\..\..\..\..\..\src\components\shell\framework\shell_framework.c" />
@@ -44,11 +49,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\..\..\src\common\wind_conv.h" />
+    <ClInclude Include="..\..\..\..\..\..\src\common\wind_crc16.h" />
+    <ClInclude Include="..\..\..\..\..\..\src\common\wind_crc32.h" />
     <ClInclude Include="..\..\..\..\..\..\src\common\wind_debug.h" />
     <ClInclude Include="..\..\..\..\..\..\src\common\wind_dlist.h" />
+    <ClInclude Include="..\..\..\..\..\..\src\common\wind_encrypt.h" />
+    <ClInclude Include="..\..\..\..\..\..\src\common\wind_macro.h" />
     <ClInclude Include="..\..\..\..\..\..\src\common\wind_md5.h" />
+    <ClInclude Include="..\..\..\..\..\..\src\common\wind_queue.h" />
     <ClInclude Include="..\..\..\..\..\..\src\common\wind_string.h" />
-    <ClInclude Include="..\..\..\..\..\..\src\components\shell\adapter\win32\console_adapter.h" />
+    <ClInclude Include="..\..\..\..\..\..\src\common\wind_tree.h" />
     <ClInclude Include="..\..\..\..\..\..\src\components\shell\framework\cmd_history.h" />
     <ClInclude Include="..\..\..\..\..\..\src\components\shell\framework\shell_framework.h" />
     <ClInclude Include="..\..\..\..\..\..\src\components\shell\framework\wind_cmd.h" />
