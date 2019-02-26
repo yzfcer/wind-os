@@ -32,7 +32,7 @@
 #include "wind_pool.h"
 #include "wind_heap.h"
 #include "wind_diagnose.h"
-#include "wind_os_hwif.h"
+#include "wind_board_port.h"
 //用来表示
 #define SYS_PRIO_START 1
 #define SYS_PRIO_END   32767

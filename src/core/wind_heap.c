@@ -29,7 +29,7 @@
 #include "wind_string.h"
 #include "wind_core.h"
 #include "wind_diagnose.h"
-#include "wind_os_hwif.h"
+#include "wind_board_port.h"
 
 #if WIND_HEAP_SUPPORT
 static w_dlist_s heaplist;

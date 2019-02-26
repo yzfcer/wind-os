@@ -29,7 +29,7 @@
 #include "wind_pool.h"
 #include "wind_macro.h"
 //#include "wind_mutex.h"
-//#include "wind_os_hwif.h"
+//#include "wind_board_port.h"
 
 #if WIND_USER_SUPPORT
 static w_dlist_s userlist;

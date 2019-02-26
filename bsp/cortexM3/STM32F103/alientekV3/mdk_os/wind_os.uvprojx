@@ -137,7 +137,7 @@
             <DriverSelection>4099</DriverSelection>
           </Flash1>
           <bUseTDR>1</bUseTDR>
-          <Flash2>Segger\JL2CM3.dll</Flash2>
+          <Flash2>BIN\UL2CM3.DLL</Flash2>
           <Flash3></Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
@@ -823,21 +823,6 @@
               <FilePath>..\port\wind_config.h</FilePath>
             </File>
             <File>
-              <FileName>wind_os_hwif.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\port\wind_os_hwif.c</FilePath>
-            </File>
-            <File>
-              <FileName>wind_os_hwif.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\port\wind_os_hwif.h</FilePath>
-            </File>
-            <File>
-              <FileName>wind_types.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\port\wind_types.h</FilePath>
-            </File>
-            <File>
               <FileName>wind_os_switch.s</FileName>
               <FileType>2</FileType>
               <FilePath>..\port\wind_os_switch.s</FilePath>
@@ -856,6 +841,21 @@
               <FileName>wind_os_prelunch.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\port\wind_os_prelunch.c</FilePath>
+            </File>
+            <File>
+              <FileName>wind_board_port.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\port\wind_board_port.c</FilePath>
+            </File>
+            <File>
+              <FileName>wind_board_port.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\port\wind_board_port.h</FilePath>
+            </File>
+            <File>
+              <FileName>wind_type.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\port\wind_type.h</FilePath>
             </File>
           </Files>
         </Group>

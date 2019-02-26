@@ -32,7 +32,7 @@
 #include "wind_thread.h"
 #include "wind_time.h"
 #include "wind_core.h"
-#include "wind_os_hwif.h"
+#include "wind_board_port.h"
 #if WIND_SOFTIRQ_SUPPORT
 #define WIND_SOFTINT_STK_LEN 256 //软中断线程的堆栈深度
 #define SOFT_FLAG_ARR_CNT ((WIND_SOFTINT_MAX_NUM + 31) >> 5)

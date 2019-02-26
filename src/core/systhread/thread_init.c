@@ -36,7 +36,7 @@
 #include "wind_time.h"
 #include "wind_debug.h"
 #include "wind_dbgpoint.h"
-#include "wind_os_hwif.h"
+#include "wind_board_port.h"
 #if WIND_FS_SUPPORT
 #include "wind_file.h"
 #endif 

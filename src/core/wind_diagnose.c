@@ -27,7 +27,7 @@
 #include "wind_core.h"
 #include "wind_string.h"
 #include "wind_mutex.h"
-#include "wind_os_hwif.h"
+#include "wind_board_port.h"
 
 
 
@@ -115,7 +115,7 @@ w_err_t wind_diagnose_check(void)
     w_dnode_s *dnode;
     w_diagnose_s *diagnose;
     wind_disable_switch();
-    wind_notice("system diagnose start");
+    wind_notice("diagnose check start");
     foreach_node(dnode,&diagnoselist)
     {
         diagnose = (w_diagnose_s*)DLIST_OBJ(dnode,w_diagnose_s,diagnosenode);
@@ -126,6 +126,7 @@ w_err_t wind_diagnose_check(void)
     foreach_node(dnode,&diagnoselist)
     {
         diagnose = (w_diagnose_s*)DLIST_OBJ(dnode,w_diagnose_s,diagnosenode);
+        wind_notice("check %s",diagnose->name);
         if(diagnose->result != DIAG_RES_OK)
             err = W_ERR_FAIL;
         wind_printf("%-12s status %-6s errorcode %d\r\n",diagnose->name,

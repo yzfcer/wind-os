@@ -26,7 +26,7 @@
 #include "wind_type.h"
 #include "wind_sysinfo.h"
 #include "wind_debug.h"
-#include "wind_os_hwif.h"
+#include "wind_board_port.h"
 #include "wind_core.h"
 const char* versioninfo = \
 "E-mail:yzfcer@163.com.\r\n";

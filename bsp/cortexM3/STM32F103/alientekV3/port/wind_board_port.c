@@ -4,10 +4,10 @@
 **                                       yzfcer@163.com
 **
 **--------------文件信息--------------------------------------------------------------------------------
-**文   件   名: wind_os_hwif.c
+**文   件   名: wind_board_port.c
 **创   建   人: Jason Zhou
 **最后修改日期: 2012.09.26
-**描        述: wind os的CPU体系相关的代码
+**描        述: wind os的单板相关的接口代码
 **              
 **--------------历史版本信息----------------------------------------------------------------------------
 ** 创建人: Jason Zhou
@@ -25,7 +25,7 @@
 
 #include "wind_config.h"
 #include "wind_type.h"
-#include "wind_os_hwif.h"
+#include "wind_board_port.h"
 #include "wind_debug.h"
 #include "misc.h"
 #include "usart.h"
@@ -34,8 +34,6 @@
 #ifndef SYSCLK
 #define SYSCLK 72    //系统时钟
 #endif
-
-
 
 /*
  * 设备进入多线程模式后函数的初始化处理的钩子函数，为了保证tick
@@ -55,7 +53,6 @@ void wind_enter_thread_hook(void)
 
 }
 
-
 /*
  * 触发CPU设备重启,一般的MCU都有软件触发重启的功能，在这个函数实现即可，
  * 这个功能不是必须的,如无必要可以不用实现，直接空置即可。
@@ -65,6 +62,20 @@ void wind_system_reset(void)
     NVIC_SystemReset();
 }
 
+#if WIND_FS_SUPPORT
+
+
+/*
+ * 在系统需要支持文件系统功能时，需要在这里初始化mount的规则，
+ * 在不需要文件系统时，可以不实现
+ */ 
+
+#include "wind_file.h"
+void _wind_fs_mount_init(void)
+{
+    wind_fs_mount("treefs","null","/");
+}
+#endif
 
 
 #if WIND_HEAP_SUPPORT
@@ -84,20 +95,10 @@ void _wind_heaps_create(void)
     wind_heap_create("heap1",(w_addr_t)(HEAP1_HEAD),HEAD1_LENTH,0);
 }
 
+
 #endif
 
 
-#if WIND_FS_SUPPORT
-/*
- * 在系统需要支持文件系统功能时，需要在这里初始化mount的规则，
- * 在不需要文件系统时，可以不实现
- */ 
-#include "wind_file.h"
-void _wind_fs_mount_init(void)
-{
-    //wind_fs_mount("treefs","null","/");
-}
-#endif
 
 /*
  * 初始化线程栈，用于线程初次切换时，从栈里面取出初始化参数
@@ -108,10 +109,10 @@ w_stack_t *_wind_thread_stack_init(thread_run_f pfunc,void *pdata, w_stack_t *ps
     w_stack_t *stk;
     stk = pstkbt;  
                                   
-    stk       = pstkbt;                              /* Load stack pointer                                 */
-                                                     /* Registers stacked as if auto-saved on exception    */
+    stk       = pstkbt;                            /* Load stack pointer                                 */
+                                                 /* Registers stacked as if auto-saved on exception    */
     *(stk)    = (w_uint32_t)0x01000000L;             /* xPSR                                               */
-    *(--stk)  = (w_uint32_t)pfunc;                   /* Entry Point                                        */
+    *(--stk)  = (w_uint32_t)pfunc;                    /* Entry Point                                        */
     *(--stk)  = (w_uint32_t)0xFFFFFFFEL;             /* R14 (LR) (init value will cause fault if ever used)*/
     *(--stk)  = (w_uint32_t)0x12121212L;             /* R12                                                */
     *(--stk)  = (w_uint32_t)0x03030303L;             /* R3                                                 */
@@ -119,7 +120,7 @@ w_stack_t *_wind_thread_stack_init(thread_run_f pfunc,void *pdata, w_stack_t *ps
     *(--stk)  = (w_uint32_t)0x01010101L;             /* R1                                                 */
     *(--stk)  = (w_uint32_t)pdata;                   /* R0 : argument                                      */
 
-                                                     /* Remaining registers saved on process stack         */
+                                                 /* Remaining registers saved on process stack         */
     *(--stk)  = (w_uint32_t)0x11111111L;             /* R11                                                */
     *(--stk)  = (w_uint32_t)0x10101010L;             /* R10                                                */
     *(--stk)  = (w_uint32_t)0x09090909L;             /* R9                                                 */

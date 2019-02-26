@@ -971,16 +971,6 @@
               <FilePath>..\port\wind_config.h</FilePath>
             </File>
             <File>
-              <FileName>wind_os_hwif.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\port\wind_os_hwif.c</FilePath>
-            </File>
-            <File>
-              <FileName>wind_os_hwif.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\port\wind_os_hwif.h</FilePath>
-            </File>
-            <File>
               <FileName>wind_os_switch.s</FileName>
               <FileType>2</FileType>
               <FilePath>..\port\wind_os_switch.s</FilePath>
@@ -1004,6 +994,16 @@
               <FileName>wind_os_prelunch.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\port\wind_os_prelunch.c</FilePath>
+            </File>
+            <File>
+              <FileName>wind_board_port.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\port\wind_board_port.c</FilePath>
+            </File>
+            <File>
+              <FileName>wind_board_port.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\port\wind_board_port.h</FilePath>
             </File>
           </Files>
         </Group>
