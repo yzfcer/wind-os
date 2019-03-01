@@ -63,9 +63,9 @@ w_diagnose_s *wind_diagnose_get(const char *name)
 w_err_t wind_diagnose_register(w_diagnose_s *diagnose)
 {
     w_diagnose_s *diag;    
+    wind_notice("register diagnose:%s",diagnose->name);
     WIND_ASSERT_RETURN(diagnose != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(diagnose->magic == (~WIND_DIAGNOSE_MAGIC),W_ERR_INVALID);
-    wind_notice("register diagnose:%s",diagnose->name);
     diag = wind_diagnose_get(diagnose->name);
     if(diag != W_NULL)
     {
@@ -119,14 +119,15 @@ w_err_t wind_diagnose_check(void)
     foreach_node(dnode,&diagnoselist)
     {
         diagnose = (w_diagnose_s*)DLIST_OBJ(dnode,w_diagnose_s,diagnosenode);
+        wind_notice("check %s",diagnose->name);
         diagnose->result = diagnose_check(diagnose);
     }
     wind_printf("--------------------------------------------------------\r\n");
-    wind_printf("\r\ndiagnose check result:\r\n");
+    wind_printf("diagnose check result:\r\n");
     foreach_node(dnode,&diagnoselist)
     {
         diagnose = (w_diagnose_s*)DLIST_OBJ(dnode,w_diagnose_s,diagnosenode);
-        wind_notice("check %s",diagnose->name);
+        
         if(diagnose->result != DIAG_RES_OK)
             err = W_ERR_FAIL;
         wind_printf("%-12s status %-6s errorcode %d\r\n",diagnose->name,

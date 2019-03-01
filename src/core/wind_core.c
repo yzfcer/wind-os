@@ -152,7 +152,7 @@ static w_thread_s *wind_search_highthread(void)
         }
     }
     wind_enable_interrupt();
-    wind_critical("core NOT find valid thread!");
+    //wind_critical("core NOT find valid thread!");
     return W_NULL;
 }
 

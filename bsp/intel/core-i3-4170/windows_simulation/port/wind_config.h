@@ -112,20 +112,20 @@ extern "C" {
 #define WIND_DAEMON_SUPPORT 1    //是否支持线程守护功能
 #define WIND_DAEMON_MAX_NUM 5    //支持可守护线程数量
 
-#define WIND_USER_SUPPORT 0 //是否支持用户账号功能
+#define WIND_USER_SUPPORT 1 //是否支持用户账号功能
 #define WIND_USER_MAX_NUM 5 //用户账号的数量
 
-#define WIND_FS_SUPPORT 1 //是否支持内存文件系统
+#define WIND_FS_SUPPORT 0 //是否支持内存文件系统
 #define WIND_FS_MAX_NUM 2 //允许支持的文件系统的数量
 #define WIND_FILE_MAX_NUM 5 //允许打开的文件的数量
 
 #define WIND_DBGPOINT_SUPPORT 1//是否支持调试点文件系统
 
-#define WIND_TICK_PER_SEC 500 //一秒钟所经历的的时间街节拍
+#define WIND_TICK_PER_SEC 200 //一秒钟所经历的的时间街节拍
 
 #define WIND_REALTIME_CORE_SUPPORT 1 //是否支持实时内核，即抢占式切换
 
-#define WIND_STATI_THREAD_SUPPORT 1    //是否支持统计线程
+#define WIND_STATI_THREAD_SUPPORT 0    //是否支持统计线程
 
 #define WIND_STACK_SUPPORT 0   //是否支持堆栈
 
@@ -158,21 +158,21 @@ extern "C" {
 #define CMD_DATETIME_SUPPORT 0 //是否支持日期时间命令
 #define CMD_ECHO_SUPPORT 1 //是否支持回显命令
 #define CMD_FS_SUPPORT 0 //是否支持文件系统命令
-#define CMD_LIST_SUPPORT 0 //是否支持内核对象列表命令
+#define CMD_LIST_SUPPORT 1 //是否支持内核对象列表命令
 #define CMD_LUA_SUPPORT 0 //是否支持lua脚本命令
-#define CMD_MEM_SUPPORT 0 //是否支持内存值查看命令
-#define CMD_RESET_SUPPORT 0 //是否支持系统复位命令
-#define CMD_STATI_SUPPORT 0 //是否支持统计命令
-#define CMD_THREAD_SUPPORT 0 //是否支持线程操作命令
+#define CMD_MEM_SUPPORT 1 //是否支持内存值查看命令
+#define CMD_RESET_SUPPORT 1 //是否支持系统复位命令
+#define CMD_STATI_SUPPORT 1 //是否支持统计命令
+#define CMD_THREAD_SUPPORT 1 //是否支持线程操作命令
 #define CMD_XMODEM_SUPPORT 0 //是否支持xmodem协议命令
-#define CMD_SYSINFO_SUPPORT 0 //是否支持系统信息命令
-#define CMD_CUTEST_SUPPORT 0 //是否支持单元测试命令
+#define CMD_SYSINFO_SUPPORT 1 //是否支持系统信息命令
+#define CMD_CUTEST_SUPPORT 1 //是否支持单元测试命令
 #define CMD_MKFS_SUPPORT 1 //是否支持创建文件系统镜像命令
-#define CMD_DBGPOINT_SUPPORT 0 //是否支持系统调试点功能命令
-#define CMD_USER_SUPPORT 0 //是否支持用户管理命令
-#define CMD_WATCHDOG_SUPPORT 0 //是否支持软件看门狗命令
-#define CMD_DAEMON_SUPPORT 0 //是否支持线程守护命令
-#define CMD_DIAGNOSE_SUPPORT 0 //是否支持系统诊断命令
+#define CMD_DBGPOINT_SUPPORT 1 //是否支持系统调试点功能命令
+#define CMD_USER_SUPPORT 1 //是否支持用户管理命令
+#define CMD_WATCHDOG_SUPPORT 1 //是否支持软件看门狗命令
+#define CMD_DAEMON_SUPPORT 1 //是否支持线程守护命令
+#define CMD_DIAGNOSE_SUPPORT 1 //是否支持系统诊断命令
 
 #define CMD_BEEP_SUPPORT 0 //是否支持蜂鸣器命令
 #define CMD_LED_SUPPORT 0 //是否支持LED操作命令
@@ -181,7 +181,7 @@ extern "C" {
 //-------------------------------------------------------------------------------
 //单元测试功能定制，前提是内核支持单元测试框架,并且支持对应的功能模块
 //-------------------------------------------------------------------------------
-#define WIND_CUTEST_SUPPORT 0 //是否支持单元测试框架
+#define WIND_CUTEST_SUPPORT 1 //是否支持单元测试框架
 
 #if WIND_CUTEST_SUPPORT
 #define TEST_HEAP_SUPPORT 0 //是否支持内存堆测试
@@ -194,8 +194,8 @@ extern "C" {
 #define TEST_EVENT_SUPPORT 1 //是否支持事件测试
 #define TEST_SOFTIRQ_SUPPORT 1 //是否支持软中断测试
 #define TEST_TREE_SUPPORT 1 //是否支持树形结构对象测试
-#define TEST_TREEFS_SUPPORT 1 //是否支持treefs文件系统测试
-#define TEST_FS_SUPPORT 1 //是否支持fs文件系统接口测试
+#define TEST_TREEFS_SUPPORT 0 //是否支持treefs文件系统测试
+#define TEST_FS_SUPPORT 0 //是否支持fs文件系统接口测试
 #endif
 
 

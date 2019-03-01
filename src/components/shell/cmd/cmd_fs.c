@@ -21,7 +21,7 @@
 #include "wind_cmd.h"
 #include "wind_heap.h"
 #include "wind_string.h"
-#include "wind_file.h"
+
 
 #ifdef __cplusplus
 extern "C" {
@@ -31,7 +31,7 @@ extern "C" {
 /*********************************************头文件定义***********************************************/
 
 #if (CMD_FS_SUPPORT)
-
+#include "wind_file.h"
 /********************************************内部变量定义**********************************************/
 #define BUF_SIZE 128
 

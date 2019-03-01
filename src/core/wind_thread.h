@@ -60,6 +60,10 @@ extern "C" {
 #define SET_F_THREAD_DAEMON(thread) (thread->flag |= F_THREAD_DAEMON)
 #define CLR_F_THREAD_DAEMON(thread) (thread->flag &= (~F_THREAD_DAEMON))
 
+#define F_THREAD_VIRTUAL (0x01 << 4) //标记thread对象是否虚拟化
+#define IS_F_THREAD_VIRTUAL(thread) ((thread->flag & F_THREAD_VIRTUAL) == F_THREAD_VIRTUAL)
+#define SET_F_THREAD_VIRTUAL(thread) (thread->flag |= F_THREAD_VIRTUAL)
+#define CLR_F_THREAD_VIRTUAL(thread) (thread->flag &= (~F_THREAD_VIRTUAL))
 
 //线程状态列表
 typedef enum __w_thread_stat_e

@@ -43,8 +43,8 @@ static w_int32_t poolitem_diagnose(w_pool_s *pool)
     w_dnode_s *dnode;
     w_poolitem_s *poolitem;
     w_uint16_t magic = 0;
-    pool = (w_pool_s*)DLIST_OBJ(dnode,w_pool_s,poolnode);
-    //foreach_node(dnode1,&pool->free_list)
+
+
     for(i = 0;i < pool->itemnum;i ++)
     {
         poolitem = (w_poolitem_s *)((w_addr_t)pool->head + i * pool->itemsize);

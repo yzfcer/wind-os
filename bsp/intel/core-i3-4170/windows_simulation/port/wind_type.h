@@ -61,7 +61,7 @@ typedef long long w_int64_t;
 #endif
 
 //SREG，CPU状态寄存器对应的数据位宽，当关闭中断时需要保存这个寄存器
-typedef w_uint32_t w_sreg_t;
+typedef w_int32_t w_sreg_t;
 
 #ifndef w_fp32_t
 typedef float w_fp32_t;

@@ -395,7 +395,7 @@ w_err_t wind_heapitem_print(void)
     WIND_ASSERT_RETURN(list->head != W_NULL,W_ERR_PTR_NULL);
     wind_printf("\r\n\r\nheapitem list:\r\n");
     wind_print_space(5);
-    wind_printf("%-16s %-8s %-10s\r\n","addr","size","state");
+    wind_printf("%-16s %-10s %-10s\r\n","addr","size","state");
     wind_print_space(5);
 
     foreach_node(dnode,list)
@@ -404,12 +404,12 @@ w_err_t wind_heapitem_print(void)
         foreach_node(dnode1,&heap->free_list)
         {
             heapitem = (w_heapitem_s *)DLIST_OBJ(dnode1,w_heapitem_s,itemnode.dnode);
-            if(heapitem->magic != WIND_HEAPITEM_MAGIC)
+            if(heapitem->magic != (w_uint16_t)(~WIND_HEAPITEM_MAGIC))
             {
                 wind_error("heap memory has been illegally accessed .");
                 return W_ERR_MEM;
             }
-            wind_printf("0x%-14x %-8d %-10s\r\n",
+            wind_printf("0x%-14x %-10d %-10s\r\n",
                 heapitem,heapitem->size,IS_F_HEAPITEM_USED(heapitem)?"uesd":"free");
         }
         foreach_node(dnode1,&heap->used_list)
@@ -420,7 +420,7 @@ w_err_t wind_heapitem_print(void)
                 wind_error("heap memory:0x%x has been illegally accessed.",heapitem);
                 return W_ERR_MEM;
             }
-            wind_printf("0x%-14x %-8d %-10s\r\n",
+            wind_printf("0x%-14x %-10d %-10s\r\n",
                 heapitem,heapitem->size,IS_F_HEAPITEM_USED(heapitem)?"uesd":"free");
         }
     }

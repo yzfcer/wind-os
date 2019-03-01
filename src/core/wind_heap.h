@@ -82,6 +82,8 @@ struct __w_heap_s
     w_dlist_s used_list;
     w_dlist_s free_list;
     void *mutex; 
+    w_uint32_t pad; 
+    
 };
 w_err_t _wind_heap_mod_init(void);
 

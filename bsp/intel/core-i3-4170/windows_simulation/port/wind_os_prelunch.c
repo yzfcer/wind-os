@@ -4,39 +4,64 @@
 **                                       yzfcer@163.com
 **
 **--------------文件信息--------------------------------------------------------------------------------
-**文   件   名: list_dev.c
+**文   件   名: wind_os_prelunch.c
 **创   建   人: Jason Zhou
-**最后修改日期: 2018.03.26
-**描        述: 块设备驱动注册文件
+**最后修改日期: 2019.01.06
+**描        述: wind os的预启动文件
+**功        能: 启动前硬件初始化，初始化外部RAM，初始化数据段，跳转到wind_o_lunch
 **              
 **--------------历史版本信息----------------------------------------------------------------------------
 ** 创建人: Jason Zhou
 ** 版  本: v1.0
-** 日　期: 2018.03.26  
+** 日　期: 2019.01.06
 ** 描　述: 原始版本
 **
 **--------------当前版本修订----------------------------------------------------------------------------
 ** 修改人: Jason Zhou
-** 日　期: 2018.03.26
+** 日　期: 2019.01.06
 ** 描　述: 
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
-#include "wind_blkdev.h"
-#include "wind_debug.h"
-#if WIND_BLK_DRVFRAME_SUPPORT
-//extern w_blkdev_s memblk_dev[1];
-//extern w_blkdev_s spi_flash_dev[2];
-//extern w_blkdev_s at24c02_dev[1];
-extern w_blkdev_s null_dev[1];
-w_err_t _register_blkdevs(void)
+#include "wind_type.h"
+#include <windows.h>
+ 
+CRITICAL_SECTION CriticalSection;
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+static void hw_preinit(void)
 {
-    //wind_blkdev_register(&gpio_dev,1);
-    //wind_blkdev_register(at24c02_dev,1);
-    //wind_blkdev_register(spi_flash_dev,2);
-    //wind_blkdev_register(memblk_dev,1);
-    wind_blkdev_register(null_dev,1);
-    return W_ERR_OK;
+    InitializeCriticalSection(&CriticalSection);
+}
+
+#if defined(__CC_ARM)
+void data_bss_init(void)
+{
+    return;
+}
+#else
+static void data_bss_init(void)
+{
+}
+#endif
+static void exram_init(void)
+{
+}
+
+extern void wind_os_lunch(void);
+void wind_os_prelunch(void)
+{
+    hw_preinit();
+    exram_init();
+    data_bss_init();
+    wind_os_lunch();
+}
+
+
+#ifdef __cplusplus
 }
 #endif
 

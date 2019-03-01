@@ -1,0 +1,412 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="main.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\common\wind_conv.c">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\common\wind_crc16.c">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\common\wind_crc32.c">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\common\wind_debug.c">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\common\wind_dlist.c">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\common\wind_encrypt.c">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\common\wind_md5.c">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\common\wind_queue.c">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\common\wind_string.c">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\common\wind_tree.c">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\port\wind_board_port.c">
+      <Filter>os_port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\port\wind_os_switch.c">
+      <Filter>os_port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\port\wind_std.c">
+      <Filter>os_port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_core.c">
+      <Filter>os_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_daemon.c">
+      <Filter>os_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_dbgpoint.c">
+      <Filter>os_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_diagnose.c">
+      <Filter>os_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_event.c">
+      <Filter>os_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_heap.c">
+      <Filter>os_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_msgbox.c">
+      <Filter>os_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_mutex.c">
+      <Filter>os_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_pipe.c">
+      <Filter>os_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_pool.c">
+      <Filter>os_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_sem.c">
+      <Filter>os_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_softirq.c">
+      <Filter>os_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_sysinfo.c">
+      <Filter>os_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_thread.c">
+      <Filter>os_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_time.c">
+      <Filter>os_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_timer.c">
+      <Filter>os_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_user.c">
+      <Filter>os_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_watchdog.c">
+      <Filter>os_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\core\systhread\thread_daemon.c">
+      <Filter>os_systhread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\core\systhread\thread_idle.c">
+      <Filter>os_systhread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\core\systhread\thread_init.c">
+      <Filter>os_systhread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\core\systhread\thread_stati.c">
+      <Filter>os_systhread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\core\systhread\thread_timer.c">
+      <Filter>os_systhread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\hal\wind_blkdev.c">
+      <Filter>os_hal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\hal\wind_chdev.c">
+      <Filter>os_hal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\application\alientekV3\user_entry.c">
+      <Filter>application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\shell\framework\cmd_history.c">
+      <Filter>component_shell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\shell\framework\shell_framework.c">
+      <Filter>component_shell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\shell\cmd\cmd_beep.c">
+      <Filter>component_shell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\shell\cmd\cmd_blkdev.c">
+      <Filter>component_shell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\shell\cmd\cmd_cutest.c">
+      <Filter>component_shell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\shell\cmd\cmd_datetime.c">
+      <Filter>component_shell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\shell\cmd\cmd_dbgpoint.c">
+      <Filter>component_shell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\shell\cmd\cmd_diagnose.c">
+      <Filter>component_shell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\shell\cmd\cmd_echo.c">
+      <Filter>component_shell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\shell\cmd\cmd_fs.c">
+      <Filter>component_shell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\shell\cmd\cmd_led.c">
+      <Filter>component_shell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\shell\cmd\cmd_list.c">
+      <Filter>component_shell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\shell\cmd\cmd_lua.c">
+      <Filter>component_shell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\shell\cmd\cmd_mem.c">
+      <Filter>component_shell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\shell\cmd\cmd_reset.c">
+      <Filter>component_shell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\shell\cmd\cmd_stati.c">
+      <Filter>component_shell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\shell\cmd\cmd_sysinfo.c">
+      <Filter>component_shell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\shell\cmd\cmd_thread.c">
+      <Filter>component_shell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\shell\cmd\cmd_user.c">
+      <Filter>component_shell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\shell\cmd\cmd_watchdog.c">
+      <Filter>component_shell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\shell\cmd\cmd_xmodem.c">
+      <Filter>component_shell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\shell\cmd\shell_cmd_regif.c">
+      <Filter>component_shell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\cutest\framework\test_framework.c">
+      <Filter>component_cutest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\cutest\port\test_port.c">
+      <Filter>component_cutest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\cutest\testcase\test_event.c">
+      <Filter>component_cutest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\cutest\testcase\test_fs.c">
+      <Filter>component_cutest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\cutest\testcase\test_heap.c">
+      <Filter>component_cutest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\cutest\testcase\test_msgbox.c">
+      <Filter>component_cutest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\cutest\testcase\test_mutex.c">
+      <Filter>component_cutest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\cutest\testcase\test_pipe.c">
+      <Filter>component_cutest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\cutest\testcase\test_pool.c">
+      <Filter>component_cutest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\cutest\testcase\test_queue.c">
+      <Filter>component_cutest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\cutest\testcase\test_sem.c">
+      <Filter>component_cutest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\cutest\testcase\test_softirq.c">
+      <Filter>component_cutest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\cutest\testcase\test_tree.c">
+      <Filter>component_cutest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\cutest\testcase\test_treefs.c">
+      <Filter>component_cutest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\port\wind_os_prelunch.c">
+      <Filter>os_port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\device\blkdev_null.c">
+      <Filter>device</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\device\list_blkdev.c">
+      <Filter>device</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\device\list_dev.c">
+      <Filter>device</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="common">
+      <UniqueIdentifier>{e634ee1b-81e4-4752-a614-9d399639021b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="os_port">
+      <UniqueIdentifier>{77f52093-fbc3-4bd8-9b74-5ab108212325}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="os_core">
+      <UniqueIdentifier>{3ecc4825-ba54-4f69-ba5b-5fd3755d7204}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="os_lib">
+      <UniqueIdentifier>{3c4dd18c-d1da-4b83-ae00-568252bf995a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="os_systhread">
+      <UniqueIdentifier>{1175c36f-7950-4450-80e3-aff4b6e45d09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="os_hal">
+      <UniqueIdentifier>{8aece0bd-8e91-4ede-a049-0cc4bbfac904}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="application">
+      <UniqueIdentifier>{3eab9536-725f-47ab-ac5d-e19288a05de8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="component_shell">
+      <UniqueIdentifier>{79c294d0-a592-4a7c-950a-6ff76114da59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="component_vfs">
+      <UniqueIdentifier>{a7bcfdf4-bf3e-4619-8225-95ea2ae6e072}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="component_lua">
+      <UniqueIdentifier>{27e4ee84-80e8-4b13-8c1e-3499b9cfdc82}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="component_cutest">
+      <UniqueIdentifier>{ce200aa1-0a64-4e01-b20e-b644ba8d7243}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="device">
+      <UniqueIdentifier>{6fa220e6-ebf1-43a7-8ca5-f07097a71d1f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\..\..\..\src\common\wind_conv.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\common\wind_crc16.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\common\wind_crc32.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\common\wind_debug.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\common\wind_dlist.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\common\wind_encrypt.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\common\wind_macro.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\common\wind_md5.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\common\wind_queue.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\common\wind_string.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\common\wind_tree.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\port\wind_board_port.h">
+      <Filter>os_port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\port\wind_config.h">
+      <Filter>os_port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\port\wind_std.h">
+      <Filter>os_port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\port\wind_type.h">
+      <Filter>os_port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_core.h">
+      <Filter>os_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_daemon.h">
+      <Filter>os_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_dbgpoint.h">
+      <Filter>os_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_diagnose.h">
+      <Filter>os_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_event.h">
+      <Filter>os_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_heap.h">
+      <Filter>os_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_msgbox.h">
+      <Filter>os_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_mutex.h">
+      <Filter>os_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_pipe.h">
+      <Filter>os_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_pool.h">
+      <Filter>os_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_sem.h">
+      <Filter>os_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_softirq.h">
+      <Filter>os_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_stati.h">
+      <Filter>os_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_sysinfo.h">
+      <Filter>os_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_thread.h">
+      <Filter>os_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_time.h">
+      <Filter>os_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_timer.h">
+      <Filter>os_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_user.h">
+      <Filter>os_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_watchdog.h">
+      <Filter>os_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\hal\wind_blkdev.h">
+      <Filter>os_hal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\hal\wind_chdev.h">
+      <Filter>os_hal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\components\shell\framework\cmd_history.h">
+      <Filter>component_shell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\components\shell\framework\shell_framework.h">
+      <Filter>component_shell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\components\shell\framework\wind_cmd.h">
+      <Filter>component_shell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\components\shell\framework\wind_key.h">
+      <Filter>component_shell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\components\cutest\framework\test_framework.h">
+      <Filter>component_cutest</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\components\cutest\framework\wind_cut.h">
+      <Filter>component_cutest</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\components\cutest\port\test_port.h">
+      <Filter>component_cutest</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
