@@ -42,11 +42,11 @@ static w_err_t treefs_op_format(w_fs_s *fs)
     return W_ERR_OK;
 }
 
-static w_err_t treefs_op_open(w_file_s *file,w_fmode_e fmode)
+static w_err_t treefs_op_open(w_file_s *file,w_uint16_t fmode)
 {
     treefile_s *tfile;
     WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
-    tfile = treefile_open(file->path,(tf_fmode_e)fmode);
+    tfile = treefile_open(file->path,fmode);
     if(tfile == W_NULL)
         return W_ERR_FAIL;
     if(file->isdir != tfile->isdir)

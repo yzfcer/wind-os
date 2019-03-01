@@ -1352,6 +1352,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\components\shell\cmd\shell_cmd_regif.c</FilePath>
             </File>
+            <File>
+              <FileName>cmd_daemon.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\components\shell\cmd\cmd_daemon.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

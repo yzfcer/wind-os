@@ -50,6 +50,22 @@ w_err_t _wind_daemon_mod_init(void)
     err = wind_pool_create("daemon",daemonpool,sizeof(daemonpool),sizeof(w_daemon_s));
     return err;
 }
+w_err_t wind_daemon_setflag(w_daemon_s *daemon,w_int16_t flag)
+{
+    WIND_ASSERT_RETURN(daemon != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(daemon->magic == WIND_DAEMON_MAGIC,W_ERR_INVALID);
+    if(flag & F_DAEMON_ENABLE)
+        SET_F_DAEMON_ENABLE(daemon);
+    return W_ERR_OK;
+}
+w_err_t wind_daemon_clrflag(w_daemon_s *daemon,w_int16_t flag)
+{
+    WIND_ASSERT_RETURN(daemon != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(daemon->magic == WIND_DAEMON_MAGIC,W_ERR_INVALID);
+    if(flag & F_DAEMON_ENABLE)
+        CLR_F_DAEMON_ENABLE(daemon);
+    return W_ERR_OK;
+}
 
 w_err_t _wind_daemon_period_check(void)
 {
@@ -60,6 +76,8 @@ w_err_t _wind_daemon_period_check(void)
     foreach_node(dnode,&daemonlist)
     {
         daemon = DLIST_OBJ(dnode,w_daemon_s,daemonnode);
+        if(!IS_F_DAEMON_ENABLE(daemon))
+            continue;
         thread = wind_thread_get(daemon->name);
         if(thread == W_NULL)
         {
@@ -135,9 +153,9 @@ w_daemon_s *wind_daemon_create(const char *name,w_daemon_fn daemon_func)
 w_err_t wind_daemon_destroy(w_daemon_s *daemon)
 {
     w_thread_s *thread;
-    wind_notice("destroy daemon:%s",daemon->name?daemon->name:"null");
     WIND_ASSERT_RETURN(daemon != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(daemon->magic == WIND_DAEMON_MAGIC,W_ERR_INVALID);
+    wind_notice("destroy daemon:%s",daemon->name?daemon->name:"null");
     wind_disable_interrupt();
     dlist_remove(&daemonlist,&daemon->daemonnode);
     wind_enable_interrupt();
@@ -155,20 +173,22 @@ w_err_t wind_daemon_print(void)
 {
     w_dnode_s *dnode;
     w_daemon_s *daemon;
+    int cnt = 0;
     w_dlist_s *list = &daemonlist;
-    wind_printf("\r\n\r\ndaemon thread list:\r\n");
-    wind_print_space(2);
-    wind_printf("%-16s\r\n","thread");
-    wind_print_space(2);
-
+    WIND_ASSERT_RETURN(list != W_NULL,W_ERR_PTR_NULL);
+    wind_printf("\r\n\r\ndaemon list:\r\n");
+    
     foreach_node(dnode,list)
     {
         daemon = (w_daemon_s *)DLIST_OBJ(dnode,w_daemon_s,daemonnode);
-        wind_printf("%-16s\r\n",daemon->name);
+        wind_printf("%-12s ",daemon->name);
+        cnt ++;
+        if((cnt & 0x03) == 0)
+            wind_printf("\r\n");
     }
-    wind_print_space(2);
     return W_ERR_OK;
 }
+
 
 #endif  //WIND_DAEMON_H__
 

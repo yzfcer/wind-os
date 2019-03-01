@@ -119,10 +119,10 @@ w_user_s *wind_user_get(const char *name)
 
 w_err_t wind_user_init(w_user_s *user,w_user_e usertype,const char *username,const char *passwd)
 {
+    wind_notice("init user:%s",username != W_NULL?username:"null");
     WIND_ASSERT_RETURN(user != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(check_user_name_format(username) == W_ERR_OK,W_ERR_INVALID);
     WIND_ASSERT_RETURN(check_passwd_format(passwd) == W_ERR_OK,W_ERR_INVALID);
-    
 
     user->magic = WIND_USER_MAGIC;
     wind_strcpy(user->name,username);
@@ -162,6 +162,7 @@ w_err_t wind_user_destroy(w_user_s *user)
     WIND_ASSERT_RETURN(user != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(user->magic == WIND_USER_MAGIC,W_ERR_INVALID);
     WIND_ASSERT_RETURN(user->usertype != USER_SUPER,W_ERR_FAIL);
+    wind_notice("destroy user:%s",user->name != W_NULL?user->name:"null");
     wind_disable_switch();
     dnode = dlist_remove(&userlist,&user->usernode);
     wind_enable_switch();

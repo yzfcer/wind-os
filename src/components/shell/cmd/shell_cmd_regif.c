@@ -87,6 +87,9 @@ CMD_DECLARE(wdog);
 #if CMD_DIAGNOSE_SUPPORT
 CMD_DECLARE(diagnose);
 #endif
+#if CMD_DAEMON_SUPPORT
+CMD_DECLARE(daemon);
+#endif
 
 
 void _wind_register_all_cmd(w_shell_ctx_s *ctx)
@@ -149,6 +152,10 @@ void _wind_register_all_cmd(w_shell_ctx_s *ctx)
 #if CMD_DIAGNOSE_SUPPORT
     wind_cmd_register(COMMAND(diagnose),1);
 #endif
+#if CMD_DAEMON_SUPPORT
+    wind_cmd_register(COMMAND(daemon),1);
+#endif
+
 }
 
 #ifdef __cplusplus

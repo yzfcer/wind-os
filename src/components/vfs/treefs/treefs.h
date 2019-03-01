@@ -7,14 +7,13 @@
 //#include "wind_file.h"
 
 #if WIND_FS_SUPPORT
-typedef enum
-{
-    TF_FMODE_R = 0x01,
-    TF_FMODE_W = 0x02,
-    TF_FMODE_RW = 0x03,
-    TF_FMODE_CRT = 0x04,
-    TF_FMODE_A = 0x08,
-}tf_fmode_e;
+
+#define TF_FMODE_R  0x01
+#define TF_FMODE_W  0x02
+#define TF_FMODE_RW  0x03
+#define TF_FMODE_CRT 0x04
+#define TF_FMODE_A  0x08
+
 
 #define TREEFILE_MAGIC 0x48A97D26
 #define TREEFS_DIR_LAYCNT 32

@@ -62,10 +62,10 @@ w_dbgpoint_s *wind_dbgpoint_get(const char *name)
 
 w_err_t wind_dbgpoint_register(w_dbgpoint_s *dbgpoint)
 {
-    w_dbgpoint_s *dbgp;    
+    w_dbgpoint_s *dbgp;
     WIND_ASSERT_RETURN(dbgpoint != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(dbgpoint->magic == WIND_DBGPOINT_MAGIC,W_ERR_INVALID);
-    wind_notice("register dbgpoint:%s",dbgpoint->name);
+    wind_notice("register dbgpoint:%s",dbgpoint->name != W_NULL?dbgpoint->name:"null");
     dbgp = wind_dbgpoint_get(dbgpoint->name);
     if(dbgp != W_NULL)
     {
@@ -86,6 +86,7 @@ w_err_t wind_dbgpoint_unregister(w_dbgpoint_s *dbgpoint)
     w_dbgpoint_s *dbgp;
     WIND_ASSERT_RETURN(dbgpoint != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(dbgpoint->magic == WIND_DBGPOINT_MAGIC,W_ERR_INVALID);
+    wind_notice("unregister dbgpoint:%s",dbgpoint->name != W_NULL?dbgpoint->name:"null");
     wind_disable_switch();
     dnode = dlist_remove(&dbgpointlist,&dbgpoint->dbgpointnode);
     wind_enable_switch();

@@ -77,6 +77,7 @@ w_err_t wind_timer_init(w_timer_s* timer,
                             w_uint16_t flag)
 {
     w_int32_t count;
+    wind_notice("init timer:%s",name != W_NULL?name:"null");
     WIND_ASSERT_RETURN(timer != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(func != W_NULL,W_ERR_PTR_NULL);
     count = period_ms / TIMER_PERIOD;
@@ -142,6 +143,7 @@ w_err_t wind_timer_destroy(w_timer_s* timer)
 {
     WIND_ASSERT_RETURN(timer != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(timer->magic == WIND_TIMER_MAGIC,W_ERR_INVALID);    
+    wind_notice("destroy timer:%s",timer->name != W_NULL?timer->name:"null");
     wind_disable_interrupt();
     dlist_remove(&timerlist,&timer->timernode);
     wind_enable_interrupt();

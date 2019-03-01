@@ -90,6 +90,7 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\components\shell\cmd\cmd_beep.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\components\shell\cmd\cmd_blkdev.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\components\shell\cmd\cmd_cutest.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\shell\cmd\cmd_daemon.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\components\shell\cmd\cmd_datetime.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\components\shell\cmd\cmd_dbgpoint.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\components\shell\cmd\cmd_diagnose.c" />

@@ -188,7 +188,7 @@ extern "C" {
 #define TEST_MSGBOX_SUPPORT 1 //是否支持消息邮箱测试
 #define TEST_MUTEX_SUPPORT 1 //是否支持互斥所测试
 #define TEST_PIPE_SUPPORT 1 //是否支持管道测试
-#define TEST_POOL_SUPPORT 1 //是否支持内存池测试
+#define TEST_POOL_SUPPORT 0 //是否支持内存池测试
 #define TEST_QUEUE_SUPPORT 1 //是否支持队列测试
 #define TEST_SEM_SUPPORT 1 //是否支持信号量测试
 #define TEST_EVENT_SUPPORT 1 //是否支持事件测试

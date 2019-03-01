@@ -239,6 +239,9 @@
     <ClCompile Include="..\..\..\device\list_dev.c">
       <Filter>device</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\shell\cmd\cmd_daemon.c">
+      <Filter>component_shell</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">

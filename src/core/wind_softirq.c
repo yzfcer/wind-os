@@ -55,6 +55,7 @@ w_err_t _wind_softirq_mod_init(void)
 //向软中断模块注册一个中断向量响应函数
 w_err_t wind_softirq_reg(w_uint16_t irqid,w_softirq_fn func)
 {
+    wind_notice("register softirq %d",irqid);
     WIND_ASSERT_RETURN(irqid < WIND_SOFTINT_MAX_NUM,W_ERR_OVERFLOW);
     softirq_vectors[irqid] = func;
     return W_ERR_OK;
@@ -64,6 +65,7 @@ w_err_t wind_softirq_reg(w_uint16_t irqid,w_softirq_fn func)
 w_err_t wind_softirq_unreg(w_int32_t irqid)
 {
     WIND_ASSERT_RETURN(irqid < WIND_SOFTINT_MAX_NUM,W_ERR_OVERFLOW);
+	wind_notice("unregister softirq %d",irqid);
     softirq_vectors[irqid] = W_NULL;
     return W_ERR_OK;
 }

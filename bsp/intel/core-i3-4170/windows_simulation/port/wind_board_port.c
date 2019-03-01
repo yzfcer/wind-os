@@ -92,24 +92,20 @@ static void push_stack(w_stack_t ** Stackpp, w_stack_t v)
  * 填入参数的顺序可以参考相应的CPU线程进出栈的顺序
  */ 
 //定义线程栈的大小
-#define GMTHREADSTACKSIZE 0x80000
+#define GMTHREADSTACKSIZE 0x820000
 
 w_stack_t *_wind_thread_stack_init(thread_run_f pfunc,void *pdata, w_stack_t *pstkbt)
 {
-    unsigned char* StackPages;
-    unsigned int* StackDWordParam;
-    
+    unsigned char* stk_pages;
+    /*
+     * 这里存在内存泄漏，为了适配在MCU上的接口，暂时无法解决
+     * 好在PC上的内存很大，且程序不存在频繁的线程创建，影响有限
+     */
     //申请空间
-    StackPages = (unsigned char*)VirtualAlloc(NULL, GMTHREADSTACKSIZE, MEM_COMMIT, PAGE_READWRITE);
-    //初始化
-    ZeroMemory(StackPages, GMTHREADSTACKSIZE);
-    //初始化地址地址
-    //GMThreadp->initialStack = StackPages + GMTHREADSTACKSIZE;
-    //堆栈限制
-    pstkbt = StackPages+GMTHREADSTACKSIZE;
-    //堆栈地址
-    //StackDWordParam = (unsigned int*)GMThreadp->initialStack;
-    //入栈
+    stk_pages = (unsigned char*)VirtualAlloc(NULL, GMTHREADSTACKSIZE, MEM_COMMIT, PAGE_READWRITE);
+    ZeroMemory(stk_pages, GMTHREADSTACKSIZE);
+    pstkbt = stk_pages+GMTHREADSTACKSIZE;
+    
     push_stack(&pstkbt, (w_stack_t)pdata);        //通过这个指针来找到线程函数，线程参数
     push_stack(&pstkbt, (w_stack_t)0);            //平衡堆栈的(不用管)
     push_stack(&pstkbt, (w_stack_t)pfunc);        //线程入口函数 这个函数负责调用线程函数
@@ -122,5 +118,7 @@ w_stack_t *_wind_thread_stack_init(thread_run_f pfunc,void *pdata, w_stack_t *ps
     push_stack(&pstkbt, (w_stack_t)0);                //push eax
     return pstkbt;
 }
+
+
 
 

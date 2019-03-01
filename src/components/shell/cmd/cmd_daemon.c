@@ -1,14 +1,14 @@
 /****************************************Copyright (c)**************************************************
 **                                       清  风  海  岸
-** 文   件   名: cmd_thread.c
+** 文   件   名: cmd_daemon.c
 ** 创   建   人: Jason Zhou
-** 最后修改日期: 2018/9/14 21:24:37
-** 描        述: 线程基本操作命令
+** 最后修改日期: 2019/1/29 21:45:25
+** 描        述: daemon对象操作命令
 **  
 **--------------历史版本信息----------------------------------------------------------------------------
 ** 创建人: Jason Zhou
 ** 版  本: v1.0
-** 日　期: 2018/9/14 21:24:37
+** 日　期: 2019/1/29 21:45:25
 ** 描　述: 原始版本
 **
 **--------------当前版本修订----------------------------------------------------------------------------
@@ -19,8 +19,9 @@
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
 #include "wind_cmd.h"
-#include "wind_thread.h"
-#include "wind_conv.h"
+#include "wind_string.h"
+#include "wind_heap.h"
+#include "wind_daemon.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
@@ -28,7 +29,7 @@ extern "C" {
 
 /*********************************************头文件定义***********************************************/
 
-#if (CMD_THREAD_SUPPORT)
+#if (CMD_DAEMON_SUPPORT)
 
 /********************************************内部变量定义**********************************************/
 
@@ -44,65 +45,47 @@ extern "C" {
 
 
 /********************************************全局函数定义**********************************************/
-COMMAND_DISC(thread)
+COMMAND_DISC(daemon)
 {
-    wind_printf("to control thread status.\r\n");
+    wind_printf("to set a daemon object status.\r\n");
 }
 
-COMMAND_USAGE(thread)
+COMMAND_USAGE(daemon)
 {
-    wind_printf("thread list:--to show all thread infomation.\r\n");
-    wind_printf("thread start <threadname>:--to start a thread.\r\n");
-    wind_printf("thread suspend <threadname>:--to suspend a thread.\r\n");
-    wind_printf("thread kill <threadname>:--to kill a thread.\r\n");
-    wind_printf("thread setprio <threadname> <prio>:--to change a thread priority.\r\n");
+    wind_printf("daemon list:--to set a daemon status via str.\r\n");
+    wind_printf("daemon enable <daemonname>:--to enable a daemon object.\r\n");
+    wind_printf("daemon disable <daemonname>:--to disable a daemon object.\r\n");
 }
 
-COMMAND_MAIN(thread,argc,argv)
+COMMAND_MAIN(daemon,argc,argv)
 {
-    w_bool_t res;
-    w_int32_t prio;
-    w_thread_s *thread;
+    w_daemon_s *daemon;
     WIND_ASSERT_RETURN(argc >= 2,W_ERR_INVALID);
     if(wind_strcmp(argv[1],"list") == 0)
     {
-        wind_thread_print();
+        wind_daemon_print();
         return W_ERR_OK;
     }
-	thread = wind_thread_get(argv[2]);
-    if(thread == W_NULL)
+    else if(wind_strcmp(argv[1],"enable") == 0)
     {
-        wind_error("has no such a thread:%s",argv[2]);
-        return W_ERR_INVALID;
-    }
-    if(wind_strcmp(argv[1],"start") == 0)
-    {
-        wind_thread_start(thread);
+        WIND_ASSERT_RETURN(argc == 3,W_ERR_INVALID);
+        daemon = wind_daemon_get(argv[2]);
+        WIND_ASSERT_RETURN(daemon != W_NULL,W_ERR_INVALID);
+        wind_daemon_setflag(daemon,F_DAEMON_ENABLE);
         return W_ERR_OK;
     }
-    else if(wind_strcmp(argv[1],"suspend") == 0)
+    else if(wind_strcmp(argv[1],"disable") == 0)
     {
-        wind_thread_suspend(thread);
-        return W_ERR_OK;
-    }
-    else if(wind_strcmp(argv[1],"kill") == 0)
-    {
-        wind_thread_destroy(thread);
-        return W_ERR_OK;
-    }
-    else if(wind_strcmp(argv[1],"setprio") == 0)
-    {
-        WIND_ASSERT_RETURN(argc >= 4,W_ERR_INVALID);
-        res = wind_atoi(argv[3],&prio);
-        if(res != W_TRUE)
-            return W_ERR_INVALID;
-        wind_thread_set_priority(thread,prio);
+        WIND_ASSERT_RETURN(argc == 3,W_ERR_INVALID);
+        daemon = wind_daemon_get(argv[2]);
+        WIND_ASSERT_RETURN(daemon != W_NULL,W_ERR_INVALID);
+        wind_daemon_clrflag(daemon,F_DAEMON_ENABLE);
         return W_ERR_OK;
     }
     return W_ERR_FAIL;
 }
 
-COMMAND_DEF(thread);
+COMMAND_DEF(daemon);
 
 #endif
 #ifdef __cplusplus

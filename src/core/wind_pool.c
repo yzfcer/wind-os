@@ -40,7 +40,6 @@ static w_dlist_s poollist;
 static w_int32_t poolitem_diagnose(w_pool_s *pool)
 {
     w_int32_t i;
-    w_dnode_s *dnode;
     w_poolitem_s *poolitem;
     w_uint16_t magic = 0;
 

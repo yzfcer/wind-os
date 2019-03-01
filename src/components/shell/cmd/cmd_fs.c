@@ -211,7 +211,7 @@ static w_err_t fs_cmd_write(w_int32_t argc,char **argv)
     if(argc < 4)
         return W_ERR_INVALID;
     fullpath = wind_full_path_generate(curpath,argv[2],0);
-    file = wind_fopen(fullpath,FMODE_W|FMODE_CRT);
+    file = wind_fopen(fullpath,FMODE_W | FMODE_CRT);
     if(file == W_NULL)
     {
         wind_printf("open directory or file failed.\r\n",fullpath);

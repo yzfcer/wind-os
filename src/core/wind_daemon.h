@@ -30,7 +30,6 @@
 #include "wind_config.h"
 #include "wind_type.h"
 #include "wind_dlist.h"
-#include "wind_thread.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -44,6 +43,10 @@ extern "C" {
 #define SET_F_DAEMON_POOL(daemon) (daemon->flag |= F_DAEMON_POOL)
 #define CLR_F_DAEMON_POOL(daemon) (daemon->flag &= (~F_DAEMON_POOL))
 
+#define F_DAEMON_ENABLE (0x01 << 1) //标记daemon对象是否通过内存池分配
+#define IS_F_DAEMON_ENABLE(daemon) ((daemon->flag & F_DAEMON_ENABLE) == F_DAEMON_ENABLE)
+#define SET_F_DAEMON_ENABLE(daemon) (daemon->flag |= F_DAEMON_ENABLE)
+#define CLR_F_DAEMON_ENABLE(daemon) (daemon->flag &= (~F_DAEMON_ENABLE))
 
 
 typedef struct __w_daemon_s w_daemon_s;
@@ -67,6 +70,9 @@ w_err_t wind_daemon_init(w_daemon_s *daemon,const char *name,w_daemon_fn daemon_
 w_daemon_s *wind_daemon_create(const char *name,w_daemon_fn daemon_func);
 
 w_err_t wind_daemon_destroy(w_daemon_s *daemon);
+
+w_err_t wind_daemon_setflag(w_daemon_s *daemon,w_int16_t flag);
+w_err_t wind_daemon_clrflag(w_daemon_s *daemon,w_int16_t flag);
 
 w_err_t _wind_daemon_period_check(void);
 

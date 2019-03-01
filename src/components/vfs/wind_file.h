@@ -59,14 +59,11 @@ struct __w_fs_s
 };
 
 
-typedef enum
-{
-    FMODE_R = 0x01,
-    FMODE_W = 0x02,
-    FMODE_RW = 0x03,
-    FMODE_CRT = 0x04,
-    FMODE_A = 0x08,
-}w_fmode_e;
+#define FMODE_R  0x01
+#define FMODE_W  0x02
+#define FMODE_RW  0x03
+#define FMODE_CRT  0x04
+#define FMODE_A  0x08
 
 typedef enum 
 {
@@ -79,7 +76,7 @@ struct __w_fs_ops_s
     w_err_t (*init)(w_fs_s *fs);
     w_err_t (*format)(w_fs_s *fs);
     
-    w_err_t (*open)(w_file_s *file,w_fmode_e fmode);
+    w_err_t (*open)(w_file_s *file,w_uint16_t fmode);
     w_err_t (*close)(w_file_s* file);
     w_err_t (*remove)(w_file_s* file);
     char *(*subfile)(w_file_s* dir,w_int32_t index);
@@ -139,7 +136,7 @@ w_err_t wind_fs_unmount(char *fsname);
 w_err_t wind_fs_format(w_fs_s *fs);
 
 w_bool_t wind_fcheck(const char *path);
-w_file_s* wind_fopen(const char *path,w_fmode_e fmode);
+w_file_s* wind_fopen(const char *path,w_uint16_t fmode);
 w_err_t wind_fclose(w_file_s *file);
 w_err_t wind_fremove(w_file_s *file);
 char* wind_fchild(w_file_s *dir,w_int32_t index);

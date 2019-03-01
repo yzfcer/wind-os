@@ -278,7 +278,7 @@ w_bool_t wind_fcheck(const char *path)
     }
     return exist;
 }
-w_file_s* wind_fopen(const char *path,w_fmode_e fmode)
+w_file_s* wind_fopen(const char *path,w_uint16_t fmode)
 {
     w_file_s *file;
     w_fs_s *fs;
@@ -319,7 +319,7 @@ w_file_s* wind_fopen(const char *path,w_fmode_e fmode)
     file->offset = 0;
     file->mutex = wind_mutex_create(W_NULL);
     file->ops = fs->ops;
-    err = file->ops->open(file,(w_fmode_e)file->fmode);
+    err = file->ops->open(file,file->fmode);
     if(err != W_ERR_OK)
     {
         wind_error("open file err:%d",err);

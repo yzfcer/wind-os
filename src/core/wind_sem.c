@@ -72,7 +72,7 @@ w_sem_s *wind_sem_get(const char *name)
 }
 w_err_t wind_sem_init(w_sem_s *sem,const char *name,w_int8_t sem_value)
 {
-    wind_notice("init sem:%s",name);
+    wind_notice("init sem:%s",name != W_NULL?name:"null");
     WIND_ASSERT_RETURN(sem != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(sem_value >= 0,W_ERR_INVALID);
     sem->magic = WIND_SEM_MAGIC;
@@ -128,7 +128,7 @@ w_err_t wind_sem_destroy(w_sem_s *sem)
     w_thread_s *thread;
     WIND_ASSERT_RETURN(sem != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(sem->magic == WIND_SEM_MAGIC,W_ERR_INVALID);
-    wind_notice("destroy sem:%s",sem->name);
+    wind_notice("destroy sem:%s",sem->name != W_NULL?sem->name:"null");
     wind_disable_interrupt();
     dlist_remove(&semlist,&sem->semnode);
     sem->magic = (~WIND_SEM_MAGIC);
