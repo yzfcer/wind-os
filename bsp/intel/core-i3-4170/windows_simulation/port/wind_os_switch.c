@@ -28,19 +28,20 @@
 #include "wind_debug.h"
 #include "wind_dlist.h"
 #include "wind_core.h"
-#include "wind_os_switch.h"
+#include "wind_string.h"
+#include "windows.h"
+//#include "wind_os_switch.h"
 #define GET_OBJ(ptr,type,mbrnode) (void*)(((char*)(ptr))-((w_uint32_t)&(((type*)0)->mbrnode)))
 
 extern volatile w_bool_t gwind_start_flag;
 extern w_stack_t **gwind_high_stack;
 extern w_stack_t **gwind_cur_stack;
-extern CRITICAL_SECTION CriticalSection;
-//static volatile w_sreg_t s_sreg = 0;
+extern void wind_tick_isr(void);
 w_thread_s *curthread = W_NULL;
 w_thread_s mainthr;
 w_stack_t mainstk[2048];
 void wind_interrupt_switch(void);
-//切换线程    1：当前线程结构体指针 2：要切换的线程结构体指针
+
 __declspec(naked) static void switch_context(w_thread_s* srcthr, w_thread_s* destthr)
 {
     __asm 
@@ -132,7 +133,7 @@ static w_err_t main_thread(w_int32_t argc,char **argv)
 void wind_start_switch(void)
 {
     w_thread_s *cur,*high;
-    wind_thread_init(&mainthr,"main",main_thread,0,NULL,&mainstk,2048);
+    wind_thread_init(&mainthr,"main",main_thread,0,W_NULL,mainstk,2048);
     gwind_start_flag = W_TRUE;
     IDLE_CNT_PER_SEC = 1000000;
     cur = &mainthr;
@@ -145,9 +146,6 @@ void wind_start_switch(void)
         set_sleep(&mainthr,1000000);
         wind_tick_isr();
     }
-
-    return W_ERR_OK;
-    
 }
 
 static w_err_t idle_func(w_int32_t argc,char **argv)
