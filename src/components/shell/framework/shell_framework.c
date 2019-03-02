@@ -520,6 +520,24 @@ static w_err_t spit_cmd(w_shell_ctx_s *ctx)
     return W_ERR_OK;
 }
 
+static void check_expected_cmd(w_shell_ctx_s *ctx)
+{
+    w_int32_t len;
+    w_dnode_s *dnode;
+    w_cmd_s *cmd;
+    WIND_ASSERT_RETURN_VOID(ctx->param.argc == 1);
+    len = wind_strlen(ctx->param.argv[0]);
+    wind_printf("\r\n\r\ncommand list:\r\n");
+    foreach_node(dnode,&g_cmdlist)
+    {
+        cmd = DLIST_OBJ(dnode,w_cmd_s,cmdnode);
+        if(wind_strncmp(cmd->name,ctx->param.argv[0],len) == 0)
+        {
+            wind_printf("%-10s : ",cmd->name);
+            cmd->showdisc();
+        }
+    }
+}
 
 static w_err_t execute_cmd(w_shell_ctx_s *ctx)
 {
@@ -535,7 +553,12 @@ static w_err_t execute_cmd(w_shell_ctx_s *ctx)
     }
     cmd = wind_cmd_get(ctx->param.argv[0]);
     if(cmd == W_NULL)
+    {
+        if(ctx->param.argc == 1)
+            check_expected_cmd(ctx);
         return W_ERR_FAIL;
+    }
+        
     if((ctx->param.argc >= 2)&&(wind_strcmp(ctx->param.argv[1],"?") == 0))
     {
         wind_printf("\r\ncmd %s usage:\r\n",cmd->name);

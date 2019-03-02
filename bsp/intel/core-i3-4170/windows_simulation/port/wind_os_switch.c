@@ -30,6 +30,10 @@
 #include "wind_core.h"
 #include "wind_string.h"
 #include "windows.h"
+#include "time.h"
+#include  < MMSystem.h >
+#pragma comment(lib, "winmm.lib")
+
 //#include "wind_os_switch.h"
 #define GET_OBJ(ptr,type,mbrnode) (void*)(((char*)(ptr))-((w_uint32_t)&(((type*)0)->mbrnode)))
 
@@ -132,6 +136,7 @@ static w_err_t main_thread(w_int32_t argc,char **argv)
 
 void wind_start_switch(void)
 {
+    clock_t start,end;  
     w_thread_s *cur,*high;
     wind_thread_init(&mainthr,"main",main_thread,0,W_NULL,mainstk,2048);
     gwind_start_flag = W_TRUE;
@@ -140,9 +145,12 @@ void wind_start_switch(void)
     high = &mainthr;//GET_OBJ(gwind_high_stack,w_thread_s,stack);
     gwind_cur_stack = &mainthr.stack;
     switch_context(cur,high);
+    
     while(1)
     {
+        timeBeginPeriod(1);
         Sleep(1000/WIND_TICK_PER_SEC);
+        timeEndPeriod(1);
         set_sleep(&mainthr,1000000);
         wind_tick_isr();
     }
