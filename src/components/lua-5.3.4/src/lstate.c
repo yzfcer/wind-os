@@ -41,7 +41,7 @@
 ** a macro to help the creation of a unique random seed when a state is
 ** created; the seed is used to randomize hashes.
 */
-int time(void *ptr)
+int lua_time(void *ptr)
 {
     return 0;
 }

@@ -629,8 +629,11 @@ const char lua_test_cmd[] = {
     "return sum\r\n"  
     "end\r\n"  
     "print(\"sum=\", foo())\r\n"  
-    "print(\"2^11=\", 2^11)\r\n"  
-    "print(\"exp(200)=\",math.exp(200))\r\n"  
+    "print(\"123+456=\",123+456)\r\n"  
+    "print(\"123-456=\",123-456)\r\n"  
+    "print(\"123*456=\",123*456)\r\n"  
+    "print(\"123/456=\",123/456)\r\n"  
+    "print(\"2^11=\", 2^11)\r\n"
 };  
   
 /* ??Lua */  

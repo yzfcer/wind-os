@@ -63,36 +63,20 @@ struct __w_dlist_s
 
 #define DLIST_OBJ(ptr,type,mbrnode) (void*)(((char*)(ptr))-((w_uint32_t)&(((type*)0)->mbrnode)))
 #define PRI_DLIST_OBJ(ptr,type,mbrnode) (void*)(((char*)(ptr))-((w_uint32_t)&(((type*)0)->mbrnode.dnode)))
-
 #define foreach_node(dnode,list) for(dnode = dlist_head(list);dnode != W_NULL;dnode = dnode_next(dnode))
 
+
 //获取链表头部节点
-static __INLINE__ 
-w_dnode_s *dlist_head(w_dlist_s *dlist)
-{
-    return dlist->head;
-}
+w_dnode_s *dlist_head(w_dlist_s *dlist);
 
 // 获取链表尾部节点
-static __INLINE__ 
-w_dnode_s *dlist_tail(w_dlist_s *dlist)
-{
-    return dlist->tail;
-}
+w_dnode_s *dlist_tail(w_dlist_s *dlist);
 
 // 获取给定节点的下一个节点
-static __INLINE__ 
-w_dnode_s *dnode_next(w_dnode_s *dnode) 
-{
-    return dnode->next;
-}
+w_dnode_s *dnode_next(w_dnode_s *dnode);
 
 // 获取给定节点的下一个节点
-static __INLINE__ 
-w_dnode_s *dnode_prev(w_dnode_s *dnode) 
-{
-    return dnode->prev;
-}
+w_dnode_s *dnode_prev(w_dnode_s *dnode); 
 
 
 // 在链表头部插入一个节点

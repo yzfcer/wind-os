@@ -115,7 +115,7 @@ extern "C" {
 #define WIND_USER_SUPPORT 1 //是否支持用户账号功能
 #define WIND_USER_MAX_NUM 5 //用户账号的数量
 
-#define WIND_FS_SUPPORT 0 //是否支持内存文件系统
+#define WIND_FS_SUPPORT 1 //是否支持内存文件系统
 #define WIND_FS_MAX_NUM 2 //允许支持的文件系统的数量
 #define WIND_FILE_MAX_NUM 5 //允许打开的文件的数量
 
@@ -154,12 +154,12 @@ extern "C" {
 #define WIND_SHELL_SUPPORT 1 //是否支持控制台模块
 
 #if WIND_SHELL_SUPPORT
-#define CMD_BLKDEV_SUPPORT 0 //是否支持块设备操作命令
+#define CMD_BLKDEV_SUPPORT 1 //是否支持块设备操作命令
 #define CMD_DATETIME_SUPPORT 0 //是否支持日期时间命令
 #define CMD_ECHO_SUPPORT 1 //是否支持回显命令
-#define CMD_FS_SUPPORT 0 //是否支持文件系统命令
+#define CMD_FS_SUPPORT 1 //是否支持文件系统命令
 #define CMD_LIST_SUPPORT 1 //是否支持内核对象列表命令
-#define CMD_LUA_SUPPORT 0 //是否支持lua脚本命令
+#define CMD_LUA_SUPPORT 1 //是否支持lua脚本命令
 #define CMD_MEM_SUPPORT 1 //是否支持内存值查看命令
 #define CMD_RESET_SUPPORT 1 //是否支持系统复位命令
 #define CMD_STATI_SUPPORT 1 //是否支持统计命令

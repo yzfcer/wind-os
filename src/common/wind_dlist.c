@@ -26,6 +26,31 @@
 #define __DLIST_H__
 #include "wind_dlist.h"
 
+
+//获取链表头部节点
+w_dnode_s *dlist_head(w_dlist_s *dlist)
+{
+    return dlist->head;
+}
+
+// 获取链表尾部节点
+w_dnode_s *dlist_tail(w_dlist_s *dlist)
+{
+    return dlist->tail;
+}
+
+// 获取给定节点的下一个节点
+w_dnode_s *dnode_next(w_dnode_s *dnode) 
+{
+    return dnode->next;
+}
+
+// 获取给定节点的下一个节点
+w_dnode_s *dnode_prev(w_dnode_s *dnode) 
+{
+    return dnode->prev;
+}
+
 // 在链表头部插入一个节点
 void dlist_insert_head(w_dlist_s *dlist,w_dnode_s *dnode)
 {

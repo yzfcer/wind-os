@@ -30,6 +30,7 @@
 #include "wind_string.h"
 #include "wind_heap.h"
 #include "wind_core.h"
+#include "wind_dlist.h"
 #include "wind_board_port.h"
 
 #if WIND_FS_SUPPORT
@@ -71,7 +72,8 @@ static w_err_t mount_param_check(char *fsname,char *blkname,char *path)
     foreach_node(dnode,&fslist)
     {
         fs = DLIST_OBJ(dnode,w_fs_s,fsnode);
-        if(wind_strcmp(path,fs->mount_path) == 0)
+        if((fs->mount_path != W_NULL) && 
+            (wind_strcmp(path,fs->mount_path) == 0))
         {
             wind_error("mount path has been used");
             return W_ERR_REPEAT;
@@ -79,7 +81,9 @@ static w_err_t mount_param_check(char *fsname,char *blkname,char *path)
             
         if(blkname == W_NULL)
             continue;
-        if(wind_strcmp(blkname,fs->blkdev->name) == 0)
+        if((fs->blkdev != W_NULL) && 
+            (fs->blkdev->name != W_NULL) && 
+            (wind_strcmp(blkname,fs->blkdev->name) == 0))
         {
             wind_error("block device has been used");
             return W_ERR_REPEAT;
