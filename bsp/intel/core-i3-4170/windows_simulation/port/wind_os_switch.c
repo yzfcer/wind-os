@@ -136,7 +136,6 @@ static w_err_t main_thread(w_int32_t argc,char **argv)
 
 void wind_start_switch(void)
 {
-    clock_t start,end;  
     w_thread_s *cur,*high;
     wind_thread_init(&mainthr,"main",main_thread,0,W_NULL,mainstk,2048);
     gwind_start_flag = W_TRUE;
