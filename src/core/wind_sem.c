@@ -107,11 +107,13 @@ w_err_t wind_sem_trydestroy(w_sem_s *sem)
 
 w_err_t wind_sem_destroy(w_sem_s *sem)
 {
+    w_err_t err;
     w_dnode_s *pdnode;
     w_thread_s *thread;
     WIND_ASSERT_RETURN(sem != W_NULL,W_ERR_PTR_NULL);
     wind_notice("destroy sem:%s",sem->obj.name != W_NULL?sem->obj.name:"null");
-    wind_obj_deinit(&sem->obj,WIND_SEM_MAGIC,&semlist);
+    err = wind_obj_deinit(&sem->obj,WIND_SEM_MAGIC,&semlist);
+    WIND_ASSERT_RETURN(err == W_ERR_OK, W_ERR_FAIL);
     wind_disable_switch();
     foreach_node(pdnode,&sem->waitlist)
     {

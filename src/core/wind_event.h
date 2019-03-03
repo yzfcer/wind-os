@@ -28,7 +28,7 @@
 
 #include "wind_config.h"
 #include "wind_type.h"
-#include "wind_dlist.h"
+#include "wind_obj.h"
 #include "wind_thread.h"
 
 #ifdef __cplusplus
@@ -39,9 +39,9 @@ extern "C" {
 #define WIND_EVENT_MAGIC 0x5A9C524C
 
 #define F_EVENT_POOL (0x01 << 0) //标记event对象是否通过内存池分配
-#define IS_F_EVENT_POOL(event) ((event->flag & F_EVENT_POOL) == F_EVENT_POOL)
-#define SET_F_EVENT_POOL(event) (event->flag |= F_EVENT_POOL)
-#define CLR_F_EVENT_POOL(event) (event->flag &= (~F_EVENT_POOL))
+#define IS_F_EVENT_POOL(event) ((event->obj.flag & F_EVENT_POOL) == F_EVENT_POOL)
+#define SET_F_EVENT_POOL(event) (event->obj.flag |= F_EVENT_POOL)
+#define CLR_F_EVENT_POOL(event) (event->obj.flag &= (~F_EVENT_POOL))
 
 typedef struct __w_event_s w_event_s;
 typedef void (*w_event_cb_fn)(w_event_s *event,void *arg);
@@ -54,11 +54,8 @@ typedef struct _w_event_cb
 
 struct __w_event_s
 {
-    w_uint32_t magic;//魔术字
-    const char *name;
-    w_dnode_s eventnode;
+    w_obj_s obj;
     w_dlist_s cblist;//消息队列
-    w_uint16_t flag;
 };
 
 

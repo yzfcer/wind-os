@@ -73,15 +73,15 @@ CASE_FUNC(eventinit)
     EXPECT_EQ(err,W_ERR_OK);
     events[0] = wind_event_get("test");
     EXPECT_EQ(events[0],&test_ev);
-    EXPECT_EQ(events[0]->magic,WIND_EVENT_MAGIC);
-    EXPECT_STR_EQ(events[0]->name,"test");
+    EXPECT_EQ(events[0]->obj.magic,WIND_EVENT_MAGIC);
+    EXPECT_STR_EQ(events[0]->obj.name,"test");
     
     EXPECT_EQ(events[0]->cblist.head,W_NULL);
     EXPECT_EQ(events[0]->cblist.tail,W_NULL);
     EXPECT_FALSE(IS_F_EVENT_POOL(events[0]));
     err = wind_event_destroy(events[0]);
     EXPECT_EQ(W_ERR_OK,err);
-    EXPECT_EQ(events[0]->magic,(~WIND_EVENT_MAGIC));
+    EXPECT_EQ(events[0]->obj.magic,(~WIND_EVENT_MAGIC));
 
     err = wind_event_init(&test_ev,W_NULL);
     EXPECT_EQ(err,W_ERR_OK);
@@ -89,7 +89,7 @@ CASE_FUNC(eventinit)
     EXPECT_EQ(events[0],W_NULL);
     err = wind_event_destroy(&test_ev);
     EXPECT_EQ(W_ERR_OK,err);
-    EXPECT_EQ(test_ev.magic,(~WIND_EVENT_MAGIC));
+    EXPECT_EQ(test_ev.obj.magic,(~WIND_EVENT_MAGIC));
 
 }
 
@@ -111,15 +111,15 @@ CASE_FUNC(eventinfo)
     EXPECT_NE(events[0],W_NULL);
     events[1] = wind_event_get("test");
     EXPECT_EQ(events[0],events[1]);
-    EXPECT_EQ(events[0]->magic,WIND_EVENT_MAGIC);
-    EXPECT_STR_EQ(events[0]->name,"test");
+    EXPECT_EQ(events[0]->obj.magic,WIND_EVENT_MAGIC);
+    EXPECT_STR_EQ(events[0]->obj.name,"test");
     
     EXPECT_EQ(events[0]->cblist.head,W_NULL);
     EXPECT_EQ(events[0]->cblist.tail,W_NULL);
     EXPECT_TRUE(IS_F_EVENT_POOL(events[0]));
     err = wind_event_destroy(events[0]);
     EXPECT_EQ(W_ERR_OK,err);
-    EXPECT_EQ(events[0]->magic,(~WIND_EVENT_MAGIC));
+    EXPECT_EQ(events[0]->obj.magic,(~WIND_EVENT_MAGIC));
 
 }
 

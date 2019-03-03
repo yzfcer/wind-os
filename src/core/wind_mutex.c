@@ -99,10 +99,12 @@ w_err_t wind_mutex_trydestroy(w_mutex_s *mutex)
 //强制性销毁互斥锁，并把所有的被该互斥锁阻塞的线程全部激活
 w_err_t wind_mutex_destroy(w_mutex_s *mutex)
 {
+    w_err_t err;
     w_dnode_s *dnode;
     w_thread_s *thread;
     WIND_ASSERT_RETURN(mutex != W_NULL,W_ERR_PTR_NULL);
-    wind_obj_deinit(&mutex->obj,WIND_MUTEX_MAGIC,&mutexlist);
+    err = wind_obj_deinit(&mutex->obj,WIND_MUTEX_MAGIC,&mutexlist);
+    WIND_ASSERT_RETURN(err == W_ERR_OK, W_ERR_FAIL);
     wind_disable_switch();
     foreach_node(dnode,&mutex->waitlist)
     {

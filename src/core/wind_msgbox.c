@@ -121,6 +121,7 @@ w_err_t wind_msgbox_trydestroy(w_msgbox_s *msgbox)
 
 w_err_t wind_msgbox_destroy(w_msgbox_s *msgbox)
 {
+    w_err_t err;
     w_dnode_s *dnode;
     w_thread_s *thread;
     WIND_ASSERT_RETURN(msgbox != W_NULL,W_ERR_PTR_NULL);
@@ -128,7 +129,8 @@ w_err_t wind_msgbox_destroy(w_msgbox_s *msgbox)
     wind_notice("destroy msgbox:%s",msgbox->obj.name?msgbox->obj.name:"null");
     thread = wind_thread_current();
     WIND_ASSERT_RETURN(msgbox->owner == thread,W_ERR_FAIL);
-    wind_obj_deinit(&msgbox->obj,WIND_MSGBOX_MAGIC,&msgboxlist);
+    err = wind_obj_deinit(&msgbox->obj,WIND_MSGBOX_MAGIC,&msgboxlist);
+    WIND_ASSERT_RETURN(err == W_ERR_OK, W_ERR_FAIL);
     
     thread = msgbox->owner;
     if((msgbox->owner->runstat == THREAD_STATUS_SLEEP) 

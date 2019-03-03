@@ -55,35 +55,16 @@ w_err_t _wind_event_mod_init(void)
 w_event_s *wind_event_get(const char *name)
 {
     w_event_s *event;
-    w_dnode_s *dnode;
-    WIND_ASSERT_RETURN(name != W_NULL,W_NULL);
-    wind_disable_switch();
-    foreach_node(dnode,&eventlist)
-    {
-        event = DLIST_OBJ(dnode,w_event_s,eventnode);
-        if(event->name && (wind_strcmp(name,event->name) == 0))
-        {
-            wind_enable_switch();
-            return event;
-        }
-    }
-    wind_enable_switch();
-    return W_NULL;
+    event = (w_event_s*)wind_obj_get(name,&eventlist);
+    return event;
 }
 
 w_err_t wind_event_init(w_event_s *event,const char *name)
 {
     wind_notice("init event:%s",name?name:"null");
     WIND_ASSERT_RETURN(event != W_NULL,W_ERR_PTR_NULL);
-    event->magic = WIND_EVENT_MAGIC;
-    event->name = name;
-    DNODE_INIT(event->eventnode);
     DLIST_INIT(event->cblist);
-    event->flag = 0;
-    CLR_F_EVENT_POOL(event);
-    wind_disable_interrupt();
-    dlist_insert_tail(&eventlist,&event->eventnode);
-    wind_enable_interrupt();
+    wind_obj_init(&event->obj, WIND_EVENT_MAGIC,name,&eventlist);
     return W_ERR_OK;
 }
 
@@ -107,20 +88,18 @@ w_event_s *wind_event_create(const char *name)
 
 w_err_t wind_event_destroy(w_event_s *event)
 {
+    w_err_t err;
     w_dnode_s *dnode;
-    wind_notice("destroy event:%s",event->name?event->name:"null");
+    wind_notice("destroy event:%s",event->obj.name?event->obj.name:"null");
     WIND_ASSERT_RETURN(event != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(event->magic == WIND_EVENT_MAGIC,W_ERR_INVALID);
-    wind_disable_interrupt();
-    dlist_remove(&eventlist,&event->eventnode);
-    wind_enable_interrupt();
-
-    event->magic = (~WIND_EVENT_MAGIC);
+    err = wind_obj_deinit(&event->obj, WIND_EVENT_MAGIC,&eventlist);
+    WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_FAIL);
+    
     dnode = dlist_head(&event->cblist);
     if(dnode != W_NULL)
     {
         wind_warn("event:%s is NOT empty while destroying it.",
-            event->name?event->name:"null");
+            event->obj.name?event->obj.name:"null");
     }
     if(IS_F_EVENT_POOL(event))
         event_free(event);
@@ -131,10 +110,10 @@ w_err_t wind_event_regcb(w_event_s *event,w_event_cb *cb)
 {
     WIND_ASSERT_RETURN(event != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(cb != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(event->magic == WIND_EVENT_MAGIC,W_ERR_INVALID);
-    wind_disable_interrupt();
+    WIND_ASSERT_RETURN(event->obj.magic == WIND_EVENT_MAGIC,W_ERR_INVALID);
+    wind_disable_switch();
     dlist_insert_tail(&event->cblist,&cb->listenernode);
-    wind_enable_interrupt();
+    wind_enable_switch();
     return W_ERR_OK;
 }
 
@@ -142,10 +121,10 @@ w_err_t wind_event_unregcb(w_event_s *event,w_event_cb *cb)
 {
     WIND_ASSERT_RETURN(event != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(cb != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(event->magic == WIND_EVENT_MAGIC,W_ERR_INVALID);
-    wind_disable_interrupt();
+    WIND_ASSERT_RETURN(event->obj.magic == WIND_EVENT_MAGIC,W_ERR_INVALID);
+    wind_disable_switch();
     dlist_remove(&event->cblist,&cb->listenernode);
-    wind_enable_interrupt();
+    wind_enable_switch();
     return W_ERR_OK;
 }
 
@@ -154,7 +133,7 @@ w_err_t wind_event_trig(w_event_s *event,void *arg)
     w_dnode_s *dnode;
     w_event_cb *cb;
     WIND_ASSERT_RETURN(event != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(event->magic == WIND_EVENT_MAGIC,W_ERR_FAIL);
+    WIND_ASSERT_RETURN(event->obj.magic == WIND_EVENT_MAGIC,W_ERR_FAIL);
     foreach_node(dnode,&event->cblist)
     {
         cb = DLIST_OBJ(dnode,w_event_cb,listenernode);
@@ -177,8 +156,8 @@ w_err_t wind_event_print(void)
 
     foreach_node(dnode,list)
     {
-        event = (w_event_s *)DLIST_OBJ(dnode,w_event_s,eventnode);
-        wind_printf("%-16s\r\n",event->name?event->name:"null");            
+        event = (w_event_s *)DLIST_OBJ(dnode,w_event_s,obj.objnode);
+        wind_printf("%-16s\r\n",event->obj.name?event->obj.name:"null");            
     }
     wind_print_space(2);
     return W_ERR_OK;
