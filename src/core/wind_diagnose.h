@@ -56,7 +56,7 @@ typedef struct _wind_diagnose
 
 #define DIAGNOSENOSE_DEF(name,func) \
     static w_diagnose_s g_diagnose_##name = \
-    {{WIND_DIAGNOSE_MAGIC,#name,{W_NULL,W_NULL},0,0},0,func}
+    {{(~WIND_DIAGNOSE_MAGIC),#name,{W_NULL,W_NULL},0,0},0,func}
 #define DIAGNOSENOSE(name) &g_diagnose_##name
 
 w_err_t _wind_diagnose_mod_init(void);
