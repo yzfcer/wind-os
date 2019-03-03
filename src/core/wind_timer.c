@@ -53,20 +53,8 @@ w_err_t _wind_timer_mod_init(void)
 w_timer_s* wind_timer_get(char *name)
 {
     w_timer_s *timer;
-    w_dnode_s *dnode;
-    WIND_ASSERT_RETURN(name != W_NULL,W_NULL);
-    wind_disable_switch();
-    foreach_node(dnode,&timerlist)
-    {
-        timer = DLIST_OBJ(dnode,w_timer_s,timernode);
-        if(timer->name && (wind_strcmp(name,timer->name) == 0))
-        {
-            wind_enable_switch();
-            return timer;
-        }
-    }
-    wind_enable_switch();
-    return W_NULL;
+    timer = (w_timer_s*)wind_obj_get(name,&timerlist);
+    return timer;
 }
 
 w_err_t wind_timer_init(w_timer_s* timer,
@@ -84,21 +72,15 @@ w_err_t wind_timer_init(w_timer_s* timer,
     if(count <= 0)
         count = 1;
     wind_notice("init timer %s:%d ms",name,period_ms);
-    timer->magic = WIND_TIMER_MAGIC;
-    timer->name = name;
-    DNODE_INIT(timer->timernode);
 
     timer->value = count;
     timer->period = count;
-
-    timer->flag = 0;
-    timer->flag |= flag;
     
     timer->arg = arg;
     timer->handle = func;
-    wind_disable_interrupt();
-    dlist_insert_tail(&timerlist,&timer->timernode);
-    wind_enable_interrupt();
+    wind_obj_init(&timer->obj,WIND_TIMER_MAGIC,name,&timerlist);
+    wind_timer_setflag(timer,flag);
+
     return W_ERR_OK;
 }
 
@@ -126,7 +108,7 @@ w_timer_s* wind_timer_create(const char *name,
 w_err_t wind_timer_start(w_timer_s* timer)
 {
     WIND_ASSERT_RETURN(timer != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(timer->magic == WIND_TIMER_MAGIC,W_ERR_INVALID);    
+    WIND_ASSERT_RETURN(timer->obj.magic == WIND_TIMER_MAGIC,W_ERR_INVALID);    
     SET_F_TIMER_RUN(timer);
     return W_ERR_OK;
 }
@@ -134,19 +116,18 @@ w_err_t wind_timer_start(w_timer_s* timer)
 w_err_t wind_timer_stop(w_timer_s* timer)
 {
     WIND_ASSERT_RETURN(timer != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(timer->magic == WIND_TIMER_MAGIC,W_ERR_INVALID);    
+    WIND_ASSERT_RETURN(timer->obj.magic == WIND_TIMER_MAGIC,W_ERR_INVALID);    
     CLR_F_TIMER_RUN(timer);
     return W_ERR_OK;
 }
 
 w_err_t wind_timer_destroy(w_timer_s* timer)
 {
+    w_err_t err;
     WIND_ASSERT_RETURN(timer != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(timer->magic == WIND_TIMER_MAGIC,W_ERR_INVALID);    
-    wind_notice("destroy timer:%s",timer->name != W_NULL?timer->name:"null");
-    wind_disable_interrupt();
-    dlist_remove(&timerlist,&timer->timernode);
-    wind_enable_interrupt();
+    WIND_ASSERT_RETURN(timer->obj.magic == WIND_TIMER_MAGIC,W_ERR_INVALID);    
+    wind_notice("destroy timer:%s",timer->obj.name != W_NULL?timer->obj.name:"null");
+    err = wind_obj_deinit(&timer->obj,WIND_TIMER_MAGIC,&timerlist);
     if(IS_F_TIMER_POOL(timer))
         timer_free(timer);
     return W_ERR_OK;
@@ -156,7 +137,7 @@ w_err_t wind_timer_set_period(w_timer_s* timer,w_uint32_t period_ms)
 {
     w_int32_t count;
     WIND_ASSERT_RETURN(timer != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(timer->magic == WIND_TIMER_MAGIC,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(timer->obj.magic == WIND_TIMER_MAGIC,W_ERR_INVALID);
     count = period_ms / TIMER_PERIOD;
     if(count <= 0)
         count = 1;
@@ -168,7 +149,7 @@ w_err_t wind_timer_set_period(w_timer_s* timer,w_uint32_t period_ms)
 w_err_t wind_timer_setflag(w_timer_s* timer,w_uint16_t flag)
 {
     WIND_ASSERT_RETURN(timer != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(timer->magic == WIND_TIMER_MAGIC,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(timer->obj.magic == WIND_TIMER_MAGIC,W_ERR_INVALID);
     if(flag & F_TIMER_REPEAT)
         SET_F_TIMER_REPEAT(timer);
     if(flag & F_TIMER_RUN)
@@ -185,7 +166,7 @@ w_err_t wind_timer_setflag(w_timer_s* timer,w_uint16_t flag)
 w_err_t wind_timer_clrflag(w_timer_s* timer,w_uint16_t flag)
 {
     WIND_ASSERT_RETURN(timer != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(timer->magic == WIND_TIMER_MAGIC,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(timer->obj.magic == WIND_TIMER_MAGIC,W_ERR_INVALID);
     if(flag & F_TIMER_REPEAT)
         CLR_F_TIMER_REPEAT(timer);
     if(flag & F_TIMER_RUN)
@@ -207,9 +188,9 @@ w_err_t wind_timer_print(void)
 
     foreach_node(dnode,list)
     {
-        timer = (w_timer_s *)DLIST_OBJ(dnode,w_timer_s,timernode);
+        timer = (w_timer_s *)DLIST_OBJ(dnode,w_timer_s,obj.objnode);
         wind_printf("%-16s %-10d %-10d %-10s %-10s\r\n",
-            timer->name,timer->period,timer->value,IS_F_TIMER_RUN(timer)?"running":"stop",
+            timer->obj.name,timer->period,timer->value,IS_F_TIMER_RUN(timer)?"running":"stop",
             IS_F_TIMER_REPEAT(timer)?"yes":"no");
     }
     wind_print_space(7);
@@ -224,7 +205,7 @@ void _wind_timer_event(void)
     w_dlist_s *list = &timerlist;
     foreach_node(pdnode,list)
     {
-        timer = DLIST_OBJ(pdnode,w_timer_s,timernode);
+        timer = DLIST_OBJ(pdnode,w_timer_s,obj.objnode);
         if(timer->value > 0)
             timer->value --;
         if(timer->value == 0 && IS_F_TIMER_RUN(timer))

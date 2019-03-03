@@ -27,7 +27,7 @@
 
 #include "wind_config.h"
 #include "wind_type.h"
-#include "wind_dlist.h"
+#include "wind_obj.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -37,30 +37,27 @@ extern "C" {
 #define WIND_TIMER_MAGIC 0x34F574B2
 
 #define F_TIMER_POOL (0x01 << 0) //标记timer对象是否通过内存池分配
-#define IS_F_TIMER_POOL(timer) ((timer->flag & F_TIMER_POOL) == F_TIMER_POOL)
-#define SET_F_TIMER_POOL(timer) (timer->flag |= F_TIMER_POOL)
-#define CLR_F_TIMER_POOL(timer) (timer->flag &= (~F_TIMER_POOL))
+#define IS_F_TIMER_POOL(timer) ((timer->obj.flag & F_TIMER_POOL) == F_TIMER_POOL)
+#define SET_F_TIMER_POOL(timer) (timer->obj.flag |= F_TIMER_POOL)
+#define CLR_F_TIMER_POOL(timer) (timer->obj.flag &= (~F_TIMER_POOL))
 
 #define F_TIMER_RUN (0x01 << 1) //标记timer对象是否处于启动运行状态
-#define IS_F_TIMER_RUN(timer) ((timer->flag & F_TIMER_RUN) == F_TIMER_RUN)
-#define SET_F_TIMER_RUN(timer) (timer->flag |= F_TIMER_RUN)
-#define CLR_F_TIMER_RUN(timer) (timer->flag &= (~F_TIMER_RUN))
+#define IS_F_TIMER_RUN(timer) ((timer->obj.flag & F_TIMER_RUN) == F_TIMER_RUN)
+#define SET_F_TIMER_RUN(timer) (timer->obj.flag |= F_TIMER_RUN)
+#define CLR_F_TIMER_RUN(timer) (timer->obj.flag &= (~F_TIMER_RUN))
 
 #define F_TIMER_REPEAT (0x01 << 2) //标记timer对象是否重复触发
-#define IS_F_TIMER_REPEAT(timer) ((timer->flag & F_TIMER_REPEAT) == F_TIMER_REPEAT)
-#define SET_F_TIMER_REPEAT(timer) (timer->flag |= F_TIMER_REPEAT)
-#define CLR_F_TIMER_REPEAT(timer) (timer->flag &= (~F_TIMER_REPEAT))
+#define IS_F_TIMER_REPEAT(timer) ((timer->obj.flag & F_TIMER_REPEAT) == F_TIMER_REPEAT)
+#define SET_F_TIMER_REPEAT(timer) (timer->obj.flag |= F_TIMER_REPEAT)
+#define CLR_F_TIMER_REPEAT(timer) (timer->obj.flag &= (~F_TIMER_REPEAT))
 
 typedef struct __w_timer_s w_timer_s;
 typedef void (*w_timer_fn)(w_timer_s* timer,void *arg);
 struct __w_timer_s
 {
-    w_uint32_t magic;
-    const char *name;
-    w_dnode_s timernode;
+    w_obj_s obj;
     w_uint32_t value;
     w_uint32_t period;
-    w_uint16_t flag;
     w_timer_fn handle;
     void *arg;
 };
