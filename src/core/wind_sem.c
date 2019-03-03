@@ -94,14 +94,14 @@ w_err_t wind_sem_trydestroy(w_sem_s *sem)
     w_dnode_s *pdnode;
     WIND_ASSERT_RETURN(sem != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(sem->obj.magic == WIND_SEM_MAGIC,W_ERR_INVALID);
-    wind_disable_interrupt();
+    wind_disable_switch();
     pdnode = dlist_head(&sem->waitlist);
     if(pdnode != W_NULL)
     {
-        wind_enable_interrupt();
+        wind_enable_switch();
         return W_ERR_FAIL;
     }
-    wind_enable_interrupt();
+    wind_enable_switch();
     return wind_sem_destroy(sem);
 }
 
@@ -112,7 +112,7 @@ w_err_t wind_sem_destroy(w_sem_s *sem)
     WIND_ASSERT_RETURN(sem != W_NULL,W_ERR_PTR_NULL);
     wind_notice("destroy sem:%s",sem->obj.name != W_NULL?sem->obj.name:"null");
     wind_obj_deinit(&sem->obj,WIND_SEM_MAGIC,&semlist);
-    
+    wind_disable_switch();
     foreach_node(pdnode,&sem->waitlist)
     {
         dlist_remove(&sem->waitlist,pdnode);
@@ -120,7 +120,7 @@ w_err_t wind_sem_destroy(w_sem_s *sem)
         thread->runstat = THREAD_STATUS_READY;
         thread->cause = CAUSE_SEM;
     }
-    wind_enable_interrupt();
+    wind_enable_switch();
     if(IS_F_SEM_POOL(sem))
         sem_free(sem);
     return W_ERR_OK;    
@@ -133,14 +133,14 @@ w_err_t wind_sem_post(w_sem_s *sem)
     w_dlist_s *sleeplist = _wind_thread_sleep_list();
     WIND_ASSERT_RETURN(sem != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(sem->obj.magic == WIND_SEM_MAGIC,W_ERR_INVALID);
-    wind_disable_interrupt();
+    wind_disable_switch();
     //无阻塞的线程，减少信号量后直接返回
     dnode = dlist_head(&sem->waitlist);
     if(dnode == W_NULL)
     {
         if(sem->sem_num < sem->sem_tot)
             sem->sem_num ++;
-        wind_enable_interrupt();
+        wind_enable_switch();
         return W_ERR_OK;
     }
     
@@ -149,7 +149,7 @@ w_err_t wind_sem_post(w_sem_s *sem)
     thread = PRI_DLIST_OBJ(dnode,w_thread_s,suspendnode);
     if(thread->runstat == THREAD_STATUS_SLEEP)
         dlist_remove(sleeplist,&thread->sleepnode.dnode);
-    wind_enable_interrupt();
+    wind_enable_switch();
     thread->cause = CAUSE_SEM;
     thread->runstat = THREAD_STATUS_READY;
     _wind_thread_dispatch();
@@ -169,11 +169,11 @@ w_err_t wind_sem_wait(w_sem_s *sem,w_uint32_t timeout)
         ticks = 1;
 
     //信号量有效，直接返回
-    wind_disable_interrupt();
+    wind_disable_switch();
     if (sem->sem_num > 0)
     {
         sem->sem_num --;
-        wind_enable_interrupt();
+        wind_enable_switch();
         return W_ERR_OK; 
     }
     if(timeout == 0)
@@ -191,14 +191,14 @@ w_err_t wind_sem_wait(w_sem_s *sem,w_uint32_t timeout)
     else
         thread->runstat = THREAD_STATUS_SUSPEND;
     dlist_insert_prio(&sem->waitlist,&thread->suspendnode,thread->prio);
-    wind_enable_interrupt();
+    wind_enable_switch();
     _wind_thread_dispatch();
 
-    wind_disable_interrupt();
+    wind_disable_switch();
     //如果是超时唤醒的，则移除出睡眠队列
     if(thread->cause == CAUSE_SLEEP)
         dlist_remove(&sem->waitlist,&thread->suspendnode.dnode);
-    wind_enable_interrupt();
+    wind_enable_switch();
     if(thread->cause == CAUSE_SLEEP)
         return W_ERR_TIMEOUT;
     return W_ERR_OK;
@@ -211,7 +211,7 @@ w_err_t wind_sem_trywait(w_sem_s *sem)
     WIND_ASSERT_RETURN(sem->obj.magic == WIND_SEM_MAGIC,W_ERR_INVALID);
 
     //信号量有效，直接返回
-    wind_disable_interrupt();
+    wind_disable_switch();
     if (sem->sem_num > 0)
     {
         sem->sem_num --;
@@ -219,7 +219,7 @@ w_err_t wind_sem_trywait(w_sem_s *sem)
     }
     else
         err = W_ERR_FAIL;
-    wind_enable_interrupt();
+    wind_enable_switch();
     return err;
 }
 
@@ -233,13 +233,14 @@ w_err_t wind_sem_print(void)
     wind_print_space(5);
     wind_printf("%-16s %-8s %-10s\r\n","sem","sem_tot","sem_num");
     wind_print_space(5);
-
+    wind_disable_switch();
     foreach_node(dnode,list)
     {
         sem = (w_sem_s *)DLIST_OBJ(dnode,w_sem_s,obj.objnode);
         wind_printf("%-16s %-8d %-10d\r\n",
             sem->obj.name,sem->sem_tot,sem->sem_num);
     }
+    wind_enable_switch();
     wind_print_space(5);
     return W_ERR_OK;
 }

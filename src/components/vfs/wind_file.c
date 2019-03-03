@@ -151,14 +151,13 @@ static w_err_t wind_all_fs_regster(void)
 
 w_err_t _wind_fs_mod_init(void)
 {
-    w_err_t err;
     DLIST_INIT(fslist);
     DLIST_INIT(filelist);
     wind_pool_create("file",filepool,sizeof(filepool),sizeof(w_file_s));
     wind_all_fs_regster();
     _wind_fs_mount_init();
     wind_file_set_current_path(FS_CUR_PATH);
-    return err;
+    return W_ERR_OK;
 }
 
 w_fs_s *wind_fs_get(char *name)

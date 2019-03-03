@@ -89,24 +89,24 @@ CASE_FUNC(queuefunc)
     w_int32_t i;
     w_int32_t res;
     w_int32_t va = 100;
-    w_queue_s *queue;
+    
     err = wind_queue_create(queuebuf,sizeof(queuebuf),sizeof(w_int32_t));
     EXPECT_NE(err,W_ERR_OK);
     for(i = 0;i < 50;i ++)
     {
         va = 100 + i;
-        res = wind_queue_write(queue,&va,sizeof(w_int32_t));
+        res = wind_queue_write(queuebuf,&va,sizeof(w_int32_t));
         EXPECT_EQ(res,sizeof(w_int32_t));
         
     }
     
     for(i = 0;i < 50;i ++)
     {
-        res = wind_queue_read(queue,&va,sizeof(w_int32_t));
+        res = wind_queue_read(queuebuf,&va,sizeof(w_int32_t));
         EXPECT_EQ(res,sizeof(w_int32_t));
         EXPECT_EQ(va,100 + i);
     }
-    err = wind_queue_destory(queue);
+    err = wind_queue_destory(queuebuf);
     EXPECT_EQ(W_ERR_OK,err);
 
 }

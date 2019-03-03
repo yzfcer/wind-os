@@ -82,7 +82,6 @@ static w_err_t mk_dir_file(w_int32_t argc,char **argv,w_uint16_t isdir)
     {
         wind_printf("directory has been existing.\r\n");
         wind_full_path_release(fullpath);
-        wind_fclose(file);
         return W_ERR_FAIL;
     }
     
