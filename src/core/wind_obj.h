@@ -42,7 +42,7 @@ typedef struct _wind_obj
 
 
 w_obj_s *wind_obj_get(const char *name,w_dlist_s *list);
-w_err_t wind_obj_init(w_obj_s *obj,w_uint32_t magic,const char *name,w_uint16_t flag,w_dlist_s *list);
+w_err_t wind_obj_init(w_obj_s *obj,w_uint32_t magic,const char *name,w_dlist_s *list);
 w_err_t wind_obj_deinit(w_obj_s *obj,w_uint32_t magic,w_dlist_s *list);
 
 

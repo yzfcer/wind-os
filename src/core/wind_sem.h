@@ -28,7 +28,7 @@
 
 #include "wind_config.h"
 #include "wind_type.h"
-#include "wind_dlist.h"
+#include "wind_obj.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -38,17 +38,14 @@ extern "C" {
 #define WIND_SEM_MAGIC 0x36F7A854
 
 #define F_SEM_POOL (0x01 << 0) //标记sem对象是否通过内存池分配
-#define IS_F_SEM_POOL(sem) ((sem->flag & F_SEM_POOL) == F_SEM_POOL)
-#define SET_F_SEM_POOL(sem) (sem->flag |= F_SEM_POOL)
-#define CLR_F_SEM_POOL(sem) (sem->flag &= (~F_SEM_POOL))
+#define IS_F_SEM_POOL(sem) ((sem->obj.flag & F_SEM_POOL) == F_SEM_POOL)
+#define SET_F_SEM_POOL(sem) (sem->obj.flag |= F_SEM_POOL)
+#define CLR_F_SEM_POOL(sem) (sem->obj.flag &= (~F_SEM_POOL))
 
 typedef struct _w_sem_s
 {
-    w_uint32_t magic;//魔术字
-    const char* name;//信号量的名称
-    w_dnode_s semnode;//信号量的节点，用于加入链表
+    w_obj_s obj;
     w_dlist_s waitlist;  //等待线程队列
-    w_uint16_t flag;    //是否从内存池获取对象
     w_int8_t sem_tot;    //初始化的信号量的值
     w_int8_t sem_num;    //当前的信号量的值
 }w_sem_s;

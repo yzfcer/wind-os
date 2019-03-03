@@ -26,7 +26,7 @@
 #include "wind_string.h"
 #include "wind_debug.h"
 #include "wind_core.h"
-#define OBJ_MAX_LEN 128
+#define OBJ_MAX_LEN 32
 
 static calc_obj_key(const char *name)
 {
@@ -89,13 +89,13 @@ w_obj_s *wind_obj_get(const char *name,w_dlist_s *list)
     return W_NULL;
 }
 
-w_err_t wind_obj_init(w_obj_s *obj,w_uint32_t magic,const char *name,w_uint16_t flag,w_dlist_s *list)
+w_err_t wind_obj_init(w_obj_s *obj,w_uint32_t magic,const char *name,w_dlist_s *list)
 {
     obj->magic = magic;
     obj->name = name;
     DNODE_INIT(obj->objnode);
     obj->key = name == W_NULL?0:calc_obj_key(name);
-    obj->flag = flag;
+    obj->flag = 0;
     insert_obj(list,obj);
     return W_ERR_OK;
 }
@@ -110,7 +110,6 @@ w_err_t wind_obj_deinit(w_obj_s *obj,w_uint32_t magic,w_dlist_s *list)
     wind_enable_switch();
     WIND_ASSERT_RETURN(dnode != W_NULL,W_ERR_INVALID);
     obj->magic = (~magic);
-    obj->flag = 0;
     return W_ERR_OK;  
 }
 

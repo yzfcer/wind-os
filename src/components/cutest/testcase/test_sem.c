@@ -61,7 +61,7 @@ CASE_FUNC(seminit)
     EXPECT_EQ(err,W_ERR_OK);
     sems[0] = wind_sem_get("test");
     EXPECT_NE(sems[0],W_NULL);
-    EXPECT_STR_EQ(sems[0]->name,"test");
+    EXPECT_STR_EQ(sems[0]->obj.name,"test");
     EXPECT_EQ(sems[0]->sem_tot,3);
     EXPECT_FALSE(IS_F_SEM_POOL(sems[0]));
     EXPECT_EQ(sems[0]->sem_num,3);
@@ -76,7 +76,7 @@ CASE_FUNC(seminit)
     EXPECT_EQ(sems[0],W_NULL);
     err = wind_sem_destroy(&test_sm);
     EXPECT_EQ(W_ERR_OK,err);
-    EXPECT_EQ(test_sm.magic,(~WIND_SEM_MAGIC));
+    EXPECT_EQ(test_sm.obj.magic,(~WIND_SEM_MAGIC));
 }
 
 CASE_SETUP(seminfo)
@@ -94,7 +94,7 @@ CASE_FUNC(seminfo)
     w_err_t err;
     sems[0] = wind_sem_create("test",3);
     EXPECT_NE(sems[0],W_NULL);
-    EXPECT_STR_EQ(sems[0]->name,"test");
+    EXPECT_STR_EQ(sems[0]->obj.name,"test");
     EXPECT_EQ(sems[0]->sem_tot,3);
     EXPECT_EQ(sems[0]->sem_num,3);
     EXPECT_TRUE(IS_F_SEM_POOL(sems[0]));
