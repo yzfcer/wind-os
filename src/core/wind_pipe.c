@@ -54,20 +54,8 @@ w_err_t _wind_pipe_mod_init(void)
 w_pipe_s *wind_pipe_get(const char *name)
 {
     w_pipe_s *pipe;
-    w_dnode_s *dnode;
-    WIND_ASSERT_RETURN(name != W_NULL,W_NULL);
-    wind_disable_switch();
-    foreach_node(dnode,&pipelist)
-    {
-        pipe = DLIST_OBJ(dnode,w_pipe_s,pipenode);
-        if(pipe->name && (wind_strcmp(name,pipe->name) == 0))
-        {
-            wind_enable_switch();
-            return pipe;
-        }
-    }
-    wind_enable_switch();
-    return W_NULL;
+    pipe = (w_pipe_s*)wind_obj_get(name,&pipelist);
+    return pipe;
 }
 
 w_err_t wind_pipe_init(w_pipe_s* pipe,const char *name,void *buff,w_uint32_t buflen)
@@ -79,16 +67,10 @@ w_err_t wind_pipe_init(w_pipe_s* pipe,const char *name,void *buff,w_uint32_t buf
     WIND_ASSERT_RETURN(buflen > 0,W_ERR_INVALID);
     err = wind_queue_create(buff,buflen,1);
     WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_FAIL);
-    pipe->magic = WIND_PIPE_MAGIC;
-    pipe->name = name;
-    DNODE_INIT(pipe->pipenode)
     pipe->buff = buff;
     pipe->buflen = buflen;
-    pipe->flag = 0;
-    CLR_F_PIPE_POOL(pipe);
-    wind_disable_interrupt();
-    dlist_insert_tail(&pipelist,&pipe->pipenode);
-    wind_enable_interrupt();
+    
+    wind_obj_init(&pipe->obj,WIND_PIPE_MAGIC,name,&pipelist);
     return W_ERR_OK;
     
 }
@@ -118,10 +100,10 @@ w_int32_t wind_pipe_read(w_pipe_s* pipe,w_int8_t *str,w_int16_t len)
     WIND_ASSERT_RETURN(pipe != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(str != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(len > 0,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(pipe->magic == WIND_PIPE_MAGIC,W_ERR_INVALID);
-    wind_disable_interrupt();
+    WIND_ASSERT_RETURN(pipe->obj.magic == WIND_PIPE_MAGIC,W_ERR_INVALID);
+    wind_disable_switch();
     count = wind_queue_read(pipe->buff,str,len);
-    wind_enable_interrupt();
+    wind_enable_switch();
     return count;
 }
 
@@ -129,27 +111,25 @@ w_int32_t wind_pipe_write(w_pipe_s* pipe,w_int8_t *str,w_int16_t len)
 {
     w_int32_t cnt = -1;
     WIND_ASSERT_RETURN(pipe != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(pipe->magic == WIND_PIPE_MAGIC,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(pipe->obj.magic == WIND_PIPE_MAGIC,W_ERR_INVALID);
     WIND_ASSERT_RETURN(str != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(len > 0,W_ERR_INVALID);
-    wind_disable_interrupt();
+    wind_disable_switch();
     cnt = wind_queue_write(pipe->buff,str,len);
-    wind_enable_interrupt();
+    wind_enable_switch();
     return cnt;
 }
 
 w_err_t wind_pipe_destroy(w_pipe_s* pipe)
 {
+    w_err_t err;
     WIND_ASSERT_RETURN(pipe != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(pipe->magic == WIND_PIPE_MAGIC,W_ERR_INVALID);
-    wind_notice("destroy pipe:%s",pipe->name?pipe->name:"null");
-    wind_disable_interrupt();
-    dlist_remove(&pipelist,&pipe->pipenode);
-    pipe->magic = (~WIND_PIPE_MAGIC);
-    pipe->name = W_NULL;
+    WIND_ASSERT_RETURN(pipe->obj.magic == WIND_PIPE_MAGIC,W_ERR_INVALID);
+    wind_notice("destroy pipe:%s",pipe->obj.name?pipe->obj.name:"null");
+    err = wind_obj_deinit(&pipe->obj,WIND_PIPE_MAGIC,&pipelist);
+    WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_FAIL);
     if(IS_F_PIPE_POOL(pipe))
         pipe_free(pipe);
-    wind_enable_interrupt();
     return W_ERR_OK;
 }
 
@@ -164,15 +144,17 @@ w_err_t wind_pipe_print(void)
     wind_print_space(5);
     wind_printf("%-16s %-8s %-10s\r\n","pipe","lenth","used");
     wind_print_space(5);
+    wind_disable_switch();
     foreach_node(dnode,list)
     {
-        pipe = DLIST_OBJ(dnode,w_pipe_s,pipenode);
+        pipe = DLIST_OBJ(dnode,w_pipe_s,obj.objnode);
         queue = (w_queue_s *)pipe->buff;
         size = wind_queue_max_count(queue);
         used = wind_queue_data_count(queue);
         wind_printf("%-16s %-8d %-10d\r\n",
-            pipe->name?pipe->name:"null",size,used);
+            pipe->obj.name?pipe->obj.name:"null",size,used);
     }
+    wind_enable_switch();
     wind_print_space(5);
     return W_ERR_OK;
 }

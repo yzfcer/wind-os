@@ -27,7 +27,7 @@
 
 #include "wind_config.h"
 #include "wind_type.h"
-#include "wind_dlist.h"
+#include "wind_obj.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -39,18 +39,15 @@ extern "C" {
 #define PIPE_NAME_LEN 12
 
 #define F_PIPE_POOL (0x01 << 0) //标记pipe对象是否通过内存池分配
-#define IS_F_PIPE_POOL(pipe) ((pipe->flag & F_PIPE_POOL) == F_PIPE_POOL)
-#define SET_F_PIPE_POOL(pipe) (pipe->flag |= F_PIPE_POOL)
-#define CLR_F_PIPE_POOL(pipe) (pipe->flag &= (~F_PIPE_POOL))
+#define IS_F_PIPE_POOL(pipe) ((pipe->obj.flag & F_PIPE_POOL) == F_PIPE_POOL)
+#define SET_F_PIPE_POOL(pipe) (pipe->obj.flag |= F_PIPE_POOL)
+#define CLR_F_PIPE_POOL(pipe) (pipe->obj.flag &= (~F_PIPE_POOL))
 
 typedef struct __w_pipe_s
 {
-    w_uint32_t magic;
-    const char *name;
-    w_dnode_s pipenode;
+    w_obj_s obj;
     void *buff;
     w_uint16_t buflen;
-    w_uint16_t flag;
 }w_pipe_s;
 
 w_err_t _wind_pipe_mod_init(void);
