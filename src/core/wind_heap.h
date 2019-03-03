@@ -28,7 +28,7 @@
 
 #include "wind_config.h"
 #include "wind_type.h"
-#include "wind_dlist.h"
+#include "wind_obj.h"
 #include "wind_stati.h"
 
 #ifdef __cplusplus
@@ -48,9 +48,10 @@ extern "C" {
 
 
 #define F_HEAP_PRIVATE (0x01 << 0) //标记heap对象是否通过内存池分配
-#define IS_F_HEAP_PRIVATE(heap) ((heap->flag & F_HEAP_PRIVATE) == F_HEAP_PRIVATE)
-#define SET_F_HEAP_PRIVATE(heap) (heap->flag |= F_HEAP_PRIVATE)
-#define CLR_F_HEAP_PRIVATE(heap) (heap->flag &= (~F_HEAP_PRIVATE))
+#define IS_F_HEAP_PRIVATE(heap) ((heap->obj.flag & F_HEAP_PRIVATE) == F_HEAP_PRIVATE)
+#define SET_F_HEAP_PRIVATE(heap) (heap->obj.flag |= F_HEAP_PRIVATE)
+#define CLR_F_HEAP_PRIVATE(heap) (heap->obj.flag &= (~F_HEAP_PRIVATE))
+
 
 #define F_HEAPITEM_USED (0x01 << 0) //标记heapitem对象是否通过内存池分配
 #define IS_F_HEAPITEM_USED(heapitem) ((heapitem->flag & F_HEAPITEM_USED) == F_HEAPITEM_USED)
@@ -73,11 +74,8 @@ struct __w_heapitem_s
 
 struct __w_heap_s
 {
-    w_uint32_t magic;
-    const char *name;
-    w_dnode_s heapnode;
+    w_obj_s obj;
     void *addr;
-    w_uint16_t flag;
     w_stati_s stati;
     w_dlist_s used_list;
     w_dlist_s free_list;
@@ -92,6 +90,9 @@ w_heap_s *wind_heap_get(const char *name);
 w_heap_s *wind_heap_create(const char *name,w_addr_t base,w_uint32_t size,w_uint16_t flag);
 
 w_err_t wind_heap_destroy(w_addr_t base);
+
+w_err_t wind_heap_setflag(w_heap_s *heap,w_int16_t flag);
+w_err_t wind_heap_clrflag(w_heap_s *heap,w_int16_t flag);
 
 
 void *wind_heap_malloc(w_heap_s* heap, w_uint32_t size);

@@ -73,8 +73,8 @@ static w_int32_t heap_diagnose(void)
     wind_disable_switch();
     foreach_node(dnode,list)
     {
-        heap = (w_heap_s*)DLIST_OBJ(dnode,w_heap_s,heapnode);
-        if(heap->magic != WIND_HEAP_MAGIC)
+        heap = (w_heap_s*)DLIST_OBJ(dnode,w_heap_s,obj.objnode);
+        if(heap->obj.magic != WIND_HEAP_MAGIC)
         {
             wind_enable_switch();
             wind_error("heap magic error,ptr=0x%x",heap);
@@ -84,12 +84,12 @@ static w_int32_t heap_diagnose(void)
         if(res != DIAG_RES_OK)
         {
             wind_enable_switch();
-            wind_notice("check heap %-16s [ERROR]",heap->name);
+            wind_notice("check heap %-16s [ERROR]",heap->obj.name);
             return res;
         }
         else
         {
-            wind_notice("check heap %-16s [OK]",heap->name);
+            wind_notice("check heap %-16s [OK]",heap->obj.name);
         }
     }
     wind_enable_switch();
@@ -128,20 +128,8 @@ static void heapitem_init(w_heapitem_s *item,w_heap_s *hp,w_uint16_t magic,w_int
 w_heap_s *wind_heap_get(const char *name)
 {
     w_heap_s *heap;
-    w_dnode_s *dnode;
-    WIND_ASSERT_RETURN(name != W_NULL,W_NULL);
-    wind_disable_switch();
-    foreach_node(dnode,&heaplist)
-    {
-        heap = DLIST_OBJ(dnode,w_heap_s,heapnode);
-        if(heap->name && (wind_strcmp(name,heap->name) == 0))
-        {
-            wind_enable_switch();
-            return heap;
-        }
-    }
-    wind_enable_switch();
-    return W_NULL;
+    heap = (w_heap_s*)wind_obj_get(name,&heaplist);
+    return heap;
 }
 
 
@@ -159,43 +147,58 @@ w_heap_s *wind_heap_create(const char *name,w_addr_t base,w_uint32_t size,w_uint
     hpsize += (w_uint32_t)(((w_addr_t)hp) - base);
     hpsize = __ALIGN_L(hpsize);
     
-    hp->magic = WIND_HEAP_MAGIC;
-    hp->flag = flag;
-    hp->name = name;
+    
     hp->addr = OFFSET_ADDR(hp,sizeof(w_heap_s));
     WIND_STATI_INIT(hp->stati,hpsize);
     WIND_STATI_ADD(hp->stati,sizeof(w_heap_s));
-    DNODE_INIT(hp->heapnode);
     DLIST_INIT(hp->used_list);
     DLIST_INIT(hp->free_list);
     hp->mutex = wind_mutex_create(name);
     WIND_ASSERT_RETURN(hp->mutex != W_NULL,W_NULL);
     item = hp->addr;
     heapitem_init(item,hp,(w_uint16_t)(~WIND_HEAPITEM_MAGIC),hpsize - sizeof(w_heap_s),0);
+
+    
     wind_disable_switch();
     dlist_insert_head(&hp->free_list,&item->itemnode.dnode);
-    dlist_insert_tail(&heaplist,&hp->heapnode);
     wind_enable_switch();
+    wind_obj_init(&hp->obj,WIND_HEAP_MAGIC,name,&heaplist);
+    wind_heap_setflag(hp, flag);
 
     return hp;
 }
 
 w_err_t wind_heap_destroy(w_addr_t base)
 {
+    w_err_t err;
     w_heap_s *heap;
     heap = (w_heap_s*)(__ALIGN_R((w_addr_t)base));
     WIND_ASSERT_RETURN(heap != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(heap->magic == WIND_HEAP_MAGIC,W_ERR_INVALID);
-    wind_notice("destroy heap:%s",heap->name?heap->name:"null");
-    wind_disable_switch();
-    dlist_remove(&heaplist,&heap->heapnode);
-    heap->magic = (~WIND_HEAP_MAGIC);
-    wind_enable_switch();
+    WIND_ASSERT_RETURN(heap->obj.magic == WIND_HEAP_MAGIC,W_ERR_INVALID);
+    wind_notice("destroy heap:%s",heap->obj.name?heap->obj.name:"null");
+    err = wind_obj_deinit(&heap->obj,WIND_HEAP_MAGIC,&heaplist);
     wind_mutex_destroy(heap->mutex);
     heap->mutex = W_NULL;
     return W_ERR_OK;
 }
 
+w_err_t wind_heap_setflag(w_heap_s *heap,w_int16_t flag)
+{
+    WIND_ASSERT_RETURN(heap != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(heap->obj.magic == WIND_HEAP_MAGIC,W_ERR_INVALID);
+    if(flag & F_HEAP_PRIVATE)
+        SET_F_HEAP_PRIVATE(heap);
+    return W_ERR_OK;
+
+}
+w_err_t wind_heap_clrflag(w_heap_s *heap,w_int16_t flag)
+{
+    WIND_ASSERT_RETURN(heap != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(heap->obj.magic == WIND_HEAP_MAGIC,W_ERR_INVALID);
+    if(flag & F_HEAP_PRIVATE)
+        CLR_F_HEAP_PRIVATE(heap);
+    return W_ERR_OK;
+}
 
 
 static void *alloc_from_freeitem(w_heap_s* heap,w_heapitem_s* freeitem,w_uint32_t size)
@@ -262,7 +265,7 @@ void *wind_heap_malloc(w_heap_s* heap,w_uint32_t size)
     w_heapitem_s* freeitem;
     WIND_ASSERT_RETURN(heap != W_NULL,W_NULL);
     WIND_ASSERT_RETURN(size > 0,W_NULL);
-    WIND_ASSERT_RETURN(heap->magic == WIND_HEAP_MAGIC,W_NULL);
+    WIND_ASSERT_RETURN(heap->obj.magic == WIND_HEAP_MAGIC,W_NULL);
     wind_debug("heap_malloc %d",size);
     size = __ALIGN_R(size) + sizeof(w_heapitem_s);
     
@@ -293,7 +296,7 @@ void *wind_heap_realloc(w_heap_s* heap, void* ptr, w_uint32_t newsize)
     w_uint32_t size;
     WIND_ASSERT_RETURN(heap != W_NULL,W_NULL);
     WIND_ASSERT_RETURN(newsize > 0,W_NULL);
-    WIND_ASSERT_RETURN(heap->magic == WIND_HEAP_MAGIC,W_NULL);
+    WIND_ASSERT_RETURN(heap->obj.magic == WIND_HEAP_MAGIC,W_NULL);
     wind_debug("\r\nheap_realloc 0x%08x,%d",ptr,newsize);
     newsize = __ALIGN_R(newsize);
     if(ptr == W_NULL)
@@ -337,10 +340,10 @@ w_err_t wind_heap_free(w_heap_s* heap,void *ptr)
     WIND_ASSERT_RETURN(item->magic == WIND_HEAPITEM_MAGIC,W_ERR_INVALID);
     WIND_ASSERT_RETURN(IS_F_HEAPITEM_USED(item),W_ERR_INVALID);
     WIND_ASSERT_RETURN(item->heap != W_NULL,W_ERR_INVALID);
-    wind_debug("heap_free %s,0x%08x",heap->name?heap->name:"null",ptr);
+    wind_debug("heap_free %s,0x%08x",heap->obj.name?heap->obj.name:"null",ptr);
     heap = item->heap;
     WIND_ASSERT_RETURN(heap != W_NULL,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(heap->magic == WIND_HEAP_MAGIC,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(heap->obj.magic == WIND_HEAP_MAGIC,W_ERR_INVALID);
     wind_mutex_lock(heap->mutex);
     dlist_remove(&heap->used_list,&item->itemnode.dnode);
     WIND_STATI_MINUS(heap->stati,item->size);
@@ -377,9 +380,9 @@ w_err_t wind_heap_print(void)
 
     foreach_node(dnode,list)
     {
-        heap = (w_heap_s *)DLIST_OBJ(dnode,w_heap_s,heapnode);
+        heap = (w_heap_s *)DLIST_OBJ(dnode,w_heap_s,obj.objnode);
         wind_printf("%-16s 0x%08x %-12d %-10s\r\n",
-            heap->name?heap->name:"null",heap->addr,heap->stati.tot,
+            heap->obj.name?heap->obj.name:"null",heap->addr,heap->stati.tot,
             IS_F_HEAP_PRIVATE(heap)?"YES":"NO");
     }
     wind_print_space(7);
@@ -400,7 +403,7 @@ w_err_t wind_heapitem_print(void)
 
     foreach_node(dnode,list)
     {
-        heap = (w_heap_s*)DLIST_OBJ(dnode,w_heap_s,heapnode);
+        heap = (w_heap_s*)DLIST_OBJ(dnode,w_heap_s,obj.objnode);
         foreach_node(dnode1,&heap->free_list)
         {
             heapitem = (w_heapitem_s *)DLIST_OBJ(dnode1,w_heapitem_s,itemnode.dnode);
@@ -439,8 +442,8 @@ w_err_t wind_heap_stati_print(void)
     
     foreach_node(dnode,list)
     {
-        heap = (w_heap_s*)DLIST_OBJ(dnode,w_heap_s,heapnode);
-        wind_printf("%-16s %-8d %-8d %-8d %-8d\r\n",heap->name,heap->stati.tot,
+        heap = (w_heap_s*)DLIST_OBJ(dnode,w_heap_s,obj.objnode);
+        wind_printf("%-16s %-8d %-8d %-8d %-8d\r\n",heap->obj.name,heap->stati.tot,
             heap->stati.used,heap->stati.max,heap->stati.err);
     }
    
@@ -457,7 +460,7 @@ void *wind_malloc(w_uint32_t size)
     size = __ALIGN_R(size);
     foreach_node(dnode,&heaplist)
     {
-        heap = DLIST_OBJ(dnode,w_heap_s,heapnode);
+        heap = DLIST_OBJ(dnode,w_heap_s,obj.objnode);
         wind_debug("malloc in heap:0x%x",heap);
         if(!IS_F_HEAP_PRIVATE(heap))
         {
@@ -502,7 +505,7 @@ void *wind_realloc(void *ptr, w_uint32_t newsize)
         return wind_malloc(newsize);
     foreach_node(dnode,&heaplist)
     {
-        heap = DLIST_OBJ(dnode,w_heap_s,heapnode);
+        heap = DLIST_OBJ(dnode,w_heap_s,obj.objnode);
         if(!IS_F_HEAP_PRIVATE(heap))
         {
             pnew = wind_heap_realloc(heap,ptr,newsize);

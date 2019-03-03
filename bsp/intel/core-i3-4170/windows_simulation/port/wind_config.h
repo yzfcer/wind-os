@@ -184,7 +184,7 @@ extern "C" {
 #define WIND_CUTEST_SUPPORT 1 //是否支持单元测试框架
 
 #if WIND_CUTEST_SUPPORT
-#define TEST_HEAP_SUPPORT 0 //是否支持内存堆测试
+#define TEST_HEAP_SUPPORT 1 //是否支持内存堆测试
 #define TEST_MSGBOX_SUPPORT 1 //是否支持消息邮箱测试
 #define TEST_MUTEX_SUPPORT 1 //是否支持互斥所测试
 #define TEST_PIPE_SUPPORT 1 //是否支持管道测试
@@ -194,8 +194,8 @@ extern "C" {
 #define TEST_EVENT_SUPPORT 1 //是否支持事件测试
 #define TEST_SOFTIRQ_SUPPORT 1 //是否支持软中断测试
 #define TEST_TREE_SUPPORT 1 //是否支持树形结构对象测试
-#define TEST_TREEFS_SUPPORT 0 //是否支持treefs文件系统测试
-#define TEST_FS_SUPPORT 0 //是否支持fs文件系统接口测试
+#define TEST_TREEFS_SUPPORT 1 //是否支持treefs文件系统测试
+#define TEST_FS_SUPPORT 1 //是否支持fs文件系统接口测试
 #endif
 
 
