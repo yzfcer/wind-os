@@ -53,7 +53,7 @@ w_err_t _wind_daemon_mod_init(void)
 w_err_t wind_daemon_setflag(w_daemon_s *daemon,w_int16_t flag)
 {
     WIND_ASSERT_RETURN(daemon != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(daemon->magic == WIND_DAEMON_MAGIC,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(daemon->obj.magic == WIND_DAEMON_MAGIC,W_ERR_INVALID);
     if(flag & F_DAEMON_ENABLE)
         SET_F_DAEMON_ENABLE(daemon);
     return W_ERR_OK;
@@ -61,7 +61,7 @@ w_err_t wind_daemon_setflag(w_daemon_s *daemon,w_int16_t flag)
 w_err_t wind_daemon_clrflag(w_daemon_s *daemon,w_int16_t flag)
 {
     WIND_ASSERT_RETURN(daemon != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(daemon->magic == WIND_DAEMON_MAGIC,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(daemon->obj.magic == WIND_DAEMON_MAGIC,W_ERR_INVALID);
     if(flag & F_DAEMON_ENABLE)
         CLR_F_DAEMON_ENABLE(daemon);
     return W_ERR_OK;
@@ -75,13 +75,13 @@ w_err_t _wind_daemon_period_check(void)
     wind_disable_switch();
     foreach_node(dnode,&daemonlist)
     {
-        daemon = DLIST_OBJ(dnode,w_daemon_s,daemonnode);
+        daemon = DLIST_OBJ(dnode,w_daemon_s,obj.objnode);
         if(!IS_F_DAEMON_ENABLE(daemon))
             continue;
-        thread = wind_thread_get(daemon->name);
+        thread = wind_thread_get(daemon->obj.name);
         if(thread == W_NULL)
         {
-            wind_notice("***check thread %s is dead,now restart",daemon->name);
+            wind_notice("***check thread %s is dead,now restart",daemon->obj.name);
             daemon->daemon_func();
         }
     }
@@ -92,20 +92,8 @@ w_err_t _wind_daemon_period_check(void)
 w_daemon_s *wind_daemon_get(const char *name)
 {
     w_daemon_s *daemon;
-    w_dnode_s *dnode;
-    WIND_ASSERT_RETURN(name != W_NULL,W_NULL);
-    wind_disable_switch();
-    foreach_node(dnode,&daemonlist)
-    {
-        daemon = DLIST_OBJ(dnode,w_daemon_s,daemonnode);
-        if(daemon->name && (wind_strcmp(name,daemon->name) == 0))
-        {
-            wind_enable_switch();
-            return daemon;
-        }
-    }
-    wind_enable_switch();
-    return W_NULL;
+    daemon = (w_daemon_s*)wind_obj_get(name,&daemonlist);
+    return daemon;
 }
 
 w_err_t wind_daemon_init(w_daemon_s *daemon,const char *name,w_daemon_fn daemon_func)
@@ -117,15 +105,9 @@ w_err_t wind_daemon_init(w_daemon_s *daemon,const char *name,w_daemon_fn daemon_
     thread = wind_thread_get(name);
     WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_INVALID);
     wind_thread_setflag(thread,F_THREAD_DAEMON);
-    daemon->magic = WIND_DAEMON_MAGIC;
-    daemon->name = name;
-    DNODE_INIT(daemon->daemonnode);
     daemon->daemon_func = daemon_func;
-    daemon->flag = 0;
-    CLR_F_DAEMON_POOL(daemon);
-    wind_disable_interrupt();
-    dlist_insert_tail(&daemonlist,&daemon->daemonnode);
-    wind_enable_interrupt();
+    wind_obj_init(&daemon->obj,WIND_DAEMON_MAGIC,name,&daemonlist);
+    SET_F_DAEMON_ENABLE(daemon);
     return W_ERR_OK;
 }
 
@@ -152,17 +134,18 @@ w_daemon_s *wind_daemon_create(const char *name,w_daemon_fn daemon_func)
 
 w_err_t wind_daemon_destroy(w_daemon_s *daemon)
 {
+    w_err_t err;
     w_thread_s *thread;
     WIND_ASSERT_RETURN(daemon != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(daemon->magic == WIND_DAEMON_MAGIC,W_ERR_INVALID);
-    wind_notice("destroy daemon:%s",daemon->name?daemon->name:"null");
-    wind_disable_interrupt();
-    dlist_remove(&daemonlist,&daemon->daemonnode);
-    wind_enable_interrupt();
-    thread = wind_thread_get(daemon->name);
+    WIND_ASSERT_RETURN(daemon->obj.magic == WIND_DAEMON_MAGIC,W_ERR_INVALID);
+    wind_notice("destroy daemon:%s",daemon->obj.name?daemon->obj.name:"null");
+    err = wind_obj_deinit(&daemon->obj,WIND_DAEMON_MAGIC,&daemonlist);
+    WIND_ASSERT_RETURN(err == W_ERR_OK, W_ERR_FAIL);
+    
+    thread = wind_thread_get(daemon->obj.name);
     WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_INVALID);
     wind_thread_clrflag(thread,F_THREAD_DAEMON);
-    daemon->magic = (~WIND_DAEMON_MAGIC);
+
     if(IS_F_DAEMON_POOL(daemon))
         daemon_free(daemon);
     return W_ERR_OK;
@@ -180,8 +163,8 @@ w_err_t wind_daemon_print(void)
     
     foreach_node(dnode,list)
     {
-        daemon = (w_daemon_s *)DLIST_OBJ(dnode,w_daemon_s,daemonnode);
-        wind_printf("%-12s ",daemon->name);
+        daemon = (w_daemon_s *)DLIST_OBJ(dnode,w_daemon_s,obj.objnode);
+        wind_printf("%-12s ",daemon->obj.name);
         cnt ++;
         if((cnt & 0x03) == 0)
             wind_printf("\r\n");

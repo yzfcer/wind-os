@@ -362,6 +362,9 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\components\vfs\treefs\treefs.c">
       <Filter>component_vfs</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_obj.c">
+      <Filter>os_core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">
@@ -623,6 +626,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\..\src\components\vfs\treefs\treefs.h">
       <Filter>component_vfs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_obj.h">
+      <Filter>os_core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

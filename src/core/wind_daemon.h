@@ -29,7 +29,7 @@
 
 #include "wind_config.h"
 #include "wind_type.h"
-#include "wind_dlist.h"
+#include "wind_obj.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -39,14 +39,14 @@ extern "C" {
 #define WIND_DAEMON_MAGIC 0x576C5A4C
 
 #define F_DAEMON_POOL (0x01 << 0) //标记daemon对象是否通过内存池分配
-#define IS_F_DAEMON_POOL(daemon) ((daemon->flag & F_DAEMON_POOL) == F_DAEMON_POOL)
-#define SET_F_DAEMON_POOL(daemon) (daemon->flag |= F_DAEMON_POOL)
-#define CLR_F_DAEMON_POOL(daemon) (daemon->flag &= (~F_DAEMON_POOL))
+#define IS_F_DAEMON_POOL(daemon) ((daemon->obj.flag & F_DAEMON_POOL) == F_DAEMON_POOL)
+#define SET_F_DAEMON_POOL(daemon) (daemon->obj.flag |= F_DAEMON_POOL)
+#define CLR_F_DAEMON_POOL(daemon) (daemon->obj.flag &= (~F_DAEMON_POOL))
 
 #define F_DAEMON_ENABLE (0x01 << 1) //标记daemon对象是否通过内存池分配
-#define IS_F_DAEMON_ENABLE(daemon) ((daemon->flag & F_DAEMON_ENABLE) == F_DAEMON_ENABLE)
-#define SET_F_DAEMON_ENABLE(daemon) (daemon->flag |= F_DAEMON_ENABLE)
-#define CLR_F_DAEMON_ENABLE(daemon) (daemon->flag &= (~F_DAEMON_ENABLE))
+#define IS_F_DAEMON_ENABLE(daemon) ((daemon->obj.flag & F_DAEMON_ENABLE) == F_DAEMON_ENABLE)
+#define SET_F_DAEMON_ENABLE(daemon) (daemon->obj.flag |= F_DAEMON_ENABLE)
+#define CLR_F_DAEMON_ENABLE(daemon) (daemon->obj.flag &= (~F_DAEMON_ENABLE))
 
 
 typedef struct __w_daemon_s w_daemon_s;
@@ -56,10 +56,7 @@ typedef w_err_t (*w_daemon_fn)(void);
 
 struct __w_daemon_s
 {
-    w_uint32_t magic;//魔术字
-    const char *name;
-    w_dnode_s daemonnode;
-    w_uint16_t flag;
+    w_obj_s obj;
     w_daemon_fn daemon_func;
 };
 

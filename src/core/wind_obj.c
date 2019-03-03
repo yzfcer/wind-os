@@ -30,9 +30,9 @@
 
 static calc_obj_key(const char *name)
 {
-    w_int16_t i,key;
+    w_uint16_t i,key;
     key = 0;
-    for(i = 0;name[i] != 0,i < OBJ_MAX_LEN;i ++)
+    for(i = 0;(name[i] != 0)&&(i < OBJ_MAX_LEN);i ++)
         key += name[i];
     key = (key&0xff00) + name[0];
     return key;

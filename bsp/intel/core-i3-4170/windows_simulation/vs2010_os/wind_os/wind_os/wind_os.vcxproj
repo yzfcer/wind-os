@@ -19,12 +19,14 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -166,6 +168,7 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_heap.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_msgbox.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_mutex.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_obj.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_pipe.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_pool.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_sem.c" />
@@ -245,6 +248,7 @@
     <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_heap.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_msgbox.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_mutex.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_obj.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_pipe.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_pool.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_sem.h" />
