@@ -28,7 +28,7 @@
 
 #include "wind_config.h"
 #include "wind_type.h"
-#include "wind_dlist.h"
+#include "wind_obj.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -41,14 +41,18 @@ typedef w_int32_t (*dbgpoint_write_fn)(w_uint8_t *buff,w_int32_t lenth);
 
 typedef struct _wind_dbgpoint
 {
-    w_uint32_t magic;
-    const char* name;
-    w_dnode_s dbgpointnode;
+    w_obj_s obj;
     w_int32_t lenth;
     void *mutex;
     dbgpoint_read_fn read;
     dbgpoint_write_fn write;
 }w_dbgpoint_s;
+
+#define DBGP_DEF(name,lenth,read,write) \
+    static g_dbgp_##name = \
+    {{WIND_DBGPOINT_SUPPORT,#name,{W_NULL,W_NULL},0,0},lenth,read,write};
+#define DBGP(name) &g_dbgp_##name
+
 
 w_err_t _wind_dbgpoint_mod_init(void);
 w_dbgpoint_s *wind_dbgpoint_get(const char *name);
