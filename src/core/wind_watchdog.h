@@ -28,7 +28,7 @@
 
 #include "wind_config.h"
 #include "wind_type.h"
-#include "wind_dlist.h"
+#include "wind_obj.h"
 #include "wind_thread.h"
 
 #ifdef __cplusplus
@@ -42,32 +42,29 @@ extern "C" {
 #define WDOG_RESET 0x01
 
 #define F_WATCHDOG_POOL (0x01 << 0)  //标记watchdog对象是否通过内存池分配
-#define IS_F_WATCHDOG_POOL(watchdog) ((watchdog->flag & F_WATCHDOG_POOL) == F_WATCHDOG_POOL)
-#define SET_F_WATCHDOG_POOL(watchdog) (watchdog->flag |= F_WATCHDOG_POOL)
-#define CLR_F_WATCHDOG_POOL(watchdog) (watchdog->flag &= (~F_WATCHDOG_POOL))
+#define IS_F_WATCHDOG_POOL(watchdog) ((watchdog->obj.flag & F_WATCHDOG_POOL) == F_WATCHDOG_POOL)
+#define SET_F_WATCHDOG_POOL(watchdog) (watchdog->obj.flag |= F_WATCHDOG_POOL)
+#define CLR_F_WATCHDOG_POOL(watchdog) (watchdog->obj.flag &= (~F_WATCHDOG_POOL))
 
 #define F_WATCHDOG_ENABLE (0x01 << 1)  //标记watchdog对象是否通过内存池分配
-#define IS_F_WATCHDOG_ENABLE(watchdog) ((watchdog->flag & F_WATCHDOG_ENABLE) == F_WATCHDOG_ENABLE)
-#define SET_F_WATCHDOG_ENABLE(watchdog) (watchdog->flag |= F_WATCHDOG_ENABLE)
-#define CLR_F_WATCHDOG_ENABLE(watchdog) (watchdog->flag &= (~F_WATCHDOG_ENABLE))
+#define IS_F_WATCHDOG_ENABLE(watchdog) ((watchdog->obj.flag & F_WATCHDOG_ENABLE) == F_WATCHDOG_ENABLE)
+#define SET_F_WATCHDOG_ENABLE(watchdog) (watchdog->obj.flag |= F_WATCHDOG_ENABLE)
+#define CLR_F_WATCHDOG_ENABLE(watchdog) (watchdog->obj.flag &= (~F_WATCHDOG_ENABLE))
 
 
 #define F_WATCHDOG_WARN (0x01 << 2) //标记watchdog超时后是否告警
-#define IS_F_WATCHDOG_WARN(watchdog) ((watchdog->flag & F_WATCHDOG_WARN) == F_WATCHDOG_WARN)
-#define SET_F_WATCHDOG_WARN(watchdog) (watchdog->flag |= F_WATCHDOG_WARN)
-#define CLR_F_WATCHDOG_WARN(watchdog) (watchdog->flag &= (~F_WATCHDOG_WARN))
+#define IS_F_WATCHDOG_WARN(watchdog) ((watchdog->obj.flag & F_WATCHDOG_WARN) == F_WATCHDOG_WARN)
+#define SET_F_WATCHDOG_WARN(watchdog) (watchdog->obj.flag |= F_WATCHDOG_WARN)
+#define CLR_F_WATCHDOG_WARN(watchdog) (watchdog->obj.flag &= (~F_WATCHDOG_WARN))
 
 #define F_WATCHDOG_RESET (0x01 << 3) //标记watchdog超时后是否重启
-#define IS_F_WATCHDOG_RESET(watchdog) ((watchdog->flag & F_WATCHDOG_RESET) == F_WATCHDOG_RESET)
-#define SET_F_WATCHDOG_RESET(watchdog) (watchdog->flag |= F_WATCHDOG_RESET)
-#define CLR_F_WATCHDOG_RESET(watchdog) (watchdog->flag &= (~F_WATCHDOG_RESET))
+#define IS_F_WATCHDOG_RESET(watchdog) ((watchdog->obj.flag & F_WATCHDOG_RESET) == F_WATCHDOG_RESET)
+#define SET_F_WATCHDOG_RESET(watchdog) (watchdog->obj.flag |= F_WATCHDOG_RESET)
+#define CLR_F_WATCHDOG_RESET(watchdog) (watchdog->obj.flag &= (~F_WATCHDOG_RESET))
 
 typedef struct _wind_watchdog
 {
-    w_uint32_t magic;
-    const char* name;
-    w_dnode_s watchdognode;
-    w_uint16_t flag;
+    w_obj_s obj;    
     w_int16_t time_max;    //初始化的信号量的值
     w_int16_t time_cur;    //当前的信号量的值
 	w_thread_s *thread;
