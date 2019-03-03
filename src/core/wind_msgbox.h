@@ -28,7 +28,7 @@
 
 #include "wind_config.h"
 #include "wind_type.h"
-#include "wind_dlist.h"
+#include "wind_obj.h"
 #include "wind_thread.h"
 
 #ifdef __cplusplus
@@ -39,9 +39,9 @@ extern "C" {
 #define WIND_MSGBOX_MAGIC 0x378A523B
 
 #define F_MSGBOX_POOL (0x01 << 0)
-#define IS_F_MSGBOX_POOL(msgbox) ((msgbox->flag & F_MSGBOX_POOL) == F_MSGBOX_POOL)
-#define SET_F_MSGBOX_POOL(msgbox) (msgbox->flag |= F_MSGBOX_POOL)
-#define CLR_F_MSGBOX_POOL(msgbox) (msgbox->flag &= (~F_MSGBOX_POOL))
+#define IS_F_MSGBOX_POOL(msgbox) ((msgbox->obj.flag & F_MSGBOX_POOL) == F_MSGBOX_POOL)
+#define SET_F_MSGBOX_POOL(msgbox) (msgbox->obj.flag |= F_MSGBOX_POOL)
+#define CLR_F_MSGBOX_POOL(msgbox) (msgbox->obj.flag &= (~F_MSGBOX_POOL))
 
 typedef struct _w_msg_s
 {
@@ -53,12 +53,9 @@ typedef struct _w_msg_s
 
 typedef struct __w_msgbox_s
 {
-    w_uint32_t magic;//魔术字
-    const char *name;
-    w_dnode_s msgboxnode;
+    w_obj_s obj;
     w_dlist_s msglist;//消息队列
     w_int16_t msgnum;//消息的数量
-    w_uint16_t flag;//消息的数量
     w_thread_s *owner;
 }w_msgbox_s;
 

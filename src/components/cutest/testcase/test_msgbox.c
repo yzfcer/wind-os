@@ -70,7 +70,7 @@ CASE_FUNC(msgboxinit)
     EXPECT_EQ(err,W_ERR_OK);
     msgbox = wind_msgbox_get("test");
     EXPECT_NE(msgbox,W_NULL);
-    EXPECT_EQ(msgbox->magic,WIND_MSGBOX_MAGIC);
+    EXPECT_EQ(msgbox->obj.magic,WIND_MSGBOX_MAGIC);
     EXPECT_EQ(msgbox->msgnum,0);
     EXPECT_FALSE(IS_F_MSGBOX_POOL(msgbox));
     EXPECT_EQ(msgbox->msglist.head,W_NULL);
@@ -85,7 +85,7 @@ CASE_FUNC(msgboxinit)
     EXPECT_EQ(msgbox,W_NULL);
     err = wind_msgbox_destroy(&test_mb);
     EXPECT_EQ(W_ERR_OK,err);
-    EXPECT_EQ(test_mb.magic,(~WIND_MSGBOX_MAGIC));
+    EXPECT_EQ(test_mb.obj.magic,(~WIND_MSGBOX_MAGIC));
 }
 
 CASE_SETUP(msgboxinfo)
@@ -105,7 +105,7 @@ CASE_FUNC(msgboxinfo)
     thr = wind_thread_current();
     msgbox = wind_msgbox_create("test");
     EXPECT_NE(msgbox,W_NULL);
-    EXPECT_EQ(msgbox->magic,WIND_MSGBOX_MAGIC);
+    EXPECT_EQ(msgbox->obj.magic,WIND_MSGBOX_MAGIC);
     EXPECT_EQ(msgbox->msgnum,0);
     EXPECT_TRUE(IS_F_MSGBOX_POOL(msgbox));
     EXPECT_EQ(msgbox->msglist.head,W_NULL);

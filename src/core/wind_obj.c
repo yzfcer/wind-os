@@ -34,7 +34,7 @@ static calc_obj_key(const char *name)
     key = 0;
     for(i = 0;name[i] != 0,i < OBJ_MAX_LEN;i ++)
         key += name[i];
-    key = (key&0xff) + name[0];
+    key = (key&0xff00) + name[0];
     return key;
 }
 
