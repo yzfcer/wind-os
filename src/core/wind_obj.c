@@ -98,12 +98,12 @@ w_obj_s *wind_obj_get(const char *name,w_dlist_s *list)
 
 w_err_t wind_obj_init(w_obj_s *obj,w_uint32_t magic,const char *name,w_dlist_s *list)
 {
-    obj->magic = magic;
     obj->name = name;
     DNODE_INIT(obj->objnode);
     obj->key = name == W_NULL?0:calc_obj_key(name);
     obj->flag = 0;
     insert_obj(list,obj);
+    obj->magic = magic;
     return W_ERR_OK;
 }
 

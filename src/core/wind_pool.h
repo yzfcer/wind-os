@@ -28,7 +28,7 @@
 
 #include "wind_config.h"
 #include "wind_type.h"
-#include "wind_dlist.h"
+#include "wind_obj.h"
 #include "wind_stati.h"
 #ifdef __cplusplus
 extern "C" {
@@ -62,9 +62,7 @@ struct __w_poolitem_s
 //内存池的基本描述信息结构体
 struct __w_pool_s
 {
-    w_uint32_t magic;//内存池被成功建立的标志
-    const char *name;
-    w_dnode_s poolnode;
+    w_obj_s obj;
     w_stati_s stati;
     void *head;//内存池的头部位置
     w_uint32_t size;//内存池的实际可用空间大小
@@ -72,6 +70,7 @@ struct __w_pool_s
     w_int32_t itemnum;//分成的内存块的数量
     w_poolitem_s* free_head;//空闲块的指针
     w_poolitem_s* free_end;//最后一个空闲块的指针
+    w_int32_t pad;
 };
 
 //定义内存池的方法

@@ -68,8 +68,8 @@ static w_int32_t pool_diagnose(void)
     wind_disable_switch();
     foreach_node(dnode,list)
     {
-        pool = (w_pool_s*)DLIST_OBJ(dnode,w_pool_s,poolnode);
-        if(pool->magic != WIND_POOL_MAGIC)
+        pool = (w_pool_s*)DLIST_OBJ(dnode,w_pool_s,obj.objnode);
+        if(pool->obj.magic != WIND_POOL_MAGIC)
         {
             wind_enable_switch();
             wind_error("pool magic error,ptr=0x%x",pool);
@@ -79,12 +79,12 @@ static w_int32_t pool_diagnose(void)
         if(res != DIAG_RES_OK)
         {
             wind_enable_switch();
-            wind_notice("check pool %-16s [ERROR]",pool->name);
+            wind_notice("check pool %-16s [ERROR]",pool->obj.name);
             return res;
         }
         else
         {
-            wind_notice("check pool %-16s [OK]",pool->name);
+            wind_notice("check pool %-16s [OK]",pool->obj.name);
         }
     }
     wind_enable_switch();
@@ -121,20 +121,8 @@ w_pool_s *wind_pool_get_by_mem(void *mem)
 w_pool_s *wind_pool_get(const char *name)
 {
     w_pool_s *pool;
-    w_dnode_s *dnode;
-    WIND_ASSERT_RETURN(name != W_NULL,W_NULL);
-    wind_disable_switch();
-    foreach_node(dnode,&poollist)
-    {
-        pool = DLIST_OBJ(dnode,w_pool_s,poolnode);
-        if(pool->name && (wind_strcmp(name,pool->name) == 0))
-        {
-            wind_enable_switch();
-            return pool;
-        }
-    }
-    wind_enable_switch();
-    return W_NULL;
+    pool = wind_obj_get(name,&poollist);
+    return pool;
 }
 
 w_err_t wind_pool_create(const char *name,void *mem,w_uint32_t memsize,w_uint32_t obj_size)
@@ -151,10 +139,7 @@ w_err_t wind_pool_create(const char *name,void *mem,w_uint32_t memsize,w_uint32_
     memsize = WIND_MPOOL_ALIGN_L(memsize - 8);
 
     item = (w_poolitem_s*)((w_uint32_t)pm + sizeof(w_pool_s));
-    pm->magic = (~WIND_POOL_MAGIC);
     pm->head = item;
-    pm->name = name;
-    DNODE_INIT(pm->poolnode);
     pm->size = memsize - sizeof(w_pool_s);
     pm->itemsize = obj_size + sizeof(w_pihead_s);
     pm->itemnum = pm->size / pm->itemsize;
@@ -173,24 +158,20 @@ w_err_t wind_pool_create(const char *name,void *mem,w_uint32_t memsize,w_uint32_
             item->head.next = W_NULL;
     }
     WIND_STATI_INIT(pm->stati,pm->itemnum);
-    wind_disable_interrupt();
-    dlist_insert_tail(&poollist,&pm->poolnode);
-    wind_enable_interrupt();
-    pm->magic = WIND_POOL_MAGIC;
+
+    wind_obj_init(&pm->obj,WIND_POOL_MAGIC,name,&poollist);
     return W_ERR_OK;
 }
 
 w_err_t wind_pool_destroy(void *mem)
 {
+    w_err_t err;
     w_pool_s *pm;
     pm = wind_pool_get_by_mem(mem);
     WIND_ASSERT_RETURN(pm != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(pm->magic == WIND_POOL_MAGIC,W_ERR_INVALID);
-    wind_notice("destroy pool:%s",pm->name?pm->name:"null");
-    wind_disable_interrupt();
-    dlist_remove(&poollist,&pm->poolnode);
-    wind_enable_interrupt();
-    pm->magic = (~WIND_POOL_MAGIC);
+    wind_notice("destroy pool:%s",pm->obj.name?pm->obj.name:"null");
+    err = wind_obj_deinit(&pm->obj,WIND_POOL_MAGIC,&poollist);
+    WIND_ASSERT_RETURN(err == W_ERR_OK, W_ERR_FAIL);
     return W_ERR_OK;
 }
 
@@ -201,14 +182,14 @@ void *wind_pool_malloc(void *mem)
     w_poolitem_s* item;
     pm = wind_pool_get_by_mem(mem);
     WIND_ASSERT_RETURN(pm != W_NULL,W_NULL);
-    WIND_ASSERT_RETURN(pm->magic == WIND_POOL_MAGIC,W_NULL);
+    WIND_ASSERT_RETURN(pm->obj.magic == WIND_POOL_MAGIC,W_NULL);
 
     wind_disable_interrupt();
     if(pm->free_head == W_NULL)
     {
         WIND_STATI_ERR_INC(pm->stati);
         wind_enable_interrupt();
-        wind_error("mpool empty");
+        wind_warn("pool empty");
         return W_NULL;
     }
     item = pm->free_head;
@@ -220,7 +201,7 @@ void *wind_pool_malloc(void *mem)
     {
         WIND_STATI_ERR_INC(pm->stati);
         wind_enable_interrupt();
-        wind_critical("mpool is NOT free.");
+        wind_critical("pool is NOT free.");
         return W_NULL;
     }
     WIND_STATI_INC(pm->stati);
@@ -272,12 +253,14 @@ void wind_pool_print_list(void)
     wind_print_space(7);
     wind_printf("%-12s %-12s %-8s %-8s %-8s\r\n","name","head","size","itemnum","itemsize");
     wind_print_space(7);
+    wind_disable_switch();
     foreach_node(pdnode,list)
     {
-        pm = DLIST_OBJ(pdnode,w_pool_s,poolnode);
+        pm = DLIST_OBJ(pdnode,w_pool_s,obj.objnode);
         wind_printf("%-12s 0x%-10x %-8d %-8d %-8d\r\n",
-            pm->name?pm->name:"null",pm->head,pm->size,pm->itemnum,pm->itemsize);
+            pm->obj.name?pm->obj.name:"null",pm->head,pm->size,pm->itemnum,pm->itemsize);
     }
+    wind_enable_switch();
     wind_print_space(7);
 }
 
@@ -290,12 +273,14 @@ void wind_pool_stati_print(void)
     wind_printf("%-16s %-8s %-8s %-8s %-8s\r\n","pool","tot","used","maxused","err");
     wind_print_space(7);
     list = &poollist;
+    wind_disable_switch();
     foreach_node(dnode,list)
     {
-        pool = (w_pool_s*)DLIST_OBJ(dnode,w_pool_s,poolnode);
-        wind_printf("%-16s %-8d %-8d %-8d %-8d\r\n",pool->name,pool->stati.tot,
+        pool = (w_pool_s*)DLIST_OBJ(dnode,w_pool_s,obj.objnode);
+        wind_printf("%-16s %-8d %-8d %-8d %-8d\r\n",pool->obj.name,pool->stati.tot,
             pool->stati.used,pool->stati.max,pool->stati.err);
     }
+    wind_enable_switch();
     wind_print_space(7);
 }
 

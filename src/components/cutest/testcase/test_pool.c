@@ -46,8 +46,8 @@ CASE_TEARDOWN(pool_info)
 CASE_FUNC(pool_info)
 {
     w_pool_s *pool = wind_pool_get_by_mem(test_pool);
-    EXPECT_EQ(pool->magic,WIND_POOL_MAGIC);
-    EXPECT_STR_EQ(pool->name,"test_pool");
+    EXPECT_EQ(pool->obj.magic,WIND_POOL_MAGIC);
+    EXPECT_STR_EQ(pool->obj.name,"test_pool");
     EXPECT_EQ(pool->size,sizeof(test_pool)-sizeof(w_pool_s)-8);
     EXPECT_EQ(pool->itemnum,TNUM);
     EXPECT_EQ(pool->itemsize,(((TSIZE+7)>>3)<<3)+sizeof(w_pihead_s));
