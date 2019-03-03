@@ -81,7 +81,7 @@ extern "C" {
 #define WIND_THREAD_MAX_NUM 8 //需要的线程总数,建议根据需要来定义
 #define WIND_THREAD_CALLBACK_SUPPORT 1  //是否支持线程事件毁回调函数
 
-#define WIND_STKPOOL_SUPPORT 0 //是否支持线程堆栈通过内存池分配
+#define WIND_STKPOOL_SUPPORT 1 //是否支持线程堆栈通过内存池分配
 #define WIND_STK_MAX_NUM 4//堆栈的数量
 #define WIND_STK_SIZE 512 //堆栈大小
 
@@ -138,11 +138,11 @@ extern "C" {
 
 #define WIND_DIAGNOSE_SUPPORT 1 //是否支持系统诊断功能
 
-#define WIND_DRVFRAME_SUPPORT 0  //是否字符驱动框架
+#define WIND_DRVFRAME_SUPPORT 1  //是否字符驱动框架
 
 #define WIND_BLK_DRVFRAME_SUPPORT 1  //是否块驱动框架
 
-#define WIND_LUA_SUPPORT 0 //是否支持lua脚本语言
+#define WIND_LUA_SUPPORT 1 //是否支持lua脚本语言
 
 #define HARD_STACK_SIZE 40 //为硬件堆栈保留的空间大小，在某些硬件里可以不需要
 
