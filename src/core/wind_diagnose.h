@@ -28,7 +28,7 @@
 
 #include "wind_config.h"
 #include "wind_type.h"
-#include "wind_dlist.h"
+#include "wind_obj.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -48,9 +48,7 @@ typedef enum
 
 typedef struct _wind_diagnose
 {
-    w_uint32_t magic;
-    const char* name;
-    w_dnode_s diagnosenode;
+    w_obj_s obj;
     w_int32_t result;
     diagnose_fn diagnose_func;
 }w_diagnose_s;
@@ -58,7 +56,7 @@ typedef struct _wind_diagnose
 
 #define DIAGNOSENOSE_DEF(name,func) \
     static w_diagnose_s g_diagnose_##name = \
-    {(~WIND_DIAGNOSE_MAGIC),#name,{W_NULL,W_NULL},0,func}
+    {{WIND_DIAGNOSE_MAGIC,#name,{W_NULL,W_NULL},0,0},0,func}
 #define DIAGNOSENOSE(name) &g_diagnose_##name
 
 w_err_t _wind_diagnose_mod_init(void);
