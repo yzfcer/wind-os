@@ -44,6 +44,13 @@ static w_err_t insert_obj(w_dlist_s *list,w_obj_s *obj)
     w_obj_s *obj1;
     w_int32_t res;
     wind_disable_switch();
+    if(obj->name == W_NULL)
+    {
+        dlist_insert_tail(list,&obj->objnode);
+        wind_enable_switch();
+        return W_ERR_OK;
+    }
+    
     foreach_node(dnode,list)
     {
         obj1 = DLIST_OBJ(dnode,w_obj_s,objnode);
