@@ -127,9 +127,7 @@ static void heapitem_init(w_heapitem_s *item,w_heap_s *hp,w_uint16_t magic,w_int
 
 w_heap_s *wind_heap_get(const char *name)
 {
-    w_heap_s *heap;
-    heap = (w_heap_s*)wind_obj_get(name,&heaplist);
-    return heap;
+    return (w_heap_s*)wind_obj_get(name,&heaplist);
 }
 
 
@@ -177,6 +175,7 @@ w_err_t wind_heap_destroy(w_addr_t base)
     WIND_ASSERT_RETURN(heap->obj.magic == WIND_HEAP_MAGIC,W_ERR_INVALID);
     wind_notice("destroy heap:%s",heap->obj.name?heap->obj.name:"null");
     err = wind_obj_deinit(&heap->obj,WIND_HEAP_MAGIC,&heaplist);
+    WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_FAIL);
     wind_mutex_destroy(heap->mutex);
     heap->mutex = W_NULL;
     return W_ERR_OK;

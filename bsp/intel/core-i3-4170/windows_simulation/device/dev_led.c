@@ -80,9 +80,9 @@ const w_chdev_ops_s led_ops =
 
 w_chdev_s led_dev[3] = 
 {
-    WIND_DEV_DEF("led0",0,&led_ops),
-    WIND_DEV_DEF("led1",1,&led_ops),
-    WIND_DEV_DEF("led2",2,&led_ops),
+    WIND_DEV_DEF("led0",CHDEV_LED,0,&led_ops),
+    WIND_DEV_DEF("led1",CHDEV_LED,1,&led_ops),
+    WIND_DEV_DEF("led2",CHDEV_LED,2,&led_ops),
 };
 #endif
 

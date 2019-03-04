@@ -53,9 +53,7 @@ w_err_t _wind_pipe_mod_init(void)
 
 w_pipe_s *wind_pipe_get(const char *name)
 {
-    w_pipe_s *pipe;
-    pipe = (w_pipe_s*)wind_obj_get(name,&pipelist);
-    return pipe;
+    return (w_pipe_s*)wind_obj_get(name,&pipelist);
 }
 
 w_err_t wind_pipe_init(w_pipe_s* pipe,const char *name,void *buff,w_uint32_t buflen)

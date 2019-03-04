@@ -52,9 +52,7 @@ w_err_t _wind_timer_mod_init(void)
 }
 w_timer_s* wind_timer_get(char *name)
 {
-    w_timer_s *timer;
-    timer = (w_timer_s*)wind_obj_get(name,&timerlist);
-    return timer;
+    return (w_timer_s*)wind_obj_get(name,&timerlist);
 }
 
 w_err_t wind_timer_init(w_timer_s* timer,
@@ -128,6 +126,7 @@ w_err_t wind_timer_destroy(w_timer_s* timer)
     WIND_ASSERT_RETURN(timer->obj.magic == WIND_TIMER_MAGIC,W_ERR_INVALID);    
     wind_notice("destroy timer:%s",timer->obj.name != W_NULL?timer->obj.name:"null");
     err = wind_obj_deinit(&timer->obj,WIND_TIMER_MAGIC,&timerlist);
+    WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_FAIL);
     if(IS_F_TIMER_POOL(timer))
         timer_free(timer);
     return W_ERR_OK;

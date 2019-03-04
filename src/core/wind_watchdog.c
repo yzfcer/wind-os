@@ -86,9 +86,7 @@ w_err_t _wind_watchdog_mod_init(void)
 
 w_watchdog_s *wind_watchdog_get(const char *name)
 {
-    w_watchdog_s *watchdog;
-    watchdog = (w_watchdog_s*)wind_obj_get(name,&watchdoglist);
-    return watchdog;
+    return (w_watchdog_s*)wind_obj_get(name,&watchdoglist);
 }
 
 w_err_t wind_watchdog_init(w_watchdog_s *watchdog,const char *name,w_int16_t timeout_1s)

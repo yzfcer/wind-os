@@ -54,9 +54,7 @@ w_err_t _wind_sem_mod_init(void)
 
 w_sem_s *wind_sem_get(const char *name)
 {
-    w_sem_s *sem;
-	sem = (w_sem_s*)wind_obj_get(name,&semlist);
-    return sem;
+	return (w_sem_s*)wind_obj_get(name,&semlist);
 }
 
 w_err_t wind_sem_init(w_sem_s *sem,const char *name,w_int8_t sem_value)

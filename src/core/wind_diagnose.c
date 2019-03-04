@@ -43,9 +43,7 @@ w_err_t _wind_diagnose_mod_init(void)
 
 w_diagnose_s *wind_diagnose_get(const char *name)
 {
-    w_diagnose_s *diagnose;
-    diagnose = (w_diagnose_s*)wind_obj_get(name,&diagnoselist);
-    return W_NULL;
+    return (w_diagnose_s*)wind_obj_get(name,&diagnoselist);
 }
 
 w_err_t wind_diagnose_register(w_diagnose_s *diagnose)

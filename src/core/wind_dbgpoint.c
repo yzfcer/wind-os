@@ -43,9 +43,7 @@ w_err_t _wind_dbgpoint_mod_init(void)
 
 w_dbgpoint_s *wind_dbgpoint_get(const char *name)
 {
-    w_dbgpoint_s *dbgpoint;
-    dbgpoint = (w_dbgpoint_s*)wind_obj_get(name,&dbgpointlist);
-    return dbgpoint;
+    return (w_dbgpoint_s*)wind_obj_get(name,&dbgpointlist);
 }
 
 w_err_t wind_dbgpoint_register(w_dbgpoint_s *dbgpoint)
@@ -53,15 +51,15 @@ w_err_t wind_dbgpoint_register(w_dbgpoint_s *dbgpoint)
     w_dbgpoint_s *dbgp;
     WIND_ASSERT_RETURN(dbgpoint != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(dbgpoint->obj.magic == WIND_DBGPOINT_MAGIC,W_ERR_INVALID);
-    wind_notice("register dbgpoint:%s",dbgpoint->obj.magic != W_NULL?dbgpoint->obj.magic:"null");
-    dbgp = wind_dbgpoint_get(dbgpoint->obj.magic);
+    wind_notice("register dbgpoint:%s",dbgpoint->obj.name != W_NULL?dbgpoint->obj.name:"null");
+    dbgp = wind_dbgpoint_get(dbgpoint->obj.name);
     if(dbgp != W_NULL)
     {
         wind_notice("dbgpoint has been registered.\r\n");
         return W_ERR_OK;
     }
 
-    dbgpoint->mutex = wind_mutex_create(dbgpoint->obj.magic);
+    dbgpoint->mutex = wind_mutex_create(dbgpoint->obj.name);
     wind_disable_switch();
     dlist_insert_tail(&dbgpointlist,&dbgpoint->obj.objnode);
     wind_enable_switch();
@@ -74,7 +72,7 @@ w_err_t wind_dbgpoint_unregister(w_dbgpoint_s *dbgpoint)
     w_dbgpoint_s *dbgp;
     WIND_ASSERT_RETURN(dbgpoint != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(dbgpoint->obj.magic == WIND_DBGPOINT_MAGIC,W_ERR_INVALID);
-    wind_notice("unregister dbgpoint:%s",dbgpoint->obj.magic != W_NULL?dbgpoint->obj.magic:"null");
+    wind_notice("unregister dbgpoint:%s",dbgpoint->obj.name != W_NULL?dbgpoint->obj.name:"null");
     wind_disable_switch();
 	dnode = dlist_remove(&dbgpointlist,&dbgpoint->obj.objnode);
     wind_enable_switch();

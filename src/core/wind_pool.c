@@ -120,9 +120,7 @@ w_pool_s *wind_pool_get_by_mem(void *mem)
 
 w_pool_s *wind_pool_get(const char *name)
 {
-    w_pool_s *pool;
-    pool = wind_obj_get(name,&poollist);
-    return pool;
+    return (w_pool_s *)wind_obj_get(name,&poollist);
 }
 
 w_err_t wind_pool_create(const char *name,void *mem,w_uint32_t memsize,w_uint32_t obj_size)

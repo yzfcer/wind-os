@@ -54,9 +54,7 @@ w_err_t _wind_event_mod_init(void)
 
 w_event_s *wind_event_get(const char *name)
 {
-    w_event_s *event;
-    event = (w_event_s*)wind_obj_get(name,&eventlist);
-    return event;
+    return (w_event_s*)wind_obj_get(name,&eventlist);
 }
 
 w_err_t wind_event_init(w_event_s *event,const char *name)

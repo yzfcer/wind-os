@@ -91,9 +91,7 @@ w_err_t _wind_daemon_period_check(void)
 
 w_daemon_s *wind_daemon_get(const char *name)
 {
-    w_daemon_s *daemon;
-    daemon = (w_daemon_s*)wind_obj_get(name,&daemonlist);
-    return daemon;
+    return (w_daemon_s*)wind_obj_get(name,&daemonlist);
 }
 
 w_err_t wind_daemon_init(w_daemon_s *daemon,const char *name,w_daemon_fn daemon_func)

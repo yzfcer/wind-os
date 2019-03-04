@@ -62,9 +62,7 @@ void wind_msg_init(w_msg_s *msg,w_uint16_t msg_id,w_uint16_t msg_len,void *msg_a
 
 w_msgbox_s *wind_msgbox_get(const char *name)
 {
-    w_msgbox_s *msgbox;
-    msgbox = (w_msgbox_s*)wind_obj_get(name,&msgboxlist);
-    return msgbox;
+    return (w_msgbox_s*)wind_obj_get(name,&msgboxlist);
 }
 
 w_err_t wind_msgbox_init(w_msgbox_s *msgbox,const char *name)

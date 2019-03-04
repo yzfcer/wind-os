@@ -52,9 +52,7 @@ w_err_t _wind_mutex_mod_init(void)
 
 w_mutex_s *wind_mutex_get(const char *name)
 {
-    w_mutex_s *mutex;
-    mutex = (w_mutex_s*)wind_obj_get(name,&mutexlist);
-    return mutex;
+    return (w_mutex_s*)wind_obj_get(name,&mutexlist);
 }
 
 w_err_t wind_mutex_init(w_mutex_s *mutex,const char *name)

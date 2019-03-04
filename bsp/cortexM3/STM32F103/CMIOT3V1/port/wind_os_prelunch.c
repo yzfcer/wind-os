@@ -79,7 +79,7 @@ void wind_os_prelaunch(void)
     hw_preinit();
     exram_init();
     data_bss_init();
-    wind_os_lunch();
+    wind_os_launch();
 }
 
 

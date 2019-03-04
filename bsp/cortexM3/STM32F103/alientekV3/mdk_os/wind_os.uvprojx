@@ -1047,6 +1047,16 @@
               <FileType>5</FileType>
               <FilePath>..\..\..\..\..\src\core\wind_diagnose.h</FilePath>
             </File>
+            <File>
+              <FileName>wind_obj.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\core\wind_obj.c</FilePath>
+            </File>
+            <File>
+              <FileName>wind_obj.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\core\wind_obj.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

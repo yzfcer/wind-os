@@ -141,8 +141,8 @@ __Vectors_Size  EQU  __Vectors_End - __Vectors
 ; Reset handler
 Reset_Handler   PROC
                 EXPORT  Reset_Handler             [WEAK]
-                IMPORT  wind_os_prelunch       
-                LDR     R0, =wind_os_prelunch
+                IMPORT  wind_os_prelaunch       
+                LDR     R0, =wind_os_prelaunch
                 BX      R0
                 ENDP
                 
