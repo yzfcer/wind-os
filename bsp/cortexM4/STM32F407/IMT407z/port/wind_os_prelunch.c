@@ -4,7 +4,7 @@
 **                                       yzfcer@163.com
 **
 **--------------文件信息--------------------------------------------------------------------------------
-**文   件   名: wind_os_prelunch.c
+**文   件   名: wind_os_prelaunch.c
 **创   建   人: Jason Zhou
 **最后修改日期: 2019.01.06
 **描        述: wind os的预启动文件
@@ -73,13 +73,13 @@ static void exram_init(void)
 
 }
 
-extern void wind_os_lunch(void);
-void wind_os_prelunch(void)
+extern void wind_os_launch(void);
+void wind_os_prelaunch(void)
 {
     hw_preinit();
     exram_init();
     data_bss_init();
-    wind_os_lunch();
+    wind_os_launch();
 }
 
 

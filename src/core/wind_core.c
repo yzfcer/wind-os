@@ -320,7 +320,7 @@ static void _wind_init()
 
 //****************************wind_entry***********************************************
 
-int wind_os_lunch(void)
+int wind_os_launch(void)
 {
     wind_disable_interrupt();
     _wind_init();
