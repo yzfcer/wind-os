@@ -29,7 +29,7 @@
 #include "wind_mutex.h"
 #include "wind_core.h"
 #include "wind_string.h"
-#if WIND_DRVFRAME_SUPPORT
+#if WIND_CHDEV_SUPPORT
 static w_dlist_s devlist;
 
 w_err_t wind_chdev_register(w_chdev_s *dev,w_int32_t count)
@@ -41,7 +41,7 @@ w_err_t wind_chdev_register(w_chdev_s *dev,w_int32_t count)
     WIND_ASSERT_RETURN(count > 0,W_ERR_INVALID);
     for(i = 0;i < count;i ++)
     {
-        WIND_ASSERT_RETURN(dev[i].obj.magic == WIND_DEV_MAGIC,W_ERR_INVALID);
+        WIND_ASSERT_RETURN(dev[i].obj.magic == (~WIND_CHDEV_MAGIC),W_ERR_INVALID);
         wind_notice("register dev:%s",dev[i].obj.name);
         devi = wind_chdev_get(dev[i].obj.name);
         if(devi != W_NULL)
@@ -59,27 +59,19 @@ w_err_t wind_chdev_register(w_chdev_s *dev,w_int32_t count)
             }
         }
         dev[i].mutex = wind_mutex_create(dev[i].obj.name);
-        wind_disable_switch();
-        dlist_insert_tail(&devlist,&dev[i].obj.objnode);
-        wind_enable_switch();
+        wind_obj_init(&dev[i].obj,WIND_CHDEV_MAGIC,dev[i].obj.name,&devlist);
     }
     return W_ERR_OK;
 }
 
 w_err_t wind_chdev_unregister(w_chdev_s *dev)
 {
-    w_dnode_s *dnode;
+    w_err_t err;
     WIND_ASSERT_RETURN(dev != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(dev->obj.magic == WIND_DEV_MAGIC,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(dev->obj.magic == WIND_CHDEV_MAGIC,W_ERR_INVALID);
     wind_notice("unregister dev:%s",dev->obj.name);
-    wind_disable_switch();
-    dnode = dlist_remove(&devlist,&dev->obj.objnode);
-    wind_enable_switch();
-    if(dnode == W_NULL)
-    {
-        wind_error("device has NOT been registered.\r\n");
-        return W_ERR_FAIL;
-    }
+    err = wind_obj_deinit(&dev->obj,WIND_CHDEV_MAGIC,&devlist);
+    WIND_ASSERT_RETURN(err == W_ERR_OK,err);
     if(dev->ops->deinit)
         dev->ops->deinit(dev);
     wind_mutex_destroy(dev->mutex);
@@ -104,7 +96,7 @@ w_err_t wind_chdev_open(w_chdev_s *dev)
 {
     w_err_t err = W_ERR_FAIL;
     WIND_ASSERT_RETURN(dev != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(dev->obj.magic == WIND_DEV_MAGIC,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(dev->obj.magic == WIND_CHDEV_MAGIC,W_ERR_INVALID);
     WIND_ASSERT_RETURN(dev->ops != W_NULL,W_ERR_INVALID);
     if(IS_F_CHDEV_OPEN(dev))
         return W_ERR_OK;
@@ -122,7 +114,7 @@ w_err_t wind_chdev_ioctl(w_chdev_s *dev,w_int32_t cmd,void *param)
 {
     w_err_t err = W_ERR_FAIL;
     WIND_ASSERT_RETURN(dev != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(dev->obj.magic == WIND_DEV_MAGIC,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(dev->obj.magic == WIND_CHDEV_MAGIC,W_ERR_INVALID);
     WIND_ASSERT_RETURN(dev->ops != W_NULL,W_ERR_INVALID);
     WIND_ASSERT_RETURN(IS_F_CHDEV_OPEN(dev) == W_TRUE,W_ERR_STATUS);
     wind_mutex_lock(dev->mutex);
@@ -136,7 +128,7 @@ w_int32_t wind_chdev_read(w_chdev_s *dev,w_uint8_t *buf,w_int32_t len)
 {
     w_err_t err = W_ERR_FAIL;
     WIND_ASSERT_RETURN(dev != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(dev->obj.magic == WIND_DEV_MAGIC,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(dev->obj.magic == WIND_CHDEV_MAGIC,W_ERR_INVALID);
     WIND_ASSERT_RETURN(dev->ops != W_NULL,W_ERR_INVALID);
     WIND_ASSERT_RETURN(IS_F_CHDEV_OPEN(dev) == W_TRUE,W_ERR_STATUS);
     wind_mutex_lock(dev->mutex);
@@ -150,7 +142,7 @@ w_int32_t wind_chdev_write(w_chdev_s *dev,w_uint8_t *buf,w_int32_t len)
 {
     w_err_t err = W_ERR_FAIL;
     WIND_ASSERT_RETURN(dev != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(dev->obj.magic == WIND_DEV_MAGIC,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(dev->obj.magic == WIND_CHDEV_MAGIC,W_ERR_INVALID);
     WIND_ASSERT_RETURN(dev->ops != W_NULL,W_ERR_INVALID);
     WIND_ASSERT_RETURN(IS_F_CHDEV_OPEN(dev) == W_TRUE,W_ERR_STATUS);
     wind_mutex_lock(dev->mutex);
@@ -164,7 +156,7 @@ w_err_t wind_chdev_close(w_chdev_s *dev)
 {
     w_err_t err;
     WIND_ASSERT_RETURN(dev != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(dev->obj.magic == WIND_DEV_MAGIC,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(dev->obj.magic == WIND_CHDEV_MAGIC,W_ERR_INVALID);
     WIND_ASSERT_RETURN(dev->ops != W_NULL,W_ERR_INVALID);
     if(!IS_F_CHDEV_OPEN(dev))
         return W_ERR_OK;

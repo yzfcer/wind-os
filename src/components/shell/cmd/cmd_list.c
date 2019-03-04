@@ -71,10 +71,10 @@ COMMAND_USAGE(list)
     wind_printf("list timer:--show all timer infomation.\r\n");
 #endif
 
-#if WIND_DRVFRAME_SUPPORT
+#if WIND_CHDEV_SUPPORT
     wind_printf("list chdev:--show all character devices list.\r\n");
 #endif
-#if WIND_BLK_DRVFRAME_SUPPORT
+#if WIND_BLKDEV_SUPPORT
     wind_printf("list blkdev:--show all block devices list.\r\n");
 #endif
 #if WIND_WATCHDOG_SUPPORT
@@ -150,14 +150,14 @@ COMMAND_MAIN(list,argc,argv)
         return W_ERR_OK;
     }
 #endif
-#if WIND_DRVFRAME_SUPPORT
+#if WIND_CHDEV_SUPPORT
     else if(0 == wind_strcmp(argv[1],"chdev"))
     {
         wind_chdev_print();
         return W_ERR_OK;
     }
 #endif
-#if WIND_BLK_DRVFRAME_SUPPORT
+#if WIND_BLKDEV_SUPPORT
     else if(0 == wind_strcmp(argv[1],"blkdev"))
     {
         wind_blkdev_print();

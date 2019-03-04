@@ -91,7 +91,7 @@ static w_int32_t pool_diagnose(void)
     return DIAG_RES_OK;
 }
 
-static w_err_t pool_diagnose_init(void)
+w_err_t _wind_pool_diagnose_init(void)
 {
     w_err_t err;
     DIAGNOSENOSE_DEF(pool,pool_diagnose);
@@ -99,15 +99,16 @@ static w_err_t pool_diagnose_init(void)
     return err;
 }
 #else
-#define pool_diagnose_init() W_ERR_OK
+w_err_t _wind_pool_diagnose_init(void)
+{
+    return W_ERR_OK
+}
 #endif
 
 w_err_t _wind_pool_mod_init(void)
 {
-    w_err_t err;
     DLIST_INIT(poollist);
-    err = pool_diagnose_init();
-    return err;
+    return W_ERR_OK;
 }
 
 w_pool_s *wind_pool_get_by_mem(void *mem)

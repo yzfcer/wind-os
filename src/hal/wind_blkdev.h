@@ -34,7 +34,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#if WIND_BLK_DRVFRAME_SUPPORT
+#if WIND_BLKDEV_SUPPORT
 
 #define WIND_BLKDEV_MAGIC 0xB88F3D9A
 typedef struct __w_blkdev_s w_blkdev_s;

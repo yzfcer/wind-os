@@ -94,10 +94,10 @@ extern w_err_t treefs_format(void);
 static w_err_t thread_init(w_int32_t argc,char **argv)
 {   
     wind_enter_thread_hook();
-#if WIND_DRVFRAME_SUPPORT
+#if WIND_CHDEV_SUPPORT
     _wind_chdev_mod_init();
 #endif
-#if WIND_BLK_DRVFRAME_SUPPORT
+#if WIND_BLKDEV_SUPPORT
     _wind_blkdev_mod_init();
 #endif
 #if WIND_HEAP_SUPPORT

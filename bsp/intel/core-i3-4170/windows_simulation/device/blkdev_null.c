@@ -26,7 +26,7 @@
 #include "wind_debug.h"
 #include "wind_string.h"
 
-#if WIND_BLK_DRVFRAME_SUPPORT
+#if WIND_BLKDEV_SUPPORT
 
 static w_err_t   null_open(w_blkdev_s *dev)
 {

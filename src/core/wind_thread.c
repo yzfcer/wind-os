@@ -144,7 +144,7 @@ w_err_t _wind_thread_mod_init(void)
 #if WIND_STKPOOL_SUPPORT
     err = wind_pool_create("stkbuf",stkbufpool,sizeof(stkbufpool),WIND_STK_SIZE *sizeof(w_stack_t));
     WIND_ASSERT_RETURN(err == W_ERR_OK,err);
-#endif    
+#endif
     err = wind_pool_create("thread",threadpool,sizeof(threadpool),sizeof(w_thread_s));
     WIND_ASSERT_RETURN(err == W_ERR_OK,err);
     err = thread_diagnose_init();

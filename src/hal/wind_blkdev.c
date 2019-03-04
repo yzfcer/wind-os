@@ -29,7 +29,7 @@
 #include "wind_mutex.h"
 #include "wind_core.h"
 #include "wind_string.h"
-#if WIND_BLK_DRVFRAME_SUPPORT
+#if WIND_BLKDEV_SUPPORT
 static w_dlist_s blkdevlist;
 
 w_err_t wind_blkdev_register(w_blkdev_s *blkdev,w_int32_t count)

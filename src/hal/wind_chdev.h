@@ -35,9 +35,9 @@
 extern "C" {
 #endif
 
-#if WIND_DRVFRAME_SUPPORT
+#if WIND_CHDEV_SUPPORT
 
-#define WIND_DEV_MAGIC 0x68353D6A
+#define WIND_CHDEV_MAGIC 0x68353D6A
 
 #define F_CHDEV_OPEN (0x01 << 0) //标记chdev对象是否已经打开
 #define IS_F_CHDEV_OPEN(chdev) ((chdev->obj.flag & F_CHDEV_OPEN) == F_CHDEV_OPEN)
@@ -83,7 +83,7 @@ struct __w_chdev_ops_s
 };
 
 #define WIND_DEV_DEF(name,devtype,devid,ops) \
-    {{(~WIND_DEV_MAGIC),name,{W_NULL,W_NULL},0,0},devtype,devid,W_NULL,ops}
+    {{(~WIND_CHDEV_MAGIC),name,{W_NULL,W_NULL},0,0},devtype,devid,W_NULL,ops}
 
 
 w_err_t _wind_chdev_mod_init(void);

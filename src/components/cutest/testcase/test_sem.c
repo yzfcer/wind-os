@@ -156,9 +156,10 @@ CASE_FUNC(semmulti)
 {
     w_int32_t i;
     w_err_t err;
+    const char *name[4] = {"t1","t2","t3","t4"};
     for(i = 0;i < 4;i ++)
     {
-        sems[i] = wind_sem_create("test",1);
+        sems[i] = wind_sem_create(name[i],1);
         EXPECT_NE(sems[0],W_NULL);
     }
     for(i = 0;i < 4;i ++)

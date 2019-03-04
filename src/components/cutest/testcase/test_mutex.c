@@ -55,22 +55,23 @@ CASE_TEARDOWN(mutexinit)
 CASE_FUNC(mutexinit)
 {
     w_err_t err;
+    w_mutex_s *mtx;
     err = wind_mutex_init(&test_mtx,"test");
     EXPECT_EQ(err,W_ERR_OK);
-    mutexs[0] = wind_mutex_get("test");
-    EXPECT_NE(mutexs[0],W_NULL);
-    EXPECT_EQ(mutexs[0]->obj.magic,WIND_MUTEX_MAGIC);
-    EXPECT_FALSE(IS_F_MUTEX_LOCKED(mutexs[0]));
-    EXPECT_FALSE(IS_F_MUTEX_POOL(mutexs[0]));
-    EXPECT_EQ(mutexs[0]->waitlist.head,W_NULL);
-    EXPECT_EQ(mutexs[0]->waitlist.tail,W_NULL);
-    err = wind_mutex_destroy(mutexs[0]);
+    mtx = wind_mutex_get("test");
+    EXPECT_EQ(&test_mtx,mtx);
+    EXPECT_EQ(mtx->obj.magic,WIND_MUTEX_MAGIC);
+    EXPECT_FALSE(IS_F_MUTEX_LOCKED(mtx));
+    EXPECT_FALSE(IS_F_MUTEX_POOL(mtx));
+    EXPECT_EQ(mtx->waitlist.head,W_NULL);
+    EXPECT_EQ(mtx->waitlist.tail,W_NULL);
+    err = wind_mutex_destroy(&test_mtx);
     EXPECT_EQ(W_ERR_OK,err);
 
     err = wind_mutex_init(&test_mtx,W_NULL);
     EXPECT_EQ(err,W_ERR_OK);
-    mutexs[0] = wind_mutex_get(W_NULL);
-    EXPECT_EQ(mutexs[0],W_NULL);
+    mtx = wind_mutex_get(W_NULL);
+    EXPECT_EQ(mtx,W_NULL);
     err = wind_mutex_destroy(&test_mtx);
     EXPECT_EQ(W_ERR_OK,err);
     EXPECT_EQ(test_mtx.obj.magic,(~WIND_MUTEX_MAGIC));
@@ -142,9 +143,10 @@ CASE_FUNC(mutexmulti)
 {
     w_int32_t i;
     w_err_t err;
+    const char *name[4] = {"t1","t2","t3","t4"};
     for(i = 0;i < 4;i ++)
     {
-        mutexs[i] = wind_mutex_create("test");
+        mutexs[i] = wind_mutex_create(name[i]);
         EXPECT_NE(mutexs[0],W_NULL);
     }
     for(i = 0;i < 4;i ++)

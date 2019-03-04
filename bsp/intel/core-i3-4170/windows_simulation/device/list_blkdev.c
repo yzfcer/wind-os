@@ -24,7 +24,7 @@
 *******************************************************************************************************/
 #include "wind_blkdev.h"
 #include "wind_debug.h"
-#if WIND_BLK_DRVFRAME_SUPPORT
+#if WIND_BLKDEV_SUPPORT
 //extern w_blkdev_s memblk_dev[1];
 //extern w_blkdev_s spi_flash_dev[2];
 //extern w_blkdev_s at24c02_dev[1];

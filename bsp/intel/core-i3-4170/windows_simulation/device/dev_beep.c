@@ -26,7 +26,7 @@
 #include "wind_debug.h"
 #include "wind_chdev.h"
 #include "beep.h"
-#if WIND_DRVFRAME_SUPPORT
+#if WIND_CHDEV_SUPPORT
 
 static w_uint8_t beepst[1];
 w_err_t   beep_init(w_chdev_s *dev)

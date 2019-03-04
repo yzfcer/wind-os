@@ -24,7 +24,7 @@
 *******************************************************************************************************/
 #include "wind_chdev.h"
 #include "wind_debug.h"
-#if WIND_DRVFRAME_SUPPORT
+#if WIND_CHDEV_SUPPORT
 
 extern w_chdev_s gpio_dev[1];
 extern w_chdev_s led_dev[3];

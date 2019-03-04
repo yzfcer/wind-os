@@ -25,6 +25,7 @@
 #include "wind_diagnose.h"
 #include "wind_debug.h"
 #include "wind_core.h"
+#include "wind_pool.h"
 #include "wind_string.h"
 #include "wind_mutex.h"
 #include "wind_board_port.h"
@@ -38,6 +39,7 @@ static w_dlist_s diagnoselist;
 w_err_t _wind_diagnose_mod_init(void)
 {
     DLIST_INIT(diagnoselist);
+    _wind_pool_diagnose_init();
     return W_ERR_OK;
 }
 

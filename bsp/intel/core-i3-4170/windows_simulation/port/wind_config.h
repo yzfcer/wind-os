@@ -138,9 +138,9 @@ extern "C" {
 
 #define WIND_DIAGNOSE_SUPPORT 1 //是否支持系统诊断功能
 
-#define WIND_DRVFRAME_SUPPORT 1  //是否字符驱动框架
+#define WIND_CHDEV_SUPPORT 1  //是否字符驱动框架
 
-#define WIND_BLK_DRVFRAME_SUPPORT 1  //是否块驱动框架
+#define WIND_BLKDEV_SUPPORT 1  //是否块驱动框架
 
 #define WIND_LUA_SUPPORT 1 //是否支持lua脚本语言
 
@@ -155,6 +155,7 @@ extern "C" {
 
 #if WIND_SHELL_SUPPORT
 #define CMD_BLKDEV_SUPPORT 1 //是否支持块设备操作命令
+#define CMD_CHDEV_SUPPORT 1 //是否支持字符设备操作命令
 #define CMD_DATETIME_SUPPORT 0 //是否支持日期时间命令
 #define CMD_ECHO_SUPPORT 1 //是否支持回显命令
 #define CMD_FS_SUPPORT 1 //是否支持文件系统命令

@@ -26,7 +26,7 @@
 #include "wind_debug.h"
 #include "wind_string.h"
 #include "24c02.h"
-#if WIND_BLK_DRVFRAME_SUPPORT
+#if WIND_BLKDEV_SUPPORT
 
 w_err_t   at24c02_open(w_blkdev_s *dev)
 {

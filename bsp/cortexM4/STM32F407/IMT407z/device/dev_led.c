@@ -26,7 +26,7 @@
 #include "wind_debug.h"
 #include "wind_chdev.h"
 #include "led.h"
-#if WIND_DRVFRAME_SUPPORT
+#if WIND_CHDEV_SUPPORT
 
 static w_uint8_t ledst[3] = {0,0,0};
 w_err_t   led_open(w_chdev_s *dev)

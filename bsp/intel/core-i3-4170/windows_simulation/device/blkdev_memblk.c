@@ -1,7 +1,7 @@
 #include "wind_blkdev.h"
 #include "wind_debug.h"
 #include "wind_string.h"
-#if WIND_BLK_DRVFRAME_SUPPORT
+#if WIND_BLKDEV_SUPPORT
 #define MEM_SEC_COUNT 10240
 #define MEM_SEC_SIZE 512
 

@@ -26,7 +26,7 @@
 #include "wind_debug.h"
 #include "wind_string.h"
 #include "w25qxx.h"
-#if WIND_BLK_DRVFRAME_SUPPORT
+#if WIND_BLKDEV_SUPPORT
 
 w_err_t   spi_flash_open(w_blkdev_s *dev)
 {

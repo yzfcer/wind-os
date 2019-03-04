@@ -31,8 +31,8 @@
 #include "wind_string.h"
 #include "windows.h"
 #include "time.h"
-#include  < MMSystem.h >
-#pragma comment(lib, "winmm.lib")
+//#include  < MMSystem.h >
+//#pragma comment(lib, "winmm.lib")
 
 //#include "wind_os_switch.h"
 #define GET_OBJ(ptr,type,mbrnode) (void*)(((char*)(ptr))-((w_uint32_t)&(((type*)0)->mbrnode)))
@@ -147,9 +147,9 @@ void wind_start_switch(void)
     
     while(1)
     {
-        timeBeginPeriod(1);
+        //timeBeginPeriod(1);
         Sleep(1000/WIND_TICK_PER_SEC);
-        timeEndPeriod(1);
+        //timeEndPeriod(1);
         set_sleep(&mainthr,1000000);
         wind_tick_isr();
     }
