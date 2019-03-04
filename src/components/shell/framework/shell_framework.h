@@ -43,7 +43,7 @@ extern "C" {
 #define WIND_SHELL_CTX_COUNT 1//支持的控制套终端的数量
 #define CMD_PARAM_CNT 10
 
-#define USER_AUTH_ENABLE 1
+#define USER_AUTH_ENABLE 0
 #define USER_AUTH_ERR_MAX 5
 #define USER_AUTH_WAIT_SEC 60
     
@@ -57,13 +57,13 @@ extern "C" {
 
 /*********************************************结构体定义***********************************************/
 
-typedef enum __w_cslstat_e
+typedef enum __w_shstat_e
 {
     CSLSTAT_USER,//需要输入用户名
     CSLSTAT_PWD,//需要输入密码
     CSLSTAT_CMD,//在命令行模式
     CSLSTAT_APP //运行于应用程序模式,暂时无用
-} w_ctlstat_e;
+} w_shstat_e;
 
 typedef struct __w_cmd_s
 {
@@ -85,7 +85,7 @@ typedef struct __cmd_param_s
 
 typedef struct __w_shell_ctx_s
 {
-    w_ctlstat_e stat;//当前的解析状态
+    w_shstat_e stat;//当前的解析状态
     w_int32_t index;//命令的下一个字符下标
     w_int8_t key_evt_f;
     w_int8_t key_evt_len;

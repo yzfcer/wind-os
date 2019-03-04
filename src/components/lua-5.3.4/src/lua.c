@@ -657,6 +657,11 @@ int lua_main (int argc, char **argv)
     {
         lua_test();
     }
+    else if((argc == 3)&&(strcmp(argv[1],"file") == 0))
+    {
+        wind_printf("NOT supported yet.\r\n");
+        return 0;
+    }
     return 0;
 }
 

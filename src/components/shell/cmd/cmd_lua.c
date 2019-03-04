@@ -50,6 +50,8 @@ COMMAND_DISC(lua)
 COMMAND_USAGE(lua)
 {
     wind_printf("lua:--to run into lua application.\r\n");
+    wind_printf("lua test:--to run a test lua script.\r\n");
+    wind_printf("lua file <luafile>:--to run a lua script file.\r\n");
 }
 
 extern int lua_main (int argc, char **argv);
