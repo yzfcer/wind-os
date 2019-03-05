@@ -79,7 +79,7 @@ const w_chdev_ops_s gpio_ops =
 
 w_chdev_s gpio_dev[1] = 
 {
-    WIND_DEV_DEF("gpio",CHDEV_GPIO,0,&gpio_ops)
+    WIND_CHDEV_DEF("gpio",CHDEV_GPIO,0,&gpio_ops)
 };
 
 

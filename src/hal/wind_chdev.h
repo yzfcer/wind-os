@@ -82,7 +82,7 @@ struct __w_chdev_ops_s
     w_err_t   (*close)(w_chdev_s *dev);
 };
 
-#define WIND_DEV_DEF(name,devtype,devid,ops) \
+#define WIND_CHDEV_DEF(name,devtype,devid,ops) \
     {{(~WIND_CHDEV_MAGIC),name,{W_NULL,W_NULL},0,0},devtype,devid,W_NULL,ops}
 
 

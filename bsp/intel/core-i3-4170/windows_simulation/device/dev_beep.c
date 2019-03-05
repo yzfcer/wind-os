@@ -77,7 +77,7 @@ const w_chdev_ops_s beep_ops =
 
 w_chdev_s beep_dev[1] = 
 {
-    WIND_DEV_DEF("beep",0,&beep_ops),
+    WIND_CHDEV_DEF("beep",0,&beep_ops),
 };
 #endif
 
