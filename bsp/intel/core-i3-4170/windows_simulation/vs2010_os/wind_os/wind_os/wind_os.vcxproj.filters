@@ -95,21 +95,6 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_watchdog.c">
       <Filter>os_core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\src\core\systhread\thread_daemon.c">
-      <Filter>os_systhread</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\src\core\systhread\thread_idle.c">
-      <Filter>os_systhread</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\src\core\systhread\thread_init.c">
-      <Filter>os_systhread</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\src\core\systhread\thread_stati.c">
-      <Filter>os_systhread</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\src\core\systhread\thread_timer.c">
-      <Filter>os_systhread</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\..\src\hal\wind_blkdev.c">
       <Filter>os_hal</Filter>
     </ClCompile>
@@ -364,6 +349,21 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_obj.c">
       <Filter>os_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\systhread\thread_daemon.c">
+      <Filter>os_systhread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\systhread\thread_idle.c">
+      <Filter>os_systhread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\systhread\thread_init.c">
+      <Filter>os_systhread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\systhread\thread_stati.c">
+      <Filter>os_systhread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\systhread\thread_timer.c">
+      <Filter>os_systhread</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

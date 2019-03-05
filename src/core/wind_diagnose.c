@@ -97,7 +97,23 @@ static w_err_t diagnose_check(w_diagnose_s *diagnose)
     diagnose->result = diagnose->diagnose_func();
     return diagnose->result;
 }
+static w_err_t wind_diagnose_print_result(void)
+{
+    w_dnode_s *dnode;
+    w_diagnose_s *diagnose;
+    wind_printf("diagnose check result:\r\n");
+    wind_print_space(5);
+    wind_printf("%-16s %-8s %-10s\r\n","diagnose","status","errcode");
+    wind_print_space(5);
+    foreach_node(dnode,&diagnoselist)
+    {
+        diagnose = DLIST_OBJ(dnode,w_diagnose_s,obj.objnode);
+        wind_printf("%-16s %-8s %-10d\r\n",
+            diagnose->obj.name,(diagnose->result == 0)?"OK":"ERROR",diagnose->result);
+    }
+    wind_print_space(5);
 
+}
 w_err_t wind_diagnose_check(void)
 {
     w_err_t err = W_ERR_OK;
@@ -108,21 +124,11 @@ w_err_t wind_diagnose_check(void)
     foreach_node(dnode,&diagnoselist)
     {
         diagnose = (w_diagnose_s*)DLIST_OBJ(dnode,w_diagnose_s,obj.objnode);
-        wind_notice("check %s",diagnose->obj.name);
+        wind_notice(" ***** check %s",diagnose->obj.name);
         diagnose->result = diagnose_check(diagnose);
     }
-    wind_printf("--------------------------------------------------------\r\n");
-    wind_printf("diagnose check result:\r\n");
-    foreach_node(dnode,&diagnoselist)
-    {
-        diagnose = (w_diagnose_s*)DLIST_OBJ(dnode,w_diagnose_s,obj.objnode);
-        
-        if(diagnose->result != DIAG_RES_OK)
-            err = W_ERR_FAIL;
-        wind_printf("%-12s status %-6s errorcode %d\r\n",diagnose->obj.name,
-            diagnose->result==0?"OK":"ERROR",diagnose->result);
-    }
-    wind_printf("--------------------------------------------------------\r\n");
+    wind_diagnose_print_result();
+
     wind_enable_switch();
     return err;
 }

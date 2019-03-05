@@ -25,6 +25,7 @@
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -153,11 +154,6 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\components\vfs\wind_file.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\components\vfs\wind_filepath.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\components\vfs\wind_log.c" />
-    <ClCompile Include="..\..\..\..\..\..\..\src\core\systhread\thread_daemon.c" />
-    <ClCompile Include="..\..\..\..\..\..\..\src\core\systhread\thread_idle.c" />
-    <ClCompile Include="..\..\..\..\..\..\..\src\core\systhread\thread_init.c" />
-    <ClCompile Include="..\..\..\..\..\..\..\src\core\systhread\thread_stati.c" />
-    <ClCompile Include="..\..\..\..\..\..\..\src\core\systhread\thread_timer.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_core.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_daemon.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_dbgpoint.c" />
@@ -179,6 +175,11 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_watchdog.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\hal\wind_blkdev.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\hal\wind_chdev.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\systhread\thread_daemon.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\systhread\thread_idle.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\systhread\thread_init.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\systhread\thread_stati.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\systhread\thread_timer.c" />
     <ClCompile Include="..\..\..\device\blkdev_null.c" />
     <ClCompile Include="..\..\..\device\list_blkdev.c" />
     <ClCompile Include="..\..\..\device\list_dev.c" />
