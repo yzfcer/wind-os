@@ -47,7 +47,8 @@ extern "C" {
 
 typedef enum 
 {
-    CHDEV_LED = 0x01,
+    CHDEV_COMMON = 0x01,
+    CHDEV_LED,
     CHDEV_GPIO,
     CHDEV_BEEP,
     CHDEV_BUTTON,
@@ -60,16 +61,18 @@ typedef enum
 }w_chdev_e;
 
 
+
 typedef struct __w_chdev_s w_chdev_s;
 typedef struct __w_chdev_ops_s w_chdev_ops_s;
 struct __w_chdev_s
 {
     w_obj_s obj;
-    w_int8_t devtype;
-    w_int8_t devid;
+    w_int16_t devtype;
+    w_int16_t devid;
     w_mutex_s *mutex;
     const w_chdev_ops_s *ops;
 };
+
 
 struct __w_chdev_ops_s
 {

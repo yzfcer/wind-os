@@ -143,7 +143,7 @@ w_int32_t wind_blkdev_read(w_blkdev_s *blkdev,w_addr_t blkaddr,w_uint8_t *buf,w_
     
     WIND_ASSERT_RETURN(blkdev->obj.magic == WIND_BLKDEV_MAGIC,W_ERR_INVALID);
     WIND_ASSERT_RETURN(blkdev->ops != W_NULL,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(IS_F_BLKDEV_OPEN(blkdev) == W_TRUE,W_ERR_STATUS);
+    WIND_ASSERT_RETURN(IS_F_BLKDEV_OPEN(blkdev),W_ERR_STATUS);
     
     wind_mutex_lock(blkdev->mutex);
     if(blkdev->ops->read != W_NULL)
@@ -162,7 +162,7 @@ w_int32_t wind_blkdev_write(w_blkdev_s *blkdev,w_addr_t blkaddr,w_uint8_t *buf,w
     WIND_ASSERT_RETURN(blkaddr + blkcnt <= blkdev->blkcnt,W_ERR_INVALID);
     WIND_ASSERT_RETURN(blkdev->obj.magic == WIND_BLKDEV_MAGIC,W_ERR_INVALID);
     WIND_ASSERT_RETURN(blkdev->ops != W_NULL,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(IS_F_BLKDEV_OPEN(blkdev) == W_TRUE,W_ERR_STATUS);
+    WIND_ASSERT_RETURN(IS_F_BLKDEV_OPEN(blkdev),W_ERR_STATUS);
     wind_mutex_lock(blkdev->mutex);
     if(blkdev->ops->write != W_NULL)
         cnt = blkdev->ops->write(blkdev,blkaddr,buf,blkcnt);
@@ -177,7 +177,7 @@ w_err_t wind_blkdev_erase(w_blkdev_s *blkdev,w_addr_t blkaddr,w_int32_t blkcnt)
     WIND_ASSERT_RETURN(blkcnt > 0,W_ERR_INVALID);
     WIND_ASSERT_RETURN(blkdev->obj.magic == WIND_BLKDEV_MAGIC,W_ERR_INVALID);
     WIND_ASSERT_RETURN(blkdev->ops != W_NULL,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(IS_F_BLKDEV_OPEN(blkdev) == W_TRUE,W_ERR_STATUS);
+    WIND_ASSERT_RETURN(IS_F_BLKDEV_OPEN(blkdev),W_ERR_STATUS);
     wind_mutex_lock(blkdev->mutex);
     if(blkdev->ops->erase!= W_NULL)
         err = blkdev->ops->erase(blkdev,blkaddr,blkcnt);
@@ -191,7 +191,7 @@ w_err_t wind_blkdev_eraseall(w_blkdev_s *blkdev)
     WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(blkdev->obj.magic == WIND_BLKDEV_MAGIC,W_ERR_INVALID);
     WIND_ASSERT_RETURN(blkdev->ops != W_NULL,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(IS_F_BLKDEV_OPEN(blkdev) == W_TRUE,W_ERR_STATUS);
+    WIND_ASSERT_RETURN(IS_F_BLKDEV_OPEN(blkdev),W_ERR_STATUS);
     wind_mutex_lock(blkdev->mutex);
     if(blkdev->ops->eraseall!= W_NULL)
         err = blkdev->ops->eraseall(blkdev);

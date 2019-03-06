@@ -116,7 +116,7 @@ w_err_t wind_chdev_ioctl(w_chdev_s *dev,w_int32_t cmd,void *param)
     WIND_ASSERT_RETURN(dev != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(dev->obj.magic == WIND_CHDEV_MAGIC,W_ERR_INVALID);
     WIND_ASSERT_RETURN(dev->ops != W_NULL,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(IS_F_CHDEV_OPEN(dev) == W_TRUE,W_ERR_STATUS);
+    WIND_ASSERT_RETURN(IS_F_CHDEV_OPEN(dev),W_ERR_STATUS);
     wind_mutex_lock(dev->mutex);
     if(dev->ops->open != W_NULL)
         err = dev->ops->ioctl(dev,cmd,param);
@@ -130,7 +130,7 @@ w_int32_t wind_chdev_read(w_chdev_s *dev,w_uint8_t *buf,w_int32_t len)
     WIND_ASSERT_RETURN(dev != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(dev->obj.magic == WIND_CHDEV_MAGIC,W_ERR_INVALID);
     WIND_ASSERT_RETURN(dev->ops != W_NULL,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(IS_F_CHDEV_OPEN(dev) == W_TRUE,W_ERR_STATUS);
+    WIND_ASSERT_RETURN(IS_F_CHDEV_OPEN(dev),W_ERR_STATUS);
     wind_mutex_lock(dev->mutex);
     if(dev->ops->read != W_NULL)
         err = dev->ops->read(dev,buf,len);
@@ -144,7 +144,7 @@ w_int32_t wind_chdev_write(w_chdev_s *dev,w_uint8_t *buf,w_int32_t len)
     WIND_ASSERT_RETURN(dev != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(dev->obj.magic == WIND_CHDEV_MAGIC,W_ERR_INVALID);
     WIND_ASSERT_RETURN(dev->ops != W_NULL,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(IS_F_CHDEV_OPEN(dev) == W_TRUE,W_ERR_STATUS);
+    WIND_ASSERT_RETURN(IS_F_CHDEV_OPEN(dev),W_ERR_STATUS);
     wind_mutex_lock(dev->mutex);
     if(dev->ops->write != W_NULL)
         err = dev->ops->write(dev,buf,len);
