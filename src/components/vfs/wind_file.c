@@ -82,8 +82,8 @@ static w_err_t mount_param_check(char *fsname,char *blkname,char *path)
         if(blkname == W_NULL)
             continue;
         if((fs->blkdev != W_NULL) && 
-            (fs->blkdev->name != W_NULL) && 
-            (wind_strcmp(blkname,fs->blkdev->name) == 0))
+            (fs->blkdev->obj.name != W_NULL) && 
+            (wind_strcmp(blkname,fs->blkdev->obj.name) == 0))
         {
             wind_error("block device has been used");
             return W_ERR_REPEAT;

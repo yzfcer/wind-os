@@ -112,7 +112,7 @@ static w_err_t wind_diagnose_print_result(void)
             diagnose->obj.name,(diagnose->result == 0)?"OK":"ERROR",diagnose->result);
     }
     wind_print_space(5);
-
+    return W_ERR_OK;
 }
 w_err_t wind_diagnose_check(void)
 {

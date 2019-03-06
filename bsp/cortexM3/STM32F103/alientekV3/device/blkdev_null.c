@@ -73,7 +73,7 @@ const w_blkdev_ops_s null_ops =
 
 w_blkdev_s null_dev[1] = 
 {
-    WIND_BLKDEV_DEF("null",0,0,0,0,&null_ops)
+    WIND_BLKDEV_DEF("null",BLKDEV_COMMON,0,0,0,0,&null_ops)
 };
 
 #endif

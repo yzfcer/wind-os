@@ -31,7 +31,7 @@
 w_err_t   spi_flash_open(w_blkdev_s *dev)
 {
     static w_bool_t init_flag = W_FALSE;
-    if(wind_strcmp(dev->name,"spi_flash0") == 0)
+    if(wind_strcmp(dev->obj.name,"spi_flash0") == 0)
     {
         dev->blkaddr = 0;
         dev->blksize = 512;
@@ -107,8 +107,8 @@ const w_blkdev_ops_s spi_flash_ops =
 
 w_blkdev_s spi_flash_dev[2] = 
 {
-    WIND_BLKDEV_DEF("spi_flash0",0,0,16384,512,&spi_flash_ops),
-    WIND_BLKDEV_DEF("spi_flash1",1,16384,16384,512,&spi_flash_ops)
+    WIND_BLKDEV_DEF("spi_flash0",BLKDEV_SPIFLASH,0,0,16384,512,&spi_flash_ops),
+    WIND_BLKDEV_DEF("spi_flash1",BLKDEV_SPIFLASH,1,16384,16384,512,&spi_flash_ops)
 };
 
 #endif

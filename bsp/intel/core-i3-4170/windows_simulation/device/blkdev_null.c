@@ -28,17 +28,17 @@
 
 #if WIND_BLKDEV_SUPPORT
 
-static w_err_t   null_open(w_blkdev_s *dev)
+static w_err_t null_open(w_blkdev_s *dev)
 {
     return W_ERR_OK;
 }
 
-static w_err_t   null_erase(w_blkdev_s *dev,w_addr_t addr,w_int32_t blkcnt)
+static w_err_t null_erase(w_blkdev_s *dev,w_addr_t addr,w_int32_t blkcnt)
 {
     return W_ERR_OK;
 }
 
-static w_err_t   null_eraseall(w_blkdev_s *dev)
+static w_err_t null_eraseall(w_blkdev_s *dev)
 {
     return W_ERR_OK;
 }
@@ -54,12 +54,12 @@ static w_int32_t null_write(w_blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32
     return blkcnt;
 }
 
-static w_err_t   null_close(w_blkdev_s *dev)
+static w_err_t null_close(w_blkdev_s *dev)
 {
     return W_ERR_OK;
 }
 
-const w_blkdev_ops_s null_ops = 
+w_blkdev_ops_s null_ops = 
 {
     W_NULL,
     W_NULL,
@@ -73,7 +73,7 @@ const w_blkdev_ops_s null_ops =
 
 w_blkdev_s null_dev[1] = 
 {
-    WIND_BLKDEV_DEF("null",0,0,0,0,&null_ops)
+    WIND_BLKDEV_DEF("null",BLKDEV_COMMON,0,0,0,0,&null_ops)
 };
 
 #endif

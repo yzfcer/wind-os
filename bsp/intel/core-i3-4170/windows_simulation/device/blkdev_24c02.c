@@ -108,7 +108,7 @@ const w_blkdev_ops_s at24c02_ops =
 
 w_blkdev_s at24c02_dev[1] = 
 {
-    WIND_BLKDEV_DEF("at24c02",0,0,16,16,&at24c02_ops)
+    WIND_BLKDEV_DEF("at24c02",BLKDEV_EEPROM,0,0,16,16,&at24c02_ops)
 };
 
 #endif

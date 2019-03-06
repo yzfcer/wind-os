@@ -37,23 +37,41 @@ extern "C" {
 #if WIND_BLKDEV_SUPPORT
 
 #define WIND_BLKDEV_MAGIC 0xB88F3D9A
+#define F_BLKDEV_OPEN (0x01 << 0) //标记blkdev对象是否已经打开
+#define IS_F_BLKDEV_OPEN(chdev) ((chdev->obj.flag & F_BLKDEV_OPEN) == F_BLKDEV_OPEN)
+#define SET_F_BLKDEV_OPEN(chdev) (chdev->obj.flag |= F_BLKDEV_OPEN)
+#define CLR_F_BLKDEV_OPEN(chdev) (chdev->obj.flag &= (~F_BLKDEV_OPEN))
+typedef enum 
+{
+    BLKDEV_COMMON = 0x01,
+    BLKDEV_RAM,
+    BLKDEV_ROM,
+    BLKDEV_NOR,
+    BLKDEV_NAND,
+    BLKDEV_EEPROM,
+    BLKDEV_SPIFLASH,
+}w_blkdev_e;
+
 typedef struct __w_blkdev_s w_blkdev_s;
 typedef struct __w_blkdev_ops_s w_blkdev_ops_s;
 struct __w_blkdev_s
 {
-    w_uint32_t magic;
-    char name[12];
-    w_int8_t dev_id;
+    w_obj_s obj;
+    w_int16_t devtype;
+    w_int16_t devid;
     w_addr_t blkaddr;
     w_int32_t blkcnt;
     w_int32_t blksize;
-    w_bool_t opened;
-    w_dnode_s blkdevnode;
     w_mutex_s *mutex;
+    w_int32_t pad;
     const w_blkdev_ops_s *ops;
 };
-#define WIND_BLKDEV_DEF(name,devid,addr,blkcnt,blksize,ops) \
-{WIND_BLKDEV_MAGIC,name,devid,addr,blkcnt,blksize,W_FALSE,{W_NULL,W_NULL},W_NULL,ops}
+
+#define WIND_BLKDEV_DEF(name,devtype,devid,addr,blkcnt,blksize,ops) \
+{{(~WIND_BLKDEV_MAGIC),name,{W_NULL,W_NULL},0,0},devtype,devid,addr,blkcnt,blksize,W_NULL,0,ops}
+
+//#define WIND_BLKDEV_DEF(name,devid,addr,blkcnt,blksize,ops) \
+//{WIND_BLKDEV_MAGIC,name,devid,addr,blkcnt,blksize,W_FALSE,{W_NULL,W_NULL},W_NULL,ops}
 
 struct __w_blkdev_ops_s
 {
@@ -72,7 +90,7 @@ w_err_t _register_blkdevs(void);
 w_err_t wind_blkdev_register(w_blkdev_s *blkdev,w_int32_t count);
 w_err_t wind_blkdev_unregister(w_blkdev_s *blkdev);
 
-w_blkdev_s *wind_blkdev_get(char *name);
+w_blkdev_s *wind_blkdev_get(const char *name);
 w_err_t wind_blkdev_open(w_blkdev_s *blkdev);
 w_int32_t wind_blkdev_read(w_blkdev_s *blkdev,w_addr_t blkaddr,w_uint8_t *buf,w_int32_t blkcnt);
 w_int32_t wind_blkdev_write(w_blkdev_s *blkdev,w_addr_t blkaddr,w_uint8_t *buf,w_int32_t blkcnt);

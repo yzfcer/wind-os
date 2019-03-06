@@ -107,8 +107,8 @@ const w_blkdev_ops_s spi_flash_ops =
 
 w_blkdev_s spi_flash_dev[2] = 
 {
-    WIND_BLKDEV_DEF("spi_flash0",0,0,16384,512,&spi_flash_ops),
-    WIND_BLKDEV_DEF("spi_flash1",1,16384,16384,512,&spi_flash_ops)
+    WIND_BLKDEV_DEF("spi_flash0",BLKDEV_SPIFLASH,0,0,16384,512,&spi_flash_ops),
+    WIND_BLKDEV_DEF("spi_flash1",BLKDEV_SPIFLASH,1,16384,16384,512,&spi_flash_ops)
 };
 
 #endif

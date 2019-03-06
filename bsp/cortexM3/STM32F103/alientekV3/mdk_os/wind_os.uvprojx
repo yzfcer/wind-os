@@ -1115,27 +1115,27 @@
             <File>
               <FileName>thread_daemon.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\core\systhread\thread_daemon.c</FilePath>
+              <FilePath>..\..\..\..\..\src\systhread\thread_daemon.c</FilePath>
             </File>
             <File>
               <FileName>thread_idle.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\core\systhread\thread_idle.c</FilePath>
+              <FilePath>..\..\..\..\..\src\systhread\thread_idle.c</FilePath>
             </File>
             <File>
               <FileName>thread_init.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\core\systhread\thread_init.c</FilePath>
+              <FilePath>..\..\..\..\..\src\systhread\thread_init.c</FilePath>
             </File>
             <File>
               <FileName>thread_stati.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\core\systhread\thread_stati.c</FilePath>
+              <FilePath>..\..\..\..\..\src\systhread\thread_stati.c</FilePath>
             </File>
             <File>
               <FileName>thread_timer.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\core\systhread\thread_timer.c</FilePath>
+              <FilePath>..\..\..\..\..\src\systhread\thread_timer.c</FilePath>
             </File>
           </Files>
         </Group>

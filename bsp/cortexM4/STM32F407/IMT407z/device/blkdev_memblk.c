@@ -79,7 +79,7 @@ const w_blkdev_ops_s memblk_ops =
 
 w_blkdev_s memblk_dev[1] = 
 {
-    WIND_BLKDEV_DEF("memblk",0,0,0,0,&memblk_ops)
+    WIND_BLKDEV_DEF("memblk",BLKDEV_RAM,0,0,0,0,&memblk_ops)
 };
 
 #endif
