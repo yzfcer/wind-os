@@ -76,13 +76,13 @@ struct __w_chdev_s
 
 struct __w_chdev_ops_s
 {
-    w_err_t   (*init)(w_chdev_s *dev);
-    w_err_t   (*deinit)(w_chdev_s *dev);
-    w_err_t   (*open)(w_chdev_s *dev);
-    w_err_t   (*ioctl)(w_chdev_s *dev,w_int32_t cmd,void *param);
-    w_int32_t (*read)(w_chdev_s *dev,w_uint8_t *buf,w_uint16_t len);
-    w_int32_t (*write)(w_chdev_s *dev,w_uint8_t *buf,w_uint16_t len);
-    w_err_t   (*close)(w_chdev_s *dev);
+    w_err_t   (*init)(w_chdev_s *chdev);
+    w_err_t   (*deinit)(w_chdev_s *chdev);
+    w_err_t   (*open)(w_chdev_s *chdev);
+    w_err_t   (*ioctl)(w_chdev_s *chdev,w_int32_t cmd,void *param);
+    w_int32_t (*read)(w_chdev_s *chdev,w_uint8_t *buf,w_uint16_t len);
+    w_int32_t (*write)(w_chdev_s *chdev,w_uint8_t *buf,w_uint16_t len);
+    w_err_t   (*close)(w_chdev_s *chdev);
 };
 
 #define WIND_CHDEV_DEF(name,devtype,devid,ops) \
@@ -92,15 +92,15 @@ struct __w_chdev_ops_s
 w_err_t _wind_chdev_mod_init(void);
 w_err_t _register_chdevs(void);
 
-w_err_t wind_chdev_register(w_chdev_s *dev,w_int32_t count);
-w_err_t wind_chdev_unregister(w_chdev_s *dev);
+w_err_t wind_chdev_register(w_chdev_s *chdev,w_int32_t count);
+w_err_t wind_chdev_unregister(w_chdev_s *chdev);
 
 w_chdev_s *wind_chdev_get(const char *name);
-w_err_t wind_chdev_open(w_chdev_s *dev);
-w_err_t wind_chdev_ioctl(w_chdev_s *dev,w_int32_t cmd,void *param);
-w_int32_t wind_chdev_read(w_chdev_s *dev,w_uint8_t *buf,w_int32_t len);
-w_int32_t wind_chdev_write(w_chdev_s *dev,w_uint8_t *buf,w_int32_t len);
-w_err_t wind_chdev_close(w_chdev_s *dev);
+w_err_t wind_chdev_open(w_chdev_s *chdev);
+w_err_t wind_chdev_ioctl(w_chdev_s *chdev,w_int32_t cmd,void *param);
+w_int32_t wind_chdev_read(w_chdev_s *chdev,w_uint8_t *buf,w_int32_t len);
+w_int32_t wind_chdev_write(w_chdev_s *chdev,w_uint8_t *buf,w_int32_t len);
+w_err_t wind_chdev_close(w_chdev_s *chdev);
 w_err_t wind_chdev_print(void);
 
 #endif

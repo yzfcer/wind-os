@@ -42,6 +42,7 @@ w_err_t wind_blkdev_register(w_blkdev_s *blkdev,w_int32_t count)
     for(i = 0;i < count;i ++)
     {
         WIND_ASSERT_RETURN(blkdev[i].obj.magic == (~WIND_BLKDEV_MAGIC),W_ERR_INVALID);
+        WIND_ASSERT_RETURN(blkdev[i].obj.name != W_NULL,W_ERR_PTR_NULL);
         wind_notice("register blkdev:%s",blkdev[i].obj.name);
         devi = wind_blkdev_get(blkdev[i].obj.name);
         if(devi != W_NULL)
@@ -59,27 +60,19 @@ w_err_t wind_blkdev_register(w_blkdev_s *blkdev,w_int32_t count)
             }
         }
         blkdev[i].mutex = wind_mutex_create(blkdev[i].obj.name);
-        wind_disable_switch();
-        dlist_insert_tail(&blkdevlist,&blkdev[i].obj.objnode);
-        wind_enable_switch();    
+        wind_obj_init(&blkdev[i].obj,WIND_BLKDEV_MAGIC,blkdev[i].obj.name,&blkdevlist);
     }
     return W_ERR_OK;
 }
 
 w_err_t wind_blkdev_unregister(w_blkdev_s *blkdev)
 {
-    w_dnode_s *dnode;
+    w_err_t err;
     WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(blkdev->obj.magic == WIND_BLKDEV_MAGIC,W_ERR_INVALID);
     wind_notice("unregister blkdev:%s",blkdev->obj.name);
-    wind_disable_switch();
-    dnode = dlist_remove(&blkdevlist,&blkdev->obj.objnode);
-    wind_enable_switch();
-    if(dnode == W_NULL)
-    {
-        wind_error("blkdevice has NOT been registered.\r\n");
-        return W_ERR_FAIL;
-    }
+    err = wind_obj_deinit(&blkdev->obj,WIND_BLKDEV_MAGIC,&blkdevlist);
+    WIND_ASSERT_RETURN(err == W_ERR_OK,err);
     if(blkdev->ops->deinit)
         blkdev->ops->deinit(blkdev);
     wind_mutex_destroy(blkdev->mutex);
@@ -97,20 +90,7 @@ w_err_t _wind_blkdev_mod_init(void)
 
 w_blkdev_s *wind_blkdev_get(const char *name)
 {
-    w_blkdev_s *blkdev = W_NULL;
-    w_dnode_s *dnode;
-    wind_disable_switch();
-    foreach_node(dnode,&blkdevlist)
-    {
-        blkdev = DLIST_OBJ(dnode,w_blkdev_s,obj.objnode);
-        if(wind_strcmp(blkdev->obj.name,name) == 0)
-        {
-            wind_enable_switch();
-            return blkdev;
-        }
-    }
-    wind_enable_switch();
-    return W_NULL;
+    return (w_blkdev_s*)wind_obj_get(name,&blkdevlist);
 }
 
 w_err_t wind_blkdev_open(w_blkdev_s *blkdev)
