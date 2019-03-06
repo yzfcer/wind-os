@@ -87,7 +87,7 @@ __declspec(naked) static void switch_context(w_thread_s* srcthr, w_thread_s* des
 
 w_sreg_t wind_save_sr(void)
 {
-
+    return 0;
 }
 
 void wind_restore_sr(w_sreg_t sreg)

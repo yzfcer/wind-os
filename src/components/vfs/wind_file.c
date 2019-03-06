@@ -351,6 +351,7 @@ w_err_t wind_fclose(w_file_s *file)
     wind_mutex_unlock(file->mutex);
     dlist_remove(&filelist,&file->filenode);
     wind_mutex_destroy(file->mutex);
+    file->mutex = W_NULL;
     if(file->subname != W_NULL)
         wind_free(file->subname);
     wind_free(file->path);
