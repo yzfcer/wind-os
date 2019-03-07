@@ -119,7 +119,7 @@ static treefile_s *get_childnode(w_tree_s *parent,char *childname)
     treefile_s *fsnode;
     foreach_node(dnode,&parent->child_list)
     {
-        fsnode = DLIST_OBJ(dnode,treefile_s,tree.treenode);
+        fsnode = NODE_TO_TREEFILE(dnode);
         if(wind_strcmp(fsnode->filename,childname) == 0)
         {
             return fsnode;
@@ -244,7 +244,7 @@ w_err_t treefile_rm(treefile_s *file)
     wind_printf("rm %s\r\n",file->filename);
     foreach_node(dnode,&tree->child_list)
     {
-        subfile = DLIST_OBJ(dnode,treefile_s,tree.treenode);
+        subfile = NODE_TO_TREEFILE(dnode);
         treefile_rm(subfile);
     }
     if(file->tree.parent)
@@ -466,7 +466,7 @@ treefile_s *treefile_readdir(treefile_s* file,w_int32_t index)
     idx = 0;
     foreach_node(dnode,&file->tree.child_list)
     {
-        sub = (treefile_s*)DLIST_OBJ(dnode,treefile_s,tree.treenode);
+        sub = NODE_TO_TREEFILE(dnode);
         if(idx == index)
             return sub;
         idx ++;

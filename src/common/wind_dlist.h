@@ -62,7 +62,6 @@ struct __w_dlist_s
 #define PDLIST_INIT(pdlist) {pdlist->head = W_NULL;pdlist->tail = W_NULL;}
 
 #define DLIST_OBJ(ptr,type,mbrnode) (void*)(((w_uint8_t*)(ptr))-((w_uint32_t)&(((type*)0)->mbrnode)))
-#define PRI_DLIST_OBJ(ptr,type,mbrnode) (type*)(((w_uint8_t*)(ptr))-((w_uint32_t)&(((type*)0)->mbrnode.dnode)))
 #define foreach_node(dnode,list) for(dnode = dlist_head(list);dnode != W_NULL;dnode = dnode_next(dnode))
 
 

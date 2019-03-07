@@ -34,6 +34,7 @@ typedef struct
     w_int32_t layer;
     w_tree_s tree;
 }test_tree_s;
+#define TREE_TO_TEST_TREE(node) (test_tree_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((test_tree_s*)0)->tree)))
 
 WIND_POOL(test_tree,TREENUM,sizeof(test_tree_s));
 test_tree_s *trees[TREENUM+1];
@@ -65,13 +66,13 @@ void set_layer(w_tree_s *tree)
     test_tree_s *tt,*tp;
     if(tree->parent == W_NULL)
     {
-        tt = DLIST_OBJ(tree,test_tree_s,tree);
+        tt = TREE_TO_TEST_TREE(tree);
         tt->layer = layer;
     }
     else
     {
-        tt = DLIST_OBJ(tree,test_tree_s,tree);
-        tp = DLIST_OBJ(tree->parent,test_tree_s,tree);
+        tt = TREE_TO_TEST_TREE(tree);
+        tp = TREE_TO_TEST_TREE(tree->parent);
         tt->layer = tp->layer + 1;
     }
         
@@ -80,7 +81,7 @@ void print_layer(w_tree_s *tree)
 {
     w_int32_t i;
     test_tree_s *tt;
-    tt = DLIST_OBJ(tree,test_tree_s,tree);
+    tt = TREE_TO_TEST_TREE(tree);
     for(i = 0;i< tt->layer;i ++)
         test_printf("   ");
     test_printf("|---%s:%d\r\n",tt->name,tt->layer);
