@@ -136,6 +136,7 @@ struct _w_thread_s
 
 };
 
+#define PRIDNODE_TO_THREAD(dnode,mbrnode) (w_thread_s*)(((char*)(dnode))-((w_uint32_t)&(((w_thread_s*)0)->mbrnode.dnode)))
 
 
 w_err_t _wind_thread_mod_init(void);

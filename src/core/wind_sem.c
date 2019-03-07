@@ -116,7 +116,7 @@ w_err_t wind_sem_destroy(w_sem_s *sem)
     foreach_node(dnode,&sem->waitlist)
     {
         dlist_remove(&sem->waitlist,dnode);
-        thread = PRI_DLIST_OBJ(dnode,w_thread_s,suspendnode);
+        thread = PRIDNODE_TO_THREAD(dnode,suspendnode);
         thread->runstat = THREAD_STATUS_READY;
         thread->cause = CAUSE_SEM;
     }
@@ -146,7 +146,7 @@ w_err_t wind_sem_post(w_sem_s *sem)
     
     //激活被阻塞的线程，从睡眠队列移除,触发线程切换
     dlist_remove(&sem->waitlist,dnode);
-    thread = PRI_DLIST_OBJ(dnode,w_thread_s,suspendnode);
+    thread = PRIDNODE_TO_THREAD(dnode,suspendnode);
     if(thread->runstat == THREAD_STATUS_SLEEP)
         dlist_remove(sleeplist,&thread->sleepnode.dnode);
     wind_enable_switch();

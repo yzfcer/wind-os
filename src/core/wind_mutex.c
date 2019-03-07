@@ -107,7 +107,7 @@ w_err_t wind_mutex_destroy(w_mutex_s *mutex)
     foreach_node(dnode,&mutex->waitlist)
     {
         dlist_remove(&mutex->waitlist,dnode);
-        thread = PRI_DLIST_OBJ(dnode,w_thread_s,suspendnode);
+        thread = PRIDNODE_TO_THREAD(dnode,suspendnode);
         thread->runstat = THREAD_STATUS_READY;
         thread->cause = CAUSE_LOCK;
     }
@@ -199,7 +199,7 @@ w_err_t wind_mutex_unlock(w_mutex_s *mutex)
     }
 
     dlist_remove_head(&mutex->waitlist);
-    thread = PRI_DLIST_OBJ(dnode,w_thread_s,suspendnode);
+    thread = PRIDNODE_TO_THREAD(dnode,suspendnode);
     thread->runstat = THREAD_STATUS_READY;
     thread->cause = CAUSE_LOCK;
     mutex->owner = thread;

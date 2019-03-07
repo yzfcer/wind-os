@@ -103,7 +103,7 @@ w_thread_s *get_sleep_thread(char *name)
         return W_NULL;
     foreach_node(dnode,sleeplist)
     {
-        thread = PRI_DLIST_OBJ(dnode,w_thread_s,sleepnode);
+        thread = PRIDNODE_TO_THREAD(dnode,sleepnode);
         if(wind_strcmp(thread->name,name) == 0)
             return thread;
     }

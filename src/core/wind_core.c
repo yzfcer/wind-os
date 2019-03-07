@@ -143,7 +143,7 @@ static w_thread_s *wind_search_highthread(void)
     }
     foreach_node(dnode,threadlist)
     {
-        thread = PRI_DLIST_OBJ(dnode,w_thread_s,validnode);
+        thread = PRIDNODE_TO_THREAD(dnode,validnode);
         if(thread->runstat == THREAD_STATUS_READY)
         {
             thread->run_times ++;

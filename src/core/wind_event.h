@@ -59,7 +59,7 @@ struct __w_event_s
     w_dlist_s cblist;//消息队列
 };
 
-#define NODE_TO_EVET(node) (w_event_s*)(((char*)(node))-((w_uint32_t)&(((w_event_s*)0)->obj.objnode)))
+#define NODE_TO_EVET(node) (w_event_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((w_event_s*)0)->obj.objnode)))
 w_err_t _wind_event_mod_init(void);
 w_event_s *wind_event_get(const char *name);
 w_err_t wind_event_init(w_event_s *event,const char *name);

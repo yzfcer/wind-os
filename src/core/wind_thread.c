@@ -107,7 +107,7 @@ static w_int32_t thread_diagnose(void)
     wind_disable_switch();
     foreach_node(dnode,list)
     {
-        thread = (w_thread_s*)DLIST_OBJ(dnode,w_thread_s,validnode.dnode);
+        thread = PRIDNODE_TO_THREAD(dnode,validnode);
         if(thread->stack_top[0] != WIND_THREAD_STK_MARK)
         {
             wind_enable_switch();
@@ -159,7 +159,7 @@ w_thread_s *wind_thread_get(const char *name)
     wind_disable_switch();
     foreach_node(dnode,&threadlist)
     {
-        thread = DLIST_OBJ(dnode,w_thread_s,validnode);
+        thread = PRIDNODE_TO_THREAD(dnode,validnode);
         if(thread->name && (wind_strcmp(name,thread->name) == 0))
         {
             wind_enable_switch();
@@ -421,7 +421,7 @@ w_err_t wind_thread_sleep(w_uint32_t ms)
 #if 0
     foreach_node(dnode,&sleeplist)
     {
-        thread = PRI_DLIST_OBJ(dnode,w_thread_s,sleepnode);
+        thread = PRIDNODE_TO_THREAD(dnode,sleepnode);
         if(thread->prio < 0)
         {
             wind_thread_print(&sleeplist);
@@ -442,7 +442,7 @@ w_err_t _wind_thread_wakeup(void)
     WIND_ASSERT_TODO_RETURN(RUN_FLAG,wind_enable_interrupt(),W_ERR_OK);
     foreach_node(dnode,&sleeplist)
     {
-        thread = PRI_DLIST_OBJ(dnode,w_thread_s,sleepnode);
+        thread = PRIDNODE_TO_THREAD(dnode,sleepnode);
         if(thread->sleep_ticks > 0)
             thread->sleep_ticks --;
         if(thread->sleep_ticks <= 0)
@@ -488,7 +488,7 @@ w_err_t wind_thread_print(void)
     wind_print_space(7);
     foreach_node(dnode,list)
     {
-        thread = PRI_DLIST_OBJ(dnode,w_thread_s,validnode);
+        thread = PRIDNODE_TO_THREAD(dnode,validnode);
         stat = wind_thread_status(thread->runstat);
         wind_printf("%-16s %-8d %-10s %-10d %-10d\r\n",
             thread->name,thread->prio,stat,thread->stksize,thread->run_times);
