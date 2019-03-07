@@ -210,7 +210,7 @@ w_err_t wind_blkdev_print(void)
 
     foreach_node(dnode,list)
     {
-        blkdev = (w_blkdev_s *)DLIST_OBJ(dnode,w_blkdev_s,obj.objnode);
+        blkdev = NODE_TO_BLKDEV(dnode);
         wind_printf("%-16s %-12d %-10d\r\n",
             blkdev->obj.name,blkdev->blkcnt,blkdev->blksize);
     }

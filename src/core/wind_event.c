@@ -138,7 +138,7 @@ w_err_t wind_event_trig(w_event_s *event,void *arg)
     WIND_ASSERT_RETURN(event->obj.magic == WIND_EVENT_MAGIC,W_ERR_FAIL);
     foreach_node(dnode,&event->cblist)
     {
-        cb = DLIST_OBJ(dnode,w_event_cb,listenernode);
+        cb = NODE_TO_EVCB(dnode);
         if(cb != W_NULL)
             cb->cb_fn(event,arg);
     }

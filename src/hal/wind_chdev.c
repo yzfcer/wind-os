@@ -182,7 +182,7 @@ w_err_t wind_chdev_print(void)
     
     foreach_node(dnode,list)
     {
-        chdev = (w_chdev_s *)DLIST_OBJ(dnode,w_chdev_s,obj.objnode);
+        chdev = NODE_TO_CHDEV(dnode);
         wind_printf("%-12s ",chdev->obj.name);
         cnt ++;
         if((cnt & 0x03) == 0)

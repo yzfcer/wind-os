@@ -71,7 +71,7 @@ static w_err_t mount_param_check(char *fsname,char *blkname,char *path)
     }
     foreach_node(dnode,&fslist)
     {
-        fs = DLIST_OBJ(dnode,w_fs_s,fsnode);
+        fs = NODE_TO_FS(dnode);
         if((fs->mount_path != W_NULL) && 
             (wind_strcmp(path,fs->mount_path) == 0))
         {
@@ -167,7 +167,7 @@ w_fs_s *wind_fs_get(char *name)
     wind_disable_switch();
     foreach_node(dnode,&fslist)
     {
-        fs = DLIST_OBJ(dnode,w_fs_s,fsnode);
+        fs = NODE_TO_FS(dnode);
         if(wind_strcmp(name,fs->name) == 0)
         {
             wind_enable_switch();
@@ -186,7 +186,7 @@ static w_fs_s *wind_fs_get_bypath(const char *path)
     wind_disable_switch();
     foreach_node(dnode,&fslist)
     {
-        fs = DLIST_OBJ(dnode,w_fs_s,fsnode);
+        fs = NODE_TO_FS(dnode);
         len = wind_strlen(fs->mount_path);
         if(wind_memcmp(path,fs->mount_path,len) == 0)
         {
@@ -253,7 +253,7 @@ w_file_s *wind_file_get(w_fs_s *fs,const char *path)
     wind_disable_switch();
     foreach_node(dnode,&filelist)
     {
-        file = DLIST_OBJ(dnode,w_file_s,filenode);
+        file = NODE_TO_FILE(dnode);
         if((wind_strcmp(path,file->path) == 0) &&
             (file->fs == fs))
         {

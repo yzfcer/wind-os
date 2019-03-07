@@ -271,7 +271,7 @@ void *wind_heap_malloc(w_heap_s* heap,w_uint32_t size)
     wind_mutex_lock(hp->mutex);
     foreach_node(dnode,&hp->free_list)
     {
-        freeitem = PRI_DLIST_OBJ(dnode,w_heapitem_s,itemnode);
+        freeitem = NODE_TO_HEAPITEM(dnode);
         if(freeitem->size > 0xffff)
             freeitem->size = freeitem->size;
         if(size <= freeitem->size)

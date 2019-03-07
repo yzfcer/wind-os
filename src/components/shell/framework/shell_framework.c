@@ -287,7 +287,7 @@ w_cmd_s *wind_cmd_get(const char *name)
     wind_disable_switch();
     foreach_node(dnode,&g_cmdlist)
     {
-        cmd = DLIST_OBJ(dnode,w_cmd_s,cmdnode);
+        cmd = NODE_TO_CMD(dnode);
         if(wind_strcmp(name,cmd->name) == 0)
         {
             wind_enable_switch();
@@ -305,7 +305,7 @@ static w_err_t insert_cmd(w_dlist_s *list,w_cmd_s *cmd)
     w_int32_t res;
     foreach_node(dnode,list)
     {
-        lcmd = DLIST_OBJ(dnode,w_cmd_s,cmdnode);
+        lcmd = NODE_TO_CMD(dnode);
         res = wind_strcmp(cmd->name,lcmd->name);
         if(res == 0)
         {
@@ -348,7 +348,7 @@ w_err_t wind_cmd_print(void)
     wind_printf("\r\n\r\ncommand list:\r\n");
     foreach_node(dnode,&g_cmdlist)
     {
-        cmd = DLIST_OBJ(dnode,w_cmd_s,cmdnode);
+        cmd = NODE_TO_CMD(dnode);
         wind_printf("%-10s : ",cmd->name);
         cmd->showdisc();
     }
@@ -530,7 +530,7 @@ static void check_expected_cmd(w_shell_ctx_s *ctx)
     wind_printf("\r\n\r\ncommand list:\r\n");
     foreach_node(dnode,&g_cmdlist)
     {
-        cmd = DLIST_OBJ(dnode,w_cmd_s,cmdnode);
+        cmd = NODE_TO_CMD(dnode);
         if(wind_strncmp(cmd->name,ctx->param.argv[0],len) == 0)
         {
             wind_printf("%-10s : ",cmd->name);

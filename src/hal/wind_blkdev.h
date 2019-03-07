@@ -69,6 +69,7 @@ struct __w_blkdev_s
 
 #define WIND_BLKDEV_DEF(name,devtype,devid,addr,blkcnt,blksize,ops) \
 {{(~WIND_BLKDEV_MAGIC),name,{W_NULL,W_NULL},0,0},devtype,devid,addr,blkcnt,blksize,W_NULL,0,ops}
+#define NODE_TO_BLKDEV(node) (w_blkdev_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((w_blkdev_s*)0)->obj.objnode)))
 
 //#define WIND_BLKDEV_DEF(name,devid,addr,blkcnt,blksize,ops) \
 //{WIND_BLKDEV_MAGIC,name,devid,addr,blkcnt,blksize,W_FALSE,{W_NULL,W_NULL},W_NULL,ops}
