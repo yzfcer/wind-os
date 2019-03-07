@@ -106,8 +106,6 @@ struct __w_file_s
     w_mutex_s *mutex;//文件操作变量
     w_fs_ops_s *ops;//操作函数集
 };
-#define NODE_TO_FS(dnode) (w_fs_s*)(((w_uint8_t*)(dnode))-((w_uint32_t)&(((w_fs_s*)0)->fsnode)))
-#define NODE_TO_FILE(dnode) (w_file_s*)(((w_uint8_t*)(dnode))-((w_uint32_t)&(((w_file_s*)0)->filenode)))
 
 #define FS_OPS_DEF(fs) \
 static w_fs_ops_s fs_ops = {\

@@ -29,6 +29,8 @@
 #include "wind_pool.h"
 
 #if WIND_EVENT_SUPPORT
+#define NODE_TO_EVET(node) (w_event_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((w_event_s*)0)->obj.objnode)))
+#define NODE_TO_EVCB(node) (w_event_cb*)(((w_uint8_t*)(node))-((w_uint32_t)&(((w_event_cb*)0)->listenernode)))
 static w_dlist_s eventlist;
 WIND_POOL(eventpool,WIND_EVENT_MAX_NUM,sizeof(w_event_s));
 

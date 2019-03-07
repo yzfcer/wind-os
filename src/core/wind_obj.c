@@ -27,6 +27,7 @@
 #include "wind_debug.h"
 #include "wind_core.h"
 #define OBJ_MAX_LEN 32
+#define NODE_TO_OBJ(node) (w_obj_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((w_obj_s*)0)->objnode)))
 
 static calc_obj_key(const char *name)
 {

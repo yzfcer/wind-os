@@ -60,7 +60,6 @@ struct __w_daemon_s
     w_daemon_fn daemon_func;
 };
 
-#define NODE_TO_DAEMON(node) (w_daemon_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((w_daemon_s*)0)->obj.objnode)))
 
 w_err_t _wind_daemon_mod_init(void);
 w_daemon_s *wind_daemon_get(const char *name);

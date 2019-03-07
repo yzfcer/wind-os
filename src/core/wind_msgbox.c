@@ -29,6 +29,8 @@
 #include "wind_pool.h"
 
 #if WIND_MSGBOX_SUPPORT
+#define NODE_TO_MSGBOX(node) (w_msgbox_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((w_msgbox_s*)0)->obj.objnode)))
+#define NODE_TO_MSG(dnode) (w_msg_s*)(((w_uint8_t*)(dnode))-((w_uint32_t)&(((w_msg_s*)0)->msgnode)))
 static w_dlist_s msgboxlist;
 WIND_POOL(msgboxpool,WIND_MBOX_MAX_NUM,sizeof(w_msgbox_s));
 

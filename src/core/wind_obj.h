@@ -40,7 +40,6 @@ typedef struct _wind_obj
     w_uint16_t flag;
 }w_obj_s;
 
-#define NODE_TO_OBJ(node) (w_obj_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((w_obj_s*)0)->objnode)))
 
 w_obj_s *wind_obj_get(const char *name,w_dlist_s *list);
 w_err_t wind_obj_init(w_obj_s *obj,w_uint32_t magic,const char *name,w_dlist_s *list);

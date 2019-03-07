@@ -87,7 +87,6 @@ struct __w_chdev_ops_s
 
 #define WIND_CHDEV_DEF(name,devtype,devid,ops) \
     {{(~WIND_CHDEV_MAGIC),name,{W_NULL,W_NULL},0,0},devtype,devid,W_NULL,ops}
-#define NODE_TO_CHDEV(node) (w_chdev_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((w_chdev_s*)0)->obj.objnode)))
 
 
 w_err_t _wind_chdev_mod_init(void);

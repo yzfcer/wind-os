@@ -33,7 +33,6 @@ typedef struct treefs_s
     w_uint32_t bufflen;
     w_dlist_s datalist;
 }treefile_s;
-#define NODE_TO_TREEFILE(node) (treefile_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((treefile_s*)0)->tree.treenode)))
 
 void *treefs_malloc(w_int32_t size);
 w_err_t treefs_free(void *ptr);

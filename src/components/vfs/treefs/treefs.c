@@ -4,6 +4,7 @@
 #include "wind_debug.h"
 #include "wind_string.h"
 #if WIND_FS_SUPPORT
+#define NODE_TO_TREEFILE(node) (treefile_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((treefile_s*)0)->tree.treenode)))
 static treefile_s *treefile_rootnode = W_NULL;
 
 void *treefs_malloc(w_int32_t size)

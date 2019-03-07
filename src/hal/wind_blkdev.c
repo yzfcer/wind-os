@@ -30,6 +30,7 @@
 #include "wind_core.h"
 #include "wind_string.h"
 #if WIND_BLKDEV_SUPPORT
+#define NODE_TO_BLKDEV(node) (w_blkdev_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((w_blkdev_s*)0)->obj.objnode)))
 static w_dlist_s blkdevlist;
 
 w_err_t wind_blkdev_register(w_blkdev_s *blkdev,w_int32_t count)

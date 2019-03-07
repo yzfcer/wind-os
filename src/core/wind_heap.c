@@ -32,6 +32,8 @@
 #include "wind_board_port.h"
 
 #if WIND_HEAP_SUPPORT
+#define NODE_TO_HEAP(node) (w_heap_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((w_heap_s*)0)->obj.objnode)))
+#define NODE_TO_HEAPITEM(node) (w_heapitem_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((w_heapitem_s*)0)->itemnode)))
 static w_dlist_s heaplist;
 
 #define OFFSET_ADDR(base,offset) (void*)(((char*)(base))+(offset))

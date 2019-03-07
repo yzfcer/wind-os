@@ -28,6 +28,7 @@
 #include "wind_string.h"
 #include "wind_diagnose.h"
 
+#define NODE_TO_POOL(node) (w_pool_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((w_pool_s*)0)->obj.objnode)))
 #define WIND_MPOOL_ALIGN_R(x) (((x)+7) & (~0x07))
 #define WIND_MPOOL_ALIGN_L(x) ((x) & (~0x07))
 
@@ -37,6 +38,7 @@ static w_dlist_s poollist;
 
 
 #if WIND_DIAGNOSE_SUPPORT
+
 static w_int32_t poolitem_diagnose(w_pool_s *pool)
 {
     w_int32_t i;

@@ -59,7 +59,6 @@ typedef struct _wind_diagnose
     {{(~WIND_DIAGNOSE_MAGIC),#name,{W_NULL,W_NULL},0,0},0,func}
 #define DIAGNOSENOSE(name) &g_diagnose_##name
 
-#define NODE_TO_DIAGNOSENOSE(node) (w_diagnose_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((w_diagnose_s*)0)->obj.objnode)))
 
 w_err_t _wind_diagnose_mod_init(void);
 w_diagnose_s *wind_diagnose_get(const char *name);

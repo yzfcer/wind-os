@@ -61,7 +61,6 @@ typedef struct _wind_user
     w_user_e usertype;
     w_dnode_s usernode;
 }w_user_s;
-#define NODE_TO_USER(node) (w_user_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((w_user_s*)0)->usernode)))
 
 w_err_t _wind_user_mod_init(void);
 w_user_s *wind_user_get(const char *name);

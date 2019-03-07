@@ -29,6 +29,7 @@
 #include "wind_pool.h"
 
 #if WIND_TIMER_SUPPORT
+#define NODE_TO_TIMER(node) (w_timer_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((w_timer_s*)0)->obj.objnode)))
 static w_dlist_s timerlist;
 static WIND_POOL(timerpool,WIND_TIMER_MAX_NUM,sizeof(w_timer_s));
 

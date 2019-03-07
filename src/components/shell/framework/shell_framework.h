@@ -74,7 +74,6 @@ typedef struct __w_cmd_s
     w_err_t (*execute)(w_int32_t argc,char **argv);//命令的入口函数
 }w_cmd_s;
 
-#define NODE_TO_CMD(node) (w_cmd_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((w_cmd_s*)0)->cmdnode)))
 
 //得到分解后的参数列表
 typedef struct __cmd_param_s

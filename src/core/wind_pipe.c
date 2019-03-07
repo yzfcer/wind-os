@@ -30,6 +30,7 @@
 #include "wind_pool.h"
 
 #if (WIND_PIPE_SUPPORT)
+#define NODE_TO_PIPE(node) (w_pipe_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((w_pipe_s*)0)->obj.objnode)))
 static w_dlist_s pipelist;
 static WIND_POOL(pipepool,WIND_PIPE_MAX_NUM,sizeof(w_pipe_s));
 

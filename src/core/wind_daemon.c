@@ -29,6 +29,7 @@
 #include "wind_pool.h"
 
 #if WIND_DAEMON_SUPPORT
+#define NODE_TO_DAEMON(node) (w_daemon_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((w_daemon_s*)0)->obj.objnode)))
 static w_dlist_s daemonlist;
 WIND_POOL(daemonpool,WIND_DAEMON_MAX_NUM,sizeof(w_daemon_s));
 

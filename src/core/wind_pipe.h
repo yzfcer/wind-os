@@ -50,7 +50,6 @@ typedef struct __w_pipe_s
     w_uint16_t buflen;
 }w_pipe_s;
 
-#define NODE_TO_PIPE(node) (w_pipe_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((w_pipe_s*)0)->obj.objnode)))
 w_err_t _wind_pipe_mod_init(void);
 w_pipe_s* wind_pipe_get(const char *name);
 w_err_t wind_pipe_init(w_pipe_s* pipe,const char *name,void *buff,w_uint32_t buflen);

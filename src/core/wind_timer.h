@@ -61,7 +61,6 @@ struct __w_timer_s
     w_timer_fn handle;
     void *arg;
 };
-#define NODE_TO_TIMER(node) (w_timer_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((w_timer_s*)0)->obj.objnode)))
 
 w_err_t _wind_timer_mod_init(void);
 void _wind_timer_event(void);

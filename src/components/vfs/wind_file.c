@@ -34,6 +34,8 @@
 #include "wind_board_port.h"
 
 #if WIND_FS_SUPPORT
+#define NODE_TO_FS(dnode) (w_fs_s*)(((w_uint8_t*)(dnode))-((w_uint32_t)&(((w_fs_s*)0)->fsnode)))
+#define NODE_TO_FILE(dnode) (w_file_s*)(((w_uint8_t*)(dnode))-((w_uint32_t)&(((w_file_s*)0)->filenode)))
 static w_dlist_s fslist;
 static w_dlist_s filelist;
 

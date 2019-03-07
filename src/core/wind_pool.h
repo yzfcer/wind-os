@@ -76,7 +76,6 @@ struct __w_pool_s
 //定义内存池的方法
 #define WIND_POOL(pool,itemnum,itemsize) w_uint8_t pool[sizeof(w_pool_s) + itemnum *(WIND_POOL_ALIGN(itemsize) + sizeof(w_pihead_s))+8]
 
-#define NODE_TO_POOL(node) (w_pool_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((w_pool_s*)0)->obj.objnode)))
 
 w_err_t _wind_pool_mod_init(void);
 w_err_t _wind_pool_diagnose_init(void);

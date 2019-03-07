@@ -34,6 +34,7 @@
 
 
 #if WIND_WATCHDOG_SUPPORT
+#define NODE_TO_WATCHDOG(node) (w_watchdog_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((w_watchdog_s*)0)->obj.objnode)))
 static w_dlist_s watchdoglist;
 static WIND_POOL(watchdogpool,WIND_WATCHDOG_MAX_NUM,sizeof(w_watchdog_s));
 

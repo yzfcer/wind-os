@@ -53,7 +53,6 @@ typedef struct _wind_dbgpoint
     {{(~WIND_DBGPOINT_SUPPORT),#name,{W_NULL,W_NULL},0,0},lenth,read,write};
 #define DBGP(name) &g_dbgp_##name
 
-#define NODE_TO_DBGPOINT(node) (w_dbgpoint_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((w_dbgpoint_s*)0)->obj.objnode)))
 
 w_err_t _wind_dbgpoint_mod_init(void);
 w_dbgpoint_s *wind_dbgpoint_get(const char *name);

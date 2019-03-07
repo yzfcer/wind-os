@@ -49,7 +49,6 @@ typedef struct _w_sem_s
     w_int8_t sem_tot;    //初始化的信号量的值
     w_int8_t sem_num;    //当前的信号量的值
 }w_sem_s;
-#define NODE_TO_SEM(node) (w_sem_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((w_sem_s*)0)->obj.objnode)))
 
 w_err_t _wind_sem_mod_init(void);
 w_sem_s *wind_sem_get(const char *name);
