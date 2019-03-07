@@ -106,7 +106,7 @@ w_user_s *wind_user_get(const char *name)
     wind_disable_switch();
     foreach_node(dnode,&userlist)
     {
-        user = DLIST_OBJ(dnode,w_user_s,usernode);
+        user = NODE_TO_USER(dnode);
         if(user->name && (wind_strcmp(name,user->name) == 0))
         {
             wind_enable_switch();
@@ -204,7 +204,7 @@ w_err_t wind_user_print(void)
     wind_print_space(3);
     foreach_node(dnode,list)
     {
-        user = (w_user_s *)DLIST_OBJ(dnode,w_user_s,usernode);
+        user = NODE_TO_USER(dnode);
         wind_printf("%-12s %-4d\r\n",user->name,user->usertype);
     }
     wind_print_space(3);

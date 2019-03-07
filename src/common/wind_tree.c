@@ -80,7 +80,7 @@ w_err_t wind_tree_search(w_tree_s *root,w_tree_s *tree)
     WIND_ASSERT_RETURN(tree != W_NULL,W_ERR_OK);
     foreach_node(dnode,&root->child_list)
     {
-        subtree = DLIST_OBJ(dnode,w_tree_s,treenode);
+        subtree = NODE_TO_TREE(dnode);
         if(subtree == tree)
             return W_ERR_OK;
         if(W_ERR_OK == wind_tree_search(subtree,tree))
@@ -98,7 +98,7 @@ w_err_t wind_tree_visit(w_tree_s *root,void (*visit)(w_tree_s *tree))
         visit(root);
     foreach_node(dnode,&root->child_list)
     {
-        subroot = DLIST_OBJ(dnode,w_tree_s,treenode);
+        subroot = NODE_TO_TREE(dnode);
         wind_tree_visit(subroot,visit);
     }
     return W_ERR_OK;

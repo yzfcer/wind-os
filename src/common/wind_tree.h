@@ -32,6 +32,7 @@ struct __w_tree_s
     w_dlist_s child_list;
     w_dnode_s treenode;
 };
+#define NODE_TO_TREE(dnode) (w_tree_s*)(((char*)(dnode))-((w_uint32_t)&(((w_tree_s*)0)->treenode)))
 
 w_err_t wind_tree_init(w_tree_s *tree);
 w_err_t wind_tree_insert_child(w_tree_s *parent,w_tree_s *child); 

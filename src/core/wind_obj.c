@@ -59,7 +59,7 @@ static w_err_t insert_obj(w_dlist_s *list,w_obj_s *obj)
     
     foreach_node(dnode,list)
     {
-        obj1 = DLIST_OBJ(dnode,w_obj_s,objnode);
+        obj1 = NODE_TO_OBJ(dnode);
         res = wind_strcmp(obj->name,obj1->name);
         if(res == 0)
         {
@@ -89,7 +89,7 @@ w_obj_s *wind_obj_get(const char *name,w_dlist_s *list)
     wind_disable_switch();
     foreach_node(dnode,list)
     {
-        obj = DLIST_OBJ(dnode,w_obj_s,objnode);
+        obj = NODE_TO_OBJ(dnode);
         if(obj->key != key)
             continue;
         if(obj->name && (wind_strcmp(name,obj->name) == 0))
