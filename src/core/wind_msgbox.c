@@ -100,15 +100,15 @@ w_msgbox_s *wind_msgbox_create(const char *name)
 
 w_err_t wind_msgbox_trydestroy(w_msgbox_s *msgbox)
 {
-    w_dnode_s *pdnode;
+    w_dnode_s *dnode;
     w_thread_s *thread;
     WIND_ASSERT_RETURN(msgbox != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(msgbox->obj.magic == WIND_MSGBOX_MAGIC,W_ERR_INVALID);
     thread = wind_thread_current();
     WIND_ASSERT_RETURN(msgbox->owner == thread,W_ERR_FAIL);
     wind_disable_switch();
-    pdnode = dlist_head(&msgbox->msglist);
-    if(pdnode != W_NULL)
+    dnode = dlist_head(&msgbox->msglist);
+    if(dnode != W_NULL)
     {
         wind_enable_switch();
         return W_ERR_FAIL;
@@ -193,7 +193,7 @@ w_err_t wind_msgbox_wait(w_msgbox_s *msgbox,w_msg_s **pmsg,w_uint32_t timeout)
     {
         msgbox->msgnum --;
         dnode = dlist_remove_head(&msgbox->msglist);
-        *pmsg = DLIST_OBJ(dnode,w_msg_s,msgnode);
+        *pmsg = NODE_TO_MSG(dnode);
         wind_enable_switch();
         return W_ERR_OK;
     }
@@ -217,7 +217,7 @@ w_err_t wind_msgbox_wait(w_msgbox_s *msgbox,w_msg_s **pmsg,w_uint32_t timeout)
             return W_ERR_PTR_NULL;
         }
         dnode = dlist_remove_head(&msgbox->msglist);
-        *pmsg = DLIST_OBJ(dnode,w_msg_s,msgnode);
+        *pmsg = NODE_TO_MSG(dnode);
         wind_enable_switch();
         err = W_ERR_OK;
     }
@@ -248,7 +248,7 @@ w_err_t wind_msgbox_trywait(w_msgbox_s *msgbox,w_msg_s **pmsg)
     {
         msgbox->msgnum --;
         dnode = dlist_remove_head(&msgbox->msglist);
-        *pmsg = DLIST_OBJ(dnode,w_msg_s,msgnode);
+        *pmsg = NODE_TO_MSG(dnode);
         err = W_ERR_OK;
     }
     else
@@ -272,7 +272,7 @@ w_err_t wind_msgbox_print(void)
     wind_disable_switch();
     foreach_node(dnode,list)
     {
-        msgbox = (w_msgbox_s *)DLIST_OBJ(dnode,w_msgbox_s,obj.objnode);
+        msgbox = NODE_TO_MSGBOX(dnode);
         wind_printf("%-16s %-8d %-16s\r\n",
             msgbox->obj.name?msgbox->obj.name:"null",msgbox->msgnum,
             msgbox->owner->name?msgbox->owner->name:"null");

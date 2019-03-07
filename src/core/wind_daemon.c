@@ -75,7 +75,7 @@ w_err_t _wind_daemon_period_check(void)
     wind_disable_switch();
     foreach_node(dnode,&daemonlist)
     {
-        daemon = DLIST_OBJ(dnode,w_daemon_s,obj.objnode);
+        daemon = NODE_TO_DAEMON(dnode);
         if(!IS_F_DAEMON_ENABLE(daemon))
             continue;
         thread = wind_thread_get(daemon->obj.name);
@@ -161,7 +161,7 @@ w_err_t wind_daemon_print(void)
     
     foreach_node(dnode,list)
     {
-        daemon = (w_daemon_s *)DLIST_OBJ(dnode,w_daemon_s,obj.objnode);
+        daemon = NODE_TO_DAEMON(dnode);
         wind_printf("%-12s ",daemon->obj.name);
         cnt ++;
         if((cnt & 0x03) == 0)

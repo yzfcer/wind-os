@@ -60,7 +60,9 @@ typedef struct __w_msgbox_s
 }w_msgbox_s;
 
 
-#define GET_MSG(nodeptr,msgtype,msgnode) (void*)(((char*)(nodeptr))-((w_uint32_t)&(((msgtype*)0)->msgnode)))
+
+#define NODE_TO_MSGBOX(node) (w_msgbox_s*)(((char*)(node))-((w_uint32_t)&(((w_msgbox_s*)0)->obj.objnode)))
+#define NODE_TO_MSG(dnode) (w_msg_s*)(((char*)(dnode))-((w_uint32_t)&(((w_msg_s*)0)->msgnode)))
 
 void wind_msg_init(w_msg_s *msg,w_uint16_t msg_id,w_uint16_t msg_len,void *msg_arg);
 w_err_t _wind_msgbox_mod_init(void);

@@ -220,7 +220,7 @@ w_err_t wind_mutex_print(void)
     wind_disable_switch();
     foreach_node(dnode,list)
     {
-        mutex = (w_mutex_s *)DLIST_OBJ(dnode,w_mutex_s,obj.objnode);
+        mutex = NODE_TO_MUTEX(dnode);
         wind_printf("%-16s %-8s %-16s \r\n",
             mutex->obj.name?mutex->obj.name:"null",IS_F_MUTEX_LOCKED(mutex)?"lock":"unlock",
             mutex->owner != W_NULL?mutex->owner->name:"null");

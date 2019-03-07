@@ -226,9 +226,9 @@ void dlist_insert_prio(w_dlist_s *dlist, w_prinode_s *prinode,w_uint32_t prio)
 // 从链表中删除给定带优先级节点
 w_prinode_s *dlist_remove_prio(w_dlist_s *dlist,w_prinode_s *prinode)
 {
-    w_dnode_s *pdnode;
-    pdnode = dlist_remove(dlist,&prinode->dnode);
-    return DLIST_OBJ(pdnode,w_prinode_s,dnode);
+    w_dnode_s *dnode;
+    dnode = dlist_remove(dlist,&prinode->dnode);
+    return DLIST_OBJ(dnode,w_prinode_s,dnode);
 }
 
 #endif//__dlist_s_H__

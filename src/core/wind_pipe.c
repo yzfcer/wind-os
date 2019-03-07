@@ -145,7 +145,7 @@ w_err_t wind_pipe_print(void)
     wind_disable_switch();
     foreach_node(dnode,list)
     {
-        pipe = DLIST_OBJ(dnode,w_pipe_s,obj.objnode);
+        pipe = NODE_TO_PIPE(dnode);
         queue = (w_queue_s *)pipe->buff;
         size = wind_queue_max_count(queue);
         used = wind_queue_data_count(queue);

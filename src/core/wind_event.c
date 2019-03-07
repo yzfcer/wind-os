@@ -62,6 +62,7 @@ w_err_t wind_event_init(w_event_s *event,const char *name)
     wind_notice("init event:%s",name?name:"null");
     WIND_ASSERT_RETURN(event != W_NULL,W_ERR_PTR_NULL);
     DLIST_INIT(event->cblist);
+    event->cbcnt = 0;
     wind_obj_init(&event->obj, WIND_EVENT_MAGIC,name,&eventlist);
     return W_ERR_OK;
 }
@@ -101,6 +102,7 @@ w_err_t wind_event_destroy(w_event_s *event)
     }
     if(IS_F_EVENT_POOL(event))
         event_free(event);
+    event->cbcnt = 0;
     return W_ERR_OK;
 }
 
@@ -111,6 +113,7 @@ w_err_t wind_event_regcb(w_event_s *event,w_event_cb *cb)
     WIND_ASSERT_RETURN(event->obj.magic == WIND_EVENT_MAGIC,W_ERR_INVALID);
     wind_disable_switch();
     dlist_insert_tail(&event->cblist,&cb->listenernode);
+    event->cbcnt ++;
     wind_enable_switch();
     return W_ERR_OK;
 }
@@ -122,6 +125,7 @@ w_err_t wind_event_unregcb(w_event_s *event,w_event_cb *cb)
     WIND_ASSERT_RETURN(event->obj.magic == WIND_EVENT_MAGIC,W_ERR_INVALID);
     wind_disable_switch();
     dlist_remove(&event->cblist,&cb->listenernode);
+    event->cbcnt --;
     wind_enable_switch();
     return W_ERR_OK;
 }
@@ -154,7 +158,7 @@ w_err_t wind_event_print(void)
 
     foreach_node(dnode,list)
     {
-        event = (w_event_s *)DLIST_OBJ(dnode,w_event_s,obj.objnode);
+        event = NODE_TO_EVET(dnode);
         wind_printf("%-16s\r\n",event->obj.name?event->obj.name:"null");            
     }
     wind_print_space(2);

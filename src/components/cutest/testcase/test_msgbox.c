@@ -140,7 +140,7 @@ CASE_FUNC(msgboxfunc)
     EXPECT_EQ(err,W_ERR_OK);
     err = wind_msgbox_wait(msgbox,&msg,100);
     EXPECT_EQ(err,W_ERR_OK);
-    tmsg = (test_msg_s *)GET_MSG(msg,test_msg_s,msg.msgnode);
+    tmsg = &msg->msgnode;
     EXPECT_EQ(tmsg->msg.msg_id,1);
     EXPECT_EQ(tmsg->msg.msg_len,sizeof(test_msg_s));
     EXPECT_EQ(tmsg->msg.msg_arg,tmsg1);

@@ -77,7 +77,7 @@ w_err_t wind_dbgpoint_unregister(w_dbgpoint_s *dbgpoint)
 	dnode = dlist_remove(&dbgpointlist,&dbgpoint->obj.objnode);
     wind_enable_switch();
     WIND_ASSERT_RETURN(dnode != W_NULL,W_ERR_INVALID);
-    dbgp = DLIST_OBJ(dnode,w_dbgpoint_s,obj.objnode);
+    dbgp = NODE_TO_DBGPOINT(dnode);
     if(dbgp->mutex)
         wind_mutex_destroy(dbgp->mutex);
     return W_ERR_OK;  
@@ -124,7 +124,7 @@ w_err_t wind_dbgpoint_print(void)
     wind_disable_switch();
     foreach_node(dnode,list)
     {
-        dbgpoint = (w_dbgpoint_s *)DLIST_OBJ(dnode,w_dbgpoint_s,obj.objnode);
+        dbgpoint = NODE_TO_DBGPOINT(dnode);
         wind_printf("%-12s ",dbgpoint->obj.magic);
         cnt ++;
         if((cnt & 0x03) == 0)

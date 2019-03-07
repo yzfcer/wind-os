@@ -69,6 +69,7 @@ typedef struct _wind_watchdog
     w_int16_t time_cur;    //当前的信号量的值
 	w_thread_s *thread;
 }w_watchdog_s;
+#define NODE_TO_WATCHDOG(node) (w_watchdog_s*)(((char*)(node))-((w_uint32_t)&(((w_watchdog_s*)0)->obj.objnode)))
 
 w_err_t _wind_watchdog_mod_init(void);
 w_watchdog_s *wind_watchdog_get(const char *name);

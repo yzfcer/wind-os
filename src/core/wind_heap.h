@@ -81,8 +81,11 @@ struct __w_heap_s
     w_dlist_s free_list;
     void *mutex; 
     w_uint32_t pad; 
-    
 };
+
+#define NODE_TO_HEAP(node) (w_heap_s*)(((char*)(node))-((w_uint32_t)&(((w_heap_s*)0)->obj.objnode)))
+#define NODE_TO_HEAPITEM(node) (w_heapitem_s*)(((char*)(node))-((w_uint32_t)&(((w_heapitem_s*)0)->itemnode)))
+
 w_err_t _wind_heap_mod_init(void);
 
 w_heap_s *wind_heap_get(const char *name);

@@ -54,6 +54,8 @@ typedef struct _w_mutex_s
     w_dlist_s waitlist;  //等待线程队列
 }w_mutex_s;
 
+#define NODE_TO_MUTEX(node) (w_mutex_s*)(((char*)(node))-((w_uint32_t)&(((w_mutex_s*)0)->obj.objnode)))
+
 w_err_t _wind_mutex_mod_init(void);
 w_mutex_s *wind_mutex_get(const char *name);
 w_err_t wind_mutex_init(w_mutex_s *mutex,const char *name);

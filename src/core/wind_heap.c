@@ -45,7 +45,7 @@ static w_int32_t heapitem_diagnose(w_heap_s *heap)
     w_heapitem_s *heapitem;
     foreach_node(dnode,&heap->free_list)
     {
-        heapitem = (w_heapitem_s *)DLIST_OBJ(dnode,w_heapitem_s,itemnode.dnode);
+        heapitem = NODE_TO_HEAPITEM(dnode);
         if(heapitem->magic != (w_uint16_t)(~WIND_HEAPITEM_MAGIC))
         {
             wind_error("heapitem magic error,ptr=0x%x",heapitem);
@@ -54,7 +54,7 @@ static w_int32_t heapitem_diagnose(w_heap_s *heap)
     }
     foreach_node(dnode,&heap->used_list)
     {
-        heapitem = (w_heapitem_s *)DLIST_OBJ(dnode,w_heapitem_s,itemnode.dnode);
+        heapitem = NODE_TO_HEAPITEM(dnode);
         if(heapitem->magic != (w_uint16_t)WIND_HEAPITEM_MAGIC)
         {
             wind_error("heapitem magic error,ptr=0x%x",heapitem);
@@ -73,7 +73,7 @@ static w_int32_t heap_diagnose(void)
     wind_disable_switch();
     foreach_node(dnode,list)
     {
-        heap = (w_heap_s*)DLIST_OBJ(dnode,w_heap_s,obj.objnode);
+        heap = NODE_TO_HEAP(dnode);
         if(heap->obj.magic != WIND_HEAP_MAGIC)
         {
             wind_enable_switch();
@@ -260,7 +260,7 @@ void *wind_heap_malloc(w_heap_s* heap,w_uint32_t size)
 {
     void *p = W_NULL;
     w_heap_s* hp = heap;
-    w_dnode_s *pdnode;
+    w_dnode_s *dnode;
     w_heapitem_s* freeitem;
     WIND_ASSERT_RETURN(heap != W_NULL,W_NULL);
     WIND_ASSERT_RETURN(size > 0,W_NULL);
@@ -269,9 +269,9 @@ void *wind_heap_malloc(w_heap_s* heap,w_uint32_t size)
     size = __ALIGN_R(size) + sizeof(w_heapitem_s);
     
     wind_mutex_lock(hp->mutex);
-    foreach_node(pdnode,&hp->free_list)
+    foreach_node(dnode,&hp->free_list)
     {
-        freeitem = PRI_DLIST_OBJ(pdnode,w_heapitem_s,itemnode);
+        freeitem = PRI_DLIST_OBJ(dnode,w_heapitem_s,itemnode);
         if(freeitem->size > 0xffff)
             freeitem->size = freeitem->size;
         if(size <= freeitem->size)
@@ -329,7 +329,7 @@ w_err_t wind_heap_free(w_heap_s* heap,void *ptr)
 {
     
     w_heapitem_s* item,*tmpitem;
-    w_dnode_s *pdnode;
+    w_dnode_s *dnode;
     if(ptr == W_NULL)
     {
         wind_debug("wind_free:ptr=null");
@@ -349,17 +349,17 @@ w_err_t wind_heap_free(w_heap_s* heap,void *ptr)
     heapitem_init(item,heap,(w_uint16_t)(~WIND_HEAPITEM_MAGIC),item->size,0);
     wind_debug("insert3 0x%x",&item->itemnode);
     dlist_insert_prio(&heap->free_list,&item->itemnode,(w_uint32_t)item);
-    pdnode = dnode_next(&item->itemnode.dnode);
-    if(pdnode != W_NULL)
+    dnode = dnode_next(&item->itemnode.dnode);
+    if(dnode != W_NULL)
     {
-        tmpitem = DLIST_OBJ(pdnode,w_heapitem_s,itemnode.dnode);
+        tmpitem = NODE_TO_HEAPITEM(dnode);
         if(tmpitem != W_NULL)
             combine_heapitem(item,tmpitem);
     }
-    pdnode = dnode_prev(&item->itemnode.dnode);
-    if(pdnode != W_NULL)
+    dnode = dnode_prev(&item->itemnode.dnode);
+    if(dnode != W_NULL)
     {
-        tmpitem = DLIST_OBJ(pdnode,w_heapitem_s,itemnode.dnode);
+        tmpitem = NODE_TO_HEAPITEM(dnode);
         if(tmpitem != W_NULL)
             combine_heapitem(tmpitem,item);
     }
@@ -379,7 +379,7 @@ w_err_t wind_heap_print(void)
 
     foreach_node(dnode,list)
     {
-        heap = (w_heap_s *)DLIST_OBJ(dnode,w_heap_s,obj.objnode);
+        heap = NODE_TO_HEAP(dnode);
         wind_printf("%-16s 0x%08x %-12d %-10s\r\n",
             heap->obj.name?heap->obj.name:"null",heap->addr,heap->stati.tot,
             IS_F_HEAP_PRIVATE(heap)?"YES":"NO");
@@ -402,10 +402,10 @@ w_err_t wind_heapitem_print(void)
 
     foreach_node(dnode,list)
     {
-        heap = (w_heap_s*)DLIST_OBJ(dnode,w_heap_s,obj.objnode);
+        heap = NODE_TO_HEAP(dnode);
         foreach_node(dnode1,&heap->free_list)
         {
-            heapitem = (w_heapitem_s *)DLIST_OBJ(dnode1,w_heapitem_s,itemnode.dnode);
+            heapitem = NODE_TO_HEAPITEM(dnode1);
             if(heapitem->magic != (w_uint16_t)(~WIND_HEAPITEM_MAGIC))
             {
                 wind_error("heap memory has been illegally accessed .");
@@ -416,7 +416,7 @@ w_err_t wind_heapitem_print(void)
         }
         foreach_node(dnode1,&heap->used_list)
         {
-            heapitem = (w_heapitem_s *)DLIST_OBJ(dnode1,w_heapitem_s,itemnode.dnode);
+            heapitem = NODE_TO_HEAPITEM(dnode1);
             if(heapitem->magic != WIND_HEAPITEM_MAGIC)
             {
                 wind_error("heap memory:0x%x has been illegally accessed.",heapitem);
@@ -441,7 +441,7 @@ w_err_t wind_heap_stati_print(void)
     
     foreach_node(dnode,list)
     {
-        heap = (w_heap_s*)DLIST_OBJ(dnode,w_heap_s,obj.objnode);
+        heap = NODE_TO_HEAP(dnode);
         wind_printf("%-16s %-8d %-8d %-8d %-8d\r\n",heap->obj.name,heap->stati.tot,
             heap->stati.used,heap->stati.max,heap->stati.err);
     }
@@ -459,7 +459,7 @@ void *wind_malloc(w_uint32_t size)
     size = __ALIGN_R(size);
     foreach_node(dnode,&heaplist)
     {
-        heap = DLIST_OBJ(dnode,w_heap_s,obj.objnode);
+        heap = NODE_TO_HEAPITEM(dnode);
         wind_debug("malloc in heap:0x%x",heap);
         if(!IS_F_HEAP_PRIVATE(heap))
         {
@@ -504,7 +504,7 @@ void *wind_realloc(void *ptr, w_uint32_t newsize)
         return wind_malloc(newsize);
     foreach_node(dnode,&heaplist)
     {
-        heap = DLIST_OBJ(dnode,w_heap_s,obj.objnode);
+        heap = NODE_TO_HEAP(dnode);
         if(!IS_F_HEAP_PRIVATE(heap))
         {
             pnew = wind_heap_realloc(heap,ptr,newsize);

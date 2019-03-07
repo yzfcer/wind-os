@@ -54,7 +54,7 @@ static void watchdog_timer(w_timer_s *timer,void * arg)
     wind_disable_switch();
     foreach_node(dnode,&watchdoglist)
     {
-        watchdog = DLIST_OBJ(dnode,w_watchdog_s,obj.objnode);
+        watchdog = NODE_TO_WATCHDOG(dnode);
         if(!IS_F_WATCHDOG_ENABLE(watchdog))
             continue;
         wind_disable_interrupt();
@@ -183,7 +183,7 @@ w_err_t wind_watchdog_print(void)
 
     foreach_node(dnode,list)
     {
-        watchdog = (w_watchdog_s *)DLIST_OBJ(dnode,w_watchdog_s,obj.objnode);
+        watchdog = NODE_TO_WATCHDOG(dnode);
         wind_printf("%-16s %-12d %-12d\r\n",
             watchdog->obj.name,watchdog->time_max,watchdog->time_cur);
     }

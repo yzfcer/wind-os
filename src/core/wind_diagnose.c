@@ -85,7 +85,7 @@ w_err_t wind_diagnose_unregister(w_diagnose_s *diagnose)
     dnode = dlist_remove(&diagnoselist,&diagnose->obj.objnode);
     wind_enable_switch();
     WIND_ASSERT_RETURN(dnode != W_NULL,W_ERR_INVALID);
-    diag = DLIST_OBJ(dnode,w_diagnose_s,obj.objnode);
+    diag = NODE_TO_DIAGNOSENOSE(dnode);
     return W_ERR_OK;
 }
 
@@ -107,7 +107,7 @@ static w_err_t wind_diagnose_print_result(void)
     wind_print_space(5);
     foreach_node(dnode,&diagnoselist)
     {
-        diagnose = DLIST_OBJ(dnode,w_diagnose_s,obj.objnode);
+        diagnose = NODE_TO_DIAGNOSENOSE(dnode);
         wind_printf("%-16s %-8s %-10d\r\n",
             diagnose->obj.name,(diagnose->result == 0)?"OK":"ERROR",diagnose->result);
     }
@@ -123,7 +123,7 @@ w_err_t wind_diagnose_check(void)
     wind_notice("diagnose check start");
     foreach_node(dnode,&diagnoselist)
     {
-        diagnose = (w_diagnose_s*)DLIST_OBJ(dnode,w_diagnose_s,obj.objnode);
+        diagnose = NODE_TO_DIAGNOSENOSE(dnode);
         wind_notice(" ***** check %s",diagnose->obj.name);
         diagnose->result = diagnose_check(diagnose);
     }
@@ -143,7 +143,7 @@ w_err_t wind_diagnose_print(void)
     wind_printf("\r\n\r\ndiagnose list:\r\n");
     foreach_node(dnode,list)
     {
-        diagnose = (w_diagnose_s *)DLIST_OBJ(dnode,w_diagnose_s,obj.objnode);
+        diagnose = NODE_TO_DIAGNOSENOSE(dnode);
         wind_printf("%-12s ",diagnose->obj.name);
         cnt ++;
         if((cnt & 0x03) == 0)

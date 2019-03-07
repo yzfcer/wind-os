@@ -68,7 +68,7 @@ static w_int32_t pool_diagnose(void)
     wind_disable_switch();
     foreach_node(dnode,list)
     {
-        pool = (w_pool_s*)DLIST_OBJ(dnode,w_pool_s,obj.objnode);
+        pool = NODE_TO_POOL(dnode);
         if(pool->obj.magic != WIND_POOL_MAGIC)
         {
             wind_enable_switch();
@@ -245,7 +245,7 @@ w_err_t wind_pool_free(void *mem,void *block)
 
 void wind_pool_print_list(void)
 {
-    w_dnode_s *pdnode;
+    w_dnode_s *dnode;
     w_pool_s *pm;
     w_dlist_s *list = &poollist;
     wind_printf("\r\n\r\nmemory pool list:\r\n");
@@ -253,9 +253,9 @@ void wind_pool_print_list(void)
     wind_printf("%-12s %-12s %-8s %-8s %-8s\r\n","name","head","size","itemnum","itemsize");
     wind_print_space(7);
     wind_disable_switch();
-    foreach_node(pdnode,list)
+    foreach_node(dnode,list)
     {
-        pm = DLIST_OBJ(pdnode,w_pool_s,obj.objnode);
+        pm = NODE_TO_POOL(dnode);
         wind_printf("%-12s 0x%-10x %-8d %-8d %-8d\r\n",
             pm->obj.name?pm->obj.name:"null",pm->head,pm->size,pm->itemnum,pm->itemsize);
     }
@@ -275,7 +275,7 @@ void wind_pool_stati_print(void)
     wind_disable_switch();
     foreach_node(dnode,list)
     {
-        pool = (w_pool_s*)DLIST_OBJ(dnode,w_pool_s,obj.objnode);
+        pool = NODE_TO_POOL(dnode);
         wind_printf("%-16s %-8d %-8d %-8d %-8d\r\n",pool->obj.name,pool->stati.tot,
             pool->stati.used,pool->stati.max,pool->stati.err);
     }

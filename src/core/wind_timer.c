@@ -187,7 +187,7 @@ w_err_t wind_timer_print(void)
 
     foreach_node(dnode,list)
     {
-        timer = (w_timer_s *)DLIST_OBJ(dnode,w_timer_s,obj.objnode);
+        timer = NODE_TO_TIMER(dnode);
         wind_printf("%-16s %-10d %-10d %-10s %-10s\r\n",
             timer->obj.name,timer->period,timer->value,IS_F_TIMER_RUN(timer)?"running":"stop",
             IS_F_TIMER_REPEAT(timer)?"yes":"no");
@@ -200,11 +200,11 @@ w_err_t wind_timer_print(void)
 void _wind_timer_event(void)
 {
     w_timer_s* timer;
-    w_dnode_s *pdnode;
+    w_dnode_s *dnode;
     w_dlist_s *list = &timerlist;
-    foreach_node(pdnode,list)
+    foreach_node(dnode,list)
     {
-        timer = DLIST_OBJ(pdnode,w_timer_s,obj.objnode);
+        timer = NODE_TO_TIMER(dnode);
         if(timer->value > 0)
             timer->value --;
         if(timer->value == 0 && IS_F_TIMER_RUN(timer))

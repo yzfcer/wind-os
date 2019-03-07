@@ -89,12 +89,12 @@ w_sem_s *wind_sem_create(const char *name,w_int8_t sem_value)
 //试图销毁一个信号量，如果有线程被阻塞，则释放将终止
 w_err_t wind_sem_trydestroy(w_sem_s *sem)
 {
-    w_dnode_s *pdnode;
+    w_dnode_s *dnode;
     WIND_ASSERT_RETURN(sem != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(sem->obj.magic == WIND_SEM_MAGIC,W_ERR_INVALID);
     wind_disable_switch();
-    pdnode = dlist_head(&sem->waitlist);
-    if(pdnode != W_NULL)
+    dnode = dlist_head(&sem->waitlist);
+    if(dnode != W_NULL)
     {
         wind_enable_switch();
         return W_ERR_FAIL;
@@ -106,17 +106,17 @@ w_err_t wind_sem_trydestroy(w_sem_s *sem)
 w_err_t wind_sem_destroy(w_sem_s *sem)
 {
     w_err_t err;
-    w_dnode_s *pdnode;
+    w_dnode_s *dnode;
     w_thread_s *thread;
     WIND_ASSERT_RETURN(sem != W_NULL,W_ERR_PTR_NULL);
     wind_notice("destroy sem:%s",sem->obj.name != W_NULL?sem->obj.name:"null");
     err = wind_obj_deinit(&sem->obj,WIND_SEM_MAGIC,&semlist);
     WIND_ASSERT_RETURN(err == W_ERR_OK, W_ERR_FAIL);
     wind_disable_switch();
-    foreach_node(pdnode,&sem->waitlist)
+    foreach_node(dnode,&sem->waitlist)
     {
-        dlist_remove(&sem->waitlist,pdnode);
-        thread = PRI_DLIST_OBJ(pdnode,w_thread_s,suspendnode);
+        dlist_remove(&sem->waitlist,dnode);
+        thread = PRI_DLIST_OBJ(dnode,w_thread_s,suspendnode);
         thread->runstat = THREAD_STATUS_READY;
         thread->cause = CAUSE_SEM;
     }
@@ -236,7 +236,7 @@ w_err_t wind_sem_print(void)
     wind_disable_switch();
     foreach_node(dnode,list)
     {
-        sem = (w_sem_s *)DLIST_OBJ(dnode,w_sem_s,obj.objnode);
+        sem = NODE_TO_SEM(dnode);
         wind_printf("%-16s %-8d %-10d\r\n",
             sem->obj.name,sem->sem_tot,sem->sem_num);
     }
