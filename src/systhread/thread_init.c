@@ -38,7 +38,7 @@
 #include "wind_dbgpoint.h"
 #include "wind_board_port.h"
 #if WIND_FS_SUPPORT
-#include "wind_file.h"
+#include "wind_fs.h"
 #endif 
 
 #define INIT_STK_SIZE 256

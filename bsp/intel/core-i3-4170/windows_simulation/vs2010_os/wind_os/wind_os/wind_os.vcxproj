@@ -25,6 +25,7 @@
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -152,6 +153,7 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\components\vfs\treefs\treefs.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\components\vfs\wind_file.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\components\vfs\wind_filepath.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\vfs\wind_fs.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\components\vfs\wind_log.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_core.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_daemon.c" />
@@ -237,6 +239,7 @@
     <ClInclude Include="..\..\..\..\..\..\..\src\components\vfs\treefs\treefs.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\components\vfs\wind_file.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\components\vfs\wind_filepath.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\components\vfs\wind_fs.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\components\vfs\wind_log.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_core.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_daemon.h" />

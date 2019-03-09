@@ -33,8 +33,8 @@
 
 #if WIND_FS_SUPPORT
 
-w_file_s *_file_malloc(void);
-w_err_t _file_free(w_file_s *file);
+//w_file_s *file_malloc(void);
+//w_err_t file_free(w_file_s *file);
 w_err_t _wind_file_mod_init(void);
 
 

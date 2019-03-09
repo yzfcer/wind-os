@@ -365,6 +365,9 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\systhread\thread_timer.c">
       <Filter>os_systhread</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\vfs\wind_fs.c">
+      <Filter>component_vfs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">
@@ -629,6 +632,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_obj.h">
       <Filter>os_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\components\vfs\wind_fs.h">
+      <Filter>component_vfs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
