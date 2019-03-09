@@ -95,7 +95,7 @@ CASE_FUNC(fs_readwrite)
     EXPECT_EQ(len,0);
     err = wind_fclose(file);
     EXPECT_EQ(err,W_ERR_OK);
-    err = wind_fremove(file);
+    err = wind_fremove("/test.txt");
     EXPECT_EQ(err,W_ERR_OK);
     
 }
