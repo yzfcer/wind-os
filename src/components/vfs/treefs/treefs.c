@@ -158,7 +158,7 @@ static treefile_s *search_node(const char *path)
     file = treefs_get_root();
     if(cnt == 1)
     {
-        wind_error("get treefs root failed");
+        //wind_error("get treefs root failed");
         goto SEARCH_COMPLETE;
     }
         
