@@ -108,10 +108,10 @@ static w_int32_t thread_diagnose(void)
     foreach_node(dnode,list)
     {
         thread = PRIDNODE_TO_THREAD(dnode,validnode);
-        if(thread->stack_top[0] != WIND_THREAD_STK_MARK)
+        if(thread->stack_start[0] != WIND_THREAD_STK_MARK)
         {
             wind_enable_switch();
-            wind_error("thread %s stack overflow,ptr=0x%x",thread->name,thread->stack_top);
+            wind_error("thread %s stack overflow,ptr=0x%x",thread->name,thread->stack_start);
             wind_notice("check thread %-16s [ERROR]",thread->name);
             return DIAG_RES_OBJ_MAGIC_ERROR;
         }
@@ -172,7 +172,7 @@ w_thread_s *wind_thread_get(const char *name)
 
 w_thread_s *wind_thread_current(void)
 {
-    return THREAD_FROM_MEMBER(gwind_cur_stack,w_thread_s,stack);
+    return THREAD_FROM_MEMBER(gwind_cur_stack,w_thread_s,stack_cur);
 }
 
 char *wind_thread_curname(void)
@@ -201,12 +201,12 @@ w_err_t wind_thread_init(w_thread_s *thread,
     PRIO_DNODE_INIT(thread->validnode);
     PRIO_DNODE_INIT(thread->suspendnode);
     PRIO_DNODE_INIT(thread->sleepnode);
-    thread->stack = pstk;
-    thread->stack_top = pstk;
+    thread->stack_cur = pstk;
+    thread->stack_start = pstk;
     thread->stksize = stksize;
     for(i = 0;i < stksize;i ++)
-        thread->stack[i] = 0;
-    thread->stack_top[0] = WIND_THREAD_STK_MARK;
+        thread->stack_cur[i] = 0;
+    thread->stack_start[0] = WIND_THREAD_STK_MARK;
     thread->argc = argc;
     thread->argv = argv;
     thread->thread_func = thread_func;
@@ -218,7 +218,7 @@ w_err_t wind_thread_init(w_thread_s *thread,
     thread->prio = get_prio();
     
     tmpstk = _wind_thread_stack_init(thread_entry,0,pstk + stksize -1);
-    thread->stack = tmpstk;
+    thread->stack_cur = tmpstk;
     thread->run_times = 0;
     thread->runstat = THREAD_STATUS_READY;
     thread->cause = CAUSE_COMMON;
@@ -289,7 +289,7 @@ w_err_t wind_thread_destroy(w_thread_s *thread)
     //这里需要先释放一些与这个线程相关的一些东西后才能释放这个thread
 #if WIND_STKPOOL_SUPPORT
     if(IS_F_THREAD_STKPOOL(thread))
-        wind_pool_free(stkbufpool,thread->stack_top);
+        wind_pool_free(stkbufpool,thread->stack_start);
 #endif
     if(IS_F_THREAD_POOL(thread))
         thread_free(thread);

@@ -65,10 +65,10 @@ __declspec(naked) static void switch_context(w_thread_s* srcthr, w_thread_s* des
         mov esi, srcthr
         mov edi, destthr
 
-        mov [esi + w_thread_s.stack], esp
+        mov [esi + w_thread_s.stack_cur], esp
 
         //经典线程切换，另外一个线程复活
-        mov esp, [edi + w_thread_s.stack]
+        mov esp, [edi + w_thread_s.stack_cur]
 
         pop eax
         pop edx
@@ -142,7 +142,7 @@ void wind_start_switch(void)
     IDLE_CNT_PER_SEC = 1000000;
     cur = &mainthr;
     high = &mainthr;//GET_OBJ(gwind_high_stack,w_thread_s,stack);
-    gwind_cur_stack = &mainthr.stack;
+    gwind_cur_stack = &mainthr.stack_cur;
     switch_context(cur,high);
     
     while(1)
@@ -165,8 +165,8 @@ static w_err_t idle_func(w_int32_t argc,char **argv)
 void do_switch(void)
 {
     w_thread_s *cur,*high;
-    cur = GET_OBJ(gwind_cur_stack,w_thread_s,stack);
-    high = GET_OBJ(gwind_high_stack,w_thread_s,stack);
+    cur = GET_OBJ(gwind_cur_stack,w_thread_s,stack_cur);
+    high = GET_OBJ(gwind_high_stack,w_thread_s,stack_cur);
     gwind_cur_stack = gwind_high_stack;
     if(high == W_NULL)
         high = &mainthr;

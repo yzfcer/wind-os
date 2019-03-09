@@ -171,7 +171,7 @@ void wind_exit_irq(void)
     if((g_core.irq_nest <= 0) && is_switch_enable())
     {
         thread = wind_search_highthread();
-        gwind_high_stack = &thread->stack;
+        gwind_high_stack = &thread->stack_cur;
         if(gwind_high_stack != gwind_cur_stack)
         {
             wind_interrupt_switch();
@@ -187,7 +187,7 @@ static void wind_run()
     w_thread_s *thread;
     thread = wind_search_highthread();
     wind_notice("wind multple thread mode.");
-    gwind_high_stack = &thread->stack;
+    gwind_high_stack = &thread->stack_cur;
     gwind_cur_stack = gwind_high_stack;
     wind_start_switch();
 }
@@ -212,7 +212,7 @@ void _wind_thread_dispatch(void)
         wind_enable_interrupt();
         return;
     }
-    gwind_high_stack = &thread->stack;
+    gwind_high_stack = &thread->stack_cur;
     if(gwind_high_stack != gwind_cur_stack)
     {
         wind_enable_interrupt();
@@ -232,7 +232,7 @@ void _wind_switchto_thread(w_thread_s *thread)
         wind_enable_interrupt();
         return;
     }
-    gwind_high_stack = &thread->stack;
+    gwind_high_stack = &thread->stack_cur;
     if(gwind_high_stack != gwind_cur_stack)
     {
         wind_enable_interrupt();

@@ -123,9 +123,9 @@ static w_err_t display_stack(w_int32_t argc,char **argv)
     {
         return W_ERR_FAIL;
     }
-    start = (w_uint32_t)thr->stack_top;
+    start = (w_uint32_t)thr->stack_start;
     end = start + thr->stksize*sizeof(w_stack_t);
-    cur = (w_uint32_t)thr->stack;
+    cur = (w_uint32_t)thr->stack_cur;
     len = (end - cur);
     used = (end - cur) / sizeof(w_stack_t*);
     

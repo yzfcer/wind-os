@@ -116,8 +116,8 @@ struct _w_thread_s
     w_prinode_s validnode;
     w_prinode_s suspendnode;
     w_prinode_s sleepnode;
-    w_stack_t *stack;//堆栈指针
-    w_stack_t *stack_top;//栈顶指针
+    w_stack_t *stack_cur;//堆栈指针
+    w_stack_t *stack_start;//栈顶指针
     w_uint16_t stksize;//堆栈大小，以栈宽度技术
     
     w_int16_t argc;
