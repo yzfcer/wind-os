@@ -252,7 +252,8 @@ w_err_t wind_fremove(const char *path)
     }
     if(wind_strcmp(path,file->fs->mount_path) == 0)
     {
-        wind_error("can not remove fs %s root directory",file->fs->name);
+        wind_error("can not remove fs \"%s\" root directory",file->fs->name);
+        wind_fclose(file);
         return W_ERR_FAIL;
     }
     
