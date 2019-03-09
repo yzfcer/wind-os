@@ -57,7 +57,7 @@ w_pipe_s *wind_pipe_get(const char *name)
     return (w_pipe_s*)wind_obj_get(name,&pipelist);
 }
 
-w_err_t wind_pipe_init(w_pipe_s* pipe,const char *name,void *buff,w_uint32_t buflen)
+w_err_t wind_pipe_init(w_pipe_s* pipe,const char *name,void *buff,w_int32_t buflen)
 {
     w_err_t err;
     wind_notice("init pipe:%s",name?name:"null");

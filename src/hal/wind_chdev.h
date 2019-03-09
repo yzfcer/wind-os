@@ -80,8 +80,8 @@ struct __w_chdev_ops_s
     w_err_t   (*deinit)(w_chdev_s *chdev);
     w_err_t   (*open)(w_chdev_s *chdev);
     w_err_t   (*ioctl)(w_chdev_s *chdev,w_int32_t cmd,void *param);
-    w_int32_t (*read)(w_chdev_s *chdev,w_uint8_t *buf,w_uint16_t len);
-    w_int32_t (*write)(w_chdev_s *chdev,w_uint8_t *buf,w_uint16_t len);
+    w_int32_t (*read)(w_chdev_s *chdev,w_uint8_t *buf,w_int32_t len);
+    w_int32_t (*write)(w_chdev_s *chdev,w_uint8_t *buf,w_int32_t len);
     w_err_t   (*close)(w_chdev_s *chdev);
 };
 

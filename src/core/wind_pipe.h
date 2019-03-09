@@ -47,15 +47,15 @@ typedef struct __w_pipe_s
 {
     w_obj_s obj;
     void *buff;
-    w_uint16_t buflen;
+    w_int32_t buflen;
 }w_pipe_s;
 
 w_err_t _wind_pipe_mod_init(void);
 w_pipe_s* wind_pipe_get(const char *name);
-w_err_t wind_pipe_init(w_pipe_s* pipe,const char *name,void *buff,w_uint32_t buflen);
-w_pipe_s* wind_pipe_create(const char *name,void *buff,w_uint32_t buflen);
-w_int32_t wind_pipe_read(w_pipe_s* pipe,w_int8_t *str,w_int16_t len);
-w_int32_t wind_pipe_write(w_pipe_s* pipe,w_int8_t *str,w_int16_t len);
+w_err_t wind_pipe_init(w_pipe_s* pipe,const char *name,void *buff,w_int32_t buflen);
+w_pipe_s* wind_pipe_create(const char *name,void *buff,w_int32_t buflen);
+w_int32_t wind_pipe_read(w_pipe_s* pipe,w_int8_t *str,w_int32_t len);
+w_int32_t wind_pipe_write(w_pipe_s* pipe,w_int8_t *str,w_int32_t len);
 w_err_t wind_pipe_destroy(w_pipe_s* pipe);
 w_err_t wind_pipe_print(void);
 

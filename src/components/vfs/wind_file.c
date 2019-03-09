@@ -172,6 +172,7 @@ file_create_fail:
             wind_mutex_destroy(file->mutex);
         file_free(file);
     }
+    return W_NULL;
     
 }
 
@@ -198,7 +199,7 @@ w_file_s* wind_fopen(char *path,w_uint16_t fmode)
     w_uint8_t isdir;
     //char *realpath = W_NULL;
     w_int32_t pathlen,len1;
-    w_err_t err;
+    //w_err_t err;
     WIND_ASSERT_RETURN(path != W_NULL,W_NULL);
     wind_debug("open file:%s",path);
     file = wind_file_get_bypath(path);
@@ -298,6 +299,8 @@ w_err_t wind_fseek(w_file_s *file,w_int32_t offset)
     wind_mutex_lock(file->mutex);
     if(file->fs->ops->seek)
         err = file->fs->ops->seek(file,offset);
+    if(err == W_ERR_OK)
+        file->offset = offset;
     wind_mutex_unlock(file->mutex);
     return err;
 }

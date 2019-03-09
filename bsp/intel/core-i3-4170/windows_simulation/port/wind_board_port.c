@@ -72,7 +72,7 @@ void _wind_heaps_create(void)
  * 在系统需要支持文件系统功能时，需要在这里初始化mount的规则，
  * 在不需要文件系统时，可以不实现
  */ 
-#include "wind_file.h"
+#include "wind_fs.h"
 void _wind_fs_mount_init(void)
 {
     wind_fs_mount("treefs","null","/");

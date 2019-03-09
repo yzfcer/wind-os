@@ -110,9 +110,9 @@ w_thread_s *get_sleep_thread(char *name)
     return W_NULL;
 }
 
-static void set_sleep(w_thread_s *thread,w_uint32_t ms)
+static void set_sleep(w_thread_s *thread,w_int32_t ms)
 {
-    w_uint16_t stcnt;
+    w_int32_t stcnt;
     w_dlist_s *sleeplist = _wind_thread_sleep_list();
     stcnt = ms *WIND_TICK_PER_SEC / 1000;
     if(0 == stcnt)
