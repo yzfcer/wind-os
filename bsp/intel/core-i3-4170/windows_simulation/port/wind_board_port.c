@@ -104,7 +104,7 @@ w_stack_t *_wind_thread_stack_init(thread_run_f pfunc,void *pdata, w_stack_t *ps
     //申请空间
     stk_pages = (unsigned char*)VirtualAlloc(NULL, GMTHREADSTACKSIZE, MEM_COMMIT, PAGE_READWRITE);
     ZeroMemory(stk_pages, GMTHREADSTACKSIZE);
-    pstkbt = stk_pages+GMTHREADSTACKSIZE;
+	pstkbt = (w_stack_t*)(stk_pages+GMTHREADSTACKSIZE);
     
     push_stack(&pstkbt, (w_stack_t)pdata);        //通过这个指针来找到线程函数，线程参数
     push_stack(&pstkbt, (w_stack_t)0);            //平衡堆栈的(不用管)

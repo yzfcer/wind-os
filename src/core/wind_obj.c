@@ -118,7 +118,7 @@ w_err_t wind_obj_deinit(w_obj_s *obj,w_uint32_t magic,w_dlist_s *list)
 {
     w_dnode_s *dnode;
     WIND_ASSERT_RETURN(obj->magic == magic,W_ERR_INVALID);
-    wind_notice("destroy obj:%s",obj->name != W_NULL?obj->name:"null");
+    //wind_notice("destroy obj:%s",obj->name != W_NULL?obj->name:"null");
     wind_disable_switch();
     dnode = dlist_remove(list,&obj->objnode);
     wind_enable_switch();

@@ -56,7 +56,7 @@ static w_err_t fs_cmd_cd(w_int32_t argc,char **argv)
     if(argc < 3)
         return W_ERR_FAIL;
     fullpath = wind_full_path_generate(curpath,argv[2],1);
-    isexist = wind_fcheck(fullpath);
+    isexist = wind_file_check(fullpath);
     if(!isexist)
     {
         wind_printf("directory:\"%s\" is NOT exist.\r\n",fullpath);
@@ -77,7 +77,7 @@ static w_err_t mk_dir_file(w_int32_t argc,char **argv,w_uint16_t isdir)
     if(argc < 3)
         return W_ERR_INVALID;
     fullpath = wind_full_path_generate(curpath,argv[2],isdir);
-    isexist = wind_fcheck(fullpath);
+    isexist = wind_file_check(fullpath);
     if(isexist)
     {
         wind_printf("directory has been existing.\r\n");
@@ -106,7 +106,7 @@ static w_err_t fs_cmd_touch(w_int32_t argc,char **argv)
 static w_err_t fs_cmd_rm(w_int32_t argc,char **argv)
 {
     w_err_t err;
-    w_file_s *file;
+    //w_file_s *file;
     w_int32_t len;
     char *curpath;
     char * fullpath;
@@ -115,15 +115,16 @@ static w_err_t fs_cmd_rm(w_int32_t argc,char **argv)
     curpath = wind_file_get_current_path();
     len = wind_strlen(argv[2]);
     fullpath = wind_full_path_generate(curpath,argv[2],argv[2][len-1] == '/'?1:0);
-    file = wind_fopen(fullpath,FMODE_R);
-    if(file == W_NULL)
-    {
-        wind_printf("open directory or file failed.\r\n");
-        wind_full_path_release(fullpath);
-        return W_ERR_NOFILE;
-    }
-    err = wind_fremove(file);
-    wind_fclose(file);
+    //file = wind_fopen(fullpath,FMODE_R);
+    //if(file == W_NULL)
+    //{
+    //    wind_printf("open directory or file failed.\r\n");
+    //    wind_full_path_release(fullpath);
+    //    return W_ERR_NOFILE;
+    //}
+    err = wind_fremove(fullpath);
+    wind_notice("remove file :%s %s",fullpath,err == W_ERR_OK?"successed":"failed");
+    //wind_fclose(file);
     wind_full_path_release(fullpath);
     return err;
 }

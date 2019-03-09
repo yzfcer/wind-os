@@ -24,7 +24,7 @@
 *******************************************************************************************************/
 #include "wind_config.h"
 #include "wind_type.h"
-//#include "adapter_treefs.h"
+#include "wind_fs.h"
 #include "wind_file.h"
 #include "treefs.h"
 #include "wind_debug.h"

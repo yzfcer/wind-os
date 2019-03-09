@@ -46,19 +46,19 @@ CASE_FUNC(fs_create)
     EXPECT_NE(file,W_NULL);
     err = wind_fclose(file);
     EXPECT_EQ(err,W_ERR_OK);
-    err = wind_fremove(file);
+    err = wind_fremove("/test.txt");
     EXPECT_EQ(err,W_ERR_OK);
     file = wind_fopen("/test1.txt",FMODE_CRT);
     EXPECT_NE(file,W_NULL);
     err = wind_fclose(file);
     EXPECT_EQ(err,W_ERR_OK);
-    err = wind_fremove(file);
+    err = wind_fremove("/test1.txt");
     EXPECT_EQ(err,W_ERR_OK);
     file = wind_fopen("/test2.txt",FMODE_CRT);
     EXPECT_NE(file,W_NULL);
     err = wind_fclose(file);
     EXPECT_EQ(err,W_ERR_OK);
-    err = wind_fremove(file);
+    err = wind_fremove("/test2.txt");
     EXPECT_EQ(err,W_ERR_OK);
 }
 
