@@ -45,10 +45,6 @@ static w_err_t mk_fat32_file(char *root_dir,struct _finddata_t *fileinfo,char *n
     wind_notice("root:%s",root_dir);
     wind_notice("file:%s",newfile);
     
-    //fw = (File*)wind_malloc(sizeof(File));
-    //res = file_fopen(fw,&efs.myFs,path,MODE_READ);
-    //WIND_ASSERT_TODO_RETURN(0 == res,wind_free(fw),W_ERR_FAIL);
-
     return W_ERR_OK;
 }
 

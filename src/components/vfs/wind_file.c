@@ -101,7 +101,6 @@ w_file_s *wind_file_get_bypath(const char *path)
 {
     w_file_s *file;
     w_fs_s *fs;
-    //char *realpath = W_NULL;
     w_int32_t len;
     WIND_ASSERT_RETURN(path != W_NULL,W_NULL);
     wind_debug("open file:%s",path);
@@ -113,12 +112,7 @@ w_file_s *wind_file_get_bypath(const char *path)
         wind_error("path:%s NOT exsit.",path);
         return W_NULL;
     }
-    //len1 = wind_strlen(fs->mount_path);
-    //realpath = wind_malloc(len-len1+2);
-    //wind_strcpy(realpath,(const char*)&path[len1-1]);
-    
     file = wind_file_get(fs,path);
-    //wind_free(realpath);
     return file;
 
 }
@@ -180,7 +174,6 @@ static w_err_t wind_file_destroy(w_file_s *file)
 {
     WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(file->mutex != W_NULL,W_ERR_PTR_NULL);
-    //WIND_ASSERT_RETURN(file->subname != W_NULL,W_ERR_PTR_NULL);
     wind_disable_switch();
     dlist_remove(&filelist,&file->filenode);
     wind_enable_switch();
@@ -197,16 +190,13 @@ w_file_s* wind_fopen(const char *path,w_uint16_t fmode)
     w_file_s *file;
     w_fs_s *fs;
     w_uint8_t isdir;
-    //char *realpath = W_NULL;
     w_int32_t pathlen,len1;
-    //w_err_t err;
     WIND_ASSERT_RETURN(path != W_NULL,W_NULL);
     wind_debug("open file:%s",path);
     file = wind_file_get_bypath(path);
     if(file != W_NULL)
     {
         wind_error("file has been opened.");
-        //wind_free(realpath);
         return W_NULL;
     }
     
@@ -219,8 +209,6 @@ w_file_s* wind_fopen(const char *path,w_uint16_t fmode)
         return W_NULL;
     }
     len1 = wind_strlen(fs->mount_path);
-    //realpath = wind_malloc(pathlen-len1+2);
-    //wind_strcpy(realpath,(const char*)&path[len1-1]);
     isdir = path[pathlen-1] == '/'?1:0;
     file = wind_file_create(fs,(const char*)&path[len1-1],fmode, isdir);
     return file;

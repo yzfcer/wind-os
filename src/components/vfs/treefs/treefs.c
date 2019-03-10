@@ -65,7 +65,6 @@ int split_path(char *path,char **layers,w_int32_t layercnt)
             wind_error("path is too deep");
             return -1;
         }
-            
         layers[i] = &path[j];
         for(;j < len;j ++)
         {
@@ -158,7 +157,6 @@ static treefile_s *search_node(const char *path)
     file = treefs_get_root();
     if(cnt == 1)
     {
-        //wind_error("get treefs root failed");
         goto SEARCH_COMPLETE;
     }
         
