@@ -212,6 +212,7 @@ static treefile_s *make_node(const char *path)
         return W_NULL;
     }
     file = mk_subnode(file,nodename,isdir);
+    treefs_free(dirname);
     return file;
 }
 
@@ -253,6 +254,7 @@ w_err_t treefile_rm(treefile_s *file)
         dlist_remove(&file->datalist,dnode);
         treefs_free(dnode);
     }
+    wind_printf("treefs free name;0x%x",file->filename);
     treefs_free(file->filename);
     treefs_free(file);
     return W_ERR_OK;
@@ -272,8 +274,8 @@ w_err_t treefs_format(void)
         return W_ERR_FAIL;
     }
         
+#if 1
     treefs_set_root(root);
-    #if 1
     treefile_create("/var/");
     treefile_create("/mnt/");
     treefile_create("/usr/");
@@ -309,7 +311,6 @@ treefile_s* treefile_open(const char *path,w_uint16_t mode)
     file = search_node(path);
     if((file == W_NULL) && (!is_crt))
     {
-        //wind_error("open file is not existing");
         return W_NULL;
     }
         

@@ -246,19 +246,16 @@ w_err_t wind_fremove(const char *path)
         return W_ERR_FAIL;
     }
     
-    if((file != W_NULL)&&(file->fs->ops->close))
+    if(file->fs->ops->close)
         file->fs->ops->close(file);
 
     wind_debug("remove file:%s",file->path);
     wind_mutex_lock(file->mutex);
     if(file->fs->ops->remove)
-        err = file->fs->ops->remove(file);
+        file->fs->ops->remove(file);
     wind_mutex_unlock(file->mutex);
-    dlist_remove(&filelist,&file->filenode);
-    wind_mutex_destroy(file->mutex);
-    file_free(file);
-    wind_free(file->path);
-    return err;
+    wind_file_destroy(file);
+    return W_ERR_OK;
 }
 
 char* wind_fchild(w_file_s *dir,w_int32_t index)

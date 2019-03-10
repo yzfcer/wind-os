@@ -115,16 +115,8 @@ static w_err_t fs_cmd_rm(w_int32_t argc,char **argv)
     curpath = wind_file_get_current_path();
     len = wind_strlen(argv[2]);
     fullpath = wind_full_path_generate(curpath,argv[2],argv[2][len-1] == '/'?1:0);
-    //file = wind_fopen(fullpath,FMODE_R);
-    //if(file == W_NULL)
-    //{
-    //    wind_printf("open directory or file failed.\r\n");
-    //    wind_full_path_release(fullpath);
-    //    return W_ERR_NOFILE;
-    //}
     err = wind_fremove(fullpath);
     wind_notice("remove file :%s %s",fullpath,err == W_ERR_OK?"successed":"failed");
-    //wind_fclose(file);
     wind_full_path_release(fullpath);
     return err;
 }
@@ -144,7 +136,7 @@ static w_err_t fs_cmd_ls(w_int32_t argc,char **argv)
     if(file == W_NULL)
     {
         wind_printf("open directory or file failed.\r\n");
-        wind_free(fullpath);
+        wind_full_path_release(fullpath);
         return W_ERR_NOFILE;
     }
     for(i = 0;;i ++)
