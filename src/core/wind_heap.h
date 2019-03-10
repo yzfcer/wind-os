@@ -68,7 +68,7 @@ struct __w_heapitem_s
     w_uint16_t flag;
     w_heap_s *heap;
     w_prinode_s itemnode;
-    w_int32_t size;
+    w_uint32_t size;
 };
 
 

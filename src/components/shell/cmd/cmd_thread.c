@@ -96,7 +96,9 @@ COMMAND_MAIN(thread,argc,argv)
         res = wind_atoi(argv[3],&prio);
         if(res != W_TRUE)
             return W_ERR_INVALID;
-        wind_thread_set_priority(thread,prio);
+        WIND_ASSERT_RETURN(prio > 0,W_ERR_INVALID);
+        WIND_ASSERT_RETURN(prio <= 0x7fff,W_ERR_INVALID);
+        wind_thread_set_priority(thread,(w_int16_t)prio);
         return W_ERR_OK;
     }
     return W_ERR_FAIL;

@@ -28,6 +28,8 @@
 #include "wind_string.h"
 #include "wind_conv.h"
 #include "wind_std.h"
+#include "wind_thread.h"
+#include "wind_core.h"
 
 #if WIND_DEBUG_SUPPORT
 

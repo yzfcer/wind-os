@@ -101,7 +101,7 @@ CASE_FUNC(tree_case)
         wind_tree_init(&tt->tree);
         wind_memset(tt->name,0,12);
         wind_strcpy(tt->name,"tree");
-        tt->name[4] = i+0x30; 
+        tt->name[4] = (char)(i+0x30); 
     }
     
     wind_tree_insert_child(&trees[0]->tree,&trees[1]->tree);

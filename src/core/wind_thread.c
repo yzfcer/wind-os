@@ -403,9 +403,9 @@ w_err_t wind_thread_exit(w_err_t exitcode)
 
 
 //睡眠一段时间,不能在中断中调用这个函数
-w_err_t wind_thread_sleep(w_uint32_t ms)
+w_err_t wind_thread_sleep(w_int32_t ms)
 {
-    w_uint16_t stcnt;
+    w_uint32_t stcnt;
     w_thread_s *thread = W_NULL;
     stcnt = ms *WIND_TICK_PER_SEC / 1000;
     if(0 == stcnt)

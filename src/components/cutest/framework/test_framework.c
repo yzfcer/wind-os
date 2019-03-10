@@ -382,9 +382,10 @@ w_int32_t is_match_str(char *str,char *filter)
         return do_match_all(str,filter,len1,len2);
     }
 }
+
 void show_test_cases(w_test_suite_s *ts)
 {
-    int i;
+    w_uint32_t i;
     for(i = 0;i < ts->case_cnt;i ++)
     {
         test_printf("|   |----%s\r\n",ts->tcase[i].name);

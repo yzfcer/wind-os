@@ -183,7 +183,7 @@ static treefile_s *make_node(const char *path)
 {
     char *ptr;
     w_int32_t len;
-    w_uint16_t isdir = 0;
+    w_uint8_t isdir = 0;
     char *dirname;
     char *nodename;
     treefile_s *file;
@@ -309,9 +309,9 @@ treefile_s* treefile_open(const char *path,w_uint16_t mode)
 
     is_crt = (mode & TF_FMODE_CRT)?W_TRUE:W_FALSE;
     file = search_node(path);
-    if((file == W_NULL) && !is_crt)
+    if((file == W_NULL) && (!is_crt))
     {
-        wind_error("open file is not existing");
+        //wind_error("open file is not existing");
         return W_NULL;
     }
         
