@@ -29,37 +29,37 @@
 #if WIND_CHDEV_SUPPORT
 
 static w_uint8_t beepst[1];
-w_err_t   beep_init(w_chdev_s *dev)
+static w_err_t   beep_init(w_chdev_s *dev)
 {
     BEEP_Init();
     beepst[0] = 0;
     return W_ERR_OK;
 }
 
-w_err_t   beep_open(w_chdev_s *dev)
+static w_err_t   beep_open(w_chdev_s *dev)
 {
     return W_ERR_OK;
 }
 
-w_err_t  beep_ioctl(w_chdev_s *dev,w_int32_t ctrlpoint,void *param)
+static w_err_t  beep_ioctl(w_chdev_s *dev,w_int32_t ctrlpoint,void *param)
 {
     return W_ERR_OK;
 }
 
-w_int32_t beep_read(w_chdev_s *dev,w_uint8_t *buf,w_uint16_t len)
+static w_int32_t beep_read(w_chdev_s *dev,w_uint8_t *buf,w_int32_t len)
 {
     buf[0] = beepst[0];
     return 1;
 }
 
-w_int32_t beep_write(w_chdev_s *dev,w_uint8_t *buf,w_uint16_t len)
+static w_int32_t beep_write(w_chdev_s *dev,w_uint8_t *buf,w_int32_t len)
 {
     beepst[0] = buf[0];
     BEEP = buf[0]?1:0;
     return 1;
 }
 
-w_err_t   beep_close(w_chdev_s *dev)
+static w_err_t   beep_close(w_chdev_s *dev)
 {
     return W_ERR_OK;
 }

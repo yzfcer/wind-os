@@ -23,6 +23,7 @@
 
 #if (WIND_CUTEST_SUPPORT && TEST_FS_SUPPORT)
 #include "wind_file.h"
+#include "wind_fs.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus

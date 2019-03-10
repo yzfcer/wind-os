@@ -461,7 +461,7 @@ void *wind_malloc(w_uint32_t size)
     size = __ALIGN_R(size);
     foreach_node(dnode,&heaplist)
     {
-        heap = NODE_TO_HEAPITEM(dnode);
+        heap = NODE_TO_HEAP(dnode);
         wind_debug("malloc in heap:0x%x",heap);
         if(!IS_F_HEAP_PRIVATE(heap))
         {

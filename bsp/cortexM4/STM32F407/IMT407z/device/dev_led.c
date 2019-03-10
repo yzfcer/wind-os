@@ -43,7 +43,7 @@ w_err_t  led_ioctl(w_chdev_s *dev,w_int32_t ctrlpoint,void *param)
     return W_ERR_OK;
 }
 
-w_int32_t led_read(w_chdev_s *dev,w_uint8_t *buf,w_uint16_t len)
+w_int32_t led_read(w_chdev_s *dev,w_uint8_t *buf,w_int32_t len)
 {
     w_int32_t id = dev->devid;
     WIND_ASSERT_RETURN(id >= 0,W_ERR_OVERFLOW);
@@ -52,7 +52,7 @@ w_int32_t led_read(w_chdev_s *dev,w_uint8_t *buf,w_uint16_t len)
     return 1;
 }
 
-w_int32_t led_write(w_chdev_s *dev,w_uint8_t *buf,w_uint16_t len)
+w_int32_t led_write(w_chdev_s *dev,w_uint8_t *buf,w_int32_t len)
 {
     w_int32_t id = dev->devid;
     WIND_ASSERT_RETURN(id >= 0,W_ERR_OVERFLOW);

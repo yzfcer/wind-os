@@ -40,6 +40,7 @@ typedef struct
 
 WIND_POOL(testmsg,6,sizeof(test_msg_s));
 WIND_POOL(testmsg_pool,4,sizeof(test_msg_s));
+#define MSG_TO_TEST_MSG(msg) (test_msg_s*)(((w_uint8_t*)(msg))-((w_uint32_t)&(((test_msg_s*)0)->msg)))
 
 /********************************************内部函数定义*********************************************/
 
@@ -140,7 +141,7 @@ CASE_FUNC(msgboxfunc)
     EXPECT_EQ(err,W_ERR_OK);
     err = wind_msgbox_wait(msgbox,&msg,100);
     EXPECT_EQ(err,W_ERR_OK);
-    tmsg = &msg->msgnode;
+    tmsg = MSG_TO_TEST_MSG(msg);
     EXPECT_EQ(tmsg->msg.msg_id,1);
     EXPECT_EQ(tmsg->msg.msg_len,sizeof(test_msg_s));
     EXPECT_EQ(tmsg->msg.msg_arg,tmsg1);

@@ -102,7 +102,7 @@ w_file_s *wind_file_get_bypath(const char *path)
     w_file_s *file;
     w_fs_s *fs;
     //char *realpath = W_NULL;
-    w_int32_t len,len1;
+    w_int32_t len;
     WIND_ASSERT_RETURN(path != W_NULL,W_NULL);
     wind_debug("open file:%s",path);
     len = wind_strlen(path);
@@ -113,7 +113,7 @@ w_file_s *wind_file_get_bypath(const char *path)
         wind_error("path:%s NOT exsit.",path);
         return W_NULL;
     }
-    len1 = wind_strlen(fs->mount_path);
+    //len1 = wind_strlen(fs->mount_path);
     //realpath = wind_malloc(len-len1+2);
     //wind_strcpy(realpath,(const char*)&path[len1-1]);
     
@@ -123,7 +123,7 @@ w_file_s *wind_file_get_bypath(const char *path)
 
 }
 
-static w_file_s *wind_file_create(w_fs_s *fs,char *realpath,w_uint16_t fmode,w_uint8_t isdir)
+static w_file_s *wind_file_create(w_fs_s *fs,const char *realpath,w_uint16_t fmode,w_uint8_t isdir)
 {
     w_file_s *file = W_NULL;
     w_err_t err;
@@ -192,7 +192,7 @@ static w_err_t wind_file_destroy(w_file_s *file)
     return W_ERR_OK;
 }
 
-w_file_s* wind_fopen(char *path,w_uint16_t fmode)
+w_file_s* wind_fopen(const char *path,w_uint16_t fmode)
 {
     w_file_s *file;
     w_fs_s *fs;
@@ -222,7 +222,7 @@ w_file_s* wind_fopen(char *path,w_uint16_t fmode)
     //realpath = wind_malloc(pathlen-len1+2);
     //wind_strcpy(realpath,(const char*)&path[len1-1]);
     isdir = path[pathlen-1] == '/'?1:0;
-    file = wind_file_create(fs,&path[len1-1],fmode, isdir);
+    file = wind_file_create(fs,(const char*)&path[len1-1],fmode, isdir);
     return file;
 }
 

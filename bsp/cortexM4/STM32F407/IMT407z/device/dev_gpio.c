@@ -28,18 +28,18 @@
 
 #if WIND_CHDEV_SUPPORT
 static w_uint8_t ledst[3] = {0,0,0};
-w_err_t   gpio_open(w_chdev_s *dev)
+static w_err_t   gpio_open(w_chdev_s *dev)
 {
     LED_Init(0x07);
     return W_ERR_OK;
 }
 
-w_err_t  gpio_ioctl(w_chdev_s *dev,w_int32_t ctrlpoint,void *param)
+static w_err_t  gpio_ioctl(w_chdev_s *dev,w_int32_t ctrlpoint,void *param)
 {
     return W_ERR_OK;
 }
 
-w_int32_t gpio_read(w_chdev_s *dev,w_uint8_t *buf,w_uint16_t len)
+static w_int32_t gpio_read(w_chdev_s *dev,w_uint8_t *buf,w_int32_t len)
 {
     w_int32_t i;
     for(i = 0;i < 3;i ++)
@@ -47,7 +47,7 @@ w_int32_t gpio_read(w_chdev_s *dev,w_uint8_t *buf,w_uint16_t len)
     return 3;
 }
 
-w_int32_t gpio_write(w_chdev_s *dev,w_uint8_t *buf,w_uint16_t len)
+static w_int32_t gpio_write(w_chdev_s *dev,w_uint8_t *buf,w_int32_t len)
 {
     w_int32_t i;
     for(i = 0;i < 3;i ++)
@@ -61,7 +61,7 @@ w_int32_t gpio_write(w_chdev_s *dev,w_uint8_t *buf,w_uint16_t len)
     return 0;
 }
 
-w_err_t   gpio_close(w_chdev_s *dev)
+static w_err_t   gpio_close(w_chdev_s *dev)
 {
     return W_ERR_OK;
 }

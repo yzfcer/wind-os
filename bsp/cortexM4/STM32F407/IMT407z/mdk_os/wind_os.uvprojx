@@ -1397,6 +1397,16 @@
               <FileType>5</FileType>
               <FilePath>..\..\..\..\..\src\components\vfs\wind_log.h</FilePath>
             </File>
+            <File>
+              <FileName>wind_fs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\components\vfs\wind_fs.c</FilePath>
+            </File>
+            <File>
+              <FileName>wind_fs.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\components\vfs\wind_fs.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
