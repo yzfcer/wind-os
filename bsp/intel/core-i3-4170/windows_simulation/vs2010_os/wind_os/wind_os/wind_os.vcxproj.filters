@@ -368,6 +368,24 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\components\vfs\wind_fs.c">
       <Filter>component_vfs</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\db\framework\db_entry.c">
+      <Filter>component_db</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\db\framework\db_if.c">
+      <Filter>component_db</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\db\framework\tb_entry.c">
+      <Filter>component_db</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\db\framework\tb_print.c">
+      <Filter>component_db</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\db\dbbase\db_demo.c">
+      <Filter>component_db</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\db\dbbase\db_demo1.c">
+      <Filter>component_db</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">
@@ -405,6 +423,9 @@
     </Filter>
     <Filter Include="device">
       <UniqueIdentifier>{6fa220e6-ebf1-43a7-8ca5-f07097a71d1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="component_db">
+      <UniqueIdentifier>{77487dbd-b87a-44c9-aafd-cea4c6b35696}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -635,6 +656,24 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\..\src\components\vfs\wind_fs.h">
       <Filter>component_vfs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\components\db\framework\db.h">
+      <Filter>component_db</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\components\db\framework\db_entry.h">
+      <Filter>component_db</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\components\db\framework\db_if.h">
+      <Filter>component_db</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\components\db\framework\tb_entry.h">
+      <Filter>component_db</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\components\db\dbbase\db_demo.h">
+      <Filter>component_db</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\components\db\dbbase\db_demo1.h">
+      <Filter>component_db</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

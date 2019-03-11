@@ -79,6 +79,27 @@ typedef long double w_lfp64_t;
 typedef unsigned long w_addr_t; 
 #endif
 
+#ifndef w_str16_t
+typedef char w_str16_t[16] ;
+#endif
+
+#ifndef w_str32_t
+typedef char w_str32_t[32] ;
+#endif
+
+
+#ifndef w_str64_t
+typedef char w_str64_t[64] ;
+#endif
+
+#ifndef w_str128_t
+typedef char w_str128_t[128] ;
+#endif
+
+#ifndef w_str256_t
+typedef char w_str256_t[256] ;
+#endif
+
 #ifndef __INLINE__
 #define __INLINE__ 
 #endif

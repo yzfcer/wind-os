@@ -40,7 +40,7 @@
     <IncludePath>$(ProjectDir)..\..\..\port;$(ProjectDir)..\..\..\..\..\..\..\src\common;$(ProjectDir)..\..\..\..\..\..\..\src\components\shell\cmd;$(ProjectDir)..\..\..\..\..\..\..\src\components\shell\framework;$(ProjectDir)..\..\..\..\..\..\..\src\core;$(ProjectDir)..\..\..\..\..\..\..\src\hal;$(ProjectDir)..\..\..\..\..\..\..\src\components\cutest\framework;$(ProjectDir)..\..\..\..\..\..\..\src\components\cutest\port;$(ProjectDir)..\..\..\..\..\..\..\src\components\cutest\testcase;$(ProjectDir)..\..\..\..\..\..\..\src\components\vfs;$(ProjectDir)..\..\..\..\..\..\..\src\components\vfs\treefs;$(ProjectDir)..\..\..\..\..\..\..\src\components\lua-5.3.4\src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(ProjectDir)..\..\..\port;$(ProjectDir)..\..\..\..\..\..\..\src\common;$(ProjectDir)..\..\..\..\..\..\..\src\components\shell\cmd;$(ProjectDir)..\..\..\..\..\..\..\src\components\shell\framework;$(ProjectDir)..\..\..\..\..\..\..\src\core;$(ProjectDir)..\..\..\..\..\..\..\src\hal;$(ProjectDir)..\..\..\..\..\..\..\src\components\cutest\framework;$(ProjectDir)..\..\..\..\..\..\..\src\components\cutest\port;$(ProjectDir)..\..\..\..\..\..\..\src\components\cutest\testcase;$(ProjectDir)..\..\..\..\..\..\..\src\components\vfs;$(ProjectDir)..\..\..\..\..\..\..\src\components\vfs\treefs;$(ProjectDir)..\..\..\..\..\..\..\src\components\lua-5.3.4\src;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\..\..\port;$(ProjectDir)..\..\..\..\..\..\..\src\common;$(ProjectDir)..\..\..\..\..\..\..\src\components\shell\cmd;$(ProjectDir)..\..\..\..\..\..\..\src\components\shell\framework;$(ProjectDir)..\..\..\..\..\..\..\src\core;$(ProjectDir)..\..\..\..\..\..\..\src\hal;$(ProjectDir)..\..\..\..\..\..\..\src\components\cutest\framework;$(ProjectDir)..\..\..\..\..\..\..\src\components\cutest\port;$(ProjectDir)..\..\..\..\..\..\..\src\components\cutest\testcase;$(ProjectDir)..\..\..\..\..\..\..\src\components\vfs;$(ProjectDir)..\..\..\..\..\..\..\src\components\vfs\treefs;$(ProjectDir)..\..\..\..\..\..\..\src\components\lua-5.3.4\src;$(ProjectDir)..\..\..\..\..\..\..\src\components\db\framework;$(ProjectDir)..\..\..\..\..\..\..\src\components\db\dbbase;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -91,6 +91,12 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\components\cutest\testcase\test_softirq.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\components\cutest\testcase\test_tree.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\components\cutest\testcase\test_treefs.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\db\dbbase\db_demo.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\db\dbbase\db_demo1.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\db\framework\db_entry.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\db\framework\db_if.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\db\framework\tb_entry.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\db\framework\tb_print.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\components\lua-5.3.4\port\lua_port.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\components\lua-5.3.4\src\lapi.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\components\lua-5.3.4\src\lauxlib.c" />
@@ -205,6 +211,12 @@
     <ClInclude Include="..\..\..\..\..\..\..\src\components\cutest\framework\test_framework.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\components\cutest\framework\wind_cut.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\components\cutest\port\test_port.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\components\db\dbbase\db_demo.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\components\db\dbbase\db_demo1.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\components\db\framework\db.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\components\db\framework\db_entry.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\components\db\framework\db_if.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\components\db\framework\tb_entry.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\components\lua-5.3.4\src\lapi.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\components\lua-5.3.4\src\lauxlib.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\components\lua-5.3.4\src\lcode.h" />
