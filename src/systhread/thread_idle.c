@@ -28,8 +28,7 @@
 #include "wind_debug.h"
 #include "wind_thread.h"
 
-#define IDLE_STK_SIZE 64
-static w_stack_t idlestk[IDLE_STK_SIZE];//ø’œ–»ŒŒÒ∂—’ª
+static w_stack_t idlestk[THREAD_IDLE_STKSIZE];//ø’œ–»ŒŒÒ∂—’ª
 static w_err_t thread_idle(w_int32_t argc,char **argv)
 {    
     while(1)
@@ -43,7 +42,7 @@ w_err_t _create_thread_idle(void)
 {
     w_thread_s *thread;
     thread = wind_thread_create("idle",thread_idle,
-                    0,W_NULL,idlestk,IDLE_STK_SIZE);
+                    0,W_NULL,idlestk,THREAD_IDLE_STKSIZE);
     WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_FAIL);
     wind_thread_set_priority(thread,32767);
     wind_thread_setflag(thread,F_THREAD_NO_KILL);

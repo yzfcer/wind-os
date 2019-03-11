@@ -118,7 +118,7 @@ struct _w_thread_s
     w_prinode_s sleepnode;
     w_stack_t *stack_cur;//堆栈指针
     w_stack_t *stack_start;//栈顶指针
-    w_uint16_t stksize;//堆栈大小，以栈宽度技术
+    w_uint32_t stksize;//堆栈大小，以栈宽度技术
     
     w_int16_t argc;
     w_int16_t flag;
@@ -155,14 +155,14 @@ w_err_t wind_thread_init(w_thread_s *thread,
                     w_int16_t argc,
                     char **argv,
                     w_stack_t *psck,
-                    w_uint16_t stksize);
+                    w_uint32_t stksize);
 
 w_thread_s *wind_thread_create(const char *name,
                     w_err_t (*thread_func)(w_int32_t argc,char **argv),
                     w_int16_t argc,
                     char **argv,
                     w_stack_t *psck,
-                    w_uint16_t stksize);
+                    w_uint32_t stksize);
 
 #if WIND_STKPOOL_SUPPORT
 w_thread_s *wind_thread_create_default(const char *name,

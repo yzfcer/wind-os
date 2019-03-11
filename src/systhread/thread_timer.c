@@ -30,9 +30,8 @@
 #include "wind_debug.h"
 
 #if WIND_TIMER_SUPPORT
-#define TIMER_STK_SIZE 256
 
-static w_stack_t timerstk[TIMER_STK_SIZE];
+static w_stack_t timerstk[THREAD_TIMER_STKSIZE];
 static w_err_t thread_timer(w_int32_t argc,char **argv)
 {
     while(1)
@@ -46,7 +45,7 @@ w_err_t _create_thread_timer(void)
 {
     w_thread_s *thread;
     thread = wind_thread_create("timer",thread_timer,
-                     0,W_NULL,timerstk,TIMER_STK_SIZE);
+                     0,W_NULL,timerstk,THREAD_TIMER_STKSIZE);
     WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_FAIL);
     wind_thread_set_priority(thread,3);
     wind_daemon_create("timer",_create_thread_timer);

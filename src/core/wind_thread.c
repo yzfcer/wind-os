@@ -188,9 +188,9 @@ w_err_t wind_thread_init(w_thread_s *thread,
                     w_int16_t argc,
                     char **argv,
                     w_stack_t *pstk,
-                    w_uint16_t stksize)
+                    w_uint32_t stksize)
 {
-    w_uint16_t i;
+    w_uint32_t i;
     w_stack_t *tmpstk;
     wind_notice("init thread:%s",name);
     WIND_ASSERT_RETURN(name != W_NULL,W_ERR_PTR_NULL);
@@ -235,7 +235,7 @@ w_thread_s *wind_thread_create(const char *name,
                     w_int16_t argc,
                     char **argv,
                     w_stack_t *pstk,
-                    w_uint16_t stksize)
+                    w_uint32_t stksize)
 {
     w_err_t err;
     w_thread_s *thread;

@@ -28,8 +28,8 @@
 #include "wind_debug.h"
 #if WIND_STATI_THREAD_SUPPORT
 
-#define STATI_STK_SIZE 256
-static w_stack_t statisstk[STATI_STK_SIZE];
+
+static w_stack_t statisstk[THREAD_STATI_STKSIZE];
 static w_err_t thread_stati(w_int32_t argc,char **argv)
 {
     w_uint32_t statcnt = 0;
@@ -49,7 +49,7 @@ w_err_t _create_thread_stati(void)
 {
     w_thread_s *thread;
     thread = wind_thread_create("statistics",thread_stati,
-                     0,W_NULL,statisstk,STATI_STK_SIZE);
+                     0,W_NULL,statisstk,THREAD_STATI_STKSIZE);
     WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_FAIL);
     wind_thread_set_priority(thread,5);
     wind_thread_setflag(thread,F_THREAD_NO_KILL);

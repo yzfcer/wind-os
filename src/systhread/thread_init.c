@@ -22,6 +22,7 @@
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
+#include "wind_config.h"
 #include "wind_type.h"
 #include "wind_core.h"
 #include "wind_thread.h"
@@ -41,7 +42,6 @@
 #include "wind_fs.h"
 #endif 
 
-#define INIT_STK_SIZE 256
 
 void wind_enter_thread_hook(void);
 #if WIND_STATI_THREAD_SUPPORT
@@ -55,15 +55,14 @@ void _create_thread_daemon(void);
 void _create_thread_idle(void);
 
 #if WIND_SHELL_SUPPORT
-#define CTRL_STK_SIZE 2048
-static w_stack_t ctrlstk[CTRL_STK_SIZE];//主任务堆栈
+static w_stack_t ctrlstk[THREAD_SHELL_STKSIZE];//主任务堆栈
 extern w_err_t thread_shell(w_int32_t argc,char **argv);
 
 w_err_t _create_thread_shell(void)
 {
     w_thread_s *thread;
     thread = wind_thread_create("shell",thread_shell,
-               0,W_NULL,ctrlstk,CTRL_STK_SIZE);
+               0,W_NULL,ctrlstk,THREAD_SHELL_STKSIZE);
     WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_FAIL);
     wind_thread_set_priority(thread,32760);
     wind_daemon_create("shell",_create_thread_shell);
@@ -77,7 +76,7 @@ w_err_t _create_thread_timer(void);
 #endif
 
 extern w_err_t wind_main(void);
-static w_stack_t initstk[INIT_STK_SIZE];
+static w_stack_t initstk[THREAD_INIT_STKSIZE];
 
 static void set_idle_cnt(void)
 {
@@ -146,7 +145,7 @@ w_err_t _create_thread_init(void)
 {
     w_thread_s *thread;
     thread = wind_thread_create("init",thread_init,
-                        0,W_NULL,initstk,INIT_STK_SIZE);
+                        0,W_NULL,initstk,THREAD_INIT_STKSIZE);
     WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_FAIL);
     return W_ERR_OK;
 }

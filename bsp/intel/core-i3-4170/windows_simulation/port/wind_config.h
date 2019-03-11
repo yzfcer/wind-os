@@ -147,6 +147,14 @@ extern "C" {
 #define HARD_STACK_SIZE 40 //为硬件堆栈保留的空间大小，在某些硬件里可以不需要
 
 
+#define THREAD_DAEMON_STKSIZE 0x10000
+#define THREAD_IDLE_STKSIZE 0x10000
+#define THREAD_INIT_STKSIZE 0x10000
+#define THREAD_STATI_STKSIZE 0x10000
+#define THREAD_TIMER_STKSIZE 0x10000
+#define THREAD_SHELL_STKSIZE 0x10000
+
+
 
 //-------------------------------------------------------------------------------
 //调试命令定制，前提是内核支持控制台功能

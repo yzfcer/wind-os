@@ -125,7 +125,7 @@ w_err_t wind_diagnose_check(void)
     foreach_node(dnode,&diagnoselist)
     {
         diagnose = NODE_TO_DIAGNOSENOSE(dnode);
-        wind_notice(" ***** check %s",diagnose->obj.name);
+        wind_notice(" ========= check %s",diagnose->obj.name);
         diagnose->result = diagnose_check(diagnose);
     }
     wind_diagnose_print_result();
