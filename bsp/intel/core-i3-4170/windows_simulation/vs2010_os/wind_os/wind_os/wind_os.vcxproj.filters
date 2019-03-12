@@ -386,6 +386,9 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\components\db\dbbase\db_demo1.c">
       <Filter>component_db</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\db\dbbase\list_tb.c">
+      <Filter>component_db</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">

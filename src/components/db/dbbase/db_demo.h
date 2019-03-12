@@ -30,7 +30,7 @@ typedef struct
 	w_int16_t cdemo;
 }tb_demo;
 
-TABLE_DECLARE(tb_demo);
+TABLE_DECLARE(demo);
 
 #endif
 

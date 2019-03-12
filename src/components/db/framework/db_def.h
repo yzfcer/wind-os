@@ -27,6 +27,7 @@
 
 #include "wind_type.h"
 #include "wind_dlist.h"
+#include "wind_mutex.h"
 #define DB_BLK_SIZE 512
 #define DB_NAME_LEN 12  //数据库名字长度
 #define TB_NAME_LEN 12  //数据表名字长度
@@ -54,8 +55,8 @@ typedef enum
 }PARA_TYPE;
 
 
-typedef struct __db_entry_s db_entry_s;
-typedef struct __tb_entry_s tb_entry_s;
+typedef struct __db_entry_s w_db_s;
+typedef struct __tb_entry_s w_tb_s;
 
 
 struct __db_entry_s
@@ -78,8 +79,9 @@ struct __tb_entry_s
     char dbname[DB_NAME_LEN];
     char tbname[TB_NAME_LEN];
     w_uint32_t base;//绝对地址
-    db_entry_s *db;
+    w_db_s *db;
     
+    w_mutex_s *mutex;
     w_uint32_t entry_size;
     w_uint16_t item_cnt;
     w_int32_t hash;
@@ -93,6 +95,7 @@ struct __tb_entry_s
     w_int16_t offset_offset;
     w_int16_t size_offset;
     w_int16_t attr_offset;
+
 };
 
 typedef struct

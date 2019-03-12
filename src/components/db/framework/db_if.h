@@ -21,9 +21,9 @@
 #ifndef DB_IF_H__
 #define DB_IF_H__
 #include "wind_type.h"
-#include "db.h"
+#include "db_def.h"
 #include "wind_heap.h"
-
+#define TB_PARA_MAGIC 0x236F79AC
 typedef struct
 {
     char *name;
@@ -36,10 +36,9 @@ typedef struct
 
 typedef struct
 {
-    char *name;
-    w_uint16_t attr;
-    tb_item_info_s *tb_item;
+    w_obj_s obj;
     w_int32_t item_cnt;
+    tb_item_info_s *tb_item;
 }tb_param_s;
 
 //字段属性定义
@@ -70,26 +69,27 @@ typedef struct
 
 
 //数据表定义
-#define TB_OFFSET(tb_type,mbr) (w_int32_t)(&(((tb_type*)0)->mbr))
-#define TB_MBRSIZE(tb_type,mbr) (sizeof(((tb_type*)0)->mbr))
-#define TB_MBRCNT(tb_type,mbr_type,mbr) (sizeof(((tb_type*)0)->mbr)/sizeof(mbr_type))
+#define TB_OFFSET(name,mbr) (w_int32_t)(&(((name*)0)->mbr))
+#define TB_MBRSIZE(name,mbr) (sizeof(((name*)0)->mbr))
+#define TB_MBRCNT(name,mbr_type,mbr) (sizeof(((name*)0)->mbr)/sizeof(mbr_type))
 
-#define TABLE_START(tb_type) static tb_item_info_s db_info_list_##tb_type[] = {
-#define TABLE_ITEM(tb_type,mbr_type,mbr) {#mbr,TYPE_##mbr_type,TB_MBRCNT(tb_type,mbr_type,mbr),TB_MBRSIZE(tb_type,mbr),TB_OFFSET(tb_type,mbr),DB_ATTR_DEFAULT_ITEM},
-#define TABLE_ITEM_A(tb_type,mbr_type,mbr,tb_attr) {#mbr,TYPE_##mbr_type,TB_MBRCNT(tb_type,mbr_type,mbr),TB_MBRSIZE(tb_type,mbr),TB_OFFSET(tb_type,mbr),tb_attr},
+#define TABLE_START(name) static tb_item_info_s db_info_list_##name[] = {
+#define TABLE_ITEM(name,mbr_type,mbr) {#mbr,TYPE_##mbr_type,TB_MBRCNT(name,mbr_type,mbr),TB_MBRSIZE(name,mbr),TB_OFFSET(name,mbr),DB_ATTR_DEFAULT_ITEM},
+#define TABLE_ITEM_A(name,mbr_type,mbr,tb_attr) {#mbr,TYPE_##mbr_type,TB_MBRCNT(name,mbr_type,mbr),TB_MBRSIZE(name,mbr),TB_OFFSET(name,mbr),tb_attr},
 #define TABLE_END };
 
-#define TABLE_DEF(tb_type,attr) \
-    tb_param_s tb_param_##tb_type = \
-    {#tb_type,attr,db_info_list_##tb_type,\
-    sizeof(db_info_list_##tb_type)/sizeof(tb_item_info_s)}; 
+#define TABLE_DEF(name,attr) \
+    tb_param_s tb_param_##name = \
+    {{~TB_PARA_MAGIC,#name,{W_NULL,W_NULL},0,attr},\
+    sizeof(db_info_list_##name)/sizeof(tb_item_info_s),&db_info_list_##name,\
+    }; 
 
-#define TABLE_DECLARE(tb_type) extern tb_param_s tb_param_##tb_type;
+#define TABLE_DECLARE(name) extern tb_param_s tb_param_##name;
 
-#define TABLE_PARA(tb_type) tb_param_##tb_type.tb_item,tb_param_##tb_type.item_cnt
+#define TABLE(name) &tb_param_##name
 
 void *db_malloc(w_int32_t size);
-w_err_t *db_free(void* ptr);
+w_err_t db_free(void* ptr);
 
 
 //数据库函数

@@ -22,13 +22,13 @@
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
-#include "db.h"
+#include "db_def.h"
 #include "db_entry.h"
 #include "tb_entry.h"
 #include "wind_string.h"
 #include "wind_debug.h"
 #include "wind_debug.h"
-#define NODE_TO_DBENTRY(node) (db_entry_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((db_entry_s*)0)->dbnode)))
+#define NODE_TO_DBENTRY(node) (w_db_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((w_db_s*)0)->dbnode)))
 
 static w_dlist_s db_list = {W_NULL,W_NULL};
 
@@ -54,10 +54,10 @@ static w_dlist_s *get_db_list(void)
 w_err_t db_entry_create(char *dbname,w_uint16_t attr)
 {
     w_dlist_s *dblist;
-    db_entry_s *entry;
+    w_db_s *entry;
     entry = db_get_byname(dbname);
     WIND_ASSERT_RETURN(entry == W_NULL,W_ERR_INVALID);
-    entry = (db_entry_s *)db_malloc(sizeof(db_entry_s));
+    entry = (w_db_s *)db_malloc(sizeof(w_db_s));
     WIND_ASSERT_RETURN(entry != W_NULL,W_ERR_MEM);
     entry->magic = DB_MAGIC;
     wind_strncpy(entry->name,dbname,TB_NAME_LEN);
@@ -77,8 +77,8 @@ w_err_t db_entry_destroy(char *dbname)
 {
     w_dlist_s *dblist;
     w_dnode_s *node;
-    tb_entry_s *tentry;
-    db_entry_s *entry = db_get_byname(dbname);
+    w_tb_s *tentry;
+    w_db_s *entry = db_get_byname(dbname);
     WIND_ASSERT_RETURN(entry != W_NULL,W_ERR_INVALID);
     dblist = get_db_list();
     dlist_remove(dblist,&entry->dbnode);
@@ -92,15 +92,15 @@ w_err_t db_entry_destroy(char *dbname)
             tb_entry_destroy(tentry->tbname);
         }
     }
-    wind_memset(entry,0,sizeof(db_entry_s));
+    wind_memset(entry,0,sizeof(w_db_s));
     db_free(entry);
     return W_ERR_OK;
 }
 
-db_entry_s *db_get_byname(char *dbname)
+w_db_s *db_get_byname(char *dbname)
 {
     w_dlist_s *dblist;
-    db_entry_s *entry;
+    w_db_s *entry;
     w_dnode_s *dnode;
     w_int32_t hash = get_db_hash(dbname);
     WIND_ASSERT_RETURN(hash > 0,W_NULL);
@@ -118,7 +118,7 @@ db_entry_s *db_get_byname(char *dbname)
 
 w_bool_t db_entry_exist(char *dbname)
 {
-    db_entry_s *entry;
+    w_db_s *entry;
     entry = db_get_byname(dbname);
     if(entry != W_NULL)
         return W_TRUE;
@@ -127,7 +127,7 @@ w_bool_t db_entry_exist(char *dbname)
 
 w_err_t db_entry_setattr(char *dbname,w_uint16_t attr)
 {
-    db_entry_s *entry = db_get_byname(dbname);
+    w_db_s *entry = db_get_byname(dbname);
     WIND_ASSERT_RETURN(entry != W_NULL,W_ERR_INVALID);
     entry->attr = attr;
     return W_ERR_OK;
@@ -135,13 +135,13 @@ w_err_t db_entry_setattr(char *dbname,w_uint16_t attr)
 
 w_err_t db_entry_getattr(char *dbname,w_uint16_t *attr)
 {
-    db_entry_s *entry = db_get_byname(dbname);
+    w_db_s *entry = db_get_byname(dbname);
     WIND_ASSERT_RETURN(entry != W_NULL,W_ERR_INVALID);
     *attr = entry->attr;
     return W_ERR_OK;
 }
 
-w_err_t db_entry_insert_tb(db_entry_s *db,tb_entry_s *tb)
+w_err_t db_entry_insert_tb(w_db_s *db,w_tb_s *tb)
 {
     WIND_ASSERT_RETURN(db != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(tb != W_NULL,W_ERR_PTR_NULL);
@@ -150,7 +150,7 @@ w_err_t db_entry_insert_tb(db_entry_s *db,tb_entry_s *tb)
     return W_ERR_OK;
 }
 
-w_err_t db_entry_remove_tb(db_entry_s *db,tb_entry_s *tb)
+w_err_t db_entry_remove_tb(w_db_s *db,w_tb_s *tb)
 {
     WIND_ASSERT_RETURN(db != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(tb != W_NULL,W_ERR_PTR_NULL);
@@ -162,7 +162,7 @@ w_err_t db_entry_remove_tb(db_entry_s *db,tb_entry_s *tb)
 
 w_err_t db_entry_print_info(char *dbname)
 {
-    db_entry_s *entry = db_get_byname(dbname);
+    w_db_s *entry = db_get_byname(dbname);
     WIND_ASSERT_RETURN(entry != W_NULL,W_ERR_INVALID);
     wind_printf("\r\ndb info:\r\n");
     wind_printf("db name:%s\r\n",entry->name);
@@ -170,9 +170,9 @@ w_err_t db_entry_print_info(char *dbname)
     return W_ERR_OK;
 }
 
-w_err_t db_entry_print_data(db_entry_s *entry)
+w_err_t db_entry_print_data(w_db_s *entry)
 {
-    tb_entry_s *tbentry;
+    w_tb_s *tbentry;
     w_dnode_s *dnode;
     wind_printf("|---<DB name=%s>\r\n",entry->name);
     foreach_node(dnode,&entry->tblist)
@@ -187,7 +187,7 @@ w_err_t db_entry_print_data(db_entry_s *entry)
 w_err_t db_entry_print_db(char *dbname)
 {
     w_dlist_s *dblist;
-    db_entry_s *entry;
+    w_db_s *entry;
     w_dnode_s *dnode;
     dblist = get_db_list();
     foreach_node(dnode,dblist)
@@ -204,7 +204,7 @@ w_err_t db_entry_print_db(char *dbname)
 
 w_err_t db_entry_print_all(void)
 {
-    db_entry_s *entry;
+    w_db_s *entry;
     w_dnode_s *dnode;
     w_dlist_s *dblist;
     dblist = get_db_list();

@@ -1,6 +1,6 @@
 #include "wind_type.h"
 #include "wind_debug.h"
-#include "db.h"
+#include "db_def.h"
 
 static void print_int8_arr(void *data,w_int32_t count)
 {
@@ -84,7 +84,7 @@ static void print_string_arr(void *data,w_int32_t count)
         wind_printf("\"%s\" ",va[i]);
 }
 
-void tb_print_data(tb_entry_s *entry,w_uint8_t *data,w_int32_t idx)
+void tb_print_data(w_tb_s *entry,w_uint8_t *data,w_int32_t idx)
 {
     w_int32_t i;
     char *name_base;

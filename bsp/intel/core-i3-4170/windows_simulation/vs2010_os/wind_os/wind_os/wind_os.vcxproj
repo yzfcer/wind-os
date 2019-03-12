@@ -93,6 +93,7 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\components\cutest\testcase\test_treefs.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\components\db\dbbase\db_demo.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\components\db\dbbase\db_demo1.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\db\dbbase\list_tb.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\components\db\framework\db_entry.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\components\db\framework\db_if.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\components\db\framework\tb_entry.c" />

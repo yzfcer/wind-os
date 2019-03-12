@@ -18,7 +18,7 @@
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
-#include "db.h"
+#include "db_def.h"
 #include "db_if.h"
 #include "db_entry.h"
 
@@ -26,7 +26,7 @@ void *db_malloc(w_int32_t size)
 {
     return wind_malloc(size);
 }
-w_err_t *db_free(void* ptr)
+w_err_t db_free(void* ptr)
 {
     return wind_free(ptr);
 }
