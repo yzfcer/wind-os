@@ -18,18 +18,18 @@
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
-#include "db_if.h"
+#include "tb_model.h"
 #include "db_demo.h"
 #include "db_entry.h"
 //定义数据库结构
 
-TABLE_START(tb_demo)
-TABLE_ITEM_A(tb_demo,w_int32_t,key,DB_ATTR_KEY_ITEM)
-TABLE_ITEM(tb_demo,w_int32_t,ademo)
-TABLE_ITEM(tb_demo,w_int8_t,bdemo)
-TABLE_ITEM(tb_demo,w_int16_t,cdemo)
-TABLE_END
-TABLE_DEF(tb_demo,DB_ATTR_SINGLE)
+TBMODEL_START(tb_demo)
+TBMODEL_ITEM_A(tb_demo,w_int32_t,key,DB_ATTR_KEY_ITEM)
+TBMODEL_ITEM(tb_demo,w_int32_t,ademo)
+TBMODEL_ITEM(tb_demo,w_int8_t,bdemo)
+TBMODEL_ITEM(tb_demo,w_int16_t,cdemo)
+TBMODEL_END
+TBMODEL_DEF(tb_demo,DB_ATTR_SINGLE)
 
 
 

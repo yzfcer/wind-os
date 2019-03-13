@@ -88,7 +88,7 @@ w_err_t db_entry_destroy(char *dbname)
         foreach_node(node,&entry->tblist)
         {
             node = dlist_remove_head(&entry->tblist);
-            tentry = NODE_TO_DBENTRY(node);
+            tentry = NODE_TO_TBENTRY(node);
             tb_entry_destroy(tentry->tbname);
         }
     }
@@ -177,7 +177,7 @@ w_err_t db_entry_print_data(w_db_s *entry)
     wind_printf("|---<DB name=%s>\r\n",entry->name);
     foreach_node(dnode,&entry->tblist)
     {
-        tbentry = NODE_TO_DBENTRY(dnode);
+        tbentry = NODE_TO_TBENTRY(dnode);
         tb_entry_print_data(tbentry);
     }
     wind_printf("|---</DB name=%s>\r\n",entry->name);

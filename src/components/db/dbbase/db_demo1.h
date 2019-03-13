@@ -32,7 +32,7 @@ typedef struct
     w_str64_t strdemo;
 }tb_demo1;
 
-TABLE_DECLARE(demo1);
+TBMODEL_DECLARE(demo1);
 
 #endif
 

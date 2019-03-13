@@ -21,6 +21,8 @@
 #include "db_def.h"
 #include "db_if.h"
 #include "db_entry.h"
+#include "tb_model.h"
+#include "wind_debug.h"
 
 void *db_malloc(w_int32_t size)
 {
@@ -29,6 +31,12 @@ void *db_malloc(w_int32_t size)
 w_err_t db_free(void* ptr)
 {
     return wind_free(ptr);
+}
+
+w_err_t wind_db_mod_init(void)
+{
+    wind_tbmodels_register();
+    return W_ERR_OK;
 }
 
 w_err_t wind_db_create(char *dbname,w_uint16_t attr)
@@ -42,7 +50,7 @@ w_err_t wind_db_distroy(char *dbname)
 }
 
 
-w_err_t wind_tb_create(char *tbname,tb_item_info_s *item_info,w_int32_t item_cnt)
+w_err_t wind_tb_create(char *tbname,tbmodel_item_s *item_info,w_int32_t item_cnt)
 {
     return tb_entry_create(tbname,item_info,item_cnt);
 }

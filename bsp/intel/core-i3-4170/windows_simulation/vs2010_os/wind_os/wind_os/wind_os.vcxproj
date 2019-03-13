@@ -93,10 +93,10 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\components\cutest\testcase\test_treefs.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\components\db\dbbase\db_demo.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\components\db\dbbase\db_demo1.c" />
-    <ClCompile Include="..\..\..\..\..\..\..\src\components\db\dbbase\list_tb.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\components\db\framework\db_entry.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\components\db\framework\db_if.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\components\db\framework\tb_entry.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\db\framework\tb_model.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\components\db\framework\tb_print.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\components\lua-5.3.4\port\lua_port.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\components\lua-5.3.4\src\lapi.c" />
@@ -218,6 +218,7 @@
     <ClInclude Include="..\..\..\..\..\..\..\src\components\db\framework\db_entry.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\components\db\framework\db_if.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\components\db\framework\tb_entry.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\components\db\framework\tb_model.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\components\lua-5.3.4\src\lapi.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\components\lua-5.3.4\src\lauxlib.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\components\lua-5.3.4\src\lcode.h" />

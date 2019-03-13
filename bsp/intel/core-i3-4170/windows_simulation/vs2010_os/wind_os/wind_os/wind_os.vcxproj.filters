@@ -371,9 +371,6 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\components\db\framework\db_entry.c">
       <Filter>component_db</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\src\components\db\framework\db_if.c">
-      <Filter>component_db</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\..\src\components\db\framework\tb_entry.c">
       <Filter>component_db</Filter>
     </ClCompile>
@@ -386,7 +383,10 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\components\db\dbbase\db_demo1.c">
       <Filter>component_db</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\src\components\db\dbbase\list_tb.c">
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\db\framework\tb_model.c">
+      <Filter>component_db</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\db\framework\db_if.c">
       <Filter>component_db</Filter>
     </ClCompile>
   </ItemGroup>
@@ -666,9 +666,6 @@
     <ClInclude Include="..\..\..\..\..\..\..\src\components\db\framework\db_entry.h">
       <Filter>component_db</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\..\src\components\db\framework\db_if.h">
-      <Filter>component_db</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\..\src\components\db\framework\tb_entry.h">
       <Filter>component_db</Filter>
     </ClInclude>
@@ -676,6 +673,12 @@
       <Filter>component_db</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\..\src\components\db\dbbase\db_demo1.h">
+      <Filter>component_db</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\components\db\framework\tb_model.h">
+      <Filter>component_db</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\components\db\framework\db_if.h">
       <Filter>component_db</Filter>
     </ClInclude>
   </ItemGroup>
