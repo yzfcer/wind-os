@@ -38,6 +38,7 @@
 #include "wind_debug.h"
 #include "wind_dbgpoint.h"
 #include "wind_board_port.h"
+#include "db_if.h"
 #if WIND_FS_SUPPORT
 #include "wind_fs.h"
 #endif 
@@ -117,7 +118,8 @@ static w_err_t thread_init(w_int32_t argc,char **argv)
 #endif  
 #if WIND_USER_SUPPORT
     _wind_user_mod_init();
-#endif  
+#endif
+    _wind_db_mod_init();
     _create_thread_idle();
     set_idle_cnt();
 #if WIND_SOFTIRQ_SUPPORT
