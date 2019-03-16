@@ -389,6 +389,9 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\components\db\framework\db_if.c">
       <Filter>component_db</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_coroutine.c">
+      <Filter>os_core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">
@@ -680,6 +683,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\..\src\components\db\framework\db_if.h">
       <Filter>component_db</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_coroutine.h">
+      <Filter>os_core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

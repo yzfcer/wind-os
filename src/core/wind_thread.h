@@ -29,6 +29,7 @@
 #include "wind_config.h"
 #include "wind_type.h"
 #include "wind_dlist.h"
+#include "wind_obj.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -133,7 +134,8 @@ struct _w_thread_s
     w_thread_stat_e runstat;
     w_int32_t sleep_ticks;
     w_suscause_e cause;//导致状态变化的原因
-
+    w_dlist_s coroutlist;//协程列表
+    w_obj_s *corout;//当前协程
 };
 
 #define PRIDNODE_TO_THREAD(dnode,mbrnode) (w_thread_s*)(((char*)(dnode))-((w_uint32_t)&(((w_thread_s*)0)->mbrnode.dnode)))

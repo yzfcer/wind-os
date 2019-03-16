@@ -223,6 +223,8 @@ w_err_t wind_thread_init(w_thread_s *thread,
     thread->runstat = THREAD_STATUS_READY;
     thread->cause = CAUSE_COMMON;
     thread->sleep_ticks = 0;
+    DLIST_INIT(thread->coroutlist);
+    thread->corout = W_NULL;
     wind_disable_interrupt();
     dlist_insert_prio(&threadlist,&thread->validnode,thread->prio);
     wind_enable_interrupt();

@@ -37,7 +37,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(ProjectDir)..\..\..\port;$(ProjectDir)..\..\..\..\..\..\..\src\common;$(ProjectDir)..\..\..\..\..\..\..\src\components\shell\cmd;$(ProjectDir)..\..\..\..\..\..\..\src\components\shell\framework;$(ProjectDir)..\..\..\..\..\..\..\src\core;$(ProjectDir)..\..\..\..\..\..\..\src\hal;$(ProjectDir)..\..\..\..\..\..\..\src\components\cutest\framework;$(ProjectDir)..\..\..\..\..\..\..\src\components\cutest\port;$(ProjectDir)..\..\..\..\..\..\..\src\components\cutest\testcase;$(ProjectDir)..\..\..\..\..\..\..\src\components\vfs;$(ProjectDir)..\..\..\..\..\..\..\src\components\vfs\treefs;$(ProjectDir)..\..\..\..\..\..\..\src\components\lua-5.3.4\src;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\..\..\port;$(ProjectDir)..\..\..\..\..\..\..\src\common;$(ProjectDir)..\..\..\..\..\..\..\src\components\shell\cmd;$(ProjectDir)..\..\..\..\..\..\..\src\components\shell\framework;$(ProjectDir)..\..\..\..\..\..\..\src\core;$(ProjectDir)..\..\..\..\..\..\..\src\hal;$(ProjectDir)..\..\..\..\..\..\..\src\components\cutest\framework;$(ProjectDir)..\..\..\..\..\..\..\src\components\cutest\port;$(ProjectDir)..\..\..\..\..\..\..\src\components\cutest\testcase;$(ProjectDir)..\..\..\..\..\..\..\src\components\vfs;$(ProjectDir)..\..\..\..\..\..\..\src\components\vfs\treefs;$(ProjectDir)..\..\..\..\..\..\..\src\components\lua-5.3.4\src;$(ProjectDir)..\..\..\..\..\..\..\src\components\db\framework;$(ProjectDir)..\..\..\..\..\..\..\src\components\db\dbbase;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>$(ProjectDir)..\..\..\port;$(ProjectDir)..\..\..\..\..\..\..\src\common;$(ProjectDir)..\..\..\..\..\..\..\src\components\shell\cmd;$(ProjectDir)..\..\..\..\..\..\..\src\components\shell\framework;$(ProjectDir)..\..\..\..\..\..\..\src\core;$(ProjectDir)..\..\..\..\..\..\..\src\hal;$(ProjectDir)..\..\..\..\..\..\..\src\components\cutest\framework;$(ProjectDir)..\..\..\..\..\..\..\src\components\cutest\port;$(ProjectDir)..\..\..\..\..\..\..\src\components\cutest\testcase;$(ProjectDir)..\..\..\..\..\..\..\src\components\vfs;$(ProjectDir)..\..\..\..\..\..\..\src\components\vfs\treefs;$(ProjectDir)..\..\..\..\..\..\..\src\components\lua-5.3.4\src;$(ProjectDir)..\..\..\..\..\..\..\src\components\db\framework;$(ProjectDir)..\..\..\..\..\..\..\src\components\db\dbbase;$(IncludePath)</IncludePath>
@@ -163,6 +163,7 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\components\vfs\wind_fs.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\components\vfs\wind_log.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_core.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_coroutine.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_daemon.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_dbgpoint.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_diagnose.c" />
@@ -256,6 +257,7 @@
     <ClInclude Include="..\..\..\..\..\..\..\src\components\vfs\wind_fs.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\components\vfs\wind_log.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_core.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_coroutine.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_daemon.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_dbgpoint.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_diagnose.h" />
