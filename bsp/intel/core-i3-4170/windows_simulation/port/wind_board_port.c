@@ -91,8 +91,6 @@ static void push_stack(w_stack_t ** Stackpp, w_stack_t v)
  * 初始化线程栈，用于线程初次切换时，从栈里面取出初始化参数
  * 填入参数的顺序可以参考相应的CPU线程进出栈的顺序
  */ 
-//定义线程栈的大小
-#define GMTHREADSTACKSIZE 0x2000
 
 w_stack_t *_wind_thread_stack_init(thread_run_f pfunc,void *pdata, w_stack_t *pstkbt)
 {    
