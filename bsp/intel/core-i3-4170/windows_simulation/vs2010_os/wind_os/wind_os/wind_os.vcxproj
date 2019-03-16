@@ -163,6 +163,7 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\components\vfs\wind_fs.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\components\vfs\wind_log.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_core.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_coroutine.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_daemon.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_dbgpoint.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_diagnose.c" />
@@ -214,7 +215,7 @@
     <ClInclude Include="..\..\..\..\..\..\..\src\components\cutest\port\test_port.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\components\db\dbbase\db_demo.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\components\db\dbbase\db_demo1.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\src\components\db\framework\db.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\components\db\framework\db_def.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\components\db\framework\db_entry.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\components\db\framework\db_if.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\components\db\framework\tb_entry.h" />
@@ -256,6 +257,7 @@
     <ClInclude Include="..\..\..\..\..\..\..\src\components\vfs\wind_fs.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\components\vfs\wind_log.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_core.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_coroutine.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_daemon.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_dbgpoint.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_diagnose.h" />
