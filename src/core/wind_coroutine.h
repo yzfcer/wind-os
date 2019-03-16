@@ -71,7 +71,7 @@ w_err_t wind_coroutine_destroy(w_coroutine_s *coroutine);
 w_err_t wind_coroutine_yeild(w_coroutine_s *coroutine,void *arg);
 w_err_t wind_coroutine_resume(w_coroutine_s *coroutine,void *arg);
 
-w_err_t wind_coroutine_print(void);
+w_err_t wind_coroutine_print(w_thread_s *thread);
 #endif
 #ifdef __cplusplus
 }

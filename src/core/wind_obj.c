@@ -94,6 +94,11 @@ w_obj_s *wind_obj_get(const char *name,w_dlist_s *list)
     WIND_ASSERT_RETURN(name != W_NULL,W_NULL);
     key = calc_obj_key(name);
     wind_disable_switch();
+    if(list->head == W_NULL)
+    {
+        wind_enable_switch();
+        return W_NULL;
+    }
     foreach_node(dnode,list)
     {
         obj = NODE_TO_OBJ(dnode);

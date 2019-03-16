@@ -29,6 +29,7 @@
 
 #include "wind_sysinfo.h"
 #include "wind_thread.h"
+#include "wind_coroutine.h"
 #include "wind_mutex.h"
 #include "wind_sem.h"
 #include "wind_event.h"
@@ -287,6 +288,9 @@ static void _wind_init()
     _wind_diagnose_mod_init();
 #endif
     _wind_thread_mod_init();
+#if WIND_COROUTINE_SUPPORT
+    _wind_coroutine_mod_init();
+#endif
 
 #if WIND_MUTEX_SUPPORT
     _wind_mutex_mod_init();
