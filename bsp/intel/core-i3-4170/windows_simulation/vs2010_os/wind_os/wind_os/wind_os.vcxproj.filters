@@ -663,9 +663,6 @@
     <ClInclude Include="..\..\..\..\..\..\..\src\components\vfs\wind_fs.h">
       <Filter>component_vfs</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\..\src\components\db\framework\db.h">
-      <Filter>component_db</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\..\src\components\db\framework\db_entry.h">
       <Filter>component_db</Filter>
     </ClInclude>
@@ -686,6 +683,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_coroutine.h">
       <Filter>os_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\components\db\framework\db_def.h">
+      <Filter>component_db</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

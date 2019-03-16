@@ -215,7 +215,7 @@
     <ClInclude Include="..\..\..\..\..\..\..\src\components\cutest\port\test_port.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\components\db\dbbase\db_demo.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\components\db\dbbase\db_demo1.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\src\components\db\framework\db.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\components\db\framework\db_def.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\components\db\framework\db_entry.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\components\db\framework\db_if.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\components\db\framework\tb_entry.h" />

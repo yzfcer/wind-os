@@ -136,6 +136,7 @@ struct _w_thread_s
     w_suscause_e cause;//导致状态变化的原因
     w_dlist_s coroutlist;//协程列表
     w_obj_s *corout;//当前协程
+
 };
 
 #define PRIDNODE_TO_THREAD(dnode,mbrnode) (w_thread_s*)(((char*)(dnode))-((w_uint32_t)&(((w_thread_s*)0)->mbrnode.dnode)))

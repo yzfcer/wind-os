@@ -61,12 +61,6 @@ static w_err_t insert_obj(w_dlist_s *list,w_obj_s *obj)
     foreach_node(dnode,list)
     {
         obj1 = NODE_TO_OBJ(dnode);
-        if(obj1->name == W_NULL)
-        {
-            dlist_insert_head(list,&obj->objnode);
-            wind_enable_switch();
-            return W_ERR_OK;
-        }
         res = wind_strcmp(obj->name,obj1->name);
         if(res == 0)
         {
@@ -89,9 +83,8 @@ static w_err_t insert_obj(w_dlist_s *list,w_obj_s *obj)
 const char *wind_obj_name(void *obj)
 {
     w_obj_s *obj1 = (w_obj_s*)obj;
-    return obj1->name?obj1->name:"anomy";
+    return obj1->name != W_NULL?obj1->name:"null";
 }
-
 
 w_obj_s *wind_obj_get(const char *name,w_dlist_s *list)
 {
