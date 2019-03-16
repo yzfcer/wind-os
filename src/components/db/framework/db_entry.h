@@ -4,51 +4,49 @@
 **                                       yzfcer@163.com
 **
 **--------------文件信息--------------------------------------------------------------------------------
-**文   件   名: wind_obj.h
+**文   件   名: db_entry.h
 **创   建   人: Jason Zhou
-**最后修改日期: 2019.01.28
-**描        述: 系统用户管理模块
+**最后修改日期: 2017.12.19
+**描        述: 
 **              
 **--------------历史版本信息----------------------------------------------------------------------------
-** 创建人: Jason Zhou
+** 创建人: 
 ** 版  本: v1.0
-** 日　期: 2019.01.28
+** 日　期: 2017.12.19
 ** 描　述: 原始版本
 **
 **--------------当前版本修订----------------------------------------------------------------------------
-** 修改人: Jason Zhou
-** 日　期: 2019.01.28
+** 修改人: 
+** 日　期: 2017.12.19
 ** 描　述: 
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
-#ifndef WIND_OBJ_H__
-#define WIND_OBJ_H__
+#ifndef DB_ENTRY_H_
+#define DB_ENTRY_H_
 #include "wind_type.h"
+#include "db_def.h"
 #include "wind_dlist.h"
+#include "tb_entry.h"
+#define DB_MAGIC 0xa5253867a16725b6
 
-#ifdef __cplusplus
-extern "C" {
+#define DB_NEXT(dbinfo) (w_db_s*)(dbinfo->base+dbinfo->next_offset)
+
+//数据库函数
+w_db_s *db_get_byname(char *dbname);
+w_bool_t db_entry_exist(char *dbname);
+w_err_t db_entry_create(char *dbname,w_uint16_t attr);
+w_err_t db_entry_destroy(char *dbname);
+w_err_t db_entry_setattr(char *dbname,w_uint16_t attr);
+w_err_t db_entry_getattr(char *dbname,w_uint16_t *attr);
+w_err_t db_entry_insert_tb(w_db_s *db,w_tb_s *tb);
+w_err_t db_entry_remove_tb(w_db_s *db,w_tb_s *tb);
+w_err_t db_entry_print_info(char *dbname);
+w_err_t db_entry_print_data(w_db_s *entry);
+w_err_t db_entry_print_db(char *dbname);
+w_err_t db_entry_print_all(void);
+
+
 #endif
 
-typedef struct _wind_obj
-{
-    w_uint32_t magic;
-    const char *name;
-    w_dnode_s objnode;
-    w_uint16_t key;
-    w_uint16_t flag;
-}w_obj_s;
-
-
-const char *wind_obj_name(void *obj);
-w_obj_s *wind_obj_get(const char *name,w_dlist_s *list);
-w_err_t wind_obj_init(w_obj_s *obj,w_uint32_t magic,const char *name,w_dlist_s *list);
-w_err_t wind_obj_deinit(w_obj_s *obj,w_uint32_t magic,w_dlist_s *list);
-
-
-#ifdef __cplusplus
-}
-#endif
-#endif//#ifndef WIND_OBJ_H__
 

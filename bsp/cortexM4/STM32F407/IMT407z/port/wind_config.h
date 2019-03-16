@@ -43,6 +43,10 @@
 #define WIND_THREAD_MAX_NUM 8 //需要的线程总数,建议根据需要来定义
 #define WIND_THREAD_CALLBACK_SUPPORT 1  //是否支持线程事件毁回调函数
 
+#define WIND_COROUTINE_SUPPORT 1 //是否支持协程
+#define WIND_COROUTINE_MAX_NUM 8 //最大的协程的数量
+#define WIND_COROUTINE_STKSIZE 20 //协程栈深度
+
 #define WIND_STKPOOL_SUPPORT 1 //是否支持线程堆栈通过内存池分配
 #define WIND_STK_MAX_NUM 4//堆栈的数量
 #define WIND_STK_SIZE 512 //堆栈大小

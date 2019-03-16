@@ -80,6 +80,12 @@ static w_err_t insert_obj(w_dlist_s *list,w_obj_s *obj)
     return W_ERR_OK;
 }
 
+const char *wind_obj_name(void *obj)
+{
+    w_obj_s *obj1 = (w_obj_s*)obj;
+    return obj1->name != W_NULL?obj1->name:"null";
+}
+
 w_obj_s *wind_obj_get(const char *name,w_dlist_s *list)
 {
     w_int16_t key;

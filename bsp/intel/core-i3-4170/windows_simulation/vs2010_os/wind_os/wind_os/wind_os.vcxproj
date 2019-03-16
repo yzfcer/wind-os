@@ -156,6 +156,7 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\components\vfs\wind_fs.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\components\vfs\wind_log.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_core.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_coroutine.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_daemon.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_dbgpoint.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_diagnose.c" />
@@ -242,6 +243,7 @@
     <ClInclude Include="..\..\..\..\..\..\..\src\components\vfs\wind_fs.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\components\vfs\wind_log.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_core.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_coroutine.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_daemon.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_dbgpoint.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_diagnose.h" />
