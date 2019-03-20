@@ -45,7 +45,7 @@
 
 #define WIND_COROUTINE_SUPPORT 1 //是否支持协程
 #define WIND_COROUTINE_MAX_NUM 8 //最大的协程的数量
-#define WIND_COROUTINE_STKSIZE 20 //协程栈深度
+#define WIND_COROUTINE_STKSIZE 128 //协程栈深度
 
 #define WIND_STKPOOL_SUPPORT 0 //是否支持线程堆栈通过内存池分配
 #define WIND_STK_MAX_NUM 4//堆栈的数量
@@ -118,6 +118,7 @@
 #define THREAD_STATI_STKSIZE 256
 #define THREAD_TIMER_STKSIZE 256
 #define THREAD_SHELL_STKSIZE 2048
+#define THREAD_COROUT_STKSIZE 256
 
 
 //-------------------------------------------------------------------------------

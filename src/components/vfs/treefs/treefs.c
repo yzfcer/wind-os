@@ -480,7 +480,7 @@ w_err_t treefile_fgets(treefile_s* file,char *buff, w_int32_t maxlen)
     w_int32_t i,len;
     WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(buff != W_NULL,W_ERR_PTR_NULL);
-    len = treefile_read(file,buff,maxlen);
+    len = treefile_read(file,(w_uint8_t*)buff,maxlen);
     WIND_ASSERT_RETURN(len > 0,-1);
     len -= 1;
     for(i = 0;i < len;i ++)
@@ -503,7 +503,7 @@ w_err_t treefile_fputs(treefile_s* file,char *buff)
     WIND_ASSERT_RETURN(buff != W_NULL,W_ERR_PTR_NULL);
     len = wind_strlen(buff);
     if(len > 0)
-        treefile_write(file,buff,len);
+        treefile_write(file,(w_uint8_t*)buff,len);
     treefile_write(file,"\n",1);
     return W_ERR_OK;
 }

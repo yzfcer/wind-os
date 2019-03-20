@@ -48,7 +48,10 @@ w_err_t _create_thread_timer(void)
                      0,W_NULL,timerstk,THREAD_TIMER_STKSIZE);
     WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_FAIL);
     wind_thread_set_priority(thread,3);
-    wind_daemon_create("timer",_create_thread_timer);
+#if WIND_DAEMON_SUPPORT
+        if(wind_daemon_get("coroutine") == W_NULL)
+            wind_daemon_create("timer",_create_thread_timer);
+#endif
     return W_ERR_OK;
 }
 #endif

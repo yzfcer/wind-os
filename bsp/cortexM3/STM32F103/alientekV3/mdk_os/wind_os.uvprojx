@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F40_41xxx,USE_STDPERIPH_DRIVER,_USE_USER_PRINT,STM32F10X_HD, USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\board;..\..\driver;..\port;..\start;..\..\..\..\..\src\common;..\..\..\..\..\src\core;..\..\..\..\..\src\hal;..\..\..\..\..\src\lib;..\..\..\..\..\src\components\shell\framework;..\..\..\..\..\src\components\shell\cmd;..\..\..\..\..\src\components\cutest\framework;..\..\..\..\..\src\components\cutest\port;..\..\..\..\..\src\components\cutest\case;..\..\..\..\..\src\components\lua-5.3.4\src;..\..\..\..\..\src\components\vfs;..\..\..\..\..\src\components\vfs\treefs</IncludePath>
+              <IncludePath>..\board;..\..\driver;..\port;..\start;..\..\..\..\..\src\common;..\..\..\..\..\src\core;..\..\..\..\..\src\hal;..\..\..\..\..\src\lib;..\..\..\..\..\src\components\shell\framework;..\..\..\..\..\src\components\shell\cmd;..\..\..\..\..\src\components\cutest\framework;..\..\..\..\..\src\components\cutest\port;..\..\..\..\..\src\components\cutest\case;..\..\..\..\..\src\components\lua-5.3.4\src;..\..\..\..\..\src\components\vfs;..\..\..\..\..\src\components\vfs\treefs;..\..\..\..\..\src\components\db\framework</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1056,6 +1056,16 @@
               <FileName>wind_obj.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\..\..\..\src\core\wind_obj.h</FilePath>
+            </File>
+            <File>
+              <FileName>wind_coroutine.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\core\wind_coroutine.c</FilePath>
+            </File>
+            <File>
+              <FileName>wind_coroutine.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\core\wind_coroutine.h</FilePath>
             </File>
           </Files>
         </Group>

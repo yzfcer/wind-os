@@ -26,6 +26,7 @@
 #include "wind_type.h"
 #include "wind_core.h"
 #include "wind_thread.h"
+#include "wind_coroutine.h"
 #include "wind_softirq.h"
 #include "wind_heap.h"
 #include "wind_watchdog.h"
@@ -66,7 +67,10 @@ w_err_t _create_thread_shell(void)
                0,W_NULL,ctrlstk,THREAD_SHELL_STKSIZE);
     WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_FAIL);
     wind_thread_set_priority(thread,32760);
-    wind_daemon_create("shell",_create_thread_shell);
+#if WIND_DAEMON_SUPPORT
+    if(wind_daemon_get("shell") == W_NULL)
+        wind_daemon_create("shell",_create_thread_shell);
+#endif
     return W_ERR_OK;
 }
 
@@ -115,11 +119,17 @@ static w_err_t thread_init(w_int32_t argc,char **argv)
 #endif  
 #if WIND_DBGPOINT_SUPPORT
     _wind_dbgpoint_mod_init();
-#endif  
+#endif
+#if WIND_COROUTINE_SUPPORT
+    _wind_coroutine_mod_init();
+#endif
+
 #if WIND_USER_SUPPORT
     _wind_user_mod_init();
 #endif
+#if wind_db_support
     _wind_db_mod_init();
+#endif
     _create_thread_idle();
     set_idle_cnt();
 #if WIND_SOFTIRQ_SUPPORT

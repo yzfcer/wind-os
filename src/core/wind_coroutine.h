@@ -63,6 +63,7 @@ typedef struct _w_coroutine_s
 }w_coroutine_s;
 
 w_err_t _wind_coroutine_mod_init(void);
+w_err_t _wind_coroutine_dispatch(void);
 w_coroutine_s *wind_coroutine_get(const char *name);
 w_err_t wind_coroutine_init(w_coroutine_s *coroutine,const char *name,w_uint16_t cid,coroutine_fn func,void *arg);
 w_coroutine_s *wind_coroutine_create(const char *name,w_uint16_t cid,coroutine_fn func,void *arg);
@@ -71,7 +72,7 @@ w_err_t wind_coroutine_destroy(w_coroutine_s *coroutine);
 w_err_t wind_coroutine_yeild(w_coroutine_s *coroutine,void *arg);
 w_err_t wind_coroutine_resume(w_coroutine_s *coroutine,void *arg);
 
-w_err_t wind_coroutine_print(w_thread_s *thread);
+w_err_t wind_coroutine_print(void);
 #endif
 #ifdef __cplusplus
 }
