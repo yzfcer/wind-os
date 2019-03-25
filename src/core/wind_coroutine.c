@@ -35,7 +35,6 @@
 #define NODE_TO_COROUTINE(node) (w_coroutine_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((w_coroutine_s*)0)->obj.objnode)))
 static w_dlist_s coroutinelist;
 static w_coroutine_s *curcorout;
-w_stack_t corout_stack[THREAD_COROUT_STKSIZE];
 static WIND_POOL(coroutinepool,WIND_COROUTINE_MAX_NUM,sizeof(w_coroutine_s));
 extern void wind_thread_switch(void);
 
@@ -65,28 +64,6 @@ static w_coroutine_s *get_coroutint_ready(void)
 }
 
 
-static w_err_t coroute_main(w_int32_t argc,char **argv)
-{
-    w_err_t err;
-    while(W_TRUE)
-    {
-        err= _wind_coroutine_dispatch();
-        if(err != W_ERR_OK)
-            wind_thread_sleep(1);
-    }
-}
-
-w_err_t corout_thread_init(void)
-{
-    w_thread_s *thread;
-    thread = wind_thread_create("coroutine",coroute_main,0,W_NULL,corout_stack,THREAD_COROUT_STKSIZE);
-    WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_FAIL);
-#if WIND_DAEMON_SUPPORT
-    if(wind_daemon_get("coroutine") == W_NULL)
-        wind_daemon_create("coroutine",corout_thread_init);
-#endif
-    return W_ERR_OK;
-}
 
 w_err_t _wind_coroutine_mod_init(void)
 {
@@ -95,11 +72,8 @@ w_err_t _wind_coroutine_mod_init(void)
     DLIST_INIT(coroutinelist);
     err = wind_pool_create("coroutine",coroutinepool,sizeof(coroutinepool),sizeof(w_coroutine_s));
     WIND_ASSERT_RETURN(err == W_ERR_OK,err);
-    err = corout_thread_init();
     return err;
 }
-
-
 
 
 w_err_t _wind_coroutine_dispatch(void)
@@ -160,7 +134,7 @@ w_err_t wind_coroutine_init(w_coroutine_s *coroutine,const char *name,w_uint16_t
     coroutine->thread = thread;
     coroutine->func = func;
     coroutine->arg = arg;
-    coroutine->stack = _wind_thread_stack_init(func,arg,&coroutine->stackbuff[WIND_COROUTINE_STKSIZE-1]);
+    coroutine->stack = _wind_thread_stack_init((thread_run_f)func,arg,&coroutine->stackbuff[WIND_COROUTINE_STKSIZE-1]);
     SET_F_COROUTINE_READY(coroutine);
     wind_obj_init(&coroutine->obj,WIND_COROUTINE_MAGIC,name,&thread->coroutlist);
     CLR_F_COROUTINE_POOL(coroutine);

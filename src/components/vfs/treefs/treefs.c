@@ -241,7 +241,7 @@ w_err_t treefile_rm(treefile_s *file)
     treefile_s *subfile;
     WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
     tree = &file->tree;
-    //wind_printf("rm %s\r\n",file->filename);
+    wind_debug("rm %s\r\n",file->filename);
     foreach_node(dnode,&tree->child_list)
     {
         subfile = NODE_TO_TREEFILE(dnode);
@@ -254,7 +254,7 @@ w_err_t treefile_rm(treefile_s *file)
         dlist_remove(&file->datalist,dnode);
         treefs_free(dnode);
     }
-    //wind_printf("treefs free name;0x%x\r\n",file->filename);
+    wind_debug("treefs free name;0x%x\r\n",file->filename);
     treefs_free(file->filename);
     treefs_free(file);
     return W_ERR_OK;

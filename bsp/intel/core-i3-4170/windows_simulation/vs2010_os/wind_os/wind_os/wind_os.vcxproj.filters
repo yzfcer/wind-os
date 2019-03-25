@@ -392,6 +392,15 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_coroutine.c">
       <Filter>os_core</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\vfs\listfs\listfs.c">
+      <Filter>component_vfs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\vfs\listfs\listfs_bitmap.c">
+      <Filter>component_vfs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\systhread\thread_coroutine.c">
+      <Filter>os_systhread</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">
@@ -686,6 +695,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\..\src\components\db\framework\db_def.h">
       <Filter>component_db</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\components\vfs\listfs\listfs.h">
+      <Filter>component_vfs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\components\vfs\listfs\listfs_bitmap.h">
+      <Filter>component_vfs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

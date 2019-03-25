@@ -53,6 +53,9 @@ void _create_thread_stati(void);
 #if WIND_DAEMON_SUPPORT
 void _create_thread_daemon(void);
 #endif
+#if WIND_COROUTINE_SUPPORT
+    w_err_t _create_coroutine_thread(void);
+#endif
 
 void _create_thread_idle(void);
 
@@ -121,13 +124,13 @@ static w_err_t thread_init(w_int32_t argc,char **argv)
     _wind_dbgpoint_mod_init();
 #endif
 #if WIND_COROUTINE_SUPPORT
-    _wind_coroutine_mod_init();
+    _create_coroutine_thread();
 #endif
 
 #if WIND_USER_SUPPORT
     _wind_user_mod_init();
 #endif
-#if wind_db_support
+#if WIND_DB_SUPPORT
     _wind_db_mod_init();
 #endif
     _create_thread_idle();

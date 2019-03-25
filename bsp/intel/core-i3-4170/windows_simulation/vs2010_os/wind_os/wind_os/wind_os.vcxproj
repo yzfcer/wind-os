@@ -40,7 +40,7 @@
     <IncludePath>$(ProjectDir)..\..\..\port;$(ProjectDir)..\..\..\..\..\..\..\src\common;$(ProjectDir)..\..\..\..\..\..\..\src\components\shell\cmd;$(ProjectDir)..\..\..\..\..\..\..\src\components\shell\framework;$(ProjectDir)..\..\..\..\..\..\..\src\core;$(ProjectDir)..\..\..\..\..\..\..\src\hal;$(ProjectDir)..\..\..\..\..\..\..\src\components\cutest\framework;$(ProjectDir)..\..\..\..\..\..\..\src\components\cutest\port;$(ProjectDir)..\..\..\..\..\..\..\src\components\cutest\testcase;$(ProjectDir)..\..\..\..\..\..\..\src\components\vfs;$(ProjectDir)..\..\..\..\..\..\..\src\components\vfs\treefs;$(ProjectDir)..\..\..\..\..\..\..\src\components\lua-5.3.4\src;$(ProjectDir)..\..\..\..\..\..\..\src\components\db\framework;$(ProjectDir)..\..\..\..\..\..\..\src\components\db\dbbase;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(ProjectDir)..\..\..\port;$(ProjectDir)..\..\..\..\..\..\..\src\common;$(ProjectDir)..\..\..\..\..\..\..\src\components\shell\cmd;$(ProjectDir)..\..\..\..\..\..\..\src\components\shell\framework;$(ProjectDir)..\..\..\..\..\..\..\src\core;$(ProjectDir)..\..\..\..\..\..\..\src\hal;$(ProjectDir)..\..\..\..\..\..\..\src\components\cutest\framework;$(ProjectDir)..\..\..\..\..\..\..\src\components\cutest\port;$(ProjectDir)..\..\..\..\..\..\..\src\components\cutest\testcase;$(ProjectDir)..\..\..\..\..\..\..\src\components\vfs;$(ProjectDir)..\..\..\..\..\..\..\src\components\vfs\treefs;$(ProjectDir)..\..\..\..\..\..\..\src\components\lua-5.3.4\src;$(ProjectDir)..\..\..\..\..\..\..\src\components\db\framework;$(ProjectDir)..\..\..\..\..\..\..\src\components\db\dbbase;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\..\..\port;$(ProjectDir)..\..\..\..\..\..\..\src\common;$(ProjectDir)..\..\..\..\..\..\..\src\core;$(ProjectDir)..\..\..\..\..\..\..\src\hal;$(ProjectDir)..\..\..\..\..\..\..\src\components\shell\framework;$(ProjectDir)..\..\..\..\..\..\..\src\components\shell\cmd;$(ProjectDir)..\..\..\..\..\..\..\src\components\cutest\framework;$(ProjectDir)..\..\..\..\..\..\..\src\components\cutest\port;$(ProjectDir)..\..\..\..\..\..\..\src\components\cutest\testcase;$(ProjectDir)..\..\..\..\..\..\..\src\components\vfs;$(ProjectDir)..\..\..\..\..\..\..\src\components\vfs\treefs;$(ProjectDir)..\..\..\..\..\..\..\src\components\vfs\listfs;$(ProjectDir)..\..\..\..\..\..\..\src\components\lua-5.3.4\src;$(ProjectDir)..\..\..\..\..\..\..\src\components\db\framework;$(ProjectDir)..\..\..\..\..\..\..\src\components\db\dbbase;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -157,6 +157,8 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\components\shell\framework\cmd_history.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\components\shell\framework\shell_framework.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\components\vfs\adapter_treefs.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\vfs\listfs\listfs.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\vfs\listfs\listfs_bitmap.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\components\vfs\treefs\treefs.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\components\vfs\wind_file.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\components\vfs\wind_filepath.c" />
@@ -184,6 +186,7 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_watchdog.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\hal\wind_blkdev.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\hal\wind_chdev.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\systhread\thread_coroutine.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\systhread\thread_daemon.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\systhread\thread_idle.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\systhread\thread_init.c" />
@@ -251,6 +254,8 @@
     <ClInclude Include="..\..\..\..\..\..\..\src\components\shell\framework\wind_cmd.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\components\shell\framework\wind_key.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\components\vfs\adapter_treefs.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\components\vfs\listfs\listfs.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\components\vfs\listfs\listfs_bitmap.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\components\vfs\treefs\treefs.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\components\vfs\wind_file.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\components\vfs\wind_filepath.h" />

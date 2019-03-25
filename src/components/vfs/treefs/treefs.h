@@ -20,6 +20,11 @@
 
 #define TREEFS_BLK_SIZE 128
 
+#define F_TREEFILE_DIR (0x01 << 0) //标记treefile对象是否是一个目录
+#define IS_F_TREEFILE_DIR(treefile) ((treefile->attr & F_TREEFILE_DIR) == F_TREEFILE_DIR)
+#define SET_F_TREEFILE_DIR(treefile) (treefile->attr |= F_TREEFILE_DIR)
+#define CLR_F_TREEFILE_DIR(treefile) (treefile->attr &= (~F_TREEFILE_DIR))
+
 
 typedef struct treefs_s
 {

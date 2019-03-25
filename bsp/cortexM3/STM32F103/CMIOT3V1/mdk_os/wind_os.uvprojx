@@ -1295,6 +1295,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\systhread\thread_timer.c</FilePath>
             </File>
+            <File>
+              <FileName>thread_coroutine.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\systhread\thread_coroutine.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
