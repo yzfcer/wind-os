@@ -40,7 +40,7 @@ static w_err_t set_free_bitmap_start(listfs_s *listfs,w_int32_t blkidx,w_int32_t
     for(i = blkidx;i < info->bitmap_cnt;i ++)
     {
         err = do_set_free_bitmap(listfs,i,blk,listfs->blkdev->blksize);
-        if(err = W_ERR_OK)
+        if(err == W_ERR_OK)
         {
             listfs_free(blk);
             return err;
@@ -49,7 +49,7 @@ static w_err_t set_free_bitmap_start(listfs_s *listfs,w_int32_t blkidx,w_int32_t
     for(i = 0;i < blkidx;i ++)
     {
         err = do_set_free_bitmap(listfs,i,blk,listfs->blkdev->blksize);
-        if(err = W_ERR_OK)
+        if(err == W_ERR_OK)
         {
             listfs_free(blk);
             return err;
@@ -88,7 +88,7 @@ w_err_t listfs_bitmap_set(listfs_s *listfs, w_int32_t unit_idx, w_uint8_t flag)
 
 w_err_t listfs_bitmap_find_free(listfs_s *listfs,w_int32_t *freeidx)
 {
-    w_int32_t bmidx,byteidx;
+    //w_int32_t bmidx,byteidx;
     WIND_ASSERT_RETURN(listfs != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(listfs->free_blkidx != -1,W_ERR_INVALID);
     WIND_ASSERT_RETURN(listfs->free_byteidx != -1,W_ERR_INVALID);

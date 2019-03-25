@@ -1,5 +1,5 @@
 #include "listfs.h"
-//#include "wind_tree.h"
+#include "wind_conv.h"
 #include "wind_heap.h"
 #include "wind_debug.h"
 #include "wind_string.h"
@@ -37,7 +37,10 @@ w_err_t listfs_format(w_blkdev_s *blkdev)
     w_int32_t i;
     w_uint32_t crc;
     lfs_info_s *lfs;
-    w_uint8_t *blk = listfs_malloc(blkdev->blksize);
+    w_uint8_t *blk;
+    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(blkdev->obj.magic == WIND_BLKDEV_MAGIC,W_ERR_INVALID);
+    blk = listfs_malloc(blkdev->blksize);
     WIND_ASSERT_RETURN(blk != W_NULL,W_ERR_MEM);
     wind_memset(blk,0,blkdev->blksize);
     lfs = (lfs_info_s*)blk;
