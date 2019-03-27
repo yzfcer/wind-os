@@ -100,6 +100,7 @@ w_bool_t dlist_is_empty(w_dlist_s *dlist);
 
 // 获取链表中的节点数
 w_int32_t dlist_get_count(w_dlist_s *dlist);
+
 // 合并两个链表
 w_dlist_s *dlist_combine(w_dlist_s *dlist1,w_dlist_s *dlist2);
 

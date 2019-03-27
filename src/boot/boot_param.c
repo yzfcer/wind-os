@@ -115,7 +115,7 @@ w_err_t boot_param_check_valid(w_uint8_t *buff)
     if(*crc != wind_crc32((w_uint8_t*)bp,sizeof(boot_param_s),0xffffffff))
     {
         wind_warn("param block crc is invalid.");
-        return W_ERR_FAIL;
+        return W_ERR_CRC;
     }
     if(bp->version > BOOT_VERSION)
     {

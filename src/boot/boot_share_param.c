@@ -53,7 +53,7 @@ static w_err_t check_share_param(w_uint8_t *buff)
     if(*crc != wind_crc32(buff,sizeof(share_param_s),0xffffffff))
     {
         wind_warn("share param block crc is invalid.");
-        return W_ERR_INVALID;
+        return W_ERR_CRC;
     }
 
     return W_ERR_OK;

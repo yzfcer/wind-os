@@ -111,7 +111,7 @@ w_err_t boot_img_head_get(img_head_s *head,w_uint8_t *buff)
     {
         head->magic = (~IMG_MAGIC);
         wind_error("img head crc_calc error.");
-        return W_ERR_INVALID;
+        return W_ERR_CRC;
     }
     boot_img_head_print(head);
     return W_ERR_OK;

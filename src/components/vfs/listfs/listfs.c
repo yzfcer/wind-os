@@ -72,9 +72,65 @@ w_err_t listfs_format(w_blkdev_s *blkdev)
     return W_ERR_OK;
 }
 
-
-listfile_s* listfile_open(const char *path,w_uint16_t mode)
+static w_err_t load_listfs(listfs_s *lfs,w_blkdev_s *blkdev)
 {
+    w_int32_t cnt;
+    w_uint8_t *blk;
+    lfs_info_s *info;
+    w_uint32_t crc,calc_crc;
+    blk = listfs_malloc(blkdev->blksize);
+    WIND_ASSERT_RETURN(blk != W_NULL,W_ERR_MEM);
+    wind_blkdev_read(blkdev,0,blk,1);
+    WIND_ASSERT_TODO_RETURN(cnt > 0,listfs_free(blk),W_ERR_FAIL);
+    info = (lfs_info_s*)blk;
+    WIND_ASSERT_TODO_RETURN(info->magic == LISTFS_MAGIC,listfs_free(blk),W_ERR_FAIL);
+    
+    calc_crc = wind_crc32(blk,blkdev->blksize-4,0xffffffff);
+    wind_to_uint32(&blk[blkdev->blksize-4],&crc);
+    WIND_ASSERT_TODO_RETURN(calc_crc == crc,listfs_free(blk),W_ERR_CRC);
+    wind_memcpy(&lfs->lfs_info,info,sizeof(lfs_info_s));
+    listfs_free(blk);
+    return W_ERR_OK;
+}
+
+w_err_t listfs_mount(listfs_s *lfs,w_blkdev_s *blkdev,const char *path)
+{
+    w_err_t err;
+    w_int32_t len;
+    WIND_ASSERT_RETURN(lfs != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(path != W_NULL,W_ERR_PTR_NULL);
+    len = wind_strlen(path);
+    lfs->path = listfs_malloc(len+1);
+    WIND_ASSERT_RETURN(lfs->path != W_NULL,W_ERR_MEM);
+    wind_memcpy(lfs->path,path,len);
+    lfs->path[len] = 0;
+    lfs->blkdev = blkdev;
+    err = load_listfs(lfs,blkdev);
+    WIND_ASSERT_TODO_RETURN(err == W_ERR_OK,listfs_free(lfs->path),err);
+        
+    listfs_bitmap_init(lfs);
+    return W_ERR_OK;
+}
+
+w_err_t listfs_unmount(listfs_s *lfs)
+{
+    WIND_ASSERT_RETURN(lfs != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(lfs->lfs_info.magic == LISTFS_MAGIC,W_ERR_INVALID);
+    lfs->blkdev = W_NULL;
+    if(lfs->path)
+        listfs_free(lfs->path);
+    lfs->lfs_info.magic = (~LISTFS_MAGIC);
+    return W_ERR_OK;
+}
+
+
+
+listfile_s* listfile_open(listfs_s *lfs,const char *path,w_uint16_t mode)
+{
+    WIND_ASSERT_RETURN(lfs != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(path != W_NULL,W_ERR_PTR_NULL);
+    
     return W_NULL;
 }
 
