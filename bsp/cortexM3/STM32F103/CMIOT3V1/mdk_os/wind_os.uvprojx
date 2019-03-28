@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F40_41xxx,USE_STDPERIPH_DRIVER,_USE_USER_PRINT,STM32F10X_HD, USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\board;..\port;..\start;..\..\driver;..\..\..\..\..\src\common;..\..\..\..\..\src\core;..\..\..\..\..\src\hal;..\..\..\..\..\src\lib;..\..\..\..\..\src\components\shell\framework;..\..\..\..\..\src\components\shell\cmd;..\..\..\..\..\src\components\cutest\framework;..\..\..\..\..\src\components\cutest\port;..\..\..\..\..\src\components\cutest\case;..\..\..\..\..\src\components\lua-5.3.4\src;..\..\..\..\..\src\components\vfs;..\..\..\..\..\src\components\db\framework</IncludePath>
+              <IncludePath>..\board;..\port;..\start;..\..\driver;..\..\..\..\..\src\common;..\..\..\..\..\src\core;..\..\..\..\..\src\hal;..\..\..\..\..\src\lib;..\..\..\..\..\src\components\shell\framework;..\..\..\..\..\src\components\shell\cmd;..\..\..\..\..\src\components\cutest\framework;..\..\..\..\..\src\components\cutest\port;..\..\..\..\..\src\components\cutest\case;..\..\..\..\..\src\components\lua-5.3.4\src;..\..\..\..\..\src\components\vfs;..\..\..\..\..\src\components\vfs\listfs;..\..\..\..\..\src\components\db\framework</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1557,6 +1557,11 @@
               <FileName>test_treefs.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\components\cutest\testcase\test_treefs.c</FilePath>
+            </File>
+            <File>
+              <FileName>test_listfsfs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\components\cutest\testcase\test_listfsfs.c</FilePath>
             </File>
           </Files>
         </Group>

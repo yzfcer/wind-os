@@ -401,6 +401,15 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\systhread\thread_coroutine.c">
       <Filter>os_systhread</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\cutest\testcase\test_listfsfs.c">
+      <Filter>component_cutest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\device\blkdev_memblk.c">
+      <Filter>device</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\device\blkdev_disk.c">
+      <Filter>device</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">

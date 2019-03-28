@@ -61,7 +61,6 @@ w_int32_t read_long_file(char *path,w_int32_t offset,w_uint8_t **buff)
 w_int32_t write_file(char *filename,w_int32_t offset,w_uint8_t *data,w_int32_t len)
 {
     FILE *file;
-    //w_uint32_t len;
     file = fopen(filename,"wb");
     WIND_ASSERT_RETURN(file != W_NULL,0);
     fseek(file,offset,SEEK_SET); 

@@ -45,7 +45,7 @@ w_int32_t memblk_read(w_blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t blk
     w_uint8_t *start;
     w_int32_t size;
     start = (w_uint8_t *)((dev->blkaddr + addr) * dev->blksize);
-    size = dev->blkcnt * dev->blksize;
+    size = blkcnt * dev->blksize;
     wind_memcpy(buf,start,size);
     return blkcnt;
 }
@@ -55,7 +55,7 @@ w_int32_t memblk_write(w_blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t bl
     w_uint8_t *start;
     w_int32_t size;
     start = (w_uint8_t *)((dev->blkaddr + addr) * dev->blksize);
-    size = dev->blkcnt * dev->blksize;
+    size = blkcnt * dev->blksize;
     wind_memcpy(start,buf,size);
     return blkcnt;
 }

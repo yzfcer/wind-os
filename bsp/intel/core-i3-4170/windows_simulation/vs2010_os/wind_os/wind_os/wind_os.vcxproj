@@ -82,6 +82,7 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\components\cutest\testcase\test_event.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\components\cutest\testcase\test_fs.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\components\cutest\testcase\test_heap.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\cutest\testcase\test_listfsfs.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\components\cutest\testcase\test_msgbox.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\components\cutest\testcase\test_mutex.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\components\cutest\testcase\test_pipe.c" />
@@ -192,6 +193,8 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\systhread\thread_init.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\systhread\thread_stati.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\systhread\thread_timer.c" />
+    <ClCompile Include="..\..\..\device\blkdev_disk.c" />
+    <ClCompile Include="..\..\..\device\blkdev_memblk.c" />
     <ClCompile Include="..\..\..\device\blkdev_null.c" />
     <ClCompile Include="..\..\..\device\list_blkdev.c" />
     <ClCompile Include="..\..\..\device\list_dev.c" />

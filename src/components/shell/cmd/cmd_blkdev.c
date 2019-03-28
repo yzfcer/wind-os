@@ -36,9 +36,9 @@ COMMAND_DISC(blkdev)
 COMMAND_USAGE(blkdev)
 {
     wind_printf("blkdev list:--to show all block devices.\r\n");
-    wind_printf("blkdev <dev> read <addr> <blknum>:--to read date from the block device.\r\n");
-    wind_printf("blkdev <dev> write <addr> <string>:--to write into the block device.\r\n");
-    wind_printf("blkdev <dev> erase <addr> <blknum>:--to erase the block device sectors.\r\n");
+    wind_printf("blkdev read  <dev> <addr> <blknum>:--to read date from the block device.\r\n");
+    wind_printf("blkdev write <dev> <addr> <string>:--to write into the block device.\r\n");
+    wind_printf("blkdev erase <dev> <addr> <blknum>:--to erase the block device sectors.\r\n");
 }
 
 
@@ -59,14 +59,14 @@ COMMAND_MAIN(blkdev,argc,argv)
     }
     
     WIND_ASSERT_RETURN(argc == 5,W_ERR_INVALID);
-    dev = wind_blkdev_get(argv[1]);
+    dev = wind_blkdev_get(argv[2]);
     wind_blkdev_open(dev);
     WIND_ASSERT_RETURN(dev != W_NULL,W_ERR_INVALID);
     res = wind_atoui(argv[3],(w_uint32_t*)&addr);
     WIND_ASSERT_RETURN(res == W_TRUE,W_ERR_INVALID);
     buff = buffer;
     wind_memset(buff,0,dev->blksize);
-    if(0 == wind_strcmp(argv[2],"read"))
+    if(0 == wind_strcmp(argv[1],"read"))
     {
         err = wind_blkdev_read(dev,addr,buff,1);
         if(wind_strlen((char*)buff) >= sizeof(buffer))
@@ -80,13 +80,13 @@ COMMAND_MAIN(blkdev,argc,argv)
             err = W_ERR_OK;
         }
     }
-    else if(0 == wind_strcmp(argv[2],"write"))
+    else if(0 == wind_strcmp(argv[1],"write"))
     {
         wind_strcpy((char*)buff,argv[4]);
         err = wind_blkdev_write(dev,addr,buff,1);
         err = W_ERR_OK;
     }
-    else if(0 == wind_strcmp(argv[2],"write"))
+    else if(0 == wind_strcmp(argv[1],"erase"))
     {
         err = wind_blkdev_erase(dev,addr,1);
         err = W_ERR_OK;

@@ -209,6 +209,7 @@ extern "C" {
 #define TEST_SOFTIRQ_SUPPORT 1 //是否支持软中断测试
 #define TEST_TREE_SUPPORT 1 //是否支持树形结构对象测试
 #define TEST_TREEFS_SUPPORT 1 //是否支持treefs文件系统测试
+#define TEST_LISTFS_SUPPORT 1 //是否支持listfs文件系统测试
 #define TEST_FS_SUPPORT 1 //是否支持fs文件系统接口测试
 #endif
 
