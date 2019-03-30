@@ -78,7 +78,7 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\common\wind_string.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\common\wind_tree.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\framework\test_framework.c" />
-    <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\port\test_port.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\cutest_register.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\test_event.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\test_fs.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\test_heap.c" />
@@ -219,7 +219,6 @@
     <ClInclude Include="..\..\..\..\..\..\..\src\common\wind_tree.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\cutest\framework\test_framework.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\cutest\framework\wind_cut.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\src\module\cutest\port\test_port.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\db\dbbase\db_demo.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\db\dbbase\db_demo1.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\db\framework\db_def.h" />

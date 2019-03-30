@@ -1479,16 +1479,6 @@
           <GroupName>component_cutest</GroupName>
           <Files>
             <File>
-              <FileName>test_port.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\module\cutest\port\test_port.c</FilePath>
-            </File>
-            <File>
-              <FileName>test_port.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\module\cutest\port\test_port.h</FilePath>
-            </File>
-            <File>
               <FileName>test_framework.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\module\cutest\framework\test_framework.c</FilePath>
@@ -1562,6 +1552,11 @@
               <FileName>test_listfsfs.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\src\module\cutest\testcase\test_listfsfs.c</FilePath>
+            </File>
+            <File>
+              <FileName>cutest_register.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\module\cutest\testcase\cutest_register.c</FilePath>
             </File>
           </Files>
         </Group>
