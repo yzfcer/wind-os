@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F40_41xxx,USE_STDPERIPH_DRIVER,_USE_USER_PRINT,STM32F10X_HD, USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\board;..\port;..\start;..\..\driver;..\..\..\..\..\src\common;..\..\..\..\..\src\core;..\..\..\..\..\src\hal;..\..\..\..\..\src\lib;..\..\..\..\..\src\components\shell\framework;..\..\..\..\..\src\components\shell\cmd;..\..\..\..\..\src\components\cutest\framework;..\..\..\..\..\src\components\cutest\port;..\..\..\..\..\src\components\cutest\case;..\..\..\..\..\src\components\lua-5.3.4\src;..\..\..\..\..\src\components\vfs;..\..\..\..\..\src\components\vfs\listfs;..\..\..\..\..\src\components\db\framework</IncludePath>
+              <IncludePath>..\board;..\port;..\start;..\..\driver;..\..\..\..\..\src\common;..\..\..\..\..\src\core;..\..\..\..\..\src\hal;..\..\..\..\..\src\lib;..\..\..\..\..\src\module\shell\framework;..\..\..\..\..\src\module\shell\cmd;..\..\..\..\..\src\module\cutest\framework;..\..\..\..\..\src\module\cutest\port;..\..\..\..\..\src\module\cutest\case;..\..\..\..\..\src\module\lua-5.3.4\src;..\..\..\..\..\src\module\vfs;..\..\..\..\..\src\module\vfs\listfs;..\..\..\..\..\src\module\db\framework</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1338,7 +1338,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>components_lua</GroupName>
+          <GroupName>module_lua</GroupName>
         </Group>
         <Group>
           <GroupName>component_shell</GroupName>
@@ -1346,132 +1346,132 @@
             <File>
               <FileName>cmd_history.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\components\shell\framework\cmd_history.c</FilePath>
+              <FilePath>..\..\..\..\..\src\module\shell\framework\cmd_history.c</FilePath>
             </File>
             <File>
               <FileName>cmd_history.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\components\shell\framework\cmd_history.h</FilePath>
+              <FilePath>..\..\..\..\..\src\module\shell\framework\cmd_history.h</FilePath>
             </File>
             <File>
               <FileName>shell_framework.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\components\shell\framework\shell_framework.c</FilePath>
+              <FilePath>..\..\..\..\..\src\module\shell\framework\shell_framework.c</FilePath>
             </File>
             <File>
               <FileName>shell_framework.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\components\shell\framework\shell_framework.h</FilePath>
+              <FilePath>..\..\..\..\..\src\module\shell\framework\shell_framework.h</FilePath>
             </File>
             <File>
               <FileName>wind_cmd.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\components\shell\framework\wind_cmd.h</FilePath>
+              <FilePath>..\..\..\..\..\src\module\shell\framework\wind_cmd.h</FilePath>
             </File>
             <File>
               <FileName>wind_key.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\components\shell\framework\wind_key.h</FilePath>
+              <FilePath>..\..\..\..\..\src\module\shell\framework\wind_key.h</FilePath>
             </File>
             <File>
               <FileName>cmd_beep.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\components\shell\cmd\cmd_beep.c</FilePath>
+              <FilePath>..\..\..\..\..\src\module\shell\cmd\cmd_beep.c</FilePath>
             </File>
             <File>
               <FileName>cmd_blkdev.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\components\shell\cmd\cmd_blkdev.c</FilePath>
+              <FilePath>..\..\..\..\..\src\module\shell\cmd\cmd_blkdev.c</FilePath>
             </File>
             <File>
               <FileName>cmd_cutest.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\components\shell\cmd\cmd_cutest.c</FilePath>
+              <FilePath>..\..\..\..\..\src\module\shell\cmd\cmd_cutest.c</FilePath>
             </File>
             <File>
               <FileName>cmd_datetime.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\components\shell\cmd\cmd_datetime.c</FilePath>
+              <FilePath>..\..\..\..\..\src\module\shell\cmd\cmd_datetime.c</FilePath>
             </File>
             <File>
               <FileName>cmd_echo.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\components\shell\cmd\cmd_echo.c</FilePath>
+              <FilePath>..\..\..\..\..\src\module\shell\cmd\cmd_echo.c</FilePath>
             </File>
             <File>
               <FileName>cmd_led.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\components\shell\cmd\cmd_led.c</FilePath>
+              <FilePath>..\..\..\..\..\src\module\shell\cmd\cmd_led.c</FilePath>
             </File>
             <File>
               <FileName>cmd_list.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\components\shell\cmd\cmd_list.c</FilePath>
+              <FilePath>..\..\..\..\..\src\module\shell\cmd\cmd_list.c</FilePath>
             </File>
             <File>
               <FileName>cmd_lua.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\components\shell\cmd\cmd_lua.c</FilePath>
+              <FilePath>..\..\..\..\..\src\module\shell\cmd\cmd_lua.c</FilePath>
             </File>
             <File>
               <FileName>cmd_mem.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\components\shell\cmd\cmd_mem.c</FilePath>
+              <FilePath>..\..\..\..\..\src\module\shell\cmd\cmd_mem.c</FilePath>
             </File>
             <File>
               <FileName>cmd_reset.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\components\shell\cmd\cmd_reset.c</FilePath>
+              <FilePath>..\..\..\..\..\src\module\shell\cmd\cmd_reset.c</FilePath>
             </File>
             <File>
               <FileName>cmd_stati.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\components\shell\cmd\cmd_stati.c</FilePath>
+              <FilePath>..\..\..\..\..\src\module\shell\cmd\cmd_stati.c</FilePath>
             </File>
             <File>
               <FileName>cmd_sysinfo.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\components\shell\cmd\cmd_sysinfo.c</FilePath>
+              <FilePath>..\..\..\..\..\src\module\shell\cmd\cmd_sysinfo.c</FilePath>
             </File>
             <File>
               <FileName>cmd_thread.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\components\shell\cmd\cmd_thread.c</FilePath>
+              <FilePath>..\..\..\..\..\src\module\shell\cmd\cmd_thread.c</FilePath>
             </File>
             <File>
               <FileName>cmd_xmodem.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\components\shell\cmd\cmd_xmodem.c</FilePath>
+              <FilePath>..\..\..\..\..\src\module\shell\cmd\cmd_xmodem.c</FilePath>
             </File>
             <File>
               <FileName>cmd_dbgpoint.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\components\shell\cmd\cmd_dbgpoint.c</FilePath>
+              <FilePath>..\..\..\..\..\src\module\shell\cmd\cmd_dbgpoint.c</FilePath>
             </File>
             <File>
               <FileName>cmd_user.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\components\shell\cmd\cmd_user.c</FilePath>
+              <FilePath>..\..\..\..\..\src\module\shell\cmd\cmd_user.c</FilePath>
             </File>
             <File>
               <FileName>cmd_watchdog.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\components\shell\cmd\cmd_watchdog.c</FilePath>
+              <FilePath>..\..\..\..\..\src\module\shell\cmd\cmd_watchdog.c</FilePath>
             </File>
             <File>
               <FileName>cmd_diagnose.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\components\shell\cmd\cmd_diagnose.c</FilePath>
+              <FilePath>..\..\..\..\..\src\module\shell\cmd\cmd_diagnose.c</FilePath>
             </File>
             <File>
               <FileName>shell_cmd_regif.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\components\shell\cmd\shell_cmd_regif.c</FilePath>
+              <FilePath>..\..\..\..\..\src\module\shell\cmd\shell_cmd_regif.c</FilePath>
             </File>
             <File>
               <FileName>cmd_daemon.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\components\shell\cmd\cmd_daemon.c</FilePath>
+              <FilePath>..\..\..\..\..\src\module\shell\cmd\cmd_daemon.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1481,92 +1481,89 @@
             <File>
               <FileName>test_port.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\components\cutest\port\test_port.c</FilePath>
+              <FilePath>..\..\..\..\..\src\module\cutest\port\test_port.c</FilePath>
             </File>
             <File>
               <FileName>test_port.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\components\cutest\port\test_port.h</FilePath>
+              <FilePath>..\..\..\..\..\src\module\cutest\port\test_port.h</FilePath>
             </File>
             <File>
               <FileName>test_framework.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\components\cutest\framework\test_framework.c</FilePath>
+              <FilePath>..\..\..\..\..\src\module\cutest\framework\test_framework.c</FilePath>
             </File>
             <File>
               <FileName>test_framework.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\components\cutest\framework\test_framework.h</FilePath>
+              <FilePath>..\..\..\..\..\src\module\cutest\framework\test_framework.h</FilePath>
             </File>
             <File>
               <FileName>wind_cut.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\..\..\..\..\src\components\cutest\framework\wind_cut.h</FilePath>
+              <FilePath>..\..\..\..\..\src\module\cutest\framework\wind_cut.h</FilePath>
             </File>
             <File>
               <FileName>test_event.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\components\cutest\testcase\test_event.c</FilePath>
+              <FilePath>..\..\..\..\..\src\module\cutest\testcase\test_event.c</FilePath>
             </File>
             <File>
               <FileName>test_heap.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\components\cutest\testcase\test_heap.c</FilePath>
+              <FilePath>..\..\..\..\..\src\module\cutest\testcase\test_heap.c</FilePath>
             </File>
             <File>
               <FileName>test_msgbox.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\components\cutest\testcase\test_msgbox.c</FilePath>
+              <FilePath>..\..\..\..\..\src\module\cutest\testcase\test_msgbox.c</FilePath>
             </File>
             <File>
               <FileName>test_mutex.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\components\cutest\testcase\test_mutex.c</FilePath>
+              <FilePath>..\..\..\..\..\src\module\cutest\testcase\test_mutex.c</FilePath>
             </File>
             <File>
               <FileName>test_pipe.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\components\cutest\testcase\test_pipe.c</FilePath>
+              <FilePath>..\..\..\..\..\src\module\cutest\testcase\test_pipe.c</FilePath>
             </File>
             <File>
               <FileName>test_pool.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\components\cutest\testcase\test_pool.c</FilePath>
+              <FilePath>..\..\..\..\..\src\module\cutest\testcase\test_pool.c</FilePath>
             </File>
             <File>
               <FileName>test_queue.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\components\cutest\testcase\test_queue.c</FilePath>
+              <FilePath>..\..\..\..\..\src\module\cutest\testcase\test_queue.c</FilePath>
             </File>
             <File>
               <FileName>test_sem.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\components\cutest\testcase\test_sem.c</FilePath>
+              <FilePath>..\..\..\..\..\src\module\cutest\testcase\test_sem.c</FilePath>
             </File>
             <File>
               <FileName>test_softirq.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\components\cutest\testcase\test_softirq.c</FilePath>
+              <FilePath>..\..\..\..\..\src\module\cutest\testcase\test_softirq.c</FilePath>
             </File>
             <File>
               <FileName>test_tree.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\components\cutest\testcase\test_tree.c</FilePath>
+              <FilePath>..\..\..\..\..\src\module\cutest\testcase\test_tree.c</FilePath>
             </File>
             <File>
               <FileName>test_treefs.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\components\cutest\testcase\test_treefs.c</FilePath>
+              <FilePath>..\..\..\..\..\src\module\cutest\testcase\test_treefs.c</FilePath>
             </File>
             <File>
               <FileName>test_listfsfs.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\src\components\cutest\testcase\test_listfsfs.c</FilePath>
+              <FilePath>..\..\..\..\..\src\module\cutest\testcase\test_listfsfs.c</FilePath>
             </File>
           </Files>
-        </Group>
-        <Group>
-          <GroupName>::CMSIS</GroupName>
         </Group>
       </Groups>
     </Target>
@@ -1574,14 +1571,7 @@
 
   <RTE>
     <apis/>
-    <components>
-      <component Cclass="CMSIS" Cgroup="CORE" Cvendor="ARM" Cversion="5.1.2" condition="ARMv6_7_8-M Device">
-        <package name="CMSIS" schemaVersion="1.3" url="http://www.keil.com/pack/" vendor="ARM" version="5.4.0"/>
-        <targetInfos>
-          <targetInfo name="wind_os"/>
-        </targetInfos>
-      </component>
-    </components>
+    <components/>
     <files/>
   </RTE>
 

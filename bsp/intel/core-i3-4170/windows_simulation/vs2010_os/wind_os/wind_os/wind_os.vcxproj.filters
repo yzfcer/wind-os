@@ -410,6 +410,9 @@
     <ClCompile Include="..\..\..\device\blkdev_disk.c">
       <Filter>device</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\components\shell\cmd\cmd_listfs.c">
+      <Filter>component_shell</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">

@@ -3,7 +3,7 @@
 #include "wind_string.h"
 #include <stdio.h>
 #if WIND_BLKDEV_SUPPORT
-#define MEM_SEC_COUNT 1024
+#define MEM_SEC_COUNT 32768
 #define MEM_SEC_SIZE 512
 #define FILE_NAME "disk.bin"
 static w_uint8_t buffer[MEM_SEC_SIZE];
