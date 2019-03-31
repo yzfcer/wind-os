@@ -9,22 +9,6 @@
 
 #define LFILE_NAME_LEN 64    //文件名长度
 
-//固化文件头部信息
-typedef struct __lfile_info_s
-{
-    w_uint32_t magic;                //魔术字
-    char       name[LFILE_NAME_LEN]; //文件名
-    w_addr_t   parent_addr;          //父地址
-    w_addr_t   self_addr;            //当前地址
-    w_addr_t   prevfile_addr;        //下一个文件地址
-    w_addr_t   nextfile_addr;        //下一个文件地址
-    w_addr_t   headchild_addr;       //第一个子文件地址
-    w_addr_t   tailchild_addr;       //最后一个文件地址
-    w_addr_t   nextblk_addr;         //下块地址
-    w_uint8_t  attr;                 //是否目录，可读，可写，隐藏，校验
-    w_uint16_t byteused;             //当前块的占用量
-}lfile_info_s;
-
 //固化文件系统信息
 typedef struct __lfs_info_s
 {
@@ -39,6 +23,25 @@ typedef struct __lfs_info_s
     w_addr_t   bitmap2;    //位图块数
     w_addr_t   root_addr;  //根目录位置
 }lfs_info_s;
+
+//固化文件头部信息
+typedef struct __lfile_info_s
+{
+    w_uint32_t magic;                //魔术字
+    char       name[LFILE_NAME_LEN]; //文件名
+    w_addr_t   parent_addr;          //父地址
+    w_addr_t   self_addr;            //当前地址
+    w_addr_t   prevfile_addr;        //下一个文件地址
+    w_addr_t   nextfile_addr;        //下一个文件地址
+    w_addr_t   headchild_addr;       //第一个子文件地址
+    w_addr_t   tailchild_addr;       //最后一个文件地址
+    w_addr_t   nextblk_addr;         //下块地址
+    w_int32_t  offset;               //当前块数据偏移量
+    w_uint8_t  attr;                 //是否目录，可读，可写，隐藏，校验
+    w_uint16_t byteused;             //当前块的占用量
+}lfile_info_s;
+
+
 
 w_err_t listfs_get_fsinfo(lfs_info_s *fsinfo,w_blkdev_s *blkdev);
 

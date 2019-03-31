@@ -79,7 +79,7 @@ listfile_s* listfile_open(listfs_s *lfs,const char *path,w_uint16_t mode);
 
 w_err_t listfile_close(listfile_s* file);
 
-w_bool_t listfile_existing(const char *path);
+w_bool_t listfile_existing(listfs_s *lfs,const char *path);
 
 w_err_t listfile_seek(listfile_s* file,w_int32_t offset);
 

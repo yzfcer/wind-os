@@ -62,7 +62,7 @@ static w_err_t listfs_search_file(listfs_s *lfs,const char *path,lfile_info_s *i
         wind_memset(pathname,0,len+1);
         wind_strcpy(pathname,path);
         pathname[len] = 0;
-        //cnt = split_path(pathname,nameseg,LISTFS_DIR_LAYCNT);
+        
         cnt = wind_strsplit(pathname,'/',nameseg,LISTFS_DIR_LAYCNT);
         if(cnt < 0)
         {
@@ -141,7 +141,6 @@ static w_err_t listfs_make_node(listfs_s *lfs,lfile_info_s *parent,char *name,w_
     
     err = listfs_bitmap_find_free(lfs,&self_addr);
     WIND_ASSERT_RETURN(err == W_ERR_OK,err);
-    
     
     do 
     {
@@ -291,7 +290,7 @@ w_err_t listfs_format(listfs_s *lfs,w_blkdev_s *blkdev)
 w_err_t listfs_mount(listfs_s *lfs,w_blkdev_s *blkdev)
 {
     w_err_t err;
-    w_int32_t len;
+    //w_int32_t len;
     WIND_ASSERT_RETURN(lfs != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
     lfs->blkdev = blkdev;
@@ -375,7 +374,7 @@ listfile_s* listfile_open(listfs_s *lfs,const char *path,w_uint16_t mode)
 
 w_err_t listfile_close(listfile_s* file)
 {
-    WIND_ASSERT_RETURN(file != W_NULL,W_NULL);
+    WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
     file->info.magic = 0;
     listfs_free(file);
     return W_ERR_OK;
@@ -393,7 +392,7 @@ w_bool_t listfile_existing(listfs_s *lfs,const char *path)
 
 w_err_t listfile_seek(listfile_s* file,w_int32_t offset)
 {
-    WIND_ASSERT_RETURN(file != W_NULL,W_NULL);
+    WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
     
     return W_ERR_FAIL;
 }
