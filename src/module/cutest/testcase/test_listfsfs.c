@@ -46,19 +46,19 @@ CASE_FUNC(listfs_create)
     EXPECT_NE(file,W_NULL);
     err = listfile_close(file);
     EXPECT_EQ(err,W_ERR_OK);
-    err = listfile_rm(file);
+    err = listfile_remove(file);
     EXPECT_EQ(err,W_ERR_OK);
     file = listfile_open(W_NULL,"/test1.txt",LF_FMODE_CRT);
     EXPECT_NE(file,W_NULL);
     err = listfile_close(file);
     EXPECT_EQ(err,W_ERR_OK);
-    err = listfile_rm(file);
+    err = listfile_remove(file);
     EXPECT_EQ(err,W_ERR_OK);
     file = listfile_open(W_NULL,"/test2.txt",LF_FMODE_CRT);
     EXPECT_NE(file,W_NULL);
     err = listfile_close(file);
     EXPECT_EQ(err,W_ERR_OK);
-    err = listfile_rm(file);
+    err = listfile_remove(file);
     EXPECT_EQ(err,W_ERR_OK);
 }
 
@@ -95,7 +95,7 @@ CASE_FUNC(listfs_readwrite)
     EXPECT_EQ(len,0);
     err = listfile_close(file);
     EXPECT_EQ(err,W_ERR_OK);
-    err = listfile_rm(file);
+    err = listfile_remove(file);
     EXPECT_EQ(err,W_ERR_OK);
     
 }

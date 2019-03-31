@@ -48,7 +48,7 @@ typedef struct __listfs_s
 {
     lfs_info_s lfs_info;
     w_blkdev_s *blkdev;
-    char *path;
+    //char *path;
     w_int32_t  free_blkidx;
     w_int32_t  free_byteidx;
 }listfs_s;
@@ -68,12 +68,11 @@ void *listfs_malloc(w_int32_t size);
 w_err_t listfs_free(void *ptr);
 
 w_err_t listfs_format(listfs_s *lfs,w_blkdev_s *blkdev);
-w_err_t listfs_mount(listfs_s *lfs,w_blkdev_s *blkdev,const char *path);
+w_err_t listfs_mount(listfs_s *lfs,w_blkdev_s *blkdev);
 w_err_t listfs_unmount(listfs_s *lfs);
 
 
-listfile_s *listfile_create(const char *path);
-w_err_t listfile_rm(listfile_s *file);
+w_err_t listfile_remove(listfile_s *file);
 
 
 listfile_s* listfile_open(listfs_s *lfs,const char *path,w_uint16_t mode);
