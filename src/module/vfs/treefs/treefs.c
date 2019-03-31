@@ -51,7 +51,7 @@ static w_uint32_t get_dataidx_by_offset(w_uint32_t offset)
     return offset % TREEFS_BLK_SIZE;
 }
 
-
+#if 0
 //将路径分割成段
 int split_path(char *path,char **layers,w_int32_t layercnt)
 {
@@ -82,8 +82,9 @@ int split_path(char *path,char **layers,w_int32_t layercnt)
     cnt = (layers[cnt-1][0] != 0?cnt:cnt -1);
     return cnt;
 }
+#endif
 
-static treefile_s *mk_subnode(treefile_s *parent,char *nodename,w_uint8_t isdir)
+static treefile_s *treefs_mk_subnode(treefile_s *parent,char *nodename,w_uint8_t isdir)
 {
     treefile_s *fsnode;
     int len = wind_strlen(nodename);
@@ -113,7 +114,7 @@ static treefile_s *mk_subnode(treefile_s *parent,char *nodename,w_uint8_t isdir)
 
 
 
-static treefile_s *get_childnode(w_tree_s *parent,char *childname)
+static treefile_s *treefs_get_childnode(w_tree_s *parent,char *childname)
 {
     w_dnode_s *dnode;
     treefile_s *fsnode;
@@ -128,7 +129,7 @@ static treefile_s *get_childnode(w_tree_s *parent,char *childname)
     return W_NULL;
 }
 
-static treefile_s *search_node(const char *path)
+static treefile_s *treefs_search_node(const char *path)
 {
     w_int32_t len,cnt,i;
     treefile_s *file = W_NULL;
@@ -147,7 +148,8 @@ static treefile_s *search_node(const char *path)
     wind_memset(pathname,0,len+1);
     wind_strcpy(pathname,path);
     pathname[len] = 0;
-    cnt = split_path(pathname,nameseg,TREEFS_DIR_LAYCNT);
+    //cnt = split_path(pathname,nameseg,TREEFS_DIR_LAYCNT);
+    cnt = wind_strsplit(pathname,'/',nameseg,TREEFS_DIR_LAYCNT);
     if(cnt < 0)
     {
         wind_error("split path failed");
@@ -162,7 +164,7 @@ static treefile_s *search_node(const char *path)
         
     for(i = 1;i < cnt;i ++)
     {
-        file = get_childnode(&file->tree,nameseg[i]);
+        file = treefs_get_childnode(&file->tree,nameseg[i]);
         if(file == W_NULL)
         {
             wind_debug("get child node failed");
@@ -177,7 +179,7 @@ SEARCH_COMPLETE:
     return file;
 }
 
-static treefile_s *make_node(const char *path)
+static treefile_s *treefs_make_node(const char *path)
 {
     char *ptr;
     w_int32_t len;
@@ -204,14 +206,14 @@ static treefile_s *make_node(const char *path)
     }
     *ptr = 0;
     nodename = &ptr[1];
-    file = search_node(dirname);
+    file = treefs_search_node(dirname);
     if(file == W_NULL)
     {
         wind_error("search filenode failed");
         treefs_free(dirname);
         return W_NULL;
     }
-    file = mk_subnode(file,nodename,isdir);
+    file = treefs_mk_subnode(file,nodename,isdir);
     treefs_free(dirname);
     return file;
 }
@@ -222,13 +224,13 @@ treefile_s *treefile_create(const char *path)
 {
     w_int32_t len;
     treefile_s *fsnode = W_NULL;
-    fsnode = search_node(path);
+    fsnode = treefs_search_node(path);
     if(fsnode != W_NULL)
     {
         wind_warn("file:%s has been existing.",path);
         return fsnode;
     }
-    fsnode = make_node(path);
+    fsnode = treefs_make_node(path);
     len = wind_strlen(path);
     fsnode->isdir = path[len-1] == '/'?1:0;
     return fsnode;
@@ -267,7 +269,7 @@ w_err_t treefs_format(void)
     treefile_s *root = treefs_get_root();
     if(root != W_NULL)
         treefile_rm(root);
-    root = mk_subnode(W_NULL,"",1);
+    root = treefs_mk_subnode(W_NULL,"",1);
     if(!root)
     {
         wind_error("make treefs root failed");
@@ -308,14 +310,14 @@ treefile_s* treefile_open(const char *path,w_uint16_t mode)
     treefile_s *file;
 
     is_crt = (mode & TF_FMODE_CRT)?W_TRUE:W_FALSE;
-    file = search_node(path);
+    file = treefs_search_node(path);
     if((file == W_NULL) && (!is_crt))
     {
         return W_NULL;
     }
         
     if(file == W_NULL)
-        file = make_node(path);
+        file = treefs_make_node(path);
     WIND_ASSERT_RETURN(file != W_NULL,W_NULL);
     WIND_ASSERT_RETURN(file->magic == TREEFILE_MAGIC,W_NULL);
     WIND_ASSERT_RETURN(file->mode == 0,W_NULL);
@@ -339,7 +341,7 @@ w_err_t treefile_close(treefile_s* file)
 w_bool_t treefile_existing(const char *path)
 {
     treefile_s *file;
-    file = search_node(path);
+    file = treefs_search_node(path);
     if(file != W_NULL)
         return W_TRUE;
     return W_FALSE;

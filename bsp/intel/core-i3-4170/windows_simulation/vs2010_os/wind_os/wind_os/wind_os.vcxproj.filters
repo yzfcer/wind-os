@@ -413,6 +413,9 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\cutest_register.c">
       <Filter>module_cutest</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\listfs\listfs_fileinfo.c">
+      <Filter>module_vfs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">
@@ -709,6 +712,9 @@
       <Filter>module_shell</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\wind_log.h">
+      <Filter>module_vfs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\listfs\listfs_fileinfo.h">
       <Filter>module_vfs</Filter>
     </ClInclude>
   </ItemGroup>

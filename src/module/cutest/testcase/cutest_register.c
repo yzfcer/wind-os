@@ -24,7 +24,7 @@
 
 
 #if WIND_CUTEST_SUPPORT
-void test_suite_register_all(void);
+
 
 
 #if TEST_POOL_SUPPORT

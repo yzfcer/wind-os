@@ -70,15 +70,16 @@ w_err_t listfs_bitmap_init(listfs_s *listfs)
     return err;
 }
 
-w_err_t listfs_bitmap_set(listfs_s *listfs, w_int32_t unit_idx, w_uint8_t flag)
+w_err_t listfs_bitmap_set(listfs_s *listfs, w_int32_t unit_idx, w_uint8_t bitflag)
 {
     w_int32_t bmidx,byteidx;
     lfs_info_s *info = &listfs->lfs_info;
     w_uint8_t *blk = listfs_malloc(listfs->blkdev->blksize);
+    WIND_ASSERT_RETURN(blk != W_NULL,W_ERR_MEM);
     bmidx = unit_idx / listfs->lfs_info.unit_size;
     byteidx = unit_idx % listfs->lfs_info.unit_size;
     wind_blkdev_read(listfs->blkdev,info->bitmap1+bmidx,blk,1);
-    blk[byteidx] = flag;
+    blk[byteidx] = bitflag;
     wind_blkdev_write(listfs->blkdev,info->bitmap1+bmidx,blk,1);
     wind_blkdev_write(listfs->blkdev,info->bitmap2+bmidx,blk,1);
     listfs_free(blk);
@@ -88,13 +89,31 @@ w_err_t listfs_bitmap_set(listfs_s *listfs, w_int32_t unit_idx, w_uint8_t flag)
 
 w_err_t listfs_bitmap_find_free(listfs_s *listfs,w_int32_t *freeidx)
 {
-    //w_int32_t bmidx,byteidx;
     WIND_ASSERT_RETURN(listfs != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(listfs->free_blkidx != -1,W_ERR_INVALID);
     WIND_ASSERT_RETURN(listfs->free_byteidx != -1,W_ERR_INVALID);
     *freeidx = listfs->free_blkidx * listfs->lfs_info.unit_size + listfs->free_byteidx;
     listfs_bitmap_set(listfs,*freeidx,BITMAP_USED);
     set_free_bitmap_start(listfs,listfs->free_blkidx,listfs->free_byteidx);
+    return W_ERR_OK;
+}
+
+
+w_err_t listfs_bitmap_clear(lfs_info_s *lfs_info,w_blkdev_s *blkdev)
+{
+    w_int32_t i;
+    w_uint8_t *blk;
+    WIND_ASSERT_RETURN(lfs_info != W_NULL,W_ERR_PTR_NULL);
+    blk = listfs_malloc(blkdev->blksize);
+    WIND_ASSERT_RETURN(blk != W_NULL,W_ERR_MEM);
+    blk = listfs_malloc(blkdev->blksize);
+    blk[0] = 0;
+    for(i = 1;i < lfs_info->bitmap_cnt; i ++)
+        wind_blkdev_write(blkdev,lfs_info->bitmap1+i,blk,1);
+    for(i = 1;i < lfs_info->bitmap_cnt; i ++)
+        wind_blkdev_write(blkdev,lfs_info->bitmap2+i,blk,1);
+
+    listfs_free(blk);
     return W_ERR_OK;
 }
 

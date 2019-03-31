@@ -25,7 +25,7 @@
 extern "C" {
 #endif // #ifdef __cplusplus
 
-
+void test_suite_register_all(void);
 
 
 

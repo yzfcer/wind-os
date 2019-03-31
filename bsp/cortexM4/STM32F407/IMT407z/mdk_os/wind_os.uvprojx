@@ -1442,6 +1442,16 @@
               <FileType>5</FileType>
               <FilePath>..\..\..\..\..\src\module\vfs\listfs\listfs_bitmap.h</FilePath>
             </File>
+            <File>
+              <FileName>listfs_fileinfo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\module\vfs\listfs\listfs_fileinfo.c</FilePath>
+            </File>
+            <File>
+              <FileName>listfs_fileinfo.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\module\vfs\listfs\listfs_fileinfo.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

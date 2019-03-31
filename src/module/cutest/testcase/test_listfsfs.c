@@ -26,6 +26,7 @@
 extern "C" {
 #endif // #ifdef __cplusplus
 
+listfs_s g_lfs;
 CASE_SETUP(listfs_create)
 {
 
@@ -99,9 +100,31 @@ CASE_FUNC(listfs_readwrite)
     
 }
 
+
+CASE_SETUP(listfs_format)
+{
+}
+
+CASE_TEARDOWN(listfs_format)
+{
+    
+}
+
+CASE_FUNC(listfs_format)
+{
+    w_err_t err;
+    w_blkdev_s *blkdev;
+    blkdev = wind_blkdev_get("disk");
+    if(blkdev == W_NULL)
+        return;
+    wind_blkdev_open(blkdev);
+    err = listfs_format(&g_lfs,blkdev);
+    EXPECT_EQ(err,W_ERR_OK);
+    wind_blkdev_close(blkdev);
+}
+
 SUITE_SETUP(test_listfs)
 {
-    listfs_format(W_NULL);
 }
 
 SUITE_TEARDOWN(test_listfs)
@@ -109,7 +132,10 @@ SUITE_TEARDOWN(test_listfs)
 
 }
 
+
+
 TEST_CASES_START(test_listfs)
+TEST_CASE(listfs_format)
 TEST_CASE(listfs_create)
 TEST_CASE(listfs_readwrite)
 TEST_CASES_END

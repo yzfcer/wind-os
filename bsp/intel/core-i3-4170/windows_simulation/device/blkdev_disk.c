@@ -3,7 +3,7 @@
 #include "wind_string.h"
 #include <stdio.h>
 #if WIND_BLKDEV_SUPPORT
-#define MEM_SEC_COUNT 32768
+#define MEM_SEC_COUNT 4096
 #define MEM_SEC_SIZE 512
 #define FILE_NAME "disk.bin"
 static w_uint8_t buffer[MEM_SEC_SIZE];
@@ -81,6 +81,7 @@ w_int32_t disk_write(w_blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t blkc
     WIND_ASSERT_RETURN(file != W_NULL,0);
     wind_memset(buffer,0,sizeof(buffer));
     fseek(file,start,SEEK_SET); 
+    wind_notice("write offset : 0x%08x",start);
     len = fwrite(buf,1,size,file);
     fclose(file);
     if(len > 0)
