@@ -16,7 +16,7 @@ w_err_t listfs_bitmap_set(listfs_s *listfs,w_int32_t unit_idx,w_uint8_t bitflag)
 
 w_err_t listfs_bitmap_find_free(listfs_s *listfs,w_int32_t *freeidx);
 
-w_err_t listfs_bitmap_clear(lfs_info_s *lfs_info,w_blkdev_s *blkdev);
+w_err_t listfs_bitmap_clear(listfs_s *listfs);
 
 #endif
 #endif

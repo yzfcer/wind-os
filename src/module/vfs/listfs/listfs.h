@@ -29,20 +29,6 @@
 
 
 
-//文件数据块头部信息
-typedef struct __lfile_blkinfo_s
-{
-    w_uint32_t magic;     //魔术字
-    w_addr_t   addr;      //当前地址
-    w_addr_t   prev_addr; //上块地址
-    w_addr_t   next_addr; //下块地址
-    w_uint8_t  verify;    //校验值
-    w_uint8_t  attr;      //是否目录，可读，可写，隐藏，校验
-    w_uint16_t blkused;   //当前块的占用量
-}lfile_blkinfo_s;
-
-
-
 //程序关联的文件系统信息
 typedef struct __listfs_s
 {
@@ -64,36 +50,24 @@ typedef struct __listfile_s
 }listfile_s;
 
 
-void *listfs_malloc(w_int32_t size);
-w_err_t listfs_free(void *ptr);
+void *lfs_malloc(w_int32_t size);
+w_err_t lfs_free(void *ptr);
 
 w_err_t listfs_format(listfs_s *lfs,w_blkdev_s *blkdev);
 w_err_t listfs_mount(listfs_s *lfs,w_blkdev_s *blkdev);
 w_err_t listfs_unmount(listfs_s *lfs);
 
 
-w_err_t listfile_remove(listfile_s *file);
-
-
-listfile_s* listfile_open(listfs_s *lfs,const char *path,w_uint16_t mode);
-
-w_err_t listfile_close(listfile_s* file);
-
 w_bool_t listfile_existing(listfs_s *lfs,const char *path);
-
+listfile_s* listfile_open(listfs_s *lfs,const char *path,w_uint16_t mode);
+w_err_t listfile_close(listfile_s* file);
+w_err_t listfile_remove(listfile_s *file);
 w_err_t listfile_seek(listfile_s* file,w_int32_t offset);
-
 w_int32_t listfile_ftell(listfile_s* file);
-
 w_int32_t listfile_read(listfile_s* file,w_uint8_t *buff, w_int32_t size);
-
 w_int32_t listfile_write(listfile_s* file,w_uint8_t *buff, w_int32_t size);
-
-
 listfile_s *listfile_readdir(listfile_s* file,w_int32_t index);
-
 w_err_t listfile_fgets(listfile_s* file,char *buff, w_int32_t maxlen);
-
 w_err_t listfile_fputs(listfile_s* file,char *buff);
 
 #endif

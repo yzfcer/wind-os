@@ -9,6 +9,9 @@
 
 #define LFILE_NAME_LEN 64    //文件名长度
 
+#define LFILE_LBLK_CNT 64    //每个块允许记录的关联块数量
+
+
 //固化文件系统信息
 typedef struct __lfs_info_s
 {
@@ -38,9 +41,21 @@ typedef struct __lfile_info_s
     w_addr_t   nextblk_addr;         //下块地址
     w_int32_t  offset;               //当前块数据偏移量
     w_uint8_t  attr;                 //是否目录，可读，可写，隐藏，校验
-    w_uint16_t byteused;             //当前块的占用量
+    w_int32_t  blkused;              //当前块已经使用的数量
+    w_int32_t  byteused;             //当前块已经使用的字节数量
 }lfile_info_s;
 
+//文件数据块头部信息
+typedef struct __lfile_blkinfo_s
+{
+    w_uint32_t magic;     //魔术字
+    w_addr_t   self_addr;      //当前地址
+    w_addr_t   prev_addr; //上块地址
+    w_addr_t   next_addr; //下块地址
+    w_int32_t  offset;    //当前块对应的文件的起始偏移量
+    w_int32_t  blkused;   //当前块已经使用的数量
+    w_int32_t  byteused;  //当前块已经使用的字节数量
+}lfile_blkinfo_s;
 
 
 w_err_t listfs_get_fsinfo(lfs_info_s *fsinfo,w_blkdev_s *blkdev);
@@ -65,7 +80,6 @@ lfile_info_s *fileinfo_tailchild(lfile_info_s *info,w_blkdev_s *blkdev);
 w_err_t fileinfo_update_parent(lfile_info_s *info,w_blkdev_s *blkdev);
 
 w_err_t fileinfo_update_prev(lfile_info_s *info,w_blkdev_s *blkdev);
-
 
 #endif
 

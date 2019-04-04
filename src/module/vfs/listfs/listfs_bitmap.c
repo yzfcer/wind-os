@@ -36,13 +36,13 @@ static w_err_t set_free_bitmap_start(listfs_s *listfs,w_int32_t blkidx,w_int32_t
     w_int32_t i;
     w_err_t err;
     lfs_info_s *info = &listfs->lfs_info;
-    w_uint8_t *blk = listfs_malloc(listfs->blkdev->blksize);
+    w_uint8_t *blk = lfs_malloc(listfs->blkdev->blksize);
     for(i = blkidx;i < info->bitmap_cnt;i ++)
     {
         err = do_set_free_bitmap(listfs,i,blk,listfs->blkdev->blksize);
         if(err == W_ERR_OK)
         {
-            listfs_free(blk);
+            lfs_free(blk);
             return err;
         }
     }
@@ -51,7 +51,7 @@ static w_err_t set_free_bitmap_start(listfs_s *listfs,w_int32_t blkidx,w_int32_t
         err = do_set_free_bitmap(listfs,i,blk,listfs->blkdev->blksize);
         if(err == W_ERR_OK)
         {
-            listfs_free(blk);
+            lfs_free(blk);
             return err;
         }
     }
@@ -59,7 +59,7 @@ static w_err_t set_free_bitmap_start(listfs_s *listfs,w_int32_t blkidx,w_int32_t
     listfs->free_blkidx = -1;
     listfs->free_byteidx = -1;
     wind_notice("set free bitmap failed");
-    listfs_free(blk);
+    lfs_free(blk);
     return W_ERR_FAIL;
 }
 
@@ -74,7 +74,7 @@ w_err_t listfs_bitmap_set(listfs_s *listfs, w_int32_t unit_idx, w_uint8_t bitfla
 {
     w_int32_t bmidx,byteidx;
     lfs_info_s *info = &listfs->lfs_info;
-    w_uint8_t *blk = listfs_malloc(listfs->blkdev->blksize);
+    w_uint8_t *blk = lfs_malloc(listfs->blkdev->blksize);
     WIND_ASSERT_RETURN(blk != W_NULL,W_ERR_MEM);
     bmidx = unit_idx / listfs->lfs_info.unit_size;
     byteidx = unit_idx % listfs->lfs_info.unit_size;
@@ -82,7 +82,7 @@ w_err_t listfs_bitmap_set(listfs_s *listfs, w_int32_t unit_idx, w_uint8_t bitfla
     blk[byteidx] = bitflag;
     wind_blkdev_write(listfs->blkdev,info->bitmap1+bmidx,blk,1);
     wind_blkdev_write(listfs->blkdev,info->bitmap2+bmidx,blk,1);
-    listfs_free(blk);
+    lfs_free(blk);
     return W_ERR_OK;
 }
 
@@ -99,21 +99,21 @@ w_err_t listfs_bitmap_find_free(listfs_s *listfs,w_int32_t *freeidx)
 }
 
 
-w_err_t listfs_bitmap_clear(lfs_info_s *lfs_info,w_blkdev_s *blkdev)
+w_err_t listfs_bitmap_clear(listfs_s *listfs)
 {
     w_int32_t i;
     w_uint8_t *blk;
-    WIND_ASSERT_RETURN(lfs_info != W_NULL,W_ERR_PTR_NULL);
-    blk = listfs_malloc(blkdev->blksize);
+    WIND_ASSERT_RETURN(listfs != W_NULL,W_ERR_PTR_NULL);
+    blk = lfs_malloc(listfs->blkdev->blksize);
     WIND_ASSERT_RETURN(blk != W_NULL,W_ERR_MEM);
-    blk = listfs_malloc(blkdev->blksize);
+    blk = lfs_malloc(listfs->blkdev->blksize);
     blk[0] = 0;
-    for(i = 1;i < lfs_info->bitmap_cnt; i ++)
-        wind_blkdev_write(blkdev,lfs_info->bitmap1+i,blk,1);
-    for(i = 1;i < lfs_info->bitmap_cnt; i ++)
-        wind_blkdev_write(blkdev,lfs_info->bitmap2+i,blk,1);
+    for(i = 1;i < listfs->lfs_info.bitmap_cnt; i ++)
+        wind_blkdev_write(listfs->blkdev,listfs->lfs_info.bitmap1+i,blk,1);
+    for(i = 1;i < listfs->lfs_info.bitmap_cnt; i ++)
+        wind_blkdev_write(listfs->blkdev,listfs->lfs_info.bitmap2+i,blk,1);
 
-    listfs_free(blk);
+    lfs_free(blk);
     return W_ERR_OK;
 }
 
