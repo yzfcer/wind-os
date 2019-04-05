@@ -52,11 +52,12 @@ w_err_t   disk_eraseall(w_blkdev_s *dev)
 
 w_int32_t disk_read(w_blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t blkcnt)
 {
-    w_uint8_t *start;
+    w_int32_t start;
     w_int32_t size,len;
     FILE *file;
-    start = (w_uint8_t *)((dev->blkaddr + addr) * dev->blksize);
+    start = (w_int32_t)((dev->blkaddr + addr) * dev->blksize);
     size = blkcnt * dev->blksize;
+
     
     file = fopen(FILE_NAME,"r");
     WIND_ASSERT_RETURN(file != W_NULL,0);
@@ -71,10 +72,10 @@ w_int32_t disk_read(w_blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t blkcn
 
 w_int32_t disk_write(w_blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t blkcnt)
 {
-    w_uint8_t *start;
+    w_int32_t start;
     w_int32_t size,len;
     FILE *file;
-    start = (w_uint8_t *)((dev->blkaddr + addr) * dev->blksize);
+    start = (w_int32_t)((dev->blkaddr + addr) * dev->blksize);
     size = blkcnt * dev->blksize;
     
     file = fopen(FILE_NAME,"rb+");

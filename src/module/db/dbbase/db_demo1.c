@@ -32,6 +32,3 @@ TBMODEL_ITEM(tb_demo1,w_bool_t,bodemo1)
 TBMODEL_ITEM(tb_demo1,w_str64_t,strdemo)
 TBMODEL_END
 TBMODEL_DEF(tb_demo1,DB_ATTR_SINGLE)
-
-
-

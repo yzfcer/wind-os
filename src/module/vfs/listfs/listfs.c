@@ -155,7 +155,7 @@ static w_err_t lfs_make_child(listfs_s *lfs,lfile_info_s *parent,char *name,w_ui
         wind_memset(blk,0,lfs->blkdev->blksize);
         attr = isdir?(LFILE_ATTR_COMMAN|LFILE_ATTR_DIR):LFILE_ATTR_COMMAN;
         info = (lfile_info_s*)blk;
-        listfs_fileinfo_init(info,name,self_addr,parent->self_addr,parent->tailchild_addr,attr);
+        listfs_fileinfo_init(info,name,self_addr,parent->blkinfo.self_addr,parent->tailchild_addr,attr);
         info->prevfile_addr = parent->tailchild_addr;
         cnt = wind_blkdev_write(lfs->blkdev,self_addr,blk,1);
         if(cnt <= 0)
@@ -420,7 +420,8 @@ listfile_s* listfile_open(listfs_s *lfs,const char *path,w_uint16_t mode)
 w_err_t listfile_close(listfile_s* file)
 {
     WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
-    file->info.magic = 0;
+    WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,W_ERR_INVALID);
+    file->info.magic == 0;
     lfs_free(file);
     return W_ERR_OK;
 }
@@ -438,37 +439,55 @@ w_bool_t listfile_existing(listfs_s *lfs,const char *path)
 w_err_t listfile_seek(listfile_s* file,w_int32_t offset)
 {
     WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
-    
-    return W_ERR_FAIL;
+    WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,W_ERR_INVALID);
+    file->offset = offset;
+    return W_ERR_OK;
 }
 
 w_int32_t listfile_ftell(listfile_s* file)
 {
-    return -1;
+    WIND_ASSERT_RETURN(file != W_NULL,-1);
+    WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,-1);
+    return file->offset;
 }
 
 w_int32_t listfile_read(listfile_s* file,w_uint8_t *buff, w_int32_t size)
 {
+    WIND_ASSERT_RETURN(file != W_NULL,-1);
+    WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,-1);
+    WIND_ASSERT_RETURN(file->mode & LF_FMODE_R,-1);
     return 0;
 }
 
 w_int32_t listfile_write(listfile_s* file,w_uint8_t *buff, w_int32_t size)
 {
+    WIND_ASSERT_RETURN(file != W_NULL,-1);
+    WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,-1);
+    WIND_ASSERT_RETURN(file->mode & LF_FMODE_W,-1);
     return 0;
 }
 
 listfile_s *listfile_readdir(listfile_s* file,w_int32_t index)
 {
+    WIND_ASSERT_RETURN(file != W_NULL,W_NULL);
+    WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,W_NULL);
+    WIND_ASSERT_RETURN(file->mode & LF_FMODE_R,W_NULL);
     return W_NULL;
 }
 
 
 w_err_t listfile_fgets(listfile_s* file,char *buff, w_int32_t maxlen)
 {
+    WIND_ASSERT_RETURN(file != W_NULL,-1);
+    WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,-1);
+    WIND_ASSERT_RETURN(file->mode & LF_FMODE_R,-1);
     return W_ERR_FAIL;
 }
 w_err_t listfile_fputs(listfile_s* file,char *buff)
 {
+    WIND_ASSERT_RETURN(file != W_NULL,-1);
+    WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,-1);
+    WIND_ASSERT_RETURN(file->mode & LF_FMODE_W,-1);
     return W_ERR_FAIL;
 }
 

@@ -457,6 +457,9 @@
     <Filter Include="module_db">
       <UniqueIdentifier>{77487dbd-b87a-44c9-aafd-cea4c6b35696}</UniqueIdentifier>
     </Filter>
+    <Filter Include="module_cjson">
+      <UniqueIdentifier>{cb956575-b568-4d7e-9038-5d90b331c8b2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\..\..\..\src\common\wind_conv.h">
