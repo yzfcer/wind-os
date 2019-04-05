@@ -332,6 +332,8 @@ w_err_t listfs_format(listfs_s *lfs,w_blkdev_s *blkdev)
         wind_blkdev_write(blkdev,lfs_info->bitmap1,blk,1);
         wind_blkdev_write(blkdev,lfs_info->bitmap2,blk,1);
         lfs_make_root(lfs);
+        listfs_bitmap_init(lfs);
+        lfs->file_ref = 0;
     }while(0);
     if(blk != W_NULL)
         lfs_free(blk);
@@ -344,16 +346,20 @@ w_err_t listfs_mount(listfs_s *lfs,w_blkdev_s *blkdev)
     w_err_t err;
     WIND_ASSERT_RETURN(lfs != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
-    lfs->blkdev = blkdev;
     err = listfs_get_fsinfo(&lfs->lfs_info,blkdev);
     if(err != W_ERR_OK)
     {
         wind_notice("No file system detected,format dev %s now.",
             wind_obj_name(&blkdev->obj));
-        listfs_format(lfs,blkdev);
+        err = listfs_format(lfs,blkdev);
     }
-    listfs_bitmap_init(lfs);
-    return W_ERR_OK;
+    else
+    {
+        lfs->blkdev = blkdev;
+        lfs->file_ref = 0;
+        err = listfs_bitmap_init(lfs);
+    }
+    return err;
 }
 
 w_err_t listfs_unmount(listfs_s *lfs)
@@ -385,16 +391,13 @@ listfile_s* listfile_open(listfs_s *lfs,const char *path,w_uint16_t mode)
             err = W_ERR_FAIL;
             break;
         }
-        else if(!is_crt)
+        else if((err == W_ERR_OK) && (!is_crt))
         {   //没有创建标记，且文件存在
             err = W_ERR_OK;
-            file->mode = (w_uint8_t)mode;
-            file->offset = 0;
             break;
         }
 
         //有创建标记，且文件不存在
-
         err = lfs_make_file(lfs,&file->info,(char*)path);
         if(err != W_ERR_OK)
         {
@@ -412,6 +415,14 @@ listfile_s* listfile_open(listfs_s *lfs,const char *path,w_uint16_t mode)
         lfs_free(file);
         file = W_NULL;
     }
+    if(file != W_NULL)
+    {
+        file->lfs = lfs;
+        file->lfs->file_ref ++;
+        file->mode = (w_uint8_t)mode;
+        file->offset = 0;
+        file->blkinfo = &file->info.blkinfo;
+    }
     return file;
 }
 
@@ -421,10 +432,38 @@ w_err_t listfile_close(listfile_s* file)
 {
     WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(file->lfs->file_ref > 0,W_ERR_INVALID);
     file->info.magic == 0;
+    file->lfs->file_ref --;
     lfs_free(file);
     return W_ERR_OK;
 }
+
+w_err_t listfile_set_attr(listfile_s* file,w_uint8_t attr)
+{
+    w_err_t err;
+    w_uint8_t tmpattr = 0;
+    WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,W_ERR_INVALID);
+    tmpattr = (file->info.attr & LFILE_ATTR_DIR);
+    (attr & LFILE_ATTR_READ)?(tmpattr |= LFILE_ATTR_READ):(tmpattr &= ~LFILE_ATTR_READ);
+    (attr & LFILE_ATTR_WRITE)?(tmpattr |= LFILE_ATTR_WRITE):(tmpattr &= ~LFILE_ATTR_WRITE);
+    (attr & LFILE_ATTR_HIDE)?(tmpattr |= LFILE_ATTR_HIDE):(tmpattr &= ~LFILE_ATTR_HIDE);
+    (attr & LFILE_ATTR_VERIFY)?(tmpattr |= LFILE_ATTR_VERIFY):(tmpattr &= ~LFILE_ATTR_VERIFY);
+    file->info.attr = tmpattr;
+    err = listfs_set_fileinfo(&file->info,file->lfs->blkdev,file->info.blkinfo.self_addr);
+    return err;
+}
+
+w_err_t listfile_get_attr(listfile_s* file,w_uint8_t *attr)
+{
+    WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(attr != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,W_ERR_INVALID);
+    *attr = file->info.attr;
+    return W_ERR_OK;
+}
+
 
 w_bool_t listfile_existing(listfs_s *lfs,const char *path)
 {
@@ -483,6 +522,7 @@ w_err_t listfile_fgets(listfile_s* file,char *buff, w_int32_t maxlen)
     WIND_ASSERT_RETURN(file->mode & LF_FMODE_R,-1);
     return W_ERR_FAIL;
 }
+
 w_err_t listfile_fputs(listfile_s* file,char *buff)
 {
     WIND_ASSERT_RETURN(file != W_NULL,-1);

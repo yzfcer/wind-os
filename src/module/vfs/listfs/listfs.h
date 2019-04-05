@@ -20,11 +20,11 @@
 //#define LISTFS_BLK_SIZE 512  //块大小
 
 //文件属性
-#define LFILE_ATTR_READ   (0x01 << 0)
-#define LFILE_ATTR_WRITE  (0x01 << 1)
-#define LFILE_ATTR_DIR    (0x01 << 2)
+#define LFILE_ATTR_DIR    (0x01 << 0)
+#define LFILE_ATTR_READ   (0x01 << 1)
+#define LFILE_ATTR_WRITE  (0x01 << 2)
 #define LFILE_ATTR_HIDE   (0x01 << 3)
-//#define LFILE_VERIFY (0x01 << 4)
+#define LFILE_ATTR_VERIFY (0x01 << 4)
 #define LFILE_ATTR_COMMAN (LFILE_ATTR_READ | LFILE_ATTR_WRITE)
 
 
@@ -34,7 +34,7 @@ typedef struct __listfs_s
 {
     lfs_info_s lfs_info;
     w_blkdev_s *blkdev;
-    //char *path;
+    w_int32_t  file_ref;
     w_int32_t  free_blkidx;
     w_int32_t  free_byteidx;
 }listfs_s;
@@ -47,6 +47,7 @@ typedef struct __listfile_s
     w_uint8_t mode;
     w_int32_t offset;
     w_int32_t filelen;
+    lfile_blkinfo_s *blkinfo;
 }listfile_s;
 
 
@@ -57,9 +58,10 @@ w_err_t listfs_format(listfs_s *lfs,w_blkdev_s *blkdev);
 w_err_t listfs_mount(listfs_s *lfs,w_blkdev_s *blkdev);
 w_err_t listfs_unmount(listfs_s *lfs);
 
-
 w_bool_t listfile_existing(listfs_s *lfs,const char *path);
 listfile_s* listfile_open(listfs_s *lfs,const char *path,w_uint16_t mode);
+w_err_t listfile_set_attr(listfile_s* file,w_uint8_t attr);
+w_err_t listfile_get_attr(listfile_s* file,w_uint8_t *attr);
 w_err_t listfile_close(listfile_s* file);
 w_err_t listfile_remove(listfile_s *file);
 w_err_t listfile_seek(listfile_s* file,w_int32_t offset);
