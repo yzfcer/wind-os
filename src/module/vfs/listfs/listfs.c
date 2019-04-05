@@ -457,8 +457,13 @@ w_err_t listfile_close(listfile_s* file)
     WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,W_ERR_INVALID);
     WIND_ASSERT_RETURN(file->lfs->file_ref > 0,W_ERR_INVALID);
-    file->info.magic == 0;
+    file->info.magic = 0;
     file->lfs->file_ref --;
+    if(file->blkinfo->offset != 0)
+    {
+        lfs_free(file->blkinfo);
+        file->blkinfo = W_NULL;
+    }
     lfs_free(file);
     return W_ERR_OK;
 }
@@ -501,8 +506,19 @@ w_bool_t listfile_existing(listfs_s *lfs,const char *path)
 
 w_err_t listfile_seek(listfile_s* file,w_int32_t offset)
 {
+    w_err_t err;
+    lfile_blkinfo_s *blkinfo = W_NULL;
     WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,W_ERR_INVALID);
+    blkinfo = lfs_malloc(sizeof(lfile_blkinfo_s));
+    WIND_ASSERT_RETURN(blkinfo != W_NULL, W_ERR_MEM);
+    wind_memcpy(blkinfo,file->blkinfo,sizeof(lfile_blkinfo_s));
+    err = blkinfo_get_byoffset(blkinfo,file->lfs->blkdev,offset);
+    if(err != W_ERR_OK)
+    {
+        
+    }
+    //WIND_ASSERT_RETURN(cond, res)
     file->offset = offset;
     return W_ERR_OK;
 }
@@ -516,17 +532,25 @@ w_int32_t listfile_ftell(listfile_s* file)
 
 w_int32_t listfile_read(listfile_s* file,w_uint8_t *buff, w_int32_t size)
 {
+    w_err_t err;
     WIND_ASSERT_RETURN(file != W_NULL,-1);
     WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,-1);
     WIND_ASSERT_RETURN(file->mode & LF_FMODE_R,-1);
+    
     return 0;
 }
 
 w_int32_t listfile_write(listfile_s* file,w_uint8_t *buff, w_int32_t size)
 {
+    w_int32_t writeed;
+    lfile_blkinfo_s *blkinfo;
     WIND_ASSERT_RETURN(file != W_NULL,-1);
     WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,-1);
     WIND_ASSERT_RETURN(file->mode & LF_FMODE_W,-1);
+    if(file->offset < LFILE_LBLK_CNT*file->lfs->blkdev->blksize)
+        file->blkinfo = &file->info.blkinfo;
+    else
+        file->blkinfo = blkinfo_get_byoffset(file->blkinfo,file->lfs->blkdev,file->offset);
     return 0;
 }
 

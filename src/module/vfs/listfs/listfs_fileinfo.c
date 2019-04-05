@@ -257,4 +257,57 @@ w_err_t blkinfo_get_next(lfile_blkinfo_s *info,w_blkdev_s *blkdev)
     return W_ERR_OK;
 }
 
+w_err_t blkinfo_get_byoffset(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_int32_t offset)
+{
+    w_err_t err;
+    lfile_blkinfo_s *tmpinfo = W_NULL;
+    w_int32_t tmpoffset;
+    
+    WIND_ASSERT_RETURN(info != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(info->magic == LISTFILE_BLK_MAGIC,W_ERR_INVALID);
+    if((offset >= info->offset)&&(offset < info->offset + LFILE_LBLK_CNT*blkdev->blksize))
+        return W_ERR_OK;
+
+    tmpinfo = lfs_malloc(sizeof(lfile_blkinfo_s));
+    WIND_ASSERT_RETURN(tmpinfo != W_NULL,W_ERR_MEM);
+    wind_memcpy(tmpinfo,info,sizeof(lfile_blkinfo_s));
+    err = W_ERR_FAIL;
+    while(info->offset > tmpoffset)
+    {
+        err = blkinfo_get_prev(tmpinfo,blkdev);
+        if(err != W_ERR_OK)
+        {
+            lfs_free(tmpinfo);
+            return W_ERR_FAIL;
+        }
+            
+        if((offset >= tmpinfo->offset)&&(offset < tmpinfo->offset + LFILE_LBLK_CNT*blkdev->blksize))
+        {
+            wind_memcpy(info,tmpinfo,sizeof(lfile_blkinfo_s));
+            lfs_free(tmpinfo);
+            return W_ERR_OK;
+        }
+    }
+    err = W_ERR_OK;
+    while(err == W_ERR_OK)
+    {
+        err = blkinfo_get_next(tmpinfo,blkdev);
+        if(err != W_ERR_OK)
+        {
+            lfs_free(tmpinfo);
+            return W_ERR_FAIL;
+        }
+            
+        if((offset >= tmpinfo->offset)&&(offset < tmpinfo->offset + LFILE_LBLK_CNT*blkdev->blksize))
+        {
+            wind_memcpy(info,tmpinfo,sizeof(lfile_blkinfo_s));
+            lfs_free(tmpinfo);
+            return W_ERR_OK;
+        }
+    }
+    lfs_free(tmpinfo);
+    return W_ERR_FAIL;
+}
+
 
