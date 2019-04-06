@@ -56,13 +56,14 @@ typedef struct __lfs_info_s
 //文件数据块头部信息
 typedef struct __lfile_blkinfo_s
 {
-    w_uint32_t magic;     //块标记魔术字
+    w_uint32_t magic;        //块标记魔术字
     w_addr_t   self_addr;    //当前地址
     w_addr_t   prevblk_addr; //上块地址
     w_addr_t   nextblk_addr; //下块地址
     w_int32_t  offset;       //当前块对应的文件的起始偏移量
     w_int32_t  blkused;      //当前块已经使用的数量
     w_int32_t  byteused;     //当前块已经使用的字节数量
+    w_addr_t   dataaddr[LFILE_LBLK_CNT];  //数据块信息
 }lfile_blkinfo_s;
 
 //固化文件头部信息

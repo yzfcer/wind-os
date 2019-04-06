@@ -126,10 +126,13 @@ lfile_info_s *fileinfo_parent(lfile_info_s *info,w_blkdev_s *blkdev)
 {
     w_err_t err;
     w_uint8_t *blk;
+    lfile_info_s *tmpinfo;
     WIND_ASSERT_RETURN(blkdev != W_NULL,W_NULL);
     WIND_ASSERT_RETURN(info != W_NULL,W_NULL);
     err = listfs_read_block(blkdev,info->parent_addr,&blk);
     WIND_ASSERT_RETURN(err == W_ERR_OK,W_NULL);
+    tmpinfo = (lfile_info_s*)blk;
+    WIND_ASSERT_TODO_RETURN(tmpinfo->magic == LISTFILE_MAGIC,lfs_free(blk),W_NULL);
     wind_memcpy(info,blk,sizeof(lfile_info_s));
     lfs_free(blk);
     WIND_ASSERT_RETURN(info->magic == LISTFILE_MAGIC,W_NULL);
@@ -140,10 +143,13 @@ lfile_info_s *fileinfo_next(lfile_info_s *info,w_blkdev_s *blkdev)
 {
     w_err_t err;
     w_uint8_t *blk;
+    lfile_info_s *tmpinfo;
     WIND_ASSERT_RETURN(blkdev != W_NULL,W_NULL);
     WIND_ASSERT_RETURN(info != W_NULL,W_NULL);
     err = listfs_read_block(blkdev,info->nextfile_addr,&blk);
     WIND_ASSERT_RETURN(err == W_ERR_OK,W_NULL);
+    tmpinfo = (lfile_info_s*)blk;
+    WIND_ASSERT_TODO_RETURN(tmpinfo->magic == LISTFILE_MAGIC,lfs_free(blk),W_NULL);
     wind_memcpy(info,blk,sizeof(lfile_info_s));
     lfs_free(blk);
     WIND_ASSERT_RETURN(info->magic == LISTFILE_MAGIC,W_NULL);
@@ -154,10 +160,13 @@ lfile_info_s *fileinfo_headchild(lfile_info_s *info,w_blkdev_s *blkdev)
 {
     w_err_t err;
     w_uint8_t *blk;
+    lfile_info_s *tmpinfo;
     WIND_ASSERT_RETURN(blkdev != W_NULL,W_NULL);
     WIND_ASSERT_RETURN(info != W_NULL,W_NULL);
     err = listfs_read_block(blkdev,info->headchild_addr,&blk);
     WIND_ASSERT_RETURN(err == W_ERR_OK,W_NULL);
+    tmpinfo = (lfile_info_s*)blk;
+    WIND_ASSERT_TODO_RETURN(tmpinfo->magic == LISTFILE_MAGIC,lfs_free(blk),W_NULL);
     wind_memcpy(info,blk,sizeof(lfile_info_s));
     lfs_free(blk);
     WIND_ASSERT_RETURN(info->magic == LISTFILE_MAGIC,W_NULL);
@@ -168,10 +177,13 @@ lfile_info_s *fileinfo_tailchild(lfile_info_s *info,w_blkdev_s *blkdev)
 {
     w_err_t err;
     w_uint8_t *blk;
+    lfile_info_s *tmpinfo;
     WIND_ASSERT_RETURN(blkdev != W_NULL,W_NULL);
     WIND_ASSERT_RETURN(info != W_NULL,W_NULL);
     err = listfs_read_block(blkdev,info->tailchild_addr,&blk);
     WIND_ASSERT_RETURN(err == W_ERR_OK,W_NULL);
+    tmpinfo = (lfile_info_s*)blk;
+    WIND_ASSERT_TODO_RETURN(tmpinfo->magic == LISTFILE_MAGIC,lfs_free(blk),W_NULL);
     wind_memcpy(info,blk,sizeof(lfile_info_s));
     lfs_free(blk);
     WIND_ASSERT_RETURN(info->magic == LISTFILE_MAGIC,W_NULL);
@@ -233,8 +245,11 @@ w_err_t blkinfo_get_prev(lfile_blkinfo_s *info,w_blkdev_s *blkdev)
     WIND_ASSERT_RETURN(info->magic == LISTFILE_BLK_MAGIC,W_ERR_INVALID);
     err = listfs_read_block(blkdev,info->prevblk_addr,&blk);
     WIND_ASSERT_RETURN(err == W_ERR_OK,err);
+    
     tmpinfo = (lfile_blkinfo_s*)blk;
-    WIND_ASSERT_RETURN(tmpinfo->magic == LISTFILE_BLK_MAGIC,W_ERR_INVALID);
+    if(tmpinfo->magic == LISTFILE_MAGIC)
+        tmpinfo = &blk[sizeof(lfile_info_s)];
+    WIND_ASSERT_TODO_RETURN(tmpinfo->magic == LISTFILE_BLK_MAGIC,lfs_free(blk),W_ERR_INVALID);
     wind_memcpy(info,tmpinfo,sizeof(lfile_blkinfo_s));
     lfs_free(blk);
     return W_ERR_OK;
@@ -250,8 +265,9 @@ w_err_t blkinfo_get_next(lfile_blkinfo_s *info,w_blkdev_s *blkdev)
     WIND_ASSERT_RETURN(info->magic == LISTFILE_BLK_MAGIC,W_ERR_INVALID);
     err = listfs_read_block(blkdev,info->nextblk_addr,&blk);
     WIND_ASSERT_RETURN(err == W_ERR_OK,err);
+    
     tmpinfo = (lfile_blkinfo_s*)blk;
-    WIND_ASSERT_RETURN(tmpinfo->magic == LISTFILE_BLK_MAGIC,W_ERR_INVALID);
+    WIND_ASSERT_TODO_RETURN(tmpinfo->magic == LISTFILE_BLK_MAGIC,lfs_free(blk),W_ERR_INVALID);
     wind_memcpy(info,tmpinfo,sizeof(lfile_blkinfo_s));
     lfs_free(blk);
     return W_ERR_OK;
@@ -289,7 +305,7 @@ w_err_t blkinfo_get_byoffset(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_int32_t 
             return W_ERR_OK;
         }
     }
-    err = W_ERR_OK;
+    err = W_ERR_FAIL;
     while(err == W_ERR_OK)
     {
         err = blkinfo_get_next(tmpinfo,blkdev);
