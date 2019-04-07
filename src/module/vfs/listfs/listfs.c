@@ -49,7 +49,6 @@ w_err_t lfs_free(void *ptr)
 }
 
 
-
 static lfile_info_s *lfs_search_child(lfile_info_s *parent,char *name,w_blkdev_s *blkdev)
 {
     lfile_info_s *info;
@@ -61,7 +60,7 @@ static lfile_info_s *lfs_search_child(lfile_info_s *parent,char *name,w_blkdev_s
     return W_NULL;
 }
 
-static w_err_t lfs_search_file(listfs_s *lfs,const char *path,listfile_s *file)
+static w_err_t lfs_search_file(listfs_s *lfs,listfile_s *file,const char *path)
 {
     w_err_t err = W_ERR_FAIL;
     w_int32_t len,cnt,i = 0;
@@ -204,7 +203,7 @@ static w_err_t lfs_make_child(listfs_s *lfs,lfile_info_s *parent,char *name,w_ui
         attr = isdir?(LFILE_ATTR_COMMAN|LFILE_ATTR_DIR):LFILE_ATTR_COMMAN;
         info = (lfile_info_s*)blk;
         listfs_fileinfo_init(info,name,self_addr,parent->self_addr,parent->tailchild_addr,attr);
-        blkinfo = FIRST_BLKINFO(blk);
+        blkinfo = FILEINFO_BLKINFO(blk);
         listfs_blkinfo_init(blkinfo, self_addr,0);
         
         info->prevfile_addr = parent->tailchild_addr;
@@ -237,20 +236,18 @@ static w_err_t lfs_make_child(listfs_s *lfs,lfile_info_s *parent,char *name,w_ui
 }
 
 
-static w_err_t lfs_make_file(listfs_s *lfs,lfile_info_s *info,char *path)
+static w_err_t lfs_make_file(listfs_s *lfs,listfile_s *file,char *path)
 {
     w_err_t err;
-    //char *ptr;
     w_int32_t i,pathlen,cnt;
     w_uint8_t isdir = 0;
     char **nameseg = W_NULL;
     lfile_info_s *finfo = W_NULL,*tmpinfo;
     lfile_blkinfo_s *blkinfo = W_NULL;
     char *pathname = W_NULL;
-    //char *nodename;
 
     WIND_ASSERT_RETURN(lfs != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(info != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(path != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(path[0] != 0,W_ERR_INVALID);
     
@@ -263,7 +260,6 @@ static w_err_t lfs_make_file(listfs_s *lfs,lfile_info_s *info,char *path)
         nameseg = (char **)lfs_malloc(LISTFS_DIR_LAYCNT * sizeof(char*));
         finfo = lfs_malloc(sizeof(lfile_info_s));
         blkinfo = lfs_malloc(sizeof(lfile_blkinfo_s));
-        
         if(pathname == W_NULL || nameseg == W_NULL || finfo == W_NULL || blkinfo == W_NULL)
         {
             wind_error("alloc memory error");
@@ -278,9 +274,7 @@ static w_err_t lfs_make_file(listfs_s *lfs,lfile_info_s *info,char *path)
             pathname[pathlen - 1] = 0;
             isdir = 1;
         }
-        
         cnt = wind_strsplit(pathname,'/',nameseg,LISTFS_DIR_LAYCNT);
-
         err = listfs_get_fileinfo(finfo,blkinfo,lfs->blkdev,lfs->lfs_info.root_addr);
         if(err != W_ERR_OK)
         {
@@ -299,7 +293,7 @@ static w_err_t lfs_make_file(listfs_s *lfs,lfile_info_s *info,char *path)
             tmpinfo = lfs_search_child(finfo,nameseg[i],lfs->blkdev);
             if(tmpinfo != W_NULL)
             {
-                wind_memcpy(info,finfo,sizeof(lfile_info_s));
+                wind_memcpy(finfo,tmpinfo,sizeof(lfile_info_s));
                 lfs_free(tmpinfo);
             }
             else
@@ -316,7 +310,10 @@ static w_err_t lfs_make_file(listfs_s *lfs,lfile_info_s *info,char *path)
             break;
     }while(0);
     if(err == W_ERR_OK)
-        wind_memcpy(info,finfo,sizeof(lfile_info_s));
+    {
+        wind_memcpy(&file->info,finfo,sizeof(lfile_info_s));
+    }
+        
     if(pathname != W_NULL)
         lfs_free(pathname);
     if(finfo != W_NULL)
@@ -438,8 +435,9 @@ listfile_s* listfile_open(listfs_s *lfs,const char *path,w_uint16_t mode)
     {
         file = lfs_malloc(sizeof(listfile_s));
         WIND_ASSERT_RETURN(file != W_NULL,W_NULL);
+        wind_memset(file,0,sizeof(listfile_s));
         is_crt = (mode & LF_FMODE_CRT)?W_TRUE:W_FALSE;
-        err = lfs_search_file(lfs,path,file);
+        err = lfs_search_file(lfs,file,path);
         if((err != W_ERR_OK) && (!is_crt))
         {   //没有创建标记，且文件不存在
             err = W_ERR_FAIL;
@@ -460,7 +458,7 @@ listfile_s* listfile_open(listfs_s *lfs,const char *path,w_uint16_t mode)
         }
     }while(0);
     if((err != W_ERR_OK)&&(file != W_NULL))
-    {   //打开文件过层中出错
+    {   //打开文件过程中出错
         lfs_free(file);
         file = W_NULL;
     }
@@ -538,18 +536,21 @@ w_err_t listfile_seek(listfile_s* file,w_int32_t offset)
     w_err_t err;
     lfile_blkinfo_s *blkinfo = W_NULL;
     WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(offset >= 0,W_ERR_OVERFLOW);
     WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,W_ERR_INVALID);
     blkinfo = lfs_malloc(sizeof(lfile_blkinfo_s));
     WIND_ASSERT_RETURN(blkinfo != W_NULL, W_ERR_MEM);
-    wind_memcpy(blkinfo,file->blkinfo,sizeof(lfile_blkinfo_s));
-    err = blkinfo_get_byoffset(blkinfo,file->lfs->blkdev,offset);
-    if(err != W_ERR_OK)
+    do 
     {
-        
-    }
-    //WIND_ASSERT_RETURN(cond, res)
-    file->offset = offset;
-    return W_ERR_OK;
+        wind_memcpy(blkinfo,file->blkinfo,sizeof(lfile_blkinfo_s));
+        err = blkinfo_get_byoffset(blkinfo,file->lfs->blkdev,offset);
+        if(err != W_ERR_OK)
+            break;
+        file->offset = offset;
+    }while(0);
+    if(blkinfo != W_NULL)
+        lfs_free(blkinfo);
+    return err;
 }
 
 w_int32_t listfile_ftell(listfile_s* file)
@@ -577,9 +578,6 @@ w_int32_t listfile_write(listfile_s* file,w_uint8_t *buff, w_int32_t size)
     WIND_ASSERT_RETURN(file != W_NULL,-1);
     WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,-1);
     WIND_ASSERT_RETURN(file->mode & LF_FMODE_W,-1);
-    //if(file->offset < LFILE_LBLK_CNT*file->lfs->blkdev->blksize)
-    //    file->blkinfo = &file->info.blkinfo;
-    //else
     err = blkinfo_get_byoffset(file->blkinfo,file->lfs->blkdev,file->offset);
     return 0;
 }

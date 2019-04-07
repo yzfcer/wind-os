@@ -36,7 +36,8 @@
 
 #define LFILE_LBLK_CNT 64    //每个块允许记录的关联块数量
 
-#define FIRST_BLKINFO(blk) (lfile_blkinfo_s*)&blk[sizeof(lfile_info_s)]
+//从fileinfo数据块中取出blkinfo
+#define FILEINFO_BLKINFO(blk) (lfile_blkinfo_s*)&blk[sizeof(lfile_info_s)]
 
 //固化文件系统信息
 typedef struct __lfs_info_s
@@ -74,6 +75,7 @@ typedef struct __lfile_info_s
     char       name[LFILE_NAME_LEN]; //文件名
     w_addr_t   parent_addr;          //父地址
     w_addr_t   self_addr;            //当前地址
+    w_addr_t   last_addr;            //最后一个块信息地址
     w_addr_t   prevfile_addr;        //下一个文件地址
     w_addr_t   nextfile_addr;        //下一个文件地址
     w_addr_t   headchild_addr;       //第一个子文件地址
@@ -90,6 +92,8 @@ w_err_t listfs_fileinfo_init(lfile_info_s *info,char *name,
 w_err_t listfs_blkinfo_init(lfile_blkinfo_s *info,w_addr_t self_addr,w_int32_t offset);
 
 w_err_t listfs_read_block(w_blkdev_s *blkdev,w_addr_t addr,w_uint8_t **blk);
+
+w_err_t listfs_write_block(w_blkdev_s *blkdev,w_addr_t addr,w_uint8_t *blk);
 
 w_err_t listfs_get_fileinfo(lfile_info_s *info,lfile_blkinfo_s *blkinfo,w_blkdev_s *blkdev,w_addr_t addr);
 
@@ -112,6 +116,8 @@ w_err_t blkinfo_get_prev(lfile_blkinfo_s *info,w_blkdev_s *blkdev);
 w_err_t blkinfo_get_next(lfile_blkinfo_s *info,w_blkdev_s *blkdev);
 
 w_err_t blkinfo_get_byoffset(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_int32_t offset);
+
+w_err_t blkinfo_update_prev(lfile_blkinfo_s *info,w_blkdev_s *blkdev);
 
 
 #endif
