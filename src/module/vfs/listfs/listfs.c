@@ -170,6 +170,19 @@ static w_err_t lfs_make_root(listfs_s *lfs)
         listfs_fileinfo_init(info,"root",lfs->lfs_info.root_addr,0,0,attr);
         blkinfo_init(blkinfo, lfs->lfs_info.root_addr,0,0);
         err = listfs_set_fileinfo(info,blkinfo,lfs->blkdev,lfs->lfs_info.root_addr);
+        if(err != W_ERR_OK)
+        {
+            wind_error("flush lfs root failed.");
+            err = W_ERR_FAIL;
+            break;
+        }
+        err = listfs_bitmap_set(&lfs->bitmap,lfs->lfs_info.root_addr,BITMAP_USED);
+        if(err != W_ERR_OK)
+        {
+            wind_error("set lfs root bitmap failed.");
+            err = W_ERR_FAIL;
+            break;
+        }
     }while(0);
     if(info != W_NULL)
         lfs_free(info);
@@ -380,12 +393,8 @@ w_err_t listfs_format(listfs_s *lfs,w_blkdev_s *blkdev)
 
         listfs_bitmap_init(&lfs->bitmap,lfs_info->bitmap1_addr,lfs_info->bitmap_cnt,blkdev);
         listfs_bitmap_clear(&lfs->bitmap,blkdev);
-        wind_memset(blk,0,blkdev->blksize);
-        blk[0] = BITMAP_USED;
-        wind_blkdev_write(blkdev,lfs_info->bitmap1_addr,blk,1);
-        wind_blkdev_write(blkdev,lfs_info->bitmap2_addr,blk,1);
         lfs_make_root(lfs);
-        //listfs_bitmap_init(lfs);
+        listfs_bitmap_update(&lfs->bitmap);
         lfs->file_ref = 0;
     }while(0);
     if(blk != W_NULL)
