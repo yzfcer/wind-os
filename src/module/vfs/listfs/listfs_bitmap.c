@@ -145,12 +145,11 @@ w_err_t listfs_bitmap_find_free(lfs_bitmap_s *bp,w_addr_t *addr)
     WIND_ASSERT_RETURN(bp != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(addr != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(bp->blkdev != W_NULL,W_ERR_PTR_NULL);
-    //err = listfs_read_block(bp->blkdev,addr,&blk);
-    //WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_FAIL);
     if(bp->free_byteidx = -1)
         set_free_bitmap_start(bp,0,0);
-    
-    
+    idx = (bp->free_addr - bp->addr1)*bp->blkdev->blksize;
+    idx += bp->free_byteidx;
+    *addr = bp->addr2 + bp->addr_cnt + idx;
     return W_ERR_OK;
 }
 

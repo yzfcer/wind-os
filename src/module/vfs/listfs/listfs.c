@@ -419,7 +419,7 @@ w_err_t listfs_mount(listfs_s *lfs,w_blkdev_s *blkdev)
     {
         lfs->blkdev = blkdev;
         lfs->file_ref = 0;
-        //err = listfs_bitmap_init(lfs);
+        err = listfs_bitmap_update(&lfs->bitmap);
     }
     return err;
 }
