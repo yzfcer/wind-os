@@ -30,6 +30,7 @@
 #include "wind_dlist.h"
 #include "wind_blkdev.h"
 #include "listfs_fileinfo.h"
+#include "listfs_bitmap.h"
 
 #if WIND_FS_SUPPORT
 //文件操作模式
@@ -58,9 +59,9 @@ typedef struct __listfs_s
 {
     lfs_info_s lfs_info;
     w_blkdev_s *blkdev;
+    lfs_bitmap_s bitmap;
     w_int32_t  file_ref;
-    w_int32_t  free_blkidx;
-    w_int32_t  free_byteidx;
+
 }listfs_s;
 
 //程序关联的文件信息

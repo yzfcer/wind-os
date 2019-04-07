@@ -49,8 +49,8 @@ typedef struct __lfs_info_s
     w_uint16_t reserve_blk;//保留块数
     w_uint16_t attr;       //文件系统属性
     w_uint32_t bitmap_cnt; //位图块数
-    w_addr_t   bitmap1;    //位图块数
-    w_addr_t   bitmap2;    //位图块数
+    w_addr_t   bitmap1_addr;//位图块数
+    w_addr_t   bitmap2_addr;//位图块数
     w_addr_t   root_addr;  //根目录位置
 }lfs_info_s;
 
@@ -89,8 +89,6 @@ w_err_t listfs_get_fsinfo(lfs_info_s *fsinfo,w_blkdev_s *blkdev);
 w_err_t listfs_fileinfo_init(lfile_info_s *info,char *name,
     w_addr_t self_addr,w_addr_t parent_addr,w_addr_t prev_addr,w_uint8_t attr);
 
-w_err_t listfs_blkinfo_init(lfile_blkinfo_s *info,w_addr_t self_addr,w_int32_t offset);
-
 w_err_t listfs_read_block(w_blkdev_s *blkdev,w_addr_t addr,w_uint8_t **blk);
 
 w_err_t listfs_write_block(w_blkdev_s *blkdev,w_addr_t addr,w_uint8_t *blk);
@@ -111,6 +109,8 @@ w_err_t fileinfo_update_parent(lfile_info_s *info,w_blkdev_s *blkdev);
 
 w_err_t fileinfo_update_prev(lfile_info_s *info,w_blkdev_s *blkdev);
 
+w_err_t blkinfo_init(lfile_blkinfo_s *info,w_addr_t self_addr,w_addr_t prev_addr,w_int32_t offset);
+
 w_err_t blkinfo_get_prev(lfile_blkinfo_s *info,w_blkdev_s *blkdev);
 
 w_err_t blkinfo_get_next(lfile_blkinfo_s *info,w_blkdev_s *blkdev);
@@ -119,6 +119,7 @@ w_err_t blkinfo_get_byoffset(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_int32_t 
 
 w_err_t blkinfo_update_prev(lfile_blkinfo_s *info,w_blkdev_s *blkdev);
 
+//w_err_t blkinfo_append_newblk(lfile_blkinfo_s *info,w_blkdev_s *blkdev);
 
 #endif
 

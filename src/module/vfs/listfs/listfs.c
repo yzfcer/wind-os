@@ -168,7 +168,7 @@ static w_err_t lfs_make_root(listfs_s *lfs)
         
         attr = (LFILE_ATTR_COMMAN | LFILE_ATTR_DIR);
         listfs_fileinfo_init(info,"root",lfs->lfs_info.root_addr,0,0,attr);
-        listfs_blkinfo_init(blkinfo, lfs->lfs_info.root_addr,0);
+        blkinfo_init(blkinfo, lfs->lfs_info.root_addr,0,0);
         err = listfs_set_fileinfo(info,blkinfo,lfs->blkdev,lfs->lfs_info.root_addr);
     }while(0);
     if(info != W_NULL)
@@ -204,7 +204,7 @@ static w_err_t lfs_make_child(listfs_s *lfs,lfile_info_s *parent,char *name,w_ui
         info = (lfile_info_s*)blk;
         listfs_fileinfo_init(info,name,self_addr,parent->self_addr,parent->tailchild_addr,attr);
         blkinfo = FILEINFO_BLKINFO(blk);
-        listfs_blkinfo_init(blkinfo, self_addr,0);
+        blkinfo_init(blkinfo, self_addr,0,0);
         
         info->prevfile_addr = parent->tailchild_addr;
         cnt = wind_blkdev_write(lfs->blkdev,self_addr,blk,1);
@@ -214,6 +214,7 @@ static w_err_t lfs_make_child(listfs_s *lfs,lfile_info_s *parent,char *name,w_ui
             err = W_ERR_FAIL;
             break;
         }
+        
         err = fileinfo_update_prev(info,lfs->blkdev);
         if(err != W_ERR_OK)
         {
@@ -352,10 +353,10 @@ w_err_t listfs_format(listfs_s *lfs,w_blkdev_s *blkdev)
         lfs_info->blksize = (w_uint16_t)blkdev->blksize;
         lfs_info->reserve_blk = 5;
         lfs_info->attr = 0;
-        lfs_info->bitmap1 = lfs_info->reserve_blk + 1;
-        lfs_info->bitmap_cnt = (blkdev->blkcnt - lfs_info->bitmap1) / (lfs_info->unit_size + 1) + 1;
-        lfs_info->bitmap2 = lfs_info->bitmap1 + lfs_info->bitmap_cnt;
-        lfs_info->root_addr = lfs_info->bitmap2 + lfs_info->bitmap_cnt;
+        lfs_info->bitmap1_addr = lfs_info->reserve_blk + 1;
+        lfs_info->bitmap_cnt = (blkdev->blkcnt - lfs_info->bitmap1_addr) / (lfs_info->unit_size + 1) + 1;
+        lfs_info->bitmap2_addr = lfs_info->bitmap1_addr + lfs_info->bitmap_cnt;
+        lfs_info->root_addr = lfs_info->bitmap2_addr + lfs_info->bitmap_cnt;
         wind_memset(blk,0,blkdev->blksize);
         wind_memcpy(blk,lfs_info,sizeof(lfs_info_s));
         crc = wind_crc32(blk,blkdev->blksize-4,0xffffffff);
@@ -377,13 +378,14 @@ w_err_t listfs_format(listfs_s *lfs,w_blkdev_s *blkdev)
             break;
         }
 
-        listfs_bitmap_clear(lfs);
+        listfs_bitmap_init(&lfs->bitmap,lfs_info->bitmap1_addr,lfs_info->bitmap_cnt,blkdev);
+        listfs_bitmap_clear(&lfs->bitmap,blkdev);
         wind_memset(blk,0,blkdev->blksize);
         blk[0] = BITMAP_USED;
-        wind_blkdev_write(blkdev,lfs_info->bitmap1,blk,1);
-        wind_blkdev_write(blkdev,lfs_info->bitmap2,blk,1);
+        wind_blkdev_write(blkdev,lfs_info->bitmap1_addr,blk,1);
+        wind_blkdev_write(blkdev,lfs_info->bitmap2_addr,blk,1);
         lfs_make_root(lfs);
-        listfs_bitmap_init(lfs);
+        //listfs_bitmap_init(lfs);
         lfs->file_ref = 0;
     }while(0);
     if(blk != W_NULL)
@@ -408,7 +410,7 @@ w_err_t listfs_mount(listfs_s *lfs,w_blkdev_s *blkdev)
     {
         lfs->blkdev = blkdev;
         lfs->file_ref = 0;
-        err = listfs_bitmap_init(lfs);
+        //err = listfs_bitmap_init(lfs);
     }
     return err;
 }
