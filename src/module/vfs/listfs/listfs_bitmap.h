@@ -34,11 +34,11 @@
 #define BITMAP_BAD  (0x01 << 1)
 typedef struct
 {
-    w_addr_t addr1;     //主位图地址
-    w_addr_t addr2;     //备份位图地址
-    w_addr_t addr_cnt;  //位图块数量
-    w_addr_t free_addr;  //空闲位图块位置
-    w_addr_t free_byteidx; //空闲位图字节位置
+    w_addr_t addr1;         //主位图块起始地址
+    w_addr_t addr2;         //备份位图块起始地址
+    w_addr_t addr_cnt;      //位图块数量
+    w_addr_t free_blkidx;   //空闲位图块位置
+    w_addr_t free_byteidx;  //空闲位图字节位置
     w_blkdev_s *blkdev;
 }lfs_bitmap_s;
 
