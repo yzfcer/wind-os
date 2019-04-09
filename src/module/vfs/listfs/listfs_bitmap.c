@@ -108,7 +108,7 @@ w_err_t listfs_bitmap_update(lfs_bitmap_s *bp)
 }
 
 
-w_err_t listfs_bitmap_set(lfs_bitmap_s *bp,w_int32_t addr,w_uint8_t bitflag)
+w_err_t listfs_bitmap_set(lfs_bitmap_s *bp,w_addr_t addr,w_uint8_t bitflag)
 {
     w_int32_t byteidx;
     w_uint8_t *blk;

@@ -168,7 +168,7 @@ static w_err_t lfs_make_root(listfs_s *lfs)
         
         attr = (LFILE_ATTR_COMMAN | LFILE_ATTR_DIR);
         listfs_fileinfo_init(info,"root",lfs->lfs_info.root_addr,0,0,attr);
-        blkinfo_init(blkinfo, lfs->lfs_info.root_addr,0,0);
+        blkinfo_init(blkinfo, lfs->lfs_info.root_addr,0,0,lfs->blkdev->blksize);
         err = listfs_set_fileinfo(info,blkinfo,lfs->blkdev,lfs->lfs_info.root_addr);
         if(err != W_ERR_OK)
         {
@@ -217,7 +217,7 @@ static w_err_t lfs_make_child(listfs_s *lfs,lfile_info_s *parent,char *name,w_ui
         info = (lfile_info_s*)blk;
         listfs_fileinfo_init(info,name,self_addr,parent->self_addr,parent->tailchild_addr,attr);
         blkinfo = FILEINFO_BLKINFO(blk);
-        blkinfo_init(blkinfo, self_addr,0,0);
+        blkinfo_init(blkinfo, self_addr,0,0,lfs->blkdev->blksize);
         
         info->prevfile_addr = parent->tailchild_addr;
         cnt = wind_blkdev_write(lfs->blkdev,self_addr,blk,1);

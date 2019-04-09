@@ -38,6 +38,8 @@
 
 //从fileinfo数据块中取出blkinfo
 #define FILEINFO_BLKINFO(blk) (lfile_blkinfo_s*)&blk[sizeof(lfile_info_s)]
+#define BLKINFO_HAS_OFFSET(info,offset) \
+((offset >= info->offset)&&(offset < info->offset + info->blkused * info->blksize))
 
 //固化文件系统信息
 typedef struct __lfs_info_s
@@ -62,6 +64,7 @@ typedef struct __lfile_blkinfo_s
     w_addr_t   self_addr;    //当前地址
     w_addr_t   prevblk_addr; //上块地址
     w_addr_t   nextblk_addr; //下块地址
+    w_int32_t  blksize;      //块大小
     w_int32_t  offset;       //当前块对应的文件的起始偏移量
     w_int32_t  blkused;      //当前块已经使用的数量
     w_int32_t  byteused;     //当前块已经使用的字节数量
@@ -109,17 +112,21 @@ w_err_t fileinfo_update_parent(lfile_info_s *info,w_blkdev_s *blkdev);
 
 w_err_t fileinfo_update_prev(lfile_info_s *info,w_blkdev_s *blkdev);
 
-w_err_t blkinfo_init(lfile_blkinfo_s *info,w_addr_t self_addr,w_addr_t prev_addr,w_int32_t offset);
+w_err_t blkinfo_init(lfile_blkinfo_s *info,w_addr_t self_addr,w_addr_t prev_addr,w_int32_t offset,w_int32_t blksize);
+
+w_int32_t blkinfo_tail_offset(lfile_blkinfo_s *info);
 
 w_err_t blkinfo_get_prev(lfile_blkinfo_s *info,w_blkdev_s *blkdev);
 
 w_err_t blkinfo_get_next(lfile_blkinfo_s *info,w_blkdev_s *blkdev);
 
+w_err_t blkinfo_get_tail(lfile_blkinfo_s *info,w_blkdev_s *blkdev);
+
 w_err_t blkinfo_get_byoffset(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_int32_t offset);
 
 w_err_t blkinfo_update_prev(lfile_blkinfo_s *info,w_blkdev_s *blkdev);
 
-//w_err_t blkinfo_append_newblk(lfile_blkinfo_s *info,w_blkdev_s *blkdev);
+w_err_t blkinfo_calc_restspace(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_int32_t offset,w_int32_t needed);
 
 #endif
 

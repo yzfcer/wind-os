@@ -55,7 +55,7 @@ typedef struct _w_coroutine_s
 {
     w_obj_s obj;
     w_cid_t cid;
-    w_thread_s *thread;
+    //w_thread_s *thread;
     w_stack_t *stack;
     coroutine_fn func;
     void *arg;

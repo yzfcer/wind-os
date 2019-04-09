@@ -26,7 +26,7 @@
 #include "listfs.h"
 #include "wind_debug.h"
 #include "wind_string.h"
-
+#define BLKINFO_HAS_OFFSET(info,offset,blksize) ((offset >= info->offset)&&(offset < info->offset + info->blkused * blksize))
 w_err_t listfs_read_block(w_blkdev_s *blkdev,w_addr_t addr,w_uint8_t **blk)
 {
     w_int32_t cnt;
@@ -252,7 +252,7 @@ w_err_t fileinfo_update_prev(lfile_info_s *info,w_blkdev_s *blkdev)
     return err;
 }
 
-w_err_t blkinfo_init(lfile_blkinfo_s *info,w_addr_t self_addr,w_addr_t prev_addr,w_int32_t offset)
+w_err_t blkinfo_init(lfile_blkinfo_s *info,w_addr_t self_addr,w_addr_t prev_addr,w_int32_t offset,w_int32_t blksize)
 {
     WIND_ASSERT_RETURN(info != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(self_addr != 0,W_ERR_INVALID);
@@ -260,7 +260,17 @@ w_err_t blkinfo_init(lfile_blkinfo_s *info,w_addr_t self_addr,w_addr_t prev_addr
     info->magic = LISTFILE_BLK_MAGIC;
     info->self_addr = self_addr;
     info->offset = offset;
+    info->blksize = blksize;
     return W_ERR_OK;
+}
+
+w_int32_t blkinfo_tail_offset(lfile_blkinfo_s *info)
+{
+    WIND_ASSERT_RETURN(info != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(info->magic == LISTFILE_BLK_MAGIC,W_ERR_INVALID);
+    if(info->blkused <= 0)
+        return info->offset;
+    return (info->blkused-1)*info->blksize + info->byteused;
 }
 
 w_err_t blkinfo_get_prev(lfile_blkinfo_s *info,w_blkdev_s *blkdev)
@@ -301,6 +311,27 @@ w_err_t blkinfo_get_next(lfile_blkinfo_s *info,w_blkdev_s *blkdev)
     return W_ERR_OK;
 }
 
+w_err_t blkinfo_get_tail(lfile_blkinfo_s *info,w_blkdev_s *blkdev)
+{
+    w_err_t err;
+    WIND_ASSERT_RETURN(info != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(info->magic == LISTFILE_BLK_MAGIC,W_ERR_INVALID);
+    if(info->nextblk_addr == 0)
+        return W_ERR_OK;
+    err = W_ERR_OK;
+    while(1)
+    {
+        if(info->nextblk_addr == 0)
+            break;
+        err = blkinfo_get_next(info,blkdev);
+        if(err != W_ERR_OK)
+            break;
+    }
+    return err;
+}
+
+
 w_err_t blkinfo_get_byoffset(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_int32_t offset)
 {
     w_err_t err;
@@ -325,16 +356,22 @@ w_err_t blkinfo_get_byoffset(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_int32_t 
             return W_ERR_FAIL;
         }
             
-        if((offset >= tmpinfo->offset)&&(offset < tmpinfo->offset + info->blkused*blkdev->blksize))
+        if(BLKINFO_HAS_OFFSET(tmpinfo,offset,blkdev->blksize))
         {
             wind_memcpy(info,tmpinfo,sizeof(lfile_blkinfo_s));
             lfs_free(tmpinfo);
             return W_ERR_OK;
         }
     }
-    err = W_ERR_FAIL;
+    err = W_ERR_OK;
     while(err == W_ERR_OK)
     {
+        if(tmpinfo->nextblk_addr == 0)
+        {
+            wind_memcpy(info,tmpinfo,sizeof(lfile_blkinfo_s));
+            lfs_free(tmpinfo);
+            return W_ERR_OK;
+        }
         err = blkinfo_get_next(tmpinfo,blkdev);
         if(err != W_ERR_OK)
         {
@@ -342,18 +379,13 @@ w_err_t blkinfo_get_byoffset(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_int32_t 
             return W_ERR_FAIL;
         }
             
-        if((offset >= tmpinfo->offset)&&(offset < tmpinfo->offset + info->blkused * blkdev->blksize))
+        if(BLKINFO_HAS_OFFSET(tmpinfo,offset,blkdev->blksize))
         {
             wind_memcpy(info,tmpinfo,sizeof(lfile_blkinfo_s));
             lfs_free(tmpinfo);
             return W_ERR_OK;
         }
-        if(tmpinfo->nextblk_addr == 0)
-        {
-            wind_memcpy(info,tmpinfo,sizeof(lfile_blkinfo_s));
-            lfs_free(tmpinfo);
-            return W_ERR_OK;
-        }
+
     }
     lfs_free(tmpinfo);
     return W_ERR_FAIL;
@@ -380,6 +412,19 @@ w_err_t blkinfo_update_prev(lfile_blkinfo_s *info,w_blkdev_s *blkdev)
     return W_ERR_OK;
 }
 
-
+w_int32_t blkinfo_calc_restspace(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_int32_t offset,w_int32_t needed)
+{
+    w_err_t err;
+    lfile_blkinfo_s *tmpinfo;
+    w_uint8_t *blk = W_NULL;
+    WIND_ASSERT_RETURN(info != W_NULL,-1);
+    WIND_ASSERT_RETURN(blkdev != W_NULL,-1);
+    WIND_ASSERT_RETURN(info->magic == LISTFILE_BLK_MAGIC,-1);
+    err = blkinfo_get_byoffset(info,blkdev,offset);
+    WIND_ASSERT_RETURN(err == W_ERR_OK,err);
+    if(BLKINFO_HAS_OFFSET(info,offset,blkdev->blksize));
+        
+    
+}
 
 

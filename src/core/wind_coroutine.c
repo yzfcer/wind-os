@@ -131,7 +131,7 @@ w_err_t wind_coroutine_init(w_coroutine_s *coroutine,const char *name,w_uint16_t
     thread = wind_thread_current();
     WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_FAIL);
     coroutine->cid = cid;
-    coroutine->thread = thread;
+    //coroutine->thread = thread;
     coroutine->func = func;
     coroutine->arg = arg;
     coroutine->stack = _wind_thread_stack_init((thread_run_f)func,arg,&coroutine->stackbuff[WIND_COROUTINE_STKSIZE-1]);
@@ -210,15 +210,14 @@ w_err_t wind_coroutine_print(void)
     w_dlist_s *list = &coroutinelist;
     wind_printf("\r\n\r\ncoroutine list:\r\n");
     wind_print_space(5);
-    wind_printf("%-16s %-8s %-16s %-8s\r\n","coroutine","cid","thread","status");
+    wind_printf("%-16s %-8s %-8s\r\n","coroutine","cid","status");
     wind_print_space(5);
     wind_disable_switch();
     foreach_node(dnode,list)
     {
         coroutine = NODE_TO_COROUTINE(dnode);
-        wind_printf("%-16s %-8d %-16s %-8s\r\n",
-            wind_obj_name(coroutine),coroutine->cid,wind_obj_name(coroutine->thread),
-            IS_F_COROUTINE_READY(coroutine));
+        wind_printf("%-16s %-8d %-8s\r\n",
+            wind_obj_name(coroutine),coroutine->cid,IS_F_COROUTINE_READY(coroutine));
     }
     wind_enable_switch();
     wind_print_space(5);
