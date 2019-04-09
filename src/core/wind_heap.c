@@ -438,13 +438,13 @@ w_err_t wind_heap_stati_print(void)
     w_heap_s *heap;
     w_dlist_s *list = &heaplist;
     wind_print_space(7);
-    wind_printf("%-16s %-8s %-8s %-8s %-8s\r\n","heap","tot","used","maxused","err");
+    wind_printf("%-16s %-10s %-10s %-8s %-8s\r\n","heap","tot","used","maxused","err");
     wind_print_space(7);
     
     foreach_node(dnode,list)
     {
         heap = NODE_TO_HEAP(dnode);
-        wind_printf("%-16s %-8d %-8d %-8d %-8d\r\n",heap->obj.name,heap->stati.tot,
+        wind_printf("%-16s %-10d %-10d %-8d %-8d\r\n",heap->obj.name,heap->stati.tot,
             heap->stati.used,heap->stati.max,heap->stati.err);
     }
    

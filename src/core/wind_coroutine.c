@@ -148,13 +148,16 @@ w_coroutine_s *wind_coroutine_create(const char *name,w_uint16_t cid,coroutine_f
 
     coroutine = coroutine_malloc();
     WIND_ASSERT_RETURN(coroutine != W_NULL,W_NULL);
+    wind_disable_switch();
     err = wind_coroutine_init(coroutine,name,cid,func,arg);
     if(err == W_ERR_OK)
     {
         SET_F_COROUTINE_POOL(coroutine);
+        wind_enable_switch();
         return coroutine;
     }
     coroutine_free(coroutine);
+    wind_enable_switch();
     return W_NULL;
 }
 
@@ -168,10 +171,12 @@ w_err_t wind_coroutine_destroy(w_coroutine_s *coroutine)
     WIND_ASSERT_RETURN(coroutine != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(coroutine->obj.magic == WIND_COROUTINE_MAGIC,W_ERR_INVALID);
     wind_notice("destroy coroutine:%s",wind_obj_name(coroutine));
+    wind_disable_switch();
     err = wind_obj_deinit(&coroutine->obj,WIND_COROUTINE_MAGIC,&thread->coroutlist);
-    WIND_ASSERT_RETURN(err == W_ERR_OK, W_ERR_FAIL);
+    WIND_ASSERT_TODO_RETURN(err == W_ERR_OK,wind_enable_switch(),W_ERR_FAIL);
     if(IS_F_COROUTINE_POOL(coroutine))
         coroutine_free(coroutine);
+    wind_enable_switch();
     return W_ERR_OK;
 }
 
