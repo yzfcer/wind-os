@@ -156,6 +156,42 @@ w_err_t listfs_bitmap_find_free(lfs_bitmap_s *bp,w_addr_t *addr)
     return W_ERR_OK;
 }
 
+w_err_t listfs_bitmap_free_blk(lfs_bitmap_s *bp,w_addr_t *addr,w_int32_t count)
+{
+    w_int32_t i;
+    w_err_t err;
+    WIND_ASSERT_RETURN(bp != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(addr != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(bp->blkdev != W_NULL,W_ERR_PTR_NULL);
+    for(i = 0;i < count;i ++)
+    {
+        if(addr[i] != 0)
+            listfs_bitmap_set(bp,addr[i],0);
+    }
+    return W_ERR_OK;
+}
+
+w_err_t listfs_bitmap_alloc_blk(lfs_bitmap_s *bp,w_addr_t *addr,w_int32_t count)
+{
+    w_int32_t i;
+    w_err_t err;
+    WIND_ASSERT_RETURN(bp != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(addr != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(bp->blkdev != W_NULL,W_ERR_PTR_NULL);
+    for(i = 0;i < count;i ++)
+        addr[i] = 0;
+    for(i = 0;i < count;i ++)
+    {
+        err = listfs_bitmap_find_free(bp,&addr[i]);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"alloc bitmap blk failed.");
+    }
+    if(i < count)
+    {
+        listfs_bitmap_free_blk(bp,addr,count);
+        return W_ERR_FAIL;
+    }
+    return W_ERR_OK;
+}
 
 w_err_t listfs_bitmap_clear(lfs_bitmap_s *bp)
 {

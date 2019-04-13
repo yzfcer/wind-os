@@ -113,7 +113,20 @@ w_err_t fileinfo_update_parent(lfile_info_s *info,w_blkdev_s *blkdev);
 
 w_err_t fileinfo_update_prev(lfile_info_s *info,w_blkdev_s *blkdev);
 
+
 w_err_t blkinfo_init(lfile_blkinfo_s *info,w_addr_t self_addr,w_addr_t prev_addr,w_int32_t offset,w_int32_t blksize);
+
+w_err_t blkinfo_load(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_addr_t addr);
+
+w_err_t blkinfo_flush(lfile_blkinfo_s *info,w_blkdev_s *blkdev);
+
+w_err_t blkinfo_link(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_addr_t *addr,w_int32_t count);
+
+w_err_t blkinfo_unlink(lfile_blkinfo_s *info,w_blkdev_s *blkdev);
+
+w_int32_t blkinfo_get_used(lfile_blkinfo_s *info);
+
+w_int32_t blkinfo_get_space(lfile_blkinfo_s *info);
 
 w_int32_t blkinfo_tail_offset(lfile_blkinfo_s *info);
 
@@ -127,7 +140,15 @@ w_err_t blkinfo_get_byoffset(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_int32_t 
 
 w_err_t blkinfo_update_prev(lfile_blkinfo_s *info,w_blkdev_s *blkdev);
 
+w_err_t blkinfo_alloc(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_int32_t count);
+
+w_err_t blkinfo_free(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_int32_t count);
+
+w_err_t blkinfo_append_addr(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_addr_t *addr,w_int32_t count);
+
 w_int32_t blkinfo_calc_restspace(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_int32_t tail_offset);
+
+
 
 #endif
 

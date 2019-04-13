@@ -555,7 +555,16 @@ w_int32_t listfile_read(listfile_s* file,w_uint8_t *buff, w_int32_t size)
     return 0;
 }
 
-w_int32_t listfile_write(listfile_s* file,w_uint8_t *buff, w_int32_t size)
+#if 0
+static w_err_t lfs_alloc_blkspace(listfile_s* file,w_int32_t size)
+{
+    w_int32_t tail_offset;
+    tail_offset = file->offset + size;
+    blkinfo_calc_restspace(file->info,file->lfs->blkdev,tail_offset);
+}
+#endif
+
+w_int32_t listfile_write(listfile_s* file,w_uint8_t *buff,w_int32_t size)
 {
     w_err_t err;
     w_int32_t writeed;
