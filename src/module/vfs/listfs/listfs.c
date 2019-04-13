@@ -82,32 +82,21 @@ static w_err_t lfs_search_file(listfs_s *lfs,listfile_s *file,const char *path)
         pathname = lfs_malloc(len+1);
         finfo = lfs_malloc(sizeof(lfile_info_s));
         blkinfo = lfs_malloc(sizeof(lfile_blkinfo_s));
-        if(pathname == W_NULL || nameseg == W_NULL || finfo == W_NULL || blkinfo == W_NULL)
-        {
-            wind_error("alloc memory error");
-            err = W_ERR_MEM;
-            break;
-        }
+
+        WIND_ASSERT_BREAK((pathname != W_NULL && nameseg != W_NULL && 
+            finfo != W_NULL && blkinfo != W_NULL),
+            W_ERR_MEM,"alloc memory error");
         
         wind_memset(pathname,0,len+1);
         wind_strcpy(pathname,path);
         pathname[len] = 0;
         
         cnt = wind_strsplit(pathname,'/',nameseg,LISTFS_DIR_LAYCNT);
-        if(cnt < 0)
-        {
-            wind_error("split path failed");
-            err = W_ERR_INVALID;
-            break;
-        }
+        WIND_ASSERT_BREAK(cnt > 0,W_ERR_INVALID,"split path failed");
 
         err = listfs_get_fileinfo(finfo,blkinfo,lfs->blkdev,lfs->lfs_info.root_addr);
-        if(err != W_ERR_OK)
-        {
-            wind_error("read root directory failed.");
-            err = W_ERR_FAIL;
-            break;
-        }
+        WIND_ASSERT_BREAK(err == W_ERR_OK,W_ERR_FAIL,"read root directory failed.");
+
     
         if(cnt == 1)
         {
@@ -124,12 +113,7 @@ static w_err_t lfs_search_file(listfs_s *lfs,listfile_s *file,const char *path)
                 break;
             }
             finfo = lfs_search_child(finfo,nameseg[i],lfs->blkdev);
-            if(finfo == W_NULL)
-            {
-                wind_error("read directory %s failed.",nameseg[i]);
-                err = W_ERR_FAIL;
-                break;
-            }
+            WIND_ASSERT_BREAK(finfo != W_NULL,W_ERR_FAIL,"read directory failed.");
         }
     }while(0);
     if(err == W_ERR_OK)
@@ -197,14 +181,14 @@ static w_err_t lfs_make_child(listfs_s *lfs,lfile_info_s *parent,char *name,w_ui
     w_err_t err;
     w_uint8_t attr;
     w_uint8_t *blk = W_NULL;
-    w_int32_t self_addr,cnt;
+    w_addr_t self_addr,cnt;
     lfile_info_s *info;
     lfile_blkinfo_s *blkinfo;
     WIND_ASSERT_RETURN(lfs != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(parent != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(name != W_NULL,W_ERR_PTR_NULL);
     
-    err = listfs_bitmap_find_free(lfs,&self_addr);
+    err = listfs_bitmap_find_free(&lfs->bitmap,&self_addr);
     WIND_ASSERT_RETURN(err == W_ERR_OK,err);
     
     do 
@@ -221,26 +205,13 @@ static w_err_t lfs_make_child(listfs_s *lfs,lfile_info_s *parent,char *name,w_ui
         
         info->prevfile_addr = parent->tailchild_addr;
         cnt = wind_blkdev_write(lfs->blkdev,self_addr,blk,1);
-        if(cnt <= 0)
-        {
-            wind_error("write file info failed.");
-            err = W_ERR_FAIL;
-            break;
-        }
+        WIND_ASSERT_BREAK(cnt > 0,W_ERR_FAIL,"write file info failed.");
         
         err = fileinfo_update_prev(info,lfs->blkdev);
-        if(err != W_ERR_OK)
-        {
-            wind_error("update prev file info failed.");
-            break;
-        }
+        WIND_ASSERT_BREAK(cnt > 0,err,"update prev file info failed.");
 
         err = fileinfo_update_parent(info,lfs->blkdev);
-        if(err != W_ERR_OK)
-        {
-            wind_error("update parent file info failed.");
-            break;
-        }
+        WIND_ASSERT_BREAK(cnt > 0,err,"update parent file info failed.");
     }while(0);
     if(blk != W_NULL)
         lfs_free(blk);
@@ -392,7 +363,7 @@ w_err_t listfs_format(listfs_s *lfs,w_blkdev_s *blkdev)
         }
 
         listfs_bitmap_init(&lfs->bitmap,lfs_info->bitmap1_addr,lfs_info->bitmap_cnt,blkdev);
-        listfs_bitmap_clear(&lfs->bitmap,blkdev);
+        listfs_bitmap_clear(&lfs->bitmap);
         lfs_make_root(lfs);
         listfs_bitmap_update(&lfs->bitmap);
         lfs->file_ref = 0;
@@ -464,7 +435,7 @@ listfile_s* listfile_open(listfs_s *lfs,const char *path,w_uint16_t mode)
         }
 
         //有创建标记，且文件不存在
-        err = lfs_make_file(lfs,&file->info,(char*)path);
+        err = lfs_make_file(lfs,file,(char*)path);
         if(err != W_ERR_OK)
         {
             wind_debug("make file %s failed",path);

@@ -38,8 +38,9 @@
 
 //从fileinfo数据块中取出blkinfo
 #define FILEINFO_BLKINFO(blk) (lfile_blkinfo_s*)&blk[sizeof(lfile_info_s)]
-#define BLKINFO_HAS_OFFSET(info,offset) \
-((offset >= info->offset)&&(offset < info->offset + info->blkused * info->blksize))
+//#define BLKINFO_HAS_OFFSET(info,offset) \
+//((offset >= info->offset)&&(offset < info->offset + info->blkused * info->blksize))
+#define BLKINFO_HAS_OFFSET(info,offset1,blksize) ((offset1 >= info->offset)&&(offset1 < info->offset + info->blkused * blksize))
 
 //固化文件系统信息
 typedef struct __lfs_info_s
@@ -126,7 +127,7 @@ w_err_t blkinfo_get_byoffset(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_int32_t 
 
 w_err_t blkinfo_update_prev(lfile_blkinfo_s *info,w_blkdev_s *blkdev);
 
-w_err_t blkinfo_calc_restspace(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_int32_t offset,w_int32_t needed);
+w_int32_t blkinfo_calc_restspace(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_int32_t tail_offset);
 
 #endif
 

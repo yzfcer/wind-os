@@ -26,7 +26,6 @@
 #include "listfs.h"
 #include "wind_debug.h"
 #include "wind_string.h"
-#define BLKINFO_HAS_OFFSET(info,offset,blksize) ((offset >= info->offset)&&(offset < info->offset + info->blkused * blksize))
 w_err_t listfs_read_block(w_blkdev_s *blkdev,w_addr_t addr,w_uint8_t **blk)
 {
     w_int32_t cnt;
@@ -412,17 +411,24 @@ w_err_t blkinfo_update_prev(lfile_blkinfo_s *info,w_blkdev_s *blkdev)
     return W_ERR_OK;
 }
 
-w_int32_t blkinfo_calc_restspace(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_int32_t offset,w_int32_t needed)
+w_int32_t blkinfo_calc_restspace(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_int32_t tail_offset)
 {
-    w_err_t err;
+    w_int32_t err;
     lfile_blkinfo_s *tmpinfo;
     w_uint8_t *blk = W_NULL;
     WIND_ASSERT_RETURN(info != W_NULL,-1);
     WIND_ASSERT_RETURN(blkdev != W_NULL,-1);
     WIND_ASSERT_RETURN(info->magic == LISTFILE_BLK_MAGIC,-1);
-    err = blkinfo_get_byoffset(info,blkdev,offset);
-    WIND_ASSERT_RETURN(err == W_ERR_OK,err);
-    if(BLKINFO_HAS_OFFSET(info,offset,blkdev->blksize));
+    tmpinfo = lfs_malloc(blkdev->blksize);
+    WIND_ASSERT_RETURN(tmpinfo != W_NULL,W_ERR_MEM);
+    do
+    {
+        wind_memcpy(tmpinfo,info,sizeof(lfile_blkinfo_s));
+        err = blkinfo_get_byoffset(tmpinfo,blkdev,tail_offset);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"get offset failed");
+    }while(0);
+    
+    if(BLKINFO_HAS_OFFSET(info,tail_offset,blkdev->blksize));
         
     
 }
