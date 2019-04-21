@@ -62,7 +62,7 @@ COMMAND_MAIN(blkdev,argc,argv)
     dev = wind_blkdev_get(argv[2]);
     wind_blkdev_open(dev);
     WIND_ASSERT_RETURN(dev != W_NULL,W_ERR_INVALID);
-    res = wind_atoui(argv[3],(w_uint32_t*)&addr);
+    res = wind_str_to_uint(argv[3],(w_uint32_t*)&addr);
     WIND_ASSERT_RETURN(res == W_TRUE,W_ERR_INVALID);
     buff = buffer;
     wind_memset(buff,0,dev->blksize);

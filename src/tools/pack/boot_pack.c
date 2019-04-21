@@ -187,7 +187,7 @@ static w_err_t parse_encrypt_key(pack_info_s *info,char *hwstr)
     {
         WIND_ASSERT_RETURN(arr[i][0] == '0',W_ERR_FAIL);
         WIND_ASSERT_RETURN((arr[i][1] == 'x')||(arr[i][1] == 'X'),W_ERR_FAIL);
-        wind_htoi(arr[i],&value);
+        wind_hexstr_to_int(arr[i],&value);
         info->keys[i] = (w_uint8_t)value;
     }
     info->key_len = (w_uint8_t)cnt;
@@ -203,7 +203,7 @@ static w_err_t parse_input_file(pack_info_s *info,char *hwstr)
     WIND_ASSERT_RETURN(cnt == 2,W_ERR_FAIL);
     WIND_ASSERT_RETURN(arr[0][0] == '0',W_ERR_FAIL);
     WIND_ASSERT_RETURN((arr[0][1] == 'x')||(arr[0][1] == 'X'),W_ERR_FAIL);
-    wind_htoi(&arr[0][2],&value);
+    wind_hexstr_to_int(&arr[0][2],&value);
     index = info->file_cnt;
     info->fileinfo[index].offset = (w_int32_t)value;
     wind_strcpy(info->fileinfo[index].input_file,arr[1]);

@@ -65,6 +65,8 @@ extern char *wind_strstr(const char *s1,const char *s2);
 
 extern char *wind_strskip(char *str,char *charr,w_int32_t count);
 
+extern w_fp64_t wind_strtod(const char *str,char **endptr);
+
 extern w_int32_t wind_strsplit(char *str,char ch,char **substr,w_int32_t maxcnt);
 
 

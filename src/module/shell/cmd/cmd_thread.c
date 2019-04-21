@@ -93,7 +93,7 @@ COMMAND_MAIN(thread,argc,argv)
     else if(wind_strcmp(argv[1],"setprio") == 0)
     {
         WIND_ASSERT_RETURN(argc >= 4,W_ERR_INVALID);
-        res = wind_atoi(argv[3],&prio);
+        res = wind_str_to_int(argv[3],&prio);
         if(res != W_TRUE)
             return W_ERR_INVALID;
         WIND_ASSERT_RETURN(prio > 0,W_ERR_INVALID);

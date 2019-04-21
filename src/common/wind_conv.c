@@ -25,7 +25,7 @@
 #include "wind_type.h"
 #include "wind_string.h"
 //把字符串转换成带符号整数
-w_bool_t wind_atoi(char *str,w_int32_t *value)
+w_bool_t wind_str_to_int(char *str,w_int32_t *value)
 {
     w_uint8_t sign;
     w_uint8_t i = 0;
@@ -47,7 +47,7 @@ w_bool_t wind_atoi(char *str,w_int32_t *value)
     return W_TRUE;
 }
 
-void wind_itoa(char *str,w_int32_t value)
+void wind_int_to_str(char *str,w_int32_t value)
 {
     char *beg = str;  
     int sign;  
@@ -73,7 +73,7 @@ void wind_itoa(char *str,w_int32_t value)
 }
 
 //把字符串转换成无符号整数
-w_bool_t wind_atoui(char *str,w_uint32_t *value)
+w_bool_t wind_str_to_uint(char *str,w_uint32_t *value)
 {
     w_uint32_t num = 0;
     w_uint8_t i = 0;
@@ -92,7 +92,7 @@ w_bool_t wind_atoui(char *str,w_uint32_t *value)
     return W_TRUE;
 }
 
-void wind_uitoa(char *str,w_uint32_t value)
+void wind_uint_to_str(char *str,w_uint32_t value)
 {
     char *beg = str;
     char *end;
@@ -131,7 +131,7 @@ static char i2c(w_uint8_t va)
 }
 
 
-w_bool_t wind_htoi(char *hex,w_uint32_t *value)  
+w_bool_t wind_hexstr_to_int(char *hex,w_uint32_t *value)  
 {  
     w_uint32_t num = 0;  
     w_int32_t len;  
@@ -153,7 +153,7 @@ w_bool_t wind_htoi(char *hex,w_uint32_t *value)
     return W_TRUE;  
 }  
 
-void wind_itoh(char *hex,w_uint32_t value)
+void wind_int_to_hexstr(char *hex,w_uint32_t value)
 {
     char *beg = hex;
     char *end;
@@ -173,57 +173,6 @@ void wind_itoh(char *hex,w_uint32_t value)
     }
 }
 
-w_fp64_t wind_strtod(const char *str,char **endptr) 
-{
-    const  char*  p    = str; 
-    w_lfp64_t value = 0.L; 
-    w_lfp64_t  factor; 
-    w_int32_t i,sign  = 0; 
-    w_int32_t ispositive = 1;
-    w_int32_t exp=0;
-    while ( *p==' ' )
-        p++;
-    if(*p == '-' || *p == '+') 
-        sign = *p++;
-    while (*p <='9'&&*p>='0' )   
-        value = value*10 + (*p++ - '0'); 
-    if ( *p == '.' ) 
-    { 
-        factor = 1; 
-        p++; 
-        while ( *p <='9'&&*p>='0' ) 
-        { 
-            factor *= 0.1; 
-            value  += (*p++ - '0') * factor; 
-        } 
-    } 
-    if(*p=='e'||*p=='E') 
-    { 
-        p++;
-        if((*p)=='-') 
-        {  
-            ispositive=0;
-        }
-        if((*p)=='+') 
-        { 
-            ispositive=1; 
-        }
-        while(*++p) 
-        {  
-            exp+=exp*10+*p-'0';
-        }
-
-        if(ispositive==0)
-        {
-            for(i=0;i <exp;i++) 
-                value*=0.1; 
-        }
-        else
-            for(i=0;i <exp;i++) 
-                value*=10; 
-    } 
-    return (sign == '-' ? -value : value); 
-} 
 
 
 w_bool_t wind_from_uint16(w_uint8_t *arr,w_uint16_t value)

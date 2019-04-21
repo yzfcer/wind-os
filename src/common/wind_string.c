@@ -248,6 +248,60 @@ char *wind_strskip(char *str,char *charr,w_int32_t count)
     return str;
 }
 
+
+w_fp64_t wind_strtod(const char *str,char **endptr) 
+{
+    const  char*  p = str; 
+    w_lfp64_t value = 0.0L; 
+    w_lfp64_t  factor; 
+    w_int32_t i,sign  = 0; 
+    w_int32_t ispositive = 1;
+    w_int32_t exp=0;
+    while ( *p==' ' )
+        p++;
+    if(*p == '-' || *p == '+') 
+        sign = *p++;
+    while (*p <='9'&&*p>='0' )   
+        value = value*10 + (*p++ - '0'); 
+    if ( *p == '.' ) 
+    { 
+        factor = 1; 
+        p++; 
+        while ( *p <='9'&&*p>='0' ) 
+        { 
+            factor *= 0.1; 
+            value  += (*p++ - '0') * factor; 
+        } 
+    } 
+    if(*p=='e'||*p=='E') 
+    { 
+        p++;
+        if((*p)=='-') 
+        {  
+            ispositive=0;
+        }
+        if((*p)=='+') 
+        { 
+            ispositive=1; 
+        }
+        while(*++p) 
+        {  
+            exp+=exp*10+*p-'0';
+        }
+
+        if(ispositive==0)
+        {
+            for(i=0;i <exp;i++) 
+                value*=0.1; 
+        }
+        else
+            for(i=0;i <exp;i++) 
+                value*=10; 
+    } 
+    return (sign == '-' ? -value : value); 
+} 
+
+
 //描述:将字符串按照特定字符分割，最多分割成maxcnt个字符串
 //str : 原字符串
 //ch  : 指定的分隔字符

@@ -116,9 +116,9 @@ w_err_t fileinfo_update_prev(lfile_info_s *info,w_blkdev_s *blkdev);
 
 w_err_t blkinfo_init(lfile_blkinfo_s *info,w_addr_t self_addr,w_addr_t prev_addr,w_int32_t offset,w_int32_t blksize);
 
-w_err_t blkinfo_load(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_addr_t addr);
+w_err_t blkinfo_read(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_addr_t addr);
 
-w_err_t blkinfo_flush(lfile_blkinfo_s *info,w_blkdev_s *blkdev);
+w_err_t blkinfo_write(lfile_blkinfo_s *info,w_blkdev_s *blkdev);
 
 w_err_t blkinfo_link(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_addr_t *addr,w_int32_t count);
 
