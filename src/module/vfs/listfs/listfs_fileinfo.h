@@ -57,7 +57,7 @@ typedef struct __lfs_info_s
     w_addr_t   root_addr;  //根目录位置
 }lfs_info_s;
 
-
+#if 1
 //文件数据块头部信息
 typedef struct __lfile_blkinfo_s
 {
@@ -71,12 +71,15 @@ typedef struct __lfile_blkinfo_s
     w_int32_t  byteused;     //当前块已经使用的字节数量
     w_addr_t   dataaddr[LFILE_LBLK_CNT];  //数据块信息
 }lfile_blkinfo_s;
+#endif
+
 
 //固化文件头部信息
 typedef struct __lfile_info_s
 {
     w_uint32_t magic;                //魔术字
     char       name[LFILE_NAME_LEN]; //文件名
+    char       filesize;             //文件大小
     w_addr_t   parent_addr;          //父地址
     w_addr_t   self_addr;            //当前地址
     w_addr_t   last_addr;            //最后一个块信息地址
@@ -85,7 +88,6 @@ typedef struct __lfile_info_s
     w_addr_t   headchild_addr;       //第一个子文件地址
     w_addr_t   tailchild_addr;       //最后一个文件地址
     w_uint8_t  attr;                 //是否目录，可读，可写，隐藏，校验
-    //lfile_blkinfo_s blkinfo;
 }lfile_info_s;
 
 w_err_t listfs_get_fsinfo(lfs_info_s *fsinfo,w_blkdev_s *blkdev);
@@ -99,7 +101,7 @@ w_err_t listfs_write_block(w_blkdev_s *blkdev,w_addr_t addr,w_uint8_t *blk);
 
 w_err_t listfs_get_fileinfo(lfile_info_s *info,lfile_blkinfo_s *blkinfo,w_blkdev_s *blkdev,w_addr_t addr);
 
-w_err_t listfs_set_fileinfo(lfile_info_s *info,lfile_blkinfo_s *blkinfo,w_blkdev_s *blkdev,w_addr_t addr);
+w_err_t listfs_set_fileinfo(lfile_info_s *info,lfile_blkinfo_s *blkinfo,w_blkdev_s *blkdev);
 
 lfile_info_s *fileinfo_parent(lfile_info_s *info,w_blkdev_s *blkdev);
 
@@ -113,7 +115,7 @@ w_err_t fileinfo_update_parent(lfile_info_s *info,w_blkdev_s *blkdev);
 
 w_err_t fileinfo_update_prev(lfile_info_s *info,w_blkdev_s *blkdev);
 
-
+#if 1
 w_err_t blkinfo_init(lfile_blkinfo_s *info,w_addr_t self_addr,w_addr_t prev_addr,w_int32_t offset,w_int32_t blksize);
 
 w_err_t blkinfo_read(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_addr_t addr);
@@ -147,7 +149,7 @@ w_err_t blkinfo_free(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_int32_t count);
 w_err_t blkinfo_append_addr(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_addr_t *addr,w_int32_t count);
 
 w_int32_t blkinfo_calc_restspace(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_int32_t tail_offset);
-
+#endif
 
 
 #endif

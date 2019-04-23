@@ -34,11 +34,11 @@
 
 #if WIND_FS_SUPPORT
 //文件操作模式
-#define LF_FMODE_R   0x01
-#define LF_FMODE_W   0x02
-#define LF_FMODE_RW  0x03
-#define LF_FMODE_CRT 0x04
-#define LF_FMODE_A   0x08
+#define LFMODE_R   0x01
+#define LFMODE_W   0x02
+#define LFMODE_RW  0x03
+#define LFMODE_CRT 0x04
+#define LFMODE_A   0x08
 
 
 #define LISTFS_DIR_LAYCNT 32 //目录深度

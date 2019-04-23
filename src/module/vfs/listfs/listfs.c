@@ -421,7 +421,7 @@ listfile_s* listfile_open(listfs_s *lfs,const char *path,w_uint16_t mode)
         file = lfs_malloc(sizeof(listfile_s));
         WIND_ASSERT_RETURN(file != W_NULL,W_NULL);
         wind_memset(file,0,sizeof(listfile_s));
-        is_crt = (mode & LF_FMODE_CRT)?W_TRUE:W_FALSE;
+        is_crt = (mode & LFMODE_CRT)?W_TRUE:W_FALSE;
         err = lfs_search_file(lfs,file,path);
         if((err != W_ERR_OK) && (!is_crt))
         {   //没有创建标记，且文件不存在
@@ -454,7 +454,7 @@ listfile_s* listfile_open(listfs_s *lfs,const char *path,w_uint16_t mode)
         file->mode = (w_uint8_t)mode;
         //file->blkinfo = &file->info.blkinfo;
         
-        if(mode & LF_FMODE_A)
+        if(mode & LFMODE_A)
             file->offset = file->filelen;
         else
             file->offset = 0;
@@ -509,7 +509,7 @@ w_err_t listfile_get_attr(listfile_s* file,w_uint8_t *attr)
 w_bool_t listfile_existing(listfs_s *lfs,const char *path)
 {
     listfile_s *file;
-    file = listfile_open(lfs,path,LF_FMODE_R);
+    file = listfile_open(lfs,path,LFMODE_R);
     if(file == W_NULL)
         return W_FALSE;
     listfile_close(file);
@@ -523,6 +523,8 @@ w_err_t listfile_seek(listfile_s* file,w_int32_t offset)
     WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(offset >= 0,W_ERR_OVERFLOW);
     WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,W_ERR_INVALID);
+    if(file->info.filesize < offset)
+        offset = file->info.filesize;
     blkinfo = lfs_malloc(sizeof(lfile_blkinfo_s));
     WIND_ASSERT_RETURN(blkinfo != W_NULL, W_ERR_MEM);
     do 
@@ -548,39 +550,46 @@ w_int32_t listfile_ftell(listfile_s* file)
 w_int32_t listfile_read(listfile_s* file,w_uint8_t *buff, w_int32_t size)
 {
     w_err_t err;
+    w_int32_t rsize;
     WIND_ASSERT_RETURN(file != W_NULL,-1);
     WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,-1);
-    WIND_ASSERT_RETURN(file->mode & LF_FMODE_R,-1);
+    WIND_ASSERT_RETURN(file->mode & LFMODE_R,-1);
+    WIND_ASSERT_RETURN(file->offset < file->info.filesize,-1);
+    rsize = size;
+    if(file->offset + rsize > file->info.filesize)
+        rsize = file->info.filesize - file->offset;
     
-    return 0;
+        
+    return rsize;
 }
 
-#if 0
-static w_err_t lfs_alloc_blkspace(listfile_s* file,w_int32_t size)
-{
-    w_int32_t tail_offset;
-    tail_offset = file->offset + size;
-    blkinfo_calc_restspace(file->info,file->lfs->blkdev,tail_offset);
-}
-#endif
 
 w_int32_t listfile_write(listfile_s* file,w_uint8_t *buff,w_int32_t size)
 {
     w_err_t err;
-    w_int32_t writeed;
+    w_int32_t wsize,allocsize;
     lfile_blkinfo_s *blkinfo;
     WIND_ASSERT_RETURN(file != W_NULL,-1);
     WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,-1);
-    WIND_ASSERT_RETURN(file->mode & LF_FMODE_W,-1);
-    err = blkinfo_get_byoffset(file->blkinfo,file->lfs->blkdev,file->offset);
-    return 0;
+    WIND_ASSERT_RETURN((file->mode & LFMODE_W)||(file->mode & LFMODE_A),-1);
+    wsize = size;
+    if(file->offset + wsize > file->info.filesize)
+    {
+        allocsize = file->offset + wsize - file->info.filesize;
+        allocsize = (allocsize + file->lfs->blkdev->blksize - 1) / file->lfs->blkdev->blksize;
+    }
+
+    if(file->info.filesize < file->offset + wsize)
+        file->info.filesize += wsize;
+    file->offset += wsize;
+    return wsize;
 }
 
 listfile_s *listfile_readdir(listfile_s* file,w_int32_t index)
 {
     WIND_ASSERT_RETURN(file != W_NULL,W_NULL);
     WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,W_NULL);
-    WIND_ASSERT_RETURN(file->mode & LF_FMODE_R,W_NULL);
+    WIND_ASSERT_RETURN(file->mode & LFMODE_R,W_NULL);
     return W_NULL;
 }
 
@@ -589,7 +598,7 @@ w_err_t listfile_fgets(listfile_s* file,char *buff, w_int32_t maxlen)
 {
     WIND_ASSERT_RETURN(file != W_NULL,-1);
     WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,-1);
-    WIND_ASSERT_RETURN(file->mode & LF_FMODE_R,-1);
+    WIND_ASSERT_RETURN(file->mode & LFMODE_R,-1);
     return W_ERR_FAIL;
 }
 
@@ -597,7 +606,7 @@ w_err_t listfile_fputs(listfile_s* file,char *buff)
 {
     WIND_ASSERT_RETURN(file != W_NULL,-1);
     WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,-1);
-    WIND_ASSERT_RETURN(file->mode & LF_FMODE_W,-1);
+    WIND_ASSERT_RETURN(file->mode & LFMODE_W,-1);
     return W_ERR_FAIL;
 }
 

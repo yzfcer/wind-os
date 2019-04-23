@@ -97,8 +97,6 @@ w_err_t listfs_fileinfo_init(lfile_info_s *info,char *name,
     info->self_addr = self_addr;
     info->prevfile_addr = prev_addr;
     info->attr = attr;
-    //info->blkinfo.magic = LISTFILE_BLK_MAGIC;
-    //info->blkinfo.byteused = sizeof(lfile_info_s);
     return W_ERR_OK;
 }
 
@@ -120,7 +118,7 @@ w_err_t listfs_get_fileinfo(lfile_info_s *info,lfile_blkinfo_s *blkinfo,w_blkdev
     return W_ERR_OK;
 }
 
-w_err_t listfs_set_fileinfo(lfile_info_s *info,lfile_blkinfo_s *blkinfo,w_blkdev_s *blkdev,w_addr_t addr)
+w_err_t listfs_set_fileinfo(lfile_info_s *info,lfile_blkinfo_s *blkinfo,w_blkdev_s *blkdev)
 {
     w_uint32_t cnt;
     w_uint8_t *blk;
@@ -132,7 +130,7 @@ w_err_t listfs_set_fileinfo(lfile_info_s *info,lfile_blkinfo_s *blkinfo,w_blkdev
     wind_memset(blk,0,blkdev->blksize);
     wind_memcpy(blk,info,sizeof(lfile_info_s));
     wind_memcpy(FILEINFO_BLKINFO(blk),blkinfo,sizeof(lfile_blkinfo_s));
-    cnt = wind_blkdev_write(blkdev,addr,blk,1);
+    cnt = wind_blkdev_write(blkdev,info->self_addr,blk,1);
     WIND_ASSERT_RETURN(cnt > 0,W_ERR_FAIL);
     lfs_free(blk);
     return W_ERR_OK;

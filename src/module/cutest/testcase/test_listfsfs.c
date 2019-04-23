@@ -42,19 +42,19 @@ CASE_FUNC(listfs_create)
 {
     w_err_t err;
     listfile_s *file;
-    file = listfile_open(W_NULL,"/test.txt",LF_FMODE_CRT);
+    file = listfile_open(W_NULL,"/test.txt",LFMODE_CRT);
     EXPECT_NE(file,W_NULL);
     err = listfile_close(file);
     EXPECT_EQ(err,W_ERR_OK);
     err = listfile_remove(file);
     EXPECT_EQ(err,W_ERR_OK);
-    file = listfile_open(W_NULL,"/test1.txt",LF_FMODE_CRT);
+    file = listfile_open(W_NULL,"/test1.txt",LFMODE_CRT);
     EXPECT_NE(file,W_NULL);
     err = listfile_close(file);
     EXPECT_EQ(err,W_ERR_OK);
     err = listfile_remove(file);
     EXPECT_EQ(err,W_ERR_OK);
-    file = listfile_open(W_NULL,"/test2.txt",LF_FMODE_CRT);
+    file = listfile_open(W_NULL,"/test2.txt",LFMODE_CRT);
     EXPECT_NE(file,W_NULL);
     err = listfile_close(file);
     EXPECT_EQ(err,W_ERR_OK);
@@ -79,7 +79,7 @@ CASE_FUNC(listfs_readwrite)
     w_err_t err;
     listfile_s *file;
     char *str = "this is a file test string.";
-    file = listfile_open(W_NULL,"/test.txt",LF_FMODE_CRT | LF_FMODE_W);
+    file = listfile_open(W_NULL,"/test.txt",LFMODE_CRT | LFMODE_W);
     EXPECT_NE(file,W_NULL);
     len = listfile_write(file,(w_uint8_t*)str,wind_strlen(str));
     EXPECT_EQ(len,wind_strlen(str));
@@ -87,7 +87,7 @@ CASE_FUNC(listfs_readwrite)
     EXPECT_EQ(err,W_ERR_OK);
 
     wind_memset(buff,0,32);
-    file = listfile_open(W_NULL,"/test.txt",LF_FMODE_R);
+    file = listfile_open(W_NULL,"/test.txt",LFMODE_R);
     EXPECT_NE(file,W_NULL);
     len = listfile_read(file,buff,32);
     EXPECT_EQ(len,wind_strlen(str));
