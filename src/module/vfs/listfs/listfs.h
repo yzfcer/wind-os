@@ -30,6 +30,7 @@
 #include "wind_dlist.h"
 #include "wind_blkdev.h"
 #include "listfs_fileinfo.h"
+#include "listfs_blkinfo.h"
 #include "listfs_bitmap.h"
 
 #if WIND_FS_SUPPORT

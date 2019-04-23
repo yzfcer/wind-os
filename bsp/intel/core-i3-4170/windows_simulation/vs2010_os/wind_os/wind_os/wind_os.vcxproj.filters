@@ -416,6 +416,9 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\listfs\listfs_fileinfo.c">
       <Filter>module_vfs</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\listfs\listfs_blkinfo.c">
+      <Filter>module_vfs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">
@@ -718,6 +721,9 @@
       <Filter>module_vfs</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\listfs\listfs_fileinfo.h">
+      <Filter>module_vfs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\listfs\listfs_blkinfo.h">
       <Filter>module_vfs</Filter>
     </ClInclude>
   </ItemGroup>

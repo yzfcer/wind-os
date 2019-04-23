@@ -34,7 +34,7 @@
 
 #define LFILE_NAME_LEN 64    //文件名长度
 
-#define LFILE_LBLK_CNT 64    //每个块允许记录的关联块数量
+//#define LFILE_LBLK_CNT 64    //每个块允许记录的关联块数量
 
 //从fileinfo数据块中取出blkinfo
 #define FILEINFO_BLKINFO(blk) (lfile_blkinfo_s*)&blk[sizeof(lfile_info_s)]
@@ -56,22 +56,6 @@ typedef struct __lfs_info_s
     w_addr_t   bitmap2_addr;//位图块数
     w_addr_t   root_addr;  //根目录位置
 }lfs_info_s;
-
-#if 1
-//文件数据块头部信息
-typedef struct __lfile_blkinfo_s
-{
-    w_uint32_t magic;        //块标记魔术字
-    w_addr_t   self_addr;    //当前地址
-    w_addr_t   prevblk_addr; //上块地址
-    w_addr_t   nextblk_addr; //下块地址
-    w_int32_t  blksize;      //块大小
-    w_int32_t  offset;       //当前块对应的文件的起始偏移量
-    w_int32_t  blkused;      //当前块已经使用的数量
-    w_int32_t  byteused;     //当前块已经使用的字节数量
-    w_addr_t   dataaddr[LFILE_LBLK_CNT];  //数据块信息
-}lfile_blkinfo_s;
-#endif
 
 
 //固化文件头部信息
@@ -99,9 +83,9 @@ w_err_t listfs_read_block(w_blkdev_s *blkdev,w_addr_t addr,w_uint8_t **blk);
 
 w_err_t listfs_write_block(w_blkdev_s *blkdev,w_addr_t addr,w_uint8_t *blk);
 
-w_err_t listfs_get_fileinfo(lfile_info_s *info,lfile_blkinfo_s *blkinfo,w_blkdev_s *blkdev,w_addr_t addr);
+w_err_t listfs_get_fileinfo(lfile_info_s *info,w_blkdev_s *blkdev,w_addr_t addr);
 
-w_err_t listfs_set_fileinfo(lfile_info_s *info,lfile_blkinfo_s *blkinfo,w_blkdev_s *blkdev);
+w_err_t listfs_set_fileinfo(lfile_info_s *info,w_blkdev_s *blkdev);
 
 lfile_info_s *fileinfo_parent(lfile_info_s *info,w_blkdev_s *blkdev);
 
@@ -114,43 +98,6 @@ lfile_info_s *fileinfo_tailchild(lfile_info_s *info,w_blkdev_s *blkdev);
 w_err_t fileinfo_update_parent(lfile_info_s *info,w_blkdev_s *blkdev);
 
 w_err_t fileinfo_update_prev(lfile_info_s *info,w_blkdev_s *blkdev);
-
-#if 1
-w_err_t blkinfo_init(lfile_blkinfo_s *info,w_addr_t self_addr,w_addr_t prev_addr,w_int32_t offset,w_int32_t blksize);
-
-w_err_t blkinfo_read(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_addr_t addr);
-
-w_err_t blkinfo_write(lfile_blkinfo_s *info,w_blkdev_s *blkdev);
-
-w_err_t blkinfo_link(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_addr_t *addr,w_int32_t count);
-
-w_err_t blkinfo_unlink(lfile_blkinfo_s *info,w_blkdev_s *blkdev);
-
-w_int32_t blkinfo_get_used(lfile_blkinfo_s *info);
-
-w_int32_t blkinfo_get_space(lfile_blkinfo_s *info);
-
-w_int32_t blkinfo_tail_offset(lfile_blkinfo_s *info);
-
-w_err_t blkinfo_get_prev(lfile_blkinfo_s *info,w_blkdev_s *blkdev);
-
-w_err_t blkinfo_get_next(lfile_blkinfo_s *info,w_blkdev_s *blkdev);
-
-w_err_t blkinfo_get_tail(lfile_blkinfo_s *info,w_blkdev_s *blkdev);
-
-w_err_t blkinfo_get_byoffset(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_int32_t offset);
-
-w_err_t blkinfo_update_prev(lfile_blkinfo_s *info,w_blkdev_s *blkdev);
-
-w_err_t blkinfo_alloc(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_int32_t count);
-
-w_err_t blkinfo_free(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_int32_t count);
-
-w_err_t blkinfo_append_addr(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_addr_t *addr,w_int32_t count);
-
-w_int32_t blkinfo_calc_restspace(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_int32_t tail_offset);
-#endif
-
 
 #endif
 

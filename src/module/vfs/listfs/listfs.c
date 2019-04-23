@@ -94,7 +94,9 @@ static w_err_t lfs_search_file(listfs_s *lfs,listfile_s *file,const char *path)
         cnt = wind_strsplit(pathname,'/',nameseg,LISTFS_DIR_LAYCNT);
         WIND_ASSERT_BREAK(cnt > 0,W_ERR_INVALID,"split path failed");
 
-        err = listfs_get_fileinfo(finfo,blkinfo,lfs->blkdev,lfs->lfs_info.root_addr);
+        err = listfs_get_fileinfo(finfo,lfs->blkdev,lfs->lfs_info.root_addr);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,W_ERR_FAIL,"read root directory failed.");
+        err = blkinfo_read(blkinfo,lfs->blkdev,lfs->lfs_info.root_addr);
         WIND_ASSERT_BREAK(err == W_ERR_OK,W_ERR_FAIL,"read root directory failed.");
 
     
@@ -153,13 +155,11 @@ static w_err_t lfs_make_root(listfs_s *lfs)
         attr = (LFILE_ATTR_COMMAN | LFILE_ATTR_DIR);
         listfs_fileinfo_init(info,"root",lfs->lfs_info.root_addr,0,0,attr);
         blkinfo_init(blkinfo, lfs->lfs_info.root_addr,0,0,lfs->blkdev->blksize);
-        err = listfs_set_fileinfo(info,blkinfo,lfs->blkdev,lfs->lfs_info.root_addr);
-        if(err != W_ERR_OK)
-        {
-            wind_error("flush lfs root failed.");
-            err = W_ERR_FAIL;
-            break;
-        }
+        err = listfs_set_fileinfo(info,lfs->blkdev,lfs->lfs_info.root_addr);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"flush lfs root file info failed.");
+        err = blkinfo_write(blkinfo,lfs->blkdev,lfs->lfs_info.root_addr);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"flush lfs root blkinfo failed.");
+        
         err = listfs_bitmap_set(&lfs->bitmap,lfs->lfs_info.root_addr,BITMAP_USED);
         if(err != W_ERR_OK)
         {
@@ -260,17 +260,11 @@ static w_err_t lfs_make_file(listfs_s *lfs,listfile_s *file,char *path)
             isdir = 1;
         }
         cnt = wind_strsplit(pathname,'/',nameseg,LISTFS_DIR_LAYCNT);
-        err = listfs_get_fileinfo(finfo,blkinfo,lfs->blkdev,lfs->lfs_info.root_addr);
-        if(err != W_ERR_OK)
-        {
-            wind_debug("get root info failed");
-            break;
-        }
-        if(cnt <= 1)
-        {
-            err = W_ERR_OK;
-            break;
-        }
+        WIND_ASSERT_BREAK(cnt > 1,W_ERR_OK,"split path failed.");
+        err = listfs_get_fileinfo(finfo,lfs->blkdev,lfs->lfs_info.root_addr);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,W_ERR_FAIL,"read root file info failed.");
+        err = blkinfo_read(blkinfo,lfs->blkdev,lfs->lfs_info.root_addr);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,W_ERR_FAIL,"read root blkinfo failed.");
 
         err = W_ERR_OK;
         for(i = 1;i < cnt;i ++)
@@ -284,11 +278,7 @@ static w_err_t lfs_make_file(listfs_s *lfs,listfile_s *file,char *path)
             else
             {
                 err = lfs_make_child(lfs,finfo,nameseg[i],i == cnt - 1?isdir:1);
-                if(err != W_ERR_OK)
-                {
-                    wind_error("make child failed,%d",err);
-                    break;
-                }
+                WIND_ASSERT_BREAK(err == W_ERR_OK,err,"make child failed");
             }
         }
         if(err != W_ERR_OK)
@@ -563,6 +553,15 @@ w_int32_t listfile_read(listfile_s* file,w_uint8_t *buff, w_int32_t size)
     return rsize;
 }
 
+static w_err_t do_alloc_blkspace(listfile_s* file,w_int32_t size)
+{
+    return W_ERR_FAIL;
+}
+
+static w_int32_t do_write_file(listfile_s* file,w_uint8_t *buff,w_int32_t size)
+{
+    return W_ERR_FAIL;
+}
 
 w_int32_t listfile_write(listfile_s* file,w_uint8_t *buff,w_int32_t size)
 {
@@ -577,11 +576,18 @@ w_int32_t listfile_write(listfile_s* file,w_uint8_t *buff,w_int32_t size)
     {
         allocsize = file->offset + wsize - file->info.filesize;
         allocsize = (allocsize + file->lfs->blkdev->blksize - 1) / file->lfs->blkdev->blksize;
+        err = do_alloc_blkspace(file,allocsize);
+        WIND_ASSERT_RETURN(err == W_ERR_OK,-1);
     }
+
+    err = do_write_file(file,buff,wsize);
+    WIND_ASSERT_RETURN(err == W_ERR_OK,-1);
 
     if(file->info.filesize < file->offset + wsize)
         file->info.filesize += wsize;
     file->offset += wsize;
+    err = listfs_set_fileinfo(&file->info,file->lfs->blkdev,file->info.self_addr);
+    WIND_ASSERT_RETURN(err == W_ERR_OK,-1);
     return wsize;
 }
 
