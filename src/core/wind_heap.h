@@ -65,7 +65,8 @@ typedef struct __w_heap_s w_heap_s;
 struct __w_heapitem_s
 {
     w_uint16_t magic;
-    w_uint16_t flag;
+    w_uint8_t  flag;
+    w_uint8_t  allocid;
     w_heap_s *heap;
     w_prinode_s itemnode;
     w_uint32_t size;
@@ -110,6 +111,8 @@ w_err_t wind_heap_stati_print(void);
 
 
 void *wind_malloc(w_uint32_t size);
+
+void *wind_zalloc(w_uint32_t size);
 
 void *wind_calloc(w_uint32_t count, w_uint32_t size);
 

@@ -45,6 +45,8 @@
 #define LISTFS_DIR_LAYCNT 32 //目录深度
 //#define LISTFS_BLK_SIZE 512  //块大小
 
+#define LISTFS_MAX_FILE_SIZE 0x7fffffff //文件长度限制，2GB
+
 //文件属性
 #define LFILE_ATTR_DIR    (0x01 << 0)
 #define LFILE_ATTR_READ   (0x01 << 1)

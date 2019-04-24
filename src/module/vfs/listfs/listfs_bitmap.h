@@ -48,7 +48,7 @@ w_err_t listfs_bitmap_update(lfs_bitmap_s *bp);
 
 w_err_t listfs_bitmap_set(lfs_bitmap_s *bp,w_addr_t addr,w_uint8_t bitflag);
 
-w_err_t listfs_bitmap_find_free(lfs_bitmap_s *bp,w_addr_t *addr);
+w_err_t listfs_bitmap_find_free(lfs_bitmap_s *bp,w_addr_t *addr,w_int32_t cnt);
 
 w_err_t listfs_bitmap_alloc_blk(lfs_bitmap_s *bp,w_addr_t *addr,w_int32_t count);
 

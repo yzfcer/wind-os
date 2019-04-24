@@ -118,10 +118,11 @@ w_err_t _wind_heap_mod_init(void)
     return err;
 }
 
-static void heapitem_init(w_heapitem_s *item,w_heap_s *hp,w_uint16_t magic,w_int32_t size,w_uint16_t flag)
+static void heapitem_init(w_heapitem_s *item,w_heap_s *hp,w_uint16_t magic,w_int32_t size,w_uint8_t flag)
 {
     item->magic = magic;
     item->flag = flag;
+    item->allocid = 0;
     item->heap = hp;
     PRIO_DNODE_INIT(item->itemnode);
     item->size = size;
@@ -478,6 +479,14 @@ void *wind_malloc(w_uint32_t size)
     return W_NULL;
 }
 
+void *wind_zalloc(w_uint32_t size)
+{
+    void *ptr;
+    ptr = wind_malloc(size);
+    if(ptr != W_NULL)
+        wind_memset(ptr,0,size);
+    return ptr;
+}
 
 w_err_t wind_free(void *ptr)
 {

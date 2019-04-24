@@ -188,7 +188,7 @@ static w_err_t lfs_make_child(listfs_s *lfs,lfile_info_s *parent,char *name,w_ui
     WIND_ASSERT_RETURN(parent != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(name != W_NULL,W_ERR_PTR_NULL);
     
-    err = listfs_bitmap_find_free(&lfs->bitmap,&self_addr);
+    err = listfs_bitmap_find_free(&lfs->bitmap,&self_addr,1);
     WIND_ASSERT_RETURN(err == W_ERR_OK,err);
     
     do 
@@ -303,6 +303,22 @@ w_err_t listfile_remove(listfile_s *file)
     return W_ERR_FAIL;
 }
 
+w_uint16_t calc_unit_size(w_int32_t blkcnt,w_int32_t blksize)
+{
+    w_int32_t i,maxcnt;
+    maxcnt = 128 * 2048;
+    for(i = 0;i < 4;i ++)
+    {
+        if(blkcnt <= maxcnt)
+            break;
+        else
+        {
+            maxcnt *= 2;
+            blksize *= 2;
+        }
+    }
+    return blksize;
+}
 w_err_t listfs_format(listfs_s *lfs,w_blkdev_s *blkdev)
 {
     w_err_t err;
@@ -323,7 +339,7 @@ w_err_t listfs_format(listfs_s *lfs,w_blkdev_s *blkdev)
         lfs_info = &lfs->lfs_info;
         lfs_info->magic = LISTFS_MAGIC;
         lfs_info->blkcount = blkdev->blkcnt;
-        lfs_info->unit_size = (w_uint16_t)blkdev->blksize;
+        lfs_info->unit_size = calc_unit_size(blkdev->blkcnt,blkdev->blksize);
         lfs_info->blksize = (w_uint16_t)blkdev->blksize;
         lfs_info->reserve_blk = 5;
         lfs_info->attr = 0;
@@ -461,7 +477,7 @@ w_err_t listfile_close(listfile_s* file)
     WIND_ASSERT_RETURN(file->lfs->file_ref > 0,W_ERR_INVALID);
     file->info.magic = 0;
     file->lfs->file_ref --;
-    if(file->blkinfo->offset != 0)
+    if(file->blkinfo != W_NULL)
     {
         lfs_free(file->blkinfo);
         file->blkinfo = W_NULL;
@@ -537,6 +553,11 @@ w_int32_t listfile_ftell(listfile_s* file)
     return file->offset;
 }
 
+static w_int32_t do_read_file(listfile_s* file,w_uint8_t *buff,w_int32_t size)
+{
+    return W_ERR_FAIL;
+}
+
 w_int32_t listfile_read(listfile_s* file,w_uint8_t *buff, w_int32_t size)
 {
     w_err_t err;
@@ -553,9 +574,27 @@ w_int32_t listfile_read(listfile_s* file,w_uint8_t *buff, w_int32_t size)
     return rsize;
 }
 
-static w_err_t do_alloc_blkspace(listfile_s* file,w_int32_t size)
+static w_err_t do_append_blks(listfile_s* file,w_addr_t *addr,w_int32_t cnt)
 {
     return W_ERR_FAIL;
+}
+
+static w_err_t do_alloc_blkspace(listfile_s* file,w_int32_t blkcnt)
+{
+    w_err_t err;
+    w_addr_t *addr = W_NULL;
+    addr = lfs_malloc(blkcnt * sizeof(w_addr_t));
+    WIND_ASSERT_RETURN(addr != W_NULL,W_ERR_MEM);
+    do
+    {
+        err = listfs_bitmap_find_free(&file->lfs->bitmap,addr,blkcnt);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,W_ERR_FAIL,"find free blk failed.");
+        err == do_append_blks(file,addr,blkcnt);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,W_ERR_FAIL,"append blk to file failed.");
+    }while(0);
+    if(addr != W_NULL)
+        lfs_free(addr);
+    return err;
 }
 
 static w_int32_t do_write_file(listfile_s* file,w_uint8_t *buff,w_int32_t size)
@@ -563,20 +602,31 @@ static w_int32_t do_write_file(listfile_s* file,w_uint8_t *buff,w_int32_t size)
     return W_ERR_FAIL;
 }
 
+static w_int32_t calc_needed_blks(listfile_s* file,w_int32_t size)
+{
+    w_int32_t capacity;
+    w_int32_t needsize;
+    capacity = (file->info.filesize + file->lfs->blkdev->blksize - 1) / file->lfs->blkdev->blksize;
+    if(file->offset + size <= capacity)
+        return 0;
+    needsize = file->offset + size - capacity;
+    return (needsize + file->lfs->blkdev->blksize - 1) / file->lfs->blkdev->blksize;
+}
+
 w_int32_t listfile_write(listfile_s* file,w_uint8_t *buff,w_int32_t size)
 {
     w_err_t err;
-    w_int32_t wsize,allocsize;
-    //lfile_blkinfo_s *blkinfo;
+    w_int32_t wsize,needblk;
     WIND_ASSERT_RETURN(file != W_NULL,-1);
     WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,-1);
     WIND_ASSERT_RETURN((file->mode & LFMODE_W)||(file->mode & LFMODE_A),-1);
+    WIND_ASSERT_RETURN(file->offset + size < LISTFS_MAX_FILE_SIZE,-1);
     wsize = size;
-    if(file->offset + wsize > file->info.filesize)
+    
+    needblk = calc_needed_blks(file,wsize);
+    if(needblk > 0)
     {
-        allocsize = file->offset + wsize - file->info.filesize;
-        allocsize = (allocsize + file->lfs->blkdev->blksize - 1) / file->lfs->blkdev->blksize;
-        err = do_alloc_blkspace(file,allocsize);
+        err = do_alloc_blkspace(file,needblk);
         WIND_ASSERT_RETURN(err == W_ERR_OK,-1);
     }
 
