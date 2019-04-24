@@ -35,7 +35,7 @@ w_err_t wind_db_create(char *dbname,w_uint16_t attr);
 w_err_t wind_db_distroy(char *dbname);
 
 //数据表函数,数据表名称格式为 dbname.tbname
-w_err_t wind_tb_create(char *tbname,tbmodel_item_s *item_info,w_int32_t item_cnt);
+w_err_t wind_tb_create(char *tbname,tbmodel_item_s *item_info,w_uint16_t item_cnt);
 w_err_t wind_tb_distroy(char *tbname);
 
 //数据操作函数,

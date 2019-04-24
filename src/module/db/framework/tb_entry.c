@@ -83,7 +83,7 @@ w_tb_s *tb_entry_get_byname(char *combine_name)
     return tb_entry_get_byname_from_db(dname,tname);
 }
 
-static w_uint16_t set_offset(w_uint16_t idx,w_uint16_t count,w_uint16_t *va,w_uint32_t size)
+static w_uint16_t set_offset(w_uint16_t idx,w_uint16_t count,w_uint16_t *va,w_uint16_t size)
 {
     w_uint16_t si;
     *va = (((idx + 7) >> 3) << 3);
@@ -104,7 +104,7 @@ static w_int32_t get_mbr_index(w_tb_s *entry,char *mbrname)
     return -1;
 }
 
-w_err_t tb_entry_create(char *tbname,tbmodel_item_s *item_info,w_int32_t item_cnt)
+w_err_t tb_entry_create(char *tbname,tbmodel_item_s *item_info,w_uint16_t item_cnt)
 {
     w_int32_t i;
     w_err_t err;

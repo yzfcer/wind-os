@@ -63,7 +63,7 @@ typedef struct __lfile_info_s
 {
     w_uint32_t magic;                //魔术字
     char       name[LFILE_NAME_LEN]; //文件名
-    char       filesize;             //文件大小
+    w_int32_t  filesize;             //文件大小
     w_addr_t   parent_addr;          //父地址
     w_addr_t   self_addr;            //当前地址
     w_addr_t   last_addr;            //最后一个块信息地址

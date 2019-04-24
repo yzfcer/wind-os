@@ -33,9 +33,9 @@ typedef struct treefs_s
     char *filename;
     w_uint16_t isdir:1;
     w_uint8_t mode;
-    w_uint32_t offset;
-    w_uint32_t filelen;
-    w_uint32_t bufflen;
+    w_int32_t offset;
+    w_int32_t filelen;
+    w_int32_t bufflen;
     w_dlist_s datalist;
 }treefile_s;
 

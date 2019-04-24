@@ -36,7 +36,7 @@ typedef struct
 {
     w_addr_t addr1;         //主位图块起始地址
     w_addr_t addr2;         //备份位图块起始地址
-    w_addr_t free_blkidx;   //空闲位图块位置
+    w_int32_t free_blkidx;   //空闲位图块位置
     w_int32_t addr_cnt;      //位图块数量
     w_int32_t free_byteidx;  //空闲位图字节位置
     w_blkdev_s *blkdev;
@@ -55,6 +55,9 @@ w_err_t listfs_bitmap_alloc_blk(lfs_bitmap_s *bp,w_addr_t *addr,w_int32_t count)
 w_err_t listfs_bitmap_free_blk(lfs_bitmap_s *bp,w_addr_t *addr,w_int32_t count);
 
 w_err_t listfs_bitmap_clear(lfs_bitmap_s *bp);
+
+w_uint32_t listfs_bitmap_get_blkused(lfs_bitmap_s *bp);
+
 
 #endif
 #endif

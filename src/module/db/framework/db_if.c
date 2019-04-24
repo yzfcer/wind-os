@@ -51,7 +51,7 @@ w_err_t wind_db_distroy(char *dbname)
 }
 
 
-w_err_t wind_tb_create(char *tbname,tbmodel_item_s *item_info,w_int32_t item_cnt)
+w_err_t wind_tb_create(char *tbname,tbmodel_item_s *item_info,w_uint16_t item_cnt)
 {
     return tb_entry_create(tbname,item_info,item_cnt);
 }

@@ -58,10 +58,11 @@
 //程序关联的文件系统信息
 typedef struct __listfs_s
 {
-    lfs_info_s lfs_info;
-    w_blkdev_s *blkdev;
-    lfs_bitmap_s bitmap;
-    w_int32_t  file_ref;
+    lfs_info_s lfs_info;  //文件系统信息
+    w_blkdev_s *blkdev;   //关联的块设备
+    lfs_bitmap_s bitmap;  //块使用位图
+    w_int32_t  file_ref;  //打开的文件数量
+    w_uint32_t blkused;   //已经使用的块数量
 
 }listfs_s;
 
@@ -72,7 +73,7 @@ typedef struct __listfile_s
     listfs_s *lfs;
     w_uint8_t mode;
     w_int32_t offset;
-    w_int32_t filelen;
+    //w_int32_t filelen;
     lfile_blkinfo_s *blkinfo;
 }listfile_s;
 

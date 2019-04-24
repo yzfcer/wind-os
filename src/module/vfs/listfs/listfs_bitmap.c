@@ -74,7 +74,7 @@ w_err_t listfs_bitmap_init(lfs_bitmap_s *bp,w_addr_t addr,w_int32_t blk_cnt,w_bl
 
 w_err_t listfs_bitmap_update(lfs_bitmap_s *bp)
 {
-    w_int32_t i;
+    w_uint32_t i;
     w_err_t err;
     w_uint8_t *blk;
     WIND_ASSERT_RETURN(bp != W_NULL,W_ERR_PTR_NULL);
@@ -134,8 +134,8 @@ w_err_t listfs_bitmap_set(lfs_bitmap_s *bp,w_addr_t addr,w_uint8_t bitflag)
 
 w_err_t listfs_bitmap_find_free(lfs_bitmap_s *bp,w_addr_t *addr)
 {
-    w_err_t err;
-    w_uint8_t *blk;
+    //w_err_t err;
+    //w_uint8_t *blk;
     w_int32_t idx;
     WIND_ASSERT_RETURN(bp != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(addr != W_NULL,W_ERR_PTR_NULL);
@@ -159,7 +159,7 @@ w_err_t listfs_bitmap_find_free(lfs_bitmap_s *bp,w_addr_t *addr)
 w_err_t listfs_bitmap_free_blk(lfs_bitmap_s *bp,w_addr_t *addr,w_int32_t count)
 {
     w_int32_t i;
-    w_err_t err;
+    //w_err_t err;
     WIND_ASSERT_RETURN(bp != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(addr != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(bp->blkdev != W_NULL,W_ERR_PTR_NULL);
@@ -213,6 +213,39 @@ w_err_t listfs_bitmap_clear(lfs_bitmap_s *bp)
     return W_ERR_OK;
 }
 
+static w_uint32_t calc_blkused(w_uint8_t *blk,w_int32_t blksize)
+{
+    w_int32_t i;
+    w_uint32_t blkused = 0;
+    for(i = 0;i < blksize;i ++)
+    {
+        if(blk[i] != 0)
+            blkused ++;
+    }
+    return blkused;
+}
+
+w_uint32_t listfs_bitmap_get_blkused(lfs_bitmap_s *bp)
+{
+    w_int32_t i;
+    w_err_t err;
+    w_uint8_t *blk;
+    w_blkdev_s *blkdev;
+    w_uint32_t blkused = 0;
+    WIND_ASSERT_RETURN(bp != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(bp->blkdev != W_NULL,W_ERR_PTR_NULL);
+    blkdev = bp->blkdev;
+    blk = lfs_malloc(blkdev->blksize);
+    WIND_ASSERT_RETURN(blk != W_NULL,W_ERR_MEM);
+    blk = lfs_malloc(blkdev->blksize);
+    for(i = 1;i < bp->addr_cnt; i ++)
+    {
+        err = wind_blkdev_read(blkdev,bp->addr1+1,blk,1);
+        WIND_ASSERT_TODO_RETURN(err == W_ERR_OK,lfs_free(blk),0xffffffff);
+        blkused += calc_blkused(blk,blkdev->blksize);
+    }
+    return blkused;    
+}
 
 #endif
 

@@ -155,9 +155,9 @@ static w_err_t lfs_make_root(listfs_s *lfs)
         attr = (LFILE_ATTR_COMMAN | LFILE_ATTR_DIR);
         listfs_fileinfo_init(info,"root",lfs->lfs_info.root_addr,0,0,attr);
         blkinfo_init(blkinfo, lfs->lfs_info.root_addr,0,0,lfs->blkdev->blksize);
-        err = listfs_set_fileinfo(info,lfs->blkdev,lfs->lfs_info.root_addr);
+        err = listfs_set_fileinfo(info,lfs->blkdev);
         WIND_ASSERT_BREAK(err == W_ERR_OK,err,"flush lfs root file info failed.");
-        err = blkinfo_write(blkinfo,lfs->blkdev,lfs->lfs_info.root_addr);
+        err = blkinfo_write(blkinfo,lfs->blkdev);
         WIND_ASSERT_BREAK(err == W_ERR_OK,err,"flush lfs root blkinfo failed.");
         
         err = listfs_bitmap_set(&lfs->bitmap,lfs->lfs_info.root_addr,BITMAP_USED);
@@ -445,7 +445,7 @@ listfile_s* listfile_open(listfs_s *lfs,const char *path,w_uint16_t mode)
         //file->blkinfo = &file->info.blkinfo;
         
         if(mode & LFMODE_A)
-            file->offset = file->filelen;
+            file->offset = file->info.filesize;
         else
             file->offset = 0;
     }
@@ -482,7 +482,7 @@ w_err_t listfile_set_attr(listfile_s* file,w_uint8_t attr)
     (attr & LFILE_ATTR_HIDE)?(tmpattr |= LFILE_ATTR_HIDE):(tmpattr &= ~LFILE_ATTR_HIDE);
     (attr & LFILE_ATTR_VERIFY)?(tmpattr |= LFILE_ATTR_VERIFY):(tmpattr &= ~LFILE_ATTR_VERIFY);
     file->info.attr = tmpattr;
-	err = listfs_set_fileinfo(&file->info,file->blkinfo,file->lfs->blkdev,file->blkinfo->self_addr);
+	err = listfs_set_fileinfo(&file->info,file->lfs->blkdev);
     return err;
 }
 
@@ -567,7 +567,7 @@ w_int32_t listfile_write(listfile_s* file,w_uint8_t *buff,w_int32_t size)
 {
     w_err_t err;
     w_int32_t wsize,allocsize;
-    lfile_blkinfo_s *blkinfo;
+    //lfile_blkinfo_s *blkinfo;
     WIND_ASSERT_RETURN(file != W_NULL,-1);
     WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,-1);
     WIND_ASSERT_RETURN((file->mode & LFMODE_W)||(file->mode & LFMODE_A),-1);
@@ -586,7 +586,7 @@ w_int32_t listfile_write(listfile_s* file,w_uint8_t *buff,w_int32_t size)
     if(file->info.filesize < file->offset + wsize)
         file->info.filesize += wsize;
     file->offset += wsize;
-    err = listfs_set_fileinfo(&file->info,file->lfs->blkdev,file->info.self_addr);
+    err = listfs_set_fileinfo(&file->info,file->lfs->blkdev);
     WIND_ASSERT_RETURN(err == W_ERR_OK,-1);
     return wsize;
 }
