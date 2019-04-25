@@ -317,7 +317,7 @@ w_uint16_t calc_unit_size(w_int32_t blkcnt,w_int32_t blksize)
             blksize *= 2;
         }
     }
-    return blksize;
+    return (w_uint16_t)blksize;
 }
 w_err_t listfs_format(listfs_s *lfs,w_blkdev_s *blkdev)
 {
@@ -597,6 +597,11 @@ static w_err_t do_alloc_blkspace(listfile_s* file,w_int32_t blkcnt)
     return err;
 }
 
+static w_err_t do_alloc_blkinfos(listfile_s* file,w_int32_t blkinfo_cnt)
+{
+    return W_ERR_FAIL;
+}
+
 static w_int32_t do_write_file(listfile_s* file,w_uint8_t *buff,w_int32_t size)
 {
     return W_ERR_FAIL;
@@ -604,19 +609,50 @@ static w_int32_t do_write_file(listfile_s* file,w_uint8_t *buff,w_int32_t size)
 
 static w_int32_t calc_needed_blks(listfile_s* file,w_int32_t size)
 {
-    w_int32_t capacity;
+    w_int32_t blksize;
     w_int32_t needsize;
-    capacity = (file->info.filesize + file->lfs->blkdev->blksize - 1) / file->lfs->blkdev->blksize;
-    if(file->offset + size <= capacity)
+    if(file->offset + size <= file->info.spacesize)
         return 0;
-    needsize = file->offset + size - capacity;
-    return (needsize + file->lfs->blkdev->blksize - 1) / file->lfs->blkdev->blksize;
+    blksize = file->lfs->blkdev->blksize;
+    needsize = file->offset + size - file->info.spacesize;
+    return (needsize + blksize - 1) / blksize;
 }
+
+static w_int32_t calc_needed_blkinfo(listfile_s* file,w_int32_t blkcnt)
+{
+    w_err_t err;
+    w_int32_t blkinfo_cnt;
+    lfile_blkinfo_s *tmpinfo;
+    tmpinfo = lfs_malloc(sizeof(lfile_blkinfo_s));
+    WIND_ASSERT_RETURN(tmpinfo != W_NULL,-1);
+    
+    do
+    {
+        wind_memcpy(tmpinfo,&file->info,sizeof(lfile_blkinfo_s));
+        err = blkinfo_get_tail(tmpinfo,file->lfs->blkdev);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,W_ERR_FAIL,"find tail blkinfo failed.");
+        if(tmpinfo->blkused + blkcnt <= LFILE_LBLK_CNT)
+        {
+            blkinfo_cnt = 0;
+            err = W_ERR_OK;
+            break;
+        }
+        blkcnt -= (LFILE_LBLK_CNT - tmpinfo->blkused);
+        blkinfo_cnt = (blkcnt + LFILE_LBLK_CNT - 1) / LFILE_LBLK_CNT;
+        
+    }while(0);
+    if(tmpinfo != W_NULL)
+        lfs_free(tmpinfo);
+    if(err == W_ERR_OK)
+        return blkinfo_cnt;
+    return -1;
+}
+
 
 w_int32_t listfile_write(listfile_s* file,w_uint8_t *buff,w_int32_t size)
 {
     w_err_t err;
-    w_int32_t wsize,needblk;
+    w_int32_t wsize,needblk,needblkinfo;
     WIND_ASSERT_RETURN(file != W_NULL,-1);
     WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,-1);
     WIND_ASSERT_RETURN((file->mode & LFMODE_W)||(file->mode & LFMODE_A),-1);
@@ -624,9 +660,15 @@ w_int32_t listfile_write(listfile_s* file,w_uint8_t *buff,w_int32_t size)
     wsize = size;
     
     needblk = calc_needed_blks(file,wsize);
+    needblkinfo = calc_needed_blkinfo(file,needblk);
     if(needblk > 0)
     {
         err = do_alloc_blkspace(file,needblk);
+        WIND_ASSERT_RETURN(err == W_ERR_OK,-1);
+    }
+    if(needblkinfo > 0)
+    {
+        err = do_alloc_blkinfos(file,needblkinfo);
         WIND_ASSERT_RETURN(err == W_ERR_OK,-1);
     }
 

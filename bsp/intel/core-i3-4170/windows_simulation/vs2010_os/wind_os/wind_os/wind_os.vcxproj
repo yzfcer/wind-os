@@ -77,6 +77,9 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\common\wind_queue.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\common\wind_string.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\common\wind_tree.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\cjson\cJSON.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\cjson\cJSON_Utils.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\cjson\json_checker.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\framework\test_framework.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\cutest_register.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\test_event.c" />
@@ -219,6 +222,9 @@
     <ClInclude Include="..\..\..\..\..\..\..\src\common\wind_queue.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\common\wind_string.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\common\wind_tree.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\cjson\cJSON.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\cjson\cJSON_Utils.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\cjson\json_checker.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\cutest\framework\test_framework.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\cutest\framework\wind_cut.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\db\dbbase\db_demo.h" />

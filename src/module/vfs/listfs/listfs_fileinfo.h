@@ -34,27 +34,24 @@
 
 #define LFILE_NAME_LEN 64    //文件名长度
 
-//#define LFILE_LBLK_CNT 64    //每个块允许记录的关联块数量
-
 //从fileinfo数据块中取出blkinfo
 #define FILEINFO_BLKINFO(blk) (lfile_blkinfo_s*)&blk[sizeof(lfile_info_s)]
-//#define BLKINFO_HAS_OFFSET(info,offset) \
-//((offset >= info->offset)&&(offset < info->offset + info->blkused * info->blksize))
+
 #define BLKINFO_HAS_OFFSET(info,offset1,blksize) ((offset1 >= info->offset)&&(offset1 < info->offset + info->blkused * blksize))
 
 //固化文件系统信息
 typedef struct __lfs_info_s
 {
-    w_uint64_t magic;      //魔术字
-    w_uint32_t blkcount;   //块数量
-    w_uint16_t unit_size;  //文件单位大小
-    w_uint16_t blksize;    //块大小
-    w_uint16_t reserve_blk;//保留块数
-    w_uint16_t attr;       //文件系统属性
-    w_uint32_t bitmap_cnt; //位图块数
-    w_addr_t   bitmap1_addr;//位图块数
-    w_addr_t   bitmap2_addr;//位图块数
-    w_addr_t   root_addr;  //根目录位置
+    w_uint64_t magic;        //魔术字
+    w_uint32_t blkcount;     //块数量
+    w_uint16_t unit_size;    //文件单位大小
+    w_uint16_t blksize;      //块大小
+    w_uint16_t reserve_blk;  //保留块数
+    w_uint16_t attr;         //文件系统属性
+    w_uint32_t bitmap_cnt;   //位图块数
+    w_addr_t   bitmap1_addr; //主位图地址
+    w_addr_t   bitmap2_addr; //备份位图地址
+    w_addr_t   root_addr;    //根目录位置
 }lfs_info_s;
 
 
@@ -64,6 +61,7 @@ typedef struct __lfile_info_s
     w_uint32_t magic;                //魔术字
     char       name[LFILE_NAME_LEN]; //文件名
     w_int32_t  filesize;             //文件大小
+    w_int32_t  spacesize;            //文件空间大小
     w_addr_t   parent_addr;          //父地址
     w_addr_t   self_addr;            //当前地址
     w_addr_t   last_addr;            //最后一个块信息地址
