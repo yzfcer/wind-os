@@ -31,7 +31,7 @@ typedef struct JSON_checker_struct {
 } JSON_checker;
 
 
-extern JSON_checker *new_JSON_checker(int depth);
-extern int  JSON_checker_char(JSON_checker *jc, int next_char);
-extern int  JSON_checker_done(JSON_checker *jc);
-extern int  JSON_checker_handle(char *JSONstr);
+JSON_checker *new_JSON_checker(int depth);
+int  JSON_checker_char(JSON_checker *jc, int next_char);
+int  JSON_checker_done(JSON_checker *jc);
+int  JSON_checker_handle(char *JSONstr);

@@ -34,7 +34,9 @@
 typedef struct __lfs_cache_s
 {
     w_uint64_t magic;        //魔术字
+    w_int32_t  self_addr;    //地址
     w_uint32_t blkcount;     //块数量
+    
     w_uint16_t unit_size;    //文件单位大小
     w_uint16_t blksize;      //块大小
     w_uint16_t reserve_blk;  //保留块数
@@ -45,8 +47,13 @@ typedef struct __lfs_cache_s
     w_addr_t   root_addr;    //根目录位置
 }lfs_cache_s;
 
+w_err_t lfs_cache_init(lfs_cache_s *cache);
 
+w_err_t lfs_cache_read(lfs_cache_s *cache,w_blkdev_s *blkdev,w_uint8_t *blk,w_int32_t cnt);
 
+w_err_t lfs_cache_write(lfs_cache_s *cache,w_blkdev_s *blkdev,w_uint8_t *blk,w_int32_t cnt);
+
+w_err_t lfs_cache_flush(lfs_cache_s *cache,w_blkdev_s *blkdev);
 
 
 #endif

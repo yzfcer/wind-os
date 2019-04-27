@@ -1,7 +1,7 @@
-#include <ctype.h>
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
+//#include <ctype.h>
+//#include <string.h>
+//#include <stdlib.h>
+//#include <stdio.h>
 #include "cJSON_Utils.h"
 #include "wind_heap.h"
 
@@ -41,7 +41,7 @@ char *cJSONUtils_FindPointerFromObjectTo(cJSON *object,cJSON *target)
 {
 	int type=object->type,c=0;cJSON *obj=0;
 
-	if (object==target) return strdup("");
+	if (object==target) return wind_strdup("");
 
 	for (obj=object->child;obj;obj=obj->next,c++)
 	{
@@ -51,7 +51,7 @@ char *cJSONUtils_FindPointerFromObjectTo(cJSON *object,cJSON *target)
 			if (type==cJSON_Array)
 			{
 				char *ret=(char*)wind_malloc(strlen(found)+23);
-				sprintf(ret,"/%d%s",c,found);
+				wind_sprintf(ret,"/%d%s",c,found);
 				wind_free(found);
 				return ret;
 			}
@@ -102,7 +102,7 @@ static cJSON *cJSONUtils_PatchDetach(cJSON *object,const char *path)
 {
 	char *parentptr=0,*childptr=0;cJSON *parent=0,*ret=0;
 
-	parentptr=strdup(path);	childptr=strrchr(parentptr,'/');	if (childptr) *childptr++=0;
+	parentptr=strdup(path);	childptr=wind_strrchr(parentptr,'/');	if (childptr) *childptr++=0;
 	parent=cJSONUtils_GetPointer(object,parentptr);
 	cJSONUtils_InplaceDecodePointerString(childptr);
 

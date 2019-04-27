@@ -23,13 +23,13 @@
 /* cJSON */
 /* JSON parser in C. */
 
-#include <string.h>
-#include <stdio.h>
-#include <math.h>
-#include <stdlib.h>
+//#include <string.h>
+//#include <stdio.h>
+//#include <math.h>
+//#include <stdlib.h>
 #include <float.h>
 #include <limits.h>
-#include <ctype.h>
+//#include <ctype.h>
 #include "cJSON.h"
 #include "JSON_checker.h"
 #include "wind_heap.h"
@@ -161,7 +161,7 @@ static char *print_number(cJSON *item,printbuffer *p)
 	{
 		if (p)	str=ensure(p,21);
 		else	str=(char*)cJSON_malloc(21);	/* 2^64+1 can be represented in 21 chars. */
-		if (str)	sprintf(str,"%d",item->valueint);
+		if (str)	wind_sprintf(str,"%d",item->valueint);
 	}
 	else
 	{
@@ -282,7 +282,7 @@ static char *print_string_ptr(const char *str,printbuffer *p)
 		return out;
 	}
 	
-	ptr=str;while ((token=*ptr) && ++len) {if (strchr("\"\\\b\f\n\r\t",token)) len++; else if (token<32) len+=5;ptr++;}
+	ptr=str;while ((token=*ptr) && ++len) {if (wind_strchr("\"\\\b\f\n\r\t",token)) len++; else if (token<32) len+=5;ptr++;}
 	
 	if (p)	out=ensure(p,len+3);
 	else	out=(char*)cJSON_malloc(len+3);
@@ -346,7 +346,7 @@ cJSON *cJSON_ParseWithOpts(const char *value,const char **return_parse_end,int r
 cJSON *cJSON_Parse(const char *value) 
 {
 	if(0 != JSON_checker_handle(value))
-		return NULL;
+		return W_NULL;
     return cJSON_ParseWithOpts(value,0,0);
 }
 
@@ -368,9 +368,9 @@ char *cJSON_PrintBuffered(cJSON *item,int prebuffer,int fmt)
 static const char *parse_value(cJSON *item,const char *value,const char **ep)
 {
 	if (!value)						return 0;	/* Fail on null. */
-	if (!strncmp(value,"null",4))	{ item->type=cJSON_NULL;  return value+4; }
-	if (!strncmp(value,"false",5))	{ item->type=cJSON_False; return value+5; }
-	if (!strncmp(value,"true",4))	{ item->type=cJSON_True; item->valueint=1;	return value+4; }
+	if (!wind_strncmp(value,"null",4))	{ item->type=cJSON_NULL;  return value+4; }
+	if (!wind_strncmp(value,"false",5))	{ item->type=cJSON_False; return value+5; }
+	if (!wind_strncmp(value,"true",4))	{ item->type=cJSON_True; item->valueint=1;	return value+4; }
 	if (*value=='\"')				{ return parse_string(item,value,ep); }
 	if (*value=='-' || (*value>='0' && *value<='9'))	{ return parse_number(item,value); }
 	if (*value=='[')				{ return parse_array(item,value,ep); }
