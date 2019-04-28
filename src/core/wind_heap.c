@@ -488,6 +488,21 @@ void *wind_zalloc(w_uint32_t size)
     return ptr;
 }
 
+void *wind_stralloc(char *str)
+{
+    char *ptr;
+    w_int32_t len;
+    if(str == W_NULL)
+        return W_NULL;
+    len = wind_strlen(str);
+    ptr = wind_malloc(len+1);
+    if(ptr == W_NULL)
+        return W_NULL;
+    wind_strcpy(ptr,str);
+    return ptr;
+}
+
+
 w_err_t wind_free(void *ptr)
 {
     w_heapitem_s *item;

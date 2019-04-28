@@ -26,35 +26,39 @@
 #define LISTFS_FILEINFO_H__
 #include "wind_config.h"
 #include "wind_type.h"
+#include "wind_dlist.h"
 #include "wind_blkdev.h"
+#define LISTFS_CACHE_MAGIC 09x357D26AC
 
+#define F_LFSCACHE_DIRTY (0x01 << 0) //标记缓存的数据是否是脏的
+#define IS_F_LFSCACHE_DIRTY(cache) ((cache->obj.flag & F_LFSCACHE_DIRTY) == F_LFSCACHE_DIRTY)
+#define SET_F_LFSCACHE_DIRTY(cache) (cache->obj.flag |= F_LFSCACHE_DIRTY)
+#define CLR_F_LFSCACHE_DIRTY(cache) (cache->obj.flag &= (~F_LFSCACHE_DIRTY))
 
+typedef struct __lcache_item_s
+{
+    w_addr_t  addr;
+    w_int32_t blksize;
+    w_dnode_s itemnode;
+    w_int8_t  *blk;
+}lcache_item_s;
 
-//固化文件系统信息
+//缓存对象信息
 typedef struct __lfs_cache_s
 {
-    w_uint64_t magic;        //魔术字
-    w_int32_t  self_addr;    //地址
-    w_uint32_t blkcount;     //块数量
-    
-    w_uint16_t unit_size;    //文件单位大小
-    w_uint16_t blksize;      //块大小
-    w_uint16_t reserve_blk;  //保留块数
-    w_uint16_t attr;         //文件系统属性
-    w_uint32_t bitmap_cnt;   //位图块数
-    w_addr_t   bitmap1_addr; //主位图地址
-    w_addr_t   bitmap2_addr; //备份位图地址
-    w_addr_t   root_addr;    //根目录位置
+    w_obj_s obj;
+    w_uint32_t itemcount;     //缓存元素数量
 }lfs_cache_s;
 
 w_err_t lfs_cache_init(lfs_cache_s *cache);
 
-w_err_t lfs_cache_read(lfs_cache_s *cache,w_blkdev_s *blkdev,w_uint8_t *blk,w_int32_t cnt);
+w_err_t lfs_cache_read(lfs_cache_s *cache,w_blkdev_s *blkdev,w_addr_t addr,w_uint8_t *blk);
 
-w_err_t lfs_cache_write(lfs_cache_s *cache,w_blkdev_s *blkdev,w_uint8_t *blk,w_int32_t cnt);
+w_err_t lfs_cache_write(lfs_cache_s *cache,w_blkdev_s *blkdev,w_addr_t addr,w_uint8_t *blk);
 
 w_err_t lfs_cache_flush(lfs_cache_s *cache,w_blkdev_s *blkdev);
 
+w_err_t lfs_cache_clear(lfs_cache_s *cache,w_blkdev_s *blkdev);
 
 #endif
 
