@@ -488,7 +488,7 @@ void *wind_zalloc(w_uint32_t size)
     return ptr;
 }
 
-void *wind_stralloc(char *str)
+void *wind_salloc(char *str)
 {
     char *ptr;
     w_int32_t len;

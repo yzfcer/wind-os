@@ -26,19 +26,33 @@
 #define LISTFS_FILEINFO_H__
 #include "wind_config.h"
 #include "wind_type.h"
-#include "wind_dlist.h"
+#include "wind_obj.h"
 #include "wind_blkdev.h"
-#define LISTFS_CACHE_MAGIC 09x357D26AC
+
+#define LISTFS_CACHE_MAGIC 0x9357D26A
+
+#define LFS_CACHEITEM_MAX_CNT 5
 
 #define F_LFSCACHE_DIRTY (0x01 << 0) //标记缓存的数据是否是脏的
 #define IS_F_LFSCACHE_DIRTY(cache) ((cache->obj.flag & F_LFSCACHE_DIRTY) == F_LFSCACHE_DIRTY)
 #define SET_F_LFSCACHE_DIRTY(cache) (cache->obj.flag |= F_LFSCACHE_DIRTY)
 #define CLR_F_LFSCACHE_DIRTY(cache) (cache->obj.flag &= (~F_LFSCACHE_DIRTY))
 
+#define F_LFSCACHE_HIT (0x01 << 1) //标记缓存的数据是命中的
+#define IS_F_LFSCACHE_HIT(cacheitem) ((cacheitem->flag & F_LFSCACHE_HIT) == F_LFSCACHE_HIT)
+#define SET_F_LFSCACHE_HIT(cacheitem) (cacheitem->flag |= F_LFSCACHE_HIT)
+#define CLR_F_LFSCACHE_HIT(cacheitem) (cacheitem->flag &= (~F_LFSCACHE_HIT))
+
+#define F_LFSCACHE_SW (0x01 << 2) //标记缓存的数据是置换的
+#define IS_F_LFSCACHE_SW(cacheitem) ((cacheitem->flag & F_LFSCACHE_SW) == F_LFSCACHE_SW)
+#define SET_F_LFSCACHE_SW(cacheitem) (cacheitem->flag |= F_LFSCACHE_SW)
+#define CLR_F_LFSCACHE_SW(cacheitem) (cacheitem->flag &= (~F_LFSCACHE_SW))
+
 typedef struct __lcache_item_s
 {
     w_addr_t  addr;
-    w_int32_t blksize;
+    w_int16_t blksize;
+    w_int16_t flag;
     w_dnode_s itemnode;
     w_int8_t  *blk;
 }lcache_item_s;
@@ -47,10 +61,17 @@ typedef struct __lcache_item_s
 typedef struct __lfs_cache_s
 {
     w_obj_s obj;
+    w_uint32_t r_hit;
+    w_uint32_t r_miss;
+    w_uint32_t w_hit;
+    w_uint32_t w_miss;
     w_uint32_t itemcount;     //缓存元素数量
+    //w_uint32_t itemsize;      //缓存元素大小
+    w_dlist_s itemlist;       //缓存元素列表
+    
 }lfs_cache_s;
 
-w_err_t lfs_cache_init(lfs_cache_s *cache);
+w_err_t lfs_cache_init(lfs_cache_s *cache,w_uint32_t itemcount,w_uint32_t blksize);
 
 w_err_t lfs_cache_read(lfs_cache_s *cache,w_blkdev_s *blkdev,w_addr_t addr,w_uint8_t *blk);
 

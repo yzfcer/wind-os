@@ -428,6 +428,9 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cjson\json_checker.c">
       <Filter>module_cjson</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\listfs\listfs_cache.c">
+      <Filter>module_vfs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">
@@ -743,6 +746,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\..\src\module\cjson\json_checker.h">
       <Filter>module_cjson</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\listfs\listfs_cache.h">
+      <Filter>module_vfs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -114,7 +114,7 @@ void *wind_malloc(w_uint32_t size);
 
 void *wind_zalloc(w_uint32_t size);
 
-void *wind_stralloc(char *str);
+void *wind_salloc(char *str);
 
 void *wind_calloc(w_uint32_t count, w_uint32_t size);
 
