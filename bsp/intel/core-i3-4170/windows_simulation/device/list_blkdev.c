@@ -26,7 +26,7 @@
 #include "wind_debug.h"
 #if WIND_BLKDEV_SUPPORT
 extern w_blkdev_s memblk_dev[1];
-extern w_blkdev_s disk_dev[1];
+extern w_blkdev_s disk_dev[4];
 //extern w_blkdev_s spi_flash_dev[2];
 //extern w_blkdev_s at24c02_dev[1];
 extern w_blkdev_s null_dev[1];
@@ -36,7 +36,7 @@ w_err_t _register_blkdevs(void)
     //wind_blkdev_register(at24c02_dev,1);
     //wind_blkdev_register(spi_flash_dev,2);
     wind_blkdev_register(memblk_dev,1);
-    wind_blkdev_register(disk_dev,1);
+    wind_blkdev_register(disk_dev,4);
     wind_blkdev_register(null_dev,1);
     return W_ERR_OK;
 }
