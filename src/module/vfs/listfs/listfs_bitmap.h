@@ -42,13 +42,13 @@ typedef struct
     w_blkdev_s *blkdev;
 }lfs_bitmap_s;
 
-w_err_t listfs_bitmap_init(lfs_bitmap_s *bp,w_addr_t addr,w_int32_t count,w_blkdev_s *blkdev);
+w_err_t listfs_bitmap_init(lfs_bitmap_s *bp,w_addr_t start_addr,w_int32_t count,w_blkdev_s *blkdev);
 
 w_err_t listfs_bitmap_update(lfs_bitmap_s *bp);
 
 w_err_t listfs_bitmap_set(lfs_bitmap_s *bp,w_addr_t addr,w_uint8_t bitflag);
 
-w_err_t listfs_bitmap_find_free(lfs_bitmap_s *bp,w_addr_t *addr,w_int32_t cnt);
+w_err_t listfs_bitmap_alloc_blk(lfs_bitmap_s *bp,w_addr_t *addr,w_int32_t cnt);
 
 w_err_t listfs_bitmap_alloc_blk(lfs_bitmap_s *bp,w_addr_t *addr,w_int32_t count);
 
@@ -56,7 +56,7 @@ w_err_t listfs_bitmap_free_blk(lfs_bitmap_s *bp,w_addr_t *addr,w_int32_t count);
 
 w_err_t listfs_bitmap_clear(lfs_bitmap_s *bp);
 
-w_uint32_t listfs_bitmap_get_blkused(lfs_bitmap_s *bp);
+w_uint32_t listfs_bitmap_get_usedblk(lfs_bitmap_s *bp);
 
 
 #endif

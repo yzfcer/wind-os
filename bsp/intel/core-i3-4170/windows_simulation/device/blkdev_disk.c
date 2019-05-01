@@ -69,6 +69,8 @@ w_int32_t disk_read(w_blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t blkcn
     w_int32_t start;
     w_int32_t size,len;
     FILE *file;
+    start = (w_int32_t)((dev->blkaddr + addr) * dev->blksize);
+    size = blkcnt * dev->blksize;
     file = fopen(FILE_NAME,"r");
     WIND_ASSERT_RETURN(file != W_NULL,0);
     wind_memset(buffer,0,sizeof(buffer));
@@ -121,7 +123,7 @@ w_blkdev_s disk_dev[4] =
 {
     WIND_BLKDEV_DEF("disk0",BLKDEV_ROM,0,0,4096,MEM_SEC_SIZE,&disk_ops),
     WIND_BLKDEV_DEF("disk1",BLKDEV_ROM,1,4096,4096,MEM_SEC_SIZE,&disk_ops),
-    WIND_BLKDEV_DEF("disk2",BLKDEV_ROM,2,4096,4096,MEM_SEC_SIZE,&disk_ops),
+    WIND_BLKDEV_DEF("disk2",BLKDEV_ROM,2,8192,4096,MEM_SEC_SIZE,&disk_ops),
     WIND_BLKDEV_DEF("disk3",BLKDEV_ROM,3,12288,8192,MEM_SEC_SIZE,&disk_ops)
 };
 

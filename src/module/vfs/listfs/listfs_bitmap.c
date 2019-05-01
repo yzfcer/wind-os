@@ -59,12 +59,12 @@ static w_err_t do_set_free_bitmap(lfs_bitmap_s *bp,w_addr_t blkidx,w_uint8_t *bl
 }
 
 
-w_err_t listfs_bitmap_init(lfs_bitmap_s *bp,w_addr_t addr,w_int32_t blk_cnt,w_blkdev_s *blkdev)
+w_err_t listfs_bitmap_init(lfs_bitmap_s *bp,w_addr_t start_addr,w_int32_t blk_cnt,w_blkdev_s *blkdev)
 {
     WIND_ASSERT_RETURN(bp != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
-    bp->addr1 = addr;
-    bp->addr2 = addr+blk_cnt;
+    bp->addr1 = start_addr;
+    bp->addr2 = start_addr + blk_cnt;
     bp->addr_cnt = blk_cnt;
     bp->free_blkidx = 0;
     bp->free_byteidx = 0;
@@ -132,7 +132,7 @@ w_err_t listfs_bitmap_set(lfs_bitmap_s *bp,w_addr_t addr,w_uint8_t bitflag)
 }
 
 
-w_err_t listfs_bitmap_find_free(lfs_bitmap_s *bp,w_addr_t *addr,w_int32_t cnt)
+w_err_t listfs_bitmap_alloc_blk(lfs_bitmap_s *bp,w_addr_t *addr,w_int32_t cnt)
 {
     w_int32_t i,idx;
     w_err_t err = W_ERR_OK;
@@ -184,6 +184,7 @@ w_err_t listfs_bitmap_free_blk(lfs_bitmap_s *bp,w_addr_t *addr,w_int32_t count)
     return W_ERR_OK;
 }
 
+#if 0
 w_err_t listfs_bitmap_alloc_blk(lfs_bitmap_s *bp,w_addr_t *addr,w_int32_t count)
 {
     w_int32_t i;
@@ -193,7 +194,7 @@ w_err_t listfs_bitmap_alloc_blk(lfs_bitmap_s *bp,w_addr_t *addr,w_int32_t count)
     WIND_ASSERT_RETURN(bp->blkdev != W_NULL,W_ERR_PTR_NULL);
     for(i = 0;i < count;i ++)
         addr[i] = 0;
-    err = listfs_bitmap_find_free(bp,&addr[i],count);
+    err = listfs_bitmap_alloc_blk(bp,&addr[i],count);
     WIND_ASSERT_BREAK(err == W_ERR_OK,err,"alloc bitmap blk failed.");
     if(i < count)
     {
@@ -202,6 +203,7 @@ w_err_t listfs_bitmap_alloc_blk(lfs_bitmap_s *bp,w_addr_t *addr,w_int32_t count)
     }
     return W_ERR_OK;
 }
+#endif
 
 w_err_t listfs_bitmap_clear(lfs_bitmap_s *bp)
 {
@@ -235,7 +237,7 @@ static w_uint32_t calc_blkused(w_uint8_t *blk,w_int32_t blksize)
     return blkused;
 }
 
-w_uint32_t listfs_bitmap_get_blkused(lfs_bitmap_s *bp)
+w_uint32_t listfs_bitmap_get_usedblk(lfs_bitmap_s *bp)
 {
     w_int32_t i;
     w_err_t err;

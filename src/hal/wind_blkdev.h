@@ -63,12 +63,12 @@ struct __w_blkdev_s
     w_int32_t blkcnt;
     w_int32_t blksize;
     w_mutex_s *mutex;
-    w_int32_t pad;
+    //w_int32_t pad;
     const w_blkdev_ops_s *ops;
 };
 
 #define WIND_BLKDEV_DEF(name,devtype,devid,addr,blkcnt,blksize,ops) \
-{{(~WIND_BLKDEV_MAGIC),name,{W_NULL,W_NULL},0,0},devtype,devid,addr,blkcnt,blksize,W_NULL,0,ops}
+{{(~WIND_BLKDEV_MAGIC),name,{W_NULL,W_NULL},0,0},devtype,devid,addr,blkcnt,blksize,W_NULL,ops}
 
 //#define WIND_BLKDEV_DEF(name,devid,addr,blkcnt,blksize,ops) \
 //{WIND_BLKDEV_MAGIC,name,devid,addr,blkcnt,blksize,W_FALSE,{W_NULL,W_NULL},W_NULL,ops}

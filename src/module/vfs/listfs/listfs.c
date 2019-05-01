@@ -7,7 +7,7 @@
 **文   件   名: listfs.c
 **创   建   人: Jason Zhou
 **最后修改日期: 2019.04.05
-**描        述: 文件系统主体功能
+**描        述: listfs文件系统主体功能
 **              
 **--------------历史版本信息----------------------------------------------------------------------------
 ** 创建人: Jason Zhou
@@ -188,7 +188,7 @@ static w_err_t lfs_make_child(listfs_s *lfs,lfile_info_s *parent,char *name,w_ui
     WIND_ASSERT_RETURN(parent != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(name != W_NULL,W_ERR_PTR_NULL);
     
-    err = listfs_bitmap_find_free(&lfs->bitmap,&self_addr,1);
+    err = listfs_bitmap_alloc_blk(&lfs->bitmap,&self_addr,1);
     WIND_ASSERT_RETURN(err == W_ERR_OK,err);
     
     do 
@@ -326,6 +326,7 @@ w_err_t listfs_format(listfs_s *lfs,w_blkdev_s *blkdev)
     w_int32_t cnt;
     lfs_info_s *lfs_info;
     w_uint8_t *blk = W_NULL;
+    wind_debug("listfs format start");
     WIND_ASSERT_RETURN(lfs != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(blkdev->obj.magic == WIND_BLKDEV_MAGIC,W_ERR_INVALID);
@@ -376,6 +377,7 @@ w_err_t listfs_format(listfs_s *lfs,w_blkdev_s *blkdev)
     }while(0);
     if(blk != W_NULL)
         lfs_free(blk);
+    wind_debug("listfs format result:%d",err);
     return err;
 }
 
@@ -385,6 +387,8 @@ w_err_t listfs_mount(listfs_s *lfs,w_blkdev_s *blkdev)
     w_err_t err;
     WIND_ASSERT_RETURN(lfs != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
+    
+    wind_debug("listfs mount blkdev:%s",blkdev->obj.name);
     err = listfs_get_fsinfo(&lfs->lfs_info,blkdev);
     if(err != W_ERR_OK)
     {
@@ -579,26 +583,11 @@ static w_err_t do_append_blks(listfile_s* file,w_addr_t *addr,w_int32_t cnt)
     return W_ERR_FAIL;
 }
 
-static w_err_t do_alloc_blkspace(listfile_s* file,w_int32_t blkcnt)
-{
-    w_err_t err;
-    w_addr_t *addr = W_NULL;
-    addr = lfs_malloc(blkcnt * sizeof(w_addr_t));
-    WIND_ASSERT_RETURN(addr != W_NULL,W_ERR_MEM);
-    do
-    {
-        err = listfs_bitmap_find_free(&file->lfs->bitmap,addr,blkcnt);
-        WIND_ASSERT_BREAK(err == W_ERR_OK,W_ERR_FAIL,"find free blk failed.");
-        err == do_append_blks(file,addr,blkcnt);
-        WIND_ASSERT_BREAK(err == W_ERR_OK,W_ERR_FAIL,"append blk to file failed.");
-    }while(0);
-    if(addr != W_NULL)
-        lfs_free(addr);
-    return err;
-}
 
-static w_err_t do_alloc_blkinfos(listfile_s* file,w_int32_t blkinfo_cnt)
+
+static w_err_t do_append_blkinfos(listfile_s* file,w_addr_t *addr,w_int32_t cnt)
 {
+    
     return W_ERR_FAIL;
 }
 
@@ -653,32 +642,44 @@ w_int32_t listfile_write(listfile_s* file,w_uint8_t *buff,w_int32_t size)
 {
     w_err_t err;
     w_int32_t wsize,needblk,needblkinfo;
+    w_addr_t *addrlist = W_NULL;
     WIND_ASSERT_RETURN(file != W_NULL,-1);
     WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,-1);
     WIND_ASSERT_RETURN((file->mode & LFMODE_W)||(file->mode & LFMODE_A),-1);
     WIND_ASSERT_RETURN(file->offset + size < LISTFS_MAX_FILE_SIZE,-1);
     wsize = size;
-    
-    needblk = calc_needed_blks(file,wsize);
-    needblkinfo = calc_needed_blkinfo(file,needblk);
-    if(needblk > 0)
+    do
     {
-        err = do_alloc_blkspace(file,needblk);
-        WIND_ASSERT_RETURN(err == W_ERR_OK,-1);
-    }
-    if(needblkinfo > 0)
-    {
-        err = do_alloc_blkinfos(file,needblkinfo);
-        WIND_ASSERT_RETURN(err == W_ERR_OK,-1);
-    }
-
-    err = do_write_file(file,buff,wsize);
-    WIND_ASSERT_RETURN(err == W_ERR_OK,-1);
-
-    if(file->info.filesize < file->offset + wsize)
-        file->info.filesize += wsize;
-    file->offset += wsize;
-    err = listfs_set_fileinfo(&file->info,file->lfs->blkdev);
+        needblk = calc_needed_blks(file,wsize);
+        needblkinfo = calc_needed_blkinfo(file,needblk);
+        if(needblk + needblkinfo > 0)
+        {
+            addrlist = (w_addr_t *)lfs_malloc((needblk+needblkinfo)*sizeof(w_addr_t *));
+            WIND_ASSERT_BREAK(addrlist != W_NULL,W_ERR_MEM,"alloc addrlist failed");
+            err = listfs_bitmap_alloc_blk(&file->lfs->bitmap,addrlist,needblk+needblkinfo);
+            WIND_ASSERT_BREAK(err == W_ERR_OK,W_ERR_FAIL,"alloc blks failed");
+            
+            if(needblk > 0)
+            {
+                err == do_append_blks(file,addrlist[0],needblk);
+                WIND_ASSERT_BREAK(err == W_ERR_OK,W_ERR_FAIL,"append blk failed.");
+            }
+            if(needblkinfo > 0)
+            {
+                err = do_append_blkinfos(file,&addrlist[needblk],needblkinfo);
+                WIND_ASSERT_BREAK(err == W_ERR_OK,W_ERR_FAIL,"append blkinfo failed.");
+            }
+        }
+        err = do_write_file(file,buff,wsize);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,W_ERR_FAIL,"do write file data failed");
+        if(file->info.filesize < file->offset + wsize)
+            file->info.filesize += wsize;
+        file->offset += wsize;
+        err = listfs_set_fileinfo(&file->info,file->lfs->blkdev);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,W_ERR_FAIL,"set file info failed");
+    }while(0);
+    if(addrlist != W_NULL)
+        lfs_free(addrlist);
     WIND_ASSERT_RETURN(err == W_ERR_OK,-1);
     return wsize;
 }
@@ -694,18 +695,37 @@ listfile_s *listfile_readdir(listfile_s* file,w_int32_t index)
 
 w_err_t listfile_fgets(listfile_s* file,char *buff, w_int32_t maxlen)
 {
+    w_int32_t i,len;
     WIND_ASSERT_RETURN(file != W_NULL,-1);
     WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,-1);
     WIND_ASSERT_RETURN(file->mode & LFMODE_R,-1);
-    return W_ERR_FAIL;
+    
+    len = listfile_read(file,buff,maxlen);
+    WIND_ASSERT_RETURN(len > 0,W_ERR_FAIL);
+    for(i = 0;i < len;i ++)
+    {
+        if(buff[i] == '\n')
+        {
+            buff[i] = 0;
+            break;
+        }
+    }
+    WIND_ASSERT_RETURN(i < len,W_ERR_FAIL);
+    return W_ERR_OK;
 }
 
 w_err_t listfile_fputs(listfile_s* file,char *buff)
 {
-    WIND_ASSERT_RETURN(file != W_NULL,-1);
-    WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,-1);
-    WIND_ASSERT_RETURN(file->mode & LFMODE_W,-1);
-    return W_ERR_FAIL;
+    w_int32_t len;
+    WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(file->mode & LFMODE_W,W_ERR_NOT_SUPPORT);
+    WIND_ASSERT_RETURN(buff != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(buff[0] != 0,W_ERR_INVALID);
+    len = wind_strlen(buff);
+    len = listfile_write(file,buff,len);
+    WIND_ASSERT_RETURN(len > 0,W_ERR_FAIL);
+    return W_ERR_OK;
 }
 
 #endif
