@@ -70,7 +70,7 @@ w_int32_t blkinfo_get_used(lfile_blkinfo_s *info);
 
 w_int32_t blkinfo_get_space(lfile_blkinfo_s *info);
 
-w_int32_t blkinfo_tail_offset(lfile_blkinfo_s *info);
+//w_int32_t blkinfo_tail_offset(lfile_blkinfo_s *info);
 
 w_err_t blkinfo_get_prev(lfile_blkinfo_s *info,w_blkdev_s *blkdev);
 

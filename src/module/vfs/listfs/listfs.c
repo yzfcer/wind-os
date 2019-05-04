@@ -562,21 +562,7 @@ static w_int32_t do_read_file(listfile_s* file,w_uint8_t *buff,w_int32_t size)
     return W_ERR_FAIL;
 }
 
-w_int32_t listfile_read(listfile_s* file,w_uint8_t *buff, w_int32_t size)
-{
-    w_err_t err;
-    w_int32_t rsize;
-    WIND_ASSERT_RETURN(file != W_NULL,-1);
-    WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,-1);
-    WIND_ASSERT_RETURN(file->mode & LFMODE_R,-1);
-    WIND_ASSERT_RETURN(file->offset < file->info.filesize,-1);
-    rsize = size;
-    if(file->offset + rsize > file->info.filesize)
-        rsize = file->info.filesize - file->offset;
-    
-        
-    return rsize;
-}
+
 
 static w_err_t do_append_blks(listfile_s* file,w_addr_t *addr,w_int32_t cnt)
 {
@@ -635,6 +621,29 @@ static w_int32_t calc_needed_blkinfo(listfile_s* file,w_int32_t blkcnt)
     if(err == W_ERR_OK)
         return blkinfo_cnt;
     return -1;
+}
+
+
+w_int32_t listfile_read(listfile_s* file,w_uint8_t *buff, w_int32_t size)
+{
+    w_err_t err;
+    w_int32_t rsize;
+    WIND_ASSERT_RETURN(file != W_NULL,-1);
+    WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,-1);
+    WIND_ASSERT_RETURN(file->mode & LFMODE_R,-1);
+    WIND_ASSERT_RETURN(file->offset < file->info.filesize,-1);
+    rsize = size;
+
+    do
+    {
+        if(file->offset + rsize > file->info.filesize)
+            rsize = file->info.filesize - file->offset;
+        err = do_read_file(file,buff,rsize);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,W_ERR_FAIL,"do read file data failed");
+        file->offset += rsize;
+    }while(0);
+    WIND_ASSERT_RETURN(err == W_ERR_OK,-1);        
+    return rsize;
 }
 
 

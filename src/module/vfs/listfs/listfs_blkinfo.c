@@ -48,15 +48,20 @@ w_err_t blkinfo_read(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_addr_t addr)
     WIND_ASSERT_RETURN(info != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(addr != 0,W_ERR_INVALID);
-    err = listfs_read_block(blkdev,addr,&blk);
-    WIND_ASSERT_RETURN(err == W_ERR_OK,err);
-    tmpinfo = (lfile_blkinfo_s*)blk;
-    if(tmpinfo->magic == LISTFILE_MAGIC)
-        tmpinfo = FILEINFO_BLKINFO(blk);
-    WIND_ASSERT_TODO_RETURN(tmpinfo->magic == LISTFILE_BLK_MAGIC,lfs_free(blk),W_ERR_INVALID);
-    wind_memcpy(info,tmpinfo,sizeof(lfile_blkinfo_s));
-    lfs_free(blk);
-    return W_ERR_OK;
+    do
+    {
+        err = listfs_read_block(blkdev,addr,&blk);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"read block failed");
+        tmpinfo = (lfile_blkinfo_s*)blk;
+        if(tmpinfo->magic == LISTFILE_MAGIC)
+            tmpinfo = FILEINFO_BLKINFO(blk);
+        WIND_ASSERT_BREAK(tmpinfo->magic == LISTFILE_BLK_MAGIC,W_ERR_INVALID,"invalid blkinfo");
+        wind_memcpy(info,tmpinfo,sizeof(lfile_blkinfo_s));
+    
+    }while(0);
+    if(blk != W_NULL)
+        lfs_free(blk);
+    return err;
 }
 
 w_err_t blkinfo_write(lfile_blkinfo_s *info,w_blkdev_s *blkdev)
@@ -67,19 +72,23 @@ w_err_t blkinfo_write(lfile_blkinfo_s *info,w_blkdev_s *blkdev)
     WIND_ASSERT_RETURN(info != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(info->magic == LISTFILE_BLK_MAGIC,W_ERR_INVALID);
-    blk = lfs_malloc(blkdev->blksize);
-    WIND_ASSERT_RETURN(blk != W_NULL,W_ERR_MEM);
-    err = wind_blkdev_read(blkdev,info->self_addr,blk,1);
-    WIND_ASSERT_TODO_RETURN(err == W_ERR_OK,lfs_free(blk),err);
-    tmpinfo = (lfile_blkinfo_s*)blk;
-    if(tmpinfo->magic == LISTFILE_MAGIC)
+
+    do
     {
-        tmpinfo = FILEINFO_BLKINFO(blk);
-        WIND_ASSERT_TODO_RETURN(tmpinfo->offset == 0,lfs_free(blk),W_ERR_FAIL);
-    }
-    wind_memcpy(tmpinfo,info,sizeof(lfile_blkinfo_s));
-    err = listfs_write_block(blkdev,info->self_addr,blk);
-    lfs_free(blk);
+        blk = lfs_malloc(blkdev->blksize);
+        WIND_ASSERT_BREAK(blk != W_NULL,W_ERR_MEM,"malloc blk failed");
+        err = wind_blkdev_read(blkdev,info->self_addr,blk,1);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"read blkinfo failed");
+        tmpinfo = (lfile_blkinfo_s*)blk;
+        if(tmpinfo->magic == LISTFILE_MAGIC)
+            tmpinfo = FILEINFO_BLKINFO(blk);
+        WIND_ASSERT_BREAK(tmpinfo->magic == LISTFILE_BLK_MAGIC,W_ERR_INVALID,"invalid blkinfo");
+        wind_memcpy(tmpinfo,info,sizeof(lfile_blkinfo_s));
+        err = listfs_write_block(blkdev,info->self_addr,blk);
+        
+    }while(0);
+    if(blk != W_NULL)
+        lfs_free(blk);
     return err;
 }
 
@@ -104,6 +113,7 @@ w_int32_t blkinfo_get_space(lfile_blkinfo_s *info)
     return count;
 }
 
+#if 0
 w_int32_t blkinfo_tail_offset(lfile_blkinfo_s *info)
 {
     WIND_ASSERT_RETURN(info != W_NULL,W_ERR_PTR_NULL);
@@ -112,16 +122,21 @@ w_int32_t blkinfo_tail_offset(lfile_blkinfo_s *info)
         return info->offset;
     return (info->blkused-1)*info->blksize + info->byteused;
 }
+#endif
 
 w_err_t blkinfo_get_prev(lfile_blkinfo_s *info,w_blkdev_s *blkdev)
 {
     WIND_ASSERT_RETURN(info != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(info->magic == LISTFILE_BLK_MAGIC,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(info->prevblk_addr != 0,W_ERR_FAIL);
     return blkinfo_read(info,blkdev,info->prevblk_addr);
 }
 
 w_err_t blkinfo_get_next(lfile_blkinfo_s *info,w_blkdev_s *blkdev)
 {
     WIND_ASSERT_RETURN(info != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(info->magic == LISTFILE_BLK_MAGIC,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(info->nextblk_addr != 0,W_ERR_FAIL);
     return blkinfo_read(info,blkdev,info->nextblk_addr);
 }
 
@@ -157,52 +172,39 @@ w_err_t blkinfo_get_byoffset(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_int32_t 
     if((offset >= info->offset)&&(offset < info->offset + info->blkused * blkdev->blksize))
         return W_ERR_OK;
 
-    tmpinfo = lfs_malloc(sizeof(lfile_blkinfo_s));
-    WIND_ASSERT_RETURN(tmpinfo != W_NULL,W_ERR_MEM);
-    wind_memcpy(tmpinfo,info,sizeof(lfile_blkinfo_s));
-    err = W_ERR_FAIL;
-    while(info->offset > offset)
+    do
     {
-        err = blkinfo_get_prev(tmpinfo,blkdev);
-        if(err != W_ERR_OK)
-        {
-            lfs_free(tmpinfo);
-            return W_ERR_FAIL;
-        }
-            
-        if(BLKINFO_HAS_OFFSET(tmpinfo,offset,blkdev->blksize))
-        {
-            wind_memcpy(info,tmpinfo,sizeof(lfile_blkinfo_s));
-            lfs_free(tmpinfo);
-            return W_ERR_OK;
-        }
-    }
-    err = W_ERR_OK;
-    while(err == W_ERR_OK)
-    {
-        if(tmpinfo->nextblk_addr == 0)
-        {
-            wind_memcpy(info,tmpinfo,sizeof(lfile_blkinfo_s));
-            lfs_free(tmpinfo);
-            return W_ERR_OK;
-        }
-        err = blkinfo_get_next(tmpinfo,blkdev);
-        if(err != W_ERR_OK)
-        {
-            lfs_free(tmpinfo);
-            return W_ERR_FAIL;
-        }
-            
-        if(BLKINFO_HAS_OFFSET(tmpinfo,offset,blkdev->blksize))
-        {
-            wind_memcpy(info,tmpinfo,sizeof(lfile_blkinfo_s));
-            lfs_free(tmpinfo);
-            return W_ERR_OK;
-        }
+        tmpinfo = lfs_malloc(sizeof(lfile_blkinfo_s));
+        WIND_ASSERT_BREAK(tmpinfo != W_NULL,W_ERR_MEM,"malloc tmpinfo failed");
+        wind_memcpy(tmpinfo,info,sizeof(lfile_blkinfo_s));
 
-    }
-    lfs_free(tmpinfo);
-    return W_ERR_FAIL;
+        while(info->offset > offset)
+        {
+            err = blkinfo_get_prev(tmpinfo,blkdev);
+            WIND_ASSERT_BREAK(err == W_ERR_OK,err,"get prev blkinfo failed");
+            if(BLKINFO_HAS_OFFSET(tmpinfo,offset,blkdev->blksize))
+                break;
+            err = W_ERR_FAIL;
+        }
+        if(err == W_ERR_OK)
+            break;
+        
+        while(info->offset <= offset)
+        {
+            err = blkinfo_get_next(tmpinfo,blkdev);
+            WIND_ASSERT_BREAK(err == W_ERR_OK,err,"get prev blkinfo failed");
+            if(BLKINFO_HAS_OFFSET(tmpinfo,offset,blkdev->blksize))
+                break;
+            err = W_ERR_FAIL;
+        }
+        if(err == W_ERR_OK)
+            break;
+    }while(0);
+    if(err == W_ERR_OK)
+        wind_memcpy(info,tmpinfo,sizeof(lfile_blkinfo_s));
+    if(tmpinfo != W_NULL)
+        lfs_free(tmpinfo);
+    return err;
 }
 
 w_err_t blkinfo_update_prev(lfile_blkinfo_s *info,w_blkdev_s *blkdev)
@@ -213,17 +215,23 @@ w_err_t blkinfo_update_prev(lfile_blkinfo_s *info,w_blkdev_s *blkdev)
     WIND_ASSERT_RETURN(info != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(info->magic == LISTFILE_BLK_MAGIC,W_ERR_INVALID);
-    err = listfs_read_block(blkdev,info->prevblk_addr,&blk);
-    WIND_ASSERT_RETURN(err == W_ERR_OK,err);
+    do
+    {
+        err = listfs_read_block(blkdev,info->prevblk_addr,&blk);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"read block failed");
+        
+        tmpinfo = (lfile_blkinfo_s*)blk;
+        if(tmpinfo->magic == LISTFILE_MAGIC)
+            tmpinfo = FILEINFO_BLKINFO(blk);
+        WIND_ASSERT_BREAK(tmpinfo->magic == LISTFILE_BLK_MAGIC,W_ERR_INVALID,"invalid blkinfo");
+        tmpinfo->nextblk_addr = info->self_addr;
+        err = listfs_write_block(blkdev,info->prevblk_addr,blk);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"write block failed");
+    }while(0);
     
-    tmpinfo = (lfile_blkinfo_s*)blk;
-    if(tmpinfo->magic == LISTFILE_MAGIC)
-        tmpinfo = FILEINFO_BLKINFO(blk);
-    WIND_ASSERT_TODO_RETURN(tmpinfo->magic == LISTFILE_BLK_MAGIC,lfs_free(blk),W_ERR_INVALID);
-    tmpinfo->nextblk_addr = info->self_addr;
-    err = listfs_write_block(blkdev,info->prevblk_addr,blk);
-    lfs_free(blk);
-    return W_ERR_OK;
+    if(blk != W_NULL)
+        lfs_free(blk);
+    return err;
 }
 
 w_err_t blkinfo_link(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_addr_t *addr,w_int32_t count)
@@ -235,15 +243,55 @@ w_err_t blkinfo_link(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_addr_t *addr,w_i
     WIND_ASSERT_RETURN(info != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(info->magic == LISTFILE_BLK_MAGIC,W_ERR_INVALID);
+    do
+    {
+        info1 = lfs_malloc(sizeof(lfile_blkinfo_s));
+        WIND_ASSERT_BREAK(info1 != W_NULL,W_ERR_MEM,"malloc info1 failed");
+        info2 = lfs_malloc(sizeof(lfile_blkinfo_s));
+        WIND_ASSERT_BREAK(info2 != W_NULL,W_ERR_MEM,"malloc info2 failed");
+        wind_memcpy(info1,info,sizeof(lfile_blkinfo_s));
+        for(i = 0;i < count;i ++)
+        {
+            blkinfo_init(info2,addr[i],info1->self_addr,
+                info1->offset + blkdev->blksize * LFILE_LBLK_CNT,info1->blksize);
+            err = blkinfo_write(info2,blkdev);
+            WIND_ASSERT_BREAK(err == W_ERR_OK,err,"write blkinfo2 failed");
+            info1->nextblk_addr = info2->self_addr;
+            err = blkinfo_write(info1,blkdev);
+            WIND_ASSERT_BREAK(err == W_ERR_OK,err,"write blkinfo1 failed");
+            wind_memcpy(info1,info2,sizeof(lfile_blkinfo_s));
+        }      
+    }while(0);
+    if(info1 != W_NULL)
+        lfs_free(info1);
+    if(info2 != W_NULL)
+        lfs_free(info2);
+    return W_ERR_OK;
+}
+
+w_err_t blkinfo_unlink(lfile_blkinfo_s *info,w_blkdev_s *blkdev)
+{
+    w_err_t err;
+    w_int32_t i;
+    lfile_blkinfo_s *info1 = W_NULL,*info2 = W_NULL;
+    WIND_ASSERT_RETURN(info != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(info->magic == LISTFILE_BLK_MAGIC,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(info->offset == 0,W_ERR_INVALID);
+    
     info1 = lfs_malloc(sizeof(lfile_blkinfo_s));
     WIND_ASSERT_RETURN(info1 != W_NULL,W_ERR_MEM);
     info2 = lfs_malloc(sizeof(lfile_blkinfo_s));
     WIND_ASSERT_TODO_RETURN(info2 != W_NULL,lfs_free(info1),W_ERR_MEM);
     wind_memcpy(info1,info,sizeof(lfile_blkinfo_s));
-    for(i = 0;i < count;i ++)
+    if(info1->prevblk_addr != 0)
     {
-        blkinfo_init(info2,addr[i],info1->self_addr,
-            info1->offset + blkdev->blksize * LFILE_LBLK_CNT,info1->blksize);
+        blkinfo_get_prev(info1,blkdev);
+    }
+    for(i = 0;;i ++)
+    {
+        //blkinfo_init(info2,addr[i],info1->self_addr,
+        //    info1->offset + blkdev->blksize * LFILE_LBLK_CNT,info1->blksize);
         err = blkinfo_write(info2,blkdev);
         info1->nextblk_addr = info2->self_addr;
         err = blkinfo_write(info1,blkdev);
@@ -251,19 +299,6 @@ w_err_t blkinfo_link(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_addr_t *addr,w_i
     }
     lfs_free(info1);
     lfs_free(info2);
-    return W_ERR_OK;
-}
-
-w_err_t blkinfo_unlink(lfile_blkinfo_s *info,w_blkdev_s *blkdev)
-{
-    w_err_t err;
-    WIND_ASSERT_RETURN(info != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(info->magic == LISTFILE_BLK_MAGIC,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(info->offset == 0,W_ERR_INVALID);
-    
-    info->nextblk_addr = 0;
-    err = blkinfo_write(info,blkdev);
     return err;
 }
 
