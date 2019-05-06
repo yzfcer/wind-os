@@ -431,6 +431,9 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\listfs\listfs_cache.c">
       <Filter>module_vfs</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\common\wind_strsearch.c">
+      <Filter>common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">
@@ -749,6 +752,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\listfs\listfs_cache.h">
       <Filter>module_vfs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\common\wind_strsearch.h">
+      <Filter>common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

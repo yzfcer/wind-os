@@ -76,6 +76,7 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\common\wind_md5.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\common\wind_queue.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\common\wind_string.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\common\wind_strsearch.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\common\wind_tree.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cjson\cJSON.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cjson\cJSON_Utils.c" />
@@ -222,6 +223,7 @@
     <ClInclude Include="..\..\..\..\..\..\..\src\common\wind_md5.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\common\wind_queue.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\common\wind_string.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\common\wind_strsearch.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\common\wind_tree.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\cjson\cJSON.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\cjson\cJSON_Utils.h" />
