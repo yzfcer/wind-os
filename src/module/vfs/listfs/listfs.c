@@ -579,6 +579,7 @@ static w_err_t do_append_blkinfos(listfile_s* file,w_addr_t *addr,w_int32_t cnt)
 
 static w_int32_t do_write_file(listfile_s* file,w_uint8_t *buff,w_int32_t size)
 {
+    
     return W_ERR_FAIL;
 }
 
@@ -650,7 +651,7 @@ w_int32_t listfile_read(listfile_s* file,w_uint8_t *buff, w_int32_t size)
 w_int32_t listfile_write(listfile_s* file,w_uint8_t *buff,w_int32_t size)
 {
     w_err_t err;
-    w_int32_t wsize,needblk,needblkinfo;
+    w_int32_t wsize,needdatablk,needblkinfo;
     w_addr_t *addrlist = W_NULL;
     WIND_ASSERT_RETURN(file != W_NULL,-1);
     WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,-1);
@@ -659,24 +660,26 @@ w_int32_t listfile_write(listfile_s* file,w_uint8_t *buff,w_int32_t size)
     wsize = size;
     do
     {
-        needblk = calc_needed_blks(file,wsize);
-        needblkinfo = calc_needed_blkinfo(file,needblk);
-        if(needblk + needblkinfo > 0)
+        needdatablk = calc_needed_blks(file,wsize);
+        needblkinfo = calc_needed_blkinfo(file,needdatablk);
+        if(needdatablk + needblkinfo > 0)
         {
-            addrlist = (w_addr_t *)lfs_malloc((needblk+needblkinfo)*sizeof(w_addr_t *));
+            addrlist = (w_addr_t *)lfs_malloc((needdatablk+needblkinfo)*sizeof(w_addr_t *));
             WIND_ASSERT_BREAK(addrlist != W_NULL,W_ERR_MEM,"alloc addrlist failed");
-            err = listfs_bitmap_alloc_blk(&file->lfs->bitmap,addrlist,needblk+needblkinfo);
+            err = listfs_bitmap_alloc_blk(&file->lfs->bitmap,addrlist,needdatablk+needblkinfo);
             WIND_ASSERT_BREAK(err == W_ERR_OK,W_ERR_FAIL,"alloc blks failed");
             
-            if(needblk > 0)
-            {
-                err == do_append_blks(file,addrlist[0],needblk);
-                WIND_ASSERT_BREAK(err == W_ERR_OK,W_ERR_FAIL,"append blk failed.");
-            }
             if(needblkinfo > 0)
             {
-                err = do_append_blkinfos(file,&addrlist[needblk],needblkinfo);
+                //err = do_append_blkinfos(file,&addrlist[needdatablk],needblkinfo);
+                err = blkinfo_link(file->blkinfo,file->lfs->blkdev,&addrlist[0],needblkinfo);
                 WIND_ASSERT_BREAK(err == W_ERR_OK,W_ERR_FAIL,"append blkinfo failed.");
+            }
+            if(needdatablk > 0)
+            {
+                //err == do_append_blks(file,addrlist[0],needdatablk);
+                err = blkinfo_add_dataaddr(file->blkinfo,file->lfs->blkdev,&addrlist[needblkinfo],needdatablk);
+                WIND_ASSERT_BREAK(err == W_ERR_OK,W_ERR_FAIL,"append blk failed.");
             }
         }
         err = do_write_file(file,buff,wsize);
