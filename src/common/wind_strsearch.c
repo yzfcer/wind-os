@@ -26,40 +26,6 @@
 #include <wind_string.h>
 #include <wind_debug.h>
 
-
-w_int32_t bm_search(char *str, char *substr, w_int32_t pos)
-{
-    w_int32_t i;
-    w_int32_t j;
- 
-    i = pos;
-    j = 0; 
- 
-    while ( (i < wind_strlen(str)) && (j < wind_strlen(substr)) )
-    {
-        if (str[i] == substr[j])
-        {
-            i++;
-            j++;
-        }
-        else
-        {
-            i = i - j + 1; 
-            j = 0;
-        }
-    }
- 
-    /* 注意strlen(substr)意味着j的取值范围为0 ~ (wind_strlen(substr) - 1) */
-    if (wind_strlen(substr) == j)
-    {
-        return i - wind_strlen(substr);
-    }
-    else
-    {
-        return -1;
-    }
-}
-
 void kmp_init(w_kmp_context_s *ctx)
 {
     if(ctx == W_NULL)
@@ -80,12 +46,10 @@ void kmp_get_next(w_kmp_context_s *ctx,char *substr)
             ++k; // 注意是先加后使用
             ++j;
             ctx->next[j] = k;
-			ctx->len = j + 1;
+            ctx->len = j + 1;
         }
         else
-        {
             k = ctx->next[k]; 
-        }
     }
 }
  
@@ -93,7 +57,7 @@ w_int32_t kmp_search(w_kmp_context_s *ctx,char *str, char *substr, w_int32_t pos
 {
     w_int32_t i;
     w_int32_t j;
-	w_int32_t slen,sublen;
+    w_int32_t slen,sublen;
     if(ctx == W_NULL)
         return -1;
     if(ctx->len == 0)
@@ -101,39 +65,59 @@ w_int32_t kmp_search(w_kmp_context_s *ctx,char *str, char *substr, w_int32_t pos
  
     i = pos;
     j = 0; 
-	slen = wind_strlen(str);
-	sublen = wind_strlen(substr);
+    slen = wind_strlen(str);
+    sublen = wind_strlen(substr);
     while ((i < slen) && (j < sublen))
     {
-        /* j = -1 表示next[0], 说明失配处在模式串T的第0个字符。所以这里特殊处理，然后令i+1和j+1。*/
         if ( (j == -1)  || str[i] == substr[j])
         {
             i++;
             j++;
         }
         else
-        {
             j = ctx->next[j];
-        }
     }
  
-    if (wind_strlen(substr) == j)
-    {
-        return i - wind_strlen(substr);
-    }
+    if (sublen == j)
+        return i - sublen;
     else
-    {
         return -1;
-    }
 }
  
 void kmp_print_next(w_kmp_context_s *ctx)
 {
    w_int32_t i;
    for (i = 0; i < ctx->len; i++) 
-   {
        wind_printf("next[%d] = %d\n", i, ctx->next[i]);
-   }
+}
+
+w_int32_t bm_search(char *str, char *substr, w_int32_t pos)
+{
+    w_int32_t i,j;
+    w_int32_t slen,sublen;
+ 
+    i = pos;
+    j = 0;
+    slen = wind_strlen(str);
+    sublen = wind_strlen(substr);
+    while ( (i < slen) && (j < sublen) )
+    {
+        if (str[i] == substr[j])
+        {
+            i++;
+            j++;
+        }
+        else
+        {
+            i = i - j + 1; 
+            j = 0;
+        }
+    }
+ 
+    if (sublen == j)
+        return i - sublen;
+    else
+        return -1;
 }
 
 #if 0

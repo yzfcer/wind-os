@@ -28,14 +28,14 @@
 #define KMP_SUBSTR_LEN 32
 typedef struct  __w_kmp_context_s
 {
-	w_int32_t len;
+    w_int32_t len;
     w_int32_t next[KMP_SUBSTR_LEN];
 }w_kmp_context_s;
 
 void kmp_init(w_kmp_context_s *ctx);
-    
+
 void kmp_get_next(w_kmp_context_s *ctx,char *substr);
- 
+
 w_int32_t kmp_search(w_kmp_context_s *ctx,char *str, char *substr, w_int32_t pos);
 
 void kmp_print_next(w_kmp_context_s *ctx);
