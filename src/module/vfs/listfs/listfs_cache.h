@@ -22,8 +22,8 @@
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
-#ifndef LISTFS_FILEINFO_H__
-#define LISTFS_FILEINFO_H__
+#ifndef LISTFS_CAVHE_H__
+#define LISTFS_CAVHE_H__
 #include "wind_config.h"
 #include "wind_type.h"
 #include "wind_obj.h"

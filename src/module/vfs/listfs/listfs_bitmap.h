@@ -54,7 +54,7 @@ w_err_t listfs_bitmap_free_blk(lfs_bitmap_s *bp,w_addr_t *addr,w_int32_t count);
 
 w_err_t listfs_bitmap_clear(lfs_bitmap_s *bp);
 
-w_uint32_t listfs_bitmap_get_usedblk(lfs_bitmap_s *bp);
+w_int32_t listfs_bitmap_get_usedblk(lfs_bitmap_s *bp);
 
 
 #endif

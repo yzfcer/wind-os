@@ -26,18 +26,15 @@
 #include <wind_string.h>
 #include <wind_debug.h>
 
-void kmp_init(w_kmp_context_s *ctx)
-{
-    if(ctx == W_NULL)
-        return;
-    wind_memset(ctx,0,sizeof(w_kmp_context_s));
-}
-
-void kmp_get_next(w_kmp_context_s *ctx,char *substr)
+w_err_t kmp_init(w_kmp_context_s *ctx,char *substr)
 {
     w_int32_t k = -1;
     w_int32_t j = 0;
-    w_int32_t len = wind_strlen(substr);
+    w_int32_t len;
+    WIND_ASSERT_RETURN(ctx != W_NULL,W_ERR_PTR_NULL);
+    wind_memset(ctx,0,sizeof(w_kmp_context_s));
+    len = wind_strlen(substr);
+    WIND_ASSERT_RETURN(len < KMP_SUBSTR_LEN,W_ERR_OVERFLOW);
     ctx->next[j] = k;
     while (j < len)
     {
@@ -51,6 +48,7 @@ void kmp_get_next(w_kmp_context_s *ctx,char *substr)
         else
             k = ctx->next[k]; 
     }
+    return W_ERR_OK;
 }
  
 w_int32_t kmp_search(w_kmp_context_s *ctx,char *str, char *substr, w_int32_t pos)
@@ -58,10 +56,9 @@ w_int32_t kmp_search(w_kmp_context_s *ctx,char *str, char *substr, w_int32_t pos
     w_int32_t i;
     w_int32_t j;
     w_int32_t slen,sublen;
-    if(ctx == W_NULL)
-        return -1;
-    if(ctx->len == 0)
-        return -1;
+    
+    WIND_ASSERT_RETURN(ctx != W_NULL,-1);
+    WIND_ASSERT_RETURN(ctx->len > 0,-1);
  
     i = pos;
     j = 0; 
@@ -84,11 +81,13 @@ w_int32_t kmp_search(w_kmp_context_s *ctx,char *str, char *substr, w_int32_t pos
         return -1;
 }
  
-void kmp_print_next(w_kmp_context_s *ctx)
+w_err_t kmp_print_next(w_kmp_context_s *ctx)
 {
    w_int32_t i;
+   WIND_ASSERT_RETURN(ctx != W_NULL,W_ERR_PTR_NULL);
    for (i = 0; i < ctx->len; i++) 
        wind_printf("next[%d] = %d\n", i, ctx->next[i]);
+   return W_ERR_OK;
 }
 
 w_int32_t bm_search(char *str, char *substr, w_int32_t pos)
@@ -96,11 +95,15 @@ w_int32_t bm_search(char *str, char *substr, w_int32_t pos)
     w_int32_t i,j;
     w_int32_t slen,sublen;
  
+    WIND_ASSERT_RETURN(str != W_NULL,-1);
+    WIND_ASSERT_RETURN(substr != W_NULL,-1);
+    WIND_ASSERT_RETURN(pos > 0,-1);
+    
     i = pos;
     j = 0;
     slen = wind_strlen(str);
     sublen = wind_strlen(substr);
-    while ( (i < slen) && (j < sublen) )
+    while ((i < slen) && (j < sublen))
     {
         if (str[i] == substr[j])
         {
@@ -135,7 +138,7 @@ w_int32_t strsearch_test(void)
     wind_printf("index = %d\n", index);
  
     wind_printf("================ KMP ==============\n");
-    kmp_get_next(&ctx,substr);
+    kmp_init(&ctx,substr);
     kmp_print_next(&ctx);
  
     index = kmp_search(&ctx,str, substr, pos);

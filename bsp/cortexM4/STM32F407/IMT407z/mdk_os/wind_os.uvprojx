@@ -1452,6 +1452,26 @@
               <FileType>5</FileType>
               <FilePath>..\..\..\..\..\src\module\vfs\listfs\listfs_fileinfo.h</FilePath>
             </File>
+            <File>
+              <FileName>listfs_blkinfo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\module\vfs\listfs\listfs_blkinfo.c</FilePath>
+            </File>
+            <File>
+              <FileName>listfs_blkinfo.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\module\vfs\listfs\listfs_blkinfo.h</FilePath>
+            </File>
+            <File>
+              <FileName>listfs_cache.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\src\module\vfs\listfs\listfs_cache.c</FilePath>
+            </File>
+            <File>
+              <FileName>listfs_cache.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\..\src\module\vfs\listfs\listfs_cache.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

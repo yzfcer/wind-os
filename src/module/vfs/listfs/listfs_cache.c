@@ -23,6 +23,7 @@
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
 #include "listfs_cache.h"
+#include "listfs.h"
 #include "wind_debug.h"
 #include "wind_string.h"
 #include "wind_obj.h"
@@ -86,7 +87,7 @@ static w_err_t cacheitem_init(lcache_item_s *cacheitem,w_addr_t addr,w_int32_t b
 {
     cacheitem->addr = addr;
     cacheitem->blksize = blksize;
-    cacheitem->blk = &cacheitem[1];
+    cacheitem->blk = (w_uint8_t*)&cacheitem[1];
     DNODE_INIT(cacheitem->itemnode);
     return W_ERR_OK;
 }
