@@ -2,9 +2,13 @@
 //#include <string.h>
 //#include <stdlib.h>
 //#include <stdio.h>
+#include "wind_debug.h"
 #include "cJSON_Utils.h"
 #include "wind_heap.h"
 
+#include "wind_string.h"
+#include "wind_macro.h"
+#define tolower(c) LOWERCASE(c)
 static int cJSONUtils_strcasecmp(const char *s1,const char *s2)
 {
 	if (!s1) return (s1==s2)?0:1;if (!s2) return 1;
@@ -100,6 +104,7 @@ static void cJSONUtils_InplaceDecodePointerString(char *string)
 
 static cJSON *cJSONUtils_PatchDetach(cJSON *object,const char *path)
 {
+    int which;
 	char *parentptr=0,*childptr=0;cJSON *parent=0,*ret=0;
 
 	parentptr=wind_salloc(path);	childptr=wind_strrchr(parentptr,'/');	if (childptr) *childptr++=0;
@@ -107,8 +112,16 @@ static cJSON *cJSONUtils_PatchDetach(cJSON *object,const char *path)
 	cJSONUtils_InplaceDecodePointerString(childptr);
 
 	if (!parent) ret=0;	/* Couldn't find object to remove child from. */
-	else if (parent->type==cJSON_Array)		ret=cJSON_DetachItemFromArray(parent,atoi(childptr));
-	else if (parent->type==cJSON_Object)	ret=cJSON_DetachItemFromObject(parent,childptr);
+	else if (parent->type==cJSON_Array)
+    {
+        if(wind_str_to_int(childptr, &which) == W_ERR_OK)
+            ret = W_NULL;
+        else
+            ret=cJSON_DetachItemFromArray(parent,which);
+    }   
+        
+	else if (parent->type==cJSON_Object)	
+        ret=cJSON_DetachItemFromObject(parent,childptr);
 	wind_free(parentptr);
 	return ret;
 }
@@ -142,6 +155,7 @@ static int cJSONUtils_Compare(cJSON *a,cJSON *b)
 
 static int cJSONUtils_ApplyPatch(cJSON *object,cJSON *patch)
 {
+    int which;
 	cJSON *op=0,*path=0,*value=0,*parent=0;int opcode=0;char *parentptr=0,*childptr=0;
 
 	op=cJSON_GetObjectItem(patch,"op");
@@ -190,8 +204,14 @@ static int cJSONUtils_ApplyPatch(cJSON *object,cJSON *patch)
 	if (!parent) {wind_free(parentptr); cJSON_Delete(value); return 9;}	/* Couldn't find object to add to. */
 	else if (parent->type==cJSON_Array)
 	{
-		if (!strcmp(childptr,"-"))	cJSON_AddItemToArray(parent,value);
-		else						cJSON_InsertItemInArray(parent,atoi(childptr),value);
+		if (!strcmp(childptr,"-"))	
+            cJSON_AddItemToArray(parent,value);
+		else
+        {
+            if(wind_str_to_int(childptr,&which) == W_NULL)
+                cJSON_InsertItemInArray(parent,which,value);
+        }      
+            
 	}
 	else if (parent->type==cJSON_Object)
 	{

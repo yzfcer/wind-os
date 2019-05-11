@@ -34,8 +34,11 @@
 #include "JSON_checker.h"
 #include "wind_heap.h"
 #include "wind_string.h"
+#include "wind_debug.h"
+#include "wind_macro.h"
 
 static const char *global_ep;
+#define tolower(c) LOWERCASE(c)
 
 const char *cJSON_GetErrorPtr(void) {return global_ep;}
 
@@ -169,10 +172,10 @@ static char *print_number(cJSON *item,printbuffer *p)
 		else	str=(char*)cJSON_malloc(64);	/* This is a nice tradeoff. */
 		if (str)
 		{
-			if (d*0!=0)													sprintf(str,"null");	/* This checks for NaN and Infinity */
-			else if (fabs(floor(d)-d)<=DBL_EPSILON && fabs(d)<1.0e60)	sprintf(str,"%.0f",d);
-			else if (fabs(d)<1.0e-6 || fabs(d)>1.0e9)					sprintf(str,"%e",d);
-			else														sprintf(str,"%f",d);
+			if (d*0!=0)													wind_sprintf(str,"null");	/* This checks for NaN and Infinity */
+			else if (fabs(floor(d)-d)<=DBL_EPSILON && fabs(d)<1.0e60)	wind_sprintf(str,"%.0f",d);
+			else if (fabs(d)<1.0e-6 || fabs(d)>1.0e9)					wind_sprintf(str,"%e",d);
+			else														wind_sprintf(str,"%f",d);
 		}
 	}
 	return str;
