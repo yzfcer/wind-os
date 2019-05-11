@@ -31,10 +31,18 @@
 */
 
 #include "wind_debug.h"
+#include "wind_timer.h"
 
+w_err_t test_tmr(w_timer_s *timer,void *arg)
+{
+    static w_uint32_t cnt = 0;
+    wind_printf("timer test run:%d\n",cnt++);
+    return W_ERR_OK;
+}
 
 w_err_t wind_main(void)
 {
     wind_notice("enter wind main.");
+    wind_timer_create("testtmr",5000,test_tmr,W_NULL,F_TIMER_REPEAT|F_TIMER_RUN);
     return 0;
 }

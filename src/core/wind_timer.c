@@ -169,7 +169,7 @@ w_err_t wind_timer_clrflag(w_timer_s* timer,w_uint16_t flag)
     if(flag & F_TIMER_REPEAT)
         CLR_F_TIMER_REPEAT(timer);
     if(flag & F_TIMER_RUN)
-        SET_F_TIMER_RUN(timer);
+        CLR_F_TIMER_RUN(timer);
     return W_ERR_OK;
 }
 

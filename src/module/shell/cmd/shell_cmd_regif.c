@@ -90,7 +90,9 @@ CMD_DECLARE(diagnose);
 #if CMD_DAEMON_SUPPORT
 CMD_DECLARE(daemon);
 #endif
-
+#if CMD_TIMER_SUPPORT
+CMD_DECLARE(timer);
+#endif
 
 void _wind_register_all_cmd(w_shell_ctx_s *ctx)
 {
@@ -155,7 +157,9 @@ void _wind_register_all_cmd(w_shell_ctx_s *ctx)
 #if CMD_DAEMON_SUPPORT
     wind_cmd_register(COMMAND(daemon),1);
 #endif
-
+#if CMD_TIMER_SUPPORT
+    wind_cmd_register(COMMAND(timer),1);
+#endif
 }
 
 #ifdef __cplusplus

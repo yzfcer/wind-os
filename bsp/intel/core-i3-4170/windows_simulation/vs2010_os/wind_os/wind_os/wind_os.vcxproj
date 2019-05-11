@@ -156,6 +156,7 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_stati.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_sysinfo.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_thread.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_timer.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_user.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_watchdog.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_xmodem.c" />

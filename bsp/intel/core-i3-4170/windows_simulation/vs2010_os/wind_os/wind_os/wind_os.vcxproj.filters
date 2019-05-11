@@ -434,6 +434,9 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\application\win32_simu\user_entry.c">
       <Filter>application</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_timer.c">
+      <Filter>module_shell</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">
