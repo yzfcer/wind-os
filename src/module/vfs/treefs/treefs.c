@@ -9,7 +9,8 @@ static treefile_s *treefile_rootnode = W_NULL;
 
 void *treefs_malloc(w_int32_t size)
 {
-    void *ptr = wind_malloc(size);
+    //void *ptr = wind_malloc(size);
+    void *ptr = wind_falloc(size,252);
     return ptr;
 }
 

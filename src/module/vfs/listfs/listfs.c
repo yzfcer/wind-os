@@ -37,7 +37,8 @@
 
 void *lfs_malloc(w_int32_t size)
 {
-    void *ptr = wind_malloc(size);
+    //void *ptr = wind_malloc(size);
+    void *ptr = wind_falloc(size,253);
     return ptr;
 }
 
