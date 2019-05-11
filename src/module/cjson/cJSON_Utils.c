@@ -8,6 +8,7 @@
 
 #include "wind_string.h"
 #include "wind_macro.h"
+#include "wind_conv.h"
 #define tolower(c) LOWERCASE(c)
 static int cJSONUtils_strcasecmp(const char *s1,const char *s2)
 {
@@ -28,7 +29,7 @@ static int cJSONUtils_Pstrcasecmp(const char *a,const char *e)
 	return 0;
 }
 
-static int cJSONUtils_PointerEncodedstrlen(const char *s)	{int l=0;for (;*s;s++,l++) if (*s=='~' || *s=='/') l++;return l;}
+static int cJSONUtils_PointerEncodedwind_strlen(const char *s)	{int l=0;for (;*s;s++,l++) if (*s=='~' || *s=='/') l++;return l;}
 
 static void cJSONUtils_PointerEncodedstrcpy(char *d,const char *s)
 {
@@ -54,14 +55,14 @@ char *cJSONUtils_FindPointerFromObjectTo(cJSON *object,cJSON *target)
 		{
 			if (type==cJSON_Array)
 			{
-				char *ret=(char*)wind_malloc(strlen(found)+23);
+				char *ret=(char*)wind_malloc(wind_strlen(found)+23);
 				wind_sprintf(ret,"/%d%s",c,found);
 				wind_free(found);
 				return ret;
 			}
 			else if (type==cJSON_Object)
 			{
-				char *ret=(char*)wind_malloc(strlen(found)+cJSONUtils_PointerEncodedstrlen(obj->string)+2);
+				char *ret=(char*)wind_malloc(wind_strlen(found)+cJSONUtils_PointerEncodedwind_strlen(obj->string)+2);
 				*ret='/';cJSONUtils_PointerEncodedstrcpy(ret+1,obj->string);
 				strcat(ret,found);
 				wind_free(found);
@@ -107,14 +108,14 @@ static cJSON *cJSONUtils_PatchDetach(cJSON *object,const char *path)
     int which;
 	char *parentptr=0,*childptr=0;cJSON *parent=0,*ret=0;
 
-	parentptr=wind_salloc(path);	childptr=wind_strrchr(parentptr,'/');	if (childptr) *childptr++=0;
+	parentptr=(char*)wind_salloc((char*)path);	childptr=wind_strrchr(parentptr,'/');	if (childptr) *childptr++=0;
 	parent=cJSONUtils_GetPointer(object,parentptr);
 	cJSONUtils_InplaceDecodePointerString(childptr);
 
 	if (!parent) ret=0;	/* Couldn't find object to remove child from. */
 	else if (parent->type==cJSON_Array)
     {
-        if(wind_str_to_int(childptr, &which) == W_ERR_OK)
+        if(wind_str_to_int(childptr, &which))
             ret = W_NULL;
         else
             ret=cJSON_DetachItemFromArray(parent,which);
@@ -196,7 +197,7 @@ static int cJSONUtils_ApplyPatch(cJSON *object,cJSON *patch)
 		
 	/* Now, just add "value" to "path". */
 
-	parentptr=wind_salloc(path->valuestring);	childptr=strrchr(parentptr,'/');	if (childptr) *childptr++=0;
+	parentptr=wind_salloc(path->valuestring);	childptr=wind_strrchr(parentptr,'/');	if (childptr) *childptr++=0;
 	parent=cJSONUtils_GetPointer(object,parentptr);
 	cJSONUtils_InplaceDecodePointerString(childptr);
 
@@ -208,7 +209,7 @@ static int cJSONUtils_ApplyPatch(cJSON *object,cJSON *patch)
             cJSON_AddItemToArray(parent,value);
 		else
         {
-            if(wind_str_to_int(childptr,&which) == W_NULL)
+            if(wind_str_to_int(childptr,&which))
                 cJSON_InsertItemInArray(parent,which,value);
         }      
             
@@ -246,8 +247,8 @@ static void cJSONUtils_GeneratePatch(cJSON *patches,const char *op,const char *p
 	cJSON_AddItemToObject(patch,"op",cJSON_CreateString(op));
 	if (suffix)
 	{
-		char *newpath=(char*)wind_malloc(strlen(path)+cJSONUtils_PointerEncodedstrlen(suffix)+2);
-		cJSONUtils_PointerEncodedstrcpy(newpath+sprintf(newpath,"%s/",path),suffix);
+		char *newpath=(char*)wind_malloc(wind_strlen(path)+cJSONUtils_PointerEncodedwind_strlen(suffix)+2);
+		cJSONUtils_PointerEncodedstrcpy(newpath+wind_sprintf(newpath,"%s/",path),suffix);
 		cJSON_AddItemToObject(patch,"path",cJSON_CreateString(newpath));
 		wind_free(newpath);
 	}
@@ -276,11 +277,11 @@ static void cJSONUtils_CompareToPatch(cJSON *patches,const char *path,cJSON *fro
 
 	case cJSON_Array:
 	{
-		int c;char *newpath=(char*)wind_malloc(strlen(path)+23);	/* Allow space for 64bit int. */
+		int c;char *newpath=(char*)wind_malloc(wind_strlen(path)+23);	/* Allow space for 64bit int. */
 		for (c=0,from=from->child,to=to->child;from && to;from=from->next,to=to->next,c++){
-										sprintf(newpath,"%s/%d",path,c);	cJSONUtils_CompareToPatch(patches,newpath,from,to);
+										wind_sprintf(newpath,"%s/%d",path,c);	cJSONUtils_CompareToPatch(patches,newpath,from,to);
 		}
-		for (;from;from=from->next,c++)	{sprintf(newpath,"%d",c);	cJSONUtils_GeneratePatch(patches,"remove",path,newpath,0);	}
+		for (;from;from=from->next,c++)	{wind_sprintf(newpath,"%d",c);	cJSONUtils_GeneratePatch(patches,"remove",path,newpath,0);	}
 		for (;to;to=to->next,c++)		cJSONUtils_GeneratePatch(patches,"add",path,"-",to);
 		wind_free(newpath);
 		return;
@@ -298,8 +299,8 @@ static void cJSONUtils_CompareToPatch(cJSON *patches,const char *path,cJSON *fro
 			int diff=(!a)?1:(!b)?-1:cJSONUtils_strcasecmp(a->string,b->string);
 			if (!diff)
 			{
-				char *newpath=(char*)wind_malloc(strlen(path)+cJSONUtils_PointerEncodedstrlen(a->string)+2);
-				cJSONUtils_PointerEncodedstrcpy(newpath+sprintf(newpath,"%s/",path),a->string);
+				char *newpath=(char*)wind_malloc(wind_strlen(path)+cJSONUtils_PointerEncodedwind_strlen(a->string)+2);
+				cJSONUtils_PointerEncodedstrcpy(newpath+wind_sprintf(newpath,"%s/",path),a->string);
 				cJSONUtils_CompareToPatch(patches,newpath,a,b);
 				wind_free(newpath);
 				a=a->next;

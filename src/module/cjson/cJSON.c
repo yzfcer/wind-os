@@ -49,20 +49,27 @@ static int cJSON_strcasecmp(const char *s1,const char *s2)
 	return tolower(*(const unsigned char *)s1) - tolower(*(const unsigned char *)s2);
 }
 
-static void *(*cJSON_malloc)(size_t sz) = wind_malloc;
-static void (*cJSON_free)(void *ptr) = wind_free;
+static void *cJSON_malloc(size_t sz)
+{
+    return wind_falloc((w_uint32_t)sz,251);
+}
+
+static void cJSON_free(void *ptr)
+{
+    wind_free(ptr);
+}
 
 static char* cJSON_strdup(const char* str)
 {
       size_t len;
       char* copy;
 
-      len = strlen(str) + 1;
+      len = wind_strlen(str) + 1;
       if (!(copy = (char*)cJSON_malloc(len))) return 0;
       memcpy(copy,str,len);
       return copy;
 }
-
+#if 0
 void cJSON_InitHooks(cJSON_Hooks* hooks)
 {
     if (!hooks) { /* Reset hooks */
@@ -74,6 +81,7 @@ void cJSON_InitHooks(cJSON_Hooks* hooks)
 	cJSON_malloc = (hooks->malloc_fn)?hooks->malloc_fn:wind_malloc;
 	cJSON_free	 = (hooks->free_fn)?hooks->free_fn:wind_free;
 }
+#endif
 
 /* Internal constructor. */
 static cJSON *cJSON_New_Item(void)
@@ -146,7 +154,7 @@ static int update(printbuffer *p)
 	char *str;
 	if (!p || !p->buffer) return 0;
 	str=p->buffer+p->offset;
-	return p->offset+strlen(str);
+	return p->offset+wind_strlen(str);
 }
 
 /* Render the number nicely from the given item into a string. */
@@ -308,7 +316,7 @@ static char *print_string_ptr(const char *str,printbuffer *p)
 				case '\n':	*ptr2++='n';	break;
 				case '\r':	*ptr2++='r';	break;
 				case '\t':	*ptr2++='t';	break;
-				default: sprintf(ptr2,"u%04x",token);ptr2+=5;	break;	/* escape and print */
+				default: wind_sprintf(ptr2,"u%04x",token);ptr2+=5;	break;	/* escape and print */
 			}
 		}
 	}
@@ -346,7 +354,7 @@ cJSON *cJSON_ParseWithOpts(const char *value,const char **return_parse_end,int r
 	return c;
 }
 /* Default options for cJSON_Parse */
-cJSON *cJSON_Parse(const char *value) 
+cJSON *cJSON_Parse(char *value) 
 {
 	if(0 != JSON_checker_handle(value))
 		return W_NULL;
@@ -492,7 +500,7 @@ static char *print_array(cJSON *item,int depth,int fmt,printbuffer *p)
 		{
 			ret=print_value(child,depth+1,fmt,0);
 			entries[i++]=ret;
-			if (ret) len+=strlen(ret)+2+(fmt?1:0); else fail=1;
+			if (ret) len+=wind_strlen(ret)+2+(fmt?1:0); else fail=1;
 			child=child->next;
 		}
 		
@@ -514,7 +522,7 @@ static char *print_array(cJSON *item,int depth,int fmt,printbuffer *p)
 		ptr=out+1;*ptr=0;
 		for (i=0;i<numentries;i++)
 		{
-			tmplen=strlen(entries[i]);memcpy(ptr,entries[i],tmplen);ptr+=tmplen;
+			tmplen=wind_strlen(entries[i]);memcpy(ptr,entries[i],tmplen);ptr+=tmplen;
 			if (i!=numentries-1) {*ptr++=',';if(fmt)*ptr++=' ';*ptr=0;}
 			cJSON_free(entries[i]);
 		}
@@ -635,7 +643,7 @@ static char *print_object(cJSON *item,int depth,int fmt,printbuffer *p)
 		{
 			names[i]=str=print_string_ptr(child->string,0);
 			entries[i++]=ret=print_value(child,depth,fmt,0);
-			if (str && ret) len+=strlen(ret)+strlen(str)+2+(fmt?2+depth:0); else fail=1;
+			if (str && ret) len+=wind_strlen(ret)+wind_strlen(str)+2+(fmt?2+depth:0); else fail=1;
 			child=child->next;
 		}
 		
@@ -656,9 +664,9 @@ static char *print_object(cJSON *item,int depth,int fmt,printbuffer *p)
 		for (i=0;i<numentries;i++)
 		{
 			if (fmt) for (j=0;j<depth;j++) *ptr++='\t';
-			tmplen=strlen(names[i]);memcpy(ptr,names[i],tmplen);ptr+=tmplen;
+			tmplen=wind_strlen(names[i]);memcpy(ptr,names[i],tmplen);ptr+=tmplen;
 			*ptr++=':';if (fmt) *ptr++='\t';
-			wind_strcpy(ptr,entries[i]);ptr+=strlen(entries[i]);
+			wind_strcpy(ptr,entries[i]);ptr+=wind_strlen(entries[i]);
 			if (i!=numentries-1) *ptr++=',';
 			if (fmt) *ptr++='\n';*ptr=0;
 			cJSON_free(names[i]);cJSON_free(entries[i]);

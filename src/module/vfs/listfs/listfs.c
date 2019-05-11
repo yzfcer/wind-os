@@ -585,11 +585,11 @@ static w_int32_t do_read_file(listfile_s* file,w_uint8_t *buff,w_int32_t size)
         cpsize = file->blkinfo->blksize - blkidx;
         if(cpsize > size - buffidx)
             cpsize = size - buffidx;
-        addr = blkinfo_get_addr(blkinfo_get_addr,file->offset);
+        addr = blkinfo_get_addr(file->blkinfo,file->offset);
         if(addr == 0)
         {
             blkinfo_get_next(file->blkinfo,file->lfs->blkdev);
-            addr = blkinfo_get_addr(blkinfo_get_addr,file->offset);
+            addr = blkinfo_get_addr(file->blkinfo,file->offset);
         }
         WIND_ASSERT_BREAK(addr > 0, W_ERR_FAIL, "get addr failed");
         len = wind_blkdev_read(file->lfs->blkdev, addr,blk, 1);
@@ -631,11 +631,11 @@ static w_int32_t do_write_file(listfile_s* file,w_uint8_t *buff,w_int32_t size)
         cpsize = file->blkinfo->blksize - blkidx;
         if(cpsize > size - buffidx)
             cpsize = size - buffidx;
-        addr = blkinfo_get_addr(blkinfo_get_addr,file->offset);
+        addr = blkinfo_get_addr(file->blkinfo,file->offset);
         if(addr == 0)
         {
             blkinfo_get_next(file->blkinfo,file->lfs->blkdev);
-            addr = blkinfo_get_addr(blkinfo_get_addr,file->offset);
+            addr = blkinfo_get_addr(file->blkinfo,file->offset);
         }
         WIND_ASSERT_BREAK(addr > 0, W_ERR_FAIL, "get addr failed");
         if((blkidx != 0) || (cpsize != file->blkinfo->blksize))
