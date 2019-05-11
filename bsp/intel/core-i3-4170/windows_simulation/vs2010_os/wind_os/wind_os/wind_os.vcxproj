@@ -66,7 +66,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\..\..\src\application\alientekV3\user_entry.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\application\win32_simu\user_entry.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\common\wind_conv.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\common\wind_crc16.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\common\wind_crc32.c" />
