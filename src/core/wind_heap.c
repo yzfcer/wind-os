@@ -169,11 +169,9 @@ w_heap_s *wind_heap_create(const char *name,w_addr_t base,w_uint32_t size,w_uint
     return hp;
 }
 
-w_err_t wind_heap_destroy(w_addr_t base)
+w_err_t wind_heap_destroy(w_heap_s *heap)
 {
     w_err_t err;
-    w_heap_s *heap;
-    heap = (w_heap_s*)(__ALIGN_R((w_addr_t)base));
     WIND_ASSERT_RETURN(heap != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(heap->obj.magic == WIND_HEAP_MAGIC,W_ERR_INVALID);
     wind_notice("destroy heap:%s",heap->obj.name?heap->obj.name:"null");

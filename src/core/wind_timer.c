@@ -70,7 +70,6 @@ w_err_t wind_timer_init(w_timer_s* timer,
     count = period_ms / TIMER_PERIOD;
     if(count <= 0)
         count = 1;
-    wind_notice("init timer %s:%d ms",name,period_ms);
 
     timer->value = count;
     timer->period = count;
