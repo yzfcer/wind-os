@@ -557,30 +557,103 @@ w_int32_t listfile_ftell(listfile_s* file)
     return file->offset;
 }
 
+
+
 static w_int32_t do_read_file(listfile_s* file,w_uint8_t *buff,w_int32_t size)
 {
-    return W_ERR_FAIL;
-}
-
-
-
-static w_err_t do_append_blks(listfile_s* file,w_addr_t *addr,w_int32_t cnt)
-{
-    return W_ERR_FAIL;
-}
-
-
-
-static w_err_t do_append_blkinfos(listfile_s* file,w_addr_t *addr,w_int32_t cnt)
-{
-    
-    return W_ERR_FAIL;
+    w_err_t err;
+    w_addr_t addr; 
+    w_int32_t len,blkidx,buffidx,cpsize;
+    w_uint8_t *blk = W_NULL;
+    if(!BLKINFO_HAS_OFFSET(file->blkinfo, file->offset, file->lfs->lfs_info.blksize))
+    {
+        err = blkinfo_get_byoffset(file->blkinfo,file->lfs->blkdev, file->offset);
+        WIND_ASSERT_RETURN(err == W_ERR_OK, -1);
+    }
+    err = W_ERR_OK;
+    buffidx = 0;
+    while(1)
+    {
+        if(blk == W_NULL)
+        {
+            blk = lfs_malloc(file->blkinfo->blksize);
+            WIND_ASSERT_BREAK(blk != W_NULL, W_ERR_MEM, "malloc blk failed");
+        }
+        
+        blkidx = file->offset % file->blkinfo->blksize;
+        cpsize = file->blkinfo->blksize - blkidx;
+        if(cpsize > size - buffidx)
+            cpsize = size - buffidx;
+        addr = blkinfo_get_addr(blkinfo_get_addr,file->offset);
+        if(addr == 0)
+        {
+            blkinfo_get_next(file->blkinfo,file->lfs->blkdev);
+            addr = blkinfo_get_addr(blkinfo_get_addr,file->offset);
+        }
+        WIND_ASSERT_BREAK(addr > 0, W_ERR_FAIL, "get addr failed");
+        len = wind_blkdev_read(file->lfs->blkdev, addr,blk, 1);
+        WIND_ASSERT_BREAK(len > 0, W_ERR_FAIL,"read data failed");
+        wind_memcpy(&buff[buffidx],&blk[blkidx],cpsize);
+        file->offset += cpsize;
+        buffidx += cpsize;
+        if(buffidx >= size)
+            break;
+    }
+    if(blk == W_NULL)
+        lfs_free(blk);
+    WIND_ASSERT_RETURN(err == W_ERR_OK, -1);
+    return size;
 }
 
 static w_int32_t do_write_file(listfile_s* file,w_uint8_t *buff,w_int32_t size)
 {
-    
-    return W_ERR_FAIL;
+    w_err_t err;
+    w_addr_t addr; 
+    w_int32_t len,blkidx,buffidx,cpsize;
+    w_uint8_t *blk = W_NULL;
+    if(!BLKINFO_HAS_OFFSET(file->blkinfo, file->offset, file->lfs->lfs_info.blksize))
+    {
+        err = blkinfo_get_byoffset(file->blkinfo,file->lfs->blkdev, file->offset);
+        WIND_ASSERT_RETURN(err == W_ERR_OK, -1);
+    }
+    err = W_ERR_OK;
+    buffidx = 0;
+    while(1)
+    {
+        if(blk == W_NULL)
+        {
+            blk = lfs_malloc(file->blkinfo->blksize);
+            WIND_ASSERT_BREAK(blk != W_NULL, W_ERR_MEM, "malloc blk failed");
+        }
+        
+        blkidx = file->offset % file->blkinfo->blksize;
+        cpsize = file->blkinfo->blksize - blkidx;
+        if(cpsize > size - buffidx)
+            cpsize = size - buffidx;
+        addr = blkinfo_get_addr(blkinfo_get_addr,file->offset);
+        if(addr == 0)
+        {
+            blkinfo_get_next(file->blkinfo,file->lfs->blkdev);
+            addr = blkinfo_get_addr(blkinfo_get_addr,file->offset);
+        }
+        WIND_ASSERT_BREAK(addr > 0, W_ERR_FAIL, "get addr failed");
+        if((blkidx != 0) || (cpsize != file->blkinfo->blksize))
+        {
+            len = wind_blkdev_read(file->lfs->blkdev, addr,blk, 1);
+            WIND_ASSERT_BREAK(len > 0, W_ERR_FAIL,"read data failed");
+        }
+        wind_memcpy(&blk[blkidx],&buff[buffidx],cpsize);
+        len = wind_blkdev_write(file->lfs->blkdev, addr,blk, 1);
+        WIND_ASSERT_BREAK(len > 0, W_ERR_FAIL,"read data failed");
+        file->offset += cpsize;
+        buffidx += cpsize;
+        if(buffidx >= size)
+            break;
+    }
+    if(blk == W_NULL)
+        lfs_free(blk);
+    WIND_ASSERT_RETURN(err == W_ERR_OK, -1);
+    return size;
 }
 
 static w_int32_t calc_needed_blks(listfile_s* file,w_int32_t size)
