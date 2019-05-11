@@ -69,6 +69,7 @@ w_err_t _create_thread_shell(void)
     thread = wind_thread_create("shell",thread_shell,
                0,W_NULL,ctrlstk,THREAD_SHELL_STKSIZE);
     WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_FAIL);
+    wind_thread_setflag(thread, F_THREAD_DAEMON | F_THREAD_SYSTEM);
     wind_thread_set_priority(thread,32760);
 #if WIND_DAEMON_SUPPORT
     if(wind_daemon_get("shell") == W_NULL)
@@ -151,7 +152,6 @@ static w_err_t thread_init(w_int32_t argc,char **argv)
 #if WIND_SHELL_SUPPORT
     _create_thread_shell();
 #endif
-    _wind_thread_set_usrmode();
     wind_main();
     return W_ERR_OK;
 }

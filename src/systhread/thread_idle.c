@@ -44,8 +44,8 @@ w_err_t _create_thread_idle(void)
     thread = wind_thread_create("idle",thread_idle,
                     0,W_NULL,idlestk,THREAD_IDLE_STKSIZE);
     WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_FAIL);
+    wind_thread_setflag(thread,F_THREAD_NO_KILL | F_THREAD_SYSTEM);
     wind_thread_set_priority(thread,32767);
-    wind_thread_setflag(thread,F_THREAD_NO_KILL);
     return W_ERR_OK;
 }
 
