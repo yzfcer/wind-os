@@ -97,9 +97,10 @@ w_err_t listfile_seek(listfile_s* file,w_int32_t offset);
 w_int32_t listfile_ftell(listfile_s* file);
 w_int32_t listfile_read(listfile_s* file,w_uint8_t *buff, w_int32_t size);
 w_int32_t listfile_write(listfile_s* file,w_uint8_t *buff, w_int32_t size);
-listfile_s *listfile_readdir(listfile_s* file,w_int32_t index);
 w_err_t listfile_fgets(listfile_s* file,char *buff, w_int32_t maxlen);
 w_err_t listfile_fputs(listfile_s* file,char *buff);
+
+listfile_s *listfile_readdir(listfile_s* file,w_int32_t index);
 
 
 #endif

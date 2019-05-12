@@ -33,7 +33,7 @@
 
 
 #define NODE_TO_LISTFILE(node) (listfile_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((listfile_s*)0)->list.listnode)))
-//static listfile_s *listfile_rootnode = W_NULL;
+
 
 void *lfs_malloc(w_int32_t size)
 {
@@ -563,20 +563,6 @@ static w_int32_t do_read_file(listfile_s* file,w_uint8_t *buff,w_int32_t size)
 }
 
 
-
-static w_err_t do_append_blks(listfile_s* file,w_addr_t *addr,w_int32_t cnt)
-{
-    return W_ERR_FAIL;
-}
-
-
-
-static w_err_t do_append_blkinfos(listfile_s* file,w_addr_t *addr,w_int32_t cnt)
-{
-    
-    return W_ERR_FAIL;
-}
-
 static w_int32_t do_write_file(listfile_s* file,w_uint8_t *buff,w_int32_t size)
 {
     
@@ -696,14 +682,6 @@ w_int32_t listfile_write(listfile_s* file,w_uint8_t *buff,w_int32_t size)
     return wsize;
 }
 
-listfile_s *listfile_readdir(listfile_s* file,w_int32_t index)
-{
-    WIND_ASSERT_RETURN(file != W_NULL,W_NULL);
-    WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,W_NULL);
-    WIND_ASSERT_RETURN(file->mode & LFMODE_R,W_NULL);
-    return W_NULL;
-}
-
 
 w_err_t listfile_fgets(listfile_s* file,char *buff, w_int32_t maxlen)
 {
@@ -722,7 +700,8 @@ w_err_t listfile_fgets(listfile_s* file,char *buff, w_int32_t maxlen)
             break;
         }
     }
-    WIND_ASSERT_RETURN(i < len,W_ERR_FAIL);
+    if(i >= len)
+        buff[len-1] = 0;
     return W_ERR_OK;
 }
 
@@ -739,6 +718,15 @@ w_err_t listfile_fputs(listfile_s* file,char *buff)
     WIND_ASSERT_RETURN(len > 0,W_ERR_FAIL);
     return W_ERR_OK;
 }
+
+listfile_s *listfile_readdir(listfile_s* file,w_int32_t index)
+{
+    WIND_ASSERT_RETURN(file != W_NULL,W_NULL);
+    WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,W_NULL);
+    WIND_ASSERT_RETURN(file->mode & LFMODE_R,W_NULL);
+    return W_NULL;
+}
+
 
 #endif
 
