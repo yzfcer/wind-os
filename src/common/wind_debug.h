@@ -45,6 +45,7 @@ extern "C" {
 #define W_ERR_FILE_OPENED      -11 //文件已经打开
 #define W_ERR_NOT_SUPPORT      -12 //文件系统不支持
 #define W_ERR_CRC              -13 //CRC检验错误
+#define W_ERR_HARDFAULT        -14 //硬件故障错误
 
 
 //---------------------------------------------------------------------

@@ -172,18 +172,26 @@ lfile_info_s *fileinfo_next(lfile_info_s *info,w_blkdev_s *blkdev)
 lfile_info_s *fileinfo_headchild(lfile_info_s *info,w_blkdev_s *blkdev)
 {
     w_err_t err;
-    w_uint8_t *blk;
+    w_uint8_t *blk = W_NULL;
     lfile_info_s *tmpinfo;
     WIND_ASSERT_RETURN(blkdev != W_NULL,W_NULL);
     WIND_ASSERT_RETURN(info != W_NULL,W_NULL);
-    err = listfs_read_block(blkdev,info->headchild_addr,&blk);
-    WIND_ASSERT_RETURN(err == W_ERR_OK,W_NULL);
-    tmpinfo = (lfile_info_s*)blk;
-    WIND_ASSERT_TODO_RETURN(tmpinfo->magic == LISTFILE_MAGIC,lfs_free(blk),W_NULL);
-    wind_memcpy(info,blk,sizeof(lfile_info_s));
-    lfs_free(blk);
-    WIND_ASSERT_RETURN(info->magic == LISTFILE_MAGIC,W_NULL);
-    return info;
+    if(info->headchild_addr == 0)
+        return W_NULL;
+    do
+    {
+        err = W_ERR_OK;
+        err = listfs_read_block(blkdev,info->headchild_addr,&blk);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,W_ERR_FAIL,"read block failed");
+        tmpinfo = (lfile_info_s*)blk;
+        WIND_ASSERT_BREAK(tmpinfo->magic == LISTFILE_MAGIC,W_ERR_INVALID,"invalid fileinfo");
+        wind_memcpy(info,blk,sizeof(lfile_info_s));
+    }while(0);
+    if(blk != W_NULL)
+        lfs_free(blk);
+    if(err == W_ERR_OK)
+        return info;
+    return W_NULL;
 }
 
 lfile_info_s *fileinfo_tailchild(lfile_info_s *info,w_blkdev_s *blkdev)
@@ -207,23 +215,29 @@ lfile_info_s *fileinfo_tailchild(lfile_info_s *info,w_blkdev_s *blkdev)
 w_err_t fileinfo_update_parent(lfile_info_s *info,w_blkdev_s *blkdev)
 {
     w_err_t err;
-    w_uint8_t *blk;
     w_addr_t self_addr;
+    w_uint8_t *blk = W_NULL;
     lfile_info_s *tmpinfo = W_NULL;
     
     WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(info != W_NULL,W_ERR_PTR_NULL);
     if(info->parent_addr == 0)
         return W_ERR_OK;
-    self_addr = info->self_addr;
-    err = listfs_read_block(blkdev,info->parent_addr,&blk);
-    WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_FAIL);
-    tmpinfo = (lfile_info_s*)blk;
-    if(tmpinfo->headchild_addr == 0)
-        tmpinfo->headchild_addr = self_addr;
-    tmpinfo->tailchild_addr = self_addr;
-    err = wind_blkdev_write(blkdev,tmpinfo->self_addr,blk,1);
-    lfs_free(blk);
+
+    do
+    {
+        err = W_ERR_OK;
+        self_addr = info->self_addr;
+        err = listfs_read_block(blkdev,info->parent_addr,&blk);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,W_ERR_FAIL,"read parent info failed");
+        tmpinfo = (lfile_info_s*)blk;
+        if(tmpinfo->headchild_addr == 0)
+            tmpinfo->headchild_addr = self_addr;
+        tmpinfo->tailchild_addr = self_addr;
+        err = wind_blkdev_write(blkdev,tmpinfo->self_addr,blk,1);
+    }while(0);
+    if(blk != W_NULL)
+        lfs_free(blk);
     return err;
 }
 

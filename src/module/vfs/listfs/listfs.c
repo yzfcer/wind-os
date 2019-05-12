@@ -64,7 +64,7 @@ static lfile_info_s *lfs_search_child(lfile_info_s *parent,char *name,w_blkdev_s
 static w_err_t lfs_search_file(listfs_s *lfs,listfile_s *file,const char *path)
 {
     w_err_t err = W_ERR_FAIL;
-    w_int32_t len,cnt,i = 0;
+    w_int32_t len,segcnt,i = 0;
     char **nameseg = W_NULL;
     char *pathname = W_NULL;
     lfile_info_s *finfo = W_NULL;
@@ -92,8 +92,8 @@ static w_err_t lfs_search_file(listfs_s *lfs,listfile_s *file,const char *path)
         wind_strcpy(pathname,path);
         pathname[len] = 0;
         
-        cnt = wind_strsplit(pathname,'/',nameseg,LISTFS_DIR_LAYCNT);
-        WIND_ASSERT_BREAK(cnt > 0,W_ERR_INVALID,"split path failed");
+        segcnt = wind_strsplit(pathname,'/',nameseg,LISTFS_DIR_LAYCNT);
+        WIND_ASSERT_BREAK(segcnt > 0,W_ERR_INVALID,"split path failed");
 
         err = listfs_get_fileinfo(finfo,lfs->blkdev,lfs->lfs_info.root_addr);
         WIND_ASSERT_BREAK(err == W_ERR_OK,W_ERR_FAIL,"read root directory failed.");
@@ -101,14 +101,14 @@ static w_err_t lfs_search_file(listfs_s *lfs,listfile_s *file,const char *path)
         WIND_ASSERT_BREAK(err == W_ERR_OK,W_ERR_FAIL,"read root directory failed.");
 
     
-        if(cnt == 1)
+        if(segcnt == 1)
         {
             err = W_ERR_OK;
             break;
         }
 
         err = W_ERR_OK;
-        for(i = 1;i < cnt;i ++)
+        for(i = 1;i < segcnt;i ++)
         {
             if(finfo->headchild_addr == 0)
             {
@@ -218,7 +218,7 @@ static w_err_t lfs_make_child(listfs_s *lfs,lfile_info_s *parent,char *name,w_ui
     if(blk != W_NULL)
         lfs_free(blk);
     if(err != W_ERR_OK)
-        wind_error("fs should NOT be error here,must restore the file system");
+        wind_error("fs should NOT be error here,must rebuild the file system");
     return err;
 }
 

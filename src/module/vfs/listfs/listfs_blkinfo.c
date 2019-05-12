@@ -51,6 +51,7 @@ w_err_t blkinfo_read(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_addr_t addr)
     WIND_ASSERT_RETURN(addr != 0,W_ERR_INVALID);
     do
     {
+        err = W_ERR_OK;
         blk = lfs_malloc(blkdev->blksize);
         WIND_ASSERT_RETURN(blk != W_NULL,W_ERR_MEM);
         cnt = wind_blkdev_read(blkdev,addr,blk,1);
