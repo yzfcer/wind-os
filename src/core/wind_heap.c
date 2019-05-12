@@ -169,11 +169,9 @@ w_heap_s *wind_heap_create(const char *name,w_addr_t base,w_uint32_t size,w_uint
     return hp;
 }
 
-w_err_t wind_heap_destroy(w_addr_t base)
+w_err_t wind_heap_destroy(w_heap_s *heap)
 {
     w_err_t err;
-    w_heap_s *heap;
-    heap = (w_heap_s*)(__ALIGN_R((w_addr_t)base));
     WIND_ASSERT_RETURN(heap != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(heap->obj.magic == WIND_HEAP_MAGIC,W_ERR_INVALID);
     wind_notice("destroy heap:%s",heap->obj.name?heap->obj.name:"null");
@@ -399,9 +397,9 @@ w_err_t wind_heapitem_print(void)
     w_dlist_s *list = &heaplist;
     WIND_ASSERT_RETURN(list->head != W_NULL,W_ERR_PTR_NULL);
     wind_printf("\r\n\r\nheapitem list:\r\n");
-    wind_print_space(5);
-    wind_printf("%-16s %-10s %-10s\r\n","addr","size","state");
-    wind_print_space(5);
+    wind_print_space(6);
+    wind_printf("%-12s %-10s %-10s %-8s\r\n","addr","size","state","allocid");
+    wind_print_space(6);
 
     foreach_node(dnode,list)
     {
@@ -414,8 +412,8 @@ w_err_t wind_heapitem_print(void)
                 wind_error("heap memory has been illegally accessed .");
                 return W_ERR_MEM;
             }
-            wind_printf("0x%-14x %-10d %-10s\r\n",
-                heapitem,heapitem->size,IS_F_HEAPITEM_USED(heapitem)?"uesd":"free");
+            wind_printf("0x%-10x %-10d %-10s %-8d\r\n",heapitem,heapitem->size,
+                IS_F_HEAPITEM_USED(heapitem)?"uesd":"free",heapitem->allocid);
         }
         foreach_node(dnode1,&heap->used_list)
         {
@@ -425,11 +423,11 @@ w_err_t wind_heapitem_print(void)
                 wind_error("heap memory:0x%x has been illegally accessed.",heapitem);
                 return W_ERR_MEM;
             }
-            wind_printf("0x%-14x %-10d %-10s\r\n",
-                heapitem,heapitem->size,IS_F_HEAPITEM_USED(heapitem)?"uesd":"free");
+            wind_printf("0x%-10x %-10d %-10s %-8d\r\n",heapitem,heapitem->size,
+                IS_F_HEAPITEM_USED(heapitem)?"uesd":"free",heapitem->allocid);
         }
     }
-    wind_print_space(5);
+    wind_print_space(6);
     return W_ERR_OK;
 }
 
@@ -485,6 +483,19 @@ void *wind_zalloc(w_uint32_t size)
     ptr = wind_malloc(size);
     if(ptr != W_NULL)
         wind_memset(ptr,0,size);
+    return ptr;
+}
+
+void *wind_falloc(w_uint32_t size,w_uint8_t allocid)
+{
+    void *ptr;
+    w_heapitem_s *item;
+    ptr = wind_malloc(size);
+    if(ptr != W_NULL)
+    {
+        item = ITEM_FROM_PTR(ptr);
+        item->allocid = allocid;
+    }
     return ptr;
 }
 

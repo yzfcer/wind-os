@@ -47,6 +47,7 @@ w_err_t _create_thread_timer(void)
     thread = wind_thread_create("timer",thread_timer,
                      0,W_NULL,timerstk,THREAD_TIMER_STKSIZE);
     WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_FAIL);
+    wind_thread_setflag(thread, F_THREAD_DAEMON | F_THREAD_SYSTEM);
     wind_thread_set_priority(thread,3);
 #if WIND_DAEMON_SUPPORT
         if(wind_daemon_get("timer") == W_NULL)

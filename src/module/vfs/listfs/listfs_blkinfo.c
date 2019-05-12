@@ -346,9 +346,20 @@ w_err_t blkinfo_add_dataaddr(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_addr_t *
 
 w_err_t blkinfo_del_dataaddr(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_int32_t addridx,w_int32_t count)
 {
+    
     return W_ERR_FAIL;
 }
 
+w_addr_t blkinfo_get_addr(lfile_blkinfo_s *info,w_int32_t offset)
+{
+    w_int32_t index;
+    WIND_ASSERT_RETURN(info != W_NULL,0);
+    WIND_ASSERT_RETURN(offset >= 0, 0);
+    index = (offset - info->offset + info->blksize - 1) / info->blksize;
+    WIND_ASSERT_RETURN(index >= 0, 0);
+    WIND_ASSERT_RETURN(index < LFILE_LBLK_CNT, 0);
+    return info->dataaddr[index];
+}
 
 
 #if 0

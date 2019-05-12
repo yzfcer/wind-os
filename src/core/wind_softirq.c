@@ -138,12 +138,11 @@ static w_err_t thread_softirq(w_int32_t argc,char **argv)
 //创建软件中断线程
 w_err_t _wind_create_thread_softirq(void)
 {
-    wind_notice("create soft interrupt thread.");
     softirq_thread = wind_thread_create("softirq",thread_softirq,
                 0,W_NULL,softirq_stk,WIND_SOFTINT_STK_LEN);
     WIND_ASSERT_RETURN(softirq_thread != W_NULL,W_ERR_FAIL);
+    wind_thread_setflag(softirq_thread,F_THREAD_NO_KILL | F_THREAD_SYSTEM);
     wind_thread_set_priority(softirq_thread,1);
-    wind_thread_setflag(softirq_thread,F_THREAD_NO_KILL);
     return W_ERR_OK;
 }
 

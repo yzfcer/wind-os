@@ -101,9 +101,6 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\hal\wind_chdev.c">
       <Filter>os_hal</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\src\application\alientekV3\user_entry.c">
-      <Filter>application</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\port\wind_os_prelunch.c">
       <Filter>os_port</Filter>
     </ClCompile>
@@ -433,6 +430,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\..\src\common\wind_strsearch.c">
       <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\application\win32_simu\user_entry.c">
+      <Filter>application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_timer.c">
+      <Filter>module_shell</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

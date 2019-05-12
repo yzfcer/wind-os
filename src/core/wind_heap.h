@@ -91,7 +91,7 @@ w_heap_s *wind_heap_get(const char *name);
 
 w_heap_s *wind_heap_create(const char *name,w_addr_t base,w_uint32_t size,w_uint16_t flag);
 
-w_err_t wind_heap_destroy(w_addr_t base);
+w_err_t wind_heap_destroy(w_heap_s *heap);
 
 w_err_t wind_heap_setflag(w_heap_s *heap,w_int16_t flag);
 w_err_t wind_heap_clrflag(w_heap_s *heap,w_int16_t flag);
@@ -113,6 +113,8 @@ w_err_t wind_heap_stati_print(void);
 void *wind_malloc(w_uint32_t size);
 
 void *wind_zalloc(w_uint32_t size);
+
+void *wind_falloc(w_uint32_t size,w_uint8_t flag);
 
 void *wind_salloc(char *str);
 

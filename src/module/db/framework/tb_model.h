@@ -72,7 +72,7 @@
 #define TBMODEL_DEF(name,attr) \
     tb_model_s tb_param_##name = \
     {{~TB_MODEL_MAGIC,#name,{W_NULL,W_NULL},0,attr},\
-    sizeof(db_info_list_##name)/sizeof(tbmodel_item_s),&db_info_list_##name,\
+    sizeof(db_info_list_##name)/sizeof(tbmodel_item_s),(tbmodel_item_s*)&db_info_list_##name,\
     }; 
 
 #define TBMODEL_DECLARE(name) extern tb_model_s tb_param_##name;

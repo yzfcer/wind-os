@@ -103,7 +103,7 @@ w_err_t wind_daemon_init(w_daemon_s *daemon,const char *name,w_daemon_fn daemon_
     WIND_ASSERT_RETURN(daemon_func != W_NULL,W_ERR_PTR_NULL);
     thread = wind_thread_get(name);
     WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_INVALID);
-    wind_thread_setflag(thread,F_THREAD_DAEMON);
+    wind_thread_setflag(thread, F_THREAD_DAEMON | F_THREAD_SYSTEM);
     daemon->daemon_func = daemon_func;
     wind_obj_init(&daemon->obj,WIND_DAEMON_MAGIC,name,&daemonlist);
     SET_F_DAEMON_ENABLE(daemon);

@@ -61,10 +61,10 @@ extern "C" {
 #define SET_F_THREAD_DAEMON(thread) (thread->flag |= F_THREAD_DAEMON)
 #define CLR_F_THREAD_DAEMON(thread) (thread->flag &= (~F_THREAD_DAEMON))
 
-//#define F_THREAD_VIRTUAL (0x01 << 4) //标记thread对象是否虚拟化
-//#define IS_F_THREAD_VIRTUAL(thread) ((thread->flag & F_THREAD_VIRTUAL) == F_THREAD_VIRTUAL)
-//#define SET_F_THREAD_VIRTUAL(thread) (thread->flag |= F_THREAD_VIRTUAL)
-//#define CLR_F_THREAD_VIRTUAL(thread) (thread->flag &= (~F_THREAD_VIRTUAL))
+#define F_THREAD_SYSTEM (0x01 << 4) //标记thread是否是系统线程
+#define IS_F_THREAD_SYSTEM(thread) ((thread->flag & F_THREAD_SYSTEM) == F_THREAD_SYSTEM)
+#define SET_F_THREAD_SYSTEM(thread) (thread->flag |= F_THREAD_SYSTEM)
+#define CLR_F_THREAD_SYSTEM(thread) (thread->flag &= (~F_THREAD_SYSTEM))
 
 //线程状态列表
 typedef enum __w_thread_stat_e
@@ -144,7 +144,6 @@ struct _w_thread_s
 
 w_err_t _wind_thread_mod_init(void);
 w_err_t _wind_thread_wakeup(void);
-void _wind_thread_set_usrmode(void);
 w_dlist_s *_wind_thread_list(void);
 w_dlist_s *_wind_thread_sleep_list(void);
 

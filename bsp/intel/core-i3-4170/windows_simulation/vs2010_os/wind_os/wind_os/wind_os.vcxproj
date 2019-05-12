@@ -66,7 +66,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\..\..\src\application\alientekV3\user_entry.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\application\win32_simu\user_entry.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\common\wind_conv.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\common\wind_crc16.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\common\wind_crc32.c" />
@@ -156,6 +156,7 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_stati.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_sysinfo.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_thread.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_timer.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_user.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_watchdog.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_xmodem.c" />

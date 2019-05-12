@@ -119,7 +119,7 @@ w_err_t listfs_get_fileinfo(lfile_info_s *info,w_blkdev_s *blkdev,w_addr_t addr)
 
 w_err_t listfs_set_fileinfo(lfile_info_s *info,w_blkdev_s *blkdev)
 {
-    w_err_t err;
+    //w_err_t err;
     w_uint32_t cnt;
     w_uint8_t *blk;
     WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);

@@ -36,12 +36,11 @@
 //用来表示
 #define SYS_PRIO_START 1
 #define SYS_PRIO_END   32767
-#define USER_PRIO_START 20000
+#define USER_PRIO_START 1000
 #define USER_PRIO_END   30000
 
 static w_dlist_s threadlist;
 static w_dlist_s sleeplist;
-static w_bool_t is_usrmode;
 
 static w_int16_t get_prio(void)
 {
@@ -138,7 +137,6 @@ static w_err_t thread_diagnose_init(void)
 w_err_t _wind_thread_mod_init(void)
 {
     w_err_t err;
-    is_usrmode = W_FALSE;
     DLIST_INIT(threadlist);
     DLIST_INIT(sleeplist);
 #if WIND_STKPOOL_SUPPORT
@@ -307,10 +305,10 @@ w_err_t wind_thread_setflag(w_thread_s *thread,w_int16_t flag)
     if(flag & F_THREAD_NO_KILL)
         SET_F_THREAD_NO_KILL(thread);
     if(flag & F_THREAD_DAEMON)
-    {
         SET_F_THREAD_DAEMON(thread);
-    }
-        
+    if(flag & F_THREAD_SYSTEM)
+        SET_F_THREAD_SYSTEM(thread);
+    
     return W_ERR_OK;
 }
 
@@ -331,14 +329,13 @@ w_err_t wind_thread_set_priority(w_thread_s *thread,w_int16_t prio)
     w_int16_t minlim = 0,maxlim = 32767;
     WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(thread->magic == WIND_THREAD_MAGIC,W_ERR_INVALID);
-    WIND_ASSERT_RETURN((prio >= minlim) && (prio <= maxlim),W_ERR_OVERFLOW);
-    //如何防止用户强制修改为禁用的优先级?
-    if(is_usrmode)
+    if(!IS_F_THREAD_SYSTEM(thread))
     {
         minlim = USER_PRIO_START;
         maxlim = USER_PRIO_END;
     }
-
+    prio = prio < minlim?minlim:prio;
+    prio = prio > maxlim?maxlim:prio;
     wind_debug("change prio %s:%d\r\n",thread->name,prio);
     wind_disable_interrupt();
     dlist_remove(&threadlist,&thread->validnode.dnode);
@@ -460,10 +457,6 @@ w_err_t _wind_thread_wakeup(void)
     return W_ERR_OK;
 }
 
-void _wind_thread_set_usrmode(void)
-{
-    is_usrmode = W_TRUE;
-}
 
 w_dlist_s *_wind_thread_list(void)
 {
