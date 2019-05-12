@@ -150,9 +150,9 @@ w_err_t wind_watchdog_setflag(w_watchdog_s *watchdog,w_uint16_t flag)
     if(flag & F_WATCHDOG_ENABLE)
         SET_F_WATCHDOG_ENABLE(watchdog);
     if(flag & F_WATCHDOG_WARN)
-        CLR_F_WATCHDOG_WARN(watchdog);
+        SET_F_WATCHDOG_WARN(watchdog);
     if(flag & F_WATCHDOG_RESET)
-        CLR_F_WATCHDOG_RESET(watchdog);
+        SET_F_WATCHDOG_RESET(watchdog);
     return W_ERR_OK;
 }
 

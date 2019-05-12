@@ -320,6 +320,8 @@ w_err_t wind_thread_clrflag(w_thread_s *thread,w_int16_t flag)
         CLR_F_THREAD_NO_KILL(thread);
     if(flag & F_THREAD_DAEMON)
         CLR_F_THREAD_DAEMON(thread);
+    if(flag & F_THREAD_SYSTEM)
+        CLR_F_THREAD_SYSTEM(thread);
     return W_ERR_OK;
 }
 
