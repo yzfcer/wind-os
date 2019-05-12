@@ -142,6 +142,7 @@ static w_err_t lfs_make_root(listfs_s *lfs)
     w_uint8_t attr;
     lfile_info_s *info = W_NULL;
     lfile_blkinfo_s *blkinfo = W_NULL;
+    wind_notice("lfs_make_root");
     do 
     {
         info = lfs_malloc(sizeof(lfile_info_s));
@@ -327,10 +328,11 @@ w_err_t listfs_format(listfs_s *lfs,w_blkdev_s *blkdev)
     w_int32_t cnt;
     lfs_info_s *lfs_info;
     w_uint8_t *blk = W_NULL;
-    wind_debug("listfs format start");
+    
     WIND_ASSERT_RETURN(lfs != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(blkdev->obj.magic == WIND_BLKDEV_MAGIC,W_ERR_INVALID);
+    wind_notice("listfs format,blkdev:%s",wind_obj_name(&blkdev->obj));
     do
     {
         err = W_ERR_OK;
@@ -378,7 +380,7 @@ w_err_t listfs_format(listfs_s *lfs,w_blkdev_s *blkdev)
     }while(0);
     if(blk != W_NULL)
         lfs_free(blk);
-    wind_debug("listfs format result:%d",err);
+    wind_notice("listfs format result:%d",err);
     return err;
 }
 

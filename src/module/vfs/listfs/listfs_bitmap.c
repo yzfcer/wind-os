@@ -63,6 +63,7 @@ w_err_t listfs_bitmap_init(lfs_bitmap_s *bp,w_addr_t start_addr,w_int32_t blk_cn
 {
     WIND_ASSERT_RETURN(bp != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
+    wind_notice("listfs_bitmap_init,blkdev:%s",wind_obj_name(&blkdev->obj));
     bp->addr1 = start_addr;
     bp->addr2 = start_addr + blk_cnt;
     bp->addr_cnt = blk_cnt;
@@ -212,6 +213,7 @@ w_err_t listfs_bitmap_clear(lfs_bitmap_s *bp)
     w_blkdev_s *blkdev;
     WIND_ASSERT_RETURN(bp != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(bp->blkdev != W_NULL,W_ERR_PTR_NULL);
+    wind_notice("listfs_bitmap_clear");
     blkdev = bp->blkdev;
     blk = lfs_malloc(blkdev->blksize);
     WIND_ASSERT_RETURN(blk != W_NULL,W_ERR_MEM);

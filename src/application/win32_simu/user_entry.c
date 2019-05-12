@@ -43,6 +43,6 @@ w_err_t test_tmr(w_timer_s *timer,void *arg)
 w_err_t wind_main(void)
 {
     wind_notice("enter wind main.");
-    wind_timer_create("testtmr",5000,test_tmr,W_NULL,F_TIMER_REPEAT|F_TIMER_RUN);
+    //wind_timer_create("testtmr",5000,test_tmr,W_NULL,F_TIMER_REPEAT|F_TIMER_RUN);
     return 0;
 }
