@@ -24,12 +24,13 @@ w_err_t   erase_virtual_disk(w_blkdev_s *dev,w_int32_t blkcnt)
     for(i = 0;i < blkcnt;i ++)
         len = fwrite(buffer,1,sizeof(buffer),file);
     fclose(file);
+    return W_ERR_OK;
 }
 
 w_err_t   make_virtual_disk(w_blkdev_s *dev,w_int32_t blkcnt)
 {
     w_int32_t start;
-    w_int32_t size,len;
+    w_int32_t size;
     FILE *file;
     start = 0;
     size = blkcnt * dev->blksize;

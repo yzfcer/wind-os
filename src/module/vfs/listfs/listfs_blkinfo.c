@@ -269,9 +269,7 @@ w_err_t blkinfo_link(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_addr_t *addr,w_i
 w_err_t blkinfo_unlink(lfile_blkinfo_s *info,w_blkdev_s *blkdev)
 {
     w_err_t err;
-    w_int32_t i;
     lfile_blkinfo_s *tmpinfo = W_NULL;
-    //lfile_blkinfo_s *info2 = W_NULL;
     WIND_ASSERT_RETURN(info != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(info->magic == LISTFILE_BLK_MAGIC,W_ERR_INVALID);
@@ -280,8 +278,6 @@ w_err_t blkinfo_unlink(lfile_blkinfo_s *info,w_blkdev_s *blkdev)
     {
         tmpinfo = lfs_malloc(sizeof(lfile_blkinfo_s));
         WIND_ASSERT_BREAK(tmpinfo != W_NULL,W_ERR_MEM,"malloc blkinfo failed");
-        //info2 = lfs_malloc(sizeof(lfile_blkinfo_s));
-        //WIND_ASSERT_TODO_RETURN(info2 != W_NULL,lfs_free(tmpinfo),W_ERR_MEM);
         wind_memcpy(tmpinfo,info,sizeof(lfile_blkinfo_s));
         if(tmpinfo->prevblk_addr != 0)
         {
@@ -294,7 +290,6 @@ w_err_t blkinfo_unlink(lfile_blkinfo_s *info,w_blkdev_s *blkdev)
     }while(0);
     if(tmpinfo != W_NULL)
         lfs_free(tmpinfo);
-    //lfs_free(info2);
     return err;
 }
 

@@ -67,9 +67,9 @@ COMMAND_MAIN(timer,argc,argv)
     WIND_ASSERT_RETURN(timer != W_NULL, W_ERR_INVALID);
     
     if(wind_strcmp(argv[1],"start") == 0)
-        wind_timer_setflag(timer,F_TIMER_RUN);
+        return wind_timer_setflag(timer,F_TIMER_RUN);
     else if(wind_strcmp(argv[1],"stop") == 0)
-        wind_timer_clrflag(timer,F_TIMER_RUN);
+        return wind_timer_clrflag(timer,F_TIMER_RUN);
     else
         return W_ERR_FAIL;
 }
