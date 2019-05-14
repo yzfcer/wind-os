@@ -42,13 +42,14 @@ COMMAND_USAGE(blkdev)
 }
 
 
-static w_uint8_t buffer[512];
+//static w_uint8_t buffer[512];
 COMMAND_MAIN(blkdev,argc,argv)
 {
     w_bool_t res;
     w_blkdev_s *dev;
-    w_uint8_t *buff;
+    w_uint8_t *buff = W_NULL;
     w_addr_t addr;
+    w_int32_t cnt;
     w_err_t err = W_ERR_FAIL;
     
     WIND_ASSERT_RETURN(argc>= 2,W_ERR_INVALID);
@@ -57,43 +58,49 @@ COMMAND_MAIN(blkdev,argc,argv)
         wind_blkdev_print();
         return W_ERR_OK;
     }
-    
-    WIND_ASSERT_RETURN(argc == 5,W_ERR_INVALID);
-    dev = wind_blkdev_get(argv[2]);
-    wind_blkdev_open(dev);
-    WIND_ASSERT_RETURN(dev != W_NULL,W_ERR_INVALID);
-    res = wind_str_to_uint(argv[3],(w_uint32_t*)&addr);
-    WIND_ASSERT_RETURN(res == W_TRUE,W_ERR_INVALID);
-    buff = buffer;
-    wind_memset(buff,0,dev->blksize);
-    if(0 == wind_strcmp(argv[1],"read"))
+
+    do
     {
-        err = wind_blkdev_read(dev,addr,buff,1);
-        if(wind_strlen((char*)buff) >= sizeof(buffer))
+        err = W_ERR_OK;
+        if(0 == wind_strcmp(argv[1],"list"))
         {
-            wind_error("data is too long.\r\n");
-            err = W_ERR_FAIL;
-        }
-        else
+            wind_blkdev_print();
+            break;
+        }        
+        WIND_ASSERT_BREAK(argc == 5,W_ERR_INVALID,"args count error");
+        dev = wind_blkdev_get(argv[2]);
+        wind_blkdev_open(dev);
+        WIND_ASSERT_BREAK(dev != W_NULL,W_ERR_INVALID,"open blkdev failed");
+        res = wind_str_to_uint(argv[3],(w_uint32_t*)&addr);
+        WIND_ASSERT_BREAK(res,W_ERR_INVALID,"addr error");
+        buff = wind_malloc(dev->blksize);
+        WIND_ASSERT_BREAK(buff != W_NULL,W_ERR_MEM,"mallc buff error");
+        wind_memset(buff,0,dev->blksize);
+        if(0 == wind_strcmp(argv[1],"read"))
         {
+            cnt = wind_blkdev_read(dev,addr,buff,1);
+            WIND_ASSERT_BREAK(err = cnt > 0,W_ERR_HARDFAULT,"read blkdata failed");
             wind_printf("%s",buff);
-            err = W_ERR_OK;
         }
-    }
-    else if(0 == wind_strcmp(argv[1],"write"))
-    {
-        wind_strcpy((char*)buff,argv[4]);
-        err = wind_blkdev_write(dev,addr,buff,1);
-        err = W_ERR_OK;
-    }
-    else if(0 == wind_strcmp(argv[1],"erase"))
-    {
-        err = wind_blkdev_erase(dev,addr,1);
-        err = W_ERR_OK;
-    }
-    else 
-        err = W_ERR_FAIL;
+        else if(0 == wind_strcmp(argv[1],"write"))
+        {
+            wind_strcpy((char*)buff,argv[4]);
+            cnt = wind_blkdev_write(dev,addr,buff,1);
+            WIND_ASSERT_BREAK(err = cnt > 0,W_ERR_HARDFAULT,"write blkdata failed");
+        }
+        else if(0 == wind_strcmp(argv[1],"erase"))
+        {
+            err = wind_blkdev_erase(dev,addr,1);
+            WIND_ASSERT_BREAK(err == 0,W_ERR_HARDFAULT,"erase blkdata failed");
+        }
+        else 
+            err = W_ERR_FAIL;
+        
+    }while(0);
+    
     wind_blkdev_close(dev);
+    if(buff != W_NULL)
+        wind_free(buff);
     return err;
 }
 
