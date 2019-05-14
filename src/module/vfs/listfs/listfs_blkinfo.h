@@ -70,8 +70,6 @@ w_int32_t blkinfo_get_used(lfile_blkinfo_s *info);
 
 w_int32_t blkinfo_get_space(lfile_blkinfo_s *info);
 
-//w_int32_t blkinfo_tail_offset(lfile_blkinfo_s *info);
-
 w_err_t blkinfo_get_prev(lfile_blkinfo_s *info,w_blkdev_s *blkdev);
 
 w_err_t blkinfo_get_next(lfile_blkinfo_s *info,w_blkdev_s *blkdev);
@@ -91,9 +89,6 @@ w_err_t blkinfo_add_dataaddr(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_addr_t *
 w_err_t blkinfo_del_dataaddr(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_int32_t addridx,w_int32_t count);
 
 w_addr_t blkinfo_get_addr(lfile_blkinfo_s *info,w_int32_t offset);
-
-
-//w_int32_t blkinfo_calc_restspace(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_int32_t tail_offset);
 
 
 #endif

@@ -53,7 +53,7 @@ w_err_t lfs_free(void *ptr)
 static lfile_info_s *lfs_search_child(lfile_info_s *parent,char *name,w_blkdev_s *blkdev)
 {
     lfile_info_s *info;
-    for(info = fileinfo_headchild(parent,blkdev);info != W_NULL;info = fileinfo_next(info,blkdev))
+    for(info = fileinfo_get_headchild(parent,blkdev);info != W_NULL;info = fileinfo_get_next(info,blkdev))
     {
         if(wind_strcmp(name,info->name) == 0)
             return info;
@@ -63,7 +63,7 @@ static lfile_info_s *lfs_search_child(lfile_info_s *parent,char *name,w_blkdev_s
 
 static w_err_t lfs_search_file(listfs_s *lfs,listfile_s *file,const char *path)
 {
-    w_err_t err = W_ERR_FAIL;
+    w_err_t err;
     w_int32_t len,segcnt,i = 0;
     char **nameseg = W_NULL;
     char *pathname = W_NULL;
@@ -76,6 +76,7 @@ static w_err_t lfs_search_file(listfs_s *lfs,listfile_s *file,const char *path)
     WIND_ASSERT_RETURN(path[0] != 0,W_ERR_INVALID);
     do 
     {
+        err = W_ERR_OK;
         wind_debug("search node path:%s",path);
         //·ÖÅäÄÚ´æ
         len = wind_strlen(path);
@@ -145,6 +146,7 @@ static w_err_t lfs_make_root(listfs_s *lfs)
     wind_notice("lfs_make_root");
     do 
     {
+        err = W_ERR_OK;
         info = lfs_malloc(sizeof(lfile_info_s));
         blkinfo = lfs_malloc(sizeof(lfile_blkinfo_s));
         if(info == W_NULL || blkinfo == W_NULL)
@@ -302,6 +304,17 @@ static w_err_t lfs_make_file(listfs_s *lfs,listfile_s *file,char *path)
 
 w_err_t listfile_remove(listfile_s *file)
 {
+    w_err_t err;
+    WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,W_ERR_INVALID);
+    do
+    {
+        err = W_ERR_OK;
+        file->info.magic = 0;
+        err = blkinfo_get_byoffset(&file->info,file->lfs->blkdev,0);
+    }while(0);
+    
+    
     return W_ERR_FAIL;
 }
 
@@ -431,6 +444,7 @@ listfile_s* listfile_open(listfs_s *lfs,const char *path,w_uint16_t mode)
     WIND_ASSERT_RETURN(path != W_NULL,W_NULL);
     do 
     {
+        err = W_ERR_OK;
         file = lfs_malloc(sizeof(listfile_s));
         WIND_ASSERT_RETURN(file != W_NULL,W_NULL);
         wind_memset(file,0,sizeof(listfile_s));
@@ -542,6 +556,7 @@ w_err_t listfile_seek(listfile_s* file,w_int32_t offset)
     WIND_ASSERT_RETURN(blkinfo != W_NULL, W_ERR_MEM);
     do 
     {
+        err = W_ERR_OK;
         wind_memcpy(blkinfo,file->blkinfo,sizeof(lfile_blkinfo_s));
         err = blkinfo_get_byoffset(blkinfo,file->lfs->blkdev,offset);
         if(err != W_ERR_OK)
@@ -680,6 +695,7 @@ static w_int32_t calc_needed_blkinfo(listfile_s* file,w_int32_t blkcnt)
     
     do
     {
+        err = W_ERR_OK;
         wind_memcpy(tmpinfo,&file->info,sizeof(lfile_blkinfo_s));
         err = blkinfo_get_tail(tmpinfo,file->lfs->blkdev);
         WIND_ASSERT_BREAK(err == W_ERR_OK,W_ERR_FAIL,"find tail blkinfo failed.");
@@ -713,6 +729,7 @@ w_int32_t listfile_read(listfile_s* file,w_uint8_t *buff, w_int32_t size)
 
     do
     {
+        err = W_ERR_OK;
         if(file->offset + rsize > file->info.filesize)
             rsize = file->info.filesize - file->offset;
         err = do_read_file(file,buff,rsize);
@@ -736,6 +753,7 @@ w_int32_t listfile_write(listfile_s* file,w_uint8_t *buff,w_int32_t size)
     wsize = size;
     do
     {
+        err = W_ERR_OK;
         needdatablk = calc_needed_blks(file,wsize);
         needblkinfo = calc_needed_blkinfo(file,needdatablk);
         if(needdatablk + needblkinfo > 0)

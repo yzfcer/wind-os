@@ -77,7 +77,7 @@ w_err_t listfs_bitmap_update(lfs_bitmap_s *bp)
 {
     w_uint32_t i;
     w_err_t err;
-    w_uint8_t *blk;
+    w_uint8_t *blk = W_NULL;
     WIND_ASSERT_RETURN(bp != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(bp->blkdev != W_NULL,W_ERR_INVALID);
     blk = lfs_malloc(bp->blkdev->blksize);
@@ -112,7 +112,7 @@ w_err_t listfs_bitmap_update(lfs_bitmap_s *bp)
 w_err_t listfs_bitmap_set(lfs_bitmap_s *bp,w_addr_t addr,w_uint8_t bitflag)
 {
     w_int32_t byteidx;
-    w_uint8_t *blk;
+    w_uint8_t *blk = W_NULL;
     w_addr_t addr_idx,addr_st;
     
     WIND_ASSERT_RETURN(bp != W_NULL,W_ERR_PTR_NULL);
@@ -209,7 +209,7 @@ w_err_t listfs_bitmap_alloc_blk(lfs_bitmap_s *bp,w_addr_t *addr,w_int32_t count)
 w_err_t listfs_bitmap_clear(lfs_bitmap_s *bp)
 {
     w_int32_t i;
-    w_uint8_t *blk;
+    w_uint8_t *blk = W_NULL;
     w_blkdev_s *blkdev;
     WIND_ASSERT_RETURN(bp != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(bp->blkdev != W_NULL,W_ERR_PTR_NULL);
@@ -241,9 +241,9 @@ static w_uint32_t calc_blkused(w_uint8_t *blk,w_int32_t blksize)
 
 w_int32_t listfs_bitmap_get_usedblk(lfs_bitmap_s *bp)
 {
-    w_int32_t i;
+    w_int32_t i,cnt;
     w_err_t err;
-    w_uint8_t *blk;
+    w_uint8_t *blk = W_NULL;
     w_blkdev_s *blkdev;
     w_uint32_t blkused = 0;
     WIND_ASSERT_RETURN(bp != W_NULL,W_ERR_PTR_NULL);
@@ -254,8 +254,8 @@ w_int32_t listfs_bitmap_get_usedblk(lfs_bitmap_s *bp)
     blk = lfs_malloc(blkdev->blksize);
     for(i = 1;i < bp->addr_cnt; i ++)
     {
-        err = wind_blkdev_read(blkdev,bp->addr1+1,blk,1);
-        WIND_ASSERT_TODO_RETURN(err == W_ERR_OK,lfs_free(blk),0xffffffff);
+        cnt = wind_blkdev_read(blkdev,bp->addr1+1,blk,1);
+        WIND_ASSERT_TODO_RETURN(cnt == 1,lfs_free(blk),0xffffffff);
         blkused += calc_blkused(blk,blkdev->blksize);
     }
     return blkused;    

@@ -50,7 +50,7 @@ COMMAND_MAIN(blkdev,argc,argv)
     w_uint8_t *buff = W_NULL;
     w_addr_t addr;
     w_int32_t cnt;
-    w_err_t err = W_ERR_FAIL;
+    w_err_t err;
     
     WIND_ASSERT_RETURN(argc>= 2,W_ERR_INVALID);
     if(0 == wind_strcmp(argv[1],"list"))
@@ -62,11 +62,6 @@ COMMAND_MAIN(blkdev,argc,argv)
     do
     {
         err = W_ERR_OK;
-        if(0 == wind_strcmp(argv[1],"list"))
-        {
-            wind_blkdev_print();
-            break;
-        }        
         WIND_ASSERT_BREAK(argc == 5,W_ERR_INVALID,"args count error");
         dev = wind_blkdev_get(argv[2]);
         wind_blkdev_open(dev);

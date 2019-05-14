@@ -85,13 +85,13 @@ w_err_t listfs_get_fileinfo(lfile_info_s *info,w_blkdev_s *blkdev,w_addr_t addr)
 
 w_err_t listfs_set_fileinfo(lfile_info_s *info,w_blkdev_s *blkdev);
 
-lfile_info_s *fileinfo_parent(lfile_info_s *info,w_blkdev_s *blkdev);
+w_err_t fileinfo_get_parent(lfile_info_s *info,w_blkdev_s *blkdev);
 
-lfile_info_s *fileinfo_next(lfile_info_s *info,w_blkdev_s *blkdev);
+w_err_t fileinfo_get_next(lfile_info_s *info,w_blkdev_s *blkdev);
 
-lfile_info_s *fileinfo_headchild(lfile_info_s *info,w_blkdev_s *blkdev);
+w_err_t fileinfo_get_headchild(lfile_info_s *info,w_blkdev_s *blkdev);
 
-lfile_info_s *fileinfo_tailchild(lfile_info_s *info,w_blkdev_s *blkdev);
+w_err_t fileinfo_get_tailchild(lfile_info_s *info,w_blkdev_s *blkdev);
 
 w_err_t fileinfo_update_parent(lfile_info_s *info,w_blkdev_s *blkdev);
 

@@ -174,6 +174,7 @@ w_err_t blkinfo_get_byoffset(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_int32_t 
 
     do
     {
+        err = W_ERR_OK;
         tmpinfo = lfs_malloc(sizeof(lfile_blkinfo_s));
         WIND_ASSERT_BREAK(tmpinfo != W_NULL,W_ERR_MEM,"malloc tmpinfo failed");
         wind_memcpy(tmpinfo,info,sizeof(lfile_blkinfo_s));
@@ -216,6 +217,7 @@ w_err_t blkinfo_update_prev(lfile_blkinfo_s *info,w_blkdev_s *blkdev)
     WIND_ASSERT_RETURN(info->magic == LISTFILE_BLK_MAGIC,W_ERR_INVALID);
     do
     {
+        err = W_ERR_OK;
         tmpinfo = lfs_malloc(sizeof(lfile_blkinfo_s));
         WIND_ASSERT_BREAK(tmpinfo != W_NULL,W_ERR_MEM,"malloc tmpinfo failed");
         wind_memcpy(tmpinfo,info,sizeof(lfile_blkinfo_s));
@@ -242,6 +244,7 @@ w_err_t blkinfo_link(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_addr_t *addr,w_i
     WIND_ASSERT_RETURN(info->magic == LISTFILE_BLK_MAGIC,W_ERR_INVALID);
     do
     {
+        err = W_ERR_OK;
         info1 = lfs_malloc(sizeof(lfile_blkinfo_s));
         WIND_ASSERT_BREAK(info1 != W_NULL,W_ERR_MEM,"malloc info1 failed");
         info2 = lfs_malloc(sizeof(lfile_blkinfo_s));
@@ -277,6 +280,7 @@ w_err_t blkinfo_unlink(lfile_blkinfo_s *info,w_blkdev_s *blkdev)
     WIND_ASSERT_RETURN(info->offset == 0,W_ERR_INVALID);
     do
     {
+        err = W_ERR_OK;
         tmpinfo = lfs_malloc(sizeof(lfile_blkinfo_s));
         WIND_ASSERT_BREAK(tmpinfo != W_NULL,W_ERR_MEM,"malloc blkinfo failed");
         wind_memcpy(tmpinfo,info,sizeof(lfile_blkinfo_s));
@@ -306,6 +310,7 @@ w_err_t blkinfo_add_dataaddr(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_addr_t *
     WIND_ASSERT_RETURN(info->magic == LISTFILE_BLK_MAGIC,W_ERR_INVALID);
     do
     {
+        err = W_ERR_OK;
         tmpinfo = lfs_malloc(sizeof(lfile_blkinfo_s));
         WIND_ASSERT_BREAK(tmpinfo != W_NULL,W_ERR_MEM,"malloc blkinfo failed");
         wind_memcpy(tmpinfo,info,sizeof(lfile_blkinfo_s));
@@ -354,33 +359,4 @@ w_addr_t blkinfo_get_addr(lfile_blkinfo_s *info,w_int32_t offset)
 }
 
 
-#if 0
-w_int32_t blkinfo_calc_restspace(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_int32_t tail_offset)
-{
-    w_int32_t err;
-    w_int32_t space = 0;
-    lfile_blkinfo_s *tmpinfo;
-    w_uint8_t *blk = W_NULL;
-    WIND_ASSERT_RETURN(info != W_NULL,-1);
-    WIND_ASSERT_RETURN(blkdev != W_NULL,-1);
-    WIND_ASSERT_RETURN(info->magic == LISTFILE_BLK_MAGIC,-1);
-    do
-    {
-        tmpinfo = lfs_malloc(blkdev->blksize);
-        WIND_ASSERT_RETURN(tmpinfo != W_NULL,W_ERR_MEM);
-        
-        wind_memcpy(tmpinfo,info,sizeof(lfile_blkinfo_s));
-        err = blkinfo_get_tail(tmpinfo,blkdev);
-        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"get offset failed");
-        space = blkinfo_get_space(tmpinfo);
-        wind_error("error here");
-        
-        
-    }while(0);
-    
-    if(blk != W_NULL)
-        lfs_free(blk);
-    return W_ERR_OK;
-}
-#endif
 
