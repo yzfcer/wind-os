@@ -56,6 +56,10 @@ typedef struct __lfile_blkinfo_s
     w_addr_t   dataaddr[LFILE_LBLK_CNT];  //数据块信息
 }lfile_blkinfo_s;
 
+w_int32_t blkinfo_get_used(lfile_blkinfo_s *info);
+
+w_int32_t blkinfo_get_space(lfile_blkinfo_s *info);
+
 w_err_t blkinfo_init(lfile_blkinfo_s *info,w_addr_t self_addr,w_addr_t prev_addr,w_int32_t offset,w_int32_t blksize);
 
 w_err_t blkinfo_read(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_addr_t addr);
@@ -65,10 +69,6 @@ w_err_t blkinfo_write(lfile_blkinfo_s *info,w_blkdev_s *blkdev);
 w_err_t blkinfo_link(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_addr_t *addr,w_int32_t count);
 
 w_err_t blkinfo_unlink(lfile_blkinfo_s *info,w_blkdev_s *blkdev);
-
-w_int32_t blkinfo_get_used(lfile_blkinfo_s *info);
-
-w_int32_t blkinfo_get_space(lfile_blkinfo_s *info);
 
 w_err_t blkinfo_get_prev(lfile_blkinfo_s *info,w_blkdev_s *blkdev);
 

@@ -28,6 +28,26 @@
 #include "wind_debug.h"
 #include "wind_string.h"
 
+w_int32_t blkinfo_get_used(lfile_blkinfo_s *info)
+{
+    w_int32_t count;
+    WIND_ASSERT_RETURN(info != W_NULL,-1);
+    WIND_ASSERT_RETURN(info->magic == LISTFILE_BLK_MAGIC,-1);
+    count = info->offset + info->byteused;
+    if(info->blkused > 1)
+        count += ((info->blkused - 1)*info->blksize);
+    return count;
+}
+
+w_int32_t blkinfo_get_space(lfile_blkinfo_s *info)
+{
+    w_int32_t count;
+    WIND_ASSERT_RETURN(info != W_NULL,-1);
+    WIND_ASSERT_RETURN(info->magic == LISTFILE_BLK_MAGIC,-1);
+    count = info->offset + info->blkused * info->blksize;
+    return count;
+}
+
 w_err_t blkinfo_init(lfile_blkinfo_s *info,w_addr_t self_addr,w_addr_t prev_addr,w_int32_t offset,w_int32_t blksize)
 {
     WIND_ASSERT_RETURN(info != W_NULL,W_ERR_PTR_NULL);
@@ -102,28 +122,6 @@ w_err_t blkinfo_write(lfile_blkinfo_s *info,w_blkdev_s *blkdev)
     return err;
 }
 
-
-w_int32_t blkinfo_get_used(lfile_blkinfo_s *info)
-{
-    w_int32_t count;
-    WIND_ASSERT_RETURN(info != W_NULL,-1);
-    WIND_ASSERT_RETURN(info->magic == LISTFILE_BLK_MAGIC,-1);
-    count = info->offset + info->byteused;
-    if(info->blkused > 1)
-        count += ((info->blkused - 1)*info->blksize);
-    return count;
-}
-
-w_int32_t blkinfo_get_space(lfile_blkinfo_s *info)
-{
-    w_int32_t count;
-    WIND_ASSERT_RETURN(info != W_NULL,-1);
-    WIND_ASSERT_RETURN(info->magic == LISTFILE_BLK_MAGIC,-1);
-    count = info->offset + info->blkused*info->blksize;
-    return count;
-}
-
-
 w_err_t blkinfo_get_prev(lfile_blkinfo_s *info,w_blkdev_s *blkdev)
 {
     WIND_ASSERT_RETURN(info != W_NULL,W_ERR_PTR_NULL);
@@ -171,7 +169,6 @@ w_err_t blkinfo_get_byoffset(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_int32_t 
     WIND_ASSERT_RETURN(info->magic == LISTFILE_BLK_MAGIC,W_ERR_INVALID);
     if((offset >= info->offset)&&(offset < info->offset + info->blkused * blkdev->blksize))
         return W_ERR_OK;
-
     do
     {
         err = W_ERR_OK;

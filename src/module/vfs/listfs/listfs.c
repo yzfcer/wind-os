@@ -311,11 +311,22 @@ w_err_t listfile_remove(listfile_s *file)
     {
         err = W_ERR_OK;
         file->info.magic = 0;
-        err = blkinfo_get_byoffset(&file->info,file->lfs->blkdev,0);
+        err = blkinfo_get_byoffset(&file->blkinfo,file->lfs->blkdev,0);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"get head blkinfo failed");
+        while(1)
+        {
+            err = listfs_bitmap_free_blk(&file->lfs->bitmap,file->blkinfo->dataaddr,LFILE_LBLK_CNT);
+            WIND_ASSERT_BREAK(err == W_ERR_OK,err,"free blk addrs failed,can NOT be error here");
+            err = listfs_bitmap_free_blk(&file->lfs->bitmap,&file->blkinfo->self_addr,1);
+            WIND_ASSERT_BREAK(err == W_ERR_OK,err,"free blkinfo addr failed,can NOT be error here");
+            err = blkinfo_get_next(&file->blkinfo,file->lfs->blkdev);
+            WIND_ASSERT_BREAK(err == W_ERR_OK,err,"get head blkinfo failed,can NOT be error here");
+        }
+        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"error occured");
+        lfs_free(file->blkinfo);
+        lfs_free(file);
     }while(0);
-    
-    
-    return W_ERR_FAIL;
+    return err;
 }
 
 w_uint16_t calc_unit_size(w_int32_t blkcnt,w_int32_t blksize)
