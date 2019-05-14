@@ -75,7 +75,7 @@ typedef struct __listfile_s
     listfs_s *lfs;
     w_uint8_t mode;
     w_int32_t offset;
-    lfile_info_s *sub;
+    lfile_info_s *subinfo;
     lfile_blkinfo_s *blkinfo;
 }listfile_s;
 

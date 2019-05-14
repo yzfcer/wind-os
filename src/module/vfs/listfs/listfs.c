@@ -323,9 +323,12 @@ w_err_t listfile_remove(listfile_s *file)
             WIND_ASSERT_BREAK(err == W_ERR_OK,err,"get head blkinfo failed,can NOT be error here");
         }
         WIND_ASSERT_BREAK(err == W_ERR_OK,err,"error occured");
-        lfs_free(file->blkinfo);
-        lfs_free(file);
+        
     }while(0);
+    if(file->subinfo != W_NULL)
+        lfs_free(file->subinfo);
+    lfs_free(file->blkinfo);
+    lfs_free(file);
     return err;
 }
 
@@ -490,6 +493,7 @@ listfile_s* listfile_open(listfs_s *lfs,const char *path,w_uint16_t mode)
         file->lfs = lfs;
         file->lfs->file_ref ++;
         file->mode = (w_uint8_t)mode;
+        file->subinfo = W_NULL;
         //file->blkinfo = &file->info.blkinfo;
         
         if(mode & LFMODE_A)
@@ -513,6 +517,11 @@ w_err_t listfile_close(listfile_s* file)
     {
         lfs_free(file->blkinfo);
         file->blkinfo = W_NULL;
+    }
+    if(file->subinfo != W_NULL)
+    {
+        lfs_free(file->subinfo);
+        file->subinfo = W_NULL;
     }
     lfs_free(file);
     return W_ERR_OK;
@@ -776,13 +785,11 @@ w_int32_t listfile_write(listfile_s* file,w_uint8_t *buff,w_int32_t size)
             
             if(needblkinfo > 0)
             {
-                //err = do_append_blkinfos(file,&addrlist[needdatablk],needblkinfo);
                 err = blkinfo_link(file->blkinfo,file->lfs->blkdev,&addrlist[0],needblkinfo);
                 WIND_ASSERT_BREAK(err == W_ERR_OK,W_ERR_FAIL,"append blkinfo failed.");
             }
             if(needdatablk > 0)
             {
-                //err == do_append_blks(file,addrlist[0],needdatablk);
                 err = blkinfo_add_dataaddr(file->blkinfo,file->lfs->blkdev,&addrlist[needblkinfo],needdatablk);
                 WIND_ASSERT_BREAK(err == W_ERR_OK,W_ERR_FAIL,"append blk failed.");
             }
@@ -806,6 +813,8 @@ listfile_s *listfile_readdir(listfile_s* file,w_int32_t index)
     WIND_ASSERT_RETURN(file != W_NULL,W_NULL);
     WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,W_NULL);
     WIND_ASSERT_RETURN(file->mode & LFMODE_R,W_NULL);
+    
+    WIND_ASSERT_RETURN(file->info.attr,W_NULL);
     return W_NULL;
 }
 
