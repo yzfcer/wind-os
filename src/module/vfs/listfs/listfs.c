@@ -52,11 +52,14 @@ w_err_t lfs_free(void *ptr)
 
 static lfile_info_s *lfs_search_child(lfile_info_s *parent,char *name,w_blkdev_s *blkdev)
 {
+    w_err_t err;
     lfile_info_s *info;
-    for(info = fileinfo_get_headchild(parent,blkdev);info != W_NULL;info = fileinfo_get_next(info,blkdev))
+    info = fileinfo_get_headchild(parent,blkdev);
+    for(;info != W_NULL;)
     {
         if(wind_strcmp(name,info->name) == 0)
             return info;
+        err = fileinfo_get_next(info,blkdev);
     }
     return W_NULL;
 }
@@ -311,7 +314,7 @@ w_err_t listfile_remove(listfile_s *file)
     {
         err = W_ERR_OK;
         file->info.magic = 0;
-        err = blkinfo_get_byoffset(&file->blkinfo,file->lfs->blkdev,0);
+        err = blkinfo_get_byoffset(file->blkinfo,file->lfs->blkdev,0);
         WIND_ASSERT_BREAK(err == W_ERR_OK,err,"get head blkinfo failed");
         while(1)
         {
@@ -319,7 +322,7 @@ w_err_t listfile_remove(listfile_s *file)
             WIND_ASSERT_BREAK(err == W_ERR_OK,err,"free blk addrs failed,can NOT be error here");
             err = listfs_bitmap_free_blk(&file->lfs->bitmap,&file->blkinfo->self_addr,1);
             WIND_ASSERT_BREAK(err == W_ERR_OK,err,"free blkinfo addr failed,can NOT be error here");
-            err = blkinfo_get_next(&file->blkinfo,file->lfs->blkdev);
+            err = blkinfo_get_next(file->blkinfo,file->lfs->blkdev);
             WIND_ASSERT_BREAK(err == W_ERR_OK,err,"get head blkinfo failed,can NOT be error here");
         }
         WIND_ASSERT_BREAK(err == W_ERR_OK,err,"error occured");
