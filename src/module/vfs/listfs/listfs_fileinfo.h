@@ -77,13 +77,13 @@ w_err_t listfs_get_fsinfo(lfs_info_s *fsinfo,w_blkdev_s *blkdev);
 w_err_t listfs_fileinfo_init(lfile_info_s *info,char *name,
     w_addr_t self_addr,w_addr_t parent_addr,w_addr_t prev_addr,w_uint8_t attr);
 
-w_err_t listfs_read_block(w_blkdev_s *blkdev,w_addr_t addr,w_uint8_t **blk);
+//w_err_t fileinfo_read_block(w_blkdev_s *blkdev,w_addr_t addr,w_uint8_t **blk);
 
-w_err_t listfs_write_block(w_blkdev_s *blkdev,w_addr_t addr,w_uint8_t *blk);
+//w_err_t fileinfo_write_block(w_blkdev_s *blkdev,w_addr_t addr,w_uint8_t *blk);
 
-w_err_t listfs_get_fileinfo(lfile_info_s *info,w_blkdev_s *blkdev,w_addr_t addr);
+w_err_t fileinfo_read(lfile_info_s *info,w_blkdev_s *blkdev,w_addr_t addr);
 
-w_err_t listfs_set_fileinfo(lfile_info_s *info,w_blkdev_s *blkdev);
+w_err_t fileinfo_write(lfile_info_s *info,w_blkdev_s *blkdev);
 
 w_err_t fileinfo_get_parent(lfile_info_s *info,w_blkdev_s *blkdev);
 

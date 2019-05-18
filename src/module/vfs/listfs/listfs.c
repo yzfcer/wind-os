@@ -50,16 +50,22 @@ w_err_t lfs_free(void *ptr)
 }
 
 
-static lfile_info_s *lfs_search_child(lfile_info_s *parent,char *name,w_blkdev_s *blkdev)
+static lfile_info_s *lfs_search_child(lfile_info_s *info,char *name,w_blkdev_s *blkdev)
 {
     w_err_t err;
-    lfile_info_s *info;
-    info = fileinfo_get_headchild(parent,blkdev);
+    WIND_ASSERT_RETURN(info != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(name != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
+    err = fileinfo_get_headchild(info,blkdev);
+    if(err != W_ERR_OK)
+        return W_NULL;
     for(;info != W_NULL;)
     {
         if(wind_strcmp(name,info->name) == 0)
             return info;
         err = fileinfo_get_next(info,blkdev);
+        if(err != W_ERR_OK)
+            return W_NULL;
     }
     return W_NULL;
 }
@@ -99,7 +105,7 @@ static w_err_t lfs_search_file(listfs_s *lfs,listfile_s *file,const char *path)
         segcnt = wind_strsplit(pathname,'/',nameseg,LISTFS_DIR_LAYCNT);
         WIND_ASSERT_BREAK(segcnt > 0,W_ERR_INVALID,"split path failed");
 
-        err = listfs_get_fileinfo(finfo,lfs->blkdev,lfs->lfs_info.root_addr);
+        err = fileinfo_read(finfo,lfs->blkdev,lfs->lfs_info.root_addr);
         WIND_ASSERT_BREAK(err == W_ERR_OK,W_ERR_FAIL,"read root directory failed.");
         err = blkinfo_read(blkinfo,lfs->blkdev,lfs->lfs_info.root_addr);
         WIND_ASSERT_BREAK(err == W_ERR_OK,W_ERR_FAIL,"read root directory failed.");
@@ -162,7 +168,7 @@ static w_err_t lfs_make_root(listfs_s *lfs)
         attr = (LFILE_ATTR_COMMAN | LFILE_ATTR_DIR);
         listfs_fileinfo_init(info,"root",lfs->lfs_info.root_addr,0,0,attr);
         blkinfo_init(blkinfo, lfs->lfs_info.root_addr,0,0,lfs->blkdev->blksize);
-        err = listfs_set_fileinfo(info,lfs->blkdev);
+        err = fileinfo_write(info,lfs->blkdev);
         WIND_ASSERT_BREAK(err == W_ERR_OK,err,"flush lfs root file info failed.");
         err = blkinfo_write(blkinfo,lfs->blkdev);
         WIND_ASSERT_BREAK(err == W_ERR_OK,err,"flush lfs root blkinfo failed.");
@@ -268,7 +274,7 @@ static w_err_t lfs_make_file(listfs_s *lfs,listfile_s *file,char *path)
         }
         cnt = wind_strsplit(pathname,'/',nameseg,LISTFS_DIR_LAYCNT);
         WIND_ASSERT_BREAK(cnt > 1,W_ERR_OK,"split path failed.");
-        err = listfs_get_fileinfo(finfo,lfs->blkdev,lfs->lfs_info.root_addr);
+        err = fileinfo_read(finfo,lfs->blkdev,lfs->lfs_info.root_addr);
         WIND_ASSERT_BREAK(err == W_ERR_OK,W_ERR_FAIL,"read root file info failed.");
         err = blkinfo_read(blkinfo,lfs->blkdev,lfs->lfs_info.root_addr);
         WIND_ASSERT_BREAK(err == W_ERR_OK,W_ERR_FAIL,"read root blkinfo failed.");
@@ -542,7 +548,7 @@ w_err_t listfile_set_attr(listfile_s* file,w_uint8_t attr)
     (attr & LFILE_ATTR_HIDE)?(tmpattr |= LFILE_ATTR_HIDE):(tmpattr &= ~LFILE_ATTR_HIDE);
     (attr & LFILE_ATTR_VERIFY)?(tmpattr |= LFILE_ATTR_VERIFY):(tmpattr &= ~LFILE_ATTR_VERIFY);
     file->info.attr = tmpattr;
-	err = listfs_set_fileinfo(&file->info,file->lfs->blkdev);
+	err = fileinfo_write(&file->info,file->lfs->blkdev);
     return err;
 }
 
@@ -802,7 +808,7 @@ w_int32_t listfile_write(listfile_s* file,w_uint8_t *buff,w_int32_t size)
         if(file->info.filesize < file->offset + wsize)
             file->info.filesize += wsize;
         file->offset += wsize;
-        err = listfs_set_fileinfo(&file->info,file->lfs->blkdev);
+        err = fileinfo_write(&file->info,file->lfs->blkdev);
         WIND_ASSERT_BREAK(err == W_ERR_OK,W_ERR_FAIL,"set file info failed");
     }while(0);
     if(addrlist != W_NULL)
