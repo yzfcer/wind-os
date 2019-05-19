@@ -44,7 +44,7 @@ CASE_FUNC(wind_treefs_create)
     w_treefile_s *file;
     w_treefs_s *tfs;
     tfs = wind_treefs_get("tfs0");
-    WIND_ASSERT_RETURN(tfs != W_NULL,W_ERR_FAIL);
+    WIND_ASSERT_RETURN_VOID(tfs != W_NULL);
     file = treefile_open(tfs,"/test.txt",TF_FMODE_CRT);
     EXPECT_NE(file,W_NULL);
     err = treefile_close(file);
@@ -84,7 +84,7 @@ CASE_FUNC(treefs_readwrite)
     w_treefs_s *tfs;
     char *str = "this is a file test string.";
     tfs = wind_treefs_get("tfs0");
-    WIND_ASSERT_RETURN(tfs != W_NULL,W_ERR_FAIL);
+    WIND_ASSERT_RETURN_VOID(tfs != W_NULL);
     file = treefile_open(tfs,"/test.txt",TF_FMODE_CRT | TF_FMODE_W);
     EXPECT_NE(file,W_NULL);
     len = treefile_write(file,(w_uint8_t*)str,wind_strlen(str));
@@ -108,9 +108,9 @@ CASE_FUNC(treefs_readwrite)
 
 SUITE_SETUP(test_treefs)
 {
-    w_treefile_s *tfs;
+    w_treefs_s *tfs;
     tfs = wind_treefs_get("tfs0");
-    WIND_ASSERT_RETURN(tfs != W_NULL,W_ERR_FAIL);
+    WIND_ASSERT_RETURN_VOID(tfs != W_NULL);
     wind_treefs_format(tfs);
 }
 

@@ -141,8 +141,8 @@ static w_err_t wind_all_fs_regster(void)
 w_err_t _wind_fs_mod_init(void)
 {
     DLIST_INIT(fslist);
-    _treefs_mod_init();
     _wind_file_mod_init();
+    _wind_treefs_mod_init();
     wind_all_fs_regster();
     _wind_fs_mount_init();
     wind_file_set_current_path(FS_CUR_PATH);

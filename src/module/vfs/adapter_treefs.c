@@ -34,7 +34,7 @@
 #if WIND_FS_SUPPORT
 static w_err_t treefs_op_init(w_fs_s *fs)
 {
-    w_treefile_s *tfs;
+    w_treefs_s *tfs;
     tfs = wind_treefs_get("tfs0");
     WIND_ASSERT_RETURN(tfs != W_NULL,W_ERR_FAIL);
     wind_treefs_format(tfs);

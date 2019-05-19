@@ -68,6 +68,7 @@ struct __w_fs_s
     w_blkdev_s *blkdev;
     w_fs_ops_s *ops;
 };
+
 struct __w_fs_ops_s
 {
     w_err_t (*init)(w_fs_s *fs);
@@ -98,7 +99,6 @@ struct __w_file_s
     void *fileobj;//文件对象
     w_int32_t offset;//偏移量
     w_mutex_s *mutex;//文件操作变量
-    //w_fs_ops_s *ops;//操作函数集
 };
 
 

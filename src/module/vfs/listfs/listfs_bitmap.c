@@ -222,7 +222,6 @@ static w_uint32_t calc_blkused(w_uint8_t *blk,w_int32_t blksize)
 w_int32_t listfs_bitmap_get_usedblk(lfs_bitmap_s *bp)
 {
     w_int32_t i,cnt;
-    w_err_t err;
     w_uint8_t *blk = W_NULL;
     w_blkdev_s *blkdev;
     w_uint32_t blkused = 0;

@@ -1,12 +1,14 @@
 #include "wind_pool.h"
 #include "wind_debug.h"
+#include "wind_string.h"
+#include "wind_heap.h"
 #include "treefs.h"
 #include "treefile.h"
 #ifdef WIND_FS_SUPPORT
 
 w_dlist_s treefslist;
 WIND_POOL(treefspool,WIND_TREEFS_MAX_NUM,sizeof(w_treefs_s));
-w_err_t _treefs_mod_init(void)
+w_err_t _wind_treefs_mod_init(void)
 {
     w_err_t err;
     w_treefs_s *tfs;
@@ -18,13 +20,13 @@ w_err_t _treefs_mod_init(void)
     return err;
 }
 
-void *tfs_malloc(w_int32_t size)
+void *tfs_mem_malloc(w_int32_t size)
 {
     void *ptr = wind_falloc(size,252);
     return ptr;
 }
 
-w_err_t tfs_free(void *ptr)
+w_err_t tfs_mem_free(void *ptr)
 {
     if(ptr == W_NULL)
         return W_ERR_OK;
@@ -102,7 +104,7 @@ w_treefs_s *wind_treefs_create(char *name)
         SET_F_TREEFS_POOL(treefs);
         return treefs;
     }
-    tfs_free(treefs);
+    tfs_mem_free(treefs);
     return W_NULL;
 }
 

@@ -40,9 +40,7 @@
 #include "wind_dbgpoint.h"
 #include "wind_board_port.h"
 #include "db_if.h"
-#if WIND_FS_SUPPORT
 #include "wind_fs.h"
-#endif 
 
 
 void wind_enter_thread_hook(void);
