@@ -119,11 +119,6 @@ extern "C" {
 #define WIND_USER_SUPPORT 1 //是否支持用户账号功能
 #define WIND_USER_MAX_NUM 5 //用户账号的数量
 
-#define WIND_FS_SUPPORT 1 //是否支持内存文件系统
-#define WIND_FS_MAX_NUM 2 //允许支持的文件系统的数量
-#define WIND_FILE_MAX_NUM 5 //允许打开的文件的数量
-#define WIND_TREEFS_MAX_NUM 2 //支持treefs结构的数量
-
 #define WIND_DBGPOINT_SUPPORT 1//是否支持调试点文件系统
 
 #define WIND_TICK_PER_SEC 100 //一秒钟所经历的的时间节拍
@@ -198,7 +193,6 @@ extern "C" {
 //单元测试功能定制，前提是内核支持单元测试框架,并且支持对应的功能模块
 //-------------------------------------------------------------------------------
 #define WIND_CUTEST_SUPPORT 1 //是否支持单元测试框架
-
 #if WIND_CUTEST_SUPPORT
 #define TEST_HEAP_SUPPORT 1 //是否支持内存堆测试
 #define TEST_MSGBOX_SUPPORT 1 //是否支持消息邮箱测试
@@ -215,6 +209,20 @@ extern "C" {
 #define TEST_FS_SUPPORT 1 //是否支持fs文件系统接口测试
 #endif
 
+
+//-------------------------------------------------------------------------------
+//文件系统功能定制，前提是系统支持虚拟文件系统vfs框架
+//-------------------------------------------------------------------------------
+#define WIND_FS_SUPPORT 1 //是否支持vfs文件系统框架
+#if WIND_CUTEST_SUPPORT
+#define WIND_FS_MAX_NUM 5 //允许支持的文件系统的数量
+#define WIND_FILE_MAX_NUM 5 //允许同时打开的文件的数量
+
+#define WIND_TREEFS_SUPPORT 1 //是否支持内存文件系统
+#define WIND_TREEFS_MAX_NUM 2 //支持treefs结构的数量
+
+#define WIND_LISTFS_SUPPORT 1//是否支持listfs文件系统
+#endif
 
 #ifdef __cplusplus
 }

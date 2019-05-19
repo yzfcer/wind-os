@@ -73,7 +73,7 @@ void wind_system_reset(void)
 #include "wind_file.h"
 void _wind_fs_mount_init(void)
 {
-    wind_fs_mount("fs0",FSTYPE_TREEFS,"null","/");
+    wind_fs_mount("fs0","treefs","null","/");
 }
 #endif
 

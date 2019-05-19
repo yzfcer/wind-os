@@ -95,7 +95,7 @@ void _wind_heaps_create(void)
 #include "wind_file.h"
 void _wind_fs_mount_init(void)
 {
-    //wind_fs_mount("treefs","null","/");
+    //wind_fs_mount("treefs","treefs","null","/");
 }
 #endif
 

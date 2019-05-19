@@ -30,7 +30,7 @@
 
 #define WIND_FS_MAGIC 0x235C79A5
 #define WIND_FILE_MAGIC 0x275972D5
-#define WIND_FS_OPS_MAGIC 0x3582A6B3
+#define WIND_FSTYPE_MAGIC 0x3582A6B3
 #define WFS_NAME_LEN 12
 #define WFILE_NAME_LEN 20
 #define FS_MOUNT_PATH_LEN 64
@@ -52,7 +52,7 @@
 #define SET_F_FS_MOUNT(fs) (fs->obj.flag |= F_FS_MOUNT)
 #define CLR_F_FS_MOUNT(fs) (fs->obj.flag &= (~F_FS_MOUNT))
 
-
+#if 0
 typedef enum 
 {
     FSTYPE_NONE   = 0x00,
@@ -72,6 +72,7 @@ typedef enum
     FSTYPE_YAFFS,
     FSTYPE_YAFFS2,
 }w_fstype_e;
+#endif
 
 typedef enum 
 {
@@ -79,7 +80,7 @@ typedef enum
     FTYPE_FILE = 0x02,
 }w_ftype_e;
 
-typedef struct __w_fs_ops_s w_fs_ops_s;
+typedef struct __w_fstype_s w_fstype_s;
 typedef struct __w_fs_s w_fs_s;
 typedef struct __w_file_s w_file_s;
 
@@ -87,13 +88,13 @@ struct __w_fs_s
 {
     w_obj_s obj;
     char *mount_path;
-    w_fstype_e fstype;
+    char *fstype;
     void *fsobj;
     w_blkdev_s *blkdev;
-    w_fs_ops_s *ops;
+    w_fstype_s *ops;
 };
 
-struct __w_fs_ops_s
+struct __w_fstype_s
 {
     w_obj_s obj;
     w_err_t (*init)(w_fs_s *fs);
@@ -128,8 +129,8 @@ struct __w_file_s
 
 
 #define FS_OPS_DEF(fs) \
-static w_fs_ops_s fs_ops = {\
-{WIND_FS_OPS_MAGIC,#fs,{W_NULL,W_NULL},0,0},\
+static w_fstype_s fs_ops = {\
+{WIND_FSTYPE_MAGIC,#fs,{W_NULL,W_NULL},0,0},\
 fs##_op_init,\
 fs##_op_format,\
 fs##_op_open,\
