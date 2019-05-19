@@ -84,6 +84,7 @@ static w_err_t mount_param_check(char *fsname,char *fstype,char *blkname,char *p
     w_fs_s *fs;
     w_fstype_s *ops;
     w_dnode_s *dnode;
+    w_int32_t len;
     WIND_ASSERT_RETURN(fsname != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(fstype != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(blkname != W_NULL,W_ERR_PTR_NULL);
@@ -92,7 +93,8 @@ static w_err_t mount_param_check(char *fsname,char *fstype,char *blkname,char *p
     WIND_ASSERT_RETURN(fs != W_NULL,W_ERR_REPEAT);
     ops = wind_fstype_get(fstype);
     WIND_ASSERT_RETURN(fs != W_NULL,W_ERR_REPEAT);
-    if(wind_strlen(path) >= FS_MOUNT_PATH_LEN)
+    len = wind_strlen(path);
+    if(len >= FS_MOUNT_PATH_LEN)
     {
         wind_error("mount path is too long");
         return W_ERR_INVALID;
@@ -103,6 +105,7 @@ static w_err_t mount_param_check(char *fsname,char *fstype,char *blkname,char *p
         wind_error("fs name is too long");
         return W_ERR_INVALID;
     }
+    
     foreach_node(dnode,&fs_list)
     {
         fs = NODE_TO_FS(dnode);
@@ -237,16 +240,24 @@ w_err_t wind_fs_mount(char *fsname,char *fstype,char *blkname,char *path)
     w_blkdev_s *blkdev;
     w_fs_s *fs;
     w_int32_t len;
+    w_fstype_s *ops;
     err = mount_param_check(fsname,fstype,blkname,path);
     WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_INVALID);
     fs = wind_fs_get(fsname);
     WIND_ASSERT_RETURN(fs != W_NULL,W_ERR_MEM);
+    ops = wind_fstype_get(fstype);
+    WIND_ASSERT_RETURN(ops != W_NULL,W_ERR_MEM);
     blkdev = wind_blkdev_get(blkname);
+    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_MEM);
     len = wind_strlen(path)+1;
+    
     fs->mount_path = wind_malloc(len);
     WIND_ASSERT_RETURN(fs->mount_path != W_NULL,W_ERR_MEM);
     wind_strcpy(fs->mount_path,path);
+    fs->fstype = fstype;
+    fs->fsobj = W_NULL;
     fs->blkdev = blkdev;
+    fs->ops = ops;
     if(fs->ops->init)
         fs->ops->init(fs);
     return W_ERR_OK;
