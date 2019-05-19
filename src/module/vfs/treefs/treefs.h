@@ -1,73 +1,26 @@
-#ifndef WIND_TREEFS_H__
-#define WIND_TREEFS_H__
+#ifndef TREEFS_H__
+#define TREEFS_H__
 #include "wind_config.h"
 #include "wind_type.h"
 #include "wind_dlist.h"
 #include "wind_tree.h"
-//#include "wind_file.h"
-
+#include "treefs_def.h"
 #if WIND_FS_SUPPORT
 
-#define TF_FMODE_R  0x01
-#define TF_FMODE_W  0x02
-#define TF_FMODE_RW  0x03
-#define TF_FMODE_CRT 0x04
-#define TF_FMODE_A  0x08
+#define F_TREEFS_POOL (0x01 << 0) //鏍囪treefs瀵硅薄鏄惁閫氳繃鍐呭瓨姹犲垎閰?
+#define IS_F_TREEFS_POOL(sem) ((sem->obj.flag & F_TREEFS_POOL) == F_TREEFS_POOL)
+#define SET_F_TREEFS_POOL(sem) (sem->obj.flag |= F_TREEFS_POOL)
+#define CLR_F_TREEFS_POOL(sem) (sem->obj.flag &= (~F_TREEFS_POOL))
+
+w_err_t _treefs_mod_init(void);
+
+void *tfs_malloc(w_int32_t size);
+w_err_t tfs_free(void *ptr);
+
+w_err_t wind_treefs_format(void);
+
+w_treefs_s *wind_treefs_create(char *name);
 
 
-#define TREEFILE_MAGIC 0x48A97D26
-#define TREEFS_DIR_LAYCNT 32
-
-#define TREEFS_BLK_SIZE 128
-
-#define F_TREEFILE_DIR (0x01 << 0) //标记treefile对象是否是一个目录
-#define IS_F_TREEFILE_DIR(treefile) ((treefile->attr & F_TREEFILE_DIR) == F_TREEFILE_DIR)
-#define SET_F_TREEFILE_DIR(treefile) (treefile->attr |= F_TREEFILE_DIR)
-#define CLR_F_TREEFILE_DIR(treefile) (treefile->attr &= (~F_TREEFILE_DIR))
-
-
-typedef struct treefs_s
-{
-    w_uint32_t magic;
-    w_tree_s tree;
-    char *filename;
-    w_uint16_t isdir:1;
-    w_uint8_t mode;
-    w_int32_t offset;
-    w_int32_t filelen;
-    w_int32_t bufflen;
-    w_dlist_s datalist;
-}treefile_s;
-
-void *treefs_malloc(w_int32_t size);
-w_err_t treefs_free(void *ptr);
-
-w_err_t treefs_format(void);
-
-
-treefile_s *treefile_create(const char *path);
-w_err_t treefile_rm(treefile_s *file);
-
-
-treefile_s* treefile_open(const char *path,w_uint16_t mode);
-
-w_err_t treefile_close(treefile_s* file);
-
-w_bool_t treefile_existing(const char *path);
-
-w_err_t treefile_seek(treefile_s* file,w_int32_t offset);
-
-w_int32_t treefile_ftell(treefile_s* file);
-
-w_int32_t treefile_read(treefile_s* file,w_uint8_t *buff, w_int32_t size);
-
-w_int32_t treefile_write(treefile_s* file,w_uint8_t *buff, w_int32_t size);
-
-treefile_s *treefile_readdir(treefile_s* file,w_int32_t index);
-
-w_err_t treefile_fgets(treefile_s* file,char *buff, w_int32_t maxlen);
-
-w_err_t treefile_fputs(treefile_s* file,char *buff);
-
-#endif
-#endif
+#endif //#if WIND_FS_SUPPORT
+#endif //#ifndef TREEFS_H__

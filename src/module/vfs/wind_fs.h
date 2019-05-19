@@ -32,7 +32,7 @@
 #if WIND_FS_SUPPORT
 
 #define WIND_FS_DEF(name,type,ops) \
-{WIND_FS_MAGIC,#name,W_NULL,{W_NULL,W_NULL},type,W_NULL,&ops}
+{WIND_FS_MAGIC,#name,W_NULL,{W_NULL,W_NULL},type,W_NULL,W_NULL,&ops}
 
 w_err_t _wind_fs_mod_init(void);
 w_fs_s *wind_fs_get(char *name);

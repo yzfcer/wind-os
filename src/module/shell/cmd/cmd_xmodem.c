@@ -68,7 +68,10 @@ static w_err_t cmd_xmodem_get(int argc,char **argv)
 {
     w_err_t err = W_ERR_OK;
     w_int32_t len;
-    treefile_s *file = W_NULL;
+    w_treefile_s *file = W_NULL;
+    w_treefs_s *tfs;
+    tfs = wind_treefs_get("tfs0");
+    WIND_ASSERT_RETURN(tfs != W_NULL,W_ERR_FAIL);
     w_uint8_t *buff = W_NULL,*xbuff = W_NULL;
     if(argv[2][0] != '/')
     {
@@ -123,7 +126,7 @@ static w_err_t cmd_xmodem_put(int argc,char **argv)
 {
     w_err_t err = W_ERR_OK;
     w_int32_t len;
-    treefile_s *file = W_NULL;
+    w_treefile_s *file = W_NULL;
     w_uint8_t *buff = W_NULL,*xbuff = W_NULL;
     if(argv[2][0] != '/')
     {

@@ -169,6 +169,7 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\listfs\listfs_blkinfo.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\listfs\listfs_cache.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\listfs\listfs_fileinfo.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\treefs\treefile.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\treefs\treefs.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\wind_file.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\wind_filepath.c" />
@@ -274,7 +275,9 @@
     <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\listfs\listfs_blkinfo.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\listfs\listfs_cache.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\listfs\listfs_fileinfo.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\treefs\treefile.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\treefs\treefs.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\treefs\treefs_def.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\wind_file.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\wind_filepath.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\wind_fs.h" />

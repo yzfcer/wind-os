@@ -33,6 +33,7 @@
 #include "wind_core.h"
 #include "wind_dlist.h"
 #include "wind_board_port.h"
+#include "treefs.h"
 
 #if WIND_FS_SUPPORT
 #define NODE_TO_FS(dnode) (w_fs_s*)(((w_uint8_t*)(dnode))-((w_uint32_t)&(((w_fs_s*)0)->fsnode)))
@@ -140,6 +141,7 @@ static w_err_t wind_all_fs_regster(void)
 w_err_t _wind_fs_mod_init(void)
 {
     DLIST_INIT(fslist);
+    _treefs_mod_init();
     _wind_file_mod_init();
     wind_all_fs_regster();
     _wind_fs_mount_init();

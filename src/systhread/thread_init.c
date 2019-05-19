@@ -97,7 +97,6 @@ static void set_idle_cnt(void)
     wind_printf("idle count:%d\r\n",IDLE_CNT_PER_SEC);
 }
 
-extern w_err_t treefs_format(void);
 
 static w_err_t thread_init(w_int32_t argc,char **argv)
 {   

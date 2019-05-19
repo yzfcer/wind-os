@@ -437,6 +437,9 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_timer.c">
       <Filter>module_shell</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\treefs\treefile.c">
+      <Filter>module_vfs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">
@@ -758,6 +761,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\..\src\common\wind_strsearch.h">
       <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\treefs\treefile.h">
+      <Filter>module_vfs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\treefs\treefs_def.h">
+      <Filter>module_vfs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
