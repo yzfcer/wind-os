@@ -52,7 +52,7 @@ w_diagnose_s *wind_diagnose_get(const char *name)
 w_err_t wind_diagnose_register(w_diagnose_s *diagnose)
 {
     w_diagnose_s *diag;    
-    wind_notice("register diagnose:%s", diagnose->obj.name != W_NULL?diagnose->obj.name:"null");
+    wind_notice("register diagnose:%s", wind_obj_name(&diagnose->obj));
     WIND_ASSERT_RETURN(diagnose != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(diagnose->obj.magic == (~WIND_DIAGNOSE_MAGIC),W_ERR_INVALID);
     diag = wind_diagnose_get(diagnose->obj.name);
@@ -75,7 +75,7 @@ w_err_t wind_diagnose_unregister(w_diagnose_s *diagnose)
     w_diagnose_s *diag;
     WIND_ASSERT_RETURN(diagnose != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(diagnose->obj.magic == WIND_DIAGNOSE_MAGIC,W_ERR_INVALID);
-    wind_notice("unregister diagnose:%s", diagnose->obj.name != W_NULL?diagnose->obj.name:"null");
+    wind_notice("unregister diagnose:%s", wind_obj_name(&diagnose->obj));
     diag = wind_diagnose_get(diagnose->obj.name);
     if(diag == W_NULL)
     {

@@ -125,7 +125,7 @@ w_err_t wind_watchdog_destroy(w_watchdog_s *watchdog)
     w_err_t err;
     WIND_ASSERT_RETURN(watchdog != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(watchdog->obj.magic == WIND_WATCHDOG_MAGIC,W_ERR_INVALID);
-    wind_notice("destroy watchdog:%s",watchdog->obj.name != W_NULL?watchdog->obj.name:"null");
+    wind_notice("destroy watchdog:%s",wind_obj_name(&watchdog->obj));
     err = wind_obj_deinit(&watchdog->obj,WIND_WATCHDOG_MAGIC,&watchdoglist);
     WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_FAIL);
     if(IS_F_WATCHDOG_POOL(watchdog))

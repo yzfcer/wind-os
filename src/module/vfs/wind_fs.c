@@ -36,10 +36,48 @@
 #include "treefs.h"
 
 #if WIND_FS_SUPPORT
-#define NODE_TO_FS(dnode) (w_fs_s*)(((w_uint8_t*)(dnode))-((w_uint32_t)&(((w_fs_s*)0)->fsnode)))
-static w_dlist_s fslist;
+#define NODE_TO_FS(dnode) (w_fs_s*)(((w_uint8_t*)(dnode))-((w_uint32_t)&(((w_fs_s*)0)->obj.objnode)))
+static w_dlist_s fs_list;
+static w_dlist_s fs_ops_list;
+static char *fsname[] = {"fs0","fs1","fs2","fs3","fs4"};
+WIND_POOL(fspool,WIND_FS_MAX_NUM,sizeof(w_fs_s));
 
-static w_err_t mount_param_check(char *fsname,char *blkname,char *path)
+static char *get_type_name(w_fstype_e type)
+{
+    switch(type)
+    {
+        case FSTYPE_NONE:return "none";
+        case FSTYPE_TREEFS:return "treefs";
+        case FSTYPE_LISTFS:return "listfs";
+        default:return "undefine";
+    }
+}
+    
+static w_err_t fsobj_init(w_fs_s *fs,char *name)
+{
+    WIND_ASSERT_RETURN(fs != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(name != W_NULL,W_ERR_PTR_NULL);
+    wind_memset(fs,0,sizeof(w_fs_s));
+    return wind_obj_init(&fs->obj,WIND_FS_MAGIC,name,&fs_list);
+}
+
+static w_err_t fs_objs_init(void)
+{
+    w_err_t err;
+    w_int32_t i;
+    w_fs_s *fs;
+    WIND_ASSERT_RETURN(sizeof(fsname)/sizeof(char *) >=  WIND_FS_MAX_NUM,W_ERR_FAIL);
+    for(i = 0;i < WIND_FS_MAX_NUM;i ++)
+    {
+        fs = wind_pool_malloc(fspool);
+        WIND_ASSERT_RETURN(fs != W_NULL,W_ERR_MEM);
+        err = fsobj_init(fs,fsname[i]);
+        WIND_ASSERT_RETURN(err == W_ERR_OK,err);
+    }
+    return W_ERR_OK;
+}
+
+static w_err_t mount_param_check(char *fsname,w_fstype_e type,char *blkname,char *path)
 {
     w_fs_s *fs;
     w_dnode_s *dnode;
@@ -58,7 +96,7 @@ static w_err_t mount_param_check(char *fsname,char *blkname,char *path)
         wind_error("fs name is too long");
         return W_ERR_INVALID;
     }
-    foreach_node(dnode,&fslist)
+    foreach_node(dnode,&fs_list)
     {
         fs = NODE_TO_FS(dnode);
         if((fs->mount_path != W_NULL) && 
@@ -82,68 +120,20 @@ static w_err_t mount_param_check(char *fsname,char *blkname,char *path)
     return W_ERR_OK;
 }
 
-w_err_t wind_fs_regster(w_fs_s *fs,w_int32_t count)
-{
-    w_int32_t i;
-    w_fs_s *fsi;    
-    w_err_t err;
-    WIND_ASSERT_RETURN(fs != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(count > 0,W_ERR_INVALID);
-    for(i = 0;i < count;i ++)
-    {
-        WIND_ASSERT_RETURN(fs[i].magic == WIND_FS_MAGIC,W_ERR_INVALID);
-        wind_notice("register fs:%s",fs[i].name);
-        fsi = wind_fs_get(fs[i].name);
-        if(fsi != W_NULL)
-        {
-            wind_notice("fs %s has been registered.\r\n",fsi->name);
-            continue;
-        }
-        if(fs[i].ops->init)
-        {
-            err = fs[i].ops->init(&fs[i]);
-            if(err != W_ERR_OK)
-            {
-                wind_error("fs:%s init failed:%d.",fs[i].name,err);
-                continue;
-            }
-        }
-        wind_disable_switch();
-        dlist_insert_tail(&fslist,&fs[i].fsnode);
-        wind_enable_switch();    
-    }
-    return W_ERR_OK;
-}
-w_err_t wind_fs_unregster(w_fs_s *fs)
-{
-    w_dnode_s *dnode;
-    WIND_ASSERT_RETURN(fs != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(fs->magic == WIND_FS_MAGIC,W_ERR_INVALID);
-    wind_notice("unregister fs:%s",fs->name);
-    wind_disable_switch();
-    dnode = dlist_remove(&fslist,&fs->fsnode);
-    wind_enable_switch();
-    if(dnode == W_NULL)
-    {
-        wind_error("fs has NOT been registered.\r\n");
-        return W_ERR_FAIL;
-    }
-    return W_ERR_OK;
-}
-
-static w_err_t wind_all_fs_regster(void)
-{
-    extern w_fs_s fs_treefs[1];
-    wind_fs_regster(fs_treefs,1);
-    return W_ERR_OK;
-}
 
 w_err_t _wind_fs_mod_init(void)
 {
-    DLIST_INIT(fslist);
+    w_err_t err;
+    DLIST_INIT(fs_list);
+    DLIST_INIT(fs_ops_list);
+    err = wind_pool_create("fs",fspool,sizeof(fspool),sizeof(w_fs_s));
+    WIND_ASSERT_RETURN(err == W_ERR_OK,err);
+    err = fs_objs_init();
+    WIND_ASSERT_RETURN(err == W_ERR_OK,err);
+    
     _wind_file_mod_init();
     _wind_treefs_mod_init();
-    wind_all_fs_regster();
+    
     _wind_fs_mount_init();
     wind_file_set_current_path(FS_CUR_PATH);
     return W_ERR_OK;
@@ -151,20 +141,7 @@ w_err_t _wind_fs_mod_init(void)
 
 w_fs_s *wind_fs_get(char *name)
 {
-    w_fs_s *fs;
-    w_dnode_s *dnode;
-    wind_disable_switch();
-    foreach_node(dnode,&fslist)
-    {
-        fs = NODE_TO_FS(dnode);
-        if(wind_strcmp(name,fs->name) == 0)
-        {
-            wind_enable_switch();
-            return fs;
-        }
-    }
-    wind_enable_switch();
-    return W_NULL;
+    return (w_fs_s *)wind_obj_get(name,&fs_list);
 }
 
 w_fs_s *wind_fs_get_bypath(const char *path)
@@ -173,7 +150,7 @@ w_fs_s *wind_fs_get_bypath(const char *path)
     w_dnode_s *dnode;
     w_int32_t len;
     wind_disable_switch();
-    foreach_node(dnode,&fslist)
+    foreach_node(dnode,&fs_list)
     {
         fs = NODE_TO_FS(dnode);
         len = wind_strlen(fs->mount_path);
@@ -187,14 +164,73 @@ w_fs_s *wind_fs_get_bypath(const char *path)
     return retfs;
 }
 
+w_err_t wind_fs_print(void)
+{
+    w_dnode_s *dnode;
+    w_fs_s *fs;
+    w_dlist_s *list = &fs_list;
+    wind_printf("\r\n\r\nfs mount list:\r\n");
+    wind_disable_switch();
+    foreach_node(dnode,list)
+    {
+        fs = NODE_TO_FS(dnode);
+        wind_printf("fsname:%s,",wind_obj_name(&fs->obj));
+        wind_printf("fstype:%s,",get_type_name(fs->fstype));
+        wind_printf("blkdev:%s,",fs->blkdev?wind_obj_name(&fs->blkdev->obj):"none");
+        wind_printf("mount path:%s\r\n",fs->mount_path?fs->mount_path:"none");
+    }
+    wind_enable_switch();
+    return W_ERR_OK;
+}
 
-w_err_t wind_fs_mount(char *fsname,char *blkname,char *path)
+
+w_fs_ops_s *wind_fs_ops_get(const char *name)
+{
+    return (w_fs_ops_s*)wind_obj_get(name,&fs_ops_list);
+}
+
+
+w_err_t wind_fs_ops_register(w_fs_ops_s *ops)
+{
+    w_fs_ops_s *tmpops;
+    WIND_ASSERT_RETURN(ops != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(ops->obj.magic == WIND_FS_OPS_MAGIC,W_ERR_INVALID);
+    wind_notice("register fs ops:%s",wind_obj_name(&ops->obj));
+    tmpops = wind_dbgpoint_get(ops->obj.name);
+    if(tmpops != W_NULL)
+    {
+        wind_notice("fs ops has been registered.\r\n");
+        return W_ERR_OK;
+    }
+
+    wind_disable_switch();
+    dlist_insert_tail(&fs_ops_list,&ops->obj.objnode);
+    wind_enable_switch();
+    return W_ERR_OK;
+}
+
+w_err_t wind_fs_ops_unregister(w_fs_ops_s *ops)
+{
+    w_dnode_s *dnode;
+    w_fs_ops_s *tmpops;
+    WIND_ASSERT_RETURN(ops != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(ops->obj.magic == WIND_FS_OPS_MAGIC,W_ERR_INVALID);
+    wind_notice("unregister fs ops:%s",wind_obj_name(&ops->obj));
+    wind_disable_switch();
+	dnode = dlist_remove(&fs_ops_list,&ops->obj.objnode);
+    wind_enable_switch();
+    WIND_ASSERT_RETURN(dnode != W_NULL,W_ERR_INVALID);
+    return W_ERR_OK;
+}
+
+
+w_err_t wind_fs_mount(char *fsname,w_fstype_e fstype,char *blkname,char *path)
 {
     w_err_t err;
     w_blkdev_s *blkdev;
     w_fs_s *fs;
     w_int32_t len;
-    err = mount_param_check(fsname,blkname,path);
+    err = mount_param_check(fsname,fstype,blkname,path);
     WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_INVALID);
     fs = wind_fs_get(fsname);
     WIND_ASSERT_RETURN(fs != W_NULL,W_ERR_MEM);
@@ -215,10 +251,12 @@ w_err_t wind_fs_unmount(char *fsname)
     WIND_ASSERT_RETURN(fsname != W_NULL,W_ERR_PTR_NULL);
     fs = wind_fs_get(fsname);
     WIND_ASSERT_RETURN(fs != W_NULL,W_ERR_INVALID);
+    wind_disable_switch();
     fs->blkdev = W_NULL;
-    DNODE_INIT(fs->fsnode);
-    wind_free(fs->mount_path);
+    fs->fstype = FSTYPE_NONE;
     fs->mount_path = W_NULL;
+    fs->ops = W_NULL;
+    wind_enable_switch();
     return W_ERR_OK;
 }
 

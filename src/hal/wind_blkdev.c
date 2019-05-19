@@ -44,7 +44,7 @@ w_err_t wind_blkdev_register(w_blkdev_s *blkdev,w_int32_t count)
     {
         WIND_ASSERT_RETURN(blkdev[i].obj.magic == (~WIND_BLKDEV_MAGIC),W_ERR_INVALID);
         WIND_ASSERT_RETURN(blkdev[i].obj.name != W_NULL,W_ERR_PTR_NULL);
-        wind_notice("register blkdev:%s",blkdev[i].obj.name);
+        wind_notice("register blkdev:%s",wind_obj_name(&blkdev[i].obj));
         devi = wind_blkdev_get(blkdev[i].obj.name);
         if(devi != W_NULL)
         {

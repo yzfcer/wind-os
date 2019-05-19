@@ -44,7 +44,7 @@ w_err_t wind_chdev_register(w_chdev_s *chdev,w_int32_t count)
     {
         WIND_ASSERT_RETURN(chdev[i].obj.magic == (~WIND_CHDEV_MAGIC),W_ERR_INVALID);
         WIND_ASSERT_RETURN(chdev[i].obj.name != W_NULL,W_ERR_PTR_NULL);
-        wind_notice("register chdev:%s",chdev[i].obj.name);
+        wind_notice("register chdev:%s",wind_obj_name(&chdev[i].obj));
         devi = wind_chdev_get(chdev[i].obj.name);
         if(devi != W_NULL)
         {

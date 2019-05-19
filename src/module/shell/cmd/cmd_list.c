@@ -37,6 +37,7 @@
 #include "wind_pipe.h"
 #include "wind_watchdog.h"
 #include "wind_timer.h"
+#include "wind_fs.h"
 
 #if (CMD_LIST_SUPPORT)
 
@@ -82,6 +83,9 @@ COMMAND_USAGE(list)
 #endif
 #if WIND_WATCHDOG_SUPPORT
     wind_printf("list daemon:--show all thread that under daemon.\r\n");
+#endif
+#if WIND_FS_SUPPORT
+    wind_printf("list fs:--show fs mount infomation.\r\n");
 #endif
 }
 
@@ -175,6 +179,13 @@ COMMAND_MAIN(list,argc,argv)
     else if(0 == wind_strcmp(argv[1],"daemon"))
     {
         wind_daemon_print();
+        return W_ERR_OK;
+    }
+#endif
+#if WIND_FS_SUPPORT
+    else if(0 == wind_strcmp(argv[1],"fs"))
+    {
+        wind_fs_print();
         return W_ERR_OK;
     }
 #endif
