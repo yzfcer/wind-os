@@ -42,15 +42,15 @@
 #define FMODE_CRT  0x04
 #define FMODE_A  0x08
 
-#define F_FS_POOL (0x01 << 0) //标记fs对象是否通过内存池分配
-#define IS_F_FS_POOL(fs) ((fs->obj.flag & F_FS_POOL) == F_FS_POOL)
-#define SET_F_FS_POOL(fs) (fs->obj.flag |= F_FS_POOL)
-#define CLR_F_FS_POOL(fs) (fs->obj.flag &= (~F_FS_POOL))
+#define F_VFS_POOL (0x01 << 0) //标记fs对象是否通过内存池分配
+#define IS_F_VFS_POOL(fs) ((fs->obj.flag & F_VFS_POOL) == F_VFS_POOL)
+#define SET_F_VFS_POOL(fs) (fs->obj.flag |= F_VFS_POOL)
+#define CLR_F_VFS_POOL(fs) (fs->obj.flag &= (~F_VFS_POOL))
 
-#define F_FS_MOUNT (0x01 << 1) //标记fs对象是否是否已被挂载
-#define IS_F_FS_MOUNT(fs) ((fs->obj.flag & F_FS_MOUNT) == F_FS_MOUNT)
-#define SET_F_FS_MOUNT(fs) (fs->obj.flag |= F_FS_MOUNT)
-#define CLR_F_FS_MOUNT(fs) (fs->obj.flag &= (~F_FS_MOUNT))
+#define F_VFS_MOUNT (0x01 << 1) //标记fs对象是否是否已被挂载
+#define IS_F_VFS_MOUNT(fs) ((fs->obj.flag & F_VFS_MOUNT) == F_VFS_MOUNT)
+#define SET_F_VFS_MOUNT(fs) (fs->obj.flag |= F_VFS_MOUNT)
+#define CLR_F_VFS_MOUNT(fs) (fs->obj.flag &= (~F_VFS_MOUNT))
 
 #if 0
 typedef enum 
@@ -97,7 +97,7 @@ struct __w_vfs_s
 struct __w_fstype_s
 {
     w_obj_s obj;
-    w_err_t (*init)(w_vfs_s *fs);
+    void* (*init)(w_vfs_s *fs);
     w_err_t (*format)(w_vfs_s *fs);
     
     w_err_t (*open)(w_file_s *file,w_uint16_t fmode);

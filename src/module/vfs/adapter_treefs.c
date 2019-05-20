@@ -32,13 +32,13 @@
 #include "wind_string.h"
 #include "wind_heap.h"
 #if WIND_FS_SUPPORT
-static w_err_t treefs_op_init(w_vfs_s *fs)
+static void* treefs_op_init(w_vfs_s *fs)
 {
     w_treefs_s *tfs;
     tfs = wind_treefs_get("tfs0");
-    WIND_ASSERT_RETURN(tfs != W_NULL,W_ERR_FAIL);
+    WIND_ASSERT_RETURN(tfs != W_NULL,W_NULL);
     wind_treefs_format(tfs);
-    return W_ERR_OK;
+    return tfs;
 }
 
 static w_err_t treefs_op_format(w_vfs_s *fs)

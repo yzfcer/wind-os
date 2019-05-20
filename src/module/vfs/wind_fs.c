@@ -76,8 +76,10 @@ static w_err_t fs_objs_init(void)
     {
         fs = wind_pool_malloc(fspool);
         WIND_ASSERT_RETURN(fs != W_NULL,W_ERR_MEM);
-        err = fsobj_init(fs,fsname[i]);
-        WIND_ASSERT_RETURN(err == W_ERR_OK,err);
+        //err = fsobj_init(fs,fsname[i]);
+        //WIND_ASSERT_RETURN(err == W_ERR_OK,err);
+        wind_memset(fs,0,sizeof(w_vfs_s));
+        wind_obj_init(&fs->obj,WIND_FS_MAGIC,fsname[i],&fs_list);
     }
     return W_ERR_OK;
 }
@@ -167,6 +169,8 @@ w_vfs_s *wind_vfs_get_bypath(const char *path)
     foreach_node(dnode,&fs_list)
     {
         fs = NODE_TO_FS(dnode);
+        if(!IS_F_VFS_MOUNT(fs))
+            continue;
         len = wind_strlen(fs->mount_path);
         if(wind_memcmp(path,fs->mount_path,len) == 0)
         {
@@ -247,29 +251,29 @@ w_err_t wind_vfs_mount(char *fsname,char *fstype,char *blkname,char *path)
 {
     w_err_t err;
     w_blkdev_s *blkdev;
-    w_vfs_s *fs;
+    w_vfs_s *vfs;
     w_int32_t len;
     w_fstype_s *ops;
     err = mount_param_check(fsname,fstype,blkname,path);
     WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_INVALID);
-    fs = wind_vfs_get(fsname);
-    WIND_ASSERT_RETURN(fs != W_NULL,W_ERR_MEM);
+    vfs = wind_vfs_get(fsname);
+    WIND_ASSERT_RETURN(vfs != W_NULL,W_ERR_MEM);
     ops = wind_fstype_get(fstype);
     WIND_ASSERT_RETURN(ops != W_NULL,W_ERR_MEM);
     blkdev = wind_blkdev_get(blkname);
     WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_MEM);
-    len = wind_strlen(path)+1;
     
-    fs->mount_path = wind_malloc(len);
-    WIND_ASSERT_RETURN(fs->mount_path != W_NULL,W_ERR_MEM);
-    wind_strcpy(fs->mount_path,path);
-    fs->fstype = fstype;
-    fs->fsobj = W_NULL;
-    fs->blkdev = blkdev;
-    fs->ops = ops;
-    if(fs->ops->init)
-        fs->ops->init(fs);
-    SET_F_FS_MOUNT(fs);
+    len = wind_strlen(path)+1;
+    vfs->mount_path = wind_malloc(len);
+    WIND_ASSERT_RETURN(vfs->mount_path != W_NULL,W_ERR_MEM);
+    wind_strcpy(vfs->mount_path,path);
+    vfs->fstype = fstype;
+    vfs->fsobj = W_NULL;
+    vfs->blkdev = blkdev;
+    vfs->ops = ops;
+    if(vfs->ops->init)
+        vfs->fsobj = vfs->ops->init(vfs);
+    SET_F_VFS_MOUNT(vfs);
     return W_ERR_OK;
 }
 
