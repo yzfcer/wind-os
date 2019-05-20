@@ -103,10 +103,10 @@ CASE_FUNC(fs_readwrite)
 
 SUITE_SETUP(test_fs)
 {
-    w_fs_s *fs;
-    fs = wind_fs_get("treefs");
+    w_vfs_s *fs;
+    fs = wind_vfs_get("treefs");
     if(fs != W_NULL)
-        wind_fs_format(fs);
+        wind_vfs_format(fs);
 }
 
 SUITE_TEARDOWN(test_fs)

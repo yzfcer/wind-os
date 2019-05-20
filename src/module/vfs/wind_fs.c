@@ -36,11 +36,14 @@
 #include "treefs.h"
 
 #if WIND_FS_SUPPORT
-#define NODE_TO_FS(dnode) (w_fs_s*)(((w_uint8_t*)(dnode))-((w_uint32_t)&(((w_fs_s*)0)->obj.objnode)))
+#define NODE_TO_FS(dnode) (w_vfs_s*)(((w_uint8_t*)(dnode))-((w_uint32_t)&(((w_vfs_s*)0)->obj.objnode)))
 static w_dlist_s fs_list;
 static w_dlist_s fs_ops_list;
 static char *fsname[] = {"fs0","fs1","fs2","fs3","fs4"};
-WIND_POOL(fspool,WIND_FS_MAX_NUM,sizeof(w_fs_s));
+WIND_POOL(fspool,WIND_FS_MAX_NUM,sizeof(w_vfs_s));
+
+static w_err_t wind_fstypes_register(void);
+
 #if 0
 static char *get_type_name(w_fstype_e type)
 {
@@ -55,11 +58,11 @@ static char *get_type_name(w_fstype_e type)
 #endif
 
     
-static w_err_t fsobj_init(w_fs_s *fs,char *name)
+static w_err_t fsobj_init(w_vfs_s *fs,char *name)
 {
     WIND_ASSERT_RETURN(fs != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(name != W_NULL,W_ERR_PTR_NULL);
-    wind_memset(fs,0,sizeof(w_fs_s));
+    wind_memset(fs,0,sizeof(w_vfs_s));
     return wind_obj_init(&fs->obj,WIND_FS_MAGIC,name,&fs_list);
 }
 
@@ -67,7 +70,7 @@ static w_err_t fs_objs_init(void)
 {
     w_err_t err;
     w_int32_t i;
-    w_fs_s *fs;
+    w_vfs_s *fs;
     WIND_ASSERT_RETURN(sizeof(fsname)/sizeof(char *) >=  WIND_FS_MAX_NUM,W_ERR_FAIL);
     for(i = 0;i < WIND_FS_MAX_NUM;i ++)
     {
@@ -81,7 +84,7 @@ static w_err_t fs_objs_init(void)
 
 static w_err_t mount_param_check(char *fsname,char *fstype,char *blkname,char *path)
 {
-    w_fs_s *fs;
+    w_vfs_s *fs;
     w_fstype_s *ops;
     w_dnode_s *dnode;
     w_int32_t len;
@@ -89,7 +92,7 @@ static w_err_t mount_param_check(char *fsname,char *fstype,char *blkname,char *p
     WIND_ASSERT_RETURN(fstype != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(blkname != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(path != W_NULL,W_ERR_PTR_NULL);
-    fs = wind_fs_get(fsname);
+    fs = wind_vfs_get(fsname);
     WIND_ASSERT_RETURN(fs != W_NULL,W_ERR_REPEAT);
     ops = wind_fstype_get(fstype);
     WIND_ASSERT_RETURN(fs != W_NULL,W_ERR_REPEAT);
@@ -131,32 +134,33 @@ static w_err_t mount_param_check(char *fsname,char *fstype,char *blkname,char *p
 }
 
 
-w_err_t _wind_fs_mod_init(void)
+w_err_t _wind_vfs_mod_init(void)
 {
     w_err_t err;
     DLIST_INIT(fs_list);
     DLIST_INIT(fs_ops_list);
-    err = wind_pool_create("fs",fspool,sizeof(fspool),sizeof(w_fs_s));
+    err = wind_pool_create("fs",fspool,sizeof(fspool),sizeof(w_vfs_s));
     WIND_ASSERT_RETURN(err == W_ERR_OK,err);
     err = fs_objs_init();
     WIND_ASSERT_RETURN(err == W_ERR_OK,err);
     
     _wind_file_mod_init();
     _wind_treefs_mod_init();
+    wind_fstypes_register();
     
     _wind_fs_mount_init();
     wind_file_set_current_path(FS_CUR_PATH);
     return W_ERR_OK;
 }
 
-w_fs_s *wind_fs_get(char *name)
+w_vfs_s *wind_vfs_get(char *name)
 {
-    return (w_fs_s *)wind_obj_get(name,&fs_list);
+    return (w_vfs_s *)wind_obj_get(name,&fs_list);
 }
 
-w_fs_s *wind_fs_get_bypath(const char *path)
+w_vfs_s *wind_vfs_get_bypath(const char *path)
 {
-    w_fs_s *fs,*retfs = W_NULL;
+    w_vfs_s *fs,*retfs = W_NULL;
     w_dnode_s *dnode;
     w_int32_t len;
     wind_disable_switch();
@@ -174,17 +178,17 @@ w_fs_s *wind_fs_get_bypath(const char *path)
     return retfs;
 }
 
-w_err_t wind_fs_print(void)
+w_err_t wind_vfs_print(void)
 {
     w_dnode_s *dnode;
-    w_fs_s *fs;
+    w_vfs_s *fs;
     w_dlist_s *list = &fs_list;
     wind_printf("\r\n\r\nfs mount list:\r\n");
     wind_disable_switch();
     foreach_node(dnode,list)
     {
         fs = NODE_TO_FS(dnode);
-        wind_printf("fsname:%s,",wind_obj_name(&fs->obj));
+        wind_printf("mount:%s,",wind_obj_name(&fs->obj));
         wind_printf("fstype:%s,",fs->fstype?fs->fstype:"none");
         wind_printf("blkdev:%s,",fs->blkdev?wind_obj_name(&fs->blkdev->obj):"none");
         wind_printf("mount path:%s\r\n",fs->mount_path?fs->mount_path:"none");
@@ -212,10 +216,7 @@ w_err_t wind_fstype_register(w_fstype_s *ops)
         wind_notice("fs ops has been registered.\r\n");
         return W_ERR_OK;
     }
-
-    wind_disable_switch();
-    dlist_insert_tail(&fs_ops_list,&ops->obj.objnode);
-    wind_enable_switch();
+    wind_obj_init(&ops->obj,WIND_FSTYPE_MAGIC,ops->obj.name,&fs_ops_list);
     return W_ERR_OK;
 }
 
@@ -226,24 +227,32 @@ w_err_t wind_fstype_unregister(w_fstype_s *ops)
     WIND_ASSERT_RETURN(ops != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(ops->obj.magic == WIND_FSTYPE_MAGIC,W_ERR_INVALID);
     wind_notice("unregister fs ops:%s",wind_obj_name(&ops->obj));
-    wind_disable_switch();
-	dnode = dlist_remove(&fs_ops_list,&ops->obj.objnode);
-    wind_enable_switch();
+    wind_obj_deinit(&ops->obj,WIND_FSTYPE_MAGIC,&fs_ops_list);
     WIND_ASSERT_RETURN(dnode != W_NULL,W_ERR_INVALID);
     return W_ERR_OK;
 }
 
+#if WIND_TREEFS_SUPPORT
+extern w_fstype_s treefs_ops;
+#endif
+static w_err_t wind_fstypes_register(void)
+{
+#if WIND_TREEFS_SUPPORT
+    wind_fstype_register(&treefs_ops);
+#endif
+    return W_ERR_OK;
+}
 
-w_err_t wind_fs_mount(char *fsname,char *fstype,char *blkname,char *path)
+w_err_t wind_vfs_mount(char *fsname,char *fstype,char *blkname,char *path)
 {
     w_err_t err;
     w_blkdev_s *blkdev;
-    w_fs_s *fs;
+    w_vfs_s *fs;
     w_int32_t len;
     w_fstype_s *ops;
     err = mount_param_check(fsname,fstype,blkname,path);
     WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_INVALID);
-    fs = wind_fs_get(fsname);
+    fs = wind_vfs_get(fsname);
     WIND_ASSERT_RETURN(fs != W_NULL,W_ERR_MEM);
     ops = wind_fstype_get(fstype);
     WIND_ASSERT_RETURN(ops != W_NULL,W_ERR_MEM);
@@ -260,14 +269,15 @@ w_err_t wind_fs_mount(char *fsname,char *fstype,char *blkname,char *path)
     fs->ops = ops;
     if(fs->ops->init)
         fs->ops->init(fs);
+    SET_F_FS_MOUNT(fs);
     return W_ERR_OK;
 }
 
-w_err_t wind_fs_unmount(char *fsname)
+w_err_t wind_vfs_unmount(char *fsname)
 {
-    w_fs_s *fs;
+    w_vfs_s *fs;
     WIND_ASSERT_RETURN(fsname != W_NULL,W_ERR_PTR_NULL);
-    fs = wind_fs_get(fsname);
+    fs = wind_vfs_get(fsname);
     WIND_ASSERT_RETURN(fs != W_NULL,W_ERR_INVALID);
     wind_disable_switch();
     fs->blkdev = W_NULL;
@@ -278,7 +288,7 @@ w_err_t wind_fs_unmount(char *fsname)
     return W_ERR_OK;
 }
 
-w_err_t wind_fs_format(w_fs_s *fs)
+w_err_t wind_vfs_format(w_vfs_s *fs)
 {
     w_err_t err = W_ERR_OK;
     WIND_ASSERT_RETURN(fs != W_NULL,W_ERR_PTR_NULL);

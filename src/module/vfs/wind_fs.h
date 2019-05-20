@@ -34,18 +34,18 @@
 #define WIND_FS_DEF(name,type,ops) \
 {{~WIND_FS_MAGIC,#name,{W_NULL,W_NULL},0,0},W_NULL,#name,W_NULL,W_NULL,&ops}
 
-w_err_t _wind_fs_mod_init(void);
-w_fs_s *wind_fs_get(char *name);
-w_fs_s *wind_fs_get_bypath(const char *path);
-w_err_t wind_fs_print(void);
+w_err_t _wind_vfs_mod_init(void);
+w_vfs_s *wind_vfs_get(char *name);
+w_vfs_s *wind_vfs_get_bypath(const char *path);
+w_err_t wind_vfs_print(void);
 
 w_fstype_s *wind_fstype_get(const char *name);
 w_err_t wind_fstype_register(w_fstype_s *ops);
 w_err_t wind_fstype_unregister(w_fstype_s *ops);
 
-w_err_t wind_fs_mount(char *fsname,char *fstype,char *devname,char *path);
-w_err_t wind_fs_unmount(char *fsname);
-w_err_t wind_fs_format(w_fs_s *fs);
+w_err_t wind_vfs_mount(char *fsname,char *fstype,char *devname,char *path);
+w_err_t wind_vfs_unmount(char *fsname);
+w_err_t wind_vfs_format(w_vfs_s *fs);
 
 #endif
 #endif

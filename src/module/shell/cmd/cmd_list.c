@@ -85,7 +85,7 @@ COMMAND_USAGE(list)
     wind_printf("list daemon:--show all thread that under daemon.\r\n");
 #endif
 #if WIND_FS_SUPPORT
-    wind_printf("list fs:--show fs mount infomation.\r\n");
+    wind_printf("list vfs:--show vfs mount infomation.\r\n");
 #endif
 }
 
@@ -183,9 +183,9 @@ COMMAND_MAIN(list,argc,argv)
     }
 #endif
 #if WIND_FS_SUPPORT
-    else if(0 == wind_strcmp(argv[1],"fs"))
+    else if(0 == wind_strcmp(argv[1],"vfs"))
     {
-        wind_fs_print();
+        wind_vfs_print();
         return W_ERR_OK;
     }
 #endif

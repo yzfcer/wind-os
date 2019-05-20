@@ -81,10 +81,10 @@ typedef enum
 }w_ftype_e;
 
 typedef struct __w_fstype_s w_fstype_s;
-typedef struct __w_fs_s w_fs_s;
+typedef struct __w_vfs_s w_vfs_s;
 typedef struct __w_file_s w_file_s;
 
-struct __w_fs_s
+struct __w_vfs_s
 {
     w_obj_s obj;
     char *mount_path;
@@ -97,8 +97,8 @@ struct __w_fs_s
 struct __w_fstype_s
 {
     w_obj_s obj;
-    w_err_t (*init)(w_fs_s *fs);
-    w_err_t (*format)(w_fs_s *fs);
+    w_err_t (*init)(w_vfs_s *fs);
+    w_err_t (*format)(w_vfs_s *fs);
     
     w_err_t (*open)(w_file_s *file,w_uint16_t fmode);
     w_err_t (*close)(w_file_s* file);
@@ -121,7 +121,7 @@ struct __w_file_s
     w_uint16_t fmode;//操作模式
     w_uint8_t ftype;//文件系统类型
     w_uint8_t isdir;
-    w_fs_s *fs;
+    w_vfs_s *fs;
     void *fileobj;//文件对象
     w_int32_t offset;//偏移量
     w_mutex_s *mutex;//文件操作变量
@@ -129,7 +129,7 @@ struct __w_file_s
 
 
 #define FS_OPS_DEF(fs) \
-static w_fstype_s fs_ops = {\
+w_fstype_s fs##_ops = {\
 {WIND_FSTYPE_MAGIC,#fs,{W_NULL,W_NULL},0,0},\
 fs##_op_init,\
 fs##_op_format,\

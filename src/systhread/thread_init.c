@@ -116,7 +116,7 @@ static w_err_t thread_init(w_int32_t argc,char **argv)
     _wind_watchdog_mod_init();
 #endif
 #if WIND_FS_SUPPORT
-    _wind_fs_mod_init();
+    _wind_vfs_mod_init();
 #endif  
 #if WIND_DBGPOINT_SUPPORT
     _wind_dbgpoint_mod_init();

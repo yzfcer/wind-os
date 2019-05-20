@@ -32,7 +32,7 @@
 #include "wind_string.h"
 #include "wind_heap.h"
 #if WIND_FS_SUPPORT
-static w_err_t treefs_op_init(w_fs_s *fs)
+static w_err_t treefs_op_init(w_vfs_s *fs)
 {
     w_treefs_s *tfs;
     tfs = wind_treefs_get("tfs0");
@@ -41,7 +41,7 @@ static w_err_t treefs_op_init(w_fs_s *fs)
     return W_ERR_OK;
 }
 
-static w_err_t treefs_op_format(w_fs_s *fs)
+static w_err_t treefs_op_format(w_vfs_s *fs)
 {
     return W_ERR_OK;
 }
@@ -150,11 +150,12 @@ static w_err_t treefs_op_fputs(w_file_s* file,char *buff)
 
 FS_OPS_DEF(treefs);
 
-w_fs_s fs_treefs[1] = 
+#if 0
+w_vfs_s fs_treefs[1] = 
 {
     WIND_FS_DEF(treefs,FSTYPE_TREEFS,fs_ops),
 };
-
+#endif
 
 
 #endif
