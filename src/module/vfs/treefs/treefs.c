@@ -15,8 +15,6 @@ w_err_t _wind_treefs_mod_init(void)
     DLIST_INIT(treefslist);
     err = wind_pool_create("treefs",treefspool,sizeof(treefspool),sizeof(w_treefs_s));
     WIND_ASSERT_RETURN(err == W_ERR_OK,err);
-    tfs = wind_treefs_create("tfs0");
-    WIND_ASSERT_RETURN(tfs != W_NULL,W_ERR_MEM);
     return err;
 }
 

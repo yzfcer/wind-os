@@ -32,7 +32,7 @@
 #if WIND_FS_SUPPORT
 
 //#define WIND_FS_DEF(name,type,ops) \
-//{{~WIND_FS_MAGIC,#name,{W_NULL,W_NULL},0,0},W_NULL,#name,W_NULL,W_NULL,&ops}
+//{{~WIND_VFS_MAGIC,#name,{W_NULL,W_NULL},0,0},W_NULL,#name,W_NULL,W_NULL,&ops}
 
 w_err_t _wind_vfs_mod_init(void);
 w_vfs_s *wind_vfs_get(char *name);

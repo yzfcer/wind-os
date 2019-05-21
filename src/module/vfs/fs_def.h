@@ -28,7 +28,7 @@
 #include "wind_type.h"
 #include "wind_obj.h"
 
-#define WIND_FS_MAGIC 0x235C79A5
+#define WIND_VFS_MAGIC 0x235C79A5
 #define WIND_FILE_MAGIC 0x275972D5
 #define WIND_FSTYPE_MAGIC 0x3582A6B3
 #define WFS_NAME_LEN 12
@@ -48,9 +48,9 @@
 #define CLR_F_VFS_POOL(fs) (fs->obj.flag &= (~F_VFS_POOL))
 
 #define F_VFS_MOUNT (0x01 << 1) //±ê¼Çfs¶ÔÏóÊÇ·ñÊÇ·ñÒÑ±»¹ÒÔØ
-#define IS_F_VFS_MOUNT(fs) ((fs->obj.flag & F_VFS_MOUNT) == F_VFS_MOUNT)
-#define SET_F_VFS_MOUNT(fs) (fs->obj.flag |= F_VFS_MOUNT)
-#define CLR_F_VFS_MOUNT(fs) (fs->obj.flag &= (~F_VFS_MOUNT))
+#define IS_F_VFS_MOUNT(vfs) ((vfs->obj.flag & F_VFS_MOUNT) == F_VFS_MOUNT)
+#define SET_F_VFS_MOUNT(vfs) (vfs->obj.flag |= F_VFS_MOUNT)
+#define CLR_F_VFS_MOUNT(vfs) (vfs->obj.flag &= (~F_VFS_MOUNT))
 
 #if 0
 typedef enum 
@@ -121,7 +121,7 @@ struct __w_file_s
     w_uint16_t fmode;//æ“ä½œæ¨¡å¼
     w_uint8_t ftype;//æ–‡ä»¶ç³»ç»Ÿç±»å‹
     w_uint8_t isdir;
-    w_vfs_s *fs;
+    w_vfs_s *vfs;
     void *fileobj;//æ–‡ä»¶å¯¹è±¡
     w_int32_t offset;//åç§»é‡
     w_mutex_s *mutex;//æ–‡ä»¶æ“ä½œå˜é‡

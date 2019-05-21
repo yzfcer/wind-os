@@ -32,18 +32,23 @@
 #include "wind_string.h"
 #include "wind_heap.h"
 #if WIND_FS_SUPPORT
-static void* treefs_op_init(w_vfs_s *fs)
+static void* treefs_op_init(w_vfs_s *vfs)
 {
     w_treefs_s *tfs;
-    tfs = wind_treefs_get("tfs0");
-    WIND_ASSERT_RETURN(tfs != W_NULL,W_NULL);
+    //tfs = wind_treefs_get("tfs0");
+    //WIND_ASSERT_RETURN(tfs != W_NULL,W_NULL);
+    
+    tfs = wind_treefs_create(vfs->obj.name);
+    WIND_ASSERT_RETURN(tfs != W_NULL,W_ERR_MEM);
     wind_treefs_format(tfs);
     return tfs;
 }
 
-static w_err_t treefs_op_format(w_vfs_s *fs)
+static w_err_t treefs_op_format(w_vfs_s *vfs)
 {
-    return W_ERR_OK;
+    WIND_ASSERT_RETURN(vfs != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(vfs->fsobj != W_NULL,W_ERR_PTR_NULL);
+    return wind_treefs_format((w_treefs_s *)vfs->fsobj);
 }
 
 static w_err_t treefs_op_open(w_file_s *file,w_uint16_t fmode)
@@ -51,7 +56,7 @@ static w_err_t treefs_op_open(w_file_s *file,w_uint16_t fmode)
     w_treefile_s *tfile;
     w_treefs_s *tfs;
     WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
-    tfs = (w_treefs_s*)file->fs->fsobj;
+    tfs = (w_treefs_s*)file->vfs->fsobj;
     WIND_ASSERT_RETURN(tfs != W_NULL,W_ERR_FAIL);
     tfile = treefile_open(tfs,file->path,fmode);
     if(tfile == W_NULL)
