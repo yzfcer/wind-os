@@ -71,9 +71,10 @@ w_blkdev_ops_s null_ops =
     null_close
 };
 
-w_blkdev_s null_dev[1] = 
+w_blkdev_s null_dev[2] = 
 {
-    WIND_BLKDEV_DEF("null",BLKDEV_COMMON,0,0,0,0,&null_ops)
+    WIND_BLKDEV_DEF("null0",BLKDEV_COMMON,0,0,0,0,&null_ops),
+    WIND_BLKDEV_DEF("null1",BLKDEV_COMMON,0,0,0,0,&null_ops)
 };
 
 #endif
