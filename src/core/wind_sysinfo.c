@@ -52,6 +52,7 @@ void _wind_os_print_logo(void)
         "   \\/    \\/   "   
     };
     wind_printf("\r\n");
+    wind_printf("system start\r\n");
     for(i = 0;i < 4;i++)
     {
         wind_printf("%s\r\n",logo[i]);

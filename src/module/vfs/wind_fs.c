@@ -203,10 +203,10 @@ w_err_t wind_vfs_print(void)
     {
         vfs = NODE_TO_FS(dnode);
         
-        wind_printf("mount:%s,",wind_obj_name(&vfs->obj));
-        wind_printf("fstype:%s,",vfs->fstype?vfs->fstype:"none");
-        wind_printf("blkdev:%s,",vfs->blkdev?wind_obj_name(&vfs->blkdev->obj):"none");
-        wind_printf("mount path:%s\r\n",vfs->mount_path?vfs->mount_path:"none");
+        wind_printf("mount %s ",wind_obj_name(&vfs->obj));
+        wind_printf("%s ",vfs->fstype?vfs->fstype:"    ");
+        wind_printf("%s ",vfs->blkdev?wind_obj_name(&vfs->blkdev->obj):"    ");
+        wind_printf("%s\r\n",vfs->mount_path?vfs->mount_path:"    ");
     }
     wind_enable_switch();
     return W_ERR_OK;

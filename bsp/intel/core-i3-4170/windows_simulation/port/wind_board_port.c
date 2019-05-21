@@ -46,6 +46,9 @@ void wind_enter_thread_hook(void)
  */
 void wind_system_reset(void)
 {
+    extern char *argv_bak;
+    if(argv_bak != W_NULL)
+        system(argv_bak);
     ExitProcess(0);
 }
 
