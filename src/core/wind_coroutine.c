@@ -131,12 +131,11 @@ w_err_t wind_coroutine_init(w_coroutine_s *coroutine,const char *name,w_uint16_t
     thread = wind_thread_current();
     WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_FAIL);
     coroutine->cid = cid;
-    //coroutine->thread = thread;
     coroutine->func = func;
     coroutine->arg = arg;
     coroutine->stack = _wind_thread_stack_init((thread_run_f)func,arg,&coroutine->stackbuff[WIND_COROUTINE_STKSIZE-1]);
-    SET_F_COROUTINE_READY(coroutine);
     wind_obj_init(&coroutine->obj,WIND_COROUTINE_MAGIC,name,&thread->coroutlist);
+    SET_F_COROUTINE_READY(coroutine);
     CLR_F_COROUTINE_POOL(coroutine);
     return W_ERR_OK;
 }
