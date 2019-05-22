@@ -16,7 +16,7 @@
 #include <stdio.h>
 #include <malloc.h>
 //#include <stdlib.h>
-
+#if 0
 void *wind_malloc(w_uint32_t size)
 {
     return malloc(size);
@@ -26,6 +26,7 @@ void wind_free(void *ptr)
 {
     free(ptr);
 }
+#endif
 
 w_int32_t read_file(char *filename,w_int32_t offset,w_uint8_t *buff,w_int32_t size)
 {

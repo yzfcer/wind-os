@@ -22,11 +22,11 @@
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
-#include "boot_pack.h"
+#include "wind_pack.h"
 #include "wind_debug.h"
 #include "wind_string.h"
 #include "wind_conv.h"
-#include "boot_imghead.h"
+#include "wind_imghead.h"
 #include "wind_encrypt.h"
 #include "wind_crc32.h"
 #include "wind_macro.h"
@@ -65,7 +65,7 @@ typedef struct
 
 static char databuff[4096];
 static pack_info_s pack_info;
-static img_head_s imghead;
+static w_img_head_s imghead;
 static w_err_t read_bin_files(void)
 {
     w_int32_t i,flen;
@@ -310,7 +310,7 @@ static w_err_t pack_files(pack_info_s *info)
     w_uint8_t *buff;
     char *img;
     w_err_t err;
-    img_head_s *head;
+    w_img_head_s *head;
     w_encypt_ctx_s ctx;
     w_uint32_t crc;
     w_uint8_t key[] = ENCRYPT_KEY;
@@ -360,7 +360,7 @@ static w_err_t pack_files(pack_info_s *info)
     wind_strncpy(head->board_name, pkinfo->board_name, 32);
     wind_strncpy(head->cpu_name, pkinfo->cpu_name, 32);
     wind_strncpy(head->arch_name, pkinfo->arch_name, 32);
-    boot_img_head_set(head,buff);
+    wind_img_head_set(head,buff);
     wind_notice("flush image file");
     err = write_file(pkinfo->output_file,0, buff,imglen);
     wind_free(buff);
@@ -411,12 +411,12 @@ static w_err_t check_file_space(void)
 }
 
 
-w_err_t pack_main(w_int32_t argc,char **argv)
+w_int32_t pack_main(w_int32_t argc,char **argv)
 {
     w_err_t err;
     
     pack_info_s *pkinfo = &pack_info;
-    wind_notice("boot pack start.\r\n");
+    wind_notice("pack firmware start.\r\n");
     WIND_ASSERT_RETURN(argc >= 2,W_ERR_INVALID);
     pack_info_init();
     err = get_cfginfo(argv[1],databuff,sizeof(databuff));

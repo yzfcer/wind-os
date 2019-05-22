@@ -440,6 +440,18 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\treefs\treefile.c">
       <Filter>module_vfs</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\common\wind_imghead.c">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\port\file_port.c">
+      <Filter>os_port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\tools\pack\wind_pack.c">
+      <Filter>tool_pack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\x86_cmd_pack.c">
+      <Filter>module_shell</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">
@@ -483,6 +495,9 @@
     </Filter>
     <Filter Include="module_cjson">
       <UniqueIdentifier>{cb956575-b568-4d7e-9038-5d90b331c8b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tool_pack">
+      <UniqueIdentifier>{1c022046-ee88-4360-a89f-e2fcc86e9b22}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -767,6 +782,15 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\treefs\treefs_def.h">
       <Filter>module_vfs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\common\wind_imghead.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\port\file_port.h">
+      <Filter>os_port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\tools\pack\wind_pack.h">
+      <Filter>tool_pack</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

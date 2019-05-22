@@ -187,6 +187,9 @@ extern "C" {
 
 #define CMD_BEEP_SUPPORT 0 //是否支持蜂鸣器命令
 #define CMD_LED_SUPPORT 0 //是否支持LED操作命令
+
+#define CMD_PACK_SUPPORT 1 //是否支持对固件打包的命令,pc
+
 #endif
 
 //-------------------------------------------------------------------------------

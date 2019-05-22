@@ -4,10 +4,10 @@
 **                                       yzfcer@163.com
 **
 **--------------文件信息--------------------------------------------------------------------------------
-**文   件   名: boot_imghead.c
+**文   件   名: wind_imghead.c
 **创   建   人: Jason Zhou
 **最后修改日期: 
-**描        述: wind-boot的image文件头部处理函数
+**描        述: wind-os的image文件头部处理函数
 **              
 **--------------历史版本信息----------------------------------------------------------------------------
 ** 创建人: Jason Zhou
@@ -22,7 +22,7 @@
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
-#include "boot_imghead.h"
+#include "wind_imghead.h"
 #include "wind_crc32.h"
 #include "wind_conv.h"
 #include "wind_string.h"
@@ -36,7 +36,7 @@ static w_err_t parse_version(w_uint32_t version,char *buff,w_int32_t len)
     return W_ERR_OK;
 }
 
-void boot_img_head_print(img_head_s *head)
+void wind_img_head_print(w_img_head_s *head)
 {
     static char *encty_type[4] = 
     {
@@ -62,7 +62,7 @@ void boot_img_head_print(img_head_s *head)
     wind_printf("\r\n");
 }
 
-w_err_t boot_img_head_get(img_head_s *head,w_uint8_t *buff)
+w_err_t wind_img_head_get(w_img_head_s *head,w_uint8_t *buff)
 {
     w_uint32_t crc_calc,crc_read;
     w_int32_t index = 0;
@@ -113,12 +113,12 @@ w_err_t boot_img_head_get(img_head_s *head,w_uint8_t *buff)
         wind_error("img head crc_calc error.");
         return W_ERR_CRC;
     }
-    boot_img_head_print(head);
+    wind_img_head_print(head);
     return W_ERR_OK;
 
 }
 
-w_err_t boot_img_head_set(img_head_s *head,w_uint8_t *buff)
+w_err_t wind_img_head_set(w_img_head_s *head,w_uint8_t *buff)
 {
     w_uint32_t crc;
     w_int32_t index = 0;
