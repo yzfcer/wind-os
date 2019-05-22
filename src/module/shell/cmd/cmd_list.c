@@ -49,9 +49,11 @@ COMMAND_DISC(list)
 COMMAND_USAGE(list)
 {
     wind_printf("list thread:--show thread infomation.\r\n");
-    wind_printf("list mutex:--show all mutex status.\r\n");
     wind_printf("list pool:--show all core object pools.\r\n");
     
+#if WIND_MUTEX_SUPPORT
+    wind_printf("list mutex:--show all mutex status.\r\n");
+#endif
 #if WIND_SEM_SUPPORT
         wind_printf("list sem:--show sem infomation.\r\n");
 #endif
@@ -81,7 +83,7 @@ COMMAND_USAGE(list)
 #if WIND_WATCHDOG_SUPPORT
     wind_printf("list watchdog:--show all thread watchdog.\r\n");
 #endif
-#if WIND_WATCHDOG_SUPPORT
+#if WIND_DAEMON_SUPPORT
     wind_printf("list daemon:--show all thread that under daemon.\r\n");
 #endif
 #if WIND_FS_SUPPORT
@@ -97,16 +99,18 @@ COMMAND_MAIN(list,argc,argv)
         wind_thread_print();
         return W_ERR_OK;
     }
-    else if(0 == wind_strcmp(argv[1],"mutex"))
-    {
-        wind_mutex_print();
-        return W_ERR_OK;
-    }
     else if(0 == wind_strcmp(argv[1],"pool"))
     {
         wind_pool_print_list();
         return W_ERR_OK;
     }
+#if WIND_MUTEX_SUPPORT
+    else if(0 == wind_strcmp(argv[1],"mutex"))
+    {
+        wind_mutex_print();
+        return W_ERR_OK;
+    }
+#endif
 #if WIND_SEM_SUPPORT
     else if(0 == wind_strcmp(argv[1],"sem"))
     {
@@ -175,7 +179,7 @@ COMMAND_MAIN(list,argc,argv)
             return W_ERR_OK;
         }
 #endif
-#if WIND_WATCHDOG_SUPPORT
+#if WIND_DAEMON_SUPPORT
     else if(0 == wind_strcmp(argv[1],"daemon"))
     {
         wind_daemon_print();
