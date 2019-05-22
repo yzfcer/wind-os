@@ -37,6 +37,7 @@
 
 #if WIND_FS_SUPPORT
 #define NODE_TO_FS(dnode) (w_vfs_s*)(((w_uint8_t*)(dnode))-((w_uint32_t)&(((w_vfs_s*)0)->obj.objnode)))
+
 static w_dlist_s fs_list;
 static w_dlist_s fs_ops_list;
 static char *fsname[] = {"fs0","fs1","fs2","fs3","fs4"};
@@ -44,20 +45,6 @@ WIND_POOL(fspool,WIND_FS_MAX_NUM,sizeof(w_vfs_s));
 
 static w_err_t wind_fstypes_register(void);
 
-#if 0
-static char *get_type_name(w_fstype_e type)
-{
-    switch(type)
-    {
-        case FSTYPE_NONE:return "none";
-        case FSTYPE_TREEFS:return "treefs";
-        case FSTYPE_LISTFS:return "listfs";
-        default:return "undefine";
-    }
-}
-#endif
-
-    
 w_vfs_s *wind_vfs_create(char *name)
 {
     w_err_t err;
@@ -81,7 +68,7 @@ w_err_t wind_vfs_destroy(w_vfs_s *vfs)
     return err;
 }
 
-static w_err_t fs_objs_init(void)
+static w_err_t vfs_objs_init(void)
 {
     w_err_t err;
     w_int32_t i;
@@ -153,7 +140,7 @@ w_err_t _wind_vfs_mod_init(void)
     DLIST_INIT(fs_ops_list);
     err = wind_pool_create("vfs",fspool,sizeof(fspool),sizeof(w_vfs_s));
     WIND_ASSERT_RETURN(err == W_ERR_OK,err);
-    err = fs_objs_init();
+    err = vfs_objs_init();
     WIND_ASSERT_RETURN(err == W_ERR_OK,err);
     
     _wind_file_mod_init();
@@ -252,6 +239,7 @@ w_err_t wind_fstype_unregister(w_fstype_s *ops)
 #if WIND_TREEFS_SUPPORT
 extern w_fstype_s treefs_ops;
 #endif
+
 static w_err_t wind_fstypes_register(void)
 {
 #if WIND_TREEFS_SUPPORT

@@ -119,54 +119,50 @@ w_file_s *wind_file_get_bypath(const char *path)
 
 static w_file_s *wind_file_create(w_vfs_s *fs,const char *realpath,w_uint16_t fmode,w_uint8_t isdir)
 {
-    w_file_s *file = W_NULL;
     w_err_t err;
-    w_err_t rpathlen;
-    file = file_malloc();
-    if(file == W_NULL)
-        goto file_create_fail;
-    file->mutex = W_NULL;
-    file->path = W_NULL;
-    file->mutex = wind_mutex_create(W_NULL);
-    if(file->mutex == W_NULL)
-        goto file_create_fail;
-    rpathlen = wind_strlen(realpath);
-    file->path = wind_malloc(rpathlen+1);
-    if(file->path == W_NULL)
-        goto file_create_fail;
+    w_int32_t rpathlen;
+    w_file_s *file = W_NULL;
+    do
+    {
+        err = W_ERR_OK;
+        file = file_malloc();
+        WIND_ASSERT_BREAK(file != W_NULL,W_ERR_MEM,"file_malloc failed");
+        file->mutex = W_NULL;
+        file->path = W_NULL;
+        file->mutex = wind_mutex_create(W_NULL);
+        WIND_ASSERT_BREAK(file->mutex != W_NULL,W_ERR_MEM,"create mutex failed");
 
-    wind_strcpy(file->path,realpath);
-    file->path[rpathlen] = 0;
-    file->subname = W_NULL;
-    DNODE_INIT(file->filenode);
-    file->ftype = fs->fstype;
-    file->fmode = fmode;
-    file->isdir = isdir;
-    file->vfs = fs;
-    file->fileobj = W_NULL;
-    file->offset = 0;
-    err = file->vfs->ops->open(file,file->fmode);
-    if(err != W_ERR_OK)
-    {
-        goto file_create_fail;
-    }
-    else
-    {
+        rpathlen = wind_strlen(realpath);
+        file->path = wind_malloc(rpathlen+1);
+        WIND_ASSERT_BREAK(file->path != W_NULL,W_ERR_MEM,"malloc file path failed");
+        wind_strcpy(file->path,realpath);
+        file->path[rpathlen] = 0;
+        file->subname = W_NULL;
+        DNODE_INIT(file->filenode);
+        file->ftype = fs->fstype;
+        file->fmode = fmode;
+        file->isdir = isdir;
+        file->vfs = fs;
+        file->fileobj = W_NULL;
+        file->offset = 0;
+        err = file->vfs->ops->open(file,file->fmode);
         wind_disable_switch();
         dlist_insert_tail(&filelist,&file->filenode);
         wind_enable_switch();
-        return file;
-    }
-file_create_fail:
-    if(file != W_NULL)
+        break;
+    }while(0);
+
+
+    if(err != W_ERR_OK)
     {
         if(file->path != W_NULL)
             wind_free(file->path);
         if(file->mutex != W_NULL)
             wind_mutex_destroy(file->mutex);
         file_free(file);
+        file = W_NULL;
     }
-    return W_NULL;
+    return file;
     
 }
 
