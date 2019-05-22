@@ -452,6 +452,9 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\x86_cmd_pack.c">
       <Filter>module_shell</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\x86_cmd_rcp.c">
+      <Filter>module_shell</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">

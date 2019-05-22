@@ -177,7 +177,6 @@ extern "C" {
 #define CMD_XMODEM_SUPPORT 0 //是否支持xmodem协议命令
 #define CMD_SYSINFO_SUPPORT 1 //是否支持系统信息命令
 #define CMD_CUTEST_SUPPORT 1 //是否支持单元测试命令
-#define CMD_MKFS_SUPPORT 1 //是否支持创建文件系统镜像命令
 #define CMD_DBGPOINT_SUPPORT 1 //是否支持系统调试点功能命令
 #define CMD_USER_SUPPORT 1 //是否支持用户管理命令
 #define CMD_WATCHDOG_SUPPORT 1 //是否支持软件看门狗命令
@@ -188,7 +187,9 @@ extern "C" {
 #define CMD_BEEP_SUPPORT 0 //是否支持蜂鸣器命令
 #define CMD_LED_SUPPORT 0 //是否支持LED操作命令
 
+#define CMD_MKFS_SUPPORT 1 //是否支持创建文件系统镜像命令,pc
 #define CMD_PACK_SUPPORT 1 //是否支持对固件打包的命令,pc
+#define CMD_RCP_SUPPORT 1 //是否支持在主机与wind-os之间拷贝文件的命令,pc
 
 #endif
 

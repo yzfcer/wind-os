@@ -96,6 +96,9 @@ CMD_DECLARE(timer);
 #if CMD_PACK_SUPPORT
 CMD_DECLARE(pack);
 #endif
+#if CMD_RCP_SUPPORT
+CMD_DECLARE(rcp);
+#endif
 
 void _wind_register_all_cmd(w_shell_ctx_s *ctx)
 {
@@ -165,6 +168,9 @@ void _wind_register_all_cmd(w_shell_ctx_s *ctx)
 #endif
 #if CMD_PACK_SUPPORT
     wind_cmd_register(COMMAND(pack),1);
+#endif
+#if CMD_RCP_SUPPORT
+    wind_cmd_register(COMMAND(rcp),1);
 #endif
 }
 
