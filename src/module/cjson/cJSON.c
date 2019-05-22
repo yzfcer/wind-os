@@ -22,20 +22,24 @@
 
 /* cJSON */
 /* JSON parser in C. */
-
-//#include <string.h>
-//#include <stdio.h>
-//#include <math.h>
-//#include <stdlib.h>
-#include <float.h>
-#include <limits.h>
-//#include <ctype.h>
 #include "cJSON.h"
 #include "JSON_checker.h"
 #include "wind_heap.h"
 #include "wind_string.h"
 #include "wind_debug.h"
 #include "wind_macro.h"
+#ifndef INT_MAX
+#define INT_MAX 2147483647
+#endif
+
+#ifndef INT_MIN
+#define INT_MIN 2147483648
+#endif
+
+#ifndef DBL_EPSILON
+#define DBL_EPSILON 0.000001f
+#endif
+
 
 static const char *global_ep;
 #define tolower(c) LOWERCASE(c)
@@ -49,7 +53,7 @@ static int cJSON_strcasecmp(const char *s1,const char *s2)
 	return tolower(*(const unsigned char *)s1) - tolower(*(const unsigned char *)s2);
 }
 
-static void *cJSON_malloc(size_t sz)
+static void *cJSON_malloc(w_size_t sz)
 {
     return wind_falloc((w_uint32_t)sz,251);
 }
@@ -61,7 +65,7 @@ static void cJSON_free(void *ptr)
 
 static char* cJSON_strdup(const char* str)
 {
-      size_t len;
+      w_size_t len;
       char* copy;
 
       len = wind_strlen(str) + 1;
@@ -459,7 +463,7 @@ static char *print_array(cJSON *item,int depth,int fmt,printbuffer *p)
 	char *out=0,*ptr,*ret;int len=5;
 	cJSON *child=item->child;
 	int numentries=0,i=0,fail=0;
-	size_t tmplen=0;
+	w_size_t tmplen=0;
 	
 	/* How many entries in the array? */
 	while (child) numentries++,child=child->next;
@@ -575,7 +579,7 @@ static char *print_object(cJSON *item,int depth,int fmt,printbuffer *p)
 	char *out=0,*ptr,*ret,*str;int len=7,i=0,j;
 	cJSON *child=item->child;
 	int numentries=0,fail=0;
-	size_t tmplen=0;
+	w_size_t tmplen=0;
 	/* Count the number of entries. */
 	while (child) numentries++,child=child->next;
 	/* Explicitly handle empty object case */

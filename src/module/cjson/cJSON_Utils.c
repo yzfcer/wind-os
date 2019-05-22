@@ -1,7 +1,3 @@
-//#include <ctype.h>
-//#include <string.h>
-//#include <stdlib.h>
-//#include <stdio.h>
 #include "wind_debug.h"
 #include "cJSON_Utils.h"
 #include "wind_heap.h"
