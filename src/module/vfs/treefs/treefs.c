@@ -4,7 +4,7 @@
 #include "wind_heap.h"
 #include "treefs.h"
 #include "treefile.h"
-#ifdef WIND_FS_SUPPORT
+#if WIND_TREEFS_SUPPORT
 
 w_dlist_s treefslist;
 WIND_POOL(treefspool,WIND_TREEFS_MAX_NUM,sizeof(w_treefs_s));

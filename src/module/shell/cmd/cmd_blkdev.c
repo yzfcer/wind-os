@@ -30,7 +30,7 @@
 
 COMMAND_DISC(blkdev)
 {
-    wind_printf("conreol one block device.\r\n");
+    wind_printf("to operate a block device.\r\n");
 }
 
 COMMAND_USAGE(blkdev)

@@ -31,7 +31,7 @@
 #include "wind_debug.h"
 #include "wind_string.h"
 #include "wind_heap.h"
-#if WIND_FS_SUPPORT
+#if WIND_TREEFS_SUPPORT
 static void* treefs_op_init(w_vfs_s *vfs)
 {
     w_treefs_s *tfs;

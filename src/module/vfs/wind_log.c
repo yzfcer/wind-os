@@ -27,7 +27,7 @@
 #include "wind_debug.h"
 #include "wind_string.h"
 
-#if WIND_FS_SUPPORT
+#if WIND_TREEFS_SUPPORT
 static w_treefile_s *logfile = W_NULL;
 w_err_t wind_log_open(void)
 {

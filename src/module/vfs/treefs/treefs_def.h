@@ -4,7 +4,7 @@
 #include "wind_type.h"
 #include "wind_obj.h"
 #include "wind_tree.h"
-#if WIND_FS_SUPPORT
+#if WIND_TREEFS_SUPPORT
 
 #define TF_FMODE_R  0x01
 #define TF_FMODE_W  0x02

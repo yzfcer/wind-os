@@ -157,7 +157,9 @@ w_err_t _wind_vfs_mod_init(void)
     WIND_ASSERT_RETURN(err == W_ERR_OK,err);
     
     _wind_file_mod_init();
+#if WIND_TREEFS_SUPPORT
     _wind_treefs_mod_init();
+#endif
     wind_fstypes_register();
     
     _wind_fs_mount_init();
@@ -272,6 +274,7 @@ w_err_t wind_vfs_mount(char *fsname,char *fstype,char *blkname,char *path)
         err = W_ERR_OK;
         vfs = wind_vfs_get(fsname);
         WIND_ASSERT_BREAK(vfs != W_NULL,W_ERR_MEM,"vfs is NOT exist");
+        WIND_ASSERT_BREAK(!IS_F_VFS_MOUNT(vfs),W_ERR_INVALID,"vfs has been mounted");
         ops = wind_fstype_get(fstype);
         WIND_ASSERT_BREAK(ops != W_NULL,W_ERR_MEM,"ops is NOT exist");
         blkdev = wind_blkdev_get(blkname);

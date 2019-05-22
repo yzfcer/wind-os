@@ -45,7 +45,7 @@ extern "C" {
 /********************************************全局函数定义**********************************************/
 COMMAND_DISC(rcp)
 {
-    wind_printf("to copy file(s) between host fs and wind-os fs.\r\n");
+    wind_printf("to copy file(s) between host fs and wind-os fs [NOT SUPPORTED NOW].\r\n");
 }
 
 COMMAND_USAGE(rcp)

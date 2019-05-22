@@ -4,7 +4,7 @@
 #include "wind_heap.h"
 #include "wind_debug.h"
 #include "wind_string.h"
-#if WIND_FS_SUPPORT
+#if WIND_TREEFS_SUPPORT
 #define NODE_TO_TREEFILE(node) (w_treefile_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((w_treefile_s*)0)->tree.treenode)))
 //static w_treefile_s *treefile_rootnode = W_NULL;
 
