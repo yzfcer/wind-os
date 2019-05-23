@@ -25,7 +25,13 @@
 #ifndef WIND_CONV_H__
 #define WIND_CONV_H__
 #include "wind_type.h"
+typedef enum
+{
+    ENDIAN_BIG = 0x01,
+    ENDIAN_LITTLE = 0x02,
+}w_endian_e;
 
+w_endian_e wind_endian(void);
 //数值与字符串之间的转换
 w_bool_t wind_str_to_int(char *str,w_int32_t *value);
 w_bool_t wind_str_to_uint(char *str,w_uint32_t *value);

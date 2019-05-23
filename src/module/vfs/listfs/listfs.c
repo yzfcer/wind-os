@@ -75,7 +75,7 @@ static w_err_t lfs_search_file(listfs_s *lfs,listfile_s *file,const char *path)
     w_err_t err;
     w_int32_t len,segcnt,i = 0;
     char **nameseg = W_NULL;
-    char *pathname = W_NULL;
+    char *tmppath = W_NULL;
     lfile_info_s *finfo = W_NULL;
     lfile_blkinfo_s *blkinfo = W_NULL;
     
@@ -88,21 +88,21 @@ static w_err_t lfs_search_file(listfs_s *lfs,listfile_s *file,const char *path)
         err = W_ERR_OK;
         wind_debug("search node path:%s",path);
         //·ÖÅäÄÚ´æ
-        len = wind_strlen(path);
         nameseg = (char **)lfs_malloc(LISTFS_DIR_LAYCNT * sizeof(char*));
-        pathname = lfs_malloc(len+1);
+        WIND_ASSERT_BREAK(nameseg,W_ERR_MEM,"malloc nameseg failed");
+        len = wind_strlen(path);
+        tmppath = lfs_malloc(len+1);
+        WIND_ASSERT_BREAK(tmppath,W_ERR_MEM,"malloc tmppath failed");
         finfo = lfs_malloc(sizeof(lfile_info_s));
+        WIND_ASSERT_BREAK(finfo,W_ERR_MEM,"malloc finfo failed");
         blkinfo = lfs_malloc(sizeof(lfile_blkinfo_s));
+        WIND_ASSERT_BREAK(blkinfo,W_ERR_MEM,"malloc blkinfo failed");
 
-        WIND_ASSERT_BREAK((pathname != W_NULL && nameseg != W_NULL && 
-            finfo != W_NULL && blkinfo != W_NULL),
-            W_ERR_MEM,"alloc memory error");
         
-        wind_memset(pathname,0,len+1);
-        wind_strcpy(pathname,path);
-        pathname[len] = 0;
-        
-        segcnt = wind_strsplit(pathname,'/',nameseg,LISTFS_DIR_LAYCNT);
+        wind_memset(tmppath,0,len+1);
+        wind_strcpy(tmppath,path);
+        //tmppath[len] = 0;
+        segcnt = wind_strsplit(tmppath,'/',nameseg,LISTFS_DIR_LAYCNT);
         WIND_ASSERT_BREAK(segcnt > 0,W_ERR_INVALID,"split path failed");
 
         err = fileinfo_read(finfo,lfs->blkdev,lfs->lfs_info.root_addr);
@@ -110,7 +110,6 @@ static w_err_t lfs_search_file(listfs_s *lfs,listfile_s *file,const char *path)
         err = blkinfo_read(blkinfo,lfs->blkdev,lfs->lfs_info.root_addr);
         WIND_ASSERT_BREAK(err == W_ERR_OK,W_ERR_FAIL,"read root directory failed.");
 
-    
         if(segcnt == 1)
         {
             err = W_ERR_OK;
@@ -135,8 +134,8 @@ static w_err_t lfs_search_file(listfs_s *lfs,listfile_s *file,const char *path)
         file->blkinfo = blkinfo;
     }
         
-    if(pathname)
-        lfs_free(pathname);
+    if(tmppath)
+        lfs_free(tmppath);
     if(nameseg)
         lfs_free(nameseg);
     if(finfo)

@@ -110,7 +110,7 @@ w_err_t blkinfo_write(lfile_blkinfo_s *info,w_blkdev_s *blkdev)
             WIND_ASSERT_BREAK(cnt == 1,err,"read blkinfo failed");
             if(tmpinfo->magic == LISTFILE_MAGIC)
                 tmpinfo = FILEINFO_BLKINFO(blk);          
-            WIND_ASSERT_BREAK(tmpinfo->magic == LISTFILE_BLK_MAGIC,W_ERR_INVALID,"invalid blkinfo");
+            //WIND_ASSERT_BREAK(tmpinfo->magic == LISTFILE_BLK_MAGIC,W_ERR_INVALID,"invalid blkinfo");
         }
 
         wind_memcpy(tmpinfo,info,sizeof(lfile_blkinfo_s));

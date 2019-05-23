@@ -24,6 +24,17 @@
 *******************************************************************************************************/
 #include "wind_type.h"
 #include "wind_string.h"
+#include "wind_conv.h"
+
+w_int32_t wind_endian(void)
+{
+    w_int32_t test = 1;
+    if (*(char*)&test == 1)
+        return ENDIAN_LITTLE;
+    else
+        return ENDIAN_BIG;
+}
+
 //把字符串转换成带符号整数
 w_bool_t wind_str_to_int(char *str,w_int32_t *value)
 {

@@ -57,7 +57,21 @@ w_err_t _wind_file_mod_init(void)
     return err;
 }
 
-
+static w_err_t check_path_valid(char *path)
+{
+    w_int32_t i,j,len;
+    char chset[] = {'!','@','$','%%','^','&','*','+','='};
+    WIND_ASSERT_RETURN(path != W_NULL,W_ERR_PTR_NULL);
+    len = wind_strlen(path);
+    WIND_ASSERT_RETURN(len > 0,W_ERR_INVALID);
+    for(i = 0;i < sizeof(chset);i ++)
+    {
+        for(j = 0;j < len; j ++)
+            if(chset[i] == path[j])
+                return W_ERR_FAIL;
+    }
+    return W_ERR_OK;
+}
 
 w_file_s *wind_file_get(w_vfs_s *fs,const char *path)
 {
@@ -183,11 +197,14 @@ static w_err_t wind_file_destroy(w_file_s *file)
 
 w_file_s* wind_fopen(const char *path,w_uint16_t fmode)
 {
+    w_err_t err;
     w_file_s *file;
     w_vfs_s *fs;
     w_uint8_t isdir;
     w_int32_t pathlen,len1;
     WIND_ASSERT_RETURN(path != W_NULL,W_NULL);
+    err = check_path_valid(path);
+    WIND_ASSERT_RETURN(err == W_ERR_OK,W_NULL);
     wind_debug("open file:%s",path);
     file = wind_file_get_bypath(path);
     if(file != W_NULL)
