@@ -31,6 +31,7 @@ char *wind_full_path_generate(char *oldpath,char *newpath,w_uint16_t isdir);
 w_err_t wind_full_path_release(char *path);
 char *wind_file_get_current_path(void);
 void wind_file_set_current_path(char *path);
+w_err_t wind_path_valid(char *path);
 
 #endif
 #endif

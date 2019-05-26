@@ -101,7 +101,6 @@ static w_err_t lfs_search_file(listfs_s *lfs,listfile_s *file,const char *path)
         
         wind_memset(tmppath,0,len+1);
         wind_strcpy(tmppath,path);
-        //tmppath[len] = 0;
         segcnt = wind_strsplit(tmppath,'/',nameseg,LISTFS_DIR_LAYCNT);
         WIND_ASSERT_BREAK(segcnt > 0,W_ERR_INVALID,"split path failed");
 
@@ -293,7 +292,18 @@ static w_err_t lfs_make_file(listfs_s *lfs,listfile_s *file,char *path)
     if(err == W_ERR_OK)
     {
         wind_memcpy(&file->info,finfo,sizeof(lfile_info_s));
+        if(!LFILE_IS_DIR(file->info.attr))
+        {
+            blkinfo_read(blkinfo,lfs->blkdev,file->info.self_addr);
+            file->blkinfo = blkinfo;
+        }
+        else
+        {
+            file->blkinfo = W_NULL;
+        }
     }
+    else if(blkinfo != W_NULL)
+        lfs_free(blkinfo);
         
     if(tmppath != W_NULL)
         lfs_free(tmppath);
@@ -303,6 +313,26 @@ static w_err_t lfs_make_file(listfs_s *lfs,listfile_s *file,char *path)
         lfs_free(nameseg);
     return err;
 }
+
+
+static w_err_t listfile_destroy(listfile_s* file)
+{
+    if(file->blkinfo != W_NULL)
+    {
+        lfs_free(file->blkinfo);
+        file->blkinfo = W_NULL;
+    }
+    
+    if(file->subinfo!= W_NULL)
+    {
+        lfs_free(file->subinfo);
+        file->subinfo = W_NULL;
+    }
+    file->lfs = W_NULL;
+    lfs_free(file);
+    return W_ERR_OK;
+}
+
 
 w_err_t listfile_remove(listfs_s *lfs,const char *path)
 {
@@ -431,9 +461,6 @@ static w_err_t lfs_info_init(listfs_s *lfs,w_blkdev_s *blkdev)
 w_err_t listfs_format(listfs_s *lfs,w_blkdev_s *blkdev)
 {
     w_err_t err;
-    //w_uint32_t crc;
-    //w_int32_t cnt;
-    w_uint8_t *blk = W_NULL;
     
     WIND_ASSERT_RETURN(lfs != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
@@ -443,16 +470,16 @@ w_err_t listfs_format(listfs_s *lfs,w_blkdev_s *blkdev)
     {
         err = lfs_info_init(lfs,blkdev);
         WIND_ASSERT_BREAK(err == W_ERR_OK,err,"init listfs info failed");
-        listfs_bitmap_init(&lfs->bitmap,lfs->lfs_info.bitmap1_addr,lfs->lfs_info.bitmap_cnt,blkdev);
-        listfs_bitmap_clear(&lfs->bitmap);
-        lfs_make_root(lfs);
-        listfs_bitmap_update(&lfs->bitmap);
+        err = listfs_bitmap_init(&lfs->bitmap,lfs->lfs_info.bitmap1_addr,lfs->lfs_info.bitmap_cnt,blkdev);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"init listfs bitmap failed");
+        err = listfs_bitmap_clear(&lfs->bitmap);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"clear listfs bitmap info failed");
+        err = lfs_make_root(lfs);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"make listfs root failed");
+        err = listfs_bitmap_update(&lfs->bitmap);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"update listfs bitmap failed");
         lfs->file_ref = 0;
-        
-
     }while(0);
-    if(blk != W_NULL)
-        lfs_free(blk);
     wind_notice("listfs format result:%d",err);
     return err;
 }
@@ -478,7 +505,9 @@ w_err_t listfs_init(listfs_s *lfs,w_blkdev_s *blkdev)
     listfs_bitmap_init(&lfs->bitmap,lfs->lfs_info.bitmap1_addr,
         lfs->lfs_info.bitmap_cnt,lfs->blkdev);
     err = listfs_bitmap_update(&lfs->bitmap);
-        
+    WIND_ASSERT_RETURN(err == W_ERR_OK,err);
+    err = fileinfo_read(&lfs->root,blkdev,lfs->lfs_info.root_addr);
+    WIND_ASSERT_RETURN(err == W_ERR_OK,err);
     return err;
 }
 
@@ -490,7 +519,6 @@ w_err_t listfs_deinit(listfs_s *lfs)
     lfs->lfs_info.magic = (~LISTFS_MAGIC);
     return W_ERR_OK;
 }
-
 
 
 listfile_s* listfile_open(listfs_s *lfs,const char *path,w_uint16_t mode)
@@ -507,6 +535,7 @@ listfile_s* listfile_open(listfs_s *lfs,const char *path,w_uint16_t mode)
         WIND_ASSERT_RETURN(file != W_NULL,W_NULL);
         wind_memset(file,0,sizeof(listfile_s));
         is_crt = (mode & LFMODE_CRT)?W_TRUE:W_FALSE;
+        
         err = lfs_search_file(lfs,file,path);
         if((err != W_ERR_OK) && (!is_crt))
         {   //没有创建标记，且文件不存在
@@ -527,19 +556,19 @@ listfile_s* listfile_open(listfs_s *lfs,const char *path,w_uint16_t mode)
             break;
         }
     }while(0);
+    
     if((err != W_ERR_OK)&&(file != W_NULL))
     {   //打开文件过程中出错
-        lfs_free(file);
+        listfile_destroy(file);
         file = W_NULL;
     }
+    
     if(file != W_NULL)
     {
         file->lfs = lfs;
         file->lfs->file_ref ++;
         file->mode = (w_uint8_t)mode;
         file->subinfo = W_NULL;
-        //file->blkinfo = &file->info.blkinfo;
-        
         if(mode & LFMODE_A)
             file->offset = file->info.filesize;
         else

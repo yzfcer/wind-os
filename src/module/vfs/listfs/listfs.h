@@ -55,7 +55,7 @@
 #define LFILE_ATTR_VERIFY (0x01 << 4)
 #define LFILE_ATTR_COMMAN (LFILE_ATTR_READ | LFILE_ATTR_WRITE)
 
-
+#define LFILE_IS_DIR(attr) (attr & LFILE_ATTR_DIR)
 
 //程序关联的文件系统信息
 typedef struct __listfs_s
@@ -88,6 +88,7 @@ w_err_t lfs_free(void *ptr);
 w_err_t listfs_format(listfs_s *lfs,w_blkdev_s *blkdev);
 w_err_t listfs_init(listfs_s *lfs,w_blkdev_s *blkdev);
 w_err_t listfs_deinit(listfs_s *lfs);
+w_err_t listfile_destroy(listfile_s* file);
 
 w_bool_t listfile_existing(listfs_s *lfs,const char *path);
 listfile_s* listfile_open(listfs_s *lfs,const char *path,w_uint16_t mode);

@@ -26,6 +26,7 @@
 #include "wind_file.h"
 #include "wind_string.h"
 #include "wind_heap.h"
+#include "wind_debug.h"
 #if WIND_FS_SUPPORT
 static char *curpath = W_NULL;
 
@@ -108,5 +109,20 @@ w_int32_t wind_split_path(char *path,char **layers,w_int32_t layercnt)
     return cnt;
 }
 
+w_err_t wind_path_valid(char *path)
+{
+    w_int32_t i,j,len;
+    char chset[] = {'!','@','$','%%','^','&','*','+','='};
+    WIND_ASSERT_RETURN(path != W_NULL,W_ERR_PTR_NULL);
+    len = wind_strlen(path);
+    WIND_ASSERT_RETURN(len > 0,W_ERR_INVALID);
+    for(i = 0;i < sizeof(chset);i ++)
+    {
+        for(j = 0;j < len; j ++)
+            if(chset[i] == path[j])
+                return W_ERR_FAIL;
+    }
+    return W_ERR_OK;
+}
 
 #endif
