@@ -26,6 +26,7 @@
 #include "wind_debug.h"
 #include "wind_string.h"
 #include "wind_conv.h"
+#include "wind_heap.h"
 #include "wind_imghead.h"
 #include "wind_encrypt.h"
 #include "wind_crc32.h"

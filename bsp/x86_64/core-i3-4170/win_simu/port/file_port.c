@@ -12,6 +12,7 @@
        Modification:
 **********************************************************************************/
 #include "wind_debug.h"
+#include "wind_heap.h"
 #include "file_port.h"
 #include <stdio.h>
 #include <malloc.h>

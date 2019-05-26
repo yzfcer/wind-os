@@ -63,7 +63,8 @@ static w_err_t check_path_valid(char *path)
     char chset[] = {'!','@','$','%%','^','&','*','+','='};
     WIND_ASSERT_RETURN(path != W_NULL,W_ERR_PTR_NULL);
     len = wind_strlen(path);
-    WIND_ASSERT_RETURN(len > 0,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(len > 0,W_ERR_INVALID
+);
     for(i = 0;i < sizeof(chset);i ++)
     {
         for(j = 0;j < len; j ++)

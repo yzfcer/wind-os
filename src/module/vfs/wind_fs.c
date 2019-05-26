@@ -227,7 +227,7 @@ w_err_t wind_fstype_register(w_fstype_s *ops)
 w_err_t wind_fstype_unregister(w_fstype_s *ops)
 {
     w_dnode_s *dnode;
-    w_fstype_s *tmpops;
+    //w_fstype_s *tmpops;
     WIND_ASSERT_RETURN(ops != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(ops->obj.magic == WIND_FSTYPE_MAGIC,W_ERR_INVALID);
     wind_notice("unregister vfs ops:%s",wind_obj_name(&ops->obj));
