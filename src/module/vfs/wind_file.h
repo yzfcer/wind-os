@@ -33,12 +33,11 @@
 
 #if WIND_FS_SUPPORT
 
-//w_file_s *file_malloc(void);
-//w_err_t file_free(w_file_s *file);
+
 w_err_t _wind_file_mod_init(void);
 
 
-w_bool_t wind_file_check(const char *path);
+w_bool_t wind_file_exist(const char *path);
 w_file_s *wind_file_get(w_vfs_s *fs,const char *path);
 w_file_s *wind_file_get_bypath(const char *path);
 

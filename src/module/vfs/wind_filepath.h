@@ -27,11 +27,14 @@
 #include "wind_config.h"
 #include "wind_type.h"
 #if WIND_FS_SUPPORT
-char *wind_full_path_generate(char *oldpath,char *newpath,w_uint16_t isdir);
-w_err_t wind_full_path_release(char *path);
-char *wind_file_get_current_path(void);
-void wind_file_set_current_path(char *path);
-w_err_t wind_path_valid(char *path);
+char *wind_filepath_generate(char *pre_path,char *relative_path,w_uint16_t isdir);
+w_err_t wind_filepath_release(char *path);
+char *  wind_filepath_get_current(void);
+w_err_t wind_filepath_set_current(char *path);
+w_err_t wind_filepath_check_valid(char *path);
+w_err_t wind_filepath_get_parent(char *path);
+w_err_t wind_pathfile_get_filename(char *path);
+
 
 #endif
 #endif

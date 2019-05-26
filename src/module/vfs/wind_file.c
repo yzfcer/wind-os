@@ -77,13 +77,16 @@ w_file_s *wind_file_get(w_vfs_s *fs,const char *path)
     return W_NULL;
 }
 
-w_bool_t wind_file_check(const char *path)
+w_bool_t wind_file_exist(const char *path)
 {
+    w_err_t err;
     w_file_s *file;
     w_uint32_t isdir;
     w_bool_t exist = W_FALSE;
     WIND_ASSERT_RETURN(path != W_NULL,W_FALSE);
-    wind_debug("wind_file_check:%s",path);
+    wind_debug("wind_file_exist:%s",path);
+    err = wind_filepath_check_valid(path);
+    WIND_ASSERT_RETURN(err == W_ERR_OK,W_FALSE);
     if(wind_file_get_bypath(path) != W_NULL)
         return W_TRUE;
     isdir = path[wind_strlen(path)-1]=='/'?1:0;
@@ -188,7 +191,7 @@ w_file_s* wind_fopen(const char *path,w_uint16_t fmode)
     w_uint8_t isdir;
     w_int32_t pathlen,len1;
     WIND_ASSERT_RETURN(path != W_NULL,W_NULL);
-    err = wind_path_valid(path);
+    err = wind_filepath_check_valid(path);
     WIND_ASSERT_RETURN(err == W_ERR_OK,W_NULL);
     wind_debug("open file:%s",path);
     file = wind_file_get_bypath(path);
@@ -229,7 +232,7 @@ w_err_t wind_fremove(const char *path)
 {
     w_err_t err = W_ERR_FAIL;
     w_file_s *file;
-    err = wind_path_valid(path);
+    err = wind_filepath_check_valid(path);
     WIND_ASSERT_RETURN(err == W_ERR_OK,err);
     file = wind_file_get_bypath(path);
     if(file == W_NULL)

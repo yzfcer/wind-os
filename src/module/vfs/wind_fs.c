@@ -32,6 +32,7 @@
 #include "wind_heap.h"
 #include "wind_core.h"
 #include "wind_dlist.h"
+#include "wind_dbgpoint.h"
 #include "wind_board_port.h"
 #include "treefs.h"
 
@@ -70,7 +71,7 @@ w_err_t wind_vfs_destroy(w_vfs_s *vfs)
 
 static w_err_t vfs_objs_init(void)
 {
-    w_err_t err;
+    //w_err_t err;
     w_int32_t i;
     w_vfs_s *vfs;
     WIND_ASSERT_RETURN(sizeof(fsname)/sizeof(char *) >=  WIND_FS_MAX_NUM,W_ERR_FAIL);
@@ -150,7 +151,7 @@ w_err_t _wind_vfs_mod_init(void)
     wind_fstypes_register();
     
     _wind_fs_mount_init();
-    wind_file_set_current_path(FS_CUR_PATH);
+    wind_filepath_set_current(FS_CUR_PATH);
     return W_ERR_OK;
 }
 

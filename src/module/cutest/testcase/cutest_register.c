@@ -63,6 +63,11 @@ DECLARE_SUITE(listfs);
 #if TEST_FS_SUPPORT
 DECLARE_SUITE(fs);
 #endif
+#if TEST_FILEPATH_SUPPORT
+DECLARE_SUITE(filepath);
+#endif
+
+
 
 void test_suite_register_all(void)
 {
@@ -102,6 +107,9 @@ void test_suite_register_all(void)
 
 #if TEST_FS_SUPPORT
     REGSTER_SUITE(fs);
+#endif
+#if TEST_FILEPATH_SUPPORT
+    REGSTER_SUITE(filepath);
 #endif
 }
 

@@ -43,7 +43,7 @@ extern "C" {
 
 static w_err_t listfs_cmd_pwd(void)
 {
-    char *curpath = wind_file_get_current_path();
+    char *curpath = wind_filepath_get_current();
     wind_printf("%s\r\n",curpath);
     return W_ERR_OK;
 }
@@ -52,19 +52,19 @@ static w_err_t listfs_cmd_cd(w_int32_t argc,char **argv)
 {
     w_bool_t isexist;
     char *fullpath;
-    char *curpath = wind_file_get_current_path();
+    char *curpath = wind_filepath_get_current();
     if(argc < 3)
         return W_ERR_FAIL;
-    fullpath = wind_full_path_generate(curpath,argv[2],1);
-    isexist = wind_file_check(fullpath);
+    fullpath = wind_filepath_generate(curpath,argv[2],1);
+    isexist = wind_file_exist(fullpath);
     if(!isexist)
     {
         wind_printf("directory:\"%s\" is NOT exist.\r\n",fullpath);
-        wind_full_path_release(fullpath);
+        wind_filepath_release(fullpath);
         return W_ERR_NOFILE;
     }
-    wind_file_set_current_path(fullpath);
-    wind_full_path_release(fullpath);
+    wind_filepath_set_current(fullpath);
+    wind_filepath_release(fullpath);
     return W_ERR_OK;
 }
 
@@ -73,15 +73,15 @@ static w_err_t mk_dir_file(w_int32_t argc,char **argv,w_uint16_t isdir)
     w_bool_t isexist;
     w_file_s *file;
     char * fullpath;
-    char *curpath = wind_file_get_current_path();
+    char *curpath = wind_filepath_get_current();
     if(argc < 3)
         return W_ERR_INVALID;
-    fullpath = wind_full_path_generate(curpath,argv[2],isdir);
-    isexist = wind_file_check(fullpath);
+    fullpath = wind_filepath_generate(curpath,argv[2],isdir);
+    isexist = wind_file_exist(fullpath);
     if(isexist)
     {
         wind_printf("directory has been existing.\r\n");
-        wind_full_path_release(fullpath);
+        wind_filepath_release(fullpath);
         return W_ERR_FAIL;
     }
     
@@ -89,7 +89,7 @@ static w_err_t mk_dir_file(w_int32_t argc,char **argv,w_uint16_t isdir)
     if(file == W_NULL)
         wind_printf("make directory failed.");
     wind_fclose(file);
-    wind_full_path_release(fullpath);
+    wind_filepath_release(fullpath);
     return W_ERR_OK;
 }
 
@@ -112,12 +112,12 @@ static w_err_t listfs_cmd_rm(w_int32_t argc,char **argv)
     char * fullpath;
     if(argc < 3)
         return W_ERR_INVALID;
-    curpath = wind_file_get_current_path();
+    curpath = wind_filepath_get_current();
     len = wind_strlen(argv[2]);
-    fullpath = wind_full_path_generate(curpath,argv[2],argv[2][len-1] == '/'?1:0);
+    fullpath = wind_filepath_generate(curpath,argv[2],argv[2][len-1] == '/'?1:0);
     err = wind_fremove(fullpath);
     wind_notice("remove file :%s %s",fullpath,err == W_ERR_OK?"successed":"failed");
-    wind_full_path_release(fullpath);
+    wind_filepath_release(fullpath);
     return err;
 }
 
@@ -126,17 +126,17 @@ static w_err_t listfs_cmd_ls(w_int32_t argc,char **argv)
     w_int32_t i;
     w_file_s *file;
     char *fullpath,*sub;
-    char *curpath = wind_file_get_current_path();
+    char *curpath = wind_filepath_get_current();
     if(argc >= 3)
-       fullpath = wind_full_path_generate(curpath,argv[2],1);
+       fullpath = wind_filepath_generate(curpath,argv[2],1);
     else
-        fullpath = wind_full_path_generate(curpath,curpath,1);
+        fullpath = wind_filepath_generate(curpath,curpath,1);
     WIND_ASSERT_RETURN(fullpath != W_NULL,W_ERR_FAIL);
     file = wind_fopen(fullpath,FMODE_R);
     if(file == W_NULL)
     {
         wind_printf("open directory or file failed.\r\n");
-        wind_full_path_release(fullpath);
+        wind_filepath_release(fullpath);
         return W_ERR_NOFILE;
     }
     for(i = 0;;i ++)
@@ -150,7 +150,7 @@ static w_err_t listfs_cmd_ls(w_int32_t argc,char **argv)
     }
     wind_printf("\r\n");
     wind_fclose(file);
-    wind_full_path_release(fullpath);
+    wind_filepath_release(fullpath);
     return W_ERR_OK;
 }
 
@@ -162,8 +162,8 @@ static w_err_t listfs_cmd_cat(w_int32_t argc,char **argv)
     w_int32_t len;
     char *curpath;
     WIND_ASSERT_RETURN(argc >= 3,W_ERR_INVALID);
-    curpath = wind_file_get_current_path();
-    fullpath = wind_full_path_generate(curpath,argv[2],0);
+    curpath = wind_filepath_get_current();
+    fullpath = wind_filepath_generate(curpath,argv[2],0);
     file = wind_fopen(fullpath,FMODE_R);
     if(file == W_NULL)
     {
@@ -189,7 +189,7 @@ static w_err_t listfs_cmd_cat(w_int32_t argc,char **argv)
     }
     wind_printf("\r\n---------%s---------\r\n",fullpath);
     wind_fclose(file);
-    wind_full_path_release(fullpath);
+    wind_filepath_release(fullpath);
     wind_free(buff);
     return W_ERR_OK;
 }
@@ -199,15 +199,15 @@ static w_err_t listfs_cmd_write(w_int32_t argc,char **argv)
     w_file_s *file;
     char * fullpath;
     w_int32_t len,filelen;
-    char *curpath = wind_file_get_current_path();
+    char *curpath = wind_filepath_get_current();
     if(argc < 4)
         return W_ERR_INVALID;
-    fullpath = wind_full_path_generate(curpath,argv[2],0);
+    fullpath = wind_filepath_generate(curpath,argv[2],0);
     file = wind_fopen(fullpath,FMODE_W | FMODE_CRT);
     if(file == W_NULL)
     {
         wind_printf("open directory or file failed.\r\n",fullpath);
-        wind_full_path_release(fullpath);
+        wind_filepath_release(fullpath);
         return W_ERR_NOFILE;
     }
 
@@ -217,11 +217,11 @@ static w_err_t listfs_cmd_write(w_int32_t argc,char **argv)
     if(filelen == len)
     {
         wind_printf("write file OK.\r\n");
-        wind_full_path_release(fullpath);
+        wind_filepath_release(fullpath);
         return W_ERR_OK;
     }
     wind_printf("write file failed.\r\n");
-    wind_full_path_release(fullpath);
+    wind_filepath_release(fullpath);
     return W_ERR_FAIL;
 }
 

@@ -30,22 +30,28 @@
 #if WIND_FS_SUPPORT
 static char *curpath = W_NULL;
 
-char *wind_file_get_current_path(void)
+char *wind_filepath_get_current(void)
 {
     return curpath;
 }
 
-void wind_file_set_current_path(char *path)
+w_err_t wind_filepath_set_current(char *path)
 {
-    w_int32_t len = wind_strlen(path);
+    w_err_t err;
+    w_int32_t len;
+    err = wind_filepath_check_valid(path);
+    WIND_ASSERT_RETURN(err == W_ERR_OK,err);
+    len = wind_strlen(path);
     if(curpath != W_NULL)
         wind_free(curpath);
     curpath = wind_malloc(len +1);
     wind_memcpy(curpath,path,len+1);
+    return W_ERR_OK;
 }
 
-char *wind_full_path_generate(char *pre_path,char *relative_path,w_uint16_t isdir)
+char *wind_filepath_generate(char *pre_path,char *relative_path,w_uint16_t isdir)
 {
+    w_err_t err;
     char *path;
     w_int32_t len,len1;
     w_int32_t ap = 0;
@@ -73,10 +79,16 @@ char *wind_full_path_generate(char *pre_path,char *relative_path,w_uint16_t isdi
     len = wind_strlen(path);
     if(isdir && (path[len-1] != '/'))
         path[len] = '/';
+    err = wind_filepath_check_valid(path);
+    if(err != W_ERR_OK)
+    {
+        wind_free(path);
+        path = W_NULL;
+    }
     return path;
 }
 
-w_err_t wind_full_path_release(char *path)
+w_err_t wind_filepath_release(char *path)
 {
     return wind_free(path);
 }
@@ -109,20 +121,83 @@ w_int32_t wind_split_path(char *path,char **layers,w_int32_t layercnt)
     return cnt;
 }
 
-w_err_t wind_path_valid(char *path)
+w_err_t wind_filepath_check_valid(char *path)
 {
     w_int32_t i,j,len;
-    char chset[] = {'!','@','$','%%','^','&','*','+','='};
+    char chset[] = {'~','!','@','#','$','%%','^','&','*','+','=','?','\t','\R','\n'};
     WIND_ASSERT_RETURN(path != W_NULL,W_ERR_PTR_NULL);
     len = wind_strlen(path);
     WIND_ASSERT_RETURN(len > 0,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(path[0] == '/',W_ERR_INVALID);
     for(i = 0;i < sizeof(chset);i ++)
     {
         for(j = 0;j < len; j ++)
+        {
             if(chset[i] == path[j])
+            {
+                wind_error("invalid character:%c",path[j]);
                 return W_ERR_FAIL;
+            }
+                
+        }
+    }
+    len = sizeof(chset) - 1;
+    for(i = 0;i < len;i ++)
+    {
+        if((path[i] == '/') && (path[i+1] == '/'))
+        {
+            wind_error("invalid path:%s",path);
+            return W_ERR_FAIL;
+        }
     }
     return W_ERR_OK;
 }
+
+w_err_t wind_filepath_get_parent(char *path)
+{
+    w_err_t err;
+    w_int32_t i,len;
+    WIND_ASSERT_RETURN(path != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(path[0] != 0,W_ERR_FAIL);
+    err = wind_filepath_check_valid(path);
+    WIND_ASSERT_RETURN(err == W_ERR_OK,err);
+    len = wind_strlen(path);
+    WIND_ASSERT_RETURN(len > 1,W_NULL);
+    if(path[len-1] == '/')
+        path[len-1] = '\0';
+    for(i = len -1;i > 0;i --)
+    {
+        if(path[i] == '/')
+        {
+            path[i+1] = 0;
+            return W_ERR_OK;
+        }
+    }
+    return W_ERR_FAIL;
+}
+
+w_err_t wind_pathfile_get_filename(char *path)
+{
+    w_err_t err;
+    w_int32_t i,len;
+    WIND_ASSERT_RETURN(path != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(path[0] != 0,W_ERR_FAIL);
+    err = wind_filepath_check_valid(path);
+    WIND_ASSERT_RETURN(err == W_ERR_OK,err);
+    len = wind_strlen(path);
+    WIND_ASSERT_RETURN(len > 1,W_NULL);
+    if(path[len-1] == '/')
+        path[len-1] = '\0';
+    for(i = len -1;i > 0;i --)
+    {
+        if(path[i] == '/')
+        {
+            path[i+1] = 0;
+            return W_ERR_OK;
+        }
+    }
+    return W_ERR_FAIL;
+}
+
 
 #endif

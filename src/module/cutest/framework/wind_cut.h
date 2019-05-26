@@ -83,6 +83,12 @@
     do{if(stringcmp((x),(y)) != 0) \
     {FAIL_EXPECT_OUT(x,y,"!=");test_suite_err(__LINE__);}\
     }while(0)
+    
+//¶ÏÑÔ×Ö·û´®²»Í¬
+#define EXPECT_STR_NE(x,y) \
+            do{if(stringcmp((x),(y)) == 0) \
+            {FAIL_EXPECT_OUT(x,y,"==");test_suite_err(__LINE__);}\
+            }while(0)
 
 
 #define SUITE_SETUP(testsuite)  static void suite_setup_##testsuite(void)

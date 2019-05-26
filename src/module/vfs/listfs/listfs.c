@@ -73,6 +73,7 @@ static lfile_info_s *lfs_search_child(lfile_info_s *info,char *name,w_blkdev_s *
 static w_err_t lfs_search_file(listfs_s *lfs,listfile_s *file,const char *path)
 {
     w_err_t err;
+    w_uint8_t isdir = 0;
     w_int32_t len,segcnt,i = 0;
     char **nameseg = W_NULL;
     char *tmppath = W_NULL;
@@ -101,15 +102,20 @@ static w_err_t lfs_search_file(listfs_s *lfs,listfile_s *file,const char *path)
         
         wind_memset(tmppath,0,len+1);
         wind_strcpy(tmppath,path);
+        if(tmppath[len-1] == '/')
+        {
+            isdir = 1;
+            tmppath[len-1] = 0;
+        }
         segcnt = wind_strsplit(tmppath,'/',nameseg,LISTFS_DIR_LAYCNT);
         WIND_ASSERT_BREAK(segcnt > 0,W_ERR_INVALID,"split path failed");
-
         wind_memcpy(finfo,&lfs->root,sizeof(lfs_info_s));
         if(segcnt == 1)
         {
             err = W_ERR_OK;
             break;
         }
+        //¿½±´¸ùÄ¿Â¼
 
         err = W_ERR_OK;
         for(i = 1;i < segcnt;i ++)

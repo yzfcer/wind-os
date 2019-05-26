@@ -308,11 +308,18 @@ w_fp64_t wind_strtod(const char *str,char **endptr)
 //substr : 返回分割后的子串
 //maxcnt : 最多分割的子串数量
 //返回值 : 实际分割的子串数量
+//空串返回0，无指定字符返回1，
 w_int32_t wind_strsplit(char *str,char ch,char **substr,w_int32_t maxcnt)
 {
-    w_int32_t i,j,cnt = 0;
-    int len = wind_strlen(str)+1;
+    w_int32_t i,j,cnt;
+    w_int32_t len;
+    if(str == W_NULL)
+        return 0;
+    if(str[0] == 0)
+        return 1;
+    len = wind_strlen(str)+1;
     j = 0;
+    cnt = 0;
     for(i = 0;i < maxcnt;i ++)
     {
         if(cnt >= maxcnt)
