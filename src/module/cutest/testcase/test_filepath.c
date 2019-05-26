@@ -42,7 +42,7 @@ static char *bak_path = W_NULL;
 
 /********************************************全局函数定义**********************************************/
 
-CASE_SETUP(filepath)
+CASE_SETUP(current_path)
 {
     char *path;
     w_int32_t len;
@@ -55,7 +55,7 @@ CASE_SETUP(filepath)
     wind_strcpy(bak_path,path);
 }
 
-CASE_TEARDOWN(filepath)
+CASE_TEARDOWN(current_path)
 {
     w_err_t err;
     WIND_ASSERT_RETURN_VOID(bak_path != W_NULL);
@@ -65,7 +65,7 @@ CASE_TEARDOWN(filepath)
     bak_path = (char*)W_NULL;
 }
 
-CASE_FUNC(filepath)
+CASE_FUNC(current_path)
 {
     char *path;
     w_err_t err;
@@ -81,6 +81,11 @@ CASE_FUNC(filepath)
     EXPECT_NE(path,W_NULL);
     EXPECT_STR_EQ(path,"/mnt/");
     
+    err = wind_filepath_set_current("/usr");
+    EXPECT_EQ(err,W_ERR_OK);
+    path = wind_filepath_get_current();
+    EXPECT_NE(path,W_NULL);
+    EXPECT_STR_EQ(path,"/usr/");   
     
 }
 
@@ -134,7 +139,7 @@ SUITE_TEARDOWN(filepath)
 
 
 TEST_CASES_START(filepath)
-TEST_CASE(filepath)
+TEST_CASE(current_path)
 TEST_CASE(path_valid)
 TEST_CASES_END
 TEST_SUITE(filepath)

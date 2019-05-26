@@ -44,8 +44,13 @@ w_err_t wind_filepath_set_current(char *path)
     len = wind_strlen(path);
     if(curpath != W_NULL)
         wind_free(curpath);
-    curpath = wind_malloc(len +1);
+    curpath = wind_malloc(len + 2);
     wind_memcpy(curpath,path,len+1);
+    if(curpath[len-1] != '/')
+    {
+        curpath[len] = '/';
+        curpath[len+1] = 0;
+    }
     return W_ERR_OK;
 }
 
