@@ -98,7 +98,7 @@ static w_err_t lfs_search_file(listfs_s *lfs,listfile_s *file,const char *path)
         blkinfo = lfs_malloc(sizeof(lfile_blkinfo_s));
         WIND_ASSERT_BREAK(blkinfo,W_ERR_MEM,"malloc blkinfo failed");
 
-        
+        //拷贝和分割文件路径
         wind_memset(tmppath,0,len+1);
         wind_strcpy(tmppath,path);
         if(tmppath[len-1] == '/')
@@ -108,13 +108,13 @@ static w_err_t lfs_search_file(listfs_s *lfs,listfile_s *file,const char *path)
         }
         segcnt = wind_strsplit(tmppath,'/',nameseg,LISTFS_DIR_LAYCNT);
         WIND_ASSERT_BREAK(segcnt > 0,W_ERR_INVALID,"split path failed");
+        //拷贝根目录
         wind_memcpy(finfo,&lfs->root,sizeof(lfs_info_s));
         if(segcnt == 1)
         {
             err = W_ERR_OK;
             break;
         }
-        //拷贝根目录
 
         err = W_ERR_OK;
         for(i = 1;i < segcnt;i ++)
@@ -188,7 +188,7 @@ static w_err_t lfs_make_root(listfs_s *lfs)
 }
 
 
-static w_err_t lfs_make_child(listfs_s *lfs,lfile_info_s *parent,char *name,w_uint8_t isdir)
+static w_err_t lfs_make_child(listfs_s *lfs,lfile_info_s *pinfo,char *name,w_uint8_t isdir)
 {
     w_err_t err;
     w_uint8_t attr;
@@ -197,7 +197,7 @@ static w_err_t lfs_make_child(listfs_s *lfs,lfile_info_s *parent,char *name,w_ui
     lfile_info_s *info;
     lfile_blkinfo_s *blkinfo;
     WIND_ASSERT_RETURN(lfs != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(parent != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(pinfo != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(name != W_NULL,W_ERR_PTR_NULL);
     
     err = listfs_bitmap_alloc_blk(&lfs->bitmap,&self_addr,1);
@@ -211,11 +211,11 @@ static w_err_t lfs_make_child(listfs_s *lfs,lfile_info_s *parent,char *name,w_ui
         wind_memset(blk,0,lfs->blkdev->blksize);
         attr = isdir?(LFILE_ATTR_COMMAN|LFILE_ATTR_DIR):LFILE_ATTR_COMMAN;
         info = (lfile_info_s*)blk;
-        listfs_fileinfo_init(info,name,self_addr,parent->self_addr,parent->tailchild_addr,attr);
+        listfs_fileinfo_init(info,name,self_addr,pinfo->self_addr,pinfo->tailchild_addr,attr);
         blkinfo = FILEINFO_BLKINFO(blk);
         blkinfo_init(blkinfo, self_addr,0,0,lfs->blkdev->blksize);
         
-        info->prevfile_addr = parent->tailchild_addr;
+        info->prevfile_addr = pinfo->tailchild_addr;
         cnt = wind_blkdev_write(lfs->blkdev,self_addr,blk,1);
         WIND_ASSERT_BREAK(cnt > 0,W_ERR_FAIL,"write file info failed.");
         
@@ -223,7 +223,8 @@ static w_err_t lfs_make_child(listfs_s *lfs,lfile_info_s *parent,char *name,w_ui
         WIND_ASSERT_BREAK(cnt > 0,err,"update prev file info failed.");
 
         err = fileinfo_update_parent(info,lfs->blkdev);
-        WIND_ASSERT_BREAK(cnt > 0,err,"update parent file info failed.");
+        WIND_ASSERT_BREAK(cnt > 0,err,"update pinfo file info failed.");
+        wind_memcpy(pinfo,info,sizeof(lfile_info_s));
     }while(0);
     if(blk != W_NULL)
         lfs_free(blk);
