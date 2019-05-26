@@ -104,22 +104,22 @@ CASE_FUNC(heapmulti)
 }
 
 
-SUITE_SETUP(test_heap)
+SUITE_SETUP(heap)
 {
 
 }
 
-SUITE_TEARDOWN(test_heap)
+SUITE_TEARDOWN(heap)
 {
 
 }
 
 
-TEST_CASES_START(test_heap)
+TEST_CASES_START(heap)
 TEST_CASE(heapfunc)
 TEST_CASE(heapmulti)
 TEST_CASES_END
-TEST_SUITE(test_heap)
+TEST_SUITE(heap)
 
 
 #ifdef __cplusplus

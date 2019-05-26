@@ -46,19 +46,16 @@ CASE_FUNC(listfs_create)
     EXPECT_NE(file,W_NULL);
     err = listfile_close(file);
     EXPECT_EQ(err,W_ERR_OK);
-    err = listfile_remove(file);
+    err = listfile_remove(&g_lfs,"/test.txt");
     EXPECT_EQ(err,W_ERR_OK);
     file = listfile_open(&g_lfs,"/test1.txt",LFMODE_CRT);
     EXPECT_NE(file,W_NULL);
-    err = listfile_close(file);
-    EXPECT_EQ(err,W_ERR_OK);
-    err = listfile_remove(file);
-    EXPECT_EQ(err,W_ERR_OK);
+
     file = listfile_open(&g_lfs,"/test2.txt",LFMODE_CRT);
     EXPECT_NE(file,W_NULL);
     err = listfile_close(file);
     EXPECT_EQ(err,W_ERR_OK);
-    err = listfile_remove(file);
+    err = listfile_remove(&g_lfs,"/test2.txt");
     EXPECT_EQ(err,W_ERR_OK);
 }
 
@@ -95,7 +92,7 @@ CASE_FUNC(listfs_readwrite)
     EXPECT_EQ(len,0);
     err = listfile_close(file);
     EXPECT_EQ(err,W_ERR_OK);
-    err = listfile_remove(file);
+    err = listfile_remove(&g_lfs,"/test.txt");
     EXPECT_EQ(err,W_ERR_OK);
     
 }
@@ -127,7 +124,7 @@ CASE_FUNC(listfs_format)
     //wind_blkdev_close(blkdev);
 }
 
-SUITE_SETUP(test_listfs)
+SUITE_SETUP(listfs)
 {
     w_err_t err;
     w_blkdev_s *blkdev;
@@ -149,19 +146,19 @@ SUITE_SETUP(test_listfs)
     //wind_blkdev_close(blkdev);
 }
 
-SUITE_TEARDOWN(test_listfs)
+SUITE_TEARDOWN(listfs)
 {
 
 }
 
 
 
-TEST_CASES_START(test_listfs)
+TEST_CASES_START(listfs)
 TEST_CASE(listfs_format)
 TEST_CASE(listfs_create)
 TEST_CASE(listfs_readwrite)
 TEST_CASES_END
-TEST_SUITE(test_listfs)
+TEST_SUITE(listfs)
 
 #ifdef __cplusplus
 }

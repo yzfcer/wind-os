@@ -156,24 +156,24 @@ CASE_FUNC(mutexmulti)
     }
 }
 
-SUITE_SETUP(test_mutex)
+SUITE_SETUP(mutex)
 {
 
 }
 
-SUITE_TEARDOWN(test_mutex)
+SUITE_TEARDOWN(mutex)
 {
 
 }
 
 
-TEST_CASES_START(test_mutex)
+TEST_CASES_START(mutex)
 TEST_CASE(mutexinit)
 TEST_CASE(mutexinfo)
 TEST_CASE(mutexfunc)
 TEST_CASE(mutexmulti)
 TEST_CASES_END
-TEST_SUITE(test_mutex)
+TEST_SUITE(mutex)
 
 #ifdef __cplusplus
 }

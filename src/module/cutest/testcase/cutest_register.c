@@ -28,80 +28,80 @@
 
 
 #if TEST_POOL_SUPPORT
-DECLARE_SUITE(test_pool);
+DECLARE_SUITE(pool);
 #endif
 #if TEST_TREE_SUPPORT
-DECLARE_SUITE(test_tree);
+DECLARE_SUITE(tree);
 #endif
 #if TEST_MUTEX_SUPPORT
-DECLARE_SUITE(test_mutex);
+DECLARE_SUITE(mutex);
 #endif
 #if TEST_SEM_SUPPORT
-DECLARE_SUITE(test_sem);
+DECLARE_SUITE(sem);
 #endif
 #if TEST_EVENT_SUPPORT
-DECLARE_SUITE(test_event);
+DECLARE_SUITE(event);
 #endif
 #if TEST_PIPE_SUPPORT
-DECLARE_SUITE(test_pipe);
+DECLARE_SUITE(pipe);
 #endif
 #if TEST_MSGBOX_SUPPORT
-DECLARE_SUITE(test_msgbox);
+DECLARE_SUITE(msgbox);
 #endif
 #if TEST_HEAP_SUPPORT
-DECLARE_SUITE(test_heap);
+DECLARE_SUITE(heap);
 #endif
 #if TEST_SOFTIRQ_SUPPORT
-DECLARE_SUITE(test_softirq);
+DECLARE_SUITE(softirq);
 #endif
 #if TEST_TREEFS_SUPPORT
-DECLARE_SUITE(test_treefs);
+DECLARE_SUITE(treefs);
 #endif
 #if TEST_LISTFS_SUPPORT
-DECLARE_SUITE(test_listfs);
+DECLARE_SUITE(listfs);
 #endif
 #if TEST_FS_SUPPORT
-DECLARE_SUITE(test_fs);
+DECLARE_SUITE(fs);
 #endif
 
 void test_suite_register_all(void)
 {
 #if TEST_POOL_SUPPORT
-    REGSTER_SUITE(test_pool);
+    REGSTER_SUITE(pool);
 #endif
 #if TEST_TREE_SUPPORT
-    REGSTER_SUITE(test_tree);
+    REGSTER_SUITE(tree);
 #endif
 #if TEST_MUTEX_SUPPORT
-    REGSTER_SUITE(test_mutex);
+    REGSTER_SUITE(mutex);
 #endif
 #if TEST_SEM_SUPPORT
-    REGSTER_SUITE(test_sem);
+    REGSTER_SUITE(sem);
 #endif
 #if TEST_EVENT_SUPPORT
-    REGSTER_SUITE(test_event);
+    REGSTER_SUITE(event);
 #endif
 #if TEST_PIPE_SUPPORT
-    REGSTER_SUITE(test_pipe);
+    REGSTER_SUITE(pipe);
 #endif
 #if TEST_MSGBOX_SUPPORT
-    REGSTER_SUITE(test_msgbox);
+    REGSTER_SUITE(msgbox);
 #endif
 #if TEST_HEAP_SUPPORT
-    REGSTER_SUITE(test_heap);
+    REGSTER_SUITE(heap);
 #endif
 #if TEST_SOFTIRQ_SUPPORT
-    REGSTER_SUITE(test_softirq);
+    REGSTER_SUITE(softirq);
 #endif
 #if TEST_TREEFS_SUPPORT
-    REGSTER_SUITE(test_treefs);
+    REGSTER_SUITE(treefs);
 #endif
 #if TEST_LISTFS_SUPPORT
-    REGSTER_SUITE(test_listfs);
+    REGSTER_SUITE(listfs);
 #endif
 
 #if TEST_FS_SUPPORT
-    REGSTER_SUITE(test_fs);
+    REGSTER_SUITE(fs);
 #endif
 }
 

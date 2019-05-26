@@ -167,24 +167,24 @@ CASE_FUNC(msgbox_multthread)
 {
 
 }
-SUITE_SETUP(test_msgbox)
+SUITE_SETUP(msgbox)
 {
     wind_pool_create("testmsg_pool",testmsg_pool,sizeof(testmsg_pool),sizeof(test_msg_s));
 }
 
-SUITE_TEARDOWN(test_msgbox)
+SUITE_TEARDOWN(msgbox)
 {
     wind_pool_destroy(testmsg_pool);
 }
 
 
-TEST_CASES_START(test_msgbox)
+TEST_CASES_START(msgbox)
 TEST_CASE(msgboxinit)
 TEST_CASE(msgboxinfo)
 TEST_CASE(msgboxfunc)
 TEST_CASE(msgbox_multthread)
 TEST_CASES_END
-TEST_SUITE(test_msgbox)
+TEST_SUITE(msgbox)
 
 #ifdef __cplusplus
 }

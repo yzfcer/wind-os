@@ -106,16 +106,16 @@ CASE_FUNC(pool_alloc)
 }
 
 
-SUITE_SETUP(test_pool){}
-SUITE_TEARDOWN(test_pool){}
+SUITE_SETUP(pool){}
+SUITE_TEARDOWN(pool){}
 
 
 
-TEST_CASES_START(test_pool)
+TEST_CASES_START(pool)
 TEST_CASE(pool_info)
 TEST_CASE(pool_alloc)
 TEST_CASES_END
-TEST_SUITE(test_pool)
+TEST_SUITE(pool)
 
 #ifdef __cplusplus
 }

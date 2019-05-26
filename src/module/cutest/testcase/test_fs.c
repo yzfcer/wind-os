@@ -101,7 +101,7 @@ CASE_FUNC(fs_readwrite)
     
 }
 
-SUITE_SETUP(test_fs)
+SUITE_SETUP(fs)
 {
     w_vfs_s *fs;
     fs = wind_vfs_get("treefs");
@@ -109,18 +109,18 @@ SUITE_SETUP(test_fs)
         wind_vfs_format(fs);
 }
 
-SUITE_TEARDOWN(test_fs)
+SUITE_TEARDOWN(fs)
 {
 
 }
 
 
 
-TEST_CASES_START(test_fs)
+TEST_CASES_START(fs)
 TEST_CASE(fs_create)
 TEST_CASE(fs_readwrite)
 TEST_CASES_END
-TEST_SUITE(test_fs)
+TEST_SUITE(fs)
 
 #ifdef __cplusplus
 }

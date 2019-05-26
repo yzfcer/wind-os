@@ -106,7 +106,7 @@ CASE_FUNC(treefs_readwrite)
     
 }
 
-SUITE_SETUP(test_treefs)
+SUITE_SETUP(treefs)
 {
     w_treefs_s *tfs;
     tfs = wind_treefs_get("tfs0");
@@ -114,18 +114,18 @@ SUITE_SETUP(test_treefs)
     wind_treefs_format(tfs);
 }
 
-SUITE_TEARDOWN(test_treefs)
+SUITE_TEARDOWN(treefs)
 {
 
 }
 
 
 
-TEST_CASES_START(test_treefs)
+TEST_CASES_START(treefs)
 TEST_CASE(wind_treefs_create)
 TEST_CASE(treefs_readwrite)
 TEST_CASES_END
-TEST_SUITE(test_treefs)
+TEST_SUITE(treefs)
 
 #ifdef __cplusplus
 }

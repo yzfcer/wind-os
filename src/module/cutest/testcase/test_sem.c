@@ -170,24 +170,24 @@ CASE_FUNC(semmulti)
 }
 
 
-SUITE_SETUP(test_sem)
+SUITE_SETUP(sem)
 {
 
 }
 
-SUITE_TEARDOWN(test_sem)
+SUITE_TEARDOWN(sem)
 {
 
 }
 
 
-TEST_CASES_START(test_sem)
+TEST_CASES_START(sem)
 TEST_CASE(seminit)
 TEST_CASE(seminfo)
 TEST_CASE(semfunc)
 TEST_CASE(semmulti)
 TEST_CASES_END
-TEST_SUITE(test_sem)
+TEST_SUITE(sem)
 
 #ifdef __cplusplus
 }

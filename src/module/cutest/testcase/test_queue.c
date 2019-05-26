@@ -115,22 +115,22 @@ CASE_FUNC(queuefunc)
 
 
 
-SUITE_SETUP(test_queue)
+SUITE_SETUP(queue)
 {
 
 }
 
-SUITE_TEARDOWN(test_queue)
+SUITE_TEARDOWN(queue)
 {
 
 }
 
 
-TEST_CASES_START(test_queue)
+TEST_CASES_START(queue)
 TEST_CASE(queueinfo)
 TEST_CASE(queuefunc)
 TEST_CASES_END
-TEST_SUITE(test_queue)
+TEST_SUITE(queue)
 
 
 #ifdef __cplusplus

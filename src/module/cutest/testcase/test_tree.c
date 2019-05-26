@@ -118,15 +118,15 @@ CASE_FUNC(tree_case)
 }
 
 
-SUITE_SETUP(test_tree){}
-SUITE_TEARDOWN(test_tree){}
+SUITE_SETUP(tree){}
+SUITE_TEARDOWN(tree){}
 
 
 
-TEST_CASES_START(test_tree)
+TEST_CASES_START(tree)
 TEST_CASE(tree_case)
 TEST_CASES_END
-TEST_SUITE(test_tree)
+TEST_SUITE(tree)
 
 
 #ifdef __cplusplus

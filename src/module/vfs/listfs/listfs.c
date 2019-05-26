@@ -310,11 +310,15 @@ static w_err_t lfs_make_file(listfs_s *lfs,listfile_s *file,char *path)
     return err;
 }
 
-w_err_t listfile_remove(listfile_s *file)
+w_err_t listfile_remove(listfs_s *lfs,const char *path)
 {
     w_err_t err;
+    listfile_s *file;
+    WIND_ASSERT_RETURN(lfs != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(path != W_NULL,W_ERR_PTR_NULL);
+    file = listfile_open(lfs,path,LFMODE_R);
     WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(lfs->lfs_info.magic == LISTFS_MAGIC,W_ERR_INVALID);
     do
     {
         err = W_ERR_OK;

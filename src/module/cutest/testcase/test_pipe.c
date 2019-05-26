@@ -146,23 +146,23 @@ CASE_FUNC(pipefunc)
 
 
 
-SUITE_SETUP(test_pipe)
+SUITE_SETUP(pipe)
 {
 
 }
 
-SUITE_TEARDOWN(test_pipe)
+SUITE_TEARDOWN(pipe)
 {
 
 }
 
 
-TEST_CASES_START(test_pipe)
+TEST_CASES_START(pipe)
 TEST_CASE(pipeinit)
 TEST_CASE(pipeinfo)
 TEST_CASE(pipefunc)
 TEST_CASES_END
-TEST_SUITE(test_pipe)
+TEST_SUITE(pipe)
 
 #ifdef __cplusplus
 }

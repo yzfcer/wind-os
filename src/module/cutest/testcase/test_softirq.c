@@ -83,21 +83,21 @@ CASE_FUNC(softirqfunc)
 
 
 
-SUITE_SETUP(test_softirq)
+SUITE_SETUP(softirq)
 {
 
 }
 
-SUITE_TEARDOWN(test_softirq)
+SUITE_TEARDOWN(softirq)
 {
 
 }
 
 
-TEST_CASES_START(test_softirq)
+TEST_CASES_START(softirq)
 TEST_CASE(softirqfunc)
 TEST_CASES_END
-TEST_SUITE(test_softirq)
+TEST_SUITE(softirq)
 
 #ifdef __cplusplus
 }

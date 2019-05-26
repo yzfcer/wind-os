@@ -92,7 +92,7 @@ listfile_s* listfile_open(listfs_s *lfs,const char *path,w_uint16_t mode);
 w_err_t listfile_set_attr(listfile_s* file,w_uint8_t attr);
 w_err_t listfile_get_attr(listfile_s* file,w_uint8_t *attr);
 w_err_t listfile_close(listfile_s* file);
-w_err_t listfile_remove(listfile_s *file);
+w_err_t listfile_remove(listfs_s *lfs,const char *path);
 w_err_t listfile_seek(listfile_s* file,w_int32_t offset);
 w_int32_t listfile_ftell(listfile_s* file);
 w_int32_t listfile_read(listfile_s* file,w_uint8_t *buff, w_int32_t size);

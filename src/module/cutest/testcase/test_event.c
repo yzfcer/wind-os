@@ -215,23 +215,23 @@ CASE_FUNC(eventmulti)
 }
 
 
-SUITE_SETUP(test_event)
+SUITE_SETUP(event)
 {
 
 }
 
-SUITE_TEARDOWN(test_event)
+SUITE_TEARDOWN(event)
 {
 
 }
 
-TEST_CASES_START(test_event)
+TEST_CASES_START(event)
 TEST_CASE(eventinit)
 TEST_CASE(eventinfo)
 TEST_CASE(eventfunc)
 TEST_CASE(eventmulti)
 TEST_CASES_END
-TEST_SUITE(test_event)
+TEST_SUITE(event)
 
 #ifdef __cplusplus
 }
