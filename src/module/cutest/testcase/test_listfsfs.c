@@ -27,18 +27,18 @@ extern "C" {
 #endif // #ifdef __cplusplus
 
 listfs_s g_lfs;
-CASE_SETUP(listfs_create)
+CASE_SETUP(create)
 {
 
 }
 
 
-CASE_TEARDOWN(listfs_create)
+CASE_TEARDOWN(create)
 {
 
 }
 
-CASE_FUNC(listfs_create)
+CASE_FUNC(create)
 {
     w_err_t err;
     listfile_s *file;
@@ -60,17 +60,17 @@ CASE_FUNC(listfs_create)
 }
 
 
-CASE_SETUP(listfs_readwrite)
+CASE_SETUP(readwrite)
 {
 }
 
-CASE_TEARDOWN(listfs_readwrite)
+CASE_TEARDOWN(readwrite)
 {
     
 }
 
 static w_uint8_t buff[32];
-CASE_FUNC(listfs_readwrite)
+CASE_FUNC(readwrite)
 {
     w_int32_t len;
     w_err_t err;
@@ -98,16 +98,16 @@ CASE_FUNC(listfs_readwrite)
 }
 
 
-CASE_SETUP(listfs_format)
+CASE_SETUP(format)
 {
 }
 
-CASE_TEARDOWN(listfs_format)
+CASE_TEARDOWN(format)
 {
     
 }
 
-CASE_FUNC(listfs_format)
+CASE_FUNC(format)
 {
     w_err_t err;
     w_blkdev_s *blkdev;
@@ -121,7 +121,6 @@ CASE_FUNC(listfs_format)
         err = listfs_format(&g_lfs,blkdev);
         EXPECT_EQ(err,W_ERR_OK);
     }
-    //wind_blkdev_close(blkdev);
 }
 
 SUITE_SETUP(listfs)
@@ -154,9 +153,9 @@ SUITE_TEARDOWN(listfs)
 
 
 TEST_CASES_START(listfs)
-TEST_CASE(listfs_format)
-TEST_CASE(listfs_create)
-TEST_CASE(listfs_readwrite)
+TEST_CASE(format)
+TEST_CASE(create)
+TEST_CASE(readwrite)
 TEST_CASES_END
 TEST_SUITE(listfs)
 
