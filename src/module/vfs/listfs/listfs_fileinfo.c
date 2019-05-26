@@ -51,42 +51,6 @@ static w_err_t fileinfo_write_block(w_blkdev_s *blkdev,w_addr_t addr,w_uint8_t *
 }
 
 
-static w_err_t lfs_get_fsinfo_by_blk(lfs_info_s *fsinfo,w_blkdev_s *blkdev,w_addr_t addr)
-{
-    w_err_t err;
-    w_uint8_t *blk = W_NULL;
-    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(fsinfo != W_NULL,W_ERR_PTR_NULL);
-    do
-    {
-        err = W_ERR_OK;
-        blk = lfs_malloc(blkdev->blksize);
-        WIND_ASSERT_BREAK(blk != W_NULL,W_ERR_MEM,"malloc blk failed");
-        err = fileinfo_read_block(blkdev,addr,blk);
-        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"read blkdata failed");
-        wind_memcpy(fsinfo,blk,sizeof(lfs_info_s));
-        WIND_ASSERT_BREAK(fsinfo->magic == LISTFS_MAGIC,W_ERR_INVALID,"invalid fs header");
-    }while(0);
-    if(blk != W_NULL)
-        lfs_free(blk);
-    return W_ERR_OK;
-}
-
-w_err_t listfs_get_fsinfo(lfs_info_s *fsinfo,w_blkdev_s *blkdev)
-{
-    w_int32_t i;
-    w_err_t err;
-    for(i = 0;i < 2;i ++)
-    {
-        err = lfs_get_fsinfo_by_blk(fsinfo,blkdev,i);
-        if(err == W_ERR_OK)
-            return W_ERR_OK;
-    }
-    return W_ERR_FAIL;
-}
-
-
-
 w_err_t listfs_fileinfo_init(lfile_info_s *info,char *name,
     w_addr_t self_addr,w_addr_t parent_addr,w_addr_t prev_addr,w_uint8_t attr)
 {

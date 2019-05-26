@@ -241,7 +241,7 @@ static w_err_t lfs_make_file(listfs_s *lfs,listfile_s *file,char *path)
     char **nameseg = W_NULL;
     lfile_info_s *finfo = W_NULL,*tmpinfo;
     lfile_blkinfo_s *blkinfo = W_NULL;
-    char *pathname = W_NULL;
+    char *tmppath = W_NULL;
 
     WIND_ASSERT_RETURN(lfs != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
@@ -253,11 +253,11 @@ static w_err_t lfs_make_file(listfs_s *lfs,listfile_s *file,char *path)
         err = W_ERR_OK;
         //分配内存
         pathlen = wind_strlen(path);
-        pathname = lfs_malloc(pathlen+1);
+        tmppath = lfs_malloc(pathlen+1);
         nameseg = (char **)lfs_malloc(LISTFS_DIR_LAYCNT * sizeof(char*));
         finfo = lfs_malloc(sizeof(lfile_info_s));
         blkinfo = lfs_malloc(sizeof(lfile_blkinfo_s));
-        if(pathname == W_NULL || nameseg == W_NULL || finfo == W_NULL || blkinfo == W_NULL)
+        if(tmppath == W_NULL || nameseg == W_NULL || finfo == W_NULL || blkinfo == W_NULL)
         {
             wind_error("alloc memory error");
             err = W_ERR_MEM;
@@ -265,13 +265,13 @@ static w_err_t lfs_make_file(listfs_s *lfs,listfile_s *file,char *path)
         }
 
         //拷贝参数
-        wind_strcpy(pathname,path);
-        if(pathname[pathlen - 1] == '/')
+        wind_strcpy(tmppath,path);
+        if(tmppath[pathlen - 1] == '/')
         {
-            pathname[pathlen - 1] = 0;
+            tmppath[pathlen - 1] = 0;
             isdir = 1;
         }
-        cnt = wind_strsplit(pathname,'/',nameseg,LISTFS_DIR_LAYCNT);
+        cnt = wind_strsplit(tmppath,'/',nameseg,LISTFS_DIR_LAYCNT);
         WIND_ASSERT_BREAK(cnt > 1,W_ERR_OK,"split path failed.");
         err = fileinfo_read(finfo,lfs->blkdev,lfs->lfs_info.root_addr);
         WIND_ASSERT_BREAK(err == W_ERR_OK,W_ERR_FAIL,"read root file info failed.");
@@ -301,8 +301,8 @@ static w_err_t lfs_make_file(listfs_s *lfs,listfile_s *file,char *path)
         wind_memcpy(&file->info,finfo,sizeof(lfile_info_s));
     }
         
-    if(pathname != W_NULL)
-        lfs_free(pathname);
+    if(tmppath != W_NULL)
+        lfs_free(tmppath);
     if(finfo != W_NULL)
         lfs_free(finfo);
     if(nameseg != W_NULL)
@@ -356,6 +356,42 @@ w_uint16_t calc_unit_size(w_int32_t blkcnt,w_int32_t blksize)
     }
     return (w_uint16_t)blksize;
 }
+static w_err_t lfs_get_fsinfo_by_blk(lfs_info_s *fsinfo,w_blkdev_s *blkdev,w_addr_t addr)
+{
+    w_err_t err;
+    w_int32_t cnt;
+    w_uint8_t *blk = W_NULL;
+    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(fsinfo != W_NULL,W_ERR_PTR_NULL);
+    do
+    {
+        err = W_ERR_OK;
+        blk = lfs_malloc(blkdev->blksize);
+        WIND_ASSERT_BREAK(blk != W_NULL,W_ERR_MEM,"malloc blk failed");
+        //err = fileinfo_read_block(blkdev,addr,blk);
+        cnt = wind_blkdev_read(blkdev,addr,blk,1);
+        WIND_ASSERT_BREAK(cnt == 1,W_ERR_FAIL,"read blkdata failed");
+        wind_memcpy(fsinfo,blk,sizeof(lfs_info_s));
+        WIND_ASSERT_BREAK(fsinfo->magic == LISTFS_MAGIC,W_ERR_INVALID,"invalid fs header");
+    }while(0);
+    if(blk != W_NULL)
+        lfs_free(blk);
+    return W_ERR_OK;
+}
+
+static w_err_t listfs_get_fsinfo(lfs_info_s *fsinfo,w_blkdev_s *blkdev)
+{
+    w_int32_t i;
+    w_err_t err;
+    for(i = 0;i < 2;i ++)
+    {
+        err = lfs_get_fsinfo_by_blk(fsinfo,blkdev,i);
+        if(err == W_ERR_OK)
+            return W_ERR_OK;
+    }
+    return W_ERR_FAIL;
+}
+
 w_err_t listfs_format(listfs_s *lfs,w_blkdev_s *blkdev)
 {
     w_err_t err;
@@ -420,19 +456,19 @@ w_err_t listfs_format(listfs_s *lfs,w_blkdev_s *blkdev)
 }
 
 
-w_err_t listfs_mount(listfs_s *lfs,w_blkdev_s *blkdev)
+w_err_t listfs_init(listfs_s *lfs,w_blkdev_s *blkdev)
 {
     w_err_t err;
     WIND_ASSERT_RETURN(lfs != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
     
-    wind_debug("listfs mount blkdev:%s",blkdev->obj.name);
+    wind_notice("listfs init,blkdev:%s",blkdev->obj.name);
     err = listfs_get_fsinfo(&lfs->lfs_info,blkdev);
     if(err != W_ERR_OK)
     {
         wind_notice("No file system detected,format dev %s now.",
             wind_obj_name(&blkdev->obj));
-        err = listfs_format(lfs,blkdev);
+        //err = listfs_format(lfs,blkdev);
     }
     else
     {
@@ -446,7 +482,7 @@ w_err_t listfs_mount(listfs_s *lfs,w_blkdev_s *blkdev)
     return err;
 }
 
-w_err_t listfs_unmount(listfs_s *lfs)
+w_err_t listfs_deinit(listfs_s *lfs)
 {
     WIND_ASSERT_RETURN(lfs != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(lfs->lfs_info.magic == LISTFS_MAGIC,W_ERR_INVALID);

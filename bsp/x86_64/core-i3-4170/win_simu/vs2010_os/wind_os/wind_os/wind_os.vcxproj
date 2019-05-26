@@ -1,0 +1,327 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{8C549474-B748-4DBA-A78E-EF939EA0746B}</ProjectGuid>
+    <RootNamespace>wind_os</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>$(ProjectDir)..\..\..\port;$(ProjectDir)..\..\..\..\..\..\..\src\common;$(ProjectDir)..\..\..\..\..\..\..\src\module\shell\cmd;$(ProjectDir)..\..\..\..\..\..\..\src\module\shell\framework;$(ProjectDir)..\..\..\..\..\..\..\src\core;$(ProjectDir)..\..\..\..\..\..\..\src\hal;$(ProjectDir)..\..\..\..\..\..\..\src\module\cutest\framework;$(ProjectDir)..\..\..\..\..\..\..\src\module\cutest\port;$(ProjectDir)..\..\..\..\..\..\..\src\module\cutest\testcase;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs\treefs;$(ProjectDir)..\..\..\..\..\..\..\src\module\lua-5.3.4\src;$(ProjectDir)..\..\..\..\..\..\..\src\module\db\framework;$(ProjectDir)..\..\..\..\..\..\..\src\module\db\dbbase;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>$(ProjectDir)..\..\..\port;$(ProjectDir)..\..\..\..\..\..\..\src\common;$(ProjectDir)..\..\..\..\..\..\..\src\core;$(ProjectDir)..\..\..\..\..\..\..\src\hal;$(ProjectDir)..\..\..\..\..\..\..\src\module\shell\framework;$(ProjectDir)..\..\..\..\..\..\..\src\module\shell\cmd;$(ProjectDir)..\..\..\..\..\..\..\src\module\cutest\framework;$(ProjectDir)..\..\..\..\..\..\..\src\module\cutest\port;$(ProjectDir)..\..\..\..\..\..\..\src\module\cutest\testcase;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs\treefs;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs\listfs;$(ProjectDir)..\..\..\..\..\..\..\src\module\lua-5.3.4\src;$(ProjectDir)..\..\..\..\..\..\..\src\module\db\framework;$(ProjectDir)..\..\..\..\..\..\..\src\module\db\dbbase;$(ProjectDir)..\..\..\..\..\..\..\src\tools\pack;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <DisableSpecificWarnings>4819;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\..\..\src\application\win32_simu\user_entry.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\common\wind_conv.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\common\wind_crc16.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\common\wind_crc32.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\common\wind_debug.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\common\wind_dlist.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\common\wind_encrypt.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\common\wind_imghead.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\common\wind_md5.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\common\wind_queue.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\common\wind_string.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\common\wind_strsearch.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\common\wind_tree.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\cjson\cJSON.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\cjson\cJSON_Utils.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\cjson\json_checker.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\framework\test_framework.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\cutest_register.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\test_event.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\test_fs.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\test_heap.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\test_listfsfs.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\test_msgbox.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\test_mutex.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\test_pipe.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\test_pool.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\test_queue.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\test_sem.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\test_softirq.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\test_tree.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\test_treefs.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\db\dbbase\db_demo.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\db\dbbase\db_demo1.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\db\framework\db_entry.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\db\framework\db_if.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\db\framework\tb_entry.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\db\framework\tb_model.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\db\framework\tb_print.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\port\lua_port.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lapi.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lauxlib.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lbaselib.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lbitlib.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lcode.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lcorolib.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lctype.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\ldblib.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\ldebug.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\ldo.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\ldump.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lfunc.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lgc.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\linit.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\liolib.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\llex.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lmathlib.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lmem.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\loadlib.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lobject.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lopcodes.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lparser.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lstate.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lstring.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lstrlib.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\ltable.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\ltablib.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\ltm.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lua.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\luac.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lundump.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lutf8lib.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lvm.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lzio.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_beep.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_blkdev.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_cutest.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_daemon.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_datetime.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_dbgpoint.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_diagnose.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_echo.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_fs.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_led.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_list.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_listfs.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_lua.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_mem.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_reset.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_stati.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_sysinfo.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_thread.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_timer.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_user.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_watchdog.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_xmodem.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\shell_cmd_regif.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\x86_cmd_pack.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\x86_cmd_rcp.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\framework\cmd_history.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\framework\shell_framework.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\adapter_treefs.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\listfs\listfs.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\listfs\listfs_bitmap.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\listfs\listfs_blkinfo.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\listfs\listfs_cache.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\listfs\listfs_fileinfo.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\treefs\treefile.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\treefs\treefs.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\wind_file.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\wind_filepath.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\wind_fs.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\wind_log.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_core.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_coroutine.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_daemon.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_dbgpoint.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_diagnose.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_event.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_heap.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_msgbox.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_mutex.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_obj.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_pipe.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_pool.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_sem.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_softirq.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_sysinfo.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_thread.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_time.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_timer.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_user.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_watchdog.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\hal\wind_blkdev.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\hal\wind_chdev.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\systhread\thread_coroutine.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\systhread\thread_daemon.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\systhread\thread_idle.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\systhread\thread_init.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\systhread\thread_stati.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\systhread\thread_timer.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\tools\pack\wind_pack.c" />
+    <ClCompile Include="..\..\..\device\blkdev_disk.c" />
+    <ClCompile Include="..\..\..\device\blkdev_memblk.c" />
+    <ClCompile Include="..\..\..\device\blkdev_null.c" />
+    <ClCompile Include="..\..\..\device\list_blkdev.c" />
+    <ClCompile Include="..\..\..\device\list_dev.c" />
+    <ClCompile Include="..\..\..\port\file_port.c" />
+    <ClCompile Include="..\..\..\port\wind_board_port.c" />
+    <ClCompile Include="..\..\..\port\wind_os_prelunch.c" />
+    <ClCompile Include="..\..\..\port\wind_os_switch.c" />
+    <ClCompile Include="..\..\..\port\wind_std.c" />
+    <ClCompile Include="main.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\..\..\..\src\common\wind_conv.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\common\wind_crc16.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\common\wind_crc32.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\common\wind_debug.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\common\wind_dlist.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\common\wind_encrypt.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\common\wind_imghead.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\common\wind_macro.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\common\wind_md5.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\common\wind_queue.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\common\wind_string.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\common\wind_strsearch.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\common\wind_tree.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\cjson\cJSON.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\cjson\cJSON_Utils.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\cjson\json_checker.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\cutest\framework\test_framework.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\cutest\framework\wind_cut.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\db\dbbase\db_demo.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\db\dbbase\db_demo1.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\db\framework\db_def.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\db\framework\db_entry.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\db\framework\db_if.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\db\framework\tb_entry.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\db\framework\tb_model.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lapi.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lauxlib.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lcode.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lctype.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\ldebug.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\ldo.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lfunc.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lgc.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\llex.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\llimits.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lmem.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lobject.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lopcodes.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lparser.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lprefix.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lstate.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lstring.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\ltable.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\ltm.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lua.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lua.hpp" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\luaconf.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lualib.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lundump.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lvm.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lzio.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\shell\framework\cmd_history.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\shell\framework\shell_framework.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\shell\framework\wind_cmd.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\shell\framework\wind_key.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\adapter_treefs.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\listfs\listfs.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\listfs\listfs_bitmap.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\listfs\listfs_blkinfo.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\listfs\listfs_cache.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\listfs\listfs_fileinfo.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\treefs\treefile.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\treefs\treefs.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\treefs\treefs_def.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\wind_file.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\wind_filepath.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\wind_fs.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\wind_log.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_core.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_coroutine.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_daemon.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_dbgpoint.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_diagnose.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_event.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_heap.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_msgbox.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_mutex.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_obj.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_pipe.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_pool.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_sem.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_softirq.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_stati.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_sysinfo.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_thread.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_time.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_timer.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_user.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_watchdog.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\hal\wind_blkdev.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\hal\wind_chdev.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\tools\pack\wind_pack.h" />
+    <ClInclude Include="..\..\..\port\file_port.h" />
+    <ClInclude Include="..\..\..\port\wind_board_port.h" />
+    <ClInclude Include="..\..\..\port\wind_config.h" />
+    <ClInclude Include="..\..\..\port\wind_std.h" />
+    <ClInclude Include="..\..\..\port\wind_type.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\Makefile" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -118,8 +118,12 @@ CASE_FUNC(listfs_format)
     if(blkdev == W_NULL)
         return;
     wind_blkdev_open(blkdev);
-    err = listfs_format(&g_lfs,blkdev);
-    EXPECT_EQ(err,W_ERR_OK);
+    err = listfs_init(&g_lfs,blkdev);
+    if(err != W_ERR_OK)
+    {
+        err = listfs_format(&g_lfs,blkdev);
+        EXPECT_EQ(err,W_ERR_OK);
+    }
     //wind_blkdev_close(blkdev);
 }
 
@@ -135,8 +139,13 @@ SUITE_SETUP(test_listfs)
     }
         
     wind_blkdev_open(blkdev);
-    err = listfs_format(&g_lfs,blkdev);
-    EXPECT_EQ(err,W_ERR_OK);
+    err = listfs_init(&g_lfs,blkdev);
+    if(err != W_ERR_OK)
+    {
+        err = listfs_format(&g_lfs,blkdev);
+        EXPECT_EQ(err,W_ERR_OK);
+    }
+
     //wind_blkdev_close(blkdev);
 }
 

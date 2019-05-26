@@ -72,14 +72,9 @@ typedef struct __lfile_info_s
     w_uint8_t  attr;                 //是否目录，可读，可写，隐藏，校验
 }lfile_info_s;
 
-w_err_t listfs_get_fsinfo(lfs_info_s *fsinfo,w_blkdev_s *blkdev);
 
 w_err_t listfs_fileinfo_init(lfile_info_s *info,char *name,
     w_addr_t self_addr,w_addr_t parent_addr,w_addr_t prev_addr,w_uint8_t attr);
-
-//w_err_t fileinfo_read_block(w_blkdev_s *blkdev,w_addr_t addr,w_uint8_t **blk);
-
-//w_err_t fileinfo_write_block(w_blkdev_s *blkdev,w_addr_t addr,w_uint8_t *blk);
 
 w_err_t fileinfo_read(lfile_info_s *info,w_blkdev_s *blkdev,w_addr_t addr);
 
