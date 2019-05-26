@@ -73,7 +73,7 @@ COMMAND_MAIN(dbgp,argc,argv)
         WIND_ASSERT_RETURN(argc == 3,W_ERR_INVALID);
         dbgp = wind_dbgpoint_get(argv[2]);
         WIND_ASSERT_RETURN(dbgp != W_NULL,W_ERR_INVALID);
-        buff = wind_malloc(dbgp->lenth+1);
+        buff = (w_uint8_t *)wind_malloc(dbgp->lenth+1);
         WIND_ASSERT_RETURN(buff != W_NULL,W_ERR_MEM);
         wind_memset(buff,0,dbgp->lenth+1);
         len = wind_dbgpoint_read(dbgp,buff,dbgp->lenth);

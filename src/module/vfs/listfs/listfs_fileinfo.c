@@ -167,7 +167,7 @@ w_err_t fileinfo_get_tailchild(lfile_info_s *info,w_blkdev_s *blkdev)
 w_err_t fileinfo_update_parent(lfile_info_s *info,w_blkdev_s *blkdev)
 {
     w_err_t err;
-    w_int32_t cnt;
+
     w_addr_t self_addr;
     lfile_info_s *tmpinfo = W_NULL;
     
@@ -198,7 +198,7 @@ w_err_t fileinfo_update_parent(lfile_info_s *info,w_blkdev_s *blkdev)
 w_err_t fileinfo_update_prev(lfile_info_s *info,w_blkdev_s *blkdev)
 {
     w_err_t err;
-    w_int32_t cnt;
+
     w_addr_t self_addr;
     lfile_info_s *tmpinfo = W_NULL;
     

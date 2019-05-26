@@ -11,7 +11,7 @@ WIND_POOL(treefspool,WIND_TREEFS_MAX_NUM,sizeof(w_treefs_s));
 w_err_t _wind_treefs_mod_init(void)
 {
     w_err_t err;
-    w_treefs_s *tfs;
+
     DLIST_INIT(treefslist);
     err = wind_pool_create("treefs",treefspool,sizeof(treefspool),sizeof(w_treefs_s));
     WIND_ASSERT_RETURN(err == W_ERR_OK,err);

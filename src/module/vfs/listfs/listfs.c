@@ -50,24 +50,23 @@ w_err_t lfs_free(void *ptr)
 }
 
 
-static lfile_info_s *lfs_search_child(lfile_info_s *info,char *name,w_blkdev_s *blkdev)
+static w_err_t lfs_search_child(lfile_info_s *info,char *name,w_blkdev_s *blkdev)
 {
     w_err_t err;
-    WIND_ASSERT_RETURN(info != W_NULL,W_NULL);
-    WIND_ASSERT_RETURN(name != W_NULL,W_NULL);
-    WIND_ASSERT_RETURN(blkdev != W_NULL,W_NULL);
+    WIND_ASSERT_RETURN(info != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(name != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
     err = fileinfo_get_headchild(info,blkdev);
-    if(err != W_ERR_OK)
-        return W_NULL;
+    WIND_ASSERT_RETURN(err == W_ERR_OK,err);
     for(;info != W_NULL;)
     {
         if(wind_strcmp(name,info->name) == 0)
-            return info;
+            return W_ERR_OK;
         err = fileinfo_get_next(info,blkdev);
         if(err != W_ERR_OK)
-            return W_NULL;
+            return err;
     }
-    return W_NULL;
+    return W_ERR_FAIL;
 }
 
 static w_err_t lfs_search_file(listfs_s *lfs,listfile_s *file,const char *path)
@@ -125,8 +124,8 @@ static w_err_t lfs_search_file(listfs_s *lfs,listfile_s *file,const char *path)
                 err = W_ERR_FAIL;
                 break;
             }
-            finfo = lfs_search_child(finfo,nameseg[i],lfs->blkdev);
-            WIND_ASSERT_BREAK(finfo != W_NULL,W_ERR_FAIL,"read directory failed.");
+            err = lfs_search_child(finfo,nameseg[i],lfs->blkdev);
+            WIND_ASSERT_BREAK(err == W_ERR_OK,err,"read directory failed.");
         }
     }while(0);
     if(err == W_ERR_OK)
@@ -240,7 +239,7 @@ static w_err_t lfs_make_file(listfs_s *lfs,listfile_s *file,char *path)
     w_int32_t i,pathlen,cnt;
     w_uint8_t isdir = 0;
     char **nameseg = W_NULL;
-    lfile_info_s *finfo = W_NULL,*tmpinfo;
+    lfile_info_s *finfo = W_NULL;
     lfile_blkinfo_s *blkinfo = W_NULL;
     char *tmppath = W_NULL;
 
@@ -280,13 +279,8 @@ static w_err_t lfs_make_file(listfs_s *lfs,listfile_s *file,char *path)
         err = W_ERR_OK;
         for(i = 1;i < cnt;i ++)
         {
-            tmpinfo = lfs_search_child(finfo,nameseg[i],lfs->blkdev);
-            if(tmpinfo != W_NULL)
-            {
-                wind_memcpy(finfo,tmpinfo,sizeof(lfile_info_s));
-                lfs_free(tmpinfo);
-            }
-            else
+            err = lfs_search_child(finfo,nameseg[i],lfs->blkdev);
+            if(err != W_ERR_OK)
             {
                 err = lfs_make_child(lfs,finfo,nameseg[i],i == cnt - 1?isdir:1);
                 WIND_ASSERT_BREAK(err == W_ERR_OK,err,"make child failed");
@@ -431,12 +425,12 @@ static w_err_t lfs_info_init(listfs_s *lfs,w_blkdev_s *blkdev)
     w_uint32_t crc;
     w_int32_t cnt;
     lfs_info_s *lfs_info;
-    w_uint8_t *blk = W_NULL;
+    w_uint8_t *blk = (w_uint8_t *)W_NULL;
     do
     {
         err = W_ERR_OK;
         lfs->blkdev = blkdev;
-        blk = lfs_malloc(blkdev->blksize);
+        blk = (w_uint8_t *)lfs_malloc(blkdev->blksize);
         WIND_ASSERT_BREAK(blk != W_NULL,W_ERR_MEM,"malloc blk failed");
         wind_memset(blk,0,blkdev->blksize);
         lfs_info = &lfs->lfs_info;
@@ -462,6 +456,7 @@ static w_err_t lfs_info_init(listfs_s *lfs,w_blkdev_s *blkdev)
         WIND_ASSERT_BREAK(cnt > 0,W_ERR_HARDFAULT,"write bak fsinfo failed.");
 
     }while(0);
+    return err;
 }
 
 w_err_t listfs_format(listfs_s *lfs,w_blkdev_s *blkdev)
