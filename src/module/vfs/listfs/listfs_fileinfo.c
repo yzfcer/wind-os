@@ -24,6 +24,7 @@
 *******************************************************************************************************/
 #include "listfs_fileinfo.h"
 #include "listfs.h"
+#include "wind_conv.h"
 #include "wind_debug.h"
 #include "wind_string.h"
 
@@ -51,7 +52,22 @@ static w_err_t fileinfo_write_block(w_blkdev_s *blkdev,w_addr_t addr,w_uint8_t *
     return W_ERR_OK;
 }
 #endif
-
+void fileinfo_be2le(lfile_info_s *info)
+{
+    if(wind_endian() == ENDIAN_BIG)
+    {
+        BE2LE_4(info->magic);
+        BE2LE_4(info->filesize);
+        BE2LE_4(info->spacesize);
+        BE2LE_4(info->parent_addr);
+        BE2LE_4(info->self_addr);
+        BE2LE_4(info->last_addr);
+        BE2LE_4(info->prevfile_addr);
+        BE2LE_4(info->nextfile_addr);
+        BE2LE_4(info->headchild_addr);
+        BE2LE_4(info->tailchild_addr);
+    }
+}
 
 w_err_t listfs_fileinfo_init(lfile_info_s *info,char *name,
     w_addr_t self_addr,w_addr_t parent_addr,w_addr_t prev_addr,w_uint8_t attr)

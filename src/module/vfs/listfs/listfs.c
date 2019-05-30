@@ -35,6 +35,25 @@
 #define NODE_TO_LISTFILE(node) (listfile_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((listfile_s*)0)->list.listnode)))
 //static listfile_s *listfile_rootnode = W_NULL;
 
+void lfs_info_be2le(lfs_info_s *info)
+{
+    w_int32_t i;
+    if(wind_endian() == ENDIAN_BIG)
+    {
+        BE2LE_4(info->magic);
+        BE2LE_4(info->blkcount);
+        BE2LE_2(info->unit_size);
+        BE2LE_2(info->blksize);
+        BE2LE_2(info->reserve_blk);
+        BE2LE_2(info->attr);
+        BE2LE_4(info->bitmap_cnt);
+        BE2LE_4(info->bitmap1_addr);
+        BE2LE_4(info->bitmap2_addr);
+        BE2LE_4(info->root_addr);
+    }
+}
+
+
 void *lfs_malloc(w_int32_t size)
 {
     //void *ptr = wind_malloc(size);
@@ -420,6 +439,11 @@ static w_err_t listfs_get_fsinfo(lfs_info_s *fsinfo,w_blkdev_s *blkdev)
     return W_ERR_FAIL;
 }
 
+w_err_t lfs_info_read(lfs_info_s *lfs_info,w_blkdev_s *blkdev)
+{
+    return W_ERR_FAIL;
+}
+
 static w_err_t lfs_info_init(listfs_s *lfs,w_blkdev_s *blkdev)
 {
     w_err_t err;
@@ -445,10 +469,16 @@ static w_err_t lfs_info_init(listfs_s *lfs,w_blkdev_s *blkdev)
         lfs_info->bitmap_cnt = (blkdev->blkcnt - lfs_info->bitmap1_addr) / (lfs_info->unit_size + 1) + 1;
         lfs_info->bitmap2_addr = lfs_info->bitmap1_addr + lfs_info->bitmap_cnt;
         lfs_info->root_addr = lfs_info->bitmap2_addr + lfs_info->bitmap_cnt;
+        
         wind_memset(blk,0,blkdev->blksize);
         wind_memcpy(blk,lfs_info,sizeof(lfs_info_s));
         crc = wind_crc32(blk,blkdev->blksize-4,0xffffffff);
         wind_from_uint32(&blk[blkdev->blksize-4],crc);
+        err = lfs_info_read(lfs_info,blkdev);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"read lfs info failed");
+
+
+
         
         cnt = wind_blkdev_write(blkdev,0,blk,1);
         WIND_ASSERT_BREAK(cnt > 0,W_ERR_HARDFAULT,"write fsinfo failed.");

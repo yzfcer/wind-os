@@ -28,9 +28,7 @@
 #include "wind_type.h"
 #include "wind_blkdev.h"
 
-#define LISTFS_MAGIC 0x49AC7D5349AC7D64
 #define LISTFILE_MAGIC 0x7D5349AC
-#define LISTFILE_BLK_MAGIC 0x725A4967
 
 #define LFILE_NAME_LEN 64    //文件名长度
 
@@ -39,20 +37,7 @@
 
 #define BLKINFO_HAS_OFFSET(info,ofst,blksize) ((ofst >= info->offset)&&(ofst < info->offset + info->blkused * blksize))
 
-//固化文件系统信息
-typedef struct __lfs_info_s
-{
-    w_uint64_t magic;        //魔术字
-    w_uint32_t blkcount;     //块数量
-    w_uint16_t unit_size;    //文件单位大小
-    w_uint16_t blksize;      //块大小
-    w_uint16_t reserve_blk;  //保留块数
-    w_uint16_t attr;         //文件系统属性
-    w_uint32_t bitmap_cnt;   //位图块数
-    w_addr_t   bitmap1_addr; //主位图地址
-    w_addr_t   bitmap2_addr; //备份位图地址
-    w_addr_t   root_addr;    //根目录位置
-}lfs_info_s;
+
 
 
 //固化文件头部信息
@@ -72,7 +57,7 @@ typedef struct __lfile_info_s
     w_uint8_t  attr;                 //是否目录，可读，可写，隐藏，校验
 }lfile_info_s;
 
-
+void fileinfo_be2le(lfile_info_s *info);
 w_err_t listfs_fileinfo_init(lfile_info_s *info,char *name,
     w_addr_t self_addr,w_addr_t parent_addr,w_addr_t prev_addr,w_uint8_t attr);
 

@@ -41,6 +41,7 @@
 #define LFMODE_CRT 0x04
 #define LFMODE_A   0x08
 
+#define LISTFS_MAGIC 0x49AC7D53
 
 #define LISTFS_DIR_LAYCNT 32 //目录深度
 //#define LISTFS_BLK_SIZE 512  //块大小
@@ -56,6 +57,21 @@
 #define LFILE_ATTR_COMMAN (LFILE_ATTR_READ | LFILE_ATTR_WRITE)
 
 #define LFILE_IS_DIR(attr) (attr & LFILE_ATTR_DIR)
+
+//固化文件系统信息
+typedef struct __lfs_info_s
+{
+    w_uint32_t magic;        //魔术字
+    w_uint32_t blkcount;     //块数量
+    w_uint16_t unit_size;    //文件单位大小
+    w_uint16_t blksize;      //块大小
+    w_uint16_t reserve_blk;  //保留块数
+    w_uint16_t attr;         //文件系统属性
+    w_uint32_t bitmap_cnt;   //位图块数
+    w_addr_t   bitmap1_addr; //主位图地址
+    w_addr_t   bitmap2_addr; //备份位图地址
+    w_addr_t   root_addr;    //根目录位置
+}lfs_info_s;
 
 //程序关联的文件系统信息
 typedef struct __listfs_s
@@ -81,6 +97,7 @@ typedef struct __listfile_s
     lfile_blkinfo_s *blkinfo;
 }listfile_s;
 
+void lfs_info_be2le(lfs_info_s *info);
 
 void *lfs_malloc(w_int32_t size);
 w_err_t lfs_free(void *ptr);

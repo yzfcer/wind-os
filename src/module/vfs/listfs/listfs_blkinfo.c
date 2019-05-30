@@ -25,8 +25,29 @@
 #include "listfs_blkinfo.h"
 #include "listfs_fileinfo.h"
 #include "listfs.h"
+#include "wind_conv.h"
 #include "wind_debug.h"
 #include "wind_string.h"
+void blkinfo_be2le(lfile_blkinfo_s *info)
+{
+    w_int32_t i;
+    if(wind_endian() == ENDIAN_BIG)
+    {
+        BE2LE_4(info->magic);
+        BE2LE_4(info->self_addr);
+        BE2LE_4(info->prevblk_addr);
+        BE2LE_4(info->nextblk_addr);
+        BE2LE_4(info->blksize);
+        BE2LE_4(info->offset);
+        BE2LE_4(info->blkused);
+        BE2LE_4(info->byteused);
+        for(i = 0;i < LFILE_LBLK_CNT;i ++)
+        {
+            if(info->dataaddr[i])
+                BE2LE_4(info->dataaddr[i]);
+        }
+    }
+}
 
 w_int32_t blkinfo_get_used(lfile_blkinfo_s *info)
 {

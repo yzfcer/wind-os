@@ -31,6 +31,13 @@ typedef enum
     ENDIAN_LITTLE = 0x02,
 }w_endian_e;
 
+//将大端格式转换成小端格式或者将小端格式转换成大端格式
+#define BE2LE_2(value16) ((value16 >> 8) + (value16 << 8))
+#define BE2LE_4(value32) (((value32 >> 24) & 0xff) \
+            + ((value32 >> 16) & 0xff00)\
+            + ((value32 << 16) & 0xff0000)\
+            + ((value32 << 24) & 0xff000000))
+
 w_endian_e wind_endian(void);
 //数值与字符串之间的转换
 w_bool_t wind_str_to_int(char *str,w_int32_t *value);

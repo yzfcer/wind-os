@@ -40,13 +40,6 @@ extern {
 #define MIN(x, y) (((x) < (y))?(x):(y))
 #define MIN3(x, y, z) MINMIN(x,y),z)
 #define MIN4(x, y, z, w) MIN(MIN(x,y),MIN(z,w))
-
-//将大端格式转换成小端格式或者将小端格式转换成大端格式
-#define BE2LE_2(value16) ((value16 >> 8) + (value16 << 8))
-#define BE2LE_4(value32) (((value32 >> 24) & 0xff) \
-            + ((value32 >> 16) & 0xff00)\
-            + ((value32 << 16) & 0xff0000)\
-            + ((value32 << 24) & 0xff000000))
             
 
 //获得结构体中一个字段的偏移量

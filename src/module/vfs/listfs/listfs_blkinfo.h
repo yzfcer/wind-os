@@ -28,8 +28,6 @@
 #include "wind_type.h"
 #include "wind_blkdev.h"
 
-#define LISTFS_MAGIC 0x49AC7D5349AC7D64
-#define LISTFILE_MAGIC 0x7D5349AC
 #define LISTFILE_BLK_MAGIC 0x725A4967
 
 #define LFILE_NAME_LEN 64    //文件名长度
@@ -55,6 +53,8 @@ typedef struct __lfile_blkinfo_s
     w_int32_t  byteused;     //当前块已经使用的字节数量
     w_addr_t   dataaddr[LFILE_LBLK_CNT];  //数据块信息
 }lfile_blkinfo_s;
+
+void blkinfo_be2le(lfile_blkinfo_s *info);
 
 w_int32_t blkinfo_get_used(lfile_blkinfo_s *info);
 
