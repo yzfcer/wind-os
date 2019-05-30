@@ -86,7 +86,7 @@ static lcache_item_s *alloc_cacheitem(lfs_cache_s *cache,w_int32_t blksize)
 static w_err_t cacheitem_init(lcache_item_s *cacheitem,w_addr_t addr,w_int32_t blksize)
 {
     cacheitem->addr = addr;
-	cacheitem->blksize = (w_int16_t)blksize;
+    cacheitem->blksize = (w_int16_t)blksize;
     cacheitem->blk = (w_uint8_t*)&cacheitem[1];
     DNODE_INIT(cacheitem->itemnode);
     return W_ERR_OK;
@@ -94,8 +94,6 @@ static w_err_t cacheitem_init(lcache_item_s *cacheitem,w_addr_t addr,w_int32_t b
 
 w_err_t lfs_cache_read(lfs_cache_s *cache,w_blkdev_s *blkdev,w_addr_t addr,w_uint8_t *blk)
 {
-    //w_err_t err;
-    //w_dnode_s *dnode;
     lcache_item_s *cacheitem;
     WIND_ASSERT_RETURN(cache != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
@@ -103,7 +101,7 @@ w_err_t lfs_cache_read(lfs_cache_s *cache,w_blkdev_s *blkdev,w_addr_t addr,w_uin
     WIND_ASSERT_RETURN(addr > 0,W_ERR_INVALID);
     wind_disable_switch();
     cacheitem = hit_cacheitem(cache,addr);
-    if(cacheitem == W_NULL)
+    if(cacheitem != W_NULL)
     {
         cache->r_hit ++;
         wind_memcpy(blk,cacheitem->blk,blkdev->blksize);
@@ -127,9 +125,6 @@ w_err_t lfs_cache_read(lfs_cache_s *cache,w_blkdev_s *blkdev,w_addr_t addr,w_uin
 
 w_err_t lfs_cache_write(lfs_cache_s *cache,w_blkdev_s *blkdev,w_addr_t addr,w_uint8_t *blk)
 {
-    //w_err_t err;
-    //w_int32_t itemsize;
-    //w_dnode_s *dnode;
     lcache_item_s *cacheitem;
     WIND_ASSERT_RETURN(cache != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
@@ -137,7 +132,7 @@ w_err_t lfs_cache_write(lfs_cache_s *cache,w_blkdev_s *blkdev,w_addr_t addr,w_ui
     WIND_ASSERT_RETURN(addr > 0,W_ERR_INVALID);
     wind_disable_switch();
     cacheitem = hit_cacheitem(cache,addr);
-    if(cacheitem == W_NULL)
+    if(cacheitem != W_NULL)
     {
         cache->w_hit ++;
         wind_memcpy(cacheitem->blk,blk,blkdev->blksize);
