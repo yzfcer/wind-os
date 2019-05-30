@@ -192,7 +192,7 @@ static w_err_t lfs_make_child(listfs_s *lfs,lfile_info_s *pinfo,char *name,w_uin
 {
     w_err_t err;
     w_uint8_t attr;
-    w_uint8_t *blk = W_NULL;
+    w_uint8_t *blk = (w_uint8_t *)W_NULL;
     w_addr_t self_addr,cnt;
     lfile_info_s *info;
     lfile_blkinfo_s *blkinfo;
@@ -206,7 +206,7 @@ static w_err_t lfs_make_child(listfs_s *lfs,lfile_info_s *pinfo,char *name,w_uin
     do 
     {
         err = W_ERR_OK;
-        blk = lfs_malloc(lfs->blkdev->blksize);
+        blk = (w_uint8_t*)lfs_malloc(lfs->blkdev->blksize);
         WIND_ASSERT_RETURN(blk != W_NULL,W_ERR_MEM);
         wind_memset(blk,0,lfs->blkdev->blksize);
         attr = isdir?(LFILE_ATTR_COMMAN|LFILE_ATTR_DIR):LFILE_ATTR_COMMAN;

@@ -30,6 +30,8 @@
 #include "listfs.h"
 #include "wind_blkdev.h"
 #if WIND_FS_SUPPORT
+
+#define BITMAP_FREE (0x00 << 0)
 #define BITMAP_USED (0x01 << 0)
 #define BITMAP_BAD  (0x01 << 1)
 typedef struct
