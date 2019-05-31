@@ -441,52 +441,92 @@ static w_err_t listfs_get_fsinfo(lfs_info_s *fsinfo,w_blkdev_s *blkdev)
 
 w_err_t lfs_info_read(lfs_info_s *lfs_info,w_blkdev_s *blkdev)
 {
-    return W_ERR_FAIL;
-}
-
-static w_err_t lfs_info_init(listfs_s *lfs,w_blkdev_s *blkdev)
-{
     w_err_t err;
-    w_uint32_t crc;
     w_int32_t cnt;
-    lfs_info_s *lfs_info;
-    w_uint8_t *blk = (w_uint8_t *)W_NULL;
+    w_uint32_t crc,calc_crc;
+    lfs_info_s *tmpinfo;
+    w_uint8_t *blk = W_NULL;
+    WIND_ASSERT_RETURN(lfs_info != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
     do
     {
         err = W_ERR_OK;
-        lfs->blkdev = blkdev;
         blk = (w_uint8_t *)lfs_malloc(blkdev->blksize);
         WIND_ASSERT_BREAK(blk != W_NULL,W_ERR_MEM,"malloc blk failed");
-        wind_memset(blk,0,blkdev->blksize);
-        lfs_info = &lfs->lfs_info;
-        lfs_info->magic = LISTFS_MAGIC;
-        lfs_info->blkcount = blkdev->blkcnt;
-        lfs_info->unit_size = calc_unit_size(blkdev->blkcnt,blkdev->blksize);
-        lfs_info->blksize = (w_uint16_t)blkdev->blksize;
-        lfs_info->reserve_blk = 5;
-        lfs_info->attr = 0;
-        lfs_info->bitmap1_addr = lfs_info->reserve_blk + 1;
-        lfs_info->bitmap_cnt = (blkdev->blkcnt - lfs_info->bitmap1_addr) / (lfs_info->unit_size + 1) + 1;
-        lfs_info->bitmap2_addr = lfs_info->bitmap1_addr + lfs_info->bitmap_cnt;
-        lfs_info->root_addr = lfs_info->bitmap2_addr + lfs_info->bitmap_cnt;
         
+        cnt = wind_blkdev_read(blkdev,0,blk,1);
+        if(cnt <= 0)
+            cnt = wind_blkdev_read(blkdev,1,blk,1);
+        WIND_ASSERT_BREAK(cnt > 0,W_ERR_HARDFAULT,"read fsinfo failed.");
+        wind_to_uint32(&blk[blkdev->blksize-4],&crc);
+        calc_crc = wind_crc32(blk,blkdev->blksize-4,0xffffffff);
+        WIND_ASSERT_BREAK(calc_crc == crc,W_ERR_INVALID,"check lfs info crc failed");
+        tmpinfo = (lfs_info_s*)blk;
+        lfs_info_be2le(tmpinfo);
+        WIND_ASSERT_BREAK(tmpinfo->magic == LISTFS_MAGIC,W_ERR_INVALID,"invalid lfs head");
+        wind_memcpy(lfs_info,tmpinfo,sizeof(lfs_info_s));
+    }while(0);
+    if(blk != W_NULL)
+        lfs_free(blk);
+    return err;
+}
+
+
+w_err_t lfs_info_write(lfs_info_s *lfs_info,w_blkdev_s *blkdev)
+{
+    w_err_t err;
+    w_int32_t cnt;
+    w_uint32_t crc;
+    w_uint8_t *blk = W_NULL;
+    WIND_ASSERT_RETURN(lfs_info != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
+    do 
+    {
+        err = W_ERR_OK;
+        blk = (w_uint8_t *)lfs_malloc(blkdev->blksize);
+        WIND_ASSERT_BREAK(blk != W_NULL,W_ERR_MEM,"malloc blk failed");
+        lfs_info_be2le(lfs_info);
+
         wind_memset(blk,0,blkdev->blksize);
         wind_memcpy(blk,lfs_info,sizeof(lfs_info_s));
         crc = wind_crc32(blk,blkdev->blksize-4,0xffffffff);
         wind_from_uint32(&blk[blkdev->blksize-4],crc);
-        err = lfs_info_read(lfs_info,blkdev);
-        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"read lfs info failed");
-
-
-
         
         cnt = wind_blkdev_write(blkdev,0,blk,1);
         WIND_ASSERT_BREAK(cnt > 0,W_ERR_HARDFAULT,"write fsinfo failed.");
         
         cnt = wind_blkdev_write(blkdev,1,blk,1);
         WIND_ASSERT_BREAK(cnt > 0,W_ERR_HARDFAULT,"write bak fsinfo failed.");
-
+        
     }while(0);
+    if(blk != W_NULL)
+        lfs_free(blk);
+    return err;
+    
+}
+
+static w_err_t lfs_info_init(listfs_s *lfs,w_blkdev_s *blkdev)
+{
+    w_err_t err;
+    lfs_info_s *lfs_info;
+
+    err = W_ERR_OK;
+    lfs->blkdev = blkdev;
+
+    lfs_info = &lfs->lfs_info;
+    lfs_info->magic = LISTFS_MAGIC;
+    lfs_info->blkcount = blkdev->blkcnt;
+    lfs_info->unit_size = calc_unit_size(blkdev->blkcnt,blkdev->blksize);
+    lfs_info->blksize = (w_uint16_t)blkdev->blksize;
+    lfs_info->reserve_blk = 5;
+    lfs_info->attr = 0;
+    lfs_info->bitmap1_addr = lfs_info->reserve_blk + 1;
+    lfs_info->bitmap_cnt = (blkdev->blkcnt - lfs_info->bitmap1_addr) / (lfs_info->unit_size + 1) + 1;
+    lfs_info->bitmap2_addr = lfs_info->bitmap1_addr + lfs_info->bitmap_cnt;
+    lfs_info->root_addr = lfs_info->bitmap2_addr + lfs_info->bitmap_cnt;
+    
+    err = lfs_info_write(lfs_info,blkdev);
+    WIND_ASSERT_RETURN(err == W_ERR_OK,err);
     return err;
 }
 
