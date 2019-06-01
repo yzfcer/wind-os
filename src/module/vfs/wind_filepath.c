@@ -93,8 +93,21 @@ char *wind_filepath_generate(char *pre_path,char *relative_path,w_uint16_t isdir
     return path;
 }
 
+char *  wind_filepath_copy(char *path)
+{
+    w_int32_t len;
+    char *newpath;
+    WIND_ASSERT_RETURN(path != W_NULL,W_NULL);
+    len = wind_strlen(path);
+    WIND_ASSERT_RETURN(len > 0,W_NULL);
+    newpath = wind_salloc(path);
+    WIND_ASSERT_RETURN(newpath != W_NULL,W_NULL);
+    return newpath;
+}
+
 w_err_t wind_filepath_release(char *path)
 {
+    WIND_ASSERT_RETURN(path != W_NULL,W_ERR_PTR_NULL);
     return wind_free(path);
 }
 
@@ -129,7 +142,7 @@ w_int32_t wind_split_path(char *path,char **layers,w_int32_t layercnt)
 w_err_t wind_filepath_check_valid(char *path)
 {
     w_int32_t i,j,len;
-    char chset[] = {'~','!','@','#','$','%%','^','&','*','+','=','?','\t','\R','\n'};
+    char chset[] = {'~','!','@','#','$','%%','^','&','*','+','=','?','\t','\r','\n'};
     WIND_ASSERT_RETURN(path != W_NULL,W_ERR_PTR_NULL);
     len = wind_strlen(path);
     WIND_ASSERT_RETURN(len > 0,W_ERR_INVALID);
@@ -167,7 +180,7 @@ w_err_t wind_filepath_get_parent(char *path)
     err = wind_filepath_check_valid(path);
     WIND_ASSERT_RETURN(err == W_ERR_OK,err);
     len = wind_strlen(path);
-    WIND_ASSERT_RETURN(len > 1,W_NULL);
+    WIND_ASSERT_RETURN(len > 1,W_ERR_INVALID);
     if(path[len-1] == '/')
         path[len-1] = '\0';
     for(i = len -1;i > 0;i --)

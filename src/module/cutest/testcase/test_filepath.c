@@ -59,7 +59,7 @@ CASE_TEARDOWN(current_path)
 {
     w_err_t err;
     WIND_ASSERT_RETURN_VOID(bak_path != W_NULL);
-    err = wind_filepath_get_parent(bak_path);
+    err = wind_filepath_get_current(bak_path);
     WIND_ASSERT_RETURN_VOID(err == W_ERR_OK);
     wind_free(bak_path);
     bak_path = (char*)W_NULL;

@@ -109,7 +109,7 @@ w_treefs_s *wind_treefs_create(char *name)
 w_err_t wind_treefs_destroy(w_treefs_s *treefs)
 {
     w_err_t err;
-    w_dnode_s *dnode;
+    //w_dnode_s *dnode;
     WIND_ASSERT_RETURN(treefs != W_NULL,W_ERR_PTR_NULL);
     wind_notice("destroy treefs:%s",wind_obj_name(&treefs->obj));
     err = wind_obj_deinit(&treefs->obj,TREEFS_MAGIC,&treefslist);

@@ -37,7 +37,6 @@
 
 void lfs_info_be2le(lfs_info_s *info)
 {
-    w_int32_t i;
     if(wind_endian() == ENDIAN_BIG)
     {
         BE2LE_4(info->magic);
