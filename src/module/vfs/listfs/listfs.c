@@ -548,7 +548,7 @@ w_err_t listfs_format(listfs_s *lfs,w_blkdev_s *blkdev)
         WIND_ASSERT_BREAK(err == W_ERR_OK,err,"clear listfs bitmap info failed");
         err = lfs_make_root(lfs);
         WIND_ASSERT_BREAK(err == W_ERR_OK,err,"make listfs root failed");
-        err = listfs_bitmap_update(&lfs->bitmap);
+        err = listfs_bitmap_update_freeidx(&lfs->bitmap);
         WIND_ASSERT_BREAK(err == W_ERR_OK,err,"update listfs bitmap failed");
         lfs->file_ref = 0;
     }while(0);
@@ -576,7 +576,7 @@ w_err_t listfs_init(listfs_s *lfs,w_blkdev_s *blkdev)
     lfs->file_ref = 0;
     listfs_bitmap_init(&lfs->bitmap,lfs->lfs_info.bitmap1_addr,
         lfs->lfs_info.bitmap_cnt,lfs->blkdev);
-    err = listfs_bitmap_update(&lfs->bitmap);
+    err = listfs_bitmap_update_freeidx(&lfs->bitmap);
     WIND_ASSERT_RETURN(err == W_ERR_OK,err);
     err = fileinfo_read(&lfs->root,blkdev,lfs->lfs_info.root_addr);
     WIND_ASSERT_RETURN(err == W_ERR_OK,err);

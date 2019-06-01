@@ -30,23 +30,25 @@
 #include "listfs.h"
 #include "wind_blkdev.h"
 #if WIND_FS_SUPPORT
-
+#define LISTFS_BITMAP_MAGIC 0x37D65A82
 #define BITMAP_FREE (0x00 << 0)
 #define BITMAP_USED (0x01 << 0)
 #define BITMAP_BAD  (0x01 << 1)
 typedef struct
 {
+    w_uint32_t magic;
     w_addr_t addr1;         //主位图块起始地址
     w_addr_t addr2;         //备份位图块起始地址
     w_int32_t free_blkidx;   //空闲位图块位置
-    w_int32_t addr_cnt;      //位图块数量
+    w_int32_t bpblk_cnt;      //位图块数量
     w_int32_t free_byteidx;  //空闲位图字节位置
-    w_blkdev_s *blkdev;
+    w_blkdev_s *blkdev;      
+    w_uint8_t *blk;          //数据块
 }lfs_bitmap_s;
 
 w_err_t listfs_bitmap_init(lfs_bitmap_s *bp,w_addr_t start_addr,w_int32_t count,w_blkdev_s *blkdev);
 
-w_err_t listfs_bitmap_update(lfs_bitmap_s *bp);
+w_err_t listfs_bitmap_update_freeidx(lfs_bitmap_s *bp);
 
 w_err_t listfs_bitmap_set(lfs_bitmap_s *bp,w_addr_t addr,w_uint8_t bitflag);
 
