@@ -2,13 +2,13 @@
 #include <Windows.h>
 char *argv_bak = NULL;
 extern void wind_os_prelaunch();
-static save_argv(int argc,char *argv[])
+static void save_argv(int argc,char *argv[])
 {
     int len;
     if(argc != 1)
         return;
     len = strlen(argv[0]);
-    argv_bak = malloc(len+1);
+    argv_bak = (char *)malloc(len+1);
     if(argv_bak != NULL)
         strcpy(argv_bak,argv[0]);
 }

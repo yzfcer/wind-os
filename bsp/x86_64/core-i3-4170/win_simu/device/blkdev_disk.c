@@ -125,7 +125,7 @@ w_blkdev_s disk_dev[4] =
     WIND_BLKDEV_DEF("disk0",BLKDEV_ROM,0,0,    4096,MEM_SEC_SIZE,&disk_ops),
     WIND_BLKDEV_DEF("disk1",BLKDEV_ROM,1,4096, 4096,MEM_SEC_SIZE,&disk_ops),
     WIND_BLKDEV_DEF("disk2",BLKDEV_ROM,2,8192, 4096,MEM_SEC_SIZE,&disk_ops),
-    WIND_BLKDEV_DEF("disk3",BLKDEV_ROM,3,12288,8192,MEM_SEC_SIZE,&disk_ops)
+    WIND_BLKDEV_DEF("disktest",BLKDEV_ROM,3,12288,8192,MEM_SEC_SIZE,&disk_ops)
 };
 
 #endif

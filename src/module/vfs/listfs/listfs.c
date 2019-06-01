@@ -175,9 +175,9 @@ static w_err_t lfs_make_root(listfs_s *lfs)
     {
         err = W_ERR_OK;
         blk = lfs_malloc(lfs->blkdev->blksize);
-        WIND_ASSERT_BREAK(blk == W_NULL,W_ERR_MEM,"malloc blk failed.");
+        WIND_ASSERT_BREAK(blk != W_NULL,W_ERR_MEM,"malloc blk failed.");
         blkinfo = lfs_malloc(sizeof(lfile_blkinfo_s));
-        WIND_ASSERT_BREAK(blkinfo == W_NULL,W_ERR_MEM,"malloc blkinfo failed.");
+        WIND_ASSERT_BREAK(blkinfo != W_NULL,W_ERR_MEM,"malloc blkinfo failed.");
 
         
         info = &lfs->root;

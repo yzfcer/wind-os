@@ -27,7 +27,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
-static char *bak_path = W_NULL;
+static char *bak_path = (char *)W_NULL;
 
 /********************************************内部变量定义**********************************************/
 
@@ -59,7 +59,7 @@ CASE_TEARDOWN(current_path)
 {
     w_err_t err;
     WIND_ASSERT_RETURN_VOID(bak_path != W_NULL);
-    err = wind_filepath_get_current(bak_path);
+    err = wind_filepath_set_current(bak_path);
     WIND_ASSERT_RETURN_VOID(err == W_ERR_OK);
     wind_free(bak_path);
     bak_path = (char*)W_NULL;
@@ -71,7 +71,7 @@ CASE_FUNC(current_path)
     w_err_t err;
     err = wind_filepath_set_current("tet");
     EXPECT_NE(err,W_ERR_OK);
-    err = wind_filepath_set_current(W_NULL);
+    err = wind_filepath_set_current((char *)W_NULL);
     EXPECT_NE(err,W_ERR_OK);
     err = wind_filepath_set_current("");
     EXPECT_NE(err,W_ERR_OK);
@@ -100,7 +100,7 @@ CASE_TEARDOWN(path_valid)
 CASE_FUNC(path_valid)
 {
     w_err_t err;
-    err = wind_filepath_check_valid(W_NULL);
+    err = wind_filepath_check_valid((char *)W_NULL);
     EXPECT_NE(err,W_ERR_OK);
     err = wind_filepath_check_valid("");
     EXPECT_NE(err,W_ERR_OK);
