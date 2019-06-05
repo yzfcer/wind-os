@@ -127,7 +127,9 @@ static w_err_t lfs_search_file(listfs_s *lfs,listfile_s *file,const char *path)
         segcnt = wind_strsplit(tmppath,'/',nameseg,LISTFS_DIR_LAYCNT);
         WIND_ASSERT_BREAK(segcnt > 0,W_ERR_INVALID,"split path failed");
         //拷贝根目录
-        wind_memcpy(finfo,&lfs->root,sizeof(lfs_info_s));
+        err = fileinfo_read(finfo,lfs->blkdev,lfs->lfs_info.root_addr);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"read root failed");
+        //wind_memcpy(finfo,&lfs->root,sizeof(lfs_info_s));
         if(segcnt == 1)
         {
             err = W_ERR_OK;
@@ -167,24 +169,31 @@ static w_err_t lfs_make_root(listfs_s *lfs)
 {
     w_err_t err;
     w_uint8_t attr;
-    lfile_info_s *info;
+    lfile_info_s *finfo;
+    w_addr_t addr;
     w_uint8_t *blk = W_NULL;
     lfile_blkinfo_s *blkinfo = W_NULL;
     wind_notice("lfs_make_root");
     do 
     {
         err = W_ERR_OK;
+        finfo = lfs_malloc(sizeof(lfile_info_s));
+        WIND_ASSERT_BREAK(finfo != W_NULL,W_ERR_MEM,"malloc finfo failed");
         blk = lfs_malloc(lfs->blkdev->blksize);
         WIND_ASSERT_BREAK(blk != W_NULL,W_ERR_MEM,"malloc blk failed.");
         blkinfo = lfs_malloc(sizeof(lfile_blkinfo_s));
         WIND_ASSERT_BREAK(blkinfo != W_NULL,W_ERR_MEM,"malloc blkinfo failed.");
 
+        err = listfs_bitmap_alloc_blk(&lfs->bitmap,&addr,1);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"malloc addr failed");
+        WIND_ASSERT_BREAK(addr == lfs->lfs_info.root_addr,W_ERR_FAIL,"root addr error");
+
         
-        info = &lfs->root;
+        
         attr = (LFILE_ATTR_COMMAN | LFILE_ATTR_DIR);
-        listfs_fileinfo_init(info,"root",lfs->lfs_info.root_addr,0,0,attr);
+        listfs_fileinfo_init(finfo,"root",lfs->lfs_info.root_addr,0,0,attr);
         blkinfo_init(blkinfo, lfs->lfs_info.root_addr,0,0,lfs->blkdev->blksize);
-        err = fileinfo_write(info,lfs->blkdev);
+        err = fileinfo_write(finfo,lfs->blkdev);
         WIND_ASSERT_BREAK(err == W_ERR_OK,err,"flush lfs root file info failed.");
         err = blkinfo_write(blkinfo,lfs->blkdev);
         WIND_ASSERT_BREAK(err == W_ERR_OK,err,"flush lfs root blkinfo failed.");
@@ -200,6 +209,9 @@ static w_err_t lfs_make_root(listfs_s *lfs)
 
     if(blk != W_NULL)
         lfs_free(blk);
+    if(finfo != W_NULL)
+        lfs_free(finfo);
+    
     if(blkinfo != W_NULL)
         lfs_free(blkinfo);
     return err;
@@ -293,7 +305,9 @@ static w_err_t lfs_make_file(listfs_s *lfs,listfile_s *file,char *path)
         WIND_ASSERT_BREAK(cnt > 1,W_ERR_OK,"split path failed.");
 
         //获取根
-        wind_memcpy(finfo,&lfs->root,sizeof(lfs_info_s));
+        err = fileinfo_read(finfo,lfs->blkdev,lfs->lfs_info.root_addr);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"read root failed");
+        //wind_memcpy(finfo,&lfs->root,sizeof(lfs_info_s));
 
         err = W_ERR_OK;
         for(i = 1;i < cnt;i ++)
@@ -559,26 +573,35 @@ w_err_t listfs_format(listfs_s *lfs,w_blkdev_s *blkdev)
 w_err_t listfs_init(listfs_s *lfs,w_blkdev_s *blkdev)
 {
     w_err_t err;
+    lfile_info_s *finfo = W_NULL;
     WIND_ASSERT_RETURN(lfs != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
-    
-    wind_notice("listfs init,blkdev:%s",blkdev->obj.name);
-    err = listfs_get_fsinfo(&lfs->lfs_info,blkdev);
-    if(err != W_ERR_OK)
+    do 
     {
-        wind_error("No file system detected,format dev %s now.",
-            wind_obj_name(&blkdev->obj));
-        return err;
-    }
-    fileinfo_read(&lfs->root,blkdev,lfs->lfs_info.root_addr);
-    lfs->blkdev = blkdev;
-    lfs->file_ref = 0;
-    listfs_bitmap_init(&lfs->bitmap,lfs->lfs_info.bitmap1_addr,
-        lfs->lfs_info.bitmap_cnt,lfs->blkdev);
-    err = listfs_bitmap_update_freeidx(&lfs->bitmap);
-    WIND_ASSERT_RETURN(err == W_ERR_OK,err);
-    err = fileinfo_read(&lfs->root,blkdev,lfs->lfs_info.root_addr);
-    WIND_ASSERT_RETURN(err == W_ERR_OK,err);
+        err = W_ERR_OK;
+        finfo = lfs_malloc(sizeof(lfile_info_s));
+        WIND_ASSERT_BREAK(finfo != W_NULL,W_ERR_MEM,"malloc finfo failed");
+        
+        wind_notice("listfs init,blkdev:%s",blkdev->obj.name);
+        err = listfs_get_fsinfo(&lfs->lfs_info,blkdev);
+        if(err != W_ERR_OK)
+        {
+            wind_error("No file system detected,format dev %s now.",
+                wind_obj_name(&blkdev->obj));
+            return err;
+        }
+        
+        lfs->blkdev = blkdev;
+        lfs->file_ref = 0;
+        listfs_bitmap_init(&lfs->bitmap,lfs->lfs_info.bitmap1_addr,
+            lfs->lfs_info.bitmap_cnt,lfs->blkdev);
+        err = listfs_bitmap_update_freeidx(&lfs->bitmap);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"init bit map failed");
+        err = fileinfo_read(finfo,blkdev,lfs->lfs_info.root_addr);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"check root failed");
+    }while(0);
+    if(finfo != W_NULL)
+        lfs_free(finfo);
     return err;
 }
 

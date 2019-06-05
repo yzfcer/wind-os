@@ -90,7 +90,7 @@ extern "C" {
 #define WIND_STK_SIZE 512 //堆栈大小
 
 #define WIND_MUTEX_SUPPORT 1 //是否支持互斥锁
-#define WIND_MUTEX_MAX_NUM 10 //互斥锁的数量
+#define WIND_MUTEX_MAX_NUM 20 //互斥锁的数量
 
 #define WIND_SEM_SUPPORT 1 //是否支持信号量
 #define WIND_SEM_MAX_NUM 8 //最大的信号量的数量

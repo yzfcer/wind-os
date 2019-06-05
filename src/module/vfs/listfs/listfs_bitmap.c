@@ -172,6 +172,18 @@ w_err_t listfs_bitmap_init(lfs_bitmap_s *bm,w_addr_t start_addr,w_int32_t blk_cn
     return W_ERR_OK;
 }
 
+w_err_t listfs_bitmap_deinit(lfs_bitmap_s *bm)
+{
+    WIND_ASSERT_RETURN(bm != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(bm->magic == LISTFS_BITMAP_MAGIC,W_ERR_INVALID);
+    bm->magic = 0;
+    if(bm->blk != W_NULL)
+    {
+        lfs_free(bm->blk);
+        bm->blk = W_NULL;
+    }
+    return W_ERR_OK;
+}
 
 
 
@@ -235,19 +247,6 @@ w_err_t listfs_bitmap_set(lfs_bitmap_s *bm,w_addr_t addr,w_uint8_t bitflag)
 }
 
 
-#if 0
-static w_err_t bm_read_free(lfs_bitmap_s *bm,w_uint8_t *blk)
-{
-    w_int32_t cnt;
-    WIND_ASSERT_RETURN(bm != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(blk != W_NULL,W_ERR_PTR_NULL);
-    listfs_bitmap_update_freeidx(bm);
-    cnt = wind_blkdev_read(bm->blkdev,bm->addr1 + bm->cur_blkidx,blk,1);
-    WIND_ASSERT_RETURN(cnt > 0,W_ERR_HARDFAULT);
-    return W_ERR_OK;
-}
-#endif
-
 w_err_t listfs_bitmap_alloc_blk(lfs_bitmap_s *bm,w_addr_t *addr,w_int32_t addr_cnt)
 {
     w_int32_t i,cnt,alloc_cnt;
@@ -262,6 +261,7 @@ w_err_t listfs_bitmap_alloc_blk(lfs_bitmap_s *bm,w_addr_t *addr,w_int32_t addr_c
     wind_memset(addr,0,sizeof(w_addr_t)*addr_cnt);
     alloc_cnt = 0;
     err = W_ERR_OK;
+    //此处应该优化，可以记录当前已经分配的数据块，这样就可以提前分析是否有足够的数据块供分配
     for(i = 0;i < bm->bmblk_cnt;i ++)
     {
         err = bm_read_blk(bm);

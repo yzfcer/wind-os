@@ -48,6 +48,9 @@ typedef struct
 
 w_err_t listfs_bitmap_init(lfs_bitmap_s *bm,w_addr_t start_addr,w_int32_t count,w_blkdev_s *blkdev);
 
+w_err_t listfs_bitmap_deinit(lfs_bitmap_s *bm);
+
+
 w_err_t listfs_bitmap_update_freeidx(lfs_bitmap_s *bm);
 
 w_err_t listfs_bitmap_set(lfs_bitmap_s *bm,w_addr_t addr,w_uint8_t bitflag);

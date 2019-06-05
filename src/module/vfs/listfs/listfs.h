@@ -80,7 +80,7 @@ typedef struct __listfs_s
     w_blkdev_s *blkdev;   //关联的块设备
     lfs_bitmap_s bitmap;  //块使用位图
     
-    lfile_info_s root;    //根目录信息
+    //lfile_info_s root;    //根目录信息
     w_int32_t  file_ref;  //打开的文件数量
     w_uint32_t blkused;   //已经使用的块数量
 
