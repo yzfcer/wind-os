@@ -38,7 +38,7 @@
 #define SOFT_FLAG_ARR_CNT ((WIND_SOFTINT_MAX_NUM + 31) >> 5)
 //软中断线程的堆栈
 static w_stack_t softirq_stk[WIND_SOFTINT_STK_LEN];
-static w_thread_s *softirq_thread = W_NULL;
+//static w_thread_s *softirq_thread = W_NULL;
 w_softirq_fn softirq_vectors[WIND_SOFTINT_MAX_NUM];
 w_uint32_t softirq_flag[SOFT_FLAG_ARR_CNT];
 
@@ -73,15 +73,19 @@ w_err_t wind_softirq_unreg(w_int32_t irqid)
 //触发一个软件中断
 w_err_t wind_softirq_trig(w_int32_t irqid)
 {
+    w_thread_s *thread;
     w_int32_t idx1,idx2;
     WIND_ASSERT_RETURN(irqid < WIND_SOFTINT_MAX_NUM,W_ERR_OVERFLOW);
+    thread = wind_thread_get("softirq");
+    WIND_ASSERT_RETURN(thread != W_NULL, W_ERR_FAIL);
     wind_disable_interrupt();
+    
     idx1 = (irqid >> 5);
     idx2 = (irqid & 0x1f);
     softirq_flag[idx1] |= (1 << idx2);
-    wind_thread_resume(softirq_thread);
+    wind_thread_resume(thread);
     wind_enable_interrupt();
-    _wind_switchto_thread(softirq_thread);
+    _wind_switchto_thread(thread);
     return W_ERR_OK;
 }
 
@@ -111,9 +115,11 @@ static w_softirq_fn get_irq_handle(void)
 
 static w_err_t thread_softirq(w_int32_t argc,char **argv)
 {
+    w_thread_s *thread;
     w_softirq_fn func;
-    softirq_thread->cause = CAUSE_COMMON;
-    softirq_thread->runstat = THREAD_STATUS_SUSPEND;
+    thread = wind_thread_current();
+    thread->cause = CAUSE_COMMON;
+    thread->runstat = THREAD_STATUS_SUSPEND;
     while(W_TRUE)
     {
         _wind_thread_dispatch();
@@ -123,8 +129,8 @@ static w_err_t thread_softirq(w_int32_t argc,char **argv)
             func = get_irq_handle();
             if(func == W_NULL)
             {
-                softirq_thread->cause = CAUSE_COMMON;
-                softirq_thread->runstat = THREAD_STATUS_SUSPEND;
+                thread->cause = CAUSE_COMMON;
+                thread->runstat = THREAD_STATUS_SUSPEND;
                 wind_enable_interrupt();
                 break;
             }
@@ -138,11 +144,12 @@ static w_err_t thread_softirq(w_int32_t argc,char **argv)
 //创建软件中断线程
 w_err_t _wind_create_thread_softirq(void)
 {
-    softirq_thread = wind_thread_create("softirq",thread_softirq,
+    w_thread_s *thread;
+    thread = wind_thread_create("softirq",thread_softirq,
                 0,W_NULL,softirq_stk,WIND_SOFTINT_STK_LEN);
-    WIND_ASSERT_RETURN(softirq_thread != W_NULL,W_ERR_FAIL);
-    wind_thread_setflag(softirq_thread,F_THREAD_NO_KILL | F_THREAD_SYSTEM);
-    wind_thread_set_priority(softirq_thread,1);
+    WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_FAIL);
+    wind_thread_setflag(thread,F_THREAD_NO_KILL | F_THREAD_SYSTEM);
+    wind_thread_set_priority(thread,1);
     return W_ERR_OK;
 }
 
