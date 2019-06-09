@@ -52,6 +52,7 @@ typedef struct __lfile_info_s
     w_addr_t   last_addr;            //最后一个块信息地址
     w_addr_t   prevfile_addr;        //下一个文件地址
     w_addr_t   nextfile_addr;        //下一个文件地址
+    w_int32_t  children_cnt;         //子文件的数量
     w_addr_t   headchild_addr;       //第一个子文件地址
     w_addr_t   tailchild_addr;       //最后一个文件地址
     w_uint8_t  attr;                 //是否目录，可读，可写，隐藏，校验
@@ -73,9 +74,15 @@ w_err_t fileinfo_get_headchild(lfile_info_s *info,w_blkdev_s *blkdev);
 
 w_err_t fileinfo_get_tailchild(lfile_info_s *info,w_blkdev_s *blkdev);
 
-w_err_t fileinfo_update_parent(lfile_info_s *info,w_blkdev_s *blkdev);
+w_err_t fileinfo_add_update_parent(lfile_info_s *info,w_blkdev_s *blkdev);
 
-w_err_t fileinfo_update_prev(lfile_info_s *info,w_blkdev_s *blkdev);
+w_err_t fileinfo_add_update_prev(lfile_info_s *info,w_blkdev_s *blkdev);
+
+w_err_t fileinfo_rm_update_parent(lfile_info_s *info,w_blkdev_s *blkdev);
+
+w_err_t fileinfo_rm_update_prev(lfile_info_s *info,w_blkdev_s *blkdev);
+
+w_err_t fileinfo_rm_update_next(lfile_info_s *info,w_blkdev_s *blkdev);
 
 #endif
 

@@ -74,6 +74,11 @@ static w_err_t lfs_search_child(lfile_info_s *info,char *name,w_blkdev_s *blkdev
     WIND_ASSERT_RETURN(info != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(name != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
+    if(info->headchild_addr == 0)
+    {
+        wind_debug("fileinfo has no children");
+        return W_ERR_FAIL;
+    }
     err = fileinfo_get_headchild(info,blkdev);
     WIND_ASSERT_RETURN(err == W_ERR_OK,err);
     for(;info != W_NULL;)
@@ -195,15 +200,7 @@ static w_err_t lfs_make_root(listfs_s *lfs)
         WIND_ASSERT_BREAK(err == W_ERR_OK,err,"flush lfs root file info failed.");
         err = blkinfo_write(blkinfo,lfs->blkdev);
         WIND_ASSERT_BREAK(err == W_ERR_OK,err,"flush lfs root blkinfo failed.");
-#if 0        
-        err = listfs_bitmap_set(&lfs->bitmap,lfs->lfs_info.root_addr,BITMAP_USED);
-        if(err != W_ERR_OK)
-        {
-            wind_error("set lfs root bitmap failed.");
-            err = W_ERR_FAIL;
-            break;
-        }
-#endif
+
     }while(0);
 
     if(blk != W_NULL)
@@ -247,11 +244,15 @@ static w_err_t lfs_make_child(listfs_s *lfs,lfile_info_s *pinfo,char *name,w_uin
         info->prevfile_addr = pinfo->tailchild_addr;
         cnt = wind_blkdev_write(lfs->blkdev,self_addr,blk,1);
         WIND_ASSERT_BREAK(cnt > 0,W_ERR_FAIL,"write file info failed.");
-        
-        err = fileinfo_update_prev(info,lfs->blkdev);
-        WIND_ASSERT_BREAK(cnt > 0,err,"update prev file info failed.");
 
-        err = fileinfo_update_parent(info,lfs->blkdev);
+        
+        if(info->prevfile_addr != 0)
+        {
+            err = fileinfo_add_update_prev(info,lfs->blkdev);
+            WIND_ASSERT_BREAK(cnt > 0,err,"update prev file info failed.");
+        }
+
+        err = fileinfo_add_update_parent(info,lfs->blkdev);
         WIND_ASSERT_BREAK(cnt > 0,err,"update pinfo file info failed.");
         wind_memcpy(pinfo,info,sizeof(lfile_info_s));
     }while(0);
