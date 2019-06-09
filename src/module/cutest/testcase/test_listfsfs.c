@@ -111,7 +111,7 @@ CASE_FUNC(format)
 {
     w_err_t err;
     w_blkdev_s *blkdev;
-    blkdev = wind_blkdev_get("disktest");
+    blkdev = wind_blkdev_get("memblk");
     if(blkdev == W_NULL)
     {
         wind_memset(&g_lfs,0,sizeof(listfs_s));
@@ -131,7 +131,7 @@ SUITE_SETUP(listfs)
 {
     w_err_t err;
     w_blkdev_s *blkdev;
-    blkdev = wind_blkdev_get("disktest");
+    blkdev = wind_blkdev_get("memblk");
     if(blkdev == W_NULL)
     {
         wind_error("get blkdev failed");

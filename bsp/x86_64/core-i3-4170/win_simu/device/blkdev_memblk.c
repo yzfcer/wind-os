@@ -7,64 +7,66 @@
 
 static w_uint8_t memblk[MEM_SEC_COUNT*MEM_SEC_SIZE];
 
-w_err_t   memblk_init(w_blkdev_s *dev)
+w_err_t   memblk_init(w_blkdev_s *blkdev)
 {
-    dev->blkaddr = (w_addr_t)memblk;
-    dev->blkcnt = MEM_SEC_COUNT;
-    dev->blksize = MEM_SEC_SIZE;
+    blkdev->blkaddr = (w_addr_t)0;
+    blkdev->blkcnt = MEM_SEC_COUNT;
+    blkdev->blksize = MEM_SEC_SIZE;
     return W_ERR_OK;
 }
 
-w_err_t   memblk_open(w_blkdev_s *dev)
+w_err_t   memblk_open(w_blkdev_s *blkdev)
 {
-    dev->blkaddr = (w_addr_t)memblk;
-    dev->blksize = 64;
-    dev->blkcnt = 8;
+    blkdev->blkaddr = (w_addr_t)0;
+    blkdev->blksize = MEM_SEC_SIZE;
+    blkdev->blkcnt = MEM_SEC_COUNT;
     return W_ERR_OK;
 }
 
-w_err_t   memblk_erase(w_blkdev_s *dev,w_addr_t addr,w_int32_t blkcnt)
+w_err_t   memblk_erase(w_blkdev_s *blkdev,w_addr_t addr,w_int32_t blkcnt)
 {
-    w_uint8_t *start;
+    w_uint32_t start;
     w_int32_t size;
-    start = (w_uint8_t *)((dev->blkaddr + addr) * dev->blksize);
-    size = blkcnt * dev->blksize;
-    wind_memset(start,0,size);
+    start = (w_uint32_t)((blkdev->blkaddr + addr) * blkdev->blksize);
+    size = blkcnt * blkdev->blksize;
+    wind_memset(&memblk[start],0,size);
     return W_ERR_OK;
 }
 
-w_err_t   memblk_eraseall(w_blkdev_s *dev)
+w_err_t   memblk_eraseall(w_blkdev_s *blkdev)
 {
-    w_uint8_t *start;
+    w_uint32_t start;
     w_int32_t size;
-    start = (w_uint8_t *)(dev->blkaddr * dev->blksize);
-    size = dev->blkcnt * dev->blksize;
-    wind_memset(start,0,size);
+    start = (w_uint32_t)((blkdev->blkaddr) * blkdev->blksize);
+    size = blkdev->blkcnt * blkdev->blksize;
+    wind_memset(&memblk[start],0,size);
     return W_ERR_OK;
 }
 
 
-w_int32_t memblk_read(w_blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t blkcnt)
+w_int32_t memblk_read(w_blkdev_s *blkdev,w_addr_t addr,w_uint8_t *buf,w_int32_t blkcnt)
 {
-    w_uint8_t *start;
+    w_uint32_t start;
     w_int32_t size;
-    start = (w_uint8_t *)((dev->blkaddr + addr) * dev->blksize);
-    size = blkcnt * dev->blksize;
-    wind_memcpy(buf,start,size);
+    start = (w_uint32_t)((blkdev->blkaddr + addr) * blkdev->blksize);
+    size = blkcnt * blkdev->blksize;
+    wind_notice("memblk_read:0x%08x,%d",start,size);
+    wind_memcpy(buf,&memblk[start],size);
     return blkcnt;
 }
 
-w_int32_t memblk_write(w_blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t blkcnt)
+w_int32_t memblk_write(w_blkdev_s *blkdev,w_addr_t addr,w_uint8_t *buf,w_int32_t blkcnt)
 {
-    w_uint8_t *start;
+    w_uint32_t start;
     w_int32_t size;
-    start = (w_uint8_t *)((dev->blkaddr + addr) * dev->blksize);
-    size = blkcnt * dev->blksize;
-    wind_memcpy(start,buf,size);
+    start = (w_uint32_t)((blkdev->blkaddr + addr) * blkdev->blksize);
+    size = blkcnt * blkdev->blksize;
+    wind_notice("memblk_write:0x%08x,%d",start,size);
+    wind_memcpy(&memblk[start],buf,size);
     return blkcnt;
 }
 
-w_err_t   memblk_close(w_blkdev_s *dev)
+w_err_t   memblk_close(w_blkdev_s *blkdev)
 {
     return W_ERR_OK;
 }

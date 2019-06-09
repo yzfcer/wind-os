@@ -188,8 +188,6 @@ static w_err_t lfs_make_root(listfs_s *lfs)
         WIND_ASSERT_BREAK(err == W_ERR_OK,err,"malloc addr failed");
         WIND_ASSERT_BREAK(addr == lfs->lfs_info.root_addr,W_ERR_FAIL,"root addr error");
 
-        
-        
         attr = (LFILE_ATTR_COMMAN | LFILE_ATTR_DIR);
         listfs_fileinfo_init(finfo,"root",lfs->lfs_info.root_addr,0,0,attr);
         blkinfo_init(blkinfo, lfs->lfs_info.root_addr,0,0,lfs->blkdev->blksize);
@@ -197,7 +195,7 @@ static w_err_t lfs_make_root(listfs_s *lfs)
         WIND_ASSERT_BREAK(err == W_ERR_OK,err,"flush lfs root file info failed.");
         err = blkinfo_write(blkinfo,lfs->blkdev);
         WIND_ASSERT_BREAK(err == W_ERR_OK,err,"flush lfs root blkinfo failed.");
-        
+#if 0        
         err = listfs_bitmap_set(&lfs->bitmap,lfs->lfs_info.root_addr,BITMAP_USED);
         if(err != W_ERR_OK)
         {
@@ -205,6 +203,7 @@ static w_err_t lfs_make_root(listfs_s *lfs)
             err = W_ERR_FAIL;
             break;
         }
+#endif
     }while(0);
 
     if(blk != W_NULL)
@@ -436,7 +435,7 @@ static w_err_t lfs_get_fsinfo_by_blk(lfs_info_s *fsinfo,w_blkdev_s *blkdev,w_add
     }while(0);
     if(blk != W_NULL)
         lfs_free(blk);
-    return W_ERR_OK;
+    return err;
 }
 
 static w_err_t listfs_get_fsinfo(lfs_info_s *fsinfo,w_blkdev_s *blkdev)
@@ -584,12 +583,7 @@ w_err_t listfs_init(listfs_s *lfs,w_blkdev_s *blkdev)
         
         wind_notice("listfs init,blkdev:%s",blkdev->obj.name);
         err = listfs_get_fsinfo(&lfs->lfs_info,blkdev);
-        if(err != W_ERR_OK)
-        {
-            wind_error("No file system detected,format dev %s now.",
-                wind_obj_name(&blkdev->obj));
-            return err;
-        }
+        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"read fsinfo failed");
         
         lfs->blkdev = blkdev;
         lfs->file_ref = 0;
