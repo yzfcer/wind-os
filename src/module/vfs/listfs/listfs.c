@@ -376,6 +376,11 @@ w_err_t listfile_remove(listfs_s *lfs,const char *path)
     file = listfile_open(lfs,path,LFMODE_R);
     WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(lfs->lfs_info.magic == LISTFS_MAGIC,W_ERR_INVALID);
+    if(file->info.attr & LFILE_ATTR_DIR)
+    {
+        wind_error("can not remove directory");
+        return W_ERR_FAIL;
+    }
     do
     {
         err = W_ERR_OK;
