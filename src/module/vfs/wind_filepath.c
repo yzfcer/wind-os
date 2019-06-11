@@ -95,11 +95,9 @@ char *wind_filepath_generate(char *pre_path,char *relative_path,w_uint16_t isdir
 
 char *  wind_filepath_copy(char *path)
 {
-    w_int32_t len;
     char *newpath;
     WIND_ASSERT_RETURN(path != W_NULL,W_NULL);
-    len = wind_strlen(path);
-    WIND_ASSERT_RETURN(len > 0,W_NULL);
+    WIND_ASSERT_RETURN(path[0] != 0,W_NULL);
     newpath = wind_salloc(path);
     WIND_ASSERT_RETURN(newpath != W_NULL,W_NULL);
     return newpath;

@@ -109,38 +109,45 @@ static w_err_t lfs_search_file(listfs_s *lfs,listfile_s *file,const char *path)
     do 
     {
         err = W_ERR_OK;
+        //拷贝和分割文件路径
         wind_debug("search node path:%s",path);
-        //分配内存
-        nameseg = (char **)lfs_malloc(LISTFS_DIR_LAYCNT * sizeof(char*));
-        WIND_ASSERT_BREAK(nameseg,W_ERR_MEM,"malloc nameseg failed");
         len = wind_strlen(path);
         tmppath = lfs_malloc(len+1);
         WIND_ASSERT_BREAK(tmppath,W_ERR_MEM,"malloc tmppath failed");
-        finfo = lfs_malloc(sizeof(lfile_info_s));
-        WIND_ASSERT_BREAK(finfo,W_ERR_MEM,"malloc finfo failed");
-        blkinfo = lfs_malloc(sizeof(lfile_blkinfo_s));
-        WIND_ASSERT_BREAK(blkinfo,W_ERR_MEM,"malloc blkinfo failed");
-
-        //拷贝和分割文件路径
-        wind_memset(tmppath,0,len+1);
+        //wind_memset(tmppath,0,len+1);
         wind_strcpy(tmppath,path);
         if(tmppath[len-1] == '/')
         {
             isdir = 1;
             tmppath[len-1] = 0;
         }
+
+        //分割目录
+        nameseg = (char **)lfs_malloc(LISTFS_DIR_LAYCNT * sizeof(char*));
+        WIND_ASSERT_BREAK(nameseg,W_ERR_MEM,"malloc nameseg failed");
         segcnt = wind_strsplit(tmppath,'/',nameseg,LISTFS_DIR_LAYCNT);
         WIND_ASSERT_BREAK(segcnt > 0,W_ERR_INVALID,"split path failed");
-        //拷贝根目录
+        
+        //分配文件信息和数据块信息结构
+        finfo = lfs_malloc(sizeof(lfile_info_s));
+        WIND_ASSERT_BREAK(finfo,W_ERR_MEM,"malloc finfo failed");
+        if(!isdir)
+        {
+            blkinfo = lfs_malloc(sizeof(lfile_blkinfo_s));
+            WIND_ASSERT_BREAK(blkinfo,W_ERR_MEM,"malloc blkinfo failed");
+        }
+
+
+        //读取根目录文件信息
         err = fileinfo_read(finfo,lfs->blkdev,lfs->lfs_info.root_addr);
         WIND_ASSERT_BREAK(err == W_ERR_OK,err,"read root failed");
-        //wind_memcpy(finfo,&lfs->root,sizeof(lfs_info_s));
         if(segcnt == 1)
         {
             err = W_ERR_OK;
             break;
         }
 
+        //从根目录开始搜索子文件
         err = W_ERR_OK;
         for(i = 1;i < segcnt;i ++)
         {
@@ -156,7 +163,11 @@ static w_err_t lfs_search_file(listfs_s *lfs,listfile_s *file,const char *path)
     if(err == W_ERR_OK)
     {
         wind_memcpy(&file->info,finfo,sizeof(lfs_info_s));
-        file->blkinfo = blkinfo;
+        if(!isdir)
+        {
+            blkinfo_read(blkinfo,lfs->blkdev,finfo->self_addr);
+            file->blkinfo = blkinfo;
+        }
     }
         
     if(tmppath)
@@ -165,8 +176,6 @@ static w_err_t lfs_search_file(listfs_s *lfs,listfile_s *file,const char *path)
         lfs_free(nameseg);
     if(finfo)
         lfs_free(finfo);
-    if(blkinfo)
-        lfs_free(blkinfo);
     return err;
 }
 
@@ -226,22 +235,24 @@ static w_err_t lfs_make_child(listfs_s *lfs,lfile_info_s *pinfo,char *name,w_uin
     WIND_ASSERT_RETURN(pinfo != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(name != W_NULL,W_ERR_PTR_NULL);
     
-    err = listfs_bitmap_alloc_blk(&lfs->bitmap,&self_addr,1);
-    WIND_ASSERT_RETURN(err == W_ERR_OK,err);
-    
     do 
     {
         err = W_ERR_OK;
+        err = listfs_bitmap_alloc_blk(&lfs->bitmap,&self_addr,1);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"alloc blk addr failed");
         blk = (w_uint8_t*)lfs_malloc(lfs->blkdev->blksize);
-        WIND_ASSERT_RETURN(blk != W_NULL,W_ERR_MEM);
+        WIND_ASSERT_BREAK(blk != W_NULL,W_ERR_MEM,"alloc blk failed");
         wind_memset(blk,0,lfs->blkdev->blksize);
         attr = isdir?(LFILE_ATTR_COMMAN|LFILE_ATTR_DIR):LFILE_ATTR_COMMAN;
         info = (lfile_info_s*)blk;
         listfs_fileinfo_init(info,name,self_addr,pinfo->self_addr,pinfo->tailchild_addr,attr);
-        blkinfo = FILEINFO_BLKINFO(blk);
-        blkinfo_init(blkinfo, self_addr,0,0,lfs->blkdev->blksize);
-        
         info->prevfile_addr = pinfo->tailchild_addr;
+        if(!isdir)
+        {
+            blkinfo = FILEINFO_BLKINFO(blk);
+            blkinfo_init(blkinfo, self_addr,0,0,lfs->blkdev->blksize);
+        }
+        
         cnt = wind_blkdev_write(lfs->blkdev,self_addr,blk,1);
         WIND_ASSERT_BREAK(cnt > 0,W_ERR_FAIL,"write file info failed.");
 
@@ -259,7 +270,9 @@ static w_err_t lfs_make_child(listfs_s *lfs,lfile_info_s *pinfo,char *name,w_uin
     if(blk != W_NULL)
         lfs_free(blk);
     if(err != W_ERR_OK)
-        wind_error("fs should NOT be error here,must rebuild the file system");
+    {
+        wind_error("fs should NOT be error here,must rollback here");
+    }
     return err;
 }
 
@@ -307,7 +320,6 @@ static w_err_t lfs_make_file(listfs_s *lfs,listfile_s *file,char *path)
         //获取根
         err = fileinfo_read(finfo,lfs->blkdev,lfs->lfs_info.root_addr);
         WIND_ASSERT_BREAK(err == W_ERR_OK,err,"read root failed");
-        //wind_memcpy(finfo,&lfs->root,sizeof(lfs_info_s));
 
         err = W_ERR_OK;
         for(i = 1;i < cnt;i ++)
@@ -366,11 +378,27 @@ static w_err_t listfile_destroy(listfile_s* file)
     return W_ERR_OK;
 }
 
+static w_err_t lfile_free_blkaddr(listfile_s *file)
+{
+    w_err_t err;
+    err = W_ERR_OK;
+    while(1)
+    {
+        err = listfs_bitmap_free_blk(&file->lfs->bitmap,file->blkinfo->dataaddr,LFILE_LBLK_CNT);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"free blk addrs failed,can NOT be error here");
+        err = listfs_bitmap_free_blk(&file->lfs->bitmap,&file->blkinfo->self_addr,1);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"free blkinfo addr failed,can NOT be error here");
+        err = blkinfo_get_next(file->blkinfo,file->lfs->blkdev);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"get head blkinfo failed,can NOT be error here");
+    }
+    return W_ERR_FAIL;
+}
 
 w_err_t listfile_remove(listfs_s *lfs,const char *path)
 {
     w_err_t err;
     listfile_s *file;
+    lfile_info_s *finfo;
     WIND_ASSERT_RETURN(lfs != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(path != W_NULL,W_ERR_PTR_NULL);
     file = listfile_open(lfs,path,LFMODE_R);
@@ -384,20 +412,29 @@ w_err_t listfile_remove(listfs_s *lfs,const char *path)
     do
     {
         err = W_ERR_OK;
-        file->info.magic = 0;
+        
+        finfo = &file->info;
+        if(finfo->parent_addr != 0)
+        {
+            err = fileinfo_rm_update_parent(finfo,file->lfs->blkdev);
+            WIND_ASSERT_BREAK(err == W_ERR_OK,err,"update parent file info failed");
+        }
+        if(finfo->nextfile_addr != 0)
+        {
+            err = fileinfo_rm_update_next(finfo,file->lfs->blkdev);
+            WIND_ASSERT_BREAK(err == W_ERR_OK,err,"update next file info failed");
+        }
+        if(finfo->prevfile_addr != 0)
+        {
+            err = fileinfo_rm_update_prev(finfo,file->lfs->blkdev);
+            WIND_ASSERT_BREAK(err == W_ERR_OK,err,"update prev file info failed");
+        }
+        
         err = blkinfo_get_byoffset(file->blkinfo,file->lfs->blkdev,0);
         WIND_ASSERT_BREAK(err == W_ERR_OK,err,"get head blkinfo failed");
-        while(1)
-        {
-            err = listfs_bitmap_free_blk(&file->lfs->bitmap,file->blkinfo->dataaddr,LFILE_LBLK_CNT);
-            WIND_ASSERT_BREAK(err == W_ERR_OK,err,"free blk addrs failed,can NOT be error here");
-            err = listfs_bitmap_free_blk(&file->lfs->bitmap,&file->blkinfo->self_addr,1);
-            WIND_ASSERT_BREAK(err == W_ERR_OK,err,"free blkinfo addr failed,can NOT be error here");
-            err = blkinfo_get_next(file->blkinfo,file->lfs->blkdev);
-            WIND_ASSERT_BREAK(err == W_ERR_OK,err,"get head blkinfo failed,can NOT be error here");
-        }
+
         WIND_ASSERT_BREAK(err == W_ERR_OK,err,"error occured");
-        
+        file->info.magic = 0;
     }while(0);
     if(file->subinfo != W_NULL)
         lfs_free(file->subinfo);
@@ -627,7 +664,13 @@ listfile_s* listfile_open(listfs_s *lfs,const char *path,w_uint16_t mode)
         err = W_ERR_OK;
         file = lfs_malloc(sizeof(listfile_s));
         WIND_ASSERT_RETURN(file != W_NULL,W_NULL);
-        wind_memset(file,0,sizeof(listfile_s));
+        wind_memset(&file->info,0,sizeof(lfile_info_s));
+        file->lfs = lfs;
+        file->mode = mode;
+        file->offset = 0;
+        file->subinfo = W_NULL;
+        file->blkinfo = W_NULL;
+        
         is_crt = (mode & LFMODE_CRT)?W_TRUE:W_FALSE;
         
         err = lfs_search_file(lfs,file,path);
@@ -659,14 +702,9 @@ listfile_s* listfile_open(listfs_s *lfs,const char *path,w_uint16_t mode)
     
     if(file != W_NULL)
     {
-        file->lfs = lfs;
         file->lfs->file_ref ++;
-        file->mode = (w_uint8_t)mode;
-        file->subinfo = W_NULL;
         if(mode & LFMODE_A)
             file->offset = file->info.filesize;
-        else
-            file->offset = 0;
     }
     return file;
 }

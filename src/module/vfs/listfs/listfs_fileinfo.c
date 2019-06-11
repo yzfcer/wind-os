@@ -64,6 +64,7 @@ void fileinfo_be2le(lfile_info_s *info)
         BE2LE_4(info->last_addr);
         BE2LE_4(info->prevfile_addr);
         BE2LE_4(info->nextfile_addr);
+        BE2LE_4(info->children_cnt);
         BE2LE_4(info->headchild_addr);
         BE2LE_4(info->tailchild_addr);
     }
@@ -108,6 +109,7 @@ w_err_t fileinfo_read(lfile_info_s *info,w_blkdev_s *blkdev,w_addr_t addr)
         cnt = wind_blkdev_read(blkdev,addr,blk,1);
         WIND_ASSERT_BREAK(cnt > 0,W_ERR_HARDFAULT,"read blkdata failed");
         tmpinfo = (lfile_info_s*)blk;
+        fileinfo_be2le(tmpinfo);
         if(tmpinfo->magic != LISTFILE_MAGIC)
         {
             err = W_ERR_INVALID;
@@ -135,6 +137,7 @@ w_err_t fileinfo_write(lfile_info_s *info,w_blkdev_s *blkdev)
         WIND_ASSERT_BREAK(blk != W_NULL,W_ERR_MEM,"malloc blk failed");
         cnt = wind_blkdev_read(blkdev,info->self_addr,blk,1);
         WIND_ASSERT_BREAK(cnt > 0,W_ERR_HARDFAULT,"read blkdata failed");
+        fileinfo_be2le(info);
         wind_memcpy(blk,info,sizeof(lfile_info_s));
         cnt = wind_blkdev_write(blkdev,info->self_addr,blk,1);
         WIND_ASSERT_BREAK(cnt > 0,W_ERR_HARDFAULT,"read blkdata failed");
