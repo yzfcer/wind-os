@@ -162,12 +162,18 @@ static w_err_t lfs_search_file(listfs_s *lfs,listfile_s *file,const char *path)
     }while(0);
     if(err == W_ERR_OK)
     {
-        wind_memcpy(&file->info,finfo,sizeof(lfs_info_s));
+        wind_memcpy(&file->info,finfo,sizeof(lfile_info_s));
         if(!isdir)
         {
             blkinfo_read(blkinfo,lfs->blkdev,finfo->self_addr);
             file->blkinfo = blkinfo;
         }
+        else
+        {
+            lfs_free(blkinfo);
+            file->blkinfo = W_NULL;
+        }
+            
     }
         
     if(tmppath)
