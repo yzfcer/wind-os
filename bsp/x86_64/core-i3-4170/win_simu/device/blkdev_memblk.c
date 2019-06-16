@@ -50,7 +50,7 @@ w_int32_t memblk_read(w_blkdev_s *blkdev,w_addr_t addr,w_uint8_t *buf,w_int32_t 
     w_int32_t size;
     start = (w_uint32_t)((blkdev->blkaddr + addr) * blkdev->blksize);
     size = blkcnt * blkdev->blksize;
-    wind_notice("memblk_read:0x%08x,%d",start,size);
+    //wind_notice("memblk_read:0x%08x,%d",start,size);
     wind_memcpy(buf,&memblk[start],size);
     return blkcnt;
 }
@@ -61,7 +61,7 @@ w_int32_t memblk_write(w_blkdev_s *blkdev,w_addr_t addr,w_uint8_t *buf,w_int32_t
     w_int32_t size;
     start = (w_uint32_t)((blkdev->blkaddr + addr) * blkdev->blksize);
     size = blkcnt * blkdev->blksize;
-    wind_notice("memblk_write:0x%08x,%d",start,size);
+    //wind_notice("memblk_write:0x%08x,%d",start,size);
     wind_memcpy(&memblk[start],buf,size);
     return blkcnt;
 }

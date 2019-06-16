@@ -47,17 +47,21 @@ CASE_FUNC(create)
     err = listfile_close(file);
     EXPECT_EQ(err,W_ERR_OK);
     err = listfile_remove(&g_lfs,"/test.txt");
-    EXPECT_EQ(err,W_ERR_OK);    
+    EXPECT_EQ(err,W_ERR_OK);
+    file = listfile_open(&g_lfs,"/test.txt",LFMODE_R);
+    EXPECT_EQ(file,W_NULL);
 
-
-
-    
     file = listfile_open(&g_lfs,"/test1.txt",LFMODE_CRT);
     EXPECT_NE(file,W_NULL);
-
+    err = listfile_close(file);
+    EXPECT_EQ(err,W_ERR_OK);
+    
     file = listfile_open(&g_lfs,"/test2.txt",LFMODE_CRT);
     EXPECT_NE(file,W_NULL);
     err = listfile_close(file);
+    EXPECT_EQ(err,W_ERR_OK);
+    
+    err = listfile_remove(&g_lfs,"/test1.txt");
     EXPECT_EQ(err,W_ERR_OK);
     err = listfile_remove(&g_lfs,"/test2.txt");
     EXPECT_EQ(err,W_ERR_OK);

@@ -102,7 +102,11 @@ static w_err_t lfs_search_child(lfile_info_s *info,char *name,w_blkdev_s *blkdev
             }
                 
             if(tmpinfo ->nextfile_addr == 0)
+            {
+                err = W_ERR_FAIL;
                 break;
+            }
+                
             err = fileinfo_get_next(tmpinfo,blkdev);
             if(err != W_ERR_OK)
                 break;
@@ -279,7 +283,7 @@ static w_err_t lfs_make_child(listfs_s *lfs,lfile_info_s *pinfo,char *name,w_uin
         attr = isdir?(LFILE_ATTR_COMMAN|LFILE_ATTR_DIR):LFILE_ATTR_COMMAN;
         info = (lfile_info_s*)blk;
         listfs_fileinfo_init(info,name,self_addr,pinfo->self_addr,pinfo->tailchild_addr,attr);
-        info->prevfile_addr = pinfo->tailchild_addr;
+        //info->prevfile_addr = pinfo->tailchild_addr;
         if(!isdir)
         {
             blkinfo = FILEINFO_BLKINFO(blk);
@@ -452,7 +456,7 @@ static w_err_t do_remove_file(listfs_s *lfs,lfile_info_s *finfo)
         {
             err = fileinfo_rm_update_next(finfo,lfs->blkdev);
             WIND_ASSERT_BREAK(err == W_ERR_OK,err,"update next file info failed");
-            finfo->parent_addr = 0;
+            finfo->nextfile_addr = 0;
         }
         if(finfo->prevfile_addr != 0)
         {
@@ -464,7 +468,7 @@ static w_err_t do_remove_file(listfs_s *lfs,lfile_info_s *finfo)
         {
             err = fileinfo_rm_update_parent(finfo,lfs->blkdev);
             WIND_ASSERT_BREAK(err == W_ERR_OK,err,"update parent file info failed");
-            finfo->nextfile_addr = 0;
+            finfo->parent_addr = 0;
         }
         if(finfo->filesize > 0)
         {
@@ -472,38 +476,15 @@ static w_err_t do_remove_file(listfs_s *lfs,lfile_info_s *finfo)
             WIND_ASSERT_BREAK(err == W_ERR_OK,err,"free blkaddr failed");
             finfo->filesize = 0;
         }
+        else
+        {
+            listfs_bitmap_free_blk(&lfs->bitmap,&finfo->self_addr,1);
+        }
         finfo->magic = 0;
     }while(0);
     return err;
 }
 
-w_err_t listfile_remove(listfs_s *lfs,const char *path)
-{
-    w_err_t err;
-    listfile_s *file;
-    lfile_info_s *finfo;
-    WIND_ASSERT_RETURN(lfs != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(path != W_NULL,W_ERR_PTR_NULL);
-    file = listfile_open(lfs,path,LFMODE_R);
-    WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(lfs->lfs_info.magic == LISTFS_MAGIC,W_ERR_INVALID);
-    if(file->info.attr & LFILE_ATTR_DIR)
-    {
-        wind_error("can not remove directory");
-        return W_ERR_FAIL;
-    }
-    do
-    {
-        err = do_remove_file(lfs,&file->info);
-        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"remove fale failed");
-
-    }while(0);
-    if(file->subinfo != W_NULL)
-        lfs_free(file->subinfo);
-    lfs_free(file->blkinfo);
-    lfs_free(file);
-    return err;
-}
 
 w_uint16_t calc_unit_size(w_int32_t blkcnt,w_int32_t blksize)
 {
@@ -665,8 +646,6 @@ w_err_t listfs_format(listfs_s *lfs,w_blkdev_s *blkdev)
         WIND_ASSERT_BREAK(err == W_ERR_OK,err,"clear listfs bitmap info failed");
         err = lfs_make_root(lfs);
         WIND_ASSERT_BREAK(err == W_ERR_OK,err,"make listfs root failed");
-        err = listfs_bitmap_update_freeidx(&lfs->bitmap);
-        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"update listfs bitmap failed");
         lfs->file_ref = 0;
     }while(0);
     wind_notice("listfs format result:%d",err);
@@ -694,8 +673,6 @@ w_err_t listfs_init(listfs_s *lfs,w_blkdev_s *blkdev)
         lfs->file_ref = 0;
         listfs_bitmap_init(&lfs->bitmap,lfs->lfs_info.bitmap1_addr,
             lfs->lfs_info.bitmap_cnt,lfs->blkdev);
-        err = listfs_bitmap_update_freeidx(&lfs->bitmap);
-        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"init bit map failed");
         err = fileinfo_read(finfo,blkdev,lfs->lfs_info.root_addr);
         WIND_ASSERT_BREAK(err == W_ERR_OK,err,"check root failed");
     }while(0);
@@ -721,6 +698,7 @@ listfile_s* listfile_open(listfs_s *lfs,const char *path,w_uint16_t mode)
     listfile_s *file = W_NULL;
     WIND_ASSERT_RETURN(lfs != W_NULL,W_NULL);
     WIND_ASSERT_RETURN(path != W_NULL,W_NULL);
+    wind_notice("open file:%s",path);
     do 
     {
         err = W_ERR_OK;
@@ -778,6 +756,7 @@ w_err_t listfile_close(listfile_s* file)
     WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,W_ERR_INVALID);
     WIND_ASSERT_RETURN(file->lfs->file_ref > 0,W_ERR_INVALID);
+    wind_notice("close file:%s",file->info.name);
     file->info.magic = 0;
     file->lfs->file_ref --;
     if(file->blkinfo != W_NULL)
@@ -793,6 +772,37 @@ w_err_t listfile_close(listfile_s* file)
     lfs_free(file);
     return W_ERR_OK;
 }
+
+
+w_err_t listfile_remove(listfs_s *lfs,const char *path)
+{
+    w_err_t err;
+    listfile_s *file;
+    lfile_info_s *finfo;
+    WIND_ASSERT_RETURN(lfs != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(path != W_NULL,W_ERR_PTR_NULL);
+    wind_notice("remove file:%s",path);
+    file = listfile_open(lfs,path,LFMODE_R);
+    WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(lfs->lfs_info.magic == LISTFS_MAGIC,W_ERR_INVALID);
+    if(file->info.attr & LFILE_ATTR_DIR)
+    {
+        wind_error("can not remove directory");
+        return W_ERR_FAIL;
+    }
+    do
+    {
+        err = do_remove_file(lfs,&file->info);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"remove fale failed");
+
+    }while(0);
+    if(file->subinfo != W_NULL)
+        lfs_free(file->subinfo);
+    lfs_free(file->blkinfo);
+    lfs_free(file);
+    return err;
+}
+
 
 w_err_t listfile_set_attr(listfile_s* file,w_uint8_t attr)
 {

@@ -28,30 +28,7 @@
 #include "wind_debug.h"
 #include "wind_string.h"
 
-#if 0
-static w_err_t fileinfo_read_block(w_blkdev_s *blkdev,w_addr_t addr,w_uint8_t *blk)
-{
-    w_err_t err;
-    w_int32_t cnt;
-    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(addr != 0,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(blk != W_NULL,W_ERR_PTR_NULL);
-    cnt = wind_blkdev_read(blkdev,addr,blk,1);
-    WIND_ASSERT_RETURN(cnt > 0,W_ERR_FAIL);
-    return W_ERR_OK;
-}
 
-static w_err_t fileinfo_write_block(w_blkdev_s *blkdev,w_addr_t addr,w_uint8_t *blk)
-{
-    w_int32_t cnt;
-    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(blk != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(addr > 0,W_ERR_INVALID);
-    cnt = wind_blkdev_write(blkdev,addr,blk,1);
-    WIND_ASSERT_RETURN(cnt > 0,W_ERR_FAIL);
-    return W_ERR_OK;
-}
-#endif
 void fileinfo_be2le(lfile_info_s *info)
 {
     if(wind_endian() == ENDIAN_BIG)
@@ -68,6 +45,19 @@ void fileinfo_be2le(lfile_info_s *info)
         BE2LE_4(info->headchild_addr);
         BE2LE_4(info->tailchild_addr);
     }
+}
+
+static w_err_t check_fileinfo(lfile_info_s *info)
+{
+    if((info->self_addr == info->parent_addr)&&(0 != info->parent_addr))
+        return W_ERR_INVALID;
+    if((info->self_addr == info->prevfile_addr)&&(0 != info->prevfile_addr))
+        return W_ERR_INVALID;
+    if((info->self_addr == info->nextfile_addr)&&(0 != info->nextfile_addr))
+        return W_ERR_INVALID;
+    if((info->prevfile_addr == info->nextfile_addr)&&(0 != info->nextfile_addr))
+        return W_ERR_INVALID;
+    return W_ERR_OK;
 }
 
 w_err_t listfs_fileinfo_init(lfile_info_s *info,char *name,
@@ -116,8 +106,8 @@ w_err_t fileinfo_read(lfile_info_s *info,w_blkdev_s *blkdev,w_addr_t addr)
             break;
         }
         wind_memcpy(info,tmpinfo,sizeof(lfile_info_s));
-        if(info->self_addr == info->parent_addr)
-            wind_error("parent and child should NOT be same");
+        if(W_ERR_OK != check_fileinfo(info))
+            wind_error("file addr error");
         WIND_ASSERT_RETURN(info->self_addr != info->parent_addr,W_ERR_INVALID);
     }while(0);
     if(blk != W_NULL)
@@ -133,7 +123,8 @@ w_err_t fileinfo_write(lfile_info_s *info,w_blkdev_s *blkdev)
     WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(info != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(info->self_addr != 0,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(info->self_addr != info->parent_addr,W_ERR_INVALID);
+    if(W_ERR_OK != check_fileinfo(info))
+        wind_error("file addr error");
     do
     {
         err = W_ERR_OK;
@@ -331,9 +322,9 @@ w_err_t fileinfo_rm_update_next(lfile_info_s *info,w_blkdev_s *blkdev)
         tmpinfo = lfs_malloc(sizeof(lfile_info_s));
         WIND_ASSERT_BREAK(tmpinfo != W_NULL,W_ERR_MEM,"malloc tmpinfo failed");
         self_addr = info->self_addr;
-        err = fileinfo_read(tmpinfo,blkdev,info->prevfile_addr);
+        err = fileinfo_read(tmpinfo,blkdev,info->nextfile_addr);
         WIND_ASSERT_BREAK(err == W_ERR_OK,err,"read blkibfo failed");
-        tmpinfo->nextfile_addr = info->nextfile_addr;
+        tmpinfo->prevfile_addr = info->prevfile_addr;
         err = fileinfo_write(tmpinfo,blkdev);
         WIND_ASSERT_BREAK(err == W_ERR_OK,err,"write fileinfo failed");
 
