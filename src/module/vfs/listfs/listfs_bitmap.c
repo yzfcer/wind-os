@@ -79,6 +79,8 @@ static w_int32_t bm_free_blk(lfs_bitmap_s *bm,w_addr_t *addr,w_int32_t cnt)
         if((byteidx >= 0)&&(byteidx < bm->blkdev->blksize))
         {
             addr[i] = 0;
+            if(bm->blk[byteidx] == 0)
+                wind_error("bitmap free error");
             bm->blk[byteidx] = 0;
             free_cnt ++;
         }

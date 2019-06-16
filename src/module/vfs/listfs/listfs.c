@@ -71,6 +71,7 @@ w_err_t lfs_free(void *ptr)
 static w_err_t lfs_search_child(lfile_info_s *info,char *name,w_blkdev_s *blkdev)
 {
     w_err_t err;
+    lfile_info_s *tmpinfo;
     WIND_ASSERT_RETURN(info != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(name != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
@@ -78,18 +79,40 @@ static w_err_t lfs_search_child(lfile_info_s *info,char *name,w_blkdev_s *blkdev
     {
         wind_debug("fileinfo has no children");
         return W_ERR_FAIL;
-    }
-    err = fileinfo_get_headchild(info,blkdev);
-    WIND_ASSERT_RETURN(err == W_ERR_OK,err);
-    for(;info != W_NULL;)
+    }        
+    do
     {
-        if(wind_strcmp(name,info->name) == 0)
-            return W_ERR_OK;
-        err = fileinfo_get_next(info,blkdev);
+        err = W_ERR_OK;
+        tmpinfo = lfs_malloc(sizeof(lfile_info_s));
+        WIND_ASSERT_BREAK(tmpinfo != W_NULL,W_ERR_MEM,"malloc tmpinfo failed");
+        wind_memcpy(tmpinfo,info,sizeof(lfile_info_s));
+        err = fileinfo_get_headchild(tmpinfo,blkdev);
         if(err != W_ERR_OK)
-            return err;
-    }
-    return W_ERR_FAIL;
+        {
+            wind_debug("file has no child");
+            break;
+        }
+        //WIND_ASSERT_RETURN(err == W_ERR_OK,err);
+        for(;tmpinfo != W_NULL;)
+        {
+            if(wind_strcmp(name,tmpinfo->name) == 0)
+            {
+                wind_memcpy(info,tmpinfo,sizeof(lfile_info_s));
+                break;
+            }
+                
+            if(tmpinfo ->nextfile_addr == 0)
+                break;
+            err = fileinfo_get_next(tmpinfo,blkdev);
+            if(err != W_ERR_OK)
+                break;
+        }
+        
+    }while(0);
+    if(tmpinfo != W_NULL)
+        lfs_free(tmpinfo);
+
+    return err;
 }
 
 static w_err_t lfs_search_file(listfs_s *lfs,listfile_s *file,const char *path)
@@ -157,7 +180,12 @@ static w_err_t lfs_search_file(listfs_s *lfs,listfile_s *file,const char *path)
                 break;
             }
             err = lfs_search_child(finfo,nameseg[i],lfs->blkdev);
-            WIND_ASSERT_BREAK(err == W_ERR_OK,err,"read directory failed.");
+            if(err != W_ERR_OK)
+            {
+                wind_debug("search child file %s failed",nameseg[i]);
+                break;
+            }
+            //WIND_ASSERT_BREAK(err == W_ERR_OK,err,"read directory failed.");
         }
     }while(0);
     if(err == W_ERR_OK)
@@ -173,7 +201,6 @@ static w_err_t lfs_search_file(listfs_s *lfs,listfile_s *file,const char *path)
             lfs_free(blkinfo);
             file->blkinfo = W_NULL;
         }
-            
     }
         
     if(tmppath)
@@ -258,7 +285,8 @@ static w_err_t lfs_make_child(listfs_s *lfs,lfile_info_s *pinfo,char *name,w_uin
             blkinfo = FILEINFO_BLKINFO(blk);
             blkinfo_init(blkinfo, self_addr,0,0,lfs->blkdev->blksize);
         }
-        
+        if(self_addr == info->parent_addr)
+            wind_error("error addr alloced:0x%x",self_addr);
         cnt = wind_blkdev_write(lfs->blkdev,self_addr,blk,1);
         WIND_ASSERT_BREAK(cnt > 0,W_ERR_FAIL,"write file info failed.");
 
@@ -384,20 +412,69 @@ static w_err_t listfile_destroy(listfile_s* file)
     return W_ERR_OK;
 }
 
-static w_err_t lfile_free_blkaddr(listfile_s *file)
+static w_err_t lfile_free_blkaddr(listfs_s *lfs,lfile_info_s *finfo)
 {
     w_err_t err;
-    err = W_ERR_OK;
-    while(1)
+    lfile_blkinfo_s *blkinfo = W_NULL;
+    do
     {
-        err = listfs_bitmap_free_blk(&file->lfs->bitmap,file->blkinfo->dataaddr,LFILE_LBLK_CNT);
-        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"free blk addrs failed,can NOT be error here");
-        err = listfs_bitmap_free_blk(&file->lfs->bitmap,&file->blkinfo->self_addr,1);
-        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"free blkinfo addr failed,can NOT be error here");
-        err = blkinfo_get_next(file->blkinfo,file->lfs->blkdev);
-        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"get head blkinfo failed,can NOT be error here");
-    }
+        err = W_ERR_OK;
+        blkinfo = lfs_malloc(sizeof(lfile_blkinfo_s));
+        WIND_ASSERT_BREAK(blkinfo != W_NULL,W_ERR_MEM,"alloc blkinfo failed");
+        err = blkinfo_read(blkinfo,lfs->blkdev,finfo->self_addr);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"get offset failed");
+        err = blkinfo_read(blkinfo,lfs->blkdev,finfo->self_addr);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"read blkinfo failed");
+        while(1)
+        {
+            err = listfs_bitmap_free_blk(&lfs->bitmap,blkinfo->dataaddr,LFILE_LBLK_CNT);
+            WIND_ASSERT_BREAK(err == W_ERR_OK,err,"free blk addrs failed,can NOT be error here");
+            err = listfs_bitmap_free_blk(&lfs->bitmap,&blkinfo->self_addr,1);
+            WIND_ASSERT_BREAK(err == W_ERR_OK,err,"free blkinfo addr failed,can NOT be error here");
+            err = blkinfo_get_next(blkinfo,lfs->blkdev);
+            WIND_ASSERT_BREAK(err == W_ERR_OK,err,"get head blkinfo failed,can NOT be error here");
+        }
+        if(err != W_ERR_OK)
+            break;
+    }while(0);
+    if(blkinfo != W_NULL)
+        lfs_free(blkinfo);
     return W_ERR_FAIL;
+}
+
+static w_err_t do_remove_file(listfs_s *lfs,lfile_info_s *finfo)
+{
+    w_err_t err;
+    do
+    {
+        err = W_ERR_OK;
+        if(finfo->nextfile_addr != 0)
+        {
+            err = fileinfo_rm_update_next(finfo,lfs->blkdev);
+            WIND_ASSERT_BREAK(err == W_ERR_OK,err,"update next file info failed");
+            finfo->parent_addr = 0;
+        }
+        if(finfo->prevfile_addr != 0)
+        {
+            err = fileinfo_rm_update_prev(finfo,lfs->blkdev);
+            WIND_ASSERT_BREAK(err == W_ERR_OK,err,"update prev file info failed");
+            finfo->prevfile_addr = 0;
+        }
+        if(finfo->parent_addr != 0)
+        {
+            err = fileinfo_rm_update_parent(finfo,lfs->blkdev);
+            WIND_ASSERT_BREAK(err == W_ERR_OK,err,"update parent file info failed");
+            finfo->nextfile_addr = 0;
+        }
+        if(finfo->filesize > 0)
+        {
+            err = lfile_free_blkaddr(lfs,finfo);
+            WIND_ASSERT_BREAK(err == W_ERR_OK,err,"free blkaddr failed");
+            finfo->filesize = 0;
+        }
+        finfo->magic = 0;
+    }while(0);
+    return err;
 }
 
 w_err_t listfile_remove(listfs_s *lfs,const char *path)
@@ -417,30 +494,9 @@ w_err_t listfile_remove(listfs_s *lfs,const char *path)
     }
     do
     {
-        err = W_ERR_OK;
-        
-        finfo = &file->info;
-        if(finfo->parent_addr != 0)
-        {
-            err = fileinfo_rm_update_parent(finfo,file->lfs->blkdev);
-            WIND_ASSERT_BREAK(err == W_ERR_OK,err,"update parent file info failed");
-        }
-        if(finfo->nextfile_addr != 0)
-        {
-            err = fileinfo_rm_update_next(finfo,file->lfs->blkdev);
-            WIND_ASSERT_BREAK(err == W_ERR_OK,err,"update next file info failed");
-        }
-        if(finfo->prevfile_addr != 0)
-        {
-            err = fileinfo_rm_update_prev(finfo,file->lfs->blkdev);
-            WIND_ASSERT_BREAK(err == W_ERR_OK,err,"update prev file info failed");
-        }
-        
-        err = blkinfo_get_byoffset(file->blkinfo,file->lfs->blkdev,0);
-        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"get head blkinfo failed");
+        err = do_remove_file(lfs,&file->info);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"remove fale failed");
 
-        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"error occured");
-        file->info.magic = 0;
     }while(0);
     if(file->subinfo != W_NULL)
         lfs_free(file->subinfo);

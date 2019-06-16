@@ -116,6 +116,9 @@ w_err_t fileinfo_read(lfile_info_s *info,w_blkdev_s *blkdev,w_addr_t addr)
             break;
         }
         wind_memcpy(info,tmpinfo,sizeof(lfile_info_s));
+        if(info->self_addr == info->parent_addr)
+            wind_error("parent and child should NOT be same");
+        WIND_ASSERT_RETURN(info->self_addr != info->parent_addr,W_ERR_INVALID);
     }while(0);
     if(blk != W_NULL)
         lfs_free(blk);
@@ -130,6 +133,7 @@ w_err_t fileinfo_write(lfile_info_s *info,w_blkdev_s *blkdev)
     WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(info != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(info->self_addr != 0,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(info->self_addr != info->parent_addr,W_ERR_INVALID);
     do
     {
         err = W_ERR_OK;

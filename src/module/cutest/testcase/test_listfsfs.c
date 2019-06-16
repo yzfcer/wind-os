@@ -47,7 +47,11 @@ CASE_FUNC(create)
     err = listfile_close(file);
     EXPECT_EQ(err,W_ERR_OK);
     err = listfile_remove(&g_lfs,"/test.txt");
-    EXPECT_EQ(err,W_ERR_OK);
+    EXPECT_EQ(err,W_ERR_OK);    
+
+
+
+    
     file = listfile_open(&g_lfs,"/test1.txt",LFMODE_CRT);
     EXPECT_NE(file,W_NULL);
 
@@ -160,7 +164,7 @@ SUITE_TEARDOWN(listfs)
 TEST_CASES_START(listfs)
 TEST_CASE(format)
 TEST_CASE(create)
-TEST_CASE(readwrite)
+//TEST_CASE(readwrite)
 TEST_CASES_END
 TEST_SUITE(listfs)
 
