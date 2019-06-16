@@ -34,11 +34,10 @@
 #include "wind_core.h"
 #include "wind_board_port.h"
 #if WIND_SOFTIRQ_SUPPORT
-#define WIND_SOFTINT_STK_LEN 256 //软中断线程的堆栈深度
 #define SOFT_FLAG_ARR_CNT ((WIND_SOFTINT_MAX_NUM + 31) >> 5)
 //软中断线程的堆栈
-static w_stack_t softirq_stk[WIND_SOFTINT_STK_LEN];
-//static w_thread_s *softirq_thread = W_NULL;
+static w_stack_t softirq_stk[THREAD_SOFTINT_STKSIZE];
+static w_thread_s *softirq_thread = W_NULL;
 w_softirq_fn softirq_vectors[WIND_SOFTINT_MAX_NUM];
 w_uint32_t softirq_flag[SOFT_FLAG_ARR_CNT];
 
@@ -47,7 +46,7 @@ w_err_t _wind_softirq_mod_init(void)
 {
     wind_memset(softirq_flag,0,sizeof(softirq_flag));
     wind_memset(softirq_vectors,0,sizeof(softirq_vectors));
-    wind_memset(softirq_stk,0,WIND_SOFTINT_STK_LEN * sizeof(w_stack_t));
+    wind_memset(softirq_stk,0,THREAD_SOFTINT_STKSIZE * sizeof(w_stack_t));
     return W_ERR_OK;
 }
 
@@ -76,8 +75,8 @@ w_err_t wind_softirq_trig(w_int32_t irqid)
     w_thread_s *thread;
     w_int32_t idx1,idx2;
     WIND_ASSERT_RETURN(irqid < WIND_SOFTINT_MAX_NUM,W_ERR_OVERFLOW);
-    thread = wind_thread_get("softirq");
-    WIND_ASSERT_RETURN(thread != W_NULL, W_ERR_FAIL);
+    WIND_ASSERT_RETURN(softirq_thread != W_NULL,W_ERR_FAIL);
+    thread = softirq_thread;
     wind_disable_interrupt();
     
     idx1 = (irqid >> 5);
@@ -146,10 +145,11 @@ w_err_t _wind_create_thread_softirq(void)
 {
     w_thread_s *thread;
     thread = wind_thread_create("softirq",thread_softirq,
-                0,W_NULL,softirq_stk,WIND_SOFTINT_STK_LEN);
+                0,W_NULL,softirq_stk,THREAD_SOFTINT_STKSIZE);
     WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_FAIL);
     wind_thread_setflag(thread,F_THREAD_NO_KILL | F_THREAD_SYSTEM);
     wind_thread_set_priority(thread,1);
+    softirq_thread = thread;
     return W_ERR_OK;
 }
 

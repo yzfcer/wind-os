@@ -78,6 +78,22 @@ CASE_FUNC(create)
     EXPECT_EQ(err,W_ERR_OK);
 }
 
+CASE_SETUP(diretion)
+{
+
+}
+
+
+CASE_TEARDOWN(diretion)
+{
+
+}
+
+CASE_FUNC(diretion)
+{
+    EXPECT_EQ(0,1);
+}
+
 
 CASE_SETUP(readwrite)
 {
@@ -179,6 +195,7 @@ SUITE_TEARDOWN(listfs)
 TEST_CASES_START(listfs)
 TEST_CASE(format)
 TEST_CASE(create)
+TEST_CASE(diretion)
 //TEST_CASE(readwrite)
 TEST_CASES_END
 TEST_SUITE(listfs)

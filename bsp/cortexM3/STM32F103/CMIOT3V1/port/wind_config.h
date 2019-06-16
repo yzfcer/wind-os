@@ -115,6 +115,7 @@
 #define THREAD_TIMER_STKSIZE 256
 #define THREAD_SHELL_STKSIZE 2048
 #define THREAD_COROUT_STKSIZE 256
+#define THREAD_SOFTINT_STKSIZE 256 
 
 
 //-------------------------------------------------------------------------------

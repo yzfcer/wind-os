@@ -116,6 +116,7 @@
 #define THREAD_TIMER_STKSIZE 256
 #define THREAD_SHELL_STKSIZE 2048
 #define THREAD_COROUT_STKSIZE 256
+#define THREAD_SOFTINT_STKSIZE 256 
 
 //-------------------------------------------------------------------------------
 //调试命令定制，前提是内核支持控制台功能
