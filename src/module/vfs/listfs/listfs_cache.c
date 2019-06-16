@@ -165,7 +165,7 @@ w_err_t lfs_cache_clear(lfs_cache_s *cache,w_blkdev_s *blkdev)
     w_err_t err;
     err = lfs_cache_flush(cache,blkdev);
     WIND_ASSERT_RETURN(err == W_ERR_OK,err);
-    
+    return W_ERR_OK;
 }
 
 

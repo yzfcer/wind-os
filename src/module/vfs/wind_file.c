@@ -141,7 +141,6 @@ static w_file_s *wind_file_create(w_vfs_s *fs,const char *realpath,w_uint16_t fm
         file->path[rpathlen] = 0;
         file->subname = W_NULL;
         DNODE_INIT(file->filenode);
-        file->ftype = fs->fstype;
         file->fmode = fmode;
         file->isdir = isdir;
         file->vfs = fs;

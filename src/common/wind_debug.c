@@ -865,7 +865,7 @@ w_int32_t wind_vsscanf(const char *str, const char *format, wind_va_list args)
 static w_int32_t scan_read_line(char *buff,w_int32_t maxlen)
 {
     char ch;
-    w_int32_t i,len = 0;
+    w_int32_t i = 0,len = 0;
     while(1)
     {
         len = wind_std_input((w_uint8_t*)&ch,1);
@@ -873,7 +873,6 @@ static w_int32_t scan_read_line(char *buff,w_int32_t maxlen)
             wind_thread_sleep(10);
         else
         {
-            
             if((ch == 0x0d) || (ch == 0x0a))
             {
                 buff[i] = '\0';

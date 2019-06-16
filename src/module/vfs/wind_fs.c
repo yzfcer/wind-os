@@ -215,7 +215,7 @@ w_err_t wind_fstype_register(w_fstype_s *ops)
     WIND_ASSERT_RETURN(ops != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(ops->obj.magic == WIND_FSTYPE_MAGIC,W_ERR_INVALID);
     wind_notice("register vfs ops:%s",wind_obj_name(&ops->obj));
-    tmpops = wind_dbgpoint_get(ops->obj.name);
+    tmpops = wind_fstype_get(ops->obj.name);
     if(tmpops != W_NULL)
     {
         wind_notice("vfs ops has been registered.\r\n");
@@ -227,14 +227,13 @@ w_err_t wind_fstype_register(w_fstype_s *ops)
 
 w_err_t wind_fstype_unregister(w_fstype_s *ops)
 {
-    w_dnode_s *dnode;
-    //w_fstype_s *tmpops;
+    w_err_t err;
     WIND_ASSERT_RETURN(ops != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(ops->obj.magic == WIND_FSTYPE_MAGIC,W_ERR_INVALID);
     wind_notice("unregister vfs ops:%s",wind_obj_name(&ops->obj));
-    wind_obj_deinit(&ops->obj,WIND_FSTYPE_MAGIC,&fs_ops_list);
-    WIND_ASSERT_RETURN(dnode != W_NULL,W_ERR_INVALID);
-    return W_ERR_OK;
+    err = wind_obj_deinit(&ops->obj,WIND_FSTYPE_MAGIC,&fs_ops_list);
+    WIND_ASSERT_RETURN(err == W_ERR_OK,err);
+    return err;
 }
 
 #if WIND_TREEFS_SUPPORT

@@ -129,6 +129,33 @@ static w_err_t bm_check_free_bitmap(lfs_bitmap_s *bm)
     return W_ERR_FAIL;
 }
 
+static w_err_t bm_update_freeidx(lfs_bitmap_s *bm)
+{
+    w_uint32_t i;
+    w_err_t err;
+    WIND_ASSERT_RETURN(bm != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(bm->magic == LISTFS_BITMAP_MAGIC,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(bm->blkdev != W_NULL,W_ERR_INVALID);
+    wind_notice("bm_update_freeidx");
+    for(i = 0;i < bm->bmblk_cnt;i ++)
+    {
+        err = bm_check_free_bitmap(bm);
+        if(err == W_ERR_OK)
+            return err;
+        bm->cur_blkidx ++;
+        if(bm->cur_blkidx >= bm->bmblk_cnt)
+            bm->cur_blkidx = 0;
+        err = bm_read_blk(bm);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,W_ERR_HARDFAULT,"read blk failed");
+    }
+
+    bm->cur_blkidx = 0;
+    bm->cur_byteidx = 0;
+    wind_notice("set free bitmap failed");
+    return W_ERR_FAIL;
+}
+
+
 
 w_err_t listfs_bitmap_init(lfs_bitmap_s *bm,w_addr_t start_addr,w_int32_t blk_cnt,w_blkdev_s *blkdev)
 {
@@ -182,31 +209,6 @@ w_err_t listfs_bitmap_deinit(lfs_bitmap_s *bm)
 
 
 
-static w_err_t bm_update_freeidx(lfs_bitmap_s *bm)
-{
-    w_uint32_t i;
-    w_err_t err;
-    WIND_ASSERT_RETURN(bm != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(bm->magic == LISTFS_BITMAP_MAGIC,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(bm->blkdev != W_NULL,W_ERR_INVALID);
-    wind_notice("bm_update_freeidx");
-    for(i = 0;i < bm->bmblk_cnt;i ++)
-    {
-        err = bm_check_free_bitmap(bm);
-        if(err == W_ERR_OK)
-            return err;
-        bm->cur_blkidx ++;
-        if(bm->cur_blkidx >= bm->bmblk_cnt)
-            bm->cur_blkidx = 0;
-        err = bm_read_blk(bm);
-        WIND_ASSERT_BREAK(err == W_ERR_OK,W_ERR_HARDFAULT,"read blk failed");
-    }
-
-    bm->cur_blkidx = 0;
-    bm->cur_byteidx = 0;
-    wind_notice("set free bitmap failed");
-    return W_ERR_FAIL;
-}
 
 
 

@@ -60,7 +60,7 @@ char *cJSONUtils_FindPointerFromObjectTo(cJSON *object,cJSON *target)
 			{
 				char *ret=(char*)wind_malloc(wind_strlen(found)+cJSONUtils_PointerEncodedwind_strlen(obj->string)+2);
 				*ret='/';cJSONUtils_PointerEncodedstrcpy(ret+1,obj->string);
-				strcat(ret,found);
+				wind_strcat(ret,found);
 				wind_free(found);
 				return ret;
 			}
@@ -129,7 +129,7 @@ static int cJSONUtils_Compare(cJSON *a,cJSON *b)
 	switch (a->type)
 	{
 	case cJSON_Number:	return (a->valueint!=b->valueint || a->valuedouble!=b->valuedouble)?-2:0;	/* numeric mismatch. */
-	case cJSON_String:	return (strcmp(a->valuestring,b->valuestring)!=0)?-3:0;						/* string mismatch. */
+	case cJSON_String:	return (wind_strcmp(a->valuestring,b->valuestring)!=0)?-3:0;						/* string mismatch. */
 	case cJSON_Array:	for (a=a->child,b=b->child;a && b;a=a->next,b=b->next)	{int err=cJSONUtils_Compare(a,b);if (err) return err;}
 						return (a || b)?-4:0;	/* array size mismatch. */
 	case cJSON_Object:
@@ -159,12 +159,12 @@ static int cJSONUtils_ApplyPatch(cJSON *object,cJSON *patch)
 	path=cJSON_GetObjectItem(patch,"path");
 	if (!op || !path) return 2;	/* malformed patch. */
 
-	if		(!strcmp(op->valuestring,"add"))	opcode=0;
-	else if (!strcmp(op->valuestring,"remove")) opcode=1;
-	else if (!strcmp(op->valuestring,"replace"))opcode=2;
-	else if (!strcmp(op->valuestring,"move"))	opcode=3;
-	else if (!strcmp(op->valuestring,"copy"))	opcode=4;
-	else if (!strcmp(op->valuestring,"test"))	return cJSONUtils_Compare(cJSONUtils_GetPointer(object,path->valuestring),cJSON_GetObjectItem(patch,"value"));
+	if		(!wind_strcmp(op->valuestring,"add"))	opcode=0;
+	else if (!wind_strcmp(op->valuestring,"remove")) opcode=1;
+	else if (!wind_strcmp(op->valuestring,"replace"))opcode=2;
+	else if (!wind_strcmp(op->valuestring,"move"))	opcode=3;
+	else if (!wind_strcmp(op->valuestring,"copy"))	opcode=4;
+	else if (!wind_strcmp(op->valuestring,"test"))	return cJSONUtils_Compare(cJSONUtils_GetPointer(object,path->valuestring),cJSON_GetObjectItem(patch,"value"));
 	else return 3; /* unknown opcode. */
 
 	if (opcode==1 || opcode==2)	/* Remove/Replace */
@@ -201,14 +201,13 @@ static int cJSONUtils_ApplyPatch(cJSON *object,cJSON *patch)
 	if (!parent) {wind_free(parentptr); cJSON_Delete(value); return 9;}	/* Couldn't find object to add to. */
 	else if (parent->type==cJSON_Array)
 	{
-		if (!strcmp(childptr,"-"))	
+		if (!wind_strcmp(childptr,"-"))	
             cJSON_AddItemToArray(parent,value);
 		else
         {
             if(wind_str_to_int(childptr,&which))
                 cJSON_InsertItemInArray(parent,which,value);
         }      
-            
 	}
 	else if (parent->type==cJSON_Object)
 	{
@@ -267,7 +266,7 @@ static void cJSONUtils_CompareToPatch(cJSON *patches,const char *path,cJSON *fro
 		return;
 						
 	case cJSON_String:	
-		if (strcmp(from->valuestring,to->valuestring)!=0)
+		if (wind_strcmp(from->valuestring,to->valuestring)!=0)
 			cJSONUtils_GeneratePatch(patches,"replace",path,0,to);
 		return;
 
@@ -391,7 +390,7 @@ cJSON *cJSONUtils_GenerateMergePatch(cJSON *from,cJSON *to)
 	patch=cJSON_CreateObject();
 	while (from || to)
 	{
-		int compare=from?(to?strcmp(from->string,to->string):-1):1;
+		int compare=from?(to?wind_strcmp(from->string,to->string):-1):1;
 		if (compare<0)
 		{
 			cJSON_AddItemToObject(patch,from->string,cJSON_CreateNull());

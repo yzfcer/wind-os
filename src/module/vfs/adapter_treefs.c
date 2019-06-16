@@ -39,7 +39,7 @@ static void* treefs_op_init(w_vfs_s *vfs)
     //WIND_ASSERT_RETURN(tfs != W_NULL,W_NULL);
     
     tfs = wind_treefs_create(vfs->obj.name);
-    WIND_ASSERT_RETURN(tfs != W_NULL,W_ERR_MEM);
+    WIND_ASSERT_RETURN(tfs != W_NULL,W_NULL);
     wind_treefs_format(tfs);
     return tfs;
 }

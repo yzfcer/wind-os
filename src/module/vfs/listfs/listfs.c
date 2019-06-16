@@ -778,7 +778,6 @@ w_err_t listfile_remove(listfs_s *lfs,const char *path)
 {
     w_err_t err;
     listfile_s *file;
-    lfile_info_s *finfo;
     WIND_ASSERT_RETURN(lfs != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(path != W_NULL,W_ERR_PTR_NULL);
     wind_trace("remove file:%s",path);

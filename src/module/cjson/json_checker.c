@@ -441,7 +441,8 @@ int  JSON_checker_handle(char *JSONstr)
     }
     if (!JSON_checker_done(jc)) 
     {
-        wind_printf("JSON_checker_end: syntax error\n");
+        wind_printf("JSON_checker_done: syntax error\n");
         return -3;
     }
+    return 0;
 }

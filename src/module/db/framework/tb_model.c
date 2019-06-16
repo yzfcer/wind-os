@@ -141,6 +141,7 @@ w_err_t wind_tbmodels_register(void)
 {
     wind_tbmodel_register(TBMODEL(tb_demo));
     wind_tbmodel_register(TBMODEL(tb_demo1));
+    return W_ERR_OK;
 }
 
 

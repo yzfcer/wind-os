@@ -119,7 +119,7 @@ struct __w_file_s
     char *subname;
     w_dnode_s filenode;//链表节点
     w_uint16_t fmode;//操作模式
-    w_uint8_t ftype;//文件系统类型
+    //w_uint8_t ftype;//文件系统类型
     w_uint8_t isdir;
     w_vfs_s *vfs;
     void *fileobj;//文件对象
