@@ -123,11 +123,11 @@ CASE_FUNC(semfunc)
     EXPECT_NE(sems[0],W_NULL);
     for(i = 0;i < 3;i ++)
     {
-        err = wind_sem_wait(sems[0],1000);
+        err = wind_sem_wait(sems[0],100);
         EXPECT_EQ(err,W_ERR_OK);
         EXPECT_EQ(sems[0]->sem_num,sems[0]->sem_tot - 1 - i);
     }
-    err = wind_sem_wait(sems[0],1000);
+    err = wind_sem_wait(sems[0],100);
     EXPECT_EQ(err,W_ERR_TIMEOUT);
     EXPECT_EQ(sems[0]->sem_num,0);
 

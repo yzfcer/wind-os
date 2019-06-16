@@ -196,7 +196,7 @@ TEST_CASES_START(listfs)
 TEST_CASE(format)
 TEST_CASE(create)
 TEST_CASE(diretion)
-//TEST_CASE(readwrite)
+TEST_CASE(readwrite)
 TEST_CASES_END
 TEST_SUITE(listfs)
 

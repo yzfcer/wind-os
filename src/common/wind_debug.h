@@ -102,15 +102,22 @@ void wind_print_space(w_int32_t space8_cnt);
 
 //---------------------------------------------------------------------
 //系统调试信息打印级别
-#define PRINT_LV_DEBUG   1
-#define PRINT_LV_NOTICE  2
-#define PRINT_LV_WARN    3
-#define PRINT_LV_ERROR   4
-#define PRINT_LV_CRIT    5
+#define PRINT_LV_TRACE   1
+#define PRINT_LV_DEBUG   2
+#define PRINT_LV_NOTICE  3
+#define PRINT_LV_WARN    4
+#define PRINT_LV_ERROR   5
+#define PRINT_LV_CRIT    6
 
 #define PRINT_LEVEL PRINT_LV_NOTICE//PRINT_LV_DEBUG//
 
 //---------------------------------------------------------------------
+#if (WIND_DEBUG_SUPPORT && (PRINT_LEVEL <= PRINT_LV_TRACE))
+#define wind_trace(fmt,...) do{wind_printf("%s"fmt"\r\n","[trace] ",##__VA_ARGS__);}while(0)
+#else 
+#define wind_trace(fmt,...)
+#endif
+
 #if (WIND_DEBUG_SUPPORT && (PRINT_LEVEL <= PRINT_LV_DEBUG))
 #define wind_debug(fmt,...) do{wind_printf("%s"fmt"\r\n","[debug] ",##__VA_ARGS__);}while(0)
 #else 

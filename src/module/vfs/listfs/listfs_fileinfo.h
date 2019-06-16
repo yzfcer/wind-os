@@ -59,7 +59,7 @@ typedef struct __lfile_info_s
 }lfile_info_s;
 
 void fileinfo_be2le(lfile_info_s *info);
-w_err_t listfs_fileinfo_init(lfile_info_s *info,char *name,
+w_err_t fileinfo_init(lfile_info_s *info,char *name,
     w_addr_t self_addr,w_addr_t parent_addr,w_addr_t prev_addr,w_uint8_t attr);
 
 w_err_t fileinfo_read(lfile_info_s *info,w_blkdev_s *blkdev,w_addr_t addr);

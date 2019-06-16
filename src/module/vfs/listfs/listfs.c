@@ -240,7 +240,7 @@ static w_err_t lfs_make_root(listfs_s *lfs)
         WIND_ASSERT_BREAK(addr == lfs->lfs_info.root_addr,W_ERR_FAIL,"root addr error");
 
         attr = (LFILE_ATTR_COMMAN | LFILE_ATTR_DIR);
-        listfs_fileinfo_init(finfo,"root",lfs->lfs_info.root_addr,0,0,attr);
+        fileinfo_init(finfo,"root",lfs->lfs_info.root_addr,0,0,attr);
         blkinfo_init(blkinfo, lfs->lfs_info.root_addr,0,0,lfs->blkdev->blksize);
         err = fileinfo_write(finfo,lfs->blkdev);
         WIND_ASSERT_BREAK(err == W_ERR_OK,err,"flush lfs root file info failed.");
@@ -282,7 +282,7 @@ static w_err_t lfs_make_child(listfs_s *lfs,lfile_info_s *pinfo,char *name,w_uin
         wind_memset(blk,0,lfs->blkdev->blksize);
         attr = isdir?(LFILE_ATTR_COMMAN|LFILE_ATTR_DIR):LFILE_ATTR_COMMAN;
         info = (lfile_info_s*)blk;
-        listfs_fileinfo_init(info,name,self_addr,pinfo->self_addr,pinfo->tailchild_addr,attr);
+        fileinfo_init(info,name,self_addr,pinfo->self_addr,pinfo->tailchild_addr,attr);
         //info->prevfile_addr = pinfo->tailchild_addr;
         if(!isdir)
         {
@@ -698,7 +698,7 @@ listfile_s* listfile_open(listfs_s *lfs,const char *path,w_uint16_t mode)
     listfile_s *file = W_NULL;
     WIND_ASSERT_RETURN(lfs != W_NULL,W_NULL);
     WIND_ASSERT_RETURN(path != W_NULL,W_NULL);
-    wind_notice("open file:%s",path);
+    wind_trace("open file:%s",path);
     do 
     {
         err = W_ERR_OK;
@@ -756,7 +756,7 @@ w_err_t listfile_close(listfile_s* file)
     WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,W_ERR_INVALID);
     WIND_ASSERT_RETURN(file->lfs->file_ref > 0,W_ERR_INVALID);
-    wind_notice("close file:%s",file->info.name);
+    wind_trace("close file:%s",file->info.name);
     file->info.magic = 0;
     file->lfs->file_ref --;
     if(file->blkinfo != W_NULL)
@@ -781,7 +781,7 @@ w_err_t listfile_remove(listfs_s *lfs,const char *path)
     lfile_info_s *finfo;
     WIND_ASSERT_RETURN(lfs != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(path != W_NULL,W_ERR_PTR_NULL);
-    wind_notice("remove file:%s",path);
+    wind_trace("remove file:%s",path);
     file = listfile_open(lfs,path,LFMODE_R);
     WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(lfs->lfs_info.magic == LISTFS_MAGIC,W_ERR_INVALID);
