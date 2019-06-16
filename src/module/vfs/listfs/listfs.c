@@ -456,20 +456,20 @@ static w_err_t do_remove_file(listfs_s *lfs,lfile_info_s *finfo)
         {
             err = fileinfo_rm_update_next(finfo,lfs->blkdev);
             WIND_ASSERT_BREAK(err == W_ERR_OK,err,"update next file info failed");
-            finfo->nextfile_addr = 0;
         }
         if(finfo->prevfile_addr != 0)
         {
             err = fileinfo_rm_update_prev(finfo,lfs->blkdev);
             WIND_ASSERT_BREAK(err == W_ERR_OK,err,"update prev file info failed");
-            finfo->prevfile_addr = 0;
         }
         if(finfo->parent_addr != 0)
         {
             err = fileinfo_rm_update_parent(finfo,lfs->blkdev);
             WIND_ASSERT_BREAK(err == W_ERR_OK,err,"update parent file info failed");
-            finfo->parent_addr = 0;
         }
+        finfo->nextfile_addr = 0;
+        finfo->prevfile_addr = 0;
+        finfo->parent_addr = 0;
         if(finfo->filesize > 0)
         {
             err = lfile_free_blkaddr(lfs,finfo);
