@@ -146,7 +146,7 @@ static char* ensure(printbuffer *p,int needed)
 	newsize=pow2gt(needed);
 	newbuffer=(char*)cJSON_malloc(newsize);
 	if (!newbuffer) {cJSON_free(p->buffer);p->length=0,p->buffer=0;return 0;}
-	if (newbuffer) memcpy(newbuffer,p->buffer,p->length);
+	if (newbuffer) wind_memcpy(newbuffer,p->buffer,p->length);
 	cJSON_free(p->buffer);
 	p->length=newsize;
 	p->buffer=newbuffer;
@@ -497,7 +497,7 @@ static char *print_array(cJSON *item,int depth,int fmt,printbuffer *p)
 		/* Allocate an array to hold the values for each */
 		entries=(char**)cJSON_malloc(numentries*sizeof(char*));
 		if (!entries) return 0;
-		memset(entries,0,numentries*sizeof(char*));
+		wind_memset(entries,0,numentries*sizeof(char*));
 		/* Retrieve all the results: */
 		child=item->child;
 		while (child && !fail)
@@ -526,7 +526,7 @@ static char *print_array(cJSON *item,int depth,int fmt,printbuffer *p)
 		ptr=out+1;*ptr=0;
 		for (i=0;i<numentries;i++)
 		{
-			tmplen=wind_strlen(entries[i]);memcpy(ptr,entries[i],tmplen);ptr+=tmplen;
+			tmplen=wind_strlen(entries[i]);wind_memcpy(ptr,entries[i],tmplen);ptr+=tmplen;
 			if (i!=numentries-1) {*ptr++=',';if(fmt)*ptr++=' ';*ptr=0;}
 			cJSON_free(entries[i]);
 		}
@@ -638,8 +638,8 @@ static char *print_object(cJSON *item,int depth,int fmt,printbuffer *p)
 		if (!entries) return 0;
 		names=(char**)cJSON_malloc(numentries*sizeof(char*));
 		if (!names) {cJSON_free(entries);return 0;}
-		memset(entries,0,sizeof(char*)*numentries);
-		memset(names,0,sizeof(char*)*numentries);
+		wind_memset(entries,0,sizeof(char*)*numentries);
+		wind_memset(names,0,sizeof(char*)*numentries);
 
 		/* Collect all the results into our arrays: */
 		child=item->child;depth++;if (fmt) len+=depth;
@@ -668,7 +668,7 @@ static char *print_object(cJSON *item,int depth,int fmt,printbuffer *p)
 		for (i=0;i<numentries;i++)
 		{
 			if (fmt) for (j=0;j<depth;j++) *ptr++='\t';
-			tmplen=wind_strlen(names[i]);memcpy(ptr,names[i],tmplen);ptr+=tmplen;
+			tmplen=wind_strlen(names[i]);wind_memcpy(ptr,names[i],tmplen);ptr+=tmplen;
 			*ptr++=':';if (fmt) *ptr++='\t';
 			wind_strcpy(ptr,entries[i]);ptr+=wind_strlen(entries[i]);
 			if (i!=numentries-1) *ptr++=',';
@@ -692,7 +692,7 @@ int cJSON_HasObjectItem(cJSON *object,const char *string)		{return cJSON_GetObje
 /* Utility for array list handling. */
 static void suffix_object(cJSON *prev,cJSON *item) {prev->next=item;item->prev=prev;}
 /* Utility for handling references. */
-static cJSON *create_reference(cJSON *item) {cJSON *ref=cJSON_New_Item();if (!ref) return 0;memcpy(ref,item,sizeof(cJSON));ref->string=0;ref->type|=cJSON_IsReference;ref->next=ref->prev=0;return ref;}
+static cJSON *create_reference(cJSON *item) {cJSON *ref=cJSON_New_Item();if (!ref) return 0;wind_memcpy(ref,item,sizeof(cJSON));ref->string=0;ref->type|=cJSON_IsReference;ref->next=ref->prev=0;return ref;}
 
 /* Add item to array/object. */
 void   cJSON_AddItemToArray(cJSON *array, cJSON *item)						{cJSON *c=array->child;if (!item) return; if (!c) {array->child=item;} else {while (c && c->next) c=c->next; suffix_object(c,item);}}
