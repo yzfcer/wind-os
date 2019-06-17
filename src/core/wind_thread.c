@@ -97,6 +97,17 @@ static char *wind_thread_status(w_thread_stat_e stat)
     }
 }
 
+static w_int32_t thread_stk_usage(w_thread_s *thread)
+{
+    w_int32_t idx,usage = 0;
+    for(idx = 1;idx < thread->stksize;idx ++)
+    {
+        if(thread->stack_start[idx] != 0)
+            break;
+    }
+    usage = (thread->stksize - idx + 1) * 100 / thread->stksize;
+    return usage;
+}
 #if WIND_DIAGNOSE_SUPPORT
 static w_int32_t thread_diagnose(void)
 {
@@ -190,7 +201,7 @@ w_err_t wind_thread_init(w_thread_s *thread,
 {
     w_uint32_t i;
     w_stack_t *tmpstk;
-    wind_notice("init thread:%s",name);
+    wind_notice("init thread:%s,0x%08x,0x%x",name,pstk,stksize);
     WIND_ASSERT_RETURN(name != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(thread_func != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(pstk != W_NULL,W_ERR_PTR_NULL);
@@ -474,24 +485,64 @@ w_dlist_s *_wind_thread_sleep_list(void)
 //调试时用到的函数，打印当前的系统中的线程的信息
 w_err_t wind_thread_print(void)
 {
+    w_int32_t usage;
     w_dnode_s *dnode;
     w_thread_s *thread;
     char *stat;
     w_dlist_s *list = &threadlist;
     wind_printf("\r\n\r\nthread list:\r\n");
-    wind_print_space(7);
-    wind_printf("%-16s %-8s %-10s %-10s %-10s\r\n","thread","prio","state","stacksize","runtimes");
-    wind_print_space(7);
+    wind_print_space(8);
+    wind_printf("%-16s %-8s %-10s %-10s %-10s %-6s\r\n","thread","prio","state","stacksize","runtimes","usage");
+    wind_print_space(8);
     foreach_node(dnode,list)
     {
         thread = PRIDNODE_TO_THREAD(dnode,validnode);
         stat = wind_thread_status(thread->runstat);
-        wind_printf("%-16s %-8d %-10s %-10d %-10d\r\n",
-            thread->name,thread->prio,stat,thread->stksize,thread->run_times);
+        usage = thread_stk_usage(thread);
+        wind_printf("%-16s %-8d %-10s %-10d %-10d %-6d\r\n",
+            thread->name,thread->prio,stat,thread->stksize,thread->run_times,usage);
     }
-    wind_print_space(7);
+    wind_print_space(8);
     return W_ERR_OK;
 }
 
+static void print_mem(w_uint32_t start,w_uint32_t len)
+{
+    w_uint32_t i,va;
+    start = ((start >> 2) << 2);
+    len = ((len + 3) >> 2);
+    wind_printf("memory 0x%0x %d\r\n",start,len);
+    for(i = 0;i < len;i ++)
+    {
+        if((i & 0x03) == 0)
+            wind_printf("0x%08x:  ",start+i*4);
+        va = *(w_uint32_t*)((void*)(start+i*4));
+        wind_printf("%08x ",va);
+        if(((i+1) & 0x03) == 0)
+            wind_printf("\r\n");
+    }
+    wind_printf("\r\n");
+}
 
+w_err_t wind_thread_print_stack(w_thread_s *thread)
+{
+    w_uint32_t start,end,cur,len,used;
+    if(thread == W_NULL)
+        thread = wind_thread_current();
+    WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_FAIL);
+    start = (w_uint32_t)thread->stack_start;
+    end = start + thread->stksize*sizeof(w_stack_t);
+    cur = (w_uint32_t)thread->stack_cur;
+    len = (end - cur);
+    used = (end - cur) / sizeof(w_stack_t*);
+    
+    wind_printf("stack start :0x%08X\r\n",start);
+    wind_printf("stack end   :0x%08X\r\n",end);
+    wind_printf("stack cur   :0x%08X\r\n",cur);
+    wind_printf("stack size  :%d\r\n",thread->stksize);
+    wind_printf("stack used  :%d\r\n",used);
+    if(len <= 4096)
+        print_mem(cur,len);
+    return W_ERR_OK;
+}
 //**********************************************extern functions******************************

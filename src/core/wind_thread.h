@@ -189,6 +189,8 @@ w_err_t wind_thread_exit(w_err_t exitcode);
 
 w_err_t wind_thread_print(void);
 
+w_err_t wind_thread_print_stack(w_thread_s *thread);
+
 
 #ifdef __cplusplus
 }

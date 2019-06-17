@@ -62,13 +62,13 @@ __declspec(naked) static void switch_context(w_thread_s* srcthr, w_thread_s* des
         push edx
         push eax
 
+        //经典线程切换，另外一个线程复活
         mov esi, srcthr
         mov edi, destthr
-
         mov [esi + w_thread_s.stack_cur], esp
-
-        //经典线程切换，另外一个线程复活
         mov esp, [edi + w_thread_s.stack_cur]
+		//mov [esi + 48], esp
+		//mov esp, [edi + 48]
 
         pop eax
         pop edx

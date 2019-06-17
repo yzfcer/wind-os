@@ -109,34 +109,21 @@ static w_err_t display_mem(w_int32_t argc,char **argv)
     return W_ERR_OK;
 }
 
-static w_err_t display_stack(w_int32_t argc,char **argv)
+w_err_t display_stack(w_int32_t argc,char **argv)
 {
-    w_uint32_t start,end,cur,len,used;
-    w_thread_s *thr;
+    w_thread_s *thread;
     WIND_ASSERT_RETURN(argc >= 3,W_ERR_INVALID);
     if(wind_strcmp(argv[1],"stack") != 0)
     {
         return W_ERR_FAIL;
     }
-    thr = wind_thread_get(argv[2]);
-    if(thr == W_NULL)
+    thread = wind_thread_get(argv[2]);
+    if(thread == W_NULL)
     {
         return W_ERR_FAIL;
     }
-    start = (w_uint32_t)thr->stack_start;
-    end = start + thr->stksize*sizeof(w_stack_t);
-    cur = (w_uint32_t)thr->stack_cur;
-    len = (end - cur);
-    used = (end - cur) / sizeof(w_stack_t*);
+    return wind_thread_print_stack(thread);
     
-    wind_printf("stack start :0x%08X\r\n",start);
-    wind_printf("stack end   :0x%08X\r\n",end);
-    wind_printf("stack cur   :0x%08X\r\n",cur);
-    wind_printf("stack size  :%d\r\n",thr->stksize);
-    wind_printf("stack used  :%d\r\n",used);
-    if(len <= 4096)
-        print_mem(cur,len);
-    return W_ERR_OK;
 }
 
 
