@@ -57,6 +57,15 @@ void _wind_os_print_logo(void)
     {
         wind_printf("%s\r\n",logo[i]);
     }
+    
+    wind_printf("++++++++++++\r\n");
+    wind_printf("+ *  ******+\r\n");
+    wind_printf("+***       +\r\n");
+    wind_printf("+          +\r\n");
+    wind_printf("+**********+\r\n");
+    wind_printf("+**********+\r\n");
+    wind_printf("+**********+\r\n");
+    wind_printf("++++++++++++\r\n");
 }
 
 void _wind_print_sysinfo(void)

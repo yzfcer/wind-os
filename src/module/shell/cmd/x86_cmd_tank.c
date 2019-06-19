@@ -1,9 +1,9 @@
 /****************************************Copyright (c)**************************************************
 **                                       清  风  海  岸
-** 文   件   名: cmd_rcp.c
+** 文   件   名: cmd_tank.c
 ** 创   建   人: Jason Zhou
 ** 最后修改日期: 2015/1/24 20:24:37
-** 描        述: 在主机文件系统与wind-os文件系统之间的文件拷贝命令
+** 描        述: 坦克大战游戏
 **  
 **--------------历史版本信息----------------------------------------------------------------------------
 ** 创建人: Jason Zhou
@@ -19,7 +19,6 @@
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
 #include "wind_cmd.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
@@ -27,7 +26,7 @@ extern "C" {
 
 /*********************************************头文件定义***********************************************/
 
-#if (CMD_RCP_SUPPORT)
+#if (CMD_ECHO_SUPPORT)
 
 /********************************************内部变量定义**********************************************/
 
@@ -43,24 +42,24 @@ extern "C" {
 
 
 /********************************************全局函数定义**********************************************/
-COMMAND_DISC(rcp)
+COMMAND_DISC(tank)
 {
-    wind_printf("[*PC*] to copy file(s) between host fs and wind-os fs [NOT SUPPORTED NOW].\r\n");
+    wind_printf("to play tanks war game.\r\n");
 }
 
-COMMAND_USAGE(rcp)
+COMMAND_USAGE(tank)
 {
-    wind_printf("rcp in <src_file> <dest_file>:--to copy file from host fs to wind-os fs.\r\n");
-    wind_printf("rcp out <src_file> <dest_file>:--to copy file from wind-os fs to host fs.\r\n");
+    wind_printf("tank:--to start tanks war game.\r\n");
 }
-
-COMMAND_MAIN(rcp,argc,argv)
+extern int tank_main(int argc,char **argv);
+COMMAND_MAIN(tank,argc,argv)
 {
-    wind_error("command is NOT supported right now\r\n");
+    system("cls");
+    tank_main(argc,argv);
     return W_ERR_OK;
 }
 
-COMMAND_DEF(rcp);
+COMMAND_DEF(tank);
 
 #endif
 #ifdef __cplusplus

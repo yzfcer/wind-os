@@ -45,12 +45,12 @@ extern "C" {
 /********************************************全局函数定义**********************************************/
 COMMAND_DISC(pack)
 {
-    wind_printf("to package binary files to a image file.\r\n");
+    wind_printf("[*PC*] to package binary files to a image file.\r\n");
 }
 
 COMMAND_USAGE(pack)
 {
-    wind_printf("pack <boardname>:--to pack binary files with configuration defined by boardname.cfg.\r\n");
+    wind_printf("pack cfg <boardname>:--to pack binary files with configuration defined by boardname.cfg.\r\n");
 }
 
 COMMAND_MAIN(pack,argc,argv)

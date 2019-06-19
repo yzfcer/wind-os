@@ -458,6 +458,14 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\test_filepath.c">
       <Filter>module_cutest</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\x86_cmd_tetris.c">
+      <Filter>module_shell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\game\tank\tank.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\game\tetris\tetris.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\x86_cmd_tank.c">
+      <Filter>module_shell</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">

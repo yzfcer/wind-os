@@ -411,16 +411,11 @@ static w_err_t check_file_space(void)
     return W_ERR_OK;
 }
 
-
-w_int32_t pack_main(w_int32_t argc,char **argv)
+static w_int32_t pack_files_to_img(w_int32_t argc,char **argv) 
 {
     w_err_t err;
-    
-    pack_info_s *pkinfo = &pack_info;
-    wind_notice("pack firmware start.\r\n");
-    WIND_ASSERT_RETURN(argc >= 2,W_ERR_INVALID);
     pack_info_init();
-    err = get_cfginfo(argv[1],databuff,sizeof(databuff));
+    err = get_cfginfo(argv[2],databuff,sizeof(databuff));
     WIND_ASSERT_RETURN(err == W_ERR_OK,-1);
     err = parse_file(databuff,&pack_info);
     WIND_ASSERT_RETURN(err == W_ERR_OK,-1);
@@ -431,9 +426,19 @@ w_int32_t pack_main(w_int32_t argc,char **argv)
     WIND_ASSERT_TODO_RETURN(err == W_ERR_OK,release_file_buff(),err);
     err = pack_files(&pack_info);
     WIND_ASSERT_TODO_RETURN(err == W_ERR_OK,release_file_buff(),-1);
-    
     release_file_buff();
-    system("pause");
+}
+
+w_int32_t pack_main(w_int32_t argc,char **argv)
+{
+    
+    pack_info_s *pkinfo = &pack_info;
+    wind_notice("pack firmware start.\r\n");
+    WIND_ASSERT_RETURN(argc >= 3,W_ERR_INVALID);
+    if(wind_strcmp(argv[1],"cfg") == 0)
+        pack_files_to_img(argc,argv);
+    else
+        wind_error("error parameter");
     return 0;
 }
 

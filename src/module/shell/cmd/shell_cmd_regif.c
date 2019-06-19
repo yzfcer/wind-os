@@ -99,6 +99,8 @@ CMD_DECLARE(pack);
 #if CMD_RCP_SUPPORT
 CMD_DECLARE(rcp);
 #endif
+CMD_DECLARE(tetris);
+CMD_DECLARE(tank);
 
 void _wind_register_all_cmd(w_shell_ctx_s *ctx)
 {
@@ -172,6 +174,8 @@ void _wind_register_all_cmd(w_shell_ctx_s *ctx)
 #if CMD_RCP_SUPPORT
     wind_cmd_register(COMMAND(rcp),1);
 #endif
+    wind_cmd_register(COMMAND(tetris),1);
+    wind_cmd_register(COMMAND(tank),1);
 }
 
 #ifdef __cplusplus

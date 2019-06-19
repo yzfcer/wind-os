@@ -127,7 +127,7 @@ static w_err_t mkfs_fat32(w_int32_t argc,char **argv)
 /********************************************全局函数定义**********************************************/
 COMMAND_DISC(mkfs)
 {
-    wind_printf("to display mkfs string that you input.\r\n");
+    wind_printf("[*PC*] to display mkfs string that you input.\r\n");
 }
 
 COMMAND_USAGE(mkfs)
