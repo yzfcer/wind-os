@@ -102,6 +102,7 @@ CMD_DECLARE(rcp);
 CMD_DECLARE(tetris);
 CMD_DECLARE(tank);
 CMD_DECLARE(snake);
+CMD_DECLARE(gobang);
 
 void _wind_register_all_cmd(w_shell_ctx_s *ctx)
 {
@@ -178,6 +179,7 @@ void _wind_register_all_cmd(w_shell_ctx_s *ctx)
     wind_cmd_register(COMMAND(tetris),1);
     wind_cmd_register(COMMAND(tank),1);
     wind_cmd_register(COMMAND(snake),1);
+    wind_cmd_register(COMMAND(gobang),1);
 }
 
 #ifdef __cplusplus
