@@ -182,7 +182,7 @@ int keyboard ()
 			printf("%d ",21-speed);   //副屏幕显示的速度为1~10
 		}
 	}
-	if(my_tank.CD==7)
+	if(my_tank.CD>=1)
 	{
 		if(GetAsyncKeyState( 88 )& 0x8000)
 		{
@@ -1449,12 +1449,13 @@ int tank_main (int argc,char **argv)                               //主函数
                 res = keyboard();
                 if(res != 0)
                     break;
+                fflush(stdin);
             }         
             
     		if(my_tank.alive==0 && interval[11]++%30==0 && my_tank.revive < MAX_LIFE)
      			BuildMyTank( &my_tank );
 		}
-		Sleep(5);
+		Sleep(1);
 	}
     SetConsoleTextAttribute(hConsoleOutput, info.wAttributes);
     system("cls"); // 清屏

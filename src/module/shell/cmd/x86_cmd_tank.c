@@ -54,8 +54,9 @@ COMMAND_USAGE(tank)
 extern int tank_main(int argc,char **argv);
 COMMAND_MAIN(tank,argc,argv)
 {
-    system("cls");
+    char ch;
     tank_main(argc,argv);
+    while(wind_std_input((w_uint8_t *)&ch,1));
     return W_ERR_OK;
 }
 
