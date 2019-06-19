@@ -45,7 +45,7 @@ typedef struct      //子弹结构体
     int my;        //区分AI子弹与玩家子弹的标记,0为AI子弹，1为玩家（我的）子弹
 }Bullet;
 
-Bullet bullet[BULLET_NUM];  //考虑到地图上不太可能同时存在20颗子弹，所以数组元素设置20个
+static Bullet bullet[BULLET_NUM];  //考虑到地图上不太可能同时存在20颗子弹，所以数组元素设置20个
  
 #if 1
  
@@ -62,43 +62,43 @@ typedef struct      //坦克结构体
     int my;        //是否敌方坦克参数，我的坦克此参数为1,为常量
     int alive;     //存活为1，不存活为0
 }Tank;
-Tank AI_tank[4] , my_tank;  //my_tank为我的坦克，Ai_tank 代表AI坦克
+static Tank AI_tank[4] , my_tank;  //my_tank为我的坦克，Ai_tank 代表AI坦克
 //∵所有的函数都有可能对全局变量map进行读写(改变)，
 //∴函数中不另说明是否会对全局变量map读写
 //基本操作与游戏辅助函数
-void GoToxy(int x,int y);    //光标移动
-void HideCursor();           //隐藏光标
-int keyboard ();            //接受键盘输入
-void Initialize();           //初始化(含有对多个数据的读写)
-int Stop();                 //暂停
-void Getmap();               //地图数据存放与获取
-void Frame ();               //打印游戏主体框架
-void PrintMap();             //打印地图(地图既地图障碍物)(含对level的读取)
-void SideScreen ();          //副屏幕打印
-void GameCheak();            //检测游戏输赢
-int GameOver(int home);  //游戏结束
-void ClearMainScreen();      //主屏幕清屏函数∵system("cls")后打印框架有一定几率造成框架上移一行的错误∴单独编写清屏函数
-void ColorChoose(int color); //颜色选择函数
-int NextLevel();            //下一关(含有对level全局变量的读写)
+static void GoToxy(int x,int y);    //光标移动
+static void HideCursor();           //隐藏光标
+static int keyboard ();            //接受键盘输入
+static void Initialize();           //初始化(含有对多个数据的读写)
+static int Stop();                 //暂停
+static void Getmap();               //地图数据存放与获取
+static void Frame ();               //打印游戏主体框架
+static void PrintMap();             //打印地图(地图既地图障碍物)(含对level的读取)
+static void SideScreen ();          //副屏幕打印
+static void GameCheak();            //检测游戏输赢
+static int GameOver(int home);  //游戏结束
+static void ClearMainScreen();      //主屏幕清屏函数∵system("cls")后打印框架有一定几率造成框架上移一行的错误∴单独编写清屏函数
+static void ColorChoose(int color); //颜色选择函数
+static int NextLevel();            //下一关(含有对level全局变量的读写)
  
 //子弹部分
-void BuildAIBullet(Tank *tank);                //AI坦克发射子弹（含有对my_tank的读取,只读取了my_tank坐标）
-void BuildBullet(Tank tank);                 //子弹发射（建立）（人机共用）(含全局变量bullet的修改)我的坦克发射子弹直接调用该函数,AI通过AIshoot间接调用
-void BulletFly(Bullet bullet[BULLET_NUM]); //子弹移动和打击（人机共用）,
-void BulletHit(Bullet* bullet);            //子弹碰撞（人机共用）(含Tank全局变量的修改)，只通过BulletFly调用，子弹间的碰撞不在本函数,子弹间碰撞已在BulletShoot中检测并处理
-void PrintBullet(int x,int y,int T);         //打印子弹（人机共用）
-void ClearBullet(int x,int y,int T);         //清除子弹（人机共用）
-int  BulletCheak(int x,int y);               //判断子弹前方情况（人机共用）
+static void BuildAIBullet(Tank *tank);                //AI坦克发射子弹（含有对my_tank的读取,只读取了my_tank坐标）
+static void BuildBullet(Tank tank);                 //子弹发射（建立）（人机共用）(含全局变量bullet的修改)我的坦克发射子弹直接调用该函数,AI通过AIshoot间接调用
+static void BulletFly(Bullet bullet[BULLET_NUM]); //子弹移动和打击（人机共用）,
+static void BulletHit(Bullet* bullet);            //子弹碰撞（人机共用）(含Tank全局变量的修改)，只通过BulletFly调用，子弹间的碰撞不在本函数,子弹间碰撞已在BulletShoot中检测并处理
+static void PrintBullet(int x,int y,int T);         //打印子弹（人机共用）
+static void ClearBullet(int x,int y,int T);         //清除子弹（人机共用）
+static int  BulletCheak(int x,int y);               //判断子弹前方情况（人机共用）
  
 //坦克部分
-void BuildAITank (int* position, Tank* AI_tank); //建立AI坦克
-void BuildMyTank (Tank* my_tank);                //建立我的坦克
-void MoveAITank  (Tank* AI_tank);                //AI坦克移动
-void MoveMyTank  (int turn);                     //我的坦克移动，只通过keyboard函数调用，既键盘控制
-void ClearTank   (int x,int y);                  //清除坦克（人机共用）
-void PrintTank   (Tank tank);                    //打印坦克（人机共用）
-int TankCheck   (Tank tank,int direction);      //检测坦克dirtection方向的障碍物,返值1阻碍,0 畅通
-int  AIPositionCheak (int position);           //检测AI坦克建立位置是否有障碍物AIPositionCheak
+static void BuildAITank (int* position, Tank* AI_tank); //建立AI坦克
+static void BuildMyTank (Tank* my_tank);                //建立我的坦克
+static void MoveAITank  (Tank* AI_tank);                //AI坦克移动
+static void MoveMyTank  (int turn);                     //我的坦克移动，只通过keyboard函数调用，既键盘控制
+static void ClearTank   (int x,int y);                  //清除坦克（人机共用）
+static void PrintTank   (Tank tank);                    //打印坦克（人机共用）
+static int TankCheck   (Tank tank,int direction);      //检测坦克dirtection方向的障碍物,返值1阻碍,0 畅通
+static int  AIPositionCheak (int position);           //检测AI坦克建立位置是否有障碍物AIPositionCheak
  
 //DWORD WINAPI InputX(LPVOID lpParameter); //声明线程函数，用于检查X键输入并设置X键的输入冷却时间
  
@@ -108,16 +108,16 @@ int  AIPositionCheak (int position);           //检测AI坦克建立位置是否有障碍物A
 //map里的值: 0为可通过陆地，1为红砖，2黄砖，5为水，100~103为敌方坦克，200为我的坦克，
  
 //全局变量
-int map[41][41];  //地图二维数组
-int key_x;        // X键是否被“读入”的变量，也是子弹是否可以发射的变，
-int bul_num;      //子弹编号
-int position;     //位置计数,对应AI坦克生成位置,-1为左位置,0为中间,1为右,2为我的坦克位置
-int speed=5;      //游戏速度,调整用
-int level=1;      //游戏关卡数
-int score=0;      //游戏分数
-int remain_enemy; //剩余敌人(未出现的敌人)
+static int map[41][41];  //地图二维数组
+static int key_x;        // X键是否被“读入”的变量，也是子弹是否可以发射的变，
+static int bul_num;      //子弹编号
+static int position;     //位置计数,对应AI坦克生成位置,-1为左位置,0为中间,1为右,2为我的坦克位置
+static int speed=5;      //游戏速度,调整用
+static int level=1;      //游戏关卡数
+static int score=0;      //游戏分数
+static int remain_enemy; //剩余敌人(未出现的敌人)
  
-char* tank_figure[4][3][4]=
+static char* tank_figure[4][3][4]=
 {
   {
     {"◢┃◣", "◢━◣", "◢┳◣", "◢┳◣"},
@@ -142,7 +142,7 @@ char* tank_figure[4][3][4]=
 };
  
  
-int keyboard ()
+static int keyboard ()
 {               // kbhit()   getch()  用法可用但是不好用            
 /* 
    函数功能:该函数判断在此函数被调用时,某个键是处于UP状态还是处于DOWN状态,及前次调用GetAsyncKeyState函数后,

@@ -101,6 +101,7 @@ CMD_DECLARE(rcp);
 #endif
 CMD_DECLARE(tetris);
 CMD_DECLARE(tank);
+CMD_DECLARE(snake);
 
 void _wind_register_all_cmd(w_shell_ctx_s *ctx)
 {
@@ -176,6 +177,7 @@ void _wind_register_all_cmd(w_shell_ctx_s *ctx)
 #endif
     wind_cmd_register(COMMAND(tetris),1);
     wind_cmd_register(COMMAND(tank),1);
+    wind_cmd_register(COMMAND(snake),1);
 }
 
 #ifdef __cplusplus
