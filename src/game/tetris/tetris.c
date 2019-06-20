@@ -115,7 +115,7 @@ void printTetrisPool(const TetrisManager *manager, const TetrisControl *control)
 void printCurrentTetris(const TetrisManager *manager, const TetrisControl *control); // 显示当前方块
 void printNextTetris(const TetrisManager *manager); // 显示下一个和下下一个方块
 void printScore(const TetrisManager *manager); // 显示得分信息
-void runGame(TetrisManager *manager, TetrisControl *control); // 运行游戏
+int runGame(TetrisManager *manager, TetrisControl *control); // 运行游戏
 void printPrompting(); // 显示提示信息
 bool ifPlayAgain(); // 再来一次
  
@@ -639,8 +639,9 @@ void printPrompting()
  
 // =============================================================================
 // 运行游戏
-void runGame(TetrisManager *manager, TetrisControl *control)
+int runGame(TetrisManager *manager, TetrisControl *control)
 {
+  char ch; 
   clock_t clockLast, clockNow;
  
   clockLast = clock(); // 计时
@@ -650,7 +651,10 @@ void runGame(TetrisManager *manager, TetrisControl *control)
   {
     while (_kbhit()) // 有键按下
     {
-      keydownControl(manager, control, _getch()); // 处理按键
+      ch = _getch();
+      if(ch == 27)
+        return -1;
+      keydownControl(manager, control,ch); // 处理按键
     }
  
     if (!control->pause) // 未暂停
@@ -664,6 +668,7 @@ void runGame(TetrisManager *manager, TetrisControl *control)
       }
     }
   }
+  return 0;
 }
  
 // =============================================================================
@@ -695,6 +700,7 @@ bool ifPlayAgain()
 // 主函数
 int tetris_main(int argc,char **argv)
 {
+  int res;
   CONSOLE_SCREEN_BUFFER_INFO info;
   TetrisManager tetrisManager;
   TetrisControl tetrisControl;
@@ -708,7 +714,9 @@ int tetris_main(int argc,char **argv)
   {
     printPrompting(); // 显示提示信息
     printPoolBorder(); // 显示游戏池边界
-    runGame(&tetrisManager, &tetrisControl); // 运行游戏
+    res = runGame(&tetrisManager, &tetrisControl); // 运行游戏
+    if(res != 0)
+        break;
     if (ifPlayAgain()) // 再来一次
     {
       SetConsoleTextAttribute(g_hConsoleOutput, 0x7);
@@ -723,6 +731,7 @@ int tetris_main(int argc,char **argv)
   gotoxyWithFullwidth(0, 0);
   SetConsoleTextAttribute(g_hConsoleOutput, info.wAttributes);
   system("cls"); // 清屏
+  system("mode con cols=100 lines=50");//设置窗口大小
   g_hConsoleOutput = GetStdHandle(STD_OUTPUT_HANDLE); // 获取控制台输出句柄
   SetConsoleCursorInfo(g_hConsoleOutput, &cursorInfo); // 设置光标隐藏
   return 0;

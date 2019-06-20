@@ -15,12 +15,20 @@ typedef struct SNAKE //蛇身的一个节点
     struct SNAKE *next;
 }snake;
 
-//全局变量//
-static int score = 0, add = 10;//总得分与每次吃食物得分。
-static int status, sleeptime = 500;//每次运行的时间间隔
-static snake *head = NULL, *food = NULL;//蛇头指针，食物指针
-static snake *q = NULL;//遍历蛇的时候用到的指针
-static int endGamestatus = 0; //游戏结束的情况，1：撞到墙；2：咬到自己；3：主动退出游戏。
+typedef struct __snake_ctx_s
+{
+    int score; 
+    int add;//总得分与每次吃食物得分。
+    int status;
+    int movetime;  //运行时间
+    snake *head;//蛇头指针
+    snake *food;//食物指针
+    snake *q;   //遍历蛇的时候用到的指针
+    int end_status; //游戏结束的情况，1：撞到墙；2：咬到自己；3：主动退出游戏。
+}snake_ctx_s;
+
+snake_ctx_s ctx;
+
 
 //声明全部函数//
 static void param_init(void);
@@ -39,15 +47,16 @@ static void gameStart();
 
 static void param_init(void)
 {
-    score = 0;
-    add = 10;//总得分与每次吃食物得分。
-    status = 0;
-    sleeptime = 500;//每次运行的时间间隔
-    head = NULL;//蛇头指针
-    food = NULL;//食物指针
-    q = NULL;//遍历蛇的时候用到的指针
-    endGamestatus = 0; //游戏结束的情况，1：撞到墙；2：咬到自己；3：主动退出游戏。
+    ctx.score = 0;
+    ctx.add = 10;//总得分与每次吃食物得分。
+    ctx.status = 0;
+    ctx.head = NULL;//蛇头指针
+    ctx.food = NULL;//食物指针
+    ctx.movetime = 500;
+    ctx.q = NULL;//遍历蛇的时候用到的指针
+    ctx.end_status = 0; //游戏结束的情况，1：撞到墙；2：咬到自己；3：主动退出游戏。
 }
+
 static void Pos(int x, int y)//设置光标位置
 {
     COORD pos;
@@ -87,11 +96,11 @@ static void initSnake()//初始化蛇身
     tail->next = NULL;
     for (i = 1; i <= 4; i++)//初始长度为4
     {
-        head = (snake*)malloc(sizeof(snake));
-        head->next = tail;
-        head->x = 24 + 2 * i;
-        head->y = 5;
-        tail = head;
+        ctx.head = (snake*)malloc(sizeof(snake));
+        ctx.head->next = tail;
+        ctx.head->x = 24 + 2 * i;
+        ctx.head->y = 5;
+        tail = ctx.head;
     }
     while (tail != NULL)//从头到为，输出蛇身
     {
@@ -104,10 +113,10 @@ static void initSnake()//初始化蛇身
 static int biteSelf()//判断是否咬到了自己
 {
     snake *self;
-    self = head->next;
+    self = ctx.head->next;
     while (self != NULL)
     {
-        if (self->x == head->x && self->y == head->y)
+        if (self->x == ctx.head->x && self->y == ctx.head->y)
         {
             return 1;
         } 
@@ -126,26 +135,26 @@ static void createFood()//随机出现食物
         food_1->x = rand() % 52 + 2;
     }
     food_1->y = rand() % 24 + 1;
-    q = head;
-    while (q->next == NULL)
+    ctx.q = ctx.head;
+    while (ctx.q->next == NULL)
     {
-        if (q->x == food_1->x && q->y == food_1->y) //判断蛇身是否与食物重合
+        if (ctx.q->x == food_1->x && ctx.q->y == food_1->y) //判断蛇身是否与食物重合
         {
             free(food_1);
             createFood();
         }
-        q = q->next;
+        ctx.q = ctx.q->next;
     }
     Pos(food_1->x, food_1->y);
-    food = food_1;
+    ctx.food = food_1;
     printf("■");
 }
 
 static int cantCrossWall()//不能穿墙
 {
-    if (head->x == 0 || head->x == 56 || head->y == 0 || head->y == 26)
+    if (ctx.head->x == 0 || ctx.head->x == 56 || ctx.head->y == 0 || ctx.head->y == 26)
     {
-        endGamestatus = 1;
+        ctx.end_status = 1;
         //return endGame();
         return -1;
     }
@@ -161,149 +170,149 @@ static int snakeMove()//蛇前进,上U,下D,左L,右R
         return res;
 
     nexthead = (snake*)malloc(sizeof(snake));
-    if (status == U)
+    if (ctx.status == U)
     {
-        nexthead->x = head->x;
-        nexthead->y = head->y - 1;
-        if (nexthead->x == food->x && nexthead->y == food->y)//如果下一个有食物//
+        nexthead->x = ctx.head->x;
+        nexthead->y = ctx.head->y - 1;
+        if (nexthead->x == ctx.food->x && nexthead->y == ctx.food->y)//如果下一个有食物//
         {
-            nexthead->next = head;
-            head = nexthead;
-            q = head;
-            while (q != NULL)
+            nexthead->next = ctx.head;
+            ctx.head = nexthead;
+            ctx.q = ctx.head;
+            while (ctx.q != NULL)
             {
-                Pos(q->x, q->y);
+                Pos(ctx.q->x, ctx.q->y);
                 printf("■");
-                q = q->next;
+                ctx.q = ctx.q->next;
             }
-            score = score + add;
+            ctx.score = ctx.score + ctx.add;
             createFood();
         }
         else                                               //如果没有食物//
         {
-            nexthead->next = head;
-            head = nexthead;
-            q = head;
-            while (q->next->next != NULL)
+            nexthead->next = ctx.head;
+            ctx.head = nexthead;
+            ctx.q = ctx.head;
+            while (ctx.q->next->next != NULL)
             {
-                Pos(q->x, q->y);
+                Pos(ctx.q->x, ctx.q->y);
                 printf("■");
-                q = q->next;
+                ctx.q = ctx.q->next;
             }
-            Pos(q->next->x, q->next->y);
+            Pos(ctx.q->next->x, ctx.q->next->y);
             printf("  ");
-            free(q->next);
-            q->next = NULL;
+            free(ctx.q->next);
+            ctx.q->next = NULL;
         }
     }
-    if (status == D)
+    if (ctx.status == D)
     {
-        nexthead->x = head->x;
-        nexthead->y = head->y + 1;
-        if (nexthead->x == food->x && nexthead->y == food->y)  //有食物
+        nexthead->x = ctx.head->x;
+        nexthead->y = ctx.head->y + 1;
+        if (nexthead->x == ctx.food->x && nexthead->y == ctx.food->y)  //有食物
         {
-            nexthead->next = head;
-            head = nexthead;
-            q = head;
-            while (q != NULL)
+            nexthead->next = ctx.head;
+            ctx.head = nexthead;
+            ctx.q = ctx.head;
+            while (ctx.q != NULL)
             {
-                Pos(q->x, q->y);
+                Pos(ctx.q->x, ctx.q->y);
                 printf("■");
-                q = q->next;
+                ctx.q = ctx.q->next;
             }
-            score = score + add;
+            ctx.score = ctx.score + ctx.add;
             createFood();
         }
         else                               //没有食物
         {
-            nexthead->next = head;
-            head = nexthead;
-            q = head;
-            while (q->next->next != NULL)
+            nexthead->next = ctx.head;
+            ctx.head = nexthead;
+            ctx.q = ctx.head;
+            while (ctx.q->next->next != NULL)
             {
-                Pos(q->x, q->y);
+                Pos(ctx.q->x, ctx.q->y);
                 printf("■");
-                q = q->next;
+                ctx.q = ctx.q->next;
             }
-            Pos(q->next->x, q->next->y);
+            Pos(ctx.q->next->x, ctx.q->next->y);
             printf("  ");
-            free(q->next);
-            q->next = NULL;
+            free(ctx.q->next);
+            ctx.q->next = NULL;
         }
     }
-    if (status == L)
+    if (ctx.status == L)
     {
-        nexthead->x = head->x - 2;
-        nexthead->y = head->y;
-        if (nexthead->x == food->x && nexthead->y == food->y)//有食物
+        nexthead->x = ctx.head->x - 2;
+        nexthead->y = ctx.head->y;
+        if (nexthead->x == ctx.food->x && nexthead->y == ctx.food->y)//有食物
         {
-            nexthead->next = head;
-            head = nexthead;
-            q = head;
-            while (q != NULL)
+            nexthead->next = ctx.head;
+            ctx.head = nexthead;
+            ctx.q = ctx.head;
+            while (ctx.q != NULL)
             {
-                Pos(q->x, q->y);
+                Pos(ctx.q->x, ctx.q->y);
                 printf("■");
-                q = q->next;
+                ctx.q = ctx.q->next;
             }
-            score = score + add;
+            ctx.score = ctx.score + ctx.add;
             createFood();
         }
         else                                //没有食物
         {
-            nexthead->next = head;
-            head = nexthead;
-            q = head;
-            while (q->next->next != NULL)
+            nexthead->next = ctx.head;
+            ctx.head = nexthead;
+            ctx.q = ctx.head;
+            while (ctx.q->next->next != NULL)
             {
-                Pos(q->x, q->y);
+                Pos(ctx.q->x, ctx.q->y);
                 printf("■");
-                q = q->next;
+                ctx.q = ctx.q->next;
             }
-            Pos(q->next->x, q->next->y);
+            Pos(ctx.q->next->x, ctx.q->next->y);
             printf("  ");
-            free(q->next);
-            q->next = NULL;
+            free(ctx.q->next);
+            ctx.q->next = NULL;
         }
     }
-    if (status == R)
+    if (ctx.status == R)
     {
-        nexthead->x = head->x + 2;
-        nexthead->y = head->y;
-        if (nexthead->x == food->x && nexthead->y == food->y)//有食物
+        nexthead->x = ctx.head->x + 2;
+        nexthead->y = ctx.head->y;
+        if (nexthead->x == ctx.food->x && nexthead->y == ctx.food->y)//有食物
         {
-            nexthead->next = head;
-            head = nexthead;
-            q = head;
-            while (q != NULL)
+            nexthead->next = ctx.head;
+            ctx.head = nexthead;
+            ctx.q = ctx.head;
+            while (ctx.q != NULL)
             {
-                Pos(q->x, q->y);
+                Pos(ctx.q->x, ctx.q->y);
                 printf("■");
-                q = q->next;
+                ctx.q = ctx.q->next;
             }
-            score = score + add;
+            ctx.score = ctx.score + ctx.add;
             createFood();
         }
         else                                         //没有食物
         {
-            nexthead->next = head;
-            head = nexthead;
-            q = head;
-            while (q->next->next != NULL)
+            nexthead->next = ctx.head;
+            ctx.head = nexthead;
+            ctx.q = ctx.head;
+            while (ctx.q->next->next != NULL)
             {
-                Pos(q->x, q->y);
+                Pos(ctx.q->x, ctx.q->y);
                 printf("■");
-                q = q->next;
+                ctx.q = ctx.q->next;
             }
-            Pos(q->next->x, q->next->y);
+            Pos(ctx.q->next->x, ctx.q->next->y);
             printf("  ");
-            free(q->next);
-            q->next = NULL;
+            free(ctx.q->next);
+            ctx.q->next = NULL;
         }
     }
     if (biteSelf() == 1)       //判断是否会咬到自己
     {
-        endGamestatus = 2;
+        ctx.end_status = 2;
         //endGame();
         return -1;
     }
@@ -323,9 +332,71 @@ static void pause()//暂停
     }
 }
 
+static void readKey(void)
+{
+    if (GetAsyncKeyState( 0x1B )& 0x8000)
+    {
+        ctx.status = 0x1B;
+    }
+    else if (GetAsyncKeyState(VK_UP) && ctx.status != D)
+    {
+        ctx.status = U;
+    }
+    else if (GetAsyncKeyState(VK_DOWN) && ctx.status != U)
+    {
+        ctx.status = D;
+    }
+    else if (GetAsyncKeyState(VK_LEFT) && ctx.status != R)
+    {
+        ctx.status = L;
+    }
+    else if (GetAsyncKeyState(VK_RIGHT) && ctx.status != L)
+    {
+        ctx.status = R;
+    }
+    else if (GetAsyncKeyState(VK_SPACE))
+    {
+        pause();
+    }
+    else if (GetAsyncKeyState(VK_ESCAPE))
+    {
+        ctx.end_status = 3;
+        ctx.status = 0x1B;
+    }
+    else if (GetAsyncKeyState(VK_F1))
+    {
+        if (ctx.movetime >= 50)
+        {
+            ctx.movetime = ctx.movetime - 30;
+            ctx.add = ctx.add + 2;
+            if (ctx.movetime == 320)
+            {
+                ctx.add = 2;//防止减到1之后再加回来有错
+            }
+            Sleep(500);
+        }
+        
+    }
+    else if (GetAsyncKeyState(VK_F2))
+    {
+        if (ctx.movetime<350)
+        {
+            ctx.movetime = ctx.movetime + 30;
+            ctx.add = ctx.add - 2;
+            if (ctx.movetime == 350)
+            {
+                ctx.add = 1;  //保证最低分为1
+            }
+            Sleep(500);
+        }
+    }
+}
+
+
 static int runGame()//控制游戏        
 {
     int res;
+    int time = 0;
     Pos(64, 15);
     printf("不能穿墙，不能咬到自己\n");
     Pos(64, 16);
@@ -336,66 +407,28 @@ static int runGame()//控制游戏
     printf("ESC ：退出游戏.space：暂停游戏.");
     Pos(64, 20);
     printf("C语言研究中心 www.clang.cc");
-    status = R;
+    ctx.status = R;
     while (1)
     {
         Pos(64, 10);
-        printf("得分：%d  ", score);
+        printf("得分：%d  ", ctx.score);
         Pos(64, 11);
-        printf("每个食物得分：%d分", add);
-        if (GetAsyncKeyState(VK_UP) && status != D)
+        printf("每个食物得分：%d分", ctx.add);
+
+        readKey();
+        if(ctx.status == 0x1B)
+            return -1;
+        Sleep(10);
+        time += 10;
+        if(time >= ctx.movetime)
         {
-            status = U;
+            time = 0;
+            res = snakeMove();
+            if(res != 0)
+                return 0;
         }
-        else if (GetAsyncKeyState(VK_DOWN) && status != U)
-        {
-            status = D;
-        }
-        else if (GetAsyncKeyState(VK_LEFT) && status != R)
-        {
-            status = L;
-        }
-        else if (GetAsyncKeyState(VK_RIGHT) && status != L)
-        {
-            status = R;
-        }
-        else if (GetAsyncKeyState(VK_SPACE))
-        {
-            pause();
-        }
-        else if (GetAsyncKeyState(VK_ESCAPE))
-        {
-            endGamestatus = 3;
-            break;
-        }
-        else if (GetAsyncKeyState(VK_F1))
-        {
-            if (sleeptime >= 50)
-            {
-                sleeptime = sleeptime - 30;
-                add = add + 2;
-                if (sleeptime == 320)
-                {
-                    add = 2;//防止减到1之后再加回来有错
-                }
-            }
-        }
-        else if (GetAsyncKeyState(VK_F2))
-        {
-            if (sleeptime<350)
-            {
-                sleeptime = sleeptime + 30;
-                add = add - 2;
-                if (sleeptime == 350)
-                {
-                    add = 1;  //保证最低分为1
-                }
-            }
-        }
-        Sleep(sleeptime);
-        res = snakeMove();
-        if(res != 0)
-            return res;
+            
+        
     }
     return 0;
 }
@@ -422,23 +455,24 @@ static int endGame()//结束游戏
 {
     system("cls");
     Pos(24, 12);
-    if (endGamestatus == 1)
+    if (ctx.end_status == 1)
     {
         printf("对不起，您撞到墙了。游戏结束.");
     }
-    else if (endGamestatus == 2)
+    else if (ctx.end_status == 2)
     {
         printf("对不起，您咬到自己了。游戏结束.");
     }
-    else if (endGamestatus == 3)
+    else if (ctx.end_status == 3)
     {
         printf("您的已经结束了游戏。");
     }
     Pos(24, 13);
-    printf("您的得分是%d\n", score);
-    printf("再来一次?[y]");
-    if (getchar() != 'y')
-        return -1;
+    printf("您的得分是%d\n", ctx.score);
+	system("pause");
+    //printf("再来一次?[y]");
+    //if (getchar() != 'y')
+    //    return -1;
     return 0;
 }
 
@@ -458,10 +492,11 @@ int snake_main(int argc,char **argv)
     {
         param_init();
         gameStart();
-        runGame();
-        res = endGame();
+        res = runGame();
         if(res != 0)
             break;
+        endGame();
     }
+    system("mode con cols=100 lines=50");//设置窗口大小
     return 0;
 }

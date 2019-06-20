@@ -3,6 +3,7 @@
 #include <conio.h>
 #include <string.h>
 #include <malloc.h>
+#include <windows.h>
 
 struct rcd;//声明节点结构
 typedef struct rcd* Record;//节点指针别名
@@ -408,7 +409,7 @@ static void ShowReplay()
 }
 
 
-static void Regret()//悔棋撤销,如果棋盘上没有子即为退出
+static int Regret()//悔棋撤销,如果棋盘上没有子即为退出
 {
     if(DelRecord()){//尝试删除当前节点，如果有节点可以删除则
         p[RecNow->X][RecNow->Y]=0;//撤除当前回合
@@ -423,10 +424,12 @@ static void Regret()//悔棋撤销,如果棋盘上没有子即为退出
             Cy=RecNow->Back->Y;
         }
         Now=3-Now;//反转当前黑白方
+        return 0;
     }
     else
     {
-        Exit();//如果没有棋子可以撤销，则询问退出
+        //Exit();//如果没有棋子可以撤销，则询问退出
+        return -1;
     }
 }
 
@@ -441,7 +444,8 @@ static int RunGame()//进行整个对局，返回赢家信息(虽然有用上)
         input=getch();//等待键盘按下一个字符
         if(input==27)//如果是ESC则悔棋或退出
         {
-            Regret();
+            if(Regret())
+                return 0;
             Print();
             continue;
         }
@@ -529,9 +533,22 @@ static int RunGame()//进行整个对局，返回赢家信息(虽然有用上)
 
 int gobang_main(int argc,char **argv)
 {
+    int res;
+	HANDLE hConsoleOutput;
+    CONSOLE_SCREEN_BUFFER_INFO info;
+    hConsoleOutput = GetStdHandle(STD_OUTPUT_HANDLE); // 获取控制台输出句柄
+    GetConsoleScreenBufferInfo(hConsoleOutput, &info);
+
     system("mode con cols=63 lines=32");//设置窗口大小
-    system("color E0");//设置颜色
+    system("color C0");//设置颜色
     while(1){//循环执行游戏
-        RunGame();
+        res = RunGame();
+        if(res == 0)
+            break;
     }
+    SetConsoleTextAttribute(hConsoleOutput, info.wAttributes);
+    system("cls"); // 清屏
+    system("mode con cols=100 lines=50");//设置窗口大小
+	fflush(stdin);
+    return 0;
 }
