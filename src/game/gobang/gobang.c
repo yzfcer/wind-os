@@ -540,7 +540,7 @@ int gobang_main(int argc,char **argv)
     GetConsoleScreenBufferInfo(hConsoleOutput, &info);
 
     system("mode con cols=63 lines=32");//设置窗口大小
-    system("color C0");//设置颜色
+    system("color E8");//设置颜色
     while(1){//循环执行游戏
         res = RunGame();
         if(res == 0)

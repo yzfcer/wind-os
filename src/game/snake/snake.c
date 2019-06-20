@@ -47,12 +47,12 @@ static void gameStart();
 
 static void param_init(void)
 {
-    ctx.score = 0;
-    ctx.add = 10;//总得分与每次吃食物得分。
+    ctx.score = 0;//总得分
+    ctx.add = 12;//每次吃食物得分。
     ctx.status = 0;
     ctx.head = NULL;//蛇头指针
     ctx.food = NULL;//食物指针
-    ctx.movetime = 500;
+    ctx.movetime = 200;
     ctx.q = NULL;//遍历蛇的时候用到的指针
     ctx.end_status = 0; //游戏结束的情况，1：撞到墙；2：咬到自己；3：主动退出游戏。
 }
@@ -365,28 +365,22 @@ static void readKey(void)
     }
     else if (GetAsyncKeyState(VK_F1))
     {
-        if (ctx.movetime >= 50)
+        if (ctx.movetime > 50)
         {
             ctx.movetime = ctx.movetime - 30;
             ctx.add = ctx.add + 2;
-            if (ctx.movetime == 320)
-            {
-                ctx.add = 2;//防止减到1之后再加回来有错
-            }
             Sleep(500);
         }
         
     }
     else if (GetAsyncKeyState(VK_F2))
     {
-        if (ctx.movetime<350)
+        if (ctx.movetime < 350)
         {
             ctx.movetime = ctx.movetime + 30;
             ctx.add = ctx.add - 2;
-            if (ctx.movetime == 350)
-            {
+            if (ctx.add < 1)
                 ctx.add = 1;  //保证最低分为1
-            }
             Sleep(500);
         }
     }
@@ -444,9 +438,11 @@ static void initGame()//开始界面
     system("pause");
     system("cls");
     Pos(25, 12);
-    printf("用↑.↓.←.→分别控制蛇的移动， F1 为加速，2 为减速\n");
+    printf("用↑.↓.←.→分别控制蛇的移动\n");
     Pos(25, 13);
-    printf("加速将能得到更高的分数。\n");
+    printf("F1 为加速，F2 为减速\n");
+    Pos(25, 14);
+    printf("加速将能得到更高的分数!!!\n");
     system("pause");
     system("cls");
 }
