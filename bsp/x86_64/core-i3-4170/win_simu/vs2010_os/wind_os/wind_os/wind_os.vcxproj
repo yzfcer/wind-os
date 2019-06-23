@@ -83,6 +83,7 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\common\wind_strsearch.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\common\wind_tree.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\game\gobang\gobang.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\game\pushbox\pushbox.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\game\snake\snake.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\game\tank\tank.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\game\tetris\tetris.c" />
@@ -172,6 +173,7 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\shell_cmd_regif.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\x86_cmd_gobang.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\x86_cmd_pack.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\x86_cmd_pushbox.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\x86_cmd_rcp.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\x86_cmd_snake.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\x86_cmd_tank.c" />
