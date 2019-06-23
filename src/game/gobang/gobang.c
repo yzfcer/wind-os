@@ -442,14 +442,17 @@ static int RunGame()//进行整个对局，返回赢家信息(虽然有用上)
         Putable=p[Cx][Cy]==0;
         Print();//打印棋盘
         input=getch();//等待键盘按下一个字符
-        if(input==27)//如果是ESC则悔棋或退出
+        if(input==0x1B) //如果是ESC则退出
+            return 0;
+        if(input==' ')//如果是空格则悔棋
         {
-            if(Regret())
-                return 0;
+            //if(Regret())
+            //    return 0;
+            Regret();
             Print();
             continue;
         }
-        else if(input==0x20)//如果是空格则开始走子
+        else if(input=='\r')//如果是回车则开始走子
         {
             if(Put())//如果走子成功则判断胜负
             {
