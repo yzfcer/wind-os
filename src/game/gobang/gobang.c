@@ -446,8 +446,6 @@ static int RunGame()//进行整个对局，返回赢家信息(虽然有用上)
             return 0;
         if(input==' ')//如果是空格则悔棋
         {
-            //if(Regret())
-            //    return 0;
             Regret();
             Print();
             continue;
