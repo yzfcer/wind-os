@@ -81,6 +81,8 @@
 #define WIND_USER_SUPPORT 1 //是否支持用户账号功能
 #define WIND_USER_MAX_NUM 5 //用户账号的数量
 
+#define WIND_MODULE_SUPPORT 1 // 是否支持独立模块功能
+
 #define WIND_DBGPOINT_SUPPORT 1//是否支持调试点文件系统
 
 #define WIND_TICK_PER_SEC 500 //一秒钟所经历的的时间节拍

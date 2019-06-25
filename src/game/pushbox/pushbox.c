@@ -489,7 +489,7 @@ int push_box()
  //整个游戏的输赢
 int check_result() 
 {
-	 int i,j,k;
+	 int i,j,k = 0;
 	for(i=0;i<9;i++)
 	{
 		for (j=0;j<11;j++)

@@ -1,0 +1,85 @@
+/****************************************Copyright (c)**************************************************
+**                                       清  风  海  岸
+**
+**                                       yzfcer@163.com
+**
+**--------------文件信息--------------------------------------------------------------------------------
+**文   件   名: wind_module.h
+**创   建   人: Jason Zhou
+**最后修改日期: 
+**描        述: wind-os模块框架
+**              
+**--------------历史版本信息----------------------------------------------------------------------------
+** 创建人: 
+** 版  本: v1.0
+** 日　期: 
+** 描　述: 原始版本
+**
+**--------------当前版本修订----------------------------------------------------------------------------
+** 修改人: 
+** 日　期: 
+** 描　述: 
+**
+**------------------------------------------------------------------------------------------------------
+*******************************************************************************************************/
+#ifndef WIND_MODULE_H__
+#define WIND_MODULE_H__
+
+#include "wind_config.h"
+#include "wind_type.h"
+#include "wind_module.h"
+#include "wind_dlist.h"
+#include "wind_mutex.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#if WIND_MODULE_SUPPORT
+
+#define WIND_MODULE_MAGIC 0x6A47326A
+
+#define F_MODULE_OPEN (0x01 << 0) //标记module对象是否已经打开
+#define IS_F_MODULE_OPEN(module) ((module->obj.flag & F_MODULE_OPEN) == F_MODULE_OPEN)
+#define SET_F_MODULE_OPEN(module) (module->obj.flag |= F_MODULE_OPEN)
+#define CLR_F_MODULE_OPEN(module) (module->obj.flag &= (~F_MODULE_OPEN))
+
+
+
+
+
+typedef struct __w_module_s w_module_s;
+typedef struct __w_module_ops_s w_module_ops_s;
+struct __w_module_s
+{
+    w_obj_s obj;
+    w_int32_t version;
+    w_err_t (*init)(void);
+    w_err_t (*exit)(void);
+};
+
+#define MODULE_INIT(module) w_err_t module##_init(void)
+#define MODULE_EXIT(module) w_err_t module##_exit(void)
+
+
+#define WIND_module_DEF(module,version) \
+    {{(~WIND_MODULE_MAGIC),#module,{W_NULL,W_NULL},0,0},devtype,devid,W_NULL,ops}
+
+
+w_err_t _wind_module_mod_init(void);
+w_err_t _register_modules(void);
+
+w_err_t wind_module_register(w_module_s *module);
+w_err_t wind_module_unregister(w_module_s *module);
+
+w_module_s *wind_module_get(const char *name);
+
+w_err_t wind_module_print(void);
+
+#endif
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif //WIND_DEV_H__

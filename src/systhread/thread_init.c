@@ -33,6 +33,7 @@
 #include "wind_dbgpoint.h"
 #include "wind_daemon.h"
 #include "wind_user.h"
+#include "wind_module.h"
 #include "wind_chdev.h"
 #include "wind_blkdev.h"
 #include "wind_time.h"
@@ -130,6 +131,9 @@ static w_err_t thread_init(w_int32_t argc,char **argv)
 #endif
 #if WIND_DB_SUPPORT
     _wind_db_mod_init();
+#endif
+#if WIND_MODULE_SUPPORT
+    _wind_module_mod_init();
 #endif
     _create_thread_idle();
     set_idle_cnt();
