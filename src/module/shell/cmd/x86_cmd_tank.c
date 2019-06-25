@@ -19,6 +19,7 @@
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
 #include "wind_cmd.h"
+#include "wind_module.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
@@ -61,6 +62,21 @@ COMMAND_MAIN(tank,argc,argv)
 }
 
 COMMAND_DEF(tank);
+
+
+MODULE_INIT(tank)
+{
+    return wind_cmd_register(COMMAND(tank), 1);
+}
+
+MODULE_EXIT(tank)
+{
+    return wind_cmd_unregister(COMMAND(tank));
+}
+
+MODULE_DEF(tank, 0x0100);
+
+
 
 #endif
 #ifdef __cplusplus

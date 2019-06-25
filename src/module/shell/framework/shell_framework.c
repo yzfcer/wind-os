@@ -335,12 +335,25 @@ w_err_t wind_cmd_register(w_cmd_s *cmd,int cnt)
         if(old != W_NULL)
             continue;
         wind_disable_switch();
-        //dlist_insert_tail(cgl,&cmd[i].cmdnode);
         insert_cmd(cgl,&cmd[i]);
         wind_enable_switch();
     }
     return W_ERR_OK;
 }
+
+w_err_t wind_cmd_unregister(w_cmd_s *cmd)
+{
+    int i;
+    w_cmd_s *dest;
+    w_dnode_s *dnode;
+    w_dlist_s *cgl = &g_cmdlist;
+    WIND_ASSERT_RETURN(cmd != W_NULL,W_ERR_PTR_NULL);
+    dest = wind_cmd_get(cmd->name);
+    WIND_ASSERT_RETURN(dest != W_NULL, W_ERR_FAIL);
+    dlist_remove(cgl, &dest->cmdnode);
+    return W_ERR_OK;
+}
+
 
 w_err_t wind_cmd_print(void)
 {
