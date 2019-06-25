@@ -182,7 +182,7 @@ static int keyboard ()
 			printf("%d ",21-speed);   //副屏幕显示的速度为1~10
 		}
 	}
-	if(my_tank.CD>=4)
+	if(my_tank.CD>=2)
 	{
 		if(GetAsyncKeyState( 88 )& 0x8000)
 		{
@@ -590,15 +590,16 @@ void BuildMyTank (Tank* my_tank) //建立我的坦克
 void MoveMyTank(int turn )   //玩家专用函数，turn为keyboard函数里因输入不同方向键而传入的不同的值
 {
 	ClearTank(my_tank.x , my_tank.y);        //map 数组中“我的坦克”参数清除工作已在此函数中完成
-	my_tank.direction=turn;                  //将键盘输入的方向值传入我的坦克方向值
-	if(TankCheck ( my_tank , my_tank.direction ))  //若此时我的坦克当前方向上无障碍
+	if(my_tank.direction!=turn)
+    	my_tank.direction=turn;                  //将键盘输入的方向值传入我的坦克方向值
+	else if(TankCheck ( my_tank , my_tank.direction ))  //若此时我的坦克当前方向上无障碍
 		switch (turn)
 		{
 			case UP   : my_tank.y--; break;  //上前进一格
 			case DOWN : my_tank.y++; break;  //下前进一格
 			case LEFT : my_tank.x--; break;  //左前进一格
 			case RIGHT: my_tank.x++; break;  //右前进一格
-	}                                        //若坦克当前方向上有障碍则跳过坐标变化直接打印该转向的坦克
+	    }                                        //若坦克当前方向上有障碍则跳过坐标变化直接打印该转向的坦克
 	PrintTank (my_tank);
 }
  
@@ -1435,6 +1436,7 @@ int tank_main (int argc,char **argv)                               //主函数
 				if(AI_tank[i].model!=2 && interval[i+5]++%3==0) //四个坦克中的慢速坦克单独使用计数器5,6,7,8
 					MoveAITank( & AI_tank[i]);
 			}
+            
 			for(i=0;i<=3;i++)                                   //建立AI坦克部分
 	  		   	if(AI_tank[i].alive==0 && AI_tank[i].revive<4 && interval[9]++%90==0)  //一个敌方坦克每局只有4条命
 				{                                               //如果坦克不存活。计时,每次建立有间隔  1750 ms
