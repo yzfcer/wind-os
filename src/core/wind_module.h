@@ -62,8 +62,10 @@ struct __w_module_s
 #define MODULE_EXIT(module) w_err_t module##_exit(void)
 
 
-#define WIND_module_DEF(module,version) \
-    {{(~WIND_MODULE_MAGIC),#module,{W_NULL,W_NULL},0,0},devtype,devid,W_NULL,ops}
+#define MODULE_DEF(module,version) \
+    w_module_s mod_##module = {{(~WIND_MODULE_MAGIC),#module,{W_NULL,W_NULL},0,0},devtype,devid,W_NULL,ops}
+#define MODULE_DECLARE(module) extern w_module_s mod_##module;
+#define MODULE(module) &mod_##module
 
 
 w_err_t _wind_module_mod_init(void);
