@@ -1,24 +1,24 @@
 /****************************************Copyright (c)**************************************************
-**                                       清  风  海  岸
+**                                       �? �? �? �?
 **
 **                                       yzfcer@163.com
 **
 **--------------文件信息--------------------------------------------------------------------------------
-**文   件   名: shell_cmd_regif.c
-**创   建   人: 周江村
-**最后修改日期: 
-**描        述: shell命令的注册接口
+**�?  �?  �? shell_cmd_regif.c
+**�?  �?  �? 周江�?
+**最后修改日�? 
+**�?       �? shell命令的注册接�?
 **              
 **--------------历史版本信息----------------------------------------------------------------------------
-** 创建人: 周江村
-** 版  本: v1.0
-** 日　期: 2013.08.10
-** 描　述: 原始版本
+** 创建�? 周江�?
+** �? �? v1.0
+** 日　�? 2013.08.10
+** 描　�? 原始版本
 **
 **--------------当前版本修订----------------------------------------------------------------------------
-** 修改人: 
-** 日　期: 
-** 描　述: 
+** 修改�? 
+** 日　�? 
+** 描　�? 
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
@@ -30,80 +30,80 @@ extern "C" {
 #endif // #ifdef __cplusplus
 
 #if CMD_SYSINFO_SUPPORT
-CMD_DECLARE(sysinfo);
+COMMAND_DECLARE(sysinfo);
 #endif
 #if CMD_LIST_SUPPORT
-CMD_DECLARE(list);
+COMMAND_DECLARE(list);
 #endif
 #if CMD_STATI_SUPPORT
-CMD_DECLARE(stati);
+COMMAND_DECLARE(stati);
 #endif
 #if CMD_RESET_SUPPORT
-CMD_DECLARE(reset);
+COMMAND_DECLARE(reset);
 #endif
 #if CMD_ECHO_SUPPORT
-CMD_DECLARE(echo);
+COMMAND_DECLARE(echo);
 #endif
 #if CMD_MEM_SUPPORT
-CMD_DECLARE(mem);
+COMMAND_DECLARE(mem);
 #endif
 #if CMD_THREAD_SUPPORT
-CMD_DECLARE(thread);
+COMMAND_DECLARE(thread);
 #endif
 #if CMD_DATETIME_SUPPORT
-CMD_DECLARE(datetime);
+COMMAND_DECLARE(datetime);
 #endif
 #if CMD_CUTEST_SUPPORT
-CMD_DECLARE(cutest);
+COMMAND_DECLARE(cutest);
 #endif
 #if CMD_BLKDEV_SUPPORT
-CMD_DECLARE(blkdev);
+COMMAND_DECLARE(blkdev);
 #endif
 #if CMD_LUA_SUPPORT
-CMD_DECLARE(lua);
+COMMAND_DECLARE(lua);
 #endif
 #if CMD_FS_SUPPORT
-CMD_DECLARE(fs);
+COMMAND_DECLARE(fs);
 #endif
 #if CMD_XMODEM_SUPPORT
-CMD_DECLARE(xm);
+COMMAND_DECLARE(xm);
 #endif
 #if CMD_DBGPOINT_SUPPORT
-CMD_DECLARE(dbgp);
+COMMAND_DECLARE(dbgp);
 #endif
 #if CMD_USER_SUPPORT
-CMD_DECLARE(user);
+COMMAND_DECLARE(user);
 #endif
 
 #if CMD_BEEP_SUPPORT
-CMD_DECLARE(beep);
+COMMAND_DECLARE(beep);
 #endif
 #if CMD_LED_SUPPORT
-CMD_DECLARE(led);
+COMMAND_DECLARE(led);
 #endif
 #if CMD_WATCHDOG_SUPPORT
-CMD_DECLARE(wdog);
+COMMAND_DECLARE(wdog);
 #endif
 #if CMD_DIAGNOSE_SUPPORT
-CMD_DECLARE(diagnose);
+COMMAND_DECLARE(diagnose);
 #endif
 #if CMD_DAEMON_SUPPORT
-CMD_DECLARE(daemon);
+COMMAND_DECLARE(daemon);
 #endif
 #if CMD_TIMER_SUPPORT
-CMD_DECLARE(timer);
+COMMAND_DECLARE(timer);
 #endif
 #if CMD_PACK_SUPPORT
-CMD_DECLARE(pack);
+COMMAND_DECLARE(pack);
 #endif
 #if CMD_RCP_SUPPORT
-CMD_DECLARE(rcp);
+COMMAND_DECLARE(rcp);
 #endif
-CMD_DECLARE(tetris);
-CMD_DECLARE(tank);
-CMD_DECLARE(snake);
-CMD_DECLARE(gobang);
-CMD_DECLARE(pushbox);
+COMMAND_DECLARE(tetris);
+COMMAND_DECLARE(tank);
+COMMAND_DECLARE(snake);
+COMMAND_DECLARE(gobang);
+COMMAND_DECLARE(pushbox);
 
 void _wind_register_all_cmd(w_shell_ctx_s *ctx)
 {
