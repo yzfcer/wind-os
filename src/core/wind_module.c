@@ -82,7 +82,7 @@ w_err_t wind_module_unregister(w_module_s *module)
 w_err_t _wind_module_mod_init(void)
 {
     DLIST_INIT(modulelist);
-    _register_modules();
+    _wind_register_modules();
     return W_ERR_OK;
 }
 

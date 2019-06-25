@@ -4,7 +4,7 @@
 **                                       yzfcer@163.com
 **
 **--------------文件信息--------------------------------------------------------------------------------
-**文   件   名: wind_dev.c
+**文   件   名: wind_chdev.c
 **创   建   人: Jason Zhou
 **最后修改日期: 
 **描        述: 字符设备标准化API接口
@@ -85,7 +85,7 @@ w_err_t wind_chdev_unregister(w_chdev_s *chdev)
 w_err_t _wind_chdev_mod_init(void)
 {
     DLIST_INIT(blkdevlist);
-    _register_chdevs();
+    _wind_register_chdevs();
     return W_ERR_OK;
 }
 

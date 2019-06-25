@@ -69,7 +69,7 @@ struct __w_module_s
 
 
 w_err_t _wind_module_mod_init(void);
-w_err_t _register_modules(void);
+w_err_t _wind_register_modules(void);
 
 w_err_t wind_module_register(w_module_s *module);
 w_err_t wind_module_unregister(w_module_s *module);

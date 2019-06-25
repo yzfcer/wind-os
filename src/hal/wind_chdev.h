@@ -90,7 +90,7 @@ struct __w_chdev_ops_s
 
 
 w_err_t _wind_chdev_mod_init(void);
-w_err_t _register_chdevs(void);
+w_err_t _wind_register_chdevs(void);
 
 w_err_t wind_chdev_register(w_chdev_s *chdev,w_int32_t count);
 w_err_t wind_chdev_unregister(w_chdev_s *chdev);
