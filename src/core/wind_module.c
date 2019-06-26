@@ -112,8 +112,6 @@ w_err_t wind_module_unregister(w_module_s *module)
     WIND_ASSERT_RETURN(err == W_ERR_OK,err);
     if(module->exit)
         module->exit();
-    //wind_mutex_destroy(module->mutex);
-    //module->mutex = W_NULL;
     return W_ERR_OK;
 }
 

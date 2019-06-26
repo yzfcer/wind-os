@@ -494,6 +494,9 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\game\tetris\tetris_module.c">
       <Filter>module_game</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\framework\shell_module.c">
+      <Filter>module_shell</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">

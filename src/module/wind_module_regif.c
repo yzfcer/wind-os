@@ -29,10 +29,21 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
-
+MODULE_DECLARE(shell);
+MODULE_DECLARE(tank);
+MODULE_DECLARE(tetris);
+MODULE_DECLARE(gobang);
+MODULE_DECLARE(pushbox);
+MODULE_DECLARE(snake);
 
 w_err_t _wind_register_modules(void)
 {
+	wind_module_register(MODULE(shell));
+	wind_module_register(MODULE(tank));
+	wind_module_register(MODULE(tetris));
+	wind_module_register(MODULE(gobang));
+	wind_module_register(MODULE(pushbox));
+	wind_module_register(MODULE(snake));
     return W_ERR_OK;
 }
 

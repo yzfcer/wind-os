@@ -264,7 +264,7 @@ static void shell_stat_init(w_shell_ctx_s *ctx)
     wind_strcpy(ctx->user,"anonymous");
     wind_memset(ctx->passwd,0,WIND_CTL_PWD_LEN);
     cmd_history_init(&ctx->his);
-    wind_cmd_init(ctx);
+    //wind_cmd_init(ctx);
 }
 
 
@@ -275,10 +275,11 @@ static void shell_stat_init(w_shell_ctx_s *ctx)
 
 /********************************************全局函数定义**********************************************/
 
-void wind_cmd_init(w_shell_ctx_s *ctx)
+w_err_t  wind_cmd_init(void)
 {
     DLIST_INIT(g_cmdlist);
-    _wind_register_all_cmd(ctx);
+    _wind_register_all_cmd();
+    return W_ERR_OK;
 }
 
 w_cmd_s *wind_cmd_get(const char *name)
