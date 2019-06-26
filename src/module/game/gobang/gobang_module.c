@@ -1,9 +1,9 @@
 /****************************************Copyright (c)**************************************************
 **                                       清  风  海  岸
-** 文   件   名: cmd_tank.c
+** 文   件   名: gobang_module.c
 ** 创   建   人: Jason Zhou
 ** 最后修改日期: 2015/1/24 20:24:37
-** 描        述: 坦克大战游戏
+** 描        述: 五子棋游戏
 **  
 **--------------历史版本信息----------------------------------------------------------------------------
 ** 创建人: Jason Zhou
@@ -43,39 +43,38 @@ extern "C" {
 
 
 /********************************************全局函数定义**********************************************/
-COMMAND_DISC(tank)
+COMMAND_DISC(gobang)
 {
-    wind_printf("to play tanks war game.\r\n");
+    wind_printf("to play gobang war game.\r\n");
 }
 
-COMMAND_USAGE(tank)
+COMMAND_USAGE(gobang)
 {
-    wind_printf("tank:--to start tanks war game.\r\n");
+    wind_printf("gobang:--to start gobang game.\r\n");
 }
-extern int tank_main(int argc,char **argv);
-COMMAND_MAIN(tank,argc,argv)
+extern int gobang_main(int argc,char **argv);
+COMMAND_MAIN(gobang,argc,argv)
 {
     char ch;
-    tank_main(argc,argv);
+    gobang_main(argc,argv);
     while(wind_std_input((w_uint8_t *)&ch,1));
     return W_ERR_OK;
 }
+COMMAND_DEF(gobang);
 
-COMMAND_DEF(tank);
 
 
-MODULE_INIT(tank)
+MODULE_INIT(gobang)
 {
-    return wind_cmd_register(COMMAND(tank), 1);
+    return wind_cmd_register(COMMAND(gobang), 1);
 }
 
-MODULE_EXIT(tank)
+MODULE_EXIT(gobang)
 {
-    return wind_cmd_unregister(COMMAND(tank));
+    return wind_cmd_unregister(COMMAND(gobang));
 }
 
-MODULE_DEF(tank, 0x0100);
-
+MODULE_DEF(gobang, 0x0100);
 
 
 #endif

@@ -1,6 +1,6 @@
 /****************************************Copyright (c)**************************************************
 **                                       清  风  海  岸
-** 文   件   名: cmd_pushbox.c
+** 文   件   名: pushbox_module.c
 ** 创   建   人: Jason Zhou
 ** 最后修改日期: 2015/1/24 20:24:37
 ** 描        述: 推箱子游戏
@@ -19,6 +19,7 @@
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
 #include "wind_cmd.h"
+#include "wind_module.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
@@ -58,8 +59,20 @@ COMMAND_MAIN(pushbox,argc,argv)
     pushbox_main(argc,argv);
     return W_ERR_OK;
 }
-
 COMMAND_DEF(pushbox);
+
+
+MODULE_INIT(pushbox)
+{
+    return wind_cmd_register(COMMAND(pushbox), 1);
+}
+
+MODULE_EXIT(pushbox)
+{
+    return wind_cmd_unregister(COMMAND(pushbox));
+}
+
+MODULE_DEF(pushbox, 0x0100);
 
 #endif
 #ifdef __cplusplus

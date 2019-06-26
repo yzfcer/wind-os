@@ -1,9 +1,9 @@
 /****************************************Copyright (c)**************************************************
 **                                       清  风  海  岸
-** 文   件   名: cmd_tetris.c
+** 文   件   名: tank_module.c
 ** 创   建   人: Jason Zhou
 ** 最后修改日期: 2015/1/24 20:24:37
-** 描        述: 俄罗斯方块游戏
+** 描        述: 坦克大战游戏
 **  
 **--------------历史版本信息----------------------------------------------------------------------------
 ** 创建人: Jason Zhou
@@ -19,6 +19,7 @@
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
 #include "wind_cmd.h"
+#include "wind_module.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
@@ -42,24 +43,40 @@ extern "C" {
 
 
 /********************************************全局函数定义**********************************************/
-COMMAND_DISC(tetris)
+COMMAND_DISC(tank)
 {
-    wind_printf("to play tetris game.\r\n");
+    wind_printf("to play tanks war game.\r\n");
 }
 
-COMMAND_USAGE(tetris)
+COMMAND_USAGE(tank)
 {
-    wind_printf("tetris:--to start tetris game.\r\n");
+    wind_printf("tank:--to start tanks war game.\r\n");
 }
-extern int tetris_main(int argc,char **argv);
-COMMAND_MAIN(tetris,argc,argv)
+extern int tank_main(int argc,char **argv);
+COMMAND_MAIN(tank,argc,argv)
 {
-    system("cls");
-    tetris_main(argc,argv);
+    char ch;
+    tank_main(argc,argv);
+    while(wind_std_input((w_uint8_t *)&ch,1));
     return W_ERR_OK;
 }
 
-COMMAND_DEF(tetris);
+COMMAND_DEF(tank);
+
+
+MODULE_INIT(tank)
+{
+    return wind_cmd_register(COMMAND(tank), 1);
+}
+
+MODULE_EXIT(tank)
+{
+    return wind_cmd_unregister(COMMAND(tank));
+}
+
+MODULE_DEF(tank, 0x0100);
+
+
 
 #endif
 #ifdef __cplusplus

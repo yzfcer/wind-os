@@ -458,41 +458,41 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\test_filepath.c">
       <Filter>module_cutest</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\x86_cmd_tetris.c">
-      <Filter>module_shell</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\x86_cmd_tank.c">
-      <Filter>module_shell</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\x86_cmd_snake.c">
-      <Filter>module_shell</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\x86_cmd_gobang.c">
-      <Filter>module_shell</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\src\game\tetris\tetris.c">
-      <Filter>game</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\src\game\tank\tank.c">
-      <Filter>game</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\src\game\snake\snake.c">
-      <Filter>game</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\src\game\gobang\gobang.c">
-      <Filter>game</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\src\game\pushbox\pushbox.c">
-      <Filter>game</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\x86_cmd_pushbox.c">
-      <Filter>module_shell</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_module.c">
       <Filter>os_core</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\..\src\module\wind_module_regif.c">
       <Filter>os_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\game\gobang\gobang.c">
+      <Filter>module_game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\game\gobang\gobang_module.c">
+      <Filter>module_game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\game\pushbox\pushbox.c">
+      <Filter>module_game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\game\pushbox\pushbox_module.c">
+      <Filter>module_game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\game\snake\snake.c">
+      <Filter>module_game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\game\snake\snake_module.c">
+      <Filter>module_game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\game\tank\tank.c">
+      <Filter>module_game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\game\tank\tank_module.c">
+      <Filter>module_game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\game\tetris\tetris.c">
+      <Filter>module_game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\game\tetris\tetris_module.c">
+      <Filter>module_game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -541,7 +541,7 @@
     <Filter Include="tool_pack">
       <UniqueIdentifier>{1c022046-ee88-4360-a89f-e2fcc86e9b22}</UniqueIdentifier>
     </Filter>
-    <Filter Include="game">
+    <Filter Include="module_game">
       <UniqueIdentifier>{e69be643-f424-45d0-99c5-6390248d091a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>

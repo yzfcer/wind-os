@@ -1,9 +1,9 @@
 /****************************************Copyright (c)**************************************************
 **                                       清  风  海  岸
-** 文   件   名: cmd_snake.c
+** 文   件   名: tetris_module.c
 ** 创   建   人: Jason Zhou
 ** 最后修改日期: 2015/1/24 20:24:37
-** 描        述: 贪吃蛇游戏
+** 描        述: 俄罗斯方块游戏
 **  
 **--------------历史版本信息----------------------------------------------------------------------------
 ** 创建人: Jason Zhou
@@ -19,6 +19,7 @@
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
 #include "wind_cmd.h"
+#include "wind_module.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
@@ -42,25 +43,37 @@ extern "C" {
 
 
 /********************************************全局函数定义**********************************************/
-COMMAND_DISC(snake)
+COMMAND_DISC(tetris)
 {
-    wind_printf("to play snakes war game.\r\n");
+    wind_printf("to play tetris game.\r\n");
 }
 
-COMMAND_USAGE(snake)
+COMMAND_USAGE(tetris)
 {
-    wind_printf("snake:--to start snakes war game.\r\n");
+    wind_printf("tetris:--to start tetris game.\r\n");
 }
-extern int snake_main(int argc,char **argv);
-COMMAND_MAIN(snake,argc,argv)
+extern int tetris_main(int argc,char **argv);
+COMMAND_MAIN(tetris,argc,argv)
 {
-    char ch;
-    snake_main(argc,argv);
-    while(wind_std_input((w_uint8_t *)&ch,1));
+    system("cls");
+    tetris_main(argc,argv);
     return W_ERR_OK;
 }
+COMMAND_DEF(tetris);
 
-COMMAND_DEF(snake);
+
+MODULE_INIT(tetris)
+{
+    return wind_cmd_register(COMMAND(tetris), 1);
+}
+
+MODULE_EXIT(tetris)
+{
+    return wind_cmd_unregister(COMMAND(tetris));
+}
+
+MODULE_DEF(tetris, 0x0100);
+
 
 #endif
 #ifdef __cplusplus
