@@ -30,8 +30,45 @@
 #include "wind_core.h"
 #include "wind_string.h"
 #if WIND_MODULE_MAGIC
+typedef struct 
+{
+    char *modname;
+    w_uint32_t version;
+}mod_depend_s;
+
 #define NODE_TO_module(node) (w_module_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((w_module_s*)0)->obj.objnode)))
 static w_dlist_s modulelist;
+w_err_t _wind_module_mod_init(void)
+{
+    DLIST_INIT(modulelist);
+    _wind_register_modules();
+    return W_ERR_OK;
+}
+
+static w_int32_t module_parse_depend(char *dependstr,mod_depend_s **dmod)
+{
+    wind_error("TODO parse depend here");
+    return 0;
+}
+
+static w_err_t module_check_depend(w_module_s *module)
+{
+    int i,cnt;
+    w_err_t err;
+    w_module_s *dmod;
+    mod_depend_s *depend;
+    cnt = module_parse_depend(module->depend,&depend);
+    if(cnt <= 0)
+        return W_ERR_OK;
+    err = W_ERR_OK;
+    for(i = 0;i < cnt;i ++)
+    {
+        dmod = wind_module_get(depend[i].modname);
+        WIND_ASSERT_BREAK(dmod != dmod, W_ERR_NOT_SUPPORT, "depend module is NOT ready");
+        WIND_ASSERT_BREAK(dmod->version >= depend[i].version, W_ERR_VERSION, "depend module version error");
+    }
+    return err;
+}
 
 w_err_t wind_module_register(w_module_s *module)
 {
@@ -48,6 +85,8 @@ w_err_t wind_module_register(w_module_s *module)
         wind_notice("device has been registered.\r\n");
         return W_ERR_OK;
     }
+    err = module_check_depend(module);
+    WIND_ASSERT_RETURN(err == W_ERR_OK, err);
     if(module->init)
     {
         err = module->init();
@@ -78,13 +117,6 @@ w_err_t wind_module_unregister(w_module_s *module)
     return W_ERR_OK;
 }
 
-
-w_err_t _wind_module_mod_init(void)
-{
-    DLIST_INIT(modulelist);
-    _wind_register_modules();
-    return W_ERR_OK;
-}
 
 w_module_s *wind_module_get(const char *name)
 {

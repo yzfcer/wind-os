@@ -59,10 +59,10 @@ COMMAND_USAGE(dbgp)
 
 COMMAND_MAIN(dbgp,argc,argv)
 {
-    w_uint8_t *buff;
     w_int32_t len;
     w_dbgpoint_s *dbgp;
-    WIND_ASSERT_RETURN(argc >= 2,W_ERR_INVALID);
+    w_uint8_t *buff = W_NULL;
+   WIND_ASSERT_RETURN(argc >= 2,W_ERR_INVALID);
     if(wind_strcmp(argv[1],"list") == 0)
     {
         wind_dbgpoint_print();

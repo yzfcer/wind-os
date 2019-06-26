@@ -9,7 +9,7 @@
 #define LEFT  3
 #define RIGHT 4
 #define MAX_LEVEL 8
-#define BULLET_NUM 20
+#define BULLET_NUM 40
 #define MAX_LIFE 4
  
 //程序中未写入函数参数表中且未说明的变量只有map二维数组,level_info数组和level   

@@ -54,6 +54,7 @@ struct __w_module_s
 {
     w_obj_s obj;
     w_int32_t version;
+    char *depend;
     w_err_t (*init)(void);
     w_err_t (*exit)(void);
 };
@@ -63,7 +64,7 @@ struct __w_module_s
 
 
 #define MODULE_DEF(module,version) \
-    w_module_s mod_##module = {{(~WIND_MODULE_MAGIC),#module,{W_NULL,W_NULL},0,0},version,module##_init,module##_exit}
+    w_module_s mod_##module = {{(~WIND_MODULE_MAGIC),#module,{W_NULL,W_NULL},0,0},version,W_NULL,module##_init,module##_exit}
 #define MODULE_DECLARE(module) extern w_module_s mod_##module;
 #define MODULE(module) &mod_##module
 
