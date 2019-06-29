@@ -473,9 +473,6 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\game\tetris\tetris.c">
       <Filter>module_game</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\framework\shell_module.c">
-      <Filter>module_shell</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\..\src\tools\pack\module_pack.c">
       <Filter>tool_pack</Filter>
     </ClCompile>
@@ -493,6 +490,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\..\src\module\game\tetris\module_tetris.c">
       <Filter>module_game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\framework\module_shell.c">
+      <Filter>module_shell</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

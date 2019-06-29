@@ -58,26 +58,6 @@ void _create_thread_daemon(void);
 
 void _create_thread_idle(void);
 
-#if WIND_SHELL_SUPPORT
-static w_stack_t ctrlstk[THREAD_SHELL_STKSIZE];//Ö÷ÈÎÎñ¶ÑÕ»
-extern w_err_t thread_shell(w_int32_t argc,char **argv);
-
-w_err_t _create_thread_shell(void)
-{
-    w_thread_s *thread;
-    thread = wind_thread_create("shell",thread_shell,
-               0,W_NULL,ctrlstk,THREAD_SHELL_STKSIZE);
-    WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_FAIL);
-    wind_thread_setflag(thread, F_THREAD_DAEMON | F_THREAD_SYSTEM);
-    wind_thread_set_priority(thread,32760);
-#if WIND_DAEMON_SUPPORT
-    if(wind_daemon_get("shell") == W_NULL)
-        wind_daemon_create("shell",_create_thread_shell);
-#endif
-    return W_ERR_OK;
-}
-
-#endif
 
 #if WIND_TIMER_SUPPORT
 w_err_t _create_thread_timer(void);
@@ -150,9 +130,7 @@ static w_err_t thread_init(w_int32_t argc,char **argv)
 #if WIND_DAEMON_SUPPORT
     _create_thread_daemon();
 #endif
-#if WIND_SHELL_SUPPORT
-    _create_thread_shell();
-#endif
+
     wind_main();
     return W_ERR_OK;
 }

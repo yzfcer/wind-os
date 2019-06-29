@@ -178,8 +178,8 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_xmodem.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\shell_cmd_regif.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\framework\cmd_history.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\framework\module_shell.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\framework\shell_framework.c" />
-    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\framework\shell_module.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\adapter_treefs.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\listfs\listfs.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\listfs\listfs_bitmap.c" />
