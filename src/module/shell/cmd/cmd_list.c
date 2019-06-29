@@ -38,6 +38,7 @@
 #include "wind_watchdog.h"
 #include "wind_timer.h"
 #include "wind_fs.h"
+#include "wind_module.h"
 
 #if (CMD_LIST_SUPPORT)
 
@@ -88,6 +89,9 @@ COMMAND_USAGE(list)
 #endif
 #if WIND_FS_SUPPORT
     wind_printf("list vfs:--show vfs mount infomation.\r\n");
+#endif
+#if WIND_MODULE_SUPPORT
+    wind_printf("list module:--show wind-os modules infomation.\r\n");
 #endif
 }
 
@@ -192,6 +196,13 @@ COMMAND_MAIN(list,argc,argv)
         wind_vfs_print();
         return W_ERR_OK;
     }
+#endif
+#if WIND_MODULE_SUPPORT
+        else if(0 == wind_strcmp(argv[1],"module"))
+        {
+            wind_module_print();
+            return W_ERR_OK;
+        }
 #endif
 
     else

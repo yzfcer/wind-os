@@ -119,8 +119,6 @@ extern "C" {
 #define WIND_USER_SUPPORT 1 //是否支持用户账号功能
 #define WIND_USER_MAX_NUM 5 //用户账号的数量
 
-#define WIND_MODULE_SUPPORT 1 // 是否支持独立模块功能
-
 #define WIND_DBGPOINT_SUPPORT 1//是否支持调试点文件系统
 
 #define WIND_TICK_PER_SEC 100 //一秒钟所经历的的时间节拍
@@ -149,6 +147,9 @@ extern "C" {
 #define HARD_STACK_SIZE 40 //为硬件堆栈保留的空间大小，在某些硬件里可以不需要
 
 
+//-------------------------------------------------------------------------------
+//线程栈空间大小定制
+//-------------------------------------------------------------------------------
 #define THREAD_DAEMON_STKSIZE 0x1000
 #define THREAD_IDLE_STKSIZE 0x1000
 #define THREAD_INIT_STKSIZE 0x1000
@@ -158,6 +159,19 @@ extern "C" {
 #define THREAD_COROUT_STKSIZE 0x1000
 #define THREAD_SOFTINT_STKSIZE 0x1000 
 
+
+//-------------------------------------------------------------------------------
+//独立模块定制，前提是内核支持模块功能
+//-------------------------------------------------------------------------------
+#define WIND_MODULE_SUPPORT 1 // 是否支持独立模块功能
+#if WIND_MODULE_SUPPORT
+#define WIND_MODULE_RCP_SUPPORT 0
+#define WIND_MODULE_MKFS_SUPPORT 0
+#define WIND_MODULE_PACK_SUPPORT 0
+#define WIND_MODULE_GAME_SUPPORT 1
+
+
+#endif
 
 
 //-------------------------------------------------------------------------------
