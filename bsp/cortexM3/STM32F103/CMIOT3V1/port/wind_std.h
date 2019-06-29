@@ -38,7 +38,7 @@ void      _wind_std_init(void);
 w_int32_t wind_std_input(w_uint8_t *str,w_int32_t len);
 w_int32_t wind_std_output(w_uint8_t *str,w_int32_t len);
 #else
-#define wind_std_init()
+#define _wind_std_init()
 #endif
 
 #ifdef __cplusplus

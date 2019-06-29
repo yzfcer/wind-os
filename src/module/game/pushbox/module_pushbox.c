@@ -18,6 +18,7 @@
 ** 本文件由C语言源文件模板软件生成。------------清风海岸出品，必属精品！------------
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
+#include "wind_std.h"
 #include "wind_cmd.h"
 #include "wind_module.h"
 #ifdef __cplusplus
@@ -57,6 +58,7 @@ COMMAND_MAIN(pushbox,argc,argv)
 {
     system("cls");
     pushbox_main(argc,argv);
+    _wind_std_init();
     return W_ERR_OK;
 }
 COMMAND_DEF(pushbox);

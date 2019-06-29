@@ -29,8 +29,10 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
-#if WIND_MODULE_GAME_SUPPORT
+#if WIND_MODULE_SHELL_SUPPORT
 MODULE_DECLARE(shell);
+#endif
+#if WIND_MODULE_GAME_SUPPORT
 MODULE_DECLARE(tank);
 MODULE_DECLARE(tetris);
 MODULE_DECLARE(gobang);
@@ -49,8 +51,10 @@ MODULE_DECLARE(MODULE(mkfs));
 
 w_err_t _wind_register_modules(void)
 {
+#if WIND_MODULE_SHELL_SUPPORT
+    wind_module_register(MODULE(shell));
+#endif
 #if WIND_MODULE_GAME_SUPPORT
-	wind_module_register(MODULE(shell));
 	wind_module_register(MODULE(tank));
 	wind_module_register(MODULE(tetris));
 	wind_module_register(MODULE(gobang));

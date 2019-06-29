@@ -18,6 +18,7 @@
 ** 本文件由C语言源文件模板软件生成。------------清风海岸出品，必属精品！------------
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
+#include "wind_std.h"
 #include "wind_cmd.h"
 #include "wind_module.h"
 #ifdef __cplusplus
@@ -55,9 +56,8 @@ COMMAND_USAGE(snake)
 extern int snake_main(int argc,char **argv);
 COMMAND_MAIN(snake,argc,argv)
 {
-    char ch;
     snake_main(argc,argv);
-    while(wind_std_input((w_uint8_t *)&ch,1));
+    _wind_std_init();
     return W_ERR_OK;
 }
 COMMAND_DEF(snake);
