@@ -31,6 +31,12 @@
 
 void _wind_std_init(void)
 {
+	w_uint8_t buff;
+	system("title wind-os");
+	system("cls");//清理屏幕，准备写入
+	system("mode con cols=100 lines=50");//设置窗口大小
+	system("color 00");//设置颜色
+	while(wind_std_input(buff,1));
 }
 
 w_int32_t wind_std_output(w_uint8_t *buf,w_int32_t len)

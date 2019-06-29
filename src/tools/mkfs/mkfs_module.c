@@ -1,9 +1,9 @@
 /****************************************Copyright (c)**************************************************
 **                                       清  风  海  岸
-** 文   件   名: cmd_mkfs.c
+** 文   件   名: mkfs_module.c
 ** 创   建   人: Jason Zhou
 ** 最后修改日期: 2018/11/09 20:24:37
-** 描        述: 创建文件系统命令
+** 描        述: 创建文件系统命令模块
 **  
 **--------------历史版本信息----------------------------------------------------------------------------
 ** 创建人: Jason Zhou
@@ -159,6 +159,20 @@ COMMAND_MAIN(mkfs,argc,argv)
 }
 
 COMMAND_DEF(mkfs);
+//---------------------------------------------------------------------
+
+MODULE_INIT(mkfs)
+{
+    return wind_cmd_register(COMMAND(mkfs),1);
+}
+
+MODULE_EXIT(mkfs)
+{
+    return wind_cmd_unregister(COMMAND(mkfs));
+}
+
+MODULE_DEF(mkfs, 0x0100);
+
 
 #endif
 #ifdef __cplusplus

@@ -116,7 +116,7 @@ static char* Copy(char* strDest,const char* strSrc)//ĞŞ¸Ä¹ıµÄ×Ö·û´®¸´ÖÆº¯Êı£¬»áº
 static void Initialize()//³õÊ¼»¯Ò»¸ö¶Ô¾Öº¯Êı
 {
     int i,j;//Ñ­»·±äÁ¿
-    system("title ¶Ô¾ÖÖĞ(°´·½Ïò¼ü¿ØÖÆ¹â±ê£¬¿Õ¸ñ×ß×Ó)£¬Esc³·Ïú");
+    system("title ¶Ô¾ÖÖĞ(°´·½Ïò¼ü¿ØÖÆ¹â±ê£¬»Ø³µ×ß×Ó£¬¿Õ¸ñ³·Ïú)£¬EscÍË³ö");
     showText="";//ÖØÖÃÏÔÊ¾ĞÅÏ¢
     count=0;//»ØºÏÊı¹éÁã
     RecNow=RecBeg=newRecord();
