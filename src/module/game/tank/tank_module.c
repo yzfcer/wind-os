@@ -45,7 +45,7 @@ extern "C" {
 /********************************************全局函数定义**********************************************/
 COMMAND_DISC(tank)
 {
-    wind_printf("to play tanks war game.\r\n");
+    wind_printf("[WIN32] to play tanks war game.\r\n");
 }
 
 COMMAND_USAGE(tank)

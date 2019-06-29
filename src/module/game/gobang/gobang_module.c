@@ -45,7 +45,7 @@ extern "C" {
 /********************************************全局函数定义**********************************************/
 COMMAND_DISC(gobang)
 {
-    wind_printf("to play gobang war game.\r\n");
+    wind_printf("[WIN32] to play gobang war game.\r\n");
 }
 
 COMMAND_USAGE(gobang)

@@ -45,7 +45,7 @@ extern "C" {
 /********************************************全局函数定义**********************************************/
 COMMAND_DISC(snake)
 {
-    wind_printf("to play snakes war game.\r\n");
+    wind_printf("[WIN32] to play snakes war game.\r\n");
 }
 
 COMMAND_USAGE(snake)

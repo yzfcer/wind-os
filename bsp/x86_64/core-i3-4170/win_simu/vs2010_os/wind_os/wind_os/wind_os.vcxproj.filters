@@ -449,12 +449,6 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\tools\pack\wind_pack.c">
       <Filter>tool_pack</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\x86_cmd_pack.c">
-      <Filter>module_shell</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\x86_cmd_rcp.c">
-      <Filter>module_shell</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\test_filepath.c">
       <Filter>module_cutest</Filter>
     </ClCompile>

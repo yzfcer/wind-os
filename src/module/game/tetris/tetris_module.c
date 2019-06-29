@@ -45,7 +45,7 @@ extern "C" {
 /********************************************全局函数定义**********************************************/
 COMMAND_DISC(tetris)
 {
-    wind_printf("to play tetris game.\r\n");
+    wind_printf("[WIN32] to play tetris game.\r\n");
 }
 
 COMMAND_USAGE(tetris)

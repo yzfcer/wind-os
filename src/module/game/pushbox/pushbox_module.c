@@ -45,7 +45,7 @@ extern "C" {
 /********************************************全局函数定义**********************************************/
 COMMAND_DISC(pushbox)
 {
-    wind_printf("to play pushbox game.\r\n");
+    wind_printf("[WIN32] to play pushbox game.\r\n");
 }
 
 COMMAND_USAGE(pushbox)

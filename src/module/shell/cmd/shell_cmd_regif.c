@@ -93,13 +93,6 @@ COMMAND_DECLARE(daemon);
 #if CMD_TIMER_SUPPORT
 COMMAND_DECLARE(timer);
 #endif
-#if CMD_PACK_SUPPORT
-COMMAND_DECLARE(pack);
-#endif
-#if CMD_RCP_SUPPORT
-COMMAND_DECLARE(rcp);
-#endif
-
 
 void _wind_register_all_cmd(void)
 {
@@ -166,12 +159,6 @@ void _wind_register_all_cmd(void)
 #endif
 #if CMD_TIMER_SUPPORT
     wind_cmd_register(COMMAND(timer),1);
-#endif
-#if CMD_PACK_SUPPORT
-    wind_cmd_register(COMMAND(pack),1);
-#endif
-#if CMD_RCP_SUPPORT
-    wind_cmd_register(COMMAND(rcp),1);
 #endif
 
 }
