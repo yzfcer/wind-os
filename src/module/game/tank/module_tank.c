@@ -74,7 +74,7 @@ MODULE_EXIT(tank)
     return wind_cmd_unregister(COMMAND(tank));
 }
 
-MODULE_DEF(tank, 0x0100);
+MODULE_DEF(tank, 0x0100,"shell");
 
 
 

@@ -73,7 +73,7 @@ MODULE_EXIT(snake)
     return wind_cmd_unregister(COMMAND(snake));
 }
 
-MODULE_DEF(snake, 0x0100);
+MODULE_DEF(snake, 0x0100,"shell");
 
 #endif
 #ifdef __cplusplus

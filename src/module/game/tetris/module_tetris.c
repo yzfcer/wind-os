@@ -74,7 +74,7 @@ MODULE_EXIT(tetris)
     return wind_cmd_unregister(COMMAND(tetris));
 }
 
-MODULE_DEF(tetris, 0x0100);
+MODULE_DEF(tetris, 0x0100,"shell");
 
 
 #endif

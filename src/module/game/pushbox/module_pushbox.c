@@ -74,7 +74,7 @@ MODULE_EXIT(pushbox)
     return wind_cmd_unregister(COMMAND(pushbox));
 }
 
-MODULE_DEF(pushbox, 0x0100);
+MODULE_DEF(pushbox, 0x0100,"shell");
 
 #endif
 #ifdef __cplusplus

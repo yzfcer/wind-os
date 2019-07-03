@@ -75,7 +75,7 @@ MODULE_EXIT(gobang)
     return wind_cmd_unregister(COMMAND(gobang));
 }
 
-MODULE_DEF(gobang, 0x0100);
+MODULE_DEF(gobang, 0x0100,"shell");
 
 
 #endif

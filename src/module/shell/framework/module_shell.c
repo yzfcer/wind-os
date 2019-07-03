@@ -74,7 +74,7 @@ MODULE_EXIT(shell)
     return W_ERR_OK;
 }
 
-MODULE_DEF(shell, 0x0100);
+MODULE_DEF(shell, 0x0100,"");
 
 #endif
 #ifdef __cplusplus

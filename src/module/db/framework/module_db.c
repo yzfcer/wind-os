@@ -54,7 +54,7 @@ MODULE_EXIT(db)
     return W_ERR_OK;
 }
 
-MODULE_DEF(db, 0x0100);
+MODULE_DEF(db, 0x0100,"");
 
 #endif
 #ifdef __cplusplus

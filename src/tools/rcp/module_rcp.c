@@ -74,7 +74,7 @@ MODULE_EXIT(rcp)
     return wind_cmd_unregister(COMMAND(rcp));
 }
 
-MODULE_DEF(rcp, 0x0100);
+MODULE_DEF(rcp, 0x0100,"shell");
 #endif
 #ifdef __cplusplus
 }

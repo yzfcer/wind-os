@@ -171,7 +171,7 @@ MODULE_EXIT(mkfs)
     return wind_cmd_unregister(COMMAND(mkfs));
 }
 
-MODULE_DEF(mkfs, 0x0100);
+MODULE_DEF(mkfs, 0x0100,"shell");
 
 
 #endif
