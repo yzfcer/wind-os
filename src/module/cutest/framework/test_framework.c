@@ -95,18 +95,14 @@ static void stati_info_init(w_stati_info_s *sti)
     
 }
 
-void test_framework_init(void)
+void test_suite_list_init(void)
 {
-    w_stati_info_s *sti;
     w_suite_list_s *tsl = &suite_list;
-
     tsl->head = W_NULL;
     tsl->tail = W_NULL;
     tsl->cnt = 0;
-    
-    sti = &stati_info;
-    stati_info_init(sti);
 }
+
 
 err_t test_suite_register(w_test_suite_s *test_suite)
 {
@@ -399,7 +395,6 @@ void show_test_suites(void)
     test_printf("\r\nTest Suites List As Following:\r\n");
     if(suite_list.head == W_NULL)
     {
-        test_framework_init();
         test_suite_register_all();
     }
     ts = suite_list.head;
@@ -473,7 +468,6 @@ void execute_all_suites(char* suitefilter,char *casefilter)
 w_err_t cutest_main(w_int32_t argc,char **argv)
 {
     WIND_ASSERT_RETURN(argc >= 2,W_ERR_FAIL);
-    test_framework_init();
     test_suite_register_all();
     if(0 == stringcmp(argv[1],"list"))
     {

@@ -68,9 +68,11 @@ DECLARE_SUITE(filepath);
 #endif
 
 
-
+extern void test_suite_list_init(void);
 void test_suite_register_all(void)
 {
+    test_suite_list_init();
+
 #if TEST_POOL_SUPPORT
     REGSTER_SUITE(pool);
 #endif
