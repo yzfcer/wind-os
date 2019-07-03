@@ -109,9 +109,7 @@ static w_err_t thread_init(w_int32_t argc,char **argv)
 #if WIND_USER_SUPPORT
     _wind_user_mod_init();
 #endif
-#if WIND_DB_SUPPORT
-    _wind_db_mod_init();
-#endif
+
 #if WIND_MODULE_SUPPORT
     _wind_module_mod_init();
 #endif

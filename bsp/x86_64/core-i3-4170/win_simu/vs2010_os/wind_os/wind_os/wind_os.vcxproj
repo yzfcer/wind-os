@@ -106,6 +106,7 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\db\dbbase\db_demo1.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\db\framework\db_entry.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\db\framework\db_if.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\db\framework\module_db.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\db\framework\tb_entry.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\db\framework\tb_model.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\db\framework\tb_print.c" />

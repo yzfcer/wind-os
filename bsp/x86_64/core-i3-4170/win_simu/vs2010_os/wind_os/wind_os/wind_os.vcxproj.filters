@@ -494,6 +494,9 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\framework\module_shell.c">
       <Filter>module_shell</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\db\framework\module_db.c">
+      <Filter>module_db</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">
