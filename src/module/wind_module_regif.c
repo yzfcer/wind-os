@@ -35,6 +35,9 @@ MODULE_DECLARE(shell);
 #if WIND_MODULE_DB_SUPPORT
 MODULE_DECLARE(db);
 #endif
+#if WIND_MODULE_CUTEST_SUPPORT
+MODULE_DECLARE(cutest);
+#endif
 #if WIND_MODULE_GAME_SUPPORT
 MODULE_DECLARE(tank);
 MODULE_DECLARE(tetris);
@@ -59,6 +62,9 @@ w_err_t _wind_register_modules(void)
 #endif
 #if WIND_MODULE_DB_SUPPORT
 wind_module_register(MODULE(db));
+#endif
+#if WIND_MODULE_CUTEST_SUPPORT
+wind_module_register(MODULE(cutest));
 #endif
 #if WIND_MODULE_GAME_SUPPORT
 	wind_module_register(MODULE(tank));

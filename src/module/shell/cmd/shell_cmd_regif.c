@@ -53,9 +53,7 @@ COMMAND_DECLARE(thread);
 #if CMD_DATETIME_SUPPORT
 COMMAND_DECLARE(datetime);
 #endif
-#if CMD_CUTEST_SUPPORT
-COMMAND_DECLARE(cutest);
-#endif
+
 #if CMD_BLKDEV_SUPPORT
 COMMAND_DECLARE(blkdev);
 #endif
@@ -117,9 +115,7 @@ void _wind_register_all_cmd(void)
 #if CMD_THREAD_SUPPORT
     wind_cmd_register(COMMAND(thread),1);
 #endif
-#if CMD_CUTEST_SUPPORT
-    wind_cmd_register(COMMAND(cutest),1);
-#endif
+
 #if CMD_DATETIME_SUPPORT
     wind_cmd_register(COMMAND(datetime),1);
 #endif

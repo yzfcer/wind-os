@@ -494,9 +494,6 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\db\framework\module_db.c">
       <Filter>module_db</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\framework\cmd_cutest.c">
-      <Filter>module_cutest</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\framework\module_cutest.c">
       <Filter>module_cutest</Filter>
     </ClCompile>

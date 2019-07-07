@@ -43,17 +43,37 @@ extern "C" {
 
 
 /********************************************全局函数定义**********************************************/
+COMMAND_DISC(cutest)
+{
+    wind_printf("to test some test cases.\r\n");
+}
+
+COMMAND_USAGE(cutest)
+{
+    wind_printf("cutest list:--to show all test suites and cases list.\r\n");
+    wind_printf("cutest <suitename> <casename>:--to test some appointed test cases.\r\n");
+    wind_printf("       suitename:--use *to test all test suite.\r\n");
+    wind_printf("       casename:--use *to test all test suite.\r\n");
+}
+
+COMMAND_MAIN(cutest,argc,argv)
+{
+    return cutest_main(argc,argv);
+}
+
+COMMAND_DEF(cutest);
+
+
 
 
 MODULE_INIT(cutest)
 {
-    
-    return W_ERR_OK;
+    return wind_cmd_register(COMMAND(cutest),1);
 }
 
 MODULE_EXIT(cutest)
 {
-    return W_ERR_OK;
+    return wind_cmd_unregister(COMMAND(cutest));
 }
 
 MODULE_DEF(cutest, 0x0100,"");
