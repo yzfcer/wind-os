@@ -152,9 +152,6 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_blkdev.c">
       <Filter>module_shell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_cutest.c">
-      <Filter>module_shell</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_daemon.c">
       <Filter>module_shell</Filter>
     </ClCompile>
@@ -496,6 +493,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\..\src\module\db\framework\module_db.c">
       <Filter>module_db</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\framework\cmd_cutest.c">
+      <Filter>module_cutest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\framework\module_cutest.c">
+      <Filter>module_cutest</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

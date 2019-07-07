@@ -86,6 +86,8 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cjson\cJSON.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cjson\cJSON_Utils.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cjson\json_checker.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\framework\cmd_cutest.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\framework\module_cutest.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\framework\test_framework.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\cutest_register.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\test_event.c" />
@@ -157,7 +159,6 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lzio.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_beep.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_blkdev.c" />
-    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_cutest.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_daemon.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_datetime.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_dbgpoint.c" />
