@@ -172,6 +172,7 @@ extern "C" {
 #define WIND_MODULE_GAME_SUPPORT 1
 #define WIND_MODULE_SHELL_SUPPORT 1
 #define WIND_MODULE_CUTEST_SUPPORT 1
+#define WIND_MODULE_VFS_SUPPORT 1
 
 
 #endif
@@ -238,8 +239,7 @@ extern "C" {
 //-------------------------------------------------------------------------------
 //文件系统功能定制，前提是系统支持虚拟文件系统vfs框架
 //-------------------------------------------------------------------------------
-#define WIND_FS_SUPPORT 1 //是否支持vfs文件系统框架
-#if WIND_CUTEST_SUPPORT
+#if WIND_MODULE_VFS_SUPPORT
 #define WIND_FS_MAX_NUM 5 //允许支持的文件系统的数量
 #define WIND_FILE_MAX_NUM 5 //允许同时打开的文件的数量
 

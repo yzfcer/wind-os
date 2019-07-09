@@ -27,7 +27,7 @@
 #include "wind_config.h"
 #include "wind_type.h"
 #include "wind_file.h"
-#if WIND_FS_SUPPORT
+#if WIND_MODULE_VFS_SUPPORT
 
 
 #endif

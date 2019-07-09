@@ -27,7 +27,7 @@
 #include "wind_config.h"
 #include "wind_type.h"
 
-#if WIND_FS_SUPPORT
+#if WIND_MODULE_VFS_SUPPORT
 
 #define wind_log_debug(fmt,...) do{wind_log_printf("%s"fmt"\r\n","[debug] ",##__VA_ARGS__);}while(0)
 

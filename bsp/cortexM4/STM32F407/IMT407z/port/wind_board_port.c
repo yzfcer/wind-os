@@ -83,7 +83,7 @@ void _wind_heaps_create(void)
 }
 #endif
 
-#if WIND_FS_SUPPORT
+#if WIND_MODULE_VFS_SUPPORT
 /*
  * 在系统需要支持文件系统功能时，需要在这里初始化mount的规则，
  * 在不需要文件系统时，可以不实现

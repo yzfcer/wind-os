@@ -40,9 +40,6 @@
 #include "wind_debug.h"
 #include "wind_dbgpoint.h"
 #include "wind_board_port.h"
-#include "db_if.h"
-#include "wind_fs.h"
-
 
 void wind_enter_thread_hook(void);
 #if WIND_STATI_THREAD_SUPPORT
@@ -96,7 +93,7 @@ static w_err_t thread_init(w_int32_t argc,char **argv)
 #if WIND_WATCHDOG_SUPPORT
     _wind_watchdog_mod_init();
 #endif
-#if WIND_FS_SUPPORT
+#if WIND_MODULE_VFS_SUPPORT
     _wind_vfs_mod_init();
 #endif  
 #if WIND_DBGPOINT_SUPPORT

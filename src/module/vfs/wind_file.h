@@ -31,7 +31,7 @@
 #include "wind_filepath.h"
 #include "fs_def.h"
 
-#if WIND_FS_SUPPORT
+#if WIND_MODULE_VFS_SUPPORT
 
 
 w_err_t _wind_file_mod_init(void);

@@ -62,7 +62,7 @@ void wind_system_reset(void)
     NVIC_SystemReset();
 }
 
-#if WIND_FS_SUPPORT
+#if WIND_MODULE_VFS_SUPPORT
 
 
 /*

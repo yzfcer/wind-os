@@ -25,5 +25,5 @@ w_treefs_s *wind_treefs_create(char *name);
 
 w_err_t wind_treefs_destroy(w_treefs_s *treefs);
 
-#endif //#if WIND_FS_SUPPORT
+#endif //#if WIND_MODULE_VFS_SUPPORT
 #endif //#ifndef TREEFS_H__

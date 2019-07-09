@@ -34,7 +34,7 @@
 #include "wind_dlist.h"
 #include "wind_board_port.h"
 
-#if WIND_FS_SUPPORT
+#if WIND_MODULE_VFS_SUPPORT
 #define NODE_TO_FILE(dnode) (w_file_s*)(((w_uint8_t*)(dnode))-((w_uint32_t)&(((w_file_s*)0)->filenode)))
 static w_dlist_s filelist;
 WIND_POOL(filepool,WIND_FILE_MAX_NUM,sizeof(w_file_s));

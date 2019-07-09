@@ -50,5 +50,5 @@ struct __treefs_s
 
 
 
-#endif //#if WIND_FS_SUPPORT
+#endif //#if WIND_MODULE_VFS_SUPPORT
 #endif //#ifndef TREEFS_DEF_H__

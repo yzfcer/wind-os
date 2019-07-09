@@ -28,7 +28,7 @@
 #include "wind_heap.h"
 #include "wind_debug.h"
 #include "wind_string.h"
-#if WIND_FS_SUPPORT
+#if WIND_MODULE_VFS_SUPPORT
 
 static w_int32_t bm_get_free_byteidx(w_uint8_t *blk,w_int32_t offset,w_int32_t blksize)
 {

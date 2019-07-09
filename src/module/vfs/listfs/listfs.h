@@ -33,7 +33,7 @@
 #include "listfs_blkinfo.h"
 #include "listfs_bitmap.h"
 
-#if WIND_FS_SUPPORT
+#if WIND_MODULE_VFS_SUPPORT
 //文件操作模式
 #define LFMODE_R   0x01
 #define LFMODE_W   0x02

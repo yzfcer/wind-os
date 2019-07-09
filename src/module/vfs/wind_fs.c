@@ -36,7 +36,7 @@
 #include "wind_board_port.h"
 #include "treefs.h"
 
-#if WIND_FS_SUPPORT
+#if WIND_MODULE_VFS_SUPPORT
 #define NODE_TO_FS(dnode) (w_vfs_s*)(((w_uint8_t*)(dnode))-((w_uint32_t)&(((w_vfs_s*)0)->obj.objnode)))
 
 static w_dlist_s fs_list;

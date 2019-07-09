@@ -120,5 +120,5 @@ w_err_t wind_treefs_destroy(w_treefs_s *treefs)
 }
 
 
-#endif //#ifdef WIND_FS_SUPPORT
+#endif //#ifdef WIND_MODULE_VFS_SUPPORT
 

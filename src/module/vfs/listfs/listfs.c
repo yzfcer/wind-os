@@ -29,7 +29,7 @@
 #include "wind_string.h"
 #include "wind_crc32.h"
 #include "listfs_bitmap.h"
-#if WIND_FS_SUPPORT
+#if WIND_MODULE_VFS_SUPPORT
 
 
 #define NODE_TO_LISTFILE(node) (listfile_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((listfile_s*)0)->list.listnode)))

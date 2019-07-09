@@ -26,7 +26,7 @@
 #define WIND_FILEPATH_H__
 #include "wind_config.h"
 #include "wind_type.h"
-#if WIND_FS_SUPPORT
+#if WIND_MODULE_VFS_SUPPORT
 char *wind_filepath_generate(char *pre_path,char *relative_path,w_uint16_t isdir);
 char *  wind_filepath_copy(char *path);
 w_err_t wind_filepath_release(char *path);

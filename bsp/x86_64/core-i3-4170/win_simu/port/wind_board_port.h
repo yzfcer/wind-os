@@ -38,7 +38,7 @@ void wind_system_reset(void);
 void _wind_heaps_create(void);
 #endif
 
-#if WIND_FS_SUPPORT
+#if WIND_MODULE_VFS_SUPPORT
 void _wind_fs_mount_init(void);
 #endif
 
