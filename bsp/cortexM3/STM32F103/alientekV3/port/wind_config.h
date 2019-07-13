@@ -124,14 +124,15 @@
 //-------------------------------------------------------------------------------
 #define WIND_MODULE_SUPPORT 1 // 是否支持独立模块功能
 #if WIND_MODULE_SUPPORT
-#define WIND_MODULE_RCP_SUPPORT 0
-#define WIND_MODULE_DB_SUPPORT 0
-#define WIND_MODULE_MKFS_SUPPORT 0
-#define WIND_MODULE_PACK_SUPPORT 0
-#define WIND_MODULE_GAME_SUPPORT 0
+#define WIND_MODULE_RCP_SUPPORT 0 //是否支持从宿主机拷贝wind-os
+#define WIND_MODULE_DB_SUPPORT 0 //是否支持DB功能
+#define WIND_MODULE_MKFS_SUPPORT 0 //是否支持创建文件系统镜像
+#define WIND_MODULE_PACK_SUPPORT 0 //是否对固件打包
+#define WIND_MODULE_GAME_SUPPORT 0 //是否支持游戏
 #define WIND_MODULE_SHELL_SUPPORT 1 //是否支持控制台模块
 #define WIND_MODULE_CUTEST_SUPPORT 1 //是否支持单元测试框架
-#define WIND_MODULE_VFS_SUPPORT 1
+#define WIND_MODULE_VFS_SUPPORT 1 //是否支持虚拟文件系统框架
+
 
 
 #endif
