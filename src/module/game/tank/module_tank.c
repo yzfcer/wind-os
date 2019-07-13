@@ -66,7 +66,7 @@ COMMAND_DEF(tank);
 
 MODULE_INIT(tank)
 {
-    return wind_cmd_register(COMMAND(tank), 1);
+    return wind_cmd_register(COMMAND(tank));
 }
 
 MODULE_EXIT(tank)

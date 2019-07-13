@@ -67,7 +67,7 @@ COMMAND_DEF(gobang);
 
 MODULE_INIT(gobang)
 {
-    return wind_cmd_register(COMMAND(gobang), 1);
+    return wind_cmd_register(COMMAND(gobang));
 }
 
 MODULE_EXIT(gobang)

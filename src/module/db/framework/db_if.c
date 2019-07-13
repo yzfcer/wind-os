@@ -40,6 +40,12 @@ w_err_t _wind_db_mod_init(void)
     return W_ERR_OK;
 }
 
+w_err_t _wind_db_mod_deinit(void)
+{
+    wind_tbmodels_unregister();
+    return W_ERR_OK;
+}
+
 w_err_t wind_db_create(char *dbname,w_uint16_t attr)
 {
     return db_entry_create(dbname,attr);

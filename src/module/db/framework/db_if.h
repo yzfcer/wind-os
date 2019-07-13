@@ -29,6 +29,7 @@ void *db_malloc(w_int32_t size);
 w_err_t db_free(void* ptr);
 
 w_err_t _wind_db_mod_init(void);
+w_err_t _wind_db_mod_deinit(void);
 
 //Êý¾Ý¿âº¯Êý
 w_err_t wind_db_create(char *dbname,w_uint16_t attr);

@@ -95,66 +95,66 @@ COMMAND_DECLARE(timer);
 void _wind_register_all_cmd(void)
 {
 #if CMD_SYSINFO_SUPPORT
-    wind_cmd_register(COMMAND(sysinfo),1);
+    wind_cmd_register(COMMAND(sysinfo));
 #endif
 #if CMD_LIST_SUPPORT
-    wind_cmd_register(COMMAND(list),1);
+    wind_cmd_register(COMMAND(list));
 #endif
 #if CMD_STATI_SUPPORT
-    wind_cmd_register(COMMAND(stati),1);
+    wind_cmd_register(COMMAND(stati));
 #endif
 #if CMD_RESET_SUPPORT
-    wind_cmd_register(COMMAND(reset),1);
+    wind_cmd_register(COMMAND(reset));
 #endif
 #if CMD_ECHO_SUPPORT
-    wind_cmd_register(COMMAND(echo),1);
+    wind_cmd_register(COMMAND(echo));
 #endif
 #if CMD_MEM_SUPPORT
-    wind_cmd_register(COMMAND(mem),1);
+    wind_cmd_register(COMMAND(mem));
 #endif
 #if CMD_THREAD_SUPPORT
-    wind_cmd_register(COMMAND(thread),1);
+    wind_cmd_register(COMMAND(thread));
 #endif
 
 #if CMD_DATETIME_SUPPORT
-    wind_cmd_register(COMMAND(datetime),1);
+    wind_cmd_register(COMMAND(datetime));
 #endif
 #if CMD_BLKDEV_SUPPORT
-    wind_cmd_register(COMMAND(blkdev),1);
+    wind_cmd_register(COMMAND(blkdev));
 #endif
 #if CMD_LUA_SUPPORT
-    wind_cmd_register(COMMAND(lua),1);
+    wind_cmd_register(COMMAND(lua));
 #endif
 #if CMD_FS_SUPPORT
-    wind_cmd_register(COMMAND(fs),1);
+    wind_cmd_register(COMMAND(fs));
 #endif
 #if CMD_XMODEM_SUPPORT
-    wind_cmd_register(COMMAND(xm),1);
+    wind_cmd_register(COMMAND(xm));
 #endif
 #if CMD_DBGPOINT_SUPPORT
-    wind_cmd_register(COMMAND(dbgp),1);
+    wind_cmd_register(COMMAND(dbgp));
 #endif
 #if CMD_USER_SUPPORT
-    wind_cmd_register(COMMAND(user),1);
+    wind_cmd_register(COMMAND(user));
 #endif
 
 #if CMD_BEEP_SUPPORT
-    wind_cmd_register(COMMAND(beep),1);
+    wind_cmd_register(COMMAND(beep));
 #endif
 #if CMD_LED_SUPPORT
-    wind_cmd_register(COMMAND(led),1);
+    wind_cmd_register(COMMAND(led));
 #endif
 #if CMD_WATCHDOG_SUPPORT
-    wind_cmd_register(COMMAND(wdog),1);
+    wind_cmd_register(COMMAND(wdog));
 #endif
 #if CMD_DIAGNOSE_SUPPORT
-    wind_cmd_register(COMMAND(diagnose),1);
+    wind_cmd_register(COMMAND(diagnose));
 #endif
 #if CMD_DAEMON_SUPPORT
-    wind_cmd_register(COMMAND(daemon),1);
+    wind_cmd_register(COMMAND(daemon));
 #endif
 #if CMD_TIMER_SUPPORT
-    wind_cmd_register(COMMAND(timer),1);
+    wind_cmd_register(COMMAND(timer));
 #endif
 
 }

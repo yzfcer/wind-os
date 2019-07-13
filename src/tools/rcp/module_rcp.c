@@ -66,7 +66,7 @@ COMMAND_DEF(rcp);
 
 MODULE_INIT(rcp)
 {
-    return wind_cmd_register(COMMAND(rcp),1);
+    return wind_cmd_register(COMMAND(rcp));
 }
 
 MODULE_EXIT(rcp)

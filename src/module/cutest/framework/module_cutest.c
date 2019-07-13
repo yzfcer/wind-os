@@ -68,7 +68,7 @@ COMMAND_DEF(cutest);
 
 MODULE_INIT(cutest)
 {
-    return wind_cmd_register(COMMAND(cutest),1);
+    return wind_cmd_register(COMMAND(cutest));
 }
 
 MODULE_EXIT(cutest)

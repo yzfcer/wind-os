@@ -66,7 +66,7 @@ COMMAND_DEF(pushbox);
 
 MODULE_INIT(pushbox)
 {
-    return wind_cmd_register(COMMAND(pushbox), 1);
+    return wind_cmd_register(COMMAND(pushbox));
 }
 
 MODULE_EXIT(pushbox)

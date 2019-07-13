@@ -100,6 +100,7 @@ tb_model_s *wind_tbmodel_get(const char *name);
 w_err_t wind_tbmodel_register(tb_model_s *tbmodel);
 w_err_t wind_tbmodel_unregister(tb_model_s *tbmodel);
 w_err_t wind_tbmodels_register(void);
+w_err_t wind_tbmodels_unregister(void);
 w_err_t wind_tbmodel_print(void);
 
 

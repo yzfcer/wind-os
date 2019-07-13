@@ -144,4 +144,9 @@ w_err_t wind_tbmodels_register(void)
     return W_ERR_OK;
 }
 
-
+w_err_t wind_tbmodels_unregister(void)
+{
+    wind_tbmodel_unregister(TBMODEL(tb_demo1));
+    wind_tbmodel_unregister(TBMODEL(tb_demo));
+    return W_ERR_OK;
+}

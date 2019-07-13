@@ -66,7 +66,7 @@ COMMAND_DEF(tetris);
 
 MODULE_INIT(tetris)
 {
-    return wind_cmd_register(COMMAND(tetris), 1);
+    return wind_cmd_register(COMMAND(tetris));
 }
 
 MODULE_EXIT(tetris)

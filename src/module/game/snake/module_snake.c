@@ -65,7 +65,7 @@ COMMAND_DEF(snake);
 
 MODULE_INIT(snake)
 {
-    return wind_cmd_register(COMMAND(snake), 1);
+    return wind_cmd_register(COMMAND(snake));
 }
 
 MODULE_EXIT(snake)

@@ -163,7 +163,7 @@ COMMAND_DEF(mkfs);
 
 MODULE_INIT(mkfs)
 {
-    return wind_cmd_register(COMMAND(mkfs),1);
+    return wind_cmd_register(COMMAND(mkfs));
 }
 
 MODULE_EXIT(mkfs)
