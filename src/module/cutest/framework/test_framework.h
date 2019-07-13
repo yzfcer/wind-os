@@ -24,7 +24,7 @@
 #include "wind_config.h"
 #include "wind_debug.h"
 //#include "test_port.h"
-#if WIND_CUTEST_SUPPORT
+#if WIND_MODULE_CUTEST_SUPPORT
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus

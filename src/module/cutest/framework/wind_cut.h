@@ -25,7 +25,7 @@
 #ifndef WIND_CUT_H__
 #define WIND_CUT_H__
 #include "test_framework.h"
-#if WIND_CUTEST_SUPPORT
+#if WIND_MODULE_CUTEST_SUPPORT
 
 //¶ÏÑÔÃüÌâxÎªÕæ
 #define EXPECT_TRUE(x) \

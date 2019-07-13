@@ -129,8 +129,8 @@
 #define WIND_MODULE_MKFS_SUPPORT 0
 #define WIND_MODULE_PACK_SUPPORT 0
 #define WIND_MODULE_GAME_SUPPORT 0
-#define WIND_MODULE_SHELL_SUPPORT 1
-#define WIND_MODULE_CUTEST_SUPPORT 1
+#define WIND_MODULE_SHELL_SUPPORT 1 //是否支持控制台模块
+#define WIND_MODULE_CUTEST_SUPPORT 1 //是否支持单元测试框架
 #define WIND_MODULE_VFS_SUPPORT 1
 
 
@@ -139,9 +139,7 @@
 //-------------------------------------------------------------------------------
 //调试命令定制，前提是内核支持控制台功能
 //-------------------------------------------------------------------------------
-#define WIND_SHELL_SUPPORT 1 //是否支持控制台模块
-
-#if WIND_SHELL_SUPPORT
+#if WIND_MODULE_SHELL_SUPPORT
 #define CMD_BLKDEV_SUPPORT 0 //是否支持块设备操作命令
 #define CMD_CHDEV_SUPPORT 0 //是否支持字符设备操作命令
 #define CMD_DATETIME_SUPPORT 0 //是否支持日期时间命令
@@ -170,8 +168,7 @@
 //-------------------------------------------------------------------------------
 //单元测试功能定制，前提是内核支持单元测试框架,并且支持对应的功能模块
 //-------------------------------------------------------------------------------
-#define WIND_CUTEST_SUPPORT 1 //是否支持单元测试框架
-#if WIND_CUTEST_SUPPORT
+#if WIND_MODULE_CUTEST_SUPPORT
 #define TEST_HEAP_SUPPORT 0 //是否支持内存堆测试
 #define TEST_MSGBOX_SUPPORT 1 //是否支持消息邮箱测试
 #define TEST_MUTEX_SUPPORT 1 //是否支持互斥所测试

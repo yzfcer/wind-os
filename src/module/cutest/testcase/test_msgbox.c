@@ -23,7 +23,7 @@
 #include "wind_pool.h"
 #include "wind_thread.h"
 #include "wind_msgbox.h"
-#if (WIND_CUTEST_SUPPORT && TEST_MSGBOX_SUPPORT)
+#if (WIND_MODULE_CUTEST_SUPPORT && TEST_MSGBOX_SUPPORT)
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus

@@ -20,7 +20,7 @@
 *******************************************************************************************************/
 #include "wind_cut.h"
 #include "wind_string.h"
-#if (WIND_CUTEST_SUPPORT && TEST_LISTFS_SUPPORT)
+#if (WIND_MODULE_CUTEST_SUPPORT && TEST_LISTFS_SUPPORT)
 #include "listfs.h"
 #ifdef __cplusplus
 extern "C" {

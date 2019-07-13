@@ -23,7 +23,7 @@
 #include "wind_cut.h"
 
 
-#if WIND_CUTEST_SUPPORT
+#if WIND_MODULE_CUTEST_SUPPORT
 
 
 

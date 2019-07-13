@@ -23,7 +23,7 @@
 #include "wind_heap.h"
 #include "wind_string.h"
 
-#if (WIND_CUTEST_SUPPORT && TEST_HEAP_SUPPORT)
+#if (WIND_MODULE_CUTEST_SUPPORT && TEST_HEAP_SUPPORT)
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus

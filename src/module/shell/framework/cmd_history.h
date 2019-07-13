@@ -26,7 +26,7 @@
 #define CMD_HISTORY_H__
 #include "wind_config.h"
 #include "wind_type.h"
-#if WIND_SHELL_SUPPORT
+#if WIND_MODULE_SHELL_SUPPORT
 #ifdef __cplusplus
 extern "C" {
 #endif

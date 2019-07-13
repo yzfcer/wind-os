@@ -21,7 +21,7 @@
 /*********************************************头文件定义***********************************************/
 #include "wind_cut.h"
 #include "wind_softirq.h"
-#if (WIND_CUTEST_SUPPORT && TEST_SOFTIRQ_SUPPORT)
+#if (WIND_MODULE_CUTEST_SUPPORT && TEST_SOFTIRQ_SUPPORT)
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus

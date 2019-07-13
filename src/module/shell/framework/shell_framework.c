@@ -26,7 +26,7 @@
 #include "wind_std.h"
 #include "wind_conv.h"
 #include "wind_core.h"
-#if WIND_SHELL_SUPPORT
+#if WIND_MODULE_SHELL_SUPPORT
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus

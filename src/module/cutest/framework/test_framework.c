@@ -20,7 +20,7 @@
 *******************************************************************************************************/
 /*********************************************头文件定义***********************************************/
 #include "test_framework.h"
-#if WIND_CUTEST_SUPPORT
+#if WIND_MODULE_CUTEST_SUPPORT
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus

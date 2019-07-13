@@ -20,7 +20,7 @@
 *******************************************************************************************************/
 #include "wind_cut.h"
 #include "wind_pool.h"
-#if (WIND_CUTEST_SUPPORT && TEST_POOL_SUPPORT)
+#if (WIND_MODULE_CUTEST_SUPPORT && TEST_POOL_SUPPORT)
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
