@@ -1,9 +1,9 @@
 /****************************************Copyright (c)**************************************************
 **                                       清  风  海  岸
-** 文   件   名: cmd_rcp.c
+** 文   件   名: module_vfs.c
 ** 创   建   人: Jason Zhou
 ** 最后修改日期: 2015/1/24 20:24:37
-** 描        述: 在主机文件系统与wind-os文件系统之间的文件拷贝命令
+** 描        述: vfs模块入口
 **  
 **--------------历史版本信息----------------------------------------------------------------------------
 ** 创建人: Jason Zhou
@@ -18,8 +18,8 @@
 ** 本文件由C语言源文件模板软件生成。------------清风海岸出品，必属精品！------------
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
+#include "wind_module.h"
 #include "wind_cmd.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
@@ -27,7 +27,7 @@ extern "C" {
 
 /*********************************************头文件定义***********************************************/
 
-#if (CMD_RCP_SUPPORT)
+#if (WIND_MODULE_VFS_SUPPORT)
 
 /********************************************内部变量定义**********************************************/
 
@@ -43,38 +43,20 @@ extern "C" {
 
 
 /********************************************全局函数定义**********************************************/
-COMMAND_DISC(rcp)
+
+
+MODULE_INIT(vfs)
 {
-    wind_printf("[*PC*] to copy file(s) between host fs and wind-os fs [NOT SUPPORTED NOW].\r\n");
+    return _wind_vfs_mod_init();
 }
 
-COMMAND_USAGE(rcp)
+MODULE_EXIT(vfs)
 {
-    wind_printf("rcp in <src_file> <dest_file>:--to copy file from host fs to wind-os fs.\r\n");
-    wind_printf("rcp out <src_file> <dest_file>:--to copy file from wind-os fs to host fs.\r\n");
-}
-
-COMMAND_MAIN(rcp,argc,argv)
-{
-    wind_error("command is NOT supported right now\r\n");
     return W_ERR_OK;
 }
 
-COMMAND_DEF(rcp);
+MODULE_DEF(vfs, 0x0100,"");
 
-//---------------------------------------------------------------------
-
-MODULE_INIT(rcp)
-{
-    return wind_cmd_register(COMMAND(rcp),1);
-}
-
-MODULE_EXIT(rcp)
-{
-    return wind_cmd_unregister(COMMAND(rcp));
-}
-
-MODULE_DEF(rcp, 0x0100,"shell");
 #endif
 #ifdef __cplusplus
 }

@@ -22,7 +22,6 @@
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
-#include "wind_pack.h"
 #include "wind_debug.h"
 #include "wind_string.h"
 #include "wind_conv.h"
@@ -441,4 +440,5 @@ w_int32_t pack_main(w_int32_t argc,char **argv)
         wind_error("error parameter");
     return 0;
 }
+
 

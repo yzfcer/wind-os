@@ -443,9 +443,6 @@
     <ClCompile Include="..\..\..\port\file_port.c">
       <Filter>os_port</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\src\tools\pack\wind_pack.c">
-      <Filter>tool_pack</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\test_filepath.c">
       <Filter>module_cutest</Filter>
     </ClCompile>
@@ -455,39 +452,6 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\wind_module_regif.c">
       <Filter>os_core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\src\module\game\gobang\gobang.c">
-      <Filter>module_game</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\src\module\game\pushbox\pushbox.c">
-      <Filter>module_game</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\src\module\game\snake\snake.c">
-      <Filter>module_game</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\src\module\game\tank\tank.c">
-      <Filter>module_game</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\src\module\game\tetris\tetris.c">
-      <Filter>module_game</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\src\tools\pack\module_pack.c">
-      <Filter>tool_pack</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\src\module\game\gobang\module_gobang.c">
-      <Filter>module_game</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\src\module\game\pushbox\module_pushbox.c">
-      <Filter>module_game</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\src\module\game\snake\module_snake.c">
-      <Filter>module_game</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\src\module\game\tank\module_tank.c">
-      <Filter>module_game</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\src\module\game\tetris\module_tetris.c">
-      <Filter>module_game</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\framework\module_shell.c">
       <Filter>module_shell</Filter>
     </ClCompile>
@@ -496,6 +460,33 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\framework\module_cutest.c">
       <Filter>module_cutest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\tools\cmd_pack.c">
+      <Filter>tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\tools\cmd_rcp.c">
+      <Filter>tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\tools\module_tools.c">
+      <Filter>tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\game\gobang.c">
+      <Filter>module_game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\game\module_game.c">
+      <Filter>module_game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\game\pushbox.c">
+      <Filter>module_game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\game\snake.c">
+      <Filter>module_game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\game\tank.c">
+      <Filter>module_game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\game\tetris.c">
+      <Filter>module_game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -541,11 +532,11 @@
     <Filter Include="module_cjson">
       <UniqueIdentifier>{cb956575-b568-4d7e-9038-5d90b331c8b2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="tool_pack">
-      <UniqueIdentifier>{1c022046-ee88-4360-a89f-e2fcc86e9b22}</UniqueIdentifier>
-    </Filter>
     <Filter Include="module_game">
       <UniqueIdentifier>{e69be643-f424-45d0-99c5-6390248d091a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tools">
+      <UniqueIdentifier>{1c022046-ee88-4360-a89f-e2fcc86e9b22}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -836,9 +827,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\port\file_port.h">
       <Filter>os_port</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\..\src\tools\pack\wind_pack.h">
-      <Filter>tool_pack</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_module.h">
       <Filter>os_core</Filter>

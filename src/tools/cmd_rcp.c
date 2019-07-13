@@ -1,9 +1,9 @@
 /****************************************Copyright (c)**************************************************
 **                                       清  风  海  岸
-** 文   件   名: pushbox_module.c
+** 文   件   名: cmd_rcp.c
 ** 创   建   人: Jason Zhou
 ** 最后修改日期: 2015/1/24 20:24:37
-** 描        述: 推箱子游戏
+** 描        述: 在主机文件系统与wind-os文件系统之间的文件拷贝命令
 **  
 **--------------历史版本信息----------------------------------------------------------------------------
 ** 创建人: Jason Zhou
@@ -18,9 +18,8 @@
 ** 本文件由C语言源文件模板软件生成。------------清风海岸出品，必属精品！------------
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
-#include "wind_std.h"
 #include "wind_cmd.h"
-#include "wind_module.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
@@ -28,7 +27,7 @@ extern "C" {
 
 /*********************************************头文件定义***********************************************/
 
-#if (CMD_ECHO_SUPPORT)
+#if (CMD_RCP_SUPPORT)
 
 /********************************************内部变量定义**********************************************/
 
@@ -44,37 +43,25 @@ extern "C" {
 
 
 /********************************************全局函数定义**********************************************/
-COMMAND_DISC(pushbox)
+COMMAND_DISC(rcp)
 {
-    wind_printf("[WIN32] to play pushbox game.\r\n");
+    wind_printf("[*PC*] to copy file(s) between host fs and wind-os fs [NOT SUPPORTED NOW].\r\n");
 }
 
-COMMAND_USAGE(pushbox)
+COMMAND_USAGE(rcp)
 {
-    wind_printf("pushbox:--to start pushbox game.\r\n");
+    wind_printf("rcp in <src_file> <dest_file>:--to copy file from host fs to wind-os fs.\r\n");
+    wind_printf("rcp out <src_file> <dest_file>:--to copy file from wind-os fs to host fs.\r\n");
 }
-extern int pushbox_main(int argc,char **argv);
-COMMAND_MAIN(pushbox,argc,argv)
+
+COMMAND_MAIN(rcp,argc,argv)
 {
-    system("cls");
-    pushbox_main(argc,argv);
-    _wind_std_init();
+    wind_error("command is NOT supported right now\r\n");
     return W_ERR_OK;
 }
-COMMAND_DEF(pushbox);
 
+COMMAND_DEF(rcp);
 
-MODULE_INIT(pushbox)
-{
-    return wind_cmd_register(COMMAND(pushbox));
-}
-
-MODULE_EXIT(pushbox)
-{
-    return wind_cmd_unregister(COMMAND(pushbox));
-}
-
-MODULE_DEF(pushbox, 0x0100,"shell");
 
 #endif
 #ifdef __cplusplus

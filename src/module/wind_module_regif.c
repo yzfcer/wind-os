@@ -54,6 +54,9 @@ MODULE_DECLARE(MODULE(rcp));
 #if WIND_MODULE_MKFS_SUPPORT
 MODULE_DECLARE(MODULE(mkfs));
 #endif
+#if WIND_MODULE_PACK_SUPPORT
+MODULE_DECLARE(MODULE(pack));
+#endif
 
 w_err_t _wind_register_modules(void)
 {
@@ -82,7 +85,9 @@ wind_module_register(MODULE(cutest));
 #if WIND_MODULE_MKFS_SUPPORT
 	wind_module_register(MODULE(mkfs));
 #endif
-	
+#if WIND_MODULE_PACK_SUPPORT
+	wind_module_register(MODULE(pack));
+#endif	
     return W_ERR_OK;
 }
 
