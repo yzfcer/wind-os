@@ -441,4 +441,23 @@ w_int32_t pack_main(w_int32_t argc,char **argv)
     return 0;
 }
 
+#if CMD_PACK_SUPPORT
+w_int32_t pack_main(w_int32_t argc,char **argv);
 
+COMMAND_DISC(pack)
+{
+    wind_printf("[*PC*] to package binary files to a image file.\r\n");
+}
+
+COMMAND_USAGE(pack)
+{
+    wind_printf("pack cfg <boardname>:--to pack binary files with configuration defined by boardname.cfg.\r\n");
+}
+extern w_int32_t pack_main(w_int32_t argc,char **argv);
+
+COMMAND_MAIN(pack,argc,argv)
+{
+    return pack_main(argc,argv);
+}
+COMMAND_DEF(pack);
+#endif

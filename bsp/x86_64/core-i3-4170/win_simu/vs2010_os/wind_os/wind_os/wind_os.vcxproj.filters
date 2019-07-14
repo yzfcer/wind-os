@@ -462,13 +462,10 @@
       <Filter>module_cutest</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\..\src\tools\cmd_pack.c">
-      <Filter>tools</Filter>
+      <Filter>module_tools</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\..\src\tools\cmd_rcp.c">
-      <Filter>tools</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\src\tools\module_tools.c">
-      <Filter>tools</Filter>
+      <Filter>module_tools</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\..\src\module\game\gobang.c">
       <Filter>module_game</Filter>
@@ -487,6 +484,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\..\src\module\game\tetris.c">
       <Filter>module_game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\tools\module_tools.c">
+      <Filter>module_tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\module_vfs.c">
+      <Filter>module_vfs</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -535,7 +538,7 @@
     <Filter Include="module_game">
       <UniqueIdentifier>{e69be643-f424-45d0-99c5-6390248d091a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="tools">
+    <Filter Include="module_tools">
       <UniqueIdentifier>{1c022046-ee88-4360-a89f-e2fcc86e9b22}</UniqueIdentifier>
     </Filter>
   </ItemGroup>

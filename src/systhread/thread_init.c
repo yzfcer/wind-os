@@ -93,9 +93,6 @@ static w_err_t thread_init(w_int32_t argc,char **argv)
 #if WIND_WATCHDOG_SUPPORT
     _wind_watchdog_mod_init();
 #endif
-#if WIND_MODULE_VFS_SUPPORT
-    _wind_vfs_mod_init();
-#endif  
 #if WIND_DBGPOINT_SUPPORT
     _wind_dbgpoint_mod_init();
 #endif
@@ -125,7 +122,6 @@ static w_err_t thread_init(w_int32_t argc,char **argv)
 #if WIND_DAEMON_SUPPORT
     _create_thread_daemon();
 #endif
-
     wind_main();
     return W_ERR_OK;
 }

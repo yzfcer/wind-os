@@ -183,6 +183,7 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\listfs\listfs_blkinfo.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\listfs\listfs_cache.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\listfs\listfs_fileinfo.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\module_vfs.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\treefs\treefile.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\treefs\treefs.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\wind_file.c" />

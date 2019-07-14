@@ -170,8 +170,8 @@ extern "C" {
 #define WIND_MODULE_VFS_SUPPORT 1 //是否支持虚拟文件系统框架
 #define WIND_MODULE_DB_SUPPORT 0 //是否支持DB功能
 
-#define WIND_MODULE_TOOLS_SUPPORT 0 //是否wind-os相关工具集
-#define WIND_MODULE_GAME_SUPPORT 0 //是否支持游戏
+#define WIND_MODULE_TOOLS_SUPPORT 1 //是否wind-os相关工具集
+#define WIND_MODULE_GAME_SUPPORT 1 //是否支持游戏
 
 
 #endif
@@ -206,7 +206,7 @@ extern "C" {
 #define CMD_LED_SUPPORT 0 //是否支持LED操作命令
 
 #define CMD_MKFS_SUPPORT 0 //是否支持创建文件系统镜像命令,pc
-#define CMD_PACK_SUPPORT 1 //是否支持对固件打包的命令,pc
+#define CMD_PACK_SUPPORT 0 //是否支持对固件打包的命令,pc
 #define CMD_RCP_SUPPORT 0 //是否支持在主机与wind-os之间拷贝文件的命令,pc
 
 #endif

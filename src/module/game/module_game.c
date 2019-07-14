@@ -146,7 +146,7 @@ COMMAND_DEF(tetris);
 
 /********************************************全局函数定义**********************************************/
 
-MODULE_INIT(tank)
+MODULE_INIT(game)
 {
     wind_cmd_register(COMMAND(gobang));
     wind_cmd_register(COMMAND(pushbox));
@@ -156,7 +156,7 @@ MODULE_INIT(tank)
     return W_ERR_OK;
 }
 
-MODULE_EXIT(tank)
+MODULE_EXIT(game)
 {
     wind_cmd_unregister(COMMAND(gobang));
     wind_cmd_unregister(COMMAND(pushbox));
@@ -166,7 +166,7 @@ MODULE_EXIT(tank)
     return W_ERR_OK;
 }
 
-MODULE_DEF(tank, 0x0100,"shell");
+MODULE_DEF(game, 0x0100,"shell");
 
 
 
