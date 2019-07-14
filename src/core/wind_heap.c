@@ -413,7 +413,7 @@ w_err_t wind_heapitem_print(void)
                 return W_ERR_MEM;
             }
             wind_printf("0x%-10x %-10d %-10s %-8d\r\n",heapitem,heapitem->size,
-                IS_F_HEAPITEM_USED(heapitem)?"uesd":"free",heapitem->allocid);
+                IS_F_HEAPITEM_USED(heapitem)?"used":"free",heapitem->allocid);
         }
         foreach_node(dnode1,&heap->used_list)
         {
@@ -424,7 +424,7 @@ w_err_t wind_heapitem_print(void)
                 return W_ERR_MEM;
             }
             wind_printf("0x%-10x %-10d %-10s %-8d\r\n",heapitem,heapitem->size,
-                IS_F_HEAPITEM_USED(heapitem)?"uesd":"free",heapitem->allocid);
+                IS_F_HEAPITEM_USED(heapitem)?"used":"free",heapitem->allocid);
         }
     }
     wind_print_space(6);

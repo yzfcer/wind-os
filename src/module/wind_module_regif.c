@@ -52,16 +52,16 @@ MODULE_DECLARE(tools);
 w_err_t _wind_register_modules(void)
 {
 #if WIND_MODULE_SHELL_SUPPORT
-        wind_module_register(MODULE(shell));
+    wind_module_register(MODULE(shell));
 #endif
 #if WIND_MODULE_VFS_SUPPORT
     wind_module_register(MODULE(vfs));
 #endif
 #if WIND_MODULE_DB_SUPPORT
-wind_module_register(MODULE(db));
+    wind_module_register(MODULE(db));
 #endif
 #if WIND_MODULE_CUTEST_SUPPORT
-wind_module_register(MODULE(cutest));
+    wind_module_register(MODULE(cutest));
 #endif
 #if WIND_MODULE_TOOLS_SUPPORT
 	wind_module_register(MODULE(tools));
