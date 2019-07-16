@@ -435,15 +435,17 @@ static w_err_t lfile_free_blkaddr(listfs_s *lfs,lfile_info_s *finfo)
             WIND_ASSERT_BREAK(err == W_ERR_OK,err,"free blk addrs failed,can NOT be error here");
             err = listfs_bitmap_free_blk(&lfs->bitmap,&blkinfo->self_addr,1);
             WIND_ASSERT_BREAK(err == W_ERR_OK,err,"free blkinfo addr failed,can NOT be error here");
+            if(blkinfo->nextblk_addr == 0)
+                break;
             err = blkinfo_get_next(blkinfo,lfs->blkdev);
             WIND_ASSERT_BREAK(err == W_ERR_OK,err,"get head blkinfo failed,can NOT be error here");
         }
-        if(err != W_ERR_OK)
-            break;
+        //if(err != W_ERR_OK)
+        //    break;
     }while(0);
     if(blkinfo != W_NULL)
         lfs_free(blkinfo);
-    return W_ERR_FAIL;
+    return err;
 }
 
 static w_err_t do_remove_file(listfs_s *lfs,lfile_info_s *finfo)
