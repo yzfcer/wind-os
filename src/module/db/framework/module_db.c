@@ -47,7 +47,9 @@ extern "C" {
 
 MODULE_INIT(db)
 {
-    return _wind_db_mod_init();
+    w_err_t err;
+    err = _wind_db_mod_init();
+    return err;
 }
 
 MODULE_EXIT(db)

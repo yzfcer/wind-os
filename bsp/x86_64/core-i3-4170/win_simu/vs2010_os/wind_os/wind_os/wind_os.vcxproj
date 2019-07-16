@@ -93,7 +93,7 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\test_filepath.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\test_fs.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\test_heap.c" />
-    <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\test_listfsfs.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\test_listfs.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\test_msgbox.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\test_mutex.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\test_pipe.c" />

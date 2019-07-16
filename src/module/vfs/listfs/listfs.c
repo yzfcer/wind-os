@@ -925,6 +925,7 @@ static w_int32_t do_write_file(listfile_s* file,w_uint8_t *buff,w_int32_t size)
     w_addr_t addr; 
     w_int32_t len,blkidx,buffidx,cpsize;
     w_uint8_t *blk = W_NULL;
+    blkinfo_read(file->blkinfo,file->lfs->blkdev,file->blkinfo->self_addr);
     if(!BLKINFO_HAS_OFFSET(file->blkinfo, file->offset, file->lfs->lfs_info.blksize))
     {
         err = blkinfo_get_byoffset(file->blkinfo,file->lfs->blkdev, file->offset);
@@ -970,7 +971,7 @@ static w_int32_t do_write_file(listfile_s* file,w_uint8_t *buff,w_int32_t size)
     return size;
 }
 
-static w_int32_t calc_needed_blks(listfile_s* file,w_int32_t size)
+static w_int32_t calc_needed_datablks(listfile_s* file,w_int32_t size)
 {
     w_int32_t blksize;
     w_int32_t needsize;
@@ -992,7 +993,7 @@ static w_int32_t calc_needed_blkinfo(listfile_s* file,w_int32_t blkcnt)
     do
     {
         err = W_ERR_OK;
-        wind_memcpy(tmpinfo,&file->info,sizeof(lfile_blkinfo_s));
+        wind_memcpy(tmpinfo,file->blkinfo,sizeof(lfile_blkinfo_s));
         err = blkinfo_get_tail(tmpinfo,file->lfs->blkdev);
         WIND_ASSERT_BREAK(err == W_ERR_OK,W_ERR_FAIL,"find tail blkinfo failed.");
         if(tmpinfo->blkused + blkcnt <= LFILE_LBLK_CNT)
@@ -1028,12 +1029,12 @@ w_int32_t listfile_read(listfile_s* file,w_uint8_t *buff, w_int32_t size)
         err = W_ERR_OK;
         if(file->offset + rsize > file->info.filesize)
             rsize = file->info.filesize - file->offset;
-        err = do_read_file(file,buff,rsize);
-        WIND_ASSERT_BREAK(err == W_ERR_OK,W_ERR_FAIL,"do read file data failed");
+        size = do_read_file(file,buff,rsize);
+        WIND_ASSERT_BREAK(size > 0,W_ERR_FAIL,"do read file data failed");
         file->offset += rsize;
     }while(0);
     WIND_ASSERT_RETURN(err == W_ERR_OK,-1);        
-    return rsize;
+    return size;
 }
 
 
@@ -1050,7 +1051,7 @@ w_int32_t listfile_write(listfile_s* file,w_uint8_t *buff,w_int32_t size)
     do
     {
         err = W_ERR_OK;
-        needdatablk = calc_needed_blks(file,wsize);
+        needdatablk = calc_needed_datablks(file,wsize);
         needblkinfo = calc_needed_blkinfo(file,needdatablk);
         if(needdatablk + needblkinfo > 0)
         {
@@ -1070,8 +1071,8 @@ w_int32_t listfile_write(listfile_s* file,w_uint8_t *buff,w_int32_t size)
                 WIND_ASSERT_BREAK(err == W_ERR_OK,W_ERR_FAIL,"append blk failed.");
             }
         }
-        err = do_write_file(file,buff,wsize);
-        WIND_ASSERT_BREAK(err == W_ERR_OK,W_ERR_FAIL,"do write file data failed");
+        size = do_write_file(file,buff,wsize);
+        WIND_ASSERT_BREAK(size == wsize,W_ERR_FAIL,"do write file data failed");
         if(file->info.filesize < file->offset + wsize)
             file->info.filesize += wsize;
         file->offset += wsize;
@@ -1081,7 +1082,7 @@ w_int32_t listfile_write(listfile_s* file,w_uint8_t *buff,w_int32_t size)
     if(addrlist != W_NULL)
         lfs_free(addrlist);
     WIND_ASSERT_RETURN(err == W_ERR_OK,-1);
-    return wsize;
+    return size;
 }
 
 listfile_s *listfile_readdir(listfile_s* file,w_int32_t index)

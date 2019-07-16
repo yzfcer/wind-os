@@ -362,9 +362,6 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\test_heap.c">
       <Filter>module_cutest</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\test_listfsfs.c">
-      <Filter>module_cutest</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\test_msgbox.c">
       <Filter>module_cutest</Filter>
     </ClCompile>
@@ -490,6 +487,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\module_vfs.c">
       <Filter>module_vfs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\test_listfs.c">
+      <Filter>module_cutest</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

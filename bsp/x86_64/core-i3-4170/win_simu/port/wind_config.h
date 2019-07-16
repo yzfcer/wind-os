@@ -22,7 +22,7 @@ extern "C" {
 //-------------------------------------------------------------------------------
 #define ARCH_NAME "x86_x64"
 #define CPU_NAME "core-i3-4170"
-#define BOARD_NAME "windows_simulation"
+#define BOARD_NAME "win-simu"
 #define HW_VERSION 0x000003
 #define SOFT_VERSION 0x000102
 
