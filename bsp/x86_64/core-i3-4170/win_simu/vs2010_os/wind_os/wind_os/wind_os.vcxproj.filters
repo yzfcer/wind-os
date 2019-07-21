@@ -182,9 +182,6 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_listfs.c">
       <Filter>module_shell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_lua.c">
-      <Filter>module_shell</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_mem.c">
       <Filter>module_shell</Filter>
     </ClCompile>
@@ -490,6 +487,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\test_listfs.c">
       <Filter>module_cutest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\module_lua.c">
+      <Filter>module_lua</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

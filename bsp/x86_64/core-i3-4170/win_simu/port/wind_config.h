@@ -166,12 +166,13 @@ extern "C" {
 #define WIND_MODULE_SUPPORT 1 // 是否支持独立模块功能
 #if WIND_MODULE_SUPPORT
 #define WIND_MODULE_SHELL_SUPPORT 1 //是否支持控制台模块
-#define WIND_MODULE_CUTEST_SUPPORT 1 //是否支持单元测试框架
-#define WIND_MODULE_VFS_SUPPORT 1 //是否支持虚拟文件系统框架
-#define WIND_MODULE_DB_SUPPORT 1 //是否支持DB功能
+#define WIND_MODULE_CUTEST_SUPPORT 1 //是否支持单元测试框架模块
+#define WIND_MODULE_VFS_SUPPORT 1 //是否支持虚拟文件系统框架模块
+#define WIND_MODULE_DB_SUPPORT 1 //是否支持DB功能模块
+#define WIND_MODULE_LUA_SUPPORT 1 //是否支持lua功能模块
 
-#define WIND_MODULE_TOOLS_SUPPORT 1 //是否wind-os相关工具集
-#define WIND_MODULE_GAME_SUPPORT 1 //是否支持游戏
+#define WIND_MODULE_TOOLS_SUPPORT 1 //是否wind-os相关工具集模块
+#define WIND_MODULE_GAME_SUPPORT 1 //是否支持游戏模块
 
 
 #endif

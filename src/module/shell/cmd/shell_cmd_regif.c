@@ -57,9 +57,7 @@ COMMAND_DECLARE(datetime);
 #if CMD_BLKDEV_SUPPORT
 COMMAND_DECLARE(blkdev);
 #endif
-#if CMD_LUA_SUPPORT
-COMMAND_DECLARE(lua);
-#endif
+
 #if CMD_FS_SUPPORT
 COMMAND_DECLARE(fs);
 #endif
@@ -121,9 +119,6 @@ void _wind_register_all_cmd(void)
 #endif
 #if CMD_BLKDEV_SUPPORT
     wind_cmd_register(COMMAND(blkdev));
-#endif
-#if CMD_LUA_SUPPORT
-    wind_cmd_register(COMMAND(lua));
 #endif
 #if CMD_FS_SUPPORT
     wind_cmd_register(COMMAND(fs));

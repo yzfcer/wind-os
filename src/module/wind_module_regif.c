@@ -42,6 +42,9 @@ MODULE_DECLARE(vfs);
 #if WIND_MODULE_CUTEST_SUPPORT
 MODULE_DECLARE(cutest);
 #endif
+#if WIND_MODULE_LUA_SUPPORT
+MODULE_DECLARE(lua);
+#endif
 #if WIND_MODULE_GAME_SUPPORT
 MODULE_DECLARE(game);
 #endif
@@ -62,6 +65,9 @@ w_err_t _wind_register_modules(void)
 #endif
 #if WIND_MODULE_CUTEST_SUPPORT
     wind_module_register(MODULE(cutest));
+#endif
+#if WIND_MODULE_LUA_SUPPORT
+    wind_module_register(MODULE(lua));
 #endif
 #if WIND_MODULE_TOOLS_SUPPORT
 	wind_module_register(MODULE(tools));

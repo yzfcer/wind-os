@@ -152,6 +152,7 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lutf8lib.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lvm.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lzio.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\module_lua.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_beep.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_blkdev.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_daemon.c" />
@@ -163,7 +164,6 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_led.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_list.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_listfs.c" />
-    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_lua.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_mem.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_reset.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_stati.c" />

@@ -1,6 +1,6 @@
 /****************************************Copyright (c)**************************************************
 **                                       清  风  海  岸
-** 文   件   名: cmd_lua.c
+** 文   件   名: module_lua.c
 ** 创   建   人: Jason Zhou
 ** 最后修改日期: 2015/1/24 20:24:37
 ** 描        述: lua脚本启动命令
@@ -18,6 +18,8 @@
 ** 本文件由C语言源文件模板软件生成。------------清风海岸出品，必属精品！------------
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
+#include "wind_module.h"
+#include "wind_debug.h"
 #include "wind_cmd.h"
 #ifdef __cplusplus
 extern "C" {
@@ -26,7 +28,7 @@ extern "C" {
 
 /*********************************************头文件定义***********************************************/
 
-#if (CMD_LUA_SUPPORT)
+#if (WIND_MODULE_LUA_SUPPORT)
 
 /********************************************内部变量定义**********************************************/
 
@@ -63,6 +65,28 @@ COMMAND_MAIN(lua,argc,argv)
 }
 
 COMMAND_DEF(lua);
+
+
+//--------------------------------------------------------------------------
+MODULE_INIT(lua)
+{
+    w_err_t err = W_ERR_NOT_SUPPORT;
+#if CMD_LUA_SUPPORT
+    err = wind_cmd_register(COMMAND(lua));
+#endif
+    return err;
+}
+
+MODULE_EXIT(lua)
+{
+        w_err_t err = W_ERR_NOT_SUPPORT;
+#if CMD_LUA_SUPPORT
+        err = wind_cmd_unregister(COMMAND(lua));
+#endif
+        return err;
+}
+
+MODULE_DEF(lua, 0x0100,"shell");
 
 #endif
 #ifdef __cplusplus
