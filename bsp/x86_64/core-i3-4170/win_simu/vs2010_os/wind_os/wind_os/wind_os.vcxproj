@@ -83,6 +83,7 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\common\wind_strsearch.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\common\wind_tree.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_module.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_module_list.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cjson\cJSON.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cjson\cJSON_Utils.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cjson\json_checker.c" />
@@ -178,6 +179,9 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\framework\cmd_history.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\framework\module_shell.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\framework\shell_framework.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\tools\cmd_pack.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\tools\cmd_rcp.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\tools\module_tools.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\adapter_treefs.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\listfs\listfs.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\listfs\listfs_bitmap.c" />
@@ -213,16 +217,12 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_watchdog.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\hal\wind_blkdev.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\hal\wind_chdev.c" />
-    <ClCompile Include="..\..\..\..\..\..\..\src\module\wind_module_regif.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\systhread\thread_coroutine.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\systhread\thread_daemon.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\systhread\thread_idle.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\systhread\thread_init.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\systhread\thread_stati.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\systhread\thread_timer.c" />
-    <ClCompile Include="..\..\..\..\..\..\..\src\tools\cmd_pack.c" />
-    <ClCompile Include="..\..\..\..\..\..\..\src\tools\cmd_rcp.c" />
-    <ClCompile Include="..\..\..\..\..\..\..\src\tools\module_tools.c" />
     <ClCompile Include="..\..\..\device\blkdev_disk.c" />
     <ClCompile Include="..\..\..\device\blkdev_memblk.c" />
     <ClCompile Include="..\..\..\device\blkdev_null.c" />
