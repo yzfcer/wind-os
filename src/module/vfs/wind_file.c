@@ -139,7 +139,7 @@ static w_file_s *wind_file_create(w_vfs_s *fs,const char *realpath,w_uint16_t fm
         WIND_ASSERT_BREAK(file->path != W_NULL,W_ERR_MEM,"malloc file path failed");
         wind_strcpy(file->path,realpath);
         file->path[rpathlen] = 0;
-        file->subname = W_NULL;
+        file->subfile = W_NULL;
         DNODE_INIT(file->filenode);
         file->fmode = fmode;
         file->isdir = isdir;
@@ -176,8 +176,8 @@ static w_err_t wind_file_destroy(w_file_s *file)
     wind_enable_switch();
     wind_mutex_destroy(file->mutex);
     wind_free(file->path);
-    if(file->subname != W_NULL)
-        wind_free(file->subname);
+    if(file->subfile != W_NULL)
+        wind_file_destroy(file->subfile);
     file_free(file);
     return W_ERR_OK;
 }
@@ -260,21 +260,24 @@ w_err_t wind_fremove(const char *path)
     return W_ERR_OK;
 }
 
-char* wind_fchild(w_file_s *dir,w_int32_t index)
+w_err_t wind_fsub(w_file_s *dir,w_file_s *sub)
 {
-    char *subname = W_NULL;
-    WIND_ASSERT_RETURN(dir != W_NULL,W_NULL);
-    WIND_ASSERT_RETURN(dir >= 0,W_NULL);
-    WIND_ASSERT_RETURN(dir->isdir != 0,W_NULL);
-    if(dir->subname == W_NULL)
-        dir->subname = wind_malloc(WFILE_NAME_LEN);
-    WIND_ASSERT_RETURN(dir->subname != W_NULL,W_NULL);
-    wind_debug("subfile %d",index);
+    w_err_t err = W_ERR_FAIL;
+    WIND_ASSERT_RETURN(dir != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(sub != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(dir->isdir != 0,W_ERR_INVALID);
+    if(dir->subfile == W_NULL)
+    {
+        wind_memset(sub,0,sizeof(w_file_s));
+        dir->subfile = sub;
+    }
+        
+    wind_debug("get subfile of %s",dir->path);
     wind_mutex_lock(dir->mutex);
     if(dir->vfs->ops->subfile)
-        subname = dir->vfs->ops->subfile(dir,index);
+        err = dir->vfs->ops->subfile(dir,sub);
     wind_mutex_unlock(dir->mutex);
-    return subname;
+    return err;
 }
 
 w_err_t wind_fseek(w_file_s *file,w_int32_t offset)

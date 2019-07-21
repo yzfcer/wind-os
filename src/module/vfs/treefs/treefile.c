@@ -5,12 +5,6 @@
 #include "wind_debug.h"
 #include "wind_string.h"
 #if WIND_TREEFS_SUPPORT
-#define NODE_TO_TREEFILE(node) (w_treefile_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((w_treefile_s*)0)->tree.treenode)))
-//static w_treefile_s *treefile_rootnode = W_NULL;
-
-
-
-
 
 static w_dnode_s *get_node_by_offset(w_dlist_s *list,w_uint32_t offset)
 {
@@ -366,24 +360,36 @@ w_int32_t treefile_write(w_treefile_s* file,w_uint8_t *buff, w_int32_t size)
     return wsize;
 }
 
-w_treefile_s *treefile_readdir(w_treefile_s* file,w_int32_t index)
+w_treefile_s *treefile_readdir(w_treefile_s* dir,w_treefile_s* subfile)
 {
-    int idx;
+    w_err_t err;
     w_dnode_s *dnode;
-    w_treefile_s *sub;
-    WIND_ASSERT_RETURN(file != W_NULL,W_NULL);
-    WIND_ASSERT_RETURN(file->magic == TREEFILE_MAGIC,W_NULL);
-    WIND_ASSERT_RETURN(file->isdir == 1,W_NULL);
-    
-    idx = 0;
-    foreach_node(dnode,&file->tree.child_list)
+    WIND_ASSERT_RETURN(dir != W_NULL,W_NULL);
+    WIND_ASSERT_RETURN(subfile != W_NULL,W_NULL);
+    WIND_ASSERT_RETURN(dir->magic == TREEFILE_MAGIC,W_NULL);
+    WIND_ASSERT_RETURN(dir->isdir == 1,W_NULL);
+    do
     {
-        sub = NODE_TO_TREEFILE(dnode);
-        if(idx == index)
-            return sub;
-        idx ++;
-    }
+        if(subfile->magic != TREEFILE_MAGIC)
+        {
+            //subfile = (w_treefile_s *)dir->fileobj;
+            dnode = dir->tree.child_list.head;
+            WIND_CHECK_BREAK(dnode != W_NULL,W_ERR_NOFILE);
+            subfile = NODE_TO_TREEFILE(dnode);
+            WIND_CHECK_BREAK(subfile->magic == TREEFILE_MAGIC,W_ERR_INVALID);
+            break;
+        }
+        
+        dnode = subfile->tree.treenode.next;
+        WIND_CHECK_BREAK(dnode != W_NULL,W_ERR_NOFILE);
+        subfile = NODE_TO_TREEFILE(dnode);       
+        WIND_CHECK_BREAK(subfile->magic == TREEFILE_MAGIC,W_ERR_INVALID);
+        break;
+    }while(0);
+    if(err == W_ERR_OK)
+        return subfile;
     return W_NULL;
+
 }
 
 

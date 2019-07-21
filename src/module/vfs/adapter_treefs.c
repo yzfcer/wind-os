@@ -82,27 +82,40 @@ static w_err_t treefs_op_rmfile(w_file_s* file)
     return treefile_rm((w_treefile_s *)file->fileobj);
 }
 
-static char *treefs_op_subfile(w_file_s* dir,w_int32_t index)
+static w_err_t treefs_op_subfile(w_file_s* dir,w_file_s* sub)
 {
+    w_err_t err;
+    w_dnode_s *dnode;
     w_treefile_s *tfile;
+    w_treefile_s *subtfile;
     w_int32_t len;
-    WIND_ASSERT_RETURN(dir->subname != W_NULL,W_NULL);
-    tfile = treefile_readdir((w_treefile_s *)dir->fileobj,index);
-    if(tfile == W_NULL)
-        return W_NULL;
-    len = wind_strlen(tfile->filename)+2;
-    if(len >= WFILE_NAME_LEN)
+    subtfile = (w_treefile_s *)sub->fileobj;
+    do
     {
-        wind_error("file name:\"%s\" is too long.",tfile->filename);
-        return W_NULL;
-    }
-    wind_strcpy(dir->subname,tfile->filename);
-    if(tfile->isdir)
+        err = W_ERR_OK;
+        if(subtfile->magic != TREEFILE_MAGIC)
+        {
+            tfile = (w_treefile_s *)dir->fileobj;
+            dnode = tfile->tree.child_list.head;
+            WIND_CHECK_BREAK(dnode != W_NULL,W_ERR_NOFILE);
+            subtfile = NODE_TO_TREEFILE(dnode);
+            if(subtfile != W_NULL)
+                break;
+        }
+        WIND_CHECK_BREAK(subtfile->tree.treenode.next != W_NULL,W_ERR_PTR_NULL);
+
+        dnode = subtfile->tree.treenode.next;
+        WIND_CHECK_BREAK(dnode != W_NULL,W_ERR_NOFILE);
+        subtfile = NODE_TO_TREEFILE(dnode);
+        WIND_ASSERT_BREAK(subtfile->magic == TREEFILE_MAGIC,W_ERR_INVALID,"invalid treefile dound");
+    }while(0);
+    if(err == W_ERR_OK)
     {
-        dir->subname[len-2] = '/';
-        dir->subname[len-1] = 0;
+        sub->fileobj = subtfile;
     }
-    return dir->subname;
+
+
+    return err;
 }
 
 static w_err_t treefs_op_seek(w_file_s* file,w_int32_t offset)

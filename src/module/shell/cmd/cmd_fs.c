@@ -125,33 +125,42 @@ static w_err_t fs_cmd_ls(w_int32_t argc,char **argv)
 {
     w_int32_t i;
     w_file_s *file;
-    char *fullpath,*sub;
+    w_err_t err;
+    char *fullpath = W_NULL;
+    w_file_s *sub = W_NULL;
     char *curpath = wind_filepath_get_current();
-    if(argc >= 3)
-       fullpath = wind_filepath_generate(curpath,argv[2],1);
-    else
-        fullpath = wind_filepath_generate(curpath,curpath,1);
-    WIND_ASSERT_RETURN(fullpath != W_NULL,W_ERR_FAIL);
-    file = wind_fopen(fullpath,FMODE_R);
-    if(file == W_NULL)
+    do 
     {
-        wind_printf("open directory or file failed.\r\n");
+        err = W_ERR_OK;
+        if(argc >= 3)
+           fullpath = wind_filepath_generate(curpath,argv[2],1);
+        else
+            fullpath = wind_filepath_generate(curpath,curpath,1);
+        WIND_ASSERT_BREAK(fullpath != W_NULL,W_ERR_FAIL,"generate curpath error");
+        sub = wind_malloc(sizeof(w_file_s));
+        WIND_ASSERT_BREAK(sub != W_NULL,W_ERR_FAIL,"malloc file error");
+        file = wind_fopen(fullpath,FMODE_R);
+        WIND_ASSERT_BREAK(file != W_NULL,W_ERR_NOFILE,"open directory error");
+
+        for(i = 0;;i ++)
+        {
+            err = wind_fsub(file,sub);
+            if(err != W_ERR_OK)
+                break;
+            wind_printf("%-24s ",sub->path);
+            wind_error("here must be filename");
+            if(i%4 == 3)
+                wind_printf("\r\n");
+        }
+        wind_printf("\r\n");
+        wind_fclose(file);
+        
+    }while(0);
+    if(fullpath != W_NULL)
         wind_filepath_release(fullpath);
-        return W_ERR_NOFILE;
-    }
-    for(i = 0;;i ++)
-    {
-        sub = wind_fchild(file,i);
-        if(sub == W_NULL)
-            break;
-        wind_printf("%-24s ",sub);
-        if(i%4 == 3)
-            wind_printf("\r\n");
-    }
-    wind_printf("\r\n");
-    wind_fclose(file);
-    wind_filepath_release(fullpath);
-    return W_ERR_OK;
+    if(sub != W_NULL)
+        wind_free(sub);
+    return err;
 }
 
 static w_err_t fs_cmd_cat(w_int32_t argc,char **argv)

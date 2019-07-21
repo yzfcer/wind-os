@@ -158,6 +158,7 @@ void wind_print_space(w_int32_t space8_cnt);
 #define WIND_ASSERT_TODO(cond,todo) do{if(!(cond)) {wind_error("ASSERT(%s)";todo;}}while(0)
 #define WIND_ASSERT_RETURN_VOID(cond) do{if(!(cond)) {wind_error("ASSERT(%s)",#cond);return;}}while(0)
 #define WIND_ASSERT_BREAK(cond,res,msg) {if(!(cond)) {wind_error("ASSERT(%s),%s",#cond,msg);err = res;break;}}
+#define WIND_CHECK_BREAK(cond,res) {if(!(cond)) {err = res;break;}}
         
 
 #ifdef __cplusplus

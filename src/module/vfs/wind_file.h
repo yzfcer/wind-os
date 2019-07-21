@@ -44,7 +44,7 @@ w_file_s *wind_file_get_bypath(const char *path);
 w_file_s* wind_fopen(const char *path,w_uint16_t fmode);
 w_err_t wind_fclose(w_file_s *file);
 w_err_t wind_fremove(const char *path);
-char* wind_fchild(w_file_s *dir,w_int32_t index);
+w_err_t wind_fsub(w_file_s *dir,w_file_s *sub);
 
 w_err_t wind_fseek(w_file_s *file,w_int32_t offset);
 w_int32_t wind_ftell(w_file_s *file);

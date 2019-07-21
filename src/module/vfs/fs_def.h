@@ -103,7 +103,7 @@ struct __w_fstype_s
     w_err_t (*open)(w_file_s *file,w_uint16_t fmode);
     w_err_t (*close)(w_file_s* file);
     w_err_t (*remove)(w_file_s* file);
-    char *(*subfile)(w_file_s* dir,w_int32_t index);
+    w_err_t (*subfile)(w_file_s* dir,w_file_s* file);
     w_err_t (*seek)(w_file_s* file,w_int32_t offset);
     w_err_t (*rename)(w_file_s* file,char *newname);
     w_int32_t (*ftell)(w_file_s* file);
@@ -116,10 +116,9 @@ struct __w_fstype_s
 struct __w_file_s
 {
     char *path;
-    char *subname;
+    w_file_s *subfile;
     w_dnode_s filenode;//链表节点
     w_uint16_t fmode;//操作模式
-    //w_uint8_t ftype;//文件系统类型
     w_uint8_t isdir;
     w_vfs_s *vfs;
     void *fileobj;//文件对象
