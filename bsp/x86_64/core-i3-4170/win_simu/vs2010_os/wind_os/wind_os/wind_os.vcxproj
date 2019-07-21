@@ -86,6 +86,7 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cjson\cJSON.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cjson\cJSON_Utils.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cjson\json_checker.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\cjson\module_cjson.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\framework\module_cutest.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\framework\test_framework.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\cutest_register.c" />

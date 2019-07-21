@@ -170,6 +170,7 @@ extern "C" {
 #define WIND_MODULE_VFS_SUPPORT 1 //是否支持虚拟文件系统框架模块
 #define WIND_MODULE_DB_SUPPORT 1 //是否支持DB功能模块
 #define WIND_MODULE_LUA_SUPPORT 1 //是否支持lua功能模块
+#define WIND_MODULE_CJSON_SUPPORT 1 //是否支持cjson功能模块
 
 #define WIND_MODULE_TOOLS_SUPPORT 1 //是否wind-os相关工具集模块
 #define WIND_MODULE_GAME_SUPPORT 1 //是否支持游戏模块
@@ -188,7 +189,6 @@ extern "C" {
 #define CMD_ECHO_SUPPORT 1 //是否支持回显命令
 #define CMD_FS_SUPPORT 1 //是否支持文件系统命令
 #define CMD_LIST_SUPPORT 1 //是否支持内核对象列表命令
-#define CMD_LUA_SUPPORT 1 //是否支持lua脚本命令
 #define CMD_MEM_SUPPORT 1 //是否支持内存值查看命令
 #define CMD_RESET_SUPPORT 1 //是否支持系统复位命令
 #define CMD_STATI_SUPPORT 1 //是否支持统计命令

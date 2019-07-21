@@ -45,6 +45,9 @@ MODULE_DECLARE(cutest);
 #if WIND_MODULE_LUA_SUPPORT
 MODULE_DECLARE(lua);
 #endif
+#if WIND_MODULE_CJSON_SUPPORT
+MODULE_DECLARE(cjson);
+#endif
 #if WIND_MODULE_GAME_SUPPORT
 MODULE_DECLARE(game);
 #endif
@@ -68,6 +71,9 @@ w_err_t _wind_register_modules(void)
 #endif
 #if WIND_MODULE_LUA_SUPPORT
     wind_module_register(MODULE(lua));
+#endif
+#if WIND_MODULE_CJSON_SUPPORT
+    wind_module_register(MODULE(cjson));
 #endif
 #if WIND_MODULE_TOOLS_SUPPORT
 	wind_module_register(MODULE(tools));

@@ -491,6 +491,9 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\module_lua.c">
       <Filter>module_lua</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\cjson\module_cjson.c">
+      <Filter>module_cjson</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">

@@ -53,8 +53,11 @@ static int cJSON_strcasecmp(const char *s1,const char *s2)
 	return tolower(*(const unsigned char *)s1) - tolower(*(const unsigned char *)s2);
 }
 
+int cjson_enable = 0;
 static void *cJSON_malloc(w_size_t sz)
 {
+	if(!cjson_enable)
+		return (void*)0;
     return wind_falloc((w_uint32_t)sz,251);
 }
 
@@ -73,6 +76,7 @@ static char* cJSON_strdup(const char* str)
       wind_memcpy(copy,str,len);
       return copy;
 }
+
 #if 0
 void cJSON_InitHooks(cJSON_Hooks* hooks)
 {

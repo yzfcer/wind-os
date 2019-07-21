@@ -71,18 +71,14 @@ COMMAND_DEF(lua);
 MODULE_INIT(lua)
 {
     w_err_t err = W_ERR_NOT_SUPPORT;
-#if CMD_LUA_SUPPORT
     err = wind_cmd_register(COMMAND(lua));
-#endif
     return err;
 }
 
 MODULE_EXIT(lua)
 {
         w_err_t err = W_ERR_NOT_SUPPORT;
-#if CMD_LUA_SUPPORT
         err = wind_cmd_unregister(COMMAND(lua));
-#endif
         return err;
 }
 

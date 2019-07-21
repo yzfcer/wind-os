@@ -1,9 +1,9 @@
 /****************************************Copyright (c)**************************************************
 **                                       清  风  海  岸
-** 文   件   名: module_cutest.c
+** 文   件   名: module_cjson.c
 ** 创   建   人: Jason Zhou
 ** 最后修改日期: 2015/1/24 20:24:37
-** 描        述: cutest模块入口
+** 描        述: cjson模块入口
 **  
 **--------------历史版本信息----------------------------------------------------------------------------
 ** 创建人: Jason Zhou
@@ -27,7 +27,7 @@ extern "C" {
 
 /*********************************************头文件定义***********************************************/
 
-#if (WIND_MODULE_CUTEST_SUPPORT)
+#if (WIND_MODULE_CJSON_SUPPORT)
 
 /********************************************内部变量定义**********************************************/
 
@@ -43,48 +43,22 @@ extern "C" {
 
 
 /********************************************全局函数定义**********************************************/
-COMMAND_DISC(cutest)
+
+extern int cjson_enable;
+
+MODULE_INIT(cjson)
 {
-    wind_printf("to test some test cases.\r\n");
+    cjson_enable = 1;
+	return W_ERR_OK;
 }
 
-COMMAND_USAGE(cutest)
+MODULE_EXIT(cjson)
 {
-    wind_printf("cutest list:--to show all test suites and cases list.\r\n");
-    wind_printf("cutest <suitename> <casename>:--to test some appointed test cases.\r\n");
-    wind_printf("       suitename:--use *to test all test suite.\r\n");
-    wind_printf("       casename:--use *to test all test suite.\r\n");
+    cjson_enable = 0;
+    return W_ERR_OK;
 }
 
-COMMAND_MAIN(cutest,argc,argv)
-{
-    return cutest_main(argc,argv);
-}
-
-COMMAND_DEF(cutest);
-
-
-
-
-MODULE_INIT(cutest)
-{
-    w_err_t err = W_ERR_NOT_SUPPORT;
-#if CMD_CUTEST_SUPPORT
-    err = wind_cmd_register(COMMAND(cutest));
-#endif
-    return err;
-}
-
-MODULE_EXIT(cutest)
-{
-    w_err_t err = W_ERR_NOT_SUPPORT;
-#if CMD_CUTEST_SUPPORT
-    err = wind_cmd_unregister(COMMAND(cutest));
-#endif
-    return err;
-}
-
-MODULE_DEF(cutest, 0x0100,"");
+MODULE_DEF(cjson, 0x0100,"");
 
 #endif
 #ifdef __cplusplus
