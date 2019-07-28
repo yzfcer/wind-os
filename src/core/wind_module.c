@@ -56,17 +56,37 @@ static w_err_t module_check_depend(w_module_s *module)
     int i,cnt;
     w_err_t err;
     w_module_s *dmod;
-    mod_depend_s *depend;
-    cnt = module_parse_depend(module->depend,&depend);
-    if(cnt <= 0)
+    char *depend = W_NULL;
+    char **dependlist = W_NULL;
+    if(module->depend == W_NULL)
         return W_ERR_OK;
-    err = W_ERR_OK;
-    for(i = 0;i < cnt;i ++)
+    do
     {
-        dmod = wind_module_get(depend[i].modname);
-        WIND_ASSERT_BREAK(dmod != dmod, W_ERR_NOT_SUPPORT, "depend module is NOT ready");
-        WIND_ASSERT_BREAK(dmod->version >= depend[i].version, W_ERR_VERSION, "depend module version error");
-    }
+        err = W_ERR_OK;
+        depend = wind_salloc(module->depend);
+        WIND_ASSERT_BREAK(depend != W_NULL,W_ERR_MEM,"alloc depend failed");
+        dependlist = wind_malloc(10 * sizeof(char *));
+        WIND_ASSERT_BREAK(dependlist != W_NULL,W_ERR_MEM,"alloc dependlist failed");
+        wind_memset(dependlist,0,10 * sizeof(char *));
+        cnt = wind_strsplit(depend,',',dependlist,10);
+        WIND_ASSERT_BREAK(cnt >= 0,W_ERR_FAIL,"split dependlist failed");
+        if((cnt == 1) && (dependlist[0][0] == 0))
+        {
+            cnt = 0;
+            break;
+        }
+        for(i = 0;i < cnt;i ++)
+        {
+            dmod = wind_module_get(dependlist[i]);
+            WIND_ASSERT_BREAK(dmod != W_NULL, W_ERR_NOT_SUPPORT, "depend module is NOT ready");
+            //WIND_ASSERT_BREAK(dmod->version >= depend[i].version, W_ERR_VERSION, "depend module version error");
+        }
+    }while(0);
+    
+    if(depend != W_NULL)
+        wind_free(depend);
+    if(dependlist!= W_NULL)
+        wind_free(dependlist);
     return err;
 }
 
@@ -93,10 +113,11 @@ w_err_t wind_module_register(w_module_s *module)
         if(err != W_ERR_OK)
         {
             wind_error("blkdev:%s init failed:%d.",module->obj.name,err);
+            module->status = MOD_ERROR;
             return err;
         }
     }
-    //module->mutex = wind_mutex_create(module->obj.name);
+    module->status = MOD_OK;
     wind_obj_init(&module->obj,WIND_MODULE_MAGIC,module->obj.name,&modulelist);
     
     return W_ERR_OK;
@@ -111,7 +132,10 @@ w_err_t wind_module_unregister(w_module_s *module)
     err = wind_obj_deinit(&module->obj,WIND_MODULE_MAGIC,&modulelist);
     WIND_ASSERT_RETURN(err == W_ERR_OK,err);
     if(module->exit)
-        module->exit();
+    {
+        err = module->exit();
+        module->status = err == W_ERR_OK?MOD_IDLE:MOD_ERROR;
+    }
     return W_ERR_OK;
 }
 

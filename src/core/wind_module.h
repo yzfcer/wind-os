@@ -44,7 +44,13 @@ extern "C" {
 #define SET_F_MODULE_OPEN(module) (module->obj.flag |= F_MODULE_OPEN)
 #define CLR_F_MODULE_OPEN(module) (module->obj.flag &= (~F_MODULE_OPEN))
 
-
+typedef enum
+{
+    MOD_IDLE,
+    MOD_INIT,
+    MOD_OK,
+    MOD_ERROR
+}mod_status_e;
 
 
 
@@ -53,6 +59,7 @@ typedef struct __w_module_ops_s w_module_ops_s;
 struct __w_module_s
 {
     w_obj_s obj;
+    mod_status_e status;
     w_int32_t version;
     char *depend;
     w_err_t (*init)(void);
@@ -64,7 +71,7 @@ struct __w_module_s
 
 
 #define MODULE_DEF(module,version,depend) \
-    w_module_s mod_##module = {{(~WIND_MODULE_MAGIC),#module,{W_NULL,W_NULL},0,0},version,depend,module##_init,module##_exit}
+    w_module_s mod_##module = {{(~WIND_MODULE_MAGIC),#module,{W_NULL,W_NULL},0,0},MOD_IDLE,version,depend,module##_init,module##_exit}
 #define MODULE_DECLARE(module) extern w_module_s mod_##module;
 #define MODULE(module) &mod_##module
 

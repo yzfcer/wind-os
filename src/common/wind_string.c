@@ -316,7 +316,11 @@ w_int32_t wind_strsplit(char *str,char ch,char **substr,w_int32_t maxcnt)
     if(str == W_NULL)
         return 0;
     if(str[0] == 0)
+    {
+        substr[0] = str;
         return 1;
+    }
+        
     len = wind_strlen(str)+1;
     j = 0;
     cnt = 0;
