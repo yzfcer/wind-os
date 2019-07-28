@@ -36,11 +36,6 @@ w_vfs_s *wind_vfs_get(char *name);
 w_vfs_s *wind_vfs_get_bypath(const char *path);
 w_err_t wind_vfs_print(void);
 
-w_fsops_s *wind_fsops_get(const char *name);
-char *wind_vfs_checktype(w_blkdev_s *blkdev,char *type);
-w_err_t wind_fsops_register(w_fsops_s *ops);
-w_err_t wind_fsops_unregister(w_fsops_s *ops);
-
 w_err_t wind_vfs_mount(char *fsname,char *fstype,char *devname,char *path);
 w_err_t wind_vfs_unmount(char *fsname);
 w_err_t wind_vfs_format(w_vfs_s *fs);

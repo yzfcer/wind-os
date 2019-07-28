@@ -32,20 +32,18 @@
 #include "wind_heap.h"
 #include "wind_core.h"
 #include "wind_dlist.h"
+#include "wind_fsops.h"
 #include "wind_dbgpoint.h"
 #include "wind_board_port.h"
 #include "treefs.h"
 
 #if WIND_MODULE_VFS_SUPPORT
 #define NODE_TO_FS(dnode) (w_vfs_s*)(((w_uint8_t*)(dnode))-((w_uint32_t)&(((w_vfs_s*)0)->obj.objnode)))
-#define NODE_TO_FSOPS(dnode) (w_fsops_s*)(((w_uint8_t*)(dnode))-((w_uint32_t)&(((w_fsops_s*)0)->obj.objnode)))
 
 static w_dlist_s fs_list;
-static w_dlist_s fs_ops_list;
 static char *fsname[] = {"fs0","fs1","fs2","fs3","fs4"};
 WIND_POOL(fspool,WIND_FS_MAX_NUM,sizeof(w_vfs_s));
 
-static w_err_t wind_fstypes_register(void);
 
 w_vfs_s *wind_vfs_create(char *name)
 {
@@ -72,7 +70,6 @@ w_err_t wind_vfs_destroy(w_vfs_s *vfs)
 
 static w_err_t vfs_objs_init(void)
 {
-    //w_err_t err;
     w_int32_t i;
     w_vfs_s *vfs;
     WIND_ASSERT_RETURN(sizeof(fsname)/sizeof(char *) >=  WIND_FS_MAX_NUM,W_ERR_FAIL);
@@ -139,17 +136,13 @@ w_err_t _wind_vfs_mod_init(void)
 {
     w_err_t err;
     DLIST_INIT(fs_list);
-    DLIST_INIT(fs_ops_list);
     err = wind_pool_create("vfs",fspool,sizeof(fspool),sizeof(w_vfs_s));
     WIND_ASSERT_RETURN(err == W_ERR_OK,err);
     err = vfs_objs_init();
     WIND_ASSERT_RETURN(err == W_ERR_OK,err);
     
     _wind_file_mod_init();
-#if WIND_TREEFS_SUPPORT
-    _wind_treefs_mod_init();
-#endif
-    wind_fstypes_register();
+    wind_fsops_init();
     
     _wind_fs_mount_init();
     wind_filepath_set_current(FS_CUR_PATH);
@@ -204,71 +197,6 @@ w_err_t wind_vfs_print(void)
     return W_ERR_OK;
 }
 
-
-w_fsops_s *wind_fsops_get(const char *name)
-{
-    return (w_fsops_s*)wind_obj_get(name,&fs_ops_list);
-}
-
-char *wind_vfs_checktype(w_blkdev_s *blkdev,char *type)
-{
-    w_dnode_s *dnode;
-    w_err_t err;
-    w_fsops_s *ops = W_NULL;
-    wind_disable_switch();
-    foreach_node(dnode,&fs_ops_list)
-    {
-        err = W_ERR_FAIL;
-        ops = NODE_TO_FSOPS(dnode);
-        if(ops->matchfs)
-            err = ops->matchfs(wind_obj_name(&blkdev->obj));
-        if(err == W_ERR_OK)
-            break;
-    }
-    wind_disable_switch();
-    if(ops)
-        return wind_obj_name(&ops->obj);
-    return W_NULL;
-}
-
-w_err_t wind_fsops_register(w_fsops_s *ops)
-{
-    w_fsops_s *tmpops;
-    WIND_ASSERT_RETURN(ops != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(ops->obj.magic == WIND_FSTYPE_MAGIC,W_ERR_INVALID);
-    wind_notice("register vfs ops:%s",wind_obj_name(&ops->obj));
-    tmpops = wind_fsops_get(ops->obj.name);
-    if(tmpops != W_NULL)
-    {
-        wind_notice("vfs ops has been registered.\r\n");
-        return W_ERR_OK;
-    }
-    wind_obj_init(&ops->obj,WIND_FSTYPE_MAGIC,ops->obj.name,&fs_ops_list);
-    return W_ERR_OK;
-}
-
-w_err_t wind_fsops_unregister(w_fsops_s *ops)
-{
-    w_err_t err;
-    WIND_ASSERT_RETURN(ops != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(ops->obj.magic == WIND_FSTYPE_MAGIC,W_ERR_INVALID);
-    wind_notice("unregister vfs ops:%s",wind_obj_name(&ops->obj));
-    err = wind_obj_deinit(&ops->obj,WIND_FSTYPE_MAGIC,&fs_ops_list);
-    WIND_ASSERT_RETURN(err == W_ERR_OK,err);
-    return err;
-}
-
-#if WIND_TREEFS_SUPPORT
-extern w_fsops_s treefs_ops;
-#endif
-
-static w_err_t wind_fstypes_register(void)
-{
-#if WIND_TREEFS_SUPPORT
-    wind_fsops_register(&treefs_ops);
-#endif
-    return W_ERR_OK;
-}
 
 w_err_t wind_vfs_mount(char *fsname,char *fstype,char *blkname,char *path)
 {

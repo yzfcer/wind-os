@@ -194,6 +194,7 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\wind_file.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\wind_filepath.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\wind_fs.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\wind_fsops.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\wind_log.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_core.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_coroutine.c" />
@@ -304,6 +305,7 @@
     <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\wind_file.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\wind_filepath.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\wind_fs.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\wind_fsops.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\wind_log.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_core.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_coroutine.h" />

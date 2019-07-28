@@ -494,6 +494,9 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\tools\module_tools.c">
       <Filter>module_tools</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\wind_fsops.c">
+      <Filter>module_vfs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">
@@ -836,6 +839,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_module.h">
       <Filter>os_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\wind_fsops.h">
+      <Filter>module_vfs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
