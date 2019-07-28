@@ -38,6 +38,7 @@
 
 #if WIND_MODULE_VFS_SUPPORT
 #define NODE_TO_FS(dnode) (w_vfs_s*)(((w_uint8_t*)(dnode))-((w_uint32_t)&(((w_vfs_s*)0)->obj.objnode)))
+#define NODE_TO_FSOPS(dnode) (w_fsops_s*)(((w_uint8_t*)(dnode))-((w_uint32_t)&(((w_fsops_s*)0)->obj.objnode)))
 
 static w_dlist_s fs_list;
 static w_dlist_s fs_ops_list;
@@ -160,6 +161,7 @@ w_vfs_s *wind_vfs_get(char *name)
     return (w_vfs_s *)wind_obj_get(name,&fs_list);
 }
 
+
 w_vfs_s *wind_vfs_get_bypath(const char *path)
 {
     w_vfs_s *vfs,*retfs = W_NULL;
@@ -208,6 +210,26 @@ w_fsops_s *wind_fsops_get(const char *name)
     return (w_fsops_s*)wind_obj_get(name,&fs_ops_list);
 }
 
+char *wind_vfs_checktype(w_blkdev_s *blkdev,char *type)
+{
+    w_dnode_s *dnode;
+    w_err_t err;
+    w_fsops_s *ops = W_NULL;
+    wind_disable_switch();
+    foreach_node(dnode,&fs_ops_list)
+    {
+        err = W_ERR_FAIL;
+        ops = NODE_TO_FSOPS(dnode);
+        if(ops->matchfs)
+            err = ops->matchfs(wind_obj_name(&blkdev->obj));
+        if(err == W_ERR_OK)
+            break;
+    }
+    wind_disable_switch();
+    if(ops)
+        return wind_obj_name(&ops->obj);
+    return W_NULL;
+}
 
 w_err_t wind_fsops_register(w_fsops_s *ops)
 {

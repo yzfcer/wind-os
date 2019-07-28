@@ -93,9 +93,9 @@ struct __w_vfs_s
 struct __w_fsops_s
 {
     w_obj_s obj;
-    void* (*init)(w_vfs_s *fs);
-    w_err_t (*format)(w_vfs_s *fs);
-    w_err_t (*checktype)(char *devname);
+    void* (*init)(w_vfs_s *fs);//文件系统类型初始化
+    w_err_t (*format)(w_vfs_s *fs);//格式化
+    w_err_t (*matchfs)(char *devname);//检测块设备文件系统是否匹配
     
     w_err_t (*open)(w_file_s *file,w_uint16_t fmode);
     w_err_t (*close)(w_file_s* file);

@@ -37,6 +37,7 @@ w_vfs_s *wind_vfs_get_bypath(const char *path);
 w_err_t wind_vfs_print(void);
 
 w_fsops_s *wind_fsops_get(const char *name);
+char *wind_vfs_checktype(w_blkdev_s *blkdev,char *type);
 w_err_t wind_fsops_register(w_fsops_s *ops);
 w_err_t wind_fsops_unregister(w_fsops_s *ops);
 
