@@ -227,6 +227,8 @@ char* wind_filepath_get_filename(char *path)
     WIND_ASSERT_RETURN(tmppath != W_NULL,W_NULL);
     if(tmppath[len-1] == '/')
         tmppath[len-1] = '\0';
+    if(tmppath[0] == 0)
+        return tmppath;
     for(i = len - 1;i >= 0;i --)
     {
         if(tmppath[i] == '/')

@@ -142,7 +142,7 @@ static w_file_s *wind_file_create(w_vfs_s *fs,const char *realpath,w_uint16_t fm
         file->path[rpathlen] = 0;
         //wind_filepath_generate(char * pre_path,char * relative_path,w_uint16_t isdir)
         file->filename = wind_filepath_get_filename(file->path);
-        WIND_ASSERT_BREAK(file->filename != W_NULL,W_ERR_INVALID,"path is invalid");
+        WIND_ASSERT_BREAK(file->filename != W_NULL,W_ERR_INVALID,"filename is invalid");
         file->subfile = W_NULL;
         DNODE_INIT(file->filenode);
         file->fmode = fmode;

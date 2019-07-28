@@ -175,17 +175,23 @@ CASE_FUNC(filename)
     EXPECT_EQ(newpath,W_NULL);
     newpath = wind_filepath_get_filename("");
     EXPECT_EQ(newpath,W_NULL);
+    
     newpath = wind_filepath_get_filename("/");
-    EXPECT_EQ(newpath,W_NULL);
+    EXPECT_NE(newpath,W_NULL);
+    EXPECT_STR_EQ(newpath,"");
+    
     newpath = wind_filepath_get_filename("/test");
     EXPECT_STR_EQ(newpath,"test");
     wind_free(newpath);
+    
     newpath = wind_filepath_get_filename("/test/");
     EXPECT_STR_EQ(newpath,"test");
     wind_free(newpath);
+    
     newpath = wind_filepath_get_filename("/test/test1");
     EXPECT_STR_EQ(newpath,"test1");
     wind_free(newpath);
+    
     newpath = wind_filepath_get_filename("/test/test1/");
     EXPECT_STR_EQ(newpath,"test1");
     wind_free(newpath);
