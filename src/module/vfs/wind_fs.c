@@ -85,7 +85,7 @@ static w_err_t vfs_objs_init(void)
 static w_err_t mount_param_check(char *fsname,char *fstype,char *blkname,char *path)
 {
     w_vfs_s *vfs;
-    w_fstype_s *ops;
+    w_fsops_s *ops;
     w_dnode_s *dnode;
     w_int32_t len;
     WIND_ASSERT_RETURN(fsname != W_NULL,W_ERR_PTR_NULL);
@@ -94,7 +94,7 @@ static w_err_t mount_param_check(char *fsname,char *fstype,char *blkname,char *p
     WIND_ASSERT_RETURN(path != W_NULL,W_ERR_PTR_NULL);
     vfs = wind_vfs_get(fsname);
     WIND_ASSERT_RETURN(vfs != W_NULL,W_ERR_REPEAT);
-    ops = wind_fstype_get(fstype);
+    ops = wind_fsops_get(fstype);
     WIND_ASSERT_RETURN(vfs != W_NULL,W_ERR_REPEAT);
     len = wind_strlen(path);
     if(len >= FS_MOUNT_PATH_LEN)
@@ -203,19 +203,19 @@ w_err_t wind_vfs_print(void)
 }
 
 
-w_fstype_s *wind_fstype_get(const char *name)
+w_fsops_s *wind_fsops_get(const char *name)
 {
-    return (w_fstype_s*)wind_obj_get(name,&fs_ops_list);
+    return (w_fsops_s*)wind_obj_get(name,&fs_ops_list);
 }
 
 
-w_err_t wind_fstype_register(w_fstype_s *ops)
+w_err_t wind_fsops_register(w_fsops_s *ops)
 {
-    w_fstype_s *tmpops;
+    w_fsops_s *tmpops;
     WIND_ASSERT_RETURN(ops != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(ops->obj.magic == WIND_FSTYPE_MAGIC,W_ERR_INVALID);
     wind_notice("register vfs ops:%s",wind_obj_name(&ops->obj));
-    tmpops = wind_fstype_get(ops->obj.name);
+    tmpops = wind_fsops_get(ops->obj.name);
     if(tmpops != W_NULL)
     {
         wind_notice("vfs ops has been registered.\r\n");
@@ -225,7 +225,7 @@ w_err_t wind_fstype_register(w_fstype_s *ops)
     return W_ERR_OK;
 }
 
-w_err_t wind_fstype_unregister(w_fstype_s *ops)
+w_err_t wind_fsops_unregister(w_fsops_s *ops)
 {
     w_err_t err;
     WIND_ASSERT_RETURN(ops != W_NULL,W_ERR_PTR_NULL);
@@ -237,13 +237,13 @@ w_err_t wind_fstype_unregister(w_fstype_s *ops)
 }
 
 #if WIND_TREEFS_SUPPORT
-extern w_fstype_s treefs_ops;
+extern w_fsops_s treefs_ops;
 #endif
 
 static w_err_t wind_fstypes_register(void)
 {
 #if WIND_TREEFS_SUPPORT
-    wind_fstype_register(&treefs_ops);
+    wind_fsops_register(&treefs_ops);
 #endif
     return W_ERR_OK;
 }
@@ -254,7 +254,7 @@ w_err_t wind_vfs_mount(char *fsname,char *fstype,char *blkname,char *path)
     w_blkdev_s *blkdev;
     w_vfs_s *vfs;
     w_int32_t len;
-    w_fstype_s *ops;
+    w_fsops_s *ops;
     err = mount_param_check(fsname,fstype,blkname,path);
     WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_INVALID);
     do
@@ -263,7 +263,7 @@ w_err_t wind_vfs_mount(char *fsname,char *fstype,char *blkname,char *path)
         vfs = wind_vfs_get(fsname);
         WIND_ASSERT_BREAK(vfs != W_NULL,W_ERR_MEM,"vfs is NOT exist");
         WIND_ASSERT_BREAK(!IS_F_VFS_MOUNT(vfs),W_ERR_INVALID,"vfs has been mounted");
-        ops = wind_fstype_get(fstype);
+        ops = wind_fsops_get(fstype);
         WIND_ASSERT_BREAK(ops != W_NULL,W_ERR_MEM,"ops is NOT exist");
         blkdev = wind_blkdev_get(blkname);
         WIND_ASSERT_BREAK(blkdev != W_NULL,W_ERR_MEM,"blkdev is NOT exist");

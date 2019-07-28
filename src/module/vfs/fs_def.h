@@ -76,7 +76,7 @@ typedef enum
     FTYPE_FILE = 0x02,
 }w_ftype_e;
 
-typedef struct __w_fstype_s w_fstype_s;
+typedef struct __w_fsops_s w_fsops_s;
 typedef struct __w_vfs_s w_vfs_s;
 typedef struct __w_file_s w_file_s;
 
@@ -87,14 +87,15 @@ struct __w_vfs_s
     char *fstype;
     void *fsobj;
     w_blkdev_s *blkdev;
-    w_fstype_s *ops;
+    w_fsops_s *ops;
 };
 
-struct __w_fstype_s
+struct __w_fsops_s
 {
     w_obj_s obj;
     void* (*init)(w_vfs_s *fs);
     w_err_t (*format)(w_vfs_s *fs);
+    w_err_t (*checktype)(char *devname);
     
     w_err_t (*open)(w_file_s *file,w_uint16_t fmode);
     w_err_t (*close)(w_file_s* file);
@@ -126,10 +127,11 @@ struct __w_file_s
 
 
 #define FS_OPS_DEF(fs) \
-w_fstype_s fs##_ops = {\
+w_fsops_s fs##_ops = {\
 {WIND_FSTYPE_MAGIC,#fs,{W_NULL,W_NULL},0,0},\
 fs##_op_init,\
 fs##_op_format,\
+W_NULL,\
 fs##_op_open,\
 fs##_op_close,\
 fs##_op_rmfile,\
