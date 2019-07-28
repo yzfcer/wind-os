@@ -24,6 +24,7 @@
 *******************************************************************************************************/
 #include "wind_config.h"
 #include "wind_fs.h"
+#include "wind_fsops.h"
 #include "wind_file.h"
 #include "wind_pool.h"
 #include "wind_debug.h"

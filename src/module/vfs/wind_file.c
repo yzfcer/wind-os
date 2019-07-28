@@ -141,7 +141,7 @@ static w_file_s *wind_file_create(w_vfs_s *fs,const char *realpath,w_uint16_t fm
         
         filename = wind_filepath_get_filename(file->path);
         WIND_ASSERT_BREAK(filename != W_NULL,W_ERR_INVALID,"filename is invalid");
-        file->subfile = W_NULL;
+        file->childfile = W_NULL;
         file->fmode = fmode;
         file->isdir = isdir;
         file->vfs = fs;
@@ -183,8 +183,8 @@ static w_err_t wind_file_destroy(w_file_s *file)
         wind_filepath_release(file->obj.name);
     if(file->mutex != W_NULL)
         wind_mutex_destroy(file->mutex);
-    if(file->subfile != W_NULL)
-        wind_file_destroy(file->subfile);
+    if(file->childfile != W_NULL)
+        wind_file_destroy(file->childfile);
     file_free(file);
     return W_ERR_OK;
 }
@@ -267,28 +267,28 @@ w_err_t wind_fremove(const char *path)
     return W_ERR_OK;
 }
 
-w_err_t wind_fsub(w_file_s *dir,w_file_s *sub)
+w_err_t wind_fchild(w_file_s *dir,w_file_s *child)
 {
     w_err_t err = W_ERR_FAIL;
     WIND_ASSERT_RETURN(dir != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(sub != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(child != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(dir->isdir != 0,W_ERR_INVALID);
-    if(dir->subfile == W_NULL)
+    if(dir->childfile == W_NULL)
     {
-        wind_memset(sub,0,sizeof(w_file_s));
+        wind_memset(child,0,sizeof(w_file_s));
     }
         
     wind_debug("get subfile of %s",dir->path);
     wind_mutex_lock(dir->mutex);
-    if(dir->vfs->ops->subfile)
+    if(dir->vfs->ops->getchild)
     {
-        err = dir->vfs->ops->subfile(dir,sub);
+        err = dir->vfs->ops->getchild(dir,child);
         if(err == W_ERR_OK)
-            dir->subfile = sub;
+            dir->childfile = child;
     }
     wind_mutex_unlock(dir->mutex);
     if(err != W_ERR_OK)
-        dir->subfile = W_NULL;
+        dir->childfile = W_NULL;
     return err;
 }
 

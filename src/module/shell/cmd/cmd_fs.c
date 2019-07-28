@@ -144,7 +144,7 @@ static w_err_t fs_cmd_ls(w_int32_t argc,char **argv)
 
         for(i = 0;;i ++)
         {
-            err = wind_fsub(file,sub);
+            err = wind_fchild(file,sub);
             if(err != W_ERR_OK)
                 break;
             wind_printf("%-24s ",sub->path);
