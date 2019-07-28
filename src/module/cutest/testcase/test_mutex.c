@@ -42,17 +42,17 @@ static w_mutex_s test_mtx;
 
 
 /********************************************全局函数定义**********************************************/
-CASE_SETUP(mutexinit)
+CASE_SETUP(init)
 {
 
 }
 
-CASE_TEARDOWN(mutexinit)
+CASE_TEARDOWN(init)
 {
 
 }
 
-CASE_FUNC(mutexinit)
+CASE_FUNC(init)
 {
     w_err_t err;
     w_mutex_s *mtx;
@@ -79,17 +79,17 @@ CASE_FUNC(mutexinit)
 }
 
 
-CASE_SETUP(mutexinfo)
+CASE_SETUP(info)
 {
 
 }
 
-CASE_TEARDOWN(mutexinfo)
+CASE_TEARDOWN(info)
 {
 
 }
 
-CASE_FUNC(mutexinfo)
+CASE_FUNC(info)
 {
     w_err_t err;
     mutexs[0] = wind_mutex_create("test");
@@ -102,17 +102,17 @@ CASE_FUNC(mutexinfo)
     EXPECT_EQ(W_ERR_OK,err);
 }
 
-CASE_SETUP(mutexfunc)
+CASE_SETUP(func)
 {
     
 }
 
-CASE_TEARDOWN(mutexfunc)
+CASE_TEARDOWN(func)
 {
 
 }
 
-CASE_FUNC(mutexfunc)
+CASE_FUNC(func)
 {
     w_err_t err;
     mutexs[0] = wind_mutex_create("test");
@@ -129,17 +129,17 @@ CASE_FUNC(mutexfunc)
     EXPECT_EQ(W_ERR_OK,err);
 }
 
-CASE_SETUP(mutexmulti)
+CASE_SETUP(multi)
 {
     
 }
 
-CASE_TEARDOWN(mutexmulti)
+CASE_TEARDOWN(multi)
 {
 
 }
 
-CASE_FUNC(mutexmulti)
+CASE_FUNC(multi)
 {
     w_int32_t i;
     w_err_t err;
@@ -168,10 +168,10 @@ SUITE_TEARDOWN(mutex)
 
 
 TEST_CASES_START(mutex)
-TEST_CASE(mutexinit)
-TEST_CASE(mutexinfo)
-TEST_CASE(mutexfunc)
-TEST_CASE(mutexmulti)
+TEST_CASE(init)
+TEST_CASE(info)
+TEST_CASE(func)
+TEST_CASE(multi)
 TEST_CASES_END
 TEST_SUITE(mutex)
 

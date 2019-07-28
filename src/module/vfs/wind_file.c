@@ -122,7 +122,7 @@ w_file_s *wind_file_get_bypath(const char *path)
 static w_file_s *wind_file_create(w_vfs_s *fs,const char *realpath,w_uint16_t fmode,w_uint8_t isdir)
 {
     w_err_t err;
-    w_int32_t rpathlen;
+    w_int32_t realpathlen;
     w_file_s *file = W_NULL;
     do
     {
@@ -135,12 +135,11 @@ static w_file_s *wind_file_create(w_vfs_s *fs,const char *realpath,w_uint16_t fm
         file->mutex = wind_mutex_create(W_NULL);
         WIND_ASSERT_BREAK(file->mutex != W_NULL,W_ERR_MEM,"create mutex failed");
 
-        rpathlen = wind_strlen(realpath);
-        file->path = wind_malloc(rpathlen+1);
+        realpathlen = wind_strlen(realpath);
+        file->path = wind_malloc(realpathlen+1);
         WIND_ASSERT_BREAK(file->path != W_NULL,W_ERR_MEM,"malloc file path failed");
         wind_strcpy(file->path,realpath);
-        file->path[rpathlen] = 0;
-        //wind_filepath_generate(char * pre_path,char * relative_path,w_uint16_t isdir)
+        file->path[realpathlen] = 0;
         file->filename = wind_filepath_get_filename(file->path);
         WIND_ASSERT_BREAK(file->filename != W_NULL,W_ERR_INVALID,"filename is invalid");
         file->subfile = W_NULL;
@@ -151,10 +150,10 @@ static w_file_s *wind_file_create(w_vfs_s *fs,const char *realpath,w_uint16_t fm
         file->fileobj = W_NULL;
         file->offset = 0;
         err = file->vfs->ops->open(file,file->fmode);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"open real file failed");
         wind_disable_switch();
         dlist_insert_tail(&filelist,&file->filenode);
         wind_enable_switch();
-        break;
     }while(0);
 
 
@@ -279,7 +278,6 @@ w_err_t wind_fsub(w_file_s *dir,w_file_s *sub)
     if(dir->subfile == W_NULL)
     {
         wind_memset(sub,0,sizeof(w_file_s));
-        dir->subfile = sub;
     }
         
     wind_debug("get subfile of %s",dir->path);

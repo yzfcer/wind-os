@@ -42,17 +42,17 @@ extern "C" {
 
 /********************************************全局函数定义**********************************************/
 
-CASE_SETUP(heapfunc)
+CASE_SETUP(func)
 {
 
 }
 
-CASE_TEARDOWN(heapfunc)
+CASE_TEARDOWN(func)
 {
 
 }
 
-CASE_FUNC(heapfunc)
+CASE_FUNC(func)
 {
     w_int32_t res;
     w_err_t err;
@@ -67,18 +67,18 @@ CASE_FUNC(heapfunc)
     EXPECT_EQ(err,W_ERR_OK);
 }
 
-CASE_SETUP(heapmulti)
+CASE_SETUP(multi)
 {
     
 }
 
-CASE_TEARDOWN(heapmulti)
+CASE_TEARDOWN(multi)
 {
 
 }
 
 static char *buff[12];
-CASE_FUNC(heapmulti)
+CASE_FUNC(multi)
 {
     w_int32_t i;
     w_int32_t res;
@@ -116,8 +116,8 @@ SUITE_TEARDOWN(heap)
 
 
 TEST_CASES_START(heap)
-TEST_CASE(heapfunc)
-TEST_CASE(heapmulti)
+TEST_CASE(func)
+TEST_CASE(multi)
 TEST_CASES_END
 TEST_SUITE(heap)
 

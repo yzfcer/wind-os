@@ -42,7 +42,7 @@ test_tree_s *trees[TREENUM+1];
 
 
 
-CASE_SETUP(tree_case)
+CASE_SETUP(func)
 {
     int i;
     wind_pool_create("test_tree",test_tree,
@@ -52,7 +52,7 @@ CASE_SETUP(tree_case)
 }
 
 
-CASE_TEARDOWN(tree_case)
+CASE_TEARDOWN(func)
 {
     int i;
     wind_pool_destroy(test_tree);
@@ -89,7 +89,7 @@ void print_layer(w_tree_s *tree)
 
 
 
-CASE_FUNC(tree_case)
+CASE_FUNC(func)
 {
     w_int32_t i;
     test_tree_s *tt;
@@ -124,7 +124,7 @@ SUITE_TEARDOWN(tree){}
 
 
 TEST_CASES_START(tree)
-TEST_CASE(tree_case)
+TEST_CASE(func)
 TEST_CASES_END
 TEST_SUITE(tree)
 

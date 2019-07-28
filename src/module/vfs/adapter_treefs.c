@@ -61,12 +61,11 @@ static w_err_t treefs_op_open(w_file_s *file,w_uint16_t fmode)
     tfile = treefile_open(tfs,file->path,fmode);
     if(tfile == W_NULL)
         return W_ERR_FAIL;
-    if(file->isdir != tfile->isdir)
-    {
-        treefile_close(tfile);
-        return W_ERR_INVALID;
-    }
+    
     file->fileobj = tfile;
+    file->isdir = tfile->isdir;
+    file->offset = 0;
+    
     return W_ERR_OK;
 }
 
@@ -88,32 +87,30 @@ static w_err_t treefs_op_subfile(w_file_s* dir,w_file_s* sub)
     w_dnode_s *dnode;
     w_treefile_s *tfile;
     w_treefile_s *subtfile;
-    w_int32_t len;
-    subtfile = (w_treefile_s *)sub->fileobj;
+    //w_int32_t len;
+    WIND_ASSERT_RETURN(dir != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(sub != W_NULL,W_ERR_PTR_NULL);
     do
     {
         err = W_ERR_OK;
-        if(subtfile->magic != TREEFILE_MAGIC)
+        subtfile = (w_treefile_s *)sub->fileobj;
+        if(subtfile == W_NULL)
         {
             tfile = (w_treefile_s *)dir->fileobj;
             dnode = tfile->tree.child_list.head;
             WIND_CHECK_BREAK(dnode != W_NULL,W_ERR_NOFILE);
             subtfile = NODE_TO_TREEFILE(dnode);
-            if(subtfile != W_NULL)
-                break;
         }
-        WIND_CHECK_BREAK(subtfile->tree.treenode.next != W_NULL,W_ERR_PTR_NULL);
-
-        dnode = subtfile->tree.treenode.next;
-        WIND_CHECK_BREAK(dnode != W_NULL,W_ERR_NOFILE);
-        subtfile = NODE_TO_TREEFILE(dnode);
+        else
+        {
+            WIND_CHECK_BREAK(subtfile->tree.treenode.next != W_NULL,W_ERR_PTR_NULL);
+            dnode = subtfile->tree.treenode.next;
+            WIND_CHECK_BREAK(dnode != W_NULL,W_ERR_NOFILE);
+            subtfile = NODE_TO_TREEFILE(dnode);
+        }
         WIND_ASSERT_BREAK(subtfile->magic == TREEFILE_MAGIC,W_ERR_INVALID,"invalid treefile dound");
-    }while(0);
-    if(err == W_ERR_OK)
-    {
         sub->fileobj = subtfile;
-    }
-
+    }while(0);
 
     return err;
 }

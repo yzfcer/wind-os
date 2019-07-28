@@ -61,7 +61,8 @@ int draw_map()
             print_map_point(map[i][j]);
         }
         printf("\n");
-    }	   
+    }
+    return 0;
 } 
 
 /*进行小人的上下左右的移动
@@ -207,6 +208,7 @@ int check_result()
     }
     if(k==0)
         printf("恭喜你，你赢了！\n");
+    return 0;
 }
 
 int pushbox_main(int argc,char **argv)//主函数 

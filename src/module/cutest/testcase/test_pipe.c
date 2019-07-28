@@ -45,17 +45,17 @@ w_pipe_s test_pp;
 
 
 /********************************************全局函数定义**********************************************/
-CASE_SETUP(pipeinit)
+CASE_SETUP(init)
 {
 
 }
 
-CASE_TEARDOWN(pipeinit)
+CASE_TEARDOWN(init)
 {
 
 }
 
-CASE_FUNC(pipeinit)
+CASE_FUNC(init)
 {
     w_err_t err;
     w_pipe_s *pipe;
@@ -80,17 +80,17 @@ CASE_FUNC(pipeinit)
     EXPECT_EQ(test_pp.obj.magic,(~WIND_PIPE_MAGIC));
 }
 
-CASE_SETUP(pipeinfo)
+CASE_SETUP(info)
 {
 
 }
 
-CASE_TEARDOWN(pipeinfo)
+CASE_TEARDOWN(info)
 {
 
 }
 
-CASE_FUNC(pipeinfo)
+CASE_FUNC(info)
 {
     w_err_t err;
     w_pipe_s *pipe;
@@ -108,17 +108,17 @@ CASE_FUNC(pipeinfo)
 
 
 
-CASE_SETUP(pipefunc)
+CASE_SETUP(func)
 {
 
 }
 
-CASE_TEARDOWN(pipefunc)
+CASE_TEARDOWN(func)
 {
 
 }
 
-CASE_FUNC(pipefunc)
+CASE_FUNC(func)
 {
     w_err_t err;
     w_int32_t i;
@@ -158,9 +158,9 @@ SUITE_TEARDOWN(pipe)
 
 
 TEST_CASES_START(pipe)
-TEST_CASE(pipeinit)
-TEST_CASE(pipeinfo)
-TEST_CASE(pipefunc)
+TEST_CASE(init)
+TEST_CASE(info)
+TEST_CASE(func)
 TEST_CASES_END
 TEST_SUITE(pipe)
 

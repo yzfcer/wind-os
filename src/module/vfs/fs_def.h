@@ -111,16 +111,17 @@ struct __w_fstype_s
 
 struct __w_file_s
 {
-    char *path;
-    char *filename;
-    w_file_s *subfile;
-    w_dnode_s filenode;//閾捐〃鑺傜偣
-    w_uint16_t fmode;//鎿嶄綔妯″紡
-    w_uint8_t isdir;
-    w_vfs_s *vfs;
-    void *fileobj;//鏂囦欢瀵硅薄
-    w_int32_t offset;//鍋忕Щ閲?
-    w_mutex_s *mutex;//鏂囦欢鎿嶄綔鍙橀噺
+    char *path;//实际的文件系统路径
+    w_vfs_s *vfs;//关联的文件系统
+    char *filename;//文件名
+    w_mutex_s *mutex;//文件锁
+    w_file_s *subfile;//子文件,在需要遍历目录时使用
+    w_dnode_s filenode;//文件对象节点
+    w_uint16_t fmode;//打开模式
+    
+    void *fileobj;//实际文件对象
+    w_uint8_t isdir;//是否是目录
+    w_int32_t offset;//文件偏移位置
 };
 
 

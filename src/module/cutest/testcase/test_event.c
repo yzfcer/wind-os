@@ -56,17 +56,17 @@ static void ev_callback2(w_event_s *event,void *arg)
     event_value += 20;
 }
 
-CASE_SETUP(eventinit)
+CASE_SETUP(init)
 {
 
 }
 
-CASE_TEARDOWN(eventinit)
+CASE_TEARDOWN(init)
 {
 
 }
 
-CASE_FUNC(eventinit)
+CASE_FUNC(init)
 {
     w_err_t err;
     err = wind_event_init(&test_ev,"test");
@@ -94,17 +94,17 @@ CASE_FUNC(eventinit)
 }
 
 
-CASE_SETUP(eventinfo)
+CASE_SETUP(info)
 {
 
 }
 
-CASE_TEARDOWN(eventinfo)
+CASE_TEARDOWN(info)
 {
 
 }
 
-CASE_FUNC(eventinfo)
+CASE_FUNC(info)
 {
     w_err_t err;
     events[0] = wind_event_create("test");
@@ -123,17 +123,17 @@ CASE_FUNC(eventinfo)
 
 }
 
-CASE_SETUP(eventfunc)
+CASE_SETUP(func)
 {
 
 }
 
-CASE_TEARDOWN(eventfunc)
+CASE_TEARDOWN(func)
 {
 
 }
 
-CASE_FUNC(eventfunc)
+CASE_FUNC(func)
 {
     w_err_t err;
     events[0] = wind_event_create("test");
@@ -161,12 +161,12 @@ CASE_FUNC(eventfunc)
 
 }
 
-CASE_SETUP(eventmulti)
+CASE_SETUP(multi)
 {
     
 }
 
-CASE_TEARDOWN(eventmulti)
+CASE_TEARDOWN(multi)
 {
     w_err_t err;
     events[0] = wind_event_create("test1");
@@ -208,7 +208,7 @@ CASE_TEARDOWN(eventmulti)
     EXPECT_EQ(W_ERR_OK,err);
 }
 
-CASE_FUNC(eventmulti)
+CASE_FUNC(multi)
 {
 
 
@@ -226,10 +226,10 @@ SUITE_TEARDOWN(event)
 }
 
 TEST_CASES_START(event)
-TEST_CASE(eventinit)
-TEST_CASE(eventinfo)
-TEST_CASE(eventfunc)
-TEST_CASE(eventmulti)
+TEST_CASE(init)
+TEST_CASE(info)
+TEST_CASE(func)
+TEST_CASE(multi)
 TEST_CASES_END
 TEST_SUITE(event)
 

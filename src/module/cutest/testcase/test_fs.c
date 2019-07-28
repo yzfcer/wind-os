@@ -28,18 +28,18 @@
 extern "C" {
 #endif // #ifdef __cplusplus
 
-CASE_SETUP(fs_create)
+CASE_SETUP(create)
 {
 
 }
 
 
-CASE_TEARDOWN(fs_create)
+CASE_TEARDOWN(create)
 {
 
 }
 
-CASE_FUNC(fs_create)
+CASE_FUNC(create)
 {
     w_err_t err;
     w_file_s *file;
@@ -64,17 +64,17 @@ CASE_FUNC(fs_create)
 }
 
 
-CASE_SETUP(fs_readwrite)
+CASE_SETUP(readwrite)
 {
 }
 
-CASE_TEARDOWN(fs_readwrite)
+CASE_TEARDOWN(readwrite)
 {
     
 }
 
 static w_uint8_t buff[32];
-CASE_FUNC(fs_readwrite)
+CASE_FUNC(readwrite)
 {
     w_int32_t len;
     w_err_t err;
@@ -117,8 +117,8 @@ SUITE_TEARDOWN(fs)
 
 
 TEST_CASES_START(fs)
-TEST_CASE(fs_create)
-TEST_CASE(fs_readwrite)
+TEST_CASE(create)
+TEST_CASE(readwrite)
 TEST_CASES_END
 TEST_SUITE(fs)
 

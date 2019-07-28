@@ -28,6 +28,7 @@
 #include "wind_module.h"
 #include "wind_mutex.h"
 #include "wind_core.h"
+#include "wind_heap.h"
 #include "wind_string.h"
 #if WIND_MODULE_MAGIC
 typedef struct 

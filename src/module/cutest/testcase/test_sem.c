@@ -44,17 +44,17 @@ w_sem_s test_sm;
 
 /********************************************全局函数定义**********************************************/
 
-CASE_SETUP(seminit)
+CASE_SETUP(init)
 {
 
 }
 
-CASE_TEARDOWN(seminit)
+CASE_TEARDOWN(init)
 {
 
 }
 
-CASE_FUNC(seminit)
+CASE_FUNC(init)
 {
     w_err_t err;
     err = wind_sem_init(&test_sm,"test",3);
@@ -79,17 +79,17 @@ CASE_FUNC(seminit)
     EXPECT_EQ(test_sm.obj.magic,(~WIND_SEM_MAGIC));
 }
 
-CASE_SETUP(seminfo)
+CASE_SETUP(info)
 {
 
 }
 
-CASE_TEARDOWN(seminfo)
+CASE_TEARDOWN(info)
 {
 
 }
 
-CASE_FUNC(seminfo)
+CASE_FUNC(info)
 {
     w_err_t err;
     sems[0] = wind_sem_create("test",3);
@@ -105,17 +105,17 @@ CASE_FUNC(seminfo)
 
 }
 
-CASE_SETUP(semfunc)
+CASE_SETUP(func)
 {
 
 }
 
-CASE_TEARDOWN(semfunc)
+CASE_TEARDOWN(func)
 {
 
 }
 
-CASE_FUNC(semfunc)
+CASE_FUNC(func)
 {
     w_int32_t i;
     w_err_t err;
@@ -142,17 +142,17 @@ CASE_FUNC(semfunc)
 
 }
 
-CASE_SETUP(semmulti)
+CASE_SETUP(multi)
 {
     
 }
 
-CASE_TEARDOWN(semmulti)
+CASE_TEARDOWN(multi)
 {
 
 }
 
-CASE_FUNC(semmulti)
+CASE_FUNC(multi)
 {
     w_int32_t i;
     w_err_t err;
@@ -182,10 +182,10 @@ SUITE_TEARDOWN(sem)
 
 
 TEST_CASES_START(sem)
-TEST_CASE(seminit)
-TEST_CASE(seminfo)
-TEST_CASE(semfunc)
-TEST_CASE(semmulti)
+TEST_CASE(init)
+TEST_CASE(info)
+TEST_CASE(func)
+TEST_CASE(multi)
 TEST_CASES_END
 TEST_SUITE(sem)
 

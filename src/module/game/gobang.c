@@ -41,7 +41,7 @@ static Record newRecord()//记录节点构造函数
 
 static void Exit()//检查退出程序
 {
-    int input;
+    //int input;
     if(Exiting)//如果是第二次按下ESC
     {
         exit(0);
@@ -55,7 +55,7 @@ static void Exit()//检查退出程序
 
 static void ExitRep()//检查退出回放
 {
-    int input;
+    //int input;
     if(ExiRep)//如果是第二次后移
     {
         ExiRep=3;

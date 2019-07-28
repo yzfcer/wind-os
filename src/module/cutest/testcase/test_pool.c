@@ -33,17 +33,17 @@ WIND_POOL(test_pool,TNUM,TSIZE);
 void *testblk[TNUM+1];
 
 
-CASE_SETUP(pool_info)
+CASE_SETUP(info)
 {
     wind_pool_create("test_pool",test_pool,sizeof(test_pool),TSIZE);
 }
 
-CASE_TEARDOWN(pool_info)
+CASE_TEARDOWN(info)
 {
     wind_pool_destroy(test_pool);
 }
 
-CASE_FUNC(pool_info)
+CASE_FUNC(info)
 {
     w_pool_s *pool = wind_pool_get_by_mem(test_pool);
     EXPECT_EQ(pool->obj.magic,WIND_POOL_MAGIC);
@@ -54,7 +54,7 @@ CASE_FUNC(pool_info)
 }
 
 
-CASE_SETUP(pool_alloc)
+CASE_SETUP(alloc)
 {
     int i;
     wind_pool_create("test_pool",test_pool,
@@ -65,7 +65,7 @@ CASE_SETUP(pool_alloc)
 }
 
 
-CASE_TEARDOWN(pool_alloc)
+CASE_TEARDOWN(alloc)
 {
     int i;
     wind_pool_destroy(test_pool);
@@ -73,7 +73,7 @@ CASE_TEARDOWN(pool_alloc)
         testblk[i] = 0;
 }
 
-CASE_FUNC(pool_alloc)
+CASE_FUNC(alloc)
 {
     int i;
     w_err_t err;
@@ -112,8 +112,8 @@ SUITE_TEARDOWN(pool){}
 
 
 TEST_CASES_START(pool)
-TEST_CASE(pool_info)
-TEST_CASE(pool_alloc)
+TEST_CASE(info)
+TEST_CASE(alloc)
 TEST_CASES_END
 TEST_SUITE(pool)
 

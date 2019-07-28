@@ -52,17 +52,17 @@ WIND_POOL(testmsg_pool,4,sizeof(test_msg_s));
 
 /********************************************全局函数定义**********************************************/
 
-CASE_SETUP(msgboxinit)
+CASE_SETUP(init)
 {
 
 }
 
-CASE_TEARDOWN(msgboxinit)
+CASE_TEARDOWN(init)
 {
 
 }
 
-CASE_FUNC(msgboxinit)
+CASE_FUNC(init)
 {
     w_err_t err;
     w_thread_s *thr;
@@ -89,17 +89,17 @@ CASE_FUNC(msgboxinit)
     EXPECT_EQ(test_mb.obj.magic,(~WIND_MSGBOX_MAGIC));
 }
 
-CASE_SETUP(msgboxinfo)
+CASE_SETUP(info)
 {
 
 }
 
-CASE_TEARDOWN(msgboxinfo)
+CASE_TEARDOWN(info)
 {
 
 }
 
-CASE_FUNC(msgboxinfo)
+CASE_FUNC(info)
 {
     w_err_t err;
     w_thread_s *thr;
@@ -116,17 +116,17 @@ CASE_FUNC(msgboxinfo)
     EXPECT_EQ(W_ERR_OK,err);
 }
 
-CASE_SETUP(msgboxfunc)
+CASE_SETUP(func)
 {
     
 }
 
-CASE_TEARDOWN(msgboxfunc)
+CASE_TEARDOWN(func)
 {
 
 }
 
-CASE_FUNC(msgboxfunc)
+CASE_FUNC(func)
 {
     w_err_t err;
     w_msg_s *msg;
@@ -153,17 +153,17 @@ CASE_FUNC(msgboxfunc)
     EXPECT_EQ(W_ERR_OK,err);
 }
 
-CASE_SETUP(msgbox_multthread)
+CASE_SETUP(multthread)
 {
     
 }
 
-CASE_TEARDOWN(msgbox_multthread)
+CASE_TEARDOWN(multthread)
 {
 
 }
 
-CASE_FUNC(msgbox_multthread)
+CASE_FUNC(multthread)
 {
 
 }
@@ -179,10 +179,10 @@ SUITE_TEARDOWN(msgbox)
 
 
 TEST_CASES_START(msgbox)
-TEST_CASE(msgboxinit)
-TEST_CASE(msgboxinfo)
-TEST_CASE(msgboxfunc)
-TEST_CASE(msgbox_multthread)
+TEST_CASE(init)
+TEST_CASE(info)
+TEST_CASE(func)
+TEST_CASE(multthread)
 TEST_CASES_END
 TEST_SUITE(msgbox)
 
