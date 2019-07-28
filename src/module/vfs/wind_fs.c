@@ -40,7 +40,7 @@
 #if WIND_MODULE_VFS_SUPPORT
 #define NODE_TO_FS(dnode) (w_vfs_s*)(((w_uint8_t*)(dnode))-((w_uint32_t)&(((w_vfs_s*)0)->obj.objnode)))
 
-static w_dlist_s fs_list;
+static w_dlist_s fslist;
 static char *fsname[] = {"fs0","fs1","fs2","fs3","fs4"};
 WIND_POOL(fspool,WIND_FS_MAX_NUM,sizeof(w_vfs_s));
 
@@ -53,7 +53,7 @@ w_vfs_s *wind_vfs_create(char *name)
     vfs = wind_pool_malloc(fspool);
     WIND_ASSERT_RETURN(vfs != W_NULL,W_NULL);
     wind_memset(vfs,0,sizeof(w_vfs_s));
-    err = wind_obj_init(&vfs->obj,WIND_VFS_MAGIC,name,&fs_list);
+    err = wind_obj_init(&vfs->obj,WIND_VFS_MAGIC,name,&fslist);
     WIND_ASSERT_RETURN(err == W_ERR_OK,W_NULL);
     return vfs;    
 }
@@ -63,7 +63,7 @@ w_err_t wind_vfs_destroy(w_vfs_s *vfs)
     w_err_t err;
     WIND_ASSERT_RETURN(vfs != W_NULL,W_ERR_MEM);
     WIND_ASSERT_RETURN(vfs->obj.magic == WIND_VFS_MAGIC,W_ERR_INVALID);
-    err = wind_obj_deinit(&vfs->obj,WIND_VFS_MAGIC,&fs_list);
+    err = wind_obj_deinit(&vfs->obj,WIND_VFS_MAGIC,&fslist);
     WIND_ASSERT_RETURN(err == W_ERR_OK,err);
     return err;
 }
@@ -107,7 +107,7 @@ static w_err_t mount_param_check(char *fsname,char *fstype,char *blkname,char *p
         return W_ERR_INVALID;
     }
     
-    foreach_node(dnode,&fs_list)
+    foreach_node(dnode,&fslist)
     {
         vfs = NODE_TO_FS(dnode);
         if((vfs->mount_path != W_NULL) && 
@@ -135,7 +135,7 @@ static w_err_t mount_param_check(char *fsname,char *fstype,char *blkname,char *p
 w_err_t _wind_vfs_mod_init(void)
 {
     w_err_t err;
-    DLIST_INIT(fs_list);
+    DLIST_INIT(fslist);
     err = wind_pool_create("vfs",fspool,sizeof(fspool),sizeof(w_vfs_s));
     WIND_ASSERT_RETURN(err == W_ERR_OK,err);
     err = vfs_objs_init();
@@ -151,7 +151,7 @@ w_err_t _wind_vfs_mod_init(void)
 
 w_vfs_s *wind_vfs_get(char *name)
 {
-    return (w_vfs_s *)wind_obj_get(name,&fs_list);
+    return (w_vfs_s *)wind_obj_get(name,&fslist);
 }
 
 
@@ -161,7 +161,7 @@ w_vfs_s *wind_vfs_get_bypath(const char *path)
     w_dnode_s *dnode;
     w_int32_t len;
     wind_disable_switch();
-    foreach_node(dnode,&fs_list)
+    foreach_node(dnode,&fslist)
     {
         vfs = NODE_TO_FS(dnode);
         if(!IS_F_VFS_MOUNT(vfs))
@@ -181,7 +181,7 @@ w_err_t wind_vfs_print(void)
 {
     w_dnode_s *dnode;
     w_vfs_s *vfs;
-    w_dlist_s *list = &fs_list;
+    w_dlist_s *list = &fslist;
     wind_printf("\r\n\r\nfs mount list:\r\n");
     wind_disable_switch();
     foreach_node(dnode,list)

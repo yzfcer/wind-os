@@ -87,7 +87,6 @@ static w_err_t treefs_op_subfile(w_file_s* dir,w_file_s* sub)
     w_dnode_s *dnode;
     w_treefile_s *tfile;
     w_treefile_s *subtfile;
-    //w_int32_t len;
     WIND_ASSERT_RETURN(dir != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(sub != W_NULL,W_ERR_PTR_NULL);
     do
