@@ -127,9 +127,73 @@ CASE_FUNC(path_valid)
 
 }
 
+CASE_SETUP(path_parent)
+{
+}
+
+CASE_TEARDOWN(path_parent)
+{
+}
+
+CASE_FUNC(path_parent)
+{
+    char *newpath;
+    newpath = wind_filepath_get_parent(W_NULL);
+    EXPECT_EQ(newpath,W_NULL);
+    newpath = wind_filepath_get_parent("");
+    EXPECT_EQ(newpath,W_NULL);
+    newpath = wind_filepath_get_parent("/");
+    EXPECT_EQ(newpath,W_NULL);
+    newpath = wind_filepath_get_parent("/test");
+    EXPECT_STR_EQ(newpath,"");
+    wind_free(newpath);
+    newpath = wind_filepath_get_parent("/test/");
+    EXPECT_STR_EQ(newpath,"");
+    wind_free(newpath);
+    newpath = wind_filepath_get_parent("/test/test1");
+    EXPECT_STR_EQ(newpath,"/test/");
+    wind_free(newpath);
+    newpath = wind_filepath_get_parent("/test/test1/");
+    EXPECT_STR_EQ(newpath,"/test/");
+    wind_free(newpath);
+    
+}
+
+CASE_SETUP(path_filename)
+{
+}
+
+CASE_TEARDOWN(path_filename)
+{
+}
+
+CASE_FUNC(path_filename)
+{
+    char *newpath;
+    newpath = wind_filepath_get_filename(W_NULL);
+    EXPECT_EQ(newpath,W_NULL);
+    newpath = wind_filepath_get_filename("");
+    EXPECT_EQ(newpath,W_NULL);
+    newpath = wind_filepath_get_filename("/");
+    EXPECT_EQ(newpath,W_NULL);
+    newpath = wind_filepath_get_filename("/test");
+    EXPECT_STR_EQ(newpath,"test");
+    wind_free(newpath);
+    newpath = wind_filepath_get_filename("/test/");
+    EXPECT_STR_EQ(newpath,"test");
+    wind_free(newpath);
+    newpath = wind_filepath_get_filename("/test/test1");
+    EXPECT_STR_EQ(newpath,"test1");
+    wind_free(newpath);
+    newpath = wind_filepath_get_filename("/test/test1/");
+    EXPECT_STR_EQ(newpath,"test1");
+    wind_free(newpath);
+    
+}
+
 SUITE_SETUP(filepath)
 {
-
+    
 }
 
 SUITE_TEARDOWN(filepath)
@@ -141,6 +205,8 @@ SUITE_TEARDOWN(filepath)
 TEST_CASES_START(filepath)
 TEST_CASE(current_path)
 TEST_CASE(path_valid)
+TEST_CASE(path_parent)
+TEST_CASE(path_filename)
 TEST_CASES_END
 TEST_SUITE(filepath)
 

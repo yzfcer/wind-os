@@ -28,13 +28,13 @@
 #include "wind_type.h"
 #if WIND_MODULE_VFS_SUPPORT
 char *wind_filepath_generate(char *pre_path,char *relative_path,w_uint16_t isdir);
-char *  wind_filepath_copy(char *path);
+char * wind_filepath_copy(char *path);
 w_err_t wind_filepath_release(char *path);
-char *  wind_filepath_get_current(void);
+char * wind_filepath_get_current(void);
 w_err_t wind_filepath_set_current(char *path);
 w_err_t wind_filepath_check_valid(char *path);
-w_err_t wind_filepath_get_parent(char *path);
-w_err_t wind_pathfile_get_filename(char *path);
+char* wind_filepath_get_parent(char *path);
+char* wind_filepath_get_filename(char *path);
 
 
 #endif

@@ -129,6 +129,7 @@ static w_file_s *wind_file_create(w_vfs_s *fs,const char *realpath,w_uint16_t fm
         err = W_ERR_OK;
         file = file_malloc();
         WIND_ASSERT_BREAK(file != W_NULL,W_ERR_MEM,"file_malloc failed");
+        wind_memset(file,0,sizeof(w_file_s));
         file->mutex = W_NULL;
         file->path = W_NULL;
         file->mutex = wind_mutex_create(W_NULL);
@@ -139,6 +140,9 @@ static w_file_s *wind_file_create(w_vfs_s *fs,const char *realpath,w_uint16_t fm
         WIND_ASSERT_BREAK(file->path != W_NULL,W_ERR_MEM,"malloc file path failed");
         wind_strcpy(file->path,realpath);
         file->path[rpathlen] = 0;
+        //wind_filepath_generate(char * pre_path,char * relative_path,w_uint16_t isdir)
+        file->filename = wind_filepath_get_filename(file->path);
+        WIND_ASSERT_BREAK(file->filename != W_NULL,W_ERR_INVALID,"path is invalid");
         file->subfile = W_NULL;
         DNODE_INIT(file->filenode);
         file->fmode = fmode;
@@ -158,6 +162,8 @@ static w_file_s *wind_file_create(w_vfs_s *fs,const char *realpath,w_uint16_t fm
     {
         if(file->path != W_NULL)
             wind_free(file->path);
+        if(file->filename != W_NULL)
+            wind_free(file->filename);
         if(file->mutex != W_NULL)
             wind_mutex_destroy(file->mutex);
         file_free(file);
@@ -174,8 +180,12 @@ static w_err_t wind_file_destroy(w_file_s *file)
     wind_disable_switch();
     dlist_remove(&filelist,&file->filenode);
     wind_enable_switch();
-    wind_mutex_destroy(file->mutex);
-    wind_free(file->path);
+    if(file->path != W_NULL)
+        wind_free(file->path);
+    if(file->filename != W_NULL)
+        wind_free(file->filename);
+    if(file->mutex != W_NULL)
+        wind_mutex_destroy(file->mutex);
     if(file->subfile != W_NULL)
         wind_file_destroy(file->subfile);
     file_free(file);

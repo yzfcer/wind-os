@@ -30,7 +30,7 @@
 #if WIND_MODULE_VFS_SUPPORT
 static char *curpath = W_NULL;
 
-char *wind_filepath_get_current(void)
+char * wind_filepath_get_current(void)
 {
     return curpath;
 }
@@ -93,7 +93,7 @@ char *wind_filepath_generate(char *pre_path,char *relative_path,w_uint16_t isdir
     return path;
 }
 
-char *  wind_filepath_copy(char *path)
+char * wind_filepath_copy(char *path)
 {
     char *newpath;
     WIND_ASSERT_RETURN(path != W_NULL,W_NULL);
@@ -169,42 +169,45 @@ w_err_t wind_filepath_check_valid(char *path)
     return W_ERR_OK;
 }
 
-w_err_t wind_filepath_get_parent(char *path)
+char* wind_filepath_get_parent(char *path)
 {
     w_err_t err;
     w_int32_t i,len;
-    WIND_ASSERT_RETURN(path != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(path[0] != 0,W_ERR_FAIL);
+    char *newpath;
+    WIND_ASSERT_RETURN(path != W_NULL,W_NULL);
+    WIND_ASSERT_RETURN(path[0] == '/',W_NULL);
     err = wind_filepath_check_valid(path);
-    WIND_ASSERT_RETURN(err == W_ERR_OK,err);
+    WIND_ASSERT_RETURN(err == W_ERR_OK,W_NULL);
     len = wind_strlen(path);
-    WIND_ASSERT_RETURN(len > 1,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(len >= 1,W_NULL);
     if(path[len-1] == '/')
         path[len-1] = '\0';
-    for(i = len -1;i > 0;i --)
+    for(i = len - 1;i >= 0;i --)
     {
         if(path[i] == '/')
         {
             path[i+1] = 0;
-            return W_ERR_OK;
+            newpath = wind_salloc(path);
+            return newpath;
         }
     }
     return W_ERR_FAIL;
 }
 
-w_err_t wind_pathfile_get_filename(char *path)
+char* wind_filepath_get_filename(char *path)
 {
     w_err_t err;
     w_int32_t i,len;
-    WIND_ASSERT_RETURN(path != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(path[0] != 0,W_ERR_FAIL);
+    char *filename;
+    WIND_ASSERT_RETURN(path != W_NULL,W_NULL);
+    WIND_ASSERT_RETURN(path[0] == '/',W_NULL);
     err = wind_filepath_check_valid(path);
-    WIND_ASSERT_RETURN(err == W_ERR_OK,err);
+    WIND_ASSERT_RETURN(err == W_ERR_OK,W_NULL);
     len = wind_strlen(path);
-    WIND_ASSERT_RETURN(len > 1,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(len >= 1,W_NULL);
     if(path[len-1] == '/')
         path[len-1] = '\0';
-    for(i = len -1;i > 0;i --)
+    for(i = len - 1;i >= 0;i --)
     {
         if(path[i] == '/')
         {

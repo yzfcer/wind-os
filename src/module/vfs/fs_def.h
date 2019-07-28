@@ -116,6 +116,7 @@ struct __w_fstype_s
 struct __w_file_s
 {
     char *path;
+    char *filename;
     w_file_s *subfile;
     w_dnode_s filenode;//链表节点
     w_uint16_t fmode;//操作模式
