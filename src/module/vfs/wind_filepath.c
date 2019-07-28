@@ -103,6 +103,16 @@ char * wind_filepath_copy(char *path)
     return newpath;
 }
 
+w_bool_t wind_filepath_isdir(char *path)
+{
+    w_int32_t len;
+    WIND_CHECK_RETURN(path != W_NULL,W_FALSE);
+    WIND_CHECK_RETURN(path[0] == '/',W_FALSE);
+    len = wind_strlen(path);
+    WIND_CHECK_RETURN(path[len-1] == '/',W_FALSE);
+    return W_TRUE;
+}
+
 w_err_t wind_filepath_release(char *path)
 {
     WIND_ASSERT_RETURN(path != W_NULL,W_ERR_PTR_NULL);
@@ -110,10 +120,16 @@ w_err_t wind_filepath_release(char *path)
 }
 
 
-w_int32_t wind_split_path(char *path,char **layers,w_int32_t layercnt)
+w_int32_t wind_filepath_split(char *path,char **layers,w_int32_t layercnt)
 {
-    w_int32_t i,j,cnt = 0;
-    int len = wind_strlen(path)+1;
+    w_err_t err;
+    w_int32_t i,j,len,cnt = 0;
+    WIND_ASSERT_RETURN(path != W_NULL,-1);
+    WIND_ASSERT_RETURN(layers != W_NULL,-1);
+    WIND_ASSERT_RETURN(layercnt >= 2,-1);
+    err = wind_filepath_check_valid(path);
+    WIND_ASSERT_RETURN(err == W_ERR_OK,-1);
+    len = wind_strlen(path)+1;
     j = 0;
     for(i = 0;i < layercnt;i ++)
     {

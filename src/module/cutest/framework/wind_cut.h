@@ -35,14 +35,14 @@
 
 //¶ÏÑÔÃüÌâxÎª¼Ù
 #define EXPECT_FALSE(x) \
-    do{if(x) \
+    do{if(!(!(x))) \
     {FAIL_EXPECT_FALSE_OUT(x,"FALSE");test_suite_err(__LINE__);}\
     }while(0)
     
 
 //¶ÏÑÔx == y
 #define EXPECT_EQ(x,y) \
-    do{if((x) != (y)) \
+    do{if(!((x) == (y))) \
     {FAIL_EXPECT_OUT(x,y,"==");test_suite_err(__LINE__);}\
     }while(0)
 
@@ -50,43 +50,43 @@
 
 //¶ÏÑÔx != y
 #define EXPECT_NE(x,y) \
-    do{if((x) == (y)) \
+    do{if(!((x) != (y))) \
     {FAIL_EXPECT_OUT(x,y,"!=");test_suite_err(__LINE__);}\
     }while(0)
 
 //¶ÏÑÔx > y
 #define EXPECT_GREATER(x,y) \
-    do{if((x) <= (y)) \
+    do{if(!((x) > (y))) \
     {FAIL_EXPECT_OUT(x,y,">");test_suite_err(__LINE__);}\
     }while(0)
 
 //¶ÏÑÔx < y
 #define EXPECT_SMALLER(x,y) \
-    do{if((x) <= (y)) \
+    do{if(!((x) < (y))) \
     {FAIL_EXPECT_OUT(x,y,"<");test_suite_err(__LINE__);}\
     }while(0)
 
 //¶ÏÑÔx <= y
 #define EXPECT_NOT_GREATER(x,y) \
-    do{if((x) <= (y)) \
+    do{if(!((x) <= (y))) \
     {FAIL_EXPECT_OUT(x,y,"<=");test_suite_err(__LINE__);}\
     }while(0)
 
 //¶ÏÑÔx >= y
 #define EXPECT_NOT_SMALLER(x,y) \
-    do{if((x) <= (y)) \
+    do{if(!((x) >= (y))) \
     {FAIL_EXPECT_OUT(x,y,">=");test_suite_err(__LINE__);}\
     }while(0)
 
 //¶ÏÑÔ×Ö·û´®ÏàÍ¬
 #define EXPECT_STR_EQ(x,y) \
-    do{if(stringcmp((x),(y)) != 0) \
+    do{if(!(stringcmp((x),(y)) == 0)) \
     {FAIL_EXPECT_OUT(x,y,"!=");test_suite_err(__LINE__);}\
     }while(0)
     
 //¶ÏÑÔ×Ö·û´®²»Í¬
 #define EXPECT_STR_NE(x,y) \
-            do{if(stringcmp((x),(y)) == 0) \
+            do{if(!(stringcmp((x),(y)) != 0)) \
             {FAIL_EXPECT_OUT(x,y,"==");test_suite_err(__LINE__);}\
             }while(0)
 

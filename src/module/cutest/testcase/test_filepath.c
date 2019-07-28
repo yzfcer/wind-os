@@ -42,20 +42,18 @@ static char *bak_path = (char *)W_NULL;
 
 /********************************************全局函数定义**********************************************/
 
-CASE_SETUP(current_path)
+CASE_SETUP(current)
 {
     char *path;
-    w_int32_t len;
     if(bak_path != W_NULL)
         wind_free(bak_path);
     path = wind_filepath_get_current();
     WIND_ASSERT_RETURN_VOID(path != W_NULL);
-    len = wind_strlen(path);
-    bak_path = (char*)wind_malloc(len+1);
-    wind_strcpy(bak_path,path);
+    bak_path = wind_salloc(path);
+    WIND_ASSERT_RETURN_VOID(bak_path != W_NULL);
 }
 
-CASE_TEARDOWN(current_path)
+CASE_TEARDOWN(current)
 {
     w_err_t err;
     WIND_ASSERT_RETURN_VOID(bak_path != W_NULL);
@@ -65,13 +63,15 @@ CASE_TEARDOWN(current_path)
     bak_path = (char*)W_NULL;
 }
 
-CASE_FUNC(current_path)
+CASE_FUNC(current)
 {
     char *path;
     w_err_t err;
-    err = wind_filepath_set_current("tet");
+    err = wind_filepath_set_current(W_NULL);
     EXPECT_NE(err,W_ERR_OK);
     err = wind_filepath_set_current((char *)W_NULL);
+    EXPECT_NE(err,W_ERR_OK);
+    err = wind_filepath_set_current("tet");
     EXPECT_NE(err,W_ERR_OK);
     err = wind_filepath_set_current("");
     EXPECT_NE(err,W_ERR_OK);
@@ -89,15 +89,15 @@ CASE_FUNC(current_path)
     
 }
 
-CASE_SETUP(path_valid)
+CASE_SETUP(valid)
 {
 }
 
-CASE_TEARDOWN(path_valid)
+CASE_TEARDOWN(valid)
 {
 }
 
-CASE_FUNC(path_valid)
+CASE_FUNC(valid)
 {
     w_err_t err;
     err = wind_filepath_check_valid((char *)W_NULL);
@@ -127,15 +127,15 @@ CASE_FUNC(path_valid)
 
 }
 
-CASE_SETUP(path_parent)
+CASE_SETUP(parent)
 {
 }
 
-CASE_TEARDOWN(path_parent)
+CASE_TEARDOWN(parent)
 {
 }
 
-CASE_FUNC(path_parent)
+CASE_FUNC(parent)
 {
     char *newpath;
     newpath = wind_filepath_get_parent(W_NULL);
@@ -159,15 +159,16 @@ CASE_FUNC(path_parent)
     
 }
 
-CASE_SETUP(path_filename)
+
+CASE_SETUP(filename)
 {
 }
 
-CASE_TEARDOWN(path_filename)
+CASE_TEARDOWN(filename)
 {
 }
 
-CASE_FUNC(path_filename)
+CASE_FUNC(filename)
 {
     char *newpath;
     newpath = wind_filepath_get_filename(W_NULL);
@@ -191,6 +192,34 @@ CASE_FUNC(path_filename)
     
 }
 
+CASE_SETUP(isdir)
+{
+}
+
+CASE_TEARDOWN(isdir)
+{
+}
+
+CASE_FUNC(isdir)
+{
+    w_bool_t isdir;
+    isdir = wind_filepath_isdir(W_NULL);
+    EXPECT_EQ(isdir,W_FALSE);
+    isdir = wind_filepath_isdir("");
+    EXPECT_EQ(isdir,W_FALSE);
+    isdir = wind_filepath_isdir("test");
+    EXPECT_EQ(isdir,W_FALSE);
+    isdir = wind_filepath_isdir("/test");
+    EXPECT_EQ(isdir,W_FALSE);
+    isdir = wind_filepath_isdir("/");
+    EXPECT_EQ(isdir,W_TRUE);
+    isdir = wind_filepath_isdir("/test/");
+    EXPECT_EQ(isdir,W_TRUE);
+    isdir = wind_filepath_isdir("/test/test1/");
+    EXPECT_EQ(isdir,W_TRUE);
+}
+
+
 SUITE_SETUP(filepath)
 {
     
@@ -201,12 +230,98 @@ SUITE_TEARDOWN(filepath)
 
 }
 
+CASE_SETUP(split)
+{
+}
+
+CASE_TEARDOWN(split)
+{
+}
+
+CASE_FUNC(split)
+{
+    w_int32_t cnt;
+    char *path;
+    char *layer[5];
+    cnt = wind_filepath_split(W_NULL,layer,5);
+    EXPECT_SMALLER(cnt,0);
+    cnt = wind_filepath_split("/test",W_NULL,5);
+    EXPECT_SMALLER(cnt,0);
+    cnt = wind_filepath_split("/test",layer,1);
+    EXPECT_SMALLER(cnt,0);
+
+    path = wind_salloc("/");
+    EXPECT_NE(path,W_NULL);
+    cnt = wind_filepath_split(path,layer,5);
+    EXPECT_EQ(cnt,1);
+    EXPECT_STR_EQ(layer[0],"");
+    wind_free(path);
+    
+    path = wind_salloc("/test");
+    EXPECT_NE(path,W_NULL);
+    cnt = wind_filepath_split(path,layer,5);
+    EXPECT_EQ(cnt,2);
+    EXPECT_STR_EQ(layer[0],"");
+    EXPECT_STR_EQ(layer[1],"test");
+    wind_free(path);
+
+    path = wind_salloc("/test/");
+    EXPECT_NE(path,W_NULL);
+    cnt = wind_filepath_split(path,layer,5);
+    EXPECT_EQ(cnt,2);
+    EXPECT_STR_EQ(layer[0],"");
+    EXPECT_STR_EQ(layer[1],"test");
+    wind_free(path);
+    
+    path = wind_salloc("/test/test1");
+    EXPECT_NE(path,W_NULL);
+    cnt = wind_filepath_split(path,layer,5);
+    EXPECT_EQ(cnt,3);
+    EXPECT_STR_EQ(layer[0],"");
+    EXPECT_STR_EQ(layer[1],"test");
+    EXPECT_STR_EQ(layer[2],"test1");
+    wind_free(path);
+    
+    path = wind_salloc("/test/test1/");
+    EXPECT_NE(path,W_NULL);
+    cnt = wind_filepath_split(path,layer,5);
+    EXPECT_EQ(cnt,3);
+    EXPECT_STR_EQ(layer[0],"");
+    EXPECT_STR_EQ(layer[1],"test");
+    EXPECT_STR_EQ(layer[2],"test1");
+    wind_free(path);
+
+    path = wind_salloc("/test/test1/test2");
+    EXPECT_NE(path,W_NULL);
+    cnt = wind_filepath_split(path,layer,5);
+    EXPECT_EQ(cnt,4);
+    EXPECT_STR_EQ(layer[0],"");
+    EXPECT_STR_EQ(layer[1],"test");
+    EXPECT_STR_EQ(layer[2],"test1");
+    EXPECT_STR_EQ(layer[3],"test2");
+    wind_free(path);
+
+    path = wind_salloc("/test/test1/test2/test3");
+    EXPECT_NE(path,W_NULL);
+    cnt = wind_filepath_split(path,layer,5);
+    EXPECT_EQ(cnt,5);
+    EXPECT_STR_EQ(layer[0],"");
+    EXPECT_STR_EQ(layer[1],"test");
+    EXPECT_STR_EQ(layer[2],"test1");
+    EXPECT_STR_EQ(layer[3],"test2");
+    EXPECT_STR_EQ(layer[4],"test3");
+    wind_free(path);
+    
+}
+
 
 TEST_CASES_START(filepath)
-TEST_CASE(current_path)
-TEST_CASE(path_valid)
-TEST_CASE(path_parent)
-TEST_CASE(path_filename)
+TEST_CASE(current)
+TEST_CASE(valid)
+TEST_CASE(parent)
+TEST_CASE(filename)
+TEST_CASE(isdir)
+TEST_CASE(split)
 TEST_CASES_END
 TEST_SUITE(filepath)
 

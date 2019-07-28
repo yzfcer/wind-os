@@ -393,6 +393,7 @@ void show_test_suites(void)
     w_uint32_t i;
     w_test_suite_s *ts;
     test_printf("\r\nTest Suites List As Following:\r\n");
+    test_printf("TestSuites\r\n");
     if(suite_list.head == W_NULL)
     {
         test_suite_register_all();
