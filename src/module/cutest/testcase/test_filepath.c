@@ -145,10 +145,10 @@ CASE_FUNC(path_parent)
     newpath = wind_filepath_get_parent("/");
     EXPECT_EQ(newpath,W_NULL);
     newpath = wind_filepath_get_parent("/test");
-    EXPECT_STR_EQ(newpath,"");
+    EXPECT_STR_EQ(newpath,"/");
     wind_free(newpath);
     newpath = wind_filepath_get_parent("/test/");
-    EXPECT_STR_EQ(newpath,"");
+    EXPECT_STR_EQ(newpath,"/");
     wind_free(newpath);
     newpath = wind_filepath_get_parent("/test/test1");
     EXPECT_STR_EQ(newpath,"/test/");
