@@ -146,7 +146,7 @@ static w_err_t listfs_cmd_ls(w_int32_t argc,char **argv)
             err = wind_fchild(file,sub);
             if(err != W_ERR_OK)
                 break;
-            wind_printf("%-24s ",sub->path);
+            wind_printf("%-24s ",sub->realpath);
             wind_error("here must be filename");
             if(i%4 == 3)
                 wind_printf("\r\n");

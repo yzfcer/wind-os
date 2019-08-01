@@ -58,7 +58,7 @@ static w_err_t treefs_op_open(w_file_s *file,w_uint16_t fmode)
     WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
     tfs = (w_treefs_s*)file->vfs->fsobj;
     WIND_ASSERT_RETURN(tfs != W_NULL,W_ERR_FAIL);
-    tfile = treefile_open(tfs,file->path,fmode);
+    tfile = treefile_open(tfs,file->realpath,fmode);
     if(tfile == W_NULL)
         return W_ERR_FAIL;
     

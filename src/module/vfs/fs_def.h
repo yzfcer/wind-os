@@ -113,7 +113,8 @@ struct __w_fsops_s
 struct __w_file_s
 {
     w_obj_s obj;
-    char *path;//实际的文件系统路径
+    char *fullpath;//完整的文件系统路径
+    char *realpath;//实际的文件系统路径
     w_vfs_s *vfs;//关联的文件系统
     w_mutex_s *mutex;//文件锁
     w_file_s *childfile;//子文件,在需要遍历目录时使用
