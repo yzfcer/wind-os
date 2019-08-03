@@ -274,28 +274,34 @@ w_err_t wind_fremove(const char *path)
     return W_ERR_OK;
 }
 
-w_err_t wind_fchild(w_file_s *dir,w_file_s *child)
+w_file_s *wind_fchild(w_file_s *dir)
 {
     w_err_t err = W_ERR_FAIL;
+    //w_file_s *child = W_NULL;
     WIND_ASSERT_RETURN(dir != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(child != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(dir->isdir != 0,W_ERR_INVALID);
-    if(dir->childfile == W_NULL)
-    {
-        wind_memset(child,0,sizeof(w_file_s));
-    }
-        
-    wind_debug("get subfile of %s",dir->realpath);
     wind_mutex_lock(dir->mutex);
-    if(dir->vfs->ops->getchild)
+    do 
     {
-        err = dir->vfs->ops->getchild(dir,child);
-        if(err == W_ERR_OK)
-            dir->childfile = child;
-    }
+        err = W_ERR_OK;
+        if(dir->childfile == W_NULL)
+        {
+            dir->childfile = file_malloc();
+            WIND_ASSERT_BREAK(dir->childfile != W_NULL, W_ERR_MEM,"malloc file obj failed");
+            wind_memset(dir->childfile,0,sizeof(w_file_s));
+        }
+         wind_debug("get subfile of %s",dir->realpath);
+        if(dir->vfs->ops->getchild)
+        {
+            err = dir->vfs->ops->getchild(dir,dir->childfile);
+            WIND_CHECK_BREAK(err == W_ERR_OK, err);
+        }
+        else
+            err = W_ERR_FAIL;
+    }while(0);
     wind_mutex_unlock(dir->mutex);
-    if(err != W_ERR_OK)
-        dir->childfile = W_NULL;
+        
+
     return err;
 }
 

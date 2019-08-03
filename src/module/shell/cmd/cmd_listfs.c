@@ -136,15 +136,15 @@ static w_err_t listfs_cmd_ls(w_int32_t argc,char **argv)
         else
             fullpath = wind_filepath_generate(curpath,curpath,1);
         WIND_ASSERT_BREAK(fullpath != W_NULL,W_ERR_FAIL,"generate curpath error");
-        sub = wind_malloc(sizeof(w_file_s));
-        WIND_ASSERT_BREAK(sub != W_NULL,W_ERR_FAIL,"malloc file error");
+        //sub = wind_malloc(sizeof(w_file_s));
+        //WIND_ASSERT_BREAK(sub != W_NULL,W_ERR_FAIL,"malloc file error");
         file = wind_fopen(fullpath,FMODE_R);
         WIND_ASSERT_BREAK(file != W_NULL,W_ERR_NOFILE,"open directory error");
 
         for(i = 0;;i ++)
         {
-            err = wind_fchild(file,sub);
-            if(err != W_ERR_OK)
+            sub = wind_fchild(file);
+            if(sub != W_NULL)
                 break;
             wind_printf("%-24s ",sub->realpath);
             wind_error("here must be filename");
@@ -157,8 +157,8 @@ static w_err_t listfs_cmd_ls(w_int32_t argc,char **argv)
     }while(0);
     if(fullpath != W_NULL)
         wind_filepath_release(fullpath);
-    if(sub != W_NULL)
-        wind_free(sub);
+    //if(sub != W_NULL)
+    //    wind_free(sub);
     return err;
 
 }
