@@ -145,10 +145,9 @@ static w_err_t fs_cmd_ls(w_int32_t argc,char **argv)
         for(i = 0;;i ++)
         {
             sub = wind_fchild(file);
-            if(sub != W_NULL)
+            if(sub == W_NULL)
                 break;
-            wind_printf("%-24s ",sub->realpath);
-            wind_error("here must be filename");
+            wind_printf("%-24s ",sub->obj.name);
             if(i%4 == 3)
                 wind_printf("\r\n");
         }
