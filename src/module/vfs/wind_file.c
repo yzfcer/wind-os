@@ -41,12 +41,19 @@ WIND_POOL(filepool,WIND_FILE_MAX_NUM,sizeof(w_file_s));
 
 static w_file_s *file_malloc(void)
 {
-    return wind_pool_malloc(filepool);
+    w_file_s *file;
+    file = wind_pool_malloc(filepool);
+    if(file != W_NULL)
+        wind_memset(file,0,sizeof(w_file_s));
+    return file;
 }
 
 static w_err_t file_free(w_file_s *file)
 {
-    return wind_pool_free(filepool,file);
+    w_err_t err;
+    WIND_ASSERT_RETURN(file != W_NULL, W_ERR_PTR_NULL);
+    err = wind_pool_free(filepool,file);
+    return err;
 }
 
 w_err_t _wind_file_mod_init(void)
@@ -131,7 +138,6 @@ static w_file_s *wind_file_create(w_vfs_s *fs,const char *path,w_uint16_t fmode,
         err = W_ERR_OK;
         file = file_malloc();
         WIND_ASSERT_BREAK(file != W_NULL,W_ERR_MEM,"file_malloc failed");
-        wind_memset(file,0,sizeof(w_file_s));
         
         fullpathlen = wind_strlen(path);
         fullpath = wind_salloc(path);
@@ -288,7 +294,6 @@ w_file_s *wind_freaddir(w_file_s *dir)
         {
             dir->childfile = file_malloc();
             WIND_ASSERT_BREAK(dir->childfile != W_NULL, W_ERR_MEM,"malloc file obj failed");
-            wind_memset(dir->childfile,0,sizeof(w_file_s));
         }
         wind_debug("get subfile of %s",dir->realpath);
         WIND_CHECK_BREAK(dir->vfs->ops->readdir,W_ERR_FAIL);
