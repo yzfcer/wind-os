@@ -100,7 +100,7 @@ struct __w_fsops_s
     w_err_t (*open)(w_file_s *file,w_uint16_t fmode);
     w_err_t (*close)(w_file_s* file);
     w_err_t (*remove)(w_file_s* file);
-    w_err_t (*getchild)(w_file_s* dir,w_file_s* child);
+    w_err_t (*readdir)(w_file_s* dir,w_file_s* child);
     w_err_t (*seek)(w_file_s* file,w_int32_t offset);
     w_err_t (*rename)(w_file_s* file,char *newname);
     w_int32_t (*ftell)(w_file_s* file);

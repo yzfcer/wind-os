@@ -291,9 +291,9 @@ w_file_s *wind_freaddir(w_file_s *dir)
             wind_memset(dir->childfile,0,sizeof(w_file_s));
         }
         wind_debug("get subfile of %s",dir->realpath);
-        WIND_CHECK_BREAK(dir->vfs->ops->getchild,W_ERR_FAIL);
+        WIND_CHECK_BREAK(dir->vfs->ops->readdir,W_ERR_FAIL);
 
-        err = dir->vfs->ops->getchild(dir,dir->childfile);
+        err = dir->vfs->ops->readdir(dir,dir->childfile);
         WIND_CHECK_BREAK(err == W_ERR_OK, err);
         //childfile = dir->childfile;
         
