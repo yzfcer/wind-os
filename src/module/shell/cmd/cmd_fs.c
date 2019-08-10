@@ -144,11 +144,11 @@ static w_err_t fs_cmd_ls(w_int32_t argc,char **argv)
 
         for(i = 0;;i ++)
         {
-            sub = wind_fchild(file);
+            sub = wind_freaddir(file);
             if(sub == W_NULL)
                 break;
             wind_printf("%-24s ",sub->obj.name);
-            if(i%4 == 3)
+            if(i % 4 == 3)
                 wind_printf("\r\n");
         }
         wind_printf("\r\n");

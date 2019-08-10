@@ -274,7 +274,7 @@ w_err_t wind_fremove(const char *path)
     return W_ERR_OK;
 }
 
-w_file_s *wind_fchild(w_file_s *dir)
+w_file_s *wind_freaddir(w_file_s *dir)
 {
     w_err_t err = W_ERR_FAIL;
     w_file_s *childfile;

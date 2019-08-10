@@ -109,6 +109,7 @@ static w_err_t treefs_op_subfile(w_file_s* dir,w_file_s* sub)
         }
         WIND_ASSERT_BREAK(subtfile->magic == TREEFILE_MAGIC,W_ERR_INVALID,"invalid treefile dound");
         sub->fileobj = subtfile;
+        sub->obj.magic = WIND_FILE_MAGIC;
         sub->obj.name = subtfile->filename;
         sub->isdir = subtfile->isdir;
         if(sub->fullpath)

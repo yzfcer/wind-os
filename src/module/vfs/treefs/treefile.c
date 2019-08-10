@@ -239,6 +239,7 @@ w_err_t treefile_close(w_treefile_s* file)
     WIND_ASSERT_RETURN(file->magic == TREEFILE_MAGIC,W_ERR_INVALID);
     WIND_ASSERT_RETURN(file->mode != 0,W_ERR_FAIL);
     file->mode = 0;
+    file->offset = 0;
     return W_ERR_OK;
 }
 
