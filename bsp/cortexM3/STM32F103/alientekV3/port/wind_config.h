@@ -182,7 +182,7 @@
 #define TEST_LISTFS_SUPPORT 1 //是否支持listfs文件系统测试
 #define TEST_FS_SUPPORT 1 //是否支持fs文件系统接口测试
 #define TEST_FILEPATH_SUPPORT 1 //是否支持文件系统路径测试
-
+#define TEST_DIAGNOSE_SUPPORT 0 //是否支持诊断功能测试
 #endif
 
 

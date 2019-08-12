@@ -28,6 +28,7 @@
 #include "wind_conv.h"
 #include "wind_debug.h"
 #include "wind_string.h"
+#if WIND_MODULE_VFS_SUPPORT
 void blkinfo_be2le(lfile_blkinfo_s *info)
 {
     w_int32_t i;
@@ -376,5 +377,5 @@ w_addr_t blkinfo_get_addr(lfile_blkinfo_s *info,w_int32_t offset)
     return info->dataaddr[index];
 }
 
-
+#endif
 

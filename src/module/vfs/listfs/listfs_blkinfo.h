@@ -27,6 +27,7 @@
 #include "wind_config.h"
 #include "wind_type.h"
 #include "wind_blkdev.h"
+#if WIND_MODULE_VFS_SUPPORT
 
 #define LISTFILE_BLK_MAGIC 0x725A4967
 
@@ -91,5 +92,6 @@ w_err_t blkinfo_del_dataaddr(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_int32_t 
 w_addr_t blkinfo_get_addr(lfile_blkinfo_s *info,w_int32_t offset);
 
 
+#endif
 #endif
 

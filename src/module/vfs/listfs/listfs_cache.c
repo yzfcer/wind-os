@@ -29,6 +29,7 @@
 #include "wind_obj.h"
 #include "wind_heap.h"
 #include "wind_core.h"
+#if WIND_MODULE_VFS_SUPPORT
 
 #define NODE_TO_CACHEITEM(node) (lcache_item_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((lcache_item_s*)0)->itemnode)))
 w_dlist_s lfscache_list = {W_NULL,W_NULL};
@@ -168,6 +169,6 @@ w_err_t lfs_cache_clear(lfs_cache_s *cache,w_blkdev_s *blkdev)
     return W_ERR_OK;
 }
 
-
+#endif
 
 

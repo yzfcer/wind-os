@@ -497,6 +497,9 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\wind_fsops.c">
       <Filter>module_vfs</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\test_diagnose.c">
+      <Filter>module_cutest</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">

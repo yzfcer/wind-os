@@ -28,6 +28,7 @@
 #include "wind_type.h"
 #include "wind_obj.h"
 #include "wind_blkdev.h"
+#if WIND_MODULE_VFS_SUPPORT
 
 #define LISTFS_CACHE_MAGIC 0x9357D26A
 
@@ -81,5 +82,6 @@ w_err_t lfs_cache_flush(lfs_cache_s *cache,w_blkdev_s *blkdev);
 
 w_err_t lfs_cache_clear(lfs_cache_s *cache,w_blkdev_s *blkdev);
 
+#endif
 #endif
 

@@ -108,7 +108,9 @@ static w_err_t thread_init(w_int32_t argc,char **argv)
     _wind_module_mod_init();
 #endif
     _create_thread_idle();
+    wind_diagnose_check();
     set_idle_cnt();
+    wind_diagnose_check();
 #if WIND_SOFTIRQ_SUPPORT
     _wind_create_thread_softirq();
 #endif

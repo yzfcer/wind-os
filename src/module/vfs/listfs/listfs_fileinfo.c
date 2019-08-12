@@ -27,6 +27,7 @@
 #include "wind_conv.h"
 #include "wind_debug.h"
 #include "wind_string.h"
+#if WIND_MODULE_VFS_SUPPORT
 
 
 void fileinfo_be2le(lfile_info_s *info)
@@ -337,6 +338,6 @@ w_err_t fileinfo_rm_update_next(lfile_info_s *info,w_blkdev_s *blkdev)
     return err;
 }
 
-
+#endif
 
 

@@ -66,6 +66,9 @@ DECLARE_SUITE(fs);
 #if TEST_FILEPATH_SUPPORT
 DECLARE_SUITE(filepath);
 #endif
+#if TEST_DIAGNOSE_SUPPORT
+DECLARE_SUITE(diagnose);
+#endif
 
 
 extern void test_suite_list_init(void);
@@ -112,6 +115,9 @@ void test_suite_register_all(void)
 #endif
 #if TEST_FILEPATH_SUPPORT
     REGSTER_SUITE(filepath);
+#endif
+#if TEST_DIAGNOSE_SUPPORT
+    REGSTER_SUITE(diagnose);
 #endif
 }
 

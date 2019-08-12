@@ -71,12 +71,20 @@ static w_int32_t pool_diagnose(void)
     foreach_node(dnode,list)
     {
         pool = NODE_TO_POOL(dnode);
+        wind_notice("pool:%-16s start:0x%08x,size:0x%08x",wind_obj_name(pool),
+                    pool,pool->size+sizeof(w_pool_s));
+    }
+        
+    foreach_node(dnode,list)
+    {
+        pool = NODE_TO_POOL(dnode);
         if(pool->obj.magic != WIND_POOL_MAGIC)
         {
             wind_enable_switch();
             wind_error("pool magic error,ptr=0x%x",pool);
             return DIAG_RES_OBJ_MAGIC_ERROR;
         }
+        //wind_notice("pool:%s,start at:0x%08x,end at:0x%08x ",wind_obj_name(pool),pool,pool+pool->size);
         res = poolitem_diagnose(pool);
         if(res != DIAG_RES_OK)
         {

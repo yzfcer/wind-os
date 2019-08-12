@@ -27,6 +27,7 @@
 #include "wind_config.h"
 #include "wind_type.h"
 #include "wind_blkdev.h"
+#if WIND_MODULE_VFS_SUPPORT
 
 #define LISTFILE_MAGIC 0x7D5349AC
 
@@ -85,4 +86,4 @@ w_err_t fileinfo_rm_update_prev(lfile_info_s *info,w_blkdev_s *blkdev);
 w_err_t fileinfo_rm_update_next(lfile_info_s *info,w_blkdev_s *blkdev);
 
 #endif
-
+#endif

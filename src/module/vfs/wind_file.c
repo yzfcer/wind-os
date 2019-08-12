@@ -300,7 +300,6 @@ w_file_s *wind_freaddir(w_file_s *dir)
 
         err = dir->vfs->ops->readdir(dir,dir->childfile);
         WIND_CHECK_BREAK(err == W_ERR_OK, err);
-        //childfile = dir->childfile;
         
     }while(0);
     wind_mutex_unlock(dir->mutex);
