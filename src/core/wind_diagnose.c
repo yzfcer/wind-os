@@ -127,6 +127,8 @@ w_err_t wind_diagnose_check(void)
         diagnose = NODE_TO_DIAGNOSENOSE(dnode);
         wind_notice(" ========= check %s",diagnose->obj.name);
         diagnose->result = diagnose_check(diagnose);
+        if(diagnose->result != DIAG_RES_OK)
+            err = W_ERR_FAIL;
     }
     wind_diagnose_print_result();
 

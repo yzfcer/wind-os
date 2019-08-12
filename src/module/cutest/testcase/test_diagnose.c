@@ -61,7 +61,9 @@ CASE_TEARDOWN(func)
 
 CASE_FUNC(func)
 {
-
+    w_err_t err;
+    err = wind_diagnose_check();
+    EXPECT_EQ(err,W_ERR_OK);
 }
 
 

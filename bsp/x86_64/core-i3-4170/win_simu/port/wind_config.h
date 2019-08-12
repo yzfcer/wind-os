@@ -230,7 +230,7 @@ extern "C" {
 #define TEST_LISTFS_SUPPORT 0 //是否支持listfs文件系统测试
 #define TEST_FS_SUPPORT 0 //是否支持fs文件系统接口测试
 #define TEST_FILEPATH_SUPPORT 0 //是否支持文件系统路径测试
-#define TEST_DIAGNOSE_SUPPORT 0 //是否支持诊断功能测试
+#define TEST_DIAGNOSE_SUPPORT 1 //是否支持诊断功能测试
 
 #endif
 
@@ -242,10 +242,10 @@ extern "C" {
 #define WIND_FS_MAX_NUM 5 //允许支持的文件系统的数量
 #define WIND_FILE_MAX_NUM 5 //允许同时打开的文件的数量
 
-#define WIND_TREEFS_SUPPORT 1 //是否支持内存文件系统
+#define WIND_TREEFS_SUPPORT 0 //是否支持内存文件系统
 #define WIND_TREEFS_MAX_NUM 2 //支持treefs结构的数量
 
-#define WIND_LISTFS_SUPPORT 1//是否支持listfs文件系统
+#define WIND_LISTFS_SUPPORT 0//是否支持listfs文件系统
 #endif
 
 #ifdef __cplusplus
