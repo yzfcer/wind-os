@@ -68,12 +68,12 @@ static w_int32_t pool_diagnose(void)
     w_pool_s *pool;
     w_dlist_s *list = &poollist;
     wind_disable_switch();
-    foreach_node(dnode,list)
-    {
-        pool = NODE_TO_POOL(dnode);
-        wind_notice("pool:%-16s start:0x%08x,size:0x%08x",wind_obj_name(pool),
-                    pool,pool->size+sizeof(w_pool_s));
-    }
+    //foreach_node(dnode,list)
+    //{
+    //    pool = NODE_TO_POOL(dnode);
+    //    wind_notice("pool:%-16s start:0x%08x,size:0x%08x",wind_obj_name(pool),
+    //                pool,pool->size+sizeof(w_pool_s));
+    //}
         
     foreach_node(dnode,list)
     {

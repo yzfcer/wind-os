@@ -63,7 +63,7 @@ COMMAND_MAIN(diagnose,argc,argv)
     }
     else if(wind_strcmp(argv[1],"check") == 0)
     {
-        return wind_diagnose_check();;
+        return wind_diagnose_check();
     }
     return W_ERR_FAIL;
 }
