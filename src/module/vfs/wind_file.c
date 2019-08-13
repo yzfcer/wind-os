@@ -160,7 +160,8 @@ static w_file_s *wind_file_create(w_vfs_s *fs,const char *path,w_uint16_t fmode,
         file->offset = 0;
         
         err = file->vfs->ops->open(file,file->fmode);
-        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"open real file failed");
+        //WIND_ASSERT_BREAK(err == W_ERR_OK,err,"open real file failed");
+        WIND_CHECK_BREAK(err == W_ERR_OK,err);
         wind_disable_switch();
         wind_obj_init(&file->obj,WIND_FILE_MAGIC,filename,&filelist);
         wind_enable_switch();

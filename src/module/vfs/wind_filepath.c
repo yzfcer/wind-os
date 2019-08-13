@@ -28,7 +28,7 @@
 #include "wind_heap.h"
 #include "wind_debug.h"
 #if WIND_MODULE_VFS_SUPPORT
-static char *curpath = W_NULL;
+static char *curpath = "/";
 
 char * wind_filepath_get_current(void)
 {

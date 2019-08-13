@@ -50,46 +50,50 @@ static w_err_t fs_cmd_pwd(void)
 
 static w_err_t fs_cmd_cd(w_int32_t argc,char **argv)
 {
+    w_err_t err;
     w_bool_t isexist;
-    char *fullpath;
+    char *fullpath = W_NULL;
     char *curpath = wind_filepath_get_current();
-    if(argc < 3)
-        return W_ERR_FAIL;
-    fullpath = wind_filepath_generate(curpath,argv[2],1);
-    isexist = wind_file_exist(fullpath);
-    if(!isexist)
+    //if(argc < 3)
+    //    return W_ERR_FAIL;
+    do
     {
-        wind_printf("directory:\"%s\" is NOT exist.\r\n",fullpath);
+        err = W_ERR_OK;
+        fullpath = wind_filepath_generate(curpath,argv[2],1);
+        WIND_ASSERT_BREAK(fullpath != W_NULL,W_ERR_MEM,"generate fullpath failed");
+        isexist = wind_file_exist(fullpath);
+        WIND_ASSERT_BREAK(isexist,W_ERR_NOFILE,"directory is NOT exist.")
+        wind_filepath_set_current(fullpath);
+        
+    }while(0);
+    if(fullpath != W_NULL)
         wind_filepath_release(fullpath);
-        return W_ERR_NOFILE;
-    }
-    wind_filepath_set_current(fullpath);
-    wind_filepath_release(fullpath);
-    return W_ERR_OK;
+    return err;
 }
 
 static w_err_t mk_dir_file(w_int32_t argc,char **argv,w_uint16_t isdir)
 {
+    w_err_t err;
     w_bool_t isexist;
     w_file_s *file;
     char * fullpath;
     char *curpath = wind_filepath_get_current();
     if(argc < 3)
         return W_ERR_INVALID;
-    fullpath = wind_filepath_generate(curpath,argv[2],isdir);
-    isexist = wind_file_exist(fullpath);
-    if(isexist)
+    do
     {
-        wind_printf("directory has been existing.\r\n");
+        err = W_ERR_OK;
+        fullpath = wind_filepath_generate(curpath,argv[2],1);
+        WIND_ASSERT_BREAK(fullpath != W_NULL,W_ERR_MEM,"generate fullpath failed");
+        isexist = wind_file_exist(fullpath);
+        WIND_ASSERT_BREAK(!isexist,W_ERR_NOFILE,"directory has been existing.")
+        file = wind_fopen(fullpath,FMODE_CRT);
+        WIND_ASSERT_BREAK(file != W_NULL,W_ERR_FAIL,"make directory failed.")
+        wind_fclose(file);
+    }while(0);
+
+    if(fullpath != W_NULL)
         wind_filepath_release(fullpath);
-        return W_ERR_FAIL;
-    }
-    
-    file = wind_fopen(fullpath,FMODE_CRT);
-    if(file == W_NULL)
-        wind_printf("make directory failed.");
-    wind_fclose(file);
-    wind_filepath_release(fullpath);
     return W_ERR_OK;
 }
 
@@ -106,7 +110,6 @@ static w_err_t fs_cmd_touch(w_int32_t argc,char **argv)
 static w_err_t fs_cmd_rm(w_int32_t argc,char **argv)
 {
     w_err_t err;
-    //w_file_s *file;
     w_int32_t len;
     char *curpath;
     char * fullpath;
