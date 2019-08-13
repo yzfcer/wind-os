@@ -57,17 +57,19 @@ w_err_t wind_filepath_set_current(char *path)
 char *wind_filepath_generate(char *pre_path,char *relative_path,w_uint16_t isdir)
 {
     w_err_t err;
-    char *path;
+    char *path = W_NULL;
     w_int32_t len,len1;
-    w_int32_t ap = 0;
-    len = wind_strlen(relative_path) + 1;
-    if(isdir)
-        len += 1;
+    //w_int32_t ap = 0;
+    WIND_ASSERT_RETURN(pre_path != W_NULL,W_NULL);
+    WIND_ASSERT_RETURN(pre_path[0] == '/',W_NULL);
+    WIND_ASSERT_RETURN(relative_path != W_NULL,W_NULL);
+    
+    len = wind_strlen(relative_path) + 3;
+    //if(isdir)
+    //    len += 1;
     if(relative_path[0] == '/')
     {
-        path = wind_malloc(len+ap);
-        wind_memset(path,0,len+ap);
-        wind_strcpy(path,relative_path);
+        path = wind_salloc(relative_path);
     }
     else
     {

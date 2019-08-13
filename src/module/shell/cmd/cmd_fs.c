@@ -127,6 +127,7 @@ static w_err_t fs_cmd_ls(w_int32_t argc,char **argv)
     w_file_s *file;
     w_err_t err;
     char *fullpath = W_NULL;
+    char *path1;
     w_file_s *sub = W_NULL;
     char *curpath = wind_filepath_get_current();
     do 
@@ -137,8 +138,10 @@ static w_err_t fs_cmd_ls(w_int32_t argc,char **argv)
         else
             fullpath = wind_filepath_generate(curpath,curpath,1);
         WIND_ASSERT_BREAK(fullpath != W_NULL,W_ERR_FAIL,"generate curpath error");
-        //sub = wind_malloc(sizeof(w_file_s));
-        //WIND_ASSERT_BREAK(sub != W_NULL,W_ERR_FAIL,"malloc file error");
+        path1 = wind_salloc(fullpath);
+        wind_filepath_release(fullpath);
+        fullpath = path1;
+        path1 = W_NULL;
         file = wind_fopen(fullpath,FMODE_R);
         WIND_ASSERT_BREAK(file != W_NULL,W_ERR_NOFILE,"open directory error");
 

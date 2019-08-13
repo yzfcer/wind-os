@@ -167,7 +167,7 @@ extern "C" {
 #if WIND_MODULE_SUPPORT
 #define WIND_MODULE_SHELL_SUPPORT 1 //是否支持控制台模块
 #define WIND_MODULE_CUTEST_SUPPORT 1 //是否支持单元测试框架模块
-#define WIND_MODULE_VFS_SUPPORT 0 //是否支持虚拟文件系统框架模块
+#define WIND_MODULE_VFS_SUPPORT 1 //是否支持虚拟文件系统框架模块
 #define WIND_MODULE_DB_SUPPORT 1 //是否支持DB功能模块
 #define WIND_MODULE_LUA_SUPPORT 1 //是否支持lua功能模块
 #define WIND_MODULE_CJSON_SUPPORT 1 //是否支持cjson功能模块
@@ -187,7 +187,7 @@ extern "C" {
 #define CMD_CHDEV_SUPPORT 1 //是否支持字符设备操作命令
 #define CMD_DATETIME_SUPPORT 0 //是否支持日期时间命令
 #define CMD_ECHO_SUPPORT 1 //是否支持回显命令
-#define CMD_FS_SUPPORT 0 //是否支持文件系统命令
+#define CMD_FS_SUPPORT 1 //是否支持文件系统命令
 #define CMD_LIST_SUPPORT 1 //是否支持内核对象列表命令
 #define CMD_MEM_SUPPORT 1 //是否支持内存值查看命令
 #define CMD_RESET_SUPPORT 1 //是否支持系统复位命令
@@ -225,11 +225,11 @@ extern "C" {
 #define TEST_SEM_SUPPORT 1 //是否支持信号量测试
 #define TEST_EVENT_SUPPORT 1 //是否支持事件测试
 #define TEST_SOFTIRQ_SUPPORT 1 //是否支持软中断测试
-#define TEST_TREE_SUPPORT 0 //是否支持树形结构对象测试
-#define TEST_TREEFS_SUPPORT 0 //是否支持treefs文件系统测试
-#define TEST_LISTFS_SUPPORT 0 //是否支持listfs文件系统测试
-#define TEST_FS_SUPPORT 0 //是否支持fs文件系统接口测试
-#define TEST_FILEPATH_SUPPORT 0 //是否支持文件系统路径测试
+#define TEST_TREE_SUPPORT 1 //是否支持树形结构对象测试
+#define TEST_TREEFS_SUPPORT 1 //是否支持treefs文件系统测试
+#define TEST_LISTFS_SUPPORT 1 //是否支持listfs文件系统测试
+#define TEST_FS_SUPPORT 1 //是否支持fs文件系统接口测试
+#define TEST_FILEPATH_SUPPORT 1 //是否支持文件系统路径测试
 #define TEST_DIAGNOSE_SUPPORT 1 //是否支持诊断功能测试
 
 #endif
@@ -242,10 +242,10 @@ extern "C" {
 #define WIND_FS_MAX_NUM 5 //允许支持的文件系统的数量
 #define WIND_FILE_MAX_NUM 5 //允许同时打开的文件的数量
 
-#define WIND_TREEFS_SUPPORT 0 //是否支持内存文件系统
+#define WIND_TREEFS_SUPPORT 1 //是否支持内存文件系统
 #define WIND_TREEFS_MAX_NUM 2 //支持treefs结构的数量
 
-#define WIND_LISTFS_SUPPORT 0//是否支持listfs文件系统
+#define WIND_LISTFS_SUPPORT 1//是否支持listfs文件系统
 #endif
 
 #ifdef __cplusplus

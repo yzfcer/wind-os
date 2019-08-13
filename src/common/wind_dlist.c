@@ -140,11 +140,11 @@ w_dnode_s *dlist_remove(w_dlist_s *dlist,w_dnode_s *dnode)
 {
     if(dnode->prev)
         dnode->prev->next = dnode->next;
-    else
+    else if(dlist->head == dnode)
         dlist->head = dnode->next;
     if(dnode->next)
         dnode->next->prev = dnode->prev;
-    else
+    else if(dlist->tail == dnode)
         dlist->tail = dnode->prev;
     return dnode;
 }

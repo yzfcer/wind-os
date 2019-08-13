@@ -186,7 +186,6 @@ static w_file_s *wind_file_create(w_vfs_s *fs,const char *path,w_uint16_t fmode,
 static w_err_t wind_file_destroy(w_file_s *file)
 {
     WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
-    //WIND_ASSERT_RETURN(file->mutex != W_NULL,W_ERR_PTR_NULL);
     wind_disable_switch();
     wind_obj_deinit(&file->obj,WIND_FILE_MAGIC,&filelist);
     wind_enable_switch();
@@ -206,31 +205,26 @@ static w_err_t wind_file_destroy(w_file_s *file)
 w_file_s* wind_fopen(const char *path,w_uint16_t fmode)
 {
     w_err_t err;
-    w_file_s *file;
     w_vfs_s *fs;
     w_uint8_t isdir;
     w_int32_t pathlen;
+    w_file_s *file = W_NULL;
     WIND_ASSERT_RETURN(path != W_NULL,W_NULL);
+    WIND_ASSERT_RETURN(path[0] != 0,W_NULL);
     err = wind_filepath_check_valid(path);
     WIND_ASSERT_RETURN(err == W_ERR_OK,W_NULL);
-    wind_debug("open file:%s",path);
-    file = wind_file_get_bypath(path);
-    if(file != W_NULL)
+    do
     {
-        wind_error("file has been opened.");
-        return W_NULL;
-    }
-    
-    pathlen = wind_strlen(path);
-    WIND_ASSERT_RETURN(pathlen > 0,W_NULL);
-    fs = wind_vfs_get_bypath(path);
-    if(fs == W_NULL)
-    {
-        wind_error("path:%s NOT exsit.",path);
-        return W_NULL;
-    }
-    isdir = path[pathlen-1] == '/'?1:0;
-    file = wind_file_create(fs,path,fmode, isdir);
+        err = W_ERR_OK;
+        wind_debug("open file:%s",path);
+        file = wind_file_get_bypath(path);
+        WIND_ASSERT_BREAK(file == W_NULL,W_ERR_FILE_OPENED,"file has been opened.");
+        pathlen = wind_strlen(path);
+        fs = wind_vfs_get_bypath(path);
+        WIND_ASSERT_BREAK(fs != W_NULL,W_ERR_FAIL,"path is NOT exsit.");
+        isdir = path[pathlen-1] == '/'?1:0;
+        file = wind_file_create(fs,path,fmode, isdir);
+    }while(0);
     return file;
 }
 
