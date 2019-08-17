@@ -524,8 +524,8 @@ w_err_t wind_free(void *ptr)
     }
     wind_debug("wind_free:ptr=0x%x",ptr);
     item = ITEM_FROM_PTR(ptr);
-    if(item->magic != WIND_HEAPITEM_MAGIC)
-        item->magic = item->magic;
+    //if(item->magic != WIND_HEAPITEM_MAGIC)
+    //    item->magic = item->magic;
     WIND_ASSERT_RETURN(item->magic == WIND_HEAPITEM_MAGIC,W_ERR_INVALID);
     WIND_ASSERT_RETURN(IS_F_HEAPITEM_USED(item),W_ERR_INVALID);
     return wind_heap_free(item->heap,ptr);

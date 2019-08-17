@@ -33,7 +33,10 @@
 
 
 #define NODE_TO_LISTFILE(node) (w_listfile_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((w_listfile_s*)0)->list.listnode)))
-//static w_listfile_s *listfile_rootnode = W_NULL;
+w_err_t _wind_listfs_mod_init(void)
+{
+    return W_ERR_OK;
+}
 
 void lfs_info_be2le(lfs_info_s *info)
 {

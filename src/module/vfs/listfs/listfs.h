@@ -99,9 +99,9 @@ typedef struct __listfile_s
 
 void lfs_info_be2le(lfs_info_s *info);
 
+w_err_t _wind_listfs_mod_init(void);
 void *lfs_malloc(w_int32_t size);
 w_err_t lfs_free(void *ptr);
-
 w_err_t listfs_format(w_listfs_s *lfs,w_blkdev_s *blkdev);
 w_err_t listfs_init(w_listfs_s *lfs,w_blkdev_s *blkdev);
 w_err_t listfs_deinit(w_listfs_s *lfs);

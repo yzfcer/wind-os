@@ -108,16 +108,20 @@ static w_err_t listfs_op_subfile(w_file_s* dir,w_file_s* sub)
         WIND_ASSERT_BREAK(sublfile->info.magic == LISTFILE_MAGIC,W_ERR_INVALID,"invalid listfile dound");
         sub->fileobj = sublfile;
         sub->obj.magic = WIND_FILE_MAGIC;
+        
         if(sub->obj.name != W_NULL)
             wind_free(sub->obj.name);
         sub->obj.name = wind_salloc(sublfile->info.name);
         sub->isdir = LFILE_IS_DIR(sublfile->info.attr)?1:0;
+        
         if(sub->fullpath)
             wind_filepath_release(sub->fullpath);
         sub->fullpath = wind_filepath_generate(dir->fullpath,sub->obj.name,sub->isdir);
+        
         if(sub->realpath)
             wind_filepath_release(sub->realpath);
         sub->realpath = wind_filepath_generate(dir->realpath,sub->obj.name,sub->isdir);
+        
         sub->vfs = dir->vfs;
         
     }while(0);

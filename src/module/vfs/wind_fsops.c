@@ -35,6 +35,7 @@
 #include "wind_dbgpoint.h"
 #include "wind_board_port.h"
 #include "treefs.h"
+#include "listfs.h"
 
 #if WIND_MODULE_VFS_SUPPORT
 #define NODE_TO_FSOPS(dnode) (w_fsops_s*)(((w_uint8_t*)(dnode))-((w_uint32_t)&(((w_fsops_s*)0)->obj.objnode)))
@@ -109,7 +110,7 @@ w_err_t wind_fsops_init(void)
     wind_fsops_register(&treefs_ops);
 #endif
 #if WIND_LISTFS_SUPPORT
-    //_wind_listfs_mod_init();
+    _wind_listfs_mod_init();
     wind_fsops_register(&listfs_ops);
 #endif
     return W_ERR_OK;

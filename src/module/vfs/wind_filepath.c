@@ -28,10 +28,12 @@
 #include "wind_heap.h"
 #include "wind_debug.h"
 #if WIND_MODULE_VFS_SUPPORT
-static char *curpath = "/";
+static char *curpath = W_NULL;
 
 char * wind_filepath_get_current(void)
 {
+    if(curpath == W_NULL)
+        wind_filepath_set_current("/");
     return curpath;
 }
 
