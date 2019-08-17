@@ -26,7 +26,7 @@
 extern "C" {
 #endif // #ifdef __cplusplus
 
-listfs_s g_lfs;
+w_listfs_s g_lfs;
 CASE_SETUP(create)
 {
 
@@ -41,7 +41,7 @@ CASE_TEARDOWN(create)
 CASE_FUNC(create)
 {
     w_err_t err;
-    listfile_s *file;
+    w_listfile_s *file;
     file = listfile_open(&g_lfs,"/test.txt",LFMODE_CRT);
     EXPECT_NE(file,W_NULL);
     err = listfile_close(file);
@@ -109,7 +109,7 @@ CASE_FUNC(readwrite)
 {
     w_int32_t len;
     w_err_t err;
-    listfile_s *file;
+    w_listfile_s *file;
     char *str = "this is a file test string.";
     file = listfile_open(&g_lfs,"/test.txt",LFMODE_CRT | LFMODE_W);
     EXPECT_NE(file,W_NULL);
@@ -149,7 +149,7 @@ CASE_FUNC(format)
     blkdev = wind_blkdev_get("memblk");
     if(blkdev == W_NULL)
     {
-        wind_memset(&g_lfs,0,sizeof(listfs_s));
+        wind_memset(&g_lfs,0,sizeof(w_listfs_s));
         return;
     }
         
@@ -170,7 +170,7 @@ SUITE_SETUP(listfs)
     if(blkdev == W_NULL)
     {
         wind_error("get blkdev failed");
-        wind_memset(&g_lfs,0,sizeof(listfs_s));
+        wind_memset(&g_lfs,0,sizeof(w_listfs_s));
         return;
     }
         

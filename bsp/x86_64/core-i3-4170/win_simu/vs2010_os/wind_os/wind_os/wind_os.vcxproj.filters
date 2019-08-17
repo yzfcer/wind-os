@@ -500,6 +500,9 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\test_diagnose.c">
       <Filter>module_cutest</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\adapter_listfs.c">
+      <Filter>module_vfs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">
@@ -668,9 +671,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\..\src\module\shell\framework\cmd_history.h">
       <Filter>module_shell</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\adapter_treefs.h">
-      <Filter>module_vfs</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\..\src\module\db\framework\db_def.h">
       <Filter>module_db</Filter>

@@ -97,6 +97,9 @@ w_err_t wind_fsops_unregister(w_fsops_s *ops)
 #if WIND_TREEFS_SUPPORT
 extern w_fsops_s treefs_ops;
 #endif
+#if WIND_LISTFS_SUPPORT
+extern w_fsops_s listfs_ops;
+#endif
 
 w_err_t wind_fsops_init(void)
 {
@@ -104,6 +107,10 @@ w_err_t wind_fsops_init(void)
 #if WIND_TREEFS_SUPPORT
     _wind_treefs_mod_init();
     wind_fsops_register(&treefs_ops);
+#endif
+#if WIND_LISTFS_SUPPORT
+    //_wind_listfs_mod_init();
+    wind_fsops_register(&listfs_ops);
 #endif
     return W_ERR_OK;
 }

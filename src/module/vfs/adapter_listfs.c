@@ -27,20 +27,18 @@
 #include "wind_fs.h"
 #include "wind_file.h"
 #include "listfs.h"
-#include "listfile.h"
+//#include "listfile.h"
 #include "wind_debug.h"
 #include "wind_string.h"
 #include "wind_heap.h"
-#if WIND_TREEFS_SUPPORT
+#if WIND_LISTFS_SUPPORT
 static void* listfs_op_init(w_vfs_s *vfs)
 {
+    w_err_t err;
     w_listfs_s *lfs;
-    //lfs = wind_listfs_get("lfs0");
-    //WIND_ASSERT_RETURN(lfs != W_NULL,W_NULL);
-    
-    lfs = wind_listfs_create(vfs->obj.name);
-    WIND_ASSERT_RETURN(lfs != W_NULL,W_NULL);
-    wind_listfs_format(lfs);
+    lfs = (w_listfs_s *)vfs->fsobj;
+    err = listfs_init(lfs,vfs->blkdev);
+    WIND_ASSERT_RETURN(err != W_ERR_OK,W_NULL);
     return lfs;
 }
 
@@ -48,7 +46,7 @@ static w_err_t listfs_op_format(w_vfs_s *vfs)
 {
     WIND_ASSERT_RETURN(vfs != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(vfs->fsobj != W_NULL,W_ERR_PTR_NULL);
-    return wind_listfs_format((w_listfs_s *)vfs->fsobj);
+    return listfs_format((w_listfs_s *)vfs->fsobj,vfs->blkdev);
 }
 
 static w_err_t listfs_op_open(w_file_s *file,w_uint16_t fmode)
@@ -63,7 +61,7 @@ static w_err_t listfs_op_open(w_file_s *file,w_uint16_t fmode)
         return W_ERR_FAIL;
     
     file->fileobj = lfile;
-    file->isdir = lfile->isdir;
+    file->isdir = LFILE_IS_DIR(lfile->info.attr)?1:0;
     file->offset = 0;
     
     return W_ERR_OK;
@@ -78,43 +76,42 @@ static w_err_t listfs_op_close(w_file_s* file)
 static w_err_t listfs_op_rmfile(w_file_s* file)
 {
     WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
-    return listfile_rm((w_listfile_s *)file->fileobj);
+    return listfile_remove((w_listfile_s *)file->vfs,file->realpath);
 }
 
 static w_err_t listfs_op_subfile(w_file_s* dir,w_file_s* sub)
 {
     w_err_t err;
-    w_dnode_s *dnode;
     w_listfile_s *lfile;
-    w_listfile_s *subtfile;
+    w_listfile_s *sublfile = W_NULL;
     WIND_ASSERT_RETURN(dir != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(sub != W_NULL,W_ERR_PTR_NULL);
     do
     {
         err = W_ERR_OK;
-        subtfile = (w_listfile_s *)sub->fileobj;
-        if(subtfile == W_NULL)
+        sublfile = (w_listfile_s *)sub->fileobj;
+        if(sublfile == W_NULL)
         {
+            sublfile = lfs_malloc(sizeof(w_listfile_s));
+            WIND_ASSERT_BREAK(sublfile != W_NULL,W_ERR_MEM,"malloc listfile failed");
+            sub->fileobj = sublfile;
             lfile = (w_listfile_s *)dir->fileobj;
-            dnode = lfile->tree.child_list.head;
-            WIND_CHECK_BREAK(dnode != W_NULL,W_ERR_NOFILE);
-            subtfile = NODE_TO_TREEFILE(dnode);
+            wind_memcpy(&sublfile->info,&lfile->info,sizeof(lfile_info_s));
+            err = fileinfo_get_headchild(&sublfile->info,dir->vfs->blkdev);
+            WIND_ASSERT_BREAK(err == W_ERR_OK,err,"get fileinfo failed");
         }
         else
         {
-            WIND_CHECK_BREAK(subtfile->tree.treenode.next != W_NULL,W_ERR_PTR_NULL);
-            dnode = subtfile->tree.treenode.next;
-            WIND_CHECK_BREAK(dnode != W_NULL,W_ERR_NOFILE);
-            subtfile = NODE_TO_TREEFILE(dnode);
-            WIND_ASSERT_BREAK(subtfile->magic == TREEFILE_MAGIC, W_ERR_INVALID, "error listfile object");
+            err = fileinfo_get_next(&sublfile->info,dir->vfs->blkdev);
+            WIND_ASSERT_BREAK(err == W_ERR_OK,err,"get fileinfo failed");
         }
-        WIND_ASSERT_BREAK(subtfile->magic == TREEFILE_MAGIC,W_ERR_INVALID,"invalid listfile dound");
-        sub->fileobj = subtfile;
+        WIND_ASSERT_BREAK(sublfile->info.magic == LISTFILE_MAGIC,W_ERR_INVALID,"invalid listfile dound");
+        sub->fileobj = sublfile;
         sub->obj.magic = WIND_FILE_MAGIC;
         if(sub->obj.name != W_NULL)
             wind_free(sub->obj.name);
-        sub->obj.name = wind_salloc(subtfile->filename);
-        sub->isdir = subtfile->isdir;
+        sub->obj.name = wind_salloc(sublfile->info.name);
+        sub->isdir = LFILE_IS_DIR(sublfile->info.attr)?1:0;
         if(sub->fullpath)
             wind_filepath_release(sub->fullpath);
         sub->fullpath = wind_filepath_generate(dir->fullpath,sub->obj.name,sub->isdir);
@@ -136,18 +133,28 @@ static w_err_t listfs_op_seek(w_file_s* file,w_int32_t offset)
 
 static w_err_t listfs_op_rename(w_file_s* file,char *newname)
 {
-    w_listfile_s *lfile;
-    char *name;
+    w_err_t err;
     w_int32_t len;
+    w_listfile_s *lfile;
+    char *oldname = W_NULL;
     WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(newname != W_NULL,W_ERR_PTR_NULL);
-    lfile = (w_listfile_s *)file->fileobj;
-    len = wind_strlen(newname) + 1;
-    name = wind_malloc(len);
-    WIND_ASSERT_RETURN(name != W_NULL,W_ERR_MEM);
-    wind_free(lfile->filename);
-    lfile->filename = name;
-    return W_ERR_OK;
+    WIND_ASSERT_RETURN(newname[0] != 0,W_ERR_INVALID);
+    len = wind_strlen(newname);
+    WIND_ASSERT_RETURN(len < LFILE_NAME_LEN,W_ERR_INVALID);
+    do
+    {
+        err = W_ERR_OK;
+        oldname = wind_salloc(lfile->info.name);
+        WIND_ASSERT_BREAK(oldname != W_NULL,W_ERR_MEM,"malloc filename failed");
+        lfile = (w_listfile_s *)file->fileobj;
+        wind_strcpy(lfile->info.name,newname);
+        err = fileinfo_write(&lfile->info,file->vfs->blkdev);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"write fileinfo failed");
+    }while(0);
+    if(oldname != W_NULL)
+        wind_free(oldname);
+    return err;
 }
 
 static w_int32_t listfs_op_ftell(w_file_s* file)

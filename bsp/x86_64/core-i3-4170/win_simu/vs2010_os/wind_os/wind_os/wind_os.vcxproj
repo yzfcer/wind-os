@@ -183,6 +183,7 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\tools\cmd_pack.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\tools\cmd_rcp.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\tools\module_tools.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\adapter_listfs.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\adapter_treefs.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\listfs\listfs.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\listfs\listfs_bitmap.c" />
@@ -294,7 +295,6 @@
     <ClInclude Include="..\..\..\..\..\..\..\src\module\shell\framework\shell_framework.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\shell\framework\wind_cmd.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\shell\framework\wind_key.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\adapter_treefs.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\listfs\listfs.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\listfs\listfs_bitmap.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\listfs\listfs_blkinfo.h" />

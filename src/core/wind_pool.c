@@ -84,7 +84,6 @@ static w_int32_t pool_diagnose(void)
             wind_error("pool magic error,ptr=0x%x",pool);
             return DIAG_RES_OBJ_MAGIC_ERROR;
         }
-        //wind_notice("pool:%s,start at:0x%08x,end at:0x%08x ",wind_obj_name(pool),pool,pool+pool->size);
         res = poolitem_diagnose(pool);
         if(res != DIAG_RES_OK)
         {

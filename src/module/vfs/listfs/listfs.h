@@ -84,42 +84,42 @@ typedef struct __listfs_s
     w_int32_t  file_ref;  //打开的文件数量
     w_uint32_t blkused;   //已经使用的块数量
 
-}listfs_s;
+}w_listfs_s;
 
 //程序关联的文件信息
 typedef struct __listfile_s
 {
     lfile_info_s info;
-    listfs_s *lfs;
+    w_listfs_s *lfs;
     w_uint8_t mode;
     w_int32_t offset;
     lfile_blkinfo_s *blkinfo;
     lfile_info_s *subinfo;
-}listfile_s;
+}w_listfile_s;
 
 void lfs_info_be2le(lfs_info_s *info);
 
 void *lfs_malloc(w_int32_t size);
 w_err_t lfs_free(void *ptr);
 
-w_err_t listfs_format(listfs_s *lfs,w_blkdev_s *blkdev);
-w_err_t listfs_init(listfs_s *lfs,w_blkdev_s *blkdev);
-w_err_t listfs_deinit(listfs_s *lfs);
+w_err_t listfs_format(w_listfs_s *lfs,w_blkdev_s *blkdev);
+w_err_t listfs_init(w_listfs_s *lfs,w_blkdev_s *blkdev);
+w_err_t listfs_deinit(w_listfs_s *lfs);
 
-w_bool_t listfile_existing(listfs_s *lfs,const char *path);
-listfile_s* listfile_open(listfs_s *lfs,const char *path,w_uint16_t mode);
-w_err_t listfile_set_attr(listfile_s* file,w_uint8_t attr);
-w_err_t listfile_get_attr(listfile_s* file,w_uint8_t *attr);
-w_err_t listfile_close(listfile_s* file);
-w_err_t listfile_remove(listfs_s *lfs,const char *path);
-w_err_t listfile_seek(listfile_s* file,w_int32_t offset);
-w_int32_t listfile_ftell(listfile_s* file);
-w_int32_t listfile_read(listfile_s* file,w_uint8_t *buff, w_int32_t size);
-w_int32_t listfile_write(listfile_s* file,w_uint8_t *buff, w_int32_t size);
-w_err_t listfile_fgets(listfile_s* file,char *buff, w_int32_t maxlen);
-w_err_t listfile_fputs(listfile_s* file,char *buff);
+w_bool_t listfile_existing(w_listfs_s *lfs,const char *path);
+w_listfile_s* listfile_open(w_listfs_s *lfs,const char *path,w_uint16_t mode);
+w_err_t listfile_set_attr(w_listfile_s* file,w_uint8_t attr);
+w_err_t listfile_get_attr(w_listfile_s* file,w_uint8_t *attr);
+w_err_t listfile_close(w_listfile_s* file);
+w_err_t listfile_remove(w_listfs_s *lfs,const char *path);
+w_err_t listfile_seek(w_listfile_s* file,w_int32_t offset);
+w_int32_t listfile_ftell(w_listfile_s* file);
+w_int32_t listfile_read(w_listfile_s* file,w_uint8_t *buff, w_int32_t size);
+w_int32_t listfile_write(w_listfile_s* file,w_uint8_t *buff, w_int32_t size);
+w_err_t listfile_fgets(w_listfile_s* file,char *buff, w_int32_t maxlen);
+w_err_t listfile_fputs(w_listfile_s* file,char *buff);
 
-listfile_s *listfile_readdir(listfile_s* file,w_int32_t index);
+w_listfile_s *listfile_readdir(w_listfile_s* file,w_int32_t index);
 
 
 #endif

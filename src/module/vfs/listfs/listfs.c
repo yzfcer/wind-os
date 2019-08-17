@@ -32,8 +32,8 @@
 #if WIND_MODULE_VFS_SUPPORT
 
 
-#define NODE_TO_LISTFILE(node) (listfile_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((listfile_s*)0)->list.listnode)))
-//static listfile_s *listfile_rootnode = W_NULL;
+#define NODE_TO_LISTFILE(node) (w_listfile_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((w_listfile_s*)0)->list.listnode)))
+//static w_listfile_s *listfile_rootnode = W_NULL;
 
 void lfs_info_be2le(lfs_info_s *info)
 {
@@ -55,8 +55,9 @@ void lfs_info_be2le(lfs_info_s *info)
 
 void *lfs_malloc(w_int32_t size)
 {
-    //void *ptr = wind_malloc(size);
     void *ptr = wind_falloc(size,253);
+    if(ptr != W_NULL)
+        wind_memset(ptr,0,size);
     return ptr;
 }
 
@@ -119,7 +120,7 @@ static w_err_t lfs_search_child(lfile_info_s *info,char *name,w_blkdev_s *blkdev
     return err;
 }
 
-static w_err_t lfs_search_file(listfs_s *lfs,listfile_s *file,const char *path)
+static w_err_t lfs_search_file(w_listfs_s *lfs,w_listfile_s *file,const char *path)
 {
     w_err_t err;
     w_uint8_t isdir = 0;
@@ -216,7 +217,7 @@ static w_err_t lfs_search_file(listfs_s *lfs,listfile_s *file,const char *path)
     return err;
 }
 
-static w_err_t lfs_make_root(listfs_s *lfs)
+static w_err_t lfs_make_root(w_listfs_s *lfs)
 {
     w_err_t err;
     w_uint8_t attr;
@@ -260,7 +261,7 @@ static w_err_t lfs_make_root(listfs_s *lfs)
 }
 
 
-static w_err_t lfs_make_child(listfs_s *lfs,lfile_info_s *pinfo,char *name,w_uint8_t isdir)
+static w_err_t lfs_make_child(w_listfs_s *lfs,lfile_info_s *pinfo,char *name,w_uint8_t isdir)
 {
     w_err_t err;
     w_uint8_t attr;
@@ -315,7 +316,7 @@ static w_err_t lfs_make_child(listfs_s *lfs,lfile_info_s *pinfo,char *name,w_uin
 }
 
 
-static w_err_t lfs_make_file(listfs_s *lfs,listfile_s *file,char *path)
+static w_err_t lfs_make_file(w_listfs_s *lfs,w_listfile_s *file,char *path)
 {
     w_err_t err;
     w_int32_t i,pathlen,cnt;
@@ -398,7 +399,7 @@ static w_err_t lfs_make_file(listfs_s *lfs,listfile_s *file,char *path)
 }
 
 
-static w_err_t listfile_destroy(listfile_s* file)
+static w_err_t listfile_destroy(w_listfile_s* file)
 {
     if(file->blkinfo != W_NULL)
     {
@@ -416,7 +417,7 @@ static w_err_t listfile_destroy(listfile_s* file)
     return W_ERR_OK;
 }
 
-static w_err_t lfile_free_blkaddr(listfs_s *lfs,lfile_info_s *finfo)
+static w_err_t lfile_free_blkaddr(w_listfs_s *lfs,lfile_info_s *finfo)
 {
     w_err_t err;
     lfile_blkinfo_s *blkinfo = W_NULL;
@@ -448,7 +449,7 @@ static w_err_t lfile_free_blkaddr(listfs_s *lfs,lfile_info_s *finfo)
     return err;
 }
 
-static w_err_t do_remove_file(listfs_s *lfs,lfile_info_s *finfo)
+static w_err_t do_remove_file(w_listfs_s *lfs,lfile_info_s *finfo)
 {
     w_err_t err;
     do
@@ -605,7 +606,7 @@ w_err_t lfs_info_write(lfs_info_s *lfs_info,w_blkdev_s *blkdev)
     
 }
 
-static w_err_t lfs_info_init(listfs_s *lfs,w_blkdev_s *blkdev)
+static w_err_t lfs_info_init(w_listfs_s *lfs,w_blkdev_s *blkdev)
 {
     w_err_t err;
     lfs_info_s *lfs_info;
@@ -630,7 +631,7 @@ static w_err_t lfs_info_init(listfs_s *lfs,w_blkdev_s *blkdev)
     return err;
 }
 
-w_err_t listfs_format(listfs_s *lfs,w_blkdev_s *blkdev)
+w_err_t listfs_format(w_listfs_s *lfs,w_blkdev_s *blkdev)
 {
     w_err_t err;
     
@@ -655,7 +656,7 @@ w_err_t listfs_format(listfs_s *lfs,w_blkdev_s *blkdev)
 }
 
 
-w_err_t listfs_init(listfs_s *lfs,w_blkdev_s *blkdev)
+w_err_t listfs_init(w_listfs_s *lfs,w_blkdev_s *blkdev)
 {
     w_err_t err;
     lfile_info_s *finfo = W_NULL;
@@ -683,7 +684,7 @@ w_err_t listfs_init(listfs_s *lfs,w_blkdev_s *blkdev)
     return err;
 }
 
-w_err_t listfs_deinit(listfs_s *lfs)
+w_err_t listfs_deinit(w_listfs_s *lfs)
 {
     WIND_ASSERT_RETURN(lfs != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(lfs->lfs_info.magic == LISTFS_MAGIC,W_ERR_INVALID);
@@ -693,18 +694,18 @@ w_err_t listfs_deinit(listfs_s *lfs)
 }
 
 
-listfile_s* listfile_open(listfs_s *lfs,const char *path,w_uint16_t mode)
+w_listfile_s* listfile_open(w_listfs_s *lfs,const char *path,w_uint16_t mode)
 {
     w_err_t err;
     w_bool_t is_crt;
-    listfile_s *file = W_NULL;
+    w_listfile_s *file = W_NULL;
     WIND_ASSERT_RETURN(lfs != W_NULL,W_NULL);
     WIND_ASSERT_RETURN(path != W_NULL,W_NULL);
     wind_trace("open file:%s",path);
     do 
     {
         err = W_ERR_OK;
-        file = lfs_malloc(sizeof(listfile_s));
+        file = lfs_malloc(sizeof(w_listfile_s));
         WIND_ASSERT_RETURN(file != W_NULL,W_NULL);
         wind_memset(&file->info,0,sizeof(lfile_info_s));
         file->lfs = lfs;
@@ -753,7 +754,7 @@ listfile_s* listfile_open(listfs_s *lfs,const char *path,w_uint16_t mode)
 
 
 
-w_err_t listfile_close(listfile_s* file)
+w_err_t listfile_close(w_listfile_s* file)
 {
     WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,W_ERR_INVALID);
@@ -776,10 +777,10 @@ w_err_t listfile_close(listfile_s* file)
 }
 
 
-w_err_t listfile_remove(listfs_s *lfs,const char *path)
+w_err_t listfile_remove(w_listfs_s *lfs,const char *path)
 {
     w_err_t err;
-    listfile_s *file;
+    w_listfile_s *file;
     WIND_ASSERT_RETURN(lfs != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(path != W_NULL,W_ERR_PTR_NULL);
     wind_trace("remove file:%s",path);
@@ -805,7 +806,7 @@ w_err_t listfile_remove(listfs_s *lfs,const char *path)
 }
 
 
-w_err_t listfile_set_attr(listfile_s* file,w_uint8_t attr)
+w_err_t listfile_set_attr(w_listfile_s* file,w_uint8_t attr)
 {
     w_err_t err;
     w_uint8_t tmpattr = 0;
@@ -821,7 +822,7 @@ w_err_t listfile_set_attr(listfile_s* file,w_uint8_t attr)
     return err;
 }
 
-w_err_t listfile_get_attr(listfile_s* file,w_uint8_t *attr)
+w_err_t listfile_get_attr(w_listfile_s* file,w_uint8_t *attr)
 {
     WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(attr != W_NULL,W_ERR_PTR_NULL);
@@ -831,9 +832,9 @@ w_err_t listfile_get_attr(listfile_s* file,w_uint8_t *attr)
 }
 
 
-w_bool_t listfile_existing(listfs_s *lfs,const char *path)
+w_bool_t listfile_existing(w_listfs_s *lfs,const char *path)
 {
-    listfile_s *file;
+    w_listfile_s *file;
     file = listfile_open(lfs,path,LFMODE_R);
     if(file == W_NULL)
         return W_FALSE;
@@ -841,7 +842,7 @@ w_bool_t listfile_existing(listfs_s *lfs,const char *path)
     return W_TRUE;
 }
 
-w_err_t listfile_seek(listfile_s* file,w_int32_t offset)
+w_err_t listfile_seek(w_listfile_s* file,w_int32_t offset)
 {
     w_err_t err;
     lfile_blkinfo_s *blkinfo = W_NULL;
@@ -866,7 +867,7 @@ w_err_t listfile_seek(listfile_s* file,w_int32_t offset)
     return err;
 }
 
-w_int32_t listfile_ftell(listfile_s* file)
+w_int32_t listfile_ftell(w_listfile_s* file)
 {
     WIND_ASSERT_RETURN(file != W_NULL,-1);
     WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,-1);
@@ -875,7 +876,7 @@ w_int32_t listfile_ftell(listfile_s* file)
 
 
 
-static w_int32_t do_read_file(listfile_s* file,w_uint8_t *buff,w_int32_t size)
+static w_int32_t do_read_file(w_listfile_s* file,w_uint8_t *buff,w_int32_t size)
 {
     w_err_t err;
     w_addr_t addr; 
@@ -921,7 +922,7 @@ static w_int32_t do_read_file(listfile_s* file,w_uint8_t *buff,w_int32_t size)
     return size;
 }
 
-static w_int32_t do_write_file(listfile_s* file,w_uint8_t *buff,w_int32_t size)
+static w_int32_t do_write_file(w_listfile_s* file,w_uint8_t *buff,w_int32_t size)
 {
     w_err_t err;
     w_addr_t addr; 
@@ -973,7 +974,7 @@ static w_int32_t do_write_file(listfile_s* file,w_uint8_t *buff,w_int32_t size)
     return size;
 }
 
-static w_int32_t calc_needed_datablks(listfile_s* file,w_int32_t size)
+static w_int32_t calc_needed_datablks(w_listfile_s* file,w_int32_t size)
 {
     w_int32_t blksize;
     w_int32_t needsize;
@@ -984,7 +985,7 @@ static w_int32_t calc_needed_datablks(listfile_s* file,w_int32_t size)
     return (needsize + blksize - 1) / blksize;
 }
 
-static w_int32_t calc_needed_blkinfo(listfile_s* file,w_int32_t blkcnt)
+static w_int32_t calc_needed_blkinfo(w_listfile_s* file,w_int32_t blkcnt)
 {
     w_err_t err;
     w_int32_t blkinfo_cnt;
@@ -1016,7 +1017,7 @@ static w_int32_t calc_needed_blkinfo(listfile_s* file,w_int32_t blkcnt)
 }
 
 
-w_int32_t listfile_read(listfile_s* file,w_uint8_t *buff, w_int32_t size)
+w_int32_t listfile_read(w_listfile_s* file,w_uint8_t *buff, w_int32_t size)
 {
     w_err_t err;
     w_int32_t rsize;
@@ -1040,7 +1041,7 @@ w_int32_t listfile_read(listfile_s* file,w_uint8_t *buff, w_int32_t size)
 }
 
 
-w_int32_t listfile_write(listfile_s* file,w_uint8_t *buff,w_int32_t size)
+w_int32_t listfile_write(w_listfile_s* file,w_uint8_t *buff,w_int32_t size)
 {
     w_err_t err;
     w_int32_t wsize,needdatablk,needblkinfo;
@@ -1087,7 +1088,7 @@ w_int32_t listfile_write(listfile_s* file,w_uint8_t *buff,w_int32_t size)
     return size;
 }
 
-listfile_s *listfile_readdir(listfile_s* file,w_int32_t index)
+w_listfile_s *listfile_readdir(w_listfile_s* file,w_int32_t index)
 {
     WIND_ASSERT_RETURN(file != W_NULL,W_NULL);
     WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,W_NULL);
@@ -1098,7 +1099,7 @@ listfile_s *listfile_readdir(listfile_s* file,w_int32_t index)
 }
 
 
-w_err_t listfile_fgets(listfile_s* file,char *buff, w_int32_t maxlen)
+w_err_t listfile_fgets(w_listfile_s* file,char *buff, w_int32_t maxlen)
 {
     w_int32_t i,len;
     WIND_ASSERT_RETURN(file != W_NULL,-1);
@@ -1119,7 +1120,7 @@ w_err_t listfile_fgets(listfile_s* file,char *buff, w_int32_t maxlen)
     return W_ERR_OK;
 }
 
-w_err_t listfile_fputs(listfile_s* file,char *buff)
+w_err_t listfile_fputs(w_listfile_s* file,char *buff)
 {
     w_int32_t len;
     WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
