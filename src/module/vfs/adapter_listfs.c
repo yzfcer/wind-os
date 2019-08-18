@@ -92,7 +92,6 @@ static w_err_t listfs_op_readdir(w_file_s* dir,w_file_s* sub)
         sublfile = W_NULL;
         err = listfile_readdir((w_listfile_s *)dir->fileobj,&sublfile);
         WIND_CHECK_BREAK(err == W_ERR_OK,err);
-        
         WIND_ASSERT_BREAK(sublfile->info.magic == LISTFILE_MAGIC,W_ERR_INVALID,"invalid listfile dound");
         sub->fileobj = sublfile;
         sub->obj.magic = WIND_FILE_MAGIC;
@@ -100,20 +99,22 @@ static w_err_t listfs_op_readdir(w_file_s* dir,w_file_s* sub)
         if(sub->obj.name != W_NULL)
             wind_free(sub->obj.name);
         sub->obj.name = wind_salloc(sublfile->info.name);
+        WIND_ASSERT_BREAK(sub->obj.name != W_NULL,W_ERR_MEM,"malloc filename failed");
         sub->isdir = LFILE_IS_DIR(sublfile->info.attr)?1:0;
         
         if(sub->fullpath)
             wind_filepath_release(sub->fullpath);
         sub->fullpath = wind_filepath_generate(dir->fullpath,sub->obj.name,sub->isdir);
-        
+        WIND_ASSERT_BREAK(sub->fullpath != W_NULL,W_ERR_MEM,"malloc fullpath failed");
+
         if(sub->realpath)
             wind_filepath_release(sub->realpath);
         sub->realpath = wind_filepath_generate(dir->realpath,sub->obj.name,sub->isdir);
-        
+        WIND_ASSERT_BREAK(sub->realpath != W_NULL,W_ERR_MEM,"malloc realpath failed");
+        wind_error("realpath error");
         sub->vfs = dir->vfs;
         
     }while(0);
-
 
     return err;
 }

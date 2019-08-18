@@ -298,8 +298,12 @@ w_file_s *wind_freaddir(w_file_s *dir)
     }while(0);
     wind_mutex_unlock(dir->mutex);
     if(err != W_ERR_OK)
+    {
+        if(dir->childfile != W_NULL)
+            wind_file_destroy(dir->childfile);
+        dir->childfile = W_NULL;
         return W_NULL;
-
+    }
     return dir->childfile;
 }
 

@@ -69,7 +69,7 @@ w_err_t wind_treefs_format(w_treefs_s *tfs)
     buff = "passwd=wind;wind;\r\n";
     treefile_write(file,(w_uint8_t*)buff,wind_strlen(buff));
     treefile_close(file);
-    #endif
+#endif
     return W_ERR_OK;
 }
 
@@ -81,9 +81,16 @@ w_treefs_s *wind_treefs_get(const char *name)
 
 w_err_t wind_treefs_init(w_treefs_s *treefs,const char *name)
 {
+    w_int32_t len;
+    char *objname = W_NULL;
     wind_notice("init treefs:%s",name != W_NULL?name:"null");
     WIND_ASSERT_RETURN(treefs != W_NULL,W_ERR_PTR_NULL);
-    wind_obj_init(&treefs->obj,TREEFS_MAGIC,name,&treefslist);
+    WIND_ASSERT_RETURN(name != W_NULL,W_ERR_PTR_NULL);
+    len = wind_strlen(name) + 1;
+    objname = tfs_mem_malloc(len);
+    WIND_ASSERT_RETURN(objname != W_NULL,W_ERR_MEM);
+    wind_strcpy(objname,name);
+    wind_obj_init(&treefs->obj,TREEFS_MAGIC,objname,&treefslist);
     CLR_F_TREEFS_POOL(treefs);
     treefs->fs_size = 0;
     treefs->root = W_NULL;
@@ -109,14 +116,17 @@ w_treefs_s *wind_treefs_create(char *name)
 w_err_t wind_treefs_destroy(w_treefs_s *treefs)
 {
     w_err_t err;
-    //w_dnode_s *dnode;
+    
     WIND_ASSERT_RETURN(treefs != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(treefs->obj.name != W_NULL,W_ERR_PTR_NULL);
     wind_notice("destroy treefs:%s",wind_obj_name(&treefs->obj));
     err = wind_obj_deinit(&treefs->obj,TREEFS_MAGIC,&treefslist);
     WIND_ASSERT_RETURN(err == W_ERR_OK, W_ERR_FAIL);
+    tfs_mem_free(treefs->obj.name);
+    treefs->obj.name = W_NULL;
     if(IS_F_TREEFS_POOL(treefs))
         wind_pool_free(&treefspool,treefs);
-    return W_ERR_OK;    
+    return W_ERR_OK;
 }
 
 
