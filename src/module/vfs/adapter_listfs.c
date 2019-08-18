@@ -79,7 +79,7 @@ static w_err_t listfs_op_rmfile(w_file_s* file)
     return listfile_remove((w_listfile_s *)file->vfs,file->realpath);
 }
 
-static w_err_t listfs_op_subfile(w_file_s* dir,w_file_s* sub)
+static w_err_t listfs_op_readdir(w_file_s* dir,w_file_s* sub)
 {
     w_err_t err;
     w_listfile_s *lfile;
@@ -149,9 +149,9 @@ static w_err_t listfs_op_rename(w_file_s* file,char *newname)
     do
     {
         err = W_ERR_OK;
+        lfile = (w_listfile_s *)file->fileobj;
         oldname = wind_salloc(lfile->info.name);
         WIND_ASSERT_BREAK(oldname != W_NULL,W_ERR_MEM,"malloc filename failed");
-        lfile = (w_listfile_s *)file->fileobj;
         wind_strcpy(lfile->info.name,newname);
         err = fileinfo_write(&lfile->info,file->vfs->blkdev);
         WIND_ASSERT_BREAK(err == W_ERR_OK,err,"write fileinfo failed");

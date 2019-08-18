@@ -21,6 +21,7 @@
 #include "wind_std.h"
 #include "wind_cmd.h"
 #include "wind_module.h"
+#include<windows.h>
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus

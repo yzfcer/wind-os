@@ -22,8 +22,8 @@
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
-#ifndef WIND_FILE_H__
-#define WIND_FILE_H__
+#ifndef WIND_FSOPS_H__
+#define WIND_FSOPS_H__
 #include "wind_config.h"
 #include "wind_blkdev.h"
 #include "wind_filepath.h"

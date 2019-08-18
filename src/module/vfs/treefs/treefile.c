@@ -362,41 +362,10 @@ w_int32_t treefile_write(w_treefile_s* file,w_uint8_t *buff, w_int32_t size)
     return wsize;
 }
 
-#if 0
-w_treefile_s *treefile_readdir(w_treefile_s* dir,w_treefile_s* subfile)
-{
-    w_err_t err;
-    w_dnode_s *dnode;
-    WIND_ASSERT_RETURN(dir != W_NULL,W_NULL);
-    WIND_ASSERT_RETURN(subfile != W_NULL,W_NULL);
-    WIND_ASSERT_RETURN(dir->magic == TREEFILE_MAGIC,W_NULL);
-    WIND_ASSERT_RETURN(dir->isdir == 1,W_NULL);
-    do
-    {
-        if(subfile->magic != TREEFILE_MAGIC)
-        {
-            dnode = dir->tree.child_list.head;
-            WIND_CHECK_BREAK(dnode != W_NULL,W_ERR_NOFILE);
-            subfile = NODE_TO_TREEFILE(dnode);
-            WIND_CHECK_BREAK(subfile->magic == TREEFILE_MAGIC,W_ERR_INVALID);
-            break;
-        }
-        
-        dnode = subfile->tree.treenode.next;
-        WIND_CHECK_BREAK(dnode != W_NULL,W_ERR_NOFILE);
-        subfile = NODE_TO_TREEFILE(dnode);       
-        WIND_CHECK_BREAK(subfile->magic == TREEFILE_MAGIC,W_ERR_INVALID);
-        break;
-    }while(0);
-    if(err == W_ERR_OK)
-        return subfile;
-    return W_NULL;
 
-}
-#endif
 
-#if 1
-w_int32_t treefile_readdir(w_treefile_s* dir,w_treefile_s **sub)
+
+w_err_t treefile_readdir(w_treefile_s* dir,w_treefile_s **sub)
 {
     w_err_t err;
     w_dnode_s *dnode;
@@ -429,7 +398,7 @@ w_int32_t treefile_readdir(w_treefile_s* dir,w_treefile_s **sub)
         *sub = W_NULL;
     return err;
 }
-#endif
+
 
 w_err_t treefile_fgets(w_treefile_s* file,char *buff, w_int32_t maxlen)
 {

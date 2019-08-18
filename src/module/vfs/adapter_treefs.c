@@ -35,8 +35,6 @@
 static void* treefs_op_init(w_vfs_s *vfs)
 {
     w_treefs_s *tfs;
-    //tfs = wind_treefs_get("tfs0");
-    //WIND_ASSERT_RETURN(tfs != W_NULL,W_NULL);
     
     tfs = wind_treefs_create(vfs->obj.name);
     WIND_ASSERT_RETURN(tfs != W_NULL,W_NULL);
@@ -81,33 +79,20 @@ static w_err_t treefs_op_rmfile(w_file_s* file)
     return treefile_rm((w_treefile_s *)file->fileobj);
 }
 
-static w_err_t treefs_op_subfile(w_file_s* dir,w_file_s* sub)
+static w_err_t treefs_op_readdir(w_file_s* dir,w_file_s* sub)
 {
     w_err_t err;
-    w_dnode_s *dnode;
-    w_treefile_s *tfile;
     w_treefile_s *subtfile;
     WIND_ASSERT_RETURN(dir != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(sub != W_NULL,W_ERR_PTR_NULL);
     do
     {
         err = W_ERR_OK;
+
         subtfile = (w_treefile_s *)sub->fileobj;
-        if(subtfile == W_NULL)
-        {
-            tfile = (w_treefile_s *)dir->fileobj;
-            dnode = tfile->tree.child_list.head;
-            WIND_CHECK_BREAK(dnode != W_NULL,W_ERR_NOFILE);
-            subtfile = NODE_TO_TREEFILE(dnode);
-        }
-        else
-        {
-            WIND_CHECK_BREAK(subtfile->tree.treenode.next != W_NULL,W_ERR_PTR_NULL);
-            dnode = subtfile->tree.treenode.next;
-            WIND_CHECK_BREAK(dnode != W_NULL,W_ERR_NOFILE);
-            subtfile = NODE_TO_TREEFILE(dnode);
-            WIND_ASSERT_BREAK(subtfile->magic == TREEFILE_MAGIC, W_ERR_INVALID, "error treefile object");
-        }
+        err = treefile_readdir((w_treefile_s *)dir->fileobj,(w_treefile_s **)&subtfile);
+        WIND_CHECK_BREAK(err == W_ERR_OK,err);
+        WIND_ASSERT_BREAK(subtfile != W_NULL,W_ERR_FAIL,"get subtfile failed");
         WIND_ASSERT_BREAK(subtfile->magic == TREEFILE_MAGIC,W_ERR_INVALID,"invalid treefile dound");
         sub->fileobj = subtfile;
         sub->obj.magic = WIND_FILE_MAGIC;
@@ -177,13 +162,5 @@ static w_err_t treefs_op_fputs(w_file_s* file,char *buff)
 }
 
 FS_OPS_DEF(treefs);
-
-#if 0
-w_vfs_s fs_treefs[1] = 
-{
-    WIND_FS_DEF(treefs,FSTYPE_TREEFS,fs_ops),
-};
-#endif
-
 
 #endif

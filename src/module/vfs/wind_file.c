@@ -278,9 +278,8 @@ w_err_t wind_fremove(const char *path)
 w_file_s *wind_freaddir(w_file_s *dir)
 {
     w_err_t err = W_ERR_FAIL;
-    w_file_s *childfile;
-    WIND_ASSERT_RETURN(dir != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(dir->isdir != 0,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(dir != W_NULL,W_NULL);
+    WIND_ASSERT_RETURN(dir->isdir != 0,W_NULL);
     wind_mutex_lock(dir->mutex);
     do 
     {
