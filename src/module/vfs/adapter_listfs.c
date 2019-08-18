@@ -89,22 +89,10 @@ static w_err_t listfs_op_readdir(w_file_s* dir,w_file_s* sub)
     do
     {
         err = W_ERR_OK;
-        sublfile = (w_listfile_s *)sub->fileobj;
-        if(sublfile == W_NULL)
-        {
-            sublfile = lfs_malloc(sizeof(w_listfile_s));
-            WIND_ASSERT_BREAK(sublfile != W_NULL,W_ERR_MEM,"malloc listfile failed");
-            sub->fileobj = sublfile;
-            lfile = (w_listfile_s *)dir->fileobj;
-            wind_memcpy(&sublfile->info,&lfile->info,sizeof(lfile_info_s));
-            err = fileinfo_get_headchild(&sublfile->info,dir->vfs->blkdev);
-            WIND_ASSERT_BREAK(err == W_ERR_OK,err,"get fileinfo failed");
-        }
-        else
-        {
-            err = fileinfo_get_next(&sublfile->info,dir->vfs->blkdev);
-            WIND_ASSERT_BREAK(err == W_ERR_OK,err,"get fileinfo failed");
-        }
+        sublfile = W_NULL;
+        err = listfile_readdir((w_listfile_s *)dir->fileobj,&sublfile);
+        WIND_CHECK_BREAK(err == W_ERR_OK,err);
+        
         WIND_ASSERT_BREAK(sublfile->info.magic == LISTFILE_MAGIC,W_ERR_INVALID,"invalid listfile dound");
         sub->fileobj = sublfile;
         sub->obj.magic = WIND_FILE_MAGIC;
@@ -125,6 +113,7 @@ static w_err_t listfs_op_readdir(w_file_s* dir,w_file_s* sub)
         sub->vfs = dir->vfs;
         
     }while(0);
+
 
     return err;
 }
