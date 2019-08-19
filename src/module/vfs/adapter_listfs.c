@@ -82,6 +82,7 @@ static w_err_t listfs_op_rmfile(w_file_s* file)
 static w_err_t listfs_op_readdir(w_file_s* dir,w_file_s* sub)
 {
     w_err_t err;
+    w_int32_t len;
     w_listfile_s *lfile;
     w_listfile_s *sublfile = W_NULL;
     WIND_ASSERT_RETURN(dir != W_NULL,W_ERR_PTR_NULL);
@@ -107,11 +108,10 @@ static w_err_t listfs_op_readdir(w_file_s* dir,w_file_s* sub)
         sub->fullpath = wind_filepath_generate(dir->fullpath,sub->obj.name,sub->isdir);
         WIND_ASSERT_BREAK(sub->fullpath != W_NULL,W_ERR_MEM,"malloc fullpath failed");
 
-        if(sub->realpath)
-            wind_filepath_release(sub->realpath);
-        sub->realpath = wind_filepath_generate(dir->realpath,sub->obj.name,sub->isdir);
-        WIND_ASSERT_BREAK(sub->realpath != W_NULL,W_ERR_MEM,"malloc realpath failed");
-        wind_error("realpath error");
+        len = wind_strlen(dir->vfs->mount_path);
+        WIND_ASSERT_BREAK(len >= 1,W_ERR_INVALID,"get mount path lenth failed");
+        sub->realpath = sub->fullpath[len - 1];
+        
         sub->vfs = dir->vfs;
         
     }while(0);
