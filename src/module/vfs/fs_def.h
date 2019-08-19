@@ -48,27 +48,6 @@
 #define SET_F_VFS_MOUNT(vfs) (vfs->obj.flag |= F_VFS_MOUNT)
 #define CLR_F_VFS_MOUNT(vfs) (vfs->obj.flag &= (~F_VFS_MOUNT))
 
-#if 0
-typedef enum 
-{
-    FSTYPE_NONE   = 0x00,
-    FSTYPE_TREEFS,
-    FSTYPE_LISTFS,
-    FSTYPE_FAT12,
-    FSTYPE_FAT16,
-    FSTYPE_FAT32,
-    FSTYPE_EXT2,
-    FSTYPE_EXT3,
-    FSTYPE_EXT4,
-    FSTYPE_ROMFS,
-    FSTYPE_RAMFS,
-    FSTYPE_NFS,
-    FSTYPE_JFFS,
-    FSTYPE_JFFS2,
-    FSTYPE_YAFFS,
-    FSTYPE_YAFFS2,
-}w_fstype_e;
-#endif
 
 typedef enum 
 {
