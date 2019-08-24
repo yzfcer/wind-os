@@ -70,7 +70,7 @@ static lcache_item_s *alloc_cacheitem(lfs_cache_s *cache,w_int32_t blksize)
     if(cache->itemcount < LFS_CACHEITEM_MAX_CNT)
     {
         itemsize = sizeof(lcache_item_s) + blksize;
-        cacheitem = lfs_malloc(itemsize);
+        cacheitem = listfs_mem_malloc(itemsize);
         cacheitem->flag = 0;
         WIND_ASSERT_TODO_RETURN(cacheitem == W_NULL,wind_enable_switch(),W_NULL);
         cache->itemcount ++;

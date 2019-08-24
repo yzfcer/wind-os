@@ -95,7 +95,7 @@ w_err_t fileinfo_read(lfile_info_s *info,w_blkdev_s *blkdev,w_addr_t addr)
     do
     {
         err = W_ERR_OK;
-        blk = lfs_malloc(blkdev->blksize);
+        blk = listfs_mem_malloc(blkdev->blksize);
         WIND_ASSERT_BREAK(blk != W_NULL,W_ERR_MEM,"malloc blk failed");
         cnt = wind_blkdev_read(blkdev,addr,blk,1);
         WIND_ASSERT_BREAK(cnt > 0,W_ERR_HARDFAULT,"read blkdata failed");
@@ -111,7 +111,7 @@ w_err_t fileinfo_read(lfile_info_s *info,w_blkdev_s *blkdev,w_addr_t addr)
             wind_error("fileinfo addr error");
     }while(0);
     if(blk != W_NULL)
-        lfs_free(blk);
+        listfs_mem_free(blk);
     return err;
 }
 
@@ -128,7 +128,7 @@ w_err_t fileinfo_write(lfile_info_s *info,w_blkdev_s *blkdev)
     do
     {
         err = W_ERR_OK;
-        blk = lfs_malloc(blkdev->blksize);
+        blk = listfs_mem_malloc(blkdev->blksize);
         WIND_ASSERT_BREAK(blk != W_NULL,W_ERR_MEM,"malloc blk failed");
         cnt = wind_blkdev_read(blkdev,info->self_addr,blk,1);
         WIND_ASSERT_BREAK(cnt > 0,W_ERR_HARDFAULT,"read blkdata failed");
@@ -138,7 +138,7 @@ w_err_t fileinfo_write(lfile_info_s *info,w_blkdev_s *blkdev)
         WIND_ASSERT_BREAK(cnt > 0,W_ERR_HARDFAULT,"read blkdata failed");
     }while(0);
     if(blk != W_NULL)
-        lfs_free(blk);
+        listfs_mem_free(blk);
     return err;
 }
 
@@ -193,7 +193,7 @@ w_err_t fileinfo_add_update_parent(lfile_info_s *info,w_blkdev_s *blkdev)
     do
     {
         err = W_ERR_OK;
-        tmpinfo = lfs_malloc(sizeof(lfile_info_s));
+        tmpinfo = listfs_mem_malloc(sizeof(lfile_info_s));
         WIND_ASSERT_BREAK(tmpinfo != W_NULL,W_ERR_MEM,"malloc tmpinfo failed");
         self_addr = info->self_addr;
         err = fileinfo_read(tmpinfo,blkdev,info->parent_addr);
@@ -208,7 +208,7 @@ w_err_t fileinfo_add_update_parent(lfile_info_s *info,w_blkdev_s *blkdev)
 
     }while(0);
     if(tmpinfo != W_NULL)
-        lfs_free(tmpinfo);
+        listfs_mem_free(tmpinfo);
     return err;
 }
 
@@ -227,7 +227,7 @@ w_err_t fileinfo_add_update_prev(lfile_info_s *info,w_blkdev_s *blkdev)
     do
     {
         err = W_ERR_OK;
-        tmpinfo = lfs_malloc(sizeof(lfile_info_s));
+        tmpinfo = listfs_mem_malloc(sizeof(lfile_info_s));
         WIND_ASSERT_BREAK(tmpinfo != W_NULL,W_ERR_MEM,"malloc tmpinfo failed");
         self_addr = info->self_addr;
         err = fileinfo_read(tmpinfo,blkdev,info->prevfile_addr);
@@ -238,7 +238,7 @@ w_err_t fileinfo_add_update_prev(lfile_info_s *info,w_blkdev_s *blkdev)
 
     }while(0);
     if(tmpinfo != W_NULL)
-        lfs_free(tmpinfo);
+        listfs_mem_free(tmpinfo);
     return err;
 }
 
@@ -257,7 +257,7 @@ w_err_t fileinfo_rm_update_parent(lfile_info_s *info,w_blkdev_s *blkdev)
     do
     {
         err = W_ERR_OK;
-        tmpinfo = lfs_malloc(sizeof(lfile_info_s));
+        tmpinfo = listfs_mem_malloc(sizeof(lfile_info_s));
         WIND_ASSERT_BREAK(tmpinfo != W_NULL,W_ERR_MEM,"malloc tmpinfo failed");
         self_addr = info->self_addr;
         err = fileinfo_read(tmpinfo,blkdev,info->parent_addr);
@@ -273,7 +273,7 @@ w_err_t fileinfo_rm_update_parent(lfile_info_s *info,w_blkdev_s *blkdev)
 
     }while(0);
     if(tmpinfo != W_NULL)
-        lfs_free(tmpinfo);
+        listfs_mem_free(tmpinfo);
     return err;
 }
 
@@ -292,7 +292,7 @@ w_err_t fileinfo_rm_update_prev(lfile_info_s *info,w_blkdev_s *blkdev)
     do
     {
         err = W_ERR_OK;
-        tmpinfo = lfs_malloc(sizeof(lfile_info_s));
+        tmpinfo = listfs_mem_malloc(sizeof(lfile_info_s));
         WIND_ASSERT_BREAK(tmpinfo != W_NULL,W_ERR_MEM,"malloc tmpinfo failed");
         self_addr = info->self_addr;
         err = fileinfo_read(tmpinfo,blkdev,info->prevfile_addr);
@@ -303,7 +303,7 @@ w_err_t fileinfo_rm_update_prev(lfile_info_s *info,w_blkdev_s *blkdev)
 
     }while(0);
     if(tmpinfo != W_NULL)
-        lfs_free(tmpinfo);
+        listfs_mem_free(tmpinfo);
     return err;
 }
 
@@ -323,7 +323,7 @@ w_err_t fileinfo_rm_update_next(lfile_info_s *info,w_blkdev_s *blkdev)
     do
     {
         err = W_ERR_OK;
-        tmpinfo = lfs_malloc(sizeof(lfile_info_s));
+        tmpinfo = listfs_mem_malloc(sizeof(lfile_info_s));
         WIND_ASSERT_BREAK(tmpinfo != W_NULL,W_ERR_MEM,"malloc tmpinfo failed");
         self_addr = info->self_addr;
         err = fileinfo_read(tmpinfo,blkdev,info->nextfile_addr);
@@ -334,7 +334,7 @@ w_err_t fileinfo_rm_update_next(lfile_info_s *info,w_blkdev_s *blkdev)
 
     }while(0);
     if(tmpinfo != W_NULL)
-        lfs_free(tmpinfo);
+        listfs_mem_free(tmpinfo);
     return err;
 }
 

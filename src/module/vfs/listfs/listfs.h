@@ -79,29 +79,26 @@ typedef struct __listfs_s
     lfs_info_s lfs_info;  //文件系统信息
     w_blkdev_s *blkdev;   //关联的块设备
     lfs_bitmap_s bitmap;  //块使用位图
-    
-    //lfile_info_s root;    //根目录信息
     w_int32_t  file_ref;  //打开的文件数量
     w_uint32_t blkused;   //已经使用的块数量
-
 }w_listfs_s;
 
 //程序关联的文件信息
 typedef struct __listfile_s
 {
-    lfile_info_s info;
-    w_listfs_s *lfs;
-    w_uint8_t mode;
-    w_int32_t offset;
-    lfile_blkinfo_s *blkinfo;
-    lfile_info_s *subinfo;
+    lfile_info_s info;        //文件基本信息
+    w_listfs_s *lfs;          //对应的文件系统
+    w_uint8_t mode;           //打开模式
+    w_int32_t offset;         //文件偏移量
+    lfile_blkinfo_s *blkinfo; //当前数据块信息
+    lfile_info_s *subinfo;    //子文件信息
 }w_listfile_s;
 
 void lfs_info_be2le(lfs_info_s *info);
 
 w_err_t _wind_listfs_mod_init(void);
-void *lfs_malloc(w_int32_t size);
-w_err_t lfs_free(void *ptr);
+void *listfs_mem_malloc(w_int32_t size);
+w_err_t listfs_mem_free(void *ptr);
 w_err_t listfs_format(w_listfs_s *lfs,w_blkdev_s *blkdev);
 w_err_t listfs_init(w_listfs_s *lfs,w_blkdev_s *blkdev);
 w_err_t listfs_deinit(w_listfs_s *lfs);

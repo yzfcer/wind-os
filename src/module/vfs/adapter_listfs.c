@@ -83,7 +83,6 @@ static w_err_t listfs_op_readdir(w_file_s* dir,w_file_s* sub)
 {
     w_err_t err;
     w_int32_t len;
-    w_listfile_s *lfile;
     w_listfile_s *sublfile = W_NULL;
     WIND_ASSERT_RETURN(dir != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(sub != W_NULL,W_ERR_PTR_NULL);
