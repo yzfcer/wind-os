@@ -45,22 +45,78 @@ CASE_FUNC(create)
     w_file_s *file;
     file = wind_fopen("/test.txt",FMODE_CRT);
     EXPECT_NE(file,W_NULL);
+    EXPECT_STR_EQ(file->fullpath,"/test.txt");
+    EXPECT_STR_EQ(file->realpath,"/test.txt");
+    EXPECT_NE(file->vfs,W_NULL);
+    EXPECT_NE(file->mutex,W_NULL);
+    EXPECT_EQ(file->childfile,W_NULL);
+    EXPECT_EQ(file->fmode,FMODE_CRT);
+    EXPECT_NE(file->fileobj,W_NULL);
+    EXPECT_EQ(file->isdir,0);
+    EXPECT_EQ(file->offset,0);
     err = wind_fclose(file);
     EXPECT_EQ(err,W_ERR_OK);
-    err = wind_fremove("/test.txt");
-    EXPECT_EQ(err,W_ERR_OK);
+    
+    
     file = wind_fopen("/test1.txt",FMODE_CRT);
     EXPECT_NE(file,W_NULL);
+    EXPECT_STR_EQ(file->fullpath,"/test1.txt");
+    EXPECT_STR_EQ(file->realpath,"/test1.txt");
+    EXPECT_NE(file->vfs,W_NULL);
+    EXPECT_NE(file->mutex,W_NULL);
+    EXPECT_EQ(file->childfile,W_NULL);
+    EXPECT_EQ(file->fmode,FMODE_CRT);
+    EXPECT_NE(file->fileobj,W_NULL);
+    EXPECT_EQ(file->isdir,0);
+    EXPECT_EQ(file->offset,0);
+    
     err = wind_fclose(file);
+    EXPECT_EQ(err,W_ERR_OK);
+    
+
+
+
+
+    file = wind_fopen("/test.txt",FMODE_R);
+    EXPECT_NE(file,W_NULL);
+    
+    EXPECT_STR_EQ(file->fullpath,"/test.txt");
+    EXPECT_STR_EQ(file->realpath,"/test.txt");
+    EXPECT_NE(file->vfs,W_NULL);
+    EXPECT_NE(file->mutex,W_NULL);
+    EXPECT_EQ(file->childfile,W_NULL);
+    EXPECT_EQ(file->fmode,FMODE_R);
+    EXPECT_NE(file->fileobj,W_NULL);
+    EXPECT_EQ(file->isdir,0);
+    EXPECT_EQ(file->offset,0);
+    err = wind_fclose(file);
+    EXPECT_EQ(err,W_ERR_OK);
+    
+    file = wind_fopen("/test1.txt",FMODE_R);
+    EXPECT_NE(file,W_NULL);
+    
+    EXPECT_STR_EQ(file->fullpath,"/test1.txt");
+    EXPECT_STR_EQ(file->realpath,"/test1.txt");
+    EXPECT_NE(file->vfs,W_NULL);
+    EXPECT_NE(file->mutex,W_NULL);
+    EXPECT_EQ(file->childfile,W_NULL);
+    EXPECT_EQ(file->fmode,FMODE_R);
+    EXPECT_NE(file->fileobj,W_NULL);
+    EXPECT_EQ(file->isdir,0);
+    EXPECT_EQ(file->offset,0);
+    err = wind_fclose(file);
+    EXPECT_EQ(err,W_ERR_OK);
+
+
+
+    
+    err = wind_fremove("/test.txt");
     EXPECT_EQ(err,W_ERR_OK);
     err = wind_fremove("/test1.txt");
     EXPECT_EQ(err,W_ERR_OK);
-    file = wind_fopen("/test2.txt",FMODE_CRT);
-    EXPECT_NE(file,W_NULL);
-    err = wind_fclose(file);
-    EXPECT_EQ(err,W_ERR_OK);
-    err = wind_fremove("/test2.txt");
-    EXPECT_EQ(err,W_ERR_OK);
+
+
+    
 }
 
 
@@ -101,6 +157,61 @@ CASE_FUNC(readwrite)
     
 }
 
+
+CASE_SETUP(readdir)
+{
+    w_file_s *file;
+    file = wind_fopen("/readdir_test/",FMODE_CRT);
+    EXPECT_NE(file,W_NULL);
+    wind_fclose(file);
+    file = wind_fopen("/readdir_test/test1",FMODE_CRT);
+    EXPECT_NE(file,W_NULL);
+    wind_fclose(file);
+    file = wind_fopen("/readdir_test/test2",FMODE_CRT);
+    EXPECT_NE(file,W_NULL);
+    file = wind_fopen("/readdir_test/testdir/",FMODE_CRT);
+    EXPECT_NE(file,W_NULL);
+    wind_fclose(file);
+    
+}
+
+CASE_TEARDOWN(readdir)
+{
+    w_err_t err;
+    err = wind_fremove("/readdir_test/");
+    EXPECT_EQ(err,W_ERR_OK);
+}
+
+CASE_FUNC(readdir)
+{
+    w_err_t err;
+    w_file_s *file;
+    w_file_s *sub;
+    file = wind_fopen("/readdir_test/",FMODE_R);
+    EXPECT_NE(file,W_NULL);
+    EXPECT_STR_EQ(file->fullpath,"/readdir_test/");
+    EXPECT_STR_EQ(file->realpath,"/readdir_test/");
+    EXPECT_NE(file->vfs,W_NULL);
+    EXPECT_NE(file->mutex,W_NULL);
+    EXPECT_EQ(file->childfile,W_NULL);
+    EXPECT_EQ(file->fmode,FMODE_R);
+    EXPECT_NE(file->fileobj,W_NULL);
+    EXPECT_EQ(file->isdir,1);
+    EXPECT_EQ(file->offset,0);
+
+    
+    sub = wind_freaddir(file);
+    EXPECT_NE(sub,W_NULL);
+    sub = wind_freaddir(file);
+    EXPECT_NE(sub,W_NULL);
+    sub = wind_freaddir(file);
+    EXPECT_NE(sub,W_NULL);
+    sub = wind_freaddir(file);
+    EXPECT_EQ(sub,W_NULL);
+    err = wind_fclose(file);
+    EXPECT_EQ(err,W_ERR_OK);
+}
+
 SUITE_SETUP(fs)
 {
     w_vfs_s *fs;
@@ -119,6 +230,7 @@ SUITE_TEARDOWN(fs)
 TEST_CASES_START(fs)
 TEST_CASE(create)
 TEST_CASE(readwrite)
+TEST_CASE(readdir)
 TEST_CASES_END
 TEST_SUITE(fs)
 

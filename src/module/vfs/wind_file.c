@@ -277,6 +277,7 @@ w_err_t wind_fremove(const char *path)
 
 w_file_s *wind_freaddir(w_file_s *dir)
 {
+    w_int32_t mountlen;
     w_err_t err = W_ERR_FAIL;
     WIND_ASSERT_RETURN(dir != W_NULL,W_NULL);
     WIND_ASSERT_RETURN(dir->isdir != 0,W_NULL);
@@ -294,6 +295,9 @@ w_file_s *wind_freaddir(w_file_s *dir)
 
         err = dir->vfs->ops->readdir(dir,dir->childfile);
         WIND_CHECK_BREAK(err == W_ERR_OK, err);
+        
+        mountlen = wind_strlen(dir->vfs->mount_path);
+        dir->childfile->realpath = &dir->childfile->fullpath[mountlen-1];
         
     }while(0);
     wind_mutex_unlock(dir->mutex);
