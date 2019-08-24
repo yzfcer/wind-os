@@ -31,23 +31,14 @@ w_err_t tfs_mem_free(void *ptr)
     return wind_free(ptr);
 }
 
-
-w_err_t wind_treefs_format(w_treefs_s *tfs)
+static void treefs_create_files(w_treefs_s *tfs)
 {
     char *buff;
     w_treefile_s *file;
-    w_treefile_s *root = tfs->root;
-    if(root != W_NULL)
-        treefile_rm(root);
-    root = treefs_mk_subnode(W_NULL,"",1);
-    if(!root)
-    {
-        wind_error("make treefs root failed");
-        return W_ERR_FAIL;
-    }
-        
-#if 1
-    tfs->root = root;
+    static w_bool_t crt_flag = W_FALSE;
+    if(crt_flag)
+        return;
+    crt_flag = W_TRUE;
     treefile_create(tfs,"/var/");
     treefile_create(tfs,"/mnt/");
     treefile_create(tfs,"/usr/");
@@ -69,7 +60,21 @@ w_err_t wind_treefs_format(w_treefs_s *tfs)
     buff = "passwd=wind;wind;\r\n";
     treefile_write(file,(w_uint8_t*)buff,wind_strlen(buff));
     treefile_close(file);
-#endif
+}
+
+w_err_t wind_treefs_format(w_treefs_s *tfs)
+{
+    w_treefile_s *root = tfs->root;
+    if(root != W_NULL)
+        treefile_rm(root);
+    root = treefs_mk_subnode(W_NULL,"",1);
+    if(!root)
+    {
+        wind_error("make treefs root failed");
+        return W_ERR_FAIL;
+    }
+    tfs->root = root;
+    treefs_create_files(tfs);
     return W_ERR_OK;
 }
 
@@ -86,6 +91,7 @@ w_err_t wind_treefs_init(w_treefs_s *treefs,const char *name)
     wind_notice("init treefs:%s",name != W_NULL?name:"null");
     WIND_ASSERT_RETURN(treefs != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(name != W_NULL,W_ERR_PTR_NULL);
+
     len = wind_strlen(name) + 1;
     objname = tfs_mem_malloc(len);
     WIND_ASSERT_RETURN(objname != W_NULL,W_ERR_MEM);
@@ -93,7 +99,8 @@ w_err_t wind_treefs_init(w_treefs_s *treefs,const char *name)
     wind_obj_init(&treefs->obj,TREEFS_MAGIC,objname,&treefslist);
     CLR_F_TREEFS_POOL(treefs);
     treefs->fs_size = 0;
-    treefs->root = W_NULL;
+    treefs->root = W_NULL;       
+    
     return W_ERR_OK;
 }
 

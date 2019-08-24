@@ -75,46 +75,35 @@ static w_treefile_s *treefs_get_childnode(w_tree_s *parent,char *childname)
 
 static w_treefile_s *treefs_search_node(w_treefs_s *tfs,const char *path)
 {
+    w_err_t err;
     w_int32_t len,cnt,i;
     w_treefile_s *file = W_NULL;
-    char **nameseg;
-    char *pathname;
+    char **nameseg = W_NULL;
+    char *pathname = W_NULL;
     wind_debug("search node path:%s",path);
-    nameseg = (char **)tfs_mem_malloc(TREEFS_DIR_LAYCNT * sizeof(char*));
-    len = wind_strlen(path);
-    pathname = tfs_mem_malloc(len+1);
-    if(pathname == W_NULL || nameseg == W_NULL)
+    do
     {
-        wind_error("alloc memory error");
-        goto SEARCH_COMPLETE;
-    }
-        
-    wind_memset(pathname,0,len+1);
-    wind_strcpy(pathname,path);
-    pathname[len] = 0;
-    cnt = wind_strsplit(pathname,'/',nameseg,TREEFS_DIR_LAYCNT);
-    if(cnt < 0)
-    {
-        wind_error("split path failed");
-        goto SEARCH_COMPLETE;
-    }
-        
-    file = tfs->root;
-    if(cnt == 1)
-    {
-        goto SEARCH_COMPLETE;
-    }
-        
-    for(i = 1;i < cnt;i ++)
-    {
-        file = treefs_get_childnode(&file->tree,nameseg[i]);
-        if(file == W_NULL)
+        err = W_ERR_OK;
+        nameseg = (char **)tfs_mem_malloc(TREEFS_DIR_LAYCNT * sizeof(char*));
+        WIND_ASSERT_BREAK(nameseg != W_NULL,W_ERR_MEM,"malloc nameseg failed");
+        len = wind_strlen(path);
+        pathname = tfs_mem_malloc(len+1);
+        WIND_ASSERT_BREAK(pathname != W_NULL,W_ERR_MEM,"malloc pathname failed");
+        wind_memset(pathname,0,len+1);
+        wind_strcpy(pathname,path);
+        pathname[len] = 0;
+        cnt = wind_strsplit(pathname,'/',nameseg,TREEFS_DIR_LAYCNT);
+        WIND_ASSERT_BREAK(cnt > 0,W_ERR_INVALID,"split path failed");
+        file = tfs->root;
+        WIND_CHECK_BREAK(cnt != 1,W_ERR_OK);
+        for(i = 1;i < cnt;i ++)
         {
-            wind_debug("get child node failed");
-            goto SEARCH_COMPLETE;
+            file = treefs_get_childnode(&file->tree,nameseg[i]);
+            WIND_ASSERT_BREAK(file != W_NULL,W_ERR_FAIL,"get child node failed");
         }
-    }
-SEARCH_COMPLETE:
+        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"search file node failed");
+    }while(0);
+        
     if(pathname)
         tfs_mem_free(pathname);
     if(nameseg)
@@ -125,41 +114,39 @@ SEARCH_COMPLETE:
 static w_treefile_s *treefs_make_node(w_treefs_s *tfs,const char *path)
 {
     char *ptr;
+    w_err_t err;
     w_int32_t len;
     w_uint8_t isdir = 0;
-    char *dirname;
     char *nodename;
     w_treefile_s *treefile;
+    char *dirname = W_NULL;
     len = wind_strlen(path);
-    dirname = tfs_mem_malloc(len+1);
-    WIND_ASSERT_RETURN(dirname != W_NULL,W_NULL);
-    wind_strcpy(dirname,path);
-    if(dirname[len - 1] == '/')
+
+    do
     {
-        dirname[len - 1] = 0;
-        isdir = 1;
-    }
-        
-    ptr = wind_strrchr(dirname,'/');
-    if(ptr == W_NULL)
-    {
-        wind_error("get dir failed,path:%s",path);
-        tfs_mem_free(dirname);
-        return W_NULL;
-    }
-    *ptr = 0;
-    nodename = &ptr[1];
-    treefile = treefs_search_node(tfs,dirname);
-    if(treefile == W_NULL)
-    {
-        wind_error("search filenode failed");
-        tfs_mem_free(dirname);
-        return W_NULL;
-    }
-    treefile = treefs_mk_subnode(treefile,nodename,isdir);
-    if(treefile != W_NULL)
+        err = W_ERR_OK;
+        dirname = tfs_mem_malloc(len+1);
+        WIND_ASSERT_BREAK(dirname != W_NULL,W_ERR_MEM,"alloc dirname failed");
+        wind_strcpy(dirname,path);
+        if(dirname[len - 1] == '/')
+        {
+            dirname[len - 1] = 0;
+            isdir = 1;
+        }
+        ptr = wind_strrchr(dirname,'/');
+        WIND_ASSERT_BREAK(ptr != W_NULL,W_ERR_INVALID,"invalid path");
+        *ptr = 0;
+        nodename = &ptr[1];
+        treefile = treefs_search_node(tfs,dirname);
+        WIND_ASSERT_BREAK(treefile != W_NULL,W_ERR_INVALID,"search filenode failed");
+
+        treefile = treefs_mk_subnode(treefile,nodename,isdir);
+        WIND_ASSERT_BREAK(treefile != W_NULL,W_ERR_FAIL,"make filenode failed");
         treefile->tfs = tfs;
-    tfs_mem_free(dirname);
+    }while(0);
+        
+    if(dirname != W_NULL)
+        tfs_mem_free(dirname);
     return treefile;
 }
 
