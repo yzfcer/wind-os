@@ -84,14 +84,14 @@ w_file_s *wind_file_get(w_vfs_s *fs,const char *path)
     return (w_file_s *)W_NULL;
 }
 
-w_bool_t wind_file_exist(const char *path)
+w_bool_t wind_fexist(const char *path)
 {
     w_err_t err;
     w_file_s *file;
     w_uint32_t isdir;
     w_bool_t exist = W_FALSE;
     WIND_ASSERT_RETURN(path != W_NULL,W_FALSE);
-    wind_debug("wind_file_exist:%s",path);
+    wind_debug("wind_fexist:%s",path);
     err = wind_filepath_check_valid(path);
     WIND_ASSERT_RETURN(err == W_ERR_OK,W_FALSE);
     if(wind_file_get_bypath(path) != W_NULL)

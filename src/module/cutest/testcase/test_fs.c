@@ -57,7 +57,6 @@ CASE_FUNC(create)
     err = wind_fclose(file);
     EXPECT_EQ(err,W_ERR_OK);
     
-    
     file = wind_fopen("/test1.txt",FMODE_CRT);
     EXPECT_NE(file,W_NULL);
     EXPECT_STR_EQ(file->fullpath,"/test1.txt");
@@ -69,17 +68,11 @@ CASE_FUNC(create)
     EXPECT_NE(file->fileobj,W_NULL);
     EXPECT_EQ(file->isdir,0);
     EXPECT_EQ(file->offset,0);
-    
     err = wind_fclose(file);
     EXPECT_EQ(err,W_ERR_OK);
     
-
-
-
-
     file = wind_fopen("/test.txt",FMODE_R);
     EXPECT_NE(file,W_NULL);
-    
     EXPECT_STR_EQ(file->fullpath,"/test.txt");
     EXPECT_STR_EQ(file->realpath,"/test.txt");
     EXPECT_NE(file->vfs,W_NULL);
@@ -94,7 +87,6 @@ CASE_FUNC(create)
     
     file = wind_fopen("/test1.txt",FMODE_R);
     EXPECT_NE(file,W_NULL);
-    
     EXPECT_STR_EQ(file->fullpath,"/test1.txt");
     EXPECT_STR_EQ(file->realpath,"/test1.txt");
     EXPECT_NE(file->vfs,W_NULL);
@@ -106,17 +98,50 @@ CASE_FUNC(create)
     EXPECT_EQ(file->offset,0);
     err = wind_fclose(file);
     EXPECT_EQ(err,W_ERR_OK);
-
-
-
     
+
     err = wind_fremove("/test.txt");
     EXPECT_EQ(err,W_ERR_OK);
     err = wind_fremove("/test1.txt");
     EXPECT_EQ(err,W_ERR_OK);
 
+    file = wind_fopen("/test.txt",FMODE_R);
+    EXPECT_EQ(file,W_NULL);
+    file = wind_fopen("/test1.txt",FMODE_R);
+    EXPECT_EQ(file,W_NULL);
 
+
+}
+
+CASE_SETUP(exist)
+{
     
+}
+
+
+CASE_TEARDOWN(exist)
+{
+
+}
+
+CASE_FUNC(exist)
+{
+    w_bool_t exist;
+    w_file_s *file;
+    w_err_t err;
+    file = wind_fopen("/exist.txt",FMODE_CRT);
+    EXPECT_NE(file,W_NULL);
+    exist = wind_fexist("/exist.txt");
+    EXPECT_EQ(exist,W_TRUE);
+   
+    err = wind_fclose(file);
+    EXPECT_EQ(err,W_ERR_OK);
+    err = wind_fremove("/exist.txt");
+    EXPECT_EQ(err,W_ERR_OK);
+
+    exist = wind_fexist("/exist.txt");
+    EXPECT_EQ(exist,W_FALSE);
+
 }
 
 
@@ -229,6 +254,7 @@ SUITE_TEARDOWN(fs)
 
 TEST_CASES_START(fs)
 TEST_CASE(create)
+TEST_CASE(exist)
 TEST_CASE(readwrite)
 TEST_CASE(readdir)
 TEST_CASES_END

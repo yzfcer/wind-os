@@ -61,7 +61,7 @@ static w_err_t fs_cmd_cd(w_int32_t argc,char **argv)
         err = W_ERR_OK;
         fullpath = wind_filepath_generate(curpath,argv[2],1);
         WIND_ASSERT_BREAK(fullpath != W_NULL,W_ERR_MEM,"generate fullpath failed");
-        isexist = wind_file_exist(fullpath);
+        isexist = wind_fexist(fullpath);
         WIND_ASSERT_BREAK(isexist,W_ERR_NOFILE,"directory is NOT exist.")
         wind_filepath_set_current(fullpath);
         
@@ -85,7 +85,7 @@ static w_err_t mk_dir_file(w_int32_t argc,char **argv,w_uint16_t isdir)
         err = W_ERR_OK;
         fullpath = wind_filepath_generate(curpath,argv[2],1);
         WIND_ASSERT_BREAK(fullpath != W_NULL,W_ERR_MEM,"generate fullpath failed");
-        isexist = wind_file_exist(fullpath);
+        isexist = wind_fexist(fullpath);
         WIND_ASSERT_BREAK(!isexist,W_ERR_NOFILE,"directory has been existing.")
         file = wind_fopen(fullpath,FMODE_CRT);
         WIND_ASSERT_BREAK(file != W_NULL,W_ERR_FAIL,"make directory failed.")
