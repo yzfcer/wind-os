@@ -189,11 +189,15 @@ CASE_SETUP(readdir)
     file = wind_fopen("/readdir_test/",FMODE_CRT);
     EXPECT_NE(file,W_NULL);
     wind_fclose(file);
+    
     file = wind_fopen("/readdir_test/test1",FMODE_CRT);
     EXPECT_NE(file,W_NULL);
     wind_fclose(file);
+    
     file = wind_fopen("/readdir_test/test2",FMODE_CRT);
     EXPECT_NE(file,W_NULL);
+    wind_fclose(file);
+    
     file = wind_fopen("/readdir_test/testdir/",FMODE_CRT);
     EXPECT_NE(file,W_NULL);
     wind_fclose(file);

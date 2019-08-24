@@ -147,12 +147,6 @@ static w_err_t lfs_search_file(w_listfs_s *lfs,w_listfile_s *file,const char *pa
         //分配文件信息和数据块信息结构
         finfo = listfs_mem_malloc(sizeof(lfile_info_s));
         WIND_ASSERT_BREAK(finfo,W_ERR_MEM,"malloc finfo failed");
-        if(!isdir)
-        {
-            blkinfo = listfs_mem_malloc(sizeof(lfile_blkinfo_s));
-            WIND_ASSERT_BREAK(blkinfo,W_ERR_MEM,"malloc blkinfo failed");
-        }
-
 
         //读取根目录文件信息
         err = fileinfo_read(finfo,lfs->blkdev,lfs->lfs_info.root_addr);
@@ -171,14 +165,14 @@ static w_err_t lfs_search_file(w_listfs_s *lfs,w_listfile_s *file,const char *pa
         wind_memcpy(&file->info,finfo,sizeof(lfile_info_s));
         if(!isdir)
         {
-            blkinfo_read(blkinfo,lfs->blkdev,finfo->self_addr);
+            blkinfo = listfs_mem_malloc(sizeof(lfile_blkinfo_s));
+            WIND_ASSERT_BREAK(blkinfo,W_ERR_MEM,"malloc blkinfo failed");
+            err = blkinfo_read(blkinfo,lfs->blkdev,finfo->self_addr);
+            WIND_ASSERT_BREAK(err == W_ERR_OK,err,"read blkinfo failed");
             file->blkinfo = blkinfo;
+            blkinfo = W_NULL;
         }
-        else
-        {
-            listfs_mem_free(blkinfo);
-            file->blkinfo = W_NULL;
-        }
+
     }while(0);
         
     if(tmppath)
@@ -187,6 +181,8 @@ static w_err_t lfs_search_file(w_listfs_s *lfs,w_listfile_s *file,const char *pa
         listfs_mem_free(nameseg);
     if(finfo)
         listfs_mem_free(finfo);
+    if(blkinfo)
+        listfs_mem_free(blkinfo);
     return err;
 }
 
@@ -227,7 +223,6 @@ static w_err_t lfs_make_root(w_listfs_s *lfs)
         listfs_mem_free(blk);
     if(finfo != W_NULL)
         listfs_mem_free(finfo);
-    
     if(blkinfo != W_NULL)
         listfs_mem_free(blkinfo);
     return err;
@@ -276,13 +271,14 @@ static w_err_t lfs_make_child(w_listfs_s *lfs,lfile_info_s *pinfo,char *name,w_u
         err = fileinfo_add_update_parent(info,lfs->blkdev);
         WIND_ASSERT_BREAK(cnt > 0,err,"update pinfo file info failed.");
         wind_memcpy(pinfo,info,sizeof(lfile_info_s));
+        
     }while(0);
-    if(blk != W_NULL)
-        listfs_mem_free(blk);
     if(err != W_ERR_OK)
     {
         wind_error("fs should NOT be error here,must rollback here");
     }
+    if(blk != W_NULL)
+        listfs_mem_free(blk);
     return err;
 }
 
@@ -351,15 +347,15 @@ static w_err_t lfs_make_file(w_listfs_s *lfs,w_listfile_s *file,char *path)
         {
             blkinfo_read(blkinfo,lfs->blkdev,file->info.self_addr);
             file->blkinfo = blkinfo;
+            blkinfo = W_NULL;
         }
         else
         {
             file->blkinfo = W_NULL;
         }
     }
-    else if(blkinfo != W_NULL)
+    if(blkinfo != W_NULL)
         listfs_mem_free(blkinfo);
-        
     if(tmppath != W_NULL)
         listfs_mem_free(tmppath);
     if(finfo != W_NULL)
@@ -372,6 +368,7 @@ static w_err_t lfs_make_file(w_listfs_s *lfs,w_listfile_s *file,char *path)
 
 static w_err_t listfile_destroy(w_listfile_s* file)
 {
+    WIND_CHECK_RETURN(file != W_NULL,W_ERR_FAIL);
     if(file->blkinfo != W_NULL)
     {
         listfs_mem_free(file->blkinfo);
@@ -696,25 +693,23 @@ w_listfile_s* listfile_open(w_listfs_s *lfs,const char *path,w_uint16_t mode)
         else if((err == W_ERR_OK) && (!is_crt))
         {   //没有创建标记，且文件存在
             err = W_ERR_OK;
+            file->lfs->file_ref ++;
             break;
         }
 
         //有创建标记，且文件不存在
         err = lfs_make_file(lfs,file,(char*)path);
         WIND_ASSERT_BREAK(err == W_ERR_OK,err,"make file failed");
-    }while(0);
-    
-    if((err != W_ERR_OK)&&(file != W_NULL))
-    {   //打开文件过程中出错
-        listfile_destroy(file);
-        file = W_NULL;
-    }
-    
-    if(file != W_NULL)
-    {
         file->lfs->file_ref ++;
         if(mode & LFMODE_A)
             file->offset = file->info.filesize;
+        
+    }while(0);
+    
+    if(err != W_ERR_OK)
+    {   //打开文件过程中出错
+        listfile_destroy(file);
+        return W_NULL;
     }
     return file;
 }
@@ -763,10 +758,7 @@ w_err_t listfile_remove(w_listfs_s *lfs,const char *path)
         WIND_ASSERT_BREAK(err == W_ERR_OK,err,"remove fale failed");
 
     }while(0);
-    if(file->subinfo != W_NULL)
-        listfs_mem_free(file->subinfo);
-    listfs_mem_free(file->blkinfo);
-    listfs_mem_free(file);
+    listfile_destroy(file);
     return err;
 }
 
@@ -814,13 +806,13 @@ w_err_t listfile_seek(w_listfile_s* file,w_int32_t offset)
     WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(offset >= 0,W_ERR_OVERFLOW);
     WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,W_ERR_INVALID);
-    if(file->info.filesize < offset)
-        offset = file->info.filesize;
-    blkinfo = listfs_mem_malloc(sizeof(lfile_blkinfo_s));
-    WIND_ASSERT_RETURN(blkinfo != W_NULL, W_ERR_MEM);
     do 
     {
         err = W_ERR_OK;
+        blkinfo = listfs_mem_malloc(sizeof(lfile_blkinfo_s));
+        WIND_ASSERT_RETURN(blkinfo != W_NULL, W_ERR_MEM);
+        if(file->info.filesize < offset)
+            offset = file->info.filesize;
         wind_memcpy(blkinfo,file->blkinfo,sizeof(lfile_blkinfo_s));
         err = blkinfo_get_byoffset(blkinfo,file->lfs->blkdev,offset);
         if(err != W_ERR_OK)
@@ -972,9 +964,8 @@ static w_int32_t calc_needed_blkinfo(w_listfile_s* file,w_int32_t blkcnt)
     }while(0);
     if(tmpinfo != W_NULL)
         listfs_mem_free(tmpinfo);
-    if(err == W_ERR_OK)
-        return blkinfo_cnt;
-    return -1;
+    WIND_CHECK_RETURN(err == W_ERR_OK,-1);
+    return blkinfo_cnt;
 }
 
 
@@ -997,7 +988,7 @@ w_int32_t listfile_read(w_listfile_s* file,w_uint8_t *buff, w_int32_t size)
         WIND_ASSERT_BREAK(size > 0,W_ERR_FAIL,"do read file data failed");
         file->offset += rsize;
     }while(0);
-    WIND_ASSERT_RETURN(err == W_ERR_OK,-1);        
+    WIND_CHECK_RETURN(err == W_ERR_OK,-1);        
     return size;
 }
 
@@ -1045,7 +1036,7 @@ w_int32_t listfile_write(w_listfile_s* file,w_uint8_t *buff,w_int32_t size)
     }while(0);
     if(addrlist != W_NULL)
         listfs_mem_free(addrlist);
-    WIND_ASSERT_RETURN(err == W_ERR_OK,-1);
+    WIND_CHECK_RETURN(err == W_ERR_OK,-1);
     return size;
 }
 

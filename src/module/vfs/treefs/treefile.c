@@ -99,9 +99,9 @@ static w_treefile_s *treefs_search_node(w_treefs_s *tfs,const char *path)
         for(i = 1;i < cnt;i ++)
         {
             file = treefs_get_childnode(&file->tree,nameseg[i]);
-            WIND_ASSERT_BREAK(file != W_NULL,W_ERR_FAIL,"get child node failed");
+            WIND_CHECK_BREAK(file != W_NULL,W_ERR_FAIL);
         }
-        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"search file node failed");
+        WIND_CHECK_BREAK(err == W_ERR_OK,err);
     }while(0);
         
     if(pathname)

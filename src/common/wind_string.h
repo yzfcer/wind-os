@@ -33,56 +33,53 @@
 extern "C" {
 #endif
 
-extern char*  wind_strcpy(char *dest,const char *src);
+char* wind_strcpy(char *dest,const char *src);
 
-extern char* wind_strncpy(char *dest,const char *src,w_int32_t count);
+char* wind_strncpy(char *dest,const char *src,w_int32_t count);
 
-extern char *wind_strcat(char *dest, const char *src);
+char *wind_strcat(char *dest, const char *src);
 
-extern char* wind_strncat(char *dest, const char *src, w_int32_t count);
+char* wind_strncat(char *dest, const char *src, w_int32_t count);
 
-extern w_int32_t wind_strcmp(const char *dest,const char *src);
+w_int32_t wind_strcmp(const char *dest,const char *src);
 
-extern w_int32_t wind_strncmp(const char* dest,const char *src,w_int32_t count);
+w_int32_t wind_strncmp(const char* dest,const char *src,w_int32_t count);
 
-extern char* wind_strchr(const char *s, w_uint32_t c);
+char* wind_strchr(const char *dest, w_uint32_t c);
 
-extern char *wind_strrchr(const char *s, char c);
+char *wind_strrchr(const char *dest, char c);
 
-extern w_int32_t wind_strlen(const char *str);
+w_int32_t wind_strlen(const char *dest);
 
-extern w_int32_t wind_strnlen(const char *s, w_int32_t count);
+w_int32_t wind_strnlen(const char *dest, w_int32_t count);
 
-extern w_uint32_t wind_strspn(const char *s, const char *accept);
+w_uint32_t wind_strspn(const char *dest, const char *accept);
 
-extern char *wind_strpbrk(const char *dest,const char *src);
+char *wind_strpbrk(const char *dest,const char *src);
 
-extern char *wind_strupper(char *dest);
+char *wind_strupper(char *dest);
 
-extern char *wind_strlower(char *dest);
+char *wind_strlower(char *dest);
 
-extern char *wind_strstr(const char *s1,const char *s2);
+char *wind_strstr(const char *str,const char *sub);
 
-extern char *wind_strskip(char *str,char *charr,w_int32_t count);
+char *wind_strskip(char *str,char *sub,w_int32_t count);
 
-extern w_fp64_t wind_strtod(const char *str,char **endptr);
+w_fp64_t wind_strtod(const char *str,char **endptr);
 
-extern w_int32_t wind_strsplit(char *str,char ch,char **substr,w_int32_t maxcnt);
+w_int32_t wind_strsplit(char *str,char ch,char **substr,w_int32_t maxcnt);
 
+void *wind_memset(void *mem,char c,w_uint32_t count);
 
-extern void *wind_memset(void *s,char c,w_uint32_t count);
+char *wind_bcopy(const char *src, char *dest, w_int32_t count);
 
-extern char *wind_bcopy(const char *src, char *dest, w_int32_t count);
+void *wind_memcpy(void *dest,const void *src,w_int32_t count);
 
-extern void *wind_memcpy(void *dest,const void *src,w_int32_t count);
+void *wind_memmove(void *dest,const void *src,w_int32_t count);
 
-extern void *wind_memmove(void *dest,const void *src,w_int32_t count);
+w_int32_t wind_memcmp(const void *dest,const void *src,w_int32_t count);
 
-extern w_int32_t wind_memcmp(const void *dest,const void *src,w_int32_t count);
-
-extern void *wind_memscan(void *addr, w_uint32_t c, w_int32_t size);
-
-
+void *wind_memscan(void *mem, w_uint32_t c, w_int32_t count);
 
 #ifdef __cplusplus
 }

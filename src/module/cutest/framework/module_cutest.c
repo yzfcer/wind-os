@@ -21,6 +21,7 @@
 #include "test_framework.h"
 #include "wind_module.h"
 #include "wind_cmd.h"
+#include "wind_conv.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
@@ -52,14 +53,28 @@ COMMAND_DISC(cutest)
 COMMAND_USAGE(cutest)
 {
     wind_printf("cutest list:--to show all test suites and cases list.\r\n");
-    wind_printf("cutest <suitename> <casename>:--to test some appointed test cases.\r\n");
+    wind_printf("cutest <suitename> <casename> [times]:--to test some appointed test cases.\r\n");
     wind_printf("       suitename:--use *to test all test suite.\r\n");
     wind_printf("       casename:--use *to test all test suite.\r\n");
 }
 
 COMMAND_MAIN(cutest,argc,argv)
 {
-    return cutest_main(argc,argv);
+    w_err_t err;
+    w_int32_t i,times = 1;
+    if(argc >= 4)
+    {
+        wind_str_to_int(argv[3],&times);
+        times = times < 1?1:times;
+        times = times > 10?10:times;
+    }
+    
+    for(i = 0;i < times;i ++)
+    {
+        err = cutest_main(argc,argv);
+        WIND_CHECK_BREAK(err == W_ERR_OK,err);
+    }
+    return err;
 }
 
 COMMAND_DEF(cutest);

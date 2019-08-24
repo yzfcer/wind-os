@@ -274,7 +274,7 @@ w_int32_t wind_vsprintf(char *buf, const char *fmt, wind_va_list args)
 
         case 's':
             s = wind_va_arg(args, char *);
-            len = wind_strnlen(s, precision);
+            len = wind_strnlen(s, 65535);
 
             if (!(flags & LEFT))
                 while (len < field_width--)

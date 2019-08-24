@@ -328,7 +328,7 @@ void *wind_heap_realloc(w_heap_s* heap, void* ptr, w_uint32_t newsize)
 
 w_err_t wind_heap_free(w_heap_s* heap,void *ptr)
 {
-    
+    w_err_t err;
     w_heapitem_s* item,*tmpitem;
     w_dnode_s *dnode;
     if(ptr == W_NULL)
