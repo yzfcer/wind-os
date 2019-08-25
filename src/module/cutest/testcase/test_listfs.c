@@ -27,15 +27,59 @@ extern "C" {
 #endif // #ifdef __cplusplus
 
 w_listfs_s g_lfs;
+
+static w_err_t lfs_init(void)
+{
+    w_blkdev_s *blkdev;
+    w_err_t err = W_ERR_OK;
+    if(g_lfs.lfs_info.magic == LISTFS_MAGIC)
+    {
+        err = listfs_deinit(&g_lfs);
+        EXPECT_EQ(err,W_ERR_OK);
+    }
+    blkdev = wind_blkdev_get("memblk");
+    if(blkdev == W_NULL)
+    {
+        wind_memset(&g_lfs,0,sizeof(w_listfs_s));
+        return W_ERR_FAIL;
+    }
+        
+    wind_blkdev_open(blkdev);
+    wind_memset(&g_lfs,0,sizeof(g_lfs));
+    err = listfs_init(&g_lfs,blkdev);
+    if(err != W_ERR_OK)
+    {
+        err = listfs_format(&g_lfs,blkdev);
+        EXPECT_EQ(err,W_ERR_OK);
+    }
+    return err;
+        
+}
+
+static w_err_t lfs_deinit(void)
+{
+    w_err_t err = W_ERR_OK;
+    if(g_lfs.lfs_info.magic == LISTFS_MAGIC)
+    {
+        err = listfs_deinit(&g_lfs);
+        EXPECT_EQ(err,W_ERR_OK);
+    }
+    return err;
+}
+
 CASE_SETUP(create)
 {
-
+    w_err_t err;
+    err = lfs_init();
+    EXPECT_EQ(err,W_ERR_OK);
 }
 
 
 CASE_TEARDOWN(create)
 {
-
+    w_err_t err;
+    err = lfs_deinit();
+    EXPECT_EQ(err,W_ERR_OK);
 }
 
 CASE_FUNC(create)
@@ -80,13 +124,17 @@ CASE_FUNC(create)
 
 CASE_SETUP(diretion)
 {
-
+    w_err_t err;
+    err = lfs_init();
+    EXPECT_EQ(err,W_ERR_OK);
 }
 
 
 CASE_TEARDOWN(diretion)
 {
-
+    w_err_t err;
+    err = lfs_deinit();
+    EXPECT_EQ(err,W_ERR_OK);
 }
 
 CASE_FUNC(diretion)
@@ -97,11 +145,16 @@ CASE_FUNC(diretion)
 
 CASE_SETUP(readwrite)
 {
+    w_err_t err;
+    err = lfs_init();
+    EXPECT_EQ(err,W_ERR_OK);
 }
 
 CASE_TEARDOWN(readwrite)
 {
-    
+    w_err_t err;
+    err = lfs_deinit();
+    EXPECT_EQ(err,W_ERR_OK);
 }
 
 static w_uint8_t buff[32];
@@ -111,7 +164,8 @@ CASE_FUNC(readwrite)
     w_err_t err;
     w_listfile_s *file;
     char *str = "this is a file test string.";
-    file = listfile_open(&g_lfs,"/test.txt",LFMODE_CRT | LFMODE_W);
+
+	file = listfile_open(&g_lfs,"/test.txt",LFMODE_CRT | LFMODE_W);
     EXPECT_NE(file,W_NULL);
     len = listfile_write(file,(w_uint8_t*)str,wind_strlen(str));
     EXPECT_EQ(len,wind_strlen(str));
@@ -135,59 +189,35 @@ CASE_FUNC(readwrite)
 
 CASE_SETUP(format)
 {
+    w_err_t err;
+    err = lfs_init();
+    EXPECT_EQ(err,W_ERR_OK);
 }
 
 CASE_TEARDOWN(format)
 {
-    
+    w_err_t err;
+    err = lfs_deinit();
+    EXPECT_EQ(err,W_ERR_OK);
 }
 
 CASE_FUNC(format)
 {
-    w_err_t err;
-    w_blkdev_s *blkdev;
-    blkdev = wind_blkdev_get("memblk");
-    if(blkdev == W_NULL)
-    {
-        wind_memset(&g_lfs,0,sizeof(w_listfs_s));
-        return;
-    }
-        
-    wind_blkdev_open(blkdev);
-    err = listfs_init(&g_lfs,blkdev);
-    if(err != W_ERR_OK)
-    {
-        err = listfs_format(&g_lfs,blkdev);
-        EXPECT_EQ(err,W_ERR_OK);
-    }
+
 }
 
 SUITE_SETUP(listfs)
 {
     w_err_t err;
-    w_blkdev_s *blkdev;
-    blkdev = wind_blkdev_get("memblk");
-    if(blkdev == W_NULL)
-    {
-        wind_error("get blkdev failed");
-        wind_memset(&g_lfs,0,sizeof(w_listfs_s));
-        return;
-    }
-        
-    wind_blkdev_open(blkdev);
-    err = listfs_init(&g_lfs,blkdev);
-    if(err != W_ERR_OK)
-    {
-        err = listfs_format(&g_lfs,blkdev);
-        EXPECT_EQ(err,W_ERR_OK);
-    }
-
-    //wind_blkdev_close(blkdev);
+    err = lfs_init();
+    EXPECT_EQ(err,W_ERR_OK);
 }
 
 SUITE_TEARDOWN(listfs)
 {
-
+    w_err_t err;
+    err = lfs_deinit();
+    EXPECT_EQ(err,W_ERR_OK);
 }
 
 

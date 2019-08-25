@@ -98,7 +98,6 @@ CASE_FUNC(multi)
     {
         err = wind_free(buff[i]);
         EXPECT_EQ(err,W_ERR_OK);
-        //wind_heapitem_print();
     }
 
 }

@@ -478,12 +478,12 @@ w_err_t cutest_main(w_int32_t argc,char **argv)
     else if(argc == 2)
     {
         execute_all_suites(argv[1],"*");
-        return W_ERR_OK;
+        return stati_info.stat.failed_suite == 0?W_ERR_OK:W_ERR_FAIL;
     }
     else if(argc >= 3)
     {
         execute_all_suites(argv[1],argv[2]);
-        return W_ERR_OK;
+        return stati_info.stat.failed_suite == 0?W_ERR_OK:W_ERR_FAIL;
     }
     return W_ERR_FAIL;
 }

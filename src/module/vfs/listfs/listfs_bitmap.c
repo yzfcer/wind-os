@@ -25,7 +25,7 @@
 #include "listfs.h"
 #include "listfs_bitmap.h"
 #include "wind_tree.h"
-#include "wind_heap.h"
+//#include "wind_heap.h"
 #include "wind_debug.h"
 #include "wind_string.h"
 #if WIND_MODULE_VFS_SUPPORT
@@ -337,6 +337,8 @@ w_int32_t listfs_bitmap_calc_usedblk(lfs_bitmap_s *bm)
         WIND_ASSERT_TODO_RETURN(cnt == 1,listfs_mem_free(blk),0xffffffff);
         blkused += bm_calc_blkused(blk,blkdev->blksize);
     }
+    if(blk != W_NULL)
+        listfs_mem_free(blk);
     return blkused;    
 }
 

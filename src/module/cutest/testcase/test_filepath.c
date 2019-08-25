@@ -46,7 +46,10 @@ CASE_SETUP(current)
 {
     char *path;
     if(bak_path != W_NULL)
+    {
         wind_free(bak_path);
+        bak_path = (char *)W_NULL;
+    }
     path = wind_filepath_get_current();
     WIND_ASSERT_RETURN_VOID(path != W_NULL);
     bak_path = wind_salloc(path);
@@ -179,7 +182,8 @@ CASE_FUNC(filename)
     newpath = wind_filepath_get_filename("/");
     EXPECT_NE(newpath,W_NULL);
     EXPECT_STR_EQ(newpath,"");
-    
+    wind_free(newpath);
+
     newpath = wind_filepath_get_filename("/test");
     EXPECT_STR_EQ(newpath,"test");
     wind_free(newpath);
