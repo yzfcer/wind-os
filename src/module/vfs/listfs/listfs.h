@@ -49,14 +49,34 @@
 #define LISTFS_MAX_FILE_SIZE 0x7fffffff //文件长度限制，2GB
 
 //文件属性
-#define LFILE_ATTR_DIR    (0x01 << 0)
-#define LFILE_ATTR_READ   (0x01 << 1)
-#define LFILE_ATTR_WRITE  (0x01 << 2)
-#define LFILE_ATTR_HIDE   (0x01 << 3)
-#define LFILE_ATTR_VERIFY (0x01 << 4)
-#define LFILE_ATTR_COMMAN (LFILE_ATTR_READ | LFILE_ATTR_WRITE)
+#define LFILE_ATTR_DIR    (0x01 << 0) //是否目录
+#define LFILE_ATTR_RDEN   (0x01 << 1) //是否可读
+#define LFILE_ATTR_WREN   (0x01 << 2) //是否可写
+#define LFILE_ATTR_HIDE   (0x01 << 3) //是否隐藏
+#define LFILE_ATTR_VERIFY (0x01 << 4) //是否校验
+#define LFILE_ATTR_COMMAN (LFILE_ATTR_RDEN | LFILE_ATTR_WREN)
 
-#define LFILE_IS_DIR(attr) (attr & LFILE_ATTR_DIR)
+#define IS_LFILE_ATTR_DIR(attr) (attr & LFILE_ATTR_DIR)
+#define SET_LFILE_ATTR_DIR(attr) (attr |= LFILE_ATTR_DIR)
+#define CLR_LFILE_ATTR_DIR(attr) (attr &= (~LFILE_ATTR_DIR))
+
+#define IS_LFILE_ATTR_RDEN(attr) (attr & LFILE_ATTR_RDEN)
+#define SET_LFILE_ATTR_RDEN(attr) (attr |= LFILE_ATTR_RDEN)
+#define CLR_LFILE_ATTR_RDEN(attr) (attr &= (~LFILE_ATTR_RDEN))
+
+#define IS_LFILE_ATTR_WREN(attr) (attr & LFILE_ATTR_WREN)
+#define SET_LFILE_ATTR_WREN(attr) (attr |= LFILE_ATTR_WREN)
+#define CLR_LFILE_ATTR_WREN(attr) (attr &= (~LFILE_ATTR_WREN))
+
+#define IS_LFILE_ATTR_HIDE(attr) (attr & LFILE_ATTR_HIDE)
+#define SET_LFILE_ATTR_HIDE(attr) (attr |= LFILE_ATTR_HIDE)
+#define CLR_LFILE_ATTR_HIDE(attr) (attr &= (~LFILE_ATTR_HIDE))
+
+#define IS_LFILE_ATTR_VERIFY(attr) (attr & LFILE_ATTR_VERIFY)
+#define SET_LFILE_ATTR_VERIFY(attr) (attr |= LFILE_ATTR_VERIFY)
+#define CLR_LFILE_ATTR_VERIFY(attr) (attr &= (~LFILE_ATTR_VERIFY))
+
+
 
 //固化文件系统信息
 typedef struct __lfs_info_s

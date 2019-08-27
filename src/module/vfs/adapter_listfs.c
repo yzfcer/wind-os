@@ -61,7 +61,7 @@ static w_err_t listfs_op_open(w_file_s *file,w_uint16_t fmode)
         return W_ERR_FAIL;
     
     file->fileobj = lfile;
-    file->isdir = LFILE_IS_DIR(lfile->info.attr)?1:0;
+    file->isdir = IS_LFILE_ATTR_DIR(lfile->info.attr)?1:0;
     file->offset = 0;
     
     return W_ERR_OK;
@@ -100,7 +100,7 @@ static w_err_t listfs_op_readdir(w_file_s* dir,w_file_s* sub)
             wind_free(sub->obj.name);
         sub->obj.name = wind_salloc(sublfile->info.name);
         WIND_ASSERT_BREAK(sub->obj.name != W_NULL,W_ERR_MEM,"malloc filename failed");
-        sub->isdir = LFILE_IS_DIR(sublfile->info.attr)?1:0;
+        sub->isdir = IS_LFILE_ATTR_DIR(sublfile->info.attr)?1:0;
         
         if(sub->fullpath)
             wind_filepath_release(sub->fullpath);

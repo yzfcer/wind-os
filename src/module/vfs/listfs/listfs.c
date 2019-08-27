@@ -337,7 +337,7 @@ static w_err_t lfs_make_file(w_listfs_s *lfs,w_listfile_s *file,char *path)
         }
         WIND_CHECK_BREAK(err == W_ERR_OK,err);
         wind_memcpy(&file->info,finfo,sizeof(lfile_info_s));
-        if(!LFILE_IS_DIR(file->info.attr))
+        if(!IS_LFILE_ATTR_DIR(file->info.attr))
         {
             if(file->blkinfo == W_NULL)
             {
@@ -759,8 +759,8 @@ w_err_t listfile_set_attr(w_listfile_s* file,w_uint8_t attr)
     WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,W_ERR_INVALID);
     tmpattr = (file->info.attr & LFILE_ATTR_DIR);
-    (attr & LFILE_ATTR_READ)?(tmpattr |= LFILE_ATTR_READ):(tmpattr &= ~LFILE_ATTR_READ);
-    (attr & LFILE_ATTR_WRITE)?(tmpattr |= LFILE_ATTR_WRITE):(tmpattr &= ~LFILE_ATTR_WRITE);
+    (attr & LFILE_ATTR_RDEN)?(tmpattr |= LFILE_ATTR_RDEN):(tmpattr &= ~LFILE_ATTR_RDEN);
+    (attr & LFILE_ATTR_WREN)?(tmpattr |= LFILE_ATTR_WREN):(tmpattr &= ~LFILE_ATTR_WREN);
     (attr & LFILE_ATTR_HIDE)?(tmpattr |= LFILE_ATTR_HIDE):(tmpattr &= ~LFILE_ATTR_HIDE);
     (attr & LFILE_ATTR_VERIFY)?(tmpattr |= LFILE_ATTR_VERIFY):(tmpattr &= ~LFILE_ATTR_VERIFY);
     file->info.attr = tmpattr;

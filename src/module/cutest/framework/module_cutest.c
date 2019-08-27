@@ -66,7 +66,7 @@ COMMAND_MAIN(cutest,argc,argv)
     {
         wind_str_to_int(argv[3],&times);
         times = times < 1?1:times;
-        times = times > 10?10:times;
+        times = times > 100?100:times;
     }
     
     for(i = 0;i < times;i ++)

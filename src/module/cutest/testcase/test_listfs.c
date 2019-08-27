@@ -122,24 +122,81 @@ CASE_FUNC(create)
     EXPECT_EQ(err,W_ERR_OK);
 }
 
-CASE_SETUP(diretion)
+CASE_SETUP(readdir)
 {
     w_err_t err;
+    w_listfile_s *file;
     err = lfs_init();
     EXPECT_EQ(err,W_ERR_OK);
 }
 
 
-CASE_TEARDOWN(diretion)
+CASE_TEARDOWN(readdir)
 {
     w_err_t err;
+    err = listfile_remove(&g_lfs,"/readdir_test/");
+    EXPECT_EQ(err,W_ERR_OK);
+
     err = lfs_deinit();
     EXPECT_EQ(err,W_ERR_OK);
+
 }
 
-CASE_FUNC(diretion)
+CASE_FUNC(readdir)
 {
-    //EXPECT_EQ(0,1);
+    w_err_t err;
+    w_listfile_s *file,*tmp;
+    w_listfile_s *sub = W_NULL;
+
+    file = listfile_open(&g_lfs,"/readdir_test/",LFMODE_CRT);
+    EXPECT_NE(file,W_NULL);
+    err = listfile_close(file);
+    EXPECT_EQ(err,W_ERR_OK);
+    
+    file = listfile_open(&g_lfs,"/readdir_test/test1",LFMODE_CRT);
+    EXPECT_NE(file,W_NULL);
+    err = listfile_close(file);
+    EXPECT_EQ(err,W_ERR_OK);
+    
+    file = listfile_open(&g_lfs,"/readdir_test/test2",LFMODE_CRT);
+    EXPECT_NE(file,W_NULL);
+    err = listfile_close(file);
+    EXPECT_EQ(err,W_ERR_OK);
+    
+    file = listfile_open(&g_lfs,"/readdir_test/testdir/",LFMODE_CRT);
+    EXPECT_NE(file,W_NULL);
+    err = listfile_close(file);
+
+    file = listfile_open(&g_lfs,"/readdir_test/",LFMODE_R);
+    EXPECT_NE(file,W_NULL);
+    EXPECT_EQ(file->info.magic,LISTFILE_MAGIC);
+    EXPECT_STR_EQ(file->info.name,"readdir_test");
+    EXPECT_EQ(file->info.filesize,0);
+    EXPECT_EQ(file->info.spacesize,0);
+    EXPECT_EQ(file->info.parent_addr,file->lfs->lfs_info.root_addr);
+    EXPECT_NE(file->info.self_addr,0);
+    EXPECT_EQ(file->info.last_addr,0);
+    EXPECT_EQ(file->info.last_addr,0);
+    EXPECT_EQ(file->info.nextfile_addr,0);
+    EXPECT_EQ(file->info.children_cnt,2);
+    EXPECT_NE(file->info.headchild_addr,0);
+    EXPECT_NE(file->info.tailchild_addr,0);
+    EXPECT_NE(IS_LFILE_ATTR_DIR(file->info.attr),0);
+
+    
+    err = listfile_readdir(file,&sub);
+    EXPECT_EQ(err,W_ERR_OK);
+    tmp = sub;
+    err = listfile_readdir(file,&sub);
+    EXPECT_EQ(err,W_ERR_OK);
+    err = listfile_readdir(file,&sub);
+    EXPECT_EQ(err,W_ERR_OK);
+    err = listfile_readdir(file,&sub);
+    EXPECT_NE(err,W_ERR_OK);
+    err = listfile_close(file);
+    EXPECT_EQ(err,W_ERR_OK);
+    if(tmp != W_NULL)
+        listfs_mem_free(tmp);
 }
 
 
@@ -225,7 +282,7 @@ SUITE_TEARDOWN(listfs)
 TEST_CASES_START(listfs)
 TEST_CASE(format)
 TEST_CASE(create)
-TEST_CASE(diretion)
+TEST_CASE(readdir)
 TEST_CASE(readwrite)
 TEST_CASES_END
 TEST_SUITE(listfs)
