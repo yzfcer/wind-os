@@ -166,8 +166,9 @@ CASE_FUNC(readdir)
     file = listfile_open(&g_lfs,"/readdir_test/testdir/",LFMODE_CRT);
     EXPECT_NE(file,W_NULL);
     err = listfile_close(file);
+    EXPECT_NE(file,W_NULL);
 
-    file = listfile_open(&g_lfs,"/readdir_test/",LFMODE_R);
+	file = listfile_open(&g_lfs,"/readdir_test/",LFMODE_R);
     EXPECT_NE(file,W_NULL);
     EXPECT_EQ(file->info.magic,LISTFILE_MAGIC);
     EXPECT_STR_EQ(file->info.name,"readdir_test");
@@ -178,7 +179,7 @@ CASE_FUNC(readdir)
     EXPECT_EQ(file->info.last_addr,0);
     EXPECT_EQ(file->info.last_addr,0);
     EXPECT_EQ(file->info.nextfile_addr,0);
-    EXPECT_EQ(file->info.children_cnt,2);
+    EXPECT_EQ(file->info.children_cnt,3);
     EXPECT_NE(file->info.headchild_addr,0);
     EXPECT_NE(file->info.tailchild_addr,0);
     EXPECT_NE(IS_LFILE_ATTR_DIR(file->info.attr),0);

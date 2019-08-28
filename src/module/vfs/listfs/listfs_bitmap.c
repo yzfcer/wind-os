@@ -216,12 +216,12 @@ w_err_t listfs_bitmap_alloc_blk(lfs_bitmap_s *bm,w_addr_t *addr,w_int32_t addr_c
 {
     w_int32_t i,cnt,alloc_cnt;
     w_err_t err;
+    wind_trace("listfs_bitmap_alloc_blk");
     WIND_ASSERT_RETURN(bm != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(bm->magic == LISTFS_BITMAP_MAGIC,W_ERR_INVALID);
     WIND_ASSERT_RETURN(addr != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(addr_cnt > 0,W_ERR_OVERFLOW);
     WIND_ASSERT_RETURN(bm->blkdev != W_NULL,W_ERR_PTR_NULL);
-    wind_trace("listfs_bitmap_alloc_blk");
     if((bm->cur_blkidx == 0) && (bm->cur_byteidx == 0))
         bm_update_freeidx(bm);
     wind_memset(addr,0,sizeof(w_addr_t)*addr_cnt);

@@ -102,7 +102,7 @@ static w_err_t lfs_search_child(lfile_info_s *info,char *name,w_blkdev_s *blkdev
             }
             WIND_CHECK_BREAK(tmpinfo->nextfile_addr != 0,W_ERR_FAIL);
             err = fileinfo_get_next(tmpinfo,blkdev);
-            WIND_CHECK_BREAK(tmpinfo->nextfile_addr != 0,err);
+            WIND_CHECK_BREAK(err == W_ERR_OK,err);
         }
         WIND_CHECK_BREAK(err == W_ERR_OK,err);
     }while(0);
