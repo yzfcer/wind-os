@@ -145,7 +145,7 @@ CASE_TEARDOWN(readdir)
 CASE_FUNC(readdir)
 {
     w_err_t err;
-    w_listfile_s *file,*tmp;
+    w_listfile_s *file;
     w_listfile_s *sub = W_NULL;
 
     file = listfile_open(&g_lfs,"/readdir_test/",LFMODE_CRT);
@@ -187,7 +187,6 @@ CASE_FUNC(readdir)
     
     err = listfile_readdir(file,&sub);
     EXPECT_EQ(err,W_ERR_OK);
-    tmp = sub;
     err = listfile_readdir(file,&sub);
     EXPECT_EQ(err,W_ERR_OK);
     err = listfile_readdir(file,&sub);
@@ -196,8 +195,6 @@ CASE_FUNC(readdir)
     EXPECT_NE(err,W_ERR_OK);
     err = listfile_close(file);
     EXPECT_EQ(err,W_ERR_OK);
-    if(tmp != W_NULL)
-        listfs_mem_free(tmp);
 }
 
 

@@ -160,6 +160,15 @@ w_err_t fileinfo_get_next(lfile_info_s *info,w_blkdev_s *blkdev)
     return fileinfo_read(info,blkdev,info->nextfile_addr);
 }
 
+w_err_t fileinfo_get_prev(lfile_info_s *info,w_blkdev_s *blkdev)
+{
+    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(info != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(info->magic == LISTFILE_MAGIC,W_ERR_INVALID);
+    wind_trace("fileinfo_get_prev");
+    return fileinfo_read(info,blkdev,info->prevfile_addr);
+}
+
 w_err_t fileinfo_get_headchild(lfile_info_s *info,w_blkdev_s *blkdev)
 {
     WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);

@@ -71,6 +71,8 @@ w_err_t fileinfo_get_parent(lfile_info_s *info,w_blkdev_s *blkdev);
 
 w_err_t fileinfo_get_next(lfile_info_s *info,w_blkdev_s *blkdev);
 
+w_err_t fileinfo_get_prev(lfile_info_s *info,w_blkdev_s *blkdev);
+
 w_err_t fileinfo_get_headchild(lfile_info_s *info,w_blkdev_s *blkdev);
 
 w_err_t fileinfo_get_tailchild(lfile_info_s *info,w_blkdev_s *blkdev);

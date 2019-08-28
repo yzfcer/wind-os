@@ -726,7 +726,45 @@ w_err_t listfile_close(w_listfile_s* file)
     return W_ERR_OK;
 }
 
-
+static w_err_t do_remove_dir(w_listfs_s *lfs,lfile_info_s *finfo)
+{
+    w_err_t err;
+    lfile_info_s *tmpinfo = W_NULL;
+    do
+    {
+        err = W_ERR_OK;
+        if(IS_LFILE_ATTR_DIR(finfo->attr))
+        {
+            if(finfo->tailchild_addr== 0)
+                break;
+            tmpinfo = listfs_mem_malloc(sizeof(lfile_info_s));
+            WIND_ASSERT_BREAK(tmpinfo != W_NULL,W_ERR_MEM,"malloc tmpinfo failed");
+            wind_memcpy(tmpinfo,finfo,sizeof(lfile_info_s));
+            err = fileinfo_get_tailchild(tmpinfo,lfs->blkdev);
+            WIND_ASSERT_BREAK(err == W_ERR_OK,W_ERR_FAIL,"get last child failed");
+            for(;tmpinfo != W_NULL;)
+            {
+                if(IS_LFILE_ATTR_DIR(tmpinfo->attr))
+                    err = do_remove_dir(lfs,tmpinfo);
+                else
+                    err = do_remove_file(lfs,tmpinfo);
+                WIND_ASSERT_BREAK(err == W_ERR_OK,err,"remove dir or file failed");
+                
+                WIND_CHECK_BREAK(tmpinfo->prevfile_addr != 0,W_ERR_OK);
+                err = fileinfo_get_prev(tmpinfo,lfs->blkdev);
+                WIND_CHECK_BREAK(err == W_ERR_OK,err);
+            }
+            
+        }
+        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"remove dir failed");
+        err = do_remove_file(lfs,finfo);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"remove file failed");
+    }while(0);
+    if(tmpinfo != W_NULL)
+        listfs_mem_free(tmpinfo);
+    return err;
+    
+}
 
 w_err_t listfile_remove(w_listfs_s *lfs,const char *path)
 {
@@ -742,9 +780,11 @@ w_err_t listfile_remove(w_listfs_s *lfs,const char *path)
     do
     {
         err = W_ERR_OK;
-        WIND_ASSERT_BREAK(!(file->info.attr & LFILE_ATTR_DIR),W_ERR_FAIL,"not support removing dir yet");
-        err = do_remove_file(lfs,&file->info);
-        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"remove fale failed");
+        if(IS_LFILE_ATTR_DIR(file->info.attr))
+            err = do_remove_dir(lfs,&file->info);
+        else
+            err = do_remove_file(lfs,&file->info);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"remove file failed");
 
     }while(0);
     listfile_destroy(file);
@@ -1039,7 +1079,7 @@ w_err_t listfile_readdir(w_listfile_s* dir,w_listfile_s** sub)
     WIND_ASSERT_RETURN(dir->lfs->blkdev != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(dir->info.magic == LISTFILE_MAGIC,W_ERR_INVALID);
     WIND_ASSERT_RETURN(dir->mode & LFMODE_R,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(dir->info.attr,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(IS_LFILE_ATTR_DIR(dir->info.attr) != 0,W_ERR_INVALID);
     
     do
     {
