@@ -630,6 +630,8 @@ w_err_t listfs_init(w_listfs_s *lfs,w_blkdev_s *blkdev)
     do 
     {
         err = W_ERR_OK;
+        err = wind_blkdev_open(blkdev);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"open blkdev failed");
         finfo = listfs_mem_malloc(sizeof(lfile_info_s));
         WIND_ASSERT_BREAK(finfo != W_NULL,W_ERR_MEM,"malloc finfo failed");
         
@@ -653,10 +655,14 @@ w_err_t listfs_deinit(w_listfs_s *lfs)
 {
     w_err_t err;
     WIND_ASSERT_RETURN(lfs != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(lfs->blkdev != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(lfs->lfs_info.magic == LISTFS_MAGIC,W_ERR_INVALID);
-    lfs->blkdev = W_NULL;
     lfs->lfs_info.magic = (~LISTFS_MAGIC);
     err = listfs_bitmap_deinit(&lfs->bitmap);
+    WIND_ASSERT_RETURN(err == W_ERR_OK,err);
+    err = wind_blkdev_close(lfs->blkdev);
+    WIND_ASSERT_RETURN(err == W_ERR_OK,err);
+    lfs->blkdev = W_NULL;
     return err;
 }
 

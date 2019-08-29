@@ -43,11 +43,27 @@ static void* listfs_op_init(w_vfs_s *vfs)
 {
     w_err_t err;
     w_listfs_s *lfs;
+    if(vfs->fsobj == W_NULL)
+        vfs->fsobj = listfs_mem_malloc(sizeof(w_listfs_s));
+    WIND_ASSERT_RETURN(vfs->fsobj != W_NULL,W_NULL);
     lfs = (w_listfs_s *)vfs->fsobj;
     err = listfs_init(lfs,vfs->blkdev);
     WIND_ASSERT_RETURN(err != W_ERR_OK,W_NULL);
     return lfs;
 }
+
+static w_err_t listfs_op_deinit(w_vfs_s *vfs)
+{
+    w_err_t err;
+    w_listfs_s *lfs;
+    WIND_ASSERT_RETURN(vfs != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(vfs->fsobj != W_NULL,W_ERR_PTR_NULL);
+    lfs = (w_listfs_s *)vfs->fsobj;
+    err = listfs_deinit(lfs);
+    WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_FAIL);
+    return W_ERR_OK;
+}
+
 
 static w_err_t listfs_op_format(w_vfs_s *vfs)
 {

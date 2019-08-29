@@ -7,7 +7,7 @@
 w_treefile_s *treefs_mk_subnode(w_treefile_s *parent,char *nodename,w_uint8_t isdir);
 
 w_treefile_s *treefile_create(w_treefs_s *tfs,const char *path);
-w_err_t treefile_rm(w_treefile_s *file);
+w_err_t treefile_remove(w_treefile_s *file);
 
 
 w_treefile_s* treefile_open(w_treefs_s *tfs,const char *path,w_uint16_t mode);

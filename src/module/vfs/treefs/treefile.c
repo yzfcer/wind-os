@@ -168,7 +168,7 @@ w_treefile_s *treefile_create(w_treefs_s *tfs,const char *path)
     return treefile;
 }
 
-w_err_t treefile_rm(w_treefile_s *file)
+w_err_t treefile_remove(w_treefile_s *file)
 {
     w_dnode_s *dnode;
     w_tree_s *tree;
@@ -179,7 +179,7 @@ w_err_t treefile_rm(w_treefile_s *file)
     foreach_node(dnode,&tree->child_list)
     {
         subfile = NODE_TO_TREEFILE(dnode);
-        treefile_rm(subfile);
+        treefile_remove(subfile);
     }
     if(file->tree.parent)
         wind_tree_remove_child(file->tree.parent,&file->tree);

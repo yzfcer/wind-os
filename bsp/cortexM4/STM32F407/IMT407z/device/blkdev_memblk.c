@@ -13,7 +13,7 @@ w_err_t   memblk_init(w_blkdev_s *dev)
 
 w_err_t   memblk_open(w_blkdev_s *dev)
 {
-    dev->blkaddr = (w_addr_t)memblk;
+    dev->blkaddr = (w_addr_t)0;
     dev->blksize = 64;
     dev->blkcnt = 8;
     return W_ERR_OK;

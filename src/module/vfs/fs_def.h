@@ -74,6 +74,7 @@ struct __w_fsops_s
     w_obj_s obj;
     w_err_t (*opsinit)(void);//文件系统类型初始化
     void*   (*init)(w_vfs_s *fs);//文件系统类型初始化
+    w_err_t (*deinit)(w_vfs_s *fs);//文件系统类型反初始化
     w_err_t (*format)(w_vfs_s *fs);//格式化
     w_err_t (*matchfs)(char *devname);//检测块设备文件系统是否匹配
     

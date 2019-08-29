@@ -201,7 +201,8 @@ w_err_t wind_thread_init(w_thread_s *thread,
 {
     w_uint32_t i;
     w_stack_t *tmpstk;
-    wind_notice("init thread:%s,0x%08x,0x%x",name,pstk,stksize);
+    wind_notice("init thread:%s",name);
+    wind_debug("pstk=0x%08x,stksize=0x%x",pstk,stksize);
     WIND_ASSERT_RETURN(name != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(thread_func != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(pstk != W_NULL,W_ERR_PTR_NULL);

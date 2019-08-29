@@ -66,7 +66,7 @@ w_err_t wind_treefs_format(w_treefs_s *tfs)
 {
     w_treefile_s *root = tfs->root;
     if(root != W_NULL)
-        treefile_rm(root);
+        treefile_remove(root);
     root = treefs_mk_subnode(W_NULL,"",1);
     if(!root)
     {
@@ -128,6 +128,8 @@ w_err_t wind_treefs_destroy(w_treefs_s *treefs)
     WIND_ASSERT_RETURN(treefs->obj.name != W_NULL,W_ERR_PTR_NULL);
     wind_notice("destroy treefs:%s",wind_obj_name(&treefs->obj));
     err = wind_obj_deinit(&treefs->obj,TREEFS_MAGIC,&treefslist);
+    WIND_ASSERT_RETURN(err == W_ERR_OK, W_ERR_FAIL);
+    err = treefile_remove(treefs->root);
     WIND_ASSERT_RETURN(err == W_ERR_OK, W_ERR_FAIL);
     tfs_mem_free(treefs->obj.name);
     treefs->obj.name = W_NULL;

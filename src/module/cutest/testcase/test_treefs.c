@@ -49,19 +49,19 @@ CASE_FUNC(create)
     EXPECT_NE(file,W_NULL);
     err = treefile_close(file);
     EXPECT_EQ(err,W_ERR_OK);
-    err = treefile_rm(file);
+    err = treefile_remove(file);
     EXPECT_EQ(err,W_ERR_OK);
     file = treefile_open(tfs,"/test1.txt",TF_FMODE_CRT);
     EXPECT_NE(file,W_NULL);
     err = treefile_close(file);
     EXPECT_EQ(err,W_ERR_OK);
-    err = treefile_rm(file);
+    err = treefile_remove(file);
     EXPECT_EQ(err,W_ERR_OK);
     file = treefile_open(tfs,"/test2.txt",TF_FMODE_CRT);
     EXPECT_NE(file,W_NULL);
     err = treefile_close(file);
     EXPECT_EQ(err,W_ERR_OK);
-    err = treefile_rm(file);
+    err = treefile_remove(file);
     EXPECT_EQ(err,W_ERR_OK);
 }
 
@@ -101,7 +101,7 @@ CASE_FUNC(readwrite)
     EXPECT_EQ(len,0);
     err = treefile_close(file);
     EXPECT_EQ(err,W_ERR_OK);
-    err = treefile_rm(file);
+    err = treefile_remove(file);
     EXPECT_EQ(err,W_ERR_OK);
     
 }

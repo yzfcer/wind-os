@@ -50,6 +50,18 @@ static void* treefs_op_init(w_vfs_s *vfs)
     return tfs;
 }
 
+static w_err_t treefs_op_deinit(w_vfs_s *vfs)
+{
+    w_err_t err;
+    w_treefs_s *tfs;
+    tfs = (w_treefs_s *)vfs->fsobj;
+    WIND_ASSERT_RETURN(tfs != W_NULL,W_ERR_PTR_NULL);
+    err = wind_treefs_destroy(tfs);
+    WIND_ASSERT_RETURN(err == W_ERR_OK,err);
+    return W_ERR_OK;
+}
+
+
 static w_err_t treefs_op_format(w_vfs_s *vfs)
 {
     WIND_ASSERT_RETURN(vfs != W_NULL,W_ERR_PTR_NULL);
@@ -84,7 +96,7 @@ static w_err_t treefs_op_close(w_file_s* file)
 static w_err_t treefs_op_rmfile(w_file_s* file)
 {
     WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
-    return treefile_rm((w_treefile_s *)file->fileobj);
+    return treefile_remove((w_treefile_s *)file->fileobj);
 }
 
 static w_err_t treefs_op_readdir(w_file_s* dir,w_file_s* sub)
