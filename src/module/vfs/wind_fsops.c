@@ -70,6 +70,7 @@ char *wind_fsops_checktype(w_blkdev_s *blkdev,char *type)
 
 w_err_t wind_fsops_register(w_fsops_s *ops)
 {
+    w_err_t err = W_ERR_OK;
     w_fsops_s *tmpops;
     WIND_ASSERT_RETURN(ops != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(ops->obj.magic == WIND_FSTYPE_MAGIC,W_ERR_INVALID);
@@ -79,6 +80,11 @@ w_err_t wind_fsops_register(w_fsops_s *ops)
     {
         wind_notice("vfs ops has been registered.\r\n");
         return W_ERR_OK;
+    }
+    if(ops->opsinit != W_NULL)
+    {
+        err = ops->opsinit();
+        WIND_ASSERT_RETURN(err == W_ERR_OK,err);
     }
     wind_obj_init(&ops->obj,WIND_FSTYPE_MAGIC,ops->obj.name,&fs_ops_list);
     return W_ERR_OK;
@@ -106,11 +112,9 @@ w_err_t wind_fsops_init(void)
 {
     DLIST_INIT(fs_ops_list);
 #if WIND_TREEFS_SUPPORT
-    _wind_treefs_mod_init();
     wind_fsops_register(&treefs_ops);
 #endif
 #if WIND_LISTFS_SUPPORT
-    _wind_listfs_mod_init();
     wind_fsops_register(&listfs_ops);
 #endif
     return W_ERR_OK;

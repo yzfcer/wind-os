@@ -32,10 +32,18 @@
 #include "wind_string.h"
 #include "wind_heap.h"
 #if WIND_TREEFS_SUPPORT
+
+static w_err_t treefs_op_opsinit(void)
+{
+    w_err_t err;
+    err = _wind_treefs_mod_init();
+    return err;
+}
+
+
 static void* treefs_op_init(w_vfs_s *vfs)
 {
     w_treefs_s *tfs;
-    
     tfs = wind_treefs_create(vfs->obj.name);
     WIND_ASSERT_RETURN(tfs != W_NULL,W_NULL);
     wind_treefs_format(tfs);

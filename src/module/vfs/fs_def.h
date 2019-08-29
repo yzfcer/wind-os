@@ -32,11 +32,11 @@
 #define FS_MOUNT_PATH_LEN 64
 #define FS_CUR_PATH "/"
 
-#define FMODE_R  0x01
-#define FMODE_W  0x02
-#define FMODE_RW  0x03
+#define FMODE_R    0x01
+#define FMODE_W    0x02
+#define FMODE_RW   0x03
 #define FMODE_CRT  0x04
-#define FMODE_A  0x08
+#define FMODE_A    0x08
 
 #define F_VFS_POOL (0x01 << 0) //标记fs对象是否通过内存池分配
 #define IS_F_VFS_POOL(fs) ((fs->obj.flag & F_VFS_POOL) == F_VFS_POOL)
@@ -72,7 +72,8 @@ struct __w_vfs_s
 struct __w_fsops_s
 {
     w_obj_s obj;
-    void* (*init)(w_vfs_s *fs);//文件系统类型初始化
+    w_err_t (*opsinit)(void);//文件系统类型初始化
+    void*   (*init)(w_vfs_s *fs);//文件系统类型初始化
     w_err_t (*format)(w_vfs_s *fs);//格式化
     w_err_t (*matchfs)(char *devname);//检测块设备文件系统是否匹配
     
@@ -108,6 +109,7 @@ struct __w_file_s
 #define FS_OPS_DEF(fs) \
 w_fsops_s fs##_ops = {\
 {WIND_FSTYPE_MAGIC,#fs,{W_NULL,W_NULL},0,0},\
+fs##_op_opsinit,\
 fs##_op_init,\
 fs##_op_format,\
 W_NULL,\

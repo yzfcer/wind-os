@@ -32,6 +32,13 @@
 #include "wind_string.h"
 #include "wind_heap.h"
 #if WIND_LISTFS_SUPPORT
+static w_err_t listfs_op_opsinit(void)
+{
+    w_err_t err;
+    err = _wind_listfs_mod_init();
+    return err;
+}
+
 static void* listfs_op_init(w_vfs_s *vfs)
 {
     w_err_t err;
