@@ -118,6 +118,8 @@ void *wind_falloc(w_uint32_t size,w_uint8_t flag);
 
 void *wind_salloc(char *str);
 
+void *wind_clone(void *object,w_uint32_t size);
+
 void *wind_calloc(w_uint32_t count, w_uint32_t size);
 
 void *wind_realloc(void *rmem, w_uint32_t newsize);

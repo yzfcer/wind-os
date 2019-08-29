@@ -540,6 +540,17 @@ void *wind_salloc(char *str)
     return ptr;
 }
 
+void *wind_clone(void *object,w_uint32_t size)
+{
+    void *obj;
+    if(object == W_NULL)
+        return W_NULL;
+    obj = wind_malloc(size);
+    WIND_ASSERT_RETURN(obj != W_NULL,W_NULL);
+    wind_memcpy(obj,object,(w_int32_t)size);
+    return obj;
+}
+
 
 w_err_t wind_free(void *ptr)
 {
