@@ -26,92 +26,19 @@
 extern "C" {
 #endif // #ifdef __cplusplus
 
-static w_uint8_t testblk[32768];
-w_err_t   testblk_init(w_blkdev_s *dev)
-{
-    dev->blkaddr = (w_addr_t)testblk;
-    dev->blkcnt = 64;
-    dev->blksize = 512;
-    return W_ERR_OK;
-}
-
-w_err_t   testblk_open(w_blkdev_s *dev)
-{
-    return W_ERR_OK;
-}
-
-w_err_t   testblk_erase(w_blkdev_s *dev,w_addr_t addr,w_int32_t blkcnt)
-{
-    w_uint8_t *start;
-    w_int32_t size;
-    start = (w_uint8_t *)(dev->blkaddr + addr * dev->blksize);
-    size = blkcnt * dev->blksize;
-    wind_memset(start,0,size);
-    return W_ERR_OK;
-}
-
-w_err_t   testblk_eraseall(w_blkdev_s *dev)
-{
-    w_uint8_t *start;
-    w_int32_t size;
-    start = (w_uint8_t *)(dev->blkaddr + 0 * dev->blksize);
-    size = dev->blkcnt * dev->blksize;
-    wind_memset(start,0,size);
-    return W_ERR_OK;
-}
+static w_uint8_t testblk[64*512];
+static w_blkdev_s testblkdev;
 
 
-w_int32_t testblk_read(w_blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t blkcnt)
-{
-    w_uint8_t *start;
-    w_int32_t size;
-    start = (w_uint8_t *)(dev->blkaddr + addr * dev->blksize);
-    size = blkcnt * dev->blksize;
-    wind_memcpy(buf,start,size);
-    return blkcnt;
-}
-
-w_int32_t testblk_write(w_blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t blkcnt)
-{
-    w_uint8_t *start;
-    w_int32_t size;
-    start = (w_uint8_t *)(dev->blkaddr + addr * dev->blksize);
-    size = blkcnt * dev->blksize;
-    wind_memcpy(start,buf,size);
-    return blkcnt;
-}
-
-w_err_t   testblk_close(w_blkdev_s *dev)
-{
-    return W_ERR_OK;
-}
-
-const w_blkdev_ops_s testblk_ops = 
-{
-    testblk_init,
-    W_NULL,
-    testblk_open,
-    testblk_erase,
-    testblk_eraseall,
-    testblk_read,
-    testblk_write,
-    testblk_close
-};
-
-w_blkdev_s testblk_dev[1] = 
-{
-    WIND_BLKDEV_DEF("testblk",BLKDEV_RAM,0,0,0,0,&testblk_ops)
-};
 
 static w_err_t testblk_reg(void)
 {
-    wind_memset(testblk,0,sizeof(testblk));
-    return wind_blkdev_register(testblk_dev,1);
+    return wind_memblk_create(&testblkdev,"testblk",testblk,sizeof(testblk),512);
 }
 
 static w_err_t testblk_unreg(void)
 {
-    return wind_blkdev_unregister(testblk_dev);
+    return wind_memblk_destroy(&testblkdev);
 }
 
 
