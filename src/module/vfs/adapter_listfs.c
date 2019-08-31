@@ -43,13 +43,28 @@ static void* listfs_op_init(w_vfs_s *vfs)
 {
     w_err_t err;
     w_listfs_s *lfs;
-    if(vfs->fsobj == W_NULL)
-        vfs->fsobj = listfs_mem_malloc(sizeof(w_listfs_s));
-    WIND_ASSERT_RETURN(vfs->fsobj != W_NULL,W_NULL);
-    lfs = (w_listfs_s *)vfs->fsobj;
-    err = listfs_init(lfs,vfs->blkdev);
-    WIND_ASSERT_RETURN(err != W_ERR_OK,W_NULL);
-    return lfs;
+    WIND_ASSERT_RETURN(vfs != W_NULL, W_NULL);
+    do
+    {
+        err = W_ERR_OK;
+        if(vfs->fsobj == W_NULL)
+            vfs->fsobj = listfs_mem_malloc(sizeof(w_listfs_s));
+        WIND_ASSERT_BREAK(vfs->fsobj != W_NULL,W_ERR_MEM,"alloc fsobj failed");
+        lfs = (w_listfs_s *)vfs->fsobj;
+        lfs->blkdev = vfs->blkdev;
+        err = listfs_init(lfs,vfs->blkdev);
+        WIND_ASSERT_BREAK(err != W_ERR_OK,W_NULL,"listfs init failed");
+    }while(0);
+    
+    if(err != W_ERR_OK)
+    {
+        if(vfs->fsobj != W_NULL)
+        {
+            listfs_mem_free(vfs->fsobj);
+            vfs->fsobj = W_NULL;
+        }
+    }
+    return vfs->fsobj;
 }
 
 static w_err_t listfs_op_deinit(w_vfs_s *vfs)
@@ -58,18 +73,45 @@ static w_err_t listfs_op_deinit(w_vfs_s *vfs)
     w_listfs_s *lfs;
     WIND_ASSERT_RETURN(vfs != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(vfs->fsobj != W_NULL,W_ERR_PTR_NULL);
-    lfs = (w_listfs_s *)vfs->fsobj;
-    err = listfs_deinit(lfs);
-    WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_FAIL);
-    return W_ERR_OK;
+    do 
+    {
+        err = W_ERR_OK;
+        lfs = (w_listfs_s *)vfs->fsobj;
+        err = listfs_deinit(lfs);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"listfs deinit failed");
+        listfs_mem_free(vfs->fsobj);
+        vfs->fsobj = W_NULL;
+    }while(0);
+    return err;
 }
 
 
 static w_err_t listfs_op_format(w_vfs_s *vfs)
 {
+    w_err_t err;
+    w_listfs_s *lfs;
     WIND_ASSERT_RETURN(vfs != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(vfs->fsobj != W_NULL,W_ERR_PTR_NULL);
-    return listfs_format((w_listfs_s *)vfs->fsobj,vfs->blkdev);
+    //WIND_ASSERT_RETURN(vfs->fsobj != W_NULL,W_ERR_PTR_NULL);
+    do
+    {
+        err = W_ERR_OK;
+        if(vfs->fsobj == W_NULL)
+            vfs->fsobj = listfs_mem_malloc(sizeof(w_listfs_s));
+        WIND_ASSERT_BREAK(vfs->fsobj != W_NULL,W_ERR_MEM,"alloc fsobj failed");
+        lfs = (w_listfs_s *)vfs->fsobj;
+        lfs->blkdev = vfs->blkdev;
+        err = listfs_format(lfs,vfs->blkdev);
+        WIND_ASSERT_BREAK(err != W_ERR_OK,W_NULL,"listfs init failed");
+    }while(0);
+    if(err != W_ERR_OK)
+    {
+        if(vfs->fsobj != W_NULL)
+        {
+            listfs_mem_free(vfs->fsobj);
+            vfs->fsobj = W_NULL;
+        }
+    }
+    return err;
 }
 
 static w_err_t listfs_op_open(w_file_s *file,w_uint16_t fmode)
@@ -79,6 +121,7 @@ static w_err_t listfs_op_open(w_file_s *file,w_uint16_t fmode)
     WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
     lfs = (w_listfs_s*)file->vfs->fsobj;
     WIND_ASSERT_RETURN(lfs != W_NULL,W_ERR_FAIL);
+
     lfile = listfile_open(lfs,file->realpath,fmode);
     if(lfile == W_NULL)
         return W_ERR_FAIL;

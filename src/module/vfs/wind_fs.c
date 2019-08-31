@@ -208,6 +208,7 @@ w_err_t wind_vfs_mount(char *fsname,char *fstype,char *blkname,char *path)
     w_fsops_s *ops;
     err = mount_param_check(fsname,fstype,blkname,path);
     WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_INVALID);
+    wind_notice("mount %s type %s dev %s path %s",fsname,fstype,blkname,path);
     do
     {
         err = W_ERR_OK;
@@ -234,6 +235,21 @@ w_err_t wind_vfs_mount(char *fsname,char *fstype,char *blkname,char *path)
         vfs->ops = ops;
         if(vfs->ops->init)
             vfs->fsobj = vfs->ops->init(vfs);
+        else
+            break;
+        if(vfs->fsobj == W_NULL)
+        {
+            wind_error("init vfs %s failed", wind_obj_name(&vfs->obj));
+            if(vfs->ops->format != W_NULL)
+            {
+                err = vfs->ops->format(vfs);
+                WIND_ASSERT_BREAK(err == W_ERR_OK,err,"vfs format failed");
+                if(vfs->ops->init)
+                    vfs->fsobj = vfs->ops->init(vfs);
+                WIND_ASSERT_BREAK(vfs->fsobj != W_NULL, W_ERR_FAIL, "vfs error");
+            }
+        }
+        
         SET_F_VFS_MOUNT(vfs);
     }while(0);
     if(err != W_ERR_OK)
@@ -247,6 +263,7 @@ w_err_t wind_vfs_unmount(char *fsname)
     WIND_ASSERT_RETURN(fsname != W_NULL,W_ERR_PTR_NULL);
     vfs = wind_vfs_get(fsname);
     WIND_ASSERT_RETURN(vfs != W_NULL,W_ERR_INVALID);
+    wind_notice("umount %s",fsname);
     wind_disable_switch();
     CLR_F_VFS_MOUNT(vfs);
     vfs->blkdev = W_NULL;
