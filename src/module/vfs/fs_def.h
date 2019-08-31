@@ -112,6 +112,7 @@ w_fsops_s fs##_ops = {\
 {WIND_FSTYPE_MAGIC,#fs,{W_NULL,W_NULL},0,0},\
 fs##_op_opsinit,\
 fs##_op_init,\
+fs##_op_deinit,\
 fs##_op_format,\
 W_NULL,\
 fs##_op_open,\

@@ -503,6 +503,9 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\adapter_listfs.c">
       <Filter>module_vfs</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\hal\wind_memblk.c">
+      <Filter>os_hal</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">
@@ -845,6 +848,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\wind_fsops.h">
       <Filter>module_vfs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\hal\wind_memblk.h">
+      <Filter>os_hal</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
