@@ -93,7 +93,7 @@ static w_err_t treefs_op_close(w_file_s* file)
     return treefile_close((w_treefile_s *)file->fileobj);
 }
 
-static w_err_t treefs_op_rmfile(w_file_s* file)
+static w_err_t treefs_op_remove(w_file_s* file)
 {
     WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
     return treefile_remove((w_treefile_s *)file->fileobj);
@@ -119,7 +119,7 @@ static w_err_t treefs_op_readdir(w_file_s* dir,w_file_s* sub)
         sub->obj.magic = WIND_FILE_MAGIC;
         if(sub->obj.name != W_NULL)
             wind_free(sub->obj.name);
-        sub->obj.name = wind_salloc(subtfile->filename);
+        sub->obj.name = wind_salloc(subtfile->filename,HP_ALLOCID_VFS);
         WIND_ASSERT_BREAK(sub->obj.name != W_NULL,W_ERR_MEM,"malloc filename failed");
         sub->isdir = subtfile->isdir;
         if(sub->fullpath)

@@ -141,7 +141,7 @@ static w_err_t fs_cmd_ls(w_int32_t argc,char **argv)
         else
             fullpath = wind_filepath_generate(curpath,curpath,1);
         WIND_ASSERT_BREAK(fullpath != W_NULL,W_ERR_FAIL,"generate curpath error");
-        path1 = wind_salloc(fullpath);
+        path1 = wind_salloc(fullpath,0);
         wind_filepath_release(fullpath);
         fullpath = path1;
         path1 = W_NULL;

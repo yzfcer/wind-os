@@ -117,7 +117,7 @@ fs##_op_format,\
 W_NULL,\
 fs##_op_open,\
 fs##_op_close,\
-fs##_op_rmfile,\
+fs##_op_remove,\
 fs##_op_readdir,\
 fs##_op_seek,\
 fs##_op_rename,\

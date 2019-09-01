@@ -20,7 +20,7 @@ w_err_t _wind_treefs_mod_init(void)
 
 void *tfs_mem_malloc(w_int32_t size)
 {
-    void *ptr = wind_falloc(size,252);
+    void *ptr = wind_alloc(size,HP_ALLOCID_TREEFS);
     return ptr;
 }
 

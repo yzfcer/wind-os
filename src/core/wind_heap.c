@@ -331,7 +331,7 @@ void *wind_heap_realloc(w_heap_s* heap, void* ptr, w_uint32_t newsize)
         else
         {
             wind_error("error realloc.");
-            wind_heapitem_print();
+            wind_heapitem_print(HP_ALLOCID_ALL);
         }
         dlist_remove(&heap->used_list,&old->itemnode.dnode);
         
@@ -415,7 +415,7 @@ w_err_t wind_heap_print(void)
     return W_ERR_OK;
 }
 
-w_err_t wind_heapitem_print(void)
+w_err_t wind_heapitem_print(w_allocid_e allocid)
 {   
     w_err_t err;
     w_dnode_s *dnode,*dnode1;
@@ -438,17 +438,22 @@ w_err_t wind_heapitem_print(void)
             heapitem = NODE_TO_HEAPITEM(dnode1);
             WIND_ASSERT_BREAK(heapitem->magic = (w_uint16_t)(~WIND_HEAPITEM_MAGIC),
                             W_ERR_MEM,"heap memory has been illegally accessed .");
-
-            wind_printf("0x%-10x %-10d %-10s %-8d\r\n",heapitem,heapitem->size,
-                IS_F_HEAPITEM_USED(heapitem)?"used":"free",heapitem->allocid);
+            if((allocid == 255)||(allocid == heapitem->allocid))
+            {
+                wind_printf("0x%-10x %-10d %-10s %-8d\r\n",heapitem,heapitem->size,
+                    IS_F_HEAPITEM_USED(heapitem)?"used":"free",heapitem->allocid);
+            }
         }
         foreach_node(dnode1,&heap->used_list)
         {
             heapitem = NODE_TO_HEAPITEM(dnode1);
             WIND_ASSERT_BREAK(heapitem->magic = (w_uint16_t)(~WIND_HEAPITEM_MAGIC),
                             W_ERR_MEM,"heap memory has been illegally accessed .");
-            wind_printf("0x%-10x %-10d %-10s %-8d\r\n",heapitem,heapitem->size,
-                IS_F_HEAPITEM_USED(heapitem)?"used":"free",heapitem->allocid);
+            if((allocid == 255)||(allocid == heapitem->allocid))
+            {
+                wind_printf("0x%-10x %-10d %-10s %-8d\r\n",heapitem,heapitem->size,
+                    IS_F_HEAPITEM_USED(heapitem)?"used":"free",heapitem->allocid);
+            }
         }
         wind_mutex_unlock(heap->mutex);
     }
@@ -504,16 +509,16 @@ void *wind_malloc(w_uint32_t size)
     return W_NULL;
 }
 
-void *wind_zalloc(w_uint32_t size)
+void *wind_zalloc(w_uint32_t size,w_uint8_t allocid)
 {
     void *ptr;
-    ptr = wind_malloc(size);
+    ptr = wind_alloc(size,allocid);
     if(ptr != W_NULL)
         wind_memset(ptr,0,size);
     return ptr;
 }
 
-void *wind_falloc(w_uint32_t size,w_uint8_t allocid)
+void *wind_alloc(w_uint32_t size,w_uint8_t allocid)
 {
     void *ptr;
     w_heapitem_s *item;
@@ -526,14 +531,14 @@ void *wind_falloc(w_uint32_t size,w_uint8_t allocid)
     return ptr;
 }
 
-void *wind_salloc(char *str)
+void *wind_salloc(char *str,w_uint8_t allocid)
 {
     char *ptr;
     w_int32_t len;
     if(str == W_NULL)
         return W_NULL;
     len = wind_strlen(str);
-    ptr = wind_malloc(len+1);
+    ptr = wind_alloc(len+1,allocid);
     if(ptr == W_NULL)
         return W_NULL;
     wind_strcpy(ptr,str);

@@ -140,7 +140,7 @@ static w_file_s *wind_file_create(w_vfs_s *fs,const char *path,w_uint8_t fmode,w
         WIND_ASSERT_BREAK(file != W_NULL,W_ERR_MEM,"file_malloc failed");
         
         fullpathlen = wind_strlen(path);
-        fullpath = wind_salloc(path);
+        fullpath = wind_salloc(path,HP_ALLOCID_VFS);
         WIND_ASSERT_BREAK(fullpath != W_NULL,W_ERR_MEM,"malloc file path failed");
         file->fullpath = fullpath;
         mountlen = wind_strlen(fs->mount_path);

@@ -46,7 +46,7 @@ w_err_t wind_filepath_set_current(char *path)
     len = wind_strlen(path);
     if(curpath != W_NULL)
         wind_free(curpath);
-    curpath = wind_malloc(len + 2);
+    curpath = wind_alloc(len + 2,HP_ALLOCID_VFS);
     wind_memcpy(curpath,path,len+1);
     if(curpath[len-1] != '/')
     {
@@ -71,13 +71,13 @@ char *wind_filepath_generate(char *pre_path,char *relative_path,w_uint16_t isdir
     //    len += 1;
     if(relative_path[0] == '/')
     {
-        path = wind_salloc(relative_path);
+        path = wind_salloc(relative_path,HP_ALLOCID_VFS);
     }
     else
     {
         len1 = wind_strlen(pre_path) + 1;
         len += len1;
-        path = wind_malloc(len);
+        path = wind_alloc(len,HP_ALLOCID_VFS);
         wind_memset(path,0,len);
         wind_strcpy(path,pre_path);
         if(pre_path[len1-1] != '/')
@@ -102,7 +102,7 @@ char * wind_filepath_copy(char *path)
     char *newpath;
     WIND_ASSERT_RETURN(path != W_NULL,W_NULL);
     WIND_ASSERT_RETURN(path[0] != 0,W_NULL);
-    newpath = wind_salloc(path);
+    newpath = wind_salloc(path,HP_ALLOCID_VFS);
     WIND_ASSERT_RETURN(newpath != W_NULL,W_NULL);
     return newpath;
 }
@@ -200,7 +200,7 @@ char* wind_filepath_get_parent(char *path)
     WIND_ASSERT_RETURN(err == W_ERR_OK,W_NULL);
     len = wind_strlen(path);
     WIND_ASSERT_RETURN(len >= 1,W_NULL);
-    tmppath = wind_salloc(path);
+    tmppath = wind_salloc(path,HP_ALLOCID_VFS);
     WIND_ASSERT_RETURN(tmppath != W_NULL,W_NULL);
     if(tmppath[len-1] == '/')
         tmppath[len-1] = '\0';
@@ -227,7 +227,7 @@ char* wind_filepath_get_filename(char *path)
     WIND_ASSERT_RETURN(err == W_ERR_OK,W_NULL);
     len = wind_strlen(path);
     WIND_ASSERT_RETURN(len >= 1,W_NULL);
-    tmppath = wind_salloc(path);
+    tmppath = wind_salloc(path,HP_ALLOCID_VFS);
     WIND_ASSERT_RETURN(tmppath != W_NULL,W_NULL);
     if(tmppath[len-1] == '/')
         tmppath[len-1] = '\0';

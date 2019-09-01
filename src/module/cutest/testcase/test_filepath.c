@@ -52,7 +52,7 @@ CASE_SETUP(current)
     }
     path = wind_filepath_get_current();
     WIND_ASSERT_RETURN_VOID(path != W_NULL);
-    bak_path = wind_salloc(path);
+    bak_path = wind_salloc(path,HP_ALLOCID_VFS);
     WIND_ASSERT_RETURN_VOID(bak_path != W_NULL);
 }
 
@@ -260,14 +260,14 @@ CASE_FUNC(split)
     cnt = wind_filepath_split("/test",layer,1);
     EXPECT_SMALLER(cnt,0);
 
-    path = wind_salloc("/");
+    path = wind_salloc("/",HP_ALLOCID_VFS);
     EXPECT_NE(path,W_NULL);
     cnt = wind_filepath_split(path,layer,5);
     EXPECT_EQ(cnt,1);
     EXPECT_STR_EQ(layer[0],"");
     wind_free(path);
     
-    path = wind_salloc("/test");
+    path = wind_salloc("/test",HP_ALLOCID_VFS);
     EXPECT_NE(path,W_NULL);
     cnt = wind_filepath_split(path,layer,5);
     EXPECT_EQ(cnt,2);
@@ -275,7 +275,7 @@ CASE_FUNC(split)
     EXPECT_STR_EQ(layer[1],"test");
     wind_free(path);
 
-    path = wind_salloc("/test/");
+    path = wind_salloc("/test/",HP_ALLOCID_VFS);
     EXPECT_NE(path,W_NULL);
     cnt = wind_filepath_split(path,layer,5);
     EXPECT_EQ(cnt,2);
@@ -283,7 +283,7 @@ CASE_FUNC(split)
     EXPECT_STR_EQ(layer[1],"test");
     wind_free(path);
     
-    path = wind_salloc("/test/test1");
+    path = wind_salloc("/test/test1",HP_ALLOCID_VFS);
     EXPECT_NE(path,W_NULL);
     cnt = wind_filepath_split(path,layer,5);
     EXPECT_EQ(cnt,3);
@@ -292,7 +292,7 @@ CASE_FUNC(split)
     EXPECT_STR_EQ(layer[2],"test1");
     wind_free(path);
     
-    path = wind_salloc("/test/test1/");
+    path = wind_salloc("/test/test1/",HP_ALLOCID_VFS);
     EXPECT_NE(path,W_NULL);
     cnt = wind_filepath_split(path,layer,5);
     EXPECT_EQ(cnt,3);
@@ -301,7 +301,7 @@ CASE_FUNC(split)
     EXPECT_STR_EQ(layer[2],"test1");
     wind_free(path);
 
-    path = wind_salloc("/test/test1/test2");
+    path = wind_salloc("/test/test1/test2",HP_ALLOCID_VFS);
     EXPECT_NE(path,W_NULL);
     cnt = wind_filepath_split(path,layer,5);
     EXPECT_EQ(cnt,4);
@@ -311,7 +311,7 @@ CASE_FUNC(split)
     EXPECT_STR_EQ(layer[3],"test2");
     wind_free(path);
 
-    path = wind_salloc("/test/test1/test2/test3");
+    path = wind_salloc("/test/test1/test2/test3",HP_ALLOCID_VFS);
     EXPECT_NE(path,W_NULL);
     cnt = wind_filepath_split(path,layer,5);
     EXPECT_EQ(cnt,5);

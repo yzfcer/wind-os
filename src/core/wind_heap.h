@@ -58,7 +58,16 @@ extern "C" {
 #define SET_F_HEAPITEM_USED(heapitem) (heapitem->flag |= F_HEAPITEM_USED)
 #define CLR_F_HEAPITEM_USED(heapitem) (heapitem->flag &= (~F_HEAPITEM_USED))
 
-
+typedef enum
+{
+    HP_ALLOCID_COMMON = 0,
+    HP_ALLOCID_VFS    = 1,
+    HP_ALLOCID_LISTFS = 2,
+    HP_ALLOCID_TREEFS = 3,
+    HP_ALLOCID_DB     = 4,
+    HP_ALLOCID_CJSON  = 5,
+    HP_ALLOCID_ALL    = 255,
+}w_allocid_e;
 
 typedef struct __w_heapitem_s w_heapitem_s;
 typedef struct __w_heap_s w_heap_s;
@@ -105,18 +114,18 @@ w_err_t wind_heap_free(w_heap_s* heap,void *ptr);
 
 w_err_t wind_heap_print(void);
 
-w_err_t wind_heapitem_print(void);
+w_err_t wind_heapitem_print(w_allocid_e allocid);
 
 w_err_t wind_heap_stati_print(void);
 
 
 void *wind_malloc(w_uint32_t size);
 
-void *wind_zalloc(w_uint32_t size);
+void *wind_zalloc(w_uint32_t size,w_uint8_t allocid);
 
-void *wind_falloc(w_uint32_t size,w_uint8_t flag);
+void *wind_alloc(w_uint32_t size,w_uint8_t flag);
 
-void *wind_salloc(char *str);
+void *wind_salloc(char *str,w_uint8_t allocid);
 
 void *wind_clone(void *object,w_uint32_t size);
 

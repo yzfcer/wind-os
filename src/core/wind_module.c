@@ -64,7 +64,7 @@ static w_err_t module_check_depend(w_module_s *module)
     do
     {
         err = W_ERR_OK;
-        depend = wind_salloc(module->depend);
+        depend = wind_salloc(module->depend,0);
         WIND_ASSERT_BREAK(depend != W_NULL,W_ERR_MEM,"alloc depend failed");
         dependlist = wind_malloc(10 * sizeof(char *));
         WIND_ASSERT_BREAK(dependlist != W_NULL,W_ERR_MEM,"alloc dependlist failed");

@@ -221,12 +221,12 @@ w_err_t wind_vfs_mount(char *fsname,char *fstype,char *blkname,char *path)
         WIND_ASSERT_BREAK(blkdev != W_NULL,W_ERR_MEM,"blkdev is NOT exist");
         
         len = wind_strlen(path)+1;
-        vfs->mount_path = wind_malloc(len);
+        vfs->mount_path = wind_alloc(len,HP_ALLOCID_VFS);
         WIND_ASSERT_BREAK(vfs->mount_path != W_NULL,W_ERR_MEM,"malloc mount_path failed");
         wind_strcpy(vfs->mount_path,path);
         
         len = wind_strlen(fstype)+1;
-        vfs->fstype = wind_malloc(len);
+        vfs->fstype = wind_alloc(len,HP_ALLOCID_VFS);
         WIND_ASSERT_BREAK(vfs->fstype != W_NULL,W_ERR_MEM,"malloc fstype failed");
         wind_strcpy(vfs->fstype,fstype);
         

@@ -139,7 +139,7 @@ static w_err_t listfs_op_close(w_file_s* file)
     return listfile_close((w_listfile_s *)file->fileobj);
 }
 
-static w_err_t listfs_op_rmfile(w_file_s* file)
+static w_err_t listfs_op_remove(w_file_s* file)
 {
     WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
 	return listfile_remove((w_listfs_s *)file->vfs->fsobj,file->realpath);
@@ -164,7 +164,7 @@ static w_err_t listfs_op_readdir(w_file_s* dir,w_file_s* sub)
         
         if(sub->obj.name != W_NULL)
             wind_free((void*)sub->obj.name);
-        sub->obj.name = (const char*)wind_salloc(sublfile->info.name);
+        sub->obj.name = (const char*)wind_salloc(sublfile->info.name,HP_ALLOCID_VFS);
         WIND_ASSERT_BREAK(sub->obj.name != W_NULL,W_ERR_MEM,"malloc filename failed");
         sub->isdir = IS_LFILE_ATTR_DIR(sublfile->info.attr)?1:0;
         
@@ -205,7 +205,7 @@ static w_err_t listfs_op_rename(w_file_s* file,char *newname)
     {
         err = W_ERR_OK;
         lfile = (w_listfile_s *)file->fileobj;
-        oldname = (char *)wind_salloc(lfile->info.name);
+        oldname = (char *)wind_salloc(lfile->info.name,HP_ALLOCID_VFS);
         WIND_ASSERT_BREAK(oldname != W_NULL,W_ERR_MEM,"malloc filename failed");
         wind_strcpy(lfile->info.name,newname);
         err = fileinfo_write(&lfile->info,file->vfs->blkdev);

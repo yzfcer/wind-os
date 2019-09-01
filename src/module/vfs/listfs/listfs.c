@@ -60,7 +60,7 @@ void *listfs_mem_malloc(w_int32_t size)
 {
     void *ptr;
     wind_trace("listfs_mem_malloc:0x%08x,%d",ptr,size);
-    ptr = wind_falloc(size,253);
+    ptr = wind_alloc(size,HP_ALLOCID_LISTFS);
     if(ptr != W_NULL)
         wind_memset(ptr,0,size);
     return ptr;

@@ -97,7 +97,8 @@ COMMAND_USAGE(list)
 
 COMMAND_MAIN(list,argc,argv)
 {
-    WIND_ASSERT_RETURN(argc == 2,W_ERR_INVALID);
+    w_uint32_t allocid;
+    WIND_ASSERT_RETURN(argc >= 2,W_ERR_INVALID);
     if(0 == wind_strcmp(argv[1],"thread"))
     {
         wind_thread_print();
@@ -151,7 +152,10 @@ COMMAND_MAIN(list,argc,argv)
     }
     else if(0 == wind_strcmp(argv[1],"heapitem"))
     {
-        wind_heapitem_print();
+        allocid = HP_ALLOCID_ALL;
+        if(argc >= 3)
+            wind_str_to_int(argv[2],&allocid);
+        wind_heapitem_print((w_allocid_e)allocid);
         return W_ERR_OK;
     }
 #endif

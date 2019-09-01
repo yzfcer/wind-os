@@ -54,6 +54,7 @@ typedef struct cJSON {
 	char *string;				/* The item's name string, if this item is the child of, or is in the list of subitems of an object. */
 } cJSON;
 
+#if 0
 typedef struct cJSON_Hooks 
 {
       void *(*malloc_fn)(int sz);
@@ -62,6 +63,11 @@ typedef struct cJSON_Hooks
 
 /* Supply malloc, realloc and free functions to cJSON */
 //extern void cJSON_InitHooks(cJSON_Hooks* hooks);
+#endif
+void *cJSON_MALLOC(unsigned sz);
+
+void cJSON_free(void *ptr);
+
 
 
 /* Supply a block of JSON, and this returns a cJSON object you can interrogate. Call cJSON_Delete when finished. */
