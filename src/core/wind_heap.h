@@ -124,7 +124,7 @@ void *wind_calloc(w_uint32_t count, w_uint32_t size);
 
 void *wind_realloc(void *rmem, w_uint32_t newsize);
 
-w_err_t wind_free(void *rmem);
+w_err_t wind_free(void *ptr);
 
 
 

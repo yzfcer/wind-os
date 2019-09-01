@@ -60,8 +60,8 @@ struct __w_blkdev_s
     w_int16_t devtype;
     w_int16_t devid;
     w_addr_t blkaddr;
-    w_int32_t blkcnt;
-    w_int32_t blksize;
+    w_uint32_t blkcnt;
+    w_uint32_t blksize;
     w_mutex_s *mutex;
     void *user_arg;
     const w_blkdev_ops_s *ops;

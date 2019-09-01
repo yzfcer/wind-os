@@ -38,10 +38,10 @@ w_err_t _wind_file_mod_init(void);
 
 
 w_file_s *wind_file_get(w_vfs_s *fs,const char *path);
-w_file_s *wind_file_get_bypath(const char *path);
+w_file_s *wind_file_get_bypath(char *path);
 
 w_bool_t wind_fexist(const char *path);
-w_file_s* wind_fopen(const char *path,w_uint16_t fmode);
+w_file_s* wind_fopen(const char *path,w_uint8_t fmode);
 w_err_t wind_fclose(w_file_s *file);
 w_err_t wind_fremove(const char *path);
 w_file_s *wind_freaddir(w_file_s *dir);

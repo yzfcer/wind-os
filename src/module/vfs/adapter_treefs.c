@@ -69,7 +69,7 @@ static w_err_t treefs_op_format(w_vfs_s *vfs)
     return wind_treefs_format((w_treefs_s *)vfs->fsobj);
 }
 
-static w_err_t treefs_op_open(w_file_s *file,w_uint16_t fmode)
+static w_err_t treefs_op_open(w_file_s *file,w_uint8_t fmode)
 {
     w_treefile_s *tfile;
     w_treefs_s *tfs;

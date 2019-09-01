@@ -43,7 +43,7 @@ static w_int32_t bm_get_free_byteidx(w_uint8_t *blk,w_int32_t offset,w_int32_t b
 
 static w_int32_t bm_alloc_blk(lfs_bitmap_s *bm,w_addr_t *addr,w_int32_t cnt)
 {
-    w_int32_t i;
+    w_uint32_t i;
     w_int32_t alloc_cnt = 0;
     
     for(i = bm->cur_byteidx;i < bm->blkdev->blksize;i ++)

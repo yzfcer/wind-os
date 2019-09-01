@@ -51,21 +51,21 @@ char *wind_fsops_checktype(w_blkdev_s *blkdev,char *type)
 {
     w_dnode_s *dnode;
     w_err_t err;
-    w_fsops_s *ops = W_NULL;
+    w_fsops_s *ops = (w_fsops_s *)W_NULL;
     wind_disable_switch();
     foreach_node(dnode,&fs_ops_list)
     {
         err = W_ERR_FAIL;
         ops = NODE_TO_FSOPS(dnode);
         if(ops->matchfs)
-            err = ops->matchfs(wind_obj_name(&blkdev->obj));
+            err = ops->matchfs((char*)wind_obj_name(&blkdev->obj));
         if(err == W_ERR_OK)
             break;
     }
     wind_disable_switch();
     if(ops)
-        return wind_obj_name(&ops->obj);
-    return W_NULL;
+        return (char*)wind_obj_name(&ops->obj);
+    return (char*)W_NULL;
 }
 
 w_err_t wind_fsops_register(w_fsops_s *ops)

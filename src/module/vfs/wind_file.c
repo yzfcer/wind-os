@@ -106,7 +106,7 @@ w_bool_t wind_fexist(const char *path)
     return exist;
 }
 
-w_file_s *wind_file_get_bypath(const char *path)
+w_file_s *wind_file_get_bypath(char *path)
 {
     w_file_s *file;
     w_vfs_s *fs;
@@ -125,7 +125,7 @@ w_file_s *wind_file_get_bypath(const char *path)
     return file;
 }
 
-static w_file_s *wind_file_create(w_vfs_s *fs,const char *path,w_uint16_t fmode,w_uint8_t isdir)
+static w_file_s *wind_file_create(w_vfs_s *fs,const char *path,w_uint8_t fmode,w_uint8_t isdir)
 {
     w_err_t err;
     w_int32_t fullpathlen,mountlen;
@@ -203,7 +203,7 @@ static w_err_t wind_file_destroy(w_file_s *file)
     return W_ERR_OK;
 }
 
-w_file_s* wind_fopen(const char *path,w_uint16_t fmode)
+w_file_s* wind_fopen(const char *path,w_uint8_t fmode)
 {
     w_err_t err;
     w_vfs_s *fs;

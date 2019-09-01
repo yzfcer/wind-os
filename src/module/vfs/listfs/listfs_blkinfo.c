@@ -87,14 +87,14 @@ w_err_t blkinfo_read(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_addr_t addr)
     w_err_t err;
     w_int32_t cnt;
     lfile_blkinfo_s *tmpinfo;
-    w_uint8_t *blk = W_NULL;
+    w_uint8_t *blk = (w_uint8_t *)W_NULL;
     WIND_ASSERT_RETURN(info != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(addr != 0,W_ERR_INVALID);
     do
     {
         err = W_ERR_OK;
-        blk = listfs_mem_malloc(blkdev->blksize);
+        blk = (w_uint8_t *)listfs_mem_malloc(blkdev->blksize);
         WIND_ASSERT_RETURN(blk != W_NULL,W_ERR_MEM);
         cnt = wind_blkdev_read(blkdev,addr,blk,1);
         WIND_ASSERT_BREAK(cnt > 0,W_ERR_FAIL,"read blk failed");
@@ -115,7 +115,7 @@ w_err_t blkinfo_write(lfile_blkinfo_s *info,w_blkdev_s *blkdev)
     w_err_t err;
     w_int32_t cnt;
     lfile_blkinfo_s *tmpinfo;
-    w_uint8_t *blk = W_NULL;
+    w_uint8_t *blk = (w_uint8_t *)W_NULL;
     WIND_ASSERT_RETURN(info != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(info->magic == LISTFILE_BLK_MAGIC,W_ERR_INVALID);
@@ -123,7 +123,7 @@ w_err_t blkinfo_write(lfile_blkinfo_s *info,w_blkdev_s *blkdev)
     do
     {
         err = W_ERR_OK;
-        blk = listfs_mem_malloc(blkdev->blksize);
+        blk = (w_uint8_t *)listfs_mem_malloc(blkdev->blksize);
         WIND_ASSERT_BREAK(blk != W_NULL,W_ERR_MEM,"malloc blk failed");
         tmpinfo = (lfile_blkinfo_s*)blk;
         if(info->offset == 0)
@@ -194,7 +194,7 @@ w_err_t blkinfo_get_byoffset(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_int32_t 
     do
     {
         err = W_ERR_OK;
-        tmpinfo = listfs_mem_malloc(sizeof(lfile_blkinfo_s));
+        tmpinfo = (lfile_blkinfo_s *)listfs_mem_malloc(sizeof(lfile_blkinfo_s));
         WIND_ASSERT_BREAK(tmpinfo != W_NULL,W_ERR_MEM,"malloc tmpinfo failed");
         wind_memcpy(tmpinfo,info,sizeof(lfile_blkinfo_s));
 
@@ -230,14 +230,14 @@ w_err_t blkinfo_get_byoffset(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_int32_t 
 w_err_t blkinfo_update_prev(lfile_blkinfo_s *info,w_blkdev_s *blkdev)
 {
     w_err_t err;
-    lfile_blkinfo_s *tmpinfo = W_NULL;
+    lfile_blkinfo_s *tmpinfo = (lfile_blkinfo_s *)W_NULL;
     WIND_ASSERT_RETURN(info != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(info->magic == LISTFILE_BLK_MAGIC,W_ERR_INVALID);
     do
     {
         err = W_ERR_OK;
-        tmpinfo = listfs_mem_malloc(sizeof(lfile_blkinfo_s));
+        tmpinfo = (lfile_blkinfo_s *)listfs_mem_malloc(sizeof(lfile_blkinfo_s));
         WIND_ASSERT_BREAK(tmpinfo != W_NULL,W_ERR_MEM,"malloc tmpinfo failed");
         wind_memcpy(tmpinfo,info,sizeof(lfile_blkinfo_s));
         err = blkinfo_read(tmpinfo,blkdev,tmpinfo->prevblk_addr);
@@ -256,7 +256,7 @@ w_err_t blkinfo_link(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_addr_t *addr,w_i
 {
     w_err_t err;
     w_int32_t i;
-    lfile_blkinfo_s *info1 = W_NULL,*info2 = W_NULL;
+    lfile_blkinfo_s *info1 = (lfile_blkinfo_s *)W_NULL,*info2 = (lfile_blkinfo_s *)W_NULL;
     
     WIND_ASSERT_RETURN(info != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
@@ -264,9 +264,9 @@ w_err_t blkinfo_link(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_addr_t *addr,w_i
     do
     {
         err = W_ERR_OK;
-        info1 = listfs_mem_malloc(sizeof(lfile_blkinfo_s));
+        info1 = (lfile_blkinfo_s *)listfs_mem_malloc(sizeof(lfile_blkinfo_s));
         WIND_ASSERT_BREAK(info1 != W_NULL,W_ERR_MEM,"malloc info1 failed");
-        info2 = listfs_mem_malloc(sizeof(lfile_blkinfo_s));
+        info2 = (lfile_blkinfo_s *)listfs_mem_malloc(sizeof(lfile_blkinfo_s));
         WIND_ASSERT_BREAK(info2 != W_NULL,W_ERR_MEM,"malloc info2 failed");
         wind_memcpy(info1,info,sizeof(lfile_blkinfo_s));
         for(i = 0;i < count;i ++)
@@ -292,7 +292,7 @@ w_err_t blkinfo_link(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_addr_t *addr,w_i
 w_err_t blkinfo_unlink(lfile_blkinfo_s *info,w_blkdev_s *blkdev)
 {
     w_err_t err;
-    lfile_blkinfo_s *tmpinfo = W_NULL;
+    lfile_blkinfo_s *tmpinfo = (lfile_blkinfo_s *)W_NULL;
     WIND_ASSERT_RETURN(info != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(info->magic == LISTFILE_BLK_MAGIC,W_ERR_INVALID);
@@ -300,7 +300,7 @@ w_err_t blkinfo_unlink(lfile_blkinfo_s *info,w_blkdev_s *blkdev)
     do
     {
         err = W_ERR_OK;
-        tmpinfo = listfs_mem_malloc(sizeof(lfile_blkinfo_s));
+        tmpinfo = (lfile_blkinfo_s *)listfs_mem_malloc(sizeof(lfile_blkinfo_s));
         WIND_ASSERT_BREAK(tmpinfo != W_NULL,W_ERR_MEM,"malloc blkinfo failed");
         wind_memcpy(tmpinfo,info,sizeof(lfile_blkinfo_s));
         if(tmpinfo->prevblk_addr != 0)
@@ -322,7 +322,7 @@ w_err_t blkinfo_add_dataaddr(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_addr_t *
     w_err_t err;
     w_int32_t i;
     w_int32_t index;
-    lfile_blkinfo_s *tmpinfo = W_NULL;
+    lfile_blkinfo_s *tmpinfo = (lfile_blkinfo_s *)W_NULL;
     WIND_ASSERT_RETURN(info != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(addr != W_NULL,W_ERR_PTR_NULL);
@@ -330,7 +330,7 @@ w_err_t blkinfo_add_dataaddr(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_addr_t *
     do
     {
         err = W_ERR_OK;
-        tmpinfo = listfs_mem_malloc(sizeof(lfile_blkinfo_s));
+        tmpinfo = (lfile_blkinfo_s *)listfs_mem_malloc(sizeof(lfile_blkinfo_s));
         WIND_ASSERT_BREAK(tmpinfo != W_NULL,W_ERR_MEM,"malloc blkinfo failed");
         wind_memcpy(tmpinfo,info,sizeof(lfile_blkinfo_s));
         err = blkinfo_get_tail(tmpinfo,blkdev);

@@ -78,7 +78,7 @@ struct __w_fsops_s
     w_err_t (*format)(w_vfs_s *fs);//格式化
     w_err_t (*matchfs)(char *devname);//检测块设备文件系统是否匹配
     
-    w_err_t (*open)(w_file_s *file,w_uint16_t fmode);
+    w_err_t (*open)(w_file_s *file,w_uint8_t fmode);
     w_err_t (*close)(w_file_s* file);
     w_err_t (*remove)(w_file_s* file);
     w_err_t (*readdir)(w_file_s* dir,w_file_s* child);
@@ -99,17 +99,17 @@ struct __w_file_s
     w_vfs_s *vfs;//关联的文件系统
     w_mutex_s *mutex;//文件锁
     w_file_s *childfile;//子文件,在需要遍历目录时使用
-    w_uint16_t fmode;//打开模式
+    w_uint8_t fmode;//打开模式
     
     void *fileobj;//实际文件对象
-    w_uint8_t isdir;//是否是目录
+    w_uint16_t isdir;//是否是目录
     w_int32_t offset;//文件偏移位置
 };
 
 
 #define FS_OPS_DEF(fs) \
 w_fsops_s fs##_ops = {\
-{WIND_FSTYPE_MAGIC,#fs,{W_NULL,W_NULL},0,0},\
+{WIND_FSTYPE_MAGIC,#fs,{(w_dnode_s*)W_NULL,(w_dnode_s*)W_NULL},0,0},\
 fs##_op_opsinit,\
 fs##_op_init,\
 fs##_op_deinit,\

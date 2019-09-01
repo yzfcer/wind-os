@@ -1418,7 +1418,7 @@ int tank_main (int argc,char **argv)                               //主函数
 	unsigned int interval[12] = {1,1,1,1,1,1,1,1,1,1,1,1};  //间隔计数器数组，用于控制速度
     hConsoleOutput = GetStdHandle(STD_OUTPUT_HANDLE); // 获取控制台输出句柄
     GetConsoleScreenBufferInfo(hConsoleOutput, &info);
-	srand(time(0)); //设置随机数种子(若不设置种子而调用rand会使每次运行的随机数序列一致)随机数序列指:如首次调用rand得到1,第二次得2,第三次3,则此次随机数序列为1,2,3
+	srand((unsigned)time(0)); //设置随机数种子(若不设置种子而调用rand会使每次运行的随机数序列一致)随机数序列指:如首次调用rand得到1,第二次得2,第三次3,则此次随机数序列为1,2,3
 	HideCursor();                         //隐藏光标
 	system("mode con cols=112 lines=42"); //控制窗口大小
 	Frame ();                             //打印游戏主体框架

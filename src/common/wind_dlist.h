@@ -53,15 +53,15 @@ struct __w_dlist_s
 
 
 
-#define DNODE_INIT(dnode) {dnode.prev = W_NULL;dnode.next = W_NULL;}
-#define PRIO_DNODE_INIT(prionode) {prionode.dnode.prev = W_NULL;prionode.dnode.next = W_NULL;prionode.prio = 0;}
-#define DLIST_INIT(dlist) {dlist.head = W_NULL;dlist.tail = W_NULL;}
+#define DNODE_INIT(dnode) {dnode.prev = (w_dnode_s*)W_NULL;dnode.next = (w_dnode_s*)W_NULL;}
+#define PRIO_DNODE_INIT(prionode) {prionode.dnode.prev = (w_dnode_s*)W_NULL;prionode.dnode.next = (w_dnode_s*)W_NULL;prionode.prio = 0;}
+#define DLIST_INIT(dlist) {dlist.head = (w_dnode_s*)W_NULL;dlist.tail = (w_dnode_s*)W_NULL;}
 
-#define PDNODE_INIT(pdnode) {pdnode->prev = W_NULL;pdnode->next = W_NULL;}
-#define PPRIO_DNODE_INIT(pprionode) {pprionode->dnode.prev = W_NULL;pprionode->dnode.next = W_NULL;pprionode->prio = 0;}
-#define PDLIST_INIT(pdlist) {pdlist->head = W_NULL;pdlist->tail = W_NULL;}
+#define PDNODE_INIT(pdnode) {pdnode->prev = (w_dnode_s*)W_NULL;pdnode->next = (w_dnode_s*)W_NULL;}
+#define PPRIO_DNODE_INIT(pprionode) {pprionode->dnode.prev = (w_dnode_s*)W_NULL;pprionode->dnode.next = (w_dnode_s*)W_NULL;pprionode->prio = 0;}
+#define PDLIST_INIT(pdlist) {pdlist->head = (w_dnode_s*)W_NULL;pdlist->tail = (w_dnode_s*)W_NULL;}
 
-#define foreach_node(dnode,list) for(dnode = dlist_head(list);dnode != W_NULL;dnode = dnode_next(dnode))
+#define foreach_node(dnode,list) for(dnode = dlist_head(list);dnode != (w_dnode_s*)W_NULL;dnode = dnode_next(dnode))
 
 
 //获取链表头部节点

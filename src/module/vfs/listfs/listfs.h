@@ -124,7 +124,7 @@ w_err_t listfs_init(w_listfs_s *lfs,w_blkdev_s *blkdev);
 w_err_t listfs_deinit(w_listfs_s *lfs);
 
 w_bool_t listfile_existing(w_listfs_s *lfs,const char *path);
-w_listfile_s* listfile_open(w_listfs_s *lfs,const char *path,w_uint16_t mode);
+w_listfile_s* listfile_open(w_listfs_s *lfs,const char *path,w_uint8_t mode);
 w_err_t listfile_set_attr(w_listfile_s* file,w_uint8_t attr);
 w_err_t listfile_get_attr(w_listfile_s* file,w_uint8_t *attr);
 w_err_t listfile_close(w_listfile_s* file);

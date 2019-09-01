@@ -667,7 +667,7 @@ w_err_t listfs_deinit(w_listfs_s *lfs)
 }
 
 
-w_listfile_s* listfile_open(w_listfs_s *lfs,const char *path,w_uint16_t mode)
+w_listfile_s* listfile_open(w_listfs_s *lfs,const char *path,w_uint8_t mode)
 {
     w_err_t err;
     w_bool_t is_crt;
