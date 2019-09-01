@@ -54,7 +54,7 @@ static int cJSON_strcasecmp(const char *s1,const char *s2)
 }
 
 int cjson_enable = 0;
-void *cJSON_MALLOC(unsigned sz)
+void *cJSON_malloc(unsigned sz)
 {
 	if(!cjson_enable)
 		return (void*)0;
@@ -72,7 +72,7 @@ static char* cJSON_strdup(const char* str)
       char* copy;
 
       len = wind_strlen(str) + 1;
-      if (!(copy = (char*)cJSON_MALLOC(len))) return 0;
+      if (!(copy = (char*)cJSON_malloc(len))) return 0;
       wind_memcpy(copy,str,len);
       return copy;
 }
@@ -81,7 +81,7 @@ static char* cJSON_strdup(const char* str)
 /* Internal constructor. */
 static cJSON *cJSON_New_Item(void)
 {
-	cJSON* node = (cJSON*)cJSON_MALLOC(sizeof(cJSON));
+	cJSON* node = (cJSON*)cJSON_malloc(sizeof(cJSON));
 	if (node) wind_memset(node,0,sizeof(cJSON));
 	return node;
 }
@@ -135,7 +135,7 @@ static char* ensure(printbuffer *p,int needed)
 	if (needed<=p->length) return p->buffer+p->offset;
 
 	newsize=pow2gt(needed);
-	newbuffer=(char*)cJSON_MALLOC(newsize);
+	newbuffer=(char*)cJSON_malloc(newsize);
 	if (!newbuffer) {cJSON_free(p->buffer);p->length=0,p->buffer=0;return 0;}
 	if (newbuffer) wind_memcpy(newbuffer,p->buffer,p->length);
 	cJSON_free(p->buffer);
@@ -160,19 +160,19 @@ static char *print_number(cJSON *item,printbuffer *p)
 	if (d==0)
 	{
 		if (p)	str=ensure(p,2);
-		else	str=(char*)cJSON_MALLOC(2);	/* special case for 0. */
+		else	str=(char*)cJSON_malloc(2);	/* special case for 0. */
 		if (str) wind_strcpy(str,"0");
 	}
 	else if (fabs(((double)item->valueint)-d)<=DBL_EPSILON && d<=INT_MAX && d>=INT_MIN)
 	{
 		if (p)	str=ensure(p,21);
-		else	str=(char*)cJSON_MALLOC(21);	/* 2^64+1 can be represented in 21 chars. */
+		else	str=(char*)cJSON_malloc(21);	/* 2^64+1 can be represented in 21 chars. */
 		if (str)	wind_sprintf(str,"%d",item->valueint);
 	}
 	else
 	{
 		if (p)	str=ensure(p,64);
-		else	str=(char*)cJSON_MALLOC(64);	/* This is a nice tradeoff. */
+		else	str=(char*)cJSON_malloc(64);	/* This is a nice tradeoff. */
 		if (str)
 		{
 			if (d*0!=0)													wind_sprintf(str,"null");	/* This checks for NaN and Infinity */
@@ -206,7 +206,7 @@ static const char *parse_string(cJSON *item,const char *str,const char **ep)
 	
 	while (*end_ptr!='\"' && *end_ptr && ++len) if (*end_ptr++ == '\\') end_ptr++;	/* Skip escaped quotes. */
 	
-	out=(char*)cJSON_MALLOC(len+1);	/* This is how long we need for the string, roughly. */
+	out=(char*)cJSON_malloc(len+1);	/* This is how long we need for the string, roughly. */
 	if (!out) return 0;
 	item->valuestring=out; /* assign here so out will be deleted during cJSON_Delete() later */
 	item->type=cJSON_String;
@@ -268,7 +268,7 @@ static char *print_string_ptr(const char *str,printbuffer *p)
 	if (!str)
 	{
 		if (p)	out=ensure(p,3);
-		else	out=(char*)cJSON_MALLOC(3);
+		else	out=(char*)cJSON_malloc(3);
 		if (!out) return 0;
 		wind_strcpy(out,"\"\"");
 		return out;
@@ -279,7 +279,7 @@ static char *print_string_ptr(const char *str,printbuffer *p)
 	{
 		len=ptr-str;
 		if (p) out=ensure(p,len+3);
-		else		out=(char*)cJSON_MALLOC(len+3);
+		else		out=(char*)cJSON_malloc(len+3);
 		if (!out) return 0;
 		ptr2=out;*ptr2++='\"';
 		wind_strcpy(ptr2,str);
@@ -291,7 +291,7 @@ static char *print_string_ptr(const char *str,printbuffer *p)
 	ptr=str;while ((token=*ptr) && ++len) {if (wind_strchr("\"\\\b\f\n\r\t",token)) len++; else if (token<32) len+=5;ptr++;}
 	
 	if (p)	out=ensure(p,len+3);
-	else	out=(char*)cJSON_MALLOC(len+3);
+	else	out=(char*)cJSON_malloc(len+3);
 	if (!out) return 0;
 
 	ptr2=out;ptr=str;
@@ -363,7 +363,7 @@ char *cJSON_PrintUnformatted(cJSON *item)	{return print_value(item,0,0,0);}
 char *cJSON_PrintBuffered(cJSON *item,int prebuffer,int fmt)
 {
 	printbuffer p;
-	p.buffer=(char*)cJSON_MALLOC(prebuffer);
+	p.buffer=(char*)cJSON_malloc(prebuffer);
 	p.length=prebuffer;
 	p.offset=0;
 	return print_value(item,0,fmt,&p);
@@ -462,7 +462,7 @@ static char *print_array(cJSON *item,int depth,int fmt,printbuffer *p)
 	if (!numentries)
 	{
 		if (p)	out=ensure(p,3);
-		else	out=(char*)cJSON_MALLOC(3);
+		else	out=(char*)cJSON_malloc(3);
 		if (out) wind_strcpy(out,"[]");
 		return out;
 	}
@@ -486,7 +486,7 @@ static char *print_array(cJSON *item,int depth,int fmt,printbuffer *p)
 	else
 	{
 		/* Allocate an array to hold the values for each */
-		entries=(char**)cJSON_MALLOC(numentries*sizeof(char*));
+		entries=(char**)cJSON_malloc(numentries*sizeof(char*));
 		if (!entries) return 0;
 		wind_memset(entries,0,numentries*sizeof(char*));
 		/* Retrieve all the results: */
@@ -500,7 +500,7 @@ static char *print_array(cJSON *item,int depth,int fmt,printbuffer *p)
 		}
 		
 		/* If we didn't fail, try to wind_malloc the output string */
-		if (!fail)	out=(char*)cJSON_MALLOC(len);
+		if (!fail)	out=(char*)cJSON_malloc(len);
 		/* If that fails, we fail. */
 		if (!out) fail=1;
 
@@ -577,7 +577,7 @@ static char *print_object(cJSON *item,int depth,int fmt,printbuffer *p)
 	if (!numentries)
 	{
 		if (p) out=ensure(p,fmt?depth+4:3);
-		else	out=(char*)cJSON_MALLOC(fmt?depth+4:3);
+		else	out=(char*)cJSON_malloc(fmt?depth+4:3);
 		if (!out)	return 0;
 		ptr=out;*ptr++='{';
 		if (fmt) {*ptr++='\n';for (i=0;i<depth;i++) *ptr++='\t';}
@@ -625,9 +625,9 @@ static char *print_object(cJSON *item,int depth,int fmt,printbuffer *p)
 	else
 	{
 		/* Allocate space for the names and the objects */
-		entries=(char**)cJSON_MALLOC(numentries*sizeof(char*));
+		entries=(char**)cJSON_malloc(numentries*sizeof(char*));
 		if (!entries) return 0;
-		names=(char**)cJSON_MALLOC(numentries*sizeof(char*));
+		names=(char**)cJSON_malloc(numentries*sizeof(char*));
 		if (!names) {cJSON_free(entries);return 0;}
 		wind_memset(entries,0,sizeof(char*)*numentries);
 		wind_memset(names,0,sizeof(char*)*numentries);
@@ -643,7 +643,7 @@ static char *print_object(cJSON *item,int depth,int fmt,printbuffer *p)
 		}
 		
 		/* Try to allocate the output string */
-		if (!fail)	out=(char*)cJSON_MALLOC(len);
+		if (!fail)	out=(char*)cJSON_malloc(len);
 		if (!out) fail=1;
 
 		/* Handle failure */

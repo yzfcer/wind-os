@@ -42,7 +42,7 @@ char *cJSONUtils_FindPointerFromObjectTo(cJSON *object,cJSON *target)
 {
 	int type=object->type,c=0;cJSON *obj=0;
 
-	if (object==target) return cJSON_MALLOC("");
+	if (object==target) return cJSON_malloc("");
 
 	for (obj=object->child;obj;obj=obj->next,c++)
 	{
@@ -51,14 +51,14 @@ char *cJSONUtils_FindPointerFromObjectTo(cJSON *object,cJSON *target)
 		{
 			if (type==cJSON_Array)
 			{
-				char *ret=(char*)cJSON_MALLOC(wind_strlen(found)+23);
+				char *ret=(char*)cJSON_malloc(wind_strlen(found)+23);
 				wind_sprintf(ret,"/%d%s",c,found);
 				wind_free(found);
 				return ret;
 			}
 			else if (type==cJSON_Object)
 			{
-				char *ret=(char*)cJSON_MALLOC(wind_strlen(found)+cJSONUtils_PointerEncodedwind_strlen(obj->string)+2);
+				char *ret=(char*)cJSON_malloc(wind_strlen(found)+cJSONUtils_PointerEncodedwind_strlen(obj->string)+2);
 				*ret='/';cJSONUtils_PointerEncodedstrcpy(ret+1,obj->string);
 				wind_strcat(ret,found);
 				wind_free(found);
@@ -104,7 +104,7 @@ static cJSON *cJSONUtils_PatchDetach(cJSON *object,const char *path)
     int which;
 	char *parentptr=0,*childptr=0;cJSON *parent=0,*ret=0;
 
-	parentptr=(char*)cJSON_MALLOC((char*)path);	
+	parentptr=(char*)cJSON_malloc((char*)path);	
     childptr=wind_strrchr(parentptr,'/');	
     if (childptr) 
         *childptr++=0;
@@ -197,7 +197,7 @@ static int cJSONUtils_ApplyPatch(cJSON *object,cJSON *patch)
 		
 	/* Now, just add "value" to "path". */
 
-	parentptr=cJSON_MALLOC(path->valuestring);	childptr=wind_strrchr(parentptr,'/');	
+	parentptr=cJSON_malloc(path->valuestring);	childptr=wind_strrchr(parentptr,'/');	
     if (childptr) 
         *childptr++=0;
 	parent=cJSONUtils_GetPointer(object,parentptr);
@@ -248,7 +248,7 @@ static void cJSONUtils_GeneratePatch(cJSON *patches,const char *op,const char *p
 	cJSON_AddItemToObject(patch,"op",cJSON_CreateString(op));
 	if (suffix)
 	{
-		char *newpath=(char*)cJSON_MALLOC(wind_strlen(path)+cJSONUtils_PointerEncodedwind_strlen(suffix)+2);
+		char *newpath=(char*)cJSON_malloc(wind_strlen(path)+cJSONUtils_PointerEncodedwind_strlen(suffix)+2);
 		cJSONUtils_PointerEncodedstrcpy(newpath+wind_sprintf(newpath,"%s/",path),suffix);
 		cJSON_AddItemToObject(patch,"path",cJSON_CreateString(newpath));
 		wind_free(newpath);
@@ -278,7 +278,7 @@ static void cJSONUtils_CompareToPatch(cJSON *patches,const char *path,cJSON *fro
 
 	case cJSON_Array:
 	{
-		int c;char *newpath=(char*)cJSON_MALLOC(wind_strlen(path)+23);	/* Allow space for 64bit int. */
+		int c;char *newpath=(char*)cJSON_malloc(wind_strlen(path)+23);	/* Allow space for 64bit int. */
 		for (c=0,from=from->child,to=to->child;from && to;from=from->next,to=to->next,c++){
 										wind_sprintf(newpath,"%s/%d",path,c);	cJSONUtils_CompareToPatch(patches,newpath,from,to);
 		}
@@ -300,7 +300,7 @@ static void cJSONUtils_CompareToPatch(cJSON *patches,const char *path,cJSON *fro
 			int diff=(!a)?1:(!b)?-1:cJSONUtils_strcasecmp(a->string,b->string);
 			if (!diff)
 			{
-				char *newpath=(char*)cJSON_MALLOC(wind_strlen(path)+cJSONUtils_PointerEncodedwind_strlen(a->string)+2);
+				char *newpath=(char*)cJSON_malloc(wind_strlen(path)+cJSONUtils_PointerEncodedwind_strlen(a->string)+2);
 				cJSONUtils_PointerEncodedstrcpy(newpath+wind_sprintf(newpath,"%s/",path),a->string);
 				cJSONUtils_CompareToPatch(patches,newpath,a,b);
 				wind_free(newpath);
