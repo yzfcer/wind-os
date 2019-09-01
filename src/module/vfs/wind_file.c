@@ -188,7 +188,8 @@ static w_err_t wind_file_destroy(w_file_s *file)
 {
     WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
     wind_disable_switch();
-    wind_obj_deinit(&file->obj,WIND_FILE_MAGIC,&filelist);
+    if(file->obj.magic == WIND_FILE_MAGIC)
+        wind_obj_deinit(&file->obj,WIND_FILE_MAGIC,&filelist);
     wind_enable_switch();
     
     if(file->fullpath != W_NULL)

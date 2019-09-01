@@ -153,7 +153,13 @@ static w_err_t lfs_search_file(w_listfs_s *lfs,w_listfile_s *file,const char *pa
         //读取根目录文件信息
         err = fileinfo_read(finfo,lfs->blkdev,lfs->lfs_info.root_addr);
         WIND_ASSERT_BREAK(err == W_ERR_OK,err,"read root failed");
-        WIND_CHECK_BREAK(segcnt != 1,W_ERR_OK);
+        if(segcnt == 1)
+        {
+            wind_memcpy(&file->info,finfo,sizeof(lfile_info_s));
+            err = W_ERR_OK;
+            break;
+        }
+        //WIND_CHECK_BREAK(segcnt != 1,W_ERR_OK);
 
         //从根目录开始搜索子文件
         err = W_ERR_OK;

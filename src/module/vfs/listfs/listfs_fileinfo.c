@@ -90,7 +90,7 @@ w_err_t fileinfo_read(lfile_info_s *info,w_blkdev_s *blkdev,w_addr_t addr)
     lfile_info_s *tmpinfo;
     WIND_ASSERT_RETURN(info != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(addr != 0,W_ERR_INVALID);
+    WIND_CHECK_RETURN(addr != 0,W_ERR_INVALID);
 
     do
     {
