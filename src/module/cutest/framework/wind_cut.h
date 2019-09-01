@@ -90,12 +90,12 @@
             {FAIL_EXPECT_OUT(x,y,"==");test_suite_err(__LINE__);}\
             }while(0)
 
+#define FUNC_EMPTY {return W_ERR_OK;}
+#define SUITE_SETUP(testsuite)  static w_err_t suite_setup_##testsuite(void)
+#define SUITE_TEARDOWN(testsuite) static w_err_t suite_teardown_##testsuite(void)
 
-#define SUITE_SETUP(testsuite)  static void suite_setup_##testsuite(void)
-#define SUITE_TEARDOWN(testsuite) static void suite_teardown_##testsuite(void)
-
-#define CASE_SETUP(testcase) static void case_setup_##testcase(void)
-#define CASE_TEARDOWN(testcase) static void case_teardown_##testcase(void)
+#define CASE_SETUP(testcase) static w_err_t case_setup_##testcase(void)
+#define CASE_TEARDOWN(testcase) static w_err_t case_teardown_##testcase(void)
 #define CASE_FUNC(testcase) static void case_func_##testcase(void)
 
 #define TEST_CASES_START(testsuite) static w_test_case_s test_cases_##testsuite[] = {

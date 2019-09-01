@@ -52,16 +52,8 @@ WIND_POOL(testmsg_pool,4,sizeof(test_msg_s));
 
 /********************************************全局函数定义**********************************************/
 
-CASE_SETUP(init)
-{
-
-}
-
-CASE_TEARDOWN(init)
-{
-
-}
-
+CASE_SETUP(init) FUNC_EMPTY
+CASE_TEARDOWN(init) FUNC_EMPTY
 CASE_FUNC(init)
 {
     w_err_t err;
@@ -89,16 +81,8 @@ CASE_FUNC(init)
     EXPECT_EQ(test_mb.obj.magic,(~WIND_MSGBOX_MAGIC));
 }
 
-CASE_SETUP(info)
-{
-
-}
-
-CASE_TEARDOWN(info)
-{
-
-}
-
+CASE_SETUP(info) FUNC_EMPTY
+CASE_TEARDOWN(info) FUNC_EMPTY
 CASE_FUNC(info)
 {
     w_err_t err;
@@ -116,16 +100,8 @@ CASE_FUNC(info)
     EXPECT_EQ(W_ERR_OK,err);
 }
 
-CASE_SETUP(func)
-{
-    
-}
-
-CASE_TEARDOWN(func)
-{
-
-}
-
+CASE_SETUP(func) FUNC_EMPTY
+CASE_TEARDOWN(func) FUNC_EMPTY
 CASE_FUNC(func)
 {
     w_err_t err;
@@ -153,16 +129,8 @@ CASE_FUNC(func)
     EXPECT_EQ(W_ERR_OK,err);
 }
 
-CASE_SETUP(multthread)
-{
-    
-}
-
-CASE_TEARDOWN(multthread)
-{
-
-}
-
+CASE_SETUP(multthread) FUNC_EMPTY
+CASE_TEARDOWN(multthread) FUNC_EMPTY
 CASE_FUNC(multthread)
 {
 
@@ -170,11 +138,13 @@ CASE_FUNC(multthread)
 SUITE_SETUP(msgbox)
 {
     wind_pool_create("testmsg_pool",testmsg_pool,sizeof(testmsg_pool),sizeof(test_msg_s));
+    return W_ERR_OK;
 }
 
 SUITE_TEARDOWN(msgbox)
 {
     wind_pool_destroy(testmsg_pool);
+    return W_ERR_OK;
 }
 
 

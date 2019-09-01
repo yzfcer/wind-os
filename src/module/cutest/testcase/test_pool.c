@@ -36,11 +36,13 @@ void *testblk[TNUM+1];
 CASE_SETUP(info)
 {
     wind_pool_create("test_pool",test_pool,sizeof(test_pool),TSIZE);
+    return W_ERR_OK;
 }
 
 CASE_TEARDOWN(info)
 {
     wind_pool_destroy(test_pool);
+    return W_ERR_OK;
 }
 
 CASE_FUNC(info)
@@ -62,6 +64,7 @@ CASE_SETUP(alloc)
     //wind_pool_print_list();
     for(i = 0;i < TNUM+1;i ++)
         testblk[i] = 0;
+    return W_ERR_OK;
 }
 
 
@@ -71,6 +74,7 @@ CASE_TEARDOWN(alloc)
     wind_pool_destroy(test_pool);
     for(i = 0;i < TNUM+1;i ++)
         testblk[i] = 0;
+    return W_ERR_OK;
 }
 
 CASE_FUNC(alloc)
@@ -106,9 +110,8 @@ CASE_FUNC(alloc)
 }
 
 
-SUITE_SETUP(pool){}
-SUITE_TEARDOWN(pool){}
-
+SUITE_SETUP(pool) FUNC_EMPTY
+SUITE_TEARDOWN(pool) FUNC_EMPTY
 
 
 TEST_CASES_START(pool)

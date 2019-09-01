@@ -45,16 +45,8 @@ w_uint8_t queuebuf[128];
 /********************************************全局函数定义**********************************************/
 
 
-CASE_SETUP(queueinfo)
-{
-
-}
-
-CASE_TEARDOWN(queueinfo)
-{
-
-}
-
+CASE_SETUP(queueinfo) FUNC_EMPTY
+CASE_TEARDOWN(queueinfo) FUNC_EMPTY
 CASE_FUNC(queueinfo)
 {
     w_err_t err;
@@ -73,16 +65,8 @@ CASE_FUNC(queueinfo)
 
 }
 
-CASE_SETUP(queuefunc)
-{
-
-}
-
-CASE_TEARDOWN(queuefunc)
-{
-
-}
-
+CASE_SETUP(queuefunc) FUNC_EMPTY
+CASE_TEARDOWN(queuefunc) FUNC_EMPTY
 CASE_FUNC(queuefunc)
 {
     w_err_t err;
@@ -115,16 +99,8 @@ CASE_FUNC(queuefunc)
 
 
 
-SUITE_SETUP(queue)
-{
-
-}
-
-SUITE_TEARDOWN(queue)
-{
-
-}
-
+SUITE_SETUP(queue) FUNC_EMPTY
+SUITE_TEARDOWN(queue) FUNC_EMPTY
 
 TEST_CASES_START(queue)
 TEST_CASE(queueinfo)

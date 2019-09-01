@@ -91,6 +91,7 @@ CASE_SETUP(create)
     w_err_t err;
     err = lfs_init();
     EXPECT_EQ(err,W_ERR_OK);
+    return W_ERR_OK;
 }
 
 
@@ -99,6 +100,7 @@ CASE_TEARDOWN(create)
     w_err_t err;
     err = lfs_deinit();
     EXPECT_EQ(err,W_ERR_OK);
+    return W_ERR_OK;
 }
 
 CASE_FUNC(create)
@@ -146,6 +148,7 @@ CASE_SETUP(readdir)
     w_err_t err;
     err = lfs_init();
     EXPECT_EQ(err,W_ERR_OK);
+    return W_ERR_OK;
 }
 
 
@@ -157,7 +160,7 @@ CASE_TEARDOWN(readdir)
 
     err = lfs_deinit();
     EXPECT_EQ(err,W_ERR_OK);
-
+    return W_ERR_OK;
 }
 
 CASE_FUNC(readdir)
@@ -221,6 +224,7 @@ CASE_SETUP(readwrite)
     w_err_t err;
     err = lfs_init();
     EXPECT_EQ(err,W_ERR_OK);
+    return W_ERR_OK;
 }
 
 CASE_TEARDOWN(readwrite)
@@ -265,6 +269,7 @@ CASE_SETUP(format)
     w_err_t err;
     err = lfs_init();
     EXPECT_EQ(err,W_ERR_OK);
+    return W_ERR_OK;
 }
 
 CASE_TEARDOWN(format)
@@ -272,6 +277,7 @@ CASE_TEARDOWN(format)
     w_err_t err;
     err = lfs_deinit();
     EXPECT_EQ(err,W_ERR_OK);
+    return W_ERR_OK;
 }
 
 CASE_FUNC(format)
@@ -285,6 +291,7 @@ SUITE_SETUP(listfs)
     testblk_reg();
     err = lfs_init();
     EXPECT_EQ(err,W_ERR_OK);
+    return W_ERR_OK;
 }
 
 SUITE_TEARDOWN(listfs)
@@ -293,6 +300,7 @@ SUITE_TEARDOWN(listfs)
     err = lfs_deinit();
     EXPECT_EQ(err,W_ERR_OK);
     testblk_unreg();
+    return W_ERR_OK;
 }
 
 

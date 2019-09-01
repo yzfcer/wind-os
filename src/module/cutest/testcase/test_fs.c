@@ -28,17 +28,8 @@
 extern "C" {
 #endif // #ifdef __cplusplus
 
-CASE_SETUP(create)
-{
-
-}
-
-
-CASE_TEARDOWN(create)
-{
-
-}
-
+CASE_SETUP(create) FUNC_EMPTY
+CASE_TEARDOWN(create) FUNC_EMPTY
 CASE_FUNC(create)
 {
     w_err_t err;
@@ -113,17 +104,8 @@ CASE_FUNC(create)
 
 }
 
-CASE_SETUP(exist)
-{
-    
-}
-
-
-CASE_TEARDOWN(exist)
-{
-
-}
-
+CASE_SETUP(exist) FUNC_EMPTY
+CASE_TEARDOWN(exist) FUNC_EMPTY
 CASE_FUNC(exist)
 {
     w_bool_t exist;
@@ -145,15 +127,8 @@ CASE_FUNC(exist)
 }
 
 
-CASE_SETUP(readwrite)
-{
-}
-
-CASE_TEARDOWN(readwrite)
-{
-    
-}
-
+CASE_SETUP(readwrite) FUNC_EMPTY
+CASE_TEARDOWN(readwrite) FUNC_EMPTY
 static w_uint8_t buff[32];
 CASE_FUNC(readwrite)
 {
@@ -179,7 +154,6 @@ CASE_FUNC(readwrite)
     EXPECT_EQ(err,W_ERR_OK);
     err = wind_fremove("/test.txt");
     EXPECT_EQ(err,W_ERR_OK);
-    
 }
 
 
@@ -201,6 +175,7 @@ CASE_SETUP(readdir)
     file = wind_fopen("/readdir_test/testdir/",FMODE_CRT);
     EXPECT_NE(file,W_NULL);
     wind_fclose(file);
+    return W_ERR_OK;
     
 }
 
@@ -209,6 +184,7 @@ CASE_TEARDOWN(readdir)
     w_err_t err;
     err = wind_fremove("/readdir_test/");
     EXPECT_EQ(err,W_ERR_OK);
+    return W_ERR_OK;
 }
 
 CASE_FUNC(readdir)
@@ -241,18 +217,9 @@ CASE_FUNC(readdir)
     EXPECT_EQ(err,W_ERR_OK);
 }
 
-SUITE_SETUP(fs)
-{
-    w_vfs_s *fs;
-    fs = wind_vfs_get("treefs");
-    if(fs != W_NULL)
-        wind_vfs_format(fs);
-}
+SUITE_SETUP(fs) FUNC_EMPTY
+SUITE_TEARDOWN(fs) FUNC_EMPTY
 
-SUITE_TEARDOWN(fs)
-{
-
-}
 
 
 

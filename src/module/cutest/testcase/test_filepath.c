@@ -51,19 +51,21 @@ CASE_SETUP(current)
         bak_path = (char *)W_NULL;
     }
     path = wind_filepath_get_current();
-    WIND_ASSERT_RETURN_VOID(path != W_NULL);
+    WIND_ASSERT_RETURN(path != W_NULL,W_ERR_FAIL);
     bak_path = wind_salloc(path,HP_ALLOCID_VFS);
-    WIND_ASSERT_RETURN_VOID(bak_path != W_NULL);
+    WIND_ASSERT_RETURN(bak_path != W_NULL,W_ERR_FAIL);
+    return W_ERR_OK;
 }
 
 CASE_TEARDOWN(current)
 {
     w_err_t err;
-    WIND_ASSERT_RETURN_VOID(bak_path != W_NULL);
+    WIND_ASSERT_RETURN(bak_path != W_NULL,W_ERR_FAIL);
     err = wind_filepath_set_current(bak_path);
-    WIND_ASSERT_RETURN_VOID(err == W_ERR_OK);
+    WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_FAIL);
     wind_free(bak_path);
     bak_path = (char*)W_NULL;
+    return W_ERR_OK;
 }
 
 CASE_FUNC(current)
@@ -92,14 +94,8 @@ CASE_FUNC(current)
     
 }
 
-CASE_SETUP(valid)
-{
-}
-
-CASE_TEARDOWN(valid)
-{
-}
-
+CASE_SETUP(valid) FUNC_EMPTY
+CASE_TEARDOWN(valid) FUNC_EMPTY
 CASE_FUNC(valid)
 {
     w_err_t err;
@@ -130,14 +126,8 @@ CASE_FUNC(valid)
 
 }
 
-CASE_SETUP(parent)
-{
-}
-
-CASE_TEARDOWN(parent)
-{
-}
-
+CASE_SETUP(parent) FUNC_EMPTY
+CASE_TEARDOWN(parent) FUNC_EMPTY
 CASE_FUNC(parent)
 {
     char *newpath;
@@ -163,14 +153,8 @@ CASE_FUNC(parent)
 }
 
 
-CASE_SETUP(filename)
-{
-}
-
-CASE_TEARDOWN(filename)
-{
-}
-
+CASE_SETUP(filename) FUNC_EMPTY
+CASE_TEARDOWN(filename) FUNC_EMPTY
 CASE_FUNC(filename)
 {
     char *newpath;
@@ -202,14 +186,8 @@ CASE_FUNC(filename)
     
 }
 
-CASE_SETUP(isdir)
-{
-}
-
-CASE_TEARDOWN(isdir)
-{
-}
-
+CASE_SETUP(isdir) FUNC_EMPTY
+CASE_TEARDOWN(isdir) FUNC_EMPTY
 CASE_FUNC(isdir)
 {
     w_bool_t isdir;
@@ -230,23 +208,10 @@ CASE_FUNC(isdir)
 }
 
 
-SUITE_SETUP(filepath)
-{
-    
-}
-
-SUITE_TEARDOWN(filepath)
-{
-
-}
-
-CASE_SETUP(split)
-{
-}
-
-CASE_TEARDOWN(split)
-{
-}
+SUITE_SETUP(filepath) FUNC_EMPTY
+SUITE_TEARDOWN(filepath) FUNC_EMPTY
+CASE_SETUP(split) FUNC_EMPTY
+CASE_TEARDOWN(split) FUNC_EMPTY
 
 CASE_FUNC(split)
 {

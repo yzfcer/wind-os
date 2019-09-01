@@ -27,17 +27,8 @@
 extern "C" {
 #endif // #ifdef __cplusplus
 
-CASE_SETUP(create)
-{
-
-}
-
-
-CASE_TEARDOWN(create)
-{
-
-}
-
+CASE_SETUP(create) FUNC_EMPTY
+CASE_TEARDOWN(create) FUNC_EMPTY
 CASE_FUNC(create)
 {
     w_err_t err;
@@ -66,16 +57,9 @@ CASE_FUNC(create)
 }
 
 
-CASE_SETUP(readwrite)
-{
-}
-
-CASE_TEARDOWN(readwrite)
-{
-    
-}
-
 static w_uint8_t buff[32];
+CASE_SETUP(readwrite) FUNC_EMPTY
+CASE_TEARDOWN(readwrite) FUNC_EMPTY
 CASE_FUNC(readwrite)
 {
     w_int32_t len;
@@ -110,15 +94,12 @@ SUITE_SETUP(treefs)
 {
     w_treefs_s *tfs;
     tfs = wind_treefs_get("tfs0");
-    WIND_ASSERT_RETURN_VOID(tfs != W_NULL);
+    WIND_ASSERT_RETURN(tfs != W_NULL,W_ERR_FAIL);
     wind_treefs_format(tfs);
+    return W_ERR_OK;
 }
 
-SUITE_TEARDOWN(treefs)
-{
-
-}
-
+SUITE_TEARDOWN(treefs) FUNC_EMPTY
 
 
 TEST_CASES_START(treefs)

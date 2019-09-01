@@ -52,16 +52,8 @@ static void softirq_test2(void)
 
 
 
-CASE_SETUP(func)
-{
-
-}
-
-CASE_TEARDOWN(func)
-{
-
-}
-
+CASE_SETUP(func) FUNC_EMPTY
+CASE_TEARDOWN(func) FUNC_EMPTY
 CASE_FUNC(func)
 {
     wind_softirq_reg(WIND_SOFTINT_MAX_NUM-1,softirq_test1);
@@ -83,16 +75,8 @@ CASE_FUNC(func)
 
 
 
-SUITE_SETUP(softirq)
-{
-
-}
-
-SUITE_TEARDOWN(softirq)
-{
-
-}
-
+SUITE_SETUP(softirq) FUNC_EMPTY
+SUITE_TEARDOWN(softirq) FUNC_EMPTY
 
 TEST_CASES_START(softirq)
 TEST_CASE(func)

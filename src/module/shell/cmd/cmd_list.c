@@ -38,6 +38,7 @@
 #include "wind_watchdog.h"
 #include "wind_timer.h"
 #include "wind_fs.h"
+#include "wind_conv.h"
 #include "wind_module.h"
 
 #if (CMD_LIST_SUPPORT)

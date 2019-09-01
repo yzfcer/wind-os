@@ -54,18 +54,8 @@ typedef struct cJSON {
 	char *string;				/* The item's name string, if this item is the child of, or is in the list of subitems of an object. */
 } cJSON;
 
-#if 0
-typedef struct cJSON_Hooks 
-{
-      void *(*malloc_fn)(int sz);
-      void (*free_fn)(void *ptr);
-} cJSON_Hooks;
 
-/* Supply malloc, realloc and free functions to cJSON */
-//extern void cJSON_InitHooks(cJSON_Hooks* hooks);
-#endif
 void *cJSON_malloc(unsigned sz);
-
 void cJSON_free(void *ptr);
 
 

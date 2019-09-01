@@ -49,6 +49,7 @@ CASE_SETUP(func)
                      sizeof(test_tree),sizeof(test_tree_s));
     for(i = 0;i < TREENUM+1;i ++)
         trees[i] = 0;
+    return W_ERR_OK;
 }
 
 
@@ -58,6 +59,7 @@ CASE_TEARDOWN(func)
     wind_pool_destroy(test_tree);
     for(i = 0;i < TREENUM+1;i ++)
         trees[i] = 0;
+    return W_ERR_OK;
 }
 
 void set_layer(w_tree_s *tree)
@@ -118,9 +120,8 @@ CASE_FUNC(func)
 }
 
 
-SUITE_SETUP(tree){}
-SUITE_TEARDOWN(tree){}
-
+SUITE_SETUP(tree) FUNC_EMPTY
+SUITE_TEARDOWN(tree) FUNC_EMPTY
 
 
 TEST_CASES_START(tree)

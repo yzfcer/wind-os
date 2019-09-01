@@ -49,16 +49,8 @@ static void diagnose_test2(void)
 
 
 
-CASE_SETUP(func)
-{
-
-}
-
-CASE_TEARDOWN(func)
-{
-
-}
-
+CASE_SETUP(func) FUNC_EMPTY
+CASE_TEARDOWN(func) FUNC_EMPTY
 CASE_FUNC(func)
 {
     w_err_t err;
@@ -68,16 +60,8 @@ CASE_FUNC(func)
 
 
 
-SUITE_SETUP(diagnose)
-{
-
-}
-
-SUITE_TEARDOWN(diagnose)
-{
-
-}
-
+SUITE_SETUP(diagnose) FUNC_EMPTY
+SUITE_TEARDOWN(diagnose) FUNC_EMPTY
 
 TEST_CASES_START(diagnose)
 TEST_CASE(func)

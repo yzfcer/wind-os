@@ -56,16 +56,8 @@ static void ev_callback2(w_event_s *event,void *arg)
     event_value += 20;
 }
 
-CASE_SETUP(init)
-{
-
-}
-
-CASE_TEARDOWN(init)
-{
-
-}
-
+CASE_SETUP(init) FUNC_EMPTY
+CASE_TEARDOWN(init) FUNC_EMPTY
 CASE_FUNC(init)
 {
     w_err_t err;
@@ -94,16 +86,8 @@ CASE_FUNC(init)
 }
 
 
-CASE_SETUP(info)
-{
-
-}
-
-CASE_TEARDOWN(info)
-{
-
-}
-
+CASE_SETUP(info) FUNC_EMPTY
+CASE_TEARDOWN(info) FUNC_EMPTY
 CASE_FUNC(info)
 {
     w_err_t err;
@@ -123,16 +107,8 @@ CASE_FUNC(info)
 
 }
 
-CASE_SETUP(func)
-{
-
-}
-
-CASE_TEARDOWN(func)
-{
-
-}
-
+CASE_SETUP(func) FUNC_EMPTY
+CASE_TEARDOWN(func) FUNC_EMPTY
 CASE_FUNC(func)
 {
     w_err_t err;
@@ -161,11 +137,7 @@ CASE_FUNC(func)
 
 }
 
-CASE_SETUP(multi)
-{
-    
-}
-
+CASE_SETUP(multi) FUNC_EMPTY
 CASE_TEARDOWN(multi)
 {
     w_err_t err;
@@ -206,25 +178,17 @@ CASE_TEARDOWN(multi)
     EXPECT_EQ(W_ERR_OK,err);
     err = wind_event_destroy(events[1]);
     EXPECT_EQ(W_ERR_OK,err);
+    return W_ERR_OK;
 }
 
-CASE_FUNC(multi)
-{
-
-
-}
-
-
-SUITE_SETUP(event)
+CASE_FUNC(multi) 
 {
 
 }
 
-SUITE_TEARDOWN(event)
-{
 
-}
-
+SUITE_SETUP(event) FUNC_EMPTY
+SUITE_TEARDOWN(event) FUNC_EMPTY
 TEST_CASES_START(event)
 TEST_CASE(init)
 TEST_CASE(info)

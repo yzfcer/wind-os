@@ -44,16 +44,8 @@ w_sem_s test_sm;
 
 /********************************************全局函数定义**********************************************/
 
-CASE_SETUP(init)
-{
-
-}
-
-CASE_TEARDOWN(init)
-{
-
-}
-
+CASE_SETUP(init) FUNC_EMPTY
+CASE_TEARDOWN(init) FUNC_EMPTY
 CASE_FUNC(init)
 {
     w_err_t err;
@@ -79,16 +71,8 @@ CASE_FUNC(init)
     EXPECT_EQ(test_sm.obj.magic,(~WIND_SEM_MAGIC));
 }
 
-CASE_SETUP(info)
-{
-
-}
-
-CASE_TEARDOWN(info)
-{
-
-}
-
+CASE_SETUP(info) FUNC_EMPTY
+CASE_TEARDOWN(info) FUNC_EMPTY
 CASE_FUNC(info)
 {
     w_err_t err;
@@ -105,16 +89,8 @@ CASE_FUNC(info)
 
 }
 
-CASE_SETUP(func)
-{
-
-}
-
-CASE_TEARDOWN(func)
-{
-
-}
-
+CASE_SETUP(func) FUNC_EMPTY
+CASE_TEARDOWN(func) FUNC_EMPTY
 CASE_FUNC(func)
 {
     w_int32_t i;
@@ -142,16 +118,8 @@ CASE_FUNC(func)
 
 }
 
-CASE_SETUP(multi)
-{
-    
-}
-
-CASE_TEARDOWN(multi)
-{
-
-}
-
+CASE_SETUP(multi) FUNC_EMPTY
+CASE_TEARDOWN(multi) FUNC_EMPTY
 CASE_FUNC(multi)
 {
     w_int32_t i;
@@ -170,16 +138,8 @@ CASE_FUNC(multi)
 }
 
 
-SUITE_SETUP(sem)
-{
-
-}
-
-SUITE_TEARDOWN(sem)
-{
-
-}
-
+SUITE_SETUP(sem) FUNC_EMPTY
+SUITE_TEARDOWN(sem) FUNC_EMPTY
 
 TEST_CASES_START(sem)
 TEST_CASE(init)
