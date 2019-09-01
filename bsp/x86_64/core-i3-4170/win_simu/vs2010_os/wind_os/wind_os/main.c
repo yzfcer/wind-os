@@ -1,4 +1,4 @@
-#include <string.h>
+#include <wind_string.h>
 #include <Windows.h>
 char *argv_bak = NULL;
 extern void wind_os_prelaunch();
@@ -10,7 +10,7 @@ static void save_argv(int argc,char *argv[])
     len = strlen(argv[0]);
     argv_bak = (char *)malloc(len+1);
     if(argv_bak != NULL)
-        strcpy(argv_bak,argv[0]);
+        wind_strcpy(argv_bak,argv[0]);
 }
 
 int main(int argc,char *argv[])

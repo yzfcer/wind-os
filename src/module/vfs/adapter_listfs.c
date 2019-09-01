@@ -53,7 +53,7 @@ static void* listfs_op_init(w_vfs_s *vfs)
         lfs = (w_listfs_s *)vfs->fsobj;
         lfs->blkdev = vfs->blkdev;
         err = listfs_init(lfs,vfs->blkdev);
-        WIND_ASSERT_BREAK(err != W_ERR_OK,W_NULL,"listfs init failed");
+        WIND_ASSERT_BREAK(err != W_ERR_OK,err,"listfs init failed");
     }while(0);
     
     if(err != W_ERR_OK)
@@ -101,7 +101,7 @@ static w_err_t listfs_op_format(w_vfs_s *vfs)
         lfs = (w_listfs_s *)vfs->fsobj;
         lfs->blkdev = vfs->blkdev;
         err = listfs_format(lfs,vfs->blkdev);
-        WIND_ASSERT_BREAK(err != W_ERR_OK,W_NULL,"listfs init failed");
+        WIND_ASSERT_BREAK(err != W_ERR_OK,err,"listfs init failed");
     }while(0);
     if(err != W_ERR_OK)
     {
@@ -175,7 +175,7 @@ static w_err_t listfs_op_readdir(w_file_s* dir,w_file_s* sub)
 
         len = wind_strlen(dir->vfs->mount_path);
         WIND_ASSERT_BREAK(len >= 1,W_ERR_INVALID,"get mount path lenth failed");
-        sub->realpath = sub->fullpath[len - 1];
+        sub->realpath = &sub->fullpath[len - 1];
         
         sub->vfs = dir->vfs;
         

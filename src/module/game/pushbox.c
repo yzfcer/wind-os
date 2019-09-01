@@ -96,8 +96,8 @@ int push_box()
             }
         }
     } 
-    push=getch();//与getchar()有区别的是：getchar()输入一个字符后需要回车来进行下一个字符的输入，
-    //比较麻烦 ，getch()则不需要回车就能连续输入多个字符。 
+    push=_getch();//与getchar()有区别的是：getchar()输入一个字符后需要回车来进行下一个字符的输入，
+    //比较麻烦 ，_getch()则不需要回车就能连续输入多个字符。 
     if(push == 0x1B)
         return 0;
     switch(push)

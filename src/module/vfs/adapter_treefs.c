@@ -129,7 +129,7 @@ static w_err_t treefs_op_readdir(w_file_s* dir,w_file_s* sub)
 
         len = wind_strlen(dir->vfs->mount_path);
         WIND_ASSERT_BREAK(len >= 1,W_ERR_INVALID,"get mount path lenth failed");
-        sub->realpath = sub->fullpath[len - 1];
+        sub->realpath = &sub->fullpath[len - 1];
         sub->vfs = dir->vfs;
         
     }while(0);

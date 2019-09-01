@@ -380,7 +380,7 @@ static void ShowReplay()
             break;
         }
         Print();//打印棋盘
-        input=getch();//等待键盘按下一个字符
+        input=_getch();//等待键盘按下一个字符
         if(input==27)//如果是ESC则退出回放
         {
             return;
@@ -392,7 +392,7 @@ static void ShowReplay()
         }
         else if(input==0xE0)//如果按下的是方向键，会填充两次输入，第一次为0xE0表示按下的是控制键
         {
-            input=getch();//获得第二次输入信息
+            input=_getch();//获得第二次输入信息
             switch(input)//判断方向键方向并移动光标位置
             {
             case 0x4B:
@@ -441,7 +441,7 @@ static int RunGame()//进行整个对局，返回赢家信息(虽然有用上)
     while(1){//开始无限回合的死循环，直到出现胜利跳出
         Putable=p[Cx][Cy]==0;
         Print();//打印棋盘
-        input=getch();//等待键盘按下一个字符
+        input=_getch();//等待键盘按下一个字符
         if(input==0x1B) //如果是ESC则退出
             return 0;
         if(input==' ')//如果是空格则悔棋
@@ -461,10 +461,10 @@ static int RunGame()//进行整个对局，返回赢家信息(虽然有用上)
                 {
                     showText="黑方胜利!按R查看回放,按其他键重新开局";
                     Print();
-                    input=getch();
+                    input=_getch();
                     if(input==0xE0)
                     {
-                        getch();
+                        _getch();
                     }
                     else if(input=='R'||input=='r')
                     {
@@ -476,10 +476,10 @@ static int RunGame()//进行整个对局，返回赢家信息(虽然有用上)
                 {
                     showText="白方胜利!按R查看回放,按其他键重新开局";
                     Print();
-                    input=getch();
+                    input=_getch();
                     if(input==0xE0)
                     {
-                        getch();
+                        _getch();
                     }
                     else if(input=='R'||input=='r')
                     {
@@ -490,10 +490,10 @@ static int RunGame()//进行整个对局，返回赢家信息(虽然有用上)
                 {
                     showText="平局!按R查看回放,按其他键重新开局";
                     Print();
-                    input=getch();
+                    input=_getch();
                     if(input==0xE0)
                     {
-                        getch();
+                        _getch();
                     }
                     else if(input=='R'||input=='r')
                     {
@@ -506,7 +506,7 @@ static int RunGame()//进行整个对局，返回赢家信息(虽然有用上)
         }
         else if(input==0xE0)//如果按下的是方向键，会填充两次输入，第一次为0xE0表示按下的是控制键
         {
-            input=getch();//获得第二次输入信息
+            input=_getch();//获得第二次输入信息
             switch(input)//判断方向键方向并移动光标位置
             {
             case 0x4B://

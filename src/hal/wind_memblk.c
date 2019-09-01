@@ -45,7 +45,7 @@ static w_err_t   memblk_erase(w_blkdev_s *blkdev,w_addr_t addr,w_int32_t blkcnt)
 {
     w_uint32_t start;
     w_int32_t size;
-    w_uint8_t *memblk = blkdev->private;
+    w_uint8_t *memblk = blkdev->user_arg;
     start = (w_uint32_t)((blkdev->blkaddr + addr) * blkdev->blksize);
     size = blkcnt * blkdev->blksize;
     wind_memset(&memblk[start],0,size);
@@ -56,7 +56,7 @@ static w_err_t   memblk_eraseall(w_blkdev_s *blkdev)
 {
     w_uint32_t start;
     w_int32_t size;
-    w_uint8_t *memblk = blkdev->private;
+    w_uint8_t *memblk = blkdev->user_arg;
     start = (w_uint32_t)((blkdev->blkaddr) * blkdev->blksize);
     size = blkdev->blkcnt * blkdev->blksize;
     wind_memset(&memblk[start],0,size);
@@ -68,7 +68,7 @@ static w_int32_t memblk_read(w_blkdev_s *blkdev,w_addr_t addr,w_uint8_t *buf,w_i
 {
     w_uint32_t start;
     w_int32_t size;
-    w_uint8_t *memblk = blkdev->private;
+    w_uint8_t *memblk = blkdev->user_arg;
     start = (w_uint32_t)((blkdev->blkaddr + addr) * blkdev->blksize);
     size = blkcnt * blkdev->blksize;
     //wind_notice("memblk_read:0x%08x,%d",start,size);
@@ -80,7 +80,7 @@ static w_int32_t memblk_write(w_blkdev_s *blkdev,w_addr_t addr,w_uint8_t *buf,w_
 {
     w_uint32_t start;
     w_int32_t size;
-    w_uint8_t *memblk = blkdev->private;
+    w_uint8_t *memblk = blkdev->user_arg;
     start = (w_uint32_t)((blkdev->blkaddr + addr) * blkdev->blksize);
     size = blkcnt * blkdev->blksize;
     //wind_notice("memblk_write:0x%08x,%d",start,size);
@@ -126,7 +126,7 @@ w_err_t wind_memblk_create(w_blkdev_s  *blkdev,    char *name,void *mem,w_int32_
     blkdev->blkaddr = 0;
     blkdev->blkcnt = blkcnt;
     blkdev->blksize = blksize;
-    blkdev->private = (void*)mem;
+    blkdev->user_arg = (void*)mem;
     blkdev->ops = &memblk_ops;
     err = wind_blkdev_register(blkdev,1);    
     WIND_ASSERT_RETURN(err == W_ERR_OK, err);

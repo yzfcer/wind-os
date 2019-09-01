@@ -143,12 +143,12 @@ static char* tank_figure[4][3][4]=
  
  
 static int keyboard ()
-{               // kbhit()   getch()  用法可用但是不好用            
+{               // kbhit()   _getch()  用法可用但是不好用            
 /* 
    函数功能:该函数判断在此函数被调用时,某个键是处于UP状态还是处于DOWN状态,及前次调用GetAsyncKeyState函数后,
    是否按过此键.如果返回值的最高位被置位,那么该键处于DOWN状态;如果最低位被置位,那么在前一次调用此函数后,此键被按过,
    否则表示该键没被按过.
-   这里GetAsyncKeyState比 kbhit() + getch() 好用,操作更顺畅.   GetAsyncKeyState的返回值表示两个内容，
+   这里GetAsyncKeyState比 kbhit() + _getch() 好用,操作更顺畅.   GetAsyncKeyState的返回值表示两个内容，
    一个是最高位bit的值，代表这个键是否被按下。一个是最低位bit的值,代表上次调用GetAsyncKeyState后，这个键是否被按下。
    &为与操作，&0x8000就是判断这个返回值的高位字节。如果high-order bit是1,则是按下状态，否则是弹起状态，为0
 */
@@ -576,7 +576,7 @@ void BuildMyTank (Tank* my_tank) //建立我的坦克
 {
 	my_tank->x=15;
    	my_tank->y=38;
-   	my_tank->stop=NULL;
+   	my_tank->stop=0;
    	my_tank->direction=1;
     my_tank->model=0;
     my_tank->color=1;
@@ -1418,7 +1418,7 @@ int tank_main (int argc,char **argv)                               //主函数
 	unsigned int interval[12] = {1,1,1,1,1,1,1,1,1,1,1,1};  //间隔计数器数组，用于控制速度
     hConsoleOutput = GetStdHandle(STD_OUTPUT_HANDLE); // 获取控制台输出句柄
     GetConsoleScreenBufferInfo(hConsoleOutput, &info);
-	srand(time(NULL)); //设置随机数种子(若不设置种子而调用rand会使每次运行的随机数序列一致)随机数序列指:如首次调用rand得到1,第二次得2,第三次3,则此次随机数序列为1,2,3
+	srand(time(0)); //设置随机数种子(若不设置种子而调用rand会使每次运行的随机数序列一致)随机数序列指:如首次调用rand得到1,第二次得2,第三次3,则此次随机数序列为1,2,3
 	HideCursor();                         //隐藏光标
 	system("mode con cols=112 lines=42"); //控制窗口大小
 	Frame ();                             //打印游戏主体框架
