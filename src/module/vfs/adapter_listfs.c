@@ -155,7 +155,7 @@ static w_err_t listfs_op_readdir(w_file_s* dir,w_file_s* sub)
     do
     {
         err = W_ERR_OK;
-        sublfile = (w_listfile_s *)W_NULL;
+        sublfile = (w_listfile_s *)sub->fileobj;
         err = listfile_readdir((w_listfile_s *)dir->fileobj,&sublfile);
         WIND_CHECK_BREAK(err == W_ERR_OK,err);
         WIND_ASSERT_BREAK(sublfile->info.magic == LISTFILE_MAGIC,W_ERR_INVALID,"invalid listfile dound");
