@@ -51,7 +51,7 @@ static w_int32_t bm_alloc_blk(lfs_bitmap_s *bm,w_addr_t *addr,w_int32_t cnt)
         if(bm->blk[i] == 0)
         {
             addr[alloc_cnt] = bm->data_addr + (bm->cur_blkidx*bm->blkdev->blksize) + bm->cur_byteidx;
-            wind_notice("bitmap:alloc addr 0x%08x",addr[alloc_cnt]);
+            wind_debug("bitmap:alloc addr 0x%08x",addr[alloc_cnt]);
             bm->blk[i] = BITMAP_USED;
             bm->cur_byteidx ++;
             alloc_cnt ++;
@@ -72,7 +72,7 @@ static w_int32_t bm_free_blk(lfs_bitmap_s *bm,w_addr_t *addr,w_int32_t cnt)
         byteidx = addr[i] - bm->data_addr - (bm->cur_blkidx*bm->blkdev->blksize);
         if((byteidx >= 0)&&(byteidx < bm->blkdev->blksize))
         {
-            wind_notice("bitmap:free addr 0x%08x",addr[i]);
+            wind_debug("bitmap:free addr 0x%08x",addr[i]);
             addr[i] = 0;
             if(bm->blk[byteidx] == 0)
                 wind_error("bitmap free error");

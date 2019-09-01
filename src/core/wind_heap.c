@@ -316,7 +316,6 @@ void *wind_heap_realloc(w_heap_s* heap, void* ptr, w_uint32_t newsize)
             p = wind_heap_malloc(heap,newsize);
             break;
         }
-        //WIND_CHECK_BREAK(ptr != W_NULL,W_ERR_OK);
         old = ITEM_FROM_PTR(ptr);
         WIND_ASSERT_BREAK(old->magic == WIND_HEAPITEM_MAGIC,W_ERR_INVALID,"invalid pointer");
         WIND_ASSERT_BREAK(IS_F_HEAPITEM_USED(old),W_ERR_INVALID,"memory is NOT alloced");
@@ -563,8 +562,8 @@ w_err_t wind_free(void *ptr)
     }
     wind_debug("wind_free:ptr=0x%x",ptr);
     item = ITEM_FROM_PTR(ptr);
-    if(item->magic != WIND_HEAPITEM_MAGIC)
-        item->magic = item->magic;
+    //if(item->magic != WIND_HEAPITEM_MAGIC)
+    //    item->magic = item->magic;
     WIND_ASSERT_RETURN(item->magic == WIND_HEAPITEM_MAGIC,W_ERR_INVALID);
     WIND_ASSERT_RETURN(IS_F_HEAPITEM_USED(item),W_ERR_INVALID);
     return wind_heap_free(item->heap,ptr);

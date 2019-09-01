@@ -70,9 +70,6 @@ struct __w_blkdev_s
 #define WIND_BLKDEV_DEF(name,devtype,devid,addr,blkcnt,blksize,ops) \
 {{(~WIND_BLKDEV_MAGIC),name,{W_NULL,W_NULL},0,0},devtype,devid,addr,blkcnt,blksize,W_NULL,W_NULL,ops}
 
-//#define WIND_BLKDEV_DEF(name,devid,addr,blkcnt,blksize,ops) \
-//{WIND_BLKDEV_MAGIC,name,devid,addr,blkcnt,blksize,W_FALSE,{W_NULL,W_NULL},W_NULL,ops}
-
 struct __w_blkdev_ops_s
 {
     w_err_t   (*init)(w_blkdev_s *blkdev);
