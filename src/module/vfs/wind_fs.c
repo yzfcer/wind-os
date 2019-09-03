@@ -147,6 +147,7 @@ w_err_t _wind_vfs_mod_init(void)
     
     _wind_fs_mount_init();
     wind_filepath_set_current(FS_CUR_PATH);
+    _wind_vfs_register_fs_cmd();
     return W_ERR_OK;
 }
 

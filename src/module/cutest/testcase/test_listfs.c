@@ -232,6 +232,7 @@ CASE_TEARDOWN(readwrite)
     w_err_t err;
     err = lfs_deinit();
     EXPECT_EQ(err,W_ERR_OK);
+    return W_ERR_OK;
 }
 
 static w_uint8_t buff[32];

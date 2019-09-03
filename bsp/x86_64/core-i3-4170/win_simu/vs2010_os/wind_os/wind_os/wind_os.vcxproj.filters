@@ -506,6 +506,33 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\hal\wind_memblk.c">
       <Filter>os_hal</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\fscmd\cmd_cat.c">
+      <Filter>module_vfs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\fscmd\cmd_cd.c">
+      <Filter>module_vfs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\fscmd\cmd_ls.c">
+      <Filter>module_vfs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\fscmd\cmd_mkdir.c">
+      <Filter>module_vfs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\fscmd\cmd_pwd.c">
+      <Filter>module_vfs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\fscmd\cmd_rm.c">
+      <Filter>module_vfs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\fscmd\cmd_touch.c">
+      <Filter>module_vfs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\fscmd\cmd_write.c">
+      <Filter>module_vfs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\fscmd\fs_cmd_list.c">
+      <Filter>module_vfs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">
