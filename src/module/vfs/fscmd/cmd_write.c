@@ -37,33 +37,36 @@ extern "C" {
 /********************************************内部函数定义*********************************************/
 static w_err_t cmd_write(w_int32_t argc,char **argv)
 {
+    w_err_t err;
     w_file_s *file;
-    char * fullpath;
+    char * fullpath = W_NULL;
     w_int32_t len,filelen;
-    char *curpath = wind_filepath_get_current();
-    if(argc < 3)
-        return W_ERR_INVALID;
-    fullpath = wind_filepath_generate(curpath,argv[1],0);
-    file = wind_fopen(fullpath,FMODE_W | FMODE_CRT);
-    if(file == W_NULL)
+    char *curpath;
+    WIND_ASSERT_RETURN(argc >= 3,W_ERR_INVALID);
+    do
     {
-        wind_printf("open directory or file failed.\r\n",fullpath);
-        wind_filepath_release(fullpath);
-        return W_ERR_NOFILE;
-    }
+        err =W_ERR_OK;
+        curpath = wind_filepath_get_current();
+        fullpath = wind_filepath_generate(curpath,argv[1],0);
+        WIND_ASSERT_BREAK(fullpath,W_ERR_FAIL,"generate full path failed.");
+        file = wind_fopen(fullpath,FMODE_W | FMODE_CRT);
+        WIND_ASSERT_BREAK(file != W_NULL,W_ERR_NOFILE,"open directory or file failed.");
+        len = wind_strlen(argv[2]);
+        filelen = wind_fwrite(file,(w_uint8_t*)argv[2],len);
+        wind_fclose(file);
+       if(filelen == len)
+        {
+            wind_printf("write file OK.\r\n");
+            wind_filepath_release(fullpath);
+            return W_ERR_OK;
+        }
+        wind_printf("write file failed.\r\n");     
+        
+    }while(0);
 
-    len = wind_strlen(argv[2]);
-    filelen = wind_fwrite(file,(w_uint8_t*)argv[2],len);
-    wind_fclose(file);
-    if(filelen == len)
-    {
-        wind_printf("write file OK.\r\n");
+    if(fullpath != W_NULL)
         wind_filepath_release(fullpath);
-        return W_ERR_OK;
-    }
-    wind_printf("write file failed.\r\n");
-    wind_filepath_release(fullpath);
-    return W_ERR_FAIL;
+    return err;
 }
 
 

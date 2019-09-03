@@ -39,42 +39,42 @@ extern "C" {
 /********************************************内部函数定义*********************************************/
 static w_err_t cmd_cat(w_int32_t argc,char **argv)
 {
+    w_err_t err;
     w_file_s *file;
-    char * fullpath;
-    w_uint8_t *buff;
+    char * fullpath = W_NULL;
+    w_uint8_t *buff = W_NULL;
     w_int32_t len;
     char *curpath;
     WIND_ASSERT_RETURN(argc >= 2,W_ERR_INVALID);
-    curpath = wind_filepath_get_current();
-    fullpath = wind_filepath_generate(curpath,argv[1],0);
-    file = wind_fopen(fullpath,FMODE_R);
-    if(file == W_NULL)
+    do
     {
-        wind_printf("open file %s failed.\r\n",fullpath);
-        wind_free(fullpath);
-        return W_ERR_NOFILE;
-    }
-    buff = wind_malloc(BUF_SIZE+1);
-    if(buff == W_NULL)
-    {
-        wind_free(fullpath);
-        return W_ERR_FAIL;
-    }
-    wind_printf("\r\n---------%s---------\r\n",fullpath);
-    while(1)
-    {
-        wind_memset(buff,0,BUF_SIZE+1);
-        len = wind_fread(file,buff,BUF_SIZE);
-        if(len > 0)
-            wind_printf("%s",(char*)buff);
-        else
-            break;
-    }
-    wind_printf("\r\n---------%s---------\r\n",fullpath);
-    wind_fclose(file);
-    wind_filepath_release(fullpath);
-    wind_free(buff);
-    return W_ERR_OK;
+        err == W_ERR_OK;
+        curpath = wind_filepath_get_current();
+        fullpath = wind_filepath_generate(curpath,argv[1],0);
+        file = wind_fopen(fullpath,FMODE_R);
+        WIND_ASSERT_BREAK(file != W_NULL,W_ERR_NOFILE,"open file failed.")
+        buff = wind_malloc(BUF_SIZE+1);
+        WIND_ASSERT_BREAK(buff != W_NULL,W_ERR_MEM,"alloc buffer failed.")
+        wind_printf("\r\n---------%s---------\r\n",fullpath);
+        while(1)
+        {
+            wind_memset(buff,0,BUF_SIZE+1);
+            len = wind_fread(file,buff,BUF_SIZE);
+            if(len > 0)
+                wind_printf("%s",(char*)buff);
+            else
+                break;
+        }
+        wind_printf("\r\n---------%s---------\r\n",fullpath);        
+        wind_fclose(file);
+
+    }while(0);
+
+    if(fullpath != W_NULL)
+        wind_filepath_release(fullpath);
+    if(buff != W_NULL)
+        wind_free(buff);
+    return err;
 }
 
 /********************************************全局变量定义**********************************************/

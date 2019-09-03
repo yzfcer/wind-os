@@ -39,8 +39,7 @@ static w_err_t mk_dir_file(w_int32_t argc,char **argv,w_uint16_t isdir)
     w_file_s *file;
     char * fullpath;
     char *curpath = wind_filepath_get_current();
-    if(argc < 2)
-        return W_ERR_INVALID;
+    WIND_ASSERT_RETURN(argc >= 2,W_ERR_INVALID);
     do
     {
         err = W_ERR_OK;

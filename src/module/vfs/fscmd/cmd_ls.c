@@ -41,13 +41,14 @@ static w_err_t cmd_ls(w_int32_t argc,char **argv)
     w_int32_t i;
     w_file_s *file;
     w_err_t err;
-    char *fullpath = W_NULL;
     char *path1;
+    char *fullpath = W_NULL;
     w_file_s *sub = W_NULL;
-    char *curpath = wind_filepath_get_current();
+    char *curpath;
     do 
     {
         err = W_ERR_OK;
+        curpath = wind_filepath_get_current();
         if(argc >= 2)
            fullpath = wind_filepath_generate(curpath,argv[1],1);
         else

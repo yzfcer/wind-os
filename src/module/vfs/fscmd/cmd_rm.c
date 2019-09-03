@@ -39,11 +39,11 @@ static w_err_t cmd_rm(w_int32_t argc,char **argv)
     w_int32_t i,len;
     char *curpath;
     char * fullpath;
-    if(argc < 2)
-        return W_ERR_INVALID;
+    WIND_ASSERT_RETURN(argc >= 2,W_ERR_INVALID);
     curpath = wind_filepath_get_current();
     for(i = 1;i < argc;i ++)
     {
+        err = W_ERR_OK;
         len = wind_strlen(argv[1]);
         fullpath = wind_filepath_generate(curpath,argv[1],argv[1][len-1] == '/'?1:0);
         err = wind_fremove(fullpath);

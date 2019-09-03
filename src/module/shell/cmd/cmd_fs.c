@@ -76,13 +76,14 @@ static w_err_t mk_dir_file(w_int32_t argc,char **argv,w_uint16_t isdir)
     w_err_t err;
     w_bool_t isexist;
     w_file_s *file;
-    char * fullpath;
-    char *curpath = wind_filepath_get_current();
+    char * fullpath = W_NULL;
+    char *curpath;
     if(argc < 3)
         return W_ERR_INVALID;
     do
     {
         err = W_ERR_OK;
+        curpath = wind_filepath_get_current();
         fullpath = wind_filepath_generate(curpath,argv[2],isdir);
         WIND_ASSERT_BREAK(fullpath != W_NULL,W_ERR_MEM,"generate fullpath failed");
         isexist = wind_fexist(fullpath);

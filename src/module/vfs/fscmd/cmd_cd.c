@@ -41,11 +41,12 @@ static w_err_t cmd_cd(w_int32_t argc,char **argv)
     w_err_t err;
     w_bool_t isexist;
     char *fullpath = W_NULL;
-    char *curpath = wind_filepath_get_current();
+    char *curpath;
 
     do
     {
         err = W_ERR_OK;
+        curpath = wind_filepath_get_current();
         if(argc >= 2)
            fullpath = wind_filepath_generate(curpath,argv[1],1);
         else
