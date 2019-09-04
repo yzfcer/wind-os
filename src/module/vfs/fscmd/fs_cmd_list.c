@@ -29,6 +29,7 @@ extern "C" {
 #if CMD_FS_SUPPORT
     COMMAND_DECLARE(mount);
     COMMAND_DECLARE(umount);
+    COMMAND_DECLARE(format);
     COMMAND_DECLARE(cat);
     COMMAND_DECLARE(cd);
     COMMAND_DECLARE(ls);
@@ -45,6 +46,7 @@ void _wind_vfs_register_fs_cmd(void)
 #if CMD_FS_SUPPORT
     wind_cmd_register(COMMAND(mount));
     wind_cmd_register(COMMAND(umount));
+    wind_cmd_register(COMMAND(format));
     wind_cmd_register(COMMAND(cat));
     wind_cmd_register(COMMAND(cd));
     wind_cmd_register(COMMAND(ls));

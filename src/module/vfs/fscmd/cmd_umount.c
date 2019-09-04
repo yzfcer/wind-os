@@ -39,7 +39,6 @@ extern "C" {
 
 static w_err_t cmd_umount(w_int32_t argc,char **argv)
 {
-    char *fullpath;
     return wind_vfs_unmount(argv[1]);
 }
 
@@ -55,12 +54,13 @@ COMMAND_DISC(umount)
 
 COMMAND_USAGE(umount)
 {
-    wind_printf("umount <fsname>:--to umount .\r\n");
+    wind_printf("umount <fsname>:--to umount a file system.\r\n");
+    wind_printf("        fsname :file system object name,use command \"mount\" to see it.\r\n");
 }
 
 COMMAND_MAIN(umount,argc,argv)
 {
-    WIND_ASSERT_RETURN(argc >= 1,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(argc >= 2,W_ERR_INVALID);
     if(wind_strcmp(argv[0],"umount") == 0)
         return cmd_umount(argc,argv);
     return W_ERR_OK;

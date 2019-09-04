@@ -189,6 +189,7 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\adapter_treefs.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\fscmd\cmd_cat.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\fscmd\cmd_cd.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\fscmd\cmd_format.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\fscmd\cmd_ls.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\fscmd\cmd_mkdir.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\fscmd\cmd_mount.c" />

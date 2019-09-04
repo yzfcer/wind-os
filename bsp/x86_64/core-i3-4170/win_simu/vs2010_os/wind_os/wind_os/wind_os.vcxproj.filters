@@ -539,6 +539,9 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\fscmd\cmd_umount.c">
       <Filter>module_vfs</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\fscmd\cmd_format.c">
+      <Filter>module_vfs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">
