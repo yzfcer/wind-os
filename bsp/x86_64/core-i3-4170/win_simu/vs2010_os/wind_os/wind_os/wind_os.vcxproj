@@ -191,9 +191,11 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\fscmd\cmd_cd.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\fscmd\cmd_ls.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\fscmd\cmd_mkdir.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\fscmd\cmd_mount.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\fscmd\cmd_pwd.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\fscmd\cmd_rm.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\fscmd\cmd_touch.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\fscmd\cmd_umount.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\fscmd\cmd_write.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\fscmd\fs_cmd_list.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\listfs\listfs.c" />

@@ -35,6 +35,8 @@ w_err_t _wind_vfs_mod_init(void);
 void _wind_vfs_register_fs_cmd(void);
 
 w_vfs_s *wind_vfs_get(char *name);
+w_vfs_s *wind_vfs_get_free(void);
+
 w_vfs_s *wind_vfs_get_bypath(const char *path);
 w_err_t wind_vfs_print(void);
 

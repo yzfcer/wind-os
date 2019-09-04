@@ -127,7 +127,6 @@ static w_err_t mount_param_check(char *fsname,char *fstype,char *blkname,char *p
             wind_error("block device has been used");
             return W_ERR_REPEAT;
         }
-            
     }
     return W_ERR_OK;
 }
@@ -154,6 +153,25 @@ w_err_t _wind_vfs_mod_init(void)
 w_vfs_s *wind_vfs_get(char *name)
 {
     return (w_vfs_s *)wind_obj_get(name,&fslist);
+}
+
+w_vfs_s *wind_vfs_get_free(void)
+{
+    w_vfs_s *vfs,*retfs = W_NULL;
+    w_dnode_s *dnode;
+    w_int32_t len;
+    wind_disable_switch();
+    foreach_node(dnode,&fslist)
+    {
+        vfs = NODE_TO_FS(dnode);
+        if(!IS_F_VFS_MOUNT(vfs))
+        {
+            retfs = vfs;
+            break;
+        }
+    }
+    wind_enable_switch();
+    return retfs;
 }
 
 
