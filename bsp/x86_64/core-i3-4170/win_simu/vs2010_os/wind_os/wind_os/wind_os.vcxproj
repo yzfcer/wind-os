@@ -87,6 +87,7 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_module_list.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\hal\wind_memblk.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\hal\wind_nullblk.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\hal\wind_stddev.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cjson\cJSON.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cjson\cJSON_Utils.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cjson\json_checker.c" />

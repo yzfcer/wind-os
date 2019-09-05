@@ -545,6 +545,9 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\hal\wind_nullblk.c">
       <Filter>os_hal</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\hal\wind_stddev.c">
+      <Filter>os_hal</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">

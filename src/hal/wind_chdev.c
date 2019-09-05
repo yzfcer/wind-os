@@ -81,10 +81,12 @@ w_err_t wind_chdev_unregister(w_chdev_s *chdev)
     return W_ERR_OK;
 }
 
+extern w_chdev_s stddev_dev[1];
 
 w_err_t _wind_chdev_mod_init(void)
 {
     DLIST_INIT(blkdevlist);
+    wind_chdev_register(stddev_dev,1);
     _wind_register_chdevs();
     return W_ERR_OK;
 }
