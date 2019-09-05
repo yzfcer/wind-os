@@ -159,7 +159,6 @@ w_vfs_s *wind_vfs_get_free(void)
 {
     w_vfs_s *vfs,*retfs = W_NULL;
     w_dnode_s *dnode;
-    w_int32_t len;
     wind_disable_switch();
     foreach_node(dnode,&fslist)
     {

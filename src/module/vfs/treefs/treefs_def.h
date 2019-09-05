@@ -33,10 +33,10 @@ struct __treefile_s
     w_tree_s tree;
     char *filename;
     w_treefs_s *tfs;
-    w_uint16_t isdir:1;
+    w_uint8_t isdir:1;
     w_uint8_t mode;
-    w_int32_t offset;
-    w_int32_t filelen;
+    w_uint32_t offset;
+    w_uint32_t filelen;
     w_int32_t bufflen;
     w_dlist_s datalist;
 };

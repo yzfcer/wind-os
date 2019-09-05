@@ -141,7 +141,7 @@ static w_err_t treefs_op_readdir(w_file_s* dir,w_file_s* sub)
     return err;
 }
 
-static w_err_t treefs_op_seek(w_file_s* file,w_int32_t offset)
+static w_err_t treefs_op_seek(w_file_s* file,w_uint32_t offset)
 {
     WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
     return treefile_seek((w_treefile_s *)file->fileobj,offset);

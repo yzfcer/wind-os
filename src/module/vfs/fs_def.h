@@ -82,7 +82,7 @@ struct __w_fsops_s
     w_err_t (*close)(w_file_s* file);
     w_err_t (*remove)(w_file_s* file);
     w_err_t (*readdir)(w_file_s* dir,w_file_s* child);
-    w_err_t (*seek)(w_file_s* file,w_int32_t offset);
+    w_err_t (*seek)(w_file_s* file,w_uint32_t offset);
     w_err_t (*rename)(w_file_s* file,char *newname);
     w_int32_t (*ftell)(w_file_s* file);
     w_int32_t (*read)(w_file_s* file,w_uint8_t *buff, w_int32_t size);
@@ -99,11 +99,11 @@ struct __w_file_s
     w_vfs_s *vfs;//关联的文件系统
     w_mutex_s *mutex;//文件锁
     w_file_s *childfile;//子文件,在需要遍历目录时使用
-    w_uint8_t fmode;//打开模式
     
     void *fileobj;//实际文件对象
-    w_uint16_t isdir;//是否是目录
-    w_int32_t offset;//文件偏移位置
+    w_uint8_t fmode;//打开模式
+    w_uint8_t isdir;//是否是目录
+    w_uint32_t offset;//文件偏移位置
 };
 
 

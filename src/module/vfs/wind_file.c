@@ -312,7 +312,7 @@ w_file_s *wind_freaddir(w_file_s *dir)
     return dir->childfile;
 }
 
-w_err_t wind_fseek(w_file_s *file,w_int32_t offset)
+w_err_t wind_fseek(w_file_s *file,w_uint32_t offset)
 {
     w_err_t err = W_ERR_FAIL;
     WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);

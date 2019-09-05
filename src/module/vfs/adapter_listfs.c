@@ -206,7 +206,7 @@ static w_err_t listfs_op_readdir(w_file_s* dir,w_file_s* sub)
     return err;
 }
 
-static w_err_t listfs_op_seek(w_file_s* file,w_int32_t offset)
+static w_err_t listfs_op_seek(w_file_s* file,w_uint32_t offset)
 {
     WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
     return listfile_seek((w_listfile_s *)file->fileobj,offset);

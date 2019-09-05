@@ -48,7 +48,7 @@ static w_err_t cmd_cat(w_int32_t argc,char **argv)
     WIND_ASSERT_RETURN(argc >= 2,W_ERR_INVALID);
     do
     {
-        err == W_ERR_OK;
+        err = W_ERR_OK;
         curpath = wind_filepath_get_current();
         fullpath = wind_filepath_generate(curpath,argv[1],0);
         file = wind_fopen(fullpath,FMODE_R);
