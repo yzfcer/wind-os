@@ -114,7 +114,7 @@ fs##_op_opsinit,\
 fs##_op_init,\
 fs##_op_deinit,\
 fs##_op_format,\
-W_NULL,\
+fs##_op_matchfs,\
 fs##_op_open,\
 fs##_op_close,\
 fs##_op_remove,\

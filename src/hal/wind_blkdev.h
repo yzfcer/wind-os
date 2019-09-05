@@ -44,6 +44,7 @@ extern "C" {
 typedef enum 
 {
     BLKDEV_COMMON = 0x01,
+    BLKDEV_NULL,
     BLKDEV_RAM,
     BLKDEV_ROM,
     BLKDEV_NOR,

@@ -542,6 +542,9 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\fscmd\cmd_format.c">
       <Filter>module_vfs</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\hal\wind_nullblk.c">
+      <Filter>os_hal</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">
@@ -886,6 +889,9 @@
       <Filter>module_vfs</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\..\src\hal\wind_memblk.h">
+      <Filter>os_hal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\hal\wind_nullblk.h">
       <Filter>os_hal</Filter>
     </ClInclude>
   </ItemGroup>

@@ -68,6 +68,10 @@ static w_err_t treefs_op_format(w_vfs_s *vfs)
     WIND_ASSERT_RETURN(vfs->fsobj != W_NULL,W_ERR_PTR_NULL);
     return wind_treefs_format((w_treefs_s *)vfs->fsobj);
 }
+w_err_t treefs_op_matchfs(char *devname)
+{
+    return W_ERR_FAIL;
+}
 
 static w_err_t treefs_op_open(w_file_s *file,w_uint8_t fmode)
 {
