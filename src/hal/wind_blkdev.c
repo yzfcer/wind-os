@@ -29,9 +29,25 @@
 #include "wind_mutex.h"
 #include "wind_core.h"
 #include "wind_string.h"
+#include "wind_nullblk.h"
+
 #if WIND_BLKDEV_SUPPORT
 #define NODE_TO_BLKDEV(node) (w_blkdev_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((w_blkdev_s*)0)->obj.objnode)))
 static w_dlist_s blkdevlist;
+static char *nullname[] = {"null0","null1","null2","null3","null4","null5","null6","null7","null8","null9","null10"};
+static w_blkdev_s nulldev[WIND_NULLDEV_MAX_NUM];
+static w_err_t create_null_devs(void)
+{
+    w_int32_t i,cnt;
+    w_int32_t namecnt;
+    namecnt = sizeof(nullname) / sizeof(char *);
+    cnt = namecnt <= WIND_NULLDEV_MAX_NUM?namecnt:WIND_NULLDEV_MAX_NUM;
+    for(i = 0;i < cnt;i ++)
+    {
+        wind_nullblk_create(&nulldev[i],nullname[i]);
+    }
+    return W_ERR_OK;
+}
 
 w_err_t wind_blkdev_register(w_blkdev_s *blkdev,w_int32_t count)
 {
@@ -85,6 +101,7 @@ w_err_t wind_blkdev_unregister(w_blkdev_s *blkdev)
 w_err_t _wind_blkdev_mod_init(void)
 {
     DLIST_INIT(blkdevlist);
+    create_null_devs();
     _register_blkdevs();
     return W_ERR_OK;
 }

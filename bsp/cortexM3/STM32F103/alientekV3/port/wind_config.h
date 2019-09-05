@@ -102,6 +102,7 @@
 #define WIND_CHDEV_SUPPORT 0  //是否字符驱动框架
 
 #define WIND_BLKDEV_SUPPORT 1  //是否块驱动框架
+#define WIND_NULLDEV_MAX_NUM 5  //空块设备的数量
 
 #define WIND_LUA_SUPPORT 0 //是否支持lua脚本语言
 
