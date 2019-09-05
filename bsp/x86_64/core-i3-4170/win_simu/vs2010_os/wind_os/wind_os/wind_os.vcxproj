@@ -244,7 +244,6 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\systhread\thread_timer.c" />
     <ClCompile Include="..\..\..\device\blkdev_disk.c" />
     <ClCompile Include="..\..\..\device\blkdev_memblk.c" />
-    <ClCompile Include="..\..\..\device\blkdev_null.c" />
     <ClCompile Include="..\..\..\device\list_blkdev.c" />
     <ClCompile Include="..\..\..\device\list_dev.c" />
     <ClCompile Include="..\..\..\port\file_port.c" />

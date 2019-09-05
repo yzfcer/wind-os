@@ -104,9 +104,6 @@
     <ClCompile Include="..\..\..\port\wind_os_prelunch.c">
       <Filter>os_port</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\device\blkdev_null.c">
-      <Filter>device</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\device\list_blkdev.c">
       <Filter>device</Filter>
     </ClCompile>
