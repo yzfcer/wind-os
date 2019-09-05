@@ -118,20 +118,14 @@ w_err_t listfs_op_matchfs(char *devname)
 {
     w_err_t err;
     w_blkdev_s *blkdev;
-    w_listfs_s * lfs = W_NULL;
     do
     {
         err = W_ERR_OK;
-        lfs = wind_alloc(sizeof(w_listfs_s),HP_ALLOCID_VFS);
-        WIND_ASSERT_BREAK(lfs != W_NULL,W_ERR_MEM,"alloc lfs failed");
         blkdev = wind_blkdev_get(devname);
         WIND_ASSERT_BREAK(blkdev != W_NULL,W_ERR_FAIL,"blkdev is not exist");
-        err = listfs_init(lfs,blkdev);
-        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"init lfs failed");
-        listfs_deinit(lfs);
+        err = listfs_match(blkdev);
+        WIND_CHECK_BREAK(err == W_ERR_OK,err);
     }while(0);
-    if(lfs != W_NULL)
-        wind_free(lfs);
     return err;
 }
 

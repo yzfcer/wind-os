@@ -657,6 +657,8 @@ w_err_t listfs_init(w_listfs_s *lfs,w_blkdev_s *blkdev)
     return err;
 }
 
+
+
 w_err_t listfs_deinit(w_listfs_s *lfs)
 {
     w_err_t err;
@@ -672,6 +674,36 @@ w_err_t listfs_deinit(w_listfs_s *lfs)
     return err;
 }
 
+w_err_t listfs_match(w_blkdev_s *blkdev)
+{
+    w_err_t err;
+    w_int32_t cnt;
+    lfs_info_s *fsinfo = W_NULL;
+    w_uint8_t *blk = W_NULL;
+    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
+    do
+    {
+        err = W_ERR_OK;
+        blk = listfs_mem_malloc(blkdev->blksize);
+        WIND_ASSERT_BREAK(blk != W_NULL,W_ERR_MEM,"malloc blk failed");
+        fsinfo = listfs_mem_malloc(sizeof(lfs_info_s));
+        WIND_ASSERT_BREAK(fsinfo != W_NULL,W_ERR_MEM,"malloc fsinfo failed");
+        cnt = wind_blkdev_read(blkdev,0,blk,1);
+        WIND_ASSERT_BREAK(cnt > 0,W_ERR_HARDFAULT,"read blkdata failed");
+        wind_memcpy(fsinfo,blk,sizeof(lfs_info_s));
+        lfs_info_be2le(fsinfo);
+        WIND_CHECK_BREAK(fsinfo->magic = LISTFS_MAGIC,W_ERR_FAIL);
+        WIND_CHECK_BREAK(fsinfo->blkcount > 0,W_ERR_FAIL);
+        WIND_CHECK_BREAK(fsinfo->unit_size > 0,W_ERR_FAIL);
+        WIND_CHECK_BREAK(fsinfo->blksize >= 512,W_ERR_FAIL);
+        WIND_CHECK_BREAK(fsinfo->bitmap1_addr + fsinfo->bitmap_cnt == fsinfo->bitmap1_addr,W_ERR_FAIL);
+    }while(0);
+    if(fsinfo != W_NULL)
+        listfs_mem_free(fsinfo);
+    if(blk != W_NULL)
+        listfs_mem_free(blk);
+    return err;
+}
 
 w_listfile_s* listfile_open(w_listfs_s *lfs,const char *path,w_uint8_t mode)
 {

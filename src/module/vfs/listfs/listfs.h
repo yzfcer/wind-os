@@ -122,6 +122,7 @@ w_err_t listfs_mem_free(void *ptr);
 w_err_t listfs_format(w_listfs_s *lfs,w_blkdev_s *blkdev);
 w_err_t listfs_init(w_listfs_s *lfs,w_blkdev_s *blkdev);
 w_err_t listfs_deinit(w_listfs_s *lfs);
+w_err_t listfs_match(w_blkdev_s *blkdev);
 
 w_bool_t listfile_existing(w_listfs_s *lfs,const char *path);
 w_listfile_s* listfile_open(w_listfs_s *lfs,const char *path,w_uint8_t mode);
