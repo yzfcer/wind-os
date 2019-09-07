@@ -51,6 +51,10 @@ w_err_t   disk_init(w_blkdev_s *dev)
 
 w_err_t   disk_open(w_blkdev_s *dev)
 {
+    FILE *file;
+    file = fopen(FILE_NAME,"rb+");
+    WIND_ASSERT_RETURN(file != W_NULL, W_ERR_FAIL);
+    dev->user_arg = file;
     return W_ERR_OK;
 }
 
@@ -73,12 +77,13 @@ w_int32_t disk_read(w_blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t blkcn
     wind_notice("read addr 0x%08x,cnt %d",addr,blkcnt);
     start = (w_int32_t)((dev->blkaddr + addr) * dev->blksize);
     size = blkcnt * dev->blksize;
-    file = fopen(FILE_NAME,"r");
+    //file = fopen(FILE_NAME,"r");
+    file = dev->user_arg;
     WIND_ASSERT_RETURN(file != W_NULL,0);
     wind_memset(buffer,0,sizeof(buffer));
     fseek(file,start,SEEK_SET); 
     len = fread(buf,1,size,file);
-    fclose(file);
+    //fclose(file);
     if(len > 0)
         return len / dev->blksize;
     return -1;
@@ -93,13 +98,14 @@ w_int32_t disk_write(w_blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t blkc
     start = (w_int32_t)((dev->blkaddr + addr) * dev->blksize);
     size = blkcnt * dev->blksize;
     
-    file = fopen(FILE_NAME,"rb+");
+    //file = fopen(FILE_NAME,"rb+");
+    file = dev->user_arg;
     WIND_ASSERT_RETURN(file != W_NULL,0);
     wind_memset(buffer,0,sizeof(buffer));
     fseek(file,start,SEEK_SET); 
     wind_notice("write offset : 0x%08x",start);
     len = fwrite(buf,1,size,file);
-    fclose(file);
+    //fclose(file);
     if(len > 0)
         return len / dev->blksize;
     return -1;
@@ -107,6 +113,11 @@ w_int32_t disk_write(w_blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t blkc
 
 w_err_t   disk_close(w_blkdev_s *dev)
 {
+    FILE *file;
+    file = dev->user_arg;
+    WIND_ASSERT_RETURN(file != W_NULL, W_ERR_FAIL);
+    fclose(file);
+    dev->user_arg = W_NULL;
     return W_ERR_OK;
 }
 
