@@ -118,6 +118,7 @@ w_err_t listfs_op_matchfs(char *devname)
 {
     w_err_t err;
     w_blkdev_s *blkdev;
+    WIND_ASSERT_RETURN(devname != W_NULL,W_ERR_PTR_NULL);
     do
     {
         err = W_ERR_OK;

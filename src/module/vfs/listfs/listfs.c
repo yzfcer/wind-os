@@ -678,6 +678,7 @@ w_err_t listfs_match(w_blkdev_s *blkdev)
 {
     w_err_t err;
     w_int32_t cnt;
+    w_uint32_t crc,calc_crc;
     lfs_info_s *fsinfo = W_NULL;
     w_uint8_t *blk = W_NULL;
     WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
@@ -697,7 +698,11 @@ w_err_t listfs_match(w_blkdev_s *blkdev)
         WIND_CHECK_BREAK(fsinfo->unit_size > 0,W_ERR_FAIL);
         WIND_CHECK_BREAK(fsinfo->blksize >= 512,W_ERR_FAIL);
         WIND_CHECK_BREAK(fsinfo->bitmap1_addr + fsinfo->bitmap_cnt == fsinfo->bitmap1_addr,W_ERR_FAIL);
+        wind_to_uint32(&blk[blkdev->blksize-4],&crc);
+        calc_crc = wind_crc32(blk,blkdev->blksize-4,0xffffffff);
+        WIND_CHECK_BREAK(calc_crc == crc,W_ERR_INVALID);
     }while(0);
+    
     if(fsinfo != W_NULL)
         listfs_mem_free(fsinfo);
     if(blk != W_NULL)
