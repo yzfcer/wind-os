@@ -1054,7 +1054,7 @@ w_int32_t listfile_read(w_listfile_s* file,w_uint8_t *buff, w_int32_t size)
     WIND_ASSERT_RETURN(file != W_NULL,-1);
     WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,-1);
     WIND_ASSERT_RETURN(file->mode & LFMODE_R,-1);
-    WIND_ASSERT_RETURN(file->offset < file->info.filesize,-1);
+    WIND_CHECK_RETURN(file->offset < file->info.filesize,-1);
 
     do
     {

@@ -74,7 +74,7 @@ w_int32_t disk_read(w_blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t blkcn
     w_int32_t start;
     w_int32_t size,len;
     FILE *file;
-    wind_notice("read addr 0x%08x,cnt %d",addr,blkcnt);
+    wind_debug("read addr 0x%08x,cnt %d",addr,blkcnt);
     start = (w_int32_t)((dev->blkaddr + addr) * dev->blksize);
     size = blkcnt * dev->blksize;
     //file = fopen(FILE_NAME,"r");
@@ -94,7 +94,7 @@ w_int32_t disk_write(w_blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t blkc
     w_int32_t start;
     w_int32_t size,len;
     FILE *file;
-    wind_notice("write addr 0x%08x,cnt %d",addr,blkcnt);
+    wind_debug("write addr 0x%08x,cnt %d",addr,blkcnt);
     start = (w_int32_t)((dev->blkaddr + addr) * dev->blksize);
     size = blkcnt * dev->blksize;
     
@@ -103,7 +103,7 @@ w_int32_t disk_write(w_blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t blkc
     WIND_ASSERT_RETURN(file != W_NULL,0);
     wind_memset(buffer,0,sizeof(buffer));
     fseek(file,start,SEEK_SET); 
-    wind_notice("write offset : 0x%08x",start);
+    wind_debug("write offset : 0x%08x",start);
     len = fwrite(buf,1,size,file);
     //fclose(file);
     if(len > 0)
