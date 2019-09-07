@@ -87,22 +87,24 @@ w_file_s *wind_file_get(w_vfs_s *fs,const char *path)
 w_bool_t wind_fexist(const char *path)
 {
     w_err_t err;
-    w_file_s *file;
-    w_uint32_t isdir;
+    w_file_s *file = W_NULL;
     w_bool_t exist = W_FALSE;
     WIND_ASSERT_RETURN(path != W_NULL,W_FALSE);
-    wind_debug("wind_fexist:%s",path);
-    err = wind_filepath_check_valid(path);
-    WIND_ASSERT_RETURN(err == W_ERR_OK,W_FALSE);
-    if(wind_file_get_bypath(path) != W_NULL)
-        return W_TRUE;
-    isdir = path[wind_strlen(path)-1]=='/'?1:0;
-    file = wind_fopen(path,FMODE_R);
-    if((file != W_NULL)&&(file->isdir==isdir))
+    do
     {
-        exist = W_TRUE;
+        err = W_ERR_OK;
+        wind_debug("wind_fexist:%s",path);
+        err = wind_filepath_check_valid(path);
+        WIND_CHECK_BREAK(err == W_ERR_OK,W_ERR_INVALID);
+        file = wind_file_get_bypath(path);
+        WIND_CHECK_BREAK(file == W_NULL,W_ERR_OK);
+        file = wind_fopen(path,FMODE_R);
+        WIND_CHECK_BREAK(file != W_NULL,W_ERR_FAIL);
         wind_fclose(file);
-    }
+        
+    }while(0);
+    
+    exist = (err == W_ERR_OK) ? W_TRUE : W_FALSE;
     return exist;
 }
 

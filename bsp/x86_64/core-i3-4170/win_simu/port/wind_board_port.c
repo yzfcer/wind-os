@@ -81,6 +81,7 @@ void _wind_fs_mount_init(void)
     wind_vfs_mount("fs0","listfs","memblk","/");
     wind_vfs_mount("fs1","treefs","null0","/var");
     wind_vfs_mount("fs2","treefs","null1","/mnt/");
+    wind_vfs_mount("fs3","listfs","disk0","/disk/");
 }
 #endif
 

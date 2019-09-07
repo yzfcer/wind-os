@@ -70,6 +70,7 @@ w_int32_t disk_read(w_blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t blkcn
     w_int32_t start;
     w_int32_t size,len;
     FILE *file;
+    wind_notice("read addr 0x%08x,cnt %d",addr,blkcnt);
     start = (w_int32_t)((dev->blkaddr + addr) * dev->blksize);
     size = blkcnt * dev->blksize;
     file = fopen(FILE_NAME,"r");
@@ -88,6 +89,7 @@ w_int32_t disk_write(w_blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t blkc
     w_int32_t start;
     w_int32_t size,len;
     FILE *file;
+    wind_notice("write addr 0x%08x,cnt %d",addr,blkcnt);
     start = (w_int32_t)((dev->blkaddr + addr) * dev->blksize);
     size = blkcnt * dev->blksize;
     

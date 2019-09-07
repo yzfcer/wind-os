@@ -115,7 +115,7 @@ static w_err_t lfs_search_child(lfile_info_s *info,char *name,w_blkdev_s *blkdev
 static w_err_t lfs_search_file(w_listfs_s *lfs,w_listfile_s *file,const char *path)
 {
     w_err_t err;
-    w_uint8_t isdir = 0;
+    //w_uint8_t isdir = 0;
     w_int32_t len,segcnt,i = 0;
     char **nameseg = W_NULL;
     char *tmppath = W_NULL;
@@ -136,7 +136,7 @@ static w_err_t lfs_search_file(w_listfs_s *lfs,w_listfile_s *file,const char *pa
         wind_strcpy(tmppath,path);
         if(tmppath[len-1] == '/')
         {
-            isdir = 1;
+            //isdir = 1;
             tmppath[len-1] = 0;
         }
 
@@ -171,7 +171,7 @@ static w_err_t lfs_search_file(w_listfs_s *lfs,w_listfile_s *file,const char *pa
         }
         WIND_CHECK_BREAK(err == W_ERR_OK,err);
         wind_memcpy(&file->info,finfo,sizeof(lfile_info_s));
-        if(!isdir)
+        if(!IS_LFILE_ATTR_DIR(file->info.attr))
         {
             if(file->blkinfo == W_NULL)
             {
