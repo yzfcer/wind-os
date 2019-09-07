@@ -43,8 +43,6 @@ static w_file_s *file_malloc(void)
 {
     w_file_s *file;
     file = wind_pool_malloc(filepool);
-    if(file != W_NULL)
-        wind_memset(file,0,sizeof(w_file_s));
     return file;
 }
 
@@ -67,14 +65,13 @@ w_err_t _wind_file_mod_init(void)
 
 w_file_s *wind_file_get(w_vfs_s *fs,const char *path)
 {
-    w_file_s *file;
+    w_file_s *file = W_NULL;
     w_dnode_s *dnode;
     wind_disable_switch();
     foreach_node(dnode,&filelist)
     {
         file = NODE_TO_FILE(dnode);
-        if((wind_strcmp(path,file->realpath) == 0) &&
-            (file->vfs == fs))
+        if((file->vfs == fs) && (wind_strcmp(path,file->realpath) == 0))
         {
             wind_enable_switch();
             return file;
@@ -140,6 +137,7 @@ static w_file_s *wind_file_create(w_vfs_s *fs,const char *path,w_uint8_t fmode,w
         err = W_ERR_OK;
         file = file_malloc();
         WIND_ASSERT_BREAK(file != W_NULL,W_ERR_MEM,"file_malloc failed");
+        wind_memset(file,0,sizeof(w_file_s));
         
         fullpathlen = wind_strlen(path);
         fullpath = wind_salloc(path,HP_ALLOCID_VFS);
@@ -162,7 +160,6 @@ static w_file_s *wind_file_create(w_vfs_s *fs,const char *path,w_uint8_t fmode,w
         file->offset = 0;
         
         err = file->vfs->ops->open(file,file->fmode);
-        //WIND_ASSERT_BREAK(err == W_ERR_OK,err,"open real file failed");
         WIND_CHECK_BREAK(err == W_ERR_OK,err);
         wind_disable_switch();
         wind_obj_init(&file->obj,WIND_FILE_MAGIC,filename,&filelist);
@@ -247,35 +244,34 @@ w_err_t wind_fclose(w_file_s *file)
 
 w_err_t wind_fremove(const char *path)
 {
+    w_int32_t res;
     w_err_t err = W_ERR_FAIL;
     w_file_s *file;
-    err = wind_filepath_check_valid(path);
-    WIND_ASSERT_RETURN(err == W_ERR_OK,err);
-    file = wind_file_get_bypath(path);
-    if(file == W_NULL)
-        file = wind_fopen(path,FMODE_R);
-    if(file == W_NULL)
+    do
     {
-        wind_warn("file %s is NOT exist.",path);
-        return W_ERR_OK;
-    }
-    if(wind_strcmp(path,file->vfs->mount_path) == 0)
-    {
-        wind_error("can not remove fs \"%s\" root directory",wind_obj_name(&file->vfs->obj));
-        wind_fclose(file);
-        return W_ERR_FAIL;
-    }
-    
-    if(file->vfs->ops->close)
-        file->vfs->ops->close(file);
+        err = W_ERR_OK;
+        wind_debug("remove file:%s",path);
+        err = wind_filepath_check_valid(path);
+        WIND_ASSERT_RETURN(err == W_ERR_OK,err);
+        file = wind_file_get_bypath(path);
+        if(file == W_NULL)
+            file = wind_fopen(path,FMODE_R);
+        WIND_ASSERT_BREAK(file != W_NULL, W_ERR_NOFILE,"file is NOT exist.");
+        res = wind_strcmp(path,file->vfs->mount_path);
+        WIND_ASSERT_BREAK(res != 0, W_ERR_FAIL, "can not remove fs root directory");
 
-    wind_debug("remove file:%s",file->realpath);
-    wind_mutex_lock(file->mutex);
-    if(file->vfs->ops->remove)
-        file->vfs->ops->remove(file);
-    wind_mutex_unlock(file->mutex);
-    wind_file_destroy(file);
-    return W_ERR_OK;
+        if(file->vfs->ops->close)
+            err = file->vfs->ops->close(file);
+        WIND_CHECK_BREAK(err == W_ERR_OK, err);
+
+        wind_mutex_lock(file->mutex);
+        if(file->vfs->ops->remove)
+            err = file->vfs->ops->remove(file);
+        wind_mutex_unlock(file->mutex);
+        wind_file_destroy(file);
+    }while(0);
+    
+    return err;
 }
 
 w_file_s *wind_freaddir(w_file_s *dir)
@@ -292,6 +288,7 @@ w_file_s *wind_freaddir(w_file_s *dir)
         {
             dir->childfile = file_malloc();
             WIND_ASSERT_BREAK(dir->childfile != W_NULL, W_ERR_MEM,"malloc file obj failed");
+            wind_memset(dir->childfile,0,sizeof(w_file_s));
         }
         wind_debug("get subfile of %s",dir->realpath);
         WIND_CHECK_BREAK(dir->vfs->ops->readdir,W_ERR_FAIL);
@@ -347,7 +344,10 @@ w_int32_t wind_ftell(w_file_s *file)
     WIND_ASSERT_RETURN(file != W_NULL,-1);
     wind_mutex_lock(file->mutex);
     if(file->vfs->ops->ftell)
+    {
         offset = file->vfs->ops->ftell(file);
+        file->offset = offset;
+    }
     wind_mutex_unlock(file->mutex);
     return offset;
 }

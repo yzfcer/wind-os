@@ -782,10 +782,10 @@ static w_err_t do_remove_dir(w_listfs_s *lfs,lfile_info_s *finfo)
     do
     {
         err = W_ERR_OK;
-        if(IS_LFILE_ATTR_DIR(finfo->attr))
+        if(IS_LFILE_ATTR_DIR(finfo->attr) && (finfo->tailchild_addr != 0))
         {
-            if(finfo->tailchild_addr== 0)
-                break;
+            //if(finfo->tailchild_addr== 0)
+            //    break;
             tmpinfo = listfs_mem_malloc(sizeof(lfile_info_s));
             WIND_ASSERT_BREAK(tmpinfo != W_NULL,W_ERR_MEM,"malloc tmpinfo failed");
             wind_memcpy(tmpinfo,finfo,sizeof(lfile_info_s));

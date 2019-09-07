@@ -44,8 +44,8 @@ static w_err_t cmd_rm(w_int32_t argc,char **argv)
     for(i = 1;i < argc;i ++)
     {
         err = W_ERR_OK;
-        len = wind_strlen(argv[1]);
-        fullpath = wind_filepath_generate(curpath,argv[1],argv[1][len-1] == '/'?1:0);
+        len = wind_strlen(argv[i]);
+        fullpath = wind_filepath_generate(curpath,argv[i],argv[i][len-1] == '/'?1:0);
         err = wind_fremove(fullpath);
         wind_notice("remove file :%s %s",fullpath,err == W_ERR_OK?"successed":"failed");
         wind_filepath_release(fullpath);
