@@ -156,25 +156,29 @@ w_int32_t wind_filepath_split(char *path,char **layers,w_int32_t layercnt)
 
 w_err_t wind_filepath_check_valid(char *path)
 {
-    w_int32_t i,j,len;
-    char chset[] = {'~','!','@','#','$','%','^','&','*','+','=','?','\t','\r','\n'};
+    w_int32_t i,len;
+    //char chset[] = {'~','!','@','#','$','%','^','&','*','+','=','?','\t','\r','\¡°'};
     WIND_ASSERT_RETURN(path != W_NULL,W_ERR_PTR_NULL);
     len = wind_strlen(path);
     WIND_ASSERT_RETURN(len > 0,W_ERR_INVALID);
     WIND_ASSERT_RETURN(path[0] == '/',W_ERR_INVALID);
-    for(i = 0;i < sizeof(chset);i ++)
+
+        
+    for(i = 0;i < len; i ++)
     {
-        for(j = 0;j < len; j ++)
-        {
-            if(chset[i] == path[j])
-            {
-                wind_error("invalid character:%c",path[j]);
-                return W_ERR_FAIL;
-            }
-                
-        }
+        if(path[i] >= 0x2D && path[i] <= 0x39)
+            continue;
+        if(path[i] >= 0x41 && path[i] <= 0x5A)
+            continue;
+        if(path[i] >= 0x61 && path[i] <= 0x7A)
+            continue;
+        if(path[i] == '_')
+            continue;;
+        wind_error("invalid character:%c",path[i]);
+        return W_ERR_FAIL;
     }
-    len = sizeof(chset) - 1;
+
+    len -= 1;
     for(i = 0;i < len;i ++)
     {
         if((path[i] == '/') && (path[i+1] == '/'))
