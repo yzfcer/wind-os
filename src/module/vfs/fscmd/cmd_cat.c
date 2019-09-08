@@ -52,9 +52,10 @@ static w_err_t cmd_cat(w_int32_t argc,char **argv)
         curpath = wind_filepath_get_current();
         fullpath = wind_filepath_generate(curpath,argv[1],0);
         file = wind_fopen(fullpath,FMODE_R);
-        WIND_ASSERT_BREAK(file != W_NULL,W_ERR_NOFILE,"open file failed.")
+        WIND_ASSERT_BREAK(file != W_NULL,W_ERR_NOFILE,"open file failed.");
+        WIND_ASSERT_BREAK(file->isdir == 0, W_ERR_INVALID,"can not show a directory content");
         buff = wind_malloc(BUF_SIZE+1);
-        WIND_ASSERT_BREAK(buff != W_NULL,W_ERR_MEM,"alloc buffer failed.")
+        WIND_ASSERT_BREAK(buff != W_NULL,W_ERR_MEM,"alloc buffer failed.");
         wind_printf("\r\n---------%s---------\r\n",fullpath);
         while(1)
         {

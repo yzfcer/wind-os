@@ -54,7 +54,7 @@ static w_err_t cmd_write(w_int32_t argc,char **argv)
         len = wind_strlen(argv[2]);
         filelen = wind_fwrite(file,(w_uint8_t*)argv[2],len);
         wind_fclose(file);
-       if(filelen == len)
+        if(filelen == len)
         {
             wind_printf("write file OK.\r\n");
             wind_filepath_release(fullpath);
