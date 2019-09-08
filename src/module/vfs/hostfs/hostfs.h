@@ -29,11 +29,9 @@
 #include "wind_type.h"
 #include "wind_dlist.h"
 #include "wind_blkdev.h"
-#include "hostfs_fileinfo.h"
-#include "hostfs_blkinfo.h"
-#include "hostfs_bitmap.h"
+#include <stdio.h>
 
-#if WIND_MODULE_VFS_SUPPORT
+#if WIND_HOSTFS_SUPPORT
 //文件操作模式
 #define HMODE_R   0x01
 #define HMODE_W   0x02
@@ -78,66 +76,44 @@
 
 
 
-//固化文件系统信息
-typedef struct __hfs_info_s
-{
-    w_uint32_t magic;        //魔术字
-    w_uint32_t blkcount;     //块数量
-    w_uint16_t unit_size;    //文件单位大小
-    w_uint16_t blksize;      //块大小
-    w_uint16_t reserve_blk;  //保留块数
-    w_uint16_t attr;         //文件系统属性
-    w_uint32_t bitmap_cnt;   //位图块数
-    w_addr_t   bitmap1_addr; //主位图地址
-    w_addr_t   bitmap2_addr; //备份位图地址
-    w_addr_t   root_addr;    //根目录位置
-}hfs_info_s;
-
 //程序关联的文件系统信息
 typedef struct __hostfs_s
 {
-    hfs_info_s hfs_info;  //文件系统信息
-    w_blkdev_s *blkdev;   //关联的块设备
-    hfs_bitmap_s bitmap;  //块使用位图
-    w_int32_t  file_ref;  //打开的文件数量
-    w_uint32_t blkused;   //已经使用的块数量
+    w_uint32_t magic;
+    char *realdir;
 }w_hostfs_s;
 
 //程序关联的文件信息
 typedef struct __hostfile_s
 {
-    hfile_info_s info;        //文件基本信息
-    w_hostfs_s *lfs;          //对应的文件系统
-    w_uint8_t mode;           //打开模式
-    w_int32_t offset;         //文件偏移量
-    hfile_blkinfo_s *blkinfo; //当前数据块信息
-    hfile_info_s *subinfo;    //子文件信息
+    w_uint32_t magic;
+    w_hostfs_s *hfs;
+    char *readpath;
+    FILE *fd;
 }w_hostfile_s;
-
-void hfs_info_be2le(hfs_info_s *info);
 
 w_err_t _wind_hostfs_mod_init(void);
 void *hostfs_mem_malloc(w_int32_t size);
 w_err_t hostfs_mem_free(void *ptr);
-w_err_t hostfs_format(w_hostfs_s *lfs,w_blkdev_s *blkdev);
-w_err_t hostfs_init(w_hostfs_s *lfs,w_blkdev_s *blkdev);
-w_err_t hostfs_deinit(w_hostfs_s *lfs);
+w_err_t hostfs_format(w_hostfs_s *hfs,w_blkdev_s *blkdev);
+w_err_t hostfs_init(w_hostfs_s *hfs,char *realdir);
+w_err_t hostfs_deinit(w_hostfs_s *hfs);
 w_err_t hostfs_match(w_blkdev_s *blkdev);
 
-w_bool_t hostfile_existing(w_hostfs_s *lfs,const char *path);
-w_hostfile_s* hostfile_open(w_hostfs_s *lfs,const char *path,w_uint8_t mode);
-w_err_t hostfile_set_attr(w_hostfile_s* file,w_uint8_t attr);
-w_err_t hostfile_get_attr(w_hostfile_s* file,w_uint8_t *attr);
-w_err_t hostfile_close(w_hostfile_s* file);
-w_err_t hostfile_remove(w_hostfs_s *lfs,const char *path);
-w_err_t hostfile_seek(w_hostfile_s* file,w_int32_t offset);
-w_int32_t hostfile_ftell(w_hostfile_s* file);
-w_int32_t hostfile_read(w_hostfile_s* file,w_uint8_t *buff, w_int32_t size);
-w_int32_t hostfile_write(w_hostfile_s* file,w_uint8_t *buff, w_int32_t size);
-w_err_t hostfile_fgets(w_hostfile_s* file,char *buff, w_int32_t maxlen);
-w_err_t hostfile_fputs(w_hostfile_s* file,char *buff);
+w_bool_t hostfile_existing(w_hostfs_s *hfs,const char *path);
+w_hostfile_s* hostfile_open(w_hostfs_s *hfs,const char *path,w_uint8_t mode);
+w_err_t hostfile_set_attr(w_hostfile_s* hfile,w_uint8_t attr);
+w_err_t hostfile_get_attr(w_hostfile_s* hfile,w_uint8_t *attr);
+w_err_t hostfile_close(w_hostfile_s* hfile);
+w_err_t hostfile_remove(w_hostfs_s *hfs,const char *path);
+w_err_t hostfile_seek(w_hostfile_s* hfile,w_int32_t offset);
+w_int32_t hostfile_ftell(w_hostfile_s* hfile);
+w_int32_t hostfile_read(w_hostfile_s* hfile,w_uint8_t *buff, w_int32_t size);
+w_int32_t hostfile_write(w_hostfile_s* hfile,w_uint8_t *buff, w_int32_t size);
+w_err_t hostfile_fgets(w_hostfile_s* hfile,char *buff, w_int32_t maxlen);
+w_err_t hostfile_fputs(w_hostfile_s* hfile,char *buff);
 
-w_err_t hostfile_readdir(w_hostfile_s* file,w_hostfile_s** sub);
+w_err_t hostfile_readdir(w_hostfile_s* hfile,w_hostfile_s** sub);
 
 
 #endif

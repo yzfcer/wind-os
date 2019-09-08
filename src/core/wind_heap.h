@@ -64,8 +64,9 @@ typedef enum
     HP_ALLOCID_VFS    = 1,
     HP_ALLOCID_LISTFS = 2,
     HP_ALLOCID_TREEFS = 3,
-    HP_ALLOCID_DB     = 4,
-    HP_ALLOCID_CJSON  = 5,
+    HP_ALLOCID_HOSTFS = 4,
+    HP_ALLOCID_DB     = 5,
+    HP_ALLOCID_CJSON  = 6,
     HP_ALLOCID_ALL    = 255,
 }w_allocid_e;
 
