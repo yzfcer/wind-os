@@ -27,7 +27,7 @@
 #include "wind_config.h"
 #include "wind_type.h"
 #include "wind_blkdev.h"
-#if WIND_MODULE_VFS_SUPPORT
+#if WIND_LISTFS_SUPPORT
 
 #define LISTFILE_BLK_MAGIC 0x725A4967
 

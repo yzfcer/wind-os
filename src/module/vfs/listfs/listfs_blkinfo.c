@@ -28,7 +28,7 @@
 #include "wind_conv.h"
 #include "wind_debug.h"
 #include "wind_string.h"
-#if WIND_MODULE_VFS_SUPPORT
+#if WIND_LISTFS_SUPPORT
 void blkinfo_be2le(lfile_blkinfo_s *info)
 {
     w_int32_t i;

@@ -26,6 +26,13 @@ extern "C" {
 #define HW_VERSION 0x000003
 #define SOFT_VERSION 0x000102
 
+//-------------------------------------------------------------------------------
+//宿主机操作系统类型
+//-------------------------------------------------------------------------------
+#define HOST_OS_NONE    1
+#define HOST_OS_WINDOWS 2
+#define HOST_OS_LINUX   3
+#define HOST_OS_TYPE HOST_OS_WINDOWS
 
 //-------------------------------------------------------------------------------
 //boot相关参数定制
@@ -247,6 +254,9 @@ extern "C" {
 #define WIND_TREEFS_MAX_NUM 2 //支持treefs结构的数量
 
 #define WIND_LISTFS_SUPPORT 1//是否支持listfs文件系统
+
+#define WIND_HOSTFS_SUPPORT 1//是否支持宿主机文件系统
+
 #endif
 
 #ifdef __cplusplus

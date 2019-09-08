@@ -29,7 +29,7 @@
 #include "wind_dlist.h"
 #include "listfs.h"
 #include "wind_blkdev.h"
-#if WIND_MODULE_VFS_SUPPORT
+#if WIND_LISTFS_SUPPORT
 #define LISTFS_BITMAP_MAGIC 0x37D65A82
 #define BITMAP_FREE (0x00 << 0)
 #define BITMAP_USED (0x01 << 0)

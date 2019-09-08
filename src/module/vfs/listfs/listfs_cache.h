@@ -28,7 +28,7 @@
 #include "wind_type.h"
 #include "wind_obj.h"
 #include "wind_blkdev.h"
-#if WIND_MODULE_VFS_SUPPORT
+#if WIND_LISTFS_SUPPORT
 
 #define LISTFS_CACHE_MAGIC 0x9357D26A
 
