@@ -31,7 +31,7 @@
 
 static w_err_t   stddev_init(w_chdev_s *dev)
 {
-    _wind_std_init();
+    //_wind_std_init();
     return W_ERR_OK;
 }
 
