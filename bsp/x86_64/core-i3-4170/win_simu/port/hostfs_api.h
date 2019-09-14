@@ -10,6 +10,11 @@
 typedef struct _finddata_t hfileinfo_s;
 typedef struct _hfile_s hfile_s;
 
+#define HFMDOE_R   0x01
+#define HFMDOE_W   0x02
+#define HFMDOE_RW  0x03
+#define HFMDOE_CRT 0x04
+
 typedef enum
 {
     HFILE_TYPE_ERROR = 0,
@@ -26,6 +31,7 @@ struct _hfile_s
     hfile_s *subhfile;
     char *path;
     w_uint8_t isdir;
+    w_uint8_t mode;
 };
 
 
@@ -37,11 +43,11 @@ w_err_t hostapi_mem_free(void *ptr);
 
 w_err_t hostapi_file_exist(char *path);
 
-hfile_s* hostapi_file_create(char *path);
+//hfile_s* hostapi_file_create(char *path);
 
-w_err_t hostapi_file_destroy(hfile_s *hfile);
+//w_err_t hostapi_file_destroy(hfile_s *hfile);
 
-hfile_s*  hostapi_file_open(char *path,char *mode);
+hfile_s*  hostapi_file_open(char *path,w_uint8_t mode);
 
 w_int32_t hostapi_file_read(hfile_s *hfile,w_uint8_t *buff,w_int32_t len);
 
