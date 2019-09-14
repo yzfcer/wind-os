@@ -47,6 +47,10 @@ static void display_cursor(void)
 void _wind_std_init(void)
 {
 	w_uint8_t buff;
+    static w_bool_t init_flag = W_FALSE;
+    if(init_flag)
+        return;
+    init_flag = W_TRUE;
     system("title wind-os");
 	system("cls");//清理屏幕，准备写入
 	system("mode con cols=100 lines=50");//设置窗口大小
