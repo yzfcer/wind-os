@@ -548,6 +548,9 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\hostfs\hostfs.c">
       <Filter>module_vfs</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\port\hostfs_api.c">
+      <Filter>os_port</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">
@@ -899,6 +902,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\hostfs\hostfs.h">
       <Filter>module_vfs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\port\hostfs_api.h">
+      <Filter>os_port</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
