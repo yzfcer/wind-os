@@ -54,8 +54,6 @@ static w_err_t fs_cmd_cd(w_int32_t argc,char **argv)
     w_bool_t isexist;
     char *fullpath = W_NULL;
     char *curpath = wind_filepath_get_current();
-    //if(argc < 3)
-    //    return W_ERR_FAIL;
     do
     {
         err = W_ERR_OK;

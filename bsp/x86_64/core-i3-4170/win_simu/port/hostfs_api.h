@@ -57,6 +57,8 @@ hfile_s *hostapi_file_readdir(hfile_s *hfile);
 
 w_err_t hostapi_file_close(hfile_s *hfile);
 
+w_err_t hostapi_file_remove(char *path);
+
 w_err_t hostapi_file_seek(hfile_s *hfile,w_uint32_t offset);
 
 w_uint32_t hostapi_file_tell(hfile_s *hfile);

@@ -29,6 +29,7 @@
 #include "wind_type.h"
 #include "wind_dlist.h"
 #include "wind_blkdev.h"
+#include "hostfs_api.h"
 #include <stdio.h>
 
 #if WIND_HOSTFS_SUPPORT
@@ -40,6 +41,7 @@
 #define HMODE_A   0x08
 
 #define HOSTFS_MAGIC 0x49AC7D53
+#define HOSTFILE_MAGIC 0x48DC7A56
 
 #define HOSTFS_DIR_LAYCNT 32 //目录深度
 //#define HOSTFS_BLK_SIZE 512  //块大小
@@ -80,7 +82,7 @@
 typedef struct __hostfs_s
 {
     w_uint32_t magic;
-    char *realdir;
+    char *dir_prefix;
 }w_hostfs_s;
 
 //程序关联的文件信息
@@ -88,15 +90,14 @@ typedef struct __hostfile_s
 {
     w_uint32_t magic;
     w_hostfs_s *hfs;
-    char *readpath;
-    FILE *fd;
+    hfile_s *hfile;
 }w_hostfile_s;
 
 w_err_t _wind_hostfs_mod_init(void);
 void *hostfs_mem_malloc(w_int32_t size);
 w_err_t hostfs_mem_free(void *ptr);
 w_err_t hostfs_format(w_hostfs_s *hfs,w_blkdev_s *blkdev);
-w_err_t hostfs_init(w_hostfs_s *hfs,char *realdir);
+w_err_t hostfs_init(w_hostfs_s *hfs,char *dir_prefix);
 w_err_t hostfs_deinit(w_hostfs_s *hfs);
 w_err_t hostfs_match(w_blkdev_s *blkdev);
 

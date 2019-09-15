@@ -3,20 +3,24 @@
 #include "wind_string.h"
 #include "wind_heap.h"
 #include "wind_filepath.h"
-#include <fileapi.h>
-
+#include <sys/stat.h>
+#include <stdio.h>
 
 #if WIND_HOSTFS_SUPPORT
 
 hfileattr_e hostapi_file_type(char *path)
 {
-	w_uint32_t attr;
-    attr = GetFileAttributes(path);
-    if(INVALID_FILE_ATTRIBUTES == attr)
+    char* fileName = path; 
+    struct _stat stat; 
+    int result; 
+    result = _stat(fileName, &stat);
+    if(result != 0)
         return HFILE_TYPE_ERROR;
-    if(attr & FILE_ATTRIBUTE_DIRECTORY)
+    if(_S_IFDIR & stat.st_mode)
         return HFILE_TYPE_DIR;
-    return HFILE_TYPE_FILE;
+    else if(_S_IFREG & stat.st_mode)
+        return HFILE_TYPE_FILE;
+    return HFILE_TYPE_ERROR;
 }
 
 
@@ -86,7 +90,6 @@ static hfile_s*   hostapi_file_create(char *path,w_uint8_t mode,w_uint8_t isdir,
     }
     return hfile;
 }
-
 
 
 static hfile_s*   hostapi_file_open_create(char *path,w_uint8_t mode)
@@ -276,6 +279,20 @@ w_err_t   hostapi_file_close(hfile_s *hfile)
     }
     return hostapi_file_destroy(hfile);
 }
+
+w_err_t hostapi_file_remove(char *path)
+{
+    hfileattr_e attr;
+    attr = hostapi_file_type(path);
+    if(attr == HFILE_TYPE_DIR)
+        _rmdir(path);
+    else if(attr == HFILE_TYPE_FILE)
+        remove(path);
+    else
+        return W_ERR_NOFILE;
+    return W_ERR_OK;
+}
+
 
 w_err_t   hostapi_file_seek(hfile_s *hfile,w_uint32_t offset)
 {

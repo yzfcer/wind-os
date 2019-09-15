@@ -35,6 +35,31 @@ extern "C" {
 /********************************************内部变量定义**********************************************/
 
 /********************************************内部函数定义*********************************************/
+static void print_filename(w_file_s *file)
+{
+    w_err_t err;
+    w_int32_t len;
+    char *buf = W_NULL;
+    do
+    {
+        err = W_ERR_OK;
+        len = wind_strlen(file->obj.name);
+        buf = wind_alloc(len + 2,HP_ALLOCID_VFS);
+        WIND_ASSERT_BREAK(buf != W_NULL,W_ERR_MEM,"");
+        wind_memcpy(buf,file->obj.name,len);
+        if(file->isdir)
+        {
+            buf[len] = '/';
+            buf[len+1] = 0;
+        }
+        else
+            buf[len] = 0;
+        wind_printf("%-24s ",buf);
+    }while(0);
+    if(buf != W_NULL)
+        wind_free(buf);
+    
+}
 
 static w_err_t cmd_ls(w_int32_t argc,char **argv)
 {
@@ -66,7 +91,8 @@ static w_err_t cmd_ls(w_int32_t argc,char **argv)
             sub = wind_freaddir(file);
             if(sub == W_NULL)
                 break;
-            wind_printf("%-24s ",sub->obj.name);
+            //wind_printf("%-24s ",sub->obj.name);
+            print_filename(sub);
             if(i % 4 == 3)
                 wind_printf("\r\n");
         }
