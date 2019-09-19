@@ -91,6 +91,7 @@ typedef struct __hostfile_s
     w_uint32_t magic;
     w_hostfs_s *hfs;
     hfile_s *hfile;
+    w_uint8_t attr;
 }w_hostfile_s;
 
 w_err_t _wind_hostfs_mod_init(void);

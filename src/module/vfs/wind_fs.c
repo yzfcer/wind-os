@@ -46,7 +46,7 @@ static char *fsname[] = {"fs0","fs1","fs2","fs3","fs4"};
 WIND_POOL(fspool,WIND_FS_MAX_NUM,sizeof(w_vfs_s));
 
 
-w_vfs_s *wind_vfs_create(char *name)
+w_vfs_s *wind_vfs_obj_init(char *name)
 {
     w_err_t err;
     w_vfs_s *vfs;
@@ -59,24 +59,15 @@ w_vfs_s *wind_vfs_create(char *name)
     return vfs;    
 }
 
-w_err_t wind_vfs_destroy(w_vfs_s *vfs)
-{
-    w_err_t err;
-    WIND_ASSERT_RETURN(vfs != W_NULL,W_ERR_MEM);
-    WIND_ASSERT_RETURN(vfs->obj.magic == WIND_VFS_MAGIC,W_ERR_INVALID);
-    err = wind_obj_deinit(&vfs->obj,WIND_VFS_MAGIC,&fslist);
-    WIND_ASSERT_RETURN(err == W_ERR_OK,err);
-    return err;
-}
 
-static w_err_t vfs_objs_init(void)
+static w_err_t vfs_all_vfs_objs_init(void)
 {
     w_int32_t i;
     w_vfs_s *vfs;
     WIND_ASSERT_RETURN(sizeof(fsname)/sizeof(char *) >=  WIND_FS_MAX_NUM,W_ERR_FAIL);
     for(i = 0;i < WIND_FS_MAX_NUM;i ++)
     {
-        vfs = wind_vfs_create(fsname[i]);
+        vfs = wind_vfs_obj_init(fsname[i]);
     }
     return W_ERR_OK;
 }
@@ -138,7 +129,7 @@ w_err_t _wind_vfs_mod_init(void)
     DLIST_INIT(fslist);
     err = wind_pool_create("vfs",fspool,sizeof(fspool),sizeof(w_vfs_s));
     WIND_ASSERT_RETURN(err == W_ERR_OK,err);
-    err = vfs_objs_init();
+    err = vfs_all_vfs_objs_init();
     WIND_ASSERT_RETURN(err == W_ERR_OK,err);
     
     _wind_file_mod_init();
@@ -209,7 +200,10 @@ w_err_t wind_vfs_print(void)
         
         wind_printf("mount %s ",wind_obj_name(&vfs->obj));
         wind_printf("%s ",vfs->fstype?vfs->fstype:"    ");
-        wind_printf("%s ",vfs->blkdev?wind_obj_name(&vfs->blkdev->obj):"    ");
+        if(wind_strcmp(vfs->fstype,"hostfs") != 0)
+            wind_printf("%s ",vfs->blkdev?wind_obj_name(&vfs->blkdev->obj):"    ");
+        else
+            wind_printf("%s ",vfs->usr_arg?(char*)vfs->usr_arg:"    ");
         wind_printf("%s\r\n",vfs->mount_path?vfs->mount_path:"    ");
     }
     wind_enable_switch();
@@ -236,7 +230,12 @@ w_err_t wind_vfs_mount(char *fsname,char *fstype,char *blkname,char *path)
         ops = wind_fsops_get(fstype);
         WIND_ASSERT_BREAK(ops != W_NULL,W_ERR_MEM,"ops is NOT exist");
         blkdev = wind_blkdev_get(blkname);
-        WIND_ASSERT_BREAK(blkdev != W_NULL,W_ERR_MEM,"blkdev is NOT exist");
+        //WIND_ASSERT_BREAK(blkdev != W_NULL,W_ERR_MEM,"blkdev is NOT exist");
+        if(wind_strcmp(fstype,"hostfs") == 0)
+        {
+            vfs->usr_arg = wind_salloc(blkname,HP_ALLOCID_VFS);
+            WIND_ASSERT_BREAK(vfs->usr_arg != W_NULL,W_ERR_MEM,"malloc usr_arg failed");
+        }
         
         len = wind_strlen(path)+1;
         vfs->mount_path = wind_alloc(len,HP_ALLOCID_VFS);
@@ -282,17 +281,18 @@ w_err_t wind_vfs_unmount(char *fsname)
     vfs = wind_vfs_get(fsname);
     WIND_ASSERT_RETURN(vfs != W_NULL,W_ERR_INVALID);
     wind_notice("umount %s",fsname);
-    wind_disable_switch();
     CLR_F_VFS_MOUNT(vfs);
-    vfs->blkdev = W_NULL;
-    if(vfs->fstype != W_NULL)
-        wind_free(vfs->fstype);
-    vfs->fstype = W_NULL;
     if(vfs->mount_path != W_NULL)
         wind_free(vfs->mount_path);
     vfs->mount_path = W_NULL;
+    if(vfs->fstype != W_NULL)
+        wind_free(vfs->fstype);
+    vfs->fstype != W_NULL;
+    if(vfs->usr_arg != W_NULL)
+        wind_free(vfs->usr_arg);
+    vfs->usr_arg != W_NULL;
+    vfs->blkdev = W_NULL;
     vfs->ops = W_NULL;
-    wind_enable_switch();
     return W_ERR_OK;
 }
 

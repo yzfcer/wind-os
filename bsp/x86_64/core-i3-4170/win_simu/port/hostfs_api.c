@@ -57,6 +57,8 @@ static w_err_t hostapi_file_destroy(hfile_s *hfile)
         hostapi_mem_free(hfile->path);
     if(hfile->fileinfo != W_NULL)
         hostapi_mem_free(hfile->fileinfo);
+    if(hfile->name != W_NULL)
+        hostapi_mem_free(hfile->name);
     hostapi_mem_free(hfile);
     return W_ERR_OK;
 }
@@ -73,6 +75,8 @@ static hfile_s*   hostapi_file_create(char *path,w_uint8_t mode,w_uint8_t isdir,
         WIND_ASSERT_BREAK(hfile != W_NULL, W_ERR_MEM, "alloc hfile failed");
         wind_memset(hfile,0,sizeof(hfile_s));
         hfile->magic = HFILE_MAGIC;
+        hfile->name = wind_filepath_get_filename(path);
+        WIND_ASSERT_BREAK(hfile->name != W_NULL, W_ERR_MEM, "alloc hfile name failed");
         hfile->fd = fd;
         hfile->subhnd = -1;
         hfile->fileinfo = W_NULL;

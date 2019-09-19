@@ -65,6 +65,7 @@ struct __w_vfs_s
     char *mount_path;
     char *fstype;
     void *fsobj;
+    void *usr_arg;
     w_blkdev_s *blkdev;
     w_fsops_s *ops;
 };

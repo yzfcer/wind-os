@@ -25,6 +25,7 @@ typedef enum
 struct _hfile_s
 {
     w_uint32_t magic;
+    char *name;
     FILE* fd;
     w_int32_t subhnd;
     hfileinfo_s* fileinfo;
