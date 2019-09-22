@@ -121,8 +121,12 @@ void wind_print_space(w_int32_t space8_cnt);
 
 #if (WIND_DEBUG_SUPPORT && (PRINT_LEVEL <= PRINT_LV_TRACE))
 #define wind_trace(fmt,...) do{wind_printf("%s[%s,%d] "fmt"\r\n","[trace] ",__FUNCTION__,__LINE__,##__VA_ARGS__);}while(0)
+#define wind_trace_enter() do{wind_printf("%s %s enter(%d)\r\n","[trace] ",__FUNCTION__,__LINE__ );}while(0)
+#define wind_trace_exit()  do{wind_printf("%s %s exit (%d)\r\n","[trace] ",__FUNCTION__,__LINE__ );}while(0)
 #else 
 #define wind_trace(fmt,...)
+#define wind_trace_enter()
+#define wind_trace_exit()
 #endif
 
 #if (WIND_DEBUG_SUPPORT && (PRINT_LEVEL <= PRINT_LV_NOTICE))

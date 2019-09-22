@@ -29,24 +29,24 @@
 #include "wind_type.h"
 #include "wind_dlist.h"
 #include "wind_blkdev.h"
-#include "hostfs_api.h"
 #include <stdio.h>
+#include <direct.h>
+#include <io.h>
+#include <sys/stat.h>
 
 #if WIND_HOSTFS_SUPPORT
-//文件操作模式
-#define HMODE_R   0x01
-#define HMODE_W   0x02
-#define HMODE_RW  0x03
-#define HMODE_CRT 0x04
-#define HMODE_A   0x08
 
-#define HOSTFS_MAGIC 0x49AC7D53
-#define HOSTFILE_MAGIC 0x48DC7A56
-
+#define HOSTFS_MAGIC   0x49AC7D53
+#define HOSTFILE_MAGIC 0x2576DA83
+#define HFILE_NAME_LEN 64    //文件名长度
 #define HOSTFS_DIR_LAYCNT 32 //目录深度
-//#define HOSTFS_BLK_SIZE 512  //块大小
-
 #define HOSTFS_MAX_FILE_SIZE 0x7fffffff //文件长度限制，2GB
+
+#define HFMDOE_R   0x01
+#define HFMDOE_W   0x02
+#define HFMDOE_RW  0x03
+#define HFMDOE_CRT 0x04
+
 
 //文件属性
 #define HFILE_ATTR_DIR    (0x01 << 0) //是否目录
@@ -76,7 +76,15 @@
 #define SET_HFILE_ATTR_VERIFY(attr) (attr |= HFILE_ATTR_VERIFY)
 #define CLR_HFILE_ATTR_VERIFY(attr) (attr &= (~HFILE_ATTR_VERIFY))
 
+typedef struct _finddata_t hfileinfo_s;
+typedef struct __hostfile_s w_hostfile_s;
 
+typedef enum
+{
+    HFILE_TYPE_ERROR = 0,
+    HFILE_TYPE_DIR = 1,
+    HFILE_TYPE_FILE = 2,
+}hfileattr_e;
 
 //程序关联的文件系统信息
 typedef struct __hostfs_s
@@ -86,13 +94,21 @@ typedef struct __hostfs_s
 }w_hostfs_s;
 
 //程序关联的文件信息
-typedef struct __hostfile_s
+struct __hostfile_s
 {
     w_uint32_t magic;
     w_hostfs_s *hfs;
-    hfile_s *hfile;
+    char *path;
+    char *name;
+    w_uint8_t mode;
     w_uint8_t attr;
-}w_hostfile_s;
+    w_uint8_t isdir;
+    FILE* fd;
+
+    FILE *subfd;
+    w_hostfile_s *subhfile;
+    hfileinfo_s* fileinfo;
+};
 
 w_err_t _wind_hostfs_mod_init(void);
 void *hostfs_mem_malloc(w_int32_t size);
@@ -116,6 +132,7 @@ w_err_t hostfile_fgets(w_hostfile_s* hfile,char *buff, w_int32_t maxlen);
 w_err_t hostfile_fputs(w_hostfile_s* hfile,char *buff);
 
 w_err_t hostfile_readdir(w_hostfile_s* hfile,w_hostfile_s** sub);
+w_uint32_t host_file_size(w_hostfile_s *hfile);
 
 
 #endif

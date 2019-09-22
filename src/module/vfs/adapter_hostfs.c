@@ -27,7 +27,6 @@
 #include "wind_fs.h"
 #include "wind_file.h"
 #include "hostfs.h"
-//#include "hostfile.h"
 #include "wind_debug.h"
 #include "wind_string.h"
 #include "wind_heap.h"
@@ -42,27 +41,30 @@ static w_err_t hostfs_op_opsinit(void)
 static void* hostfs_op_init(w_vfs_s *vfs)
 {
     w_err_t err;
-    w_hostfs_s *lfs;
+    w_hostfs_s *hfs = W_NULL;
+    char *prefix = W_NULL;
     WIND_ASSERT_RETURN(vfs != W_NULL, W_NULL);
     do
     {
         err = W_ERR_OK;
-        if(vfs->fsobj == W_NULL)
-            vfs->fsobj = hostfs_mem_malloc(sizeof(w_hostfs_s));
-        WIND_ASSERT_BREAK(vfs->fsobj != W_NULL,W_ERR_MEM,"alloc fsobj failed");
-        lfs = (w_hostfs_s *)vfs->fsobj;
-        lfs->blkdev = vfs->blkdev;
-        err = hostfs_init(lfs,vfs->blkdev);
-        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"hostfs init failed");
+        WIND_ASSERT_BREAK(vfs->fsobj == W_NULL,W_ERR_OK,"hostfs has been init");
+        hfs = hostfs_mem_malloc(sizeof(w_hostfs_s));
+        WIND_ASSERT_BREAK(hfs != W_NULL,W_ERR_MEM,"alloc fsobj failed");
+        //wind_memset(hfs,0,sizeof(w_hostfs_s));
+        err = hostfile_existing(vfs->fsobj,(char *)vfs->usr_arg);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"dirent is not exist");
+        err = hostfs_init(hfs,vfs->usr_arg);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"host fs init failed");
+        vfs->fsobj = hfs;
     }while(0);
     
     if(err != W_ERR_OK)
     {
-        if(vfs->fsobj != W_NULL)
-        {
-            hostfs_mem_free(vfs->fsobj);
-            vfs->fsobj = W_NULL;
-        }
+        if(prefix != W_NULL)
+            wind_free(prefix);
+        if(hfs != W_NULL)
+            hostfs_mem_free(hfs);
+        vfs->fsobj = W_NULL;
     }
     return vfs->fsobj;
 }
@@ -70,14 +72,14 @@ static void* hostfs_op_init(w_vfs_s *vfs)
 static w_err_t hostfs_op_deinit(w_vfs_s *vfs)
 {
     w_err_t err;
-    w_hostfs_s *lfs;
+    w_hostfs_s *hfs;
     WIND_ASSERT_RETURN(vfs != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(vfs->fsobj != W_NULL,W_ERR_PTR_NULL);
     do 
     {
         err = W_ERR_OK;
-        lfs = (w_hostfs_s *)vfs->fsobj;
-        err = hostfs_deinit(lfs);
+        hfs = (w_hostfs_s *)vfs->fsobj;
+        err = hostfs_deinit(hfs);
         WIND_ASSERT_BREAK(err == W_ERR_OK,err,"hostfs deinit failed");
         hostfs_mem_free(vfs->fsobj);
         vfs->fsobj = W_NULL;
@@ -88,58 +90,24 @@ static w_err_t hostfs_op_deinit(w_vfs_s *vfs)
 
 static w_err_t hostfs_op_format(w_vfs_s *vfs)
 {
-    w_err_t err;
-    w_hostfs_s *lfs;
-    WIND_ASSERT_RETURN(vfs != W_NULL,W_ERR_PTR_NULL);
-    //WIND_ASSERT_RETURN(vfs->fsobj != W_NULL,W_ERR_PTR_NULL);
-    do
-    {
-        err = W_ERR_OK;
-        if(vfs->fsobj == W_NULL)
-            vfs->fsobj = hostfs_mem_malloc(sizeof(w_hostfs_s));
-        WIND_ASSERT_BREAK(vfs->fsobj != W_NULL,W_ERR_MEM,"alloc fsobj failed");
-        lfs = (w_hostfs_s *)vfs->fsobj;
-        lfs->blkdev = vfs->blkdev;
-        err = hostfs_format(lfs,vfs->blkdev);
-        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"hostfs init failed");
-    }while(0);
-    if(err != W_ERR_OK)
-    {
-        if(vfs->fsobj != W_NULL)
-        {
-            hostfs_mem_free(vfs->fsobj);
-            vfs->fsobj = W_NULL;
-        }
-    }
-    return err;
+    return W_ERR_FAIL;
 }
 
 w_err_t hostfs_op_matchfs(char *devname)
 {
-    w_err_t err;
-    w_blkdev_s *blkdev;
-    WIND_ASSERT_RETURN(devname != W_NULL,W_ERR_PTR_NULL);
-    do
-    {
-        err = W_ERR_OK;
-        blkdev = wind_blkdev_get(devname);
-        WIND_ASSERT_BREAK(blkdev != W_NULL,W_ERR_FAIL,"blkdev is not exist");
-        err = hostfs_match(blkdev);
-        WIND_CHECK_BREAK(err == W_ERR_OK,err);
-    }while(0);
-    return err;
+    return W_ERR_FAIL;
 }
 
 
 static w_err_t hostfs_op_open(w_file_s *file,w_uint8_t fmode)
 {
     w_hostfile_s *hfile;
-    w_hostfs_s *lfs;
+    w_hostfs_s *hfs;
     WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
-    lfs = (w_hostfs_s*)file->vfs->fsobj;
-    WIND_ASSERT_RETURN(lfs != W_NULL,W_ERR_FAIL);
+    hfs = (w_hostfs_s*)file->vfs->fsobj;
+    WIND_ASSERT_RETURN(hfs != W_NULL,W_ERR_FAIL);
 
-    hfile = hostfile_open(lfs,file->realpath,fmode);
+    hfile = hostfile_open(hfs,file->realpath,fmode);
     if(hfile == W_NULL)
         return W_ERR_FAIL;
     
@@ -175,13 +143,13 @@ static w_err_t hostfs_op_readdir(w_file_s* dir,w_file_s* sub)
         subhfile = (w_hostfile_s *)sub->fileobj;
         err = hostfile_readdir((w_hostfile_s *)dir->fileobj,&subhfile);
         WIND_CHECK_BREAK(err == W_ERR_OK,err);
-        WIND_ASSERT_BREAK(subhfile->info.magic == HOSTFILE_MAGIC,W_ERR_INVALID,"invalid hostfile dound");
+        WIND_ASSERT_BREAK(subhfile->magic == HOSTFILE_MAGIC,W_ERR_INVALID,"invalid hostfile dound");
         sub->fileobj = subhfile;
         sub->obj.magic = WIND_FILE_MAGIC;
         
         if(sub->obj.name != W_NULL)
             wind_free((void*)sub->obj.name);
-        sub->obj.name = (const char*)wind_salloc(subhfile->info.name,HP_ALLOCID_VFS);
+        sub->obj.name = (const char*)wind_salloc(subhfile->name,HP_ALLOCID_VFS);
         WIND_ASSERT_BREAK(sub->obj.name != W_NULL,W_ERR_MEM,"malloc filename failed");
         sub->isdir = IS_HFILE_ATTR_DIR(subhfile->attr)?1:0;
         
@@ -222,11 +190,8 @@ static w_err_t hostfs_op_rename(w_file_s* file,char *newname)
     {
         err = W_ERR_OK;
         hfile = (w_hostfile_s *)file->fileobj;
-        oldname = (char *)wind_salloc(hfile->info.name,HP_ALLOCID_VFS);
+        oldname = (char *)wind_salloc(hfile->name,HP_ALLOCID_VFS);
         WIND_ASSERT_BREAK(oldname != W_NULL,W_ERR_MEM,"malloc filename failed");
-        //wind_strcpy(hfile->info.name,newname);
-        //err = fileinfo_write(&hfile->info,file->vfs->blkdev);
-        //WIND_ASSERT_BREAK(err == W_ERR_OK,err,"write fileinfo failed");
     }while(0);
     if(oldname != W_NULL)
         wind_free(oldname);
