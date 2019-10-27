@@ -53,7 +53,7 @@ static w_err_t cmd_cd(w_int32_t argc,char **argv)
             fullpath = wind_filepath_generate(curpath,curpath,1);
         WIND_ASSERT_BREAK(fullpath != W_NULL,W_ERR_MEM,"generate fullpath failed");
         isexist = wind_fexist(fullpath);
-        WIND_ASSERT_BREAK(isexist,W_ERR_NOFILE,"directory is NOT exist.")
+        WIND_ASSERT_BREAK(isexist,W_ERR_NOFILE,"directory is NOT exist.");
         wind_filepath_set_current(fullpath);
         
     }while(0);

@@ -37,6 +37,7 @@ w_int32_t wind_filepath_split(char *path,char **layers,w_int32_t layercnt);
 w_err_t wind_filepath_check_valid(char *path);
 char* wind_filepath_get_parent(char *path);
 char* wind_filepath_get_filename(char *path);
+char* wind_filepath_to_directory(char *path);
 
 
 #endif

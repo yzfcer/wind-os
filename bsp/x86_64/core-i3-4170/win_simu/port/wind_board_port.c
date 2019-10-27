@@ -79,10 +79,9 @@ void _wind_heaps_create(void)
 void _wind_fs_mount_init(void)
 {
     wind_vfs_mount("fs0","listfs","disk0","/");
-    //wind_vfs_mount("fs0","listfs","memblk","/");
     wind_vfs_mount("fs1","treefs","null0","/var");
     wind_vfs_mount("fs2","treefs","null1","/mnt/");
-    //wind_vfs_mount("fs3","listfs","disk0","/disk/");
+    wind_vfs_mount("fs3","hostfs","D:/hostfs/","/host");
 }
 #endif
 

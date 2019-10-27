@@ -106,7 +106,7 @@ static w_err_t mount_param_check(char *fsname,char *fstype,char *blkname,char *p
     foreach_node(dnode,&fslist)
     {
         vfs = NODE_TO_FS(dnode);
-        is_match = ((vfs->mount_path != 0)&&(wind_strcmp(path,vfs->mount_path) != 0));
+        is_match = ((vfs->mount_path != 0)&&(wind_strcmp(path,vfs->mount_path) == 0));
         WIND_ASSERT_MSG_RETURN(!is_match,W_ERR_REPEAT,"mount path %s has been used",path);
         if(blkname == W_NULL)
             continue;
@@ -213,9 +213,9 @@ w_err_t wind_vfs_mount(char *fsname,char *fstype,char *blkname,char *path)
     w_vfs_s *vfs;
     w_int32_t len;
     w_fsops_s *ops;
+    wind_notice("mount %s type %s dev %s path %s",fsname,fstype,blkname,path);
     err = mount_param_check(fsname,fstype,blkname,path);
     WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_INVALID);
-    wind_notice("mount %s type %s dev %s path %s",fsname,fstype,blkname,path);
     do
     {
         err = W_ERR_OK;
@@ -239,6 +239,7 @@ w_err_t wind_vfs_mount(char *fsname,char *fstype,char *blkname,char *path)
         
         len = wind_strlen(fstype)+1;
         vfs->fstype = wind_alloc(len,HP_ALLOCID_VFS);
+
         WIND_ASSERT_BREAK(vfs->fstype != W_NULL,W_ERR_MEM,"malloc fstype failed");
         wind_strcpy(vfs->fstype,fstype);
         

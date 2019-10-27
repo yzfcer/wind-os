@@ -68,7 +68,10 @@ char *wind_filepath_generate(char *pre_path,char *relative_path,w_uint16_t isdir
     len = wind_strlen(relative_path) + 3;
     if(relative_path[0] == '/')
     {
-        path = wind_salloc(relative_path,HP_ALLOCID_VFS);
+        path = wind_alloc(len,HP_ALLOCID_VFS);
+        WIND_ASSERT_RETURN(path != W_NULL,W_NULL);
+        wind_strcpy(path,relative_path);
+        //path = wind_salloc(relative_path,HP_ALLOCID_VFS);
     }
     else
     {
@@ -84,7 +87,11 @@ char *wind_filepath_generate(char *pre_path,char *relative_path,w_uint16_t isdir
     
     len = wind_strlen(path);
     if(isdir && (path[len-1] != '/'))
+    {
         path[len] = '/';
+        path[len+1] = 0;
+    }
+        
     err = wind_filepath_check_valid(path);
     if(err != W_ERR_OK)
     {
@@ -246,6 +253,25 @@ char* wind_filepath_get_filename(char *path)
     }
     wind_free(tmppath);
     return W_NULL;
+}
+
+char* wind_filepath_to_directory(char *path)
+{
+    w_int32_t len;
+    char *newpath;
+    WIND_ASSERT_RETURN(path != W_NULL,W_ERR_PTR_NULL);
+    len = wind_strlen(path);
+    if(!wind_filepath_isdir(path))
+    {
+        newpath = wind_alloc(len+2,HP_ALLOCID_VFS);
+        WIND_ASSERT_RETURN(newpath != W_NULL,W_NULL);
+        wind_strcpy(newpath,path);
+        newpath[len] = '/';
+        newpath[len+1] = 0;
+    }
+    else
+        newpath = wind_salloc(path,HP_ALLOCID_VFS);
+    return newpath;
 }
 
 
