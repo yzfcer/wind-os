@@ -133,8 +133,6 @@ w_err_t hostfile_seek(w_hostfile_s* hfile,w_int32_t offset);
 w_int32_t hostfile_ftell(w_hostfile_s* hfile);
 w_int32_t hostfile_read(w_hostfile_s* hfile,w_uint8_t *buff, w_int32_t size);
 w_int32_t hostfile_write(w_hostfile_s* hfile,w_uint8_t *buff, w_int32_t size);
-w_err_t hostfile_fgets(w_hostfile_s* hfile,char *buff, w_int32_t maxlen);
-w_err_t hostfile_fputs(w_hostfile_s* hfile,char *buff);
 
 w_err_t hostfile_readdir(w_hostfile_s* hfile,w_hostfile_s** sub);
 w_uint32_t host_file_size(w_hostfile_s *hfile);

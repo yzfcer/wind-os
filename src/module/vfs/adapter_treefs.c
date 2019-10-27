@@ -180,14 +180,7 @@ static w_int32_t treefs_op_write(w_file_s* file,w_uint8_t *buff, w_int32_t size)
     WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
     return treefile_write((w_treefile_s *)file->fileobj,buff,size);
 }
-static w_err_t treefs_op_fgets(w_file_s* file,char *buff, w_int32_t maxlen)
-{
-    return W_ERR_FAIL;
-}
-static w_err_t treefs_op_fputs(w_file_s* file,char *buff)
-{
-    return W_ERR_FAIL;
-}
+
 
 FS_OPS_DEF(treefs);
 

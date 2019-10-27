@@ -107,6 +107,9 @@ extern w_fsops_s treefs_ops;
 #if WIND_LISTFS_SUPPORT
 extern w_fsops_s listfs_ops;
 #endif
+#if WIND_HOSTFS_SUPPORT
+extern w_fsops_s hostfs_ops;
+#endif
 
 w_err_t wind_fsops_init(void)
 {
@@ -116,6 +119,9 @@ w_err_t wind_fsops_init(void)
 #endif
 #if WIND_LISTFS_SUPPORT
     wind_fsops_register(&listfs_ops);
+#endif
+#if WIND_HOSTFS_SUPPORT
+    wind_fsops_register(&hostfs_ops);
 #endif
     return W_ERR_OK;
 }

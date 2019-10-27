@@ -73,7 +73,7 @@ struct __w_vfs_s
 struct __w_fsops_s
 {
     w_obj_s obj;
-    w_err_t (*opsinit)(void);//文件系统类型初始化
+    w_err_t (*opsinit)(void);//文件系统操作集初始化
     void*   (*init)(w_vfs_s *fs);//文件系统类型初始化
     w_err_t (*deinit)(w_vfs_s *fs);//文件系统类型反初始化
     w_err_t (*format)(w_vfs_s *fs);//格式化
@@ -88,8 +88,6 @@ struct __w_fsops_s
     w_int32_t (*ftell)(w_file_s* file);
     w_int32_t (*read)(w_file_s* file,w_uint8_t *buff, w_int32_t size);
     w_int32_t (*write)(w_file_s* file,w_uint8_t *buff, w_int32_t size);
-    w_err_t (*fgets)(w_file_s* file,char *buff, w_int32_t maxlen);
-    w_err_t (*fputs)(w_file_s* file,char *buff);
 };
 
 struct __w_file_s
@@ -124,9 +122,7 @@ fs##_op_seek,\
 fs##_op_rename,\
 fs##_op_ftell,\
 fs##_op_read,\
-fs##_op_write,\
-fs##_op_fgets,\
-fs##_op_fputs,\
+fs##_op_write \
 }
 
 #endif

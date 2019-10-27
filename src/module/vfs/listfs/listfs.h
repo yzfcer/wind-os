@@ -134,8 +134,6 @@ w_err_t listfile_seek(w_listfile_s* file,w_int32_t offset);
 w_int32_t listfile_ftell(w_listfile_s* file);
 w_int32_t listfile_read(w_listfile_s* file,w_uint8_t *buff, w_int32_t size);
 w_int32_t listfile_write(w_listfile_s* file,w_uint8_t *buff, w_int32_t size);
-w_err_t listfile_fgets(w_listfile_s* file,char *buff, w_int32_t maxlen);
-w_err_t listfile_fputs(w_listfile_s* file,char *buff);
 
 w_err_t listfile_readdir(w_listfile_s* file,w_listfile_s** sub);
 

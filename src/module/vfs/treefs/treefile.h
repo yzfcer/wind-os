@@ -26,9 +26,6 @@ w_int32_t treefile_write(w_treefile_s* file,w_uint8_t *buff, w_int32_t size);
 
 w_err_t treefile_readdir(w_treefile_s* dir,w_treefile_s **sub);
 
-w_err_t treefile_fgets(w_treefile_s* file,char *buff, w_int32_t maxlen);
-
-w_err_t treefile_fputs(w_treefile_s* file,char *buff);
 
 #endif
 #endif

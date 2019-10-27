@@ -225,7 +225,6 @@ w_hostfile_s* hostfile_open(w_hostfs_s *hfs,const char *path,w_uint8_t mode)
         WIND_ASSERT_BREAK(hfile != W_NULL,W_ERR_MEM,"alloc hostfile failed");
         hfile->magic = HOSTFILE_MAGIC;
         hfile->hfs = hfs;
-        //hostfile->hfile = hfile;
     }while(0);
     if(fullpath)
         wind_free(fullpath);
@@ -470,20 +469,6 @@ w_uint32_t host_file_size(w_hostfile_s *hfile)
 	return len;
 }
 
-
-w_err_t hostfile_fgets(w_hostfile_s* hfile,char *buff, w_int32_t maxlen)
-{
-    WIND_ASSERT_RETURN(hfile != W_NULL,W_NULL);
-    WIND_ASSERT_RETURN(hfile->magic == HOSTFILE_MAGIC,W_ERR_INVALID);
-    return W_ERR_OK;
-}
-
-w_err_t hostfile_fputs(w_hostfile_s* hfile,char *buff)
-{
-    WIND_ASSERT_RETURN(hfile != W_NULL,W_NULL);
-    WIND_ASSERT_RETURN(hfile->magic == HOSTFILE_MAGIC,W_ERR_INVALID);
-    return W_ERR_OK;
-}
 
 #endif
 

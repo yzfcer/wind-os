@@ -1160,40 +1160,6 @@ w_err_t listfile_readdir(w_listfile_s* dir,w_listfile_s** sub)
 }
 
 
-w_err_t listfile_fgets(w_listfile_s* file,char *buff, w_int32_t maxlen)
-{
-    w_int32_t i,len;
-    WIND_ASSERT_RETURN(file != W_NULL,-1);
-    WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,-1);
-    WIND_ASSERT_RETURN(file->mode & LFMODE_R,-1);
-    
-    len = listfile_read(file,buff,maxlen);
-    WIND_ASSERT_RETURN(len > 0,W_ERR_FAIL);
-    for(i = 0;i < len;i ++)
-    {
-        if(buff[i] == '\n')
-        {
-            buff[i] = 0;
-            break;
-        }
-    }
-    WIND_ASSERT_RETURN(i < len,W_ERR_FAIL);
-    return W_ERR_OK;
-}
-
-w_err_t listfile_fputs(w_listfile_s* file,char *buff)
-{
-    w_int32_t len;
-    WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(file->mode & LFMODE_W,W_ERR_NOT_SUPPORT);
-    WIND_ASSERT_RETURN(buff != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(buff[0] != 0,W_ERR_INVALID);
-    len = wind_strlen(buff);
-    len = listfile_write(file,buff,len);
-    WIND_ASSERT_RETURN(len > 0,W_ERR_FAIL);
-    return W_ERR_OK;
-}
 
 #endif
 

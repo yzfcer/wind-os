@@ -387,38 +387,5 @@ w_err_t treefile_readdir(w_treefile_s* dir,w_treefile_s **sub)
 }
 
 
-w_err_t treefile_fgets(w_treefile_s* file,char *buff, w_int32_t maxlen)
-{
-    w_int32_t i,len;
-    WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(buff != W_NULL,W_ERR_PTR_NULL);
-    len = treefile_read(file,(w_uint8_t*)buff,maxlen);
-    WIND_ASSERT_RETURN(len > 0,-1);
-    len -= 1;
-    for(i = 0;i < len;i ++)
-    {
-        if(buff[i] == '\n')
-        {
-            buff[i] = 0;
-            treefile_seek(file,i+1);
-            return W_ERR_OK;
-        }
-    }
-    buff[len] = 0;
-    treefile_seek(file,len+1);
-    return W_ERR_OK;
-}
-w_err_t treefile_fputs(w_treefile_s* file,char *buff)
-{
-    w_int32_t len;
-    WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(buff != W_NULL,W_ERR_PTR_NULL);
-    len = wind_strlen(buff);
-    if(len > 0)
-        treefile_write(file,(w_uint8_t*)buff,len);
-    treefile_write(file,"\n",1);
-    return W_ERR_OK;
-}
-
 #endif
 

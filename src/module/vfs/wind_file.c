@@ -384,28 +384,34 @@ w_int32_t wind_fwrite(w_file_s *file,w_uint8_t *buff, w_int32_t size)
 
 w_err_t wind_fgets(w_file_s *file,char *buff, w_int32_t maxlen)
 {
-    w_int32_t len = -1;
+    w_int32_t i,len;
     WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(buff != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(maxlen > 0,W_ERR_INVALID);
     WIND_ASSERT_RETURN(file->isdir == 0, W_ERR_FAIL);
-    wind_mutex_lock(file->mutex);
-    if(file->vfs->ops->fgets)
-        len = file->vfs->ops->fgets(file,buff,maxlen);
-    wind_mutex_unlock(file->mutex);
+    len = wind_fread(file,buff,maxlen);
+    WIND_ASSERT_RETURN(len > 0,W_ERR_FAIL);
+    for(i = 0;i < len;i ++)
+    {
+        if(buff[i] == '\n')
+        {
+            buff[i] = 0;
+            break;
+        }
+    }
+    WIND_ASSERT_RETURN(i < len,W_ERR_FAIL);
     return len > 0?W_ERR_OK:W_ERR_FAIL;
 }
 
 w_err_t wind_fputs(w_file_s *file,char *buff)
 {
-    w_int32_t len = -1;
+    w_int32_t len;
     WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(buff != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(file->isdir == 0, W_ERR_FAIL);
-    wind_mutex_lock(file->mutex);
-    if(file->vfs->ops->fputs)
-        len = file->vfs->ops->fputs(file,buff);
-    wind_mutex_unlock(file->mutex);
+    len = wind_strlen(buff);
+    len = wind_fwrite(file,buff,len);
+    WIND_ASSERT_RETURN(len > 0,W_ERR_FAIL);
     return len > 0?W_ERR_OK:W_ERR_FAIL;
 }
 

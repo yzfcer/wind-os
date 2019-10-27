@@ -251,15 +251,6 @@ static w_int32_t listfs_op_write(w_file_s* file,w_uint8_t *buff, w_int32_t size)
     return listfile_write((w_listfile_s *)file->fileobj,buff,size);
 }
 
-static w_err_t listfs_op_fgets(w_file_s* file,char *buff, w_int32_t maxlen)
-{
-    return W_ERR_FAIL;
-}
-
-static w_err_t listfs_op_fputs(w_file_s* file,char *buff)
-{
-    return W_ERR_FAIL;
-}
 
 FS_OPS_DEF(listfs);
 
