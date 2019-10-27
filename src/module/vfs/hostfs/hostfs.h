@@ -119,7 +119,6 @@ hfileattr_e host_file_type(char *path);
 w_err_t _wind_hostfs_mod_init(void);
 void *hostfs_mem_malloc(w_int32_t size);
 w_err_t hostfs_mem_free(void *ptr);
-w_err_t hostfs_format(w_hostfs_s *hfs,w_blkdev_s *blkdev);
 w_err_t hostfs_init(w_hostfs_s *hfs,char *dir_prefix);
 w_err_t hostfs_deinit(w_hostfs_s *hfs);
 w_err_t hostfs_match(w_blkdev_s *blkdev);

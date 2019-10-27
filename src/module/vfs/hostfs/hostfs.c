@@ -117,7 +117,7 @@ static w_hostfile_s*   host_file_create(char *path,w_uint8_t mode,w_uint8_t isdi
         hfile->subfd = (FILE *)W_NULL;
         hfile->isdir = isdir;
         hfile->mode = mode;
-        hfile->path = wind_salloc(path, HP_ALLOCID_HOSTFS);
+        hfile->path = (char*)wind_salloc(path, HP_ALLOCID_HOSTFS);
         WIND_ASSERT_BREAK(hfile->path != W_NULL, W_ERR_MEM, "alloc path failed");
     }while(0);
     if(err != W_ERR_OK)
@@ -132,7 +132,7 @@ static w_hostfile_s*   host_file_create(char *path,w_uint8_t mode,w_uint8_t isdi
 static w_hostfile_s*   host_file_open_exist(char *path,w_uint8_t mode)
 {
     w_err_t err;
-    FILE *file;
+    FILE *fd;
     w_hostfile_s *hfile = W_NULL;
     hfileattr_e attr;
     w_uint8_t isdir;
@@ -140,16 +140,16 @@ static w_hostfile_s*   host_file_open_exist(char *path,w_uint8_t mode)
     {
         err = W_ERR_OK;
         attr = host_file_type(path);
-        WIND_ASSERT_BREAK(attr != HFILE_TYPE_ERROR, W_ERR_FAIL, "get file type failed");
+        WIND_ASSERT_BREAK(attr != HFILE_TYPE_ERROR, W_ERR_FAIL, "get hfile type failed");
         isdir = (attr == HFILE_TYPE_DIR)?1:0;
         if(!isdir)
         {
-            file = fopen(path,"rb+");
-            WIND_ASSERT_BREAK(file != W_NULL,W_ERR_FAIL,"open file failed");
+            fd = fopen(path,"rb+");
+            WIND_ASSERT_BREAK(fd != W_NULL,W_ERR_FAIL,"open hfile failed");
         }
         
-        hfile = host_file_create(path,mode,isdir,file);
-        WIND_ASSERT_BREAK(hfile != W_NULL,W_ERR_FAIL,"create file obj failed");
+        hfile = host_file_create(path,mode,isdir,fd);
+        WIND_ASSERT_BREAK(hfile != W_NULL,W_ERR_FAIL,"create hfile obj failed");
         
     }while(0);
     if(err != W_ERR_OK)
@@ -167,7 +167,7 @@ static w_hostfile_s*   host_file_open_create(char *path,w_uint8_t mode)
     w_int8_t isdir;
     w_int32_t res;
     w_err_t err;
-    FILE *file = (FILE *)W_NULL;
+    FILE *fd = (FILE *)W_NULL;
     w_hostfile_s *hfile = (w_hostfile_s *)W_NULL;
     WIND_ASSERT_RETURN(path != W_NULL, (w_hostfile_s *)W_NULL);
     do
@@ -175,26 +175,26 @@ static w_hostfile_s*   host_file_open_create(char *path,w_uint8_t mode)
         err = W_ERR_OK;
         if(!hfile->isdir)
         {
-            file = fopen(path,"wb+");
-            WIND_ASSERT_BREAK(file != W_NULL, W_ERR_FAIL, "create file failed");
+            fd = fopen(path,"wb+");
+            WIND_ASSERT_BREAK(fd != W_NULL, W_ERR_FAIL, "create hfile failed");
         }
         else
         {
             res = _mkdir(path);
             WIND_ASSERT_BREAK(res == 0, W_ERR_FAIL, "make dir failed");
-            file = (FILE *)W_NULL;
+            fd = (FILE *)W_NULL;
         }
         isdir = wind_filepath_isdir(path)?1:0;
-        hfile = host_file_create(path,mode,isdir,file);
-        WIND_ASSERT_BREAK(hfile != W_NULL,W_ERR_FAIL,"create file obj failed");
+        hfile = host_file_create(path,mode,isdir,fd);
+        WIND_ASSERT_BREAK(hfile != W_NULL,W_ERR_FAIL,"create hfile obj failed");
     }while(0);
     
     if(err != W_ERR_OK)
     {
         if(hfile)
             host_file_destroy(hfile);
-        else if(file)
-            fclose(file);
+        else if(fd)
+            fclose(fd);
         hfile = (w_hostfile_s *)W_NULL;
     }
     return hfile;
@@ -206,14 +206,13 @@ w_hostfile_s* hostfile_open(w_hostfs_s *hfs,const char *path,w_uint8_t mode)
     w_err_t err,exist;
     w_uint8_t isdir;
     w_hostfile_s *hfile = (w_hostfile_s *)W_NULL;
-    //w_hostfile_s *hostfile = (w_hostfile_s *)W_NULL;
     char *fullpath = (char *)W_NULL;
     do
     {
         err = W_ERR_OK;
         
         exist = hostfile_existing(hfs,path);
-        WIND_ASSERT_BREAK((exist == W_ERR_OK) || ((mode & HFMDOE_CRT) != 0),W_ERR_NOFILE,"file is not exist");
+        WIND_ASSERT_BREAK((exist == W_ERR_OK) || ((mode & HFMDOE_CRT) != 0),W_ERR_NOFILE,"hfile is not exist");
         isdir = wind_filepath_isdir((char*)path);
         fullpath = wind_filepath_generate(hfs->dir_prefix,path,isdir);
         WIND_ASSERT_BREAK(fullpath != W_NULL,W_ERR_FAIL,"get full path failed");
@@ -297,13 +296,19 @@ w_err_t hostfile_remove(w_hostfs_s *hfs,const char *path)
 }
 
 
-w_err_t hostfile_set_attr(w_hostfile_s* file,w_uint8_t attr)
+w_err_t hostfile_set_attr(w_hostfile_s* hfile,w_uint8_t attr)
 {
+    WIND_ASSERT_RETURN(hfile != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(hfile->magic == HOSTFILE_MAGIC,W_ERR_INVALID);
+    hfile->attr = attr;
     return W_ERR_OK;
 }
 
-w_err_t hostfile_get_attr(w_hostfile_s* file,w_uint8_t *attr)
+w_err_t hostfile_get_attr(w_hostfile_s* hfile,w_uint8_t *attr)
 {
+    WIND_ASSERT_RETURN(hfile != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(hfile->magic == HOSTFILE_MAGIC,W_ERR_INVALID);
+    *attr = hfile->attr;
     return W_ERR_OK;
 }
 
@@ -311,7 +316,7 @@ w_err_t hostfile_get_attr(w_hostfile_s* file,w_uint8_t *attr)
 w_bool_t hostfile_existing(w_hostfs_s *hfs,const char *path)
 {
     w_err_t err;
-    FILE *file;
+    FILE *fd;
     w_uint8_t isdir;
     char *fullpath = W_NULL;
     do
@@ -320,38 +325,38 @@ w_bool_t hostfile_existing(w_hostfs_s *hfs,const char *path)
         isdir = wind_filepath_isdir(path);
         fullpath = wind_filepath_generate(hfs->dir_prefix,path,isdir);
         WIND_ASSERT_BREAK(fullpath != W_NULL,W_ERR_FAIL,"get full path failed");
-        file = fopen(path,"r");
-        WIND_CHECK_BREAK(file != W_NULL, W_ERR_FAIL);
-        fclose(file);
+        fd = fopen(path,"r");
+        WIND_CHECK_BREAK(fd != W_NULL, W_ERR_FAIL);
+        fclose(fd);
     }while(0);
     if(fullpath)
         wind_free(fullpath);
     return err == W_ERR_OK ? W_TRUE : W_FALSE;
 }
 
-w_err_t hostfile_seek(w_hostfile_s* file,w_int32_t offset)
+w_err_t hostfile_seek(w_hostfile_s* hfile,w_int32_t offset)
 {
     w_err_t err;
-    WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(file->magic != HOSTFILE_MAGIC,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(hfile != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(hfile->magic != HOSTFILE_MAGIC,W_ERR_INVALID);
     do
     {
         err = W_ERR_OK;
-        fseek(file->fd,offset,SEEK_SET);
+        fseek(hfile->fd,offset,SEEK_SET);
     }while(0);
     return err;
 }
 
-w_int32_t hostfile_ftell(w_hostfile_s* file)
+w_int32_t hostfile_ftell(w_hostfile_s* hfile)
 {
     w_err_t err;
     w_int32_t offset = -1;
-    WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(file->magic != HOSTFILE_MAGIC,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(hfile != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(hfile->magic != HOSTFILE_MAGIC,W_ERR_INVALID);
     do
     {
         err = W_ERR_OK;
-        offset = ftell(file->fd);
+        offset = ftell(hfile->fd);
         WIND_ASSERT_BREAK(offset >= 0,err,"tell hfile failed");
     }while(0);
     return offset;
@@ -359,28 +364,28 @@ w_int32_t hostfile_ftell(w_hostfile_s* file)
 
 
 
-w_int32_t hostfile_read(w_hostfile_s* file,w_uint8_t *buff, w_int32_t size)
+w_int32_t hostfile_read(w_hostfile_s* hfile,w_uint8_t *buff, w_int32_t size)
 {
     w_int32_t rdsize = 0;
-    WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(file->magic != HOSTFILE_MAGIC,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(hfile != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(hfile->magic != HOSTFILE_MAGIC,W_ERR_INVALID);
     WIND_ASSERT_RETURN(buff != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(file->isdir == 0,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(file->fd != W_NULL, W_ERR_INVALID);
-    rdsize = fread(buff,1,size,file->fd);
+    WIND_ASSERT_RETURN(hfile->isdir == 0,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(hfile->fd != W_NULL, W_ERR_INVALID);
+    rdsize = fread(buff,1,size,hfile->fd);
     return rdsize;
 }
 
 
-w_int32_t hostfile_write(w_hostfile_s* file,w_uint8_t *buff,w_int32_t size)
+w_int32_t hostfile_write(w_hostfile_s* hfile,w_uint8_t *buff,w_int32_t size)
 {
     w_int32_t wrsize = 0;
-    WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(file->magic != HOSTFILE_MAGIC,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(hfile != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(hfile->magic != HOSTFILE_MAGIC,W_ERR_INVALID);
     WIND_ASSERT_RETURN(buff != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(file->isdir == 0,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(file->fd != W_NULL, W_ERR_INVALID);
-    wrsize = fwrite(buff,1,size,file->fd);
+    WIND_ASSERT_RETURN(hfile->isdir == 0,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(hfile->fd != W_NULL, W_ERR_INVALID);
+    wrsize = fwrite(buff,1,size,hfile->fd);
     return wrsize;
 }
 
@@ -418,7 +423,6 @@ static w_hostfile_s *do_host_file_readdir(w_hostfile_s *hfile)
         {
             hfile->subhfile = hostfs_mem_malloc(sizeof(w_hostfile_s));
             WIND_ASSERT_BREAK(hfile->subhfile != W_NULL, W_ERR_MEM, "alloc sub hfile failed");
-            //wind_memset(hfile->subhfile,0,sizeof(w_hostfile_s));
         }
         subhfile = hfile->subhfile;
         
@@ -447,7 +451,6 @@ w_err_t hostfile_readdir(w_hostfile_s* dir,w_hostfile_s** sub)
         WIND_CHECK_BREAK(hfile != W_NULL,W_ERR_FAIL);
         tmp->magic = HOSTFILE_MAGIC;
         tmp->hfs = dir->hfs;
-        //tmp->hfile = hfile;
     }while(0);
     return err;
 }
@@ -468,13 +471,17 @@ w_uint32_t host_file_size(w_hostfile_s *hfile)
 }
 
 
-w_err_t hostfile_fgets(w_hostfile_s* file,char *buff, w_int32_t maxlen)
+w_err_t hostfile_fgets(w_hostfile_s* hfile,char *buff, w_int32_t maxlen)
 {
+    WIND_ASSERT_RETURN(hfile != W_NULL,W_NULL);
+    WIND_ASSERT_RETURN(hfile->magic == HOSTFILE_MAGIC,W_ERR_INVALID);
     return W_ERR_OK;
 }
 
-w_err_t hostfile_fputs(w_hostfile_s* file,char *buff)
+w_err_t hostfile_fputs(w_hostfile_s* hfile,char *buff)
 {
+    WIND_ASSERT_RETURN(hfile != W_NULL,W_NULL);
+    WIND_ASSERT_RETURN(hfile->magic == HOSTFILE_MAGIC,W_ERR_INVALID);
     return W_ERR_OK;
 }
 
