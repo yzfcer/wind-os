@@ -159,6 +159,14 @@ w_vfs_s *wind_vfs_get_free(void)
     return retfs;
 }
 
+w_vfs_s *wind_vfs_get_byidx(w_int32_t index)
+{
+    WIND_ASSERT_RETURN(index < WIND_FS_MAX_NUM,W_NULL);
+    WIND_ASSERT_RETURN(index >= 0,W_NULL);
+    return wind_vfs_get(fsname[index]);    
+}
+
+
 
 w_vfs_s *wind_vfs_get_bypath(const char *path)
 {
@@ -232,11 +240,13 @@ w_err_t wind_vfs_mount(char *fsname,char *fstype,char *blkname,char *path)
             WIND_ASSERT_BREAK(vfs->usr_arg != W_NULL,W_ERR_MEM,"malloc usr_arg failed");
         }
         
-        len = wind_strlen(path)+1;
-        vfs->mount_path = wind_alloc(len,HP_ALLOCID_VFS);
+        //len = wind_strlen(path)+1;
+        //vfs->mount_path = wind_alloc(len,HP_ALLOCID_VFS);
+        //WIND_ASSERT_BREAK(vfs->mount_path != W_NULL,W_ERR_MEM,"malloc mount_path failed");
+        //wind_strcpy(vfs->mount_path,path);
+        vfs->mount_path = wind_filepath_to_directory(path);
         WIND_ASSERT_BREAK(vfs->mount_path != W_NULL,W_ERR_MEM,"malloc mount_path failed");
-        wind_strcpy(vfs->mount_path,path);
-        
+
         len = wind_strlen(fstype)+1;
         vfs->fstype = wind_alloc(len,HP_ALLOCID_VFS);
 

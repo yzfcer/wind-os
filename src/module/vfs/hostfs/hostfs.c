@@ -94,29 +94,35 @@ static char *hostfs_filepath_generate(char *pre_path,char *relative_path,w_uint1
 {
     w_err_t err;
     char *path = W_NULL;
-    w_int32_t len,len1;
+    w_int32_t prelen,relalen,pathlen;
     WIND_ASSERT_RETURN(pre_path != W_NULL,W_NULL);
-    //WIND_ASSERT_RETURN(pre_path[0] == '/',W_NULL);
     WIND_ASSERT_RETURN(relative_path != W_NULL,W_NULL);
-    len = wind_strlen(pre_path);
-    WIND_ASSERT_RETURN(len >= 2,W_ERR_INVALID);
+    prelen = wind_strlen(pre_path);
+    WIND_ASSERT_RETURN(prelen >= 2,W_ERR_INVALID);
     WIND_ASSERT_RETURN(pre_path[1] == ':',W_ERR_INVALID);
     
     
-    len = wind_strlen(relative_path) + 3;
-    len1 = wind_strlen(pre_path) + 1;
-    len += len1;
-    path = wind_alloc(len,HP_ALLOCID_VFS);
-    wind_memset(path,0,len);
+    relalen = wind_strlen(relative_path);
+    prelen = wind_strlen(pre_path);
+    pathlen = prelen + relalen+3;
+    path = wind_alloc(pathlen,HP_ALLOCID_VFS);
     wind_strcpy(path,pre_path);
-    if(pre_path[len1-1] != '/')
-        path[len1] = '/';
+    if(pre_path[prelen-1] != '/')
+    {
+        path[prelen] = '/';
+        prelen ++;
+    }
+    if((relative_path[0] == '/'))
+    {
+        path[prelen-1] = 0;
+        prelen --;
+    }
     wind_strcat(path,relative_path);
     
     
-    len = wind_strlen(path);
-    if(isdir && (path[len-1] != '/'))
-        path[len] = '/';
+    pathlen = wind_strlen(path);
+    if(isdir && (path[pathlen-1] != '/'))
+        path[pathlen] = '/';
     err = hostfs_filepath_check_valid(path);
     if(err != W_ERR_OK)
     {
@@ -218,6 +224,8 @@ static w_hostfile_s*   host_file_open_exist(char *path,w_uint8_t mode)
             fd = fopen(path,"rb+");
             WIND_ASSERT_BREAK(fd != W_NULL,W_ERR_FAIL,"open hfile failed");
         }
+        else
+            fd = W_NULL;
         
         hfile = host_file_create(path,mode,isdir,fd);
         WIND_ASSERT_BREAK(hfile != W_NULL,W_ERR_FAIL,"create hfile obj failed");
