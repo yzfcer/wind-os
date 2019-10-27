@@ -72,12 +72,22 @@ static w_err_t vfs_all_vfs_objs_init(void)
     return W_ERR_OK;
 }
 
+static w_bool_t is_dev_match(w_vfs_s *vfs,char *blkdev_name)
+{
+    if((vfs->blkdev != W_NULL) && 
+        (vfs->blkdev->obj.name != W_NULL) && 
+        (wind_strcmp(blkdev_name,vfs->blkdev->obj.name) == 0))
+        return W_TRUE;
+    return W_FALSE;
+}
+
 static w_err_t mount_param_check(char *fsname,char *fstype,char *blkname,char *path)
 {
     w_vfs_s *vfs;
     w_fsops_s *ops;
     w_dnode_s *dnode;
     w_int32_t len;
+    w_bool_t is_match;
     WIND_ASSERT_RETURN(fsname != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(fstype != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(blkname != W_NULL,W_ERR_PTR_NULL);
@@ -87,37 +97,22 @@ static w_err_t mount_param_check(char *fsname,char *fstype,char *blkname,char *p
     ops = wind_fsops_get(fstype);
     WIND_ASSERT_RETURN(vfs != W_NULL,W_ERR_REPEAT);
     len = wind_strlen(path);
-    if(len >= FS_MOUNT_PATH_LEN)
-    {
-        wind_error("mount path is too long");
-        return W_ERR_INVALID;
-    }
-        
-    if(wind_strlen(fsname) >= WFS_NAME_LEN)
-    {
-        wind_error("vfs name is too long");
-        return W_ERR_INVALID;
-    }
+    WIND_ASSERT_MSG_RETURN(len < FS_MOUNT_PATH_LEN,W_ERR_INVALID,"mount path is too long");
+
+    len = wind_strlen(fsname);
+    WIND_ASSERT_MSG_RETURN(len < WFS_NAME_LEN,W_ERR_INVALID,"vfs name is too long");
+
     
     foreach_node(dnode,&fslist)
     {
         vfs = NODE_TO_FS(dnode);
-        if((vfs->mount_path != W_NULL) && 
-            (wind_strcmp(path,vfs->mount_path) == 0))
-        {
-            wind_error("mount path has been used");
-            return W_ERR_REPEAT;
-        }
-            
+        is_match = ((vfs->mount_path != 0)&&(wind_strcmp(path,vfs->mount_path) != 0));
+        WIND_ASSERT_MSG_RETURN(!is_match,W_ERR_REPEAT,"mount path %s has been used",path);
         if(blkname == W_NULL)
             continue;
-        if((vfs->blkdev != W_NULL) && 
-            (vfs->blkdev->obj.name != W_NULL) && 
-            (wind_strcmp(blkname,vfs->blkdev->obj.name) == 0))
-        {
-            wind_error("block device has been used");
-            return W_ERR_REPEAT;
-        }
+        is_match = is_dev_match(vfs,blkname);
+        WIND_ASSERT_MSG_RETURN(!is_match,W_ERR_REPEAT,"block device %s has been used",blkname);
+
     }
     return W_ERR_OK;
 }
@@ -287,10 +282,10 @@ w_err_t wind_vfs_unmount(char *fsname)
     vfs->mount_path = W_NULL;
     if(vfs->fstype != W_NULL)
         wind_free(vfs->fstype);
-    vfs->fstype != W_NULL;
+    vfs->fstype = W_NULL;
     if(vfs->usr_arg != W_NULL)
         wind_free(vfs->usr_arg);
-    vfs->usr_arg != W_NULL;
+    vfs->usr_arg = W_NULL;
     vfs->blkdev = W_NULL;
     vfs->ops = W_NULL;
     return W_ERR_OK;
