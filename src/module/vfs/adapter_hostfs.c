@@ -50,7 +50,7 @@ static void* hostfs_op_init(w_vfs_s *vfs)
         WIND_ASSERT_BREAK(vfs->fsobj == W_NULL,W_ERR_OK,"hostfs has been init");
         hfs = hostfs_mem_malloc(sizeof(w_hostfs_s));
         WIND_ASSERT_BREAK(hfs != W_NULL,W_ERR_MEM,"alloc fsobj failed");
-        //wind_memset(hfs,0,sizeof(w_hostfs_s));
+        wind_memset(hfs,0,sizeof(w_hostfs_s));
         err = hostfile_existing(vfs->fsobj,(char *)vfs->usr_arg);
         WIND_ASSERT_BREAK(err == W_ERR_OK,err,"dirent is not exist");
         err = hostfs_init(hfs,vfs->usr_arg);
