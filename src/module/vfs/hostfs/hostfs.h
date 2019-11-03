@@ -44,10 +44,10 @@
 #define HOSTFS_DIR_LAYCNT 32 //目录深度
 #define HOSTFS_MAX_FILE_SIZE 0x7fffffff //文件长度限制，2GB
 
-#define HFMDOE_R   0x01
-#define HFMDOE_W   0x02
-#define HFMDOE_RW  0x03
-#define HFMDOE_CRT 0x04
+#define HFMODE_R   0x01
+#define HFMODE_W   0x02
+#define HFMODE_RW  0x03
+#define HFMODE_CRT 0x04
 
 
 //文件属性

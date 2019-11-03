@@ -296,7 +296,7 @@ w_hostfile_s* hostfile_open(w_hostfs_s *hfs,const char *path,w_uint8_t mode)
         err = W_ERR_OK;
         
         exist = hostfile_existing(hfs,path);
-        WIND_ASSERT_BREAK((exist == W_TRUE) || ((mode & HFMDOE_CRT) != 0),W_ERR_NOFILE,"hfile is not exist");
+        WIND_ASSERT_BREAK((exist == W_TRUE) || ((mode & HFMODE_CRT) != 0),W_ERR_NOFILE,"hfile is not exist");
         isdir = wind_filepath_isdir((char*)path);
 #if  HOST_OS_TYPE == HOST_OS_WINDOWS
         fullpath = hostfs_filepath_generate(hfs->dir_prefix,path,isdir);
@@ -547,7 +547,7 @@ w_err_t hostfile_readdir(w_hostfile_s* dir,w_hostfile_s** sub)
     WIND_ASSERT_RETURN(dir->magic == HOSTFILE_MAGIC,W_ERR_INVALID);
 
     WIND_ASSERT_RETURN(dir->hfs != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(dir->mode & HFMDOE_R,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(dir->mode & HFMODE_R,W_ERR_INVALID);
     WIND_ASSERT_RETURN(IS_HFILE_ATTR_DIR(dir->attr) != 0,W_ERR_INVALID);
 
     do

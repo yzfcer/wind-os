@@ -551,6 +551,9 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\adapter_hostfs.c">
       <Filter>module_vfs</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\test_hostfs.c">
+      <Filter>module_cutest</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">
