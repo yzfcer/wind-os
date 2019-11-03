@@ -170,8 +170,6 @@ static w_err_t host_file_destroy(w_hostfile_s *hfile)
         hostfs_mem_free(hfile->path);
     if(hfile->name != W_NULL)
         hostfs_mem_free(hfile->name);
-    if(hfile->fileinfo != W_NULL)
-        hostfs_mem_free(hfile->fileinfo);
     hostfs_mem_free(hfile);
     return W_ERR_OK;
 }
@@ -193,6 +191,7 @@ static w_hostfile_s*   host_file_create(char *path,w_uint8_t mode,w_uint8_t isdi
         hfile->mode = mode;
         hfile->attr = isdir?HFILE_ATTR_DIR:0;
         hfile->isdir = isdir;
+        hfile->has_sub = 0;
         hfile->subhfile = W_NULL;
         hfile->fd = fd;
 #if (HOST_OS_TYPE == HOST_OS_WINDOWS)
@@ -489,7 +488,7 @@ static w_hostfile_s *do_host_file_readdir(w_hostfile_s *hfile)
 {
     w_err_t err;
     w_int32_t res;
-    w_hostfile_s *subhfile;
+    w_hostfile_s *subhfile = W_NULL;
     WIND_ASSERT_RETURN(hfile != W_NULL,W_NULL);
     WIND_ASSERT_RETURN(hfile->magic == HOSTFILE_MAGIC,W_NULL);
     WIND_ASSERT_RETURN(hfile->isdir == 1,W_NULL);
@@ -497,36 +496,41 @@ static w_hostfile_s *do_host_file_readdir(w_hostfile_s *hfile)
     do 
     {
         err = W_ERR_OK;
-        if(hfile->fileinfo == W_NULL)
+        if(!hfile->has_sub)
         {
             err = W_ERR_OK;
-            hfile->fileinfo = hostfs_mem_malloc(sizeof(hfileinfo_s));
-            WIND_ASSERT_BREAK(hfile->fileinfo != W_NULL, W_ERR_MEM, "alloc fileinfo failed");
-            wind_memset(hfile->fileinfo,0,sizeof(hfileinfo_s));
-            hfile->handle = _findfirst(hfile->path,hfile->fileinfo);
+            wind_memset(&hfile->fileinfo,0,sizeof(_finddata_t));
+            hfile->handle = _findfirst(hfile->path,&hfile->fileinfo);
+            WIND_CHECK_BREAK(hfile->handle >= 0,W_ERR_FAIL);
+            hfile->has_sub = 1;
         }
         else
         {
             WIND_ASSERT_BREAK(hfile->handle >= 0, W_ERR_INVALID, "handle is invalid");
-            res = _findnext(hfile->handle,hfile->fileinfo);
-            if(res < 0)
-            {
-                hostfs_mem_free(hfile->fileinfo);
-                hfile->fileinfo = W_NULL;
-            }
+            res = _findnext(hfile->handle,&hfile->fileinfo);
+            WIND_CHECK_BREAK(res >= 0,W_ERR_FAIL)
         }
-        WIND_CHECK_BREAK(hfile->fileinfo != W_NULL, W_ERR_FAIL);
         if(hfile->subhfile == W_NULL)
         {
-            hfile->subhfile = hostfs_mem_malloc(sizeof(w_hostfile_s));
-            WIND_ASSERT_BREAK(hfile->subhfile != W_NULL, W_ERR_MEM, "alloc sub hfile failed");
-            wind_memset(hfile->subhfile,0,sizeof(w_hostfile_s));
+            subhfile = hostfs_mem_malloc(sizeof(w_hostfile_s));
+            WIND_ASSERT_BREAK(subhfile != W_NULL, W_ERR_MEM, "alloc sub hfile failed");
+            wind_memset(subhfile,0,sizeof(w_hostfile_s));
         }
-        subhfile = hfile->subhfile;
-        
+        subhfile->attr = (hfile->fileinfo.attrib & _A_SUBDIR)?HFILE_ATTR_DIR:0;
+        subhfile->isdir = (subhfile->attr & HFILE_ATTR_DIR)?1:0;
+        subhfile->name = wind_salloc(subhfile->name,HP_ALLOCID_HOSTFS);
+        WIND_ASSERT_BREAK(subhfile->name != W_NULL,W_ERR_MEM,"clone filename failed");
+        hfile->subhfile = subhfile;
     }while(0);
     if(err == W_ERR_OK)
         return hfile->subhfile;
+    if(subhfile)
+    {
+        if(subhfile->name)
+            wind_free(subhfile->name);
+        wind_free(subhfile);
+    }
+        
     return W_NULL;
 }
  
@@ -553,19 +557,20 @@ w_err_t hostfile_readdir(w_hostfile_s* dir,w_hostfile_s** sub)
             tmp = hostfs_mem_malloc(sizeof(w_hostfile_s));
             WIND_ASSERT_BREAK(tmp != W_NULL,W_ERR_MEM,"alloc hostfile obj failed");
             wind_memset(tmp,0,sizeof(w_hostfile_s));
+            *sub = tmp;
             dir->subhfile = tmp;
+            tmp->magic = HOSTFILE_MAGIC;
+            tmp->hfs = dir->hfs;
         }
         hfile = do_host_file_readdir(dir);
         WIND_CHECK_BREAK(hfile != W_NULL,W_ERR_FAIL);
-        tmp->magic = HOSTFILE_MAGIC;
-        tmp->hfs = dir->hfs;
-        *sub = tmp;
     }while(0);
     if(err != W_ERR_OK)
     {
         if(dir->subhfile != W_NULL)
             hostfs_mem_free(dir->subhfile);
         dir->subhfile = W_NULL;
+        *sub = W_NULL;
     }
     return err;
 }
