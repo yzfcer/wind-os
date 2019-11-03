@@ -108,9 +108,9 @@ struct __hostfile_s
     w_uint8_t attr;
     w_uint8_t isdir;
     w_hostfile_s *subhfile;
-#if (HOST_OS_TYPE == HOST_OS_WINDOWS)
     FILE* fd;
-    FILE *subfd;
+#if (HOST_OS_TYPE == HOST_OS_WINDOWS)
+    intptr_t *handle;
     hfileinfo_s* fileinfo;
 #endif
 };
