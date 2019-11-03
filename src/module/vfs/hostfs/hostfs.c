@@ -252,10 +252,11 @@ static w_hostfile_s*   host_file_open_create(char *path,w_uint8_t mode)
     FILE *fd = (FILE *)W_NULL;
     w_hostfile_s *hfile = (w_hostfile_s *)W_NULL;
     WIND_ASSERT_RETURN(path != W_NULL, (w_hostfile_s *)W_NULL);
+    isdir = wind_filepath_isdir(path);
     do
     {
         err = W_ERR_OK;
-        if(!hfile->isdir)
+        if(!isdir)
         {
             fd = fopen(path,"wb+");
             WIND_ASSERT_BREAK(fd != W_NULL, W_ERR_FAIL, "create hfile failed");
@@ -285,7 +286,8 @@ static w_hostfile_s*   host_file_open_create(char *path,w_uint8_t mode)
 
 w_hostfile_s* hostfile_open(w_hostfs_s *hfs,const char *path,w_uint8_t mode)
 {
-    w_err_t err,exist;
+    w_err_t err;
+    w_bool_t exist;
     w_uint8_t isdir;
     w_hostfile_s *hfile = (w_hostfile_s *)W_NULL;
     char *fullpath = (char *)W_NULL;
@@ -294,7 +296,7 @@ w_hostfile_s* hostfile_open(w_hostfs_s *hfs,const char *path,w_uint8_t mode)
         err = W_ERR_OK;
         
         exist = hostfile_existing(hfs,path);
-        WIND_ASSERT_BREAK((exist == W_ERR_OK) || ((mode & HFMDOE_CRT) != 0),W_ERR_NOFILE,"hfile is not exist");
+        WIND_ASSERT_BREAK((exist == W_TRUE) || ((mode & HFMDOE_CRT) != 0),W_ERR_NOFILE,"hfile is not exist");
         isdir = wind_filepath_isdir((char*)path);
 #if  HOST_OS_TYPE == HOST_OS_WINDOWS
         fullpath = hostfs_filepath_generate(hfs->dir_prefix,path,isdir);
@@ -302,7 +304,7 @@ w_hostfile_s* hostfile_open(w_hostfs_s *hfs,const char *path,w_uint8_t mode)
         fullpath = wind_filepath_generate(hfs->dir_prefix,path,isdir);
 #endif
         WIND_ASSERT_BREAK(fullpath != W_NULL,W_ERR_FAIL,"get full path failed");
-        if(exist != W_ERR_OK)
+        if(exist != W_TRUE)
             hfile = host_file_open_create((char*)path,mode);
         else
             hfile = host_file_open_exist((char*)path,mode);
@@ -402,7 +404,7 @@ w_err_t hostfile_get_attr(w_hostfile_s* hfile,w_uint8_t *attr)
 w_bool_t hostfile_existing(w_hostfs_s *hfs,const char *path)
 {
     w_err_t err;
-    FILE *fd;
+    w_int32_t res;
     w_uint8_t isdir;
     char *fullpath = W_NULL;
     WIND_ASSERT_RETURN(hfs != W_NULL,W_ERR_PTR_NULL);
@@ -420,9 +422,8 @@ w_bool_t hostfile_existing(w_hostfs_s *hfs,const char *path)
         fullpath = wind_filepath_generate(hfs->dir_prefix,path,isdir);
 #endif
         WIND_ASSERT_BREAK(fullpath != W_NULL,W_ERR_FAIL,"get full path failed");
-        fd = fopen(path,"r");
-        WIND_CHECK_BREAK(fd != W_NULL, W_ERR_FAIL);
-        fclose(fd);
+        res = _access(fullpath,0);
+        WIND_CHECK_BREAK(res == 0, W_ERR_FAIL);
     }while(0);
     if(fullpath)
         wind_free(fullpath);

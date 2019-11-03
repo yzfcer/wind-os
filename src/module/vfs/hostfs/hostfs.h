@@ -111,7 +111,7 @@ struct __hostfile_s
     w_hostfile_s *subhfile;//子文件(或目录)
     FILE* fd;          //文件句柄
 #if (HOST_OS_TYPE == HOST_OS_WINDOWS)
-    intptr_t *handle;  //子文件句柄(windows系统)
+    intptr_t handle;  //子文件句柄(windows系统)
     _finddata_t fileinfo;//子文件信息
 #endif
 };

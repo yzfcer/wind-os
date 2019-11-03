@@ -43,6 +43,7 @@ static void* hostfs_op_init(w_vfs_s *vfs)
     w_err_t err;
     w_hostfs_s *hfs = W_NULL;
     char *prefix = W_NULL;
+    w_bool_t isexist;
     WIND_ASSERT_RETURN(vfs != W_NULL, W_NULL);
     do
     {
@@ -53,8 +54,8 @@ static void* hostfs_op_init(w_vfs_s *vfs)
         wind_memset(hfs,0,sizeof(w_hostfs_s));
         err = hostfs_init(hfs,vfs->usr_arg);
         WIND_ASSERT_BREAK(err == W_ERR_OK,err,"host fs init failed");
-        err = hostfile_existing(hfs,"");
-        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"dirent is not exist");
+        isexist = hostfile_existing(hfs,"/");
+        WIND_ASSERT_BREAK(isexist == W_TRUE,err,"dirent is not exist");
         vfs->fsobj = hfs;
     }while(0);
     
