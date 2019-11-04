@@ -179,6 +179,7 @@ extern "C" {
 #define WIND_MODULE_DB_SUPPORT 1 //是否支持DB功能模块
 #define WIND_MODULE_LUA_SUPPORT 1 //是否支持lua功能模块
 #define WIND_MODULE_CJSON_SUPPORT 1 //是否支持cjson功能模块
+#define WIND_MODULE_DICT_SUPPORT 1 //是否支持数据字典功能模块
 
 #define WIND_MODULE_TOOLS_SUPPORT 1 //是否wind-os相关工具集模块
 #define WIND_MODULE_GAME_SUPPORT 1 //是否支持游戏模块
