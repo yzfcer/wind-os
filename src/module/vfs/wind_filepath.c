@@ -259,7 +259,7 @@ char* wind_filepath_to_directory(char *path)
 {
     w_int32_t len;
     char *newpath;
-    WIND_ASSERT_RETURN(path != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(path != W_NULL,W_NULL);
     len = wind_strlen(path);
     if(!wind_filepath_isdir(path))
     {

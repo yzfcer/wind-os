@@ -37,7 +37,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(ProjectDir)..\..\..\port;$(ProjectDir)..\..\..\..\..\..\..\src\common;$(ProjectDir)..\..\..\..\..\..\..\src\module\shell\cmd;$(ProjectDir)..\..\..\..\..\..\..\src\module\shell\framework;$(ProjectDir)..\..\..\..\..\..\..\src\core;$(ProjectDir)..\..\..\..\..\..\..\src\hal;$(ProjectDir)..\..\..\..\..\..\..\src\module\cutest\framework;$(ProjectDir)..\..\..\..\..\..\..\src\module\cutest\port;$(ProjectDir)..\..\..\..\..\..\..\src\module\cutest\testcase;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs\treefs;$(ProjectDir)..\..\..\..\..\..\..\src\module\lua-5.3.4\src;$(ProjectDir)..\..\..\..\..\..\..\src\module\db\framework;$(ProjectDir)..\..\..\..\..\..\..\src\module\db\dbbase;$(ProjectDir)..\..\..\..\..\..\..\src\tools\pack;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs\listfs;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs\hostfs;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\..\..\port;$(ProjectDir)..\..\..\..\..\..\..\src\common;$(ProjectDir)..\..\..\..\..\..\..\src\module\shell\cmd;$(ProjectDir)..\..\..\..\..\..\..\src\module\shell\framework;$(ProjectDir)..\..\..\..\..\..\..\src\core;$(ProjectDir)..\..\..\..\..\..\..\src\hal;$(ProjectDir)..\..\..\..\..\..\..\src\module\cutest\framework;$(ProjectDir)..\..\..\..\..\..\..\src\module\cutest\port;$(ProjectDir)..\..\..\..\..\..\..\src\module\cutest\testcase;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs\treefs;$(ProjectDir)..\..\..\..\..\..\..\src\module\lua-5.3.4\src;$(ProjectDir)..\..\..\..\..\..\..\src\module\db\framework;$(ProjectDir)..\..\..\..\..\..\..\src\module\db\dbbase;$(ProjectDir)..\..\..\..\..\..\..\src\module\dict;$(ProjectDir)..\..\..\..\..\..\..\src\tools\pack;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs\listfs;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs\hostfs;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>$(ProjectDir)..\..\..\port;$(ProjectDir)..\..\..\..\..\..\..\src\common;$(ProjectDir)..\..\..\..\..\..\..\src\core;$(ProjectDir)..\..\..\..\..\..\..\src\hal;$(ProjectDir)..\..\..\..\..\..\..\src\module\shell\framework;$(ProjectDir)..\..\..\..\..\..\..\src\module\shell\cmd;$(ProjectDir)..\..\..\..\..\..\..\src\module\cutest\framework;$(ProjectDir)..\..\..\..\..\..\..\src\module\cutest\port;$(ProjectDir)..\..\..\..\..\..\..\src\module\cutest\testcase;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs\treefs;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs\listfs;$(ProjectDir)..\..\..\..\..\..\..\src\module\lua-5.3.4\src;$(ProjectDir)..\..\..\..\..\..\..\src\module\db\framework;$(ProjectDir)..\..\..\..\..\..\..\src\module\db\dbbase;$(ProjectDir)..\..\..\..\..\..\..\src\tools\pack;$(IncludePath)</IncludePath>
@@ -120,6 +120,8 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\db\framework\tb_entry.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\db\framework\tb_model.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\db\framework\tb_print.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\dict\module_dict.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\dict\wind_dict.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\game\gobang.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\game\module_game.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\game\pushbox.c" />
@@ -286,6 +288,7 @@
     <ClInclude Include="..\..\..\..\..\..\..\src\module\db\framework\db_if.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\db\framework\tb_entry.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\db\framework\tb_model.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\dict\wind_dict.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lapi.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lauxlib.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lcode.h" />

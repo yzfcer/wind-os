@@ -22,11 +22,8 @@
 #define __SHELL_FRAMEWORK_H__
 #include "wind_config.h"
 #include "wind_type.h"
-#include "wind_debug.h"
-#include "wind_key.h"
-#include "wind_string.h"
-#include "cmd_history.h"
-#include "wind_dlist.h"
+#include "wind_mutex.h"
+#include "wind_obj.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
@@ -50,8 +47,9 @@ typedef struct
 {
     w_obj_s obj;
     w_dlist_s list;
-    void *mutex;
+    w_mutex_s *mutex;
 }w_dictset_s;
+
 
 w_err_t _wind_dict_mod_init(void);
 

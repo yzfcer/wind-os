@@ -20,6 +20,7 @@
 *******************************************************************************************************/
 #include "wind_module.h"
 #include "wind_dict.h"
+#include "wind_debug.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus

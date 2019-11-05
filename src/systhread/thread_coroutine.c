@@ -45,7 +45,7 @@ static w_err_t coroute_main(w_int32_t argc,char **argv)
 w_err_t _create_coroutine_thread(void)
 {
     w_thread_s *thread;
-    thread = wind_thread_create("coroutine",coroute_main,0,W_NULL,corout_stack,THREAD_COROUT_STKSIZE);
+    thread = wind_thread_create("coroutine",coroute_main,0,(char**)W_NULL,corout_stack,THREAD_COROUT_STKSIZE);
     WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_FAIL);
 #if WIND_DAEMON_SUPPORT
     if(wind_daemon_get("coroutine") == W_NULL)

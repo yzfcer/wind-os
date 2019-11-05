@@ -93,13 +93,13 @@ static w_err_t hostfs_filepath_check_valid(char *path)
 static char *hostfs_filepath_generate(char *pre_path,char *relative_path,w_uint16_t isdir)
 {
     w_err_t err;
-    char *path = W_NULL;
+    char *path = (char *)W_NULL;
     w_int32_t prelen,relalen,pathlen;
-    WIND_ASSERT_RETURN(pre_path != W_NULL,W_NULL);
-    WIND_ASSERT_RETURN(relative_path != W_NULL,W_NULL);
+    WIND_ASSERT_RETURN(pre_path != W_NULL,(char *)W_NULL);
+    WIND_ASSERT_RETURN(relative_path != W_NULL,(char *)W_NULL);
     prelen = wind_strlen(pre_path);
-    WIND_ASSERT_RETURN(prelen >= 2,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(pre_path[1] == ':',W_ERR_INVALID);
+    WIND_ASSERT_RETURN(prelen >= 2,(char *)W_NULL);
+    WIND_ASSERT_RETURN(pre_path[1] == ':',(char *)W_NULL);
     
     
     relalen = wind_strlen(relative_path);
@@ -406,9 +406,9 @@ w_bool_t hostfile_existing(w_hostfs_s *hfs,const char *path)
     w_err_t err;
     w_int32_t res;
     w_uint8_t isdir;
-    char *fullpath = W_NULL;
-    WIND_ASSERT_RETURN(hfs != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(path != W_NULL,W_ERR_PTR_NULL);
+    char *fullpath = (char*)W_NULL;
+    WIND_ASSERT_RETURN(hfs != W_NULL,W_FALSE);
+    WIND_ASSERT_RETURN(path != W_NULL,W_FALSE);
     do
     {
         err = W_ERR_OK;

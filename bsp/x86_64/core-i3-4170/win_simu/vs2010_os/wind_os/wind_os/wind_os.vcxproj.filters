@@ -554,6 +554,12 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\test_hostfs.c">
       <Filter>module_cutest</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\dict\module_dict.c">
+      <Filter>module_dict</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\dict\wind_dict.c">
+      <Filter>module_dict</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">
@@ -603,6 +609,9 @@
     </Filter>
     <Filter Include="module_tools">
       <UniqueIdentifier>{1c022046-ee88-4360-a89f-e2fcc86e9b22}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="module_dict">
+      <UniqueIdentifier>{b32fc16d-e4c5-4583-9809-7b081d330e77}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -905,6 +914,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\hostfs\hostfs.h">
       <Filter>module_vfs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\dict\wind_dict.h">
+      <Filter>module_dict</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

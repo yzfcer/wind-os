@@ -410,7 +410,7 @@ static w_err_t check_file_space(void)
     return W_ERR_OK;
 }
 
-static w_int32_t pack_files_to_img(w_int32_t argc,char **argv) 
+static w_err_t pack_files_to_img(w_int32_t argc,char **argv) 
 {
     w_err_t err;
     pack_info_init();
@@ -426,6 +426,7 @@ static w_int32_t pack_files_to_img(w_int32_t argc,char **argv)
     err = pack_files(&pack_info);
     WIND_ASSERT_TODO_RETURN(err == W_ERR_OK,release_file_buff(),-1);
     release_file_buff();
+    return W_ERR_OK;
 }
 
 w_int32_t pack_main(w_int32_t argc,char **argv)
