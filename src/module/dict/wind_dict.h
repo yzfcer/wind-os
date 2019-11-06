@@ -53,13 +53,14 @@ typedef struct
 
 w_err_t _wind_dict_mod_init(void);
 
+w_dictset_s *wind_dictset_get(char *name);
 w_dictset_s *wind_dictset_create(char *name);
 w_err_t wind_dictset_destroy(w_dictset_s *dictset);
 w_err_t wind_dictset_insert(w_dictset_s *dictset,w_dict_s *dict);
 w_err_t wind_dictset_remove(w_dictset_s *dictset,w_dict_s *dict);
 
 
-w_dict_s *wind_get_dict(w_dictset_s *dictset,char *name);
+w_dict_s *wind_dict_get(w_dictset_s *dictset,char *name);
 w_dict_s *wind_dict_create(char *name,char *value);
 w_err_t wind_dict_destroy(w_dict_s *dict);
 

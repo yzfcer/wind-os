@@ -72,6 +72,9 @@ DECLARE_SUITE(filepath);
 #if TEST_DIAGNOSE_SUPPORT
 DECLARE_SUITE(diagnose);
 #endif
+#if TEST_DICT_SUPPORT
+DECLARE_SUITE(dict);
+#endif
 
 
 extern void test_suite_list_init(void);
@@ -124,6 +127,9 @@ void test_suite_register_all(void)
 #endif
 #if TEST_DIAGNOSE_SUPPORT
     REGSTER_SUITE(diagnose);
+#endif
+#if TEST_DICT_SUPPORT
+    REGSTER_SUITE(dict);
 #endif
 }
 

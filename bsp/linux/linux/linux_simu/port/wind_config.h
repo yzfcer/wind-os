@@ -242,7 +242,7 @@ extern "C" {
 #define TEST_FS_SUPPORT 1 //是否支持fs文件系统接口测试
 #define TEST_FILEPATH_SUPPORT 1 //是否支持文件系统路径测试
 #define TEST_DIAGNOSE_SUPPORT 1 //是否支持诊断功能测试
-
+#define TEST_DICT_SUPPORT 0     //是否支持参数字典功能测试
 #endif
 
 

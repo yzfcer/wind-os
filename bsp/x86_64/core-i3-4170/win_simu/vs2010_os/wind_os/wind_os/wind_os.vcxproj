@@ -97,6 +97,7 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\framework\test_framework.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\cutest_register.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\test_diagnose.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\test_dict.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\test_event.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\test_filepath.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\test_fs.c" />

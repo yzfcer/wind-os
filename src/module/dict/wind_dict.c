@@ -40,7 +40,7 @@ w_dlist_s g_dictlist;
 
 
 /********************************************内部函数定义*********************************************/
-static w_uint16_t calc_obj_key(const char *name)
+static w_uint16_t calc_dict_key(const char *name)
 {
     w_uint16_t i,key = 0;
     if(name == W_NULL)
@@ -62,6 +62,10 @@ w_err_t _wind_dict_mod_init(void)
     return W_ERR_OK;
 }
 
+w_dictset_s *wind_dictset_get(char *name)
+{
+    return (w_dictset_s *)wind_obj_get(name,&g_dictlist);
+}
 
 w_dictset_s *wind_dictset_create(char *name)
 {
@@ -115,7 +119,7 @@ w_err_t wind_dictset_destroy(w_dictset_s *dictset)
             WIND_ASSERT_BREAK(err == W_ERR_OK,err,"");
         }
         if(dictset->mutex != W_NULL)
-            wind_free(dictset->mutex);
+            wind_mutex_destroy(dictset->mutex);
         if(dictset != W_NULL)
             wind_free(dictset);
     }while(0);
@@ -143,19 +147,20 @@ w_err_t wind_dictset_remove(w_dictset_s *dictset,w_dict_s *dict)
 }
 
 
-w_dict_s *wind_get_dict(w_dictset_s *dictset,char *name)
+w_dict_s *wind_dict_get(w_dictset_s *dictset,char *name)
 {
     w_uint16_t key = 0;
     w_err_t err;
     w_dnode_s *dnode;
-    w_dict_s *dict;
+    w_dict_s *dict,*retdict;
     WIND_ASSERT_RETURN(dictset != W_NULL,W_NULL);
     WIND_ASSERT_RETURN(name != W_NULL,W_NULL);
     wind_mutex_lock(dictset->mutex);
     do
     {
         err = W_ERR_OK;
-        key = calc_obj_key(name);
+        retdict = (w_dict_s *)W_NULL;
+        key = calc_dict_key(name);
         WIND_ASSERT_BREAK(dictset->list.head != W_NULL, W_ERR_INVALID,"");
         foreach_node(dnode,&dictset->list)
         {
@@ -163,21 +168,24 @@ w_dict_s *wind_get_dict(w_dictset_s *dictset,char *name)
             if(dict->key != key)
                 continue;
             if(dict->name && (wind_strcmp(name,dict->name) == 0))
+            {
+                retdict = dict;
                 break;
+            }
+                
         }
-        dict = (w_dict_s*)W_NULL;
     }while(0);
 
     wind_mutex_unlock(dictset->mutex);
-    return dict;
+    return retdict;
 }
 
 w_dict_s *wind_dict_create(char *name,char *value)
 {
     w_err_t err;
     w_dict_s *dict;
-    WIND_ASSERT_RETURN(name != W_NULL,W_NULL);
-    WIND_ASSERT_RETURN(value != W_NULL,W_NULL);
+    WIND_ASSERT_RETURN(name != W_NULL,(w_dict_s *)W_NULL);
+    WIND_ASSERT_RETURN(value != W_NULL,(w_dict_s *)W_NULL);
     do
     {
         err = W_ERR_OK;
@@ -188,6 +196,9 @@ w_dict_s *wind_dict_create(char *name,char *value)
         WIND_ASSERT_BREAK(dict->name != W_NULL, W_ERR_MEM,"");
         dict->value = wind_salloc(value,0);
         WIND_ASSERT_BREAK(dict->value != W_NULL, W_ERR_MEM,"");
+        DNODE_INIT(dict->dictnode);
+        dict->key = calc_dict_key(name);
+        dict->count = 0;
     }while(0);
     if((err != W_ERR_OK) && (dict != W_NULL))
     {
@@ -198,7 +209,7 @@ w_dict_s *wind_dict_create(char *name,char *value)
         wind_free(dict);
         dict = (w_dict_s*)W_NULL;
     }
-    return W_NULL;
+    return dict;
 }
 
 w_err_t wind_dict_destroy(w_dict_s *dict)

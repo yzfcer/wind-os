@@ -560,6 +560,9 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\dict\wind_dict.c">
       <Filter>module_dict</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\test_dict.c">
+      <Filter>module_cutest</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">
