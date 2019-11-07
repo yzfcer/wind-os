@@ -146,6 +146,27 @@ w_err_t wind_dictset_remove(w_dictset_s *dictset,w_dict_s *dict)
     return W_ERR_OK;
 }
 
+w_err_t wind_dictset_print(w_dictset_s *dictset)
+{
+    w_err_t err;
+    w_dnode_s *dnode;
+    w_dict_s *dict;
+    WIND_ASSERT_RETURN(dictset != W_NULL,W_NULL);
+    wind_printf("[dictset:%s]\r\n",dictset->obj.name);
+    wind_mutex_lock(dictset->mutex);
+    do
+    {
+        err = W_ERR_OK;
+        foreach_node(dnode,&dictset->list)
+        {
+            dict = NODE_TO_DICT(dnode);
+            wind_dict_print(dict);
+        }
+    }while(0);
+    wind_mutex_unlock(dictset->mutex);
+    return W_ERR_OK;
+}
+
 
 w_dict_s *wind_dict_get(w_dictset_s *dictset,char *name)
 {
@@ -220,6 +241,15 @@ w_err_t wind_dict_destroy(w_dict_s *dict)
     if(dict->value != W_NULL)
         wind_free(dict->value);
     wind_free(dict);
+    return W_ERR_OK;
+}
+
+w_err_t wind_dict_print(w_dict_s *dict)
+{
+    WIND_ASSERT_RETURN(dict != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(dict->name != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(dict->value != W_NULL,W_ERR_PTR_NULL);
+    wind_printf("%s=%s\r\n",dict->name,dict->value);
     return W_ERR_OK;
 }
 

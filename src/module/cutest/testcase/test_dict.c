@@ -71,6 +71,7 @@ CASE_FUNC(func)
     EXPECT_NE(dict,W_NULL);
     err = wind_dictset_insert(dictset,dict);
     EXPECT_EQ(err,W_ERR_OK);
+    wind_dictset_print(dictset);
 
     dict = wind_dict_get(dictset,"name1");
     EXPECT_NE(dict,W_NULL);
