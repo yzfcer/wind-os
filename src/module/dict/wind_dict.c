@@ -35,6 +35,7 @@ extern "C" {
 
 /********************************************内部变量定义**********************************************/
 #define NODE_TO_DICT(node) (w_dict_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((w_dict_s*)0)->dictnode)))
+#define NODE_TO_DICTSET(node) (w_dictset_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((w_dictset_s*)0)->obj.objnode)))
 w_dlist_s g_dictlist;
 
 
@@ -167,6 +168,17 @@ w_err_t wind_dictset_print(w_dictset_s *dictset)
     return W_ERR_OK;
 }
 
+w_err_t wind_dictset_print_all(void)
+{
+    w_dictset_s *dictset;
+    w_dnode_s *dnode;
+    foreach_node(dnode,&g_dictlist)
+    {
+        dictset = NODE_TO_DICTSET(dnode);
+        wind_dictset_print(dictset);
+    }
+    return W_ERR_OK;
+}
 
 w_dict_s *wind_dict_get(w_dictset_s *dictset,char *name)
 {

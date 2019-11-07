@@ -59,6 +59,7 @@ w_err_t wind_dictset_destroy(w_dictset_s *dictset);
 w_err_t wind_dictset_insert(w_dictset_s *dictset,w_dict_s *dict);
 w_err_t wind_dictset_remove(w_dictset_s *dictset,w_dict_s *dict);
 w_err_t wind_dictset_print(w_dictset_s *dictset);
+w_err_t wind_dictset_print_all(void);
 
 
 w_dict_s *wind_dict_get(w_dictset_s *dictset,char *name);
