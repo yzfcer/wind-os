@@ -38,9 +38,10 @@ w_int32_t boot_receive_img(w_part_s *part)
     FILE *file;
     w_int32_t len,offset;
     w_uint8_t *buff = get_common_buffer();
-    file = fopen("imgfile.none.img","rb");
-    if(!file)
-        return -1;
+
+    errno = fopen_s(&file,"imgfile.none.img","rb");
+    WIND_ASSERT_RETURN(errno == 0,-1);
+    WIND_ASSERT_RETURN(file != W_NULL,-1);
     offset = 0;
     while(1)
     {

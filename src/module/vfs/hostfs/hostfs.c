@@ -211,6 +211,7 @@ static w_hostfile_s*   host_file_create(char *path,w_uint8_t mode,w_uint8_t isdi
 
 static w_hostfile_s*   host_file_open_exist(char *path,w_uint8_t mode)
 {
+    errno_t errno;
     w_err_t err;
     FILE *fd;
     w_hostfile_s *hfile = W_NULL;
@@ -224,7 +225,8 @@ static w_hostfile_s*   host_file_open_exist(char *path,w_uint8_t mode)
         isdir = (attr == HFILE_TYPE_DIR)?1:0;
         if(!isdir)
         {
-            fd = fopen(path,"rb+");
+            errno = fopen_s(&fd,path,"rb+");
+            WIND_ASSERT_BREAK(errno = 0,W_ERR_FAIL,"open hfile failed");
             WIND_ASSERT_BREAK(fd != W_NULL,W_ERR_FAIL,"open hfile failed");
         }
         else
@@ -246,6 +248,7 @@ static w_hostfile_s*   host_file_open_exist(char *path,w_uint8_t mode)
 
 static w_hostfile_s*   host_file_open_create(char *path,w_uint8_t mode)
 {
+    errno_t errno;
     w_int8_t isdir;
     w_int32_t res;
     w_err_t err;
@@ -258,7 +261,8 @@ static w_hostfile_s*   host_file_open_create(char *path,w_uint8_t mode)
         err = W_ERR_OK;
         if(!isdir)
         {
-            fd = fopen(path,"wb+");
+            errno = fopen_s(&fd,path,"wb+");
+            WIND_ASSERT_BREAK(errno = 0,W_ERR_FAIL,"open hfile failed");
             WIND_ASSERT_BREAK(fd != W_NULL, W_ERR_FAIL, "create hfile failed");
         }
         else

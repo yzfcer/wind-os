@@ -22,16 +22,18 @@ static w_uint8_t g_rom2[ROM2_SIZE];
 
 static void flush_rom_file(void)
 {
+    errno_t errno;
     FILE *file;
-    file = fopen("rom2.bin","wb+");
+    errno = fopen_s(&file,"rom2.bin","wb+");
     fwrite(g_rom2,1,ROM2_SIZE,file);
     fclose(file);
 }
 
 static void read_rom_file(void)
 {
+    errno_t errno;
     FILE *file;
-    file = fopen("rom2.bin","rb");
+    errno = fopen_s(&file,"rom2.bin","rb");
     fread(g_rom2,1,ROM2_SIZE,file);
     fclose(file);
 }
@@ -39,12 +41,12 @@ static void read_rom_file(void)
 
 static w_err_t rom2_init(w_media_s *media)
 {
-    
+    errno_t errno;
     FILE *file;
-    file = fopen("rom2.bin","rb");
+    errno = fopen_s(&file,"rom2.bin","rb");
     if(file == W_NULL)
     {
-        file = fopen("rom2.bin","wb+");
+        errno = fopen_s(&file,"rom2.bin","wb+");
         WIND_ASSERT_RETURN(file != 0,W_ERR_FAIL);
     }
     fclose(file);

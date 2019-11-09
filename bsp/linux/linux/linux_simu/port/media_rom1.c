@@ -22,27 +22,34 @@ static w_uint8_t g_rom1[ROM1_SIZE];
 
 static void flush_rom_file(void)
 {
+    errno_t errno;
     FILE *file;
-    file = fopen("rom1.bin","wb+");
+    errno = fopen_s(&file,"rom1.bin","wb+");
+    WIND_CHECK_RETURN_VOID(errno == 0);
+    WIND_CHECK_RETURN_VOID(file != W_NULL);
     fwrite(g_rom1,1,ROM1_SIZE,file);
     fclose(file);
 }
 
 static void read_rom_file(void)
 {
+    errno_t errno;
     FILE *file;
-    file = fopen("rom1.bin","rb");
+    errno = fopen_s(&file,"rom1.bin","rb");
+    WIND_CHECK_RETURN_VOID(errno == 0);
+    WIND_CHECK_RETURN_VOID(file != W_NULL);
     fread(g_rom1,1,ROM1_SIZE,file);
     fclose(file);
 }
 
 static w_err_t rom1_init(w_media_s *media)
 {
+    errno_t errno;
     FILE *file;
-    file = fopen("rom1.bin","rb");
+    errno = fopen_s(&file,"rom1.bin","rb");
     if(file == W_NULL)
     {
-        file = fopen("rom1.bin","wb+");
+        errno = fopen_s(&file,"rom1.bin","wb+");
         WIND_ASSERT_RETURN(file != 0,W_ERR_FAIL);
     }
     fclose(file);

@@ -31,10 +31,13 @@ void wind_free(void *ptr)
 
 w_int32_t read_file(char *filename,w_int32_t offset,w_uint8_t *buff,w_int32_t size)
 {
+    errno_t errno;
     FILE *file;
     w_uint32_t len;
-    file = fopen(filename,"rb");
+    errno = fopen_s(&file,filename,"rb");
+    WIND_ASSERT_RETURN(errno == 0,0);
     WIND_ASSERT_RETURN(file != W_NULL,0);
+
     fseek(file,offset,SEEK_SET); 
     len = fread(buff,1,size,file);
     WIND_ASSERT_TODO_RETURN(len > 0,fclose(file),W_ERR_FAIL);
@@ -45,16 +48,19 @@ w_int32_t read_file(char *filename,w_int32_t offset,w_uint8_t *buff,w_int32_t si
 
 w_int32_t read_long_file(char *path,w_int32_t offset,w_uint8_t **buff)
 {
-    FILE*fp;
+    errno_t errno;
+    FILE*file;
     w_int32_t flen;
-    fp=fopen(path,"rb");
-    WIND_ASSERT_RETURN(fp != W_NULL,W_ERR_INVALID);
-    fseek(fp,offset,SEEK_END); 
-    flen=ftell(fp); 
+    errno = fopen_s(&file,path,"rb");
+    WIND_ASSERT_RETURN(errno == 0,0);
+    WIND_ASSERT_RETURN(file != W_NULL,0);
+
+    fseek(file,offset,SEEK_END); 
+    flen=ftell(file); 
     *buff = (w_uint8_t*)wind_malloc(flen); 
     WIND_ASSERT_RETURN(*buff != W_NULL,W_ERR_MEM);
-    fseek(fp,offset,SEEK_SET); 
-    flen = fread(*buff,1,flen,fp); 
+    fseek(file,offset,SEEK_SET); 
+    flen = fread(*buff,1,flen,file); 
     return flen;
 }
 
@@ -62,9 +68,12 @@ w_int32_t read_long_file(char *path,w_int32_t offset,w_uint8_t **buff)
 
 w_int32_t write_file(char *filename,w_int32_t offset,w_uint8_t *data,w_int32_t len)
 {
+    errno_t errno;
     FILE *file;
-    file = fopen(filename,"wb");
+    errno = fopen_s(&file,filename,"wb");
+    WIND_ASSERT_RETURN(errno == 0,0);
     WIND_ASSERT_RETURN(file != W_NULL,0);
+    
     fseek(file,offset,SEEK_SET); 
     len = fwrite(data,1,len,file);
     fclose(file);

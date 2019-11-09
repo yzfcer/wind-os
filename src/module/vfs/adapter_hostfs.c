@@ -30,7 +30,7 @@
 #include "wind_debug.h"
 #include "wind_string.h"
 #include "wind_heap.h"
-#if WIND_LISTFS_SUPPORT
+#if WIND_HOSTFS_SUPPORT
 static w_err_t hostfs_op_opsinit(void)
 {
     w_err_t err;
