@@ -33,30 +33,16 @@ w_hostfs_s g_hfs;
 
 static w_err_t hfs_init(void)
 {
-    w_blkdev_s *blkdev;
     w_err_t err = W_ERR_OK;
     if(g_hfs.magic == HOSTFS_MAGIC)
     {
-        //err = hostfs_deinit(&g_hfs);
-        //EXPECT_EQ(err,W_ERR_OK);
+        err = hostfs_deinit(&g_hfs);
+        EXPECT_EQ(err,W_ERR_OK);
     }
-    blkdev = wind_blkdev_get("testblk");
-    if(blkdev == W_NULL)
-    {
-        wind_memset(&g_hfs,0,sizeof(w_hostfs_s));
-        return W_ERR_FAIL;
-    }
-        
-    wind_blkdev_open(blkdev);
+
     wind_memset(&g_hfs,0,sizeof(g_hfs));
-    err = hostfs_init(&g_hfs,blkdev);
-    if(err != W_ERR_OK)
-    {
-        //err = hostfs_format(&g_hfs,blkdev);
-        //EXPECT_EQ(err,W_ERR_OK);
-    }
+    err = hostfs_init(&g_hfs,"D:/hostfs");
     return err;
-        
 }
 
 static w_err_t hfs_deinit(void)

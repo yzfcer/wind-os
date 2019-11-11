@@ -115,7 +115,7 @@ w_bool_t wind_filepath_isdir(char *path)
 {
     w_int32_t len;
     WIND_CHECK_RETURN(path != W_NULL,W_FALSE);
-    //WIND_CHECK_RETURN(path[0] == '/',W_FALSE);
+    WIND_CHECK_RETURN(path[0] == '/',W_FALSE);
     len = wind_strlen(path);
     WIND_ASSERT_RETURN(len > 0, W_FALSE);
     WIND_CHECK_RETURN(path[len-1] == '/',W_FALSE);

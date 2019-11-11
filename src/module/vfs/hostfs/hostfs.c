@@ -54,7 +54,7 @@ w_err_t hostfs_mem_free(void *ptr)
     return wind_free(ptr);
 }
 #if  HOST_OS_TYPE == HOST_OS_WINDOWS
-static w_err_t hostfs_filepath_check_valid(char *path)
+static w_err_t windows_filepath_check_valid(char *path)
 {
     w_int32_t i,len;
     //char chset[] = {'~','!','@','#','$','%','^','&','*','+','=','?','\t','\r','\¡°'};
@@ -90,7 +90,7 @@ static w_err_t hostfs_filepath_check_valid(char *path)
     return W_ERR_OK;
 }
 
-static char *hostfs_filepath_generate(char *pre_path,char *relative_path,w_uint16_t isdir)
+static char *windows_filepath_generate(char *pre_path,char *relative_path,w_uint16_t isdir)
 {
     w_err_t err;
     char *path = (char *)W_NULL;
@@ -123,7 +123,7 @@ static char *hostfs_filepath_generate(char *pre_path,char *relative_path,w_uint1
     pathlen = wind_strlen(path);
     if(isdir && (path[pathlen-1] != '/'))
         path[pathlen] = '/';
-    err = hostfs_filepath_check_valid(path);
+    err = windows_filepath_check_valid(path);
     if(err != W_ERR_OK)
     {
         wind_free(path);
@@ -131,6 +131,17 @@ static char *hostfs_filepath_generate(char *pre_path,char *relative_path,w_uint1
     }
     return path;
 }
+
+w_bool_t windows_filepath_isdir(char *path)
+{
+    w_int32_t len;
+    WIND_CHECK_RETURN(path != W_NULL,W_FALSE);
+    len = wind_strlen(path);
+    WIND_ASSERT_RETURN(len > 0, W_FALSE);
+    WIND_CHECK_RETURN(path[len-1] == '/',W_FALSE);
+    return W_TRUE;
+}
+
 #endif
 
 w_err_t hostfs_init(w_hostfs_s *hfs,char *dir_prefix)
@@ -186,7 +197,7 @@ static w_hostfile_s*   host_file_create(char *path,w_uint8_t mode,w_uint8_t isdi
         WIND_ASSERT_BREAK(hfile != W_NULL, W_ERR_MEM, "alloc hfile failed");
         wind_memset(hfile,0,sizeof(w_hostfile_s));
         hfile->magic = HOSTFILE_MAGIC;
-        hfile->name = wind_filepath_get_filename(path);
+        hfile->name = wind_salloc(path,HP_ALLOCID_HOSTFS);
         WIND_ASSERT_BREAK(hfile->name != W_NULL, W_ERR_MEM, "alloc hfile name failed");
         hfile->mode = mode;
         hfile->attr = isdir?HFILE_ATTR_DIR:0;
@@ -226,7 +237,7 @@ static w_hostfile_s*   host_file_open_exist(char *path,w_uint8_t mode)
         if(!isdir)
         {
             errno = fopen_s(&fd,path,"rb+");
-            WIND_ASSERT_BREAK(errno = 0,W_ERR_FAIL,"open hfile failed");
+            WIND_ASSERT_BREAK(errno == 0,W_ERR_FAIL,"open hfile failed");
             WIND_ASSERT_BREAK(fd != W_NULL,W_ERR_FAIL,"open hfile failed");
         }
         else
@@ -255,14 +266,19 @@ static w_hostfile_s*   host_file_open_create(char *path,w_uint8_t mode)
     FILE *fd = (FILE *)W_NULL;
     w_hostfile_s *hfile = (w_hostfile_s *)W_NULL;
     WIND_ASSERT_RETURN(path != W_NULL, (w_hostfile_s *)W_NULL);
-    isdir = wind_filepath_isdir(path);
     do
     {
         err = W_ERR_OK;
+#if (HOST_OS_TYPE == HOST_OS_WINDOWS)
+        isdir = windows_filepath_isdir(path);
+#else
+        isdir = wind_filepath_isdir(path);
+#endif
+
         if(!isdir)
         {
-            errno = fopen_s(&fd,path,"wb+");
-            WIND_ASSERT_BREAK(errno = 0,W_ERR_FAIL,"open hfile failed");
+            errno = fopen_s(&fd,path,"w+");
+            WIND_ASSERT_BREAK(errno == 0,W_ERR_FAIL,"open hfile failed");
             WIND_ASSERT_BREAK(fd != W_NULL, W_ERR_FAIL, "create hfile failed");
         }
         else
@@ -271,7 +287,7 @@ static w_hostfile_s*   host_file_open_create(char *path,w_uint8_t mode)
             WIND_ASSERT_BREAK(res == 0, W_ERR_FAIL, "make dir failed");
             fd = (FILE *)W_NULL;
         }
-        isdir = wind_filepath_isdir(path)?1:0;
+        //isdir = windows_filepath_isdir(path)?1:0;
         hfile = host_file_create(path,mode,isdir,fd);
         WIND_ASSERT_BREAK(hfile != W_NULL,W_ERR_FAIL,"create hfile obj failed");
     }while(0);
@@ -299,19 +315,21 @@ w_hostfile_s* hostfile_open(w_hostfs_s *hfs,const char *path,w_uint8_t mode)
     {
         err = W_ERR_OK;
         
-        exist = hostfile_existing(hfs,path);
-        WIND_ASSERT_BREAK((exist == W_TRUE) || ((mode & HFMODE_CRT) != 0),W_ERR_NOFILE,"hfile is not exist");
-        isdir = wind_filepath_isdir((char*)path);
+
 #if  HOST_OS_TYPE == HOST_OS_WINDOWS
-        fullpath = hostfs_filepath_generate(hfs->dir_prefix,path,isdir);
+        isdir = windows_filepath_isdir(path);
+        fullpath = windows_filepath_generate(hfs->dir_prefix,path,isdir);
 #else
+        isdir = wind_filepath_isdir(path);
         fullpath = wind_filepath_generate(hfs->dir_prefix,path,isdir);
 #endif
         WIND_ASSERT_BREAK(fullpath != W_NULL,W_ERR_FAIL,"get full path failed");
+        exist = hostfile_existing(hfs,path);
+        WIND_CHECK_BREAK((exist == W_TRUE) || ((mode & HFMODE_CRT) != 0),W_ERR_NOFILE);
         if(exist != W_TRUE)
-            hfile = host_file_open_create((char*)path,mode);
+            hfile = host_file_open_create((char*)fullpath,mode);
         else
-            hfile = host_file_open_exist((char*)path,mode);
+            hfile = host_file_open_exist((char*)fullpath,mode);
         WIND_ASSERT_BREAK(hfile != W_NULL,W_ERR_FAIL,"open hfile failed");
         hfile->hfs = hfs;
     }while(0);
@@ -366,18 +384,19 @@ w_err_t hostfile_remove(w_hostfs_s *hfs,const char *path)
     do
     {
         err = W_ERR_OK;
-        isdir = wind_filepath_isdir((char*)path);
 #if  HOST_OS_TYPE == HOST_OS_WINDOWS
-        fullpath = hostfs_filepath_generate(hfs->dir_prefix,path,isdir);
+        isdir = windows_filepath_isdir((char*)path);
+        fullpath = windows_filepath_generate(hfs->dir_prefix,path,isdir);
 #else
+        isdir = wind_filepath_isdir((char*)path);
         fullpath = wind_filepath_generate(hfs->dir_prefix,path,isdir);
 #endif
         WIND_ASSERT_BREAK(fullpath != W_NULL,W_ERR_FAIL,"get full path failed");
-        attr = host_file_type((char*)path);
+        attr = host_file_type((char*)fullpath);
         if(attr == HFILE_TYPE_DIR)
-            _rmdir(path);
+            _rmdir(fullpath);
         else if(attr == HFILE_TYPE_FILE)
-            remove(path);
+            remove(fullpath);
         else
             return W_ERR_NOFILE;
         WIND_ASSERT_BREAK(err == W_ERR_OK,err,"remove hfile failed");
@@ -416,13 +435,14 @@ w_bool_t hostfile_existing(w_hostfs_s *hfs,const char *path)
     do
     {
         err = W_ERR_OK;
+        isdir = 0;
+#if  HOST_OS_TYPE == HOST_OS_WINDOWS
+        if(path[0] != 0)
+            isdir = windows_filepath_isdir(path);
+        fullpath = windows_filepath_generate(hfs->dir_prefix,path,isdir);
+#else
         if(path[0] != 0)
             isdir = wind_filepath_isdir(path);
-        else
-            isdir = 0;
-#if  HOST_OS_TYPE == HOST_OS_WINDOWS
-        fullpath = hostfs_filepath_generate(hfs->dir_prefix,path,isdir);
-#else
         fullpath = wind_filepath_generate(hfs->dir_prefix,path,isdir);
 #endif
         WIND_ASSERT_BREAK(fullpath != W_NULL,W_ERR_FAIL,"get full path failed");
