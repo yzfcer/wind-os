@@ -69,8 +69,8 @@ typedef struct __w_stati_info_s w_stati_info_s;
 struct __w_test_case_s
 {
     char name[TEST_CASE_NAME_LEN];
-    void (*setup)(void);
-    void (*teardown)(void);
+    w_err_t (*setup)(void);
+    w_err_t (*teardown)(void);
     void (*test)(void);
 };
 
@@ -81,8 +81,8 @@ struct __w_test_suite_s
     w_uint32_t case_cnt;//测试用例的数量
     w_test_case_s *tcase;
     //void (*init)(void);
-    void (*setup)(void);
-    void (*teardown)(void);
+    w_err_t (*setup)(void);
+    w_err_t (*teardown)(void);
     w_test_suite_s *next;
 };
 

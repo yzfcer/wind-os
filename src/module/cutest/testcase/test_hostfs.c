@@ -138,7 +138,7 @@ CASE_FUNC(readdir)
 {
     w_err_t err;
     w_hostfile_s *file;
-    w_hostfile_s *sub = W_NULL;
+    w_hostfile_s *sub = (w_hostfile_s *)W_NULL;
 
     file = hostfile_open(&g_hfs,"/readdir_test/",HFMODE_CRT);
     EXPECT_NE(file,W_NULL);
