@@ -311,7 +311,7 @@ w_int32_t treefile_write(w_treefile_s* file,w_uint8_t *buff, w_int32_t size)
     WIND_ASSERT_RETURN(size > 0,W_ERR_INVALID);
     while(file->bufflen < file->filelen + size)
     {
-        dnode = tfs_mem_malloc(TREEFS_BLK_SIZE + sizeof(w_dnode_s));
+        dnode = (w_dnode_s *)tfs_mem_malloc(TREEFS_BLK_SIZE + sizeof(w_dnode_s));
         WIND_ASSERT_RETURN(dnode != W_NULL,-1);
         dlist_insert_tail(&file->datalist,dnode);
         file->bufflen += TREEFS_BLK_SIZE;
