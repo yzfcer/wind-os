@@ -378,6 +378,7 @@ w_err_t hostfile_close(w_hostfile_s* hfile)
 
 w_err_t hostfile_remove(w_hostfs_s *hfs,const char *path)
 {
+    w_int32_t result;
     w_err_t err;
     w_uint8_t isdir;
     hfileattr_e attr;
@@ -395,7 +396,11 @@ w_err_t hostfile_remove(w_hostfs_s *hfs,const char *path)
         WIND_ASSERT_BREAK(fullpath != W_NULL,W_ERR_FAIL,"get full path failed");
         attr = host_file_type((char*)fullpath);
         if(attr == HFILE_TYPE_DIR)
-            _rmdir(fullpath);
+        {
+            result = _rmdir(fullpath);
+            WIND_ASSERT_BREAK(result == 0,W_ERR_FAIL,"rmdir failed,result:%d",result);
+        }
+            
         else if(attr == HFILE_TYPE_FILE)
             remove(fullpath);
         else
@@ -547,6 +552,8 @@ static w_hostfile_s *do_host_file_readdir(w_hostfile_s *hfile)
         subhfile = hfile->subhfile;
         subhfile->attr = (hfile->fileinfo.attrib & _A_SUBDIR)?HFILE_ATTR_DIR:0;
         subhfile->isdir = (subhfile->attr & HFILE_ATTR_DIR)?1:0;
+        if(subhfile->name != W_NULL)
+            wind_free(subhfile->name);
         subhfile->name = (char*)wind_salloc(hfile->fileinfo.name,HP_ALLOCID_HOSTFS);
         WIND_ASSERT_BREAK(subhfile->name != W_NULL,W_ERR_MEM,"clone filename failed");
         hfile->subhfile = subhfile;

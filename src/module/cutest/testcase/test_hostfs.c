@@ -162,21 +162,7 @@ CASE_FUNC(readdir)
 
 	file = hostfile_open(&g_hfs,"/readdir_test/",HFMODE_R);
     EXPECT_NE(file,W_NULL);
-#if 0
-    EXPECT_EQ(file->info.magic,LISTFILE_MAGIC);
-    EXPECT_STR_EQ(file->info.name,"readdir_test");
-    EXPECT_EQ(file->info.filesize,0);
-    EXPECT_EQ(file->info.spacesize,0);
-    EXPECT_EQ(file->info.parent_addr,file->hfs->hfs_info.root_addr);
-    EXPECT_NE(file->info.self_addr,0);
-    EXPECT_EQ(file->info.last_addr,0);
-    EXPECT_EQ(file->info.last_addr,0);
-    EXPECT_EQ(file->info.nextfile_addr,0);
-    EXPECT_EQ(file->info.children_cnt,3);
-    EXPECT_NE(file->info.headchild_addr,0);
-    EXPECT_NE(file->info.tailchild_addr,0);
-    EXPECT_NE(IS_HFILE_ATTR_DIR(file->info.attr),0);
-#endif
+
     while(1)
     {
         err = hostfile_readdir(file,&sub);
@@ -196,6 +182,11 @@ CASE_FUNC(readdir)
     EXPECT_NE(err,W_ERR_OK);
     err = hostfile_close(file);
     EXPECT_EQ(err,W_ERR_OK);
+    err = hostfile_remove(&g_hfs,"/readdir_test/");
+    EXPECT_EQ(err,W_ERR_OK);
+	file = hostfile_open(&g_hfs,"/readdir_test/",HFMODE_R);
+    EXPECT_EQ(file,W_NULL);
+
 }
 
 
@@ -269,7 +260,6 @@ CASE_FUNC(format)
 SUITE_SETUP(hostfs)
 {
     w_err_t err;
-    //testblk_reg();
     err = hfs_init();
     EXPECT_EQ(err,W_ERR_OK);
     return W_ERR_OK;
@@ -280,7 +270,6 @@ SUITE_TEARDOWN(hostfs)
     w_err_t err;
     err = hfs_deinit();
     EXPECT_EQ(err,W_ERR_OK);
-    //testblk_unreg();
     return W_ERR_OK;
 }
 
