@@ -177,8 +177,16 @@ CASE_FUNC(readdir)
     EXPECT_NE(file->info.tailchild_addr,0);
     EXPECT_NE(IS_HFILE_ATTR_DIR(file->info.attr),0);
 #endif
+    while(1)
+    {
+        err = hostfile_readdir(file,&sub);
+        if(err != W_ERR_OK)
+            break;
+        if((wind_strcmp(sub->name,".") != 0) &&
+            (wind_strcmp(sub->name,"..") != 0))
+            break;
+    }
     
-    err = hostfile_readdir(file,&sub);
     EXPECT_EQ(err,W_ERR_OK);
     err = hostfile_readdir(file,&sub);
     EXPECT_EQ(err,W_ERR_OK);

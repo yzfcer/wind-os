@@ -87,7 +87,7 @@ static w_err_t windows_filepath_check_valid(char *path)
             continue;
         if(path[i] >= 0x61 && path[i] <= 0x7A)
             continue;
-        if((path[i] == '_')||(path[i] == ':'))
+        if((path[i] == '_')||(path[i] == ':')||(path[i] == '*'))
             continue;
         wind_error("invalid character:%c",path[i]);
         return W_ERR_FAIL;
@@ -514,6 +514,7 @@ static w_hostfile_s *do_host_file_readdir(w_hostfile_s *hfile)
 {
     w_err_t err;
     w_int32_t res;
+    char *path = W_NULL;
     w_hostfile_s *subhfile = (w_hostfile_s *)W_NULL;
     WIND_ASSERT_RETURN(hfile != W_NULL,(w_hostfile_s *)W_NULL);
     WIND_ASSERT_RETURN(hfile->magic == HOSTFILE_MAGIC,(w_hostfile_s *)W_NULL);
@@ -522,10 +523,12 @@ static w_hostfile_s *do_host_file_readdir(w_hostfile_s *hfile)
     do 
     {
         err = W_ERR_OK;
+        path = windows_filepath_generate(hfile->path,"/*",0);
+        WIND_ASSERT_BREAK(path != W_NULL,W_ERR_MEM,"generate path failed");
         if(!hfile->has_sub)
         {
             wind_memset(&hfile->fileinfo,0,sizeof(_finddata_t));
-            hfile->handle = _findfirst(hfile->path,&hfile->fileinfo);
+            hfile->handle = _findfirst(path,&hfile->fileinfo);
             WIND_CHECK_BREAK(hfile->handle >= 0,W_ERR_FAIL);
             hfile->has_sub = 1;
         }
@@ -540,7 +543,6 @@ static w_hostfile_s *do_host_file_readdir(w_hostfile_s *hfile)
             subhfile = (w_hostfile_s *)hostfs_mem_malloc(sizeof(w_hostfile_s));
             WIND_ASSERT_BREAK(subhfile != W_NULL, W_ERR_MEM, "alloc sub hfile failed");
             wind_memset(subhfile,0,sizeof(w_hostfile_s));
-            
         }
         subhfile = hfile->subhfile;
         subhfile->attr = (hfile->fileinfo.attrib & _A_SUBDIR)?HFILE_ATTR_DIR:0;
@@ -549,6 +551,8 @@ static w_hostfile_s *do_host_file_readdir(w_hostfile_s *hfile)
         WIND_ASSERT_BREAK(subhfile->name != W_NULL,W_ERR_MEM,"clone filename failed");
         hfile->subhfile = subhfile;
     }while(0);
+    if(path != W_NULL)
+        hostfs_mem_free(path);
     if(err == W_ERR_OK)
         return hfile->subhfile;
     if(subhfile)
