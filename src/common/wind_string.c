@@ -288,6 +288,19 @@ char *wind_strskip(char *str,char *sub,w_int32_t count)
     return str;
 }
 
+void *wind_strrpc(char *str,char oldch,char newch)
+{
+    w_int32_t i = 0;
+    WIND_STRCHECK(str != W_NULL,W_NULL);
+    while(str[i])
+    {
+        if(str[i] == oldch)
+            str[i] = newch;
+        i ++;
+    }
+    return str;
+}
+
 
 w_fp64_t wind_strtod(const char *str,char **endptr) 
 {

@@ -65,6 +65,8 @@ char *wind_strstr(const char *str,const char *sub);
 
 char *wind_strskip(char *str,char *sub,w_int32_t count);
 
+void *wind_strrpc(char *str,char oldch,char newch);
+
 w_fp64_t wind_strtod(const char *str,char **endptr);
 
 w_int32_t wind_strsplit(char *str,char ch,char **substr,w_int32_t maxcnt);
@@ -80,6 +82,7 @@ void *wind_memmove(void *dest,const void *src,w_int32_t count);
 w_int32_t wind_memcmp(const void *dest,const void *src,w_int32_t count);
 
 void *wind_memscan(void *mem, w_uint32_t c, w_int32_t count);
+
 
 #ifdef __cplusplus
 }

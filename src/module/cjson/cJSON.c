@@ -22,6 +22,7 @@
 
 /* cJSON */
 /* JSON parser in C. */
+#include <math.h>
 #include "cJSON.h"
 #include "JSON_checker.h"
 #include "wind_heap.h"

@@ -208,6 +208,7 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\fscmd\cmd_write.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\fscmd\fs_cmd_list.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\hostfs\hostfs.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\hostfs\windows_filepath.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\listfs\listfs.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\listfs\listfs_bitmap.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\listfs\listfs_blkinfo.c" />
@@ -321,6 +322,7 @@
     <ClInclude Include="..\..\..\..\..\..\..\src\module\shell\framework\wind_cmd.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\shell\framework\wind_key.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\hostfs\hostfs.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\hostfs\windows_filepath.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\listfs\listfs.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\listfs\listfs_bitmap.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\listfs\listfs_blkinfo.h" />

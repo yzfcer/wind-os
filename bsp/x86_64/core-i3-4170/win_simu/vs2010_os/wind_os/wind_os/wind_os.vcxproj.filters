@@ -563,6 +563,9 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\test_dict.c">
       <Filter>module_cutest</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\hostfs\windows_filepath.c">
+      <Filter>module_vfs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">
@@ -920,6 +923,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\..\src\module\dict\wind_dict.h">
       <Filter>module_dict</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\hostfs\windows_filepath.h">
+      <Filter>module_vfs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
