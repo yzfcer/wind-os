@@ -27,7 +27,8 @@
 #include "wind_config.h"
 #include "wind_type.h"
 #if (HOST_OS_TYPE == HOST_OS_WINDOWS)
-hfileattr_e host_file_type(char *path);
+hfileattr_e windows_file_type(char *path);
+char *windows_filepath_remove_tail(char *path);
 char *windows_filepath_generate(char *pre_path,char *relative_path,w_uint16_t isdir);
 char * windows_filepath_copy(char *path);
 w_bool_t windows_filepath_isdir(char *path);

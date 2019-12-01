@@ -44,7 +44,7 @@ w_err_t _wind_hostfs_mod_init(void)
 void *hostfs_mem_malloc(w_int32_t size)
 {
     void *ptr;
-    wind_trace("hostfs_mem_malloc:0x%08x,%d",ptr,size);
+    wind_trace("hostfs_mem_malloc:%d",size);
     ptr = wind_alloc(size,HP_ALLOCID_HOSTFS);
     return ptr;
 }
@@ -115,7 +115,6 @@ static w_hostfile_s*   host_file_create(char *path,w_uint8_t mode,w_uint8_t isdi
         wind_memset(hfile,0,sizeof(w_hostfile_s));
         hfile->magic = HOSTFILE_MAGIC;
         hfile->name = windows_filepath_get_filename(path);
-        //hostfs_mem_malloc(path,HP_ALLOCID_HOSTFS);
         WIND_ASSERT_BREAK(hfile->name != W_NULL, W_ERR_MEM, "alloc hfile name failed");
         hfile->mode = mode;
         hfile->attr = isdir?HFILE_ATTR_DIR:0;
@@ -157,16 +156,13 @@ static w_hostfile_s*   host_file_open_exist(char *path,w_uint8_t mode)
     do
     {
         err = W_ERR_OK;
-        attr = host_file_type(path);
+        attr = windows_file_type(path);
         WIND_ASSERT_BREAK(attr != HFILE_TYPE_ERROR, W_ERR_FAIL, "get hfile type failed");
         isdir = (attr == HFILE_TYPE_DIR)?1:0;
         if(!isdir)
         {
-            realpath = wind_salloc(path,HP_ALLOCID_HOSTFS);
+            realpath = windows_filepath_remove_tail(path);
             WIND_ASSERT_BREAK(realpath != W_NULL,W_ERR_MEM,"alloc realpath failed");
-            len = wind_strlen(realpath);
-            if(realpath[len - 1] == '/')
-                realpath[len - 1] = '\0';
             errno = fopen_s(&fd,realpath,"rb+");
             WIND_ASSERT_BREAK(errno == 0,W_ERR_FAIL,"open hfile failed");
             WIND_ASSERT_BREAK(fd != W_NULL,W_ERR_FAIL,"open hfile failed");
@@ -196,6 +192,7 @@ static w_hostfile_s*   host_file_open_create(char *path,w_uint8_t mode)
     w_int8_t isdir;
     w_int32_t res;
     w_err_t err;
+    char *realpath = (char*)W_NULL;
     FILE *fd = (FILE *)W_NULL;
     w_hostfile_s *hfile = (w_hostfile_s *)W_NULL;
     WIND_ASSERT_RETURN(path != W_NULL, (w_hostfile_s *)W_NULL);
@@ -210,7 +207,9 @@ static w_hostfile_s*   host_file_open_create(char *path,w_uint8_t mode)
 
         if(!isdir)
         {
-            errno = fopen_s(&fd,path,"w+");
+            realpath = windows_filepath_remove_tail(path);
+            WIND_ASSERT_BREAK(realpath != W_NULL,W_ERR_MEM,"alloc realpath failed");
+            errno = fopen_s(&realpath,path,"w+");
             WIND_ASSERT_BREAK(errno == 0,W_ERR_FAIL,"open hfile failed");
             WIND_ASSERT_BREAK(fd != W_NULL, W_ERR_FAIL, "create hfile failed");
         }
@@ -297,6 +296,8 @@ w_err_t hostfile_remove(w_hostfs_s *hfs,const char *path)
     w_err_t err;
     w_uint8_t isdir;
     hfileattr_e attr;
+    
+    char *realpath = (char *)W_NULL;
     char *fullpath = (char*)W_NULL;
     do
     {
@@ -309,13 +310,12 @@ w_err_t hostfile_remove(w_hostfs_s *hfs,const char *path)
         fullpath = windows_filepath_generate(hfs->dir_prefix,path,isdir);
 #endif
         WIND_ASSERT_BREAK(fullpath != W_NULL,W_ERR_FAIL,"get full path failed");
-        attr = host_file_type((char*)fullpath);
+        attr = windows_file_type((char*)fullpath);
         if(attr == HFILE_TYPE_DIR)
         {
-            //result = _rmdir(fullpath);
+            realpath = windows_filepath_remove_tail(fullpath);
+            WIND_ASSERT_BREAK(realpath != W_NULL,W_ERR_FAIL,"remove tail failed");
             err = windows_do_remove_dir(fullpath);
-
-            
             WIND_ASSERT_BREAK(err == W_ERR_OK,W_ERR_FAIL,"rmdir failed,result:%d",err);
         }
             
@@ -327,6 +327,8 @@ w_err_t hostfile_remove(w_hostfs_s *hfs,const char *path)
     }while(0);
     if(fullpath)
         wind_free(fullpath);
+    if(realpath)
+        wind_free(realpath);
     return err;
 }
 

@@ -110,7 +110,7 @@ void wind_print_space(w_int32_t space8_cnt);
 #define PRINT_LV_ERROR   5
 #define PRINT_LV_CRIT    6
 
-#define PRINT_LEVEL PRINT_LV_NOTICE//PRINT_LV_DEBUG//
+#define PRINT_LEVEL PRINT_LV_TRACE//PRINT_LV_DEBUG//
 
 //---------------------------------------------------------------------
 #if (WIND_DEBUG_SUPPORT && (PRINT_LEVEL <= PRINT_LV_DEBUG))

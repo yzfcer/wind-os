@@ -36,24 +36,57 @@
 
 //static char *curpath = (char*)W_NULL;
 
-hfileattr_e host_file_type(char *path)
+char *windows_filepath_remove_tail(char *path)
 {
+    w_err_t err;
+    w_int32_t len;
+    char *new_path = (char *)W_NULL;
+    WIND_ASSERT_RETURN(path != W_NULL,(char *)W_NULL);
+    WIND_ASSERT_RETURN(path[0] != 0,(char *)W_NULL);
+    do
+    {
+        err = W_ERR_OK;
+        new_path = wind_salloc(path,HP_ALLOCID_HOSTFS);
+        WIND_ASSERT_BREAK(new_path != W_NULL,W_ERR_MEM,"alloc new_path failed");
+        len = wind_strlen(new_path);
+        if(new_path[len - 1] == '/')
+            new_path[len - 1] = 0;
+    }while(0);
+    return new_path;
+}
+
+hfileattr_e windows_file_type(char *path)
+{
+    w_err_t err;
+    hfileattr_e attr;
+    char *realpath = (char*)W_NULL;
     HANDLE handle;
     WIN32_FIND_DATAA FindFileData;
-    handle = FindFirstFileA(path,&FindFileData);
-    if( handle < 0 )
-        return HFILE_TYPE_ERROR;
-    if(FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
-        return HFILE_TYPE_DIR;
-    else
-        return HFILE_TYPE_FILE;
-    return HFILE_TYPE_ERROR;
+    wind_trace("path=%s",path);
+    do
+    {
+        err = W_ERR_OK;
+        realpath = windows_filepath_remove_tail(path);
+        WIND_ASSERT_BREAK(realpath != W_NULL,W_ERR_MEM,"alloc realpath failed");
+        handle = FindFirstFileA(realpath,&FindFileData);
+        WIND_ASSERT_BREAK(realpath != W_NULL,W_ERR_MEM,"FindFirstFileA failed");
+        if(FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+            attr = HFILE_TYPE_DIR;
+        else
+            attr = HFILE_TYPE_FILE;
+    }while(0);
+    if(err != W_ERR_OK)
+        attr = HFILE_TYPE_ERROR;
+    if(realpath != W_NULL)
+        windows_filepath_release(realpath);
+    return attr;
 }
 
 w_err_t windows_filepath_check_valid(char *path)
 {
     w_int32_t i,len;
     WIND_ASSERT_RETURN(path != W_NULL,W_ERR_PTR_NULL);
+    wind_trace("path=%s",path);
     len = wind_strlen(path);
     WIND_ASSERT_RETURN(len > 0,W_ERR_INVALID);
         
@@ -90,6 +123,8 @@ char *windows_filepath_generate(char *pre_path,char *relative_path,w_uint16_t is
     w_int32_t prelen,relalen,pathlen;
     WIND_ASSERT_RETURN(pre_path != W_NULL,(char *)W_NULL);
     WIND_ASSERT_RETURN(relative_path != W_NULL,(char *)W_NULL);
+    wind_trace("pre_path=%s",pre_path);
+    wind_trace("relative_path=%s",relative_path);
     prelen = wind_strlen(pre_path);
     WIND_ASSERT_RETURN(prelen >= 2,(char *)W_NULL);
     WIND_ASSERT_RETURN(pre_path[1] == ':',(char *)W_NULL);
@@ -129,6 +164,7 @@ w_bool_t windows_filepath_isdir(char *path)
 {
     w_int32_t len;
     WIND_CHECK_RETURN(path != W_NULL,W_FALSE);
+    wind_trace("path=%s",path);
     len = wind_strlen(path);
     WIND_ASSERT_RETURN(len > 0, W_FALSE);
     WIND_CHECK_RETURN(path[len-1] == '/',W_FALSE);
@@ -140,6 +176,7 @@ w_err_t windows_do_remove_dir(char *fullpath)
     w_int32_t len;
     w_err_t err;
     char *cmd = (char *)W_NULL;
+    wind_trace("fullpath=%s",fullpath);
     do
     {
         err = W_ERR_OK;
@@ -195,7 +232,7 @@ char * windows_filepath_copy(char *path)
 {
     char *newpath;
     WIND_ASSERT_RETURN(path != W_NULL,(char*)W_NULL);
-    //WIND_ASSERT_RETURN(path[0] == '/',(char*)W_NULL);
+    wind_trace("path=%s",path);
     newpath = (char*)wind_salloc(path,HP_ALLOCID_VFS);
     WIND_ASSERT_RETURN(newpath != W_NULL,(char*)W_NULL);
     return newpath;
@@ -206,6 +243,7 @@ char * windows_filepath_copy(char *path)
 w_err_t windows_filepath_release(char *path)
 {
     WIND_ASSERT_RETURN(path != W_NULL,W_ERR_PTR_NULL);
+    wind_trace("path=%s",path);
     return wind_free(path);
 }
 
@@ -215,6 +253,7 @@ w_int32_t windows_filepath_split(char *path,char **layers,w_int32_t layercnt)
     w_err_t err;
     w_int32_t i,j,len,cnt = 0;
     WIND_ASSERT_RETURN(path != W_NULL,-1);
+    wind_trace("path=%s",path);
     //WIND_ASSERT_RETURN(path[0] == '/',-1);
     WIND_ASSERT_RETURN(layers != W_NULL,-1);
     WIND_ASSERT_RETURN(layercnt >= 2,-1);
@@ -252,6 +291,7 @@ char* windows_filepath_get_parent(char *path)
     w_int32_t i,len;
     char *tmppath;
     WIND_ASSERT_RETURN(path != W_NULL,(char*)W_NULL);
+    wind_trace("path=%s",path);
     //WIND_ASSERT_RETURN(path[0] == '/',(char*)W_NULL);
     err = windows_filepath_check_valid(path);
     WIND_ASSERT_RETURN(err == W_ERR_OK,(char*)W_NULL);
@@ -279,6 +319,7 @@ char* windows_filepath_get_filename(char *path)
     w_int32_t i,len;
     char *tmppath;
     WIND_ASSERT_RETURN(path != W_NULL,(char*)W_NULL);
+    wind_trace("path=%s",path);
     //WIND_ASSERT_RETURN(path[0] == '/',(char*)W_NULL);
     err = windows_filepath_check_valid(path);
     WIND_ASSERT_RETURN(err == W_ERR_OK,(char*)W_NULL);
@@ -308,6 +349,7 @@ char* windows_filepath_to_directory(char *path)
     w_int32_t len;
     char *newpath;
     WIND_ASSERT_RETURN(path != W_NULL,(char*)W_NULL);
+    wind_trace("path=%s",path);
     len = wind_strlen(path);
     if(!windows_filepath_isdir(path))
     {
