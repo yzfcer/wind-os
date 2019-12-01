@@ -75,10 +75,10 @@ hfileattr_e windows_file_type(char *path)
         else
             attr = HFILE_TYPE_FILE;
     }while(0);
-    if(err != W_ERR_OK)
-        attr = HFILE_TYPE_ERROR;
     if(realpath != W_NULL)
         windows_filepath_release(realpath);
+    if(err != W_ERR_OK)
+        attr = HFILE_TYPE_ERROR;
     return attr;
 }
 
