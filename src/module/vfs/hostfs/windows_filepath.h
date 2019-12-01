@@ -33,7 +33,6 @@ char *windows_filepath_generate(char *pre_path,char *relative_path,w_uint16_t is
 char * windows_filepath_copy(char *path);
 w_bool_t windows_filepath_isdir(char *path);
 w_err_t windows_filepath_release(char *path);
-w_err_t windows_do_remove_dir(char *fullpath);
 
 char * windows_filepath_get_current(void);
 w_err_t windows_filepath_set_current(char *path);

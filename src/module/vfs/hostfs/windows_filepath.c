@@ -171,30 +171,6 @@ w_bool_t windows_filepath_isdir(char *path)
     return W_TRUE;
 }
 
-w_err_t windows_do_remove_dir(char *fullpath)
-{
-    w_int32_t len;
-    w_err_t err;
-    char *cmd = (char *)W_NULL;
-    wind_trace("fullpath=%s",fullpath);
-    do
-    {
-        err = W_ERR_OK;
-        len = wind_strlen(fullpath) + 1;
-        len += sizeof("rd /s /q ");
-        cmd = (char *)hostfs_mem_malloc(len);
-        WIND_ASSERT_BREAK(cmd != W_NULL,W_ERR_MEM,"alloc cmd failed");
-        wind_strcpy(cmd,"rd /s /q ");
-        wind_strcat(cmd,fullpath);
-        wind_strrpc(cmd,'/','\\');
-        wind_printf(cmd);
-        system(cmd);
-    }while(0);
-    if(cmd != W_NULL)
-        hostfs_mem_free(cmd);
-    return err;
-    
-}
 
 
 
