@@ -247,7 +247,7 @@ void _wind_switchto_thread(w_thread_s *thread)
 //获取tick计数器
 w_uint32_t wind_get_tick(void)
 {
-    return g_core.ms_cnt;
+    return g_core.ticks_cnt;
 }
 
 w_uint32_t wind_get_seconds(void)
