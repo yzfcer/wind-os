@@ -39,9 +39,9 @@ extern "C" {
 static w_err_t cmd_cd(w_int32_t argc,char **argv)
 {
     w_err_t err;
-    w_bool_t isexist;
     char *fullpath = W_NULL;
     char *curpath;
+    w_file_s *file;
 
     do
     {
@@ -52,13 +52,16 @@ static w_err_t cmd_cd(w_int32_t argc,char **argv)
         else
             fullpath = wind_filepath_generate(curpath,curpath,1);
         WIND_ASSERT_BREAK(fullpath != W_NULL,W_ERR_MEM,"generate fullpath failed");
-        isexist = wind_fexist(fullpath);
-        WIND_ASSERT_BREAK(isexist,W_ERR_NOFILE,"directory is NOT exist.");
+        file = wind_fopen(fullpath,FMODE_R);
+        WIND_ASSERT_BREAK(file != W_NULL,W_ERR_NOFILE,"directory is NOT exist.");
+        WIND_ASSERT_BREAK(file->isdir == 1,W_ERR_FAIL,"%s is not a directory",fullpath);
         wind_filepath_set_current(fullpath);
         
     }while(0);
     if(fullpath != W_NULL)
         wind_filepath_release(fullpath);
+    if(file != W_NULL)
+        wind_fclose(file);
     return err;
 }
 
