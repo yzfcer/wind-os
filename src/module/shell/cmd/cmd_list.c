@@ -40,6 +40,7 @@
 #include "wind_fs.h"
 #include "wind_conv.h"
 #include "wind_module.h"
+#include "wind_fsm.h"
 
 #if (CMD_LIST_SUPPORT)
 
@@ -93,6 +94,9 @@ COMMAND_USAGE(list)
 #endif
 #if WIND_MODULE_SUPPORT
     wind_printf("list module:--show wind-os modules infomation.\r\n");
+#endif
+#if WIND_FSM_SUPPORT
+    wind_printf("list fsm:--show fsm list infomation.\r\n");
 #endif
 }
 
@@ -182,11 +186,11 @@ COMMAND_MAIN(list,argc,argv)
     }
 #endif
 #if WIND_WATCHDOG_SUPPORT
-        else if(0 == wind_strcmp(argv[1],"watchdog"))
-        {
-            wind_watchdog_print();
-            return W_ERR_OK;
-        }
+    else if(0 == wind_strcmp(argv[1],"watchdog"))
+    {
+        wind_watchdog_print();
+        return W_ERR_OK;
+    }
 #endif
 #if WIND_DAEMON_SUPPORT
     else if(0 == wind_strcmp(argv[1],"daemon"))
@@ -203,11 +207,18 @@ COMMAND_MAIN(list,argc,argv)
     }
 #endif
 #if WIND_MODULE_SUPPORT
-        else if(0 == wind_strcmp(argv[1],"module"))
-        {
-            wind_module_print();
-            return W_ERR_OK;
-        }
+    else if(0 == wind_strcmp(argv[1],"module"))
+    {
+        wind_module_print();
+        return W_ERR_OK;
+    }
+#endif
+#if WIND_FSM_SUPPORT
+    else if(0 == wind_strcmp(argv[1],"fsm"))
+    {
+        wind_fsm_print();
+        return W_ERR_OK;
+    }
 #endif
 
     else

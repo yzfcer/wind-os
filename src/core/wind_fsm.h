@@ -29,6 +29,7 @@ extern "C" {
 #include "wind_type.h"
 #include "wind_obj.h"
 #include "wind_debug.h"
+#if WIND_FSM_SUPPORT
 
 
 
@@ -50,7 +51,7 @@ typedef enum
     FSM_STAT_SLEEP,
     FSM_STAT_SUSPEND,
     FSM_STAT_STOP,
-}fsm_state_e;
+}w_fsm_state_e;
 
 
 
@@ -78,7 +79,7 @@ typedef struct __w_fsm_s
     w_int32_t id;
     w_uint32_t sleep_ms;
     w_uint32_t sleep_tick;
-    fsm_state_e state;
+    w_fsm_state_e state;
     w_int32_t cur_step;
     void *arg;
     w_int32_t arglen;
@@ -111,8 +112,7 @@ w_err_t wind_fsm_schedule(void);
 w_err_t wind_fsm_print(void);
 
 
-
-
+#endif //#if WIND_FSM_SUPPORT
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

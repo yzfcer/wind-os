@@ -31,7 +31,7 @@ extern "C" {
 #include "wind_debug.h"
 #include "wind_obj.h"
 #include "wind_pool.h"
-
+#if WIND_FSM_SUPPORT
 
 #define NODE_TO_FSM(node) (w_fsm_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((w_fsm_s*)0)->obj.objnode)))
 
@@ -57,7 +57,36 @@ static w_err_t fsm_free(w_fsm_s *fsm)
 
 static w_fsm_s *get_reay_fsm(void)
 {
+    w_fsm_s *fsm;
+    w_dnode_s *dnode = &cur_fsm->obj.objnode;
+    for(;dnode != W_NULL;dnode = dnode->next)
+    {
+        fsm = NODE_TO_FSM(dnode);
+        if(fsm->state == FSM_STAT_READY)
+            return fsm;
+    }
+    for(dnode = fsmlist.head;dnode != &cur_fsm->obj.objnode;dnode = dnode->next)
+    {
+        fsm = NODE_TO_FSM(dnode);
+        if(fsm->state == FSM_STAT_READY)
+            return fsm;
+    }
     return (w_fsm_s *)W_NULL;
+}
+
+static char *fsm_state_str(w_fsm_state_e state)
+{
+    if(state == FSM_STAT_IDLE)
+        return "idle";
+    else if(state == FSM_STAT_READY)
+        return "ready";
+    else if(state == FSM_STAT_SLEEP)
+        return "sleep";
+    else if(state == FSM_STAT_SUSPEND)
+        return "suspend";
+    else if(state == FSM_STAT_STOP)
+        return "stop";
+    return "unknown";
 }
 
 /********************************************全局变量定义**********************************************/
@@ -70,16 +99,14 @@ w_err_t _wind_fsm_mod_init(void)
     w_err_t err;
     DLIST_INIT(modellist);
     DLIST_INIT(fsmlist);
-    cur_fsm = W_NULL;
+    cur_fsm = (w_fsm_s*)W_NULL;
     err = wind_pool_create("fsm",fsmpool,sizeof(fsmpool),sizeof(w_fsm_s));
     return err;
 }
 
 w_err_t wind_fsm_model_register(w_fsm_model_s *fsm_model)
 {
-    w_int32_t i;
     w_fsm_model_s *model;    
-    w_err_t err;
     WIND_ASSERT_RETURN(fsm_model != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(fsm_model->obj.magic == (~WIND_FSM_MODEL_MAGIC),W_ERR_INVALID);
     WIND_ASSERT_RETURN(fsm_model->obj.name != W_NULL,W_ERR_PTR_NULL);
@@ -177,6 +204,7 @@ w_err_t wind_fsm_suspend(w_fsm_s *fsm)
     fsm->state = FSM_STAT_SUSPEND;
     return W_ERR_OK;
 }
+
 w_err_t wind_fsm_sleep(w_fsm_s *fsm,w_int32_t time_ms)
 {
     WIND_ASSERT_RETURN(fsm != W_NULL,W_ERR_PTR_NULL);
@@ -186,12 +214,14 @@ w_err_t wind_fsm_sleep(w_fsm_s *fsm,w_int32_t time_ms)
     fsm->sleep_tick = wind_get_tick();
     return W_ERR_OK;
 }
+
 w_err_t wind_fsm_change_step(w_fsm_s *fsm,w_int32_t cur_step)
 {
     WIND_ASSERT_RETURN(fsm != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(fsm->obj.magic == WIND_FSM_MAGIC,W_ERR_INVALID);
     WIND_ASSERT_RETURN(cur_step < fsm->model->step_cnt,W_ERR_PTR_NULL);
     fsm->cur_step = cur_step;
+    fsm->state = FSM_STAT_READY;
     return W_ERR_FAIL;
 }
 
@@ -232,9 +262,27 @@ w_err_t wind_fsm_schedule(void)
 
 w_err_t wind_fsm_print(void)
 {
-    wind_printf("NULL\r\n");
-}
+    w_dnode_s *dnode;
+    w_fsm_s *fsm;
+    w_dlist_s *list = &fsmlist;
+    wind_printf("\r\n\r\nfsm list:\r\n");
+    wind_print_space(7);
+    wind_printf("%-16s %-16s %-8s %-8s\r\n","fsm","mode","state","cur_step");
+    wind_print_space(7);
+    wind_disable_switch();
+    foreach_node(dnode,list)
+    {
+        fsm = NODE_TO_FSM(dnode);
+        wind_printf("%-16s %-16s %-8s\r\n",
+            fsm->obj.name,fsm->model->obj.name,fsm_state_str(fsm->state),fsm->cur_step);
+    }
+    wind_enable_switch();
+    wind_print_space(7);
+    return W_ERR_OK;
 
+    return W_ERR_OK;
+}
+#endif
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus
