@@ -194,6 +194,7 @@ w_err_t wind_fsm_stop(w_fsm_s *fsm)
     WIND_ASSERT_RETURN(fsm != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(fsm->obj.magic == WIND_FSM_MAGIC,W_ERR_INVALID);
     fsm->state = FSM_STAT_STOP;
+    fsm->cur_step = 0;
     return W_ERR_OK;
 }
 
@@ -204,6 +205,15 @@ w_err_t wind_fsm_suspend(w_fsm_s *fsm)
     fsm->state = FSM_STAT_SUSPEND;
     return W_ERR_OK;
 }
+
+w_err_t wind_fsm_resume(w_fsm_s *fsm)
+{
+    WIND_ASSERT_RETURN(fsm != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(fsm->obj.magic == WIND_FSM_MAGIC,W_ERR_INVALID);
+    fsm->state = FSM_STAT_READY;
+    return W_ERR_OK;
+}
+
 
 w_err_t wind_fsm_sleep(w_fsm_s *fsm,w_int32_t time_ms)
 {
@@ -230,7 +240,8 @@ w_err_t wind_fsm_input(w_fsm_s *fsm,void *arg,w_int32_t arglen)
     WIND_ASSERT_RETURN(fsm != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(fsm->obj.magic == WIND_FSM_MAGIC,W_ERR_INVALID);
     fsm->arg = arg;
-    fsm->arglen = arglen;    
+    fsm->arglen = arglen; 
+    fsm->state = FSM_STAT_READY;
     return W_ERR_FAIL;
 }
 
@@ -278,8 +289,6 @@ w_err_t wind_fsm_print(void)
     }
     wind_enable_switch();
     wind_print_space(7);
-    return W_ERR_OK;
-
     return W_ERR_OK;
 }
 #endif

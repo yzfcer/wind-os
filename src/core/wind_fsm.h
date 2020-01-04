@@ -105,6 +105,7 @@ w_fsm_s *wind_fsm_get(char *name);
 w_err_t wind_fsm_start(w_fsm_s *fsm);
 w_err_t wind_fsm_stop(w_fsm_s *fsm);
 w_err_t wind_fsm_suspend(w_fsm_s *fsm);
+w_err_t wind_fsm_resume(w_fsm_s *fsm);
 w_err_t wind_fsm_sleep(w_fsm_s *fsm,w_int32_t time_ms);
 w_err_t wind_fsm_change_step(w_fsm_s *fsm,w_int32_t cur_step);
 w_err_t wind_fsm_input(w_fsm_s *fsm,void *arg,w_int32_t arglen);
