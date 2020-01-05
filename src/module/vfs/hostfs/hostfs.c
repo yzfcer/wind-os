@@ -28,6 +28,7 @@
 #include "wind_debug.h"
 #include "wind_string.h"
 #include "wind_crc32.h"
+#include <stdlib.h>
 #if  HOST_OS_TYPE == HOST_OS_WINDOWS
 #include "windows_filepath.h"
 #endif
@@ -147,7 +148,6 @@ static w_hostfile_s*   host_file_open_exist(char *path,w_uint8_t mode)
     errno_t errno;
     w_err_t err;
     FILE *fd;
-    w_int32_t len;
     w_hostfile_s *hfile = W_NULL;
     char *realpath = (char*)W_NULL;
     hfileattr_e attr;

@@ -29,8 +29,8 @@
 #include "wind_dlist.h"
 #include "wind_mutex.h"
 #define DB_BLK_SIZE 512
-#define DB_NAME_LEN 12  //数据库名字长度
-#define TB_NAME_LEN 12  //数据表名字长度
+#define DB_NAME_LEN 20   //数据库名字长度
+#define TB_NAME_LEN 20   //数据表名字长度
 #define MBR_NAME_LEN 20  //数据名字长度
 
 typedef enum 

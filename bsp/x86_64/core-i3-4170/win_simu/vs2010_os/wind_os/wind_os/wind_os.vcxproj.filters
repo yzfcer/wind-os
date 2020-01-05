@@ -569,6 +569,9 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_fsm.c">
       <Filter>os_core</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\db\framework\cmd_db.c">
+      <Filter>module_db</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">

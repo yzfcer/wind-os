@@ -35,8 +35,9 @@ extern "C" {
 #define W_ERR_OK                 0 //正常返回结果
 #define W_ERR_FAIL              -1 //一般错误
 #define W_ERR_PTR_NULL          -2 //指针为空
-#define W_ERR_OVERFLOW          -3 //传入的参数超出了范围
-#define W_ERR_MEM               -4 //存储空间受到限制
+#define W_ERR_NO_OBJ            -3 //对象不存在
+#define W_ERR_OVERFLOW          -4 //传入的参数超出了范围
+#define W_ERR_MEM               -5 //存储空间受到限制
 #define W_ERR_INVALID           -6 //参数无效
 #define W_ERR_TIMEOUT           -7 //操作超时，返回失败
 #define W_ERR_STATUS            -8 //当前状态错误

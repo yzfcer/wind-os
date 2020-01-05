@@ -213,7 +213,7 @@ w_err_t db_entry_print_all(void)
         entry = NODE_TO_DBENTRY(dnode);
         db_entry_print_data(entry);
     }
-    return W_ERR_FAIL;
+    return W_ERR_OK;
 }
 
 
