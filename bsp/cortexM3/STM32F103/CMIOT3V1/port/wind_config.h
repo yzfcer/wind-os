@@ -88,6 +88,9 @@
 #define WIND_USER_SUPPORT 1 //是否支持用户账号功能
 #define WIND_USER_MAX_NUM 5 //用户账号的数量
 
+#define WIND_FSM_SUPPORT 1 //是否支持有限状态机功能
+#define WIND_FSM_MAX_NUM 5 //有限状态机的数量
+
 #define WIND_DBGPOINT_SUPPORT 1//是否支持调试点文件系统
 
 #define WIND_TICK_PER_SEC 500 //一秒钟所经历的的时间节拍
@@ -171,6 +174,7 @@
 #define CMD_DAEMON_SUPPORT 1 //是否支持线程守护命令
 #define CMD_DIAGNOSE_SUPPORT 1 //是否支持系统诊断命令
 #define CMD_TIMER_SUPPORT 0 //是否支持定时器操作命令
+#define CMD_DB_SUPPORT 0 //是否支持DB模块操作命令
 
 #define CMD_BEEP_SUPPORT 0 //是否支持蜂鸣器命令
 #define CMD_LED_SUPPORT 0 //是否支持LED操作命令

@@ -84,6 +84,7 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\common\wind_string.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\common\wind_strsearch.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\common\wind_tree.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_fsm.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_module.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_module_list.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\hal\wind_memblk.c" />
@@ -115,6 +116,7 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\test_treefs.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\db\dbbase\db_demo.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\db\dbbase\db_demo1.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\db\framework\cmd_db.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\db\framework\db_entry.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\db\framework\db_if.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\db\framework\module_db.c" />
@@ -275,6 +277,7 @@
     <ClInclude Include="..\..\..\..\..\..\..\src\common\wind_string.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\common\wind_strsearch.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\common\wind_tree.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_fsm.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_module.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\hal\wind_memblk.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\hal\wind_nullblk.h" />

@@ -86,7 +86,7 @@ CASE_FUNC(create)
     EXPECT_EQ(err,W_ERR_OK);
     file = hostfile_open(&g_hfs,"/test.txt",HFMODE_R);
     EXPECT_EQ(file,W_NULL);
-
+    
     file = hostfile_open(&g_hfs,"/test1.txt",HFMODE_CRT);
     EXPECT_NE(file,W_NULL);
     err = hostfile_close(file);
@@ -110,6 +110,7 @@ CASE_FUNC(create)
     
     err = hostfile_remove(&g_hfs,"/test1.txt");
     EXPECT_EQ(err,W_ERR_OK);
+    
     err = hostfile_remove(&g_hfs,"/test2.txt");
     EXPECT_EQ(err,W_ERR_OK);
 }
@@ -162,7 +163,6 @@ CASE_FUNC(readdir)
 
 	file = hostfile_open(&g_hfs,"/readdir_test/",HFMODE_R);
     EXPECT_NE(file,W_NULL);
-
     while(1)
     {
         err = hostfile_readdir(file,&sub);
@@ -180,6 +180,7 @@ CASE_FUNC(readdir)
     EXPECT_EQ(err,W_ERR_OK);
     err = hostfile_readdir(file,&sub);
     EXPECT_NE(err,W_ERR_OK);
+ 
     err = hostfile_close(file);
     EXPECT_EQ(err,W_ERR_OK);
     err = hostfile_remove(&g_hfs,"/readdir_test/");

@@ -116,7 +116,7 @@ struct __hostfile_s
 #endif
 };
 
-hfileattr_e host_file_type(char *path);
+hfileattr_e windows_file_type(char *path);
 w_err_t _wind_hostfs_mod_init(void);
 void *hostfs_mem_malloc(w_int32_t size);
 w_err_t hostfs_mem_free(void *ptr);

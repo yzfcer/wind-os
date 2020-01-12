@@ -21,6 +21,7 @@
 #include "wind_module.h"
 #include "wind_debug.h"
 #include "db_if.h"
+#include "wind_cmd.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
@@ -40,7 +41,9 @@ extern "C" {
 
 
 /********************************************全局变量定义**********************************************/
-
+#if CMD_DB_SUPPORT
+COMMAND_DECLARE(db);
+#endif
 
 
 /********************************************全局函数定义**********************************************/
@@ -48,12 +51,22 @@ extern "C" {
 MODULE_INIT(db)
 {
     w_err_t err;
+#if CMD_DB_SUPPORT
+    err = wind_cmd_register(COMMAND(db));
+    WIND_ASSERT_RETURN(err == W_ERR_OK,err);
+#endif
     err = _wind_db_mod_init();
+    WIND_ASSERT_RETURN(err == W_ERR_OK,err);
     return err;
 }
 
 MODULE_EXIT(db)
 {
+    w_err_t err;
+#if CMD_DB_SUPPORT
+    err = wind_cmd_unregister(COMMAND(db));
+    WIND_ASSERT_RETURN(err == W_ERR_OK,err);
+#endif
     return W_ERR_OK;
 }
 

@@ -566,6 +566,12 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\hostfs\windows_filepath.c">
       <Filter>module_vfs</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_fsm.c">
+      <Filter>os_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\db\framework\cmd_db.c">
+      <Filter>module_db</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">
@@ -926,6 +932,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\hostfs\windows_filepath.h">
       <Filter>module_vfs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_fsm.h">
+      <Filter>os_core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

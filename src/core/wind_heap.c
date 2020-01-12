@@ -327,6 +327,7 @@ void *wind_heap_realloc(w_heap_s* heap, void* ptr, w_uint32_t newsize)
             size = old->size - sizeof(w_heapitem_s) > newsize?newsize:old->size - sizeof(w_heapitem_s);
             wind_memcpy(p,ptr,size);
             wind_free(ptr);
+            ptr = W_NULL;
         }
         else
         {
@@ -560,11 +561,7 @@ void *wind_clone(void *object,w_uint32_t size)
 w_err_t wind_free(void *ptr)
 {
     w_heapitem_s *item;
-    wind_debug("wind_free:ptr=null");
-    if(ptr == W_NULL)
-    {
-        return W_ERR_OK;
-    }
+    WIND_CHECK_RETURN(ptr != W_NULL,W_ERR_OK);
     wind_debug("wind_free:ptr=0x%x",ptr);
     item = ITEM_FROM_PTR(ptr);
     if(item->magic != WIND_HEAPITEM_MAGIC)
