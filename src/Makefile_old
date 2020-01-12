@@ -1,0 +1,26 @@
+SRC_DIR = application
+SRC_DIR += common
+SRC_DIR += core
+SRC_DIR += hal
+SRC_DIR += lib
+SRC_DIR += module
+SRC_DIR += systhread
+
+
+CFLAGS = -g -Wall ${WINDOS_INC}
+
+all: wind-os 
+wind-os:
+	for dir in $(WINDOS_SRC); do \
+		echo "enter dir:"$(ROOTDIR)/src/$$dir; \
+		make -C $(ROOTDIR)/src/$$dir profile; \
+	done
+
+
+clean: 
+	for dir in $(WINDOS_SRC); do \
+		echo "enter dir:"$(ROOTDIR)/src/$$dir; \
+		make -C $(ROOTDIR)/src/$$dir clean; \
+	done
+
+
