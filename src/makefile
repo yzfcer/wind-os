@@ -1,12 +1,25 @@
+CUR_DIR=$(shell pwd)
 #子目录的Makefile直接读取其子目录就行
-SUBDIRS=$(shell ls -l | grep ^d | awk '{print $$9}')
+SUBDIRS=application
+SUBDIRS+=core
+SUBDIRS+=common
+SUBDIRS+=hal
+SUBDIRS+=lib
+SUBDIRS+=module
+SUBDIRS+=systhread
+
 #以下同根目录下的makefile的相同代码的解释
 CUR_SOURCE=${wildcard *.c}
 CUR_OBJS=${patsubst %.c, %.o, $(CUR_SOURCE)}
-all:$(SUBDIRS) $(CUR_OBJS)
+profile:$(SUBDIRS) $(CUR_OBJS)
 $(SUBDIRS):ECHO
-    make -C $@
+	make -C $@
 $(CUR_OBJS):%.o:%.c
-    $(CC) -c $^ -o $(ROOT_DIR)/$(OBJS_DIR)/$@
+	$(CC) -c $^ $(CFLAGS) -o $(CUR_DIR)$(OBJS_DIR)/$@
 ECHO:
-    @echo $(SUBDIRS)
+	@echo $(SUBDIRS)
+clean:
+	rm $(CUR_OBJS)
+	for dir in $(SUBDIRS); do \
+		make -C $(ROOTDIR)/$$dir clean; \
+	done

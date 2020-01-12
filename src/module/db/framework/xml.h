@@ -1,6 +1,6 @@
 #ifndef XML_H__
 #define XML_H_
-
+#if 0
 typedef struct __XSTRING XSTRING;
 struct __XSTRING
 {
@@ -34,4 +34,5 @@ struct __XTREE
     XNODE *rootNode;
 };
 
+#endif
 #endif

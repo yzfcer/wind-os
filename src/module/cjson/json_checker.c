@@ -25,7 +25,7 @@ SOFTWARE.
 #include "wind_string.h"
 #include "wind_heap.h"
 #include "wind_debug.h"
-#include "JSON_checker.h"
+#include "json_checker.h"
 #include "cJSON.h"
 
 #define TRUE  1

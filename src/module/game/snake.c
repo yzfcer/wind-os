@@ -1,3 +1,5 @@
+#include "wind_config.h"
+#if (WIND_MODULE_GAME_SUPPORT)
 #include<stdio.h>
 #include<time.h>
 #include<windows.h>
@@ -496,3 +498,4 @@ int snake_main(int argc,char **argv)
     system("mode con cols=100 lines=50");//设置窗口大小
     return 0;
 }
+#endif

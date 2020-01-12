@@ -1,3 +1,5 @@
+#include "wind_config.h"
+#if (WIND_MODULE_GAME_SUPPORT)
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -736,5 +738,5 @@ int tetris_main(int argc,char **argv)
   SetConsoleCursorInfo(g_hConsoleOutput, &cursorInfo); // …Ë÷√π‚±Í“˛≤ÿ
   return 0;
 }
- 
+#endif
 

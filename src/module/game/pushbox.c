@@ -5,6 +5,8 @@
 初写时间：2018年8月3日 
 修改时间：2018年8月3日  
 ***********************************************/
+#include "wind_config.h"
+#if (WIND_MODULE_GAME_SUPPORT)
 #include<stdio.h>
 #include<stdlib.h> 
 #include<conio.h> 
@@ -224,4 +226,4 @@ int pushbox_main(int argc,char **argv)//主函数
     }
     return 0;
 } 
-
+#endif

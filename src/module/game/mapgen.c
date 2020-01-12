@@ -1,3 +1,5 @@
+#include "wind_config.h"
+#if (WIND_MODULE_GAME_SUPPORT)
 typedef struct __map_s
 {
 	int rows,cols;
@@ -304,3 +306,4 @@ void map_test(void)
     printMap(&tmap);
     free_map(&tmap);
 }
+#endif

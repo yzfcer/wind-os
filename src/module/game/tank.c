@@ -1,3 +1,5 @@
+#include "wind_config.h"
+#if (WIND_MODULE_GAME_SUPPORT)
 
 #include <stdio.h>
 #include <windows.h>
@@ -1466,4 +1468,5 @@ int tank_main (int argc,char **argv)                               //Ö÷º¯Êý
 	return 0;
 }
 
+#endif
 #endif

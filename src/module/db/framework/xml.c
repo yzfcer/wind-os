@@ -14,7 +14,7 @@
 #define XVAL_TAG 5  /* ø’±Í÷æ */ 
 #define XVAL_NONE 0 
 #define XVAL_ERROR -1 
-
+#if 0
 
 
 
@@ -601,4 +601,5 @@ XSTRING * XWriteBuf(XSTRING * buf,XSTRING * str)
     return (buf+strlen(str));
 }
 
+#endif
 

@@ -183,7 +183,7 @@ extern "C" {
 #define WIND_MODULE_DICT_SUPPORT 1 //是否支持数据字典功能模块
 
 #define WIND_MODULE_TOOLS_SUPPORT 1 //是否wind-os相关工具集模块
-#define WIND_MODULE_GAME_SUPPORT 1 //是否支持游戏模块
+#define WIND_MODULE_GAME_SUPPORT 0 //是否支持游戏模块
 
 
 #endif
@@ -258,7 +258,7 @@ extern "C" {
 
 #define WIND_LISTFS_SUPPORT 1//是否支持listfs文件系统
 
-#define WIND_HOSTFS_SUPPORT 1//是否支持宿主机文件系统
+#define WIND_HOSTFS_SUPPORT 0//是否支持宿主机文件系统
 
 #endif
 

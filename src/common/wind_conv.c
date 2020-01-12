@@ -26,7 +26,7 @@
 #include "wind_string.h"
 #include "wind_conv.h"
 
-w_int32_t wind_endian(void)
+w_endian_e wind_endian(void)
 {
     w_int32_t test = 1;
     if (*(char*)&test == 1)

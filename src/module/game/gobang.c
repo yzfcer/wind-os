@@ -1,3 +1,5 @@
+#include "wind_config.h"
+#if (WIND_MODULE_GAME_SUPPORT)
 #include <stdlib.h>
 #include <stdio.h>
 #include <conio.h>
@@ -553,3 +555,4 @@ int gobang_main(int argc,char **argv)
 	fflush(stdin);
     return 0;
 }
+#endif
