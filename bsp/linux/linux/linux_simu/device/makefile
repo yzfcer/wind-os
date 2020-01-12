@@ -18,4 +18,4 @@ clean:
 		echo "enter dir:"$$dir; \
 		cd $(CUR_DIR)/$$dir && make clean; \
 	done
-	rm -rf ./*.o
+	rm -rf *.o

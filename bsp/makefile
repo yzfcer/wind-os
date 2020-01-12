@@ -5,13 +5,17 @@ SUBDIRS=$(ARCH)
 #以下同根目录下的makefile的相同代码的解释
 CUR_SOURCE=${wildcard *.c}
 CUR_OBJS=${patsubst %.c, %.o, $(CUR_SOURCE)}
-profile:$(SUBDIRS) $(CUR_OBJS)
+profile:$(SUBDIRS) $(CUR_OBJS) combine
 $(SUBDIRS):ECHO
 	make -C $@
 $(CUR_OBJS):%.o:%.c
 	$(CC) -c $^ $(CFLAGS) -o $(CUR_DIR)$(OBJS_DIR)/$@
 ECHO:
 	@echo $(SUBDIRS)
+.PHONY:combine
+combine:
+	$(CC) $(SUBOBJ) -o bsp.o
+
 .PHONY:clean
 clean:
 	for dir in $(SUBDIRS); do \

@@ -4,20 +4,25 @@ SUBDIRS=application
 SUBDIRS+=core
 SUBDIRS+=common
 SUBDIRS+=hal
-SUBDIRS+=lib
+#SUBDIRS+=lib
 SUBDIRS+=module
 SUBDIRS+=systhread
 
 #以下同根目录下的makefile的相同代码的解释
 CUR_SOURCE=${wildcard *.c}
 CUR_OBJS=${patsubst %.c, %.o, $(CUR_SOURCE)}
-profile:$(SUBDIRS) $(CUR_OBJS)
+#SUBSRC=$(shell find $(SUBDIRS) -name '*.c')
+#SUBOBJ=$(SUBSRC:%.c=%.o)
+profile:$(SUBDIRS) $(CUR_OBJS) combine
 $(SUBDIRS):ECHO
 	make -C $@
 $(CUR_OBJS):%.o:%.c
 	$(CC) -c $^ $(CFLAGS) -o $(CUR_DIR)$(OBJS_DIR)/$@
 ECHO:
 	@echo $(SUBDIRS)
+.PHONY:combine
+combine:
+	#$(CC) $(SUBOBJ) -o src.o
 .PHONY:clean
 clean:
 	for dir in $(SUBDIRS); do \

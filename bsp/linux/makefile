@@ -13,5 +13,8 @@ $(CUR_OBJS):%.o:%.c
 ECHO:
 	@echo $(SUBDIRS)
 clean:
-	make -C `echo $(SUBDIRS)`
-	rm -rf ./*.o
+	for dir in $(SUBDIRS); do \
+		echo "enter dir:"$$dir; \
+		cd $(CUR_DIR)/$$dir && make clean; \
+	done
+	rm -rf *.o

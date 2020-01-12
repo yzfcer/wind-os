@@ -39,9 +39,9 @@ export BOARD=linux_simu
 
 
 #source directory
-WINDOS_SRC = bsp/$(ARCH)
-WINDOS_SRC += bsp/$(ARCH)/$(CPU)
-WINDOS_SRC += bsp/$(ARCH)/$(CPU)/$(BOARD)
+WINDOS_SRC = bsp
+#WINDOS_SRC += bsp/$(ARCH)/$(CPU)
+#WINDOS_SRC += bsp/$(ARCH)/$(CPU)/$(BOARD)
 WINDOS_SRC += src
 export WINDOS_SRC
 
@@ -73,6 +73,10 @@ WINDOS_INC += -I$(ROOTDIR)/src/module/vfs/treefs
 CFLAGS = -g -Wall ${WINDOS_INC}
 export WINDOS_INC CFLAGS
 
+OBJLIST=$(shell find $(ROOTDIR) -name *.o | tr ' ' '\ ' | tr '\n' ' ')
+
+export OBJLIST
+
 all: wind-os 
 wind-os:
 	@echo "WINDOS_SRC="$(WINDOS_SRC)
@@ -80,7 +84,7 @@ wind-os:
 	for dir in $(WINDOS_SRC); do \
 		make -C $(ROOTDIR)/$$dir profile; \
 	done
-
+	@#$(CC) $(shell find $(ROOTDIR) -name *.o | tr ' ' '\ ' | tr '\n' ' ') -o wind-os
 .PHONY:clean
 clean: 
 	for dir in $(WINDOS_SRC); do \
