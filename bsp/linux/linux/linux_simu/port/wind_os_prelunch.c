@@ -24,9 +24,9 @@
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
 #include "wind_type.h"
-#include <windows.h>
+//#include <windows.h>
  
-CRITICAL_SECTION CriticalSection;
+//CRITICAL_SECTION CriticalSection;
 
 #ifdef __cplusplus
 extern "C" {
@@ -34,7 +34,7 @@ extern "C" {
 
 static void hw_preinit(void)
 {
-    InitializeCriticalSection(&CriticalSection);
+    //InitializeCriticalSection(&CriticalSection);
 }
 
 #if defined(__CC_ARM)

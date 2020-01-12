@@ -24,24 +24,26 @@
 *******************************************************************************************************/
 //#include "boot_config.h"
 #include <stdio.h>
-#include <conio.h>
-#include <windows.h>
+//#include <conio.h>
+//#include <windows.h>
 #include "wind_type.h"
 #include "wind_std.h"
 #include "wind_debug.h"
+#include <unistd.h> 
+#include <stdlib.h> 
 
 static void set_scr_buffer(void)
 {
-    HANDLE hConsoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
-    COORD BuffSize;
-    BuffSize.X = 100;
-    BuffSize.Y = 3000;
-    SetConsoleScreenBufferSize( hConsoleHandle, BuffSize );
+    //HANDLE hConsoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+    //COORD BuffSize;
+    //BuffSize.X = 100;
+    //BuffSize.Y = 3000;
+    //SetConsoleScreenBufferSize( hConsoleHandle, BuffSize );
 }
 static void display_cursor(void)
 {
-    CONSOLE_CURSOR_INFO cursor_info = {100, 1}; //1表示显示
-    SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursor_info);	
+    //CONSOLE_CURSOR_INFO cursor_info = {100, 1}; //1表示显示
+    //SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursor_info);	
 }
 
 void _wind_std_init(void)

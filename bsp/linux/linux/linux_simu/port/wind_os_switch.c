@@ -29,8 +29,8 @@
 #include "wind_dlist.h"
 #include "wind_core.h"
 #include "wind_string.h"
-#include "windows.h"
-#include "time.h"
+//#include "windows.h"
+//#include "time.h"
 //#include  < MMSystem.h >
 //#pragma comment(lib, "winmm.lib")
 
@@ -46,40 +46,9 @@ w_thread_s mainthr;
 w_stack_t mainstk[2048];
 void wind_interrupt_switch(void);
 
-__declspec(naked) static void switch_context(w_thread_s* srcthr, w_thread_s* destthr)
+static void switch_context(w_thread_s* srcthr, w_thread_s* destthr)
 {
-    __asm 
-    {
-        //提升堆栈
-        push ebp
-        mov ebp, esp
 
-        //保存当前线程寄存器
-        push edi
-        push esi
-        push ebx
-        push ecx
-        push edx
-        push eax
-
-        //经典线程切换，另外一个线程复活
-        mov esi, srcthr
-        mov edi, destthr
-        mov [esi + w_thread_s.stack_cur], esp
-        mov esp, [edi + w_thread_s.stack_cur]
-		//mov [esi + 48], esp
-		//mov esp, [edi + 48]
-
-        pop eax
-        pop edx
-        pop ecx
-        pop ebx
-        pop esi
-        pop edi
-
-        pop ebp
-        ret    //把startup(线程函数入口)弹到eip 执行的就是线程函数了
-    }
 }
 
 
@@ -148,7 +117,7 @@ void wind_start_switch(void)
     while(1)
     {
         //timeBeginPeriod(1);
-        Sleep(1000/WIND_TICK_PER_SEC);
+        usleep(1000/WIND_TICK_PER_SEC*1000);
         //timeEndPeriod(1);
         set_sleep(&mainthr,1000000);
         wind_tick_isr();

@@ -27,7 +27,8 @@
 #include "wind_type.h"
 #include "wind_board_port.h"
 #include "wind_debug.h"
-#include <Windows.h>                //需要包含该头文件
+#include <stdlib.h>
+//#include <Windows.h>                //需要包含该头文件
 
 
 /*
@@ -49,7 +50,7 @@ void wind_system_reset(void)
     extern char *argv_bak;
     if(argv_bak != W_NULL)
         system(argv_bak);
-    ExitProcess(0);
+    //ExitProcess(0);
 }
 
 
