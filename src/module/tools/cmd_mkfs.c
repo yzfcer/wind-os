@@ -23,6 +23,7 @@
 //#include <io.h>
 //#include "io.h"
 //#include "file.h"
+#if (CMD_MKFS_SUPPORT)
 #include "file_port.h"
 
 
@@ -33,7 +34,7 @@ extern "C" {
 
 /*********************************************头文件定义***********************************************/
 
-#if (CMD_MKFS_SUPPORT)
+
 #define BUFF_LEN 0x10000
 
 static EmbeddedFileSystem efs;

@@ -22,6 +22,7 @@
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
+
 #include "wind_debug.h"
 #include "wind_string.h"
 #include "wind_conv.h"
@@ -33,6 +34,7 @@
 #include <stdio.h>
 #include <malloc.h>
 #include <stdlib.h>
+#if CMD_PACK_SUPPORT
 #include "file_port.h"
 
 //--------------------------------------------------------------------
@@ -442,7 +444,7 @@ w_int32_t pack_main(w_int32_t argc,char **argv)
     return 0;
 }
 
-#if CMD_PACK_SUPPORT
+
 w_int32_t pack_main(w_int32_t argc,char **argv);
 
 COMMAND_DISC(pack)
@@ -462,3 +464,4 @@ COMMAND_MAIN(pack,argc,argv)
 }
 COMMAND_DEF(pack);
 #endif
+

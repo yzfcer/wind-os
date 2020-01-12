@@ -81,11 +81,11 @@ wind-os:
 		make -C $(ROOTDIR)/$$dir profile; \
 	done
 
-
+.PHONY:clean
 clean: 
 	for dir in $(WINDOS_SRC); do \
 		echo "enter dir:"$$dir; \
-		make -C $(ROOTDIR)/$$dir clean; \
+		cd $(ROOTDIR)/$$dir && make clean; \
 	done
 
 

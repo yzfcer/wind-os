@@ -12,3 +12,11 @@ $(CUR_OBJS):%.o:%.c
 	$(CC) -c $^ $(CFLAGS) -o $(CUR_DIR)$(OBJS_DIR)/$@
 ECHO:
 	@echo $(SUBDIRS)
+.PHONY:clean
+clean:
+	for dir in $(SUBDIRS); do \
+		echo "enter dir:"$$dir; \
+		cd $(CUR_DIR)/$$dir && make clean; \
+	done
+	rm -rf *.o
+

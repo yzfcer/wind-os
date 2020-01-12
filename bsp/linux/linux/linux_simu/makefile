@@ -5,10 +5,18 @@ SUBDIRS=$(shell ls -l | grep ^d | awk '{print $$9}')
 #以下同根目录下的makefile的相同代码的解释
 CUR_SOURCE=${wildcard *.c}
 CUR_OBJS=${patsubst %.c, %.o, $(CUR_SOURCE)}
-profile:$(SUBDIRS) $(CUR_OBJS)
+rofile:$(SUBDIRS) $(CUR_OBJS)
 $(SUBDIRS):ECHO
 	make -C $@
 $(CUR_OBJS):%.o:%.c
 	$(CC) -c $^ $(CFLAGS) -o $(CUR_DIR)$(OBJS_DIR)/$@
 ECHO:
 	@echo $(SUBDIRS)
+.PHONY:clean
+clean:
+	for dir in $(SUBDIRS); do \
+		echo "enter dir:"$$dir; \
+		cd $(CUR_DIR)/$$dir && make clean; \
+	done
+	rm -rf *.o
+
