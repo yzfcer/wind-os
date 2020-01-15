@@ -70,12 +70,15 @@ WINDOS_INC += -I$(ROOTDIR)/src/module/vfs/hostfs
 WINDOS_INC += -I$(ROOTDIR)/src/module/vfs/listfs
 WINDOS_INC += -I$(ROOTDIR)/src/module/vfs/treefs
 
-CFLAGS = -g -Wall ${WINDOS_INC}
-export WINDOS_INC CFLAGS
+CFLAGS = -g -Wall ${WINDOS_INC} 
+CLIBFLAGS = -L/usr/lib/86_64-linux-gnu -lm
+
+export WINDOS_INC CFLAGS CLIBFLAGS
 
 OBJLIST=$(shell find $(ROOTDIR) -name *.o | tr ' ' '\ ' | tr '\n' ' ')
 
 export OBJLIST
+
 
 all: wind-os 
 wind-os:
@@ -84,7 +87,7 @@ wind-os:
 	for dir in $(WINDOS_SRC); do \
 		make -C $(ROOTDIR)/$$dir profile; \
 	done
-	@#$(CC) $(shell find $(ROOTDIR) -name *.o | tr ' ' '\ ' | tr '\n' ' ') -o wind-os
+	$(CC) $(shell find $(ROOTDIR) -name *.o | tr ' ' '\ ' | tr '\n' ' ')  $(CLIBFLAGS) -o wind-os
 .PHONY:clean
 clean: 
 	for dir in $(WINDOS_SRC); do \

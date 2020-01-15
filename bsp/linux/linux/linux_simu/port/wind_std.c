@@ -63,7 +63,7 @@ w_int32_t wind_std_output(w_uint8_t *buf,w_int32_t len)
     w_int32_t i;
     for(i = 0;i < len;i ++)
     {
-        putchar(buf[i]);
+        //putchar(buf[i]);
     }
     return len;
 }
@@ -74,15 +74,15 @@ w_int32_t wind_std_input(w_uint8_t *buff,w_int32_t len)
     w_int32_t i;
     for(i = 0;i < len;i ++)
     {
-        c = _kbhit();
-        if(c)
-        {
-            buff[i] = _getch();
-        }
-        else
-            return i;
+        //c = _kbhit();
+        //if(c)
+        //{
+        //    buff[i] = _getch();
+        //}
+        //else
+        //    return i;
     }
-    return len;
+    return 0;
 }
 
 
