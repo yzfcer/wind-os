@@ -85,14 +85,14 @@ wind-os:
 	@echo "WINDOS_SRC="$(WINDOS_SRC)
 	@echo "ROOTDIR="${ROOTDIR}
 	for dir in $(WINDOS_SRC); do \
-		make -C $(ROOTDIR)/$$dir profile; \
+		make -C $(ROOTDIR)/$$dir profile || exit 1; \
 	done
 	$(CC) $(shell find $(ROOTDIR) -name *.o | tr ' ' '\ ' | tr '\n' ' ')  $(CLIBFLAGS) -o wind-os
 .PHONY:clean
 clean: 
 	for dir in $(WINDOS_SRC); do \
 		echo "enter dir:"$$dir; \
-		cd $(ROOTDIR)/$$dir && make clean; \
+		cd $(ROOTDIR)/$$dir && make clean || exit 1; \
 	done
 
 

@@ -28,6 +28,15 @@
 #include "wind_board_port.h"
 #include "wind_debug.h"
 #include <stdlib.h>
+#include <asm/sigcontext.h>
+#include <ucontext.h>
+#include <string.h>    
+#include <unistd.h>
+#include <signal.h>
+#include <setjmp.h>
+#include <sys/select.h>    
+   
+#include <stdio.h>    // if we want to use printf...    
 //#include <Windows.h>                //需要包含该头文件
 
 
@@ -102,19 +111,19 @@ static void push_stack(w_stack_t ** Stackpp, w_stack_t v)
 
 w_stack_t *_wind_thread_stack_init(thread_run_f pfunc,void *pdata, w_stack_t *pstkbt)
 {    
-    push_stack(&pstkbt, (w_stack_t)pdata);        //通过这个指针来找到线程函数，线程参数
-    push_stack(&pstkbt, (w_stack_t)0);            //平衡堆栈的(不用管)
-    push_stack(&pstkbt, (w_stack_t)pfunc);        //线程入口函数 这个函数负责调用线程函数
-    push_stack(&pstkbt, (w_stack_t)5);                //push ebp
-    push_stack(&pstkbt, (w_stack_t)7);                //push edi
-    push_stack(&pstkbt, (w_stack_t)6);                //push esi
-    push_stack(&pstkbt, (w_stack_t)3);                //push ebx
-    push_stack(&pstkbt, (w_stack_t)2);                //push ecx
-    push_stack(&pstkbt, (w_stack_t)1);                //push edx
-    push_stack(&pstkbt, (w_stack_t)0);                //push eax
-    return pstkbt;
+    w_stack_t*    stk;   
+    ucontext_t ctx;   
+    w_int32_t sigsize = 20 + sizeof(ctx);   
+    getcontext(&ctx);   
+    stk = (w_int32_t*)((int)pstkbt - sigsize);   
+    ctx.uc_link = NULL;
+    ctx.uc_mcontext.gregs[REG_EBP] = (int)stk;   
+    ctx.uc_stack.ss_sp = (void*)(((int)stk) - (OS_TASK_DEF_STK_SIZE) + sigsize); /// base address    
+    ctx.uc_stack.ss_size = OS_TASK_DEF_STK_SIZE - sigsize;   
+   
+    makecontext(&ctx, (void*)pfunc, 1, pdata);   
+    memcpy(stk, &ctx, sizeof(ctx));   
+       
+    return ((w_stack_t *)stk);   
 }
-
-
-
 

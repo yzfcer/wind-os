@@ -32,31 +32,52 @@
 #include <unistd.h> 
 #include <stdlib.h> 
 
+
+int kbhit(void)
+{
+    struct timeval tv
+    fd_set readFd;
+    struct termios newKbdMode;
+    if(!inited)
+    {
+        newKbdMode.c_lflag&=?(ICANON | ECHO);
+        newKbdMode.c_cc[VTIME]=0;
+        newKbdMode.c_cc[VMIN]=1;
+        tcsetattr(0,TCSANOW,&newKbdMode);
+        atexit(rekbd);
+        inited=1;
+    }
+    tv.tv_sec=0;
+    tv.tv_usec=0;
+    FD_ZERO(&readFd);
+    FD_SET(STDIN_FILENO,&readFd);
+    select(1,&readFd,NULL,NULL,&tv);
+    if(FD-ISSET(STDIN-FILENO?&readFd))
+        return 1;
+    else
+        return 0;
+}
+
 static void set_scr_buffer(void)
 {
-    //HANDLE hConsoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
-    //COORD BuffSize;
-    //BuffSize.X = 100;
-    //BuffSize.Y = 3000;
-    //SetConsoleScreenBufferSize( hConsoleHandle, BuffSize );
+
 }
 static void display_cursor(void)
 {
-    //CONSOLE_CURSOR_INFO cursor_info = {100, 1}; //1表示显示
-    //SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursor_info);	
 }
 
 void _wind_std_init(void)
 {
 	w_uint8_t buff;
-    system("title wind-os");
-	system("cls");//清理屏幕，准备写入
-	system("mode con cols=100 lines=50");//设置窗口大小
-	system("color 00");//设置颜色
+    //system("title wind-os");
+	//system("cls");//清理屏幕，准备写入
+	//system("mode con cols=100 lines=50");//设置窗口大小
+	//system("color 00");//设置颜色
 	set_scr_buffer();
     display_cursor();
 	while(wind_std_input(&buff,1));
 }
+
 
 w_int32_t wind_std_output(w_uint8_t *buf,w_int32_t len)
 {
@@ -74,13 +95,13 @@ w_int32_t wind_std_input(w_uint8_t *buff,w_int32_t len)
     w_int32_t i;
     for(i = 0;i < len;i ++)
     {
-        //c = _kbhit();
-        //if(c)
-        //{
-        //    buff[i] = _getch();
-        //}
-        //else
-        //    return i;
+        c = kbhit();
+        if(c)
+        {
+            buff[i] = _getch();
+        }
+        else
+            return i;
     }
     return 0;
 }

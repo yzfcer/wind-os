@@ -29,12 +29,10 @@
 #include "wind_dlist.h"
 #include "wind_core.h"
 #include "wind_string.h"
-//#include "windows.h"
-//#include "time.h"
-//#include  < MMSystem.h >
-//#pragma comment(lib, "winmm.lib")
+#include <unistd.h> 
+#include <signal.h> 
 
-//#include "wind_os_switch.h"
+
 #define GET_OBJ(ptr,type,mbrnode) (void*)(((char*)(ptr))-((w_uint32_t)&(((type*)0)->mbrnode)))
 
 extern volatile w_bool_t gwind_start_flag;
@@ -56,42 +54,22 @@ static void switch_context(w_thread_s* srcthr, w_thread_s* destthr)
 
 w_sreg_t wind_save_sr(void)
 {
-    return 0;
+    sigset_t set;
+    sigset_t cpu_sr;
+    sigemptyset(&set);
+    sigaddset(&set, SIGALRM);
+    sigaddset(&set, SIGIO);
+    sigprocmask(SIG_SETMASK, &set, &cpu_sr);
+    return cpu_sr;
 }
 
 void wind_restore_sr(w_sreg_t sreg)
 {
-
-}
-w_thread_s *get_sleep_thread(char *name)
-{
-    w_thread_s *thread;
-    w_dnode_s *dnode;
-    w_dlist_s *sleeplist = _wind_thread_sleep_list();
-    if((sleeplist == W_NULL) || (sleeplist->head == W_NULL))
-        return W_NULL;
-    foreach_node(dnode,sleeplist)
-    {
-        thread = PRIDNODE_TO_THREAD(dnode,sleepnode);
-        if(wind_strcmp(thread->name,name) == 0)
-            return thread;
-    }
-    return W_NULL;
+    sigprocmask(SIG_SETMASK, &cpu_sr, NULL);
 }
 
-static void set_sleep(w_thread_s *thread,w_int32_t ms)
-{
-    w_int32_t stcnt;
-    w_dlist_s *sleeplist = _wind_thread_sleep_list();
-    stcnt = ms *WIND_TICK_PER_SEC / 1000;
-    if(0 == stcnt)
-        stcnt = 1;
-    thread->runstat = THREAD_STATUS_SUSPEND;
-    thread->cause = CAUSE_SLEEP;
-    thread->sleep_ticks = stcnt;
-    if(get_sleep_thread("main") == W_NULL)
-        dlist_insert_prio(sleeplist,&thread->sleepnode,thread->prio);
-}
+
+
 
 static w_err_t main_thread(w_int32_t argc,char **argv)
 {

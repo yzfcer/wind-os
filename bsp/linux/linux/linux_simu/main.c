@@ -21,5 +21,5 @@ int main(int argc,char *argv[])
     save_argv(argc,argv);
     //hproc = GetModuleHandle(NULL);
     //SetPriorityClass(hproc,REALTIME_PRIORITY_CLASS);
-	wind_os_prelaunch();
+    wind_os_prelaunch();
 }
