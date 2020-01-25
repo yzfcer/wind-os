@@ -28,16 +28,30 @@
 #include "wind_board_port.h"
 #include "wind_debug.h"
 #include <stdlib.h>
-#include <asm/sigcontext.h>
+#ifdef _GNU_SOURCE
+#define _GNU_SOURCE
+#endif
+#ifndef __USE_GNU
+#define __USE_GNU 
+#endif
+//#ifndef __x86_64__
+//#define __x86_64__ 
+//#endif
+
+//#include <features.h>
 #include <ucontext.h>
+
+#include <signal.h>
+#include <bits/sigcontext.h>		
 #include <string.h>    
 #include <unistd.h>
-#include <signal.h>
 #include <setjmp.h>
 #include <sys/select.h>    
-   
-#include <stdio.h>    // if we want to use printf...    
-//#include <Windows.h>                //需要包含该头文件
+//#include <stdio.h>
+
+
+
+#define OS_TASK_DEF_STK_SIZE 0x2000
 
 
 /*
@@ -96,13 +110,6 @@ void _wind_fs_mount_init(void)
 }
 #endif
 
-//向栈中压入一个uint值
-static void push_stack(w_stack_t ** Stackpp, w_stack_t v)
-{
-    *Stackpp -= 1;//esp - 4
-    **Stackpp = v;//
-    return;
-}
 
 /*
  * 初始化线程栈，用于线程初次切换时，从栈里面取出初始化参数
@@ -115,10 +122,10 @@ w_stack_t *_wind_thread_stack_init(thread_run_f pfunc,void *pdata, w_stack_t *ps
     ucontext_t ctx;   
     w_int32_t sigsize = 20 + sizeof(ctx);   
     getcontext(&ctx);   
-    stk = (w_int32_t*)((int)pstkbt - sigsize);   
+    stk = (w_stack_t*)((w_uint32_t)pstkbt - sigsize);   
     ctx.uc_link = NULL;
-    ctx.uc_mcontext.gregs[REG_EBP] = (int)stk;   
-    ctx.uc_stack.ss_sp = (void*)(((int)stk) - (OS_TASK_DEF_STK_SIZE) + sigsize); /// base address    
+    ctx.uc_mcontext.gregs[REG_EBP] = (greg_t)stk;
+    ctx.uc_stack.ss_sp = (void*)(((w_uint32_t)stk) - (OS_TASK_DEF_STK_SIZE) + sigsize); /// base address    
     ctx.uc_stack.ss_size = OS_TASK_DEF_STK_SIZE - sigsize;   
    
     makecontext(&ctx, (void*)pfunc, 1, pdata);   

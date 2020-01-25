@@ -2,6 +2,11 @@
 export CROSS_COMPILE_BIN=/usr/bin
 export SYSROOT=/opt/arm-linux-glibc-zte-cmcc/arm-buildroot-linux-gnueabi/sysroot
 export CROSS_COMPILE=$(CROSS_COMPILE_BIN)/
+CROSS_COMPILE_INCLUDE += -I/usr/include
+CROSS_COMPILE_INCLUDE += -I/usr/include/x86_64-linux-gnu
+export CROSS_COMPILE_INCLUDE
+
+
 export CC=$(CROSS_COMPILE)gcc
 export LD=$(CROSS_COMPILE)ld
 export CXX=$(CROSS_COMPILE)g++
@@ -44,6 +49,7 @@ WINDOS_SRC = bsp
 #WINDOS_SRC += bsp/$(ARCH)/$(CPU)/$(BOARD)
 WINDOS_SRC += src
 export WINDOS_SRC
+export OBJS_DIR = ${ROOTDIR}/objs
 
 
 #include directory
@@ -70,29 +76,42 @@ WINDOS_INC += -I$(ROOTDIR)/src/module/vfs/hostfs
 WINDOS_INC += -I$(ROOTDIR)/src/module/vfs/listfs
 WINDOS_INC += -I$(ROOTDIR)/src/module/vfs/treefs
 
-CFLAGS = -g -Wall ${WINDOS_INC} 
+CFLAGS = -g -Wall ${WINDOS_INC} ${CROSS_COMPILE_INCLUDE}
 CLIBFLAGS = -L/usr/lib/86_64-linux-gnu -lm
 
 export WINDOS_INC CFLAGS CLIBFLAGS
 
-OBJLIST=$(shell find $(ROOTDIR) -name *.o | tr ' ' '\ ' | tr '\n' ' ')
+#OBJLIST=$(shell find $(ROOTDIR) -name *.o | tr ' ' '\ ' | tr '\n' ' ')
+OBJLIST=${OBJS_DIR}/*.o
 
 export OBJLIST
 
+TARGET = wind-os
 
-all: wind-os 
+
+all: wind-os build
 wind-os:
 	@echo "WINDOS_SRC="$(WINDOS_SRC)
 	@echo "ROOTDIR="${ROOTDIR}
+	if [ ! -d ${OBJS_DIR} ]; \
+	then \
+		mkdir -p ${OBJS_DIR}; \
+	fi
 	for dir in $(WINDOS_SRC); do \
 		make -C $(ROOTDIR)/$$dir profile || exit 1; \
 	done
-	$(CC) $(shell find $(ROOTDIR) -name *.o | tr ' ' '\ ' | tr '\n' ' ')  $(CLIBFLAGS) -o wind-os
+	
+
+.PHONY:build
+build:
+	$(CC) $$OBJLIST $(CLIBFLAGS) -o $(TARGET)
 .PHONY:clean
 clean: 
 	for dir in $(WINDOS_SRC); do \
 		echo "enter dir:"$$dir; \
 		cd $(ROOTDIR)/$$dir && make clean || exit 1; \
 	done
+	-rm -f $(TARGET)
+
 
 

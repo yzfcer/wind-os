@@ -140,7 +140,7 @@ struct __w_stati_info_s
 
 
 /********************************************全局函数申明**********************************************/
-static w_int32_t stringlenth(char *str);
+//static w_int32_t stringlenth(char *str);
 w_int32_t stringcmp(const char *cs,const char *ct);
 
 

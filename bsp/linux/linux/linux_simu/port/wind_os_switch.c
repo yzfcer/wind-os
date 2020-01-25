@@ -65,7 +65,7 @@ w_sreg_t wind_save_sr(void)
 
 void wind_restore_sr(w_sreg_t sreg)
 {
-    sigprocmask(SIG_SETMASK, &cpu_sr, NULL);
+    sigprocmask(SIG_SETMASK, &sreg, NULL);
 }
 
 
@@ -97,7 +97,7 @@ void wind_start_switch(void)
         //timeBeginPeriod(1);
         usleep(1000/WIND_TICK_PER_SEC*1000);
         //timeEndPeriod(1);
-        set_sleep(&mainthr,1000000);
+        //set_sleep(&mainthr,1000000);
         wind_tick_isr();
     }
 }

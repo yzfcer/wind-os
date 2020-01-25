@@ -12,12 +12,12 @@ w_err_t   erase_virtual_disk(w_blkdev_s *dev,w_int32_t blkcnt)
 {
     w_int32_t i;
     w_int32_t start;
-    w_int32_t size,len;
+    //w_int32_t size;
     FILE *file;
     //errno_t errno;
     
     start = 0;
-    size = blkcnt * dev->blksize;
+    //size = blkcnt * dev->blksize;
     file = fopen(FILE_NAME,"wb+");
     WIND_ASSERT_RETURN(file  != W_NULL,W_ERR_FAIL);
     WIND_ASSERT_RETURN(file != W_NULL,W_ERR_FAIL);
@@ -25,19 +25,19 @@ w_err_t   erase_virtual_disk(w_blkdev_s *dev,w_int32_t blkcnt)
     wind_memset(buffer,0,sizeof(buffer));
     fseek(file,start,SEEK_SET); 
     for(i = 0;i < blkcnt;i ++)
-        len = fwrite(buffer,1,sizeof(buffer),file);
+        fwrite(buffer,1,sizeof(buffer),file);
     fclose(file);
     return W_ERR_OK;
 }
 
 w_err_t   make_virtual_disk(w_blkdev_s *dev,w_int32_t blkcnt)
 {
-    w_int32_t start;
-    w_int32_t size;
+    //w_int32_t start;
+    //w_int32_t size;
     FILE *file;
     //errno_t errno;
-    start = 0;
-    size = blkcnt * dev->blksize;
+    //start = 0;
+    //size = blkcnt * dev->blksize;
 
     file = fopen(FILE_NAME,"r");
     WIND_ASSERT_RETURN(file  != W_NULL,W_ERR_FAIL);

@@ -9,7 +9,7 @@ profile:$(SUBDIRS) $(CUR_OBJS)
 $(SUBDIRS):ECHO
 	make -C $@
 $(CUR_OBJS):%.o:%.c
-	$(CC) -c $^ $(CFLAGS) -o $(CUR_DIR)$(OBJS_DIR)/$@
+	$(CC) -c $^ $(CFLAGS) -o $(OBJS_DIR)/$@
 ECHO:
 	@echo $(SUBDIRS)
 clean:
@@ -17,4 +17,4 @@ clean:
 		echo "enter dir:"$$dir; \
 		cd $(CUR_DIR)/$$dir && make clean; \
 	done
-	rm -rf *.o
+	-rm -rf $(OBJS_DIR)/*.o
