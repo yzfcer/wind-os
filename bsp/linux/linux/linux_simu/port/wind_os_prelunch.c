@@ -24,7 +24,7 @@
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
 #include "wind_type.h"
-//#include <windows.h>
+#include <stdio.h>
  
 //CRITICAL_SECTION CriticalSection;
 
@@ -40,15 +40,18 @@ static void hw_preinit(void)
 #if defined(__CC_ARM)
 void data_bss_init(void)
 {
+	printf("data_bss_init\n");
     return;
 }
 #else
 static void data_bss_init(void)
 {
+	printf("data_bss_init\n");
 }
 #endif
 static void exram_init(void)
 {
+	printf("exram_init\n");
 }
 
 extern void wind_os_launch(void);
@@ -57,7 +60,8 @@ void wind_os_prelaunch(void)
     hw_preinit();
     exram_init();
     data_bss_init();
-    wind_os_launch();
+	printf("wind_os_launch\n");
+	wind_os_launch();
 }
 
 

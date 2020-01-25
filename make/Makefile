@@ -81,8 +81,8 @@ CLIBFLAGS = -L/usr/lib/86_64-linux-gnu -lm
 
 export WINDOS_INC CFLAGS CLIBFLAGS
 
-#OBJLIST=$(shell find $(ROOTDIR) -name *.o | tr ' ' '\ ' | tr '\n' ' ')
-OBJLIST=${OBJS_DIR}/*.o
+OBJLIST=$(shell find $(ROOTDIR) -name *.o | tr ' ' '\ ' | tr '\n' ' ')
+#OBJLIST=${OBJS_DIR}/*.o
 
 export OBJLIST
 
@@ -90,6 +90,7 @@ TARGET = wind-os
 
 
 all: wind-os build
+.PHONY:wind-os
 wind-os:
 	@echo "WINDOS_SRC="$(WINDOS_SRC)
 	@echo "ROOTDIR="${ROOTDIR}
@@ -112,6 +113,7 @@ clean:
 		cd $(ROOTDIR)/$$dir && make clean || exit 1; \
 	done
 	-rm -f $(TARGET)
+	-rm -rf $$OBJLIST
 
 
 

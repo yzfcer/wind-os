@@ -85,6 +85,7 @@ w_err_t _wind_std_init(void)
 	//system("color 00");//ÉèÖÃÑÕÉ«
 	//set_scr_buffer();
     //display_cursor();
+	printf("_wind_std_init\n");
 	while(wind_std_input(&buff,1));
 	return W_ERR_OK;
 }
