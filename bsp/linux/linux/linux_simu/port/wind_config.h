@@ -34,6 +34,7 @@ extern "C" {
 #define HOST_OS_WINDOWS 2
 #define HOST_OS_LINUX   3
 #define HOST_OS_TYPE HOST_OS_LINUX
+#define USE_SYS_VSPRINTF
 
 //-------------------------------------------------------------------------------
 //boot相关参数定制

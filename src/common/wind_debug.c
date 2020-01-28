@@ -367,25 +367,43 @@ w_int32_t wind_vsprintf(char *buf, const char *fmt, wind_va_list args)
 w_int32_t wind_printf(const char *fmt, ...)
 {
     static char buff[512];
-    wind_va_list args;
     w_int32_t count;
+#ifdef USE_SYS_VSPRINTF
+    va_list args;
+#else
+	wind_va_list args;
+#endif
+
     wind_std_lock();
     wind_memset(buff,0,sizeof(buff));
+#ifdef USE_SYS_VSPRINTF
+	va_start(args, fmt);
+	count = vsprintf(buff, fmt, args);
+	va_end(args);
+#else
     wind_va_start(args, fmt);
-    count = wind_vsprintf(buff, fmt, args);
+	count = wind_vsprintf(buff, fmt, args);
     wind_va_end(args);
-    wind_std_output((w_uint8_t *)buff, count);
+#endif
+	wind_std_output((w_uint8_t *)buff, count);
     wind_std_unlock();
     return count;
 }
 
 w_int32_t wind_sprintf(char *buff, const char *fmt, ...)
 {
-    wind_va_list args;
     w_int32_t count;
+#ifdef USE_SYS_VSPRINTF
+    va_list args;
+    va_start(args, fmt);
+	count = vsprintf(buff, fmt, args);
+    va_end(args);
+#else
+    wind_va_list args;
     wind_va_start(args, fmt);
-    count = wind_vsprintf(buff, fmt, args);
+	count = wind_vsprintf(buff, fmt, args);
     wind_va_end(args);
+#endif
     return count;
 }
 

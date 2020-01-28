@@ -41,6 +41,7 @@ w_sysinfo_s g_sysinfo =
     SOFT_VERSION
 };
 
+#include <stdio.h>
 void _wind_os_print_logo(void)
 {
     int i;
@@ -53,11 +54,11 @@ void _wind_os_print_logo(void)
     };
     wind_printf("\r\n");
     wind_printf("system start\r\n");
+		
     for(i = 0;i < 4;i++)
     {
         wind_printf("%s\r\n",logo[i]);
-    }
-    
+    }	    
 }
 
 void _wind_print_sysinfo(void)

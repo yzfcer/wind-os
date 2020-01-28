@@ -33,7 +33,7 @@
 #include <termio.h>
 
 
-int kbhit(void)
+static int kbhit(void)
 {
 	struct termios oldt, newt;
 	int ch;
@@ -55,7 +55,7 @@ int kbhit(void)
 	return 0;
 }
 
-int sh_getch(void) 
+static int sh_getch(void) 
 {
     int cr;
     struct termios nts, ots;
@@ -85,7 +85,7 @@ w_err_t _wind_std_init(void)
 	//system("color 00");//…Ë÷√—’…´
 	//set_scr_buffer();
     //display_cursor();
-	printf("_wind_std_init\n");
+	//printf("_wind_std_init\n");
 	while(wind_std_input(&buff,1));
 	return W_ERR_OK;
 }
@@ -94,10 +94,13 @@ w_err_t _wind_std_init(void)
 w_int32_t wind_std_output(w_uint8_t *buf,w_int32_t len)
 {
     w_int32_t i;
+	//printf("wind_std_output\n");
     for(i = 0;i < len;i ++)
     {
-        //putchar(buf[i]);
+        putchar(buf[i]);
     }
+	
+	//printf("wind_std_output out\n");
     return len;
 }
 
@@ -110,10 +113,13 @@ w_int32_t wind_std_input(w_uint8_t *buff,w_int32_t len)
         c = kbhit();
         if(c)
         {
-            buff[i] = sh_getch();
+            buff[i] = getchar();
         }
         else
-            return i;
+		{
+			return i;
+		}
+            
     }
     return 0;
 }

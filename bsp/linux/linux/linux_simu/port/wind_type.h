@@ -133,8 +133,8 @@ typedef w_int32_t w_err_t;
 
 
 #ifndef w_stack_t  //堆栈宽度的定义
-typedef w_uint32_t w_stack_t;//,*w_pstack_t;
-typedef w_uint32_t *w_pstack_t;
+typedef void* w_stack_t;//,*w_pstack_t;
+typedef void** *w_pstack_t;
 #endif
 
 

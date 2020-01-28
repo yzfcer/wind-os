@@ -25,7 +25,12 @@
 
 #ifndef WIND_DEBUG_H__
 #define WIND_DEBUG_H__
+#include "wind_config.h"
 #include "wind_type.h"
+#ifdef USE_SYS_VSPRINTF
+#include <stdarg.h>
+#include <stdio.h>
+#endif
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -63,7 +68,7 @@ extern "C" {
 #define _WIND_ADDRESSOF(v)   (&(v))
 #endif
 
-#define _WIND_INTSIZEOF(n)   ((sizeof(n) + sizeof(w_int32_t) - 1) & ~(sizeof(w_int32_t) - 1))
+#define _WIND_INTSIZEOF(n)   ((sizeof(n) + sizeof(void*) - 1) & ~(sizeof(void*) - 1))
 
 #define _wind_crt_va_start(ap,v)  ( ap = (wind_va_list)_WIND_ADDRESSOF(v) + _WIND_INTSIZEOF(v) )
 #define _wind_crt_va_arg(ap,t)    ( *(t *)((ap += _WIND_INTSIZEOF(t)) - _WIND_INTSIZEOF(t)) )
