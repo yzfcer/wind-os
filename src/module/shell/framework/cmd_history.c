@@ -69,8 +69,9 @@ static w_err_t remove_cmd_index(w_cmd_his_s *his,w_int32_t index)
 {
     w_int32_t i,cmdlen,mvlen;
     cmdlen = wind_strlen(his->hiscmd[index])+1;
-    mvlen = ((w_uint32_t)&his->hiscmd[0]) + CMD_HISBUF_LENTH;
-    mvlen -= (((w_uint32_t)&his->hiscmd[index]) + cmdlen);
+    //mvlen = ((w_addr_t)&his->hiscmd[0]) + CMD_HISBUF_LENTH;
+    //mvlen -= (((w_uint32_t)&his->hiscmd[index]) + cmdlen);
+	mvlen = (CMD_HISBUF_LENTH - cmdlen) - (w_int32_t)((w_addr_t)&his->hiscmd[index] - (w_addr_t)&his->hiscmd[0]);
     wind_memcpy(his->hiscmd[index],his->hiscmd[index]+cmdlen,mvlen);
     for(i = index;i < his->hiscnt - 1 ;i ++)
         his->hiscmd[i] = his->hiscmd[i+1] - cmdlen;

@@ -26,7 +26,7 @@
 #define __DLIST_H__
 #include "wind_dlist.h"
 
-#define DLIST_OBJ(ptr,type,mbrnode) (void*)(((w_uint8_t*)(ptr))-((w_uint32_t)&(((type*)0)->mbrnode)))
+#define DLIST_OBJ(ptr,type,mbrnode) (void*)(((w_uint8_t*)(ptr))-((w_addr_t)&(((type*)0)->mbrnode)))
 
 //获取链表头部节点
 w_dnode_s *dlist_head(w_dlist_s *dlist)

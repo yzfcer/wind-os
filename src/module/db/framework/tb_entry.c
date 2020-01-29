@@ -122,7 +122,7 @@ w_err_t tb_entry_create(char *tbname,tbmodel_item_s *item_info,w_uint16_t item_c
     entry->magic = TB_MAGIC;
     err = tb_name_split(tbname,entry->dbname,entry->tbname);
     WIND_ASSERT_TODO_RETURN(err == W_ERR_OK,db_free(entry),W_ERR_INVALID);
-    entry->base = (w_uint32_t)entry;
+    entry->base = (w_addr_t)entry;
     entry->db = db_get_byname(entry->dbname);
     WIND_ASSERT_TODO_RETURN(entry->db != W_NULL,db_free(entry),W_ERR_INVALID);
     DNODE_INIT(entry->tbnode);

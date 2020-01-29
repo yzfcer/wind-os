@@ -122,7 +122,7 @@ w_stack_t *_wind_thread_stack_init(thread_run_f pfunc,void *pdata, w_stack_t *ps
     stk = (w_stack_t*)(pstkbt + stk_depth - 1 - sigsize);   
 
     ctx.uc_mcontext.gregs[REG_EBP] = (greg_t)stk;
-    ctx.uc_stack.ss_sp = (void*)(((w_uint32_t)stk) + sigsize - 1); /// base address    
+    ctx.uc_stack.ss_sp = (void*)(((w_stack_t)stk) + sigsize - 1); /// base address    
     ctx.uc_stack.ss_size = (stk_depth - sigsize) * sizeof(w_stack_t);   
    
     makecontext(&ctx, (void*)pfunc, 1, pdata);

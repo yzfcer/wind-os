@@ -30,7 +30,7 @@
 #include "wind_board_port.h"
 
 #if WIND_DBGPOINT_SUPPORT
-#define NODE_TO_DBGPOINT(node) (w_dbgpoint_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((w_dbgpoint_s*)0)->obj.objnode)))
+#define NODE_TO_DBGPOINT(node) (w_dbgpoint_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((w_dbgpoint_s*)0)->obj.objnode)))
 static w_dlist_s dbgpointlist;
 
 

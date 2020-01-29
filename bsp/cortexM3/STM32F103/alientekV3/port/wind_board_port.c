@@ -111,24 +111,24 @@ w_stack_t *_wind_thread_stack_init(thread_run_f pfunc,void *pdata, w_stack_t *ps
                                   
     stk       = pstkbt + stk_depth - 1;          /* Load stack pointer                                 */
                                                  /* Registers stacked as if auto-saved on exception    */
-    *(stk)    = (w_uint32_t)0x01000000L;             /* xPSR                                               */
-    *(--stk)  = (w_uint32_t)pfunc;                    /* Entry Point                                        */
-    *(--stk)  = (w_uint32_t)0xFFFFFFFEL;             /* R14 (LR) (init value will cause fault if ever used)*/
-    *(--stk)  = (w_uint32_t)0x12121212L;             /* R12                                                */
-    *(--stk)  = (w_uint32_t)0x03030303L;             /* R3                                                 */
-    *(--stk)  = (w_uint32_t)0x02020202L;             /* R2                                                 */
-    *(--stk)  = (w_uint32_t)0x01010101L;             /* R1                                                 */
-    *(--stk)  = (w_uint32_t)pdata;                   /* R0 : argument                                      */
+    *(stk)    = (w_stack_t)0x01000000L;             /* xPSR                                               */
+    *(--stk)  = (w_stack_t)pfunc;                    /* Entry Point                                        */
+    *(--stk)  = (w_stack_t)0xFFFFFFFEL;             /* R14 (LR) (init value will cause fault if ever used)*/
+    *(--stk)  = (w_stack_t)0x12121212L;             /* R12                                                */
+    *(--stk)  = (w_stack_t)0x03030303L;             /* R3                                                 */
+    *(--stk)  = (w_stack_t)0x02020202L;             /* R2                                                 */
+    *(--stk)  = (w_stack_t)0x01010101L;             /* R1                                                 */
+    *(--stk)  = (w_stack_t)pdata;                   /* R0 : argument                                      */
 
                                                  /* Remaining registers saved on process stack         */
-    *(--stk)  = (w_uint32_t)0x11111111L;             /* R11                                                */
-    *(--stk)  = (w_uint32_t)0x10101010L;             /* R10                                                */
-    *(--stk)  = (w_uint32_t)0x09090909L;             /* R9                                                 */
-    *(--stk)  = (w_uint32_t)0x08080808L;             /* R8                                                 */
-    *(--stk)  = (w_uint32_t)0x07070707L;             /* R7                                                 */
-    *(--stk)  = (w_uint32_t)0x06060606L;             /* R6                                                 */
-    *(--stk)  = (w_uint32_t)0x05050505L;             /* R5                                                 */
-    *(--stk)  = (w_uint32_t)0x04040404L;             /* R4                                                 */
+    *(--stk)  = (w_stack_t)0x11111111L;             /* R11                                                */
+    *(--stk)  = (w_stack_t)0x10101010L;             /* R10                                                */
+    *(--stk)  = (w_stack_t)0x09090909L;             /* R9                                                 */
+    *(--stk)  = (w_stack_t)0x08080808L;             /* R8                                                 */
+    *(--stk)  = (w_stack_t)0x07070707L;             /* R7                                                 */
+    *(--stk)  = (w_stack_t)0x06060606L;             /* R6                                                 */
+    *(--stk)  = (w_stack_t)0x05050505L;             /* R5                                                 */
+    *(--stk)  = (w_stack_t)0x04040404L;             /* R4                                                 */
 
     return (stk);
 }

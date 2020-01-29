@@ -26,7 +26,7 @@
 #include "wind_type.h"
 #include "wind_queue.h"
 #include "wind_debug.h"
-#define MBR_OFFSET(type, mbr) ((w_uint32_t)&(((type*)0)->mbr))
+#define MBR_OFFSET(type, mbr) ((w_addr_t)&(((type*)0)->mbr))
 
 w_err_t wind_queue_create(void *mem,w_uint32_t size,w_uint16_t itemsize)
 {

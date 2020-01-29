@@ -28,7 +28,7 @@
 #include "wind_string.h"
 #include "wind_diagnose.h"
 
-#define NODE_TO_POOL(node) (w_pool_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((w_pool_s*)0)->obj.objnode)))
+#define NODE_TO_POOL(node) (w_pool_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((w_pool_s*)0)->obj.objnode)))
 #define WIND_MPOOL_ALIGN_R(x) (((x)+7) & (~0x07))
 #define WIND_MPOOL_ALIGN_L(x) ((x) & (~0x07))
 
@@ -124,7 +124,7 @@ w_pool_s *wind_pool_get_by_mem(void *mem)
 {
     w_pool_s *pm;
     WIND_ASSERT_RETURN(mem != W_NULL,W_NULL);
-    pm = (w_pool_s *)WIND_MPOOL_ALIGN_R((w_uint32_t)mem);
+    pm = (w_pool_s *)WIND_MPOOL_ALIGN_R((w_addr_t)mem);
     return pm;
 }
 
@@ -146,12 +146,8 @@ w_err_t wind_pool_create(const char *name,void *mem,w_uint32_t memsize,w_uint32_
     WIND_ASSERT_RETURN(memsize >= sizeof(w_pool_s)+obj_size+sizeof(w_pihead_s),W_ERR_INVALID);
     memsize = WIND_MPOOL_ALIGN_L(memsize - 8);
 
-	wind_notice("mem=%p\n",mem);
-	wind_notice("pm=%p\n",pm);
-    item = (w_poolitem_s*)((w_uint32_t)pm + sizeof(w_pool_s));
-	wind_notice("item=%p\n",item);
+    item = (w_poolitem_s*)((w_addr_t)pm + sizeof(w_pool_s));
     pm->head = item;
-	WIND_TRAP();
     pm->size = memsize - sizeof(w_pool_s);
     pm->itemsize = obj_size + sizeof(w_pihead_s);
     pm->itemnum = pm->size / pm->itemsize;

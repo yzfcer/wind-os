@@ -33,7 +33,7 @@ extern "C" {
 #include "wind_pool.h"
 #if WIND_FSM_SUPPORT
 
-#define NODE_TO_FSM(node) (w_fsm_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((w_fsm_s*)0)->obj.objnode)))
+#define NODE_TO_FSM(node) (w_fsm_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((w_fsm_s*)0)->obj.objnode)))
 
 
 /********************************************内部变量定义**********************************************/

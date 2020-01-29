@@ -25,7 +25,7 @@
 #include "wind_type.h"
 #include "db_if.h"
 #include "wind_debug.h"
-#define NODE_TO_TBMODEL(dnode) (tb_model_s*)(((w_uint8_t*)(dnode))-((w_uint32_t)&(((tb_model_s*)0)->obj.objnode)))
+#define NODE_TO_TBMODEL(dnode) (tb_model_s*)(((w_uint8_t*)(dnode))-((w_addr_t)&(((tb_model_s*)0)->obj.objnode)))
 static w_dlist_s tbmodellist;
 typedef struct
 {

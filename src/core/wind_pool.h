@@ -40,7 +40,7 @@ extern "C" {
 #define IS_F_POOLITEM_USED(item) ((item->head.flag & F_POOLITEM_USED) == F_POOLITEM_USED)
 #define SET_F_POOLITEM_USED(item) (item->head.flag |= F_POOLITEM_USED)
 #define CLR_F_POOLITEM_USED(item) (item->head.flag &= (~F_POOLITEM_USED))
-#define POOL_ITEM(ptr,type,mbrnode) (void*)(((char*)(ptr))-((w_uint32_t)&(((type*)0)->mbrnode)))
+#define POOL_ITEM(ptr,type,mbrnode) (void*)(((char*)(ptr))-((w_addr_t)&(((type*)0)->mbrnode)))
 typedef struct __w_poolitem_s w_poolitem_s;
 typedef struct __w_pool_s w_pool_s;
 #define WIND_POOL_ALIGN(size) (((size)+7) & (~0x07))

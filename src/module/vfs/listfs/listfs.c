@@ -32,7 +32,7 @@
 #if WIND_LISTFS_SUPPORT
 
 
-#define NODE_TO_LISTFILE(node) (w_listfile_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((w_listfile_s*)0)->list.listnode)))
+#define NODE_TO_LISTFILE(node) (w_listfile_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((w_listfile_s*)0)->list.listnode)))
 w_err_t _wind_listfs_mod_init(void)
 {
     return W_ERR_OK;

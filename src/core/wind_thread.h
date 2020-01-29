@@ -37,7 +37,7 @@ extern "C" {
 #define WIND_THREAD_MAGIC 0x35BA6857
 #define WIND_THREAD_STK_MARK 0x24681357
 #define THREAD_NAME_LEN 20 //线程名的最大长度，包括 '\0'
-#define THREAD_FROM_MEMBER(ptr,type,mbr) (void*)(((char*)(ptr))-((w_uint32_t)&(((type*)0)->mbr)))
+#define THREAD_FROM_MEMBER(ptr,type,mbr) (void*)(((char*)(ptr))-((w_addr_t)&(((type*)0)->mbr)))
 #define SLEEP_TIMEOUT_MAX 0x7fffffff
 
 
@@ -139,7 +139,7 @@ struct _w_thread_s
 
 };
 
-#define PRIDNODE_TO_THREAD(dnode,mbrnode) (w_thread_s*)(((char*)(dnode))-((w_uint32_t)&(((w_thread_s*)0)->mbrnode.dnode)))
+#define PRIDNODE_TO_THREAD(dnode,mbrnode) (w_thread_s*)(((char*)(dnode))-((w_addr_t)&(((w_thread_s*)0)->mbrnode.dnode)))
 
 
 w_err_t _wind_thread_mod_init(void);

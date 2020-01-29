@@ -24,7 +24,7 @@
 *******************************************************************************************************/
 #include "wind_tree.h"
 #include "wind_debug.h"
-#define NODE_TO_TREE(dnode) (w_tree_s*)(((w_uint8_t*)(dnode))-((w_uint32_t)&(((w_tree_s*)0)->treenode)))
+#define NODE_TO_TREE(dnode) (w_tree_s*)(((w_uint8_t*)(dnode))-((w_addr_t)&(((w_tree_s*)0)->treenode)))
 w_err_t wind_tree_init(w_tree_s *tree)
 {
     WIND_ASSERT_RETURN(tree != W_NULL,W_ERR_PTR_NULL);

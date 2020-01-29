@@ -33,7 +33,7 @@
 
 
 #if WIND_DIAGNOSE_SUPPORT
-#define NODE_TO_DIAGNOSENOSE(node) (w_diagnose_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((w_diagnose_s*)0)->obj.objnode)))
+#define NODE_TO_DIAGNOSENOSE(node) (w_diagnose_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((w_diagnose_s*)0)->obj.objnode)))
 static w_dlist_s diagnoselist;
 
 

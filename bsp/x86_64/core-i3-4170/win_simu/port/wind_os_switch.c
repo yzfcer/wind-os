@@ -35,7 +35,7 @@
 //#pragma comment(lib, "winmm.lib")
 
 //#include "wind_os_switch.h"
-#define GET_OBJ(ptr,type,mbrnode) (void*)(((char*)(ptr))-((w_uint32_t)&(((type*)0)->mbrnode)))
+#define GET_OBJ(ptr,type,mbrnode) (void*)(((char*)(ptr))-((w_addr_t)&(((type*)0)->mbrnode)))
 
 extern volatile w_bool_t gwind_start_flag;
 extern w_stack_t **gwind_high_stack;

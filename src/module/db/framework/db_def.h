@@ -65,7 +65,7 @@ struct __db_entry_s
     w_dnode_s dbnode;
     w_dlist_s tblist;
     char name[DB_NAME_LEN];
-    w_uint32_t base;//绝对地址
+    w_addr_t base;//绝对地址
     w_uint16_t attr;
     w_int32_t hash;
     w_int32_t tb_count;
@@ -78,7 +78,7 @@ struct __tb_entry_s
     w_dlist_s data_list;
     char dbname[DB_NAME_LEN];
     char tbname[TB_NAME_LEN];
-    w_uint32_t base;//绝对地址
+    w_addr_t base;//绝对地址
     w_db_s *db;
     
     w_mutex_s *mutex;

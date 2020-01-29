@@ -40,7 +40,7 @@ typedef struct
 
 WIND_POOL(testmsg,6,sizeof(test_msg_s));
 WIND_POOL(testmsg_pool,4,sizeof(test_msg_s));
-#define MSG_TO_TEST_MSG(msg) (test_msg_s*)(((w_uint8_t*)(msg))-((w_uint32_t)&(((test_msg_s*)0)->msg)))
+#define MSG_TO_TEST_MSG(msg) (test_msg_s*)(((w_uint8_t*)(msg))-((w_addr_t)&(((test_msg_s*)0)->msg)))
 
 /********************************************内部函数定义*********************************************/
 

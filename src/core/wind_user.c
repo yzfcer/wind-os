@@ -32,7 +32,7 @@
 //#include "wind_board_port.h"
 
 #if WIND_USER_SUPPORT
-#define NODE_TO_USER(node) (w_user_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((w_user_s*)0)->usernode)))
+#define NODE_TO_USER(node) (w_user_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((w_user_s*)0)->usernode)))
 static w_dlist_s userlist;
 WIND_POOL(userpool,WIND_USER_MAX_NUM,sizeof(w_user_s));
 

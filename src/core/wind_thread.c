@@ -154,7 +154,6 @@ w_err_t _wind_thread_mod_init(void)
     err = wind_pool_create("stkbuf",stkbufpool,sizeof(stkbufpool),WIND_STK_SIZE *sizeof(w_stack_t));
     WIND_ASSERT_RETURN(err == W_ERR_OK,err);
 #endif
-	WIND_TRAP();
     err = wind_pool_create("thread",threadpool,sizeof(threadpool),sizeof(w_thread_s));
     WIND_ASSERT_RETURN(err == W_ERR_OK,err);
     err = thread_diagnose_init();
@@ -527,13 +526,14 @@ static void print_mem(w_uint32_t start,w_uint32_t len)
 
 w_err_t wind_thread_print_stack(w_thread_s *thread)
 {
-    w_uint32_t start,end,cur,len,used;
+    w_stack_t start,end,cur;
+	w_uint32_t len,used;
     if(thread == W_NULL)
         thread = wind_thread_current();
     WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_FAIL);
-    start = (w_uint32_t)thread->stack_start;
+    start = (w_stack_t)thread->stack_start;
     end = start + thread->stksize*sizeof(w_stack_t);
-    cur = (w_uint32_t)thread->stack_cur;
+    cur = (w_stack_t)thread->stack_cur;
     len = (end - cur);
     used = (end - cur) / sizeof(w_stack_t*);
     

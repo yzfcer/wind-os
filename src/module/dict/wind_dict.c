@@ -34,8 +34,8 @@ extern "C" {
 /*********************************************头文件定义***********************************************/
 
 /********************************************内部变量定义**********************************************/
-#define NODE_TO_DICT(node) (w_dict_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((w_dict_s*)0)->dictnode)))
-#define NODE_TO_DICTSET(node) (w_dictset_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((w_dictset_s*)0)->obj.objnode)))
+#define NODE_TO_DICT(node) (w_dict_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((w_dict_s*)0)->dictnode)))
+#define NODE_TO_DICTSET(node) (w_dictset_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((w_dictset_s*)0)->obj.objnode)))
 w_dlist_s g_dictlist;
 
 

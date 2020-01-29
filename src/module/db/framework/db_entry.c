@@ -28,7 +28,7 @@
 #include "wind_string.h"
 #include "wind_debug.h"
 #include "wind_debug.h"
-#define NODE_TO_DBENTRY(node) (w_db_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((w_db_s*)0)->dbnode)))
+#define NODE_TO_DBENTRY(node) (w_db_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((w_db_s*)0)->dbnode)))
 
 static w_dlist_s db_list = {W_NULL,W_NULL};
 
@@ -63,7 +63,7 @@ w_err_t db_entry_create(char *dbname,w_uint16_t attr)
     wind_strncpy(entry->name,dbname,TB_NAME_LEN);
     DNODE_INIT(entry->dbnode);
     DLIST_INIT(entry->tblist);
-    entry->base = (w_uint32_t)entry;
+    entry->base = (w_addr_t)entry;
     entry->attr = attr;
     entry->hash = get_db_hash(entry->name);
     WIND_ASSERT_RETURN(entry->hash > 0,W_ERR_INVALID);

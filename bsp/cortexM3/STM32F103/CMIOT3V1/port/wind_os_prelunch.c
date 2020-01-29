@@ -39,25 +39,25 @@ static void hw_preinit(void)
 void data_bss_init(void)
 {
     w_uint32_t i,limit; 
-    w_uint32_t *src,*dest;
-    extern w_uint32_t Image$$ER_IROM1$$RW$$Base[];
-    extern w_uint32_t Image$$ER_IROM1$$ZI$$Base[];
+    w_addr_t *src,*dest;
+    extern w_addr_t Image$$ER_IROM1$$RW$$Base[];
+    extern w_addr_t Image$$ER_IROM1$$ZI$$Base[];
 
-    extern w_uint32_t Image$$ER_DATA$$RW$$Base[];
-    extern w_uint32_t Image$$ER_DATA$$ZI$$Base[];
+    extern w_addr_t Image$$ER_DATA$$RW$$Base[];
+    extern w_addr_t Image$$ER_DATA$$ZI$$Base[];
 
-    extern w_uint32_t Image$$ER_HEAP$$RW$$Base[];
-    extern w_uint32_t Image$$ER_HEAP$$ZI$$Base[];
+    extern w_addr_t Image$$ER_HEAP$$RW$$Base[];
+    extern w_addr_t Image$$ER_HEAP$$ZI$$Base[];
     
-    src = (w_uint32_t *)Image$$ER_IROM1$$RW$$Base;
-    dest = (w_uint32_t *)Image$$ER_DATA$$RW$$Base;
-    limit = ((w_uint32_t)Image$$ER_HEAP$$RW$$Base - (w_uint32_t)Image$$ER_DATA$$ZI$$Base)/sizeof(w_uint32_t);
+    src = (w_addr_t *)Image$$ER_IROM1$$RW$$Base;
+    dest = (w_addr_t *)Image$$ER_DATA$$RW$$Base;
+    limit = (w_uint32_t)((w_addr_t)Image$$ER_HEAP$$RW$$Base - (w_addr_t)Image$$ER_DATA$$ZI$$Base)/sizeof(w_addr_t);
     for(i =0;i < limit;i ++)
     {
         dest[i] = src[i];
     }
     dest = Image$$ER_IROM1$$ZI$$Base;
-    limit = ((w_uint32_t)Image$$ER_HEAP$$RW$$Base - (w_uint32_t)Image$$ER_DATA$$ZI$$Base)/sizeof(w_uint32_t);
+    limit = (w_uint32_t)((w_addr_t)Image$$ER_HEAP$$RW$$Base - (w_addr_t)Image$$ER_DATA$$ZI$$Base)/sizeof(w_addr_t);
     for(i =0;i < limit;i ++)
     {
         dest[i] = 0;

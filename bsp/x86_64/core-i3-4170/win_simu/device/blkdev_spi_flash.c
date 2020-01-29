@@ -57,7 +57,7 @@ w_err_t   spi_flash_erase(w_blkdev_s *dev,w_addr_t addr,w_int32_t blkcnt)
     w_uint8_t *start;
     start = (w_uint8_t *)((dev->blkaddr + addr) * dev->blksize);
     for(i = 0;i < blkcnt;i ++)
-        W25QXX_Erase_Sector((w_uint32_t)(start + i * dev->blksize));
+        W25QXX_Erase_Sector((w_addr_t)(start + i * dev->blksize));
     return W_ERR_OK;
 }
 
@@ -74,7 +74,7 @@ w_int32_t spi_flash_read(w_blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t 
     w_uint8_t *start;
     start = (w_uint8_t *)((dev->blkaddr + addr) * dev->blksize);
     for(i = 0;i < blkcnt;i ++)
-        W25QXX_Read(buf,(w_uint32_t)(start + i * dev->blksize),dev->blksize);
+        W25QXX_Read(buf,(w_addr_t)(start + i * dev->blksize),dev->blksize);
     return W_ERR_OK;
 }
 
@@ -84,7 +84,7 @@ w_int32_t spi_flash_write(w_blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t
     w_uint8_t *start;
     start = (w_uint8_t *)((dev->blkaddr + addr) * dev->blksize);
     for(i = 0;i < blkcnt;i ++)
-        W25QXX_SectorWrite(buf,(w_uint32_t)(start + i * dev->blksize),dev->blksize);
+        W25QXX_SectorWrite(buf,(w_addr_t)(start + i * dev->blksize),dev->blksize);
     return W_ERR_OK;
 }
 

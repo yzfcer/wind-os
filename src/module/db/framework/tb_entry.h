@@ -4,7 +4,7 @@
 #include "db_if.h"
 #include "wind_type.h"
 #include "db_entry.h"
-#define NODE_TO_TBENTRY(node) (w_tb_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((w_tb_s*)0)->tbnode)))
+#define NODE_TO_TBENTRY(node) (w_tb_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((w_tb_s*)0)->tbnode)))
 
 w_err_t tb_entry_create(char *tbname,tbmodel_item_s *info,w_uint16_t item_cnt);
 w_bool_t tb_entry_exist(char *tbname);

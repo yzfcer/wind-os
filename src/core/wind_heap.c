@@ -32,12 +32,12 @@
 #include "wind_board_port.h"
 
 #if WIND_HEAP_SUPPORT
-#define NODE_TO_HEAP(node) (w_heap_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((w_heap_s*)0)->obj.objnode)))
-#define NODE_TO_HEAPITEM(node) (w_heapitem_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((w_heapitem_s*)0)->itemnode)))
+#define NODE_TO_HEAP(node) (w_heap_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((w_heap_s*)0)->obj.objnode)))
+#define NODE_TO_HEAPITEM(node) (w_heapitem_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((w_heapitem_s*)0)->itemnode)))
 static w_dlist_s heaplist;
 
 #define OFFSET_ADDR(base,offset) (void*)(((char*)(base))+(offset))
-#define ITEM_FROM_PTR(ptr) (void*)((w_uint32_t)ptr - sizeof(w_heapitem_s))
+#define ITEM_FROM_PTR(ptr) (void*)((w_addr_t)ptr - sizeof(w_heapitem_s))
 
 
 #if WIND_DIAGNOSE_SUPPORT
@@ -252,7 +252,7 @@ static w_err_t combine_heapitem(w_heapitem_s* item1,w_heapitem_s* item2)
     WIND_ASSERT_RETURN(item2->magic == (w_uint16_t)(~WIND_HEAPITEM_MAGIC),W_ERR_INVALID);
     WIND_ASSERT_RETURN(!IS_F_HEAPITEM_USED(item1),W_ERR_INVALID);
     WIND_ASSERT_RETURN(!IS_F_HEAPITEM_USED(item2),W_ERR_INVALID);
-    if(item1->size + (w_uint32_t)item1 == (w_uint32_t)item2)
+    if(item1->size + (w_addr_t)item1 == (w_addr_t)item2)
     {
         dlist_remove(&item1->heap->free_list,&item2->itemnode.dnode);
         item1->size += item2->size;

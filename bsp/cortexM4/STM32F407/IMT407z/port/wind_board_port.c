@@ -106,63 +106,63 @@ w_stack_t *_wind_thread_stack_init(thread_run_f pfunc,void *pdata, w_stack_t *ps
     w_stack_t *stk;
     stk = pstkbt + stk_depth - 1;       /* Load stack pointer  */
 #if (__FPU_PRESENT==1)&&(__FPU_USED==1)	
-    *(--stk) = (w_uint32_t)0x00000000L; //No Name Register  
-    *(--stk) = (w_uint32_t)0x00001000L; //FPSCR
-    *(--stk) = (w_uint32_t)0x00000015L; //s15
-    *(--stk) = (w_uint32_t)0x00000014L; //s14
-    *(--stk) = (w_uint32_t)0x00000013L; //s13
-    *(--stk) = (w_uint32_t)0x00000012L; //s12
-    *(--stk) = (w_uint32_t)0x00000011L; //s11
-    *(--stk) = (w_uint32_t)0x00000010L; //s10
-    *(--stk) = (w_uint32_t)0x00000009L; //s9
-    *(--stk) = (w_uint32_t)0x00000008L; //s8
-    *(--stk) = (w_uint32_t)0x00000007L; //s7
-    *(--stk) = (w_uint32_t)0x00000006L; //s6
-    *(--stk) = (w_uint32_t)0x00000005L; //s5
-    *(--stk) = (w_uint32_t)0x00000004L; //s4
-    *(--stk) = (w_uint32_t)0x00000003L; //s3
-    *(--stk) = (w_uint32_t)0x00000002L; //s2
-    *(--stk) = (w_uint32_t)0x00000001L; //s1
-    *(--stk) = (w_uint32_t)0x00000000L; //s0
+    *(--stk) = (w_stack_t)0x00000000L; //No Name Register  
+    *(--stk) = (w_stack_t)0x00001000L; //FPSCR
+    *(--stk) = (w_stack_t)0x00000015L; //s15
+    *(--stk) = (w_stack_t)0x00000014L; //s14
+    *(--stk) = (w_stack_t)0x00000013L; //s13
+    *(--stk) = (w_stack_t)0x00000012L; //s12
+    *(--stk) = (w_stack_t)0x00000011L; //s11
+    *(--stk) = (w_stack_t)0x00000010L; //s10
+    *(--stk) = (w_stack_t)0x00000009L; //s9
+    *(--stk) = (w_stack_t)0x00000008L; //s8
+    *(--stk) = (w_stack_t)0x00000007L; //s7
+    *(--stk) = (w_stack_t)0x00000006L; //s6
+    *(--stk) = (w_stack_t)0x00000005L; //s5
+    *(--stk) = (w_stack_t)0x00000004L; //s4
+    *(--stk) = (w_stack_t)0x00000003L; //s3
+    *(--stk) = (w_stack_t)0x00000002L; //s2
+    *(--stk) = (w_stack_t)0x00000001L; //s1
+    *(--stk) = (w_stack_t)0x00000000L; //s0
 #endif
                                          /* Registers stacked as if auto-saved on exception    */
-    *(stk)    = (w_uint32_t)0x01000000L;             /* xPSR                                               */
-    *(--stk)  = (w_uint32_t)pfunc;                    /* Entry Point                                        */
-    *(--stk)  = (w_uint32_t)W_NULL;  /* R14 (LR) (init value will cause fault if ever used)*/
-    *(--stk)  = (w_uint32_t)0x12121212L;             /* R12                                                */
-    *(--stk)  = (w_uint32_t)0x03030303L;             /* R3                                                 */
-    *(--stk)  = (w_uint32_t)0x02020202L;             /* R2                                                 */
-    *(--stk)  = (w_uint32_t)0x01010101L;             /* R1                                                 */
-    *(--stk)  = (w_uint32_t)pdata;                   /* R0 : argument                                      */
+    *(stk)    = (w_stack_t)0x01000000L;             /* xPSR                                               */
+    *(--stk)  = (w_stack_t)pfunc;                    /* Entry Point                                        */
+    *(--stk)  = (w_stack_t)W_NULL;  /* R14 (LR) (init value will cause fault if ever used)*/
+    *(--stk)  = (w_stack_t)0x12121212L;             /* R12                                                */
+    *(--stk)  = (w_stack_t)0x03030303L;             /* R3                                                 */
+    *(--stk)  = (w_stack_t)0x02020202L;             /* R2                                                 */
+    *(--stk)  = (w_stack_t)0x01010101L;             /* R1                                                 */
+    *(--stk)  = (w_stack_t)pdata;                   /* R0 : argument                                      */
 
 #if (__FPU_PRESENT==1)&&(__FPU_USED==1)	
-    *(--stk) = (w_uint32_t)0x00000031L; //s31
-    *(--stk) = (w_uint32_t)0x00000030L; //s30
-    *(--stk) = (w_uint32_t)0x00000029L; //s29
-    *(--stk) = (w_uint32_t)0x00000028L; //s28
-    *(--stk) = (w_uint32_t)0x00000027L; //s27
-    *(--stk) = (w_uint32_t)0x00000026L; //s26	
-    *(--stk) = (w_uint32_t)0x00000025L; //s25
-    *(--stk) = (w_uint32_t)0x00000024L; //s24
-    *(--stk) = (w_uint32_t)0x00000023L; //s23
-    *(--stk) = (w_uint32_t)0x00000022L; //s22
-    *(--stk) = (w_uint32_t)0x00000021L; //s21
-    *(--stk) = (w_uint32_t)0x00000020L; //s20
-    *(--stk) = (w_uint32_t)0x00000019L; //s19
-    *(--stk) = (w_uint32_t)0x00000018L; //s18
-    *(--stk) = (w_uint32_t)0x00000017L; //s17
-    *(--stk) = (w_uint32_t)0x00000016L; //s16
+    *(--stk) = (w_stack_t)0x00000031L; //s31
+    *(--stk) = (w_stack_t)0x00000030L; //s30
+    *(--stk) = (w_stack_t)0x00000029L; //s29
+    *(--stk) = (w_stack_t)0x00000028L; //s28
+    *(--stk) = (w_stack_t)0x00000027L; //s27
+    *(--stk) = (w_stack_t)0x00000026L; //s26	
+    *(--stk) = (w_stack_t)0x00000025L; //s25
+    *(--stk) = (w_stack_t)0x00000024L; //s24
+    *(--stk) = (w_stack_t)0x00000023L; //s23
+    *(--stk) = (w_stack_t)0x00000022L; //s22
+    *(--stk) = (w_stack_t)0x00000021L; //s21
+    *(--stk) = (w_stack_t)0x00000020L; //s20
+    *(--stk) = (w_stack_t)0x00000019L; //s19
+    *(--stk) = (w_stack_t)0x00000018L; //s18
+    *(--stk) = (w_stack_t)0x00000017L; //s17
+    *(--stk) = (w_stack_t)0x00000016L; //s16
 #endif
 
                                         /* Remaining registers saved on process stack */
-    *(--stk)  = (w_uint32_t)0x11111111L;             /* R11                                                */
-    *(--stk)  = (w_uint32_t)0x10101010L;             /* R10                                                */
-    *(--stk)  = (w_uint32_t)0x09090909L;             /* R9                                                 */
-    *(--stk)  = (w_uint32_t)0x08080808L;             /* R8                                                 */
-    *(--stk)  = (w_uint32_t)0x07070707L;             /* R7                                                 */
-    *(--stk)  = (w_uint32_t)0x06060606L;             /* R6                                                 */
-    *(--stk)  = (w_uint32_t)0x05050505L;             /* R5                                                 */
-    *(--stk)  = (w_uint32_t)0x04040404L;             /* R4                                                 */
+    *(--stk)  = (w_stack_t)0x11111111L;             /* R11                                                */
+    *(--stk)  = (w_stack_t)0x10101010L;             /* R10                                                */
+    *(--stk)  = (w_stack_t)0x09090909L;             /* R9                                                 */
+    *(--stk)  = (w_stack_t)0x08080808L;             /* R8                                                 */
+    *(--stk)  = (w_stack_t)0x07070707L;             /* R7                                                 */
+    *(--stk)  = (w_stack_t)0x06060606L;             /* R6                                                 */
+    *(--stk)  = (w_stack_t)0x05050505L;             /* R5                                                 */
+    *(--stk)  = (w_stack_t)0x04040404L;             /* R4                                                 */
 
     return (stk);
 }

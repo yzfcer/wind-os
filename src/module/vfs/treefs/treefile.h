@@ -3,7 +3,7 @@
 #include "treefs_def.h"
 
 #if WIND_TREEFS_SUPPORT
-#define NODE_TO_TREEFILE(node) (w_treefile_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((w_treefile_s*)0)->tree.treenode)))
+#define NODE_TO_TREEFILE(node) (w_treefile_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((w_treefile_s*)0)->tree.treenode)))
 w_treefile_s *treefs_mk_subnode(w_treefile_s *parent,char *nodename,w_uint8_t isdir);
 
 w_treefile_s *treefile_create(w_treefs_s *tfs,const char *path);

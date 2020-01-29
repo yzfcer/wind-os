@@ -30,7 +30,7 @@
 #include "wind_pool.h"
 
 #if WIND_SEM_SUPPORT
-#define NODE_TO_SEM(node) (w_sem_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((w_sem_s*)0)->obj.objnode)))
+#define NODE_TO_SEM(node) (w_sem_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((w_sem_s*)0)->obj.objnode)))
 static w_dlist_s semlist;
 static WIND_POOL(sempool,WIND_SEM_MAX_NUM,sizeof(w_sem_s));
 

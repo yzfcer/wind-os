@@ -32,7 +32,7 @@
 #include "wind_board_port.h"
 
 #if WIND_COROUTINE_SUPPORT
-#define NODE_TO_COROUTINE(node) (w_coroutine_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((w_coroutine_s*)0)->obj.objnode)))
+#define NODE_TO_COROUTINE(node) (w_coroutine_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((w_coroutine_s*)0)->obj.objnode)))
 static w_dlist_s coroutinelist;
 static w_coroutine_s *curcorout;
 static WIND_POOL(coroutinepool,WIND_COROUTINE_MAX_NUM,sizeof(w_coroutine_s));

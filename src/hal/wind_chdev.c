@@ -30,7 +30,7 @@
 #include "wind_core.h"
 #include "wind_string.h"
 #if WIND_CHDEV_SUPPORT
-#define NODE_TO_CHDEV(node) (w_chdev_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((w_chdev_s*)0)->obj.objnode)))
+#define NODE_TO_CHDEV(node) (w_chdev_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((w_chdev_s*)0)->obj.objnode)))
 static w_dlist_s blkdevlist;
 
 w_err_t wind_chdev_register(w_chdev_s *chdev,w_int32_t count)

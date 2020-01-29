@@ -34,7 +34,7 @@ typedef struct
     w_int32_t layer;
     w_tree_s tree;
 }test_tree_s;
-#define TREE_TO_TEST_TREE(node) (test_tree_s*)(((w_uint8_t*)(node))-((w_uint32_t)&(((test_tree_s*)0)->tree)))
+#define TREE_TO_TEST_TREE(node) (test_tree_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((test_tree_s*)0)->tree)))
 
 WIND_POOL(test_tree,TREENUM,sizeof(test_tree_s));
 test_tree_s *trees[TREENUM+1];
