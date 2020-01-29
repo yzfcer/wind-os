@@ -35,7 +35,14 @@ extern "C" {
 
 
 /********************************************内部函数定义*********************************************/
-
+static void print_byte_width(void)
+{
+	wind_printf("sizeof char:%d\r\n",sizeof(char));
+	wind_printf("sizeof short:%d\r\n",sizeof(short));
+	wind_printf("sizeof int:%d\r\n",sizeof(int));
+	wind_printf("sizeof long:%d\r\n",sizeof(long));
+	wind_printf("sizeof long long:%d\r\n",sizeof(long long));
+}
 
 
 /********************************************全局变量定义**********************************************/
@@ -51,10 +58,16 @@ COMMAND_DISC(sysinfo)
 COMMAND_USAGE(sysinfo)
 {
     wind_printf("sysinfo:--to show system infomation of the device.\r\n");
+    wind_printf("sysinfo -b:--to show system byte width.\r\n");
 }
 
 COMMAND_MAIN(sysinfo,argc,argv)
 {
+   if((argc >= 2) && (wind_strcmp(argv[1],"-b") == 0))
+    {
+        print_byte_width();
+        return W_ERR_OK;
+    }
    _wind_print_sysinfo();
    return W_ERR_OK;
 }

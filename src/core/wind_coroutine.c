@@ -133,12 +133,13 @@ w_err_t wind_coroutine_init(w_coroutine_s *coroutine,const char *name,w_uint16_t
     coroutine->cid = cid;
     coroutine->func = func;
     coroutine->arg = arg;
-    coroutine->stack = _wind_thread_stack_init((thread_run_f)func,arg,&coroutine->stackbuff[WIND_COROUTINE_STKSIZE-1]);
+    coroutine->stack = _wind_thread_stack_init((thread_run_f)func,arg,&coroutine->stackbuff,WIND_COROUTINE_STKSIZE);
     wind_obj_init(&coroutine->obj,WIND_COROUTINE_MAGIC,name,&thread->coroutlist);
     SET_F_COROUTINE_READY(coroutine);
     CLR_F_COROUTINE_POOL(coroutine);
     return W_ERR_OK;
 }
+
 
 w_coroutine_s *wind_coroutine_create(const char *name,w_uint16_t cid,coroutine_fn func,void *arg)
 {

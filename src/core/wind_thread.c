@@ -154,6 +154,7 @@ w_err_t _wind_thread_mod_init(void)
     err = wind_pool_create("stkbuf",stkbufpool,sizeof(stkbufpool),WIND_STK_SIZE *sizeof(w_stack_t));
     WIND_ASSERT_RETURN(err == W_ERR_OK,err);
 #endif
+	WIND_TRAP();
     err = wind_pool_create("thread",threadpool,sizeof(threadpool),sizeof(w_thread_s));
     WIND_ASSERT_RETURN(err == W_ERR_OK,err);
     err = thread_diagnose_init();
@@ -226,8 +227,7 @@ w_err_t wind_thread_init(w_thread_s *thread,
     
     thread->name = (char*)name;
     thread->prio = get_prio();
-    
-    tmpstk = _wind_thread_stack_init(thread_entry,0,pstk + stksize -1);
+    tmpstk = _wind_thread_stack_init(thread_entry,0,pstk,stksize);
     thread->stack_cur = tmpstk;
     thread->run_times = 0;
     thread->runstat = THREAD_STATUS_READY;

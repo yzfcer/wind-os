@@ -50,10 +50,6 @@
 //#include <stdio.h>
 
 
-
-#define OS_TASK_DEF_STK_SIZE 0x2000
-
-
 /*
  * 设备进入多线程模式后函数的初始化处理的钩子函数，为了保证tick
  * 中断的稳定，一般配置系统tick中断会放到系统进入线程状态时开始
@@ -116,19 +112,21 @@ void _wind_fs_mount_init(void)
  * 填入参数的顺序可以参考相应的CPU线程进出栈的顺序
  */ 
 
-w_stack_t *_wind_thread_stack_init(thread_run_f pfunc,void *pdata, w_stack_t *pstkbt)
+w_stack_t *_wind_thread_stack_init(thread_run_f pfunc,void *pdata, w_stack_t *pstkbt,w_int32_t stk_depth)
 {    
     w_stack_t*    stk;   
     ucontext_t ctx;   
-    w_int32_t sigsize = 20 + sizeof(ctx);   
-    getcontext(&ctx);   
-    stk = (w_stack_t*)((w_uint32_t)pstkbt - sigsize);   
-    ctx.uc_link = NULL;
+    w_int32_t sigsize = (20 + sizeof(ctx))/sizeof(w_stack_t);
+    getcontext(&ctx);
+
+    stk = (w_stack_t*)(pstkbt + stk_depth - 1 - sigsize);   
+
     ctx.uc_mcontext.gregs[REG_EBP] = (greg_t)stk;
-    ctx.uc_stack.ss_sp = (void*)(((w_uint32_t)stk) - (OS_TASK_DEF_STK_SIZE) + sigsize); /// base address    
-    ctx.uc_stack.ss_size = OS_TASK_DEF_STK_SIZE - sigsize;   
+    ctx.uc_stack.ss_sp = (void*)(((w_uint32_t)stk) + sigsize - 1); /// base address    
+    ctx.uc_stack.ss_size = (stk_depth - sigsize) * sizeof(w_stack_t);   
    
-    makecontext(&ctx, (void*)pfunc, 1, pdata);   
+    makecontext(&ctx, (void*)pfunc, 1, pdata);
+ 	WIND_TRAP();
     memcpy(stk, &ctx, sizeof(ctx));   
        
     return ((w_stack_t *)stk);   

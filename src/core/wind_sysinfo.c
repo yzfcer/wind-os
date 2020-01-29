@@ -41,7 +41,6 @@ w_sysinfo_s g_sysinfo =
     SOFT_VERSION
 };
 
-#include <stdio.h>
 void _wind_os_print_logo(void)
 {
     int i;

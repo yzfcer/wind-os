@@ -101,10 +101,10 @@ void _wind_fs_mount_init(void)
  * 填入参数的顺序可以参考相应的CPU线程进出栈的顺序
  */ 
 
-w_stack_t *_wind_thread_stack_init(thread_run_f pfunc,void *pdata, w_stack_t *pstkbt)
+w_stack_t *_wind_thread_stack_init(thread_run_f pfunc,void *pdata, w_stack_t *pstkbt,w_int32_t stk_depth)
 {
     w_stack_t *stk;
-    stk = pstkbt;                            /* Load stack pointer  */
+    stk = pstkbt + stk_depth - 1;       /* Load stack pointer  */
 #if (__FPU_PRESENT==1)&&(__FPU_USED==1)	
     *(--stk) = (w_uint32_t)0x00000000L; //No Name Register  
     *(--stk) = (w_uint32_t)0x00001000L; //FPSCR

@@ -24,6 +24,19 @@
 *******************************************************************************************************/
 #ifndef WIND_TYPES_H__
 #define WIND_TYPES_H__
+
+#if 0
+#ifndef _GNU_SOURCE
+#define _GNU_SOURCE
+#endif
+#ifndef __USE_GNU
+#define __USE_GNU 
+#endif
+#include "signal.h"
+#endif
+
+
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -37,7 +50,7 @@ typedef unsigned short w_uint16_t;
 #endif
 
 #ifndef w_uint32_t
-typedef unsigned long w_uint32_t; 
+typedef unsigned int w_uint32_t; 
 #endif
 
 #ifndef w_uint64_t
@@ -53,7 +66,7 @@ typedef short w_int16_t;
 #endif
 
 #ifndef w_int32_t
-typedef long w_int32_t; 
+typedef int w_int32_t; 
 #endif
 
 #ifndef w_int64_t
@@ -61,7 +74,7 @@ typedef long long w_int64_t;
 #endif
 
 #ifndef w_size_t
-typedef unsigned long w_size_t; 
+typedef unsigned int w_size_t; 
 #endif
 
 #ifndef _GNU_SOURCE
@@ -133,8 +146,8 @@ typedef w_int32_t w_err_t;
 
 
 #ifndef w_stack_t  //堆栈宽度的定义
-typedef void* w_stack_t;//,*w_pstack_t;
-typedef void** *w_pstack_t;
+typedef w_uint32_t w_stack_t;//,*w_pstack_t;
+typedef w_stack_t* *w_pstack_t;
 #endif
 
 

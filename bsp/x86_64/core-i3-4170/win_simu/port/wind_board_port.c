@@ -98,19 +98,20 @@ static void push_stack(w_stack_t ** Stackpp, w_stack_t v)
  * 填入参数的顺序可以参考相应的CPU线程进出栈的顺序
  */ 
 
-w_stack_t *_wind_thread_stack_init(thread_run_f pfunc,void *pdata, w_stack_t *pstkbt)
-{    
-    push_stack(&pstkbt, (w_stack_t)pdata);        //通过这个指针来找到线程函数，线程参数
-    push_stack(&pstkbt, (w_stack_t)0);            //平衡堆栈的(不用管)
-    push_stack(&pstkbt, (w_stack_t)pfunc);        //线程入口函数 这个函数负责调用线程函数
-    push_stack(&pstkbt, (w_stack_t)5);                //push ebp
-    push_stack(&pstkbt, (w_stack_t)7);                //push edi
-    push_stack(&pstkbt, (w_stack_t)6);                //push esi
-    push_stack(&pstkbt, (w_stack_t)3);                //push ebx
-    push_stack(&pstkbt, (w_stack_t)2);                //push ecx
-    push_stack(&pstkbt, (w_stack_t)1);                //push edx
-    push_stack(&pstkbt, (w_stack_t)0);                //push eax
-    return pstkbt;
+w_stack_t *_wind_thread_stack_init(thread_run_f pfunc,void *pdata, w_stack_t *pstkbt,w_int32_t stk_depth)
+{
+	w_stack_t *stk_bottom = pstkbt + stk_depth - 1;
+    push_stack(&stk_bottom, (w_stack_t)pdata);        //通过这个指针来找到线程函数，线程参数
+    push_stack(&stk_bottom, (w_stack_t)0);            //平衡堆栈的(不用管)
+    push_stack(&stk_bottom, (w_stack_t)pfunc);        //线程入口函数 这个函数负责调用线程函数
+    push_stack(&stk_bottom, (w_stack_t)5);                //push ebp
+    push_stack(&stk_bottom, (w_stack_t)7);                //push edi
+    push_stack(&stk_bottom, (w_stack_t)6);                //push esi
+    push_stack(&stk_bottom, (w_stack_t)3);                //push ebx
+    push_stack(&stk_bottom, (w_stack_t)2);                //push ecx
+    push_stack(&stk_bottom, (w_stack_t)1);                //push edx
+    push_stack(&stk_bottom, (w_stack_t)0);                //push eax
+    return stk_bottom;
 }
 
 

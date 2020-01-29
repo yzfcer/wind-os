@@ -146,8 +146,12 @@ w_err_t wind_pool_create(const char *name,void *mem,w_uint32_t memsize,w_uint32_
     WIND_ASSERT_RETURN(memsize >= sizeof(w_pool_s)+obj_size+sizeof(w_pihead_s),W_ERR_INVALID);
     memsize = WIND_MPOOL_ALIGN_L(memsize - 8);
 
+	wind_notice("mem=%p\n",mem);
+	wind_notice("pm=%p\n",pm);
     item = (w_poolitem_s*)((w_uint32_t)pm + sizeof(w_pool_s));
+	wind_notice("item=%p\n",item);
     pm->head = item;
+	WIND_TRAP();
     pm->size = memsize - sizeof(w_pool_s);
     pm->itemsize = obj_size + sizeof(w_pihead_s);
     pm->itemnum = pm->size / pm->itemsize;

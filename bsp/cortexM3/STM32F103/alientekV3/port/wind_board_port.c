@@ -104,12 +104,12 @@ void _wind_heaps_create(void)
  * 初始化线程栈，用于线程初次切换时，从栈里面取出初始化参数
  * 填入参数的顺序可以参考相应的CPU线程进出栈的顺序
  */ 
-w_stack_t *_wind_thread_stack_init(thread_run_f pfunc,void *pdata, w_stack_t *pstkbt)
+w_stack_t *_wind_thread_stack_init(thread_run_f pfunc,void *pdata, w_stack_t *pstkbt,w_int32_t stk_depth)
 {
     w_stack_t *stk;
     stk = pstkbt;  
                                   
-    stk       = pstkbt;                            /* Load stack pointer                                 */
+    stk       = pstkbt + stk_depth - 1;          /* Load stack pointer                                 */
                                                  /* Registers stacked as if auto-saved on exception    */
     *(stk)    = (w_uint32_t)0x01000000L;             /* xPSR                                               */
     *(--stk)  = (w_uint32_t)pfunc;                    /* Entry Point                                        */
