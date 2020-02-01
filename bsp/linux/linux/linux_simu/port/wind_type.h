@@ -25,18 +25,6 @@
 #ifndef WIND_TYPES_H__
 #define WIND_TYPES_H__
 
-#if 0
-#ifndef _GNU_SOURCE
-#define _GNU_SOURCE
-#endif
-#ifndef __USE_GNU
-#define __USE_GNU 
-#endif
-#include "signal.h"
-#endif
-
-
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -77,9 +65,9 @@ typedef long long w_int64_t;
 typedef unsigned int w_size_t; 
 #endif
 
-#ifndef _GNU_SOURCE
-#define _GNU_SOURCE
-#endif
+//#ifndef _GNU_SOURCE
+//#define _GNU_SOURCE
+//#endif
 #include <signal.h>
 //SREG，CPU状态寄存器对应的数据位宽，当关闭中断时需要保存这个寄存器
 typedef sigset_t w_sreg_t;

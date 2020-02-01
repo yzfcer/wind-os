@@ -27,26 +27,17 @@
 #include "wind_type.h"
 #include "wind_board_port.h"
 #include "wind_debug.h"
+#include "wind_string.h"
 #include <stdlib.h>
-#ifdef _GNU_SOURCE
-#define _GNU_SOURCE
-#endif
-#ifndef __USE_GNU
-#define __USE_GNU 
-#endif
-//#ifndef __x86_64__
-//#define __x86_64__ 
-//#endif
 
-//#include <features.h>
 #include <ucontext.h>
 
-#include <signal.h>
-#include <bits/sigcontext.h>		
-#include <string.h>    
-#include <unistd.h>
-#include <setjmp.h>
-#include <sys/select.h>    
+//#include <signal.h>
+//#include <bits/sigcontext.h>		
+//#include <string.h>    
+//#include <unistd.h>
+//#include <setjmp.h>
+//#include <sys/select.h>    
 //#include <stdio.h>
 
 
@@ -98,10 +89,10 @@ void _wind_heaps_create(void)
 #include "wind_fs.h"
 void _wind_fs_mount_init(void)
 {
-    wind_vfs_mount("fs0","listfs","disk0","/");
+    //wind_vfs_mount("fs0","listfs","disk0","/");
     //wind_vfs_mount("fs0","listfs","memblk","/");
-    wind_vfs_mount("fs1","treefs","null0","/var");
-    wind_vfs_mount("fs2","treefs","null1","/mnt/");
+    //wind_vfs_mount("fs1","treefs","null0","/var");
+    //wind_vfs_mount("fs2","treefs","null1","/mnt/");
     //wind_vfs_mount("fs3","listfs","disk0","/disk/");
 }
 #endif
@@ -111,24 +102,47 @@ void _wind_fs_mount_init(void)
  * 初始化线程栈，用于线程初次切换时，从栈里面取出初始化参数
  * 填入参数的顺序可以参考相应的CPU线程进出栈的顺序
  */ 
-
+//static ucontext_t mainctx;
 w_stack_t *_wind_thread_stack_init(thread_run_f pfunc,void *pdata, w_stack_t *pstkbt,w_int32_t stk_depth)
 {    
-    w_stack_t*    stk;   
-    ucontext_t ctx;   
-    w_int32_t sigsize = (20 + sizeof(ctx))/sizeof(w_stack_t);
-    getcontext(&ctx);
 
-    stk = (w_stack_t*)(pstkbt + stk_depth - 1 - sigsize);   
-
-    ctx.uc_mcontext.gregs[REG_EBP] = (greg_t)stk;
-    ctx.uc_stack.ss_sp = (void*)(((w_stack_t)stk) + sigsize - 1); /// base address    
-    ctx.uc_stack.ss_size = (stk_depth - sigsize) * sizeof(w_stack_t);   
-   
-    makecontext(&ctx, (void*)pfunc, 1, pdata);
- 	WIND_TRAP();
-    memcpy(stk, &ctx, sizeof(ctx));   
-       
-    return ((w_stack_t *)stk);   
+	ucontext_t *ctx;   
+    w_int32_t ctx_size;
+    w_stack_t* stk;
+	
+	ctx_size = 4 + sizeof(ucontext_t)/sizeof(w_stack_t);
+    stk = (w_stack_t*)(pstkbt + stk_depth - 1 - ctx_size);
+	
+	ctx = (ucontext_t *)stk;
+	getcontext(ctx);
+    ctx->uc_link = W_NULL; /// next context   
+    ctx->uc_stack.ss_sp = (void*)(pstkbt); /// base address    
+    ctx->uc_stack.ss_size = (stk - pstkbt - 1) * sizeof(w_stack_t);
+    ctx->uc_stack.ss_flags = 0;
+	WIND_ASSERT_RETURN(ctx->uc_stack.ss_size > 0x1000,W_NULL);
+    makecontext(ctx, (void*)pfunc, 1, pdata);
+    wind_memcpy(stk, ctx, sizeof(ucontext_t));
+	
+    //wind_printf("stack_start=%p\n",pstkbt);
+    //wind_printf("stk=%p\n",stk);
+	//wind_printf("ctx.uc_stack.ss_sp=%p\n",ctx->uc_stack.ss_sp);
+    //wind_printf("ctx.uc_stack.ss_size=0x%x\n",ctx->uc_stack.ss_size);
+	return ((w_stack_t *)stk);
 }
+
+
+#if 0
+    wind_printf("pstkbt=%p\n",pstkbt);
+    wind_printf("stk=%p\n",stk);
+    wind_printf("stk_depth=0x%x\n",stk_depth);
+    wind_printf("ctx_size=0x%x\n",ctx_size);
+	
+    wind_printf("ctx.uc_stack.ss_sp=%p\n",ctx.uc_stack.ss_sp);
+    wind_printf("ctx.uc_stack.ss_size=0x%x\n",ctx.uc_stack.ss_size);
+    wind_printf("sizeof(greg_t)=%d\n",sizeof(greg_t));
+    wind_printf("sizeof(w_stack_t*)=%d\n",sizeof(w_stack_t*));
+    wind_printf("sizeof(w_stack_t)=%d\n",sizeof(w_stack_t));
+    wind_printf("sizeof(stack_t)=%d\n",sizeof(stack_t));
+    wind_printf("sizeof(ucontext_t)=%d\n",sizeof(ucontext_t));
+#endif
 

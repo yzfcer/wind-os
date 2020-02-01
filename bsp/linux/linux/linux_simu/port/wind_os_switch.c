@@ -31,7 +31,7 @@
 #include "wind_string.h"
 #include <unistd.h> 
 #include <signal.h> 
-
+#include <ucontext.h>
 
 #define GET_OBJ(ptr,type,mbrnode) (void*)(((char*)(ptr))-((w_addr_t)&(((type*)0)->mbrnode)))
 
@@ -80,26 +80,39 @@ static w_err_t main_thread(w_int32_t argc,char **argv)
 
 
 
-
+ucontext_t mainctx;
 void wind_start_switch(void)
 {
+	ucontext_t ctx;
+	ucontext_t *saved;
     w_thread_s *cur,*high;
-    wind_thread_init(&mainthr,"main",main_thread,0,W_NULL,mainstk,2048);
+	w_stack_t *stk;
+	w_int32_t ctx_size;
     gwind_start_flag = W_TRUE;
     IDLE_CNT_PER_SEC = 1000000;
-    cur = &mainthr;
-    high = &mainthr;//GET_OBJ(gwind_high_stack,w_thread_s,stack);
-    gwind_cur_stack = &mainthr.stack_cur;
-    switch_context(cur,high);
-    
-    while(1)
-    {
-        //timeBeginPeriod(1);
-        usleep(1000/WIND_TICK_PER_SEC*1000);
-        //timeEndPeriod(1);
-        //set_sleep(&mainthr,1000000);
-        wind_tick_isr();
-    }
+	
+	getcontext(&ctx);
+    high = GET_OBJ(gwind_high_stack,w_thread_s,stack_cur);
+	
+	
+	ctx_size = 4 + sizeof(ucontext_t)/sizeof(w_stack_t);
+    stk = (w_stack_t*)(high->stack_start + high->stksize - 1 - ctx_size);
+	saved = (ucontext_t *)stk;
+	wind_memcpy(&ctx, stk, sizeof(ucontext_t));
+	wind_printf("high thread:%s\n",high->name);
+	wind_printf("high stksize:0x%x\n",high->stksize);
+    //ctx.uc_link = saved->uc_link; /// next context   
+    //ctx.uc_stack.ss_sp = saved->uc_stack.ss_sp; /// base address    
+    //ctx.uc_stack.ss_size = saved->uc_stack.ss_size;
+    //ctx.uc_stack.ss_flags = saved->uc_stack.ss_flags;
+	
+	//wind_printf("stack_start:%p\n",high->stack_start);
+	//wind_printf("stk:%p\n",stk);
+	wind_printf("ctx.uc_stack.ss_sp=%p\n",ctx.uc_stack.ss_sp);
+    wind_printf("ctx.uc_stack.ss_size=0x%x\n",ctx.uc_stack.ss_size);
+
+	swapcontext(&mainctx,&ctx);
+	WIND_TRAP();
 }
 
 static w_err_t idle_func(w_int32_t argc,char **argv)
