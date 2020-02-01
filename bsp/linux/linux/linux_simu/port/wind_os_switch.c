@@ -80,10 +80,10 @@ static w_err_t main_thread(w_int32_t argc,char **argv)
 
 
 
-ucontext_t mainctx;
 void wind_start_switch(void)
 {
-	ucontext_t ctx;
+	ucontext_t mainctx;
+	ucontext_t *ctx;
 	ucontext_t *saved;
     w_thread_s *cur,*high;
 	w_stack_t *stk;
@@ -97,21 +97,8 @@ void wind_start_switch(void)
 	
 	ctx_size = 4 + sizeof(ucontext_t)/sizeof(w_stack_t);
     stk = (w_stack_t*)(high->stack_start + high->stksize - 1 - ctx_size);
-	saved = (ucontext_t *)stk;
-	wind_memcpy(&ctx, stk, sizeof(ucontext_t));
-	wind_printf("high thread:%s\n",high->name);
-	wind_printf("high stksize:0x%x\n",high->stksize);
-    //ctx.uc_link = saved->uc_link; /// next context   
-    //ctx.uc_stack.ss_sp = saved->uc_stack.ss_sp; /// base address    
-    //ctx.uc_stack.ss_size = saved->uc_stack.ss_size;
-    //ctx.uc_stack.ss_flags = saved->uc_stack.ss_flags;
-	
-	//wind_printf("stack_start:%p\n",high->stack_start);
-	//wind_printf("stk:%p\n",stk);
-	wind_printf("ctx.uc_stack.ss_sp=%p\n",ctx.uc_stack.ss_sp);
-    wind_printf("ctx.uc_stack.ss_size=0x%x\n",ctx.uc_stack.ss_size);
-
-	swapcontext(&mainctx,&ctx);
+	ctx = (ucontext_t *)stk;
+	swapcontext(&mainctx,ctx);
 	WIND_TRAP();
 }
 
@@ -128,6 +115,7 @@ void do_switch(void)
     cur = GET_OBJ(gwind_cur_stack,w_thread_s,stack_cur);
     high = GET_OBJ(gwind_high_stack,w_thread_s,stack_cur);
     gwind_cur_stack = gwind_high_stack;
+    wind_printf("do_switch\n");
     if(high == W_NULL)
         high = &mainthr;
     if(cur == W_NULL)

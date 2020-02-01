@@ -121,28 +121,6 @@ w_stack_t *_wind_thread_stack_init(thread_run_f pfunc,void *pdata, w_stack_t *ps
     ctx->uc_stack.ss_flags = 0;
 	WIND_ASSERT_RETURN(ctx->uc_stack.ss_size > 0x1000,W_NULL);
     makecontext(ctx, (void*)pfunc, 1, pdata);
-    wind_memcpy(stk, ctx, sizeof(ucontext_t));
-	
-    //wind_printf("stack_start=%p\n",pstkbt);
-    //wind_printf("stk=%p\n",stk);
-	//wind_printf("ctx.uc_stack.ss_sp=%p\n",ctx->uc_stack.ss_sp);
-    //wind_printf("ctx.uc_stack.ss_size=0x%x\n",ctx->uc_stack.ss_size);
 	return ((w_stack_t *)stk);
 }
-
-
-#if 0
-    wind_printf("pstkbt=%p\n",pstkbt);
-    wind_printf("stk=%p\n",stk);
-    wind_printf("stk_depth=0x%x\n",stk_depth);
-    wind_printf("ctx_size=0x%x\n",ctx_size);
-	
-    wind_printf("ctx.uc_stack.ss_sp=%p\n",ctx.uc_stack.ss_sp);
-    wind_printf("ctx.uc_stack.ss_size=0x%x\n",ctx.uc_stack.ss_size);
-    wind_printf("sizeof(greg_t)=%d\n",sizeof(greg_t));
-    wind_printf("sizeof(w_stack_t*)=%d\n",sizeof(w_stack_t*));
-    wind_printf("sizeof(w_stack_t)=%d\n",sizeof(w_stack_t));
-    wind_printf("sizeof(stack_t)=%d\n",sizeof(stack_t));
-    wind_printf("sizeof(ucontext_t)=%d\n",sizeof(ucontext_t));
-#endif
 
