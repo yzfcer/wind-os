@@ -279,6 +279,7 @@ void wind_tick_isr(void)
 //操作系统初始化
 static void _wind_init()
 {
+	wind_init_hook();
     _wind_corevar_init();
     _wind_std_init();//调试端口初始化
     _wind_os_print_logo();
@@ -323,13 +324,16 @@ static void _wind_init()
 
 
 //****************************wind_entry***********************************************
-
+//void signal_test();
 int wind_os_launch(void)
 {
+	
     wind_disable_interrupt();
     _wind_init();
     _create_thread_init();
     wind_enable_interrupt();
+	wind_printf("wind_run\n");
+	//signal_test();
     wind_run();
     return W_ERR_OK;
 }

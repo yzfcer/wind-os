@@ -31,23 +31,55 @@
 #include <stdlib.h>
 
 #include <ucontext.h>
+#include <sys/time.h>
+#include <signal.h>
+#include <stdio.h>    // for printf()  
 
-//#include <signal.h>
-//#include <bits/sigcontext.h>		
-//#include <string.h>    
-//#include <unistd.h>
-//#include <setjmp.h>
-//#include <sys/select.h>    
-//#include <stdio.h>
-
+#include <errno.h>
 
 /*
  * 设备进入多线程模式后函数的初始化处理的钩子函数，为了保证tick
  * 中断的稳定，一般配置系统tick中断会放到系统进入线程状态时开始
  * 执行，在进入线程之前，不让tick触发中断级线程切换。
  */
+extern void wind_tick_isr(void);
+
+
+void wind_init_hook(void)
+{
+
+}
+
+
+
+static void sig_ticks_timer(int signo)
+{
+	//printf("wind_tick_isr\n");
+	wind_tick_isr();
+}
+
+void tick_timer_run(void)
+{
+	struct itimerval tv, otv;
+   signal(SIGALRM, sig_ticks_timer);
+   //how long to run the first time
+   tv.it_value.tv_sec = 0;
+   tv.it_value.tv_usec = 10000;
+   //after the first time, how long to run next time
+   tv.it_interval.tv_sec = 0;
+   tv.it_interval.tv_usec = 10000;
+ 
+   if (setitimer(ITIMER_REAL, &tv, &otv) != 0)
+	printf("setitimer err %d\n", errno);
+
+	while(1) 
+		sleep(1);	
+}
+
+
 void wind_enter_thread_hook(void)
 {
+	//tick_timer_run();
 }
 
 
@@ -55,12 +87,12 @@ void wind_enter_thread_hook(void)
  * 触发CPU设备重启,一般的MCU都有软件触发重启的功能，在这个函数实现即可，
  * 这个功能不是必须的,如无必要可以不用实现，直接空置即可。
  */
+
 void wind_system_reset(void)
 {
     extern char *argv_bak;
     if(argv_bak != W_NULL)
         system(argv_bak);
-    //ExitProcess(0);
 }
 
 

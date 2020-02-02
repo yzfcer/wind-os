@@ -70,8 +70,8 @@ typedef unsigned int w_size_t;
 //#endif
 #include <signal.h>
 //SREG，CPU状态寄存器对应的数据位宽，当关闭中断时需要保存这个寄存器
-typedef sigset_t w_sreg_t;
-//typedef int w_sreg_t;
+typedef sigset_t* w_sreg_t;
+
 
 #ifndef w_fp32_t
 typedef float w_fp32_t;
