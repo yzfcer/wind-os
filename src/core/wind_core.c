@@ -97,21 +97,32 @@ void wind_enable_switch(void)
 void wind_disable_interrupt(void)
 {
     w_sreg_t cpu_sr;
-    cpu_sr = wind_save_sr();
-    g_core.ssr[g_core.sreg_idx++] = cpu_sr;
-    if(g_core.sreg_idx >= 32)
+    if(g_core.sreg_idx < 30)
     {
-        wind_system_reset();
+		cpu_sr = wind_save_sr();
+		g_core.ssr[g_core.sreg_idx] = cpu_sr;
+		g_core.sreg_idx ++;
     }
+	else
+	{
+		WIND_TRAP();
+        wind_system_reset();
+	}
 }
 
 void wind_enable_interrupt(void)
 {
     w_sreg_t cpu_sr;
     if(g_core.sreg_idx > 0)
-        g_core.sreg_idx --;
-    cpu_sr = g_core.ssr[g_core.sreg_idx];   
-    wind_restore_sr(cpu_sr);
+	{
+		g_core.sreg_idx --;
+		cpu_sr = g_core.ssr[g_core.sreg_idx];
+		wind_restore_sr(cpu_sr);
+	}
+	else
+	{
+        WIND_TRAP();
+    }
 }
 
 void wind_enter_irq(void)
@@ -175,10 +186,14 @@ void wind_exit_irq(void)
         gwind_high_stack = &thread->stack_cur;
         if(gwind_high_stack != gwind_cur_stack)
         {
+			wind_enable_interrupt();
             wind_interrupt_switch();
         }
+		else
+			wind_enable_interrupt();
     }
-    wind_enable_interrupt();
+	else
+	    wind_enable_interrupt();
 }
 
 
@@ -265,6 +280,7 @@ void wind_tick_callback(void)
 #if WIND_DATETIME_SUPPORT
     _wind_datetime_tick_isr();
 #endif
+	//printf("_wind_thread_wakeup\n");
     _wind_thread_wakeup();
 }
 
@@ -280,7 +296,6 @@ void wind_tick_isr(void)
 static void _wind_init()
 {
 	wind_init_hook();
-    _wind_corevar_init();
     _wind_std_init();//调试端口初始化
     _wind_os_print_logo();
     _wind_print_sysinfo();
@@ -327,7 +342,7 @@ static void _wind_init()
 //void signal_test();
 int wind_os_launch(void)
 {
-	
+    _wind_corevar_init();
     wind_disable_interrupt();
     _wind_init();
     _create_thread_init();

@@ -121,7 +121,7 @@ w_int32_t wind_std_input(w_uint8_t *buff,w_int32_t len)
 		}
             
     }
-    return 0;
+    return i;
 }
 
 

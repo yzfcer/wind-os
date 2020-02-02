@@ -31,11 +31,9 @@
 #include <stdlib.h>
 
 #include <ucontext.h>
-#include <sys/time.h>
 #include <signal.h>
-#include <stdio.h>    // for printf()  
+#include <stdio.h>
 
-#include <errno.h>
 
 /*
  * 设备进入多线程模式后函数的初始化处理的钩子函数，为了保证tick
@@ -48,32 +46,6 @@ extern void wind_tick_isr(void);
 void wind_init_hook(void)
 {
 
-}
-
-
-
-static void sig_ticks_timer(int signo)
-{
-	//printf("wind_tick_isr\n");
-	wind_tick_isr();
-}
-
-void tick_timer_run(void)
-{
-	struct itimerval tv, otv;
-   signal(SIGALRM, sig_ticks_timer);
-   //how long to run the first time
-   tv.it_value.tv_sec = 0;
-   tv.it_value.tv_usec = 10000;
-   //after the first time, how long to run next time
-   tv.it_interval.tv_sec = 0;
-   tv.it_interval.tv_usec = 10000;
- 
-   if (setitimer(ITIMER_REAL, &tv, &otv) != 0)
-	printf("setitimer err %d\n", errno);
-
-	while(1) 
-		sleep(1);	
 }
 
 
@@ -134,7 +106,8 @@ void _wind_fs_mount_init(void)
  * 初始化线程栈，用于线程初次切换时，从栈里面取出初始化参数
  * 填入参数的顺序可以参考相应的CPU线程进出栈的顺序
  */ 
-//static ucontext_t mainctx;
+
+extern ucontext_t mainctx;
 w_stack_t *_wind_thread_stack_init(thread_run_f pfunc,void *pdata, w_stack_t *pstkbt,w_int32_t stk_depth)
 {    
 
@@ -147,7 +120,7 @@ w_stack_t *_wind_thread_stack_init(thread_run_f pfunc,void *pdata, w_stack_t *ps
 	
 	ctx = (ucontext_t *)stk;
 	getcontext(ctx);
-    ctx->uc_link = W_NULL; /// next context   
+    ctx->uc_link = &mainctx; /// next context   
     ctx->uc_stack.ss_sp = (void*)(pstkbt); /// base address    
     ctx->uc_stack.ss_size = (stk - pstkbt - 1) * sizeof(w_stack_t);
     ctx->uc_stack.ss_flags = 0;

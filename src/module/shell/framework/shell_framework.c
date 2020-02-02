@@ -191,7 +191,6 @@ static w_bool_t handle_default(w_shell_ctx_s *ctx,char ch)
 static w_bool_t shell_prehandle_char(w_shell_ctx_s *ctx,w_uint8_t ch,w_int32_t len)
 {
     w_bool_t ret;
-
     ret = handle_key_evt(ctx,ch);
     if(W_TRUE == ret)
         return W_FALSE;
@@ -199,7 +198,7 @@ static w_bool_t shell_prehandle_char(w_shell_ctx_s *ctx,w_uint8_t ch,w_int32_t l
     {
         return handle_BKSPACE(ctx);
     }
-    else if(ch == WVK_ENTER)
+    else if((ch == WVK_ENTER) || (ch == WVK_LINEFEED))
     {
         return handle_LF(ctx);
     }
@@ -614,7 +613,6 @@ w_err_t thread_shell(w_int32_t argc,char **argv)
     while(1)
     {
         len = shell_read_line(ctx,WIND_CMD_MAX_LEN);
-
         if(len >= 0)
         {
             switch(ctx->stat)
