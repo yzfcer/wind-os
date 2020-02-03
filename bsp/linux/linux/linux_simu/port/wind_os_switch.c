@@ -135,11 +135,7 @@ static void tick_timer_run(void)
 	while(1) 
 	{
 		sleep(10);
-		//wind_tick_isr();
-		//printf("wind_tick_isr\n");
-		//cnt ++;
-		//if(cnt % 100 == 0 )
-		//	wind_thread_print();
+		//*(char*)0 = 0;
 	}
 }
 

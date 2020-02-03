@@ -254,7 +254,8 @@ void _wind_switchto_thread(w_thread_s *thread)
         wind_enable_interrupt();
         wind_thread_switch();
     }
-    wind_enable_interrupt();
+    else
+        wind_enable_interrupt();
 }
 
 

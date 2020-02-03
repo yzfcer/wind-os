@@ -64,7 +64,9 @@ static w_bool_t insert_ch(w_shell_ctx_s *ctx,char ch,w_int32_t len)
 static w_bool_t handle_LF(w_shell_ctx_s *ctx)
 {
     ctx->buf[ctx->index] = 0;
+#ifndef SHELL_NO_ECHO_BACK
     wind_printf("\r\n");
+#endif
     return W_TRUE;
 }
 
@@ -181,8 +183,10 @@ key_evt_ret:
 
 static w_bool_t handle_default(w_shell_ctx_s *ctx,char ch)
 {
+#ifndef SHELL_NO_ECHO_BACK
     if(ctx->stat != CSLSTAT_PWD)
         wind_printf("%c",ch);
+#endif
     return W_FALSE;
 }
 

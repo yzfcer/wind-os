@@ -82,8 +82,9 @@ w_err_t wind_softirq_trig(w_int32_t irqid)
     idx1 = (irqid >> 5);
     idx2 = (irqid & 0x1f);
     softirq_flag[idx1] |= (1 << idx2);
-    wind_thread_resume(thread);
+	wind_printf("g_core.sreg_idx=%d\r\n",g_core.sreg_idx);
     wind_enable_interrupt();
+    wind_thread_resume(thread);
     _wind_switchto_thread(thread);
     return W_ERR_OK;
 }
@@ -126,14 +127,15 @@ static w_err_t thread_softirq(w_int32_t argc,char **argv)
         {
             wind_disable_interrupt();
             func = get_irq_handle();
+            wind_enable_interrupt();
             if(func == W_NULL)
             {
                 thread->cause = CAUSE_COMMON;
                 thread->runstat = THREAD_STATUS_SUSPEND;
-                wind_enable_interrupt();
+                //wind_enable_interrupt();
                 break;
             }
-            wind_enable_interrupt();
+
             if(func != W_NULL)
                 func();
         }

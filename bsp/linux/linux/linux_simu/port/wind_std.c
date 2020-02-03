@@ -31,8 +31,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <termio.h>
-
-
+#include <error.h>
 static int kbhit(void)
 {
 	struct termios oldt, newt;
@@ -55,37 +54,25 @@ static int kbhit(void)
 	return 0;
 }
 
-static int sh_getch(void) 
-{
-    int cr;
-    struct termios nts, ots;
 
-    if (tcgetattr(0, &ots) < 0) // ??????(0??????)???
-        return EOF;
-
-    nts = ots;
-    cfmakeraw(&nts); // ?????Raw?????????????????????????
-    if (tcsetattr(0, TCSANOW, &nts) < 0) // ??????????
-        return EOF;
-
-    cr = getchar();
-    if (tcsetattr(0, TCSANOW, &ots) < 0) // ?????????
-        return EOF;
-
-    return cr;
-}
 
 w_err_t _wind_std_init(void)
 {
-	//w_int32_t cnt = 0;
 	w_uint8_t buff;
-    //system("title wind-os");
-	//system("cls");//清理屏幕，准备写入
-	//system("mode con cols=100 lines=50");//设置窗口大小
-	//system("color 00");//设置颜色
-	//set_scr_buffer();
-    //display_cursor();
-	//printf("_wind_std_init\n");
+	struct termios term;
+	printf("_wind_std_init\n");
+	if ( tcgetattr(STDIN_FILENO, &term) == -1 )
+	{
+		printf("tcgetattr error\n");
+		return;
+	}
+
+	term.c_cc[VERASE] = '\b';  /* ??'\b' ????? ASCII ?*/
+
+	if ( tcsetattr(STDIN_FILENO, TCSANOW, &term) == -1 )
+	{
+		printf("tcsetattr error\n");
+	}
 	while(wind_std_input(&buff,1));
 	return W_ERR_OK;
 }
@@ -111,9 +98,10 @@ w_int32_t wind_std_input(w_uint8_t *buff,w_int32_t len)
     for(i = 0;i < len;i ++)
     {
         c = kbhit();
-        if(c)
+		if(c)
         {
             buff[i] = getchar();
+            //printf("kbhit:%d\n",buff[i]);
         }
         else
 		{

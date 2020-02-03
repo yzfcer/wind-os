@@ -36,6 +36,7 @@ extern "C" {
 #define HOST_OS_TYPE HOST_OS_LINUX
 #define USE_SYS_VSPRINTF
 
+
 //-------------------------------------------------------------------------------
 //boot相关参数定制
 //-------------------------------------------------------------------------------
@@ -197,6 +198,7 @@ extern "C" {
 //调试命令定制，前提是内核支持控制台功能
 //-------------------------------------------------------------------------------
 #if WIND_MODULE_SHELL_SUPPORT
+#define SHELL_NO_ECHO_BACK 
 #define CMD_BLKDEV_SUPPORT 1 //是否支持块设备操作命令
 #define CMD_CHDEV_SUPPORT 1 //是否支持字符设备操作命令
 #define CMD_DATETIME_SUPPORT 0 //是否支持日期时间命令
