@@ -29,6 +29,9 @@
 #include "wind_debug.h"
 #include <Windows.h>                //需要包含该头文件
 
+void wind_init_hook(void)
+{
+}
 
 /*
  * 设备进入多线程模式后函数的初始化处理的钩子函数，为了保证tick
@@ -81,7 +84,7 @@ void _wind_fs_mount_init(void)
     wind_vfs_mount("fs0","listfs","disk0","/");
     wind_vfs_mount("fs1","treefs","null0","/var");
     wind_vfs_mount("fs2","treefs","null1","/mnt/");
-    wind_vfs_mount("fs3","hostfs","D:/hostfs/","/host");
+    wind_vfs_mount("fs3","hostfs","C:/hostfs/","/host");
 }
 #endif
 
