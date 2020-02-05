@@ -45,14 +45,14 @@
 typedef struct __lfile_blkinfo_s
 {
     w_uint32_t magic;        //块标记魔术字
-    w_addr_t   self_addr;    //当前地址
-    w_addr_t   prevblk_addr; //上块地址
-    w_addr_t   nextblk_addr; //下块地址
+    w_uint32_t self_addr;    //当前地址
+    w_uint32_t prevblk_addr; //上块地址
+    w_uint32_t nextblk_addr; //下块地址
     w_int32_t  blksize;      //块大小
     w_int32_t  offset;       //当前块对应的文件的起始偏移量
     w_int32_t  blkused;      //当前块已经使用的数量
     w_int32_t  byteused;     //当前块已经使用的字节数量
-    w_addr_t   dataaddr[LFILE_LBLK_CNT];  //数据块信息
+    w_uint32_t dataaddr[LFILE_LBLK_CNT];  //数据块信息
 }lfile_blkinfo_s;
 
 void blkinfo_be2le(lfile_blkinfo_s *info);
@@ -61,13 +61,13 @@ w_int32_t blkinfo_get_used(lfile_blkinfo_s *info);
 
 w_int32_t blkinfo_get_space(lfile_blkinfo_s *info);
 
-w_err_t blkinfo_init(lfile_blkinfo_s *info,w_addr_t self_addr,w_addr_t prev_addr,w_int32_t offset,w_int32_t blksize);
+w_err_t blkinfo_init(lfile_blkinfo_s *info,w_uint32_t self_addr,w_uint32_t prev_addr,w_int32_t offset,w_int32_t blksize);
 
-w_err_t blkinfo_read(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_addr_t addr);
+w_err_t blkinfo_read(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_uint32_t addr);
 
 w_err_t blkinfo_write(lfile_blkinfo_s *info,w_blkdev_s *blkdev);
 
-w_err_t blkinfo_link(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_addr_t *addr,w_int32_t count);
+w_err_t blkinfo_link(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_uint32_t *addr,w_int32_t count);
 
 w_err_t blkinfo_unlink(lfile_blkinfo_s *info,w_blkdev_s *blkdev);
 
@@ -85,11 +85,11 @@ w_err_t blkinfo_alloc(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_int32_t count);
 
 w_err_t blkinfo_free(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_int32_t count);
 
-w_err_t blkinfo_add_dataaddr(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_addr_t *addr,w_int32_t count);
+w_err_t blkinfo_add_dataaddr(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_uint32_t *addr,w_int32_t count);
 
 w_err_t blkinfo_del_dataaddr(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_int32_t addridx,w_int32_t count);
 
-w_addr_t blkinfo_get_addr(lfile_blkinfo_s *info,w_int32_t offset);
+w_uint32_t blkinfo_get_addr(lfile_blkinfo_s *info,w_int32_t offset);
 
 
 #endif

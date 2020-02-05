@@ -51,7 +51,7 @@
 
 typedef struct __lcache_item_s
 {
-    w_addr_t  addr;
+    w_uint32_t  addr;
     w_int16_t blksize;
     w_int16_t flag;
     w_dnode_s itemnode;
@@ -74,9 +74,9 @@ typedef struct __lfs_cache_s
 
 w_err_t lfs_cache_init(lfs_cache_s *cache,w_uint32_t itemcount,w_uint32_t blksize);
 
-w_err_t lfs_cache_read(lfs_cache_s *cache,w_blkdev_s *blkdev,w_addr_t addr,w_uint8_t *blk);
+w_err_t lfs_cache_read(lfs_cache_s *cache,w_blkdev_s *blkdev,w_uint32_t addr,w_uint8_t *blk);
 
-w_err_t lfs_cache_write(lfs_cache_s *cache,w_blkdev_s *blkdev,w_addr_t addr,w_uint8_t *blk);
+w_err_t lfs_cache_write(lfs_cache_s *cache,w_blkdev_s *blkdev,w_uint32_t addr,w_uint8_t *blk);
 
 w_err_t lfs_cache_flush(lfs_cache_s *cache,w_blkdev_s *blkdev);
 

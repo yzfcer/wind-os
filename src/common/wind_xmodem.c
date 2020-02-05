@@ -3,7 +3,7 @@
 #include "wind_debug.h"  
 #include "wind_crc16.h"  
 #include "wind_log.h"  
-
+#if WIND_XMODEM_SUPPORT
 #define SOH  0x01
 #define STX  0x02
 #define EOT  0x04
@@ -505,5 +505,5 @@ w_err_t xmodem_end(xm_ctx_s *ctx)
     return W_ERR_OK;
 }
 
-
+#endif //#if WIND_XMODEM_SUPPORT
 

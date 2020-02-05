@@ -37,28 +37,28 @@
 typedef struct
 {
     w_uint32_t magic;
-    w_addr_t addr1;         //主位图块起始地址
-    w_addr_t addr2;         //备份位图块起始地址
+    w_uint32_t addr1;         //主位图块起始地址
+    w_uint32_t addr2;         //备份位图块起始地址
     w_int32_t bmblk_cnt;    //位图块数量
-    w_addr_t data_addr;      //数据块起始位置
+    w_uint32_t data_addr;      //数据块起始位置
     w_int32_t cur_blkidx;   //空闲位图块位置
     w_int32_t cur_byteidx;  //空闲位图字节位置
     w_blkdev_s *blkdev;      
     w_uint8_t *blk;          //数据块
 }lfs_bitmap_s;
 
-w_err_t listfs_bitmap_init(lfs_bitmap_s *bm,w_addr_t start_addr,w_int32_t count,w_blkdev_s *blkdev);
+w_err_t listfs_bitmap_init(lfs_bitmap_s *bm,w_uint32_t start_addr,w_int32_t count,w_blkdev_s *blkdev);
 
 w_err_t listfs_bitmap_deinit(lfs_bitmap_s *bm);
 
 
 //w_err_t bm_update_freeidx(lfs_bitmap_s *bm);
 
-//w_err_t listfs_bitmap_set(lfs_bitmap_s *bm,w_addr_t addr,w_uint8_t bitflag);
+//w_err_t listfs_bitmap_set(lfs_bitmap_s *bm,w_uint32_t addr,w_uint8_t bitflag);
 
-w_err_t listfs_bitmap_alloc_blk(lfs_bitmap_s *bm,w_addr_t *addr,w_int32_t addr_cnt);
+w_err_t listfs_bitmap_alloc_blk(lfs_bitmap_s *bm,w_uint32_t *addr,w_int32_t addr_cnt);
 
-w_err_t listfs_bitmap_free_blk(lfs_bitmap_s *bm,w_addr_t *addr,w_int32_t addr_cnt);
+w_err_t listfs_bitmap_free_blk(lfs_bitmap_s *bm,w_uint32_t *addr,w_int32_t addr_cnt);
 
 w_err_t listfs_bitmap_clear(lfs_bitmap_s *bm);
 

@@ -70,7 +70,7 @@ w_int32_t blkinfo_get_space(lfile_blkinfo_s *info)
     return count;
 }
 
-w_err_t blkinfo_init(lfile_blkinfo_s *info,w_addr_t self_addr,w_addr_t prev_addr,w_int32_t offset,w_int32_t blksize)
+w_err_t blkinfo_init(lfile_blkinfo_s *info,w_uint32_t self_addr,w_uint32_t prev_addr,w_int32_t offset,w_int32_t blksize)
 {
     WIND_ASSERT_RETURN(info != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(self_addr != 0,W_ERR_INVALID);
@@ -82,7 +82,7 @@ w_err_t blkinfo_init(lfile_blkinfo_s *info,w_addr_t self_addr,w_addr_t prev_addr
     return W_ERR_OK;
 }
 
-w_err_t blkinfo_read(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_addr_t addr)
+w_err_t blkinfo_read(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_uint32_t addr)
 {
     w_err_t err;
     w_int32_t cnt;
@@ -252,7 +252,7 @@ w_err_t blkinfo_update_prev(lfile_blkinfo_s *info,w_blkdev_s *blkdev)
     return err;
 }
 
-w_err_t blkinfo_link(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_addr_t *addr,w_int32_t count)
+w_err_t blkinfo_link(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_uint32_t *addr,w_int32_t count)
 {
     w_err_t err;
     w_int32_t i;
@@ -317,7 +317,7 @@ w_err_t blkinfo_unlink(lfile_blkinfo_s *info,w_blkdev_s *blkdev)
     return err;
 }
 
-w_err_t blkinfo_add_dataaddr(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_addr_t *addr,w_int32_t count)
+w_err_t blkinfo_add_dataaddr(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_uint32_t *addr,w_int32_t count)
 {
     w_err_t err;
     w_int32_t i;
@@ -366,7 +366,7 @@ w_err_t blkinfo_del_dataaddr(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_int32_t 
     return W_ERR_FAIL;
 }
 
-w_addr_t blkinfo_get_addr(lfile_blkinfo_s *info,w_int32_t offset)
+w_uint32_t blkinfo_get_addr(lfile_blkinfo_s *info,w_int32_t offset)
 {
     w_int32_t index;
     WIND_ASSERT_RETURN(info != W_NULL,0);

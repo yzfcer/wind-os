@@ -62,7 +62,7 @@ static w_err_t check_fileinfo(lfile_info_s *info)
 }
 
 w_err_t fileinfo_init(lfile_info_s *info,char *name,
-    w_addr_t self_addr,w_addr_t parent_addr,w_addr_t prev_addr,w_uint8_t attr)
+    w_uint32_t self_addr,w_uint32_t parent_addr,w_uint32_t prev_addr,w_uint8_t attr)
 {
     w_int32_t namelen;
     WIND_ASSERT_RETURN(info != W_NULL,W_ERR_PTR_NULL);
@@ -81,7 +81,7 @@ w_err_t fileinfo_init(lfile_info_s *info,char *name,
 }
 
 
-w_err_t fileinfo_read(lfile_info_s *info,w_blkdev_s *blkdev,w_addr_t addr)
+w_err_t fileinfo_read(lfile_info_s *info,w_blkdev_s *blkdev,w_uint32_t addr)
 {
     w_err_t err;
     w_int32_t cnt;
@@ -192,7 +192,7 @@ w_err_t fileinfo_add_update_parent(lfile_info_s *info,w_blkdev_s *blkdev)
 {
     w_err_t err;
 
-    w_addr_t self_addr;
+    w_uint32_t self_addr;
     lfile_info_s *tmpinfo = W_NULL;
     
     WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
@@ -225,7 +225,7 @@ w_err_t fileinfo_add_update_prev(lfile_info_s *info,w_blkdev_s *blkdev)
 {
     w_err_t err;
 
-    w_addr_t self_addr;
+    w_uint32_t self_addr;
     lfile_info_s *tmpinfo = W_NULL;
     
     WIND_ASSERT_RETURN(info != W_NULL,W_ERR_PTR_NULL);
@@ -255,7 +255,7 @@ w_err_t fileinfo_rm_update_parent(lfile_info_s *info,w_blkdev_s *blkdev)
 {
     w_err_t err;
 
-    w_addr_t self_addr;
+    w_uint32_t self_addr;
     lfile_info_s *tmpinfo = W_NULL;
     
     WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
@@ -290,7 +290,7 @@ w_err_t fileinfo_rm_update_prev(lfile_info_s *info,w_blkdev_s *blkdev)
 {
     w_err_t err;
 
-    w_addr_t self_addr;
+    w_uint32_t self_addr;
     lfile_info_s *tmpinfo = W_NULL;
     
     WIND_ASSERT_RETURN(info != W_NULL,W_ERR_PTR_NULL);
@@ -321,7 +321,7 @@ w_err_t fileinfo_rm_update_next(lfile_info_s *info,w_blkdev_s *blkdev)
 {
     w_err_t err;
 
-    w_addr_t self_addr;
+    w_uint32_t self_addr;
     lfile_info_s *tmpinfo = W_NULL;
     
     WIND_ASSERT_RETURN(info != W_NULL,W_ERR_PTR_NULL);

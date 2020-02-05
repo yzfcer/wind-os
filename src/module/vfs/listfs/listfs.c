@@ -35,6 +35,8 @@
 #define NODE_TO_LISTFILE(node) (w_listfile_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((w_listfile_s*)0)->list.listnode)))
 w_err_t _wind_listfs_mod_init(void)
 {
+    wind_debug("sizeof(lfile_info_s)=%d\r\n",sizeof(lfile_info_s));
+    wind_debug("sizeof(lfile_blkinfo_s)=%d\r\n",sizeof(lfile_blkinfo_s));
     return W_ERR_OK;
 }
 
@@ -197,7 +199,7 @@ static w_err_t lfs_make_root(w_listfs_s *lfs)
 {
     w_err_t err;
     w_uint8_t attr;
-    w_addr_t addr;
+    w_uint32_t addr;
     lfile_info_s *finfo = W_NULL;
     w_uint8_t *blk = W_NULL;
     lfile_blkinfo_s *blkinfo = W_NULL;
@@ -241,7 +243,7 @@ static w_err_t lfs_make_child(w_listfs_s *lfs,lfile_info_s *pinfo,char *name,w_u
     w_err_t err;
     w_uint8_t attr;
     w_uint8_t *blk = (w_uint8_t *)W_NULL;
-    w_addr_t self_addr,cnt;
+    w_uint32_t self_addr,cnt;
     lfile_info_s *info;
     lfile_blkinfo_s *blkinfo;
     WIND_ASSERT_RETURN(lfs != W_NULL,W_ERR_PTR_NULL);
@@ -476,7 +478,7 @@ w_uint16_t calc_unit_size(w_int32_t blkcnt,w_int32_t blksize)
     return (w_uint16_t)blksize;
 }
 
-static w_err_t lfs_get_fsinfo_by_blk(lfs_info_s *fsinfo,w_blkdev_s *blkdev,w_addr_t addr)
+static w_err_t lfs_get_fsinfo_by_blk(lfs_info_s *fsinfo,w_blkdev_s *blkdev,w_uint32_t addr)
 {
     w_err_t err;
     w_int32_t cnt;
@@ -914,7 +916,7 @@ w_int32_t listfile_ftell(w_listfile_s* file)
 static w_int32_t do_read_file(w_listfile_s* file,w_uint8_t *buff,w_int32_t size)
 {
     w_err_t err;
-    w_addr_t addr; 
+    w_uint32_t addr; 
     w_int32_t len,blkidx,buffidx,cpsize;
     w_uint8_t *blk = W_NULL;
     if(!BLKINFO_HAS_OFFSET(file->blkinfo, file->offset, file->lfs->lfs_info.blksize))
@@ -958,7 +960,7 @@ static w_int32_t do_read_file(w_listfile_s* file,w_uint8_t *buff,w_int32_t size)
 static w_int32_t do_write_file(w_listfile_s* file,w_uint8_t *buff,w_int32_t size)
 {
     w_err_t err;
-    w_addr_t addr; 
+    w_uint32_t addr; 
     w_int32_t len,blkidx,buffidx,cpsize;
     w_uint8_t *blk = W_NULL;
     blkinfo_read(file->blkinfo,file->lfs->blkdev,file->blkinfo->self_addr);
@@ -1075,7 +1077,7 @@ w_int32_t listfile_write(w_listfile_s* file,w_uint8_t *buff,w_int32_t size)
 {
     w_err_t err;
     w_int32_t wsize,needdatablk,needblkinfo;
-    w_addr_t *addrlist = W_NULL;
+    w_uint32_t *addrlist = W_NULL;
     WIND_ASSERT_RETURN(file != W_NULL,-1);
     WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,-1);
     WIND_ASSERT_RETURN((file->mode & LFMODE_W)||(file->mode & LFMODE_A),-1);
@@ -1088,7 +1090,7 @@ w_int32_t listfile_write(w_listfile_s* file,w_uint8_t *buff,w_int32_t size)
         needblkinfo = calc_needed_blkinfo(file,needdatablk);
         if(needdatablk + needblkinfo > 0)
         {
-            addrlist = (w_addr_t *)listfs_mem_malloc((needdatablk+needblkinfo)*sizeof(w_addr_t *));
+            addrlist = (w_uint32_t *)listfs_mem_malloc((needdatablk+needblkinfo)*sizeof(w_uint32_t *));
             WIND_ASSERT_BREAK(addrlist != W_NULL,W_ERR_MEM,"alloc addrlist failed");
             err = listfs_bitmap_alloc_blk(&file->lfs->bitmap,addrlist,needdatablk+needblkinfo);
             WIND_ASSERT_BREAK(err == W_ERR_OK,W_ERR_FAIL,"alloc blks failed");

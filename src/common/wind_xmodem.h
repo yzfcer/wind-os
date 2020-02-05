@@ -2,6 +2,7 @@
 #define WIND_XMODEM_H__
 #include "wind_config.h"
 #include "wind_type.h"  
+#if WIND_XMODEM_SUPPORT
 #define XMODEM_BUFF_LEN 1030
 #define XMODEM_MIN_LEN 128
 typedef enum 
@@ -69,5 +70,6 @@ w_int32_t xmodem_send(xm_ctx_s *ctx,w_uint8_t *data, w_int32_t size);
 
 w_err_t xmodem_end(xm_ctx_s *ctx);
 
-#endif
+#endif //#if WIND_XMODEM_SUPPORT
+#endif //#ifndef WIND_XMODEM_H__
 

@@ -160,6 +160,7 @@ extern "C" {
 
 #define HARD_STACK_SIZE 40 //为硬件堆栈保留的空间大小，在某些硬件里可以不需要
 
+#define WIND_XMODEM_SUPPORT 1
 
 //-------------------------------------------------------------------------------
 //线程栈空间大小定制
@@ -209,7 +210,7 @@ extern "C" {
 #define CMD_RESET_SUPPORT 1 //是否支持系统复位命令
 #define CMD_STATI_SUPPORT 1 //是否支持统计命令
 #define CMD_THREAD_SUPPORT 1 //是否支持线程操作命令
-#define CMD_XMODEM_SUPPORT 0 //是否支持xmodem协议命令
+#define CMD_XMODEM_SUPPORT 1 //是否支持xmodem协议命令
 #define CMD_SYSINFO_SUPPORT 1 //是否支持系统信息命令
 #define CMD_CUTEST_SUPPORT 1 //是否支持单元测试命令
 #define CMD_DBGPOINT_SUPPORT 1 //是否支持系统调试点功能命令
