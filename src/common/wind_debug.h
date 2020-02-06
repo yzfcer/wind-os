@@ -167,7 +167,7 @@ void wind_print_space(w_int32_t space8_cnt);
 #define WIND_ASSERT_TODO_RETURN(cond,todo,res) do{if(!(cond)) {wind_error("ASSERT(%s)",#cond);todo;return res;}}while(0)
 #define WIND_ASSERT_TODO(cond,todo) do{if(!(cond)) {wind_error("ASSERT(%s)",#cond);todo;}}while(0)
 #define WIND_ASSERT_RETURN_VOID(cond) do{if(!(cond)) {wind_error("ASSERT(%s)",#cond);return;}}while(0)
-#define WIND_ASSERT_BREAK(cond,res,msg,...) {if(!(cond)) {wind_error("ASSERT(%s)"#msg,#cond,##__VA_ARGS__);err = res;break;}}
+#define WIND_ASSERT_BREAK(cond,res,msg,...) {if(!(cond)) {wind_error("ASSERT(%s):"#msg,#cond,##__VA_ARGS__);err = res;break;}}
 #define WIND_TRAP() {wind_error("proc trapped here now!");while(1);}
 	
 #define WIND_CHECK_BREAK(cond,res) {if(!(cond)) {wind_debug("EXPECT(%s)",#cond);err = res;break;}}

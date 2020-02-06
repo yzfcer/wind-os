@@ -340,7 +340,6 @@ static void _wind_init()
 
 
 //****************************wind_entry***********************************************
-//void signal_test();
 int wind_os_launch(void)
 {
     _wind_corevar_init();
@@ -348,8 +347,7 @@ int wind_os_launch(void)
     _wind_init();
     _create_thread_init();
     wind_enable_interrupt();
-	wind_printf("wind_run\n");
-	//signal_test();
+	wind_debug("wind_run\n");
     wind_run();
     return W_ERR_OK;
 }

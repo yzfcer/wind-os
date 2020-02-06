@@ -41,7 +41,7 @@ static w_int32_t bm_get_free_byteidx(w_uint8_t *blk,w_int32_t offset,w_int32_t b
     return -1;
 }
 
-static w_int32_t bm_alloc_blk(lfs_bitmap_s *bm,w_addr_t *addr,w_int32_t cnt)
+static w_int32_t bm_alloc_blk(lfs_bitmap_s *bm,w_uint32_t *addr,w_int32_t cnt)
 {
     w_uint32_t i;
     w_int32_t alloc_cnt = 0;
@@ -62,7 +62,7 @@ static w_int32_t bm_alloc_blk(lfs_bitmap_s *bm,w_addr_t *addr,w_int32_t cnt)
     return alloc_cnt;
 }
 
-static w_int32_t bm_free_blk(lfs_bitmap_s *bm,w_addr_t *addr,w_int32_t cnt)
+static w_int32_t bm_free_blk(lfs_bitmap_s *bm,w_uint32_t *addr,w_int32_t cnt)
 {
     w_int32_t i,free_cnt = 0;
     w_int32_t byteidx;
@@ -157,7 +157,7 @@ static w_err_t bm_update_freeidx(lfs_bitmap_s *bm)
 
 
 
-w_err_t listfs_bitmap_init(lfs_bitmap_s *bm,w_addr_t start_addr,w_int32_t blk_cnt,w_blkdev_s *blkdev)
+w_err_t listfs_bitmap_init(lfs_bitmap_s *bm,w_uint32_t start_addr,w_int32_t blk_cnt,w_blkdev_s *blkdev)
 {
     w_err_t err;
     WIND_ASSERT_RETURN(bm != W_NULL,W_ERR_PTR_NULL);
@@ -212,7 +212,7 @@ w_err_t listfs_bitmap_deinit(lfs_bitmap_s *bm)
 
 
 
-w_err_t listfs_bitmap_alloc_blk(lfs_bitmap_s *bm,w_addr_t *addr,w_int32_t addr_cnt)
+w_err_t listfs_bitmap_alloc_blk(lfs_bitmap_s *bm,w_uint32_t *addr,w_int32_t addr_cnt)
 {
     w_int32_t i,cnt,alloc_cnt;
     w_err_t err;
@@ -224,7 +224,7 @@ w_err_t listfs_bitmap_alloc_blk(lfs_bitmap_s *bm,w_addr_t *addr,w_int32_t addr_c
     WIND_ASSERT_RETURN(bm->blkdev != W_NULL,W_ERR_PTR_NULL);
     if((bm->cur_blkidx == 0) && (bm->cur_byteidx == 0))
         bm_update_freeidx(bm);
-    wind_memset(addr,0,sizeof(w_addr_t)*addr_cnt);
+    wind_memset(addr,0,sizeof(w_uint32_t)*addr_cnt);
     alloc_cnt = 0;
     err = W_ERR_OK;
     //此处应该优化，可以记录当前已经分配的数据块，这样就可以提前分析是否有足够的数据块供分配
@@ -254,7 +254,7 @@ w_err_t listfs_bitmap_alloc_blk(lfs_bitmap_s *bm,w_addr_t *addr,w_int32_t addr_c
     return W_ERR_OK;
 }
 
-w_err_t listfs_bitmap_free_blk(lfs_bitmap_s *bm,w_addr_t *addr,w_int32_t addr_cnt)
+w_err_t listfs_bitmap_free_blk(lfs_bitmap_s *bm,w_uint32_t *addr,w_int32_t addr_cnt)
 {
     w_int32_t i,cnt,free_cnt;
     w_err_t err;

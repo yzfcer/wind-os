@@ -150,8 +150,8 @@ void wind_start_switch(void)
 	w_int32_t ctx_size;
     gwind_start_flag = W_TRUE;
     IDLE_CNT_PER_SEC = 1000000;
-	wind_printf("sizeof(sigset_t)=%d\n",sizeof(sigset_t));
-	wind_printf("sizeof(w_sreg_t)=%d\n",sizeof(w_sreg_t));
+	wind_debug("sizeof(sigset_t)=%d\n",sizeof(sigset_t));
+	wind_debug("sizeof(w_sreg_t)=%d\n",sizeof(w_sreg_t));
 	getcontext(&mainctx);
 
 	if(init_flag == 0)

@@ -41,9 +41,10 @@ extern "C" {
 #define WIND_HEAP_MAGIC        0x0a5e8749
 #define WIND_HEAPITEM_MAGIC    0xA1ea
 
-#define __ALIGN_R(size) (((size + 7) >> 3) << 3)
-#define __ALIGN_L(size) (((size) >> 3) << 3)
-#define WIND_HEAP_SIZE         __ALIGN_R(sizeof(w_heapitem_s), WIND_HEAP_ALIGN_SIZE)
+#define HEAP_ALIGN_R(size) ((((size) + 7) >> 3) << 3)
+#define HEAP_ALIGN_L(size) (((size) >> 3) << 3)
+#define WIND_HEAP_HEAD_SIZE  HEAP_ALIGN_R(sizeof(w_heap_s))
+#define WIND_HEAP_ITEM_SIZE  HEAP_ALIGN_R(sizeof(w_heapitem_s))
 
 
 
@@ -77,21 +78,21 @@ struct __w_heapitem_s
     w_uint16_t magic;
     w_uint8_t  flag;
     w_uint8_t  allocid;
+    w_uint32_t size;
     w_heap_s *heap;
     w_prinode_s itemnode;
-    w_uint32_t size;
 };
 
 
 struct __w_heap_s
 {
-    w_obj_s obj;
-    void *addr;
+    w_obj_s   obj;
+    w_addr_t  addr;
     w_stati_s stati;
     w_dlist_s used_list;
     w_dlist_s free_list;
     void *mutex; 
-    w_uint32_t pad; 
+    //w_uint32_t pad; 
 };
 
 

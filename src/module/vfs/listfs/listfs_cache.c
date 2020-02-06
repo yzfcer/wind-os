@@ -46,7 +46,7 @@ w_err_t lfs_cache_init(lfs_cache_s *cache,w_uint32_t itemcount,w_uint32_t blksiz
     return W_ERR_OK;
 }
 
-static lcache_item_s *hit_cacheitem(lfs_cache_s *cache,w_addr_t addr)
+static lcache_item_s *hit_cacheitem(lfs_cache_s *cache,w_uint32_t addr)
 {
     w_dnode_s *dnode;
     lcache_item_s *cacheitem;
@@ -84,7 +84,7 @@ static lcache_item_s *alloc_cacheitem(lfs_cache_s *cache,w_int32_t blksize)
     return cacheitem;
 }
 
-static w_err_t cacheitem_init(lcache_item_s *cacheitem,w_addr_t addr,w_int32_t blksize)
+static w_err_t cacheitem_init(lcache_item_s *cacheitem,w_uint32_t addr,w_int32_t blksize)
 {
     cacheitem->addr = addr;
     cacheitem->blksize = (w_int16_t)blksize;
@@ -93,7 +93,7 @@ static w_err_t cacheitem_init(lcache_item_s *cacheitem,w_addr_t addr,w_int32_t b
     return W_ERR_OK;
 }
 
-w_err_t lfs_cache_read(lfs_cache_s *cache,w_blkdev_s *blkdev,w_addr_t addr,w_uint8_t *blk)
+w_err_t lfs_cache_read(lfs_cache_s *cache,w_blkdev_s *blkdev,w_uint32_t addr,w_uint8_t *blk)
 {
     lcache_item_s *cacheitem;
     WIND_ASSERT_RETURN(cache != W_NULL,W_ERR_PTR_NULL);
@@ -124,7 +124,7 @@ w_err_t lfs_cache_read(lfs_cache_s *cache,w_blkdev_s *blkdev,w_addr_t addr,w_uin
     return W_ERR_OK;
 }
 
-w_err_t lfs_cache_write(lfs_cache_s *cache,w_blkdev_s *blkdev,w_addr_t addr,w_uint8_t *blk)
+w_err_t lfs_cache_write(lfs_cache_s *cache,w_blkdev_s *blkdev,w_uint32_t addr,w_uint8_t *blk)
 {
     lcache_item_s *cacheitem;
     WIND_ASSERT_RETURN(cache != W_NULL,W_ERR_PTR_NULL);

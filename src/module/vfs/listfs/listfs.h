@@ -88,9 +88,9 @@ typedef struct __lfs_info_s
     w_uint16_t reserve_blk;  //保留块数
     w_uint16_t attr;         //文件系统属性
     w_uint32_t bitmap_cnt;   //位图块数
-    w_addr_t   bitmap1_addr; //主位图地址
-    w_addr_t   bitmap2_addr; //备份位图地址
-    w_addr_t   root_addr;    //根目录位置
+    w_uint32_t   bitmap1_addr; //主位图地址
+    w_uint32_t   bitmap2_addr; //备份位图地址
+    w_uint32_t   root_addr;    //根目录位置
 }lfs_info_s;
 
 //程序关联的文件系统信息
