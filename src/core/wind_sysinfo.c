@@ -52,7 +52,8 @@ void _wind_os_print_logo(void)
         "   \\/    \\/   "   
     };
     wind_printf("\r\n");
-    wind_printf("system start\r\n");
+    wind_printf("system start ...\r\n");
+    wind_printf("*** Only simple can be the perfect ***\r\n");
 		
     for(i = 0;i < 4;i++)
     {

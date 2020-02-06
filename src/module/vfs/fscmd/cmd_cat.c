@@ -40,7 +40,7 @@ extern "C" {
 static w_err_t cmd_cat(w_int32_t argc,char **argv)
 {
     w_err_t err;
-    w_file_s *file;
+    w_file_s *file = (w_file_s *)W_NULL;
     char * fullpath = W_NULL;
     w_uint8_t *buff = W_NULL;
     w_int32_t len;

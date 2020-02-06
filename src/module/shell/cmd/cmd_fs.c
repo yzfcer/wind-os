@@ -73,7 +73,7 @@ static w_err_t mk_dir_file(w_int32_t argc,char **argv,w_uint16_t isdir)
 {
     w_err_t err;
     w_bool_t isexist;
-    w_file_s *file;
+    w_file_s *file = (w_file_s *)W_NULL;
     char * fullpath = W_NULL;
     char *curpath;
     if(argc < 3)
@@ -126,11 +126,11 @@ static w_err_t fs_cmd_rm(w_int32_t argc,char **argv)
 static w_err_t fs_cmd_ls(w_int32_t argc,char **argv)
 {
     w_int32_t i;
-    w_file_s *file;
+    w_file_s *file = (w_file_s *)W_NULL;
     w_err_t err;
     char *fullpath = W_NULL;
     char *path1;
-    w_file_s *sub = W_NULL;
+    w_file_s *sub = (w_file_s *)W_NULL;
     char *curpath = wind_filepath_get_current();
     do 
     {
@@ -169,7 +169,7 @@ static w_err_t fs_cmd_ls(w_int32_t argc,char **argv)
 
 static w_err_t fs_cmd_cat(w_int32_t argc,char **argv)
 {
-    w_file_s *file;
+    w_file_s *file = (w_file_s *)W_NULL;
     char * fullpath;
     w_uint8_t *buff;
     w_int32_t len;
@@ -209,7 +209,7 @@ static w_err_t fs_cmd_cat(w_int32_t argc,char **argv)
     
 static w_err_t fs_cmd_write(w_int32_t argc,char **argv)
 {
-    w_file_s *file;
+    w_file_s *file = (w_file_s *)W_NULL;
     char * fullpath;
     w_int32_t len,filelen;
     char *curpath = wind_filepath_get_current();

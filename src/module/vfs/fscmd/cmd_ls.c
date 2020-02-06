@@ -64,12 +64,12 @@ static void print_filename(w_file_s *file)
 static w_err_t cmd_ls(w_int32_t argc,char **argv)
 {
     w_int32_t i;
-    w_file_s *file;
     w_err_t err;
+    w_file_s *file = (w_file_s *)W_NULL;
     char *path1;
-    char *fullpath = W_NULL;
-    w_file_s *sub = W_NULL;
-    char *curpath;
+    char *fullpath = (char*)W_NULL;
+    w_file_s *sub = (w_file_s *)W_NULL;
+    char *curpath = (char*)W_NULL;
     do 
     {
         err = W_ERR_OK;

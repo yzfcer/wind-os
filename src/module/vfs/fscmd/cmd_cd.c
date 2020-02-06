@@ -41,7 +41,7 @@ static w_err_t cmd_cd(w_int32_t argc,char **argv)
     w_err_t err;
     char *fullpath = W_NULL;
     char *curpath;
-    w_file_s *file;
+    w_file_s *file = W_NULL;
 
     do
     {

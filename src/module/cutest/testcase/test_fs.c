@@ -33,7 +33,7 @@ CASE_TEARDOWN(create) FUNC_EMPTY
 CASE_FUNC(create)
 {
     w_err_t err;
-    w_file_s *file;
+    w_file_s *file = (w_file_s *)W_NULL;
     file = wind_fopen("/test.txt",FMODE_CRT);
     EXPECT_NE(file,W_NULL);
     EXPECT_STR_EQ(file->fullpath,"/test.txt");
@@ -109,7 +109,7 @@ CASE_TEARDOWN(exist) FUNC_EMPTY
 CASE_FUNC(exist)
 {
     w_bool_t exist;
-    w_file_s *file;
+    w_file_s *file = (w_file_s *)W_NULL;
     w_err_t err;
     file = wind_fopen("/exist.txt",FMODE_CRT);
     EXPECT_NE(file,W_NULL);
@@ -134,7 +134,7 @@ CASE_FUNC(readwrite)
 {
     w_int32_t len;
     w_err_t err;
-    w_file_s *file;
+    w_file_s *file = (w_file_s *)W_NULL;
     char *str = "this is a file test string.";
     file = wind_fopen("/test.txt",FMODE_CRT | FMODE_W);
     EXPECT_NE(file,W_NULL);
@@ -159,7 +159,7 @@ CASE_FUNC(readwrite)
 
 CASE_SETUP(readdir)
 {
-    w_file_s *file;
+    w_file_s *file = (w_file_s *)W_NULL;
     file = wind_fopen("/readdir_test/",FMODE_CRT);
     EXPECT_NE(file,W_NULL);
     wind_fclose(file);
@@ -190,8 +190,8 @@ CASE_TEARDOWN(readdir)
 CASE_FUNC(readdir)
 {
     w_err_t err;
-    w_file_s *file;
-    w_file_s *sub;
+    w_file_s *file = (w_file_s *)W_NULL;
+    w_file_s *sub = (w_file_s *)W_NULL;
     file = wind_fopen("/readdir_test/",FMODE_R);
     EXPECT_NE(file,W_NULL);
     EXPECT_STR_EQ(file->fullpath,"/readdir_test/");

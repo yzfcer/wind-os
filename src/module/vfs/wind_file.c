@@ -41,7 +41,7 @@ WIND_POOL(filepool,WIND_FILE_MAX_NUM,sizeof(w_file_s));
 
 static w_file_s *file_malloc(void)
 {
-    w_file_s *file;
+    w_file_s *file = (w_file_s *)W_NULL;
     file = wind_pool_malloc(filepool);
     return file;
 }
@@ -107,7 +107,7 @@ w_bool_t wind_fexist(const char *path)
 
 w_file_s *wind_file_get_bypath(char *path)
 {
-    w_file_s *file;
+    w_file_s *file = (w_file_s *)W_NULL;
     w_vfs_s *fs;
     w_int32_t len;
     WIND_ASSERT_RETURN(path != W_NULL,W_NULL);
@@ -246,7 +246,7 @@ w_err_t wind_fremove(const char *path)
 {
     w_int32_t res;
     w_err_t err = W_ERR_FAIL;
-    w_file_s *file;
+    w_file_s *file = (w_file_s *)W_NULL;
     WIND_ASSERT_RETURN(path != W_NULL, W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(path[0] != 0, W_ERR_PTR_NULL);
     do
