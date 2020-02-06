@@ -41,7 +41,7 @@ static w_err_t hfs_init(void)
     }
 
     wind_memset(&g_hfs,0,sizeof(g_hfs));
-    err = hostfs_init(&g_hfs,"D:/hostfs");
+    err = hostfs_init(&g_hfs,"C:/hostfs");
     return err;
 }
 
