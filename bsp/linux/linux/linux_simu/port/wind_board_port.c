@@ -76,7 +76,7 @@ void wind_system_reset(void)
  * 申请一块空间创建一个嵌套的内存堆，用于某些特定的目的
  */ 
 #include "wind_heap.h"
-static w_uint8_t buff1[0x10000];
+static w_uint8_t buff1[0x100000];
 static w_uint8_t buff2[0x100000];
 void _wind_heaps_create(void)
 {

@@ -507,18 +507,21 @@ w_err_t wind_thread_print(void)
     return W_ERR_OK;
 }
 
-static void print_mem(w_uint32_t start,w_uint32_t len)
+static void print_mem(w_addr_t start,w_uint32_t len)
 {
     w_uint32_t i,va;
     start = ((start >> 2) << 2);
     len = ((len + 3) >> 2);
-    wind_printf("memory 0x%0x %d\r\n",start,len);
+    wind_printf("memory %p %d\r\n",start,len);
     for(i = 0;i < len;i ++)
     {
         if((i & 0x03) == 0)
-            wind_printf("0x%08x:  ",start+i*4);
-        va = *(w_uint32_t*)((void*)(start+i*4));
-        wind_printf("%08x ",va);
+            wind_printf("%p:  ",start+i*4);
+        va = *(w_addr_t*)((void*)(start+i*4));
+		if(sizeof(w_addr_t) == 8)
+		    wind_printf("%016x ",va);
+		else
+		    wind_printf("%08x ",va);
         if(((i+1) & 0x03) == 0)
             wind_printf("\r\n");
     }
@@ -538,9 +541,9 @@ w_err_t wind_thread_print_stack(w_thread_s *thread)
     len = (end - cur);
     used = (end - cur) / sizeof(w_stack_t*);
     
-    wind_printf("stack start :0x%08X\r\n",start);
-    wind_printf("stack end   :0x%08X\r\n",end);
-    wind_printf("stack cur   :0x%08X\r\n",cur);
+    wind_printf("stack start :%p\r\n",start);
+    wind_printf("stack end   :%p\r\n",end);
+    wind_printf("stack cur   :%p\r\n",cur);
     wind_printf("stack size  :%d\r\n",thread->stksize);
     wind_printf("stack used  :%d\r\n",used);
     if(len <= 4096)

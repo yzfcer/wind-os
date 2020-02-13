@@ -32,7 +32,7 @@
 
 #include "wind_debug.h"
 #include "wind_timer.h"
-
+#include "wind_thread.h"
 w_err_t test_tmr(w_timer_s *timer,void *arg)
 {
     static w_uint32_t cnt = 0;
@@ -43,6 +43,13 @@ w_err_t test_tmr(w_timer_s *timer,void *arg)
 w_err_t wind_main(void)
 {
     wind_notice("enter wind main.");
-    //wind_timer_create("testtmr",5000,test_tmr,W_NULL,F_TIMER_REPEAT|F_TIMER_RUN);
-    return 0;
+#if 0
+	wind_timer_create("testtmr",5000,test_tmr,W_NULL,F_TIMER_REPEAT|F_TIMER_RUN);
+	while(1)
+	{
+		wind_thread_sleep(1000);
+		wind_printf("wind_main run\r\n");
+	}
+#endif
+    return W_ERR_OK;
 }

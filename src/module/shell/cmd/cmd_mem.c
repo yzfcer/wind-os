@@ -27,9 +27,9 @@
 #include "wind_thread.h"
 #if (CMD_MEM_SUPPORT)
 
-static w_bool_t str2int(const char *str,w_uint32_t *value)
+static w_bool_t str2int64(const char *str,w_uint64_t *value)
 {
-    w_uint32_t temp = 0;
+    w_uint64_t temp = 0;
     //const char *ptr = str;  //ptr保存str字符串开头
     while(*str != 0)
     {
@@ -42,9 +42,9 @@ static w_bool_t str2int(const char *str,w_uint32_t *value)
     return W_TRUE;
 }
 
-static w_bool_t strh2int(const char *str,w_uint32_t *value)
+static w_bool_t strh2int64(const char *str,w_uint64_t *value)
 {
-    w_uint32_t temp = 0;
+    w_uint64_t temp = 0;
     //const char *ptr = str;  //ptr保存str字符串开头
     while(*str != 0)
     {
@@ -65,28 +65,51 @@ static w_bool_t strh2int(const char *str,w_uint32_t *value)
 
 static w_bool_t get_num(char *str,w_uint32_t *value)
 {
+    w_bool_t res;
+	w_uint64_t tmpva = 0;
     if((wind_memcmp(str,"0x",2) == 0) || 
        (wind_memcmp(str,"0X",2) == 0)) 
     {
-        return strh2int(&str[2],value);
+        res = strh2int64(&str[2],&tmpva);
     }
     else
-        return str2int(str,value);
-        
+        res = str2int64(str,&tmpva);
+    if(res)
+        *value = (w_uint32_t)tmpva;
+    return res;
 }
 
-static void print_mem(w_uint32_t start,w_uint32_t len)
+static w_bool_t get_addr(char *str,w_addr_t *value)
+{
+    w_bool_t res;
+	w_uint64_t tmpva = 0;
+    if((wind_memcmp(str,"0x",2) == 0) || 
+       (wind_memcmp(str,"0X",2) == 0)) 
+    {
+        return strh2int64(&str[2],&tmpva);
+    }
+    else
+        return str2int64(str,&tmpva);
+    if(res)
+        *value = (w_addr_t)tmpva;
+    return res;
+}
+
+static void print_mem(w_addr_t start,w_uint32_t len)
 {
     w_uint32_t i,va;
     start = ((start >> 2) << 2);
     len = ((len + 3) >> 2);
-    wind_printf("memory 0x%0x %d\r\n",start,len);
+    wind_printf("memory %p %d\r\n",start,len);
     for(i = 0;i < len;i ++)
     {
         if((i & 0x03) == 0)
-            wind_printf("0x%08x:  ",start+i*4);
-        va = *(w_uint32_t*)((void*)(start+i*4));
-        wind_printf("%08x ",va);
+            wind_printf("%p:  ",start+i*4);
+        va = *(w_addr_t*)((void*)(start+i*4));
+		if(sizeof(w_addr_t) == 8)
+		    wind_printf("%016x ",va);
+		else
+		    wind_printf("%08x ",va);
         if(((i+1) & 0x03) == 0)
             wind_printf("\r\n");
     }
@@ -95,9 +118,10 @@ static void print_mem(w_uint32_t start,w_uint32_t len)
 
 static w_err_t display_mem(w_int32_t argc,char **argv)
 {
-    w_uint32_t start,len;
+    w_uint32_t len;
+    w_addr_t start;
     WIND_ASSERT_RETURN(argc >= 3,W_ERR_INVALID);
-    if(!get_num(argv[1],&start))
+    if(!get_addr(argv[1],&start))
     {
         return W_ERR_FAIL;
     }

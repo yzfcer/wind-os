@@ -121,15 +121,21 @@ static void sig_ticks_timer(int signo)
 static void tick_timer_run(void)
 {
 #if 1
+	static int timer_flag = 0;
 	struct itimerval tv, otv;
-	signal(SIGALRM, sig_ticks_timer);
-	tv.it_value.tv_sec = 0;
-	tv.it_value.tv_usec = 1000000/WIND_TICK_PER_SEC;
-	tv.it_interval.tv_sec = 0;
-	tv.it_interval.tv_usec = 1000000/WIND_TICK_PER_SEC;
+	if(timer_flag == 0)
+	{
+		timer_flag = 1;
+		signal(SIGALRM, sig_ticks_timer);
+		tv.it_value.tv_sec = 0;
+		tv.it_value.tv_usec = 1000000/WIND_TICK_PER_SEC;
+		tv.it_interval.tv_sec = 0;
+		tv.it_interval.tv_usec = 1000000/WIND_TICK_PER_SEC;
+		wind_printf("tick interval is %d usec\n",tv.it_interval.tv_usec);
+		if (setitimer(ITIMER_REAL, &tv, &otv) != 0)
+			printf("setitimer err %d\n", errno);	
+	}
 
-	if (setitimer(ITIMER_REAL, &tv, &otv) != 0)
-		printf("setitimer err %d\n", errno);
 #endif
 	int cnt = 0;
 	while(1) 

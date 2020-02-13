@@ -39,8 +39,6 @@ w_err_t   make_virtual_disk(w_blkdev_s *dev,w_int32_t blkcnt)
     size = blkcnt * dev->blksize;
 
     errno = fopen_s(&file,FILE_NAME,"r");
-    //WIND_ASSERT_RETURN(errno == 0,W_ERR_FAIL);
-    //WIND_ASSERT_RETURN(file != W_NULL,W_ERR_FAIL);
     if(file != W_NULL)
     {
         fclose(file);
