@@ -81,6 +81,24 @@ static w_bool_t is_dev_match(w_vfs_s *vfs,char *blkdev_name)
     return W_FALSE;
 }
 
+static w_err_t check_dir_path_valid(char *path)
+{
+    w_err_t err;
+    w_file_s *file = W_NULL;
+    do
+    {
+        err = W_ERR_OK;
+        if((path[0] == '/') && (path[1] == 0))
+            break;
+        file = wind_fopen(path,FMODE_R);
+        WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
+        WIND_ASSERT_RETURN(file->isdir != 0,W_ERR_FAIL);        
+    }while(0);
+    if(file != W_NULL)
+        wind_fclose(file);
+    return  err;
+}
+
 static w_err_t mount_param_check(char *fsname,char *fstype,char *blkname,char *path)
 {
     w_vfs_s *vfs;
@@ -88,6 +106,7 @@ static w_err_t mount_param_check(char *fsname,char *fstype,char *blkname,char *p
     w_dnode_s *dnode;
     w_int32_t len;
     w_bool_t is_match;
+    w_err_t err;
     WIND_ASSERT_RETURN(fsname != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(fstype != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(blkname != W_NULL,W_ERR_PTR_NULL);
@@ -98,7 +117,8 @@ static w_err_t mount_param_check(char *fsname,char *fstype,char *blkname,char *p
     WIND_ASSERT_RETURN(vfs != W_NULL,W_ERR_REPEAT);
     len = wind_strlen(path);
     WIND_ASSERT_MSG_RETURN(len < FS_MOUNT_PATH_LEN,W_ERR_INVALID,"mount path is too long");
-
+    err = check_dir_path_valid(path);
+    WIND_ASSERT_MSG_RETURN(err == W_ERR_OK,W_ERR_INVALID,"dir path is invalid");
     len = wind_strlen(fsname);
     WIND_ASSERT_MSG_RETURN(len < WFS_NAME_LEN,W_ERR_INVALID,"vfs name is too long");
 
@@ -112,7 +132,6 @@ static w_err_t mount_param_check(char *fsname,char *fstype,char *blkname,char *p
             continue;
         is_match = is_dev_match(vfs,blkname);
         WIND_ASSERT_MSG_RETURN(!is_match,W_ERR_REPEAT,"block device %s has been used",blkname);
-
     }
     return W_ERR_OK;
 }
