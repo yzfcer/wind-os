@@ -623,27 +623,29 @@ w_err_t wind_free(void *ptr)
 void *wind_realloc(void *ptr, w_uint32_t newsize)
 {
     void *pnew;
-    w_heapitem_s *olditm,*newitm;
-    w_uint32_t cpsize;
+	w_heapitem_s *olditm,*newitm;
+	w_uint32_t cpsize;
+    //w_heap_s* heap;
+    //w/_dnode_s *dnode;
     do
     {
         pnew = W_NULL;
         wind_debug("wind_realloc:0x%0x,%d",ptr,newsize);
         newsize = HEAP_ALIGN_R(newsize);
-        pnew = wind_malloc(newsize);
+		pnew = wind_malloc(newsize);
         if ((ptr == W_NULL) || (pnew == W_NULL))
-        {
-            break;
-        }
-        olditm = ITEM_FROM_PTR(ptr);
-        newitm = ITEM_FROM_PTR(pnew);
-        cpsize = olditm->size < newitm->size?olditm->size : newitm->size;
-        cpsize -= WIND_HEAP_ITEM_SIZE;
-        wind_memcpy(pnew,ptr,cpsize);
+		{
+			break;
+		}
+		olditm = ITEM_FROM_PTR(ptr);
+		newitm = ITEM_FROM_PTR(pnew);
+		cpsize = olditm->size < newitm->size?olditm->size : newitm->size;
+		cpsize -= WIND_HEAP_ITEM_SIZE;
+		wind_memcpy(pnew,ptr,cpsize);
 
-    }while(0);
-    if(ptr != W_NULL)
-        wind_free(ptr);
+	}while(0);
+	if(ptr != W_NULL)
+		wind_free(ptr);
 
     return pnew;
 }

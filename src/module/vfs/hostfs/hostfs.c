@@ -155,7 +155,7 @@ static w_hostfile_s*   host_file_open_exist(char *path,w_uint8_t mode)
     do
     {
         err = W_ERR_OK;
-        attr = windows_file_type(path);
+        attr = hostfs_file_type(path);
         WIND_ASSERT_BREAK(attr != HFILE_TYPE_ERROR, W_ERR_FAIL, "get hfile type failed");
         isdir = (attr == HFILE_TYPE_DIR)?1:0;
         if(!isdir)
@@ -337,7 +337,7 @@ w_err_t hostfile_remove(w_hostfs_s *hfs,const char *path)
         fullpath = windows_filepath_generate(hfs->dir_prefix,path,isdir);
 #endif
         WIND_ASSERT_BREAK(fullpath != W_NULL,W_ERR_FAIL,"get full path failed");
-        attr = windows_file_type((char*)fullpath);
+        attr = hostfs_file_type((char*)fullpath);
         if(attr == HFILE_TYPE_DIR)
         {
             len = wind_strlen(fullpath);

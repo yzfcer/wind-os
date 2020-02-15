@@ -55,7 +55,7 @@ char *windows_filepath_remove_tail(char *path)
     return new_path;
 }
 
-hfileattr_e windows_file_type(char *path)
+hfileattr_e hostfs_file_type(char *path)
 {
     w_err_t err;
     hfileattr_e attr;

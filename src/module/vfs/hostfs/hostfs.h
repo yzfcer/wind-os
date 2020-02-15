@@ -36,6 +36,11 @@
 #include <sys/stat.h>
 #endif
 
+#if (HOST_OS_TYPE == HOST_OS_LINUX)
+#include <stdio.h>
+#include <sys/stat.h>
+#endif
+
 #if WIND_HOSTFS_SUPPORT
 
 #define HOSTFS_MAGIC   0x49AC7D53
@@ -116,7 +121,7 @@ struct __hostfile_s
 #endif
 };
 
-hfileattr_e windows_file_type(char *path);
+hfileattr_e hostfs_file_type(char *path);
 w_err_t _wind_hostfs_mod_init(void);
 void *hostfs_mem_malloc(w_int32_t size);
 w_err_t hostfs_mem_free(void *ptr);
