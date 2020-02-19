@@ -28,6 +28,7 @@
 #include "wind_debug.h"
 #include "wind_string.h"
 #include "wind_crc32.h"
+#include "wind_filepath.h"
 #include <stdlib.h>
 #if  HOST_OS_TYPE == HOST_OS_WINDOWS
 #include "windows_filepath.h"
@@ -98,6 +99,8 @@ static w_err_t host_file_destroy(w_hostfile_s *hfile)
         hostfs_mem_free(hfile->path);
     if(hfile->name != W_NULL)
         hostfs_mem_free(hfile->name);
+    if(hfile->subinfo.name != W_NULL)
+        hostfs_mem_free(hfile->subinfo.name);
     hostfs_mem_free(hfile);
     return W_ERR_OK;
 }
@@ -119,12 +122,9 @@ static w_hostfile_s*   host_file_create(char *path,w_uint8_t mode,w_uint8_t isdi
         hfile->mode = mode;
         hfile->attr = isdir?HFILE_ATTR_DIR:0;
         hfile->isdir = isdir;
-        hfile->has_sub = 0;
+        hfile->subinfo.has_sub = 0;
         hfile->subhfile = W_NULL;
         hfile->fd = fd;
-#if (HOST_OS_TYPE == HOST_OS_WINDOWS)
-        hfile->handle = -1;
-#endif
         hfile->path = (char*)wind_salloc(path, HP_ALLOCID_HOSTFS);
         WIND_ASSERT_BREAK(hfile->path != W_NULL, W_ERR_MEM, "alloc path failed");
     }while(0);
@@ -284,8 +284,10 @@ w_err_t hostfile_close(w_hostfile_s* hfile)
 
     if(hfile->isdir == 0)
         fclose(hfile->fd);
-    else if(hfile->handle >= 0)
+ #if HOST_OS_TYPE == HOST_OS_WINDOWS
+    else if(hfile->handle > 0)
         _findclose(hfile->handle);
+#endif
     return host_file_destroy(hfile);
 }
 
@@ -465,10 +467,42 @@ w_int32_t hostfile_write(w_hostfile_s* hfile,w_uint8_t *buff,w_int32_t size)
     return wrsize;
 }
 
-static w_hostfile_s *do_host_file_readdir(w_hostfile_s *hfile)
+#if HOST_OS_TYPE == HOST_OS_WINDOWS
+static w_err_t get_subinfo(w_hostfile_s *hfile,char *path)
 {
     w_err_t err;
     w_int32_t res;
+    do
+    {
+        err = W_ERR_OK;
+         if(!hfile->subinfo.has_sub)
+        {
+            wind_memset(&hfile->finddata,0,sizeof(_finddata_t));
+            hfile->handle = _findfirst(path,&hfile->finddata);
+            WIND_CHECK_BREAK(hfile->handle >= 0,W_ERR_FAIL);
+            hfile->subinfo.has_sub = 1;
+        }
+        else
+        {
+            WIND_ASSERT_BREAK(hfile->handle >= 0, W_ERR_INVALID, "handle is invalid");
+            res = _findnext(hfile->handle,&hfile->finddata);
+            WIND_CHECK_BREAK(res >= 0,W_ERR_FAIL)
+        }
+        hfile->subinfo.attr = (hfile->finddata.attrib & _A_SUBDIR)?HFILE_ATTR_DIR:0;
+        hfile->subinfo.name = (char*)wind_salloc(hfile->finddata.name,HP_ALLOCID_HOSTFS);
+    }while(0);
+    return err;
+
+}
+#else
+static w_err_t get_subinfo(w_hostfile_s *hfile,char *path)
+{
+    return W_ERR_FAIL;
+}
+#endif
+static w_hostfile_s *do_host_file_readdir(w_hostfile_s *hfile)
+{
+    w_err_t err;
     char *path = W_NULL;
     w_hostfile_s *subhfile = (w_hostfile_s *)W_NULL;
     WIND_ASSERT_RETURN(hfile != W_NULL,(w_hostfile_s *)W_NULL);
@@ -480,19 +514,8 @@ static w_hostfile_s *do_host_file_readdir(w_hostfile_s *hfile)
         err = W_ERR_OK;
         path = windows_filepath_generate(hfile->path,"/*",0);
         WIND_ASSERT_BREAK(path != W_NULL,W_ERR_MEM,"generate path failed");
-        if(!hfile->has_sub)
-        {
-            wind_memset(&hfile->fileinfo,0,sizeof(_finddata_t));
-            hfile->handle = _findfirst(path,&hfile->fileinfo);
-            WIND_CHECK_BREAK(hfile->handle >= 0,W_ERR_FAIL);
-            hfile->has_sub = 1;
-        }
-        else
-        {
-            WIND_ASSERT_BREAK(hfile->handle >= 0, W_ERR_INVALID, "handle is invalid");
-            res = _findnext(hfile->handle,&hfile->fileinfo);
-            WIND_CHECK_BREAK(res >= 0,W_ERR_FAIL)
-        }
+        err = get_subinfo(hfile,path);
+        WIND_CHECK_BREAK(err == W_ERR_OK,err);
         if(hfile->subhfile == W_NULL)
         {
             subhfile = (w_hostfile_s *)hostfs_mem_malloc(sizeof(w_hostfile_s));
@@ -500,11 +523,11 @@ static w_hostfile_s *do_host_file_readdir(w_hostfile_s *hfile)
             wind_memset(subhfile,0,sizeof(w_hostfile_s));
         }
         subhfile = hfile->subhfile;
-        subhfile->attr = (hfile->fileinfo.attrib & _A_SUBDIR)?HFILE_ATTR_DIR:0;
+        subhfile->attr = hfile->subinfo.attr;
         subhfile->isdir = (subhfile->attr & HFILE_ATTR_DIR)?1:0;
         if(subhfile->name != W_NULL)
             wind_free(subhfile->name);
-        subhfile->name = (char*)wind_salloc(hfile->fileinfo.name,HP_ALLOCID_HOSTFS);
+        subhfile->name = (char*)wind_salloc(hfile->subinfo.name,HP_ALLOCID_HOSTFS);
         WIND_ASSERT_BREAK(subhfile->name != W_NULL,W_ERR_MEM,"clone filename failed");
         hfile->subhfile = subhfile;
     }while(0);
