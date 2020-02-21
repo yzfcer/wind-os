@@ -39,6 +39,7 @@
 #if (HOST_OS_TYPE == HOST_OS_LINUX)
 #include <stdio.h>
 #include <sys/stat.h>
+//typedef int errno_t ;
 #endif
 
 #if WIND_HOSTFS_SUPPORT

@@ -35,6 +35,25 @@
 #endif
 #if WIND_HOSTFS_SUPPORT
 
+#if  HOST_OS_TYPE == HOST_OS_LINUX
+#include "sys/stat.h"
+#include "unistd.h"
+hfileattr_e hostfs_file_type(char *path)
+{
+    int res;
+    struct stat st;
+    hfileattr_e attr = HFILE_TYPE_ERROR;
+    
+    res = stat(path,&st);
+    if(res != 0)
+        attr = HFILE_TYPE_ERROR;
+    else if (S_ISDIR(st.st_mode))
+        attr = HFILE_TYPE_DIR;
+    else
+        attr = HFILE_TYPE_FILE;
+    return attr;
+}
+#endif
 
 w_err_t _wind_hostfs_mod_init(void)
 {
@@ -117,7 +136,11 @@ static w_hostfile_s*   host_file_create(char *path,w_uint8_t mode,w_uint8_t isdi
         WIND_ASSERT_BREAK(hfile != W_NULL, W_ERR_MEM, "alloc hfile failed");
         wind_memset(hfile,0,sizeof(w_hostfile_s));
         hfile->magic = HOSTFILE_MAGIC;
-        hfile->name = windows_filepath_get_filename(path);
+#if (HOST_OS_TYPE == HOST_OS_WINDOWS)
+		hfile->name = windows_filepath_get_filename(path);
+#else
+		hfile->name = wind_filepath_get_filename(path);
+#endif
         WIND_ASSERT_BREAK(hfile->name != W_NULL, W_ERR_MEM, "alloc hfile name failed");
         hfile->mode = mode;
         hfile->attr = isdir?HFILE_ATTR_DIR:0;
@@ -133,8 +156,12 @@ static w_hostfile_s*   host_file_create(char *path,w_uint8_t mode,w_uint8_t isdi
         if(hfile)
         {
             if(hfile->name)
+#if (HOST_OS_TYPE == HOST_OS_WINDOWS)
                 windows_filepath_release(hfile->name);
-            if(hfile->path)
+#else
+                wind_filepath_release(hfile->name);
+#endif
+			if(hfile->path)
                 wind_free(hfile->path);
             hostfs_mem_free(hfile);
         }
@@ -145,7 +172,7 @@ static w_hostfile_s*   host_file_create(char *path,w_uint8_t mode,w_uint8_t isdi
 
 static w_hostfile_s*   host_file_open_exist(char *path,w_uint8_t mode)
 {
-    errno_t errno;
+    //errno_t errno;
     w_err_t err;
     FILE *fd;
     w_hostfile_s *hfile = W_NULL;
@@ -160,10 +187,15 @@ static w_hostfile_s*   host_file_open_exist(char *path,w_uint8_t mode)
         isdir = (attr == HFILE_TYPE_DIR)?1:0;
         if(!isdir)
         {
+#if (HOST_OS_TYPE == HOST_OS_WINDOWS)
             realpath = windows_filepath_remove_tail(path);
+#else
+            realpath = wind_filepath_remove_tail(path);
+#endif
             WIND_ASSERT_BREAK(realpath != W_NULL,W_ERR_MEM,"alloc realpath failed");
-            errno = fopen_s(&fd,realpath,"rb+");
-            WIND_ASSERT_BREAK(errno == 0,W_ERR_FAIL,"open hfile failed");
+
+            fd = fopen(realpath,"rb+");
+            //WIND_ASSERT_BREAK(fd == 0,W_ERR_FAIL,"open hfile failed");
             WIND_ASSERT_BREAK(fd != W_NULL,W_ERR_FAIL,"open hfile failed");
         }
         else
@@ -187,7 +219,7 @@ static w_hostfile_s*   host_file_open_exist(char *path,w_uint8_t mode)
 
 static w_hostfile_s*   host_file_open_create(char *path,w_uint8_t mode)
 {
-    errno_t errno;
+    //errno_t errno;
     w_int8_t isdir;
     w_int32_t res;
     w_err_t err;
@@ -201,20 +233,28 @@ static w_hostfile_s*   host_file_open_create(char *path,w_uint8_t mode)
 #if (HOST_OS_TYPE == HOST_OS_WINDOWS)
         isdir = windows_filepath_isdir(path);
 #else
-        isdir = windows_filepath_isdir(path);
+        isdir = wind_filepath_isdir(path);
 #endif
 
         if(!isdir)
         {
+#if (HOST_OS_TYPE == HOST_OS_WINDOWS)
             realpath = windows_filepath_remove_tail(path);
+#else
+            realpath = wind_filepath_remove_tail(path);
+#endif
             WIND_ASSERT_BREAK(realpath != W_NULL,W_ERR_MEM,"alloc realpath failed");
-            errno = fopen_s(&fd,realpath,"w+");
-            WIND_ASSERT_BREAK(errno == 0,W_ERR_FAIL,"open hfile failed");
+            fd = fopen(realpath,"w+");
+            //WIND_ASSERT_BREAK(errno == 0,W_ERR_FAIL,"open hfile failed");
             WIND_ASSERT_BREAK(fd != W_NULL, W_ERR_FAIL, "create hfile failed");
         }
         else
         {
+#if (HOST_OS_TYPE == HOST_OS_WINDOWS)
             res = _mkdir(path);
+#else
+            res = mkdir(path,0755);
+#endif
             WIND_ASSERT_BREAK(res == 0, W_ERR_FAIL, "make dir failed");
             fd = (FILE *)W_NULL;
         }
@@ -250,8 +290,8 @@ w_hostfile_s* hostfile_open(w_hostfs_s *hfs,const char *path,w_uint8_t mode)
         isdir = windows_filepath_isdir(path);
         fullpath = windows_filepath_generate(hfs->dir_prefix,path,isdir);
 #else
-        isdir = windows_filepath_isdir(path);
-        fullpath = windows_filepath_generate(hfs->dir_prefix,path,isdir);
+        isdir = wind_filepath_isdir(path);
+        fullpath = wind_filepath_generate(hfs->dir_prefix,path,isdir);
 #endif
         WIND_ASSERT_BREAK(fullpath != W_NULL,W_ERR_FAIL,"get full path failed");
         exist = hostfile_existing(hfs,path);
@@ -335,8 +375,8 @@ w_err_t hostfile_remove(w_hostfs_s *hfs,const char *path)
         isdir = windows_filepath_isdir((char*)path);
         fullpath = windows_filepath_generate(hfs->dir_prefix,path,isdir);
 #else
-        isdir = windows_filepath_isdir((char*)path);
-        fullpath = windows_filepath_generate(hfs->dir_prefix,path,isdir);
+        isdir = wind_filepath_isdir((char*)path);
+        fullpath = wind_filepath_generate(hfs->dir_prefix,path,isdir);
 #endif
         WIND_ASSERT_BREAK(fullpath != W_NULL,W_ERR_FAIL,"get full path failed");
         attr = hostfs_file_type((char*)fullpath);
@@ -402,8 +442,8 @@ w_bool_t hostfile_existing(w_hostfs_s *hfs,const char *path)
         WIND_CHECK_BREAK(res == 0, W_ERR_FAIL);
 #else
         if(path[0] != 0)
-            isdir = windows_filepath_isdir(path);
-        fullpath = windows_filepath_generate(hfs->dir_prefix,path,isdir);
+            isdir = wind_filepath_isdir(path);
+        fullpath = wind_filepath_generate(hfs->dir_prefix,path,isdir);
         err = W_ERR_NOT_SUPPORT;
 #endif
     }while(0);
@@ -512,7 +552,11 @@ static w_hostfile_s *do_host_file_readdir(w_hostfile_s *hfile)
     do 
     {
         err = W_ERR_OK;
+#if  HOST_OS_TYPE == HOST_OS_WINDOWS
         path = windows_filepath_generate(hfile->path,"/*",0);
+#else
+        path = wind_filepath_generate(hfile->path,"/*",0);
+#endif
         WIND_ASSERT_BREAK(path != W_NULL,W_ERR_MEM,"generate path failed");
         err = get_subinfo(hfile,path);
         WIND_CHECK_BREAK(err == W_ERR_OK,err);

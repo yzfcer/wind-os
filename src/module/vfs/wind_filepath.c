@@ -103,6 +103,25 @@ char *wind_filepath_generate(char *pre_path,char *relative_path,w_uint16_t isdir
     return path;
 }
 
+char *wind_filepath_remove_tail(char *path)
+{
+    w_err_t err;
+    w_int32_t len;
+    char *new_path = (char *)W_NULL;
+    WIND_ASSERT_RETURN(path != W_NULL,(char *)W_NULL);
+    WIND_ASSERT_RETURN(path[0] != 0,(char *)W_NULL);
+    do
+    {
+        err = W_ERR_OK;
+        new_path = wind_salloc(path,HP_ALLOCID_HOSTFS);
+        WIND_ASSERT_BREAK(new_path != W_NULL,W_ERR_MEM,"alloc new_path failed");
+        len = wind_strlen(new_path);
+        if(new_path[len - 1] == '/')
+            new_path[len - 1] = 0;
+    }while(0);
+    return new_path;
+}
+
 char * wind_filepath_copy(char *path)
 {
     char *newpath;
