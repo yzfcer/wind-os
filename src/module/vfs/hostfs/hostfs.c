@@ -328,7 +328,7 @@ w_err_t hostfile_close(w_hostfile_s* hfile)
     else if(hfile->handle > 0)
     {
         _findclose(hfile->handle);
-        hfile->handle = 0£»
+        hfile->handle = 0;
     }
 #endif
  #if HOST_OS_TYPE == HOST_OS_LINUX
