@@ -326,7 +326,18 @@ w_err_t hostfile_close(w_hostfile_s* hfile)
         fclose(hfile->fd);
  #if HOST_OS_TYPE == HOST_OS_WINDOWS
     else if(hfile->handle > 0)
+    {
         _findclose(hfile->handle);
+        hfile->handle = 0£»
+    }
+#endif
+ #if HOST_OS_TYPE == HOST_OS_LINUX
+    else if(hfile->dir != W_NULL)
+    {
+        closedir(hfile->dir);
+        hfile->dir != W_NULL;
+    }
+        
 #endif
     return host_file_destroy(hfile);
 }
@@ -534,10 +545,22 @@ static w_err_t get_subinfo(w_hostfile_s *hfile,char *path)
     return err;
 
 }
-#else
+#elif HOST_OS_TYPE == HOST_OS_LINUX
 static w_err_t get_subinfo(w_hostfile_s *hfile,char *path)
 {
-    return W_ERR_FAIL;
+    w_err_t err;
+    do
+    {
+        err = W_ERR_OK;
+        if(hfile->dir == W_NULL)
+            hfile->dir = opendir(path);
+        WIND_ASSERT_BREAK(hfile->dir != W_NULL,W_ERR_FAIL,"dirent is NULL");
+        hfile->dirinfo = readdir(hfile->dir);
+        WIND_CHECK_BREAK(hfile->dirinfo,W_ERR_FAIL);
+        hfile->subinfo.attr = (hfile->dirinfo->d_type == DT_DIR)?HFILE_ATTR_DIR:0;
+        hfile->subinfo.name = (char*)wind_salloc(hfile->dirinfo->d_type,HP_ALLOCID_HOSTFS);
+    }while(0);
+    return err;
 }
 #endif
 static w_hostfile_s *do_host_file_readdir(w_hostfile_s *hfile)
@@ -555,7 +578,7 @@ static w_hostfile_s *do_host_file_readdir(w_hostfile_s *hfile)
 #if  HOST_OS_TYPE == HOST_OS_WINDOWS
         path = windows_filepath_generate(hfile->path,"/*",0);
 #else
-        path = wind_filepath_generate(hfile->path,"/*",0);
+        path = wind_filepath_generate(hfile->path,"",0);
 #endif
         WIND_ASSERT_BREAK(path != W_NULL,W_ERR_MEM,"generate path failed");
         err = get_subinfo(hfile,path);

@@ -39,6 +39,7 @@
 #if (HOST_OS_TYPE == HOST_OS_LINUX)
 #include <stdio.h>
 #include <sys/stat.h>
+#include <dirent.h>
 //typedef int errno_t ;
 #endif
 
@@ -127,6 +128,10 @@ struct __hostfile_s
 #if (HOST_OS_TYPE == HOST_OS_WINDOWS)
     intptr_t handle;  //子文件句柄(windows系统)
     _finddata_t finddata;//子文件信息
+#endif
+#if (HOST_OS_TYPE == HOST_OS_LINUX)
+    DIR *dir;
+    struct dirent *dirinfo;
 #endif
 };
 
