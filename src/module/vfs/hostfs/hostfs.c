@@ -164,10 +164,50 @@ hfileattr_e host_file_type(char *path)
     return attr;
 }
 
+
+static char *host_filepath_generate(char *pre_path,char *relative_path,w_uint16_t isdir)
+{
+    w_err_t err;
+    char *path = (char*)W_NULL;
+    w_int32_t len,len1;
+    WIND_ASSERT_RETURN(pre_path != W_NULL,(char*)W_NULL);
+    WIND_ASSERT_RETURN(pre_path[0] != 0,(char*)W_NULL);
+    WIND_ASSERT_RETURN(pre_path[0] == '/',(char*)W_NULL);
+    WIND_ASSERT_RETURN(relative_path != W_NULL,(char*)W_NULL);
+    
+    len = wind_strlen(relative_path);
+	//if(relative_path[len - 1] == '/')
+	//	relative_path[len - 1] = 0;
+
+    len1 = wind_strlen(pre_path) + 1;
+    len += len1 + 3;
+    path = (char*)wind_alloc(len,HP_ALLOCID_VFS);
+    wind_memset(path,0,len);
+    wind_strcpy(path,pre_path);
+    if(pre_path[len1-1] != '/')
+        path[len1] = '/';
+    if(relative_path[0] == '/')
+        relative_path ++;
+    wind_strcat(path,relative_path);
+    len = wind_strlen(path);
+	if(path[len - 1] == '/')
+		path[len - 1] = 0;
+    wind_notice("gen path:%s",path);
+    
+    err = host_filepath_check_valid(path);
+    if(err != W_ERR_OK)
+    {
+        wind_free(path);
+        path = (char*)W_NULL;
+    }
+    return path;
+}
+
 w_bool_t hostfile_existing(w_hostfs_s *hfs,const char *path)
 {
     w_err_t err;
     w_int32_t res,len;
+    hfileattr_e hfattr;
     w_uint8_t isdir = 0;
     char *fullpath = (char*)W_NULL;
     WIND_ASSERT_RETURN(hfs != W_NULL,W_FALSE);
@@ -178,43 +218,13 @@ w_bool_t hostfile_existing(w_hostfs_s *hfs,const char *path)
         if(path[0] != 0)
             isdir = host_filepath_isdir(path);
         fullpath = host_filepath_generate(hfs->dir_prefix,path,isdir);
-        err = W_ERR_NOT_SUPPORT;
+        hfattr = host_file_type(fullpath);
+        WIND_CHECK_BREAK(hfattr == HFILE_TYPE_DIR,W_ERR_FAIL);
+        //err = W_ERR_NOT_SUPPORT;
     }while(0);
     if(fullpath)
         wind_free(fullpath);
     return err == W_ERR_OK ? W_TRUE : W_FALSE;
-}
-
-static char *host_filepath_generate(char *pre_path,char *relative_path,w_uint16_t isdir);
-{
-    w_err_t err;
-    char *path = (char*)W_NULL;
-    w_int32_t len,len1;
-    WIND_ASSERT_RETURN(pre_path != W_NULL,(char*)W_NULL);
-    WIND_ASSERT_RETURN(pre_path[0] != 0,(char*)W_NULL);
-    WIND_ASSERT_RETURN(pre_path[0] == '/',(char*)W_NULL);
-    WIND_ASSERT_RETURN(relative_path != W_NULL,(char*)W_NULL);
-    
-    len = wind_strlen(relative_path) + 3;
-
-    len1 = wind_strlen(pre_path) + 1;
-    len += len1;
-    path = (char*)wind_alloc(len,HP_ALLOCID_VFS);
-    wind_memset(path,0,len);
-    wind_strcpy(path,pre_path);
-    if(pre_path[len1-1] != '/')
-        path[len1] = '/';
-    if(relative_path[0] == '/')
-        relative_path ++;
-    wind_strcat(path,relative_path);
-    
-    err = host_filepath_check_valid(path);
-    if(err != W_ERR_OK)
-    {
-        wind_free(path);
-        path = (char*)W_NULL;
-    }
-    return path;
 }
 #endif
 
