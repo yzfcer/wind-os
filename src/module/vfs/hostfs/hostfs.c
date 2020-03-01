@@ -113,8 +113,9 @@ w_bool_t hostfile_existing(w_hostfs_s *hfs,const char *path)
 #define host_filepath_get_filename wind_filepath_get_filename 
 #define host_filepath_release wind_filepath_release
 #define host_filepath_remove_tail wind_filepath_remove_tail
-#define host_filepath_generate wind_filepath_generate
+//#define host_filepath_generate wind_filepath_generate
 #define  host_filepath_isdir wind_filepath_isdir
+#define host_filepath_check_valid wind_filepath_check_valid
 
 static w_int32_t host_mkdir(char *path)
 {
@@ -176,7 +177,7 @@ w_bool_t hostfile_existing(w_hostfs_s *hfs,const char *path)
         err = W_ERR_OK;
         if(path[0] != 0)
             isdir = host_filepath_isdir(path);
-        fullpath = wind_filepath_generate(hfs->dir_prefix,path,isdir);
+        fullpath = host_filepath_generate(hfs->dir_prefix,path,isdir);
         err = W_ERR_NOT_SUPPORT;
     }while(0);
     if(fullpath)
@@ -186,7 +187,34 @@ w_bool_t hostfile_existing(w_hostfs_s *hfs,const char *path)
 
 static char *host_filepath_generate(char *pre_path,char *relative_path,w_uint16_t isdir);
 {
-    return W_ERR_FAIL;
+    w_err_t err;
+    char *path = (char*)W_NULL;
+    w_int32_t len,len1;
+    WIND_ASSERT_RETURN(pre_path != W_NULL,(char*)W_NULL);
+    WIND_ASSERT_RETURN(pre_path[0] != 0,(char*)W_NULL);
+    WIND_ASSERT_RETURN(pre_path[0] == '/',(char*)W_NULL);
+    WIND_ASSERT_RETURN(relative_path != W_NULL,(char*)W_NULL);
+    
+    len = wind_strlen(relative_path) + 3;
+
+    len1 = wind_strlen(pre_path) + 1;
+    len += len1;
+    path = (char*)wind_alloc(len,HP_ALLOCID_VFS);
+    wind_memset(path,0,len);
+    wind_strcpy(path,pre_path);
+    if(pre_path[len1-1] != '/')
+        path[len1] = '/';
+    if(relative_path[0] == '/')
+        relative_path ++;
+    wind_strcat(path,relative_path);
+    
+    err = host_filepath_check_valid(path);
+    if(err != W_ERR_OK)
+    {
+        wind_free(path);
+        path = (char*)W_NULL;
+    }
+    return path;
 }
 #endif
 
@@ -376,7 +404,7 @@ static w_hostfile_s*   host_file_open_create(char *path,w_uint8_t mode)
         WIND_ASSERT_BREAK(hfile != W_NULL,W_ERR_FAIL,"create hfile obj failed");
     }while(0);
     if(realpath)
-        wind_filepath_release(realpath);
+        host_filepath_release(realpath);
     
     if(err != W_ERR_OK)
     {
