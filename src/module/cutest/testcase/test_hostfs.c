@@ -27,7 +27,7 @@
 extern "C" {
 #endif // #ifdef __cplusplus
 
-#if HOST_OS_TYPE  == WIND_OS_WINDOWS
+#if HOST_OS_TYPE  == HOST_OS_WINDOWS
 #define HOST_DIR "C:/hostfs"
 #else
 #define HOST_DIR "/home/jason/wfs"

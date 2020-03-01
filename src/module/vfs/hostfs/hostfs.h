@@ -29,11 +29,13 @@
 #include "wind_type.h"
 #include "wind_dlist.h"
 #include "wind_blkdev.h"
+
 #if (HOST_OS_TYPE == HOST_OS_WINDOWS)
 #include <stdio.h>
 #include <direct.h>
 #include <io.h>
 #include <sys/stat.h>
+typedef struct _finddata_t _finddata_t;
 #endif
 
 #if (HOST_OS_TYPE == HOST_OS_LINUX)
@@ -85,9 +87,6 @@
 #define SET_HFILE_ATTR_VERIFY(attr) (attr |= HFILE_ATTR_VERIFY)
 #define CLR_HFILE_ATTR_VERIFY(attr) (attr &= (~HFILE_ATTR_VERIFY))
 
-#if (HOST_OS_TYPE == HOST_OS_WINDOWS)
-typedef struct _finddata_t _finddata_t;
-#endif
 typedef struct __hostfile_s w_hostfile_s;
 
 typedef enum
@@ -135,7 +134,7 @@ struct __hostfile_s
 #endif
 };
 
-hfileattr_e hostfs_file_type(char *path);
+hfileattr_e host_file_type(char *path);
 w_err_t _wind_hostfs_mod_init(void);
 void *hostfs_mem_malloc(w_int32_t size);
 w_err_t hostfs_mem_free(void *ptr);
