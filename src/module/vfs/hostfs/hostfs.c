@@ -107,15 +107,18 @@ w_bool_t hostfile_existing(w_hostfs_s *hfs,const char *path)
 #endif
 
 #if  HOST_OS_TYPE == HOST_OS_LINUX
+
 #include "sys/stat.h"
 #include "unistd.h"
 #define host_filepath_get_filename wind_filepath_get_filename 
 #define host_filepath_release wind_filepath_release
 #define host_filepath_remove_tail wind_filepath_remove_tail
 #define host_filepath_generate wind_filepath_generate
+#define  host_filepath_isdir wind_filepath_isdir
+
 static w_int32_t host_mkdir(char *path)
 {
-    return mkdir(path£¬0755);
+    return mkdir(path,0755);
 }
 
 static void host_release_subfile(w_hostfile_s *hfile)
@@ -179,6 +182,11 @@ w_bool_t hostfile_existing(w_hostfs_s *hfs,const char *path)
     if(fullpath)
         wind_free(fullpath);
     return err == W_ERR_OK ? W_TRUE : W_FALSE;
+}
+
+static char *host_filepath_generate(char *pre_path,char *relative_path,w_uint16_t isdir);
+{
+    return W_ERR_FAIL;
 }
 #endif
 
