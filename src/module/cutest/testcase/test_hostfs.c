@@ -27,6 +27,11 @@
 extern "C" {
 #endif // #ifdef __cplusplus
 
+#if HOST_OS_TYPE  == WIND_OS_WINDOWS
+#define HOST_DIR "C:/hostfs"
+#else
+#define HOST_DIR "/home/jason/wfs"
+#endif
 
 //=================================================================
 w_hostfs_s g_hfs;
@@ -41,7 +46,8 @@ static w_err_t hfs_init(void)
     }
 
     wind_memset(&g_hfs,0,sizeof(g_hfs));
-    err = hostfs_init(&g_hfs,"C:/hostfs");
+	wind_notice("hostfs prefix:%s",HOST_DIR);
+    err = hostfs_init(&g_hfs,HOST_DIR);
     return err;
 }
 

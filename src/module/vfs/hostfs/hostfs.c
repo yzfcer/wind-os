@@ -240,10 +240,12 @@ static w_hostfile_s*   host_file_open_create(char *path,w_uint8_t mode)
         {
 #if (HOST_OS_TYPE == HOST_OS_WINDOWS)
             realpath = windows_filepath_remove_tail(path);
+            WIND_ASSERT_BREAK(realpath != W_NULL,W_ERR_MEM,"alloc realpath failed");
 #else
             realpath = wind_filepath_remove_tail(path);
-#endif
             WIND_ASSERT_BREAK(realpath != W_NULL,W_ERR_MEM,"alloc realpath failed");
+#endif
+            wind_notice("open file: %s",realpath);
             fd = fopen(realpath,"w+");
             //WIND_ASSERT_BREAK(errno == 0,W_ERR_FAIL,"open hfile failed");
             WIND_ASSERT_BREAK(fd != W_NULL, W_ERR_FAIL, "create hfile failed");
