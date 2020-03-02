@@ -133,8 +133,8 @@ CASE_SETUP(readdir)
 CASE_TEARDOWN(readdir)
 {
     w_err_t err;
-    err = hostfile_remove(&g_hfs,"/readdir_test/");
-    EXPECT_EQ(err,W_ERR_OK);
+    //err = hostfile_remove(&g_hfs,"/readdir_test/");
+    //EXPECT_EQ(err,W_ERR_OK);
 
     err = hfs_deinit();
     EXPECT_EQ(err,W_ERR_OK);
@@ -144,6 +144,7 @@ CASE_TEARDOWN(readdir)
 CASE_FUNC(readdir)
 {
     w_err_t err;
+	w_int32_t i;
     w_hostfile_s *file;
     w_hostfile_s *sub = (w_hostfile_s *)W_NULL;
 
@@ -169,7 +170,8 @@ CASE_FUNC(readdir)
 
 	file = hostfile_open(&g_hfs,"/readdir_test/",HFMODE_R);
     EXPECT_NE(file,W_NULL);
-    while(1)
+#if 0
+	while(1)
     {
         err = hostfile_readdir(file,&sub);
         if(err != W_ERR_OK)
@@ -178,12 +180,17 @@ CASE_FUNC(readdir)
             (wind_strcmp(sub->name,"..") != 0))
             break;
     }
-    
     EXPECT_EQ(err,W_ERR_OK);
-    err = hostfile_readdir(file,&sub);
-    EXPECT_EQ(err,W_ERR_OK);
-    err = hostfile_readdir(file,&sub);
-    EXPECT_EQ(err,W_ERR_OK);
+#endif
+	for(i = 0;i < 5;i ++)
+	{
+		wind_printf("readdir:%d\r\n",i);
+		err = hostfile_readdir(file,&sub);
+		EXPECT_EQ(err,W_ERR_OK);		
+	}
+
+    //err = hostfile_readdir(file,&sub);
+    //EXPECT_EQ(err,W_ERR_OK);
     err = hostfile_readdir(file,&sub);
     EXPECT_NE(err,W_ERR_OK);
  
@@ -233,12 +240,14 @@ CASE_FUNC(readwrite)
     EXPECT_NE(file,W_NULL);
     len = hostfile_read(file,buff,32);
     EXPECT_EQ(len,wind_strlen(str));
+	wind_printf("buff=%s\r\n",buff);
+	wind_printf("len=%d\r\n",len);
     len = wind_strcmp(str,(char*)buff);
     EXPECT_EQ(len,0);
     err = hostfile_close(file);
     EXPECT_EQ(err,W_ERR_OK);
-    err = hostfile_remove(&g_hfs,"/test.txt");
-    EXPECT_EQ(err,W_ERR_OK);
+    //err = hostfile_remove(&g_hfs,"/test.txt");
+    //EXPECT_EQ(err,W_ERR_OK);
     
 }
 

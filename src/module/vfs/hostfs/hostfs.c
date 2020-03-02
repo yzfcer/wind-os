@@ -104,6 +104,32 @@ w_bool_t hostfile_existing(w_hostfs_s *hfs,const char *path)
         wind_free(fullpath);
     return err == W_ERR_OK ? W_TRUE : W_FALSE;
 }
+
+static w_err_t host_remove_dir(char *fullpath)
+{
+    w_int32_t len;
+    w_err_t err;
+    char *cmd = (char *)W_NULL;
+    WIND_ASSERT_RETURN(fullpath != W_NULL,W_ERR_PTR_NULL);
+    
+    wind_trace("fullpath=%s",fullpath);
+    do
+    {
+        err = W_ERR_OK;
+        len = wind_strlen(fullpath) + 1;
+        wind_strrpc(fullpath,'/','\\');
+        len += sizeof("rd /s /q ");
+        cmd = (char *)hostfs_mem_malloc(len);
+        WIND_ASSERT_BREAK(cmd != W_NULL,W_ERR_MEM,"alloc cmd failed");
+        wind_strcpy(cmd,"rd /s /q ");
+        wind_strcat(cmd,fullpath);
+        wind_printf("execute cmd:%s\r\n",cmd);
+        system(cmd);
+    }while(0);
+    if(cmd != W_NULL)
+        hostfs_mem_free(cmd);
+    return err;
+}
 #endif
 
 #if  HOST_OS_TYPE == HOST_OS_LINUX
@@ -143,7 +169,8 @@ static w_err_t get_subinfo(w_hostfile_s *hfile,char *path)
         hfile->dirinfo = readdir(hfile->dir);
         WIND_CHECK_BREAK(hfile->dirinfo,W_ERR_FAIL);
         hfile->subinfo.attr = (hfile->dirinfo->d_type == DT_DIR)?HFILE_ATTR_DIR:0;
-        hfile->subinfo.name = (char*)wind_salloc(hfile->dirinfo->d_type,HP_ALLOCID_HOSTFS);
+        hfile->subinfo.name = (char*)wind_salloc(hfile->dirinfo->d_name,HP_ALLOCID_HOSTFS);
+		wind_notice("hfile->subinfo.name=%s",hfile->subinfo.name);
     }while(0);
     return err;
 }
@@ -161,6 +188,7 @@ hfileattr_e host_file_type(char *path)
         attr = HFILE_TYPE_DIR;
     else
         attr = HFILE_TYPE_FILE;
+	//wind_notice("host_file_type attr=0x%02x",attr);
     return attr;
 }
 
@@ -169,18 +197,17 @@ static char *host_filepath_generate(char *pre_path,char *relative_path,w_uint16_
 {
     w_err_t err;
     char *path = (char*)W_NULL;
-    w_int32_t len,len1;
+    w_int32_t len,len1,len2;
     WIND_ASSERT_RETURN(pre_path != W_NULL,(char*)W_NULL);
     WIND_ASSERT_RETURN(pre_path[0] != 0,(char*)W_NULL);
     WIND_ASSERT_RETURN(pre_path[0] == '/',(char*)W_NULL);
     WIND_ASSERT_RETURN(relative_path != W_NULL,(char*)W_NULL);
-    
-    len = wind_strlen(relative_path);
-	//if(relative_path[len - 1] == '/')
-	//	relative_path[len - 1] = 0;
+    //wind_notice("pre_path:%s",pre_path);
+    //wind_notice("relative_path:%s",relative_path);
+    len1 = wind_strlen(pre_path);
+    len2 = wind_strlen(relative_path);
 
-    len1 = wind_strlen(pre_path) + 1;
-    len += len1 + 3;
+    len += len1 + len2 + 3;
     path = (char*)wind_alloc(len,HP_ALLOCID_VFS);
     wind_memset(path,0,len);
     wind_strcpy(path,pre_path);
@@ -190,8 +217,17 @@ static char *host_filepath_generate(char *pre_path,char *relative_path,w_uint16_
         relative_path ++;
     wind_strcat(path,relative_path);
     len = wind_strlen(path);
-	if(path[len - 1] == '/')
-		path[len - 1] = 0;
+	if(!isdir)
+	{
+		if(path[len - 1] == '/')
+			path[len - 1] = 0;	
+	}
+	else
+	{
+		if(path[len - 1] != '/')
+			path[len - 1] = '/';	
+	}
+
     wind_notice("gen path:%s",path);
     
     err = host_filepath_check_valid(path);
@@ -219,12 +255,38 @@ w_bool_t hostfile_existing(w_hostfs_s *hfs,const char *path)
             isdir = host_filepath_isdir(path);
         fullpath = host_filepath_generate(hfs->dir_prefix,path,isdir);
         hfattr = host_file_type(fullpath);
-        WIND_CHECK_BREAK(hfattr == HFILE_TYPE_DIR,W_ERR_FAIL);
+        WIND_CHECK_BREAK(hfattr != HFILE_TYPE_ERROR,W_ERR_FAIL);
         //err = W_ERR_NOT_SUPPORT;
     }while(0);
     if(fullpath)
         wind_free(fullpath);
     return err == W_ERR_OK ? W_TRUE : W_FALSE;
+}
+
+static w_err_t host_remove_dir(char *fullpath)
+{
+    w_int32_t len;
+    w_err_t err;
+    char *cmd = (char *)W_NULL;
+    WIND_ASSERT_RETURN(fullpath != W_NULL,W_ERR_PTR_NULL);
+    
+    wind_trace("fullpath=%s",fullpath);
+    do
+    {
+        err = W_ERR_OK;
+        len = wind_strlen(fullpath) + 1;
+        len += sizeof("rm -rf ");
+        cmd = (char *)hostfs_mem_malloc(len);
+        WIND_ASSERT_BREAK(cmd != W_NULL,W_ERR_MEM,"alloc cmd failed");
+        wind_strcpy(cmd,"rm -rf ");
+        wind_strcat(cmd,fullpath);
+		host_filepath_remove_tail(cmd);
+        wind_printf("execute cmd:%s\r\n",cmd);
+        system(cmd);
+    }while(0);
+    if(cmd != W_NULL)
+        hostfs_mem_free(cmd);
+    return err;
 }
 #endif
 
@@ -377,6 +439,7 @@ static w_hostfile_s*   host_file_open_exist(char *path,w_uint8_t mode)
             host_file_destroy(hfile);
         hfile = (w_hostfile_s *)W_NULL;
     }
+	//wind_notice("host_file_open_exist hfile=%p",hfile);
     return hfile;
     
 }
@@ -400,7 +463,7 @@ static w_hostfile_s*   host_file_open_create(char *path,w_uint8_t mode)
             WIND_ASSERT_BREAK(realpath != W_NULL,W_ERR_MEM,"alloc realpath failed");
 
             wind_notice("open file: %s",realpath);
-            fd = fopen(realpath,"w+");
+            fd = fopen(realpath,"wb+");
             //WIND_ASSERT_BREAK(errno == 0,W_ERR_FAIL,"open hfile failed");
             WIND_ASSERT_BREAK(fd != W_NULL, W_ERR_FAIL, "create hfile failed");
         }
@@ -413,6 +476,7 @@ static w_hostfile_s*   host_file_open_create(char *path,w_uint8_t mode)
         hfile = host_file_create(path,mode,isdir,fd);
         WIND_ASSERT_BREAK(hfile != W_NULL,W_ERR_FAIL,"create hfile obj failed");
     }while(0);
+	//wind_notice("hfile=%p",hfile);
     if(realpath)
         host_filepath_release(realpath);
     
@@ -424,6 +488,7 @@ static w_hostfile_s*   host_file_open_create(char *path,w_uint8_t mode)
             fclose(fd);
         hfile = (w_hostfile_s *)W_NULL;
     }
+	//wind_notice("host_file_open_create hfile=%p",hfile);
     return hfile;
 }
 
@@ -435,6 +500,7 @@ w_hostfile_s* hostfile_open(w_hostfs_s *hfs,const char *path,w_uint8_t mode)
     w_uint8_t isdir;
     w_hostfile_s *hfile = (w_hostfile_s *)W_NULL;
     char *fullpath = (char *)W_NULL;
+	wind_notice("hostfile_open %s,mode=0x%02x",path,mode);
     do
     {
         err = W_ERR_OK;
@@ -443,6 +509,7 @@ w_hostfile_s* hostfile_open(w_hostfs_s *hfs,const char *path,w_uint8_t mode)
 
         WIND_ASSERT_BREAK(fullpath != W_NULL,W_ERR_FAIL,"get full path failed");
         exist = hostfile_existing(hfs,path);
+		wind_notice("exist=%d",exist);
         WIND_CHECK_BREAK((exist == W_TRUE) || ((mode & HFMODE_CRT) != 0),W_ERR_NOFILE);
         if(exist != W_TRUE)
             hfile = host_file_open_create((char*)fullpath,mode);
@@ -451,6 +518,8 @@ w_hostfile_s* hostfile_open(w_hostfs_s *hfs,const char *path,w_uint8_t mode)
         WIND_ASSERT_BREAK(hfile != W_NULL,W_ERR_FAIL,"open hfile failed");
         hfile->hfs = hfs;
     }while(0);
+	//wind_notice("hostfile_open[1] err=%d",err);
+	//wind_notice("hostfile_open[1] hfile=%p",hfile);
     if(fullpath)
         wind_free(fullpath);
     if(err != W_ERR_OK)
@@ -459,6 +528,7 @@ w_hostfile_s* hostfile_open(w_hostfs_s *hfs,const char *path,w_uint8_t mode)
             wind_free(hfile);
         hfile = (w_hostfile_s *)W_NULL;
     }
+	//wind_notice("hostfile_open hfile=%p",hfile);
     return hfile;
 }
 
@@ -476,31 +546,7 @@ w_err_t hostfile_close(w_hostfile_s* hfile)
     return host_file_destroy(hfile);
 }
 
-static w_err_t do_remove_windows_dir(char *fullpath)
-{
-    w_int32_t len;
-    w_err_t err;
-    char *cmd = (char *)W_NULL;
-    WIND_ASSERT_RETURN(fullpath != W_NULL,W_ERR_PTR_NULL);
-    
-    wind_trace("fullpath=%s",fullpath);
-    do
-    {
-        err = W_ERR_OK;
-        len = wind_strlen(fullpath) + 1;
-        wind_strrpc(fullpath,'/','\\');
-        len += sizeof("rd /s /q ");
-        cmd = (char *)hostfs_mem_malloc(len);
-        WIND_ASSERT_BREAK(cmd != W_NULL,W_ERR_MEM,"alloc cmd failed");
-        wind_strcpy(cmd,"rd /s /q ");
-        wind_strcat(cmd,fullpath);
-        wind_printf("execute cmd:%s\r\n",cmd);
-        system(cmd);
-    }while(0);
-    if(cmd != W_NULL)
-        hostfs_mem_free(cmd);
-    return err;
-}
+
 
 
 w_err_t hostfile_remove(w_hostfs_s *hfs,const char *path)
@@ -525,7 +571,7 @@ w_err_t hostfile_remove(w_hostfs_s *hfs,const char *path)
             len = wind_strlen(fullpath);
             if(fullpath[len - 1] == '/')
                 fullpath[len - 1] = 0;
-            err = do_remove_windows_dir(fullpath);
+            err = host_remove_dir(fullpath);
             WIND_ASSERT_BREAK(err == W_ERR_OK,W_ERR_FAIL,"rmdir failed,result:%d",err);
         }
             
