@@ -32,7 +32,6 @@ static w_err_t cmd_db_list(void)
 
 static w_err_t cmd_db_detail(char *dbname)
 {
-
     w_db_s *db;
     db = db_get_byname(dbname);
     WIND_ASSERT_RETURN(db != W_NULL,W_ERR_NO_OBJ);
@@ -46,7 +45,8 @@ static w_err_t cmd_db_create(char *dbname)
 
 static w_err_t cmd_db_delete(char *dbname)
 {
-    return db_entry_destroy(dbname);
+    w_db_s *entry = db_get_byname(dbname);
+    return db_entry_destroy(entry);
 }
 
 

@@ -51,7 +51,6 @@ typedef enum
     TYPE_w_str64_t ,
     TYPE_w_str128_t ,
     TYPE_w_str256_t ,
-    
 }PARA_TYPE;
 
 

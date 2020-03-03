@@ -53,7 +53,8 @@ w_err_t wind_db_create(char *dbname,w_uint16_t attr)
 
 w_err_t wind_db_distroy(char *dbname)
 {
-    return db_entry_destroy(dbname);
+    w_db_s *entry = db_get_byname(dbname);
+    return db_entry_destroy(entry);
 }
 
 

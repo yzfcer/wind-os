@@ -36,14 +36,14 @@
 w_db_s *db_get_byname(char *dbname);
 w_bool_t db_entry_exist(char *dbname);
 w_err_t db_entry_create(char *dbname,w_uint16_t attr);
-w_err_t db_entry_destroy(char *dbname);
-w_err_t db_entry_setattr(char *dbname,w_uint16_t attr);
-w_err_t db_entry_getattr(char *dbname,w_uint16_t *attr);
+w_err_t db_entry_destroy(w_db_s *db);
+w_err_t db_entry_setattr(w_db_s *db,w_uint16_t attr);
+w_err_t db_entry_getattr(w_db_s *db,w_uint16_t *attr);
 w_err_t db_entry_insert_tb(w_db_s *db,w_tb_s *tb);
 w_err_t db_entry_remove_tb(w_db_s *db,w_tb_s *tb);
-w_err_t db_entry_print_info(char *dbname);
-w_err_t db_entry_print_data(w_db_s *entry);
-w_err_t db_entry_print_db(char *dbname);
+w_err_t db_entry_print_info(w_db_s *db);
+w_err_t db_entry_print_data(w_db_s *db);
+w_err_t db_entry_print_db(w_db_s *db);
 w_err_t db_entry_print_all(void);
 
 
