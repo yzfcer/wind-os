@@ -170,7 +170,7 @@ static w_err_t get_subinfo(w_hostfile_s *hfile,char *path)
         WIND_CHECK_BREAK(hfile->dirinfo,W_ERR_FAIL);
         hfile->subinfo.attr = (hfile->dirinfo->d_type == DT_DIR)?HFILE_ATTR_DIR:0;
         hfile->subinfo.name = (char*)wind_salloc(hfile->dirinfo->d_name,HP_ALLOCID_HOSTFS);
-		wind_notice("hfile->subinfo.name=%s",hfile->subinfo.name);
+		//wind_notice("hfile->subinfo.name=%s",hfile->subinfo.name);
     }while(0);
     return err;
 }
@@ -228,7 +228,7 @@ static char *host_filepath_generate(char *pre_path,char *relative_path,w_uint16_
 			path[len - 1] = '/';	
 	}
 
-    wind_notice("gen path:%s",path);
+    //wind_notice("gen path:%s",path);
     
     err = host_filepath_check_valid(path);
     if(err != W_ERR_OK)
@@ -462,7 +462,7 @@ static w_hostfile_s*   host_file_open_create(char *path,w_uint8_t mode)
             realpath = host_filepath_remove_tail(path);
             WIND_ASSERT_BREAK(realpath != W_NULL,W_ERR_MEM,"alloc realpath failed");
 
-            wind_notice("open file: %s",realpath);
+            //wind_notice("open file: %s",realpath);
             fd = fopen(realpath,"wb+");
             //WIND_ASSERT_BREAK(errno == 0,W_ERR_FAIL,"open hfile failed");
             WIND_ASSERT_BREAK(fd != W_NULL, W_ERR_FAIL, "create hfile failed");
@@ -500,7 +500,7 @@ w_hostfile_s* hostfile_open(w_hostfs_s *hfs,const char *path,w_uint8_t mode)
     w_uint8_t isdir;
     w_hostfile_s *hfile = (w_hostfile_s *)W_NULL;
     char *fullpath = (char *)W_NULL;
-	wind_notice("hostfile_open %s,mode=0x%02x",path,mode);
+	//wind_notice("hostfile_open %s,mode=0x%02x",path,mode);
     do
     {
         err = W_ERR_OK;
@@ -509,7 +509,7 @@ w_hostfile_s* hostfile_open(w_hostfs_s *hfs,const char *path,w_uint8_t mode)
 
         WIND_ASSERT_BREAK(fullpath != W_NULL,W_ERR_FAIL,"get full path failed");
         exist = hostfile_existing(hfs,path);
-		wind_notice("exist=%d",exist);
+		//wind_notice("exist=%d",exist);
         WIND_CHECK_BREAK((exist == W_TRUE) || ((mode & HFMODE_CRT) != 0),W_ERR_NOFILE);
         if(exist != W_TRUE)
             hfile = host_file_open_create((char*)fullpath,mode);
