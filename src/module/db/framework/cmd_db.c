@@ -66,13 +66,13 @@ COMMAND_USAGE(db)
 COMMAND_MAIN(db,argc,argv)
 {
     WIND_ASSERT_RETURN(argc >= 2,W_ERR_INVALID);
-    if(argv[1] == "list")
+    if(wind_strcmp(argv[1],"list") == 0)
         return cmd_db_list();
-    else if(argv[1] == "detail")
+    else if(wind_strcmp(argv[1],"detail") == 0)
         return cmd_db_detail(argv[2]);
-    else if(argv[1] == "create")
+    else if(wind_strcmp(argv[1],"create") == 0)
         return cmd_db_create(argv[2]);
-    else if(argv[1] == "delete")
+    else if(wind_strcmp(argv[1],"delete") == 0)
         return cmd_db_delete(argv[2]);
     return W_ERR_OK;
 }

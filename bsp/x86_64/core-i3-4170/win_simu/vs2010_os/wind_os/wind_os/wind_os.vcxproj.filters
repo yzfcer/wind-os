@@ -572,6 +572,9 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\db\framework\cmd_db.c">
       <Filter>module_db</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\db\framework\cmd_tbmodel.c">
+      <Filter>module_db</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">

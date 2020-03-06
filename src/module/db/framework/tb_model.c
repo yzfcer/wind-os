@@ -39,7 +39,7 @@ w_err_t wind_tbmodel_init(void)
     w_err_t err;
     DLIST_INIT(tbmodellist);
     err = wind_tbmodels_register();
-    wind_tbmodel_print();
+    wind_tbmodel_print_all();
     return err;
 }
 
@@ -54,9 +54,6 @@ w_err_t wind_tbmodel_register(tb_model_s *tbmodel)
 {
     tb_model_s *tbm;    
     WIND_ASSERT_RETURN(tbmodel != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(tbmodel->obj.magic == (~TB_MODEL_MAGIC),W_ERR_INVALID);
-
-
     WIND_ASSERT_RETURN(tbmodel->obj.magic == (~TB_MODEL_MAGIC),W_ERR_INVALID);
     WIND_ASSERT_RETURN(tbmodel->obj.name != W_NULL,W_ERR_PTR_NULL);
     wind_notice("register table:%s",tbmodel->obj.name);
@@ -108,10 +105,11 @@ static char *get_type_name(w_uint8_t type)
     
 }
 
-static w_err_t wind_tbmodel_printitem(tb_model_s *tbmodel)
+w_err_t wind_tbmodel_print(tb_model_s *tbmodel)
 {
     w_int32_t i;
     tbmodel_item_s *item;
+    WIND_ASSERT_RETURN(tbmodel != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(tbmodel->obj.magic == TB_MODEL_MAGIC,W_ERR_INVALID);
     wind_printf("\r\ntable %s member attribution:\r\n",tbmodel->obj.name);
     wind_print_space(7);
@@ -129,7 +127,28 @@ static w_err_t wind_tbmodel_printitem(tb_model_s *tbmodel)
     return W_ERR_OK;
 }
 
-w_err_t wind_tbmodel_print(void)
+w_err_t wind_tbmodel_print_list(void)
+{
+    
+    w_dnode_s *dnode;
+    tb_model_s *tbmodel;
+    int cnt = 0;
+    w_dlist_s *list = &tbmodellist;
+    WIND_ASSERT_RETURN(list != W_NULL,W_ERR_PTR_NULL);
+    wind_printf("\r\n\r\ntbmodel list:\r\n");
+    foreach_node(dnode,list)
+    {
+        tbmodel = NODE_TO_TBMODEL(dnode);
+        wind_printf("%-12s ",tbmodel->obj.name);
+        cnt ++;
+        if((cnt & 0x03) == 0)
+            wind_printf("\r\n");
+    }
+    return W_ERR_OK;
+}
+
+
+w_err_t wind_tbmodel_print_all(void)
 {
     
     w_dnode_s *dnode;
@@ -137,7 +156,7 @@ w_err_t wind_tbmodel_print(void)
     foreach_node(dnode,&tbmodellist)
     {
         tbmodel = NODE_TO_TBMODEL(dnode);
-        wind_tbmodel_printitem(tbmodel);
+        wind_tbmodel_print(tbmodel);
     }
     return W_ERR_OK;
 }

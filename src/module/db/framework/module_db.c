@@ -43,6 +43,7 @@ extern "C" {
 /********************************************全局变量定义**********************************************/
 #if CMD_DB_SUPPORT
 COMMAND_DECLARE(db);
+COMMAND_DECLARE(tbmodel);
 #endif
 
 
@@ -53,6 +54,8 @@ MODULE_INIT(db)
     w_err_t err;
 #if CMD_DB_SUPPORT
     err = wind_cmd_register(COMMAND(db));
+    WIND_ASSERT_RETURN(err == W_ERR_OK,err);
+    err = wind_cmd_register(COMMAND(tbmodel));
     WIND_ASSERT_RETURN(err == W_ERR_OK,err);
 #endif
     err = _wind_db_mod_init();
@@ -65,6 +68,8 @@ MODULE_EXIT(db)
     w_err_t err;
 #if CMD_DB_SUPPORT
     err = wind_cmd_unregister(COMMAND(db));
+    WIND_ASSERT_RETURN(err == W_ERR_OK,err);
+    err = wind_cmd_unregister(COMMAND(tbmodel));
     WIND_ASSERT_RETURN(err == W_ERR_OK,err);
 #endif
     return W_ERR_OK;
