@@ -97,6 +97,12 @@ w_err_t db_entry_destroy(w_db_s *db)
     return W_ERR_OK;
 }
 
+w_err_t db_entry_init(void)
+{
+    DLIST_INIT(db_list);
+    return W_ERR_OK;
+}
+
 w_db_s *db_get_byname(char *dbname)
 {
     w_dlist_s *dblist;
@@ -174,27 +180,21 @@ w_err_t db_entry_print_info(w_db_s *db)
     return W_ERR_OK;
 }
 
+
 w_err_t db_entry_print_data(w_db_s *db)
 {
-    w_tb_s *tbentry;
+    w_tb_s *tb;
     w_dnode_s *dnode;
     WIND_ASSERT_RETURN(db != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(db->magic == DB_MAGIC,W_ERR_INVALID);
     wind_printf("|---<DB name=%s>\r\n",db->name);
     foreach_node(dnode,&db->tblist)
     {
-        tbentry = NODE_TO_TBENTRY(dnode);
-        tb_entry_print_data(tbentry);
+        tb = NODE_TO_TBENTRY(dnode);
+        tb_entry_print_data(tb);
     }
     wind_printf("|---</DB name=%s>\r\n",db->name);
     return W_ERR_OK;
-}
-
-w_err_t db_entry_print_db(w_db_s *db)
-{
-    WIND_ASSERT_RETURN(db != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(db->magic == DB_MAGIC,W_ERR_INVALID);
-    db_entry_print_data(db);
     return W_ERR_OK;
 }
 

@@ -7,7 +7,8 @@
 **文   件   名: db_entry.c
 **创   建   人: Jason Zhou
 **最后修改日期: 2019.3.13
-**描        述: 数据表模型框架
+**描        述: 数据表模型框架,数据表模型定义了一个表的基本结构和相关的属性，系统可以根据该模型在不同的
+**              的DB中创建相同的数据表而不会导致访问冲突
 **              
 **--------------历史版本信息----------------------------------------------------------------------------
 ** 创建人: 
@@ -96,6 +97,7 @@ typedef struct
     tbmodel_item_s *tb_item;
 }tb_model_s;
 
+w_err_t wind_tbmodel_init(void);
 tb_model_s *wind_tbmodel_get(const char *name);
 w_err_t wind_tbmodel_register(tb_model_s *tbmodel);
 w_err_t wind_tbmodel_unregister(tb_model_s *tbmodel);

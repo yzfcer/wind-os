@@ -35,8 +35,8 @@ w_err_t db_free(void* ptr)
 
 w_err_t _wind_db_mod_init(void)
 {
-    wind_tbmodels_register();
-    wind_tbmodel_print();
+    wind_tbmodel_init();
+    db_entry_init();
     return W_ERR_OK;
 }
 

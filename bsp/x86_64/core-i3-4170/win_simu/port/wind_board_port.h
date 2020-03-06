@@ -31,7 +31,7 @@
 extern "C" {
 #endif
 
-
+void wind_init_hook(void);
 void wind_system_reset(void);
 
 #if WIND_HEAP_SUPPORT

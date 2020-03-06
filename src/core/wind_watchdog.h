@@ -46,7 +46,7 @@ extern "C" {
 #define SET_F_WATCHDOG_POOL(watchdog) (watchdog->obj.flag |= F_WATCHDOG_POOL)
 #define CLR_F_WATCHDOG_POOL(watchdog) (watchdog->obj.flag &= (~F_WATCHDOG_POOL))
 
-#define F_WATCHDOG_ENABLE (0x01 << 1)  //标记watchdog对象是否通过内存池分配
+#define F_WATCHDOG_ENABLE (0x01 << 1)  //标记watchdog对象是否使能
 #define IS_F_WATCHDOG_ENABLE(watchdog) ((watchdog->obj.flag & F_WATCHDOG_ENABLE) == F_WATCHDOG_ENABLE)
 #define SET_F_WATCHDOG_ENABLE(watchdog) (watchdog->obj.flag |= F_WATCHDOG_ENABLE)
 #define CLR_F_WATCHDOG_ENABLE(watchdog) (watchdog->obj.flag &= (~F_WATCHDOG_ENABLE))

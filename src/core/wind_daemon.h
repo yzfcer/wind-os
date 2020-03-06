@@ -43,7 +43,7 @@ extern "C" {
 #define SET_F_DAEMON_POOL(daemon) (daemon->obj.flag |= F_DAEMON_POOL)
 #define CLR_F_DAEMON_POOL(daemon) (daemon->obj.flag &= (~F_DAEMON_POOL))
 
-#define F_DAEMON_ENABLE (0x01 << 1) //标记daemon对象是否通过内存池分配
+#define F_DAEMON_ENABLE (0x01 << 1) //标记daemon对象是否使能
 #define IS_F_DAEMON_ENABLE(daemon) ((daemon->obj.flag & F_DAEMON_ENABLE) == F_DAEMON_ENABLE)
 #define SET_F_DAEMON_ENABLE(daemon) (daemon->obj.flag |= F_DAEMON_ENABLE)
 #define CLR_F_DAEMON_ENABLE(daemon) (daemon->obj.flag &= (~F_DAEMON_ENABLE))
