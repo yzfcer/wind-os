@@ -73,7 +73,7 @@ w_int32_t wind_std_input(w_uint8_t *buff,w_int32_t len)
     for(i = 0;i < len;i ++)
     {
         c = _kbhit();
-        if(c && (c <= 128))
+        if(c && (c <= 128) && (c >= 0))
         {
             buff[i] = _getch();
 			//wind_printf("_kbhit:%d\r\n",buff[i]);

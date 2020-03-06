@@ -65,47 +65,67 @@ w_err_t wind_tb_create(char *tbname,tbmodel_item_s *item_info,w_uint16_t item_cn
 
 w_err_t wind_tb_distroy(char *tbname)
 {
-    return tb_entry_destroy(tbname);
+    w_tb_s *tb;
+    tb = tb_entry_get_byname(tbname);
+    return tb_entry_destroy(tb);
 }
 
 
 w_err_t wind_tb_insert(char *tbname,void *row_data,w_int32_t row_size)
 {
-    return tb_entry_insert(tbname,row_data,row_size);
+    w_tb_s *tb;
+    tb = tb_entry_get_byname(tbname);
+    WIND_ASSERT_RETURN(tb != W_NULL,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(tb->data_cnt < 65535,W_ERR_FAIL);
+    return tb_entry_insert(tb,row_data,row_size);
 }
 
 w_err_t wind_tb_delete(char *tbname,w_int32_t row_idx)
 {
-    return tb_entry_delete(tbname,row_idx);
+    w_tb_s *tb;
+    tb = tb_entry_get_byname(tbname);
+    return tb_entry_delete(tb,row_idx);
 }
 
 w_int32_t wind_tb_get_row_index(char * tbname,w_int32_t row_idx,void * data,w_int32_t data_size)
 {
-    return tb_entry_get_data(tbname,row_idx,data,data_size);
+    w_tb_s *tb;
+    tb = tb_entry_get_byname(tbname);
+    return tb_entry_get_data(tb,row_idx,data,data_size);
 }
 
 w_err_t wind_tb_modify(char *tbname,w_int32_t tbindex,void *row_data,w_int32_t row_size)
 {
-    return tb_entry_modify(tbname,tbindex,row_data,row_size);
+    w_tb_s *tb;
+    tb = tb_entry_get_byname(tbname);
+    return tb_entry_modify(tb,tbindex,row_data,row_size);
 }
 
 w_err_t wind_tb_modify_value(char *tbname,char *mbrname,w_int32_t row_idx,void *data,w_int32_t data_size)
 {
-    return tb_entry_modify_value(tbname,mbrname,row_idx,data,data_size);
+    w_tb_s *tb;
+    tb = tb_entry_get_byname(tbname);
+    return tb_entry_modify_value(tb,mbrname,row_idx,data,data_size);
 }
 
 w_err_t wind_tb_query_cond_count(char *tbname,char *cond,w_int32_t *idxlist,w_int32_t cnt)
 {
-    return tb_entry_query_cond_count(tbname,cond,idxlist,cnt);
+    w_tb_s *tb;
+    tb = tb_entry_get_byname(tbname);
+    return tb_entry_query_cond_count(tb,cond,idxlist,cnt);
 }
 
 w_err_t wind_tb_query_count(char *tbname,w_int32_t *count)
 {
-    return tb_entry_query_count(tbname,count);
+    w_tb_s *tb;
+    tb = tb_entry_get_byname(tbname);
+    return tb_entry_query_count(tb,count);
 }
 
 w_err_t wind_tb_getdata(char * tbname,w_int32_t row_idx,void * data,w_int32_t data_size)
 {
-    return tb_entry_get_data(tbname,row_idx,data,data_size);
+    w_tb_s *tb;
+    tb = tb_entry_get_byname(tbname);
+    return tb_entry_get_data(tb,row_idx,data,data_size);
 }
 

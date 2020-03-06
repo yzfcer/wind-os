@@ -212,7 +212,7 @@ static w_err_t check_img_valid(w_part_s *cache)
     WIND_ASSERT_RETURN(len > 0,W_ERR_FAIL);
     wind_memset(head,0,sizeof(img_head_s));
     err = boot_img_head_get(head,buff);
-    WIND_ASSERT_RETURN(head->magic == IMG_MAGIC,W_ERR_FAIL);
+    WIND_ASSERT_RETURN(head->magic == IMG_MAGIC,W_ERR_INVALID);
 
     if(W_ERR_OK != check_img_hwinfo(head))
     {

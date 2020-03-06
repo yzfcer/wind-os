@@ -94,7 +94,6 @@ struct __tb_entry_s
     w_int16_t offset_offset;
     w_int16_t size_offset;
     w_int16_t attr_offset;
-
 };
 
 typedef struct

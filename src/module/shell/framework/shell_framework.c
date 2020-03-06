@@ -300,7 +300,7 @@ w_cmd_s *wind_cmd_get(const char *name)
         }
     }
     wind_enable_switch();
-    return W_NULL;
+    return (w_cmd_s *)W_NULL;
 }
 
 static w_err_t insert_cmd(w_dlist_s *list,w_cmd_s *cmd)
