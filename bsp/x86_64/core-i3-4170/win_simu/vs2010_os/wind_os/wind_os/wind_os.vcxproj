@@ -124,6 +124,7 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\db\framework\tb_entry.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\db\framework\tb_model.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\db\framework\tb_print.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\db\framework\xml.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\dict\module_dict.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\dict\wind_dict.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\game\gobang.c" />
@@ -294,6 +295,7 @@
     <ClInclude Include="..\..\..\..\..\..\..\src\module\db\framework\db_if.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\db\framework\tb_entry.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\db\framework\tb_model.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\db\framework\xml.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\dict\wind_dict.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lapi.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lauxlib.h" />
