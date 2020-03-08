@@ -22,9 +22,9 @@ struct __XNODE
 
 struct __XTREE
 {
-    int nodeCount;  
+    int nodeCount;
     int nodeMaxCount;
-    xnode_s *preNode;  
+    xnode_s *preNode;
     xnode_s *curNode;
     xstring_s *xBuf;
     xstring_s *xBufPos;
@@ -45,10 +45,13 @@ int xml_read_xnode_value(xtree_s *xtree,xstring_s *value_str);
 int xml_parse(xstring_s *xmlbuf,int xmlsize,xtree_s *xtree);
 int xml_parse_free(xtree_s *xtree);
 int print_xtree(xtree_s *xtree);
+
 xnode_s *xml_get_xnode_by_name(xtree_s *xtree,xstring_s *nodename);
 xnode_s *xml_get_xnode(xtree_s *xtree,xstring_s *parent_name,xstring_s *nodename);
 xnode_s *xml_get_child_xnode(xtree_s *xtree,xnode_s *parent_node, xstring_s *nodename);
 xnode_s *xml_get_tag(xtree_s *xtree, xnode_s *parent_node,xstring_s *tagname);
+
+
 int xml_encode(xstring_s *xs,xstring_s *scode,xstring_s *dcode);
 int xml_data_encode(xstring_s *xs);
 int xml_data_uncode(xstring_s *xs);
