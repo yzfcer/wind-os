@@ -30,6 +30,12 @@
 extern "C" {
 #endif
 
+typedef struct
+{
+    char *keyword;
+    w_err_t (*exec)(w_int32_t argc,char **argv);
+}w_cmd_handle_s;
+
 #define COMMAND_DISC(cmdname) static void cmd_##cmdname##_disc(void)
 #define COMMAND_USAGE(cmdname) static void cmd_##cmdname##_help(void)
 #define COMMAND_MAIN(cmdname,argc,argv) static w_err_t cmd_##cmdname##_main(w_int32_t argc,char **argv)

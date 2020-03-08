@@ -70,7 +70,7 @@ w_err_t db_entry_create(char *dbname,w_uint16_t attr)
     db->tb_count = 0;
     dblist = get_db_list();
     dlist_insert_tail(dblist,&db->dbnode);
-    return W_TRUE;
+    return W_ERR_OK;
 }
 
 w_err_t db_entry_destroy(w_db_s *db)

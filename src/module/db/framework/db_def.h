@@ -80,7 +80,7 @@ struct __tb_entry_s
     w_addr_t base;//¾ø¶ÔµØÖ·
     w_db_s *db;
     
-    w_mutex_s *mutex;
+    w_mutex_s mutex;
     w_uint32_t entry_size;
     w_uint16_t item_cnt;
     w_int32_t hash;

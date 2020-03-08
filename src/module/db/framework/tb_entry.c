@@ -104,55 +104,73 @@ w_err_t tb_entry_create(char *tbname,tbmodel_item_s *item_info,w_uint16_t item_c
     w_uint8_t *type,*count;
     w_uint16_t *pos,*psize,*pattr;
     w_int32_t size;
-    
-    size = calc_tb_entry_size(item_cnt);
-    tb = db_malloc(size);
-    WIND_ASSERT_RETURN(tb != W_NULL,W_ERR_MEM);
-    wind_memset(tb,0,size);
-    tb->magic = TB_MAGIC;
-    err = tb_name_split(tbname,tb->dbname,tb->tbname);
-    WIND_ASSERT_TODO_RETURN(err == W_ERR_OK,db_free(tb),W_ERR_INVALID);
-    tb->base = (w_addr_t)tb;
-    tb->db = db_get_byname(tb->dbname);
-    WIND_ASSERT_TODO_RETURN(tb->db != W_NULL,db_free(tb),W_ERR_INVALID);
-    DNODE_INIT(tb->tbnode);
 
-
-    tb->entry_size = size;
-    tb->item_cnt = item_cnt;
-    tb->hash = get_tb_hash(tb->tbname);
-
-    DLIST_INIT(tb->data_list);
-    tb->data_cnt = 0;
-    tb->data_size = item_info[item_cnt-1].offset + item_info[item_cnt-1].size;
-    
-    offset = sizeof(w_tb_s);
-    offset = (((offset + 7) >> 3) << 3);
-    offset += set_offset(offset,tb->item_cnt,&tb->mbrname_offset,MBR_NAME_LEN);
-    offset += set_offset(offset,tb->item_cnt,&tb->type_offset,sizeof(item_info->type));
-    offset += set_offset(offset,tb->item_cnt,&tb->count_offset,sizeof(item_info->count));
-    offset += set_offset(offset,tb->item_cnt,&tb->offset_offset,sizeof(item_info->offset));
-    offset += set_offset(offset,tb->item_cnt,&tb->size_offset,sizeof(item_info->size));
-    offset += set_offset(offset,tb->item_cnt,&tb->attr_offset,sizeof(item_info->attr));
-    
-    name_base = (char*)db_get_addr(tb,tb->mbrname_offset);
-    type = (w_uint8_t*)db_get_addr(tb,tb->type_offset);
-    count = (w_uint8_t*)db_get_addr(tb,tb->count_offset);
-    pos = (w_uint16_t*)db_get_addr(tb,tb->offset_offset);
-    psize = (w_uint16_t*)db_get_addr(tb,tb->size_offset);
-    pattr = (w_uint16_t*)db_get_addr(tb,tb->attr_offset);
-    for(i = 0;i < tb->item_cnt;i ++)
+    do
     {
-        wind_strncpy(name_base,item_info[i].name,MBR_NAME_LEN);
-        name_base += MBR_NAME_LEN;
-        type[i] = item_info[i].type;
-        count[i] = item_info[i].count;
-        pos[i] = item_info[i].offset;
-        psize[i] = item_info[i].size;
-        pattr[i] = item_info[i].attr;
+        err = W_ERR_OK;
+        size = calc_tb_entry_size(item_cnt);
+        tb = db_malloc(size);
+        WIND_ASSERT_BREAK(tb != W_NULL,W_ERR_MEM,"alloc tb failed");
+        wind_memset(tb,0,size);
+        tb->magic = TB_MAGIC;
+        err = tb_name_split(tbname,tb->dbname,tb->tbname);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,W_ERR_INVALID,"split tb name failed");
+        tb->base = (w_addr_t)tb;
+        tb->db = db_get_byname(tb->dbname);
+        WIND_ASSERT_BREAK(tb->db != W_NULL,W_ERR_INVALID,"db is NOT eist");
+        DNODE_INIT(tb->tbnode);
+
+        tb->entry_size = size;
+        tb->item_cnt = item_cnt;
+        tb->hash = get_tb_hash(tb->tbname);
+
+        DLIST_INIT(tb->data_list);
+        tb->data_cnt = 0;
+        tb->data_size = item_info[item_cnt-1].offset + item_info[item_cnt-1].size;
+        
+        offset = sizeof(w_tb_s);
+        offset = (((offset + 7) >> 3) << 3);
+        offset += set_offset(offset,tb->item_cnt,&tb->mbrname_offset,MBR_NAME_LEN);
+        offset += set_offset(offset,tb->item_cnt,&tb->type_offset,sizeof(item_info->type));
+        offset += set_offset(offset,tb->item_cnt,&tb->count_offset,sizeof(item_info->count));
+        offset += set_offset(offset,tb->item_cnt,&tb->offset_offset,sizeof(item_info->offset));
+        offset += set_offset(offset,tb->item_cnt,&tb->size_offset,sizeof(item_info->size));
+        offset += set_offset(offset,tb->item_cnt,&tb->attr_offset,sizeof(item_info->attr));
+
+        name_base = (char*)db_get_addr(tb,tb->mbrname_offset);
+        type = (w_uint8_t*)db_get_addr(tb,tb->type_offset);
+        count = (w_uint8_t*)db_get_addr(tb,tb->count_offset);
+        pos = (w_uint16_t*)db_get_addr(tb,tb->offset_offset);
+        psize = (w_uint16_t*)db_get_addr(tb,tb->size_offset);
+        pattr = (w_uint16_t*)db_get_addr(tb,tb->attr_offset);
+        for(i = 0;i < tb->item_cnt;i ++)
+        {
+            wind_strncpy(name_base,item_info[i].name,MBR_NAME_LEN);
+            name_base += MBR_NAME_LEN;
+            type[i] = item_info[i].type;
+            count[i] = item_info[i].count;
+            pos[i] = item_info[i].offset;
+            psize[i] = item_info[i].size;
+            pattr[i] = item_info[i].attr;
+        }
+        err = db_entry_insert_tb(tb->db,tb);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,W_ERR_FAIL);
+        wind_mutex_init(&tb->mutex,tb->tbname);
+    }while(0);
+    
+    if(err != W_ERR_OK)
+    {
+        if(tb != W_NULL)
+        {
+            if(tb->mutex.obj.magic == WIND_MUTEX_MAGIC)
+                wind_mutex_destroy(&tb->mutex);
+            db_free(tb);
+        }
+        
     }
-    err = db_entry_insert_tb(tb->db,tb);
-    WIND_ASSERT_TODO_RETURN(err == W_ERR_OK,db_free(tb),W_ERR_FAIL);
+
+
+    
     return W_TRUE;
 }
 
@@ -190,6 +208,9 @@ w_err_t tb_entry_destroy(w_tb_s *tb)
         dnode = dlist_remove(&tb->data_list,dnode);
         db_free((void *)dnode);
     }
+    
+    if(tb->mutex.obj.magic == WIND_MUTEX_MAGIC)
+        wind_mutex_destroy(&tb->mutex);
     db_free((void *)tb);
     return W_ERR_OK;
 }

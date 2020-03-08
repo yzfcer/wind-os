@@ -153,7 +153,7 @@ w_err_t wind_dictset_print(w_dictset_s *dictset)
     w_dnode_s *dnode;
     w_dict_s *dict;
     WIND_ASSERT_RETURN(dictset != W_NULL,W_ERR_PTR_NULL);
-    wind_printf("[dictset:%s]\r\n",dictset->obj.name);
+    wind_printf("[dictset name:%s]\r\n",dictset->obj.name);
     wind_mutex_lock(dictset->mutex);
     do
     {
