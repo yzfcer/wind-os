@@ -98,6 +98,7 @@ typedef struct
 }tb_model_s;
 
 w_err_t wind_tbmodel_init(void);
+w_dlist_s *wind_tbmodel_get_list(void);
 tb_model_s *wind_tbmodel_get(const char *name);
 w_err_t wind_tbmodel_register(tb_model_s *tbmodel);
 w_err_t wind_tbmodel_unregister(tb_model_s *tbmodel);

@@ -39,6 +39,7 @@ w_err_t wind_filepath_check_valid(char *path);
 char* wind_filepath_get_parent(char *path);
 char* wind_filepath_get_filename(char *path);
 char* wind_filepath_to_directory(char *path);
+char* wind_filepath_suffix(char *path);
 
 
 #endif

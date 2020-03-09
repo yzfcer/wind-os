@@ -578,6 +578,9 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\db\framework\xml.c">
       <Filter>module_db</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\db\framework\tb_model_file.c">
+      <Filter>module_db</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">
@@ -943,6 +946,9 @@
       <Filter>os_core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\..\src\module\db\framework\xml.h">
+      <Filter>module_db</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\db\framework\tb_model_file.h">
       <Filter>module_db</Filter>
     </ClInclude>
   </ItemGroup>

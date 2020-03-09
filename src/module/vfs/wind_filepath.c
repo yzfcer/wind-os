@@ -295,5 +295,17 @@ char* wind_filepath_to_directory(char *path)
     return newpath;
 }
 
+char* wind_filepath_suffix(char *path)
+{
+    char *pos;
+    char *suffix;
+    WIND_ASSERT_RETURN(path != W_NULL,(char*)W_NULL);
+    suffix = wind_strrchr(path,'.');
+    WIND_CHECK_RETURN(suffix != W_NULL,(char*)W_NULL);
+    suffix ++;
+    pos = wind_strchr(path,'/');
+    WIND_CHECK_RETURN(pos == W_NULL,(char*)W_NULL);
+    return suffix;
+}
 
 #endif

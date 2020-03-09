@@ -1,36 +1,36 @@
 #ifndef XML_H__
 #define XML_H__
-#if 1
-typedef struct __XSTRING xstring_s;
-typedef struct __XNODE xnode_s;
-typedef struct __XTREE xtree_s;
-struct __XSTRING
+
+typedef struct __xstring_s xstring_s;
+typedef struct __xnode_s xnode_s;
+typedef struct __xtree_s xtree_s;
+struct __xstring_s
 {
     char *text;
     int len;
 };
 
-struct __XNODE
+struct __xnode_s
 {
     xstring_s name;
     int index;
-    xnode_s *parentNode;
+    xnode_s *parent_node;
     int level;
     int tagCount;
     xstring_s data;
 };
 
-struct __XTREE
+struct __xtree_s
 {
-    int nodeCount;
-    int nodeMaxCount;
-    xnode_s *preNode;
-    xnode_s *curNode;
-    xstring_s *xBuf;
-    xstring_s *xBufPos;
-    xstring_s *xBufEnd;
-    xnode_s *nodeList;
-    xnode_s *rootNode;
+    int node_count;
+    int max_node_count;
+    xnode_s *pre_node;
+    xnode_s *cur_node;
+    xstring_s *xbuf;
+    xstring_s *xbuf_pos;
+    xstring_s *xbuf_tail;
+    xnode_s *node_list;
+    xnode_s *root_node;
 };
 
 int copy_xstring(xstring_s *dest_xs,xstring_s *src_xs);
@@ -42,7 +42,7 @@ int xnode_modify_data(xtree_s *xtree,xstring_s *data);
 xstring_s *delete_space(xstring_s *xbuf);
 int xml_handle_attr(xtree_s *xtree,xstring_s *attr_str);
 int xml_read_xnode_value(xtree_s *xtree,xstring_s *value_str);
-int xml_parse(xstring_s *xmlbuf,int xmlsize,xtree_s *xtree);
+int xml_parse(xtree_s *xtree,xstring_s *xmlbuf,int xmlsize);
 int xml_parse_free(xtree_s *xtree);
 int print_xtree(xtree_s *xtree);
 
@@ -64,5 +64,4 @@ xstring_s *xml_write_note(xstring_s *xmlbuf,xstring_s *note);
 xstring_s *xml_write_buf(xstring_s *buf,xstring_s *str);
 
 
-#endif
 #endif

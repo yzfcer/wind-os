@@ -26,6 +26,8 @@
 #include "wind_type.h"
 #include "db_if.h"
 #include "wind_debug.h"
+#include "tb_model.h"
+#include "tb_model_file.h"
 #define NODE_TO_TBMODEL(dnode) (tb_model_s*)(((w_uint8_t*)(dnode))-((w_addr_t)&(((tb_model_s*)0)->obj.objnode)))
 static w_dlist_s tbmodellist;
 typedef struct
@@ -39,10 +41,16 @@ w_err_t wind_tbmodel_init(void)
     w_err_t err;
     DLIST_INIT(tbmodellist);
     err = wind_tbmodels_register();
+    WIND_ASSERT_RETURN(err == W_ERR_OK,err);
+    err = tbmodel_file_init();
     wind_tbmodel_print_all();
     return err;
 }
 
+w_dlist_s *wind_tbmodel_get_list(void)
+{
+    return &tbmodellist;
+}
 
 tb_model_s *wind_tbmodel_get(const char *name)
 {

@@ -1,6 +1,6 @@
-#include < stdlib.h >  
-#include < stdio.h >  
-#include < string.h >  
+#include <stdlib.h>  
+#include <stdio.h>  
+#include "wind_string.h"
 //#include < time.h >  
 //#include < varargs.h >  
 //#include"xmlparse.h" 
@@ -14,7 +14,7 @@
 #define XVAL_TAG 5  /*空标志 */ 
 #define XVAL_NONE 0 
 #define XVAL_ERROR -1 
-#if 1
+
 
 static int is_space(char c) /*是空否 */ 
 { 
@@ -31,7 +31,7 @@ static int is_space(char c) /*是空否 */
 
 static int is_name_tchar(int c) /*有效的名称前导符 */ 
 { 
-    return (c  >= 'A' && c <= 'Z') || (c  >= 'a' && c <= 'z') || (c == '_'); 
+    return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c == '_'); 
 }
 
 int copy_xstring(xstring_s *dest_xs,xstring_s *src_xs) /*X字串赋值 */ 
@@ -46,7 +46,7 @@ int copy_xnode(xnode_s *dest_xnode,xnode_s *src_xnode) /*X节点赋值 */
 { 
     copy_xstring(&(dest_xnode->name),&(src_xnode->name));
     dest_xnode->index = src_xnode->index;
-    dest_xnode->parentNode = src_xnode->parentNode;
+    dest_xnode->parent_node = src_xnode->parent_node;
     dest_xnode->level = src_xnode->level;
     dest_xnode->tagCount = src_xnode->tagCount;
     copy_xstring(&(dest_xnode->data),&(src_xnode->data)); 
@@ -56,53 +56,53 @@ int copy_xnode(xnode_s *dest_xnode,xnode_s *src_xnode) /*X节点赋值 */
 /*增加同级节点: */ 
 xnode_s *xnode_add_brother(xtree_s *xtree,xstring_s *name) 
 {
-    if(xtree->curNode->parentNode == W_NULL || xtree->nodeCount  >= xtree->nodeMaxCount)
+    if(xtree->cur_node->parent_node == W_NULL || xtree->node_count >= xtree->max_node_count)
         return W_NULL;
-    (xtree->nodeCount) ++ ;
-    xtree->preNode = xtree->curNode;
-    xtree->curNode = &(xtree->nodeList[xtree->nodeCount-1]);
-    xtree->curNode->index = xtree->nodeCount-1;
-    copy_xstring(&(xtree->curNode->name),name);
-    xtree->curNode->parentNode = xtree->preNode->parentNode;
-    xtree->curNode->level = xtree->preNode->level;
-    (xtree->curNode->parentNode->tagCount) ++ ;
-    return (xtree->curNode);
+    (xtree->node_count) ++ ;
+    xtree->pre_node = xtree->cur_node;
+    xtree->cur_node = &(xtree->node_list[xtree->node_count-1]);
+    xtree->cur_node->index = xtree->node_count-1;
+    copy_xstring(&(xtree->cur_node->name),name);
+    xtree->cur_node->parent_node = xtree->pre_node->parent_node;
+    xtree->cur_node->level = xtree->pre_node->level;
+    (xtree->cur_node->parent_node->tagCount) ++ ;
+    return (xtree->cur_node);
 }
 
 /*增加子节点: */ 
 xnode_s *xnode_add_child(xtree_s *xtree,xstring_s *name) 
 { 
-    if(xtree->curNode == W_NULL || xtree->nodeCount  >= xtree->nodeMaxCount)
+    if(xtree->cur_node == W_NULL || xtree->node_count >= xtree->max_node_count)
         return W_NULL;
-    (xtree->nodeCount) ++ ;
-    xtree->preNode = xtree->curNode;
-    xtree->curNode = &(xtree->nodeList[xtree->nodeCount-1]);
-    xtree->curNode->index = xtree->nodeCount-1;
-    copy_xstring(&(xtree->curNode->name),name);
-    xtree->curNode->parentNode = xtree->preNode;
-    xtree->curNode->level = xtree->preNode->level + 1;
-    (xtree->preNode->tagCount) ++ ;
-    return (xtree->curNode);
+    (xtree->node_count) ++ ;
+    xtree->pre_node = xtree->cur_node;
+    xtree->cur_node = &(xtree->node_list[xtree->node_count-1]);
+    xtree->cur_node->index = xtree->node_count-1;
+    copy_xstring(&(xtree->cur_node->name),name);
+    xtree->cur_node->parent_node = xtree->pre_node;
+    xtree->cur_node->level = xtree->pre_node->level + 1;
+    (xtree->pre_node->tagCount) ++ ;
+    return (xtree->cur_node);
 }
 
 /*返回父节点: */ 
 xnode_s *xnode_get_parent(xtree_s *xtree) 
 { 
-    if(xtree->curNode->parentNode == W_NULL)
+    if(xtree->cur_node->parent_node == W_NULL)
         return W_NULL;
-    xtree->preNode = xtree->curNode;
-    xtree->curNode = xtree->curNode->parentNode;
-    return (xtree->curNode);
+    xtree->pre_node = xtree->cur_node;
+    xtree->cur_node = xtree->cur_node->parent_node;
+    return (xtree->cur_node);
 }
 
 /*修改当前节点元素值: */ 
 int xnode_modify_data(xtree_s *xtree,xstring_s *data) 
 { 
-    if(xtree->curNode == W_NULL)
+    if(xtree->cur_node == W_NULL)
         return -1;
-    /*if(xtree->curNode->tagCount > 0)
+    /*if(xtree->cur_node->tagCount > 0)
         return -2; */ 
-    copy_xstring(&(xtree->curNode->data),data); 
+    copy_xstring(&(xtree->cur_node->data),data); 
     return 0;
 }
 
@@ -122,7 +122,7 @@ int xml_handle_attr(xtree_s *xtree,xstring_s *attr_str) /*处理属性:当作叶节点,子
     while(p && *(char*)p)
     { 
         p1 = p;
-        p2 = (xstring_s*)strchr((char*)p1,' = ');
+        p2 = (xstring_s*)wind_strchr((char*)p1,' = ');
         if(p2 == W_NULL)
             break;
         xn.text = (char*)p1;
@@ -132,7 +132,7 @@ int xml_handle_attr(xtree_s *xtree,xstring_s *attr_str) /*处理属性:当作叶节点,子
         if( *(char*)p != '\"')
             break;
         p1 = p;
-        p2 = (xstring_s*)strchr((char*)(p1 + 1),'"');
+        p2 = (xstring_s*)wind_strchr((char*)(p1 + 1),'"');
         if(p2 == W_NULL)
             break;
         xv.text = (char*)(p1 + 1);
@@ -144,7 +144,7 @@ int xml_handle_attr(xtree_s *xtree,xstring_s *attr_str) /*处理属性:当作叶节点,子
         k ++ ;
         if(xnode_modify_data(xtree,&xv) < 0)
             break;
-        xtree->curNode->tagCount = -1;
+        xtree->cur_node->tagCount = -1;
         xnode_get_parent(xtree);
         p = delete_space(p2 + 1);
     }
@@ -156,16 +156,16 @@ int xml_read_xnode_value(xtree_s *xtree,xstring_s *value_str)
 { 
     xstring_s *p, *p1, *p2;
     int ivtype = XVAL_NONE;
-    p = xtree->xBufPos;
-    p = delete_space(xtree->xBufPos); /*删除前导空 */ 
+    p = xtree->xbuf_pos;
+    p = delete_space(xtree->xbuf_pos); /*删除前导空 */ 
     if( *(char*)p!= ' < ')
     {  /*数据 */ 
         p1 = p;
-        p2 = (xstring_s*)strchr((char*)p1,' < ');
+        p2 = (xstring_s*)wind_strchr((char*)p1,' < ');
         value_str->text = (char*)p1;
         value_str->len = (p2?p2-p1:0);
-        ivtype = (p2 && p2 < xtree->xBufEnd? XVAL_DATA:XVAL_NONE);
-        xtree->xBufPos = (p2?p2:xtree->xBufEnd);
+        ivtype = (p2 && p2 < xtree->xbuf_tail? XVAL_DATA:XVAL_NONE);
+        xtree->xbuf_pos = (p2?p2:xtree->xbuf_tail);
         goto OKExit33qqq;
     }
 
@@ -174,7 +174,7 @@ int xml_read_xnode_value(xtree_s *xtree,xstring_s *value_str)
     if( *(char*)p == '/') 
     { /*标记尾 */ 
         p1 = p + 1;
-        p2 = (xstring_s*)strchr((char*)p1,'>');
+        p2 = (xstring_s*)wind_strchr((char*)p1,'>');
         if(p2 == W_NULL)
         { /*错误 */ 
             goto ErrExit33qqq;
@@ -184,13 +184,13 @@ int xml_read_xnode_value(xtree_s *xtree,xstring_s *value_str)
             ivtype = XVAL_NEND;
             value_str->text = (char*)p1;
             value_str->len = p2-p1;
-            xtree->xBufPos = p2 + 1;
+            xtree->xbuf_pos = p2 + 1;
         }
     }
     else if(is_name_tchar( *(char*)p)) 
     { /*标记头 */ 
         p1 = p;
-        p2 = (xstring_s*)strchr((char*)p1,'>');
+        p2 = (xstring_s*)wind_strchr((char*)p1,'>');
         if(p2 == W_NULL)
         { /*错误 */ 
             goto ErrExit33qqq;
@@ -200,7 +200,7 @@ int xml_read_xnode_value(xtree_s *xtree,xstring_s *value_str)
         { /*处理空标记 < abc/ >  */ 
             ivtype = 11;
             value_str->text = (char*)p1;
-            if(p  >= p2)
+            if(p >= p2)
                 p = p2-1;
             value_str->len = p-p1;
             if(xnode_add_child(xtree,value_str) == W_NULL)
@@ -231,7 +231,7 @@ int xml_read_xnode_value(xtree_s *xtree,xstring_s *value_str)
                 ivtype = 11 + xml_handle_attr(xtree,value_str);
             }  
         }
-        xtree->xBufPos = p2 + 1;
+        xtree->xbuf_pos = p2 + 1;
     }
     else if( *(char*)p == '!')
     {  
@@ -239,7 +239,7 @@ int xml_read_xnode_value(xtree_s *xtree,xstring_s *value_str)
         { 
             p += 3; 
             p1 = delete_space(p);
-            p2 = (xstring_s*)strstr((char*)p1,"-->"); /*注释尾 */ 
+            p2 = (xstring_s*)wind_strstr((char*)p1,"-->"); /*注释尾 */ 
             if(p2 == W_NULL)
             { /*错误 */ 
                 goto ErrExit33qqq;
@@ -247,7 +247,7 @@ int xml_read_xnode_value(xtree_s *xtree,xstring_s *value_str)
             else
             { 
                 ivtype = XVAL_NOTE;
-                xtree->xBufPos = p2 + 3;
+                xtree->xbuf_pos = p2 + 3;
                 value_str->text = (char*)p1;
                 value_str->len = (p2-p1)/sizeof(xstring_s);
             }
@@ -259,12 +259,12 @@ OKExit33qqq:
     return (ivtype);
 ErrExit33qqq: 
     ivtype = XVAL_ERROR;
-    xtree->xBufPos = xtree->xBufEnd;
+    xtree->xbuf_pos = xtree->xbuf_tail;
     return (ivtype); 
 }
 
 /*读xml并解析到X树 */ 
-int xml_parse(xstring_s *xmlbuf,int xmlsize,xtree_s *xtree) 
+int xml_parse(xtree_s *xtree,xstring_s *xmlbuf,int xmlsize) 
 { 
     xstring_s *p, *p1, *pend = xmlbuf + xmlsize;
     xstring_s xstr;
@@ -272,13 +272,13 @@ int xml_parse(xstring_s *xmlbuf,int xmlsize,xtree_s *xtree)
     int k;
     int maxnn = 0,vtype = XVAL_NONE, vtype0 = XVAL_NONE;
 
-    memset(xtree,0x00,sizeof(xtree_s));
-    if(memcmp(xmlbuf,"< ?xmlversion = ",14)!= 0) 
+    wind_memset(xtree,0x00,sizeof(xtree_s));
+    if(wind_memcmp(xmlbuf,"<?xmlversion=",14)!= 0) 
     { 
-        wind_error("无XML内容头!");
+        wind_error("xml has no content!");
         return -1;
     }
-    p = (xstring_s*)strstr((char*)xmlbuf,"? > ");
+    p = (xstring_s*)wind_strstr((char*)xmlbuf,"?>");
     if(p == W_NULL) 
     { 
         wind_error("XML内容头无结尾!");
@@ -294,9 +294,9 @@ int xml_parse(xstring_s *xmlbuf,int xmlsize,xtree_s *xtree)
             maxnn ++ ;/*空标记 */ 
     }
     maxnn = maxnn/2 + 2;
-    xtree->xBuf = xmlbuf;
-    xtree->xBufEnd = xmlbuf + xmlsize;
-    xtree->xBufPos = p1;
+    xtree->xbuf = xmlbuf;
+    xtree->xbuf_tail = xmlbuf + xmlsize;
+    xtree->xbuf_pos = p1;
     for(k = 0;k < 99;k ++ )
     { 
         vtype = xml_read_xnode_value(xtree,&xstr); 
@@ -306,29 +306,29 @@ int xml_parse(xstring_s *xmlbuf,int xmlsize,xtree_s *xtree)
             break;
     }
 
-    xtree->nodeCount = 0;
+    xtree->node_count = 0;
     if (vtype!= XVAL_NBEGIN) 
     { 
-        xtree->nodeMaxCount = 0;
+        xtree->max_node_count = 0;
         wind_debug("空XML内容");
         return 0;
     }
-    wind_debug(" == = 申请节点存储空间 = %d",maxnn);
-    xtree->nodeList = (xnode_s *)calloc(maxnn,sizeof(xnode_s)); /*申请节点存储空间 */ 
-    if(xtree->nodeList == W_NULL) 
+    wind_debug("===申请节点存储空间=%d",maxnn);
+    xtree->node_list = (xnode_s *)calloc(maxnn,sizeof(xnode_s)); /*申请节点存储空间 */ 
+    if(xtree->node_list == W_NULL) 
     { 
         wind_error("申请节点存储空间(%d)失败!",maxnn);
         return -2;
     }
-    xtree->nodeMaxCount = maxnn;
-    memset(xtree->nodeList,0x00,maxnn *sizeof(xnode_s));
-    xtree->rootNode = &(xtree->nodeList[0]); /*根节点 */ 
-    xtree->rootNode->parentNode = W_NULL;
-    xtree->rootNode->index = xtree->rootNode->level = 0;
+    xtree->max_node_count = maxnn;
+    wind_memset(xtree->node_list,0x00,maxnn *sizeof(xnode_s));
+    xtree->root_node = &(xtree->node_list[0]); /*根节点 */ 
+    xtree->root_node->parent_node = W_NULL;
+    xtree->root_node->index = xtree->root_node->level = 0;
     *(xstr.text + xstr.len) = '\0';
-    copy_xstring(&(xtree->rootNode->name),&xstr);
-    xtree->curNode = xtree->rootNode;
-    xtree->nodeCount = 1;
+    copy_xstring(&(xtree->root_node->name),&xstr);
+    xtree->cur_node = xtree->root_node;
+    xtree->node_count = 1;
     k = 0;
     while(k < maxnn ) 
     { 
@@ -353,14 +353,14 @@ int xml_parse(xstring_s *xmlbuf,int xmlsize,xtree_s *xtree)
             break;
         default: 
             if(vtype > 10) 
-                break;/*printf(" == = c增加%d/n", vtype-10); */ 
+                break;
         }
     }
     *(char*)xmlbuf = '\0'; /*置已解析标志 */ 
-    maxnn = xtree->curNode->index; /*最终当前节点号 */ 
-    for(k = 0;k < xtree->nodeCount;k ++ )
+    maxnn = xtree->cur_node->index; /*最终当前节点号 */ 
+    for(k = 0;k < xtree->node_count;k ++ )
     { 
-        xn = &(xtree->nodeList[k]);
+        xn = &(xtree->node_list[k]);
         if(xn->name.text) 
            *(xn->name.text + xn->name.len) = '\0';
         else 
@@ -370,19 +370,19 @@ int xml_parse(xstring_s *xmlbuf,int xmlsize,xtree_s *xtree)
         else 
             xn->data.text = (char*)xmlbuf; 
     }
-    wind_debug ("节点数 = %d/n",xtree->nodeCount);
+    wind_debug ("节点数 = %d/n",xtree->node_count);
     if(maxnn)
         wind_error("XML文件不完整(%d)",maxnn);
-    xtree->curNode = xtree->rootNode; 
+    xtree->cur_node = xtree->root_node; 
     return (maxnn);
 }
 
 int xml_parse_free(xtree_s *xtree) 
 { 
-    if(xtree->nodeMaxCount > 0) 
-        free(xtree->nodeList);
-    xtree->nodeMaxCount = 0;
-    xtree->nodeCount = 0;
+    if(xtree->max_node_count > 0) 
+        free(xtree->node_list);
+    xtree->max_node_count = 0;
+    xtree->node_count = 0;
     return 0;
 }
 
@@ -390,12 +390,12 @@ int print_xtree(xtree_s *xtree)
 { 
     int k;
     xnode_s *xn;
-    wind_debug(" ********xTree结构,总节点数 = %d,节点空间 = %d ********",xtree->nodeCount,xtree->nodeMaxCount);
+    wind_debug(" ********xTree结构,总节点数=%d,节点空间=%d ********",xtree->node_count,xtree->max_node_count);
     wind_debug("/t节点号父节点节点级子节数节点名节点数据");
-    for(k = 0;k < xtree->nodeCount;k ++ )
+    for(k = 0;k < xtree->node_count;k ++ )
     { 
-        xn = &(xtree->nodeList[k]);
-        wind_debug("/t%d%d%d%d[%s][%s]",xn->index,(xn->parentNode?xn->parentNode->index:-1), xn->level,xn->tagCount,xn->name.text,xn->data.text);
+        xn = &(xtree->node_list[k]);
+        wind_debug("/t%d%d%d%d[%s][%s]",xn->index,(xn->parent_node?xn->parent_node->index:-1), xn->level,xn->tagCount,xn->name.text,xn->data.text);
     }
     wind_debug(" *****************************************************************");
     return 0;
@@ -406,15 +406,15 @@ xnode_s *xml_get_xnode_by_name(xtree_s *xtree,xstring_s *nodename)
 { 
     int k;
     xnode_s *xn;
-    for(k = xtree->curNode->index + 1;k < xtree->nodeCount;k ++ ) 
+    for(k = xtree->cur_node->index + 1;k < xtree->node_count;k ++ ) 
     { 
-        xn = &(xtree->nodeList[k]);
-        if(memcmp(xn->name.text,nodename,xn->name.len) == 0)
+        xn = &(xtree->node_list[k]);
+        if(wind_memcmp(xn->name.text,nodename,xn->name.len) == 0)
             break;
     }
-    if(k  >= xtree->nodeCount)
+    if(k >= xtree->node_count)
         return W_NULL;
-    xtree->curNode = xn;
+    xtree->cur_node = xn;
     return (xn);
 }
 
@@ -423,16 +423,16 @@ xnode_s *xml_get_xnode(xtree_s *xtree,xstring_s *parent_name,xstring_s *nodename
 { 
      int k;
     xnode_s *xn;
-    for(k = xtree->curNode->index + 1;k < xtree->nodeCount;k ++ ) 
+    for(k = xtree->cur_node->index + 1;k < xtree->node_count;k ++ ) 
     { 
-        xn = &(xtree->nodeList[k]);
-        if(memcmp(xn->name.text,nodename,xn->name.len) == 0 && memcmp(xn->parentNode->name.text,parent_name,xn->parentNode->name.len) == 0)
+        xn = &(xtree->node_list[k]);
+        if(wind_memcmp(xn->name.text,nodename,xn->name.len) == 0 && wind_memcmp(xn->parent_node->name.text,parent_name,xn->parent_node->name.len) == 0)
             break;
     }
-    if(k  >= xtree->nodeCount)
+    if(k >= xtree->node_count)
         return W_NULL;
-    xtree->curNode = xn;
-    return (xtree->curNode);
+    xtree->cur_node = xn;
+    return (xtree->cur_node);
 }
 
 /*从当前节点往下取得子节点(根据父节点和节点名): */ 
@@ -440,18 +440,18 @@ xnode_s *xml_get_child_xnode(xtree_s *xtree,xnode_s *parent_node, xstring_s *nod
 { 
      int k;
     xnode_s *xn;
-    for(k = xtree->curNode->index + 1;k < xtree->nodeCount;k ++ ) 
+    for(k = xtree->cur_node->index + 1;k < xtree->node_count;k ++ ) 
     { 
-        xn = &(xtree->nodeList[k]);
+        xn = &(xtree->node_list[k]);
         if(xn->level <= parent_node->level)
         return W_NULL;
-        if(xn->parentNode == parent_node && memcmp(xn->name.text,nodename,xn->name.len) == 0)
+        if(xn->parent_node == parent_node && wind_memcmp(xn->name.text,nodename,xn->name.len) == 0)
             break;
     }
-    if(k  >= xtree->nodeCount)
+    if(k >= xtree->node_count)
         return W_NULL;
-    xtree->curNode = xn;
-    return (xtree->curNode);
+    xtree->cur_node = xn;
+    return (xtree->cur_node);
 }
 
 /*取得叶节点: */ 
@@ -459,28 +459,28 @@ xnode_s *xml_get_tag(xtree_s *xtree, xnode_s *parent_node,xstring_s *tagname)
 { 
      int k;
     xnode_s *xn;
-    if(parent_node == W_NULL) 
+    if(parent_node == W_NULL)
         return W_NULL;
-    for(k = parent_node->index + 1;k < xtree->nodeCount;k ++ ) 
+    for(k = parent_node->index + 1;k < xtree->node_count;k ++) 
     { 
-        xn = &(xtree->nodeList[k]);
+        xn = &(xtree->node_list[k]);
         if(xn->level <= parent_node->level)
         return W_NULL;
-        if(xn->parentNode == parent_node && memcmp(xn->name.text,tagname,xn->name.len) == 0)
+        if(xn->parent_node == parent_node && wind_memcmp(xn->name.text,tagname,xn->name.len) == 0)
             break;
     }
-    if(k  >= xtree->nodeCount)
+    if(k >= xtree->node_count)
         return W_NULL;
-    xtree->curNode = xn;
-    return (xtree->curNode);
+    xtree->cur_node = xn;
+    return (xtree->cur_node);
 }
 
 /*代码编码转换1: */ 
 int xml_encode(xstring_s *xs,xstring_s *scode,xstring_s *dcode) 
 { 
-    int k,lens = strlen((char*)scode),lend = strlen((char*)dcode),nrr = 0;
+    int k,lens = wind_strlen((char*)scode),lend = wind_strlen((char*)dcode),nrr = 0;
     xstring_s *tmpbuf, *p, *p0, *pt, *pend;
-    if(strstr(xs->text,(char*)scode) == W_NULL) 
+    if(wind_strstr(xs->text,(char*)scode) == W_NULL) 
         return 0;
     pend = (xstring_s *)(xs->text + xs->len);
     k = lend-lens;
@@ -489,23 +489,23 @@ int xml_encode(xstring_s *xs,xstring_s *scode,xstring_s *dcode)
     tmpbuf = (xstring_s *)malloc( xs->len + k *100 + 1 );
     if(tmpbuf == W_NULL)
         return -1;
-    memset(tmpbuf,0x00,xs->len + k *100);
+    wind_memset(tmpbuf,0x00,xs->len + k *100);
     for(p0 = p = (xstring_s*)xs->text,pt = tmpbuf;p && nrr < 100;nrr ++ )
     { 
-        p = (xstring_s*)strstr((char*)p0,(char*)scode);
+        p = (xstring_s*)wind_strstr((char*)p0,(char*)scode);
         if(p == W_NULL || p > pend)
         { 
-            memcpy(pt,p0,pend-p0);
+            wind_memcpy(pt,p0,pend-p0);
             pt += pend-p0;
             break;
         }
-        memcpy(pt,p0,p-p0);pt += p-p0;
-        memcpy(pt,dcode,lend);pt += lend;
+        wind_memcpy(pt,p0,p-p0);pt += p-p0;
+        wind_memcpy(pt,dcode,lend);pt += lend;
         p0 = p + lens;
     }
     pt = '\0';
-    lens = strlen((char*)tmpbuf);
-    memcpy(xs->text,tmpbuf,lens );
+    lens = wind_strlen((char*)tmpbuf);
+    wind_memcpy(xs->text,tmpbuf,lens );
     xs->len = lens;
     *(xs->text + lens) = '\0';
     free(tmpbuf);
@@ -539,8 +539,8 @@ int xml_data_uncode(xstring_s *xs)
 /*写xml头 */ 
 xstring_s *xml_write_head(xstring_s *xmlbuf,xstring_s *encode) 
 { 
-    sprintf((char*)xmlbuf,"< ?xmlversion = \"1.0\"encoding = \"%s\"? > \n\0",(char*)encode);
-    return (xmlbuf + strlen((char*)xmlbuf));
+    wind_sprintf((char*)xmlbuf,"<?xmlversion=\"1.0\"encoding=\"%s\"?>\n\0",(char*)encode);
+    return (xmlbuf + wind_strlen((char*)xmlbuf));
 }
 
 /*写标识头 */ 
@@ -548,14 +548,14 @@ xstring_s *xml_write_xnode_beg(xstring_s *xmlbuf,xstring_s *tag)
 { 
     int k;
     if( *(char*)tag > '9'){ 
-        sprintf((char*)xmlbuf,"<%s>\n\0",(char*)tag);
-        return (xmlbuf + strlen((char*)tag) + 3);
+        wind_sprintf((char*)xmlbuf,"<%s>\n\0",(char*)tag);
+        return (xmlbuf + wind_strlen((char*)tag) + 3);
     }
     else
     { 
         for(k = 0;k < ( *(char*)tag-'0');k ++ ) *((char*)xmlbuf + k) = '/t';
-        sprintf((char*)xmlbuf + k,"<%s>\n\0",tag + 1);
-        return (xmlbuf + k + strlen((char*)tag) + 2);
+        wind_sprintf((char*)xmlbuf + k,"<%s>\n\0",tag + 1);
+        return (xmlbuf + k + wind_strlen((char*)tag) + 2);
     }
 }
 
@@ -565,15 +565,15 @@ xstring_s *xml_write_xnode_end(xstring_s *xmlbuf,xstring_s *tag)
     int k;
     if( *(char*)tag > '9')
     { 
-        sprintf((char*)xmlbuf,"</%s>\n\0",(char*)tag);
-        return (xmlbuf + strlen((char*)tag) + 4);
+        wind_sprintf((char*)xmlbuf,"</%s>\n\0",(char*)tag);
+        return (xmlbuf + wind_strlen((char*)tag) + 4);
     }
     else
     { 
         for(k = 0;k < ( *(char*)tag-'0');k ++ ) 
            *((char*)xmlbuf + k) = '/t';
-        sprintf((char*)xmlbuf + k,"</%s>\n\0",(char*)tag + 1);
-        return (xmlbuf + k + strlen((char*)tag) + 3);
+        wind_sprintf((char*)xmlbuf + k,"</%s>\n\0",(char*)tag + 1);
+        return (xmlbuf + k + wind_strlen((char*)tag) + 3);
     } 
 }
 
@@ -583,15 +583,15 @@ xstring_s *xml_write_tag(xstring_s *xmlbuf,xstring_s *tag,xstring_s *data)
     int k;
     if( *(char*)tag > '9')
     { 
-        sprintf((char*)xmlbuf,"/t/t<%s>%s</%s>\n\0",(char*)tag,(char*)data,(char*)tag);
-        return (xmlbuf + strlen((char*)tag) *2 + 8 + strlen((char*)data) );
+        wind_sprintf((char*)xmlbuf,"/t/t<%s>%s</%s>\n\0",(char*)tag,(char*)data,(char*)tag);
+        return (xmlbuf + wind_strlen((char*)tag) * 2 + 8 + wind_strlen((char*)data) );
     }
     else
     { 
         for(k = 0;k < ( *(char*)tag-'0');k ++ ) 
            *((char*)xmlbuf + k) = '/t';
-        sprintf((char*)xmlbuf + k,"<%s>%s</%s>\n\0",(char*)tag + 1,(char*)data,(char*)tag + 1);
-        return (xmlbuf + k + strlen((char*)tag) *2 + 4 + strlen((char*)data));
+        wind_sprintf((char*)xmlbuf + k,"<%s>%s</%s>\n\0",(char*)tag + 1,(char*)data,(char*)tag + 1);
+        return (xmlbuf + k + wind_strlen((char*)tag) * 2 + 4 + wind_strlen((char*)data));
     }
 }
 
@@ -600,40 +600,39 @@ xstring_s *xml_write_extag(xstring_s *xmlbuf,xstring_s *tag,xstring_s *data)
 { 
     xstring_s xs;
     xstring_s xdata[512]; 
-    int len = strlen((char*)data);
+    int len = wind_strlen((char*)data);
     int k;
-    xs.text = (char*)xdata; /*xmlbuf + strlen(tag) + 2; */ 
+    xs.text = (char*)xdata; /*xmlbuf + wind_strlen(tag) + 2; */ 
     xs.len = len;
-    memcpy(xs.text,data,len); 
+    wind_memcpy(xs.text,data,len); 
     xml_data_uncode(&xs);
     *(xs.text + xs.len) = '\0';
     if( *(char*)tag > '9')
     { 
-        sprintf((char*)xmlbuf,"/t/t<%s>%s</%s>\n\0",(char*)tag,xs.text,(char*)tag);
-        return (xmlbuf + strlen((char*)tag) *2 + 8 + xs.len );
+        wind_sprintf((char*)xmlbuf,"/t/t<%s>%s</%s>\n\0",(char*)tag,xs.text,(char*)tag);
+        return (xmlbuf + wind_strlen((char*)tag) * 2 + 8 + xs.len );
     }
     else
     { 
         for(k = 0;k < ( *(char*)tag-'0');k ++ ) 
            *((char*)xmlbuf + k) = '/t';
-        sprintf((char*)xmlbuf + k,"<%s>%s</%s>\n\0",(char*)tag + 1,xs.text,(char*)tag + 1);
-        return (xmlbuf + k + strlen((char*)tag) *2 + 4 + xs.len );
+        wind_sprintf((char*)xmlbuf + k,"<%s>%s</%s>\n\0",(char*)tag + 1,xs.text,(char*)tag + 1);
+        return (xmlbuf + k + wind_strlen((char*)tag) * 2 + 4 + xs.len );
     }
 }
 
 /*写注释 */ 
 xstring_s *xml_write_note(xstring_s *xmlbuf,xstring_s *note) 
 { 
-    sprintf((char*)xmlbuf,"<!--%s-->\n\0",(char*)note);
-    return (xmlbuf + strlen((char*)note) + 8);
+    wind_sprintf((char*)xmlbuf,"<!--%s-->\n\0",(char*)note);
+    return (xmlbuf + wind_strlen((char*)note) + 8);
 }
 
 /*写任意串写缓冲 */ 
 xstring_s *xml_write_buf(xstring_s *buf,xstring_s *str) 
 { 
-    sprintf((char*)buf,"%s\0",(char*)str);
-    return (buf + strlen((char*)str));
+    wind_sprintf((char*)buf,"%s\0",(char*)str);
+    return (buf + wind_strlen((char*)str));
 }
 
-#endif
 
