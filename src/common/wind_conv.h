@@ -38,6 +38,9 @@ typedef enum
             + (((value32) << 16) & 0xff0000)\
             + (((value32) << 24) & 0xff000000))
 
+#define SELF_BE2LE_2(value16) value16 = BE2LE_2(value16)
+#define SELF_BE2LE_4(value32) value32 = BE2LE_4(value32)
+
 w_endian_e wind_endian(void);
 //��ֵ���ַ���֮���ת��
 w_bool_t wind_str_to_int(char *str,w_int32_t *value);

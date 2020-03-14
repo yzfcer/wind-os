@@ -31,7 +31,6 @@
 #include "listfs_bitmap.h"
 #if WIND_LISTFS_SUPPORT
 
-
 #define NODE_TO_LISTFILE(node) (w_listfile_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((w_listfile_s*)0)->list.listnode)))
 w_err_t _wind_listfs_mod_init(void)
 {
@@ -44,16 +43,16 @@ void lfs_info_be2le(lfs_info_s *info)
 {
     if(wind_endian() == ENDIAN_BIG)
     {
-        BE2LE_4(info->magic);
-        BE2LE_4(info->blkcount);
-        BE2LE_2(info->unit_size);
-        BE2LE_2(info->blksize);
-        BE2LE_2(info->reserve_blk);
-        BE2LE_2(info->attr);
-        BE2LE_4(info->bitmap_cnt);
-        BE2LE_4(info->bitmap1_addr);
-        BE2LE_4(info->bitmap2_addr);
-        BE2LE_4(info->root_addr);
+        SELF_BE2LE_4(info->magic);
+        SELF_BE2LE_4(info->blkcount);
+        SELF_BE2LE_2(info->unit_size);
+        SELF_BE2LE_2(info->blksize);
+        SELF_BE2LE_2(info->reserve_blk);
+        SELF_BE2LE_2(info->attr);
+        SELF_BE2LE_4(info->bitmap_cnt);
+        SELF_BE2LE_4(info->bitmap1_addr);
+        SELF_BE2LE_4(info->bitmap2_addr);
+        SELF_BE2LE_4(info->root_addr);
     }
 }
 

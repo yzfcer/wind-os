@@ -34,17 +34,17 @@ void fileinfo_be2le(lfile_info_s *info)
 {
     if(wind_endian() == ENDIAN_BIG)
     {
-        BE2LE_4(info->magic);
-        BE2LE_4(info->filesize);
-        BE2LE_4(info->spacesize);
-        BE2LE_4(info->parent_addr);
-        BE2LE_4(info->self_addr);
-        BE2LE_4(info->last_addr);
-        BE2LE_4(info->prevfile_addr);
-        BE2LE_4(info->nextfile_addr);
-        BE2LE_4(info->children_cnt);
-        BE2LE_4(info->headchild_addr);
-        BE2LE_4(info->tailchild_addr);
+        SELF_BE2LE_4(info->magic);
+        SELF_BE2LE_4(info->filesize);
+        SELF_BE2LE_4(info->spacesize);
+        SELF_BE2LE_4(info->parent_addr);
+        SELF_BE2LE_4(info->self_addr);
+        SELF_BE2LE_4(info->last_addr);
+        SELF_BE2LE_4(info->prevfile_addr);
+        SELF_BE2LE_4(info->nextfile_addr);
+        SELF_BE2LE_4(info->children_cnt);
+        SELF_BE2LE_4(info->headchild_addr);
+        SELF_BE2LE_4(info->tailchild_addr);
     }
 }
 
