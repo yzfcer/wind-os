@@ -214,7 +214,7 @@ static w_bool_t shell_prehandle_char(w_shell_ctx_s *ctx,w_uint8_t ch,w_int32_t l
     {
         return handle_DIR(ctx);
     }
-    else
+    else if((ch > 0) && (ch < 128))
     {
         handle_default(ctx,ch);
         ret = insert_ch(ctx,ch,len);
@@ -222,6 +222,7 @@ static w_bool_t shell_prehandle_char(w_shell_ctx_s *ctx,w_uint8_t ch,w_int32_t l
             return W_FALSE;
         return W_TRUE;
     }
+    return W_FALSE;
 }
 
 static void shell_clear_buf(w_shell_ctx_s *ctx)
