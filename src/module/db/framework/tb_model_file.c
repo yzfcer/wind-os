@@ -109,7 +109,7 @@ w_err_t tbmodel_file_save_all(char *dirpath)
     {
         err = W_ERR_OK;
         tbmlist = wind_tbmodel_get_list();
-        WIND_CHECK_BREAK(tbmlist != W_NULL,W_ERR_OK,"tb model list is NULL");
+        WIND_CHECK_BREAK(tbmlist != W_NULL,W_ERR_OK);
         tbm_filename = db_malloc(MAX_TBM_FILENAME_LEN);
         WIND_ASSERT_BREAK(tbm_filename != W_NULL,W_ERR_MEM,"alloc filename failed");
         foreach_node(dnode,tbmlist)

@@ -154,7 +154,7 @@ w_err_t tb_entry_create(char *tbname,tbmodel_item_s *item_info,w_uint16_t item_c
             pattr[i] = item_info[i].attr;
         }
         err = db_entry_insert_tb(tb->db,tb);
-        WIND_ASSERT_BREAK(err == W_ERR_OK,W_ERR_FAIL);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,W_ERR_FAIL,"insert tb failed");
         wind_mutex_init(&tb->mutex,tb->tbname);
     }while(0);
     
