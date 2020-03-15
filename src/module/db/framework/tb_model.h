@@ -59,7 +59,7 @@
 
 
 //���ݱ�����
-#define TB_OFFSET(name,mbr) (w_uint16_t)(&(((name*)0)->mbr))
+#define TB_OFFSET(name,mbr) (w_uint16_t)(w_addr_t)(&(((name*)0)->mbr))
 #define TB_MBRSIZE(name,mbr) (sizeof(((name*)0)->mbr))
 #define TB_MBRCNT(name,mbr_type,mbr) (sizeof(((name*)0)->mbr)/sizeof(mbr_type))
 

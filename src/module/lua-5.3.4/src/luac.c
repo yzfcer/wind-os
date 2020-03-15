@@ -233,12 +233,12 @@ static void PrintString(const TString* ts)
   int c=(int)(unsigned char)s[i];
   switch (c)
   {
-   case '"':  printf("\\\""); break;
+   case '\"':  printf("\\\""); break;
    case '\\': printf("\\\\"); break;
    case '\a': printf("\\a"); break;
    case '\b': printf("\\b"); break;
    case '\f': printf("\\f"); break;
-   case '\r\n': printf("\\r\n"); break;
+   case '\n': printf("\\n"); break;
    case '\r': printf("\\r"); break;
    case '\t': printf("\\t"); break;
    case '\v': printf("\\v"); break;

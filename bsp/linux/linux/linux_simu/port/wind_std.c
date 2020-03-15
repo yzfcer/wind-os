@@ -65,7 +65,7 @@ w_err_t _wind_std_init(void)
 	if ( tcgetattr(STDIN_FILENO, &term) == -1 )
 	{
 		printf("tcgetattr error\n");
-		return;
+		return W_ERR_FAIL;
 	}
 
 	term.c_cc[VERASE] = '\b';  /* ??'\b' ????? ASCII ?*/

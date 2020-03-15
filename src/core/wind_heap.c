@@ -36,7 +36,7 @@
 #define NODE_TO_HEAPITEM(node) (w_heapitem_s*)(((w_addr_t)(node))-((w_addr_t)&(((w_heapitem_s*)0)->itemnode)))
 static w_dlist_s heaplist;
 
-#define OFFSET_ADDR(base,offset) (void*)(((w_addr_t)(base))+(offset))
+#define OFFSET_ADDR(base,offset) (((w_addr_t)(base))+(offset))
 #define ITEM_FROM_PTR(ptr) (void*)((w_addr_t)ptr - WIND_HEAP_ITEM_SIZE)
 
 #define NEXT_HEAPITEM(item) NODE_TO_HEAPITEM(item->itemnode.dnode.next)
@@ -250,7 +250,7 @@ static void *alloc_from_freeitem(w_heap_s* heap,w_heapitem_s* freeitem,w_uint32_
     if(rest > WIND_HEAP_ITEM_SIZE)
     {
         item->size = size;
-        freeitem = OFFSET_ADDR(item,size);
+        freeitem = (w_heapitem_s*)OFFSET_ADDR(item,size);
         freeitem->size = rest;
     }
     else
@@ -260,14 +260,14 @@ static void *alloc_from_freeitem(w_heap_s* heap,w_heapitem_s* freeitem,w_uint32_
     }
     WIND_STATI_ADD(heap->stati,item->size);
     heapitem_init(item,heap,WIND_HEAPITEM_MAGIC,item->size,1);
-    p = OFFSET_ADDR(item,WIND_HEAP_ITEM_SIZE);
-    dlist_insert_prio(&heap->used_list,&item->itemnode,(w_uint32_t)item);
+    p = (void*)OFFSET_ADDR(item,WIND_HEAP_ITEM_SIZE);
+    dlist_insert_prio(&heap->used_list,&item->itemnode,(w_uint32_t)(w_addr_t)item);
     item->magic = WIND_HEAPITEM_MAGIC;
 
     if(freeitem)
     {
         heapitem_init(freeitem,heap,(w_uint16_t)(~WIND_HEAPITEM_MAGIC),rest,0);
-        dlist_insert_prio(&heap->free_list,&freeitem->itemnode,(w_uint32_t)freeitem);
+        dlist_insert_prio(&heap->free_list,&freeitem->itemnode,(w_uint32_t)(w_addr_t)freeitem);
     }
     return p;
 }
@@ -406,7 +406,7 @@ w_err_t wind_heap_free(w_heap_s* heap,void *ptr)
         WIND_STATI_MINUS(heap->stati,item->size);
         heapitem_init(item,heap,(w_uint16_t)(~WIND_HEAPITEM_MAGIC),item->size,0);
         wind_debug("insert3 0x%x",&item->itemnode);
-        dlist_insert_prio(&heap->free_list,&item->itemnode,(w_uint32_t)item);
+        dlist_insert_prio(&heap->free_list,&item->itemnode,(w_uint32_t)(w_addr_t)item);
         dnode = dnode_next(&item->itemnode.dnode);
         if(dnode != W_NULL)
         {

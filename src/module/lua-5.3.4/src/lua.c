@@ -87,8 +87,8 @@
 
 #else				/* }{ */
 
-//#define lua_readline(L,b,p) \
-//        ((void)L, fputs(p, stdout), fflush(stdout),  /* show prompt */ \
+//#define lua_readline(L,b,p) 
+//        ((void)L, fputs(p, stdout), fflush(stdout),  /* show prompt */ 
 //        fgets(b, LUA_MAXINPUT, stdin) != NULL)  /* get line */
 #define lua_saveline(L,line)	{ (void)L; (void)line; }
 #define lua_freeline(L,b)	{ (void)L; (void)b; }
@@ -640,10 +640,10 @@ const char lua_test_cmd[] = {
 void lua_test(void)  
 {  
     lua_State *L;  
-    L = luaL_newstate(); /* ??Lua???? */  
+    L = luaL_newstate(); 
     luaL_openlibs(L);  
     luaopen_base(L);  
-    luaL_dostring(L, lua_test_cmd); /* ??Lua?? */  
+    luaL_dostring(L, lua_test_cmd); 
     lua_close(L);  
 }  
 
