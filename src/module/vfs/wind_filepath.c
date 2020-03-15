@@ -119,6 +119,11 @@ char *wind_filepath_remove_tail(char *path)
         if(new_path[len - 1] == '/')
             new_path[len - 1] = 0;
     }while(0);
+    if(err != W_ERR_OK)
+    {
+        if(new_path != W_NULL)
+            wind_free(new_path);
+    }
     return new_path;
 }
 

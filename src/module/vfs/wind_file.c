@@ -389,7 +389,7 @@ w_err_t wind_fgets(w_file_s *file,char *buff, w_int32_t maxlen)
     WIND_ASSERT_RETURN(buff != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(maxlen > 0,W_ERR_INVALID);
     WIND_ASSERT_RETURN(file->isdir == 0, W_ERR_FAIL);
-    len = wind_fread(file,buff,maxlen);
+    len = wind_fread(file,(w_uint8_t*)buff,maxlen);
     WIND_ASSERT_RETURN(len > 0,W_ERR_FAIL);
     for(i = 0;i < len;i ++)
     {
@@ -410,7 +410,7 @@ w_err_t wind_fputs(w_file_s *file,char *buff)
     WIND_ASSERT_RETURN(buff != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(file->isdir == 0, W_ERR_FAIL);
     len = wind_strlen(buff);
-    len = wind_fwrite(file,buff,len);
+    len = wind_fwrite(file,(w_uint8_t*)buff,len);
     WIND_ASSERT_RETURN(len > 0,W_ERR_FAIL);
     return len > 0?W_ERR_OK:W_ERR_FAIL;
 }

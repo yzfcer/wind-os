@@ -34,7 +34,7 @@ extern "C" {
 typedef struct _wind_obj
 {
     w_uint32_t magic;
-    const char *name;
+    char *name;
     w_dnode_s objnode;
     w_uint16_t key;
     w_uint16_t flag;

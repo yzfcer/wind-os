@@ -63,13 +63,16 @@ w_vfs_s *wind_vfs_obj_init(char *name)
 static w_err_t vfs_all_vfs_objs_init(void)
 {
     w_int32_t i;
+    w_err_t err;
     w_vfs_s *vfs;
     WIND_ASSERT_RETURN(sizeof(fsname)/sizeof(char *) >=  WIND_FS_MAX_NUM,W_ERR_FAIL);
+    err = W_ERR_OK;
     for(i = 0;i < WIND_FS_MAX_NUM;i ++)
     {
         vfs = wind_vfs_obj_init(fsname[i]);
+        WIND_ASSERT_BREAK(vfs != W_NULL,W_ERR_FAIL,"init vfs obj %s failed",fsname[i]);
     }
-    return W_ERR_OK;
+    return err;
 }
 
 static w_bool_t is_dev_match(w_vfs_s *vfs,char *blkdev_name)
@@ -114,7 +117,7 @@ static w_err_t mount_param_check(char *fsname,char *fstype,char *blkname,char *p
     vfs = wind_vfs_get(fsname);
     WIND_ASSERT_RETURN(vfs != W_NULL,W_ERR_REPEAT);
     ops = wind_fsops_get(fstype);
-    WIND_ASSERT_RETURN(vfs != W_NULL,W_ERR_REPEAT);
+    WIND_ASSERT_RETURN(ops != W_NULL,W_ERR_REPEAT);
     len = wind_strlen(path);
     WIND_ASSERT_MSG_RETURN(len < FS_MOUNT_PATH_LEN,W_ERR_INVALID,"mount path is too long");
     err = check_dir_path_valid(path);
