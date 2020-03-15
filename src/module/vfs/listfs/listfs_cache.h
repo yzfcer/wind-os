@@ -1,24 +1,24 @@
 /****************************************Copyright (c)**************************************************
-**                                       Çå  ·ç  º£  °¶
+**                                       ï¿½ï¿½  ï¿½ï¿½  ï¿½ï¿½  ï¿½ï¿½
 **
 **                                       yzfcer@163.com
 **
-**--------------ÎÄ¼þÐÅÏ¢--------------------------------------------------------------------------------
-**ÎÄ   ¼þ   Ãû: listfs_cache.h
-**´´   ½¨   ÈË: Jason Zhou
-**×îºóÐÞ¸ÄÈÕÆÚ: 2019.04.05
-**Ãè        Êö: ÎÄ¼þÏµÍ³¶Ô¿éÉè±¸µÄ²Ù×÷½Ó¿Ú
+**--------------ï¿½Ä¼ï¿½ï¿½ï¿½Ï¢--------------------------------------------------------------------------------
+**ï¿½ï¿½   ï¿½ï¿½   ï¿½ï¿½: listfs_cache.h
+**ï¿½ï¿½   ï¿½ï¿½   ï¿½ï¿½: Jason Zhou
+**ï¿½ï¿½ï¿½ï¿½Þ¸ï¿½ï¿½ï¿½ï¿½ï¿½: 2019.04.05
+**ï¿½ï¿½        ï¿½ï¿½: ï¿½Ä¼ï¿½ÏµÍ³ï¿½Ô¿ï¿½ï¿½è±¸ï¿½Ä²ï¿½ï¿½ï¿½ï¿½Ó¿ï¿½
 **              
-**--------------ÀúÊ·°æ±¾ÐÅÏ¢----------------------------------------------------------------------------
-** ´´½¨ÈË: Jason Zhou
-** °æ  ±¾: v1.0
-** ÈÕ¡¡ÆÚ: 2019.04.05
-** Ãè¡¡Êö: Ô­Ê¼°æ±¾
+**--------------ï¿½ï¿½Ê·ï¿½æ±¾ï¿½ï¿½Ï¢----------------------------------------------------------------------------
+** ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: Jason Zhou
+** ï¿½ï¿½  ï¿½ï¿½: v1.0
+** ï¿½Õ¡ï¿½ï¿½ï¿½: 2019.04.05
+** ï¿½è¡¡ï¿½ï¿½: Ô­Ê¼ï¿½æ±¾
 **
-**--------------µ±Ç°°æ±¾ÐÞ¶©----------------------------------------------------------------------------
-** ÐÞ¸ÄÈË: Jason Zhou
-** ÈÕ¡¡ÆÚ: 2019.04.05
-** Ãè¡¡Êö: 
+**--------------ï¿½ï¿½Ç°ï¿½æ±¾ï¿½Þ¶ï¿½----------------------------------------------------------------------------
+** ï¿½Þ¸ï¿½ï¿½ï¿½: Jason Zhou
+** ï¿½Õ¡ï¿½ï¿½ï¿½: 2019.04.05
+** ï¿½è¡¡ï¿½ï¿½: 
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
@@ -34,17 +34,17 @@
 
 #define LFS_CACHEITEM_MAX_CNT 5
 
-#define F_LFSCACHE_DIRTY (0x01 << 0) //±ê¼Ç»º´æµÄÊý¾ÝÊÇ·ñÊÇÔàµÄ
+#define F_LFSCACHE_DIRTY (0x01 << 0) //ï¿½ï¿½Ç»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 #define IS_F_LFSCACHE_DIRTY(cache) ((cache->obj.flag & F_LFSCACHE_DIRTY) == F_LFSCACHE_DIRTY)
 #define SET_F_LFSCACHE_DIRTY(cache) (cache->obj.flag |= F_LFSCACHE_DIRTY)
 #define CLR_F_LFSCACHE_DIRTY(cache) (cache->obj.flag &= (~F_LFSCACHE_DIRTY))
 
-#define F_LFSCACHE_HIT (0x01 << 1) //±ê¼Ç»º´æµÄÊý¾ÝÊÇÃüÖÐµÄ
+#define F_LFSCACHE_HIT (0x01 << 1) //ï¿½ï¿½Ç»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ðµï¿½
 #define IS_F_LFSCACHE_HIT(cacheitem) ((cacheitem->flag & F_LFSCACHE_HIT) == F_LFSCACHE_HIT)
 #define SET_F_LFSCACHE_HIT(cacheitem) (cacheitem->flag |= F_LFSCACHE_HIT)
 #define CLR_F_LFSCACHE_HIT(cacheitem) (cacheitem->flag &= (~F_LFSCACHE_HIT))
 
-#define F_LFSCACHE_SW (0x01 << 2) //±ê¼Ç»º´æµÄÊý¾ÝÊÇÖÃ»»µÄ
+#define F_LFSCACHE_SW (0x01 << 2) //ï¿½ï¿½Ç»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½
 #define IS_F_LFSCACHE_SW(cacheitem) ((cacheitem->flag & F_LFSCACHE_SW) == F_LFSCACHE_SW)
 #define SET_F_LFSCACHE_SW(cacheitem) (cacheitem->flag |= F_LFSCACHE_SW)
 #define CLR_F_LFSCACHE_SW(cacheitem) (cacheitem->flag &= (~F_LFSCACHE_SW))
@@ -55,10 +55,10 @@ typedef struct __lcache_item_s
     w_int16_t blksize;
     w_int16_t flag;
     w_dnode_s itemnode;
-    w_int8_t  *blk;
+    w_uint8_t  *blk;
 }lcache_item_s;
 
-//»º´æ¶ÔÏóÐÅÏ¢
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
 typedef struct __lfs_cache_s
 {
     w_obj_s obj;
@@ -66,9 +66,9 @@ typedef struct __lfs_cache_s
     w_uint32_t r_miss;
     w_uint32_t w_hit;
     w_uint32_t w_miss;
-    w_uint32_t itemcount;     //»º´æÔªËØÊýÁ¿
-    //w_uint32_t itemsize;      //»º´æÔªËØ´óÐ¡
-    w_dlist_s itemlist;       //»º´æÔªËØÁÐ±í
+    w_uint32_t itemcount;     //ï¿½ï¿½ï¿½ï¿½Ôªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    //w_uint32_t itemsize;      //ï¿½ï¿½ï¿½ï¿½Ôªï¿½Ø´ï¿½Ð¡
+    w_dlist_s itemlist;       //ï¿½ï¿½ï¿½ï¿½Ôªï¿½ï¿½ï¿½Ð±ï¿½
     
 }lfs_cache_s;
 

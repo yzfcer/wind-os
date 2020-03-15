@@ -147,6 +147,7 @@ static w_treefile_s *treefs_make_node(w_treefs_s *tfs,const char *path)
         
     if(dirname != W_NULL)
         tfs_mem_free(dirname);
+    WIND_ASSERT_RETURN(err == W_ERR_OK,(w_treefile_s*)W_NULL);
     return treefile;
 }
 

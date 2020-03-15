@@ -1,24 +1,24 @@
 /****************************************Copyright (c)**************************************************
-**                                       Çå  ·ç  º£  °¶
+**                                       ï¿½ï¿½  ï¿½ï¿½  ï¿½ï¿½  ï¿½ï¿½
 **
 **                                       yzfcer@163.com
 **
-**--------------ÎÄ¼þÐÅÏ¢--------------------------------------------------------------------------------
-**ÎÄ   ¼þ   Ãû: listfs_fileinfo.c
-**´´   ½¨   ÈË: Jason Zhou
-**×îºóÐÞ¸ÄÈÕÆÚ: 2019.04.05
-**Ãè        Êö: ÎÄ¼þÏµÍ³¶Ô¿éÉè±¸µÄ²Ù×÷½Ó¿Ú
+**--------------ï¿½Ä¼ï¿½ï¿½ï¿½Ï¢--------------------------------------------------------------------------------
+**ï¿½ï¿½   ï¿½ï¿½   ï¿½ï¿½: listfs_fileinfo.c
+**ï¿½ï¿½   ï¿½ï¿½   ï¿½ï¿½: Jason Zhou
+**ï¿½ï¿½ï¿½ï¿½Þ¸ï¿½ï¿½ï¿½ï¿½ï¿½: 2019.04.05
+**ï¿½ï¿½        ï¿½ï¿½: ï¿½Ä¼ï¿½ÏµÍ³ï¿½Ô¿ï¿½ï¿½è±¸ï¿½Ä²ï¿½ï¿½ï¿½ï¿½Ó¿ï¿½
 **              
-**--------------ÀúÊ·°æ±¾ÐÅÏ¢----------------------------------------------------------------------------
-** ´´½¨ÈË: Jason Zhou
-** °æ  ±¾: v1.0
-** ÈÕ¡¡ÆÚ: 2019.04.05
-** Ãè¡¡Êö: Ô­Ê¼°æ±¾
+**--------------ï¿½ï¿½Ê·ï¿½æ±¾ï¿½ï¿½Ï¢----------------------------------------------------------------------------
+** ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: Jason Zhou
+** ï¿½ï¿½  ï¿½ï¿½: v1.0
+** ï¿½Õ¡ï¿½ï¿½ï¿½: 2019.04.05
+** ï¿½è¡¡ï¿½ï¿½: Ô­Ê¼ï¿½æ±¾
 **
-**--------------µ±Ç°°æ±¾ÐÞ¶©----------------------------------------------------------------------------
-** ÐÞ¸ÄÈË: Jason Zhou
-** ÈÕ¡¡ÆÚ: 2019.04.05
-** Ãè¡¡Êö: 
+**--------------ï¿½ï¿½Ç°ï¿½æ±¾ï¿½Þ¶ï¿½----------------------------------------------------------------------------
+** ï¿½Þ¸ï¿½ï¿½ï¿½: Jason Zhou
+** ï¿½Õ¡ï¿½ï¿½ï¿½: 2019.04.05
+** ï¿½è¡¡ï¿½ï¿½: 
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
@@ -254,8 +254,6 @@ w_err_t fileinfo_add_update_prev(lfile_info_s *info,w_blkdev_s *blkdev)
 w_err_t fileinfo_rm_update_parent(lfile_info_s *info,w_blkdev_s *blkdev)
 {
     w_err_t err;
-
-    w_uint32_t self_addr;
     lfile_info_s *tmpinfo = W_NULL;
     
     WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
@@ -268,7 +266,6 @@ w_err_t fileinfo_rm_update_parent(lfile_info_s *info,w_blkdev_s *blkdev)
         err = W_ERR_OK;
         tmpinfo = listfs_mem_malloc(sizeof(lfile_info_s));
         WIND_ASSERT_BREAK(tmpinfo != W_NULL,W_ERR_MEM,"malloc tmpinfo failed");
-        self_addr = info->self_addr;
         err = fileinfo_read(tmpinfo,blkdev,info->parent_addr);
         WIND_ASSERT_BREAK(err == W_ERR_OK,W_ERR_FAIL,"read parent info failed");
 
@@ -289,8 +286,6 @@ w_err_t fileinfo_rm_update_parent(lfile_info_s *info,w_blkdev_s *blkdev)
 w_err_t fileinfo_rm_update_prev(lfile_info_s *info,w_blkdev_s *blkdev)
 {
     w_err_t err;
-
-    w_uint32_t self_addr;
     lfile_info_s *tmpinfo = W_NULL;
     
     WIND_ASSERT_RETURN(info != W_NULL,W_ERR_PTR_NULL);
@@ -303,7 +298,6 @@ w_err_t fileinfo_rm_update_prev(lfile_info_s *info,w_blkdev_s *blkdev)
         err = W_ERR_OK;
         tmpinfo = listfs_mem_malloc(sizeof(lfile_info_s));
         WIND_ASSERT_BREAK(tmpinfo != W_NULL,W_ERR_MEM,"malloc tmpinfo failed");
-        self_addr = info->self_addr;
         err = fileinfo_read(tmpinfo,blkdev,info->prevfile_addr);
         WIND_ASSERT_BREAK(err == W_ERR_OK,err,"read blkibfo failed");
         tmpinfo->nextfile_addr = info->nextfile_addr;
@@ -320,8 +314,6 @@ w_err_t fileinfo_rm_update_prev(lfile_info_s *info,w_blkdev_s *blkdev)
 w_err_t fileinfo_rm_update_next(lfile_info_s *info,w_blkdev_s *blkdev)
 {
     w_err_t err;
-
-    w_uint32_t self_addr;
     lfile_info_s *tmpinfo = W_NULL;
     
     WIND_ASSERT_RETURN(info != W_NULL,W_ERR_PTR_NULL);
@@ -334,7 +326,6 @@ w_err_t fileinfo_rm_update_next(lfile_info_s *info,w_blkdev_s *blkdev)
         err = W_ERR_OK;
         tmpinfo = listfs_mem_malloc(sizeof(lfile_info_s));
         WIND_ASSERT_BREAK(tmpinfo != W_NULL,W_ERR_MEM,"malloc tmpinfo failed");
-        self_addr = info->self_addr;
         err = fileinfo_read(tmpinfo,blkdev,info->nextfile_addr);
         WIND_ASSERT_BREAK(err == W_ERR_OK,err,"read blkibfo failed");
         tmpinfo->prevfile_addr = info->prevfile_addr;

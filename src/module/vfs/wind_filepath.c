@@ -1,24 +1,24 @@
 /****************************************Copyright (c)**************************************************
-**                                       Çå  ·ç  º£  °¶
+**                                       ï¿½ï¿½  ï¿½ï¿½  ï¿½ï¿½  ï¿½ï¿½
 **
 **                                       yzfcer@163.com
 **
-**--------------ÎÄ¼þÐÅÏ¢--------------------------------------------------------------------------------
-**ÎÄ   ¼þ   Ãû: wind_filepath.h
-**´´   ½¨   ÈË: ÖÜ½­´å
-**×îºóÐÞ¸ÄÈÕÆÚ: 
-**Ãè        Êö: ÎÄ¼þÂ·¾¶´¦ÀíÏà¹Øº¯Êý
+**--------------ï¿½Ä¼ï¿½ï¿½ï¿½Ï¢--------------------------------------------------------------------------------
+**ï¿½ï¿½   ï¿½ï¿½   ï¿½ï¿½: wind_filepath.h
+**ï¿½ï¿½   ï¿½ï¿½   ï¿½ï¿½: ï¿½Ü½ï¿½ï¿½ï¿½
+**ï¿½ï¿½ï¿½ï¿½Þ¸ï¿½ï¿½ï¿½ï¿½ï¿½: 
+**ï¿½ï¿½        ï¿½ï¿½: ï¿½Ä¼ï¿½Â·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Øºï¿½ï¿½ï¿½
 **              
-**--------------ÀúÊ·°æ±¾ÐÅÏ¢----------------------------------------------------------------------------
-** ´´½¨ÈË: 
-** °æ  ±¾: v1.0
-** ÈÕ¡¡ÆÚ: 
-** Ãè¡¡Êö: Ô­Ê¼°æ±¾
+**--------------ï¿½ï¿½Ê·ï¿½æ±¾ï¿½ï¿½Ï¢----------------------------------------------------------------------------
+** ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: 
+** ï¿½ï¿½  ï¿½ï¿½: v1.0
+** ï¿½Õ¡ï¿½ï¿½ï¿½: 
+** ï¿½è¡¡ï¿½ï¿½: Ô­Ê¼ï¿½æ±¾
 **
-**--------------µ±Ç°°æ±¾ÐÞ¶©----------------------------------------------------------------------------
-** ÐÞ¸ÄÈË: 
-** ÈÕ¡¡ÆÚ: 
-** Ãè¡¡Êö: 
+**--------------ï¿½ï¿½Ç°ï¿½æ±¾ï¿½Þ¶ï¿½----------------------------------------------------------------------------
+** ï¿½Þ¸ï¿½ï¿½ï¿½: 
+** ï¿½Õ¡ï¿½ï¿½ï¿½: 
+** ï¿½è¡¡ï¿½ï¿½: 
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
@@ -37,7 +37,7 @@ char * wind_filepath_get_current(void)
     return curpath;
 }
 
-w_err_t wind_filepath_set_current(char *path)
+w_err_t wind_filepath_set_current(const char *path)
 {
     w_err_t err;
     w_int32_t len;
@@ -103,7 +103,7 @@ char *wind_filepath_generate(char *pre_path,char *relative_path,w_uint16_t isdir
     return path;
 }
 
-char *wind_filepath_remove_tail(char *path)
+char *wind_filepath_remove_tail(const char *path)
 {
     w_err_t err;
     w_int32_t len;
@@ -127,7 +127,7 @@ char *wind_filepath_remove_tail(char *path)
     return new_path;
 }
 
-char * wind_filepath_copy(char *path)
+char * wind_filepath_copy(const char *path)
 {
     char *newpath;
     WIND_ASSERT_RETURN(path != W_NULL,(char*)W_NULL);
@@ -137,7 +137,7 @@ char * wind_filepath_copy(char *path)
     return newpath;
 }
 
-w_bool_t wind_filepath_isdir(char *path)
+w_bool_t wind_filepath_isdir(const char *path)
 {
     w_int32_t len;
     WIND_CHECK_RETURN(path != W_NULL,W_FALSE);
@@ -189,7 +189,7 @@ w_int32_t wind_filepath_split(char *path,char **layers,w_int32_t layercnt)
     return cnt;
 }
 
-w_err_t wind_filepath_check_valid(char *path)
+w_err_t wind_filepath_check_valid(const char *path)
 {
     w_int32_t i,len;
     WIND_ASSERT_RETURN(path != W_NULL,W_ERR_PTR_NULL);
@@ -224,7 +224,7 @@ w_err_t wind_filepath_check_valid(char *path)
     return W_ERR_OK;
 }
 
-char* wind_filepath_get_parent(char *path)
+char* wind_filepath_get_parent(const char *path)
 {
     w_err_t err;
     w_int32_t i,len;
@@ -251,7 +251,7 @@ char* wind_filepath_get_parent(char *path)
     return (char*)W_NULL;
 }
 
-char* wind_filepath_get_filename(char *path)
+char* wind_filepath_get_filename(const char *path)
 {
     w_err_t err;
     w_int32_t i,len;
@@ -281,7 +281,7 @@ char* wind_filepath_get_filename(char *path)
     return (char*)W_NULL;
 }
 
-char* wind_filepath_to_directory(char *path)
+char* wind_filepath_to_directory(const char *path)
 {
     w_int32_t len;
     char *newpath;
@@ -300,7 +300,7 @@ char* wind_filepath_to_directory(char *path)
     return newpath;
 }
 
-char* wind_filepath_suffix(char *path)
+char* wind_filepath_suffix(const char *path)
 {
     char *pos;
     char *suffix;

@@ -1,26 +1,26 @@
 /****************************************Copyright (c)**************************************************
-**                                       Çå  ·ç  º£  °¶
+**                                       ï¿½ï¿½  ï¿½ï¿½  ï¿½ï¿½  ï¿½ï¿½
 **
 **                                       yzfcer@163.com
 **
-**--------------ÎÄ¼þÐÅÏ¢--------------------------------------------------------------------------------
-**ÎÄ   ¼þ   Ãû: wind_heap.h / wind_heap.c
-**´´   ½¨   ÈË: Jason Zhou
-**×îºóÐÞ¸ÄÈÕÆÚ: 
-**Ãè        Êö: ÏµÍ³µÄÄÚ´æ¶ÑµÄ¶¯Ì¬·ÖÅäº¯Êý
+**--------------ï¿½Ä¼ï¿½ï¿½ï¿½Ï¢--------------------------------------------------------------------------------
+**ï¿½ï¿½   ï¿½ï¿½   ï¿½ï¿½: wind_heap.h / wind_heap.c
+**ï¿½ï¿½   ï¿½ï¿½   ï¿½ï¿½: Jason Zhou
+**ï¿½ï¿½ï¿½ï¿½Þ¸ï¿½ï¿½ï¿½ï¿½ï¿½: 
+**ï¿½ï¿½        ï¿½ï¿½: ÏµÍ³ï¿½ï¿½ï¿½Ú´ï¿½ÑµÄ¶ï¿½Ì¬ï¿½ï¿½ï¿½äº¯ï¿½ï¿½
 **              
-**--------------ÀúÊ·°æ±¾ÐÅÏ¢----------------------------------------------------------------------------
-** ´´½¨ÈË: Jason Zhou
-** °æ  ±¾: v1.0
-** ÈÕ¡¡ÆÚ: 
-** Ãè¡¡Êö: Ô­Ê¼°æ±¾
+**--------------ï¿½ï¿½Ê·ï¿½æ±¾ï¿½ï¿½Ï¢----------------------------------------------------------------------------
+** ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: Jason Zhou
+** ï¿½ï¿½  ï¿½ï¿½: v1.0
+** ï¿½Õ¡ï¿½ï¿½ï¿½: 
+** ï¿½è¡¡ï¿½ï¿½: Ô­Ê¼ï¿½æ±¾
 **
-**--------------µ±Ç°°æ±¾ÐÞ¶©----------------------------------------------------------------------------
-** ÐÞ¸ÄÈË: 
-** ÈÕ¡¡ÆÚ: 2013.11.03,³õ²½²âÊÔÍ¨¹ý
-** Ãè¡¡Êö: ¹ØÓÚÄÚ´æ¶ÑµÄ·ÖÅäËã·¨
+**--------------ï¿½ï¿½Ç°ï¿½æ±¾ï¿½Þ¶ï¿½----------------------------------------------------------------------------
+** ï¿½Þ¸ï¿½ï¿½ï¿½: 
+** ï¿½Õ¡ï¿½ï¿½ï¿½: 2013.11.03,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¨ï¿½ï¿½
+** ï¿½è¡¡ï¿½ï¿½: ï¿½ï¿½ï¿½ï¿½ï¿½Ú´ï¿½ÑµÄ·ï¿½ï¿½ï¿½ï¿½ã·¨
 **
-** ±¸  ×¢£º²»ÒªÔÚÖÐ¶Ï·þÎñÀý³ÌÖÐ·ÖÅä»òÊÍ·Å¶¯Ì¬ÄÚ´æ¿é
+** ï¿½ï¿½  ×¢ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½Ð¶Ï·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð·ï¿½ï¿½ï¿½ï¿½ï¿½Í·Å¶ï¿½Ì¬ï¿½Ú´ï¿½ï¿½
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
 #include "wind_heap.h"
@@ -179,7 +179,7 @@ w_heap_s *wind_heap_create(const char *name,w_addr_t base,w_uint32_t size,w_uint
     DLIST_INIT(hp->free_list);
     hp->mutex = wind_mutex_create(name);
     WIND_ASSERT_RETURN(hp->mutex != W_NULL,W_NULL);
-    item = hp->addr;
+    item = (w_heapitem_s*)hp->addr;
     heapitem_init(item,hp,(w_uint16_t)(~WIND_HEAPITEM_MAGIC),hpsize - WIND_HEAP_HEAD_SIZE,0);
     
     wind_disable_switch();
@@ -295,7 +295,7 @@ static w_err_t combine_heapitem(w_heapitem_s* item1,w_heapitem_s* item2)
     return W_ERR_OK;
 }
 
-//´ÓÄÚ´æ¶ÑÖÐ·Ö³öÒ»¿é¿Õ¼ä
+//ï¿½ï¿½ï¿½Ú´ï¿½ï¿½ï¿½Ð·Ö³ï¿½Ò»ï¿½ï¿½Õ¼ï¿½
 void *wind_heap_malloc(w_heap_s* heap,w_uint32_t size)
 {
     void *p = W_NULL;
@@ -325,6 +325,7 @@ void *wind_heap_malloc(w_heap_s* heap,w_uint32_t size)
     }
     wind_mutex_unlock(hp->mutex);
     wind_debug("base:0x%0x,addr:0x%0x,size:%d",freeitem,p,size);
+    WIND_ASSERT_RETURN(err == W_ERR_OK,W_NULL);
     return p;
 }
 
@@ -375,7 +376,7 @@ void *wind_heap_realloc(w_heap_s* heap, void* ptr, w_uint32_t newsize)
     //if(ptr != W_NULL)
     //    wind_free(ptr);
     wind_mutex_unlock(heap->mutex);
-        
+    WIND_ASSERT_RETURN(err == W_ERR_OK,W_NULL);
     return p;
 }
 
@@ -435,7 +436,7 @@ w_err_t wind_heap_free(w_heap_s* heap,void *ptr)
     }while(0);
 
     wind_mutex_unlock(heap->mutex);
-    return W_ERR_OK;
+    return err;
 }
 
 w_err_t wind_heap_print(void)
@@ -504,7 +505,7 @@ w_err_t wind_heapitem_print(w_allocid_e allocid)
         wind_mutex_unlock(heap->mutex);
     }
     wind_print_space(6);
-    return W_ERR_OK;
+    return err;
 }
 
 w_err_t wind_heap_stati_print(void)
@@ -577,7 +578,7 @@ void *wind_alloc(w_uint32_t size,w_uint8_t allocid)
     return ptr;
 }
 
-void *wind_salloc(char *str,w_uint8_t allocid)
+void *wind_salloc(const char *str,w_uint8_t allocid)
 {
     char *ptr;
     w_int32_t len;

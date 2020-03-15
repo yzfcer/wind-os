@@ -62,7 +62,7 @@ w_err_t tbmodel_file_load_all(char *dirpath)
     w_err_t err;
     char *fullpath = (char*)W_NULL;
     w_file_s *sub;
-    w_file_s *dir = (char*)W_NULL;
+    w_file_s *dir = (w_file_s*)W_NULL;
     WIND_ASSERT_RETURN(dirpath != W_NULL,W_ERR_PTR_NULL);
     do
     {
@@ -120,7 +120,7 @@ w_err_t tbmodel_file_save_all(char *dirpath)
             fullpath = wind_filepath_generate(dirpath,tbm_filename,0);
             err = tbmodel_file_save(fullpath,tbmodel->obj.name);
             WIND_ASSERT_BREAK(err == W_ERR_OK,err,"save file %s failed",fullpath);
-            wind_filepath_release(err);
+            wind_filepath_release(fullpath);
             fullpath = (char*)W_NULL;
         }
         WIND_ASSERT_BREAK(err == W_ERR_OK,err,"save tbmodel files failed");

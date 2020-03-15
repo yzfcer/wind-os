@@ -1,24 +1,24 @@
 /****************************************Copyright (c)**************************************************
-**                                       Çå  ·ç  º£  °¶
+**                                       ï¿½ï¿½  ï¿½ï¿½  ï¿½ï¿½  ï¿½ï¿½
 **
 **                                       yzfcer@163.com
 **
-**--------------ÎÄ¼þÐÅÏ¢--------------------------------------------------------------------------------
-**ÎÄ   ¼þ   Ãû: hostfs.c
-**´´   ½¨   ÈË: Jason Zhou
-**×îºóÐÞ¸ÄÈÕÆÚ: 2019.09.08
-**Ãè        Êö: hostfsËÞÖ÷»úÎÄ¼þÏµÍ³Ö÷Ìâ¹¦ÄÜ
+**--------------ï¿½Ä¼ï¿½ï¿½ï¿½Ï¢--------------------------------------------------------------------------------
+**ï¿½ï¿½   ï¿½ï¿½   ï¿½ï¿½: hostfs.c
+**ï¿½ï¿½   ï¿½ï¿½   ï¿½ï¿½: Jason Zhou
+**ï¿½ï¿½ï¿½ï¿½Þ¸ï¿½ï¿½ï¿½ï¿½ï¿½: 2019.09.08
+**ï¿½ï¿½        ï¿½ï¿½: hostfsï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ÏµÍ³ï¿½ï¿½ï¿½â¹¦ï¿½ï¿½
 **              
-**--------------ÀúÊ·°æ±¾ÐÅÏ¢----------------------------------------------------------------------------
-** ´´½¨ÈË: Jason Zhou
-** °æ  ±¾: v1.0
-** ÈÕ¡¡ÆÚ: 2019.09.08
-** Ãè¡¡Êö: Ô­Ê¼°æ±¾
+**--------------ï¿½ï¿½Ê·ï¿½æ±¾ï¿½ï¿½Ï¢----------------------------------------------------------------------------
+** ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: Jason Zhou
+** ï¿½ï¿½  ï¿½ï¿½: v1.0
+** ï¿½Õ¡ï¿½ï¿½ï¿½: 2019.09.08
+** ï¿½è¡¡ï¿½ï¿½: Ô­Ê¼ï¿½æ±¾
 **
-**--------------µ±Ç°°æ±¾ÐÞ¶©----------------------------------------------------------------------------
-** ÐÞ¸ÄÈË: Jason Zhou
-** ÈÕ¡¡ÆÚ: 2019.09.08
-** Ãè¡¡Êö: 
+**--------------ï¿½ï¿½Ç°ï¿½æ±¾ï¿½Þ¶ï¿½----------------------------------------------------------------------------
+** ï¿½Þ¸ï¿½ï¿½ï¿½: Jason Zhou
+** ï¿½Õ¡ï¿½ï¿½ï¿½: 2019.09.08
+** ï¿½è¡¡ï¿½ï¿½: 
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
@@ -139,7 +139,6 @@ static w_err_t host_remove_dir(char *fullpath)
 #define host_filepath_get_filename wind_filepath_get_filename 
 #define host_filepath_release wind_filepath_release
 #define host_filepath_remove_tail wind_filepath_remove_tail
-//#define host_filepath_generate wind_filepath_generate
 #define  host_filepath_isdir wind_filepath_isdir
 #define host_filepath_check_valid wind_filepath_check_valid
 
@@ -153,7 +152,7 @@ static void host_release_subfile(w_hostfile_s *hfile)
     if(hfile && hfile->dir)
     {
         closedir(hfile->dir);
-        hfile->dir != W_NULL;
+        hfile->dir = W_NULL;
     }
 }
 
@@ -193,7 +192,7 @@ hfileattr_e host_file_type(char *path)
 }
 
 
-static char *host_filepath_generate(char *pre_path,char *relative_path,w_uint16_t isdir)
+static char *host_filepath_generate(const char *pre_path,const char *relative_path,w_uint16_t isdir)
 {
     w_err_t err;
     char *path = (char*)W_NULL;
@@ -207,7 +206,7 @@ static char *host_filepath_generate(char *pre_path,char *relative_path,w_uint16_
     len1 = wind_strlen(pre_path);
     len2 = wind_strlen(relative_path);
 
-    len += len1 + len2 + 3;
+    len = len1 + len2 + 3;
     path = (char*)wind_alloc(len,HP_ALLOCID_VFS);
     wind_memset(path,0,len);
     wind_strcpy(path,pre_path);
@@ -242,7 +241,6 @@ static char *host_filepath_generate(char *pre_path,char *relative_path,w_uint16_
 w_bool_t hostfile_existing(w_hostfs_s *hfs,const char *path)
 {
     w_err_t err;
-    w_int32_t res,len;
     hfileattr_e hfattr;
     w_uint8_t isdir = 0;
     char *fullpath = (char*)W_NULL;
@@ -541,7 +539,9 @@ w_err_t hostfile_close(w_hostfile_s* hfile)
     WIND_ASSERT_RETURN(hfile->magic == HOSTFILE_MAGIC,W_ERR_INVALID);
 
     if(hfile->isdir == 0)
+    {
         fclose(hfile->fd);
+    }
 	host_release_subfile(hfile);
     return host_file_destroy(hfile);
 }

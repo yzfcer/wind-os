@@ -3,16 +3,16 @@
 #include"xml.h"
 #include"wind_debug.h"
 
-/*xmlµÃµ½½ÚµãÃûÖµ,·µ»Ø:1½Úµã±êÊ¶Ãû¿ªÍ·,2½Úµã±êÊ¶Ãû½áÎ²,3×¢ÊÍ,4ÔªËØÊý¾Ý  <= 0ÓÐ´íÎó */ 
+/*xmlï¿½Ãµï¿½ï¿½Úµï¿½ï¿½ï¿½Öµ,ï¿½ï¿½ï¿½ï¿½:1ï¿½Úµï¿½ï¿½Ê¶ï¿½ï¿½ï¿½ï¿½Í·,2ï¿½Úµï¿½ï¿½Ê¶ï¿½ï¿½ï¿½ï¿½Î²,3×¢ï¿½ï¿½,4Ôªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  <= 0ï¿½Ð´ï¿½ï¿½ï¿½ */ 
 #define XVAL_NBEGIN 1 
 #define XVAL_NEND 2 
 #define XVAL_NOTE 3 
 #define XVAL_DATA 4 
-#define XVAL_TAG 5  /*¿Õ±êÖ¾ */ 
+#define XVAL_TAG 5  /*ï¿½Õ±ï¿½Ö¾ */ 
 #define XVAL_NONE 0 
 #define XVAL_ERROR -1 
 
-/*ÅÐ¶ÏÊÇ·ñ¿Õ¸ñ»òÆäËûxml·Ö¸î×Ö·û */ 
+/*ï¿½Ð¶ï¿½ï¿½Ç·ï¿½Õ¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½xmlï¿½Ö¸ï¿½ï¿½Ö·ï¿½ */ 
 static int is_space(char c) 
 { 
     switch(c)
@@ -26,13 +26,13 @@ static int is_space(char c)
     return 0;
 }
 
-/*ÅÐ¶ÏÊÇ·ñÓÐÐ§µÄÃû³ÆÇ°µ¼·û */ 
+/*ï¿½Ð¶ï¿½ï¿½Ç·ï¿½ï¿½ï¿½Ð§ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ */ 
 static int is_valid_prefix(int c) 
 { 
     return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c == '_'); 
 }
 
-/*XML×Ö·û´®¸³Öµ */ 
+/*XMLï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½Öµ */ 
 int copy_xstring(xstring_s *dest_xs,xstring_s *src_xs) 
 { 
     dest_xs->text = src_xs->text;
@@ -40,7 +40,7 @@ int copy_xstring(xstring_s *dest_xs,xstring_s *src_xs)
     return 0;
 }
 
-/*XML½Úµã¸³Öµ */ 
+/*XMLï¿½Úµã¸³Öµ */ 
 int copy_xnode(xnode_s *dest_xnode,xnode_s *src_xnode) 
 { 
     copy_xstring(&(dest_xnode->name),&(src_xnode->name));
@@ -52,7 +52,7 @@ int copy_xnode(xnode_s *dest_xnode,xnode_s *src_xnode)
     return 0;
 }
 
-/*Ôö¼ÓÍ¬¼¶½Úµã: */ 
+/*ï¿½ï¿½ï¿½ï¿½Í¬ï¿½ï¿½ï¿½Úµï¿½: */ 
 xnode_s *xnode_add_brother(xtree_s *xtree,xstring_s *name) 
 {
     if(xtree->cur_node->parent_node == W_NULL || xtree->node_count >= xtree->max_node_count)
@@ -68,7 +68,7 @@ xnode_s *xnode_add_brother(xtree_s *xtree,xstring_s *name)
     return (xtree->cur_node);
 }
 
-/*Ôö¼Ó×Ó½Úµã: */ 
+/*ï¿½ï¿½ï¿½ï¿½ï¿½Ó½Úµï¿½: */ 
 xnode_s *xnode_add_child(xtree_s *xtree,xstring_s *name) 
 { 
     if(xtree->cur_node == W_NULL || xtree->node_count >= xtree->max_node_count)
@@ -84,7 +84,7 @@ xnode_s *xnode_add_child(xtree_s *xtree,xstring_s *name)
     return (xtree->cur_node);
 }
 
-/*·µ»Ø¸¸½Úµã: */ 
+/*ï¿½ï¿½ï¿½Ø¸ï¿½ï¿½Úµï¿½: */ 
 xnode_s *xnode_get_parent(xtree_s *xtree) 
 { 
     if(xtree->cur_node->parent_node == W_NULL)
@@ -94,7 +94,7 @@ xnode_s *xnode_get_parent(xtree_s *xtree)
     return (xtree->cur_node);
 }
 
-/*ÐÞ¸Äµ±Ç°½ÚµãÔªËØÖµ: */ 
+/*ï¿½Þ¸Äµï¿½Ç°ï¿½Úµï¿½Ôªï¿½ï¿½Öµ: */ 
 int xnode_modify_data(xtree_s *xtree,xstring_s *data) 
 { 
     if(xtree->cur_node == W_NULL)
@@ -105,7 +105,7 @@ int xnode_modify_data(xtree_s *xtree,xstring_s *data)
     return 0;
 }
 
-/*É¾³ýÇ°µ¼¿Õ×Ö·û */ 
+/*É¾ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ */ 
 xstring_s *delete_prefix_space(xstring_s *xbuf) 
 { 
     xstring_s *p;
@@ -113,7 +113,7 @@ xstring_s *delete_prefix_space(xstring_s *xbuf)
     return (p);
 }
 
-/*´¦ÀíÊôÐÔ:µ±×÷Ò¶½Úµã,×Ó½ÚµãÊýÎª-1,·µ»ØÔö¼ÓµÄÊôÐÔ½ÚµãÊý */ 
+/*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½:ï¿½ï¿½ï¿½ï¿½Ò¶ï¿½Úµï¿½,ï¿½Ó½Úµï¿½ï¿½ï¿½Îª-1,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Óµï¿½ï¿½ï¿½ï¿½Ô½Úµï¿½ï¿½ï¿½ */ 
 int xml_handle_attr(xtree_s *xtree,xstring_s *attr_str) 
 { 
     xstring_s xn,xv;
@@ -123,7 +123,7 @@ int xml_handle_attr(xtree_s *xtree,xstring_s *attr_str)
     while(p && *(char*)p)
     { 
         p1 = p;
-        p2 = (xstring_s*)wind_strchr((char*)p1,' = ');
+        p2 = (xstring_s*)wind_strchr((char*)p1,'=');
         if(p2 == W_NULL)
             break;
         xn.text = (char*)p1;
@@ -133,13 +133,13 @@ int xml_handle_attr(xtree_s *xtree,xstring_s *attr_str)
         if(*(char*)p != '\"')
             break;
         p1 = p;
-        p2 = (xstring_s*)wind_strchr((char*)(p1 + 1),'"');
+        p2 = (xstring_s*)wind_strchr((char*)(p1 + 1),'\"');
         if(p2 == W_NULL)
             break;
         xv.text = (char*)(p1 + 1);
         *(char*)p2 = '\0';
         xv.len = p2-p1-1;
-        /*Ôö¼ÓÊôÐÔÖµ½Úµã */ 
+        /*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµï¿½Úµï¿½ */ 
         if(xnode_add_child(xtree,&xn) == W_NULL)
             break;
         k ++ ;
@@ -152,17 +152,17 @@ int xml_handle_attr(xtree_s *xtree,xstring_s *attr_str)
     return (k);
 }
 
-/*xmlµÃµ½½ÚµãÃûÖµ,·µ»Ø:1½Úµã±êÊ¶Ãû¿ªÍ·,2½Úµã±êÊ¶Ãû½áÎ²,3×¢ÊÍ,4ÔªËØÊý¾Ý 0ÎÞ -1ÓÐ´íÎó */ 
+/*xmlï¿½Ãµï¿½ï¿½Úµï¿½ï¿½ï¿½Öµ,ï¿½ï¿½ï¿½ï¿½:1ï¿½Úµï¿½ï¿½Ê¶ï¿½ï¿½ï¿½ï¿½Í·,2ï¿½Úµï¿½ï¿½Ê¶ï¿½ï¿½ï¿½ï¿½Î²,3×¢ï¿½ï¿½,4Ôªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 0ï¿½ï¿½ -1ï¿½Ð´ï¿½ï¿½ï¿½ */ 
 int xml_read_xnode_value(xtree_s *xtree,xstring_s *value_str) 
 { 
     xstring_s *p, *p1, *p2;
     int ivtype = XVAL_NONE;
     p = xtree->xbuf_pos;
     p = delete_prefix_space(xtree->xbuf_pos);
-    if(*(char*)p!= ' < ')
-    {  /*Êý¾Ý */ 
+    if(*(char*)p!= '<')
+    {  /*ï¿½ï¿½ï¿½ï¿½ */ 
         p1 = p;
-        p2 = (xstring_s*)wind_strchr((char*)p1,' < ');
+        p2 = (xstring_s*)wind_strchr((char*)p1,'<');
         value_str->text = (char*)p1;
         value_str->len = (p2?p2-p1:0);
         ivtype = (p2 && p2 < xtree->xbuf_tail? XVAL_DATA:XVAL_NONE);
@@ -170,14 +170,14 @@ int xml_read_xnode_value(xtree_s *xtree,xstring_s *value_str)
         goto OKExit33qqq;
     }
 
-    /*Ç°µ¼Îª < */ 
+    /*Ç°ï¿½ï¿½Îª < */ 
     p ++ ;
     if(*(char*)p == '/') 
-    { /*±ê¼ÇÎ² */ 
+    { /*ï¿½ï¿½ï¿½Î² */ 
         p1 = p + 1;
         p2 = (xstring_s*)wind_strchr((char*)p1,'>');
         if(p2 == W_NULL)
-        { /*´íÎó */ 
+        { /*ï¿½ï¿½ï¿½ï¿½ */ 
             goto ErrExit33qqq;
         }
         else
@@ -189,16 +189,16 @@ int xml_read_xnode_value(xtree_s *xtree,xstring_s *value_str)
         }
     }
     else if(is_valid_prefix(*(char*)p))
-    { /*±ê¼ÇÍ· */ 
+    { /*ï¿½ï¿½ï¿½Í· */ 
         p1 = p;
         p2 = (xstring_s*)wind_strchr((char*)p1,'>');
         if(p2 == W_NULL)
-        { /*´íÎó */ 
+        { /*ï¿½ï¿½ï¿½ï¿½ */ 
             goto ErrExit33qqq;
         } 
         for(p = p1; *(char*)p!= ' ' && p < p2;p ++);
         if(*((char*)(p2-1)) == '/')
-        { /*´¦Àí¿Õ±ê¼Ç < abc/ >  */ 
+        { /*ï¿½ï¿½ï¿½ï¿½ï¿½Õ±ï¿½ï¿½ < abc/ >  */ 
             ivtype = 11;
             value_str->text = (char*)p1;
             if(p >= p2)
@@ -206,7 +206,7 @@ int xml_read_xnode_value(xtree_s *xtree,xstring_s *value_str)
             value_str->len = p-p1;
             if(xnode_add_child(xtree,value_str) == W_NULL)
                 goto ErrExit33qqq;
-            if(p < p2-1)/*Ôö¼ÓÊôÐÔ½Úµã */ 
+            if(p < p2-1)/*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô½Úµï¿½ */ 
             { 
                 *((char*)(p2-1)) = '\0';
                 p ++ ;
@@ -221,7 +221,7 @@ int xml_read_xnode_value(xtree_s *xtree,xstring_s *value_str)
             ivtype = XVAL_NBEGIN;
             value_str->text = (char*)p1;
             value_str->len = p-p1;
-            if(p < p2) /*Ôö¼ÓÊôÐÔ½Úµã */ 
+            if(p < p2) /*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô½Úµï¿½ */ 
             { 
                 if(xnode_add_child(xtree,value_str) == W_NULL)
                     goto ErrExit33qqq;
@@ -236,13 +236,13 @@ int xml_read_xnode_value(xtree_s *xtree,xstring_s *value_str)
     }
     else if(*(char*)p == '!')
     {  
-        if(*((char*)p + 1) == '-' &&  *((char*)p + 2) == '-') /*×¢ÊÍ */ 
+        if(*((char*)p + 1) == '-' &&  *((char*)p + 2) == '-') /*×¢ï¿½ï¿½ */ 
         { 
             p += 3; 
             p1 = delete_prefix_space(p);
-            p2 = (xstring_s*)wind_strstr((char*)p1,"-->"); /*×¢ÊÍÎ² */ 
+            p2 = (xstring_s*)wind_strstr((char*)p1,"-->"); /*×¢ï¿½ï¿½Î² */ 
             if(p2 == W_NULL)
-            { /*´íÎó */ 
+            { /*ï¿½ï¿½ï¿½ï¿½ */ 
                 goto ErrExit33qqq;
             }
             else
@@ -264,7 +264,7 @@ ErrExit33qqq:
     return (ivtype); 
 }
 
-/*¶ÁxmlÎÄ¼þ»º´æ²¢½âÎöµ½XÊ÷ */ 
+/*ï¿½ï¿½xmlï¿½Ä¼ï¿½ï¿½ï¿½ï¿½æ²¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½ï¿½ */ 
 int xml_parse(xtree_s *xtree,xstring_s *xmlbuf,int xmlsize) 
 { 
     xstring_s *p, *p1, *pend = xmlbuf + xmlsize;
@@ -292,7 +292,7 @@ int xml_parse(xtree_s *xtree,xstring_s *xmlbuf,int xmlsize)
             maxnn ++ ;
         if(*(char*)p == '>')
             if(*((char*)p-1) == '/') 
-            maxnn ++ ;/*¿Õ±ê¼Ç */ 
+            maxnn ++ ;/*ï¿½Õ±ï¿½ï¿½ */ 
     }
     maxnn = maxnn/2 + 2;
     xtree->xbuf = xmlbuf;
@@ -315,7 +315,7 @@ int xml_parse(xtree_s *xtree,xstring_s *xmlbuf,int xmlsize)
         return 0;
     }
     wind_debug("alloc node space(%d)",maxnn);
-    xtree->node_list = (xnode_s *)wind_calloc(maxnn,sizeof(xnode_s)); /*ÉêÇë½Úµã´æ´¢¿Õ¼ä */ 
+    xtree->node_list = (xnode_s *)wind_calloc(maxnn,sizeof(xnode_s)); /*ï¿½ï¿½ï¿½ï¿½Úµï¿½æ´¢ï¿½Õ¼ï¿½ */ 
     if(xtree->node_list == W_NULL) 
     { 
         wind_error("mem %s alloc failed",maxnn);
@@ -323,7 +323,7 @@ int xml_parse(xtree_s *xtree,xstring_s *xmlbuf,int xmlsize)
     }
     xtree->max_node_count = maxnn;
     wind_memset(xtree->node_list,0x00,maxnn *sizeof(xnode_s));
-    xtree->root_node = &(xtree->node_list[0]); /*¸ù½Úµã */ 
+    xtree->root_node = &(xtree->node_list[0]); /*ï¿½ï¿½ï¿½Úµï¿½ */ 
     xtree->root_node->parent_node = W_NULL;
     xtree->root_node->index = xtree->root_node->level = 0;
     *(xstr.text + xstr.len) = '\0';
@@ -347,18 +347,18 @@ int xml_parse(xtree_s *xtree,xstring_s *xmlbuf,int xmlsize)
                 k = maxnn + 1; 
             break;
         case XVAL_NEND: 
-            xnode_get_parent(xtree); /*·µ»Ø¸¸½Úµã: */ 
+            xnode_get_parent(xtree); /*ï¿½ï¿½ï¿½Ø¸ï¿½ï¿½Úµï¿½: */ 
             break;
         case XVAL_DATA: 
-            xnode_modify_data(xtree,&xstr);/*ÐÞ¸Äµ±Ç°½ÚµãÔªËØÖµ: */ 
+            xnode_modify_data(xtree,&xstr);/*ï¿½Þ¸Äµï¿½Ç°ï¿½Úµï¿½Ôªï¿½ï¿½Öµ: */ 
             break;
         default: 
             if(vtype > 10) 
                 break;
         }
     }
-    *(char*)xmlbuf = '\0'; /*ÖÃÒÑ½âÎö±êÖ¾ */ 
-    maxnn = xtree->cur_node->index; /*×îÖÕµ±Ç°½ÚµãºÅ */ 
+    *(char*)xmlbuf = '\0'; /*ï¿½ï¿½ï¿½Ñ½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾ */ 
+    maxnn = xtree->cur_node->index; /*ï¿½ï¿½ï¿½Õµï¿½Ç°ï¿½Úµï¿½ï¿½ */ 
     for(k = 0;k < xtree->node_count;k ++)
     { 
         xn = &(xtree->node_list[k]);
@@ -391,18 +391,18 @@ int print_xtree(xtree_s *xtree)
 { 
     int k;
     xnode_s *xn;
-    wind_debug(" ********xTree node_count=%d,max_node_count=%d ********",xtree->node_count,xtree->max_node_count);
-    wind_debug("/tnode_idx parent node_level sub_count node_name node_data");
+    wind_printf(" ********xTree node_count=%d,max_node_count=%d ********",xtree->node_count,xtree->max_node_count);
+    wind_printf("/tnode_idx parent node_level sub_count node_name node_data");
     for(k = 0;k < xtree->node_count;k ++)
     { 
         xn = &(xtree->node_list[k]);
-        wind_debug("/t%d%d%d%d[%s][%s]",xn->index,(xn->parent_node?xn->parent_node->index:-1), xn->level,xn->tagCount,xn->name.text,xn->data.text);
+        wind_printf("/t%d%d%d%d[%s][%s]",xn->index,(xn->parent_node?xn->parent_node->index:-1), xn->level,xn->tagCount,xn->name.text,xn->data.text);
     }
-    wind_debug(" *****************************************************************");
+    wind_printf(" *****************************************************************");
     return 0;
 }
 
-/*´Óµ±Ç°½ÚµãÍùÏÂÈ¡µÃ½Úµã: */ 
+/*ï¿½Óµï¿½Ç°ï¿½Úµï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½Ã½Úµï¿½: */ 
 xnode_s *xml_get_xnode_by_name(xtree_s *xtree,xstring_s *nodename) 
 { 
     int k;
@@ -419,7 +419,7 @@ xnode_s *xml_get_xnode_by_name(xtree_s *xtree,xstring_s *nodename)
     return (xn);
 }
 
-/*´Óµ±Ç°½ÚµãÍùÏÂÈ¡µÃ×Ó½Úµã(¸ù¾Ý¸¸½ÚµãÃûºÍ½ÚµãÃû): */ 
+/*ï¿½Óµï¿½Ç°ï¿½Úµï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½Ó½Úµï¿½(ï¿½ï¿½ï¿½Ý¸ï¿½ï¿½Úµï¿½ï¿½ï¿½ï¿½Í½Úµï¿½ï¿½ï¿½): */ 
 xnode_s *xml_get_xnode(xtree_s *xtree,xstring_s *parent_name,xstring_s *nodename) 
 { 
      int k;
@@ -436,7 +436,7 @@ xnode_s *xml_get_xnode(xtree_s *xtree,xstring_s *parent_name,xstring_s *nodename
     return (xtree->cur_node);
 }
 
-/*´Óµ±Ç°½ÚµãÍùÏÂÈ¡µÃ×Ó½Úµã(¸ù¾Ý¸¸½ÚµãºÍ½ÚµãÃû): */ 
+/*ï¿½Óµï¿½Ç°ï¿½Úµï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½Ó½Úµï¿½(ï¿½ï¿½ï¿½Ý¸ï¿½ï¿½Úµï¿½Í½Úµï¿½ï¿½ï¿½): */ 
 xnode_s *xml_get_child_xnode(xtree_s *xtree,xnode_s *parent_node, xstring_s *nodename) 
 { 
     int k;
@@ -455,7 +455,7 @@ xnode_s *xml_get_child_xnode(xtree_s *xtree,xnode_s *parent_node, xstring_s *nod
     return (xtree->cur_node);
 }
 
-/*È¡µÃÒ¶½Úµã: */ 
+/*È¡ï¿½ï¿½Ò¶ï¿½Úµï¿½: */ 
 xnode_s *xml_get_tag(xtree_s *xtree, xnode_s *parent_node,xstring_s *tagname) 
 { 
      int k;
@@ -476,7 +476,7 @@ xnode_s *xml_get_tag(xtree_s *xtree, xnode_s *parent_node,xstring_s *tagname)
     return (xtree->cur_node);
 }
 
-/*´úÂë±àÂë×ª»»1: */ 
+/*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½1: */ 
 int xml_encode(xstring_s *xs,xstring_s *scode,xstring_s *dcode) 
 { 
     int k,lens = wind_strlen((char*)scode),lend = wind_strlen((char*)dcode),nrr = 0;
@@ -513,7 +513,7 @@ int xml_encode(xstring_s *xs,xstring_s *scode,xstring_s *dcode)
     return (nrr);
 }
 
-/*XML´úÂë·ûºÅ×ª»»: */ 
+/*XMLï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½: */ 
 int xml_data_encode(xstring_s *xs) 
 { 
     xml_encode(xs,(xstring_s*)"<",(xstring_s*)"<");
@@ -521,12 +521,12 @@ int xml_data_encode(xstring_s *xs)
     xml_encode(xs,(xstring_s*)"/\"",(xstring_s*)"\"");
     xml_encode(xs,(xstring_s*)"'",(xstring_s*)"'");
     xml_encode(xs,(xstring_s*)"&",(xstring_s*)"&");
-    /*Îª·ÀÖ¹°üÖÐ·Ö¸ô·ûÓëÒµÎñÏµÍ³³åÍ»,·Ç±ê×¼×ª»» */ 
+    /*Îªï¿½ï¿½Ö¹ï¿½ï¿½ï¿½Ð·Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½Òµï¿½ï¿½ÏµÍ³ï¿½ï¿½Í»,ï¿½Ç±ï¿½×¼×ªï¿½ï¿½ */ 
     xml_encode(xs,(xstring_s*)"|",(xstring_s*)":");
     return (0);
 }
 
-/*XML´úÂë·ûºÅ·´×ª»»: */ 
+/*XMLï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å·ï¿½×ªï¿½ï¿½: */ 
 int xml_data_uncode(xstring_s *xs) 
 { 
     xml_encode(xs,(xstring_s*)"&",(xstring_s*)"&");
@@ -544,7 +544,7 @@ xstring_s *xml_write_head(xstring_s *xmlbuf,xstring_s *encode)
     return (xmlbuf + wind_strlen((char*)xmlbuf));
 }
 
-/*Ð´±êÊ¶Í· */ 
+/*Ð´ï¿½ï¿½Ê¶Í· */ 
 xstring_s *xml_write_xnode_beg(xstring_s *xmlbuf,xstring_s *tag) 
 { 
     int k;
@@ -556,13 +556,13 @@ xstring_s *xml_write_xnode_beg(xstring_s *xmlbuf,xstring_s *tag)
     else
     { 
         for(k = 0;k < (*(char*)tag-'0');k ++)
-            *((char*)xmlbuf + k) = '/t';
+            *((char*)xmlbuf + k) = '\t';
         wind_sprintf((char*)xmlbuf + k,"<%s>\n\0",tag + 1);
         return (xmlbuf + k + wind_strlen((char*)tag) + 2);
     }
 }
 
-/*Ð´±êÊ¶Î² */ 
+/*Ð´ï¿½ï¿½Ê¶Î² */ 
 xstring_s *xml_write_xnode_end(xstring_s *xmlbuf,xstring_s *tag) 
 { 
     int k;
@@ -574,13 +574,13 @@ xstring_s *xml_write_xnode_end(xstring_s *xmlbuf,xstring_s *tag)
     else
     { 
         for(k = 0;k < (*(char*)tag-'0');k ++) 
-           *((char*)xmlbuf + k) = '/t';
+           *((char*)xmlbuf + k) = '\t';
         wind_sprintf((char*)xmlbuf + k,"</%s>\n\0",(char*)tag + 1);
         return (xmlbuf + k + wind_strlen((char*)tag) + 3);
     } 
 }
 
-/*Ð´Êý¾ÝÔªËØ */ 
+/*Ð´ï¿½ï¿½ï¿½ï¿½Ôªï¿½ï¿½ */ 
 xstring_s *xml_write_tag(xstring_s *xmlbuf,xstring_s *tag,xstring_s *data) 
 { 
     int k;
@@ -592,13 +592,13 @@ xstring_s *xml_write_tag(xstring_s *xmlbuf,xstring_s *tag,xstring_s *data)
     else
     { 
         for(k = 0;k < (*(char*)tag-'0');k ++) 
-           *((char*)xmlbuf + k) = '/t';
+           *((char*)xmlbuf + k) = '\t';
         wind_sprintf((char*)xmlbuf + k,"<%s>%s</%s>\n\0",(char*)tag + 1,(char*)data,(char*)tag + 1);
         return (xmlbuf + k + wind_strlen((char*)tag) * 2 + 4 + wind_strlen((char*)data));
     }
 }
 
-/*Ð´À©Õ¹(ÐèÒª·ûºÅ×ª»»)µÄÊý¾ÝÔªËØ */ 
+/*Ð´ï¿½ï¿½Õ¹(ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½)ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ôªï¿½ï¿½ */ 
 xstring_s *xml_write_extag(xstring_s *xmlbuf,xstring_s *tag,xstring_s *data) 
 { 
     xstring_s xs;
@@ -618,20 +618,20 @@ xstring_s *xml_write_extag(xstring_s *xmlbuf,xstring_s *tag,xstring_s *data)
     else
     { 
         for(k = 0;k < (*(char*)tag-'0');k ++) 
-           *((char*)xmlbuf + k) = '/t';
+           *((char*)xmlbuf + k) = '\t';
         wind_sprintf((char*)xmlbuf + k,"<%s>%s</%s>\n\0",(char*)tag + 1,xs.text,(char*)tag + 1);
         return (xmlbuf + k + wind_strlen((char*)tag) * 2 + 4 + xs.len);
     }
 }
 
-/*Ð´×¢ÊÍ */ 
+/*Ð´×¢ï¿½ï¿½ */ 
 xstring_s *xml_write_note(xstring_s *xmlbuf,xstring_s *note) 
 { 
     wind_sprintf((char*)xmlbuf,"<!--%s-->\n\0",(char*)note);
     return (xmlbuf + wind_strlen((char*)note) + 8);
 }
 
-/*Ð´ÈÎÒâ´®Ð´»º³å */ 
+/*Ð´ï¿½ï¿½ï¿½â´®Ð´ï¿½ï¿½ï¿½ï¿½ */ 
 xstring_s *xml_write_buf(xstring_s *buf,xstring_s *str) 
 {
     wind_sprintf((char*)buf,"%s\0",(char*)str);

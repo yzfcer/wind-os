@@ -1,21 +1,21 @@
 /****************************************Copyright (c)**************************************************
-**                                       Çå  ·ç  º£  °¶
-** ÎÄ   ¼þ   Ãû: cmd_xmodem.c
-** ´´   ½¨   ÈË: Jason Zhou
-** ×îºóÐÞ¸ÄÈÕÆÚ: 2015/1/24 20:24:37
-** Ãè        Êö: xmodemÐ­Òé´«ÊäÃüÁî
+**                                       ï¿½ï¿½  ï¿½ï¿½  ï¿½ï¿½  ï¿½ï¿½
+** ï¿½ï¿½   ï¿½ï¿½   ï¿½ï¿½: cmd_xmodem.c
+** ï¿½ï¿½   ï¿½ï¿½   ï¿½ï¿½: Jason Zhou
+** ï¿½ï¿½ï¿½ï¿½Þ¸ï¿½ï¿½ï¿½ï¿½ï¿½: 2015/1/24 20:24:37
+** ï¿½ï¿½        ï¿½ï¿½: xmodemÐ­ï¿½é´«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 **  
-**--------------ÀúÊ·°æ±¾ÐÅÏ¢----------------------------------------------------------------------------
-** ´´½¨ÈË: Jason Zhou
-** °æ  ±¾: v1.0
-** ÈÕ¡¡ÆÚ: 2015/1/24 20:24:37
-** Ãè¡¡Êö: Ô­Ê¼°æ±¾
+**--------------ï¿½ï¿½Ê·ï¿½æ±¾ï¿½ï¿½Ï¢----------------------------------------------------------------------------
+** ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: Jason Zhou
+** ï¿½ï¿½  ï¿½ï¿½: v1.0
+** ï¿½Õ¡ï¿½ï¿½ï¿½: 2015/1/24 20:24:37
+** ï¿½è¡¡ï¿½ï¿½: Ô­Ê¼ï¿½æ±¾
 **
-**--------------µ±Ç°°æ±¾ÐÞ¶©----------------------------------------------------------------------------
-** ÐÞ¸ÄÈË: 
-** ÈÕ¡¡ÆÚ: 
-** Ãè¡¡Êö: 
-** ±¾ÎÄ¼þÓÉCÓïÑÔÔ´ÎÄ¼þÄ£°åÈí¼þÉú³É¡£------------Çå·çº£°¶³öÆ·£¬±ØÊô¾«Æ·£¡------------
+**--------------ï¿½ï¿½Ç°ï¿½æ±¾ï¿½Þ¶ï¿½----------------------------------------------------------------------------
+** ï¿½Þ¸ï¿½ï¿½ï¿½: 
+** ï¿½Õ¡ï¿½ï¿½ï¿½: 
+** ï¿½è¡¡ï¿½ï¿½: 
+** ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½ï¿½Ô´ï¿½Ä¼ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¡ï¿½------------ï¿½ï¿½çº£ï¿½ï¿½ï¿½ï¿½Æ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ·ï¿½ï¿½------------
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
 #include "wind_cmd.h"
@@ -25,19 +25,19 @@ extern "C" {
 #endif // #ifdef __cplusplus
 
 
-/*********************************************Í·ÎÄ¼þ¶¨Òå***********************************************/
+/*********************************************Í·ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½***********************************************/
 
 #if (CMD_XMODEM_SUPPORT)
 #include "wind_heap.h"
 #include "wind_std.h"
 #include "wind_xmodem.h"
-#include "treefs.h"
-/********************************************ÄÚ²¿±äÁ¿¶¨Òå**********************************************/
+#include "wind_file.h"
+/********************************************ï¿½Ú²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½**********************************************/
 
 
 
 
-/********************************************ÄÚ²¿º¯Êý¶¨Òå*********************************************/
+/********************************************ï¿½Ú²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*********************************************/
 //extern w_int32_t xmodem_send(w_uint8_t *src, w_int32_t srcsz);
 //extern w_int32_t xmodem_recv_bak(w_uint8_t *dest, w_int32_t destsz);
 xm_ctx_s ctx;
@@ -68,10 +68,10 @@ static w_err_t cmd_xmodem_get(int argc,char **argv)
 {
     w_err_t err = W_ERR_OK;
     w_int32_t len;
-    w_treefile_s *file = W_NULL;
-    w_treefs_s *tfs;
-    tfs = wind_treefs_get("tfs0");
-    WIND_ASSERT_RETURN(tfs != W_NULL,W_ERR_FAIL);
+    w_file_s *file = W_NULL;
+    //w_file_s *tfs;
+    //tfs = wind_treefs_get("tfs0");
+    //WIND_ASSERT_RETURN(tfs != W_NULL,W_ERR_FAIL);
     w_uint8_t *buff = W_NULL,*xbuff = W_NULL;
     if(argv[2][0] != '/')
     {
@@ -90,7 +90,7 @@ static w_err_t cmd_xmodem_get(int argc,char **argv)
         err = W_ERR_MEM;
         goto XM_GET_END;
     }
-    file = treefile_open(argv[2],TF_FMODE_CRT | TF_FMODE_W);
+    file = wind_fopen(argv[2],FMODE_CRT | FMODE_W);
     if(file == W_NULL)
     {
         err = W_ERR_INVALID;
@@ -112,11 +112,11 @@ static w_err_t cmd_xmodem_get(int argc,char **argv)
         {
             break;
         }
-        treefile_write(file,buff,len);
+        wind_fwrite(file,buff,len);
     }
     xmodem_end(&ctx);
 XM_GET_END:
-    treefile_close(file);
+    wind_fclose(file);
     wind_free(buff);
     wind_free(xbuff);
     return err;
@@ -126,7 +126,7 @@ static w_err_t cmd_xmodem_put(int argc,char **argv)
 {
     w_err_t err = W_ERR_OK;
     w_int32_t len;
-    w_treefile_s *file = W_NULL;
+    w_file_s *file = W_NULL;
     w_uint8_t *buff = W_NULL,*xbuff = W_NULL;
     if(argv[2][0] != '/')
     {
@@ -146,7 +146,7 @@ static w_err_t cmd_xmodem_put(int argc,char **argv)
         err = W_ERR_MEM;
         goto XM_PUT_END;
     }
-    file = treefile_open(argv[2],TF_FMODE_R);
+    file = wind_fopen(argv[2],FMODE_R);
     if(file == W_NULL)
     {
         err = W_ERR_INVALID;
@@ -157,7 +157,7 @@ static w_err_t cmd_xmodem_put(int argc,char **argv)
     for(;;)
     {
         wind_memset(buff,0,4096);
-        len = treefile_read(file,buff,4096);
+        len = wind_fread(file,buff,4096);
         if(len <= 0)
             break;
         len = xmodem_send(&ctx,buff,len);
@@ -171,7 +171,7 @@ static w_err_t cmd_xmodem_put(int argc,char **argv)
     xmodem_end(&ctx);
 XM_PUT_END:
     if(file != W_NULL)
-        treefile_close(file);
+        wind_fclose(file);
     if(buff != W_NULL)
         wind_free(buff);
     if(xbuff != W_NULL)
@@ -180,11 +180,11 @@ XM_PUT_END:
 
 }
 
-/********************************************È«¾Ö±äÁ¿¶¨Òå**********************************************/
+/********************************************È«ï¿½Ö±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½**********************************************/
 
 
 
-/********************************************È«¾Öº¯Êý¶¨Òå**********************************************/
+/********************************************È«ï¿½Öºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½**********************************************/
 COMMAND_DISC(xm)
 {
     wind_printf("to translate file data via xmodem protocol.\r\n");

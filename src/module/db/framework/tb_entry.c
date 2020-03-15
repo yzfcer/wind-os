@@ -73,7 +73,7 @@ w_tb_s *tb_entry_get_byname_from_db(char *dbname,char *tbname)
 }
 
 
-static w_uint16_t set_offset(w_uint16_t idx,w_uint16_t count,w_uint16_t *va,w_uint16_t size)
+static w_uint16_t set_offset(w_uint16_t idx,w_uint16_t count,w_int16_t *va,w_uint16_t size)
 {
     w_uint16_t si;
     *va = (((idx + 7) >> 3) << 3);
@@ -326,7 +326,7 @@ w_err_t tb_entry_modify_value(w_tb_s *tb,char *mbrname,w_int32_t row_idx,void *d
 
 w_err_t tb_entry_query_count(w_tb_s *tb,w_int32_t *count)
 {
-    w_int32_t idx = 0;
+    //w_int32_t idx = 0;
     WIND_ASSERT_RETURN(tb != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(tb->magic == TB_MAGIC,W_ERR_INVALID);
     *count = tb->data_cnt;

@@ -1,21 +1,21 @@
 /****************************************Copyright (c)**************************************************
-**                                       Çå  ·ç  º£  °¶
-** ÎÄ   ¼þ   Ãû: module_shell.c
-** ´´   ½¨   ÈË: Jason Zhou
-** ×îºóÐÞ¸ÄÈÕÆÚ: 2019/11/04 20:24:37
-** Ãè        Êö: ²ÎÊý×Öµä¹¦ÄÜAPI
+**                                       ï¿½ï¿½  ï¿½ï¿½  ï¿½ï¿½  ï¿½ï¿½
+** ï¿½ï¿½   ï¿½ï¿½   ï¿½ï¿½: module_shell.c
+** ï¿½ï¿½   ï¿½ï¿½   ï¿½ï¿½: Jason Zhou
+** ï¿½ï¿½ï¿½ï¿½Þ¸ï¿½ï¿½ï¿½ï¿½ï¿½: 2019/11/04 20:24:37
+** ï¿½ï¿½        ï¿½ï¿½: ï¿½ï¿½ï¿½ï¿½ï¿½Öµä¹¦ï¿½ï¿½API
 **  
-**--------------ÀúÊ·°æ±¾ÐÅÏ¢----------------------------------------------------------------------------
-** ´´½¨ÈË: Jason Zhou
-** °æ  ±¾: v1.0
-** ÈÕ¡¡ÆÚ: 2019/11/04 20:24:37
-** Ãè¡¡Êö: Ô­Ê¼°æ±¾
+**--------------ï¿½ï¿½Ê·ï¿½æ±¾ï¿½ï¿½Ï¢----------------------------------------------------------------------------
+** ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: Jason Zhou
+** ï¿½ï¿½  ï¿½ï¿½: v1.0
+** ï¿½Õ¡ï¿½ï¿½ï¿½: 2019/11/04 20:24:37
+** ï¿½è¡¡ï¿½ï¿½: Ô­Ê¼ï¿½æ±¾
 **
-**--------------µ±Ç°°æ±¾ÐÞ¶©----------------------------------------------------------------------------
-** ÐÞ¸ÄÈË: 
-** ÈÕ¡¡ÆÚ: 
-** Ãè¡¡Êö: 
-** ±¾ÎÄ¼þÓÉCÓïÑÔÔ´ÎÄ¼þÄ£°åÈí¼þÉú³É¡£------------Çå·çº£°¶³öÆ·£¬±ØÊô¾«Æ·£¡------------
+**--------------ï¿½ï¿½Ç°ï¿½æ±¾ï¿½Þ¶ï¿½----------------------------------------------------------------------------
+** ï¿½Þ¸ï¿½ï¿½ï¿½: 
+** ï¿½Õ¡ï¿½ï¿½ï¿½: 
+** ï¿½è¡¡ï¿½ï¿½: 
+** ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½ï¿½Ô´ï¿½Ä¼ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¡ï¿½------------ï¿½ï¿½çº£ï¿½ï¿½ï¿½ï¿½Æ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ·ï¿½ï¿½------------
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
 #include "wind_config.h"
@@ -31,16 +31,16 @@ extern "C" {
 #endif // #ifdef __cplusplus
 
 
-/*********************************************Í·ÎÄ¼þ¶¨Òå***********************************************/
+/*********************************************Í·ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½***********************************************/
 
-/********************************************ÄÚ²¿±äÁ¿¶¨Òå**********************************************/
+/********************************************ï¿½Ú²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½**********************************************/
 #define NODE_TO_DICT(node) (w_dict_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((w_dict_s*)0)->dictnode)))
 #define NODE_TO_DICTSET(node) (w_dictset_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((w_dictset_s*)0)->obj.objnode)))
 w_dlist_s g_dictlist;
 
 
 
-/********************************************ÄÚ²¿º¯Êý¶¨Òå*********************************************/
+/********************************************ï¿½Ú²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*********************************************/
 static w_uint16_t calc_dict_key(const char *name)
 {
     w_uint16_t i,key = 0;
@@ -52,11 +52,11 @@ static w_uint16_t calc_dict_key(const char *name)
     return key;
 }
 
-/********************************************È«¾Ö±äÁ¿¶¨Òå**********************************************/
+/********************************************È«ï¿½Ö±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½**********************************************/
 
 
 
-/********************************************È«¾Öº¯Êý¶¨Òå**********************************************/
+/********************************************È«ï¿½Öºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½**********************************************/
 w_err_t _wind_dict_mod_init(void)
 {
     DLIST_INIT(g_dictlist);
@@ -84,7 +84,7 @@ w_dictset_s *wind_dictset_create(char *name)
         WIND_ASSERT_BREAK(mutex != W_NULL, W_ERR_MEM,"create mutex failed");
         dictset->mutex = mutex;
         wind_disable_switch();
-        wind_obj_init(&dictset->obj,WIND_DICT_MAGIC,name,&g_dictlist);
+        wind_obj_init(&dictset->obj,WIND_DICTSET_MAGIC,name,&g_dictlist);
         wind_enable_switch();    
     }while(0);
     if(err != W_ERR_OK)
@@ -104,11 +104,11 @@ w_err_t wind_dictset_destroy(w_dictset_s *dictset)
     w_dnode_s *dnode;
     w_dict_s *dict;
     WIND_ASSERT_RETURN(dictset != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(dictset->obj.magic == WIND_DICT_MAGIC,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(dictset->obj.magic == WIND_DICTSET_MAGIC,W_ERR_INVALID);
     do
     {
         err = W_ERR_OK;
-        err = wind_obj_deinit(&dictset->obj,WIND_DICT_MAGIC,&g_dictlist);
+        err = wind_obj_deinit(&dictset->obj,WIND_DICTSET_MAGIC,&g_dictlist);
         WIND_ASSERT_BREAK(err == W_ERR_OK,err,"");
         foreach_node(dnode, &dictset->list)
         {
@@ -161,23 +161,27 @@ w_err_t wind_dictset_print(w_dictset_s *dictset)
         foreach_node(dnode,&dictset->list)
         {
             dict = NODE_TO_DICT(dnode);
+            //WIND_ASSERT_BREAK(dict->obj.magic == WIND_DICT_MAGIC,W_ERR_INVALID,"invalid dict obj");
             wind_dict_print(dict);
         }
     }while(0);
     wind_mutex_unlock(dictset->mutex);
-    return W_ERR_OK;
+    return err;
 }
 
 w_err_t wind_dictset_print_all(void)
 {
+    w_err_t err;
     w_dictset_s *dictset;
     w_dnode_s *dnode;
     foreach_node(dnode,&g_dictlist)
     {
+        err = W_ERR_OK;
         dictset = NODE_TO_DICTSET(dnode);
+        WIND_ASSERT_BREAK(dictset->obj.magic == WIND_DICTSET_MAGIC,W_ERR_INVALID,"invalid dict obj");
         wind_dictset_print(dictset);
     }
-    return W_ERR_OK;
+    return err;
 }
 
 w_dict_s *wind_dict_get(w_dictset_s *dictset,char *name)
@@ -198,6 +202,7 @@ w_dict_s *wind_dict_get(w_dictset_s *dictset,char *name)
         foreach_node(dnode,&dictset->list)
         {
             dict = NODE_TO_DICT(dnode);
+            //WIND_ASSERT_BREAK(dict->obj.magic == WIND_DICT_MAGIC,W_ERR_INVALID,"invalid dict obj");
             if(dict->key != key)
                 continue;
             if(dict->name && (wind_strcmp(name,dict->name) == 0))
@@ -210,6 +215,7 @@ w_dict_s *wind_dict_get(w_dictset_s *dictset,char *name)
     }while(0);
 
     wind_mutex_unlock(dictset->mutex);
+    WIND_ASSERT_RETURN(err == W_ERR_OK,W_NULL);
     return retdict;
 }
 
