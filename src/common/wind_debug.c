@@ -1,24 +1,24 @@
 /****************************************Copyright (c)**************************************************
-**                                       Çå  ·ç  º£  °¶
+**                                       ï¿½ï¿½  ï¿½ï¿½  ï¿½ï¿½  ï¿½ï¿½
 **
 **                                       yzfcer@163.com
 **
-**--------------ÎÄ¼þÐÅÏ¢--------------------------------------------------------------------------------
-**ÎÄ   ¼þ   Ãû: wind_debug.c
-**´´   ½¨   ÈË: Jason Zhou
-**×îºóÐÞ¸ÄÈÕÆÚ: 2012.09.26
-**Ãè        Êö: µ÷ÊÔÐÅÏ¢µÄÊä³ö·½Ê½
+**--------------ï¿½Ä¼ï¿½ï¿½ï¿½Ï¢--------------------------------------------------------------------------------
+**ï¿½ï¿½   ï¿½ï¿½   ï¿½ï¿½: wind_debug.c
+**ï¿½ï¿½   ï¿½ï¿½   ï¿½ï¿½: Jason Zhou
+**ï¿½ï¿½ï¿½ï¿½Þ¸ï¿½ï¿½ï¿½ï¿½ï¿½: 2012.09.26
+**ï¿½ï¿½        ï¿½ï¿½: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê½
 **              
-**--------------ÀúÊ·°æ±¾ÐÅÏ¢----------------------------------------------------------------------------
-** ´´½¨ÈË: Jason Zhou
-** °æ  ±¾: v1.0
-** ÈÕ¡¡ÆÚ: 2012.09.26
-** Ãè¡¡Êö: Ô­Ê¼°æ±¾
+**--------------ï¿½ï¿½Ê·ï¿½æ±¾ï¿½ï¿½Ï¢----------------------------------------------------------------------------
+** ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: Jason Zhou
+** ï¿½ï¿½  ï¿½ï¿½: v1.0
+** ï¿½Õ¡ï¿½ï¿½ï¿½: 2012.09.26
+** ï¿½è¡¡ï¿½ï¿½: Ô­Ê¼ï¿½æ±¾
 **
-**--------------µ±Ç°°æ±¾ÐÞ¶©----------------------------------------------------------------------------
-** ÐÞ¸ÄÈË: Jason Zhou
-** ÈÕ¡¡ÆÚ: 2012.10.20
-** Ãè¡¡Êö: 
+**--------------ï¿½ï¿½Ç°ï¿½æ±¾ï¿½Þ¶ï¿½----------------------------------------------------------------------------
+** ï¿½Þ¸ï¿½ï¿½ï¿½: Jason Zhou
+** ï¿½Õ¡ï¿½ï¿½ï¿½: 2012.10.20
+** ï¿½è¡¡ï¿½ï¿½: 
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
@@ -67,7 +67,7 @@ static w_int32_t skip_atoi(const char **s)
 }
 
 
-static char * wind_dec(char *str,int dec)
+static char * wind_dec(char *str,w_int32_t dec)
 {
     if(dec==0)
     {
@@ -80,13 +80,13 @@ static char * wind_dec(char *str,int dec)
 
 static char * wind_fp64(char *str,w_fp64_t flt)
 {
-    int tmpint = 0;
+    w_int32_t tmpint = 0;
 
-    tmpint = (int)flt;
+    tmpint = (w_int32_t)flt;
     str = wind_dec(str,tmpint);
     *str++ = '.';
     flt = flt - tmpint;
-    tmpint = (int)(flt * 1000000);
+    tmpint = (w_int32_t)(flt * 1000000);
     str = wind_dec(str,tmpint);
     return str;
 }
@@ -267,7 +267,7 @@ w_int32_t wind_vsprintf(char *buf, const char *fmt, wind_va_list args)
             if (!(flags & LEFT))
                 while (--field_width > 0)
                     *str++ = ' ';
-            *str++ = (unsigned char)wind_va_arg(args, w_int32_t);
+            *str++ = (w_uint8_t)wind_va_arg(args, w_int32_t);
             while (--field_width > 0)
                 *str++ = ' ';
             continue;
@@ -291,7 +291,7 @@ w_int32_t wind_vsprintf(char *buf, const char *fmt, wind_va_list args)
                 flags |= ZEROPAD;
             }
             str = wind_number(str,
-                     (w_uint32_t)wind_va_arg(args, void *), 16,
+                     (w_int32_t)wind_va_arg(args, void *), 16,
                      field_width, precision, flags);
             continue;
 
@@ -426,7 +426,7 @@ enum _WVSCANF__flag
     WVSCANF_DestChar = 0x4U,      /*!< Destination Char Flag. */
     WVSCANF_DestString = 0x8U,    /*!< Destination String FLag. */
     WVSCANF_DestSet = 0x10U,      /*!< Destination Set Flag. */
-    WVSCANF_DestInt = 0x20U,      /*!< Destination Int Flag. */
+    WVSCANF_DestInt = 0x20U,      /*!< Destination w_int32_t Flag. */
     WVSCANF_DestFloat = 0x30U,    /*!< Destination Float Flag. */
     WVSCANF_LengthMask = 0x1f00U, /*!< Length Mask Flag. */
     WVSCANF_LengthChar = 0x100U,        /*!< Length Char Flag. */
@@ -793,11 +793,11 @@ w_int32_t wind_vsscanf(const char *str, const char *format, wind_va_list args)
                             case WVSCANF_LengthChar:
                                 if (flag & WVSCANF_TypeSinged)
                                 {
-                                    *wind_va_arg(args, signed char *) = (signed char)val;
+                                    *wind_va_arg(args, w_int8_t *) = (w_int8_t)val;
                                 }
                                 else
                                 {
-                                    *wind_va_arg(args, unsigned char *) = (unsigned char)val;
+                                    *wind_va_arg(args, w_uint8_t *) = (w_uint8_t)val;
                                 }
                                 break;
                             case WVSCANF_LengthShortInt:
@@ -813,32 +813,32 @@ w_int32_t wind_vsscanf(const char *str, const char *format, wind_va_list args)
                             case WVSCANF_LengthLongInt:
                                 if (flag & WVSCANF_TypeSinged)
                                 {
-                                    *wind_va_arg(args, signed long int *) = (signed long int)val;
+                                    *wind_va_arg(args, w_int32_t *) = (w_int32_t)val;
                                 }
                                 else
                                 {
-                                    *wind_va_arg(args, unsigned long int *) = (unsigned long int)val;
+                                    *wind_va_arg(args, w_uint32_t *) = (w_uint32_t)val;
                                 }
                                 break;
                             case WVSCANF_LengthLongLongInt:
                                 if (flag & WVSCANF_TypeSinged)
                                 {
-                                    *wind_va_arg(args, signed long long int *) = (signed long long int)val;
+                                    *wind_va_arg(args, w_int64_t *) = (w_int64_t)val;
                                 }
                                 else
                                 {
-                                    *wind_va_arg(args, unsigned long long int *) = (unsigned long long int)val;
+                                    *wind_va_arg(args, w_uint64_t *) = (w_uint64_t)val;
                                 }
                                 break;
                             default:
-                                /* The default type is the type int. */
+                                /* The default type is the type w_int32_t. */
                                 if (flag & WVSCANF_TypeSinged)
                                 {
-                                    *wind_va_arg(args, signed int *) = (signed int)val;
+                                    *wind_va_arg(args, w_int32_t *) = (w_int32_t)val;
                                 }
                                 else
                                 {
-                                    *wind_va_arg(args, unsigned int *) = (unsigned int)val;
+                                    *wind_va_arg(args, w_uint32_t *) = (w_uint32_t)val;
                                 }
                                 break;
                         }
@@ -855,7 +855,7 @@ w_int32_t wind_vsscanf(const char *str, const char *format, wind_va_list args)
                         break;
                     }
 
-                    n_decode += (int)(s) - (int)(p);
+                    n_decode += (w_uint32_t)((w_addr_t)(s) - (w_addr_t)(p));
                     p = s;
                     if (!(flag & WVSCANF_Suppress))
                     {

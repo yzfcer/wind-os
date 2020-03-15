@@ -40,6 +40,7 @@ static w_err_t coroute_main(w_int32_t argc,char **argv)
         if(err != W_ERR_OK)
             wind_thread_sleep(1);
     }
+    return W_ERR_OK;
 }
 
 w_err_t _create_coroutine_thread(void)
