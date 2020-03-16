@@ -2,26 +2,26 @@
 	************************************************************
 	************************************************************
 	************************************************************
-	*	ÎÄ¼þÃû£º 	rtc.c
+	*	æ–‡ä»¶åï¼š 	rtc.c
 	*
-	*	×÷Õß£º 		ÕÅ¼ÌÈð
+	*	ä½œè€…ï¼š 		å¼ ç»§ç‘ž
 	*
-	*	ÈÕÆÚ£º 		2016-11-23
+	*	æ—¥æœŸï¼š 		2016-11-23
 	*
-	*	°æ±¾£º 		V1.0
+	*	ç‰ˆæœ¬ï¼š 		V1.0
 	*
-	*	ËµÃ÷£º 		RTC³õÊ¼»¯ºÍ¹¦ÄÜ
+	*	è¯´æ˜Žï¼š 		RTCåˆå§‹åŒ–å’ŒåŠŸèƒ½
 	*
-	*	ÐÞ¸Ä¼ÇÂ¼£º	
+	*	ä¿®æ”¹è®°å½•ï¼š	
 	************************************************************
 	************************************************************
 	************************************************************
 **/
 
-//µ¥Æ¬»úÍ·ÎÄ¼þ
+//å•ç‰‡æœºå¤´æ–‡ä»¶
 #include "stm32f10x.h"
 
-//Ó²¼þÇý¶¯
+//ç¡¬ä»¶é©±åŠ¨
 #include "delay.h"
 #include "rtc.h"
 
@@ -32,15 +32,15 @@ RTC_INFO rtcInfo;
 
 /*
 ************************************************************
-*	º¯ÊýÃû³Æ£º	RTC_Init
+*	å‡½æ•°åç§°ï¼š	RTC_Init
 *
-*	º¯Êý¹¦ÄÜ£º	RTC³õÊ¼»¯
+*	å‡½æ•°åŠŸèƒ½ï¼š	RTCåˆå§‹åŒ–
 *
-*	Èë¿Ú²ÎÊý£º	ÎÞ
+*	å…¥å£å‚æ•°ï¼š	æ— 
 *
-*	·µ»Ø²ÎÊý£º	ÎÞ
+*	è¿”å›žå‚æ•°ï¼š	æ— 
 *
-*	ËµÃ÷£º		
+*	è¯´æ˜Žï¼š		
 ************************************************************
 */
 _Bool RTC_Init(void)
@@ -50,45 +50,45 @@ _Bool RTC_Init(void)
 	unsigned char errCount = 0;
 #endif
 
-	RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR | RCC_APB1Periph_BKP, ENABLE); //Ê¹ÄÜPWRºÍBKPÍâÉèÊ±ÖÓ   
-	PWR_BackupAccessCmd(ENABLE); //Ê¹ÄÜºó±¸¼Ä´æÆ÷·ÃÎÊ
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR | RCC_APB1Periph_BKP, ENABLE); //ä½¿èƒ½PWRå’ŒBKPå¤–è®¾æ—¶é’Ÿ   
+	PWR_BackupAccessCmd(ENABLE); //ä½¿èƒ½åŽå¤‡å¯„å­˜å™¨è®¿é—®
 	
-	BKP_DeInit();	//¸´Î»±¸·ÝÇøÓò
+	BKP_DeInit();	//å¤ä½å¤‡ä»½åŒºåŸŸ
 #if(USE_EXT_RCC == 1)
-	RCC_LSEConfig(RCC_LSE_ON);	//ÉèÖÃÍâ²¿µÍËÙ¾§Õñ(LSE),Ê¹ÓÃÍâÉèµÍËÙ¾§Õñ
-	while(RCC_GetFlagStatus(RCC_FLAG_LSERDY) == RESET && errCount < 250)	//¼ì²éÖ¸¶¨µÄRCC±êÖ¾Î»ÉèÖÃÓë·ñ,µÈ´ýµÍËÙ¾§Õñ¾ÍÐ÷
+	RCC_LSEConfig(RCC_LSE_ON);	//è®¾ç½®å¤–éƒ¨ä½Žé€Ÿæ™¶æŒ¯(LSE),ä½¿ç”¨å¤–è®¾ä½Žé€Ÿæ™¶æŒ¯
+	while(RCC_GetFlagStatus(RCC_FLAG_LSERDY) == RESET && errCount < 250)	//æ£€æŸ¥æŒ‡å®šçš„RCCæ ‡å¿—ä½è®¾ç½®ä¸Žå¦,ç­‰å¾…ä½Žé€Ÿæ™¶æŒ¯å°±ç»ª
 	{
 		errCount++;
 		DelayMs(10);
 	}
 	if(errCount >= 250)
-		return 1; //³õÊ¼»¯Ê±ÖÓÊ§°Ü,¾§ÕñÓÐÎÊÌâ
+		return 1; //åˆå§‹åŒ–æ—¶é’Ÿå¤±è´¥,æ™¶æŒ¯æœ‰é—®é¢˜
 #endif
 	
 #if(USE_EXT_RCC == 1)
-	RCC_RTCCLKConfig(RCC_RTCCLKSource_LSE); 		//ÉèÖÃRTCÊ±ÖÓ(RTCCLK),Ñ¡ÔñLSE×÷ÎªRTCÊ±ÖÓ
+	RCC_RTCCLKConfig(RCC_RTCCLKSource_LSE); 		//è®¾ç½®RTCæ—¶é’Ÿ(RTCCLK),é€‰æ‹©LSEä½œä¸ºRTCæ—¶é’Ÿ
 #else
-	RCC_RTCCLKConfig(RCC_RTCCLKSource_HSE_Div128);	//ÉèÖÃRTCÊ±ÖÓ(HSE/128),Ñ¡ÔñHES×÷ÎªRTCÊ±ÖÓ
+	RCC_RTCCLKConfig(RCC_RTCCLKSource_HSE_Div128);	//è®¾ç½®RTCæ—¶é’Ÿ(HSE/128),é€‰æ‹©HESä½œä¸ºRTCæ—¶é’Ÿ
 #endif
-	RCC_RTCCLKCmd(ENABLE); //Ê¹ÄÜRTCÊ±ÖÓ
-	RTC_WaitForLastTask(); //µÈ´ý×î½üÒ»´Î¶ÔRTC¼Ä´æÆ÷µÄÐ´²Ù×÷Íê³É
-	RTC_WaitForSynchro(); //µÈ´ýRTC¼Ä´æÆ÷Í¬²½
+	RCC_RTCCLKCmd(ENABLE); //ä½¿èƒ½RTCæ—¶é’Ÿ
+	RTC_WaitForLastTask(); //ç­‰å¾…æœ€è¿‘ä¸€æ¬¡å¯¹RTCå¯„å­˜å™¨çš„å†™æ“ä½œå®Œæˆ
+	RTC_WaitForSynchro(); //ç­‰å¾…RTCå¯„å­˜å™¨åŒæ­¥
 	
-	RTC_ITConfig(RTC_IT_ALR, ENABLE); //Ê¹ÄÜRTCÄÖÖÓÖÐ¶Ï
-	RTC_WaitForLastTask(); //µÈ´ý×î½üÒ»´Î¶ÔRTC¼Ä´æÆ÷µÄÐ´²Ù×÷Íê³É
+	RTC_ITConfig(RTC_IT_ALR, ENABLE); //ä½¿èƒ½RTCé—¹é’Ÿä¸­æ–­
+	RTC_WaitForLastTask(); //ç­‰å¾…æœ€è¿‘ä¸€æ¬¡å¯¹RTCå¯„å­˜å™¨çš„å†™æ“ä½œå®Œæˆ
 	
-	RTC_EnterConfigMode(); //ÔÊÐíÅäÖÃ
+	RTC_EnterConfigMode(); //å…è®¸é…ç½®
 #if(USE_EXT_RCC == 1)
-	RTC_SetPrescaler(32767); //ÉèÖÃRTCÔ¤·ÖÆµµÄÖµ
+	RTC_SetPrescaler(32767); //è®¾ç½®RTCé¢„åˆ†é¢‘çš„å€¼
 #else
-	RTC_SetPrescaler(HSE_VALUE / 128 - 1); //ÉèÖÃRTCÔ¤·ÖÆµµÄÖµ
+	RTC_SetPrescaler(HSE_VALUE / 128 - 1); //è®¾ç½®RTCé¢„åˆ†é¢‘çš„å€¼
 #endif
-	RTC_WaitForLastTask(); //µÈ´ý×î½üÒ»´Î¶ÔRTC¼Ä´æÆ÷µÄÐ´²Ù×÷Íê³É
+	RTC_WaitForLastTask(); //ç­‰å¾…æœ€è¿‘ä¸€æ¬¡å¯¹RTCå¯„å­˜å™¨çš„å†™æ“ä½œå®Œæˆ
 	
-	RTC_SetCounter(0); //ÉèÖÃRTC¼ÆÊýÆ÷µÄÖµ
-	RTC_WaitForLastTask(); //µÈ´ý×î½üÒ»´Î¶ÔRTC¼Ä´æÆ÷µÄÐ´²Ù×÷Íê³É
+	RTC_SetCounter(0); //è®¾ç½®RTCè®¡æ•°å™¨çš„å€¼
+	RTC_WaitForLastTask(); //ç­‰å¾…æœ€è¿‘ä¸€æ¬¡å¯¹RTCå¯„å­˜å™¨çš„å†™æ“ä½œå®Œæˆ
 	
-	RTC_ExitConfigMode(); //ÍË³öÅäÖÃÄ£Ê½
+	RTC_ExitConfigMode(); //é€€å‡ºé…ç½®æ¨¡å¼
 	
 	RTC_NVIC_Init();
 	
@@ -98,15 +98,15 @@ _Bool RTC_Init(void)
 
 /*
 ************************************************************
-*	º¯ÊýÃû³Æ£º	RTC_NVIC_Init
+*	å‡½æ•°åç§°ï¼š	RTC_NVIC_Init
 *
-*	º¯Êý¹¦ÄÜ£º	RTCÖÐ¶Ï³õÊ¼»¯
+*	å‡½æ•°åŠŸèƒ½ï¼š	RTCä¸­æ–­åˆå§‹åŒ–
 *
-*	Èë¿Ú²ÎÊý£º	ÎÞ
+*	å…¥å£å‚æ•°ï¼š	æ— 
 *
-*	·µ»Ø²ÎÊý£º	ÎÞ
+*	è¿”å›žå‚æ•°ï¼š	æ— 
 *
-*	ËµÃ÷£º		
+*	è¯´æ˜Žï¼š		
 ************************************************************
 */
 void RTC_NVIC_Init(void)
@@ -117,17 +117,17 @@ void RTC_NVIC_Init(void)
 	
 	nvicInitStruct.NVIC_IRQChannel = RTC_IRQn;
 	nvicInitStruct.NVIC_IRQChannelCmd = ENABLE;
-	nvicInitStruct.NVIC_IRQChannelPreemptionPriority = 2; //Ç¿Õ¼ÓÅÏÈ¼¶2
-	nvicInitStruct.NVIC_IRQChannelSubPriority = 1; //×ÓÓÅÏÈ¼¶0
+	nvicInitStruct.NVIC_IRQChannelPreemptionPriority = 2; //å¼ºå ä¼˜å…ˆçº§2
+	nvicInitStruct.NVIC_IRQChannelSubPriority = 1; //å­ä¼˜å…ˆçº§0
 	
 	NVIC_Init(&nvicInitStruct);
 	
-	//Í£Ö¹Ä£Ê½ÏÂRTCÄÖÖÓÁ¬µ½Íâ²¿ÖÐ¶Ï17ÉÏ
+	//åœæ­¢æ¨¡å¼ä¸‹RTCé—¹é’Ÿè¿žåˆ°å¤–éƒ¨ä¸­æ–­17ä¸Š
 	extiInitStructure.EXTI_Line = EXTI_Line17;
 	extiInitStructure.EXTI_LineCmd = ENABLE;
 	extiInitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
-	extiInitStructure.EXTI_Trigger = EXTI_Trigger_Rising; //ÉÏÉýÑØ
-	//ÖÐ¶Ï³õÊ¼»¯
+	extiInitStructure.EXTI_Trigger = EXTI_Trigger_Rising; //ä¸Šå‡æ²¿
+	//ä¸­æ–­åˆå§‹åŒ–
 	EXTI_Init(&extiInitStructure);
 	
 	nvicInitStruct.NVIC_IRQChannel = RTCAlarm_IRQn;
@@ -140,39 +140,39 @@ void RTC_NVIC_Init(void)
 
 /*
 ************************************************************
-*	º¯ÊýÃû³Æ£º	RTC_SetTime
+*	å‡½æ•°åç§°ï¼š	RTC_SetTime
 *
-*	º¯Êý¹¦ÄÜ£º	RTCÊ±¼äÉèÖÃ
+*	å‡½æ•°åŠŸèƒ½ï¼š	RTCæ—¶é—´è®¾ç½®
 *
-*	Èë¿Ú²ÎÊý£º	sec£ºÃëÖµ
+*	å…¥å£å‚æ•°ï¼š	secï¼šç§’å€¼
 *
-*	·µ»Ø²ÎÊý£º	ÎÞ
+*	è¿”å›žå‚æ•°ï¼š	æ— 
 *
-*	ËµÃ÷£º		
+*	è¯´æ˜Žï¼š		
 ************************************************************
 */
 void RTC_SetTime(unsigned int sec)
 {
 
-	RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR | RCC_APB1Periph_BKP, ENABLE);	//Ê¹ÄÜPWRºÍBKPÍâÉèÊ±ÖÓ  
-	PWR_BackupAccessCmd(ENABLE);												//Ê¹ÄÜRTCºÍºó±¸¼Ä´æÆ÷·ÃÎÊ 
-	RTC_SetCounter(sec);														//ÉèÖÃRTC¼ÆÊýÆ÷µÄÖµ
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR | RCC_APB1Periph_BKP, ENABLE);	//ä½¿èƒ½PWRå’ŒBKPå¤–è®¾æ—¶é’Ÿ  
+	PWR_BackupAccessCmd(ENABLE);												//ä½¿èƒ½RTCå’ŒåŽå¤‡å¯„å­˜å™¨è®¿é—® 
+	RTC_SetCounter(sec);														//è®¾ç½®RTCè®¡æ•°å™¨çš„å€¼
 
-	RTC_WaitForLastTask();														//µÈ´ý×î½üÒ»´Î¶ÔRTC¼Ä´æÆ÷µÄÐ´²Ù×÷Íê³É
+	RTC_WaitForLastTask();														//ç­‰å¾…æœ€è¿‘ä¸€æ¬¡å¯¹RTCå¯„å­˜å™¨çš„å†™æ“ä½œå®Œæˆ
 
 }
 
 /*
 ************************************************************
-*	º¯ÊýÃû³Æ£º	RTC_AlarmSet
+*	å‡½æ•°åç§°ï¼š	RTC_AlarmSet
 *
-*	º¯Êý¹¦ÄÜ£º	RTCÄÖÖÓ³õÊ¼»¯
+*	å‡½æ•°åŠŸèƒ½ï¼š	RTCé—¹é’Ÿåˆå§‹åŒ–
 *
-*	Èë¿Ú²ÎÊý£º	sec£ºÃëÖµ
+*	å…¥å£å‚æ•°ï¼š	secï¼šç§’å€¼
 *
-*	·µ»Ø²ÎÊý£º	ÎÞ
+*	è¿”å›žå‚æ•°ï¼š	æ— 
 *
-*	ËµÃ÷£º		Ð´ÈëÒ»¸ö32bitµÄÃëÊý£¬À´´ú±íÊ±¼ä¡£µ±ÓëRTC_CNTÏàµÈÊ±²úÉúÄÖÖÓÖÐ¶Ï
+*	è¯´æ˜Žï¼š		å†™å…¥ä¸€ä¸ª32bitçš„ç§’æ•°ï¼Œæ¥ä»£è¡¨æ—¶é—´ã€‚å½“ä¸ŽRTC_CNTç›¸ç­‰æ—¶äº§ç”Ÿé—¹é’Ÿä¸­æ–­
 ************************************************************
 */
 void RTC_AlarmSet(unsigned int sec)
@@ -181,84 +181,84 @@ void RTC_AlarmSet(unsigned int sec)
 	RTC_WaitForLastTask();
 	RTC_SetAlarm(sec);
 	RTC_WaitForLastTask();
-	RTC_WaitForSynchro();			//µÈ´ýRTC¼Ä´æÆ÷Í¬²½
+	RTC_WaitForSynchro();			//ç­‰å¾…RTCå¯„å­˜å™¨åŒæ­¥
 
 }
 
 /*
 ************************************************************
-*	º¯ÊýÃû³Æ£º	RTC_AlarmReSet
+*	å‡½æ•°åç§°ï¼š	RTC_AlarmReSet
 *
-*	º¯Êý¹¦ÄÜ£º	RTCÄÖÖÓÖØÉè
+*	å‡½æ•°åŠŸèƒ½ï¼š	RTCé—¹é’Ÿé‡è®¾
 *
-*	Èë¿Ú²ÎÊý£º	sec£ºÃëÖµ
+*	å…¥å£å‚æ•°ï¼š	secï¼šç§’å€¼
 *
-*	·µ»Ø²ÎÊý£º	ÎÞ
+*	è¿”å›žå‚æ•°ï¼š	æ— 
 *
-*	ËµÃ÷£º		µ±RTCÄÖÖÓÖÐ¶Ï²úÉúºó£¬ÐèÒªÖØÉèÒ»ÏÂ£¬²»È»¾ÍÍ£Ö¹ÁË
+*	è¯´æ˜Žï¼š		å½“RTCé—¹é’Ÿä¸­æ–­äº§ç”ŸåŽï¼Œéœ€è¦é‡è®¾ä¸€ä¸‹ï¼Œä¸ç„¶å°±åœæ­¢äº†
 ************************************************************
 */
 void RTC_AlarmReSet(unsigned int sec)
 {
 
-	RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR | RCC_APB1Periph_BKP, ENABLE); //Ê¹ÄÜPWRºÍBKPÍâÉèÊ±ÖÓ
-	PWR_BackupAccessCmd(ENABLE); //Ê¹ÄÜºó±¸¼Ä´æÆ÷·ÃÎÊ
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR | RCC_APB1Periph_BKP, ENABLE); //ä½¿èƒ½PWRå’ŒBKPå¤–è®¾æ—¶é’Ÿ
+	PWR_BackupAccessCmd(ENABLE); //ä½¿èƒ½åŽå¤‡å¯„å­˜å™¨è®¿é—®
 				
-	RTC_SetCounter(0); //ÉèÖÃRTC¼ÆÊýÆ÷µÄÖµ
+	RTC_SetCounter(0); //è®¾ç½®RTCè®¡æ•°å™¨çš„å€¼
 	RTC_AlarmSet(sec);
 
 }
 
 /*
 ************************************************************
-*	º¯ÊýÃû³Æ£º	RTC_IRQHandler
+*	å‡½æ•°åç§°ï¼š	RTC_IRQHandler
 *
-*	º¯Êý¹¦ÄÜ£º	RTCÒ»°ã¹¦ÄÜÖÐ¶Ï
+*	å‡½æ•°åŠŸèƒ½ï¼š	RTCä¸€èˆ¬åŠŸèƒ½ä¸­æ–­
 *
-*	Èë¿Ú²ÎÊý£º	ÎÞ
+*	å…¥å£å‚æ•°ï¼š	æ— 
 *
-*	·µ»Ø²ÎÊý£º	ÎÞ
+*	è¿”å›žå‚æ•°ï¼š	æ— 
 *
-*	ËµÃ÷£º		
+*	è¯´æ˜Žï¼š		
 ************************************************************
 */
 void RTC_IRQHandler(void)
 {
 
-	//ÃëÖÐ¶Ï
+	//ç§’ä¸­æ–­
 	if(RTC_GetITStatus(RTC_IT_SEC))
 	{
-		RTC_ClearITPendingBit(RTC_IT_SEC); //ÇåÃëÖÐ¶Ï
+		RTC_ClearITPendingBit(RTC_IT_SEC); //æ¸…ç§’ä¸­æ–­
 		//........do something
 	}
-	//Òç³öÖÐ¶Ï
+	//æº¢å‡ºä¸­æ–­
 	if(RTC_GetITStatus(RTC_IT_OW))
 	{
-		RTC_ClearITPendingBit(RTC_IT_OW); //ÇåÒç³öÖÐ¶Ï
+		RTC_ClearITPendingBit(RTC_IT_OW); //æ¸…æº¢å‡ºä¸­æ–­
 		//........do something
 	}
-	//ÄÖÖÓÖÐ¶Ï
+	//é—¹é’Ÿä¸­æ–­
 	if(RTC_GetITStatus(RTC_IT_ALR))
 	{
-		RTC_ClearITPendingBit(RTC_IT_ALR); //ÇåÄÖÖÓÖÐ¶Ï
+		RTC_ClearITPendingBit(RTC_IT_ALR); //æ¸…é—¹é’Ÿä¸­æ–­
 		//........do something
 	}
 	
-	RTC_WaitForLastTask(); //µÈ´ý²Ù×÷Íê³É
+	RTC_WaitForLastTask(); //ç­‰å¾…æ“ä½œå®Œæˆ
 
 }
 
 /*
 ************************************************************
-*	º¯ÊýÃû³Æ£º	RTCAlarm_IRQHandler
+*	å‡½æ•°åç§°ï¼š	RTCAlarm_IRQHandler
 *
-*	º¯Êý¹¦ÄÜ£º	RTCÄÖÖÓ-Íâ²¿ÖÐ¶Ï
+*	å‡½æ•°åŠŸèƒ½ï¼š	RTCé—¹é’Ÿ-å¤–éƒ¨ä¸­æ–­
 *
-*	Èë¿Ú²ÎÊý£º	ÎÞ
+*	å…¥å£å‚æ•°ï¼š	æ— 
 *
-*	·µ»Ø²ÎÊý£º	ÎÞ
+*	è¿”å›žå‚æ•°ï¼š	æ— 
 *
-*	ËµÃ÷£º		
+*	è¯´æ˜Žï¼š		
 ************************************************************
 */
 void RTCAlarm_IRQHandler(void)

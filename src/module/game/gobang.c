@@ -7,105 +7,105 @@
 #include <malloc.h>
 #include <windows.h>
 
-struct rcd;//ÉùÃ÷½Úµã½á¹¹
-typedef struct rcd* Record;//½ÚµãÖ¸Õë±ğÃû
-typedef struct rcd record;//½Úµã±ğÃû
+struct rcd;//å£°æ˜èŠ‚ç‚¹ç»“æ„
+typedef struct rcd* Record;//èŠ‚ç‚¹æŒ‡é’ˆåˆ«å
+typedef struct rcd record;//èŠ‚ç‚¹åˆ«å
 
-#define MAXIMUS 15 //¶¨ÒåÆåÅÌ´óĞ¡
+#define MAXIMUS 15 //å®šä¹‰æ£‹ç›˜å¤§å°
 
-static int p[MAXIMUS][MAXIMUS];//´æ´¢¶Ô¾ÖĞÅÏ¢
-static char buff[MAXIMUS*2+1][MAXIMUS*4+3];//Êä³ö»º³åÆ÷
-static int Cx,Cy;//µ±Ç°¹â±êÎ»ÖÃ
-static int Now;//µ±Ç°×ß×ÓµÄÍæ¼Ò£¬1´ú±íºÚ£¬2´ú±í°×
-static int wl,wp;//µ±Ç°Ğ´Èë»º³åÆ÷µÄÁĞÊıºÍĞĞÊıÎ»ÖÃ
-static char* showText;//ÔÚÆåÅÌÖĞÑëÏÔÊ¾µÄÎÄ×ÖĞÅÏ¢
-static int count;//»ØºÏÊı
-static int Putable;//Ö¸Ê¾µ±Ç°ÊÇ·ñ¿ÉÒÔ×ßÆå
-static int Exiting;//1Îªµ±³¡ÉÏÎŞ×Ó²¢°´ESCÊ±Ñ¯ÎÊÊÇ·ñÍË³ö³ÌĞòµÄ×´Ì¬£¬2Îª·Ç´Ë×´Ì¬
-static int ExiRep;//1Îªµ±»Ø·Åµ½×îºóÒ»»ØºÏ²¢°´ÏòºóÊ±Ñ¯ÎÊÊÇ·ñÍË³ö»Ø·ÅµÄ×´Ì¬£¬2Îª·Ç´Ë×´Ì¬
-static Record RecBeg,RecNow;//¼ÇÂ¼µÄ¿ªÊ¼½ÚµãºÍµ±Ç°½Úµã
+static int p[MAXIMUS][MAXIMUS];//å­˜å‚¨å¯¹å±€ä¿¡æ¯
+static char buff[MAXIMUS*2+1][MAXIMUS*4+3];//è¾“å‡ºç¼“å†²å™¨
+static int Cx,Cy;//å½“å‰å…‰æ ‡ä½ç½®
+static int Now;//å½“å‰èµ°å­çš„ç©å®¶ï¼Œ1ä»£è¡¨é»‘ï¼Œ2ä»£è¡¨ç™½
+static int wl,wp;//å½“å‰å†™å…¥ç¼“å†²å™¨çš„åˆ—æ•°å’Œè¡Œæ•°ä½ç½®
+static char* showText;//åœ¨æ£‹ç›˜ä¸­å¤®æ˜¾ç¤ºçš„æ–‡å­—ä¿¡æ¯
+static int count;//å›åˆæ•°
+static int Putable;//æŒ‡ç¤ºå½“å‰æ˜¯å¦å¯ä»¥èµ°æ£‹
+static int Exiting;//1ä¸ºå½“åœºä¸Šæ— å­å¹¶æŒ‰ESCæ—¶è¯¢é—®æ˜¯å¦é€€å‡ºç¨‹åºçš„çŠ¶æ€ï¼Œ2ä¸ºéæ­¤çŠ¶æ€
+static int ExiRep;//1ä¸ºå½“å›æ”¾åˆ°æœ€åä¸€å›åˆå¹¶æŒ‰å‘åæ—¶è¯¢é—®æ˜¯å¦é€€å‡ºå›æ”¾çš„çŠ¶æ€ï¼Œ2ä¸ºéæ­¤çŠ¶æ€
+static Record RecBeg,RecNow;//è®°å½•çš„å¼€å§‹èŠ‚ç‚¹å’Œå½“å‰èŠ‚ç‚¹
 
-struct rcd//¼ÇÂ¼½Úµã½á¹¹,Ë«Á´±íĞÎÊ½
+struct rcd//è®°å½•èŠ‚ç‚¹ç»“æ„,åŒé“¾è¡¨å½¢å¼
 {
-    int X;//´Ë¼ÇÂ¼×ßÆåµÄX×ø±ê
-    int Y;//´Ë¼ÇÂ¼×ßÆåµÄY×ø±ê
-    Record Next;//Ç°Ò»¸ö¼ÇÂ¼
-    Record Back;//ºóÒ»¸ö¼ÇÂ¼
+    int X;//æ­¤è®°å½•èµ°æ£‹çš„Xåæ ‡
+    int Y;//æ­¤è®°å½•èµ°æ£‹çš„Yåæ ‡
+    Record Next;//å‰ä¸€ä¸ªè®°å½•
+    Record Back;//åä¸€ä¸ªè®°å½•
 };
 
-static Record newRecord()//¼ÇÂ¼½Úµã¹¹Ôìº¯Êı
+static Record newRecord()//è®°å½•èŠ‚ç‚¹æ„é€ å‡½æ•°
 {
-    Record r=(Record)malloc(sizeof(record));//ÉêÇëÒ»¸ö½Úµã¶ÔÏó
-    r->Next=NULL;//¸øÓèÇ°ºó½Úµã³õÖµNULL
+    Record r=(Record)malloc(sizeof(record));//ç”³è¯·ä¸€ä¸ªèŠ‚ç‚¹å¯¹è±¡
+    r->Next=NULL;//ç»™äºˆå‰åèŠ‚ç‚¹åˆå€¼NULL
     r->Back=NULL;
     return r;
 }
 
-static void Exit()//¼ì²éÍË³ö³ÌĞò
+static void Exit()//æ£€æŸ¥é€€å‡ºç¨‹åº
 {
     //int input;
-    if(Exiting)//Èç¹ûÊÇµÚ¶ş´Î°´ÏÂESC
+    if(Exiting)//å¦‚æœæ˜¯ç¬¬äºŒæ¬¡æŒ‰ä¸‹ESC
     {
         exit(0);
     }
-    else//Èç¹ûÊÇµÚÒ»´Î°´ÏÂESCÔòÑ¯ÎÊÊÇ·ñÍË³ö³ÌĞò
+    else//å¦‚æœæ˜¯ç¬¬ä¸€æ¬¡æŒ‰ä¸‹ESCåˆ™è¯¢é—®æ˜¯å¦é€€å‡ºç¨‹åº
     {
-        showText="ÊÇ·ñÍË³ö£¿ÔÙ´Î°´ÏÂESCÍË³ö£¬ÆäËû¼ü·µ»Ø";
-        Exiting=1;//Ö¸Ê¾ÒÑ¾­°´ÏÂ¹ıESC
+        showText="æ˜¯å¦é€€å‡ºï¼Ÿå†æ¬¡æŒ‰ä¸‹ESCé€€å‡ºï¼Œå…¶ä»–é”®è¿”å›";
+        Exiting=1;//æŒ‡ç¤ºå·²ç»æŒ‰ä¸‹è¿‡ESC
     }
 }
 
-static void ExitRep()//¼ì²éÍË³ö»Ø·Å
+static void ExitRep()//æ£€æŸ¥é€€å‡ºå›æ”¾
 {
     //int input;
-    if(ExiRep)//Èç¹ûÊÇµÚ¶ş´ÎºóÒÆ
+    if(ExiRep)//å¦‚æœæ˜¯ç¬¬äºŒæ¬¡åç§»
     {
         ExiRep=3;
     }
-    else//Èç¹ûÊÇµÚÒ»´ÎºóÒÆÔòÑ¯ÎÊÊÇ·ñÍË³ö»Ø·Å
+    else//å¦‚æœæ˜¯ç¬¬ä¸€æ¬¡åç§»åˆ™è¯¢é—®æ˜¯å¦é€€å‡ºå›æ”¾
     {
-        showText="ÊÇ·ñÍË³ö£¿ÔÙ´ÎºóÒÆÍË³ö»Ø·Å£¬ÆäËû¼ü·µ»Ø";
-        ExiRep=1;//Ö¸Ê¾ÒÑ¾­°´ÏÂ¹ıºóÒÆ
+        showText="æ˜¯å¦é€€å‡ºï¼Ÿå†æ¬¡åç§»é€€å‡ºå›æ”¾ï¼Œå…¶ä»–é”®è¿”å›";
+        ExiRep=1;//æŒ‡ç¤ºå·²ç»æŒ‰ä¸‹è¿‡åç§»
     }
 }
 
-static void AddRecord()//Ìí¼Ó¼ÇÂ¼
+static void AddRecord()//æ·»åŠ è®°å½•
 {
-    RecNow->X=Cx;//¼ÇÂ¼×ø±ê
+    RecNow->X=Cx;//è®°å½•åæ ‡
     RecNow->Y=Cy;
-    RecNow->Next=newRecord();//´´½¨ÏÂÒ»¸ö¼ÇÂ¼½Úµã
-    RecNow->Next->Back=RecNow;//Íê³ÉË«Á´±í
-    RecNow=RecNow->Next;//µ±Ç°¼ÇÂ¼ÍÆÖÁÏÂÒ»¸ö¼ÇÂ¼½Úµã
+    RecNow->Next=newRecord();//åˆ›å»ºä¸‹ä¸€ä¸ªè®°å½•èŠ‚ç‚¹
+    RecNow->Next->Back=RecNow;//å®ŒæˆåŒé“¾è¡¨
+    RecNow=RecNow->Next;//å½“å‰è®°å½•æ¨è‡³ä¸‹ä¸€ä¸ªè®°å½•èŠ‚ç‚¹
 }
 
-static int DelRecord()//É¾³ıµ±Ç°¼ÇÂ¼½Úµã£¬1ÎªÉ¾³ı³É¹¦£¬0ÎªÉ¾³ıÊ§°Ü
+static int DelRecord()//åˆ é™¤å½“å‰è®°å½•èŠ‚ç‚¹ï¼Œ1ä¸ºåˆ é™¤æˆåŠŸï¼Œ0ä¸ºåˆ é™¤å¤±è´¥
 {
-    Record b;//ÉÏÒ»¸ö½Úµã
-    if(RecNow->Back!=NULL)//Ô½½ç¼ì²é
+    Record b;//ä¸Šä¸€ä¸ªèŠ‚ç‚¹
+    if(RecNow->Back!=NULL)//è¶Šç•Œæ£€æŸ¥
     {
-        b=RecNow->Back;//»º´æÉÏÒ»¸ö½Úµã
-        free(RecNow);//ÊÍ·Åµ±Ç°½Úµã
-        RecNow=b;//µ±Ç°¼ÇÂ¼»ØÖÁÉÏÒ»¸ö¼ÇÂ¼½Úµã
+        b=RecNow->Back;//ç¼“å­˜ä¸Šä¸€ä¸ªèŠ‚ç‚¹
+        free(RecNow);//é‡Šæ”¾å½“å‰èŠ‚ç‚¹
+        RecNow=b;//å½“å‰è®°å½•å›è‡³ä¸Šä¸€ä¸ªè®°å½•èŠ‚ç‚¹
         return 1;
     }
     else
     {
-        return 0;//Ã»ÓĞ½Úµã¿ÉÉ¾³ıÊ±
+        return 0;//æ²¡æœ‰èŠ‚ç‚¹å¯åˆ é™¤æ—¶
     }
 }
 
-static void CleanRecord()//ÇåÀíËùÓĞ¼ÇÂ¼
+static void CleanRecord()//æ¸…ç†æ‰€æœ‰è®°å½•
 {
-    Record n;//ÏÂÒ»¸ö½Úµã
-    while(RecBeg->Next!=NULL)//É¾³ıËùÓĞ¼ÇÂ¼£¬Ö±µ½Ô½½çÇ°ÎªÖ¹
+    Record n;//ä¸‹ä¸€ä¸ªèŠ‚ç‚¹
+    while(RecBeg->Next!=NULL)//åˆ é™¤æ‰€æœ‰è®°å½•ï¼Œç›´åˆ°è¶Šç•Œå‰ä¸ºæ­¢
     {
-        n=RecBeg->Next;//¼ÇÏÂÏÂÒ»¸ö½Úµã
-        free(RecBeg);//ÊÍ·Åµ±Ç°½Úµã
-        RecBeg=n;//µ±Ç°¼ÇÂ¼ÍÆÖÁÏÂÒ»¸ö¼ÇÂ¼½Úµã
+        n=RecBeg->Next;//è®°ä¸‹ä¸‹ä¸€ä¸ªèŠ‚ç‚¹
+        free(RecBeg);//é‡Šæ”¾å½“å‰èŠ‚ç‚¹
+        RecBeg=n;//å½“å‰è®°å½•æ¨è‡³ä¸‹ä¸€ä¸ªè®°å½•èŠ‚ç‚¹
     }
 }
 
-static char* Copy(char* strDest,const char* strSrc)//ĞŞ¸Ä¹ıµÄ×Ö·û´®¸´ÖÆº¯Êı£¬»áºöÂÔÄ©¶ËµÄ\0
+static char* Copy(char* strDest,const char* strSrc)//ä¿®æ”¹è¿‡çš„å­—ç¬¦ä¸²å¤åˆ¶å‡½æ•°ï¼Œä¼šå¿½ç•¥æœ«ç«¯çš„\0
 {
     char* strDestCopy = strDest;
     while (*strSrc!='\0')
@@ -115,174 +115,174 @@ static char* Copy(char* strDest,const char* strSrc)//ĞŞ¸Ä¹ıµÄ×Ö·û´®¸´ÖÆº¯Êı£¬»áº
     return strDestCopy;
 }
 
-static void Initialize()//³õÊ¼»¯Ò»¸ö¶Ô¾Öº¯Êı
+static void Initialize()//åˆå§‹åŒ–ä¸€ä¸ªå¯¹å±€å‡½æ•°
 {
-    int i,j;//Ñ­»·±äÁ¿
-    system("title ¶Ô¾ÖÖĞ(°´·½Ïò¼ü¿ØÖÆ¹â±ê£¬»Ø³µ×ß×Ó£¬¿Õ¸ñ³·Ïú)£¬EscÍË³ö");
-    showText="";//ÖØÖÃÏÔÊ¾ĞÅÏ¢
-    count=0;//»ØºÏÊı¹éÁã
+    int i,j;//å¾ªç¯å˜é‡
+    system("title å¯¹å±€ä¸­(æŒ‰æ–¹å‘é”®æ§åˆ¶å…‰æ ‡ï¼Œå›è½¦èµ°å­ï¼Œç©ºæ ¼æ’¤é”€)ï¼ŒEscé€€å‡º");
+    showText="";//é‡ç½®æ˜¾ç¤ºä¿¡æ¯
+    count=0;//å›åˆæ•°å½’é›¶
     RecNow=RecBeg=newRecord();
     Exiting=0;
-    for(i=0;i<MAXIMUS;i++)//ÖØÖÃ¶Ô¾ÖÊı¾İ
+    for(i=0;i<MAXIMUS;i++)//é‡ç½®å¯¹å±€æ•°æ®
     {
         for(j=0;j<MAXIMUS;j++)
         {
             p[i][j]=0;
         }
     }
-    Cx=Cy=MAXIMUS/2;//ÖØÖÃ¹â±êµ½ÖĞÑë
-    Now=1;//ÖØÖÃµ±Ç°ÎªºÚ·½
+    Cx=Cy=MAXIMUS/2;//é‡ç½®å…‰æ ‡åˆ°ä¸­å¤®
+    Now=1;//é‡ç½®å½“å‰ä¸ºé»‘æ–¹
 }
 
-static char* getStyle(int i,int j)//»ñµÃÆåÅÌÖĞÖ¸¶¨×ø±ê½»µãÎ»ÖÃµÄ×Ö·û£¬Í¨¹ıÖÆ±í·ûÆ´³ÉÆåÅÌ
+static char* getStyle(int i,int j)//è·å¾—æ£‹ç›˜ä¸­æŒ‡å®šåæ ‡äº¤ç‚¹ä½ç½®çš„å­—ç¬¦ï¼Œé€šè¿‡åˆ¶è¡¨ç¬¦æ‹¼æˆæ£‹ç›˜
 {
-    if(p[i][j]==1)//1ÎªºÚ×Ó
-        return "¡ñ";
-    else if(p[i][j]==2)//2Îª°××Ó
-        return "¡ğ";
-    else if(i==0&&j==0)//ÒÔÏÂÎª±ßÔµÆåÅÌÑùÊ½
-        return "©³";
+    if(p[i][j]==1)//1ä¸ºé»‘å­
+        return "â—";
+    else if(p[i][j]==2)//2ä¸ºç™½å­
+        return "â—‹";
+    else if(i==0&&j==0)//ä»¥ä¸‹ä¸ºè¾¹ç¼˜æ£‹ç›˜æ ·å¼
+        return "â”";
     else if(i==MAXIMUS-1&&j==0)
-        return "©·";
+        return "â”“";
     else if(i==MAXIMUS-1&&j==MAXIMUS-1)
-        return "©¿";
+        return "â”›";
     else if(i==0&&j==MAXIMUS-1)
-        return "©»";
+        return "â”—";
     else if(i==0)
-        return "©Ä";
+        return "â” ";
     else if(i==MAXIMUS-1)
-        return "©Ì";
+        return "â”¨";
     else if(j==0)
-        return "©Ó";
+        return "â”¯";
     else if(j==MAXIMUS-1)
-        return "©Û";
-    return "©à";//ÖĞ¼äµÄ¿ÕÎ»
+        return "â”·";
+    return "â”¼";//ä¸­é—´çš„ç©ºä½
 }
 
-static char* getCurse(int i,int j){//»ñµÃÖ¸¶¨×ø±ê½»µãÎ»ÖÃ×óÉÏ¸ñµÄÑùÊ½£¬Í¨¹ıÖÆ±í·ûÀ´Ä£Äâ¹â±êµÄÏÔÊ¾
-    if(Putable)//¿É×ßÆåÊ±¹â±êÎª´ÖÏß
+static char* getCurse(int i,int j){//è·å¾—æŒ‡å®šåæ ‡äº¤ç‚¹ä½ç½®å·¦ä¸Šæ ¼çš„æ ·å¼ï¼Œé€šè¿‡åˆ¶è¡¨ç¬¦æ¥æ¨¡æ‹Ÿå…‰æ ‡çš„æ˜¾ç¤º
+    if(Putable)//å¯èµ°æ£‹æ—¶å…‰æ ‡ä¸ºç²—çº¿
     {
         if(i==Cx){
             if(j==Cy)
-                return "©³";
+                return "â”";
             else if (j==Cy+1)
-                return "©»";
+                return "â”—";
         }
         else if(i==Cx+1)
         {
             if(j==Cy)
-                return "©·";
+                return "â”“";
             else if (j==Cy+1)
-                return "©¿";
+                return "â”›";
         }
     }
-    else//²»¿É×ßÆåÊ±¹â±êÎªĞéÏß
+    else//ä¸å¯èµ°æ£‹æ—¶å…‰æ ‡ä¸ºè™šçº¿
     {
         if(i==Cx){
             if(j==Cy)
-                return "©°";
+                return "â”Œ";
             else if (j==Cy+1)
-                return "©¸";
+                return "â””";
         }
         else if(i==Cx+1)
         {
             if(j==Cy)
-                return "©´";
+                return "â”";
             else if (j==Cy+1)
-                return "©¼";
+                return "â”˜";
         }
     }
-    return "¡¡";//Èç¹û²»ÔÚ¹â±ê¸½½üÔòÎª¿Õ
+    return "ã€€";//å¦‚æœä¸åœ¨å…‰æ ‡é™„è¿‘åˆ™ä¸ºç©º
 }
 
-static void write(char* c)//Ïò»º³åÆ÷Ğ´Èë×Ö·û´®
+static void write(char* c)//å‘ç¼“å†²å™¨å†™å…¥å­—ç¬¦ä¸²
 {
     Copy(buff[wl]+wp,c);
     wp+=strlen(c);
 }
 
-static void ln()//»º³åÆ÷Ğ´ÈëÎ»ÖÃÌáĞĞ
+static void ln()//ç¼“å†²å™¨å†™å…¥ä½ç½®æè¡Œ
 {
     wl+=1;
     wp=0;
 }
 
-static void Display()//½«»º³åÆ÷ÄÚÈİÊä³öµ½ÆÁÄ»
+static void Display()//å°†ç¼“å†²å™¨å†…å®¹è¾“å‡ºåˆ°å±å¹•
 {
-    int i,l=strlen(showText);//Ñ­»·±äÁ¿£¬ÖĞ¼äÎÄ×ÖĞÅÏ¢µÄ³¤¶È
-    int Offset=MAXIMUS*2+2-l/2;//Ëã³öÖĞ¼äÎÄ×ÖĞÅÏ¢¾ÓÖĞÏÔÊ¾ËùÔÚµÄºá×ø±êÎ»ÖÃ
-    if(Offset%2==1)//Èç¹ûÎ»ÖÃÎªÆæÊı£¬ÔòÒÆ¶¯µ½Å¼Êı£¬±ÜÃâ»ìÂÒ
+    int i,l=strlen(showText);//å¾ªç¯å˜é‡ï¼Œä¸­é—´æ–‡å­—ä¿¡æ¯çš„é•¿åº¦
+    int Offset=MAXIMUS*2+2-l/2;//ç®—å‡ºä¸­é—´æ–‡å­—ä¿¡æ¯å±…ä¸­æ˜¾ç¤ºæ‰€åœ¨çš„æ¨ªåæ ‡ä½ç½®
+    if(Offset%2==1)//å¦‚æœä½ç½®ä¸ºå¥‡æ•°ï¼Œåˆ™ç§»åŠ¨åˆ°å¶æ•°ï¼Œé¿å…æ··ä¹±
     {
         Offset--;
     }
-    Copy(buff[MAXIMUS]+Offset,showText);//½²ÖĞ¼äÎÄ×ÖĞÅÏ¢¸´ÖÆµ½»º³åÆ÷
-    if(l%2==1)//Èç¹ûÖĞ¼äÎÄ×Ö³¤¶ÈÎª°ë½ÇÆæÊı£¬Ôò²¹ÉÏ¿Õ¸ñ£¬±ÜÃâ»ìÂÒ
+    Copy(buff[MAXIMUS]+Offset,showText);//è®²ä¸­é—´æ–‡å­—ä¿¡æ¯å¤åˆ¶åˆ°ç¼“å†²å™¨
+    if(l%2==1)//å¦‚æœä¸­é—´æ–‡å­—é•¿åº¦ä¸ºåŠè§’å¥‡æ•°ï¼Œåˆ™è¡¥ä¸Šç©ºæ ¼ï¼Œé¿å…æ··ä¹±
     {
         *(buff[MAXIMUS]+Offset+l)=0x20;
     }
-    system("cls");//ÇåÀíÆÁÄ»£¬×¼±¸Ğ´Èë
-    for(i=0;i<MAXIMUS*2+1;i++){//Ñ­»·Ğ´ÈëÃ¿Ò»ĞĞ
+    system("cls");//æ¸…ç†å±å¹•ï¼Œå‡†å¤‡å†™å…¥
+    for(i=0;i<MAXIMUS*2+1;i++){//å¾ªç¯å†™å…¥æ¯ä¸€è¡Œ
         printf("%s",buff[i]);
-        if(i<MAXIMUS*2)//Ğ´ÈëÍêÃ¿Ò»ĞĞĞèÒª»»ĞĞ
+        if(i<MAXIMUS*2)//å†™å…¥å®Œæ¯ä¸€è¡Œéœ€è¦æ¢è¡Œ
             printf("\n");
     }
 }
 
-static void Print()//½«Õû¸öÆåÅÌËã³ö²¢´¢´æµ½»º³åÆ÷£¬È»ºóµ÷ÓÃDisplayº¯ÊıÏÔÊ¾³öÀ´
+static void Print()//å°†æ•´ä¸ªæ£‹ç›˜ç®—å‡ºå¹¶å‚¨å­˜åˆ°ç¼“å†²å™¨ï¼Œç„¶åè°ƒç”¨Displayå‡½æ•°æ˜¾ç¤ºå‡ºæ¥
 {
-    int i,j;//Ñ­»·±äÁ¿
+    int i,j;//å¾ªç¯å˜é‡
     wl=0;
     wp=0;
-    for(j=0;j<=MAXIMUS;j++)//Ğ´Èë³ö½»µã×óÉÏ½ÇµÄ×Ö·û£¬ÒòÎªĞèÒª´òÓ¡ÆåÅÌÓÒÏÂ½Ç£¬ËùÒÔºÜÒÔºá×İ¸÷¶àÒ»´ÎÑ­»·
+    for(j=0;j<=MAXIMUS;j++)//å†™å…¥å‡ºäº¤ç‚¹å·¦ä¸Šè§’çš„å­—ç¬¦ï¼Œå› ä¸ºéœ€è¦æ‰“å°æ£‹ç›˜å³ä¸‹è§’ï¼Œæ‰€ä»¥å¾ˆä»¥æ¨ªçºµå„å¤šä¸€æ¬¡å¾ªç¯
     {
         for(i=0;i<=MAXIMUS;i++)
         {
-            write(getCurse(i,j));//Ğ´Èë×óÉÏ½Ç×Ö·û
-            if(j==0||j==MAXIMUS)//Èç¹ûÊÇÆåÉÏÏÂÅÌ±ßÔµÔòÃ»ÓĞÁ¬½ÓµÄÊúÏß£¬ÓÃ¿Õ¸ñÌî³äÎ»ÖÃ
+            write(getCurse(i,j));//å†™å…¥å·¦ä¸Šè§’å­—ç¬¦
+            if(j==0||j==MAXIMUS)//å¦‚æœæ˜¯æ£‹ä¸Šä¸‹ç›˜è¾¹ç¼˜åˆ™æ²¡æœ‰è¿æ¥çš„ç«–çº¿ï¼Œç”¨ç©ºæ ¼å¡«å……ä½ç½®
             {
                 if(i!=MAXIMUS)
-                    write("¡¡");
+                    write("ã€€");
             }
-            else//Èç¹ûÔÚÆåÅÌÖĞ¼äÔòÓÃÊúÏß³Ğ½ÓÉÏÏÂ
+            else//å¦‚æœåœ¨æ£‹ç›˜ä¸­é—´åˆ™ç”¨ç«–çº¿æ‰¿æ¥ä¸Šä¸‹
             {
-                if(i==0||i==MAXIMUS-1)//×óÓÒ±ßÔµµÄÊúÏß¸ü´Ö
-                    write("©§");
-                else if(i!=MAXIMUS)//ÖĞ¼äµÄÊúÏß
-                    write("©¦");
+                if(i==0||i==MAXIMUS-1)//å·¦å³è¾¹ç¼˜çš„ç«–çº¿æ›´ç²—
+                    write("â”ƒ");
+                else if(i!=MAXIMUS)//ä¸­é—´çš„ç«–çº¿
+                    write("â”‚");
             }
         }
-        if(j==MAXIMUS)//Èç¹ûÊÇ×îºóÒ»´ÎÑ­»·£¬ÔòÖ»ĞèÒª´¦Àí±ß²à×Ö·û£¬½»µãÒªÉÙÒ»ÅÅ
+        if(j==MAXIMUS)//å¦‚æœæ˜¯æœ€åä¸€æ¬¡å¾ªç¯ï¼Œåˆ™åªéœ€è¦å¤„ç†è¾¹ä¾§å­—ç¬¦ï¼Œäº¤ç‚¹è¦å°‘ä¸€æ’
         {
             break;
         }
-        ln();//ÌáĞĞ¿ªÊ¼´òÓ¡½»µãÄÚÈİ
-        write("¡¡");//ÓÃ¿ÕÎ»²¹ÆëÎ»ÖÃ
-        for(i=0;i<MAXIMUS;i++)//°´ºá×ø±êÑ­»·Õı³£µÄ´ÎÊı
+        ln();//æè¡Œå¼€å§‹æ‰“å°äº¤ç‚¹å†…å®¹
+        write("ã€€");//ç”¨ç©ºä½è¡¥é½ä½ç½®
+        for(i=0;i<MAXIMUS;i++)//æŒ‰æ¨ªåæ ‡å¾ªç¯æ­£å¸¸çš„æ¬¡æ•°
         {
-            write(getStyle(i,j));//Ğ´Èë½»µã×Ö·û
-            if(i!=MAXIMUS-1)//Èç¹û²»ÔÚ×îÓÒ²àÔò²¹³äÒ»¸öºáÏß³Ğ½Ó×óÓÒ
+            write(getStyle(i,j));//å†™å…¥äº¤ç‚¹å­—ç¬¦
+            if(i!=MAXIMUS-1)//å¦‚æœä¸åœ¨æœ€å³ä¾§åˆ™è¡¥å……ä¸€ä¸ªæ¨ªçº¿æ‰¿æ¥å·¦å³
             {
                 if(j==0||j==MAXIMUS-1)
                 {
-                    write("©¥");//ÉÏÏÂ±ßÔµµÄºáÏß¸ü´Ö
+                    write("â”");//ä¸Šä¸‹è¾¹ç¼˜çš„æ¨ªçº¿æ›´ç²—
                 }
                 else
                 {
-                    write("©¤");//ÖĞ¼äµÄºáÏß
+                    write("â”€");//ä¸­é—´çš„æ¨ªçº¿
                 }
             }
         }
-        ln();//Ğ´ÍêÒ»ĞĞºóÌáĞĞ
+        ln();//å†™å®Œä¸€è¡Œåæè¡Œ
     }
-    Display();//½«»º³åÆ÷ÄÚÈİÊä³öµ½ÆÁÄ»
+    Display();//å°†ç¼“å†²å™¨å†…å®¹è¾“å‡ºåˆ°å±å¹•
 }
 
-static int Put(){//ÔÚµ±Ç°¹â±êÎ»ÖÃ×ß×Ó£¬Èç¹û·Ç¿Õ£¬Ôò·µ»Ø0±íÊ¾Ê§°Ü
+static int Put(){//åœ¨å½“å‰å…‰æ ‡ä½ç½®èµ°å­ï¼Œå¦‚æœéç©ºï¼Œåˆ™è¿”å›0è¡¨ç¤ºå¤±è´¥
     if(Putable)
     {
-        p[Cx][Cy]=Now;//¸Ä±ä¸ÃÎ»ÖÃÊı¾İ
+        p[Cx][Cy]=Now;//æ”¹å˜è¯¥ä½ç½®æ•°æ®
         AddRecord();
-        return 1;//·µ»Ø1±íÊ¾³É¹¦
+        return 1;//è¿”å›1è¡¨ç¤ºæˆåŠŸ
     }
     else
     {
@@ -290,178 +290,178 @@ static int Put(){//ÔÚµ±Ç°¹â±êÎ»ÖÃ×ß×Ó£¬Èç¹û·Ç¿Õ£¬Ôò·µ»Ø0±íÊ¾Ê§°Ü
     }
 }
 
-static int Check()//Ê¤¸º¼ì²é£¬¼´ÅĞ¶Ïµ±Ç°×ß×ÓÎ»ÖÃÓĞÃ»ÓĞÔì³ÉÎåÁ¬ÖéµÄÇé¿ö
+static int Check()//èƒœè´Ÿæ£€æŸ¥ï¼Œå³åˆ¤æ–­å½“å‰èµ°å­ä½ç½®æœ‰æ²¡æœ‰é€ æˆäº”è¿ç çš„æƒ…å†µ
 {
-    int w=1,x=1,y=1,z=1,i;//ÀÛ¼ÆºáÊúÕıĞ±·´Ğ°ËÄ¸ö·½ÏòµÄÁ¬ĞøÏàÍ¬Æå×ÓÊıÄ¿
-    for(i=1;i<5;i++)if(Cy+i<MAXIMUS&&p[Cx][Cy+i]==Now)w++;else break;//ÏòÏÂ¼ì²é
-    for(i=1;i<5;i++)if(Cy-i>0&&p[Cx][Cy-i]==Now)w++;else break;//ÏòÉÏ¼ì²é
-    if(w>=5)return Now;//Èô¹û´ïµ½5¸öÔòÅĞ¶Ïµ±Ç°×ß×ÓÍæ¼ÒÎªÓ®¼Ò
-    for(i=1;i<5;i++)if(Cx+i<MAXIMUS&&p[Cx+i][Cy]==Now)x++;else break;//ÏòÓÒ¼ì²é
-    for(i=1;i<5;i++)if(Cx-i>0&&p[Cx-i][Cy]==Now)x++;else break;//Ïò×ó¼ì²é
-    if(x>=5)return Now;//Èô¹û´ïµ½5¸öÔòÅĞ¶Ïµ±Ç°×ß×ÓÍæ¼ÒÎªÓ®¼Ò
-    for(i=1;i<5;i++)if(Cx+i<MAXIMUS&&Cy+i<MAXIMUS&&p[Cx+i][Cy+i]==Now)y++;else break;//ÏòÓÒÏÂ¼ì²é
-    for(i=1;i<5;i++)if(Cx-i>0&&Cy-i>0&&p[Cx-i][Cy-i]==Now)y++;else break;//Ïò×óÉÏ¼ì²é
-    if(y>=5)return Now;//Èô¹û´ïµ½5¸öÔòÅĞ¶Ïµ±Ç°×ß×ÓÍæ¼ÒÎªÓ®¼Ò
-    for(i=1;i<5;i++)if(Cx+i<MAXIMUS&&Cy-i>0&&p[Cx+i][Cy-i]==Now)z++;else break;//ÏòÓÒÉÏ¼ì²é
-    for(i=1;i<5;i++)if(Cx-i>0&&Cy+i<MAXIMUS&&p[Cx-i][Cy+i]==Now)z++;else break;//Ïò×óÏÂ¼ì²é
-    if(z>=5)return Now;//Èô¹û´ïµ½5¸öÔòÅĞ¶Ïµ±Ç°×ß×ÓÍæ¼ÒÎªÓ®¼Ò
-    return 0;//ÈôÃ»ÓĞ¼ì²éµ½ÎåÁ¬Öé£¬Ôò·µ»Ø0±íÊ¾»¹Ã»ÓĞÍæ¼Ò´ï³ÉÊ¤Àû
+    int w=1,x=1,y=1,z=1,i;//ç´¯è®¡æ¨ªç«–æ­£æ–œåé‚ªå››ä¸ªæ–¹å‘çš„è¿ç»­ç›¸åŒæ£‹å­æ•°ç›®
+    for(i=1;i<5;i++)if(Cy+i<MAXIMUS&&p[Cx][Cy+i]==Now)w++;else break;//å‘ä¸‹æ£€æŸ¥
+    for(i=1;i<5;i++)if(Cy-i>0&&p[Cx][Cy-i]==Now)w++;else break;//å‘ä¸Šæ£€æŸ¥
+    if(w>=5)return Now;//è‹¥æœè¾¾åˆ°5ä¸ªåˆ™åˆ¤æ–­å½“å‰èµ°å­ç©å®¶ä¸ºèµ¢å®¶
+    for(i=1;i<5;i++)if(Cx+i<MAXIMUS&&p[Cx+i][Cy]==Now)x++;else break;//å‘å³æ£€æŸ¥
+    for(i=1;i<5;i++)if(Cx-i>0&&p[Cx-i][Cy]==Now)x++;else break;//å‘å·¦æ£€æŸ¥
+    if(x>=5)return Now;//è‹¥æœè¾¾åˆ°5ä¸ªåˆ™åˆ¤æ–­å½“å‰èµ°å­ç©å®¶ä¸ºèµ¢å®¶
+    for(i=1;i<5;i++)if(Cx+i<MAXIMUS&&Cy+i<MAXIMUS&&p[Cx+i][Cy+i]==Now)y++;else break;//å‘å³ä¸‹æ£€æŸ¥
+    for(i=1;i<5;i++)if(Cx-i>0&&Cy-i>0&&p[Cx-i][Cy-i]==Now)y++;else break;//å‘å·¦ä¸Šæ£€æŸ¥
+    if(y>=5)return Now;//è‹¥æœè¾¾åˆ°5ä¸ªåˆ™åˆ¤æ–­å½“å‰èµ°å­ç©å®¶ä¸ºèµ¢å®¶
+    for(i=1;i<5;i++)if(Cx+i<MAXIMUS&&Cy-i>0&&p[Cx+i][Cy-i]==Now)z++;else break;//å‘å³ä¸Šæ£€æŸ¥
+    for(i=1;i<5;i++)if(Cx-i>0&&Cy+i<MAXIMUS&&p[Cx-i][Cy+i]==Now)z++;else break;//å‘å·¦ä¸‹æ£€æŸ¥
+    if(z>=5)return Now;//è‹¥æœè¾¾åˆ°5ä¸ªåˆ™åˆ¤æ–­å½“å‰èµ°å­ç©å®¶ä¸ºèµ¢å®¶
+    return 0;//è‹¥æ²¡æœ‰æ£€æŸ¥åˆ°äº”è¿ç ï¼Œåˆ™è¿”å›0è¡¨ç¤ºè¿˜æ²¡æœ‰ç©å®¶è¾¾æˆèƒœåˆ©
 }
 static void ReplayMode(){
-    int i,j;//Ñ­»·±äÁ¿
-    system("title »Ø·ÅÖĞ(°´×ó¼üºóÍË£¬ÓÒ¼ü»ò¿Õ¸ñÇ°½ø)£¬EscÍË³ö");
-    showText="";//ÖØÖÃÏÔÊ¾ĞÅÏ¢
-    count=0;//»ØºÏÊı¹éÁã
-    Putable=0;//²»¿É×ßÆå×´Ì¬
+    int i,j;//å¾ªç¯å˜é‡
+    system("title å›æ”¾ä¸­(æŒ‰å·¦é”®åé€€ï¼Œå³é”®æˆ–ç©ºæ ¼å‰è¿›)ï¼ŒEscé€€å‡º");
+    showText="";//é‡ç½®æ˜¾ç¤ºä¿¡æ¯
+    count=0;//å›åˆæ•°å½’é›¶
+    Putable=0;//ä¸å¯èµ°æ£‹çŠ¶æ€
     RecBeg->Back=newRecord();
     RecBeg->Back->Next=RecBeg;
     RecBeg=RecBeg->Back;
-    for(i=0;i<MAXIMUS;i++)//ÖØÖÃ¶Ô¾ÖÊı¾İ
+    for(i=0;i<MAXIMUS;i++)//é‡ç½®å¯¹å±€æ•°æ®
     {
         for(j=0;j<MAXIMUS;j++)
         {
             p[i][j]=0;
         }
     }
-    Now=1;//ÖØÖÃµ±Ç°ÎªºÚ·½
+    Now=1;//é‡ç½®å½“å‰ä¸ºé»‘æ–¹
 }
 
-static void RepForward()//»Ø·ÅÄ£Ê½Ç°½ø
+static void RepForward()//å›æ”¾æ¨¡å¼å‰è¿›
 {
-    if(RecNow->Next->Next!=NULL)//Ô½½ç¼ì²é
+    if(RecNow->Next->Next!=NULL)//è¶Šç•Œæ£€æŸ¥
     {
-        RecNow=RecNow->Next;//µ±Ç°½ÚµãÍÆÖÁÏÂÒ»¸ö¼ÇÂ¼½Úµã
-        p[RecNow->X][RecNow->Y]=Now;//°´ÕÕ¼ÇÂ¼»¹Ô­Ò»¸ö»ØºÏ
-        Cx=RecNow->X;//ÉèÖÃ¹â±êÎ»ÖÃ
+        RecNow=RecNow->Next;//å½“å‰èŠ‚ç‚¹æ¨è‡³ä¸‹ä¸€ä¸ªè®°å½•èŠ‚ç‚¹
+        p[RecNow->X][RecNow->Y]=Now;//æŒ‰ç…§è®°å½•è¿˜åŸä¸€ä¸ªå›åˆ
+        Cx=RecNow->X;//è®¾ç½®å…‰æ ‡ä½ç½®
         Cy=RecNow->Y;
-        Now=3-Now;//×ª»»µ±Ç°µÄºÚ°×·½
+        Now=3-Now;//è½¬æ¢å½“å‰çš„é»‘ç™½æ–¹
     }
-    else//ÈôÒÑ´ïµ½×îºóÔòÑ¯ÎÊÍË³ö
+    else//è‹¥å·²è¾¾åˆ°æœ€ååˆ™è¯¢é—®é€€å‡º
     {
         ExitRep();
     }
 }
 
-static void RepBackward()//»Ø·ÅÄ£Ê½ºóÍË
+static void RepBackward()//å›æ”¾æ¨¡å¼åé€€
 {
-    if(RecNow->Back!=NULL)//Ô½½ç¼ì²é
+    if(RecNow->Back!=NULL)//è¶Šç•Œæ£€æŸ¥
     {
-        p[RecNow->X][RecNow->Y]=0;//°´ÕÕ¼ÇÂ¼³·ÏúÒ»¸ö»ØºÏ
-        if(RecNow->Back->Back==NULL)//ÔÚÕû¸öÆåÅÌÃ»ÓĞÆå×ÓÊ±Òş²Ø¹â±ê
+        p[RecNow->X][RecNow->Y]=0;//æŒ‰ç…§è®°å½•æ’¤é”€ä¸€ä¸ªå›åˆ
+        if(RecNow->Back->Back==NULL)//åœ¨æ•´ä¸ªæ£‹ç›˜æ²¡æœ‰æ£‹å­æ—¶éšè—å…‰æ ‡
         {
             Cx=-2;
             Cy=-2;
         }
-        else if(RecNow->Back==NULL)//ÔÚÖ»ÓĞÒ»¸öÆå×ÓÊ±ÒÆ¶¯¹â±êµ½Õâ¸öÆå×ÓµÄÎ»ÖÃ
+        else if(RecNow->Back==NULL)//åœ¨åªæœ‰ä¸€ä¸ªæ£‹å­æ—¶ç§»åŠ¨å…‰æ ‡åˆ°è¿™ä¸ªæ£‹å­çš„ä½ç½®
         {
             Cx=RecNow->X;
             Cy=RecNow->Y;
         }
-        else//Õı³£Çé¿öÏÂÒÆ¶¯¹â±êµ½ÉÏÒ»»ØºÏµÄÎ»ÖÃ
+        else//æ­£å¸¸æƒ…å†µä¸‹ç§»åŠ¨å…‰æ ‡åˆ°ä¸Šä¸€å›åˆçš„ä½ç½®
         {
             Cx=RecNow->Back->X;
             Cy=RecNow->Back->Y;
         }
-        RecNow=RecNow->Back;//µ±Ç°½ÚµãºóÍËÖÁÉÏÒ»¸ö¼ÇÂ¼½Úµã
-        Now=3-Now;//×ª»»µ±Ç°µÄºÚ°×·½
+        RecNow=RecNow->Back;//å½“å‰èŠ‚ç‚¹åé€€è‡³ä¸Šä¸€ä¸ªè®°å½•èŠ‚ç‚¹
+        Now=3-Now;//è½¬æ¢å½“å‰çš„é»‘ç™½æ–¹
         
     }
 }
 
 static void ShowReplay()
 {
-    int input;//ÊäÈë±äÁ¿
-    ReplayMode();//³õÊ¼»¯»Ø·ÅÄ£Ê½
-    RecNow=RecBeg;//µ±Ç°¹Û²ì´ÓÍ·¿ªÊ¼
-    RepForward();//ÏÔÊ¾µÚÒ»´Î×ßÆå
-    while(1)//¿ªÊ¼ÎŞÏŞ»ØºÏµÄËÀÑ­»·£¬Ö±µ½EscÍË³ö
+    int input;//è¾“å…¥å˜é‡
+    ReplayMode();//åˆå§‹åŒ–å›æ”¾æ¨¡å¼
+    RecNow=RecBeg;//å½“å‰è§‚å¯Ÿä»å¤´å¼€å§‹
+    RepForward();//æ˜¾ç¤ºç¬¬ä¸€æ¬¡èµ°æ£‹
+    while(1)//å¼€å§‹æ— é™å›åˆçš„æ­»å¾ªç¯ï¼Œç›´åˆ°Escé€€å‡º
     {
         if(ExiRep==3)
         {
             ExiRep=0;
             break;
         }
-        Print();//´òÓ¡ÆåÅÌ
-        input=_getch();//µÈ´ı¼üÅÌ°´ÏÂÒ»¸ö×Ö·û
-        if(input==27)//Èç¹ûÊÇESCÔòÍË³ö»Ø·Å
+        Print();//æ‰“å°æ£‹ç›˜
+        input=_getch();//ç­‰å¾…é”®ç›˜æŒ‰ä¸‹ä¸€ä¸ªå­—ç¬¦
+        if(input==27)//å¦‚æœæ˜¯ESCåˆ™é€€å‡ºå›æ”¾
         {
             return;
         }
-        else if(input==0x20)//Èç¹ûÊÇ¿Õ¸ñÔòÇ°½ø
+        else if(input==0x20)//å¦‚æœæ˜¯ç©ºæ ¼åˆ™å‰è¿›
         {
             RepForward();
             continue;
         }
-        else if(input==0xE0)//Èç¹û°´ÏÂµÄÊÇ·½Ïò¼ü£¬»áÌî³äÁ½´ÎÊäÈë£¬µÚÒ»´ÎÎª0xE0±íÊ¾°´ÏÂµÄÊÇ¿ØÖÆ¼ü
+        else if(input==0xE0)//å¦‚æœæŒ‰ä¸‹çš„æ˜¯æ–¹å‘é”®ï¼Œä¼šå¡«å……ä¸¤æ¬¡è¾“å…¥ï¼Œç¬¬ä¸€æ¬¡ä¸º0xE0è¡¨ç¤ºæŒ‰ä¸‹çš„æ˜¯æ§åˆ¶é”®
         {
-            input=_getch();//»ñµÃµÚ¶ş´ÎÊäÈëĞÅÏ¢
-            switch(input)//ÅĞ¶Ï·½Ïò¼ü·½Ïò²¢ÒÆ¶¯¹â±êÎ»ÖÃ
+            input=_getch();//è·å¾—ç¬¬äºŒæ¬¡è¾“å…¥ä¿¡æ¯
+            switch(input)//åˆ¤æ–­æ–¹å‘é”®æ–¹å‘å¹¶ç§»åŠ¨å…‰æ ‡ä½ç½®
             {
             case 0x4B:
-                RepBackward();//Ïò×óºóÍË
+                RepBackward();//å‘å·¦åé€€
                 break;
             case 0x4D:
-                RepForward();//ÏòÓÒÇ°½ø
+                RepForward();//å‘å³å‰è¿›
                 continue;
             }
         }
-        ExiRep=0;//Î´ÔÙ´Î°´ºóÒÆÔò²»×¼±¸ÍË³ö
+        ExiRep=0;//æœªå†æ¬¡æŒ‰åç§»åˆ™ä¸å‡†å¤‡é€€å‡º
         showText="";
     }
 }
 
 
-static int Regret()//»ÚÆå³·Ïú,Èç¹ûÆåÅÌÉÏÃ»ÓĞ×Ó¼´ÎªÍË³ö
+static int Regret()//æ‚”æ£‹æ’¤é”€,å¦‚æœæ£‹ç›˜ä¸Šæ²¡æœ‰å­å³ä¸ºé€€å‡º
 {
-    if(DelRecord()){//³¢ÊÔÉ¾³ıµ±Ç°½Úµã£¬Èç¹ûÓĞ½Úµã¿ÉÒÔÉ¾³ıÔò
-        p[RecNow->X][RecNow->Y]=0;//³·³ıµ±Ç°»ØºÏ
-        if(RecNow->Back==NULL)//Èç¹ûÉ¾³ıµÄÊÇµÚÒ»¿Å×ÓÔò½«¹â±êÒÆ¶¯µ½µÚÒ»¿Å×ÓÔ­À´µÄÎ»ÖÃÉÏ
+    if(DelRecord()){//å°è¯•åˆ é™¤å½“å‰èŠ‚ç‚¹ï¼Œå¦‚æœæœ‰èŠ‚ç‚¹å¯ä»¥åˆ é™¤åˆ™
+        p[RecNow->X][RecNow->Y]=0;//æ’¤é™¤å½“å‰å›åˆ
+        if(RecNow->Back==NULL)//å¦‚æœåˆ é™¤çš„æ˜¯ç¬¬ä¸€é¢—å­åˆ™å°†å…‰æ ‡ç§»åŠ¨åˆ°ç¬¬ä¸€é¢—å­åŸæ¥çš„ä½ç½®ä¸Š
         {
             Cx=RecNow->X;
             Cy=RecNow->Y;
         }
-        else//·ñÔò½«¹â±êÒÆ¶¯µ½ÉÏÒ»¿Å×ÓÉÏ
+        else//å¦åˆ™å°†å…‰æ ‡ç§»åŠ¨åˆ°ä¸Šä¸€é¢—å­ä¸Š
         {
             Cx=RecNow->Back->X;
             Cy=RecNow->Back->Y;
         }
-        Now=3-Now;//·´×ªµ±Ç°ºÚ°×·½
+        Now=3-Now;//åè½¬å½“å‰é»‘ç™½æ–¹
         return 0;
     }
     else
     {
-        //Exit();//Èç¹ûÃ»ÓĞÆå×Ó¿ÉÒÔ³·Ïú£¬ÔòÑ¯ÎÊÍË³ö
+        //Exit();//å¦‚æœæ²¡æœ‰æ£‹å­å¯ä»¥æ’¤é”€ï¼Œåˆ™è¯¢é—®é€€å‡º
         return -1;
     }
 }
 
-static int RunGame()//½øĞĞÕû¸ö¶Ô¾Ö£¬·µ»ØÓ®¼ÒĞÅÏ¢(ËäÈ»ÓĞÓÃÉÏ)
+static int RunGame()//è¿›è¡Œæ•´ä¸ªå¯¹å±€ï¼Œè¿”å›èµ¢å®¶ä¿¡æ¯(è™½ç„¶æœ‰ç”¨ä¸Š)
 {
-    int input;//ÊäÈë±äÁ¿
-    int victor;//Ó®¼ÒĞÅÏ¢
-    Initialize();//³õÊ¼»¯¶Ô¾Ö
-    while(1){//¿ªÊ¼ÎŞÏŞ»ØºÏµÄËÀÑ­»·£¬Ö±µ½³öÏÖÊ¤ÀûÌø³ö
+    int input;//è¾“å…¥å˜é‡
+    int victor;//èµ¢å®¶ä¿¡æ¯
+    Initialize();//åˆå§‹åŒ–å¯¹å±€
+    while(1){//å¼€å§‹æ— é™å›åˆçš„æ­»å¾ªç¯ï¼Œç›´åˆ°å‡ºç°èƒœåˆ©è·³å‡º
         Putable=p[Cx][Cy]==0;
-        Print();//´òÓ¡ÆåÅÌ
-        input=_getch();//µÈ´ı¼üÅÌ°´ÏÂÒ»¸ö×Ö·û
-        if(input==0x1B) //Èç¹ûÊÇESCÔòÍË³ö
+        Print();//æ‰“å°æ£‹ç›˜
+        input=_getch();//ç­‰å¾…é”®ç›˜æŒ‰ä¸‹ä¸€ä¸ªå­—ç¬¦
+        if(input==0x1B) //å¦‚æœæ˜¯ESCåˆ™é€€å‡º
             return 0;
-        if(input==' ')//Èç¹ûÊÇ¿Õ¸ñÔò»ÚÆå
+        if(input==' ')//å¦‚æœæ˜¯ç©ºæ ¼åˆ™æ‚”æ£‹
         {
             Regret();
             Print();
             continue;
         }
-        else if(input=='\r')//Èç¹ûÊÇ»Ø³µÔò¿ªÊ¼×ß×Ó
+        else if(input=='\r')//å¦‚æœæ˜¯å›è½¦åˆ™å¼€å§‹èµ°å­
         {
-            if(Put())//Èç¹û×ß×Ó³É¹¦ÔòÅĞ¶ÏÊ¤¸º
+            if(Put())//å¦‚æœèµ°å­æˆåŠŸåˆ™åˆ¤æ–­èƒœè´Ÿ
             {
                 victor=Check();
-                Now=3-Now;//ÂÖ»»µ±Ç°×ß×ÓÍæ¼Ò
+                Now=3-Now;//è½®æ¢å½“å‰èµ°å­ç©å®¶
                 count++;
-                if(victor==1)//Èç¹ûºÚ·½´ïµ½Ê¤Àû£¬ÏÔÊ¾ÌáÊ¾ÎÄ×Ö²¢µÈ´ıÒ»´Î°´¼ü£¬·µ»ØÊ¤ÀûĞÅÏ¢
+                if(victor==1)//å¦‚æœé»‘æ–¹è¾¾åˆ°èƒœåˆ©ï¼Œæ˜¾ç¤ºæç¤ºæ–‡å­—å¹¶ç­‰å¾…ä¸€æ¬¡æŒ‰é”®ï¼Œè¿”å›èƒœåˆ©ä¿¡æ¯
                 {
-                    showText="ºÚ·½Ê¤Àû!°´R²é¿´»Ø·Å,°´ÆäËû¼üÖØĞÂ¿ª¾Ö";
+                    showText="é»‘æ–¹èƒœåˆ©!æŒ‰RæŸ¥çœ‹å›æ”¾,æŒ‰å…¶ä»–é”®é‡æ–°å¼€å±€";
                     Print();
                     input=_getch();
                     if(input==0xE0)
@@ -474,9 +474,9 @@ static int RunGame()//½øĞĞÕû¸ö¶Ô¾Ö£¬·µ»ØÓ®¼ÒĞÅÏ¢(ËäÈ»ÓĞÓÃÉÏ)
                     }
                     return Now;
                 }
-                else if(victor==2)//Èç¹û°×·½´ïµ½Ê¤Àû£¬ÏÔÊ¾ÌáÊ¾ÎÄ×Ö²¢µÈ´ıÒ»´Î°´¼ü£¬·µ»ØÊ¤ÀûĞÅÏ¢
+                else if(victor==2)//å¦‚æœç™½æ–¹è¾¾åˆ°èƒœåˆ©ï¼Œæ˜¾ç¤ºæç¤ºæ–‡å­—å¹¶ç­‰å¾…ä¸€æ¬¡æŒ‰é”®ï¼Œè¿”å›èƒœåˆ©ä¿¡æ¯
                 {
-                    showText="°×·½Ê¤Àû!°´R²é¿´»Ø·Å,°´ÆäËû¼üÖØĞÂ¿ª¾Ö";
+                    showText="ç™½æ–¹èƒœåˆ©!æŒ‰RæŸ¥çœ‹å›æ”¾,æŒ‰å…¶ä»–é”®é‡æ–°å¼€å±€";
                     Print();
                     input=_getch();
                     if(input==0xE0)
@@ -488,9 +488,9 @@ static int RunGame()//½øĞĞÕû¸ö¶Ô¾Ö£¬·µ»ØÓ®¼ÒĞÅÏ¢(ËäÈ»ÓĞÓÃÉÏ)
                         ShowReplay();
                     }
                     return Now;
-                }else if(count==MAXIMUS*MAXIMUS)//Èç¹û»ØºÏÊı´ïµ½ÁËÆåÅÌ×ÜÁ¿£¬¼´ÆåÅÌ³äÂú£¬¼´ÎªÆ½¾Ö
+                }else if(count==MAXIMUS*MAXIMUS)//å¦‚æœå›åˆæ•°è¾¾åˆ°äº†æ£‹ç›˜æ€»é‡ï¼Œå³æ£‹ç›˜å……æ»¡ï¼Œå³ä¸ºå¹³å±€
                 {
-                    showText="Æ½¾Ö!°´R²é¿´»Ø·Å,°´ÆäËû¼üÖØĞÂ¿ª¾Ö";
+                    showText="å¹³å±€!æŒ‰RæŸ¥çœ‹å›æ”¾,æŒ‰å…¶ä»–é”®é‡æ–°å¼€å±€";
                     Print();
                     input=_getch();
                     if(input==0xE0)
@@ -506,10 +506,10 @@ static int RunGame()//½øĞĞÕû¸ö¶Ô¾Ö£¬·µ»ØÓ®¼ÒĞÅÏ¢(ËäÈ»ÓĞÓÃÉÏ)
                 }
             }
         }
-        else if(input==0xE0)//Èç¹û°´ÏÂµÄÊÇ·½Ïò¼ü£¬»áÌî³äÁ½´ÎÊäÈë£¬µÚÒ»´ÎÎª0xE0±íÊ¾°´ÏÂµÄÊÇ¿ØÖÆ¼ü
+        else if(input==0xE0)//å¦‚æœæŒ‰ä¸‹çš„æ˜¯æ–¹å‘é”®ï¼Œä¼šå¡«å……ä¸¤æ¬¡è¾“å…¥ï¼Œç¬¬ä¸€æ¬¡ä¸º0xE0è¡¨ç¤ºæŒ‰ä¸‹çš„æ˜¯æ§åˆ¶é”®
         {
-            input=_getch();//»ñµÃµÚ¶ş´ÎÊäÈëĞÅÏ¢
-            switch(input)//ÅĞ¶Ï·½Ïò¼ü·½Ïò²¢ÒÆ¶¯¹â±êÎ»ÖÃ
+            input=_getch();//è·å¾—ç¬¬äºŒæ¬¡è¾“å…¥ä¿¡æ¯
+            switch(input)//åˆ¤æ–­æ–¹å‘é”®æ–¹å‘å¹¶ç§»åŠ¨å…‰æ ‡ä½ç½®
             {
             case 0x4B://
                 Cx--;
@@ -524,12 +524,12 @@ static int RunGame()//½øĞĞÕû¸ö¶Ô¾Ö£¬·µ»ØÓ®¼ÒĞÅÏ¢(ËäÈ»ÓĞÓÃÉÏ)
                 Cy++;
                 break;
             }
-            if(Cx<0)Cx=MAXIMUS-1;//Èç¹û¹â±êÎ»ÖÃÔ½½çÔòÒÆ¶¯µ½¶Ô²à
+            if(Cx<0)Cx=MAXIMUS-1;//å¦‚æœå…‰æ ‡ä½ç½®è¶Šç•Œåˆ™ç§»åŠ¨åˆ°å¯¹ä¾§
             if(Cy<0)Cy=MAXIMUS-1;
             if(Cx>MAXIMUS-1)Cx=0;
             if(Cy>MAXIMUS-1)Cy=0;
         }
-        Exiting=0;//Î´ÔÙ´Î°´ÏÂESCÔò²»×¼±¸ÍË³ö
+        Exiting=0;//æœªå†æ¬¡æŒ‰ä¸‹ESCåˆ™ä¸å‡†å¤‡é€€å‡º
         showText="";
     }
 }
@@ -539,19 +539,19 @@ int gobang_main(int argc,char **argv)
     int res;
 	HANDLE hConsoleOutput;
     CONSOLE_SCREEN_BUFFER_INFO info;
-    hConsoleOutput = GetStdHandle(STD_OUTPUT_HANDLE); // »ñÈ¡¿ØÖÆÌ¨Êä³ö¾ä±ú
+    hConsoleOutput = GetStdHandle(STD_OUTPUT_HANDLE); // è·å–æ§åˆ¶å°è¾“å‡ºå¥æŸ„
     GetConsoleScreenBufferInfo(hConsoleOutput, &info);
 
-    system("mode con cols=63 lines=32");//ÉèÖÃ´°¿Ú´óĞ¡
-    system("color E8");//ÉèÖÃÑÕÉ«
-    while(1){//Ñ­»·Ö´ĞĞÓÎÏ·
+    system("mode con cols=63 lines=32");//è®¾ç½®çª—å£å¤§å°
+    system("color E8");//è®¾ç½®é¢œè‰²
+    while(1){//å¾ªç¯æ‰§è¡Œæ¸¸æˆ
         res = RunGame();
         if(res == 0)
             break;
     }
     SetConsoleTextAttribute(hConsoleOutput, info.wAttributes);
-    system("cls"); // ÇåÆÁ
-    system("mode con cols=100 lines=50");//ÉèÖÃ´°¿Ú´óĞ¡
+    system("cls"); // æ¸…å±
+    system("mode con cols=100 lines=50");//è®¾ç½®çª—å£å¤§å°
 	fflush(stdin);
     return 0;
 }

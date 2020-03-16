@@ -27,19 +27,19 @@ extern "C" {
 #define CPU_NAME_LEN 24
 #define BOARD_NAME_LEN 24
 
-//´æ´¢ÓÚflash²ÎÊıÇøµÄÊı¾İµÄÕûÌå½á¹¹£¬
-//Õâ²¿·ÖÊı¾İÔÚÄÚ´æÖĞÃ»ÓĞ±¸·İ£¬ÔÚĞèÒªÊ±´Óflash¶Á³ö
+//å­˜å‚¨äºflashå‚æ•°åŒºçš„æ•°æ®çš„æ•´ä½“ç»“æ„ï¼Œ
+//è¿™éƒ¨åˆ†æ•°æ®åœ¨å†…å­˜ä¸­æ²¡æœ‰å¤‡ä»½ï¼Œåœ¨éœ€è¦æ—¶ä»flashè¯»å‡º
 typedef struct 
 {
-    w_uint32_t magic;//Ä§Êõ×Ö£¬ÓÃÓÚ²ÎÊıÍ·²¿Ğ£Ñé
-    w_uint32_t lenth;//±¾²ÎÊı½á¹¹ÌåµÄ³¤¶È
+    w_uint32_t magic;//é­”æœ¯å­—ï¼Œç”¨äºå‚æ•°å¤´éƒ¨æ ¡éªŒ
+    w_uint32_t lenth;//æœ¬å‚æ•°ç»“æ„ä½“çš„é•¿åº¦
     
     w_uint32_t version;    //bootloader`
-    w_uint8_t debug_mode; //µ÷ÊÔÄ£Ê½
-    w_uint8_t wait_sec;   //µÈ´ı¼üÅÌÊÂ¼şÃëÊı
-    w_uint8_t run_type;   //ÔËĞĞÔÚRAM»òFlash
-    w_uint8_t encrypt_type;//³ÌĞò¼ÓÃÜÊ¹ÄÜ
-    w_uint8_t lock_en;     //Ğ¾Æ¬Ëø¶¨Ê¹ÄÜ
+    w_uint8_t debug_mode; //è°ƒè¯•æ¨¡å¼
+    w_uint8_t wait_sec;   //ç­‰å¾…é”®ç›˜äº‹ä»¶ç§’æ•°
+    w_uint8_t run_type;   //è¿è¡Œåœ¨RAMæˆ–Flash
+    w_uint8_t encrypt_type;//ç¨‹åºåŠ å¯†ä½¿èƒ½
+    w_uint8_t lock_en;     //èŠ¯ç‰‡é”å®šä½¿èƒ½
     w_int8_t part_cnt;
     char arch_name[ARCH_NAME_LEN];
     char cpu_name[CPU_NAME_LEN];

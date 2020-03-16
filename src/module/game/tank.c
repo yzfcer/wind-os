@@ -4,8 +4,8 @@
 #include <stdio.h>
 #include <windows.h>
 #include <time.h> 
-                           //Àï¹æ¸ñ£º³¤39*2=78 £¨Õæ×ø±ê£©(¼Ù×ø±ê¿íÎª39)  ¸ß39
-                           //Íâ¹æ¸ñ£º³¤41*2=82 £¨Õæ×ø±ê£©(¼Ù×ø±ê¿íÎª41)  ¸ß41
+                           //é‡Œè§„æ ¼ï¼šé•¿39*2=78 ï¼ˆçœŸåæ ‡ï¼‰(å‡åæ ‡å®½ä¸º39)  é«˜39
+                           //å¤–è§„æ ¼ï¼šé•¿41*2=82 ï¼ˆçœŸåæ ‡ï¼‰(å‡åæ ‡å®½ä¸º41)  é«˜41
 #define UP    1
 #define DOWN  2
 #define LEFT  3
@@ -14,145 +14,145 @@
 #define BULLET_NUM 40
 #define MAX_LIFE 4
  
-//³ÌĞòÖĞÎ´Ğ´Èëº¯Êı²ÎÊı±íÖĞÇÒÎ´ËµÃ÷µÄ±äÁ¿Ö»ÓĞmap¶şÎ¬Êı×é,level_infoÊı×éºÍlevel   
+//ç¨‹åºä¸­æœªå†™å…¥å‡½æ•°å‚æ•°è¡¨ä¸­ä¸”æœªè¯´æ˜çš„å˜é‡åªæœ‰mapäºŒç»´æ•°ç»„,level_infoæ•°ç»„å’Œlevel   
  
 /*
-      ´Ë³ÌĞòÖĞÉæ¼°µÄx,yÀàµÄ×ø±êÖµ£¬·ÖÎªÒÔÏÂÁ½ÖÖ£º                                 
+      æ­¤ç¨‹åºä¸­æ¶‰åŠçš„x,yç±»çš„åæ ‡å€¼ï¼Œåˆ†ä¸ºä»¥ä¸‹ä¸¤ç§ï¼š                                 
                                                                                                   
-¼Ù×ø±ê£ºÕâÀïµÄ×ø±êÖ¸µÄÊÇÒÔÒ»¸ö¡ö³¤¶ÈÎªµ¥Î»µÄ×ø±ê£¬¶ø²»ÊÇÕæÕıµÄcoord×ø±ê (ÓÃÓÚmapÊı×éµÄ×ø±ê)                             
+å‡åæ ‡ï¼šè¿™é‡Œçš„åæ ‡æŒ‡çš„æ˜¯ä»¥ä¸€ä¸ªâ– é•¿åº¦ä¸ºå•ä½çš„åæ ‡ï¼Œè€Œä¸æ˜¯çœŸæ­£çš„coordåæ ‡ (ç”¨äºmapæ•°ç»„çš„åæ ‡)                             
                                                                                                   
-Õæ×ø±ê£ºÍ·ÎÄ¼ş×Ô´øµÄ×ø±ê½á¹¹coordÖĞµÄ×ø±ê£¨Ò²¿ÉÒÔËµÊÇ¿ØÖÆÌ¨ÀïµÄÕæÕı×ø±êÖµ£©                                 
+çœŸåæ ‡ï¼šå¤´æ–‡ä»¶è‡ªå¸¦çš„åæ ‡ç»“æ„coordä¸­çš„åæ ‡ï¼ˆä¹Ÿå¯ä»¥è¯´æ˜¯æ§åˆ¶å°é‡Œçš„çœŸæ­£åæ ‡å€¼ï¼‰                                 
                                                                                                   
-  Çø±ğ£º×İ×ø±êyÁ½ÖµÒ»ÖÂ£¬¼Ùºá×ø±êxÖµÓëÕæÕıcoordºá×ø±ê£¨Õæ×ø±ê£©¹ØÏµÊÇ x * 2 = coord ºá×ø±ê    
+  åŒºåˆ«ï¼šçºµåæ ‡yä¸¤å€¼ä¸€è‡´ï¼Œå‡æ¨ªåæ ‡xå€¼ä¸çœŸæ­£coordæ¨ªåæ ‡ï¼ˆçœŸåæ ‡ï¼‰å…³ç³»æ˜¯ x * 2 = coord æ¨ªåæ ‡    
                                                                                                             
-		  coordºá×ø±ê¼ÈÖ¸GoToº¯ÊıÖĞµÄx²ÎÊı,ÒòÎª±¾³ÌĞòÓÎÏ·½çÃæÒÔÒ»¸ö¡ö³¤¶ÈÎª»ù±¾µ¥Î»£¬                    
+		  coordæ¨ªåæ ‡æ—¢æŒ‡GoToå‡½æ•°ä¸­çš„xå‚æ•°,å› ä¸ºæœ¬ç¨‹åºæ¸¸æˆç•Œé¢ä»¥ä¸€ä¸ªâ– é•¿åº¦ä¸ºåŸºæœ¬å•ä½ï¼Œ                    
                                                                                                   
-		  ¿ÉÒÔËµÉæ¼°µÄcoordºá×ø±êÈ«ÊÇÅ¼Êı¡£¼È¼Ù×ø±êÒª±äÕæ×ø±ê£¨±äÕæ×ø±ê²ÅÄÜ·¢»ÓÕæÕı×÷ÓÃ£©£¬ºá×ø±êĞë³ËÒÔ2                                    
+		  å¯ä»¥è¯´æ¶‰åŠçš„coordæ¨ªåæ ‡å…¨æ˜¯å¶æ•°ã€‚æ—¢å‡åæ ‡è¦å˜çœŸåæ ‡ï¼ˆå˜çœŸåæ ‡æ‰èƒ½å‘æŒ¥çœŸæ­£ä½œç”¨ï¼‰ï¼Œæ¨ªåæ ‡é¡»ä¹˜ä»¥2                                    
                                                            
 */
-typedef struct             //ÕâÀïµÄ³öÏÖ´ÎĞòÖ¸µÄÊÇÒ»¸öAI_tank±äÁ¿ÖĞµÄ´ÎĞò£¬ÓÎÏ·¹²ÓĞËÄ¸öAI_tank±äÁ¿
-{                          //¡ßÉè¶¨Ã¿¸öAI_tankÃ¿ÖÖÌØÊâÌ¹¿ËÖ»³öÏÖÒ»´Î ¡àfast_tank & firm_tank ×î¶à³öÏÖ´ÎÊı²»³¬¹ı1
-    int fast_tank_order;   //fast_tank³öÏÖµÄ´ÎĞò(ÔÚµÚfast_tank_order´Î¸´»î³öÏÖ,´ÓµÚ0´Î¿ªÊ¼)£¬ÇÒÃ¿¸öAI_tankÖ»³öÏÖÒ»´Î
-    int firm_tank_order;   //firm_tank³öÏÖµÄ´ÎĞò£¬Í¬ÉÏ
-}LevInfo;                 //¹Ø¿¨ĞÅÏ¢(×¼È·ËµÊÇ¸Ã¹Ø³öÏÖµÄÌ¹¿ËĞÅÏ¢)
-LevInfo level_info [MAX_LEVEL] = {{-1,-1},{3,-1},{-1,3},{2,3},{2,3},{2,3},{2,3},{2,3}};   //³õÊ¼»¯£¬-1´ú±íÃ»ÓĞ¸ÃÀàĞÍÌ¹¿Ë
+typedef struct             //è¿™é‡Œçš„å‡ºç°æ¬¡åºæŒ‡çš„æ˜¯ä¸€ä¸ªAI_tankå˜é‡ä¸­çš„æ¬¡åºï¼Œæ¸¸æˆå…±æœ‰å››ä¸ªAI_tankå˜é‡
+{                          //âˆµè®¾å®šæ¯ä¸ªAI_tankæ¯ç§ç‰¹æ®Šå¦å…‹åªå‡ºç°ä¸€æ¬¡ âˆ´fast_tank & firm_tank æœ€å¤šå‡ºç°æ¬¡æ•°ä¸è¶…è¿‡1
+    int fast_tank_order;   //fast_tankå‡ºç°çš„æ¬¡åº(åœ¨ç¬¬fast_tank_orderæ¬¡å¤æ´»å‡ºç°,ä»ç¬¬0æ¬¡å¼€å§‹)ï¼Œä¸”æ¯ä¸ªAI_tankåªå‡ºç°ä¸€æ¬¡
+    int firm_tank_order;   //firm_tankå‡ºç°çš„æ¬¡åºï¼ŒåŒä¸Š
+}LevInfo;                 //å…³å¡ä¿¡æ¯(å‡†ç¡®è¯´æ˜¯è¯¥å…³å‡ºç°çš„å¦å…‹ä¿¡æ¯)
+LevInfo level_info [MAX_LEVEL] = {{-1,-1},{3,-1},{-1,3},{2,3},{2,3},{2,3},{2,3},{2,3}};   //åˆå§‹åŒ–ï¼Œ-1ä»£è¡¨æ²¡æœ‰è¯¥ç±»å‹å¦å…‹
  
  
-typedef struct      //×Óµ¯½á¹¹Ìå
+typedef struct      //å­å¼¹ç»“æ„ä½“
 {
-    int x,y;        //×Óµ¯×ø±ê,¼Ù×ø±ê
-    int direction;  //×Óµ¯·½Ïò±äÁ¿
-    int exist;     //×Óµ¯´æÔÚÓë·ñµÄ±äÁ¿,1Îª´æÔÚ£¬0²»´æÔÚ
-    int initial;   //×Óµ¯ÊÇ·ñ´¦ÓÚ½¨Á¢³õ×´Ì¬µÄÖµ£¬1Îª´¦ÓÚ½¨Á¢³õ×´Ì¬£¬0Îª´¦ÓÚ·Ç½¨Á¢³õ×´Ì¬
-    int my;        //Çø·ÖAI×Óµ¯ÓëÍæ¼Ò×Óµ¯µÄ±ê¼Ç,0ÎªAI×Óµ¯£¬1ÎªÍæ¼Ò£¨ÎÒµÄ£©×Óµ¯
+    int x,y;        //å­å¼¹åæ ‡,å‡åæ ‡
+    int direction;  //å­å¼¹æ–¹å‘å˜é‡
+    int exist;     //å­å¼¹å­˜åœ¨ä¸å¦çš„å˜é‡,1ä¸ºå­˜åœ¨ï¼Œ0ä¸å­˜åœ¨
+    int initial;   //å­å¼¹æ˜¯å¦å¤„äºå»ºç«‹åˆçŠ¶æ€çš„å€¼ï¼Œ1ä¸ºå¤„äºå»ºç«‹åˆçŠ¶æ€ï¼Œ0ä¸ºå¤„äºéå»ºç«‹åˆçŠ¶æ€
+    int my;        //åŒºåˆ†AIå­å¼¹ä¸ç©å®¶å­å¼¹çš„æ ‡è®°,0ä¸ºAIå­å¼¹ï¼Œ1ä¸ºç©å®¶ï¼ˆæˆ‘çš„ï¼‰å­å¼¹
 }Bullet;
 
-static Bullet bullet[BULLET_NUM];  //¿¼ÂÇµ½µØÍ¼ÉÏ²»Ì«¿ÉÄÜÍ¬Ê±´æÔÚ20¿Å×Óµ¯£¬ËùÒÔÊı×éÔªËØÉèÖÃ20¸ö
+static Bullet bullet[BULLET_NUM];  //è€ƒè™‘åˆ°åœ°å›¾ä¸Šä¸å¤ªå¯èƒ½åŒæ—¶å­˜åœ¨20é¢—å­å¼¹ï¼Œæ‰€ä»¥æ•°ç»„å…ƒç´ è®¾ç½®20ä¸ª
  
 #if 1
  
-typedef struct      //Ì¹¿Ë½á¹¹Ìå
+typedef struct      //å¦å…‹ç»“æ„ä½“
 {
-    int x,y;        //Ì¹¿ËÖĞĞÄ×ø±ê
-    int direction;  //Ì¹¿Ë·½Ïò
-    int color;      //ÑÕÉ«²Î·½ÏòÊı£¬1µ½6·Ö±ğ´ú±í²»Í¬ÑÕÉ«£¬¾ßÌåÔÚPrintTankº¯Êı¶¨ÒåÓĞËµÃ÷
-    int model;      //Ì¹¿ËÍ¼°¸Ä£ĞÍ£¬ÖµÎª1,2,3£¬·Ö±ğ´ú±í²»Í¬µÄÌ¹¿ËÍ¼°¸,0ÎªÎÒµÄÌ¹¿ËÍ¼°¸£¬AI²»ÄÜÊ¹ÓÃ
-    int stop;       //Ö»ÄÜÊÇAIÌ¹¿ËÊ¹ÓÃµÄ²ÎÊı£¬·Ç0´ú±íÌ¹¿ËÍ£Ö¹×ß¶¯,0Îª¿ÉÒÔ×ß¶¯
-    int revive;     //Ì¹¿Ë¸´»î´ÎÊı
-    int num;        //AIÌ¹¿Ë±àºÅ£¨¹Ì¶¨Öµ£¬Îª³£Á¿£¬³õÊ¼»¯º¯ÊıÖĞ¶¨ÏÂ£©0~3
-    int CD;         //·¢Éä×Óµ¯ÀäÈ´¼ÆÊ±
-    int my;        //ÊÇ·ñµĞ·½Ì¹¿Ë²ÎÊı£¬ÎÒµÄÌ¹¿Ë´Ë²ÎÊıÎª1,Îª³£Á¿
-    int alive;     //´æ»îÎª1£¬²»´æ»îÎª0
+    int x,y;        //å¦å…‹ä¸­å¿ƒåæ ‡
+    int direction;  //å¦å…‹æ–¹å‘
+    int color;      //é¢œè‰²å‚æ–¹å‘æ•°ï¼Œ1åˆ°6åˆ†åˆ«ä»£è¡¨ä¸åŒé¢œè‰²ï¼Œå…·ä½“åœ¨PrintTankå‡½æ•°å®šä¹‰æœ‰è¯´æ˜
+    int model;      //å¦å…‹å›¾æ¡ˆæ¨¡å‹ï¼Œå€¼ä¸º1,2,3ï¼Œåˆ†åˆ«ä»£è¡¨ä¸åŒçš„å¦å…‹å›¾æ¡ˆ,0ä¸ºæˆ‘çš„å¦å…‹å›¾æ¡ˆï¼ŒAIä¸èƒ½ä½¿ç”¨
+    int stop;       //åªèƒ½æ˜¯AIå¦å…‹ä½¿ç”¨çš„å‚æ•°ï¼Œé0ä»£è¡¨å¦å…‹åœæ­¢èµ°åŠ¨,0ä¸ºå¯ä»¥èµ°åŠ¨
+    int revive;     //å¦å…‹å¤æ´»æ¬¡æ•°
+    int num;        //AIå¦å…‹ç¼–å·ï¼ˆå›ºå®šå€¼ï¼Œä¸ºå¸¸é‡ï¼Œåˆå§‹åŒ–å‡½æ•°ä¸­å®šä¸‹ï¼‰0~3
+    int CD;         //å‘å°„å­å¼¹å†·å´è®¡æ—¶
+    int my;        //æ˜¯å¦æ•Œæ–¹å¦å…‹å‚æ•°ï¼Œæˆ‘çš„å¦å…‹æ­¤å‚æ•°ä¸º1,ä¸ºå¸¸é‡
+    int alive;     //å­˜æ´»ä¸º1ï¼Œä¸å­˜æ´»ä¸º0
 }Tank;
-static Tank AI_tank[4] , my_tank;  //my_tankÎªÎÒµÄÌ¹¿Ë£¬Ai_tank ´ú±íAIÌ¹¿Ë
-//¡ßËùÓĞµÄº¯Êı¶¼ÓĞ¿ÉÄÜ¶ÔÈ«¾Ö±äÁ¿map½øĞĞ¶ÁĞ´(¸Ä±ä)£¬
-//¡àº¯ÊıÖĞ²»ÁíËµÃ÷ÊÇ·ñ»á¶ÔÈ«¾Ö±äÁ¿map¶ÁĞ´
-//»ù±¾²Ù×÷ÓëÓÎÏ·¸¨Öúº¯Êı
-static void GoToxy(int x,int y);    //¹â±êÒÆ¶¯
-static void HideCursor();           //Òş²Ø¹â±ê
-static int keyboard ();            //½ÓÊÜ¼üÅÌÊäÈë
-static void Initialize();           //³õÊ¼»¯(º¬ÓĞ¶Ô¶à¸öÊı¾İµÄ¶ÁĞ´)
-static int Stop();                 //ÔİÍ£
-static void Getmap();               //µØÍ¼Êı¾İ´æ·ÅÓë»ñÈ¡
-static void Frame ();               //´òÓ¡ÓÎÏ·Ö÷Ìå¿ò¼Ü
-static void PrintMap();             //´òÓ¡µØÍ¼(µØÍ¼¼ÈµØÍ¼ÕÏ°­Îï)(º¬¶ÔlevelµÄ¶ÁÈ¡)
-static void SideScreen ();          //¸±ÆÁÄ»´òÓ¡
-static void GameCheak();            //¼ì²âÓÎÏ·ÊäÓ®
-static int GameOver(int home);  //ÓÎÏ·½áÊø
-static void ClearMainScreen();      //Ö÷ÆÁÄ»ÇåÆÁº¯Êı¡ßsystem("cls")ºó´òÓ¡¿ò¼ÜÓĞÒ»¶¨¼¸ÂÊÔì³É¿ò¼ÜÉÏÒÆÒ»ĞĞµÄ´íÎó¡àµ¥¶À±àĞ´ÇåÆÁº¯Êı
-static void ColorChoose(int color); //ÑÕÉ«Ñ¡Ôñº¯Êı
-static int NextLevel();            //ÏÂÒ»¹Ø(º¬ÓĞ¶ÔlevelÈ«¾Ö±äÁ¿µÄ¶ÁĞ´)
+static Tank AI_tank[4] , my_tank;  //my_tankä¸ºæˆ‘çš„å¦å…‹ï¼ŒAi_tank ä»£è¡¨AIå¦å…‹
+//âˆµæ‰€æœ‰çš„å‡½æ•°éƒ½æœ‰å¯èƒ½å¯¹å…¨å±€å˜é‡mapè¿›è¡Œè¯»å†™(æ”¹å˜)ï¼Œ
+//âˆ´å‡½æ•°ä¸­ä¸å¦è¯´æ˜æ˜¯å¦ä¼šå¯¹å…¨å±€å˜é‡mapè¯»å†™
+//åŸºæœ¬æ“ä½œä¸æ¸¸æˆè¾…åŠ©å‡½æ•°
+static void GoToxy(int x,int y);    //å…‰æ ‡ç§»åŠ¨
+static void HideCursor();           //éšè—å…‰æ ‡
+static int keyboard ();            //æ¥å—é”®ç›˜è¾“å…¥
+static void Initialize();           //åˆå§‹åŒ–(å«æœ‰å¯¹å¤šä¸ªæ•°æ®çš„è¯»å†™)
+static int Stop();                 //æš‚åœ
+static void Getmap();               //åœ°å›¾æ•°æ®å­˜æ”¾ä¸è·å–
+static void Frame ();               //æ‰“å°æ¸¸æˆä¸»ä½“æ¡†æ¶
+static void PrintMap();             //æ‰“å°åœ°å›¾(åœ°å›¾æ—¢åœ°å›¾éšœç¢ç‰©)(å«å¯¹levelçš„è¯»å–)
+static void SideScreen ();          //å‰¯å±å¹•æ‰“å°
+static void GameCheak();            //æ£€æµ‹æ¸¸æˆè¾“èµ¢
+static int GameOver(int home);  //æ¸¸æˆç»“æŸ
+static void ClearMainScreen();      //ä¸»å±å¹•æ¸…å±å‡½æ•°âˆµsystem("cls")åæ‰“å°æ¡†æ¶æœ‰ä¸€å®šå‡ ç‡é€ æˆæ¡†æ¶ä¸Šç§»ä¸€è¡Œçš„é”™è¯¯âˆ´å•ç‹¬ç¼–å†™æ¸…å±å‡½æ•°
+static void ColorChoose(int color); //é¢œè‰²é€‰æ‹©å‡½æ•°
+static int NextLevel();            //ä¸‹ä¸€å…³(å«æœ‰å¯¹levelå…¨å±€å˜é‡çš„è¯»å†™)
  
-//×Óµ¯²¿·Ö
-static void BuildAIBullet(Tank *tank);                //AIÌ¹¿Ë·¢Éä×Óµ¯£¨º¬ÓĞ¶Ômy_tankµÄ¶ÁÈ¡,Ö»¶ÁÈ¡ÁËmy_tank×ø±ê£©
-static void BuildBullet(Tank tank);                 //×Óµ¯·¢Éä£¨½¨Á¢£©£¨ÈË»ú¹²ÓÃ£©(º¬È«¾Ö±äÁ¿bulletµÄĞŞ¸Ä)ÎÒµÄÌ¹¿Ë·¢Éä×Óµ¯Ö±½Óµ÷ÓÃ¸Ãº¯Êı,AIÍ¨¹ıAIshoot¼ä½Óµ÷ÓÃ
-static void BulletFly(Bullet bullet[BULLET_NUM]); //×Óµ¯ÒÆ¶¯ºÍ´ò»÷£¨ÈË»ú¹²ÓÃ£©,
-static void BulletHit(Bullet* bullet);            //×Óµ¯Åö×²£¨ÈË»ú¹²ÓÃ£©(º¬TankÈ«¾Ö±äÁ¿µÄĞŞ¸Ä)£¬Ö»Í¨¹ıBulletFlyµ÷ÓÃ£¬×Óµ¯¼äµÄÅö×²²»ÔÚ±¾º¯Êı,×Óµ¯¼äÅö×²ÒÑÔÚBulletShootÖĞ¼ì²â²¢´¦Àí
-static void PrintBullet(int x,int y,int T);         //´òÓ¡×Óµ¯£¨ÈË»ú¹²ÓÃ£©
-static void ClearBullet(int x,int y,int T);         //Çå³ı×Óµ¯£¨ÈË»ú¹²ÓÃ£©
-static int  BulletCheak(int x,int y);               //ÅĞ¶Ï×Óµ¯Ç°·½Çé¿ö£¨ÈË»ú¹²ÓÃ£©
+//å­å¼¹éƒ¨åˆ†
+static void BuildAIBullet(Tank *tank);                //AIå¦å…‹å‘å°„å­å¼¹ï¼ˆå«æœ‰å¯¹my_tankçš„è¯»å–,åªè¯»å–äº†my_tankåæ ‡ï¼‰
+static void BuildBullet(Tank tank);                 //å­å¼¹å‘å°„ï¼ˆå»ºç«‹ï¼‰ï¼ˆäººæœºå…±ç”¨ï¼‰(å«å…¨å±€å˜é‡bulletçš„ä¿®æ”¹)æˆ‘çš„å¦å…‹å‘å°„å­å¼¹ç›´æ¥è°ƒç”¨è¯¥å‡½æ•°,AIé€šè¿‡AIshooté—´æ¥è°ƒç”¨
+static void BulletFly(Bullet bullet[BULLET_NUM]); //å­å¼¹ç§»åŠ¨å’Œæ‰“å‡»ï¼ˆäººæœºå…±ç”¨ï¼‰,
+static void BulletHit(Bullet* bullet);            //å­å¼¹ç¢°æ’ï¼ˆäººæœºå…±ç”¨ï¼‰(å«Tankå…¨å±€å˜é‡çš„ä¿®æ”¹)ï¼Œåªé€šè¿‡BulletFlyè°ƒç”¨ï¼Œå­å¼¹é—´çš„ç¢°æ’ä¸åœ¨æœ¬å‡½æ•°,å­å¼¹é—´ç¢°æ’å·²åœ¨BulletShootä¸­æ£€æµ‹å¹¶å¤„ç†
+static void PrintBullet(int x,int y,int T);         //æ‰“å°å­å¼¹ï¼ˆäººæœºå…±ç”¨ï¼‰
+static void ClearBullet(int x,int y,int T);         //æ¸…é™¤å­å¼¹ï¼ˆäººæœºå…±ç”¨ï¼‰
+static int  BulletCheak(int x,int y);               //åˆ¤æ–­å­å¼¹å‰æ–¹æƒ…å†µï¼ˆäººæœºå…±ç”¨ï¼‰
  
-//Ì¹¿Ë²¿·Ö
-static void BuildAITank (int* position, Tank* AI_tank); //½¨Á¢AIÌ¹¿Ë
-static void BuildMyTank (Tank* my_tank);                //½¨Á¢ÎÒµÄÌ¹¿Ë
-static void MoveAITank  (Tank* AI_tank);                //AIÌ¹¿ËÒÆ¶¯
-static void MoveMyTank  (int turn);                     //ÎÒµÄÌ¹¿ËÒÆ¶¯£¬Ö»Í¨¹ıkeyboardº¯Êıµ÷ÓÃ£¬¼È¼üÅÌ¿ØÖÆ
-static void ClearTank   (int x,int y);                  //Çå³ıÌ¹¿Ë£¨ÈË»ú¹²ÓÃ£©
-static void PrintTank   (Tank tank);                    //´òÓ¡Ì¹¿Ë£¨ÈË»ú¹²ÓÃ£©
-static int TankCheck   (Tank tank,int direction);      //¼ì²âÌ¹¿Ëdirtection·½ÏòµÄÕÏ°­Îï,·µÖµ1×è°­,0 ³©Í¨
-static int  AIPositionCheak (int position);           //¼ì²âAIÌ¹¿Ë½¨Á¢Î»ÖÃÊÇ·ñÓĞÕÏ°­ÎïAIPositionCheak
+//å¦å…‹éƒ¨åˆ†
+static void BuildAITank (int* position, Tank* AI_tank); //å»ºç«‹AIå¦å…‹
+static void BuildMyTank (Tank* my_tank);                //å»ºç«‹æˆ‘çš„å¦å…‹
+static void MoveAITank  (Tank* AI_tank);                //AIå¦å…‹ç§»åŠ¨
+static void MoveMyTank  (int turn);                     //æˆ‘çš„å¦å…‹ç§»åŠ¨ï¼Œåªé€šè¿‡keyboardå‡½æ•°è°ƒç”¨ï¼Œæ—¢é”®ç›˜æ§åˆ¶
+static void ClearTank   (int x,int y);                  //æ¸…é™¤å¦å…‹ï¼ˆäººæœºå…±ç”¨ï¼‰
+static void PrintTank   (Tank tank);                    //æ‰“å°å¦å…‹ï¼ˆäººæœºå…±ç”¨ï¼‰
+static int TankCheck   (Tank tank,int direction);      //æ£€æµ‹å¦å…‹dirtectionæ–¹å‘çš„éšœç¢ç‰©,è¿”å€¼1é˜»ç¢,0 ç•…é€š
+static int  AIPositionCheak (int position);           //æ£€æµ‹AIå¦å…‹å»ºç«‹ä½ç½®æ˜¯å¦æœ‰éšœç¢ç‰©AIPositionCheak
  
-//DWORD WINAPI InputX(LPVOID lpParameter); //ÉùÃ÷Ïß³Ìº¯Êı£¬ÓÃÓÚ¼ì²éX¼üÊäÈë²¢ÉèÖÃX¼üµÄÊäÈëÀäÈ´Ê±¼ä
+//DWORD WINAPI InputX(LPVOID lpParameter); //å£°æ˜çº¿ç¨‹å‡½æ•°ï¼Œç”¨äºæ£€æŸ¥Xé”®è¾“å…¥å¹¶è®¾ç½®Xé”®çš„è¾“å…¥å†·å´æ—¶é—´
  
  
-//×¢ÒâmapÊı×éÓ¦ÊÇ×İ×ø±êÔÚÇ°£¬ºá×ø±êÔÚºó£¬¼Èmap[y][x]£¬(¡ßÊı×éĞĞ³¤¶ÈÔÚÇ°£¬ÁĞ³¤¶ÈÔÚºó)
-//mapÀïµÄÖµ: ¸öÎ»ÊıµÄÖµÎªµØÍ¼·½¿é²¿·Ö£¬°ÙÎ»ÊıµÄÖµÎªÌ¹¿Ë,×Óµ¯ÔÚmapÉÏÃ»ÓĞÖµ(×Óµ¯½ö½öÊÇÒ»¸ö¼Ù×ø±ê)
-//mapÀïµÄÖµ: 0Îª¿ÉÍ¨¹ıÂ½µØ£¬1Îªºì×©£¬2»Æ×©£¬5ÎªË®£¬100~103ÎªµĞ·½Ì¹¿Ë£¬200ÎªÎÒµÄÌ¹¿Ë£¬
+//æ³¨æ„mapæ•°ç»„åº”æ˜¯çºµåæ ‡åœ¨å‰ï¼Œæ¨ªåæ ‡åœ¨åï¼Œæ—¢map[y][x]ï¼Œ(âˆµæ•°ç»„è¡Œé•¿åº¦åœ¨å‰ï¼Œåˆ—é•¿åº¦åœ¨å)
+//mapé‡Œçš„å€¼: ä¸ªä½æ•°çš„å€¼ä¸ºåœ°å›¾æ–¹å—éƒ¨åˆ†ï¼Œç™¾ä½æ•°çš„å€¼ä¸ºå¦å…‹,å­å¼¹åœ¨mapä¸Šæ²¡æœ‰å€¼(å­å¼¹ä»…ä»…æ˜¯ä¸€ä¸ªå‡åæ ‡)
+//mapé‡Œçš„å€¼: 0ä¸ºå¯é€šè¿‡é™†åœ°ï¼Œ1ä¸ºçº¢ç –ï¼Œ2é»„ç –ï¼Œ5ä¸ºæ°´ï¼Œ100~103ä¸ºæ•Œæ–¹å¦å…‹ï¼Œ200ä¸ºæˆ‘çš„å¦å…‹ï¼Œ
  
-//È«¾Ö±äÁ¿
-static int map[41][41];  //µØÍ¼¶şÎ¬Êı×é
-static int key_x;        // X¼üÊÇ·ñ±»¡°¶ÁÈë¡±µÄ±äÁ¿£¬Ò²ÊÇ×Óµ¯ÊÇ·ñ¿ÉÒÔ·¢ÉäµÄ±ä£¬
-static int bul_num;      //×Óµ¯±àºÅ
-static int position;     //Î»ÖÃ¼ÆÊı,¶ÔÓ¦AIÌ¹¿ËÉú³ÉÎ»ÖÃ,-1Îª×óÎ»ÖÃ,0ÎªÖĞ¼ä,1ÎªÓÒ,2ÎªÎÒµÄÌ¹¿ËÎ»ÖÃ
-static int speed=5;      //ÓÎÏ·ËÙ¶È,µ÷ÕûÓÃ
-static int level=1;      //ÓÎÏ·¹Ø¿¨Êı
-static int score=0;      //ÓÎÏ··ÖÊı
-static int remain_enemy; //Ê£ÓàµĞÈË(Î´³öÏÖµÄµĞÈË)
+//å…¨å±€å˜é‡
+static int map[41][41];  //åœ°å›¾äºŒç»´æ•°ç»„
+static int key_x;        // Xé”®æ˜¯å¦è¢«â€œè¯»å…¥â€çš„å˜é‡ï¼Œä¹Ÿæ˜¯å­å¼¹æ˜¯å¦å¯ä»¥å‘å°„çš„å˜ï¼Œ
+static int bul_num;      //å­å¼¹ç¼–å·
+static int position;     //ä½ç½®è®¡æ•°,å¯¹åº”AIå¦å…‹ç”Ÿæˆä½ç½®,-1ä¸ºå·¦ä½ç½®,0ä¸ºä¸­é—´,1ä¸ºå³,2ä¸ºæˆ‘çš„å¦å…‹ä½ç½®
+static int speed=5;      //æ¸¸æˆé€Ÿåº¦,è°ƒæ•´ç”¨
+static int level=1;      //æ¸¸æˆå…³å¡æ•°
+static int score=0;      //æ¸¸æˆåˆ†æ•°
+static int remain_enemy; //å‰©ä½™æ•Œäºº(æœªå‡ºç°çš„æ•Œäºº)
  
 static char* tank_figure[4][3][4]=
 {
   {
-    {"¨©§¨", "¨©¥¨", "¨©×¨", "¨©×¨"},
-    {"©Ç¡ñ©Ï", "©Ç¡ñ©Ï", "©¥¡ñ©§", "©§¡ñ©¥"},
-    {"¨©¥¨", "¨©§¨", "¨©ß¨", "¨©ß¨"}
+    {"â—¢â”ƒâ—£", "â—¢â”â—£", "â—¢â”³â—£", "â—¢â”³â—£"},
+    {"â”£â—â”«", "â”£â—â”«", "â”â—â”ƒ", "â”ƒâ—â”"},
+    {"â—¥â”â—¤", "â—¥â”ƒâ—¤", "â—¥â”»â—¤", "â—¥â”»â—¤"}
   }, 
   {
-    {"©³©§©·", "©³©×©·", "©³©×©·", "©³©×©·"},
-    {"©Ç¡ñ©Ï", "©Ç¡ñ©Ï", "©¥¡ñ©Ï", "©Ç¡ñ©¥"},
-    {"©»©ß©¿", "©»©§©¿", "©»©ß©¿", "©»©ß©¿"}
+    {"â”â”ƒâ”“", "â”â”³â”“", "â”â”³â”“", "â”â”³â”“"},
+    {"â”£â—â”«", "â”£â—â”«", "â”â—â”«", "â”£â—â”"},
+    {"â”—â”»â”›", "â”—â”ƒâ”›", "â”—â”»â”›", "â”—â”»â”›"}
   }, 
   {
-    {"©³©§©·", "¨©¥¨", "©³©×¨", "¨©×©·"},
-    {"©Ç¡ñ©Ï", "©Ç¡ñ©Ï", "©¥¡ñ©§", "©§¡ñ©¥"},
-    {"¨©¥¨", "©»©§©¿", "©»©ß¨", "¨©ß©¿"}
+    {"â”â”ƒâ”“", "â—¢â”â—£", "â”â”³â—£", "â—¢â”³â”“"},
+    {"â”£â—â”«", "â”£â—â”«", "â”â—â”ƒ", "â”ƒâ—â”"},
+    {"â—¥â”â—¤", "â”—â”ƒâ”›", "â”—â”»â—¤", "â—¥â”»â”›"}
   },
   {
-    {"¨X©§¨[", "¨X¨j¨[", "¨X¨j¨[", "¨X¨j¨["},
-    {"¨d¨€¨g", "¨d¨€¨g", "©¥¨€¨g", "¨d¨€©¥"},
-    {"¨^¨m¨a", "¨^©§¨a", "¨^¨m¨a", "¨^¨m¨a"}
+    {"â•”â”ƒâ•—", "â•”â•¦â•—", "â•”â•¦â•—", "â•”â•¦â•—"},
+    {"â• â–ˆâ•£", "â• â–ˆâ•£", "â”â–ˆâ•£", "â• â–ˆâ”"},
+    {"â•šâ•©â•", "â•šâ”ƒâ•", "â•šâ•©â•", "â•šâ•©â•"}
   }
 };
  
  
 static int keyboard ()
-{               // kbhit()   _getch()  ÓÃ·¨¿ÉÓÃµ«ÊÇ²»ºÃÓÃ            
+{               // kbhit()   _getch()  ç”¨æ³•å¯ç”¨ä½†æ˜¯ä¸å¥½ç”¨            
 /* 
-   º¯Êı¹¦ÄÜ:¸Ãº¯ÊıÅĞ¶ÏÔÚ´Ëº¯Êı±»µ÷ÓÃÊ±,Ä³¸ö¼üÊÇ´¦ÓÚUP×´Ì¬»¹ÊÇ´¦ÓÚDOWN×´Ì¬,¼°Ç°´Îµ÷ÓÃGetAsyncKeyStateº¯Êıºó,
-   ÊÇ·ñ°´¹ı´Ë¼ü.Èç¹û·µ»ØÖµµÄ×î¸ßÎ»±»ÖÃÎ»,ÄÇÃ´¸Ã¼ü´¦ÓÚDOWN×´Ì¬;Èç¹û×îµÍÎ»±»ÖÃÎ»,ÄÇÃ´ÔÚÇ°Ò»´Îµ÷ÓÃ´Ëº¯Êıºó,´Ë¼ü±»°´¹ı,
-   ·ñÔò±íÊ¾¸Ã¼üÃ»±»°´¹ı.
-   ÕâÀïGetAsyncKeyState±È kbhit() + _getch() ºÃÓÃ,²Ù×÷¸üË³³©.   GetAsyncKeyStateµÄ·µ»ØÖµ±íÊ¾Á½¸öÄÚÈİ£¬
-   Ò»¸öÊÇ×î¸ßÎ»bitµÄÖµ£¬´ú±íÕâ¸ö¼üÊÇ·ñ±»°´ÏÂ¡£Ò»¸öÊÇ×îµÍÎ»bitµÄÖµ,´ú±íÉÏ´Îµ÷ÓÃGetAsyncKeyStateºó£¬Õâ¸ö¼üÊÇ·ñ±»°´ÏÂ¡£
-   &ÎªÓë²Ù×÷£¬&0x8000¾ÍÊÇÅĞ¶ÏÕâ¸ö·µ»ØÖµµÄ¸ßÎ»×Ö½Ú¡£Èç¹ûhigh-order bitÊÇ1,ÔòÊÇ°´ÏÂ×´Ì¬£¬·ñÔòÊÇµ¯Æğ×´Ì¬£¬Îª0
+   å‡½æ•°åŠŸèƒ½:è¯¥å‡½æ•°åˆ¤æ–­åœ¨æ­¤å‡½æ•°è¢«è°ƒç”¨æ—¶,æŸä¸ªé”®æ˜¯å¤„äºUPçŠ¶æ€è¿˜æ˜¯å¤„äºDOWNçŠ¶æ€,åŠå‰æ¬¡è°ƒç”¨GetAsyncKeyStateå‡½æ•°å,
+   æ˜¯å¦æŒ‰è¿‡æ­¤é”®.å¦‚æœè¿”å›å€¼çš„æœ€é«˜ä½è¢«ç½®ä½,é‚£ä¹ˆè¯¥é”®å¤„äºDOWNçŠ¶æ€;å¦‚æœæœ€ä½ä½è¢«ç½®ä½,é‚£ä¹ˆåœ¨å‰ä¸€æ¬¡è°ƒç”¨æ­¤å‡½æ•°å,æ­¤é”®è¢«æŒ‰è¿‡,
+   å¦åˆ™è¡¨ç¤ºè¯¥é”®æ²¡è¢«æŒ‰è¿‡.
+   è¿™é‡ŒGetAsyncKeyStateæ¯” kbhit() + _getch() å¥½ç”¨,æ“ä½œæ›´é¡ºç•….   GetAsyncKeyStateçš„è¿”å›å€¼è¡¨ç¤ºä¸¤ä¸ªå†…å®¹ï¼Œ
+   ä¸€ä¸ªæ˜¯æœ€é«˜ä½bitçš„å€¼ï¼Œä»£è¡¨è¿™ä¸ªé”®æ˜¯å¦è¢«æŒ‰ä¸‹ã€‚ä¸€ä¸ªæ˜¯æœ€ä½ä½bitçš„å€¼,ä»£è¡¨ä¸Šæ¬¡è°ƒç”¨GetAsyncKeyStateåï¼Œè¿™ä¸ªé”®æ˜¯å¦è¢«æŒ‰ä¸‹ã€‚
+   &ä¸ºä¸æ“ä½œï¼Œ&0x8000å°±æ˜¯åˆ¤æ–­è¿™ä¸ªè¿”å›å€¼çš„é«˜ä½å­—èŠ‚ã€‚å¦‚æœhigh-order bitæ˜¯1,åˆ™æ˜¯æŒ‰ä¸‹çŠ¶æ€ï¼Œå¦åˆ™æ˜¯å¼¹èµ·çŠ¶æ€ï¼Œä¸º0
 */
 	int count=0;
 	if (GetAsyncKeyState(VK_UP)& 0x8000)  
@@ -163,25 +163,25 @@ static int keyboard ()
         MoveMyTank( LEFT );
 	else if (GetAsyncKeyState(VK_RIGHT)& 0x8000)  
 		MoveMyTank( RIGHT );
-	else if (GetAsyncKeyState( 0x1B )& 0x8000)  // Esc¼ü
-		return 1;                                //ÍË³ö³ÌĞòº¯Êı
-	else if (GetAsyncKeyState( 0x20 )& 0x8000)  //¿Õ¸ñ
+	else if (GetAsyncKeyState( 0x1B )& 0x8000)  // Escé”®
+		return 1;                                //é€€å‡ºç¨‹åºå‡½æ•°
+	else if (GetAsyncKeyState( 0x20 )& 0x8000)  //ç©ºæ ¼
 		return Stop();
-	else if (count++%7==0)            //ÕâÀïÌí¼Ó¼ÆÊıÆ÷ÊÇÎªÁË·ÀÖ¹°´¼üÕ³Á¬²»ÄÜ´ïµ½Î¢µ÷Ğ§¹û
+	else if (count++%7==0)            //è¿™é‡Œæ·»åŠ è®¡æ•°å™¨æ˜¯ä¸ºäº†é˜²æ­¢æŒ‰é”®ç²˜è¿ä¸èƒ½è¾¾åˆ°å¾®è°ƒæ•ˆæœ
 	{
-		if (speed>1 && GetAsyncKeyState( 0x6B )& 0x8000)   // +¼ü
+		if (speed>1 && GetAsyncKeyState( 0x6B )& 0x8000)   // +é”®
 		{
 			speed--;
-			GoToxy(102,11);           //ÔÚ¸±ÆÁÄ»´òÓ¡³öµ±Ç°ËÙ¶È
+			GoToxy(102,11);           //åœ¨å‰¯å±å¹•æ‰“å°å‡ºå½“å‰é€Ÿåº¦
 			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_INTENSITY|FOREGROUND_BLUE|FOREGROUND_RED);
-			printf("%d ",21-speed);   //¸±ÆÁÄ»ÏÔÊ¾µÄËÙ¶ÈÎª1~10
+			printf("%d ",21-speed);   //å‰¯å±å¹•æ˜¾ç¤ºçš„é€Ÿåº¦ä¸º1~10
 		}
-		else if (speed<20 && GetAsyncKeyState( 0x6D )& 0x8000)  // - ¼ü
+		else if (speed<20 && GetAsyncKeyState( 0x6D )& 0x8000)  // - é”®
 		{
 			speed++;
-			GoToxy(102,11);           //ÔÚ¸±ÆÁÄ»´òÓ¡³öµ±Ç°ËÙ¶È
+			GoToxy(102,11);           //åœ¨å‰¯å±å¹•æ‰“å°å‡ºå½“å‰é€Ÿåº¦
 			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_INTENSITY|FOREGROUND_BLUE|FOREGROUND_RED);
-			printf("%d ",21-speed);   //¸±ÆÁÄ»ÏÔÊ¾µÄËÙ¶ÈÎª1~10
+			printf("%d ",21-speed);   //å‰¯å±å¹•æ˜¾ç¤ºçš„é€Ÿåº¦ä¸º1~10
 		}
 	}
 	if(my_tank.CD>=2)
@@ -199,12 +199,12 @@ static int keyboard ()
  
  
  
-void BuildAIBullet(Tank *tank)   //AI×Óµ¯·¢Éä(½¨Á¢)º¬ÓĞ¶Ômy_tankµÄ¶ÁÈ¡
+void BuildAIBullet(Tank *tank)   //AIå­å¼¹å‘å°„(å»ºç«‹)å«æœ‰å¯¹my_tankçš„è¯»å–
 {
     int i,big,smal;
 	if(tank->CD==15)
 	{
-		if(!(rand()%11))     //ÀäÈ´½áÊøºóÔÚËæºóµÄÃ¿¸öÓÎÏ·ÖÜÆÚÖĞÓĞ10·ÖÖ®Ò»µÄ¿ÉÄÜ·¢Éä×Óµ¯
+		if(!(rand()%11))     //å†·å´ç»“æŸååœ¨éšåçš„æ¯ä¸ªæ¸¸æˆå‘¨æœŸä¸­æœ‰10åˆ†ä¹‹ä¸€çš„å¯èƒ½å‘å°„å­å¼¹
 		{
 			BuildBullet(*tank);
 			tank->CD=0;
@@ -212,61 +212,61 @@ void BuildAIBullet(Tank *tank)   //AI×Óµ¯·¢Éä(½¨Á¢)º¬ÓĞ¶Ômy_tankµÄ¶ÁÈ¡
 	}
 	else
 		tank->CD++;
-	if(tank->CD >= 14)       //AIÇ¿»¯²¿·Ö£¬ÔÚÀäÈ´µ½´ïÒ»¶¨·¶Î§¼´¿ÉÊ¹ÓÃ
+	if(tank->CD >= 14)       //AIå¼ºåŒ–éƒ¨åˆ†ï¼Œåœ¨å†·å´åˆ°è¾¾ä¸€å®šèŒƒå›´å³å¯ä½¿ç”¨
 	{
-		if(tank->y==38 )     //Èç¹ûÌ¹¿ËÔÚµ×²¿(Õâ¸ö×îÓÅÏÈ)
+		if(tank->y==38 )     //å¦‚æœå¦å…‹åœ¨åº•éƒ¨(è¿™ä¸ªæœ€ä¼˜å…ˆ)
 		{
-			if(tank->x < 20) //ÔÚÀÏ¼Ò×ó±ß
+			if(tank->x < 20) //åœ¨è€å®¶å·¦è¾¹
 			{
-				if(tank->direction==RIGHT)  //Ì¹¿Ë·½Ïò³¯×ó
+				if(tank->direction==RIGHT)  //å¦å…‹æ–¹å‘æœå·¦
 				{
-					BuildBullet(*tank);     //·¢Éä×Óµ¯
+					BuildBullet(*tank);     //å‘å°„å­å¼¹
 					tank->CD=0;
 				}
 			}
-			else             //ÔÚÀÏ¼ÒÓÒ±ß
-				if(tank->direction==LEFT)   //Ì¹¿Ë·½Ïò³¯ÓÒ
+			else             //åœ¨è€å®¶å³è¾¹
+				if(tank->direction==LEFT)   //å¦å…‹æ–¹å‘æœå³
 				{
-					BuildBullet(*tank);     //·¢Éä×Óµ¯
+					BuildBullet(*tank);     //å‘å°„å­å¼¹
 					tank->CD=0;
 				}
 		}
-		else if(tank->x==my_tank.x+1 || tank->x==my_tank.x || tank->x==my_tank.x-1)  //AIÌ¹¿ËÔÚ×İÏòÉÏ"ÅÚ¿Ú"¶Ô×¼ÎÒµÄÌ¹¿Ë
+		else if(tank->x==my_tank.x+1 || tank->x==my_tank.x || tank->x==my_tank.x-1)  //AIå¦å…‹åœ¨çºµå‘ä¸Š"ç‚®å£"å¯¹å‡†æˆ‘çš„å¦å…‹
 		{
 			if(tank->direction==DOWN && my_tank.y > tank->y || tank->direction==UP && my_tank.y < tank->y)
-			{                               //ÈôÊÇAI³¯ÏÂ²¢ÇÒÎÒµÄÌ¹¿ËÔÚAIÌ¹¿ËÏÂ·½(ÊıÖµ´óµÄÔÚÏÂÃæ)»òÕßAI³¯ÉÏÎÒµÄÌ¹¿ËÔÚAIÉÏ·½
+			{                               //è‹¥æ˜¯AIæœä¸‹å¹¶ä¸”æˆ‘çš„å¦å…‹åœ¨AIå¦å…‹ä¸‹æ–¹(æ•°å€¼å¤§çš„åœ¨ä¸‹é¢)æˆ–è€…AIæœä¸Šæˆ‘çš„å¦å…‹åœ¨AIä¸Šæ–¹
 				big=my_tank.y , smal=tank->y , i; 
 				if(my_tank.y < tank->y)
 				{
 					big=tank->y;
 					smal=my_tank.y;
 				}
-				for(i=smal+2;i<=big-2;i++)  //ÅĞ¶ÏAIÅÚ¿ÚµÄÖ±ÏßÉÏÁ½Ì¹¿Ë¼äÓĞÎŞÕÏ°­
-					if(map[i][tank->x]!=0 || map[i][tank->x]!=5)      //ÈôÓĞÕÏ°­
+				for(i=smal+2;i<=big-2;i++)  //åˆ¤æ–­AIç‚®å£çš„ç›´çº¿ä¸Šä¸¤å¦å…‹é—´æœ‰æ— éšœç¢
+					if(map[i][tank->x]!=0 || map[i][tank->x]!=5)      //è‹¥æœ‰éšœç¢
 						break;
-				if(i==big-1)                //Èôi×ßµ½big-1ËµÃ÷ÎŞÕÏ°­
+				if(i==big-1)                //è‹¥ièµ°åˆ°big-1è¯´æ˜æ— éšœç¢
 				{
-					BuildBullet(*tank);     //Ôò·¢Éä×Óµ¯
+					BuildBullet(*tank);     //åˆ™å‘å°„å­å¼¹
 					tank->CD=0;
 				}
 			}
 		}
-		else if(tank->y==my_tank.y+1 || tank->y==my_tank.y || tank->y==my_tank.y-1) //AIÌ¹¿ËÔÚºáÏòÉÏ"ÅÚ¿Ú"¶Ô×¼ÎÒµÄÌ¹¿Ë
+		else if(tank->y==my_tank.y+1 || tank->y==my_tank.y || tank->y==my_tank.y-1) //AIå¦å…‹åœ¨æ¨ªå‘ä¸Š"ç‚®å£"å¯¹å‡†æˆ‘çš„å¦å…‹
 		{
 			if(tank->direction==RIGHT && my_tank.x > tank->x || tank->direction==LEFT && my_tank.x < tank->x)
-			{                  //ÈôÊÇAI³¯ÓÒ²¢ÇÒÎÒµÄÌ¹¿ËÔÚAIÌ¹¿ËÓÒ·½(ÊıÖµ´óµÄÔÚÏÂÃæ)»òÕßAI³¯×óÎÒµÄÌ¹¿ËÔÚAI×ó·½
+			{                  //è‹¥æ˜¯AIæœå³å¹¶ä¸”æˆ‘çš„å¦å…‹åœ¨AIå¦å…‹å³æ–¹(æ•°å€¼å¤§çš„åœ¨ä¸‹é¢)æˆ–è€…AIæœå·¦æˆ‘çš„å¦å…‹åœ¨AIå·¦æ–¹
 				big=my_tank.y , smal=tank->y , i;
 				if(my_tank.x < tank->x)
 				{
 					big=tank->x;
 					smal=my_tank.x;
 				}
-				for(i=smal+2;i<=big-2;i++)  //ÅĞ¶ÏAIÅÚ¿ÚµÄÖ±ÏßÉÏÁ½Ì¹¿Ë¼äÓĞÎŞÕÏ°­
-					if(map[tank->y][i]!=0 || map[tank->y][i]!=5)      //ÈôÓĞÕÏ°­
+				for(i=smal+2;i<=big-2;i++)  //åˆ¤æ–­AIç‚®å£çš„ç›´çº¿ä¸Šä¸¤å¦å…‹é—´æœ‰æ— éšœç¢
+					if(map[tank->y][i]!=0 || map[tank->y][i]!=5)      //è‹¥æœ‰éšœç¢
 						break;
-				if(i==big-1)   //Èôi×ßµ½big-1ËµÃ÷ÎŞÕÏ°­
+				if(i==big-1)   //è‹¥ièµ°åˆ°big-1è¯´æ˜æ— éšœç¢
 				{
-					BuildBullet(*tank);     //Ôò·¢Éä×Óµ¯
+					BuildBullet(*tank);     //åˆ™å‘å°„å­å¼¹
 					tank->CD=0;
 				}
 			}
@@ -276,9 +276,9 @@ void BuildAIBullet(Tank *tank)   //AI×Óµ¯·¢Éä(½¨Á¢)º¬ÓĞ¶Ômy_tankµÄ¶ÁÈ¡
  
  
  
-void BuildBullet(Tank tank)  //×Óµ¯·¢Éä£¨½¨Á¢£©,´«Èë½á¹¹ÌåTank,ÕâÀï°üº¬¸Ä±äÁËÈ«¾Ö±äÁ¿½á¹¹Ìåbullet
-{                            //¡ßÊµÏÖ·½Ê½ÎªË³ĞòÑ­»·½¨Á¢×Óµ¯£¬Ã¿´Îµ÷ÓÃ¸Ä±äµÄbulletÊı×éÔªËØ¶¼²»Í¬
-	switch(tank.direction)   //¡àÎªÁË·½±ã,²»½«bullet·ÅÈë²ÎÊı,bullet×÷ÎªÈ«¾Ö±äÁ¿Ê¹ÓÃ
+void BuildBullet(Tank tank)  //å­å¼¹å‘å°„ï¼ˆå»ºç«‹ï¼‰,ä¼ å…¥ç»“æ„ä½“Tank,è¿™é‡ŒåŒ…å«æ”¹å˜äº†å…¨å±€å˜é‡ç»“æ„ä½“bullet
+{                            //âˆµå®ç°æ–¹å¼ä¸ºé¡ºåºå¾ªç¯å»ºç«‹å­å¼¹ï¼Œæ¯æ¬¡è°ƒç”¨æ”¹å˜çš„bulletæ•°ç»„å…ƒç´ éƒ½ä¸åŒ
+	switch(tank.direction)   //âˆ´ä¸ºäº†æ–¹ä¾¿,ä¸å°†bulletæ”¾å…¥å‚æ•°,bulletä½œä¸ºå…¨å±€å˜é‡ä½¿ç”¨
 	{
     	case UP    :
 				bullet [bul_num].x = tank.x;
@@ -301,28 +301,28 @@ void BuildBullet(Tank tank)  //×Óµ¯·¢Éä£¨½¨Á¢£©,´«Èë½á¹¹ÌåTank,ÕâÀï°üº¬¸Ä±äÁËÈ«¾
 				bullet [bul_num].direction=4;
 				break; 
 	}     
-	bullet [bul_num].exist = 1;    //×Óµ¯±»½¨Á¢,´ËÖµÎª1Ôò´Ë×Óµ¯´æÔÚ
-	bullet [bul_num].initial = 1;  //×Óµ¯´¦ÓÚ³õ½¨Á¢×´Ì¬
-	bullet [bul_num].my=tank.my;   //Èç¹ûÊÇÎÒµÄÌ¹¿Ë·¢ÉäµÄ×Óµ¯bullet.my=1£¬·ñÔòÎª0
+	bullet [bul_num].exist = 1;    //å­å¼¹è¢«å»ºç«‹,æ­¤å€¼ä¸º1åˆ™æ­¤å­å¼¹å­˜åœ¨
+	bullet [bul_num].initial = 1;  //å­å¼¹å¤„äºåˆå»ºç«‹çŠ¶æ€
+	bullet [bul_num].my=tank.my;   //å¦‚æœæ˜¯æˆ‘çš„å¦å…‹å‘å°„çš„å­å¼¹bullet.my=1ï¼Œå¦åˆ™ä¸º0
 	bul_num++;
-	if(bul_num==BULLET_NUM)        //Èç¹û×Óµ¯±àºÅÔö³¤µ½20ºÅ£¬ÄÇÃ´ÖØÍ·¿ªÊ¼±àºÅ
-		bul_num=0;                 //¿¼ÂÇµ½µØÍ¼ÉÏ²»¿ÉÄÜÍ¬Ê±´æÔÚ20¿Å×Óµ¯£¬ËùÒÔÊı×éÔªËØÉèÖÃ20¸ö
+	if(bul_num==BULLET_NUM)        //å¦‚æœå­å¼¹ç¼–å·å¢é•¿åˆ°20å·ï¼Œé‚£ä¹ˆé‡å¤´å¼€å§‹ç¼–å·
+		bul_num=0;                 //è€ƒè™‘åˆ°åœ°å›¾ä¸Šä¸å¯èƒ½åŒæ—¶å­˜åœ¨20é¢—å­å¼¹ï¼Œæ‰€ä»¥æ•°ç»„å…ƒç´ è®¾ç½®20ä¸ª
 }
  
  
-void BulletFly(Bullet bullet[BULLET_NUM]) //×Óµ¯ÒÆ¶¯ºÍ´ò»÷
+void BulletFly(Bullet bullet[BULLET_NUM]) //å­å¼¹ç§»åŠ¨å’Œæ‰“å‡»
 {
-    int i,j;                                     //º¬ÓĞÈ«¾Ö±äÁ¿BulletµÄ¸Ä±ä
+    int i,j;                                     //å«æœ‰å…¨å±€å˜é‡Bulletçš„æ”¹å˜
     int collide;
 	for(i =0; i<BULLET_NUM;i++)
 	{
-		if(bullet [i].exist)              //Èç¹û×Óµ¯´æÔÚ
+		if(bullet [i].exist)              //å¦‚æœå­å¼¹å­˜åœ¨
 		{   
-			if(bullet [i].initial==0)     //Èç¹û×Óµ¯²»ÊÇ³õ½¨Á¢µÄ
+			if(bullet [i].initial==0)     //å¦‚æœå­å¼¹ä¸æ˜¯åˆå»ºç«‹çš„
 			{                           
-				if(map[bullet[i].y] [bullet[i].x]==0 || map[bullet[i].y] [bullet[i].x]==5)   //Èç¹û×Óµ¯×ø±êµ±Ç°Î»ÖÃÎŞÕÏ°­
-					ClearBullet( bullet[i].x , bullet[i].y , BulletCheak(bullet[i].x , bullet[i].y ));     //Ä¨³ı×Óµ¯Í¼ĞÎ
-    			switch(bullet [i].direction)                                      //È»ºó×Óµ¯×ø±ê±ä»¯£¨×Óµ¯±äµ½ÏÂÒ»¸ö×ø±ê£©
+				if(map[bullet[i].y] [bullet[i].x]==0 || map[bullet[i].y] [bullet[i].x]==5)   //å¦‚æœå­å¼¹åæ ‡å½“å‰ä½ç½®æ— éšœç¢
+					ClearBullet( bullet[i].x , bullet[i].y , BulletCheak(bullet[i].x , bullet[i].y ));     //æŠ¹é™¤å­å¼¹å›¾å½¢
+    			switch(bullet [i].direction)                                      //ç„¶åå­å¼¹åæ ‡å˜åŒ–ï¼ˆå­å¼¹å˜åˆ°ä¸‹ä¸€ä¸ªåæ ‡ï¼‰
 				{
         			case UP    :(bullet [i].y)--;break;
         			case DOWN  :(bullet [i].y)++;break;
@@ -330,19 +330,19 @@ void BulletFly(Bullet bullet[BULLET_NUM]) //×Óµ¯ÒÆ¶¯ºÍ´ò»÷
         			case RIGHT :(bullet [i].x)++;break;
 				}
 			}
-			collide = BulletCheak ( bullet [i].x , bullet [i].y );   //ÅĞ¶Ï×Óµ¯µ±Ç°Î»ÖÃÇé¿ö,ÅĞ¶Ï×Óµ¯ÊÇ·ñÅö×²,ÊÇ·ñÎ»ÓÚË®ÃæÉÏ¡£
-			if( collide )                                                //Èç¹û¼ì²âµ½µ±Ç°×Óµ¯×ø±êÎŞÕÏ°­(ÎŞÅö×²)£¨°üÀ¨ÔÚµØÃæÉÏÓëÔÚË®ÃæÉÏ£©
-				PrintBullet( bullet[i].x , bullet[i].y , collide);       //Ôò´òÓ¡×Óµ¯£¬ÈôÓĞÅö×²Ôò²»´òÓ¡
+			collide = BulletCheak ( bullet [i].x , bullet [i].y );   //åˆ¤æ–­å­å¼¹å½“å‰ä½ç½®æƒ…å†µ,åˆ¤æ–­å­å¼¹æ˜¯å¦ç¢°æ’,æ˜¯å¦ä½äºæ°´é¢ä¸Šã€‚
+			if( collide )                                                //å¦‚æœæ£€æµ‹åˆ°å½“å‰å­å¼¹åæ ‡æ— éšœç¢(æ— ç¢°æ’)ï¼ˆåŒ…æ‹¬åœ¨åœ°é¢ä¸Šä¸åœ¨æ°´é¢ä¸Šï¼‰
+				PrintBullet( bullet[i].x , bullet[i].y , collide);       //åˆ™æ‰“å°å­å¼¹ï¼Œè‹¥æœ‰ç¢°æ’åˆ™ä¸æ‰“å°
 			else
-				BulletHit( & bullet [i] );     //ÈôÓĞÅö×²ÔòÖ´ĞĞ×Óµ¯Åö×²º¯Êı                  
-			if(bullet [i].initial)             //Èô×Óµ¯³õ½¨Á¢£¬Ôò°Ñ³õ½¨Á¢±ê¼ÇÈ¥³ı
+				BulletHit( & bullet [i] );     //è‹¥æœ‰ç¢°æ’åˆ™æ‰§è¡Œå­å¼¹ç¢°æ’å‡½æ•°                  
+			if(bullet [i].initial)             //è‹¥å­å¼¹åˆå»ºç«‹ï¼Œåˆ™æŠŠåˆå»ºç«‹æ ‡è®°å»é™¤
 				bullet [i].initial = 0;
-			for(j=0; j< BULLET_NUM ; j++)  //×Óµ¯¼äµÄÅö×²ÅĞ¶Ï,ÈôÊÇÎÒ·½×Óµ¯ºÍµĞ·½×Óµ¯Åö×²Ôò¶¼É¾³ı,ÈôÎªÁ½µĞ·½×Óµ¯ÔòÎŞÊÓ
+			for(j=0; j< BULLET_NUM ; j++)  //å­å¼¹é—´çš„ç¢°æ’åˆ¤æ–­,è‹¥æ˜¯æˆ‘æ–¹å­å¼¹å’Œæ•Œæ–¹å­å¼¹ç¢°æ’åˆ™éƒ½åˆ é™¤,è‹¥ä¸ºä¸¤æ•Œæ–¹å­å¼¹åˆ™æ— è§†
 				if(bullet [j].exist && j!=i && (bullet[i].my || bullet[j].my) && bullet[i].x==bullet[j].x && bullet[i].y==bullet[j].y)
-				{                              //Í¬ÑùµÄÁ½¿ÅÎÒ·½×Óµ¯²»¿ÉÄÜ²úÉúÅö×²
+				{                              //åŒæ ·çš„ä¸¤é¢—æˆ‘æ–¹å­å¼¹ä¸å¯èƒ½äº§ç”Ÿç¢°æ’
 					bullet [j].exist=0;
 					bullet [i].exist=0;
-					ClearBullet( bullet[j].x , bullet[j].y , BulletCheak(bullet[j].x , bullet[j].y ));  //Ä¨³ıj×Óµ¯Í¼ĞÎ,×Óµ¯iÍ¼ĞÎÒÑ±»Ä¨³ı
+					ClearBullet( bullet[j].x , bullet[j].y , BulletCheak(bullet[j].x , bullet[j].y ));  //æŠ¹é™¤jå­å¼¹å›¾å½¢,å­å¼¹iå›¾å½¢å·²è¢«æŠ¹é™¤
 					break;
 				}
 		}
@@ -350,83 +350,83 @@ void BulletFly(Bullet bullet[BULLET_NUM]) //×Óµ¯ÒÆ¶¯ºÍ´ò»÷
 }
  
  
-void BulletHit(Bullet* bullet)  //º¬ÓĞTankÈ«¾Ö±äÁ¿µÄĞŞ¸Ä,×Óµ¯¼äµÄÅö×²²»ÔÚ±¾º¯Êı,×Óµ¯¼äÅö×²ÒÑÔÚBulletShootÖĞ¼ì²â²¢´¦Àí
-{                               //¡ßÃ¿´Î´òÖĞµÄÌ¹¿Ë¶¼²»Ò»Ñù£¬²»¿ÉÄÜ°ÑËùÓĞÌ¹¿Ë·ÅÔÚ²ÎÊı±íÖĞ
+void BulletHit(Bullet* bullet)  //å«æœ‰Tankå…¨å±€å˜é‡çš„ä¿®æ”¹,å­å¼¹é—´çš„ç¢°æ’ä¸åœ¨æœ¬å‡½æ•°,å­å¼¹é—´ç¢°æ’å·²åœ¨BulletShootä¸­æ£€æµ‹å¹¶å¤„ç†
+{                               //âˆµæ¯æ¬¡æ‰“ä¸­çš„å¦å…‹éƒ½ä¸ä¸€æ ·ï¼Œä¸å¯èƒ½æŠŠæ‰€æœ‰å¦å…‹æ”¾åœ¨å‚æ•°è¡¨ä¸­
 	int i,num;
-	int x=bullet->x;            //¡àÕâÀïµÄTankÊ¹ÓÃÈ«¾Ö±äÁ¿
-	int y=bullet->y;            //ÕâÀï´«ÈëµÄÖµÊÇ×Óµ¯×ø±ê,ÕâÁ½¸öÖµ²»ĞèÒª¸Ä±ä
-	if(map[y][x]==1 || map[y][x]==2)  //×Óµ¯Åöµ½×©¿é
+	int x=bullet->x;            //âˆ´è¿™é‡Œçš„Tankä½¿ç”¨å…¨å±€å˜é‡
+	int y=bullet->y;            //è¿™é‡Œä¼ å…¥çš„å€¼æ˜¯å­å¼¹åæ ‡,è¿™ä¸¤ä¸ªå€¼ä¸éœ€è¦æ”¹å˜
+	if(map[y][x]==1 || map[y][x]==2)  //å­å¼¹ç¢°åˆ°ç –å—
 	{
-		if(bullet->direction==UP || bullet->direction==DOWN)   //Èç¹û×Óµ¯ÊÇ×İÏòµÄ
+		if(bullet->direction==UP || bullet->direction==DOWN)   //å¦‚æœå­å¼¹æ˜¯çºµå‘çš„
 			for(i = -1 ; i<=1 ; i++)
-            	if(map[y][x+i]==1 || map[y][x+i]==2)  //Èç¹û×Óµ¯´òÖĞ×©¿éÁ½ÅÔÎª×©¿é,ÔòÉ¾³ı×©,Èô²»ÊÇ(Ò»ÅÔÎªÌ¹¿Ë»òÆäËûµØĞÎ)ÔòºöÂÔ
+            	if(map[y][x+i]==1 || map[y][x+i]==2)  //å¦‚æœå­å¼¹æ‰“ä¸­ç –å—ä¸¤æ—ä¸ºç –å—,åˆ™åˆ é™¤ç –,è‹¥ä¸æ˜¯(ä¸€æ—ä¸ºå¦å…‹æˆ–å…¶ä»–åœ°å½¢)åˆ™å¿½ç•¥
 				{
-		    		map[y][x+i]=0;    //×©¿éËé
+		    		map[y][x+i]=0;    //ç –å—ç¢
                  	GoToxy(2*x+2*i,y);
-		    		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_RED); //±³¾°ºÚÉ«
+		    		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_RED); //èƒŒæ™¯é»‘è‰²
                  	printf("  ");
 				}
-		if(bullet->direction==LEFT || bullet->direction==RIGHT)     //Èô×Óµ¯ÊÇºáÏòµÄ  (Óë×Óµ¯×İÏòÊµÏÖÍ¬Àí)
+		if(bullet->direction==LEFT || bullet->direction==RIGHT)     //è‹¥å­å¼¹æ˜¯æ¨ªå‘çš„  (ä¸å­å¼¹çºµå‘å®ç°åŒç†)
 			for(i = -1 ; i<=1 ; i++)
 				if(map[y+i][x]==1 || map[y+i][x]==2)
 				{
 		    		map[y+i][x]=0;
                  	GoToxy(2*x,y+i);
-	    			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_RED); //±³¾°ºÚÉ«
+	    			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_RED); //èƒŒæ™¯é»‘è‰²
                  	printf("  "); 
 				}
-		bullet->exist=0;           //Õâ¿Å×Óµ¯ÒÑ¾­²»´æÔÚÁË
+		bullet->exist=0;           //è¿™é¢—å­å¼¹å·²ç»ä¸å­˜åœ¨äº†
 	}
-	else if(map[y][x]==4 || map[y][x]==6 )  //×Óµ¯Åöµ½±ß¿ò»òÕß²»¿É´İ»Ù·½¿é
+	else if(map[y][x]==4 || map[y][x]==6 )  //å­å¼¹ç¢°åˆ°è¾¹æ¡†æˆ–è€…ä¸å¯æ‘§æ¯æ–¹å—
         bullet->exist=0;
-	else if(bullet->my && map[y][x]>=100 && map[y][x]<104 )  //ÈôÎÒµÄ×Óµ¯Åöµ½ÁËµĞ·½Ì¹¿Ë
+	else if(bullet->my && map[y][x]>=100 && map[y][x]<104 )  //è‹¥æˆ‘çš„å­å¼¹ç¢°åˆ°äº†æ•Œæ–¹å¦å…‹
 	{
-		num = map[y][x]%100;   //map[y][x]%100 µÈÍ¬ÓÚ tank.num £¬¿ÉÍ¨¹ımapÖµ¶ÁÈ¡¸ÃÌ¹¿ËĞÅÏ¢
-		if(AI_tank[num].model==3 && AI_tank[num].color==2)   //ÈôÎªfirm tank,ÇÒcolor==2¡£¸ÃÌ¹¿ËÎªÂÌÉ«,±íÃ÷Ã»ÓĞÊÜµ½ÉËº¦
-				AI_tank[num].color=3;                        //Ôò±ä³É»ÆÉ«£¬color=3Îª»ÆÉ«
+		num = map[y][x]%100;   //map[y][x]%100 ç­‰åŒäº tank.num ï¼Œå¯é€šè¿‡mapå€¼è¯»å–è¯¥å¦å…‹ä¿¡æ¯
+		if(AI_tank[num].model==3 && AI_tank[num].color==2)   //è‹¥ä¸ºfirm tank,ä¸”color==2ã€‚è¯¥å¦å…‹ä¸ºç»¿è‰²,è¡¨æ˜æ²¡æœ‰å—åˆ°ä¼¤å®³
+				AI_tank[num].color=3;                        //åˆ™å˜æˆé»„è‰²ï¼Œcolor=3ä¸ºé»„è‰²
 		else if (AI_tank[num].model==3 && AI_tank[num].color==3)
-				AI_tank[num].color=4;                        //4ÎªºìÉ«
-		else                       //ÆäËûÀàĞÍµÄÌ¹¿Ë»òÕßfirm tankÎªºìÉ«µÄÇé¿ö
+				AI_tank[num].color=4;                        //4ä¸ºçº¢è‰²
+		else                       //å…¶ä»–ç±»å‹çš„å¦å…‹æˆ–è€…firm tankä¸ºçº¢è‰²çš„æƒ…å†µ
 		{
 			AI_tank[num].alive=0;
-			ClearTank(AI_tank[num].x , AI_tank[num].y);      //Çå³ı¸ÃÌ¹¿Ë
+			ClearTank(AI_tank[num].x , AI_tank[num].y);      //æ¸…é™¤è¯¥å¦å…‹
 		}
 		bullet->exist=0;
 		score+=100;
-		GoToxy(102,5);             //ÔÚ¸±ÆÁÄ»ÉÏ´òÓ¡³ö·ÖÊı
+		GoToxy(102,5);             //åœ¨å‰¯å±å¹•ä¸Šæ‰“å°å‡ºåˆ†æ•°
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
 		printf("%d ",score);
 	}
-	else if(map[y][x]==200 && bullet->my==0 )   //ÈôµĞ·½×Óµ¯»÷ÖĞÎÒµÄÌ¹¿Ë
+	else if(map[y][x]==200 && bullet->my==0 )   //è‹¥æ•Œæ–¹å­å¼¹å‡»ä¸­æˆ‘çš„å¦å…‹
 	{
 		my_tank.alive=0;
 		ClearTank(my_tank.x , my_tank.y);
 		bullet->exist=0;
-		my_tank.revive++;      //ÎÒµÄÌ¹¿Ë¸´»î´ÎÊı+1(¡ßÎÒµÄÌ¹¿Ë¸´»î´ÎÊıÓëÉúÃüÖµÓĞ¹Ø¡à·ÅÔÚÕâÀï×Ô¼õ)
-		score-=100;            //·ÖÊı¼õÉÙ
-		GoToxy(102,5);         //ÔÚ¸±ÆÁÄ»ÉÏ´òÓ¡³ö·ÖÊı
+		my_tank.revive++;      //æˆ‘çš„å¦å…‹å¤æ´»æ¬¡æ•°+1(âˆµæˆ‘çš„å¦å…‹å¤æ´»æ¬¡æ•°ä¸ç”Ÿå‘½å€¼æœ‰å…³âˆ´æ”¾åœ¨è¿™é‡Œè‡ªå‡)
+		score-=100;            //åˆ†æ•°å‡å°‘
+		GoToxy(102,5);         //åœ¨å‰¯å±å¹•ä¸Šæ‰“å°å‡ºåˆ†æ•°
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
 		printf("%d   ",score);
-		GoToxy(102,7);         //ÔÚ¸±ÆÁÄ»´òÓ¡³öÎÒµÄÊ£ÓàÉúÃüÖµ
+		GoToxy(102,7);         //åœ¨å‰¯å±å¹•æ‰“å°å‡ºæˆ‘çš„å‰©ä½™ç”Ÿå‘½å€¼
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_INTENSITY|FOREGROUND_GREEN);
 		printf("%d   ", MAX_LIFE-my_tank.revive);
 	}
-//	else if(bullet->my==0 && map[y][x]>=100 && map[y][x]<104) //µĞ·½×Óµ¯»÷ÖĞµĞ·½Ì¹¿Ë,¿ÉÒÔÉèÖÃÁ½ÖÖ×Óµ¯ÔËĞĞ·½Ê½,ÕâÖÖÔİÊ±²»ÓÃ
+//	else if(bullet->my==0 && map[y][x]>=100 && map[y][x]<104) //æ•Œæ–¹å­å¼¹å‡»ä¸­æ•Œæ–¹å¦å…‹,å¯ä»¥è®¾ç½®ä¸¤ç§å­å¼¹è¿è¡Œæ–¹å¼,è¿™ç§æš‚æ—¶ä¸ç”¨
 //		bullet->exist=0;
-	else if(map[y][x]==9)      //×Óµ¯Åöµ½¼Ò(ÎŞÂÛÊÇË­µÄ×Óµ¯)
+	else if(map[y][x]==9)      //å­å¼¹ç¢°åˆ°å®¶(æ— è®ºæ˜¯è°çš„å­å¼¹)
 	{
 		bullet->exist=0;
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_BLUE|FOREGROUND_RED|FOREGROUND_GREEN);
 		GoToxy(38,37);	 printf("      ");
-		GoToxy(38,38);	 printf("¨¨  ");
-		GoToxy(38,39);	 printf("¨€¨€¨€");
-		GameOver(1);           //ÓÎÏ·½áÊø,´«Èë1´ú±íÀÏ¼Ò±»»Ù
+		GoToxy(38,38);	 printf("â—¢â—£  ");
+		GoToxy(38,39);	 printf("â–ˆâ–ˆâ–ˆ");
+		GameOver(1);           //æ¸¸æˆç»“æŸ,ä¼ å…¥1ä»£è¡¨è€å®¶è¢«æ¯
 	}
 }
  
  
-int BulletCheak (int x,int y)  //ÅĞ¶Ï×Óµ¯µ±Ç°Î»ÖÃÇé¿ö,ÅĞ¶Ï×Óµ¯ÊÇ·ñÅö×²,ÊÇ·ñÎ»ÓÚË®ÃæÉÏ¡£
-{                              //ÓĞÕÏ°­·µ»Ø0,ÎŞÕÏ°­ÇÒ×Óµ¯ÔÚµØÃæ·µ»Ø1£¬×Óµ¯ÔÚË®ÃæÉÏ·µ»Ø2
+int BulletCheak (int x,int y)  //åˆ¤æ–­å­å¼¹å½“å‰ä½ç½®æƒ…å†µ,åˆ¤æ–­å­å¼¹æ˜¯å¦ç¢°æ’,æ˜¯å¦ä½äºæ°´é¢ä¸Šã€‚
+{                              //æœ‰éšœç¢è¿”å›0,æ— éšœç¢ä¸”å­å¼¹åœ¨åœ°é¢è¿”å›1ï¼Œå­å¼¹åœ¨æ°´é¢ä¸Šè¿”å›2
 	if(map[y][x]==0)
 		return 1;
 	else if(map[y][x]==5)
@@ -436,26 +436,26 @@ int BulletCheak (int x,int y)  //ÅĞ¶Ï×Óµ¯µ±Ç°Î»ÖÃÇé¿ö,ÅĞ¶Ï×Óµ¯ÊÇ·ñÅö×²,ÊÇ·ñÎ»ÓÚË
 }
  
  
-void PrintBullet (int x,int y,int T)   //µ±Ç°×ø±êBulletCheak µÄÖµ×ö²ÎÁ¿ T
+void PrintBullet (int x,int y,int T)   //å½“å‰åæ ‡BulletCheak çš„å€¼åšå‚é‡ T
 {
-	if(T==1)          //  T==1 ±íÊ¾×Óµ¯µ±Ç°×ø±êÔÚÂ½µØÉÏ
+	if(T==1)          //  T==1 è¡¨ç¤ºå­å¼¹å½“å‰åæ ‡åœ¨é™†åœ°ä¸Š
     	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE|FOREGROUND_INTENSITY);
-	else if(T==2)     //  T==2 ±íÊ¾×Óµ¯µ±Ç°×ø±êÔÚË®ÃæÉÏ
+	else if(T==2)     //  T==2 è¡¨ç¤ºå­å¼¹å½“å‰åæ ‡åœ¨æ°´é¢ä¸Š
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE|FOREGROUND_INTENSITY|BACKGROUND_BLUE);
     GoToxy(2*x,y);
-    printf("¨‘");
+    printf("â˜‰");
 }
  
  
-void ClearBullet(int x,int y,int T)   //µ±Ç°×ø±êBulletCheak µÄÖµ×ö²ÎÁ¿ T
+void ClearBullet(int x,int y,int T)   //å½“å‰åæ ‡BulletCheak çš„å€¼åšå‚é‡ T
 {
 	GoToxy(2*x,y);
-	if(T==2)        //  T==2 ±íÊ¾×Óµ¯µ±Ç°×ø±êÔÚË®ÃæÉÏ
+	if(T==2)        //  T==2 è¡¨ç¤ºå­å¼¹å½“å‰åæ ‡åœ¨æ°´é¢ä¸Š
 	{
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_INTENSITY|BACKGROUND_BLUE|FOREGROUND_BLUE|FOREGROUND_GREEN);
-		printf("¡«");
+		printf("ï½");
 	}
-	else if(T==1)   //  T==1 ±íÊ¾×Óµ¯µ±Ç°×ø±êÔÚÂ½µØÉÏ
+	else if(T==1)   //  T==1 è¡¨ç¤ºå­å¼¹å½“å‰åæ ‡åœ¨é™†åœ°ä¸Š
 	{
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_BLUE);
 		printf("  ");
@@ -463,118 +463,118 @@ void ClearBullet(int x,int y,int T)   //µ±Ç°×ø±êBulletCheak µÄÖµ×ö²ÎÁ¿ T
 }
  
  
-//positionÎªÌ¹¿ËÉú³ÉÎ»ÖÃ,-1Îª×óÎ»ÖÃ,0ÎªÖĞ¼ä,1ÎªÓÒ,2ÎªÎÒµÄÌ¹¿ËÎ»ÖÃ
-void BuildAITank(int* position, Tank* AI_tank)   //Ö´ĞĞÒ»´Î¸Ãº¯ÊıÖ»½¨Á¢Ò»¸öÌ¹¿Ë
-{                                         //randº¯Êı¹«Ê½£º0<=rand()%(a+1)<=a  0+m<=rand()%(n-m+1)+m<=n  
-                                          //randº¯ÊıÊµÏÖ1µ½n£º1<=rand()%(n)+1<=n
-   	if(AIPositionCheak(*position))        //Èô´ËÎ»ÖÃÎŞÕÏ°­,¿ÉÉú³É¡£position²ÎÊıÏê¼ûAIPositionCheakº¯Êı¶¨Òå
+//positionä¸ºå¦å…‹ç”Ÿæˆä½ç½®,-1ä¸ºå·¦ä½ç½®,0ä¸ºä¸­é—´,1ä¸ºå³,2ä¸ºæˆ‘çš„å¦å…‹ä½ç½®
+void BuildAITank(int* position, Tank* AI_tank)   //æ‰§è¡Œä¸€æ¬¡è¯¥å‡½æ•°åªå»ºç«‹ä¸€ä¸ªå¦å…‹
+{                                         //randå‡½æ•°å…¬å¼ï¼š0<=rand()%(a+1)<=a  0+m<=rand()%(n-m+1)+m<=n  
+                                          //randå‡½æ•°å®ç°1åˆ°nï¼š1<=rand()%(n)+1<=n
+   	if(AIPositionCheak(*position))        //è‹¥æ­¤ä½ç½®æ— éšœç¢,å¯ç”Ÿæˆã€‚positionå‚æ•°è¯¦è§AIPositionCheakå‡½æ•°å®šä¹‰
 	{
-		AI_tank->x= 20 + 18*(*position);  //20 + 18 * position ¶ÔÓ¦Èı¸öÉú³ÉÎ»ÖÃµÄx¼Ù×ø±ê
+		AI_tank->x= 20 + 18*(*position);  //20 + 18 * position å¯¹åº”ä¸‰ä¸ªç”Ÿæˆä½ç½®çš„xå‡åæ ‡
 		AI_tank->y=2;
-		if(AI_tank->revive==level_info[level-1].firm_tank_order)  //Ì¹¿Ë³öÏÖ(¸´»î)´ÎĞò==¹Ø¿¨ĞÅÏ¢(level_info)ÖĞfirm tankµÄ³öÏÖ´ÎĞò
+		if(AI_tank->revive==level_info[level-1].firm_tank_order)  //å¦å…‹å‡ºç°(å¤æ´»)æ¬¡åº==å…³å¡ä¿¡æ¯(level_info)ä¸­firm tankçš„å‡ºç°æ¬¡åº
 		{
-			AI_tank->model = 3;           //3Îªfirm tankµÄÄ£ĞÍ(Íâ¹Û)
-			AI_tank->color = 2;           //ÑÕÉ«²ÎÊı2ÎªÂÌÉ«£¬¾ßÌåÏê¼ûº¯ÊıColorChoose
+			AI_tank->model = 3;           //3ä¸ºfirm tankçš„æ¨¡å‹(å¤–è§‚)
+			AI_tank->color = 2;           //é¢œè‰²å‚æ•°2ä¸ºç»¿è‰²ï¼Œå…·ä½“è¯¦è§å‡½æ•°ColorChoose
 		}
-		else if(AI_tank->revive==level_info[level-1].fast_tank_order)  //Í¬ÉÏif£¬ÕâÀïÊÇfast_tankµÄ
+		else if(AI_tank->revive==level_info[level-1].fast_tank_order)  //åŒä¸Šifï¼Œè¿™é‡Œæ˜¯fast_tankçš„
 		{
 			AI_tank->model = 2;
-			AI_tank->color = rand()%6+1;  //Èô²»ÊÇfirm tankÔòËæ»úÑÕÉ«£¬ÑÕÉ«²ÎÊıÎª1~6,·Ö±ğ´ú±í²»Í¬ÑÕÉ«,Ïê¼ûº¯ÊıColorChoose
+			AI_tank->color = rand()%6+1;  //è‹¥ä¸æ˜¯firm tankåˆ™éšæœºé¢œè‰²ï¼Œé¢œè‰²å‚æ•°ä¸º1~6,åˆ†åˆ«ä»£è¡¨ä¸åŒé¢œè‰²,è¯¦è§å‡½æ•°ColorChoose
 		}
-		else      //ÆÕÍ¨Ì¹¿Ë
+		else      //æ™®é€šå¦å…‹
 		{
 			AI_tank->model = 1;
-	 	  	AI_tank->color = rand()%6+1;  //Èô²»ÊÇfirm tankÔòËæ»úÑÕÉ«
+	 	  	AI_tank->color = rand()%6+1;  //è‹¥ä¸æ˜¯firm tankåˆ™éšæœºé¢œè‰²
 		}
-		AI_tank->alive = 1;       //Ì¹¿Ë±äÎª´æÔÚ
-		AI_tank->direction = 2 ;  //·½Ïò³¯ÏÂ
-		AI_tank->revive++;        //¸´»î´ÎÊı+1
+		AI_tank->alive = 1;       //å¦å…‹å˜ä¸ºå­˜åœ¨
+		AI_tank->direction = 2 ;  //æ–¹å‘æœä¸‹
+		AI_tank->revive++;        //å¤æ´»æ¬¡æ•°+1
 		PrintTank(*AI_tank);
 		(*position)++; 
 		remain_enemy--;
-		GoToxy(102,9);            //ÔÚ¸±ÆÁÄ»ÉÏ´òÓ¡Ê£ÓàÌ¹¿ËÊı
+		GoToxy(102,9);            //åœ¨å‰¯å±å¹•ä¸Šæ‰“å°å‰©ä½™å¦å…‹æ•°
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_INTENSITY|FOREGROUND_RED);
 		printf("%d ",remain_enemy);
-		if(*position==2)          //positionÖ»ÄÜÎª0,1£¬-1£¬ÕâÀïpositionÑ­»·ÖØÖÃ
+		if(*position==2)          //positionåªèƒ½ä¸º0,1ï¼Œ-1ï¼Œè¿™é‡Œpositionå¾ªç¯é‡ç½®
     		*position = -1;
-  	   	return ;                  //ÈôÉú³ÉÁËÒ»Á¾Ì¹¿Ë£¬Ôò½áÊø¸Ãº¯Êı
+  	   	return ;                  //è‹¥ç”Ÿæˆäº†ä¸€è¾†å¦å…‹ï¼Œåˆ™ç»“æŸè¯¥å‡½æ•°
 	}
 }
  
  
-int AIPositionCheak( int position )    //positionÎªÌ¹¿ËÉú³ÉÎ»ÖÃ2ÎªÎÒµÄÌ¹¿ËÎ»ÖÃ£¬ÆäÓàÎªAIÎ»£¬-1Îª×óÎ»£¬0ÎªÖĞ¼äÎ»ÖÃ£¬1ÎªÓÒÎ»
+int AIPositionCheak( int position )    //positionä¸ºå¦å…‹ç”Ÿæˆä½ç½®2ä¸ºæˆ‘çš„å¦å…‹ä½ç½®ï¼Œå…¶ä½™ä¸ºAIä½ï¼Œ-1ä¸ºå·¦ä½ï¼Œ0ä¸ºä¸­é—´ä½ç½®ï¼Œ1ä¸ºå³ä½
 {
 	int	i,j,x,y;
-	if(position==2)                    //2ÎªÎÒµÄÌ¹¿ËÎ»ÖÃ£¬ÏÖÔÚÔİÊ±ÓÃ²»µ½
+	if(position==2)                    //2ä¸ºæˆ‘çš„å¦å…‹ä½ç½®ï¼Œç°åœ¨æš‚æ—¶ç”¨ä¸åˆ°
 		x=15,y=38;
 	else
-    	y=2 , x= 20 + 18 * position ;  //20 + 18 * position ¶ÔÓ¦Èı¸öÉú³ÉÎ»ÖÃµÄx¼Ù×ø±ê
+    	y=2 , x= 20 + 18 * position ;  //20 + 18 * position å¯¹åº”ä¸‰ä¸ªç”Ÿæˆä½ç½®çš„xå‡åæ ‡
 	for(i=0;i<3;i++)
 		for(j=0;j<3;j++)
-			if( map[y+j-1][x+i-1]!=0)  //Èç¹û±éÀúµÄ¾Å¹¬¸ñÀïÓĞÕÏ°­Îï
-				return 0;              //Ôò·µ»Ø0£¬±íÊ¾´ËÉú³ÉÎ»ÖÃÓĞ×è°­
-    return 1;                          //·ñÔòÉú³É1£¬±íÊ¾´ËÉú³ÉÎ»ÖÃÎŞ×è°­
+			if( map[y+j-1][x+i-1]!=0)  //å¦‚æœéå†çš„ä¹å®«æ ¼é‡Œæœ‰éšœç¢ç‰©
+				return 0;              //åˆ™è¿”å›0ï¼Œè¡¨ç¤ºæ­¤ç”Ÿæˆä½ç½®æœ‰é˜»ç¢
+    return 1;                          //å¦åˆ™ç”Ÿæˆ1ï¼Œè¡¨ç¤ºæ­¤ç”Ÿæˆä½ç½®æ— é˜»ç¢
 }
  
  
-void MoveAITank(Tank* AI_tank) //AI×¨ÓÃº¯Êı£¬¸Ãº¯ÊıÖ÷ÒªÎªAI¼ÓÇ¿
+void MoveAITank(Tank* AI_tank) //AIä¸“ç”¨å‡½æ•°ï¼Œè¯¥å‡½æ•°ä¸»è¦ä¸ºAIåŠ å¼º
 {
     int j;
-    if(AI_tank->alive)         //Èç¹ûÌ¹¿Ë»î×Å
+    if(AI_tank->alive)         //å¦‚æœå¦å…‹æ´»ç€
 	{
-		if(AI_tank->stop!=0)   //Ì¹¿ËÊÇ·ñÍ£Ö¹ÔË¶¯µÄÅĞ¶Ï£¬Èôstop²ÎÊı²»Îª0
+		if(AI_tank->stop!=0)   //å¦å…‹æ˜¯å¦åœæ­¢è¿åŠ¨çš„åˆ¤æ–­ï¼Œè‹¥stopå‚æ•°ä¸ä¸º0
 		{
-			AI_tank->stop--;   //Ôò´ËÌ¹¿Ë±¾»ØºÏÍ£Ö¹ÔË¶¯
+			AI_tank->stop--;   //åˆ™æ­¤å¦å…‹æœ¬å›åˆåœæ­¢è¿åŠ¨
 			return;
 		}
-		if( !(rand()%23) )     //22·ÖÖ®1µÄ¸ÅÂÊÖ´ĞĞ·½ÏòÖØÖÃ
+		if( !(rand()%23) )     //22åˆ†ä¹‹1çš„æ¦‚ç‡æ‰§è¡Œæ–¹å‘é‡ç½®
 		{
 			AI_tank->direction = rand()%4+1;
-			if( rand()%3 )     //ÔÚ·½ÏòÖØÖÃºóÓĞ2·ÖÖ®1µÄ¸ÅÂÊÍ£Ö¹×ß¶¯3²½µÄÊ±¼ä
+			if( rand()%3 )     //åœ¨æ–¹å‘é‡ç½®åæœ‰2åˆ†ä¹‹1çš„æ¦‚ç‡åœæ­¢èµ°åŠ¨3æ­¥çš„æ—¶é—´
 			{
 				AI_tank->stop=2;
 				return;
 			}
 		}
 		ClearTank (AI_tank->x , AI_tank->y);
-		if(TankCheck ( *AI_tank , AI_tank->direction))   //Èç¹ûÇ°·½ÎŞÕÏ°­
+		if(TankCheck ( *AI_tank , AI_tank->direction))   //å¦‚æœå‰æ–¹æ— éšœç¢
 			switch ( AI_tank->direction )
 			{
-	       		case UP   : AI_tank->y--; break;  //ÉÏÇ°½øÒ»¸ñ
-        		case DOWN : AI_tank->y++; break;  //ÏÂÇ°½øÒ»¸ñ
-         		case LEFT : AI_tank->x--; break;  //×óÇ°½øÒ»¸ñ
-        		case RIGHT: AI_tank->x++; break;  //ÓÒÇ°½øÒ»¸ñ
+	       		case UP   : AI_tank->y--; break;  //ä¸Šå‰è¿›ä¸€æ ¼
+        		case DOWN : AI_tank->y++; break;  //ä¸‹å‰è¿›ä¸€æ ¼
+         		case LEFT : AI_tank->x--; break;  //å·¦å‰è¿›ä¸€æ ¼
+        		case RIGHT: AI_tank->x++; break;  //å³å‰è¿›ä¸€æ ¼
 			}
-		else                     //Ç°·½ÓĞÕÏ°­
+		else                     //å‰æ–¹æœ‰éšœç¢
 		{
-			if(!(rand()%4))      //3·ÖÖ®1µÄ¸ÅÂÊÂÒ×ª
+			if(!(rand()%4))      //3åˆ†ä¹‹1çš„æ¦‚ç‡ä¹±è½¬
 			{
 				AI_tank->direction=rand()%4+1;
-				AI_tank->stop=2; //ÂÒ×ªÖ®ºóÍ£Ö¹×ß¶¯3²½µÄÊ±¼ä
+				AI_tank->stop=2; //ä¹±è½¬ä¹‹ååœæ­¢èµ°åŠ¨3æ­¥çš„æ—¶é—´
 				PrintTank(*AI_tank);
-				return;          //¡ßcontinue»áÌø¹ıÏÂÃæµÄ´òÓ¡º¯Êı,¡àÕâÀïÏÈ´òÓ¡
+				return;          //âˆµcontinueä¼šè·³è¿‡ä¸‹é¢çš„æ‰“å°å‡½æ•°,âˆ´è¿™é‡Œå…ˆæ‰“å°
 			}
-			else                 //ÁíÍâ3·ÖÖ®2µÄ¼¸ÂÊÑ¡ÔñÕıÈ·µÄ·½Ïò
+			else                 //å¦å¤–3åˆ†ä¹‹2çš„å‡ ç‡é€‰æ‹©æ­£ç¡®çš„æ–¹å‘
 			{
 				
 	    		for(j=1;j<=4;j++)
-	        		if(TankCheck ( *AI_tank , j ))  //Ñ­»·ÅĞ¶ÏÌ¹¿ËËÄÖÜÓĞÎŞÕÏ°­,´Ëº¯Êı·µÖµ1Îª¿ÉÍ¨¹ı
+	        		if(TankCheck ( *AI_tank , j ))  //å¾ªç¯åˆ¤æ–­å¦å…‹å››å‘¨æœ‰æ— éšœç¢,æ­¤å‡½æ•°è¿”å€¼1ä¸ºå¯é€šè¿‡
 	    				break;
-    			if(j==5)         //j==5ËµÃ÷´ËÌ¹¿ËËÄÖÜ¶¼ÓĞÕÏ°­Îï£¬ÎŞ·¨Í¨ĞĞ
+    			if(j==5)         //j==5è¯´æ˜æ­¤å¦å…‹å››å‘¨éƒ½æœ‰éšœç¢ç‰©ï¼Œæ— æ³•é€šè¡Œ
 				{
 					PrintTank(*AI_tank);
-	    			return;      //ÔòÌø¹ıÏÂÃæµÄwhileÑ­»·ÒÔ·À³ÌĞò¿¨ËÀ
+	    			return;      //åˆ™è·³è¿‡ä¸‹é¢çš„whileå¾ªç¯ä»¥é˜²ç¨‹åºå¡æ­»
 				}
-    			while(TankCheck ( *AI_tank , AI_tank->direction) == 0)  //Èç¹ûÇ°·½ÈÔÓĞÕÏ°­
-	    			AI_tank->direction=(rand()%4+1);                    //Ôò»»¸öËæ»ú·½Ïò¼ì²â
+    			while(TankCheck ( *AI_tank , AI_tank->direction) == 0)  //å¦‚æœå‰æ–¹ä»æœ‰éšœç¢
+	    			AI_tank->direction=(rand()%4+1);                    //åˆ™æ¢ä¸ªéšæœºæ–¹å‘æ£€æµ‹
 			}
 		}
-		PrintTank(*AI_tank);     //´òÓ¡AIÌ¹¿Ë
+		PrintTank(*AI_tank);     //æ‰“å°AIå¦å…‹
 	}
 }
  
  
-void BuildMyTank (Tank* my_tank) //½¨Á¢ÎÒµÄÌ¹¿Ë
+void BuildMyTank (Tank* my_tank) //å»ºç«‹æˆ‘çš„å¦å…‹
 {
 	my_tank->x=15;
    	my_tank->y=38;
@@ -585,30 +585,30 @@ void BuildMyTank (Tank* my_tank) //½¨Á¢ÎÒµÄÌ¹¿Ë
     my_tank->alive=1;
     my_tank->my=1;
 	my_tank->CD=7;
-    PrintTank (*my_tank) ;   //´òÓ¡ÎÒµÄÌ¹¿Ë
+    PrintTank (*my_tank) ;   //æ‰“å°æˆ‘çš„å¦å…‹
 }
  
  
-void MoveMyTank(int turn )   //Íæ¼Ò×¨ÓÃº¯Êı£¬turnÎªkeyboardº¯ÊıÀïÒòÊäÈë²»Í¬·½Ïò¼ü¶ø´«ÈëµÄ²»Í¬µÄÖµ
+void MoveMyTank(int turn )   //ç©å®¶ä¸“ç”¨å‡½æ•°ï¼Œturnä¸ºkeyboardå‡½æ•°é‡Œå› è¾“å…¥ä¸åŒæ–¹å‘é”®è€Œä¼ å…¥çš„ä¸åŒçš„å€¼
 {
-	ClearTank(my_tank.x , my_tank.y);        //map Êı×éÖĞ¡°ÎÒµÄÌ¹¿Ë¡±²ÎÊıÇå³ı¹¤×÷ÒÑÔÚ´Ëº¯ÊıÖĞÍê³É
+	ClearTank(my_tank.x , my_tank.y);        //map æ•°ç»„ä¸­â€œæˆ‘çš„å¦å…‹â€å‚æ•°æ¸…é™¤å·¥ä½œå·²åœ¨æ­¤å‡½æ•°ä¸­å®Œæˆ
 	if(my_tank.direction!=turn)
-    	my_tank.direction=turn;                  //½«¼üÅÌÊäÈëµÄ·½ÏòÖµ´«ÈëÎÒµÄÌ¹¿Ë·½ÏòÖµ
-	else if(TankCheck ( my_tank , my_tank.direction ))  //Èô´ËÊ±ÎÒµÄÌ¹¿Ëµ±Ç°·½ÏòÉÏÎŞÕÏ°­
+    	my_tank.direction=turn;                  //å°†é”®ç›˜è¾“å…¥çš„æ–¹å‘å€¼ä¼ å…¥æˆ‘çš„å¦å…‹æ–¹å‘å€¼
+	else if(TankCheck ( my_tank , my_tank.direction ))  //è‹¥æ­¤æ—¶æˆ‘çš„å¦å…‹å½“å‰æ–¹å‘ä¸Šæ— éšœç¢
 		switch (turn)
 		{
-			case UP   : my_tank.y--; break;  //ÉÏÇ°½øÒ»¸ñ
-			case DOWN : my_tank.y++; break;  //ÏÂÇ°½øÒ»¸ñ
-			case LEFT : my_tank.x--; break;  //×óÇ°½øÒ»¸ñ
-			case RIGHT: my_tank.x++; break;  //ÓÒÇ°½øÒ»¸ñ
-	    }                                        //ÈôÌ¹¿Ëµ±Ç°·½ÏòÉÏÓĞÕÏ°­ÔòÌø¹ı×ø±ê±ä»¯Ö±½Ó´òÓ¡¸Ã×ªÏòµÄÌ¹¿Ë
+			case UP   : my_tank.y--; break;  //ä¸Šå‰è¿›ä¸€æ ¼
+			case DOWN : my_tank.y++; break;  //ä¸‹å‰è¿›ä¸€æ ¼
+			case LEFT : my_tank.x--; break;  //å·¦å‰è¿›ä¸€æ ¼
+			case RIGHT: my_tank.x++; break;  //å³å‰è¿›ä¸€æ ¼
+	    }                                        //è‹¥å¦å…‹å½“å‰æ–¹å‘ä¸Šæœ‰éšœç¢åˆ™è·³è¿‡åæ ‡å˜åŒ–ç›´æ¥æ‰“å°è¯¥è½¬å‘çš„å¦å…‹
 	PrintTank (my_tank);
 }
  
  
-int TankCheck(Tank tank,int direction)  //¼ì²âÌ¹¿ËÇ°·½ÕÏ°­º¯Êı,²ÎÁ¿Îª¼Ù×ø±ê¡£·µÖµ1Îª¿ÉÍ¨¹ı,·µÖµ0Îª×èµ²(ÈË»ú¹²ÓÃ)
+int TankCheck(Tank tank,int direction)  //æ£€æµ‹å¦å…‹å‰æ–¹éšœç¢å‡½æ•°,å‚é‡ä¸ºå‡åæ ‡ã€‚è¿”å€¼1ä¸ºå¯é€šè¿‡,è¿”å€¼0ä¸ºé˜»æŒ¡(äººæœºå…±ç”¨)
 {
-	switch(direction)                    //direction±äÁ¿   1ÉÏ£¬2ÏÂ£¬3×ó£¬4ÓÒ
+	switch(direction)                    //directionå˜é‡   1ä¸Šï¼Œ2ä¸‹ï¼Œ3å·¦ï¼Œ4å³
 	{
     	case UP:
 			if (map[tank.y-2][tank.x]==0 && map[tank.y-2][tank.x-1]==0 && map[tank.y-2][tank.x+1]==0)
@@ -631,19 +631,19 @@ int TankCheck(Tank tank,int direction)  //¼ì²âÌ¹¿ËÇ°·½ÕÏ°­º¯Êı,²ÎÁ¿Îª¼Ù×ø±ê¡£·µÖ
 			else
 				return 0;
 		default:
-			printf("´íÎó£¡£¡");
+			printf("é”™è¯¯ï¼ï¼");
 			Sleep(5000);
 			return 0;
 	}
 }
  
  
-void ClearTank(int x,int y)   //Çå³ıÌ¹¿Ëº¯Êı£¨ÈË»ú¹²ÓÃ£©
+void ClearTank(int x,int y)   //æ¸…é™¤å¦å…‹å‡½æ•°ï¼ˆäººæœºå…±ç”¨ï¼‰
 {
 	int i,j;
 	for(i=0;i<3;i++)
 		for(j=0;j<3;j++)
-		{                     //½«Ì¹¿ËÕ¼ÓÃµÄµØÍ¼ÉÏµÄ¾Å¸ñÈ¥µô
+		{                     //å°†å¦å…‹å ç”¨çš„åœ°å›¾ä¸Šçš„ä¹æ ¼å»æ‰
 	     	map[y+j-1][x+i-1]=0;
 	        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_GREEN);
 			GoToxy(2*x+2*j-2,y+i-1);
@@ -652,102 +652,102 @@ void ClearTank(int x,int y)   //Çå³ıÌ¹¿Ëº¯Êı£¨ÈË»ú¹²ÓÃ£©
 }
  
  
-void PrintTank(Tank tank)     //´òÓ¡Ì¹¿Ë£¨ÈË»ú¹²ÓÃ£© ÓÉÓÚ¶ÁÈ¡µÄTank²ÎÊı½Ï¶à,¹Ê¾Í²»½«²ÎÊıÒ»Ò»´«ÈëÁË
-{                             // tank.color²ÎÊı¶ÔÓ¦²»Í¬µÄÑÕÉ«,·¶Î§ 1 ~ 6
+void PrintTank(Tank tank)     //æ‰“å°å¦å…‹ï¼ˆäººæœºå…±ç”¨ï¼‰ ç”±äºè¯»å–çš„Tankå‚æ•°è¾ƒå¤š,æ•…å°±ä¸å°†å‚æ•°ä¸€ä¸€ä¼ å…¥äº†
+{                             // tank.colorå‚æ•°å¯¹åº”ä¸åŒçš„é¢œè‰²,èŒƒå›´ 1 ~ 6
     int i,j;
     char** tankF[4];
-    ColorChoose(tank.color);  //ÑÕÉ«Ñ¡Ôñº¯Êı   ¶¨ÒåÒ»¸öÊı×éÀï×°×Å×Ö·ûÖ¸Õë(¼È×°×Ö·û´®)µÄÊı×éÖ¸Õë(Ö¸ÏòÒ»Î¬Êı×éÊ×µØÖ·µÄÖ¸Õë)
+    ColorChoose(tank.color);  //é¢œè‰²é€‰æ‹©å‡½æ•°   å®šä¹‰ä¸€ä¸ªæ•°ç»„é‡Œè£…ç€å­—ç¬¦æŒ‡é’ˆ(æ—¢è£…å­—ç¬¦ä¸²)çš„æ•°ç»„æŒ‡é’ˆ(æŒ‡å‘ä¸€ç»´æ•°ç»„é¦–åœ°å€çš„æŒ‡é’ˆ)
     for(i = 0;i < 4;i ++)
-        tankF[i] = tank_figure[tank.model][i];  //½«¶şÎ¬Êı×éÊ×Ö·¸³³õÖµ¸øÊı×éÖ¸Õë model==0ÎªÎÒµÄÌ¹¿Ë,4ÎªµçÄÔ1Ì¹¿Ë,8ÎªµçÄÔ2,ÀàÍÆ
+        tankF[i] = tank_figure[tank.model][i];  //å°†äºŒç»´æ•°ç»„é¦–å€èµ‹åˆå€¼ç»™æ•°ç»„æŒ‡é’ˆ model==0ä¸ºæˆ‘çš„å¦å…‹,4ä¸ºç”µè„‘1å¦å…‹,8ä¸ºç”µè„‘2,ç±»æ¨
 	for(i = 0; i < 3; i++)   
 	{
-        GoToxy((tank.x-1)*2 , tank.y-1+i);        //ÔÚÌ¹¿ËÖĞĞÄ×ø±êµÄ×ó±ß£¬ÉÏÖĞÏÂÈıĞĞ´òÓ¡
-        printf("%s", tankF[i][tank.direction-1]); //´òÓ¡µÄÊÇµØÖ·£¬µØÖ·¼È×Ö·û´®
+        GoToxy((tank.x-1)*2 , tank.y-1+i);        //åœ¨å¦å…‹ä¸­å¿ƒåæ ‡çš„å·¦è¾¹ï¼Œä¸Šä¸­ä¸‹ä¸‰è¡Œæ‰“å°
+        printf("%s", tankF[i][tank.direction-1]); //æ‰“å°çš„æ˜¯åœ°å€ï¼Œåœ°å€æ—¢å­—ç¬¦ä¸²
      	for(j=0;j<3;j++)
-			if(tank.my)       //ÈôÎªÎÒµÄÌ¹¿Ë
-	            map[tank.y+j-1][tank.x+i-1]=200;  //ÔÚmapÉÏ°Ñ"Ì¹¿Ë"¾Å¸ñÌîÂú´ú±íµĞÎÒÌ¹¿ËµÄ²ÎÊı¡£µĞ·½´ËÖµÎª100~103,ÎÒ·½Îª200
+			if(tank.my)       //è‹¥ä¸ºæˆ‘çš„å¦å…‹
+	            map[tank.y+j-1][tank.x+i-1]=200;  //åœ¨mapä¸ŠæŠŠ"å¦å…‹"ä¹æ ¼å¡«æ»¡ä»£è¡¨æ•Œæˆ‘å¦å…‹çš„å‚æ•°ã€‚æ•Œæ–¹æ­¤å€¼ä¸º100~103,æˆ‘æ–¹ä¸º200
 			else
-		    	map[tank.y+j-1][tank.x+i-1]=100+tank.num;  //ÕâÑù¿ÉÒÔÍ¨¹ımapÖµ¶ÁÈ¡Ì¹¿Ë±àºÅ,¶ÁÈ¡²Ù×÷ÔÚBulletHit º¯Êı
+		    	map[tank.y+j-1][tank.x+i-1]=100+tank.num;  //è¿™æ ·å¯ä»¥é€šè¿‡mapå€¼è¯»å–å¦å…‹ç¼–å·,è¯»å–æ“ä½œåœ¨BulletHit å‡½æ•°
 	}
 }
  
  
-void HideCursor()  //Òş²Ø¹â±ê
-{                  //CONSOLE_CURSOR_INFO½á¹¹Ìå°üº¬¿ØÖÆÌ¨¹â±êµÄĞÅÏ¢,DWORD dwSize¹â±ê°Ù·Ö±Èºñ¶È£¨1~100£©ºÍBOOL bVisible¹â±êÊÇ·ñ¿É¼û
+void HideCursor()  //éšè—å…‰æ ‡
+{                  //CONSOLE_CURSOR_INFOç»“æ„ä½“åŒ…å«æ§åˆ¶å°å…‰æ ‡çš„ä¿¡æ¯,DWORD dwSizeå…‰æ ‡ç™¾åˆ†æ¯”åšåº¦ï¼ˆ1~100ï¼‰å’ŒBOOL bVisibleå…‰æ ‡æ˜¯å¦å¯è§
 	CONSOLE_CURSOR_INFO cursor_info={1,0};
-	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE),&cursor_info); //SetConsoleCursorInfoÓÃÀ´ÉèÖÃÖ¸¶¨µÄ¿ØÖÆÌ¨¹â±êµÄ´óĞ¡ºÍ¿É¼ûĞÔ¡£
+	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE),&cursor_info); //SetConsoleCursorInfoç”¨æ¥è®¾ç½®æŒ‡å®šçš„æ§åˆ¶å°å…‰æ ‡çš„å¤§å°å’Œå¯è§æ€§ã€‚
 }
  
  
-void GoToxy(int x,int y)  //¹â±êÒÆ¶¯º¯Êı£¬X±íÊ¾ºá×ø±ê£¬Y±íÊ¾×İ×ø±ê¡£
+void GoToxy(int x,int y)  //å…‰æ ‡ç§»åŠ¨å‡½æ•°ï¼ŒXè¡¨ç¤ºæ¨ªåæ ‡ï¼ŒYè¡¨ç¤ºçºµåæ ‡ã€‚
 {
-	COORD  coord;         //Ê¹ÓÃÍ·ÎÄ¼ş×Ô´øµÄ×ø±ê½á¹¹
+	COORD  coord;         //ä½¿ç”¨å¤´æ–‡ä»¶è‡ªå¸¦çš„åæ ‡ç»“æ„
     HANDLE a;
-	coord.X=x;            //ÕâÀï½«intÀàĞÍÖµ´«¸øshort,²»¹ı³ÌĞòÖĞÉæ¼°µÄ×ø±êÖµ¾ù²»»á³¬¹ıshort·¶Î§
+	coord.X=x;            //è¿™é‡Œå°†intç±»å‹å€¼ä¼ ç»™short,ä¸è¿‡ç¨‹åºä¸­æ¶‰åŠçš„åæ ‡å€¼å‡ä¸ä¼šè¶…è¿‡shortèŒƒå›´
 	coord.Y=y;
-	a=GetStdHandle(STD_OUTPUT_HANDLE);  //»ñµÃ±ê×¼Êä³ö¾ä±ú
-	SetConsoleCursorPosition(a,coord);         //ÒÔ±ê×¼Êä³öµÄ¾ä±úÎª²ÎÊıÉèÖÃ¿ØÖÆÌ¨¹â±ê×ø±ê
+	a=GetStdHandle(STD_OUTPUT_HANDLE);  //è·å¾—æ ‡å‡†è¾“å‡ºå¥æŸ„
+	SetConsoleCursorPosition(a,coord);         //ä»¥æ ‡å‡†è¾“å‡ºçš„å¥æŸ„ä¸ºå‚æ•°è®¾ç½®æ§åˆ¶å°å…‰æ ‡åæ ‡
 }
  
  
-void ColorChoose(int color)   //ÑÕÉ«Ñ¡Ôñº¯Êı
+void ColorChoose(int color)   //é¢œè‰²é€‰æ‹©å‡½æ•°
 {
 	switch(color)
 	{
-	   	case 1:               //ÌìÀ¶É«(ÎÒµÄÌ¹¿ËÑÕÉ«)
+	   	case 1:               //å¤©è“è‰²(æˆ‘çš„å¦å…‹é¢œè‰²)
 			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_INTENSITY|FOREGROUND_GREEN|FOREGROUND_BLUE);
 			break;
-		case 2:               //ÂÌÉ«
+		case 2:               //ç»¿è‰²
 			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_INTENSITY|FOREGROUND_GREEN);	
 			break;
-		case 3:               //»ÆÉ«
+		case 3:               //é»„è‰²
 			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN);
 			break;
-		case 4:               //ºìÉ«
+		case 4:               //çº¢è‰²
 			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_INTENSITY|FOREGROUND_RED);
 			break;
-		case 5:               //×ÏÉ«
+		case 5:               //ç´«è‰²
 			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_BLUE);
 			break;
-		case 6:               //°×É«
+		case 6:               //ç™½è‰²
 			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
 			break;
-		case 7:               //ÉîÀ¶É«(¡ßÑÕÉ«ÉîÄÑÓëºÚÉ«±³¾°±æÊ¶¶È²»¸ß ¡àÌ¹¿ËÑÕÉ«²»Ñ¡ÓÃ´ËÑÕÉ«),Ö»ÓÃÔÚ×ÖÌåÑÕÉ«ÉÁË¸ÖĞ
+		case 7:               //æ·±è“è‰²(âˆµé¢œè‰²æ·±éš¾ä¸é»‘è‰²èƒŒæ™¯è¾¨è¯†åº¦ä¸é«˜ âˆ´å¦å…‹é¢œè‰²ä¸é€‰ç”¨æ­¤é¢œè‰²),åªç”¨åœ¨å­—ä½“é¢œè‰²é—ªçƒä¸­
 			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_INTENSITY|FOREGROUND_BLUE);
 			break;
 	}
 }
  
  
-int Stop()    //ÔİÍ£
+int Stop()    //æš‚åœ
 {
 	int color=1,timing=0;
 	while(1)
 	{
 		if(timing++%30==0)
 		{
-			ColorChoose(color);   //ÑÕÉ«Ñ¡Ôñ
-			GoToxy(100,13);       //¸±ÆÁÄ»´òÓ¡
-			printf("ÓÎÏ·ÔİÍ£");
+			ColorChoose(color);   //é¢œè‰²é€‰æ‹©
+			GoToxy(100,13);       //å‰¯å±å¹•æ‰“å°
+			printf("æ¸¸æˆæš‚åœ");
 			GoToxy(88,17);
-			printf("°´»Ø³µ¼ü»Øµ½ÓÎÏ·");
+			printf("æŒ‰å›è½¦é”®å›åˆ°æ¸¸æˆ");
 			GoToxy(88,18);
-			printf("»ò°´ Esc¼üÍË³öÓÎÏ·");
+			printf("æˆ–æŒ‰ Escé”®é€€å‡ºæ¸¸æˆ");
 			if(++color==8)
 				color=1;
 		}
-		if (GetAsyncKeyState( 0xD )& 0x8000)      //»Ø³µ¼ü
+		if (GetAsyncKeyState( 0xD )& 0x8000)      //å›è½¦é”®
 		{
-			GoToxy(100,13);       //¸±ÆÁÄ»´òÓ¡
+			GoToxy(100,13);       //å‰¯å±å¹•æ‰“å°
 			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_INTENSITY|FOREGROUND_GREEN|FOREGROUND_BLUE);
-			printf("ÕıÔÚ½øĞĞ");   //¸²¸ÇµôÔ­À´µÄÌáÊ¾
+			printf("æ­£åœ¨è¿›è¡Œ");   //è¦†ç›–æ‰åŸæ¥çš„æç¤º
 			GoToxy(88,17);
 			printf("                     ");
 			GoToxy(88,18);
 			printf("                     ");
 			break;
 		}
-		else if(GetAsyncKeyState( 0x1B )& 0x8000) //Esc¼üÍË³ö	
+		else if(GetAsyncKeyState( 0x1B )& 0x8000) //Escé”®é€€å‡º	
 			return -1;
 		Sleep(20);
 	}
@@ -755,7 +755,7 @@ int Stop()    //ÔİÍ£
 }
  
  
-void ClearMainScreen()  //Ö÷ÆÁÄ»ÇåÆÁº¯Êı£¬ÒòÊ¹ÓÃsystem("cls");ÔÙ´òÓ¡¿ò¼ÜÓĞÒ»¶¨¼¸ÂÊÔì³É¿ò¼ÜÉÏÒÆÒ»ĞĞµÄ´íÎó£¬ËùÒÔµ¥¶À±àĞ´ÇåÆÁº¯Êı
+void ClearMainScreen()  //ä¸»å±å¹•æ¸…å±å‡½æ•°ï¼Œå› ä½¿ç”¨system("cls");å†æ‰“å°æ¡†æ¶æœ‰ä¸€å®šå‡ ç‡é€ æˆæ¡†æ¶ä¸Šç§»ä¸€è¡Œçš„é”™è¯¯ï¼Œæ‰€ä»¥å•ç‹¬ç¼–å†™æ¸…å±å‡½æ•°
 {
     int i;
 	for(i=1;i<40;i++)
@@ -766,40 +766,40 @@ void ClearMainScreen()  //Ö÷ÆÁÄ»ÇåÆÁº¯Êı£¬ÒòÊ¹ÓÃsystem("cls");ÔÙ´òÓ¡¿ò¼ÜÓĞÒ»¶¨¼¸
 }
  
  
-void Frame ()     //´òÓ¡ÓÎÏ·Ö÷Ìå¿ò¼Ü
-{                 //SetConsoleTextAttributeÎªÉèÖÃÎÄ±¾ÑÕÉ«ºÍÎÄ±¾±³¾°ÑÕÉ«º¯Êı
+void Frame ()     //æ‰“å°æ¸¸æˆä¸»ä½“æ¡†æ¶
+{                 //SetConsoleTextAttributeä¸ºè®¾ç½®æ–‡æœ¬é¢œè‰²å’Œæ–‡æœ¬èƒŒæ™¯é¢œè‰²å‡½æ•°
 	int i;
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_GREEN|FOREGROUND_RED|FOREGROUND_INTENSITY);
-	printf("  ¨x¨x¨x¨x¨x¨x¨x¨x¨x¨x¨x¨x¨x¨x¨x¨x¨x¨x¨x¨x¨x¨x¨x¨x¨x¨x¨x¨x¨x¨x¨x¨x¨x¨x¨x¨x¨x¨x¨x  ");
+	printf("  â–â–â–â–â–â–â–â–â–â–â–â–â–â–â–â–â–â–â–â–â–â–â–â–â–â–â–â–â–â–â–â–â–â–â–â–â–â–â–  ");
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_BLUE); 
-	printf("  ¨y¨y¨y¨y¨y¨y¨y¨y¨y¨y¨y¨y¨y \n");
+	printf("  â–‚â–‚â–‚â–‚â–‚â–‚â–‚â–‚â–‚â–‚â–‚â–‚â–‚ \n");
 	for(i=0;i<14;i++)
 	{
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_GREEN|FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_INTENSITY);
-	    printf("¨Š                                                                              ¨‡");
+	    printf("â–•                                                                              â–");
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_BLUE); 
 		printf(" |                          |\n");
 	}
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_GREEN|FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_INTENSITY);
-	printf("¨Š                                                                              ¨‡");
+	printf("â–•                                                                              â–");
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_BLUE); 
-	printf(" |¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T|\n");
+	printf(" |â•â•â•â•â•â•â•â•â•â•â•â•â•|\n");
 	for(i=0;i<24;i++)
 	{
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_GREEN|FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_INTENSITY);
-	    printf("¨Š                                                                              ¨‡");
+	    printf("â–•                                                                              â–");
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_BLUE); 
 		printf(" |                          |\n");
 	}
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_GREEN|FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_INTENSITY);
-	printf("  ¨‰¨‰¨‰¨‰¨‰¨‰¨‰¨‰¨‰¨‰¨‰¨‰¨‰¨‰¨‰¨‰¨‰¨‰¨‰¨‰¨‰¨‰¨‰¨‰¨‰¨‰¨‰¨‰¨‰¨‰¨‰¨‰¨‰¨‰¨‰¨‰¨‰¨‰¨‰  ");
+	printf("  â–”â–”â–”â–”â–”â–”â–”â–”â–”â–”â–”â–”â–”â–”â–”â–”â–”â–”â–”â–”â–”â–”â–”â–”â–”â–”â–”â–”â–”â–”â–”â–”â–”â–”â–”â–”â–”â–”â–”  ");
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_INTENSITY| FOREGROUND_BLUE); 
-	printf(" ©i©i©i©i©i©i©i©i©i©i©i©i©i©i\n");
-	SideScreen ();  //´òÓ¡¸±ÆÁÄ»
+	printf(" ï¹Šï¹Šï¹Šï¹Šï¹Šï¹Šï¹Šï¹Šï¹Šï¹Šï¹Šï¹Šï¹Šï¹Š\n");
+	SideScreen ();  //æ‰“å°å‰¯å±å¹•
 }
  
  
-void PrintMap()     // ´òÓ¡µØÍ¼(µØÍ¼¼ÈµØÍ¼ÕÏ°­Îï)
+void PrintMap()     // æ‰“å°åœ°å›¾(åœ°å›¾æ—¢åœ°å›¾éšœç¢ç‰©)
 {
     int i,j;
 	for(j=0;j<41;j++)
@@ -809,36 +809,36 @@ void PrintMap()     // ´òÓ¡µØÍ¼(µØÍ¼¼ÈµØÍ¼ÕÏ°­Îï)
 				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_INTENSITY|FOREGROUND_GREEN
 					|FOREGROUND_RED|FOREGROUND_BLUE|BACKGROUND_GREEN|BACKGROUND_RED|BACKGROUND_BLUE);
 				GoToxy(2*j,i);
-				printf("¡ö");
+				printf("â– ");
 			}
 			else if(map[i][j]==2)
 			{
 				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_INTENSITY|FOREGROUND_GREEN|FOREGROUND_RED|BACKGROUND_GREEN|BACKGROUND_RED);
 				GoToxy(2*j,i);
-				printf("¨ˆ");
+				printf("â–“");
 			}
 			else if(map[i][j]==1)
 			{
 				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_INTENSITY|FOREGROUND_RED|BACKGROUND_GREEN|BACKGROUND_RED);
 				GoToxy(2*j,i);
-				printf("¨ˆ");
+				printf("â–“");
 			}
 			else if(map[i][j]==5)
 			{                      
 				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_INTENSITY|BACKGROUND_BLUE|FOREGROUND_BLUE|FOREGROUND_GREEN);
 				GoToxy(2*j,i);
-				printf("¡«");
+				printf("ï½");
 			}
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_BLUE|FOREGROUND_RED|FOREGROUND_GREEN);
-	GoToxy(38,37);	 printf("¨¡ï¨");
-	GoToxy(38,38);	 printf("¨€¨€¨€");    //¡ßÎŞÂÛµØÍ¼ÔõÃ´±ä,¼ÒËùÔÚÎ»ÖÃ²»±ä,ÇÒ¼ÒµÄ×Ö·û¶àÖÖ,²»·½±ãÓÃÉÏÊö·½Ê½´òÓ¡
-	GoToxy(38,39);	 printf("¨¨€¨");    //¡àÖ±½Ó´òÓ¡(ÇÒ¼ÒµÄmapÖµÓë·ûºÅÎŞ¹Ø)
+	GoToxy(38,37);	 printf("â—£â˜…â—¢");
+	GoToxy(38,38);	 printf("â–ˆâ–ˆâ–ˆ");    //âˆµæ— è®ºåœ°å›¾æ€ä¹ˆå˜,å®¶æ‰€åœ¨ä½ç½®ä¸å˜,ä¸”å®¶çš„å­—ç¬¦å¤šç§,ä¸æ–¹ä¾¿ç”¨ä¸Šè¿°æ–¹å¼æ‰“å°
+	GoToxy(38,39);	 printf("â—¢â–ˆâ—£");    //âˆ´ç›´æ¥æ‰“å°(ä¸”å®¶çš„mapå€¼ä¸ç¬¦å·æ— å…³)
 }
  
  
-void GetMap()      //µØÍ¼´æ·Åº¯Êı
-{	               //mapÀïµÄÖµ: ¸öÎ»ÊıµÄÖµÎªµØÍ¼·½¿é²¿·Ö£¬°ÙÎ»ÊıµÄÖµÎªÌ¹¿Ë
-	int i ,j;      //mapÀïµÄÖµ: 0Îª¿ÉÍ¨¹ıÂ½µØ£¬1Îªºì×©£¬2´ı¶¨£¬5ÎªË®£¬100ÎªµĞ·½Ì¹¿Ë£¬200ÎªÎÒµÄÌ¹¿Ë£¬
+void GetMap()      //åœ°å›¾å­˜æ”¾å‡½æ•°
+{	               //mapé‡Œçš„å€¼: ä¸ªä½æ•°çš„å€¼ä¸ºåœ°å›¾æ–¹å—éƒ¨åˆ†ï¼Œç™¾ä½æ•°çš„å€¼ä¸ºå¦å…‹
+	int i ,j;      //mapé‡Œçš„å€¼: 0ä¸ºå¯é€šè¿‡é™†åœ°ï¼Œ1ä¸ºçº¢ç –ï¼Œ2å¾…å®šï¼Œ5ä¸ºæ°´ï¼Œ100ä¸ºæ•Œæ–¹å¦å…‹ï¼Œ200ä¸ºæˆ‘çš„å¦å…‹ï¼Œ
 	int Map[8][41][41]=
 	{
 		{
@@ -1189,7 +1189,7 @@ void GetMap()      //µØÍ¼´æ·Åº¯Êı
 		for(i=0;i<41;i++)
 			for(j=0;j<41;j++)
 					map[i][j]=Map[level-1][i][j];
-	PrintMap();         //´òÓ¡µØÍ¼
+	PrintMap();         //æ‰“å°åœ°å›¾
 }
  
  
@@ -1198,35 +1198,35 @@ int GameOver(int home)
 	int timing=0,color=1;
 	while(1)
 	{
-		if(timing++%30==0)         //ÓÎÏ·½áÊøÔ­ÒòÎªÉúÃüÖµÎª0
+		if(timing++%30==0)         //æ¸¸æˆç»“æŸåŸå› ä¸ºç”Ÿå‘½å€¼ä¸º0
 		{
-			ColorChoose(color);    //ÑÕÉ«Ñ¡Ôñ
-			if(home)               //ÓÎÏ·½áÊøÔ­ÒòÎªÀÏ¼Ò±»»Ù,Ôò¶à´òÓ¡Ò»ĞĞ×ÖÒÔÌáÊ¾Íæ¼Ò
+			ColorChoose(color);    //é¢œè‰²é€‰æ‹©
+			if(home)               //æ¸¸æˆç»“æŸåŸå› ä¸ºè€å®¶è¢«æ¯,åˆ™å¤šæ‰“å°ä¸€è¡Œå­—ä»¥æç¤ºç©å®¶
 			{
-				GoToxy(37,19);     //Ö÷ÆÁÄ»ÖĞĞÄ´òÓ¡
-				printf("ÀÏ¼Ò±»»Ù!");
+				GoToxy(37,19);     //ä¸»å±å¹•ä¸­å¿ƒæ‰“å°
+				printf("è€å®¶è¢«æ¯!");
 			}
-			GoToxy(37,20);         //Ö÷ÆÁÄ»ÖĞĞÄ´òÓ¡
-			printf("ÓÎÏ·½áÊø!");
-			GoToxy(100,13);        //¸±ÆÁÄ»´òÓ¡
-			printf("ÓÎÏ·½áÊø");
+			GoToxy(37,20);         //ä¸»å±å¹•ä¸­å¿ƒæ‰“å°
+			printf("æ¸¸æˆç»“æŸ!");
+			GoToxy(100,13);        //å‰¯å±å¹•æ‰“å°
+			printf("æ¸¸æˆç»“æŸ");
 			GoToxy(88,17);
-			printf("Çë°´»Ø³µ¼üÖØĞÂ¿ªÊ¼!");
+			printf("è¯·æŒ‰å›è½¦é”®é‡æ–°å¼€å§‹!");
 			GoToxy(88,18);
-			printf("»ò°´ Esc¼üÍË³öÓÎÏ·!");
+			printf("æˆ–æŒ‰ Escé”®é€€å‡ºæ¸¸æˆ!");
 			if(++color==8)
 				color=1;
 		}
-		if (GetAsyncKeyState( 0xD )& 0x8000)  //»Ø³µ¼ü
+		if (GetAsyncKeyState( 0xD )& 0x8000)  //å›è½¦é”®
 		{
-//			system("cls");       //ÇåÆÁ,ÕâÀïÇåÆÁºóÔÙ´Î´òÓ¡¿ò¼ÜÓĞÒ»¶¨¼¸ÂÊÔì³É¿ò¼ÜÉÏÒÆÒ»ĞĞµÄbug£¬Òò´ËÑ¡ÓÃ×Ô½¨ÇåÆÁº¯Êı
-//			Frame ();            //ÖØĞÂ´òÓ¡ÓÎÏ·¿ò¼Ü
-			score-=500;          //·ÖÊı-500
-			ClearMainScreen();   //Ö÷ÆÁÇåÆÁº¯Êı£¬ÎŞĞèÔÙ´Î´òÓ¡¿ò¼Ü
-			Initialize();        //´Ó±¾¹ØÖØĞÂ¿ªÊ¼
+//			system("cls");       //æ¸…å±,è¿™é‡Œæ¸…å±åå†æ¬¡æ‰“å°æ¡†æ¶æœ‰ä¸€å®šå‡ ç‡é€ æˆæ¡†æ¶ä¸Šç§»ä¸€è¡Œçš„bugï¼Œå› æ­¤é€‰ç”¨è‡ªå»ºæ¸…å±å‡½æ•°
+//			Frame ();            //é‡æ–°æ‰“å°æ¸¸æˆæ¡†æ¶
+			score-=500;          //åˆ†æ•°-500
+			ClearMainScreen();   //ä¸»å±æ¸…å±å‡½æ•°ï¼Œæ— éœ€å†æ¬¡æ‰“å°æ¡†æ¶
+			Initialize();        //ä»æœ¬å…³é‡æ–°å¼€å§‹
 			break;
 		}
-		else if(GetAsyncKeyState( 0x1B )& 0x8000)  //Esc¼üÍË³ö	
+		else if(GetAsyncKeyState( 0x1B )& 0x8000)  //Escé”®é€€å‡º	
 			return -1;
 		Sleep(20);
 	}
@@ -1243,50 +1243,50 @@ int NextLevel()
 		{
 			if(timing++%10==0)
 			{
-				ColorChoose(color);   //ÑÕÉ«Ñ¡Ôñ   
-				GoToxy(37,20);        //Ö÷ÆÁÄ»ÖĞĞÄ´òÓ¡
-				printf("¹§Ï²¹ı¹Ø!");
-				GoToxy(100,13);       //¸±ÆÁÄ»´òÓ¡
-				printf("µÈ´ıÏÂ¹Ø");
+				ColorChoose(color);   //é¢œè‰²é€‰æ‹©   
+				GoToxy(37,20);        //ä¸»å±å¹•ä¸­å¿ƒæ‰“å°
+				printf("æ­å–œè¿‡å…³!");
+				GoToxy(100,13);       //å‰¯å±å¹•æ‰“å°
+				printf("ç­‰å¾…ä¸‹å…³");
 				GoToxy(87,17);
-				printf("Çë°´»Ø³µ¼ü½øÈëÏÂÒ»¹Ø!");
+				printf("è¯·æŒ‰å›è½¦é”®è¿›å…¥ä¸‹ä¸€å…³!");
 				GoToxy(88,18);
-				printf("»ò°´ Esc¼üÍË³öÓÎÏ·!");
+				printf("æˆ–æŒ‰ Escé”®é€€å‡ºæ¸¸æˆ!");
 				if(++color==8)	
 					color=1;
 			}
-			if (GetAsyncKeyState( 0xD )& 0x8000)  //»Ø³µ¼ü
+			if (GetAsyncKeyState( 0xD )& 0x8000)  //å›è½¦é”®
 			{
-				GoToxy(88,17);        //Ä¨³ı¸±ÆÁÄ»ÖĞµÄÌáÊ¾
+				GoToxy(88,17);        //æŠ¹é™¤å‰¯å±å¹•ä¸­çš„æç¤º
 				printf("                     ");
 				GoToxy(88,18);
 				printf("                     ");
-				ClearMainScreen();   //Ö÷ÆÁÇåÆÁº¯Êı£¬ÎŞĞèÔÙ´Î´òÓ¡¿ò¼Ü
-				Initialize();        //³õÊ¼»¯´ÓÏÂÒ»¹Ø¿ªÊ¼,levelÒÑ++
+				ClearMainScreen();   //ä¸»å±æ¸…å±å‡½æ•°ï¼Œæ— éœ€å†æ¬¡æ‰“å°æ¡†æ¶
+				Initialize();        //åˆå§‹åŒ–ä»ä¸‹ä¸€å…³å¼€å§‹,levelå·²++
 				break;
 			}
-			else if(GetAsyncKeyState( 0x1B )& 0x8000)  //Esc¼üÍË³ö	
+			else if(GetAsyncKeyState( 0x1B )& 0x8000)  //Escé”®é€€å‡º	
 				return -1;
 			Sleep(20);
 		}
-	else   //level>8 Í¨¹Ø
+	else   //level>8 é€šå…³
 		while(1)
 		{
 			if(timing++%5==0)
 			{
 				ColorChoose(color);
-				GoToxy(33,20);        //Ö÷ÆÁÄ»ÖĞĞÄ´òÓ¡
-				printf("¹§Ï²Í¨¹ıÈ«²¿¹Ø¿¨!");
-				GoToxy(100,13);       //¸±ÆÁÄ»´òÓ¡
-				printf("ÒÑÍ¨È«¹Ø");
+				GoToxy(33,20);        //ä¸»å±å¹•ä¸­å¿ƒæ‰“å°
+				printf("æ­å–œé€šè¿‡å…¨éƒ¨å…³å¡!");
+				GoToxy(100,13);       //å‰¯å±å¹•æ‰“å°
+				printf("å·²é€šå…¨å…³");
 				GoToxy(88,17);
-				printf("¹§Ï²Í¨¹ıÈ«²¿¹Ø¿¨!");
+				printf("æ­å–œé€šè¿‡å…¨éƒ¨å…³å¡!");
 				GoToxy(88,19);
-				printf("°´ Esc¼üÍË³öÓÎÏ·!");
+				printf("æŒ‰ Escé”®é€€å‡ºæ¸¸æˆ!");
 				if(++color==8)	
 					color=1;
 			}
-			if(GetAsyncKeyState( 0x1B )& 0x8000)  //Esc¼üÍË³ö	
+			if(GetAsyncKeyState( 0x1B )& 0x8000)  //Escé”®é€€å‡º	
 				return -1;
 			Sleep(10);
 		}
@@ -1295,159 +1295,159 @@ int NextLevel()
  
  
 void GameCheak()
-{                           //Ê£ÓàµĞÈËÎª0ÇÒËÄÌ¹¿ËÈ«²¿²»´æ»î
+{                           //å‰©ä½™æ•Œäººä¸º0ä¸”å››å¦å…‹å…¨éƒ¨ä¸å­˜æ´»
 	if(remain_enemy<=0 && !AI_tank[0].alive && !AI_tank[1].alive && !AI_tank[2].alive && !AI_tank[3].alive )
-		NextLevel();        //½øÈëÏÂÒ»¹Ø
-	if(my_tank.revive>=MAX_LIFE)   //ÎÒµÄÉúÃüÖµ(¸´»î´ÎÊı)È«²¿ÓÃÍê MAX_LIFE
-		GameOver(0);        //ÓÎÏ·½áÊø£¬´«Èë0´ú±íÎÒµÄ¸´»î´ÎÊıÓÃ¹â(ÉúÃüÖµÎª0)¡£ÓÎÏ·½áÊøÓĞÁ½ÖÖÅĞ¶Ï£¬ÁíÒ»ÖÖÊÇÀÏ¼Ò±»»Ù
+		NextLevel();        //è¿›å…¥ä¸‹ä¸€å…³
+	if(my_tank.revive>=MAX_LIFE)   //æˆ‘çš„ç”Ÿå‘½å€¼(å¤æ´»æ¬¡æ•°)å…¨éƒ¨ç”¨å®Œ MAX_LIFE
+		GameOver(0);        //æ¸¸æˆç»“æŸï¼Œä¼ å…¥0ä»£è¡¨æˆ‘çš„å¤æ´»æ¬¡æ•°ç”¨å…‰(ç”Ÿå‘½å€¼ä¸º0)ã€‚æ¸¸æˆç»“æŸæœ‰ä¸¤ç§åˆ¤æ–­ï¼Œå¦ä¸€ç§æ˜¯è€å®¶è¢«æ¯
 }
  
  
-void SideScreen ()  //¸±ÆÁÄ» ĞĞ(84Æğ,110Ä©,ÈôË«×Ö·û¿íÔòÔÚ108´òÓ¡×îºóÒ»¸ö×Ö£©ÁĞ(11ÉÏÆÁÄ©,13ÏÂÆÁ³õ,39ÏÂÆÁÄ©¡£ÎªÃÀ¹Û×îºÃ´òÔÚ38)
-{                   // |         µÚ  d  ¹Ø         |   " |                          |\n"
+void SideScreen ()  //å‰¯å±å¹• è¡Œ(84èµ·,110æœ«,è‹¥åŒå­—ç¬¦å®½åˆ™åœ¨108æ‰“å°æœ€åä¸€ä¸ªå­—ï¼‰åˆ—(11ä¸Šå±æœ«,13ä¸‹å±åˆ,39ä¸‹å±æœ«ã€‚ä¸ºç¾è§‚æœ€å¥½æ‰“åœ¨38)
+{                   // |         ç¬¬  d  å…³         |   " |                          |\n"
 	GoToxy(93,2);
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_INTENSITY|FOREGROUND_GREEN|FOREGROUND_RED);
-	printf("µÚ     ¹Ø");
+	printf("ç¬¬     å…³");
 	GoToxy(92,5);
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_INTENSITY|FOREGROUND_GREEN|FOREGROUND_RED|FOREGROUND_BLUE);
-	printf("·Ö  Êı£º");
+	printf("åˆ†  æ•°ï¼š");
 	GoToxy(92,7);
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_INTENSITY|FOREGROUND_GREEN);
-	printf("Éú  Ãü£º");
+	printf("ç”Ÿ  å‘½ï¼š");
 	GoToxy(86,9);
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_INTENSITY|FOREGROUND_RED);
-	printf("Ê£ÓàµĞ·½Ì¹¿Ë£º");
+	printf("å‰©ä½™æ•Œæ–¹å¦å…‹ï¼š");
 	GoToxy(86,11);
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_BLUE);
-	printf("µ±Ç°ÓÎÏ·ËÙ¶È£º  %d",21-speed);
+	printf("å½“å‰æ¸¸æˆé€Ÿåº¦ï¼š  %d",21-speed);
 	GoToxy(86,13);
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_INTENSITY|FOREGROUND_GREEN|FOREGROUND_BLUE);
-	printf("µ±Ç°ÓÎÏ·×´Ì¬£º");
+	printf("å½“å‰æ¸¸æˆçŠ¶æ€ï¼š");
 	GoToxy(94,19);
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_INTENSITY|FOREGROUND_GREEN|FOREGROUND_RED);
 	GoToxy(94,24);
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_INTENSITY|FOREGROUND_GREEN|FOREGROUND_RED);
-	printf("°ï  Öú");
+	printf("å¸®  åŠ©");
 	GoToxy(86,27);
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_INTENSITY|FOREGROUND_GREEN);
-	printf("·½Ïò¼ü  ¡û¡ü¡ú¡ı  ÒÆ¶¯");
+	printf("æ–¹å‘é”®  â†â†‘â†’â†“  ç§»åŠ¨");
 	GoToxy(93,29);
-	printf("x ¼ü Éä»÷");
+	printf("x é”® å°„å‡»");
 	GoToxy(89,31);
-	printf("+ - µ÷ÕûÓÎÏ·ËÙ¶È");
+	printf("+ - è°ƒæ•´æ¸¸æˆé€Ÿåº¦");
 	GoToxy(90,33);
-	printf("ÓÎÏ·ËÙ¶È·¶Î§1~20");
+	printf("æ¸¸æˆé€Ÿåº¦èŒƒå›´1~20");
 	GoToxy(90,35);
-	printf("»Ø³µ¼ü ÔİÍ£ÓÎÏ·");
+	printf("å›è½¦é”® æš‚åœæ¸¸æˆ");
 	GoToxy(90,37);
-	printf("Esc¼ü  ÍË³öÓÎÏ·");
-/*	printf("°ï  Öú");     //ÕâÊÇµÚ¶şÖÖÏêÏ¸ËµÃ÷µÄÑùÊ½
+	printf("Escé”®  é€€å‡ºæ¸¸æˆ");
+/*	printf("å¸®  åŠ©");     //è¿™æ˜¯ç¬¬äºŒç§è¯¦ç»†è¯´æ˜çš„æ ·å¼
 	GoToxy(86,21);
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_INTENSITY|FOREGROUND_GREEN);
-	printf("·½Ïò¼ü  ¡û¡ü¡ú¡ı  ÒÆ¶¯");
+	printf("æ–¹å‘é”®  â†â†‘â†’â†“  ç§»åŠ¨");
 	GoToxy(93,23);
-	printf("x ¼ü Éä»÷");
+	printf("x é”® å°„å‡»");
 	GoToxy(89,25);
-	printf("+ - µ÷ÕûÓÎÏ·ËÙ¶È");
+	printf("+ - è°ƒæ•´æ¸¸æˆé€Ÿåº¦");
 	GoToxy(90,27);
-	printf("ÓÎÏ·ËÙ¶È·¶Î§1~20");
+	printf("æ¸¸æˆé€Ÿåº¦èŒƒå›´1~20");
 	GoToxy(90,29);
-	printf("»Ø³µ¼ü ÔİÍ£ÓÎÏ·");
+	printf("å›è½¦é”® æš‚åœæ¸¸æˆ");
 	GoToxy(90,31);
-	printf("Esc¼ü  ÍË³öÓÎÏ·");
+	printf("Escé”®  é€€å‡ºæ¸¸æˆ");
 	GoToxy(86,33);
-	printf("µĞ·½Ì¹¿ËÈ«²¿ÏûÃğÔò¹ı¹Ø");
+	printf("æ•Œæ–¹å¦å…‹å…¨éƒ¨æ¶ˆç­åˆ™è¿‡å…³");
 	GoToxy(87,34);
-	printf("¼º·½Ì¹¿ËÉúÃüÖµÎª0 »ò");
+	printf("å·±æ–¹å¦å…‹ç”Ÿå‘½å€¼ä¸º0 æˆ–");
 	GoToxy(86,35);
-	printf("ÕıÏÂ·½µÄÀÏ¼Ò±»»ÙÔòÊ§°Ü");
+	printf("æ­£ä¸‹æ–¹çš„è€å®¶è¢«æ¯åˆ™å¤±è´¥");
 	GoToxy(86,36);
-	printf("¼ºÌ¹¿ËÓëµĞÌ¹¿Ë×Óµ¯Åö×²");
+	printf("å·±å¦å…‹ä¸æ•Œå¦å…‹å­å¼¹ç¢°æ’");
 	GoToxy(87,37);
-	printf("ÔòµÖÏû£¬µĞÌ¹¿Ë¼ä×Óµ¯Åö");
+	printf("åˆ™æŠµæ¶ˆï¼Œæ•Œå¦å…‹é—´å­å¼¹ç¢°");
 	GoToxy(86,38);
-	printf("×²²»µÖÏûÇÒ¿É´©¹ıµĞÌ¹¿Ë");*/
+	printf("æ’ä¸æŠµæ¶ˆä¸”å¯ç©¿è¿‡æ•Œå¦å…‹");*/
 }
  
  
-void Initialize()      //³õÊ¼»¯
+void Initialize()      //åˆå§‹åŒ–
 {
     int i;
     remain_enemy=16;
-	my_tank.revive=0;  //ÎÒµÄÌ¹¿Ë¸´»î´ÎÊıÎª0
+	my_tank.revive=0;  //æˆ‘çš„å¦å…‹å¤æ´»æ¬¡æ•°ä¸º0
 	position=0;
 	bul_num=0;
 	GetMap();
 	BuildMyTank( &my_tank );
-	for(i=0;i<12;i++)     //×Óµ¯³õÊ¼»¯
+	for(i=0;i<12;i++)     //å­å¼¹åˆå§‹åŒ–
 	{
 		bullet [i].exist=0;
 		bullet [i].initial=0;
 	}
-	for(i=0;i<=3;i++)         //AIÌ¹¿Ë³õÊ¼»¯
+	for(i=0;i<=3;i++)         //AIå¦å…‹åˆå§‹åŒ–
 	{
 		AI_tank [i].revive=0;
-		AI_tank [i].alive=0;  //³õÊ¼»¯Ì¹¿ËÈ«ÊÇ²»´æ»îµÄ£¬BuildAITank()»á½¨Á¢ÖØĞÂ½¨Á¢²»´æ»îµÄÌ¹¿Ë
+		AI_tank [i].alive=0;  //åˆå§‹åŒ–å¦å…‹å…¨æ˜¯ä¸å­˜æ´»çš„ï¼ŒBuildAITank()ä¼šå»ºç«‹é‡æ–°å»ºç«‹ä¸å­˜æ´»çš„å¦å…‹
 		AI_tank [i].stop=0;
 		AI_tank [i].num=i;
 		AI_tank [i].my=0;
 		AI_tank [i].CD=0;
 	}
-	GoToxy(97,2);                        //ÔÚ¸±ÆÁÄ»ÉÏ¹Ø¿¨Êı
+	GoToxy(97,2);                        //åœ¨å‰¯å±å¹•ä¸Šå…³å¡æ•°
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN);
 	printf("%d",level);
-	GoToxy(102,5);                       //ÔÚ¸±ÆÁÄ»ÉÏ´òÓ¡·ÖÊı
+	GoToxy(102,5);                       //åœ¨å‰¯å±å¹•ä¸Šæ‰“å°åˆ†æ•°
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_INTENSITY|FOREGROUND_GREEN|FOREGROUND_RED|FOREGROUND_BLUE);
 	printf("%d   ",score);
-	GoToxy(102,7);                       //ÔÚ¸±ÆÁÄ»´òÓ¡ÎÒµÄÊ£ÓàÉúÃüÖµ
+	GoToxy(102,7);                       //åœ¨å‰¯å±å¹•æ‰“å°æˆ‘çš„å‰©ä½™ç”Ÿå‘½å€¼
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_INTENSITY|FOREGROUND_GREEN);
 	printf("%d", MAX_LIFE-my_tank.revive);
-	GoToxy(102,9);                       //ÔÚ¸±ÆÁÄ»ÉÏ´òÓ¡Ê£ÓàÌ¹¿ËÊı
+	GoToxy(102,9);                       //åœ¨å‰¯å±å¹•ä¸Šæ‰“å°å‰©ä½™å¦å…‹æ•°
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_INTENSITY|FOREGROUND_RED);
 	printf("%d ",remain_enemy);
-	GoToxy(100,13);                      //ÔÚ¸±ÆÁÄ»ÉÏ´òÓ¡×´Ì¬
+	GoToxy(100,13);                      //åœ¨å‰¯å±å¹•ä¸Šæ‰“å°çŠ¶æ€
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_INTENSITY|FOREGROUND_BLUE|FOREGROUND_GREEN);
-	printf("ÕıÔÚÓÎÏ·");
+	printf("æ­£åœ¨æ¸¸æˆ");
 }
 
 
-int tank_main (int argc,char **argv)                               //Ö÷º¯Êı
+int tank_main (int argc,char **argv)                               //ä¸»å‡½æ•°
 {
 	int i,res;
 	HANDLE hConsoleOutput;
     CONSOLE_SCREEN_BUFFER_INFO info;
     
-	unsigned int interval[12] = {1,1,1,1,1,1,1,1,1,1,1,1};  //¼ä¸ô¼ÆÊıÆ÷Êı×é£¬ÓÃÓÚ¿ØÖÆËÙ¶È
-    hConsoleOutput = GetStdHandle(STD_OUTPUT_HANDLE); // »ñÈ¡¿ØÖÆÌ¨Êä³ö¾ä±ú
+	unsigned int interval[12] = {1,1,1,1,1,1,1,1,1,1,1,1};  //é—´éš”è®¡æ•°å™¨æ•°ç»„ï¼Œç”¨äºæ§åˆ¶é€Ÿåº¦
+    hConsoleOutput = GetStdHandle(STD_OUTPUT_HANDLE); // è·å–æ§åˆ¶å°è¾“å‡ºå¥æŸ„
     GetConsoleScreenBufferInfo(hConsoleOutput, &info);
-	srand((unsigned)time(0)); //ÉèÖÃËæ»úÊıÖÖ×Ó(Èô²»ÉèÖÃÖÖ×Ó¶øµ÷ÓÃrand»áÊ¹Ã¿´ÎÔËĞĞµÄËæ»úÊıĞòÁĞÒ»ÖÂ)Ëæ»úÊıĞòÁĞÖ¸:ÈçÊ×´Îµ÷ÓÃrandµÃµ½1,µÚ¶ş´ÎµÃ2,µÚÈı´Î3,Ôò´Ë´ÎËæ»úÊıĞòÁĞÎª1,2,3
-	HideCursor();                         //Òş²Ø¹â±ê
-	system("mode con cols=112 lines=42"); //¿ØÖÆ´°¿Ú´óĞ¡
-	Frame ();                             //´òÓ¡ÓÎÏ·Ö÷Ìå¿ò¼Ü
-	Initialize();                         //³õÊ¼»¯£¬È«¾Ö±äÁ¿level³õÖµ±ãÊÇ1 
+	srand((unsigned)time(0)); //è®¾ç½®éšæœºæ•°ç§å­(è‹¥ä¸è®¾ç½®ç§å­è€Œè°ƒç”¨randä¼šä½¿æ¯æ¬¡è¿è¡Œçš„éšæœºæ•°åºåˆ—ä¸€è‡´)éšæœºæ•°åºåˆ—æŒ‡:å¦‚é¦–æ¬¡è°ƒç”¨randå¾—åˆ°1,ç¬¬äºŒæ¬¡å¾—2,ç¬¬ä¸‰æ¬¡3,åˆ™æ­¤æ¬¡éšæœºæ•°åºåˆ—ä¸º1,2,3
+	HideCursor();                         //éšè—å…‰æ ‡
+	system("mode con cols=112 lines=42"); //æ§åˆ¶çª—å£å¤§å°
+	Frame ();                             //æ‰“å°æ¸¸æˆä¸»ä½“æ¡†æ¶
+	Initialize();                         //åˆå§‹åŒ–ï¼Œå…¨å±€å˜é‡levelåˆå€¼ä¾¿æ˜¯1 
 	for(;;)
 	{
-		if(interval[0]++%speed==0)        //ËÙ¶Èµ÷ÕûÓÃ,¼ÙÉèinterval[0]Îªa, Óï¾äÒâÎª a % 2==0,a=a+1; 
+		if(interval[0]++%speed==0)        //é€Ÿåº¦è°ƒæ•´ç”¨,å‡è®¾interval[0]ä¸ºa, è¯­å¥æ„ä¸º a % 2==0,a=a+1; 
 		{
-			GameCheak();                  //ÓÎÏ·Ê¤¸º¼ì²â
+			GameCheak();                  //æ¸¸æˆèƒœè´Ÿæ£€æµ‹
 			BulletFly ( bullet );
-			for(i=0 ; i<=3 ; i++)         //AIÌ¹¿ËÒÆ¶¯Ñ­»·
+			for(i=0 ; i<=3 ; i++)         //AIå¦å…‹ç§»åŠ¨å¾ªç¯
 			{
-				if(AI_tank[i].model==2 && interval[i+1]++%2==0) //ËÄ¸öÌ¹¿ËÖĞµÄ¿ìËÙÌ¹¿Ëµ¥¶ÀÊ¹ÓÃ¼ÆÊıÆ÷1,2,3,4
+				if(AI_tank[i].model==2 && interval[i+1]++%2==0) //å››ä¸ªå¦å…‹ä¸­çš„å¿«é€Ÿå¦å…‹å•ç‹¬ä½¿ç”¨è®¡æ•°å™¨1,2,3,4
 					MoveAITank( & AI_tank[i]);
-				if(AI_tank[i].model!=2 && interval[i+5]++%3==0) //ËÄ¸öÌ¹¿ËÖĞµÄÂıËÙÌ¹¿Ëµ¥¶ÀÊ¹ÓÃ¼ÆÊıÆ÷5,6,7,8
+				if(AI_tank[i].model!=2 && interval[i+5]++%3==0) //å››ä¸ªå¦å…‹ä¸­çš„æ…¢é€Ÿå¦å…‹å•ç‹¬ä½¿ç”¨è®¡æ•°å™¨5,6,7,8
 					MoveAITank( & AI_tank[i]);
 			}
             
-			for(i=0;i<=3;i++)                                   //½¨Á¢AIÌ¹¿Ë²¿·Ö
-	  		   	if(AI_tank[i].alive==0 && AI_tank[i].revive<4 && interval[9]++%90==0)  //Ò»¸öµĞ·½Ì¹¿ËÃ¿¾ÖÖ»ÓĞ4ÌõÃü
-				{                                               //Èç¹ûÌ¹¿Ë²»´æ»î¡£¼ÆÊ±,Ã¿´Î½¨Á¢ÓĞ¼ä¸ô  1750 ms
-             	  	BuildAITank( &position, & AI_tank[i] );     //½¨Á¢AIÌ¹¿Ë£¨¸´»î£©
-			  		break;                                      //Ã¿´ÎÑ­»·Ö»½¨Á¢Ò»¸öÌ¹¿Ë
+			for(i=0;i<=3;i++)                                   //å»ºç«‹AIå¦å…‹éƒ¨åˆ†
+	  		   	if(AI_tank[i].alive==0 && AI_tank[i].revive<4 && interval[9]++%90==0)  //ä¸€ä¸ªæ•Œæ–¹å¦å…‹æ¯å±€åªæœ‰4æ¡å‘½
+				{                                               //å¦‚æœå¦å…‹ä¸å­˜æ´»ã€‚è®¡æ—¶,æ¯æ¬¡å»ºç«‹æœ‰é—´éš”  1750 ms
+             	  	BuildAITank( &position, & AI_tank[i] );     //å»ºç«‹AIå¦å…‹ï¼ˆå¤æ´»ï¼‰
+			  		break;                                      //æ¯æ¬¡å¾ªç¯åªå»ºç«‹ä¸€ä¸ªå¦å…‹
 		  		}
 			for(i=0;i<=3;i++)
 				if(AI_tank[i].alive)
-					BuildAIBullet(&AI_tank[i]);                 //AIshoot×Ô´øint×ÔÔö¼ÆÊıCD,²»Ê¹ÓÃmainÖĞµÄCD interval
+					BuildAIBullet(&AI_tank[i]);                 //AIshootè‡ªå¸¦intè‡ªå¢è®¡æ•°CD,ä¸ä½¿ç”¨mainä¸­çš„CD interval
 			if(my_tank.alive && interval[10]++%2==0 )
             {
                 res = keyboard();
@@ -1461,9 +1461,9 @@ int tank_main (int argc,char **argv)                               //Ö÷º¯Êı
 		}
 		Sleep(5);
 	}
-    system("mode con cols=100 lines=50");//ÉèÖÃ´°¿Ú´óĞ¡
+    system("mode con cols=100 lines=50");//è®¾ç½®çª—å£å¤§å°
     SetConsoleTextAttribute(hConsoleOutput, info.wAttributes);
-    system("cls"); // ÇåÆÁ
+    system("cls"); // æ¸…å±
 	fflush(stdin);
 	return 0;
 }

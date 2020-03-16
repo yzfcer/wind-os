@@ -1,36 +1,36 @@
 #if 0
 /*
-IS62WV51216 ¼ò½é
-IS62WV51216 ÊÇ ISSI£¨Integrated  Silicon  Solution,  Inc£©¹«Ë¾Éú²úµÄÒ»¿Å 16 Î»¿í 512K£¨512*16£¬¼´ 1M ×Ö½Ú£©ÈİÁ¿µÄ CMOS ¾²Ì¬ÄÚ´æĞ¾Æ¬¡£¸ÃĞ¾Æ¬¾ßÓĞÈçÏÂ¼¸¸öÌØµã£º
-l ¸ßËÙ¡£¾ßÓĞ 45ns/55ns ·ÃÎÊËÙ¶È¡£
-l µÍ¹¦ºÄ¡£
-l TTL µçÆ½¼æÈİ¡£
-l È«¾²Ì¬²Ù×÷¡£²»ĞèÒªË¢ĞÂºÍÊ±ÖÓµçÂ·¡£
-l ÈıÌ¬Êä³ö¡£
-l ×Ö½Ú¿ØÖÆ¹¦ÄÜ¡£Ö§³Ö¸ß/µÍ×Ö½Ú¿ØÖÆ¡£
-¿´¿´ÊµÏÖ IS62WV51216 µÄ·ÃÎÊ£¬ĞèÒª¶Ô FSMC½øĞĞÄÄĞ©ÅäÖÃ¡£ ÕâÀï¾Í×öÒ»¸ö¸ÅÀ¨ĞÔµÄ½²½â¡£²½ÖèÈçÏÂ£º 
-1£©Ê¹ÄÜ FSMC Ê±ÖÓ£¬²¢ÅäÖÃ FSMC Ïà¹ØµÄ IO ¼°ÆäÊ±ÖÓÊ¹ÄÜ¡£
-ÒªÊ¹ÓÃ FSMC£¬µ±È»Ê×ÏÈµÃ¿ªÆôÆäÊ±ÖÓ¡£È»ºóĞèÒª°Ñ FSMC_D0~15£¬FSMCA0~18 µÈÏà¹ØIO ¿Ú£¬È«²¿ÅäÖÃÎª¸´ÓÃÊä³ö£¬²¢Ê¹ÄÜ¸÷ IO ×éµÄÊ±ÖÓ¡£ 
-Ê¹ÄÜ FSMC Ê±ÖÓµÄ·½·¨£º
+IS62WV51216 ç®€ä»‹
+IS62WV51216 æ˜¯ ISSIï¼ˆIntegrated  Silicon  Solution,  Incï¼‰å…¬å¸ç”Ÿäº§çš„ä¸€é¢— 16 ä½å®½ 512Kï¼ˆ512*16ï¼Œå³ 1M å­—èŠ‚ï¼‰å®¹é‡çš„ CMOS é™æ€å†…å­˜èŠ¯ç‰‡ã€‚è¯¥èŠ¯ç‰‡å…·æœ‰å¦‚ä¸‹å‡ ä¸ªç‰¹ç‚¹ï¼š
+l é«˜é€Ÿã€‚å…·æœ‰ 45ns/55ns è®¿é—®é€Ÿåº¦ã€‚
+l ä½åŠŸè€—ã€‚
+l TTL ç”µå¹³å…¼å®¹ã€‚
+l å…¨é™æ€æ“ä½œã€‚ä¸éœ€è¦åˆ·æ–°å’Œæ—¶é’Ÿç”µè·¯ã€‚
+l ä¸‰æ€è¾“å‡ºã€‚
+l å­—èŠ‚æ§åˆ¶åŠŸèƒ½ã€‚æ”¯æŒé«˜/ä½å­—èŠ‚æ§åˆ¶ã€‚
+çœ‹çœ‹å®ç° IS62WV51216 çš„è®¿é—®ï¼Œéœ€è¦å¯¹ FSMCè¿›è¡Œå“ªäº›é…ç½®ã€‚ è¿™é‡Œå°±åšä¸€ä¸ªæ¦‚æ‹¬æ€§çš„è®²è§£ã€‚æ­¥éª¤å¦‚ä¸‹ï¼š 
+1ï¼‰ä½¿èƒ½ FSMC æ—¶é’Ÿï¼Œå¹¶é…ç½® FSMC ç›¸å…³çš„ IO åŠå…¶æ—¶é’Ÿä½¿èƒ½ã€‚
+è¦ä½¿ç”¨ FSMCï¼Œå½“ç„¶é¦–å…ˆå¾—å¼€å¯å…¶æ—¶é’Ÿã€‚ç„¶åéœ€è¦æŠŠ FSMC_D0~15ï¼ŒFSMCA0~18 ç­‰ç›¸å…³IO å£ï¼Œå…¨éƒ¨é…ç½®ä¸ºå¤ç”¨è¾“å‡ºï¼Œå¹¶ä½¿èƒ½å„ IO ç»„çš„æ—¶é’Ÿã€‚ 
+ä½¿èƒ½ FSMC æ—¶é’Ÿçš„æ–¹æ³•ï¼š
 RCC_AHBPeriphClockCmd(RCC_AHBPeriph_FSMC,ENABLE); 
-¶ÔÓÚÆäËû IO ¿ÚÉèÖÃµÄ·½·¨Ç°Ãæ½²½âºÜÏêÏ¸£¬ÕâÀï²»×ö¹ı¶àµÄ½²½â¡£
-2£©ÉèÖÃ FSMC BANK1 ÇøÓò 3¡£
-´Ë²¿·Ö°üÀ¨ÉèÖÃÇøÓò 3 µÄ´æ´¢Æ÷µÄ¹¤×÷Ä£Ê½¡¢Î»¿íºÍ¶ÁĞ´Ê±ĞòµÈ¡£ÎÒÃÇÊ¹ÓÃÄ£Ê½ A¡¢16 Î»¿í£¬¶ÁĞ´¹²ÓÃÒ»¸öÊ±Ğò¼Ä´æÆ÷¡£Ê¹ÓÃµÄº¯ÊıÊÇ£º
+å¯¹äºå…¶ä»– IO å£è®¾ç½®çš„æ–¹æ³•å‰é¢è®²è§£å¾ˆè¯¦ç»†ï¼Œè¿™é‡Œä¸åšè¿‡å¤šçš„è®²è§£ã€‚
+2ï¼‰è®¾ç½® FSMC BANK1 åŒºåŸŸ 3ã€‚
+æ­¤éƒ¨åˆ†åŒ…æ‹¬è®¾ç½®åŒºåŸŸ 3 çš„å­˜å‚¨å™¨çš„å·¥ä½œæ¨¡å¼ã€ä½å®½å’Œè¯»å†™æ—¶åºç­‰ã€‚æˆ‘ä»¬ä½¿ç”¨æ¨¡å¼ Aã€16 ä½å®½ï¼Œè¯»å†™å…±ç”¨ä¸€ä¸ªæ—¶åºå¯„å­˜å™¨ã€‚ä½¿ç”¨çš„å‡½æ•°æ˜¯ï¼š
 void FSMC_NORSRAMInit(FSMC_NORSRAMInitTypeDef* FSMC_NORSRAMInitStruct)
-3£©Ê¹ÄÜ BANK1 ÇøÓò 3¡£
-Ê¹ÄÜ BANK µÄ·½·¨¸úÇ°Ãæ LCD ÊµÑéÒ²ÊÇÒ»ÑùµÄ£¬ÕâÀïÒ²²»×öÏêÏ¸½²½â£¬º¯ÊıÊÇ£º
-void FSMC_NORSRAMCmd(uint32_t FSMC_Bank, FunctionalState NewState)£»
-Í¨¹ıÒÔÉÏ¼¸¸ö²½Öè£¬ÎÒÃÇ¾ÍÍê³ÉÁË FSMC µÄÅäÖÃ£¬¿ÉÒÔ·ÃÎÊ IS62WV51216 ÁË£¬ÕâÀï»¹ĞèÒª×¢Òâ£¬ÒòÎªÎÒÃÇÊ¹ÓÃµÄÊÇ BANK1 µÄÇøÓò 3£¬ËùÒÔ HADDR[27:26]=10£¬¹ÊÍâ²¿ÄÚ´æµÄÊ×µØÖ·Îª 0X68000000¡£
+3ï¼‰ä½¿èƒ½ BANK1 åŒºåŸŸ 3ã€‚
+ä½¿èƒ½ BANK çš„æ–¹æ³•è·Ÿå‰é¢ LCD å®éªŒä¹Ÿæ˜¯ä¸€æ ·çš„ï¼Œè¿™é‡Œä¹Ÿä¸åšè¯¦ç»†è®²è§£ï¼Œå‡½æ•°æ˜¯ï¼š
+void FSMC_NORSRAMCmd(uint32_t FSMC_Bank, FunctionalState NewState)ï¼›
+é€šè¿‡ä»¥ä¸Šå‡ ä¸ªæ­¥éª¤ï¼Œæˆ‘ä»¬å°±å®Œæˆäº† FSMC çš„é…ç½®ï¼Œå¯ä»¥è®¿é—® IS62WV51216 äº†ï¼Œè¿™é‡Œè¿˜éœ€è¦æ³¨æ„ï¼Œå› ä¸ºæˆ‘ä»¬ä½¿ç”¨çš„æ˜¯ BANK1 çš„åŒºåŸŸ 3ï¼Œæ‰€ä»¥ HADDR[27:26]=10ï¼Œæ•…å¤–éƒ¨å†…å­˜çš„é¦–åœ°å€ä¸º 0X68000000ã€‚
 */
 #endif
 
 
-//Ê¹ÓÃNOR/SRAMµÄ Bank1.sector3,µØÖ·Î»HADDR[27,26]=10 
-//¶ÔIS61LV25616/IS62WV25616,µØÖ·Ïß·¶Î§ÎªA0~A17 
-//¶ÔIS61LV51216/IS62WV51216,µØÖ·Ïß·¶Î§ÎªA0~A18
+//ä½¿ç”¨NOR/SRAMçš„ Bank1.sector3,åœ°å€ä½HADDR[27,26]=10 
+//å¯¹IS61LV25616/IS62WV25616,åœ°å€çº¿èŒƒå›´ä¸ºA0~A17 
+//å¯¹IS61LV51216/IS62WV51216,åœ°å€çº¿èŒƒå›´ä¸ºA0~A18
 #define Bank1_SRAM3_ADDR ((u32)(0x68000000))        
                            
-//³õÊ¼»¯Íâ²¿SRAM
+//åˆå§‹åŒ–å¤–éƒ¨SRAM
 void FSMC_SRAM_Init(void)
 {    
     FSMC_NORSRAMInitTypeDef FSMC_NORSRAMInitStructure;
@@ -38,85 +38,85 @@ void FSMC_SRAM_Init(void)
     GPIO_InitTypeDef GPIO_InitStructure;
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOD|RCC_APB2Periph_GPIOE|RCC_APB2Periph_GPIOF|RCC_APB2Periph_GPIOG,ENABLE);
     RCC_AHBPeriphClockCmd(RCC_AHBPeriph_FSMC,ENABLE);
-    GPIO_InitStructure.GPIO_Pin = 0xFF33;                  //PORTD¸´ÓÃÍÆÍìÊä³ö 
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;          //¸´ÓÃÍÆÍìÊä³ö
+    GPIO_InitStructure.GPIO_Pin = 0xFF33;                  //PORTDå¤ç”¨æ¨æŒ½è¾“å‡º 
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;          //å¤ç”¨æ¨æŒ½è¾“å‡º
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_Init(GPIOD, &GPIO_InitStructure);
-    GPIO_InitStructure.GPIO_Pin = 0xFF83;                  //PORTE¸´ÓÃÍÆÍìÊä³ö 
+    GPIO_InitStructure.GPIO_Pin = 0xFF83;                  //PORTEå¤ç”¨æ¨æŒ½è¾“å‡º 
     GPIO_Init(GPIOE, &GPIO_InitStructure);
-    GPIO_InitStructure.GPIO_Pin = 0xF03F;                  //PORTD¸´ÓÃÍÆÍìÊä³ö 
+    GPIO_InitStructure.GPIO_Pin = 0xF03F;                  //PORTDå¤ç”¨æ¨æŒ½è¾“å‡º 
     GPIO_Init(GPIOF, &GPIO_InitStructure);
-    GPIO_InitStructure.GPIO_Pin = 0x043F;                  //PORTD¸´ÓÃÍÆÍìÊä³ö 
+    GPIO_InitStructure.GPIO_Pin = 0x043F;                  //PORTDå¤ç”¨æ¨æŒ½è¾“å‡º 
     GPIO_Init(GPIOG, &GPIO_InitStructure);
        
-    readWriteTiming.FSMC_AddressSetupTime = 0x00;     //µØÖ·½¨Á¢Ê±¼ä£¨ADDSET£©Îª1¸öHCLK 1/36M=27ns
-    readWriteTiming.FSMC_AddressHoldTime = 0x00;     //µØÖ·±£³ÖÊ±¼ä£¨ADDHLD£©Ä£Ê½AÎ´ÓÃµ½    
-    readWriteTiming.FSMC_DataSetupTime = 0x03;         //Êı¾İ±£³ÖÊ±¼ä£¨DATAST£©Îª3¸öHCLK 4/72M=55ns(¶ÔEMµÄSRAMĞ¾Æ¬)     
+    readWriteTiming.FSMC_AddressSetupTime = 0x00;     //åœ°å€å»ºç«‹æ—¶é—´ï¼ˆADDSETï¼‰ä¸º1ä¸ªHCLK 1/36M=27ns
+    readWriteTiming.FSMC_AddressHoldTime = 0x00;     //åœ°å€ä¿æŒæ—¶é—´ï¼ˆADDHLDï¼‰æ¨¡å¼Aæœªç”¨åˆ°    
+    readWriteTiming.FSMC_DataSetupTime = 0x03;         //æ•°æ®ä¿æŒæ—¶é—´ï¼ˆDATASTï¼‰ä¸º3ä¸ªHCLK 4/72M=55ns(å¯¹EMçš„SRAMèŠ¯ç‰‡)     
     readWriteTiming.FSMC_BusTurnAroundDuration = 0x00;
     readWriteTiming.FSMC_CLKDivision = 0x00;
     readWriteTiming.FSMC_DataLatency = 0x00;
-    readWriteTiming.FSMC_AccessMode = FSMC_AccessMode_A;     //Ä£Ê½A 
+    readWriteTiming.FSMC_AccessMode = FSMC_AccessMode_A;     //æ¨¡å¼A 
 
-    FSMC_NORSRAMInitStructure.FSMC_Bank = FSMC_Bank1_NORSRAM3;// ÕâÀïÎÒÃÇÊ¹ÓÃNE3 £¬Ò²¾Í¶ÔÓ¦BTCR[4],[5]¡£
+    FSMC_NORSRAMInitStructure.FSMC_Bank = FSMC_Bank1_NORSRAM3;// è¿™é‡Œæˆ‘ä»¬ä½¿ç”¨NE3 ï¼Œä¹Ÿå°±å¯¹åº”BTCR[4],[5]ã€‚
     FSMC_NORSRAMInitStructure.FSMC_DataAddressMux = FSMC_DataAddressMux_Disable; 
     FSMC_NORSRAMInitStructure.FSMC_MemoryType =FSMC_MemoryType_SRAM;// FSMC_MemoryType_SRAM; //SRAM 
-    FSMC_NORSRAMInitStructure.FSMC_MemoryDataWidth = FSMC_MemoryDataWidth_16b;//´æ´¢Æ÷Êı¾İ¿í¶ÈÎª16bit 
+    FSMC_NORSRAMInitStructure.FSMC_MemoryDataWidth = FSMC_MemoryDataWidth_16b;//å­˜å‚¨å™¨æ•°æ®å®½åº¦ä¸º16bit 
     FSMC_NORSRAMInitStructure.FSMC_BurstAccessMode =FSMC_BurstAccessMode_Disable;// FSMC_BurstAccessMode_Disable; 
     FSMC_NORSRAMInitStructure.FSMC_WaitSignalPolarity = FSMC_WaitSignalPolarity_Low;
     FSMC_NORSRAMInitStructure.FSMC_AsynchronousWait=FSMC_AsynchronousWait_Disable;
     FSMC_NORSRAMInitStructure.FSMC_WrapMode = FSMC_WrapMode_Disable; 
     FSMC_NORSRAMInitStructure.FSMC_WaitSignalActive = FSMC_WaitSignalActive_BeforeWaitState; 
-    FSMC_NORSRAMInitStructure.FSMC_WriteOperation = FSMC_WriteOperation_Enable;    //´æ´¢Æ÷Ğ´Ê¹ÄÜ 
+    FSMC_NORSRAMInitStructure.FSMC_WriteOperation = FSMC_WriteOperation_Enable;    //å­˜å‚¨å™¨å†™ä½¿èƒ½ 
     FSMC_NORSRAMInitStructure.FSMC_WaitSignal = FSMC_WaitSignal_Disable; 
-    FSMC_NORSRAMInitStructure.FSMC_ExtendedMode = FSMC_ExtendedMode_Disable; // ¶ÁĞ´Ê¹ÓÃÏàÍ¬µÄÊ±Ğò
+    FSMC_NORSRAMInitStructure.FSMC_ExtendedMode = FSMC_ExtendedMode_Disable; // è¯»å†™ä½¿ç”¨ç›¸åŒçš„æ—¶åº
     FSMC_NORSRAMInitStructure.FSMC_WriteBurst = FSMC_WriteBurst_Disable; 
     FSMC_NORSRAMInitStructure.FSMC_ReadWriteTimingStruct = &readWriteTiming;
-    FSMC_NORSRAMInitStructure.FSMC_WriteTimingStruct = &readWriteTiming; //¶ÁĞ´Í¬ÑùÊ±Ğò
+    FSMC_NORSRAMInitStructure.FSMC_WriteTimingStruct = &readWriteTiming; //è¯»å†™åŒæ ·æ—¶åº
 
-    FSMC_NORSRAMInit(&FSMC_NORSRAMInitStructure); //³õÊ¼»¯FSMCÅäÖÃ
+    FSMC_NORSRAMInit(&FSMC_NORSRAMInitStructure); //åˆå§‹åŒ–FSMCé…ç½®
 
-    FSMC_NORSRAMCmd(FSMC_Bank1_NORSRAM3, ENABLE); // Ê¹ÄÜBANK3                                         
+    FSMC_NORSRAMCmd(FSMC_Bank1_NORSRAM3, ENABLE); // ä½¿èƒ½BANK3                                         
                                             
 }
                                                               
-//ÔÚÖ¸¶¨µØÖ·¿ªÊ¼,Á¬ĞøĞ´Èën¸ö×Ö½Ú.
-//pBuffer:×Ö½ÚÖ¸Õë
-//WriteAddr:ÒªĞ´ÈëµÄµØÖ·
-//n:ÒªĞ´ÈëµÄ×Ö½ÚÊı
+//åœ¨æŒ‡å®šåœ°å€å¼€å§‹,è¿ç»­å†™å…¥nä¸ªå­—èŠ‚.
+//pBuffer:å­—èŠ‚æŒ‡é’ˆ
+//WriteAddr:è¦å†™å…¥çš„åœ°å€
+//n:è¦å†™å…¥çš„å­—èŠ‚æ•°
 void FSMC_SRAM_WriteBuffer(u8* pBuffer,u32 WriteAddr,u32 n)
 {
     for(;n!=0;n--) 
     {                                         
         *(vu8*)(Bank1_SRAM3_ADDR+WriteAddr)=*pBuffer;     
-        WriteAddr+=2;//ÕâÀïĞèÒª¼Ó2£¬ÊÇÒòÎªSTM32µÄFSMCµØÖ·ÓÒÒÆÒ»Î»¶ÔÆä.¼Ó2Ïàµ±ÓÚ¼Ó1.
+        WriteAddr+=2;//è¿™é‡Œéœ€è¦åŠ 2ï¼Œæ˜¯å› ä¸ºSTM32çš„FSMCåœ°å€å³ç§»ä¸€ä½å¯¹å…¶.åŠ 2ç›¸å½“äºåŠ 1.
         pBuffer++;
     } 
 }
 
-//ÔÚÖ¸¶¨µØÖ·¿ªÊ¼,Á¬Ğø¶Á³ön¸ö×Ö½Ú.
-//pBuffer:×Ö½ÚÖ¸Õë
-//ReadAddr:Òª¶Á³öµÄÆğÊ¼µØÖ·
-//n:ÒªĞ´ÈëµÄ×Ö½ÚÊı
+//åœ¨æŒ‡å®šåœ°å€å¼€å§‹,è¿ç»­è¯»å‡ºnä¸ªå­—èŠ‚.
+//pBuffer:å­—èŠ‚æŒ‡é’ˆ
+//ReadAddr:è¦è¯»å‡ºçš„èµ·å§‹åœ°å€
+//n:è¦å†™å…¥çš„å­—èŠ‚æ•°
 void FSMC_SRAM_ReadBuffer(u8* pBuffer,u32 ReadAddr,u32 n)
 {
     for(;n!=0;n--) 
     {                                             
         *pBuffer++=*(vu8*)(Bank1_SRAM3_ADDR+ReadAddr); 
-        ReadAddr+=2;//ÕâÀïĞèÒª¼Ó2£¬ÊÇÒòÎªSTM32µÄFSMCµØÖ·ÓÒÒÆÒ»Î»¶ÔÆä.¼Ó2Ïàµ±ÓÚ¼Ó1.
+        ReadAddr+=2;//è¿™é‡Œéœ€è¦åŠ 2ï¼Œæ˜¯å› ä¸ºSTM32çš„FSMCåœ°å€å³ç§»ä¸€ä½å¯¹å…¶.åŠ 2ç›¸å½“äºåŠ 1.
     } 
 } 
 ////////////////////////////////////////////////////////////////////////////////////////
-//²âÊÔº¯Êı
-//ÔÚÖ¸¶¨µØÖ·Ğ´Èë1¸ö×Ö½Ú
-//addr:µØÖ·
-//data:ÒªĞ´ÈëµÄÊı¾İ
+//æµ‹è¯•å‡½æ•°
+//åœ¨æŒ‡å®šåœ°å€å†™å…¥1ä¸ªå­—èŠ‚
+//addr:åœ°å€
+//data:è¦å†™å…¥çš„æ•°æ®
 void fsmc_sram_test_write(u8 data,u32 addr)
 {             
-    FSMC_SRAM_WriteBuffer(&data,addr,1);//Ğ´Èë1¸ö×Ö½Ú
+    FSMC_SRAM_WriteBuffer(&data,addr,1);//å†™å…¥1ä¸ªå­—èŠ‚
 }
-//¶ÁÈ¡1¸ö×Ö½Ú
-//addr:Òª¶ÁÈ¡µÄµØÖ·
-//·µ»ØÖµ:¶ÁÈ¡µ½µÄÊı¾İ
+//è¯»å–1ä¸ªå­—èŠ‚
+//addr:è¦è¯»å–çš„åœ°å€
+//è¿”å›å€¼:è¯»å–åˆ°çš„æ•°æ®
 u8 fsmc_sram_test_read(u32 addr)
 {
     u8 data;

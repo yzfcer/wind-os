@@ -221,7 +221,7 @@ static w_err_t boot_load_img(void)
         return W_ERR_FAIL;
     }
     
-    // debug模式不需要检查，直接调入image
+    // debug妯″紡涓嶉渶瑕佹鏌ワ紝鐩存帴璋冨叆image
     if(bp->debug_mode)
     {
         boot_status_go_next();

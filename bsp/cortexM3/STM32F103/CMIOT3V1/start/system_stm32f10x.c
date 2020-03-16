@@ -1019,13 +1019,13 @@ static void SetSysClockTo72(void)
 
  
     /* HCLK = SYSCLK */
-    RCC->CFGR |= (uint32_t)RCC_CFGR_HPRE_DIV1; /****************** HCLK �洢����DMA ����Ƶ 72MHz **********************/
+    RCC->CFGR |= (uint32_t)RCC_CFGR_HPRE_DIV1; /****************** HCLK 存储器、DMA 不分频 72MHz **********************/
       
     /* PCLK2 = HCLK */
-    RCC->CFGR |= (uint32_t)RCC_CFGR_PPRE2_DIV1; /****************** APB2 APB2���� ����Ƶ 72MHz **********************/
+    RCC->CFGR |= (uint32_t)RCC_CFGR_PPRE2_DIV1; /****************** APB2 APB2外设 不分频 72MHz **********************/
     
     /* PCLK1 = HCLK */
-    RCC->CFGR |= (uint32_t)RCC_CFGR_PPRE1_DIV2; /****************** APB1 APB1���� 2��Ƶ 36MHz **********************/
+    RCC->CFGR |= (uint32_t)RCC_CFGR_PPRE1_DIV2; /****************** APB1 APB1外设 2分频 36MHz **********************/
 
 #ifdef STM32F10X_CL
     /* Configure PLLs ------------------------------------------------------*/
@@ -1053,7 +1053,7 @@ static void SetSysClockTo72(void)
     /*  PLL configuration: PLLCLK = HSE * 9 = 72 MHz */
     RCC->CFGR &= (uint32_t)((uint32_t)~(RCC_CFGR_PLLSRC | RCC_CFGR_PLLXTPRE |
                                         RCC_CFGR_PLLMULL));
-    RCC->CFGR |= (uint32_t)(RCC_CFGR_PLLSRC_HSE | RCC_CFGR_PLLMULL6); /****************** ���12MHz ��ƵֵΪ6 72MHz **********************/
+    RCC->CFGR |= (uint32_t)(RCC_CFGR_PLLSRC_HSE | RCC_CFGR_PLLMULL6); /****************** 外接12MHz 倍频值为6 72MHz **********************/
 #endif /* STM32F10X_CL */
 
     /* Enable PLL */

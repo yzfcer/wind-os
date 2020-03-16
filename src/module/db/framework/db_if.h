@@ -1,20 +1,20 @@
 /****************************************Copyright (c)**************************************************
-**                                       Çå  ·ç  º£  °¶
-**ÎÄ   ¼ş   Ãû: db_if.h
-**´´   ½¨   ÈË: Jason Zhou
-**×îºóĞŞ¸ÄÈÕÆÚ: 2017/11/23
-**Ãè        Êö: 
+**                                       æ¸…  é£  æµ·  å²¸
+**æ–‡   ä»¶   å: db_if.h
+**åˆ›   å»º   äºº: Jason Zhou
+**æœ€åä¿®æ”¹æ—¥æœŸ: 2017/11/23
+**æ        è¿°: 
 **  
-**--------------ÀúÊ·°æ±¾ĞÅÏ¢----------------------------------------------------------------------------
-** ´´½¨ÈË: Jason Zhou
-** °æ  ±¾: v1.0
-** ÈÕ¡¡ÆÚ: 2017/11/23
-** Ãè¡¡Êö: Ô­Ê¼°æ±¾
+**--------------å†å²ç‰ˆæœ¬ä¿¡æ¯----------------------------------------------------------------------------
+** åˆ›å»ºäºº: Jason Zhou
+** ç‰ˆ  æœ¬: v1.0
+** æ—¥ã€€æœŸ: 2017/11/23
+** æã€€è¿°: åŸå§‹ç‰ˆæœ¬
 **
-**--------------µ±Ç°°æ±¾ĞŞ¶©----------------------------------------------------------------------------
-** ĞŞ¸ÄÈË: 
-** ÈÕ¡¡ÆÚ: 
-** Ãè¡¡Êö: 
+**--------------å½“å‰ç‰ˆæœ¬ä¿®è®¢----------------------------------------------------------------------------
+** ä¿®æ”¹äºº: 
+** æ—¥ã€€æœŸ: 
+** æã€€è¿°: 
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
@@ -31,22 +31,22 @@ w_err_t db_free(void* ptr);
 w_err_t _wind_db_mod_init(void);
 w_err_t _wind_db_mod_deinit(void);
 
-//Êı¾İ¿âº¯Êı
+//æ•°æ®åº“å‡½æ•°
 w_err_t wind_db_create(char *dbname,w_uint16_t attr);
 w_err_t wind_db_distroy(char *dbname);
 
-//Êı¾İ±íº¯Êı,Êı¾İ±íÃû³Æ¸ñÊ½Îª dbname.tbname
+//æ•°æ®è¡¨å‡½æ•°,æ•°æ®è¡¨åç§°æ ¼å¼ä¸º dbname.tbname
 w_err_t wind_tb_create(char *tbname,tbmodel_item_s *item_info,w_uint16_t item_cnt);
 w_err_t wind_tb_distroy(char *tbname);
 
-//Êı¾İ²Ù×÷º¯Êı,
+//æ•°æ®æ“ä½œå‡½æ•°,
 w_err_t wind_tb_insert(char *tbname,void *row_data,w_int32_t row_size);
 w_err_t wind_tb_delete(char *tbname,w_int32_t row_idx);
 w_err_t wind_tb_get_row_index(char * tbname,w_int32_t row_idx,void * data,w_int32_t data_size);
 w_err_t wind_tb_modify(char *tbname,w_int32_t tbindex,void *row_data,w_int32_t row_size);
-//Êı¾İ×Ö¶ÎÃû³Æ¸ñÊ½Îª dbname.tbname.mbrname
+//æ•°æ®å­—æ®µåç§°æ ¼å¼ä¸º dbname.tbname.mbrname
 w_err_t wind_tb_modify_value(char *tbname,char *mbrname,w_int32_t row_idx,void *data,w_int32_t data_size);
-//condµÄ¸ñÊ½Îª"mbrname1=value1&&mbr2=value2"ÀàËÆµÄ¸ñÊ½
+//condçš„æ ¼å¼ä¸º"mbrname1=value1&&mbr2=value2"ç±»ä¼¼çš„æ ¼å¼
 w_err_t wind_tb_query_cond_count(char *tbname,char *cond,w_int32_t *idxlist,w_int32_t cnt);
 w_err_t wind_tb_query_count(char *tbname,w_int32_t *count);
 w_err_t wind_tb_getdata(char * tbname,w_int32_t row_idx,void * data,w_int32_t data_size);

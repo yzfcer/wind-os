@@ -7,14 +7,14 @@
 extern RTC_TimeTypeDef RTC_TimeStruct;
 extern RTC_DateTypeDef RTC_DateStruct;
 	
-u8_t RTC_InitConfig(void);						//RTC³õÊ¼»¯
+u8_t RTC_InitConfig(void);						//RTCåˆå§‹åŒ–
 
 u8_t RTC_GetWeek(u8_t wyear,u8_t wmonth,u8_t wday);
 ErrorStatus RTC_SetTimes(u8_t year,u8_t month,u8_t date,u8_t hour,u8_t min,u8_t sec);
 void RTC_GetTimes(uint32_t RTC_Format);
 
-void RTC_SetAlarmA(u8_t week,u8_t hour,u8_t min,u8_t sec);	//ÉèÖÃÄÖÖÓÊ±¼ä(°´ĞÇÆÚÄÖÁå,24Ğ¡Ê±ÖÆ)
-void RTC_SetWakeUp(u32_t wktime,u16_t autodata);				//ÉèÖÃ»½ĞÑ¶¨Ê±Æ÷µÄÊ±¼ä
+void RTC_SetAlarmA(u8_t week,u8_t hour,u8_t min,u8_t sec);	//è®¾ç½®é—¹é’Ÿæ—¶é—´(æŒ‰æ˜ŸæœŸé—¹é“ƒ,24å°æ—¶åˆ¶)
+void RTC_SetWakeUp(u32_t wktime,u16_t autodata);				//è®¾ç½®å”¤é†’å®šæ—¶å™¨çš„æ—¶é—´
 
 #endif
 

@@ -2,26 +2,26 @@
 	************************************************************
 	************************************************************
 	************************************************************
-	*	ÎÄ¼şÃû£º 	key.c
+	*	æ–‡ä»¶åï¼š 	key.c
 	*
-	*	×÷Õß£º 		ÕÅ¼ÌÈğ
+	*	ä½œè€…ï¼š 		å¼ ç»§ç‘
 	*
-	*	ÈÕÆÚ£º 		2016-11-23
+	*	æ—¥æœŸï¼š 		2016-11-23
 	*
-	*	°æ±¾£º 		V1.0
+	*	ç‰ˆæœ¬ï¼š 		V1.0
 	*
-	*	ËµÃ÷£º 		°´¼üIO³õÊ¼»¯£¬°´¼ü¹¦ÄÜÅĞ¶Ï
+	*	è¯´æ˜ï¼š 		æŒ‰é”®IOåˆå§‹åŒ–ï¼ŒæŒ‰é”®åŠŸèƒ½åˆ¤æ–­
 	*
-	*	ĞŞ¸Ä¼ÇÂ¼£º	
+	*	ä¿®æ”¹è®°å½•ï¼š	
 	************************************************************
 	************************************************************
 	************************************************************
 **/
 
-//°´¼üÍ·ÎÄ¼ş
+//æŒ‰é”®å¤´æ–‡ä»¶
 #include "key.h"
 
-//Ó²¼şÇı¶¯
+//ç¡¬ä»¶é©±åŠ¨
 #include "delay.h"
 
 
@@ -29,16 +29,16 @@
 
 /*
 ************************************************************
-*	º¯ÊıÃû³Æ£º	Key_Init
+*	å‡½æ•°åç§°ï¼š	Key_Init
 *
-*	º¯Êı¹¦ÄÜ£º	°´¼üIO³õÊ¼»¯
+*	å‡½æ•°åŠŸèƒ½ï¼š	æŒ‰é”®IOåˆå§‹åŒ–
 *
-*	Èë¿Ú²ÎÊı£º	ÎŞ
+*	å…¥å£å‚æ•°ï¼š	æ— 
 *
-*	·µ»Ø²ÎÊı£º	ÎŞ
+*	è¿”å›å‚æ•°ï¼š	æ— 
 *
-*	ËµÃ÷£º		SW2-PD2		SW3-PC11	SW4-PC12	SW5-PC13	
-*				°´ÏÂÎªµÍµçÆ½		ÊÍ·ÅÎª¸ßµçÆ½
+*	è¯´æ˜ï¼š		SW2-PD2		SW3-PC11	SW4-PC12	SW5-PC13	
+*				æŒ‰ä¸‹ä¸ºä½ç”µå¹³		é‡Šæ”¾ä¸ºé«˜ç”µå¹³
 ************************************************************
 */
 void Key_Init(void)
@@ -61,15 +61,15 @@ void Key_Init(void)
 
 /*
 ************************************************************
-*	º¯ÊıÃû³Æ£º	KeyScan
+*	å‡½æ•°åç§°ï¼š	KeyScan
 *
-*	º¯Êı¹¦ÄÜ£º	°´¼üµçÆ½É¨Ãè
+*	å‡½æ•°åŠŸèƒ½ï¼š	æŒ‰é”®ç”µå¹³æ‰«æ
 *
-*	Èë¿Ú²ÎÊı£º	GPIOX£ºĞèÒªÉ¨ÃèµÄGPIO×é	NUM£º¸ÃGPIO×éÄÚµÄ±àºÅ
+*	å…¥å£å‚æ•°ï¼š	GPIOXï¼šéœ€è¦æ‰«æçš„GPIOç»„	NUMï¼šè¯¥GPIOç»„å†…çš„ç¼–å·
 *
-*	·µ»Ø²ÎÊı£º	IOµçÆ½×´Ì¬
+*	è¿”å›å‚æ•°ï¼š	IOç”µå¹³çŠ¶æ€
 *
-*	ËµÃ÷£º		
+*	è¯´æ˜ï¼š		
 ************************************************************
 */
 _Bool KeyScan(GPIO_TypeDef* GPIOX, unsigned int NUM)
@@ -77,101 +77,101 @@ _Bool KeyScan(GPIO_TypeDef* GPIOX, unsigned int NUM)
 	
 	if(GPIOX == GPIOC)
 	{
-		if(!GPIO_ReadInputDataBit(GPIOC, NUM))	//°´ÏÂ  ÎªµÍ
+		if(!GPIO_ReadInputDataBit(GPIOC, NUM))	//æŒ‰ä¸‹  ä¸ºä½
 		{
 			return KEYDOWN;
 		}
-		else									//µ¯Æğ  Îª¸ß
+		else									//å¼¹èµ·  ä¸ºé«˜
 		{
 			return KEYUP;
 		}
 	}
 	else if(GPIOX == GPIOD)
 	{
-		if(!GPIO_ReadInputDataBit(GPIOD, NUM))	//°´ÏÂ  ÎªµÍ
+		if(!GPIO_ReadInputDataBit(GPIOD, NUM))	//æŒ‰ä¸‹  ä¸ºä½
 		{
 			return KEYDOWN;
 		}
-		else									//µ¯Æğ  Îª¸ß
+		else									//å¼¹èµ·  ä¸ºé«˜
 		{
 			return KEYUP;
 		}
 	}
 	
-	return KEYUP;								//Ä¬ÈÏ·µ»Ø°´¼üÊÍ·Å
+	return KEYUP;								//é»˜è®¤è¿”å›æŒ‰é”®é‡Šæ”¾
 	
 }
 
 /*
 ************************************************************
-*	º¯ÊıÃû³Æ£º	Keyboard
+*	å‡½æ•°åç§°ï¼š	Keyboard
 *
-*	º¯Êı¹¦ÄÜ£º	°´¼ü¹¦ÄÜ¼ì²â
+*	å‡½æ•°åŠŸèƒ½ï¼š	æŒ‰é”®åŠŸèƒ½æ£€æµ‹
 *
-*	Èë¿Ú²ÎÊı£º	GPIOX£ºĞèÒªÉ¨ÃèµÄGPIO×é	NUM£º¸ÃGPIO×éÄÚµÄ±àºÅ
+*	å…¥å£å‚æ•°ï¼š	GPIOXï¼šéœ€è¦æ‰«æçš„GPIOç»„	NUMï¼šè¯¥GPIOç»„å†…çš„ç¼–å·
 *
-*	·µ»Ø²ÎÊı£º	IOµçÆ½×´Ì¬
+*	è¿”å›å‚æ•°ï¼š	IOç”µå¹³çŠ¶æ€
 *
-*	ËµÃ÷£º		·Öµ¥»÷¡¢Ë«»÷¡¢³¤°²
+*	è¯´æ˜ï¼š		åˆ†å•å‡»ã€åŒå‡»ã€é•¿å®‰
 ************************************************************
 */
 unsigned char Keyboard(void)
 {
 	
-	static unsigned int keyBusyFlag = 0;									//°´¼ü´¦ÓÚ·ÇÊÍ·Å×´Ì¬
-	static unsigned char keyCount = 0;										//°´¼ü°´ÏÂÊ±¼ä
-	unsigned char timeOut = 15;												//ÅĞ¶ÏË«»÷¶¯×÷ËùĞèÒªµÄÑÓÊ±¼ä¸ô
+	static unsigned int keyBusyFlag = 0;									//æŒ‰é”®å¤„äºéé‡Šæ”¾çŠ¶æ€
+	static unsigned char keyCount = 0;										//æŒ‰é”®æŒ‰ä¸‹æ—¶é—´
+	unsigned char timeOut = 15;												//åˆ¤æ–­åŒå‡»åŠ¨ä½œæ‰€éœ€è¦çš„å»¶æ—¶é—´éš”
 	
-	if(KeyScan(GPIOC, KEY0) == KEYDOWN && !(keyBusyFlag & (~(1 << 0))))		//Èç¹û°´ÏÂ ÇÒÆäËû°´¼üÎ´°´ÏÂ
+	if(KeyScan(GPIOC, KEY0) == KEYDOWN && !(keyBusyFlag & (~(1 << 0))))		//å¦‚æœæŒ‰ä¸‹ ä¸”å…¶ä»–æŒ‰é”®æœªæŒ‰ä¸‹
 	{
-		keyBusyFlag |= 1 << 0;												//´Ë°´¼ü´¦ÓÚÃ¦×´Ì¬
+		keyBusyFlag |= 1 << 0;												//æ­¤æŒ‰é”®å¤„äºå¿™çŠ¶æ€
 		
-		if(++keyCount >= KEYDOWN_LONG_TIME)									//°´ÏÂ¼ÆÊ±
-			keyCount = KEYDOWN_LONG_TIME;									//´ïµ½³¤°´Ê±³¤Ôò²»±ä
+		if(++keyCount >= KEYDOWN_LONG_TIME)									//æŒ‰ä¸‹è®¡æ—¶
+			keyCount = KEYDOWN_LONG_TIME;									//è¾¾åˆ°é•¿æŒ‰æ—¶é•¿åˆ™ä¸å˜
 		
-		return KEYNONE;														//·µ»ØÎŞ¶¯×÷×´Ì¬
+		return KEYNONE;														//è¿”å›æ— åŠ¨ä½œçŠ¶æ€
 	}
-	else if(KeyScan(GPIOC, KEY0) == KEYUP && keyBusyFlag & (1 << 0))		//Èç¹ûÊÍ·Å ÇÒ °´¼üÖ®Ç°ÊÇ°´ÏÂ¹ıµÄ
+	else if(KeyScan(GPIOC, KEY0) == KEYUP && keyBusyFlag & (1 << 0))		//å¦‚æœé‡Šæ”¾ ä¸” æŒ‰é”®ä¹‹å‰æ˜¯æŒ‰ä¸‹è¿‡çš„
 	{
-		keyBusyFlag &= ~(1 << 0);											//´Ë°´¼ü´¦ÓÚ¿ÕÏĞ×´Ì¬
+		keyBusyFlag &= ~(1 << 0);											//æ­¤æŒ‰é”®å¤„äºç©ºé—²çŠ¶æ€
 		
-		if(keyCount == KEYDOWN_LONG_TIME)									//Èç¹ûÊÇ³¤°´
+		if(keyCount == KEYDOWN_LONG_TIME)									//å¦‚æœæ˜¯é•¿æŒ‰
 		{
-			keyCount = 0;													//°´ÏÂ¼ÆÊ±ÇåÁã
-			return KEY0DOWNLONG;											//·µ»Ø³¤°´¶¯×÷
+			keyCount = 0;													//æŒ‰ä¸‹è®¡æ—¶æ¸…é›¶
+			return KEY0DOWNLONG;											//è¿”å›é•¿æŒ‰åŠ¨ä½œ
 		}
 		else
 		{
-			keyCount = 0;													//°´ÏÂ¼ÆÊ±ÇåÁã
-			while(--timeOut)												//ÕâÀïÖ÷ÒªÊÇµÈ´ıÔ¼250ms£¬ÅĞ¶ÏÊÇ·ñÓĞµÚ¶ş´Î°´ÏÂ
+			keyCount = 0;													//æŒ‰ä¸‹è®¡æ—¶æ¸…é›¶
+			while(--timeOut)												//è¿™é‡Œä¸»è¦æ˜¯ç­‰å¾…çº¦250msï¼Œåˆ¤æ–­æ˜¯å¦æœ‰ç¬¬äºŒæ¬¡æŒ‰ä¸‹
 			{
-				RTOS_TimeDly(2);											//ÈÃ´ËÈÎÎñ½øÈë×èÈûÌ¬£¬Õâ²»Ó°Ïì´úÂëÕı³£µÄÔËĞĞ
+				RTOS_TimeDly(2);											//è®©æ­¤ä»»åŠ¡è¿›å…¥é˜»å¡æ€ï¼Œè¿™ä¸å½±å“ä»£ç æ­£å¸¸çš„è¿è¡Œ
 				
-				if(KeyScan(GPIOC, KEY0) == KEYDOWN)							//ÓĞµÚ¶ş´Î°´ÏÂ£¬ËµÃ÷ÎªË«»÷
+				if(KeyScan(GPIOC, KEY0) == KEYDOWN)							//æœ‰ç¬¬äºŒæ¬¡æŒ‰ä¸‹ï¼Œè¯´æ˜ä¸ºåŒå‡»
 				{
-					while(KeyScan(GPIOC, KEY0) == KEYDOWN)					//µÈ´ıÊÍ·Å£¬ÎŞ´Ë¾ä£¬Ë«»÷ºó»á¸úÒ»¸öµ¥»÷¶¯×÷
-						RTOS_TimeDly(1);									//ÈÃ´ËÈÎÎñ½øÈë×èÈûÌ¬£¬Õâ²»Ó°Ïì´úÂëÕı³£µÄÔËĞĞ
+					while(KeyScan(GPIOC, KEY0) == KEYDOWN)					//ç­‰å¾…é‡Šæ”¾ï¼Œæ— æ­¤å¥ï¼ŒåŒå‡»åä¼šè·Ÿä¸€ä¸ªå•å‡»åŠ¨ä½œ
+						RTOS_TimeDly(1);									//è®©æ­¤ä»»åŠ¡è¿›å…¥é˜»å¡æ€ï¼Œè¿™ä¸å½±å“ä»£ç æ­£å¸¸çš„è¿è¡Œ
 					
-					return KEY0DOUBLE;										//·µ»ØË«»÷¶¯×÷
+					return KEY0DOUBLE;										//è¿”å›åŒå‡»åŠ¨ä½œ
 				}
 				
 			}
-			return KEY0DOWN;												//ÒÔÉÏÅĞ¶Ï¾ùÎŞĞ§£¬ÔòÎªµ¥»÷¶¯×÷
+			return KEY0DOWN;												//ä»¥ä¸Šåˆ¤æ–­å‡æ— æ•ˆï¼Œåˆ™ä¸ºå•å‡»åŠ¨ä½œ
 		}
 	}
-	/********************************************ÏÂÍ¬**********************************************/
-	if(KeyScan(GPIOC, KEY1) == KEYDOWN && !(keyBusyFlag & (~(1 << 1))))		//Èç¹û°´ÏÂ ÇÒÆäËû°´¼üÎ´°´ÏÂ
+	/********************************************ä¸‹åŒ**********************************************/
+	if(KeyScan(GPIOC, KEY1) == KEYDOWN && !(keyBusyFlag & (~(1 << 1))))		//å¦‚æœæŒ‰ä¸‹ ä¸”å…¶ä»–æŒ‰é”®æœªæŒ‰ä¸‹
 	{
-		keyBusyFlag |= 1 << 1;												//´Ë°´¼ü´¦ÓÚÃ¦×´Ì¬
+		keyBusyFlag |= 1 << 1;												//æ­¤æŒ‰é”®å¤„äºå¿™çŠ¶æ€
 		
 		if(++keyCount >= KEYDOWN_LONG_TIME)
 			keyCount = KEYDOWN_LONG_TIME;
 		
 		return KEYNONE;
 	}
-	else if(KeyScan(GPIOC, KEY1) == KEYUP && keyBusyFlag & (1 << 1))		//Èç¹ûÊÍ·Å
+	else if(KeyScan(GPIOC, KEY1) == KEYUP && keyBusyFlag & (1 << 1))		//å¦‚æœé‡Šæ”¾
 	{
-		keyBusyFlag &= ~(1 << 1);											//´Ë°´¼ü´¦ÓÚ¿ÕÏĞ×´Ì¬
+		keyBusyFlag &= ~(1 << 1);											//æ­¤æŒ‰é”®å¤„äºç©ºé—²çŠ¶æ€
 		
 		if(keyCount == KEYDOWN_LONG_TIME)
 		{
@@ -198,18 +198,18 @@ unsigned char Keyboard(void)
 		}
 	}
 	
-	if(KeyScan(GPIOC, KEY2) == KEYDOWN && !(keyBusyFlag & (~(1 << 2))))		//Èç¹û°´ÏÂ ÇÒÆäËû°´¼üÎ´°´ÏÂ
+	if(KeyScan(GPIOC, KEY2) == KEYDOWN && !(keyBusyFlag & (~(1 << 2))))		//å¦‚æœæŒ‰ä¸‹ ä¸”å…¶ä»–æŒ‰é”®æœªæŒ‰ä¸‹
 	{
-		keyBusyFlag |= 1 << 2;												//´Ë°´¼ü´¦ÓÚÃ¦×´Ì¬
+		keyBusyFlag |= 1 << 2;												//æ­¤æŒ‰é”®å¤„äºå¿™çŠ¶æ€
 		
 		if(++keyCount >= KEYDOWN_LONG_TIME)
 			keyCount = KEYDOWN_LONG_TIME;
 		
 		return KEYNONE;
 	}
-	else if(KeyScan(GPIOC, KEY2) == KEYUP && keyBusyFlag & (1 << 2))		//Èç¹ûÊÍ·Å
+	else if(KeyScan(GPIOC, KEY2) == KEYUP && keyBusyFlag & (1 << 2))		//å¦‚æœé‡Šæ”¾
 	{
-		keyBusyFlag &= ~(1 << 2);											//´Ë°´¼ü´¦ÓÚ¿ÕÏĞ×´Ì¬
+		keyBusyFlag &= ~(1 << 2);											//æ­¤æŒ‰é”®å¤„äºç©ºé—²çŠ¶æ€
 		
 		if(keyCount == KEYDOWN_LONG_TIME)
 		{
@@ -236,18 +236,18 @@ unsigned char Keyboard(void)
 		}
 	}
 	
-	if(KeyScan(GPIOD, KEY3) == KEYDOWN && !(keyBusyFlag & (~(1 << 3))))		//Èç¹û°´ÏÂ ÇÒÆäËû°´¼üÎ´°´ÏÂ
+	if(KeyScan(GPIOD, KEY3) == KEYDOWN && !(keyBusyFlag & (~(1 << 3))))		//å¦‚æœæŒ‰ä¸‹ ä¸”å…¶ä»–æŒ‰é”®æœªæŒ‰ä¸‹
 	{
-		keyBusyFlag |= 1 << 3;												//´Ë°´¼ü´¦ÓÚÃ¦×´Ì¬
+		keyBusyFlag |= 1 << 3;												//æ­¤æŒ‰é”®å¤„äºå¿™çŠ¶æ€
 		
 		if(++keyCount >= KEYDOWN_LONG_TIME)
 			keyCount = KEYDOWN_LONG_TIME;
 		
 		return KEYNONE;
 	}
-	else if(KeyScan(GPIOD, KEY3) == KEYUP && keyBusyFlag & (1 << 3))		//Èç¹ûÊÍ·Å
+	else if(KeyScan(GPIOD, KEY3) == KEYUP && keyBusyFlag & (1 << 3))		//å¦‚æœé‡Šæ”¾
 	{
-		keyBusyFlag &= ~(1 << 3);											//´Ë°´¼ü´¦ÓÚ¿ÕÏĞ×´Ì¬
+		keyBusyFlag &= ~(1 << 3);											//æ­¤æŒ‰é”®å¤„äºç©ºé—²çŠ¶æ€
 		
 		if(keyCount == KEYDOWN_LONG_TIME)
 		{

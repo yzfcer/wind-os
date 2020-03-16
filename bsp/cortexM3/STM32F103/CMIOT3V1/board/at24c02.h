@@ -7,7 +7,7 @@
 
 
 
-#define AT24C02_ADDRESS		0x50 //AT24C02��ַ
+#define AT24C02_ADDRESS		0x50 //AT24C02地址
 
 
 

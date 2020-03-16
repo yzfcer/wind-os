@@ -2,106 +2,106 @@
 #include "w25qxx.h"  
 
 /*********************************************************************************
-*************************MCUÆôÃ÷ STM32F407ºËĞÄ¿ª·¢°å******************************
+*************************MCUå¯æ˜ STM32F407æ ¸å¿ƒå¼€å‘æ¿******************************
 **********************************************************************************
-* ÎÄ¼şÃû³Æ: w25qxx.c                                                             *
-* ÎÄ¼ş¼òÊö£ºW25Q128Ê¹ÓÃ                                                          *
-* ´´½¨ÈÕÆÚ£º2015.03.10                                                           *
-* °æ    ±¾£ºV1.0                                                                 *
-* ×÷    Õß£ºClever                                                               *
-* Ëµ    Ã÷£º25Q128ÈİÁ¿Îª16M,¹²ÓĞ128¸öBlock,4096¸öSector                          *
-255byteÎªÒ»Ò³                                                        *
-4KbytesÎªÒ»¸öÉÈÇø                                                    *
-16¸öÉÈÇøÎªÒ»¸ö¿é                                                     *
+* æ–‡ä»¶åç§°: w25qxx.c                                                             *
+* æ–‡ä»¶ç®€è¿°ï¼šW25Q128ä½¿ç”¨                                                          *
+* åˆ›å»ºæ—¥æœŸï¼š2015.03.10                                                           *
+* ç‰ˆ    æœ¬ï¼šV1.0                                                                 *
+* ä½œ    è€…ï¼šClever                                                               *
+* è¯´    æ˜ï¼š25Q128å®¹é‡ä¸º16M,å…±æœ‰128ä¸ªBlock,4096ä¸ªSector                          *
+255byteä¸ºä¸€é¡µ                                                        *
+4Kbytesä¸ºä¸€ä¸ªæ‰‡åŒº                                                    *
+16ä¸ªæ‰‡åŒºä¸ºä¸€ä¸ªå—                                                     *
 *********************************************************************************/	
 
 w_uint16_t W25QXX_ID;	 
 
-//³õÊ¼»¯SPI FLASHµÄIO¿Ú
+//åˆå§‹åŒ–SPI FLASHçš„IOå£
 void W25QXX_Init(void)
 { 
     GPIO_InitTypeDef  GPIO_InitStructure;
 
-    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOG, ENABLE); //Ê¹ÄÜGPIOGÊ±ÖÓ
+    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOG, ENABLE); //ä½¿èƒ½GPIOGæ—¶é’Ÿ
 
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8;             //PG8
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;         //Êä³ö
-    GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;        //ÍÆÍìÊä³ö
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;         //è¾“å‡º
+    GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;        //æ¨æŒ½è¾“å‡º
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;    //100MHz
-    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;          //ÉÏÀ­
-    GPIO_Init(GPIOG, &GPIO_InitStructure);                //³õÊ¼»¯
+    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;          //ä¸Šæ‹‰
+    GPIO_Init(GPIOG, &GPIO_InitStructure);                //åˆå§‹åŒ–
 
-    W25QXX_CS=1;			                                    //SPI FLASH²»Ñ¡ÖĞ
-    SPI1_Init();		   			                              //³õÊ¼»¯SPI
-    SPI1_Setclock(SPI_BaudRatePrescaler_2);		            //ÉèÖÃÎª42MÊ±ÖÓ,¸ßËÙÄ£Ê½ 
-    W25QXX_ID=W25QXX_ReadID();	                          //¶ÁÈ¡FLASH ID.
+    W25QXX_CS=1;			                                    //SPI FLASHä¸é€‰ä¸­
+    SPI1_Init();		   			                              //åˆå§‹åŒ–SPI
+    SPI1_Setclock(SPI_BaudRatePrescaler_2);		            //è®¾ç½®ä¸º42Mæ—¶é’Ÿ,é«˜é€Ÿæ¨¡å¼ 
+    W25QXX_ID=W25QXX_ReadID();	                          //è¯»å–FLASH ID.
 }  
 /****************************************************************************
-* Ãû    ³Æ: w_uint8_t W25QXX_ReadSR(void) 
-* ¹¦    ÄÜ£º¶ÁÈ¡W25QXXµÄ×´Ì¬¼Ä´æÆ÷
-* Èë¿Ú²ÎÊı£ºÎŞ
-* ·µ»Ø²ÎÊı£º×´Ì¬¼Ä´æÆ÷µÄÖµ
-* Ëµ    Ã÷£º 		     
+* å    ç§°: w_uint8_t W25QXX_ReadSR(void) 
+* åŠŸ    èƒ½ï¼šè¯»å–W25QXXçš„çŠ¶æ€å¯„å­˜å™¨
+* å…¥å£å‚æ•°ï¼šæ— 
+* è¿”å›å‚æ•°ï¼šçŠ¶æ€å¯„å­˜å™¨çš„å€¼
+* è¯´    æ˜ï¼š 		     
 ****************************************************************************/
 w_uint8_t W25QXX_ReadSR(void)   
 {  
     w_uint8_t byte=0;   
-    W25QXX_CS=0;                                  //Ê¹ÄÜÆ÷¼ş   
-    SPI1_ReadWriteByte(W25X_CMD_ReadStatusReg);   //·¢ËÍ¶ÁÈ¡×´Ì¬¼Ä´æÆ÷ÃüÁî    
-    byte=SPI1_ReadWriteByte(0Xff);                //¶ÁÈ¡Ò»¸ö×Ö½Ú  
-    W25QXX_CS=1;                                  //È¡ÏûÆ¬Ñ¡     
+    W25QXX_CS=0;                                  //ä½¿èƒ½å™¨ä»¶   
+    SPI1_ReadWriteByte(W25X_CMD_ReadStatusReg);   //å‘é€è¯»å–çŠ¶æ€å¯„å­˜å™¨å‘½ä»¤    
+    byte=SPI1_ReadWriteByte(0Xff);                //è¯»å–ä¸€ä¸ªå­—èŠ‚  
+    W25QXX_CS=1;                                  //å–æ¶ˆç‰‡é€‰     
     return byte;   
 } 
 /****************************************************************************
-* Ãû    ³Æ: void W25QXX_Write_SR(w_uint8_t sr)
-* ¹¦    ÄÜ£ºĞ´W25QXX×´Ì¬¼Ä´æÆ÷
-* Èë¿Ú²ÎÊı£ºĞ´ÈëµÄÖµ
-* ·µ»Ø²ÎÊı£ºÎŞ
-* Ëµ    Ã÷£º 		     
+* å    ç§°: void W25QXX_Write_SR(w_uint8_t sr)
+* åŠŸ    èƒ½ï¼šå†™W25QXXçŠ¶æ€å¯„å­˜å™¨
+* å…¥å£å‚æ•°ï¼šå†™å…¥çš„å€¼
+* è¿”å›å‚æ•°ï¼šæ— 
+* è¯´    æ˜ï¼š 		     
 ****************************************************************************/
 void W25QXX_Write_SR(w_uint8_t sr)   
 {   
-    W25QXX_CS=0;                                 //Ê¹ÄÜÆ÷¼ş   
-    SPI1_ReadWriteByte(W25X_CMD_WriteStatusReg); //·¢ËÍĞ´È¡×´Ì¬¼Ä´æÆ÷ÃüÁî    
-    SPI1_ReadWriteByte(sr);                      //Ğ´ÈëÒ»¸ö×Ö½Ú  
-    W25QXX_CS=1;                                 //È¡ÏûÆ¬Ñ¡     	      
+    W25QXX_CS=0;                                 //ä½¿èƒ½å™¨ä»¶   
+    SPI1_ReadWriteByte(W25X_CMD_WriteStatusReg); //å‘é€å†™å–çŠ¶æ€å¯„å­˜å™¨å‘½ä»¤    
+    SPI1_ReadWriteByte(sr);                      //å†™å…¥ä¸€ä¸ªå­—èŠ‚  
+    W25QXX_CS=1;                                 //å–æ¶ˆç‰‡é€‰     	      
 } 
 
-//W25QXXĞ´Ê¹ÄÜ	 
+//W25QXXå†™ä½¿èƒ½	 
 void W25QXX_Write_Enable(void)   
 {
-    W25QXX_CS=0;                               //Ê¹ÄÜÆ÷¼ş   
-    SPI1_ReadWriteByte(W25X_CMD_WriteEnable);  //·¢ËÍĞ´Ê¹ÄÜ  
-    W25QXX_CS=1;                               //È¡ÏûÆ¬Ñ¡     	      
+    W25QXX_CS=0;                               //ä½¿èƒ½å™¨ä»¶   
+    SPI1_ReadWriteByte(W25X_CMD_WriteEnable);  //å‘é€å†™ä½¿èƒ½  
+    W25QXX_CS=1;                               //å–æ¶ˆç‰‡é€‰     	      
 } 
-//µÈ´ı¿ÕÏĞ
+//ç­‰å¾…ç©ºé—²
 void W25QXX_Wait_Busy(void)   
 {   
-    while((W25QXX_ReadSR()&0x01)==0x01);      //µÈ´ıBUSYÎ»Çå¿Õ
+    while((W25QXX_ReadSR()&0x01)==0x01);      //ç­‰å¾…BUSYä½æ¸…ç©º
 } 
-//W25QXXĞ´½ûÖ¹	 
+//W25QXXå†™ç¦æ­¢	 
 void W25QXX_Write_Disable(void)   
 {  
-    W25QXX_CS=0;                                //Ê¹ÄÜÆ÷¼ş   
-    SPI1_ReadWriteByte(W25X_CMD_WriteDisable);  //·¢ËÍĞ´½ûÖ¹Ö¸Áî    
-    W25QXX_CS=1;                                //È¡ÏûÆ¬Ñ¡     	      
+    W25QXX_CS=0;                                //ä½¿èƒ½å™¨ä»¶   
+    SPI1_ReadWriteByte(W25X_CMD_WriteDisable);  //å‘é€å†™ç¦æ­¢æŒ‡ä»¤    
+    W25QXX_CS=1;                                //å–æ¶ˆç‰‡é€‰     	      
 } 
 /****************************************************************************
-* Ãû    ³Æ: w_uint16_t W25QXX_ReadID(void)
-* ¹¦    ÄÜ£º¶ÁÈ¡Ğ¾Æ¬ID
-* Èë¿Ú²ÎÊı£ºÎŞ
-* ·µ»Ø²ÎÊı£ºĞ¾Æ¬ID
-* Ëµ    Ã÷£º0XEF13,±íÊ¾Ğ¾Æ¬ĞÍºÅÎªW25Q80  
-0XEF14,±íÊ¾Ğ¾Æ¬ĞÍºÅÎªW25Q16    
-0XEF15,±íÊ¾Ğ¾Æ¬ĞÍºÅÎªW25Q32  
-0XEF16,±íÊ¾Ğ¾Æ¬ĞÍºÅÎªW25Q64 
-0XEF17,±íÊ¾Ğ¾Æ¬ĞÍºÅÎªW25Q128      
+* å    ç§°: w_uint16_t W25QXX_ReadID(void)
+* åŠŸ    èƒ½ï¼šè¯»å–èŠ¯ç‰‡ID
+* å…¥å£å‚æ•°ï¼šæ— 
+* è¿”å›å‚æ•°ï¼šèŠ¯ç‰‡ID
+* è¯´    æ˜ï¼š0XEF13,è¡¨ç¤ºèŠ¯ç‰‡å‹å·ä¸ºW25Q80  
+0XEF14,è¡¨ç¤ºèŠ¯ç‰‡å‹å·ä¸ºW25Q16    
+0XEF15,è¡¨ç¤ºèŠ¯ç‰‡å‹å·ä¸ºW25Q32  
+0XEF16,è¡¨ç¤ºèŠ¯ç‰‡å‹å·ä¸ºW25Q64 
+0XEF17,è¡¨ç¤ºèŠ¯ç‰‡å‹å·ä¸ºW25Q128      
 ****************************************************************************/  
 w_uint16_t W25QXX_ReadID(void)
 {
     w_uint16_t IDnum = 0;	  
     W25QXX_CS=0;				    
-    SPI1_ReadWriteByte(0x90); //·¢ËÍ¶ÁÈ¡IDÃüÁî	    
+    SPI1_ReadWriteByte(0x90); //å‘é€è¯»å–IDå‘½ä»¤	    
     SPI1_ReadWriteByte(0x00); 	    
     SPI1_ReadWriteByte(0x00); 	    
     SPI1_ReadWriteByte(0x00); 	 			   
@@ -111,72 +111,72 @@ w_uint16_t W25QXX_ReadID(void)
     return IDnum;
 } 
 /****************************************************************************
-* Ãû    ³Æ: void W25QXX_Erase_Chip(void) 
-* ¹¦    ÄÜ£º²Á³ıÕû¸öĞ¾Æ¬		  
-* Èë¿Ú²ÎÊı£ºÎŞ
-* ·µ»Ø²ÎÊı£ºÎŞ
-* Ëµ    Ã÷£º 		     
+* å    ç§°: void W25QXX_Erase_Chip(void) 
+* åŠŸ    èƒ½ï¼šæ“¦é™¤æ•´ä¸ªèŠ¯ç‰‡		  
+* å…¥å£å‚æ•°ï¼šæ— 
+* è¿”å›å‚æ•°ï¼šæ— 
+* è¯´    æ˜ï¼š 		     
 ****************************************************************************/
 void W25QXX_Erase_Chip(void)   
 {                                   
     W25QXX_Write_Enable();                   
     W25QXX_Wait_Busy();   
-    W25QXX_CS=0;                             //Ê¹ÄÜÆ÷¼ş   
-    SPI1_ReadWriteByte(W25X_CMD_ChipErase);  //·¢ËÍÆ¬²Á³ıÃüÁî  
-    W25QXX_CS=1;                             //È¡ÏûÆ¬Ñ¡     	      
-    W25QXX_Wait_Busy();   				           //µÈ´ıĞ¾Æ¬²Á³ı½áÊø
+    W25QXX_CS=0;                             //ä½¿èƒ½å™¨ä»¶   
+    SPI1_ReadWriteByte(W25X_CMD_ChipErase);  //å‘é€ç‰‡æ“¦é™¤å‘½ä»¤  
+    W25QXX_CS=1;                             //å–æ¶ˆç‰‡é€‰     	      
+    W25QXX_Wait_Busy();   				           //ç­‰å¾…èŠ¯ç‰‡æ“¦é™¤ç»“æŸ
 }  
 /****************************************************************************
-* Ãû    ³Æ: void W25QXX_Erase_Sector(w_uint32_t First_Addr)
-* ¹¦    ÄÜ£º²Á³ıÄ³¸öÉÈÇøµÄÊ×µØÖ·	  
-* Èë¿Ú²ÎÊı£ºFirst_Addr:ÉÈÇøµØÖ·
-* ·µ»Ø²ÎÊı£ºÎŞ
-* Ëµ    Ã÷£º 		     
+* å    ç§°: void W25QXX_Erase_Sector(w_uint32_t First_Addr)
+* åŠŸ    èƒ½ï¼šæ“¦é™¤æŸä¸ªæ‰‡åŒºçš„é¦–åœ°å€	  
+* å…¥å£å‚æ•°ï¼šFirst_Addr:æ‰‡åŒºåœ°å€
+* è¿”å›å‚æ•°ï¼šæ— 
+* è¯´    æ˜ï¼š 		     
 ****************************************************************************/
 void W25QXX_Erase_Sector(w_uint32_t First_Addr)   
 {    
     First_Addr*=4096;
     W25QXX_Write_Enable();                  
     W25QXX_Wait_Busy();   
-    W25QXX_CS=0;                                  //Ê¹ÄÜÆ÷¼ş   
-    SPI1_ReadWriteByte(W25X_CMD_SectorErase);     //·¢ËÍÉÈÇø²Á³ıÖ¸Áî 
-    SPI1_ReadWriteByte((w_uint8_t)((First_Addr)>>16));   //·¢ËÍµØÖ·    
+    W25QXX_CS=0;                                  //ä½¿èƒ½å™¨ä»¶   
+    SPI1_ReadWriteByte(W25X_CMD_SectorErase);     //å‘é€æ‰‡åŒºæ“¦é™¤æŒ‡ä»¤ 
+    SPI1_ReadWriteByte((w_uint8_t)((First_Addr)>>16));   //å‘é€åœ°å€    
     SPI1_ReadWriteByte((w_uint8_t)((First_Addr)>>8));   
     SPI1_ReadWriteByte((w_uint8_t)First_Addr);  
-    W25QXX_CS=1;                                  //È¡ÏûÆ¬Ñ¡     	      
-    W25QXX_Wait_Busy();   				                //µÈ´ı²Á³ıÍê³É
+    W25QXX_CS=1;                                  //å–æ¶ˆç‰‡é€‰     	      
+    W25QXX_Wait_Busy();   				                //ç­‰å¾…æ“¦é™¤å®Œæˆ
 }  
-//½øÈëµôµçÄ£Ê½
+//è¿›å…¥æ‰ç”µæ¨¡å¼
 void W25QXX_PowerDown(void)   
 { 
-    W25QXX_CS=0;                             //Ê¹ÄÜÆ÷¼ş   
-    SPI1_ReadWriteByte(W25X_CMD_PowerDown);  //·¢ËÍµôµçÃüÁî  
-    W25QXX_CS=1;                             //È¡ÏûÆ¬Ñ¡     	      
+    W25QXX_CS=0;                             //ä½¿èƒ½å™¨ä»¶   
+    SPI1_ReadWriteByte(W25X_CMD_PowerDown);  //å‘é€æ‰ç”µå‘½ä»¤  
+    W25QXX_CS=1;                             //å–æ¶ˆç‰‡é€‰     	      
     delay_us(3);                             
 }   
-//»½ĞÑ
+//å”¤é†’
 void W25QXX_WAKEUP(void)   
 {  
-    W25QXX_CS=0;                                      //Ê¹ÄÜÆ÷¼ş   
-    SPI1_ReadWriteByte(W25X_CMD_ReleasePowerDown);    //·¢ËÍ»½ĞÑÃüÁî
-    W25QXX_CS=1;                                      //È¡ÏûÆ¬Ñ¡     	      
+    W25QXX_CS=0;                                      //ä½¿èƒ½å™¨ä»¶   
+    SPI1_ReadWriteByte(W25X_CMD_ReleasePowerDown);    //å‘é€å”¤é†’å‘½ä»¤
+    W25QXX_CS=1;                                      //å–æ¶ˆç‰‡é€‰     	      
     delay_us(3);                                     
 }   
 
 /****************************************************************************
-* Ãû    ³Æ: void W25QXX_Read(w_uint8_t* pBuffer,w_uint32_t ReadAddr,w_uint16_t NumByteToRead)
-* ¹¦    ÄÜ£ºÖ¸¶¨µØÖ·¿ªÊ¼¶ÁÈ¡Ö¸¶¨³¤¶ÈµÄÊı¾İ
-* Èë¿Ú²ÎÊı£ºDataBuffer:Êı¾İ´æ´¢Çø
-StartAddress:¿ªÊ¼¶ÁÈ¡µÄµØÖ·(24bit)
-ByteCount:Òª¶ÁÈ¡µÄ×Ö½ÚÊı(×î´ó65535)
-* ·µ»Ø²ÎÊı£ºÎŞ
-* Ëµ    Ã÷£º 		     
+* å    ç§°: void W25QXX_Read(w_uint8_t* pBuffer,w_uint32_t ReadAddr,w_uint16_t NumByteToRead)
+* åŠŸ    èƒ½ï¼šæŒ‡å®šåœ°å€å¼€å§‹è¯»å–æŒ‡å®šé•¿åº¦çš„æ•°æ®
+* å…¥å£å‚æ•°ï¼šDataBuffer:æ•°æ®å­˜å‚¨åŒº
+StartAddress:å¼€å§‹è¯»å–çš„åœ°å€(24bit)
+ByteCount:è¦è¯»å–çš„å­—èŠ‚æ•°(æœ€å¤§65535)
+* è¿”å›å‚æ•°ï¼šæ— 
+* è¯´    æ˜ï¼š 		     
 ****************************************************************************/
 void W25QXX_Read(w_uint8_t* DataBuffer,w_uint32_t StartAddress,w_uint16_t ByteCount)   
 {  										    
-    W25QXX_CS=0;                                 //Ê¹ÄÜÆ÷¼ş   
-    SPI1_ReadWriteByte(W25X_CMD_ReadData);     //·¢ËÍ¶ÁÈ¡ÃüÁî   
-    SPI1_ReadWriteByte((w_uint8_t)((StartAddress)>>16));  //·¢ËÍ24bitµØÖ·    
+    W25QXX_CS=0;                                 //ä½¿èƒ½å™¨ä»¶   
+    SPI1_ReadWriteByte(W25X_CMD_ReadData);     //å‘é€è¯»å–å‘½ä»¤   
+    SPI1_ReadWriteByte((w_uint8_t)((StartAddress)>>16));  //å‘é€24bitåœ°å€    
     SPI1_ReadWriteByte((w_uint8_t)((StartAddress)>>8));   
     SPI1_ReadWriteByte((w_uint8_t)StartAddress);   
 
@@ -188,20 +188,20 @@ void W25QXX_Read(w_uint8_t* DataBuffer,w_uint32_t StartAddress,w_uint16_t ByteCo
     W25QXX_CS=1;  				    	      
 }  
 /****************************************************************************
-* Ãû    ³Æ: void W25QXX_Write_Page(w_uint8_t* DataBuffer,w_uint32_t StartAddress,w_uint16_t ByteCount)
-* ¹¦    ÄÜ£ºÔÚÒ»Ò³ÄÚĞ´ÈëÉÙÓÚ256¸ö×Ö½ÚµÄÊı¾İ  
-* Èë¿Ú²ÎÊı£ºDataBuffer:Êı¾İ´æ´¢Çø
-StartAddress:¿ªÊ¼Ğ´ÈëµÄµØÖ·(24bit)
-ByteCount:ÒªĞ´ÈëµÄ×Ö½ÚÊı(×î´ó256)
-* ·µ»Ø²ÎÊı£ºÎŞ
-* Ëµ    Ã÷£º 		     
+* å    ç§°: void W25QXX_Write_Page(w_uint8_t* DataBuffer,w_uint32_t StartAddress,w_uint16_t ByteCount)
+* åŠŸ    èƒ½ï¼šåœ¨ä¸€é¡µå†…å†™å…¥å°‘äº256ä¸ªå­—èŠ‚çš„æ•°æ®  
+* å…¥å£å‚æ•°ï¼šDataBuffer:æ•°æ®å­˜å‚¨åŒº
+StartAddress:å¼€å§‹å†™å…¥çš„åœ°å€(24bit)
+ByteCount:è¦å†™å…¥çš„å­—èŠ‚æ•°(æœ€å¤§256)
+* è¿”å›å‚æ•°ï¼šæ— 
+* è¯´    æ˜ï¼š 		     
 ****************************************************************************/
 void W25QXX_Write_Page(w_uint8_t* DataBuffer,w_uint32_t StartAddress,w_uint16_t ByteCount)
 {  
     W25QXX_Write_Enable();                   
-    W25QXX_CS=0;                                   //Ê¹ÄÜÆ÷¼ş   
-    SPI1_ReadWriteByte(W25X_CMD_PageProgram);      //·¢ËÍĞ´Ò³ÃüÁî   
-    SPI1_ReadWriteByte((w_uint8_t)((StartAddress)>>16));  //·¢ËÍµØÖ·    
+    W25QXX_CS=0;                                   //ä½¿èƒ½å™¨ä»¶   
+    SPI1_ReadWriteByte(W25X_CMD_PageProgram);      //å‘é€å†™é¡µå‘½ä»¤   
+    SPI1_ReadWriteByte((w_uint8_t)((StartAddress)>>16));  //å‘é€åœ°å€    
     SPI1_ReadWriteByte((w_uint8_t)((StartAddress)>>8));   
     SPI1_ReadWriteByte((w_uint8_t)StartAddress);   
     while (ByteCount--)
@@ -209,18 +209,18 @@ void W25QXX_Write_Page(w_uint8_t* DataBuffer,w_uint32_t StartAddress,w_uint16_t 
         SPI1_ReadWriteByte(*DataBuffer);
         DataBuffer++;
     }	
-    W25QXX_CS=1;                   //È¡ÏûÆ¬Ñ¡ 
-    W25QXX_Wait_Busy();					   //µÈ´ıĞ´Èë½áÊø
+    W25QXX_CS=1;                   //å–æ¶ˆç‰‡é€‰ 
+    W25QXX_Wait_Busy();					   //ç­‰å¾…å†™å…¥ç»“æŸ
 }
 /****************************************************************************
-* Ãû    ³Æ: void W25QXX_PageWrite(w_uint8_t* DataBuffer,w_uint32_t StartAddress,w_uint16_t ByteCount) 
-* ¹¦    ÄÜ£º°´Ò³Ğ´ÈëÊı¾İ
-* Èë¿Ú²ÎÊı£ºDataBuffer:Êı¾İ´æ´¢Çø
-StartAddress:¿ªÊ¼Ğ´ÈëµÄµØÖ·(24bit)
-ByteCount:ÒªĞ´ÈëµÄ×Ö½ÚÊı(×î´ó256)
-* ·µ»Ø²ÎÊı£ºÎŞ
-* Ëµ    Ã÷£ºÓĞ×Ô¶¯»»Ò³¹¦ÄÜ£¬ÒòÎª¸Ãº¯ÊıÃ»ÓĞÔÚĞ´Ö®Ç°ÅĞ¶ÏÒªĞ´ÈëµÄµØÖ·ÉÏµÄÊı¾İÊÇ·ñÎª
-¿Õ£¬ËùÒÔÔÚĞ´ÈëÖ®Ç°±ØĞëÈ·±£¸ÃµØÖ·ÉÏµÄÊı¾İÎª¿Õ0xFF£¬·ñÔòĞ´ÈëÊ§°Ü 		     
+* å    ç§°: void W25QXX_PageWrite(w_uint8_t* DataBuffer,w_uint32_t StartAddress,w_uint16_t ByteCount) 
+* åŠŸ    èƒ½ï¼šæŒ‰é¡µå†™å…¥æ•°æ®
+* å…¥å£å‚æ•°ï¼šDataBuffer:æ•°æ®å­˜å‚¨åŒº
+StartAddress:å¼€å§‹å†™å…¥çš„åœ°å€(24bit)
+ByteCount:è¦å†™å…¥çš„å­—èŠ‚æ•°(æœ€å¤§256)
+* è¿”å›å‚æ•°ï¼šæ— 
+* è¯´    æ˜ï¼šæœ‰è‡ªåŠ¨æ¢é¡µåŠŸèƒ½ï¼Œå› ä¸ºè¯¥å‡½æ•°æ²¡æœ‰åœ¨å†™ä¹‹å‰åˆ¤æ–­è¦å†™å…¥çš„åœ°å€ä¸Šçš„æ•°æ®æ˜¯å¦ä¸º
+ç©ºï¼Œæ‰€ä»¥åœ¨å†™å…¥ä¹‹å‰å¿…é¡»ç¡®ä¿è¯¥åœ°å€ä¸Šçš„æ•°æ®ä¸ºç©º0xFFï¼Œå¦åˆ™å†™å…¥å¤±è´¥ 		     
 ****************************************************************************/
 void W25QXX_PageWrite(w_uint8_t* DataBuffer,w_uint32_t StartAddress,w_uint16_t ByteCount)   
 {
@@ -231,13 +231,13 @@ void W25QXX_PageWrite(w_uint8_t* DataBuffer,w_uint32_t StartAddress,w_uint16_t B
     NumOfPage =  ByteCount / 256;
     NumOfSingle = ByteCount % 256;
 
-    if (Surplus_Addr == 0) //¿ªÊ¼Ğ´µÄµØÖ·¸ÕºÃÊÇÒ³¿ªÊ¼µÄµØÖ·
+    if (Surplus_Addr == 0) //å¼€å§‹å†™çš„åœ°å€åˆšå¥½æ˜¯é¡µå¼€å§‹çš„åœ°å€
     {
-        if (NumOfPage == 0)  // ByteCount < 256£¨Ò»Ò³×ÜµÄ×Ö½ÚÊı£©  
+        if (NumOfPage == 0)  // ByteCount < 256ï¼ˆä¸€é¡µæ€»çš„å­—èŠ‚æ•°ï¼‰  
         {
             W25QXX_Write_Page(DataBuffer, StartAddress, ByteCount);
         }
-        else                 // ByteCount > 256£¨Ò»Ò³×ÜµÄ×Ö½ÚÊı£©  
+        else                 // ByteCount > 256ï¼ˆä¸€é¡µæ€»çš„å­—èŠ‚æ•°ï¼‰  
         {
         while (NumOfPage--)
         {
@@ -248,9 +248,9 @@ void W25QXX_PageWrite(w_uint8_t* DataBuffer,w_uint32_t StartAddress,w_uint16_t B
         W25QXX_Write_Page(DataBuffer, StartAddress, NumOfSingle);
         }
     }
-    else ///¿ªÊ¼Ğ´µÄµØÖ·²»ÔÚÒ³µÄÊ×µØÖ·ÉÏ
+    else ///å¼€å§‹å†™çš„åœ°å€ä¸åœ¨é¡µçš„é¦–åœ°å€ä¸Š
     {
-        if (NumOfPage == 0) // ByteCount < 256£¨Ò»Ò³×ÜµÄ×Ö½ÚÊı£© 
+        if (NumOfPage == 0) // ByteCount < 256ï¼ˆä¸€é¡µæ€»çš„å­—èŠ‚æ•°ï¼‰ 
         {
             if (NumOfSingle > Surplus_count)  
             {
@@ -265,7 +265,7 @@ void W25QXX_PageWrite(w_uint8_t* DataBuffer,w_uint32_t StartAddress,w_uint16_t B
                 W25QXX_Write_Page(DataBuffer, StartAddress, ByteCount);
             }
         }
-        else //ByteCount > 256£¨Ò»Ò³×ÜµÄ×Ö½ÚÊı£©  
+        else //ByteCount > 256ï¼ˆä¸€é¡µæ€»çš„å­—èŠ‚æ•°ï¼‰  
         {
             ByteCount -= Surplus_count;
             NumOfPage =  ByteCount / 256;
@@ -288,13 +288,13 @@ void W25QXX_PageWrite(w_uint8_t* DataBuffer,w_uint32_t StartAddress,w_uint16_t B
     }
 } 
 /****************************************************************************
-* Ãû    ³Æ: void W25QXX_SectorWrite(w_uint8_t* DataBuffer,w_uint32_t StartAddress,w_uint16_t ByteCount)
-* ¹¦    ÄÜ£º°´ÉÈÇøĞ´ÈëÊı¾İ
-* Èë¿Ú²ÎÊı£ºDataBuffer:Êı¾İ´æ´¢Çø
-StartAddress:¿ªÊ¼Ğ´ÈëµÄµØÖ·(24bit)
-ByteCount:ÒªĞ´ÈëµÄ×Ö½ÚÊı(×î´ó65536)
-* ·µ»Ø²ÎÊı£ºÎŞ
-* Ëµ    Ã÷£ºĞ´ÈëÖ®Ç°ÅĞ¶Ï¸ÄµØÖ·ÉÏµÄÊı¾İÊÇ·ñÎª¿Õ£¬²»ÊÇÏÈ²Á³ıÔÙĞ´Èë£¬¸Ãº¯Êı²Î¿¼ÍøÉÏ´úÂëhttp://www.openedv.com      
+* å    ç§°: void W25QXX_SectorWrite(w_uint8_t* DataBuffer,w_uint32_t StartAddress,w_uint16_t ByteCount)
+* åŠŸ    èƒ½ï¼šæŒ‰æ‰‡åŒºå†™å…¥æ•°æ®
+* å…¥å£å‚æ•°ï¼šDataBuffer:æ•°æ®å­˜å‚¨åŒº
+StartAddress:å¼€å§‹å†™å…¥çš„åœ°å€(24bit)
+ByteCount:è¦å†™å…¥çš„å­—èŠ‚æ•°(æœ€å¤§65536)
+* è¿”å›å‚æ•°ï¼šæ— 
+* è¯´    æ˜ï¼šå†™å…¥ä¹‹å‰åˆ¤æ–­æ”¹åœ°å€ä¸Šçš„æ•°æ®æ˜¯å¦ä¸ºç©ºï¼Œä¸æ˜¯å…ˆæ“¦é™¤å†å†™å…¥ï¼Œè¯¥å‡½æ•°å‚è€ƒç½‘ä¸Šä»£ç http://www.openedv.com      
 ****************************************************************************/
 w_uint8_t TS_BUFFER[4096];	
 void W25QXX_SectorWrite(w_uint8_t* DataBuffer,w_uint32_t StartAddress,w_uint16_t ByteCount)   
@@ -307,46 +307,46 @@ void W25QXX_SectorWrite(w_uint8_t* DataBuffer,w_uint32_t StartAddress,w_uint16_t
     w_uint8_t * Cache_BUF;	   
     Cache_BUF=TS_BUFFER;	  
 
-    secaddr=StartAddress/4096;//ÉÈÇøµØÖ·  
-    secused=StartAddress%4096;//Ğ´ÈëµÄµØÖ·ÔÚÉÈÇøÄÚµÄÆ«ÒÆ£¨´Ó¸ÃÉÈÇøµÄÊ×µØÖ·¿ªÊ¼ÒÑÊ¹ÓÃµÄ×Ö½ÚÊı£©
-    Surplus_count=4096-secused;//¸ÃÉÈÇøÊ£Óà¿Õ¼ä´óĞ¡   
+    secaddr=StartAddress/4096;//æ‰‡åŒºåœ°å€  
+    secused=StartAddress%4096;//å†™å…¥çš„åœ°å€åœ¨æ‰‡åŒºå†…çš„åç§»ï¼ˆä»è¯¥æ‰‡åŒºçš„é¦–åœ°å€å¼€å§‹å·²ä½¿ç”¨çš„å­—èŠ‚æ•°ï¼‰
+    Surplus_count=4096-secused;//è¯¥æ‰‡åŒºå‰©ä½™ç©ºé—´å¤§å°   
 
     if(ByteCount<=Surplus_count)
-        Surplus_count=ByteCount;//²»´óÓÚ4096¸ö×Ö½Ú
+        Surplus_count=ByteCount;//ä¸å¤§äº4096ä¸ªå­—èŠ‚
     while(1) 
     {	
-        W25QXX_Read(Cache_BUF,secaddr*4096,4096);//¶Á³öÕû¸öÉÈÇøµÄÄÚÈİ
+        W25QXX_Read(Cache_BUF,secaddr*4096,4096);//è¯»å‡ºæ•´ä¸ªæ‰‡åŒºçš„å†…å®¹
         i=0;
         while(Cache_BUF[secused+i]==0XFF)
         {
             i++;
             if(i==Surplus_count)break;
         }
-        if(i<Surplus_count)//ĞèÒª²Á³ı
+        if(i<Surplus_count)//éœ€è¦æ“¦é™¤
         {
-            W25QXX_Erase_Sector(secaddr);//²Á³ıÕâ¸öÉÈÇø
-            for(i=0;i<Surplus_count;i++)	   //¸´ÖÆ
+            W25QXX_Erase_Sector(secaddr);//æ“¦é™¤è¿™ä¸ªæ‰‡åŒº
+            for(i=0;i<Surplus_count;i++)	   //å¤åˆ¶
             {
                 Cache_BUF[i+secused]=DataBuffer[i];	  
             }
-            W25QXX_PageWrite(Cache_BUF,secaddr*4096,4096);//Ğ´ÈëÕû¸öÉÈÇø  
+            W25QXX_PageWrite(Cache_BUF,secaddr*4096,4096);//å†™å…¥æ•´ä¸ªæ‰‡åŒº  
         }
         else
-        W25QXX_PageWrite(DataBuffer,StartAddress,Surplus_count);//Ğ´ÒÑ¾­²Á³ıÁËµÄ,Ö±½ÓĞ´ÈëÉÈÇøÊ£ÓàÇø¼ä. 				   
+        W25QXX_PageWrite(DataBuffer,StartAddress,Surplus_count);//å†™å·²ç»æ“¦é™¤äº†çš„,ç›´æ¥å†™å…¥æ‰‡åŒºå‰©ä½™åŒºé—´. 				   
         if(ByteCount==Surplus_count)
-            break;//Ğ´Èë½áÊøÁË
-        else//Ğ´ÈëÎ´½áÊø
+            break;//å†™å…¥ç»“æŸäº†
+        else//å†™å…¥æœªç»“æŸ
         {
-            secaddr++;//ÉÈÇøµØÖ·Ôö1
-            secused=0;//Æ«ÒÆÎ»ÖÃÎª0 	 
+            secaddr++;//æ‰‡åŒºåœ°å€å¢1
+            secused=0;//åç§»ä½ç½®ä¸º0 	 
 
-            DataBuffer+=Surplus_count;  //Ö¸ÕëÆ«ÒÆ
-            StartAddress+=Surplus_count;//Ğ´µØÖ·Æ«ÒÆ	   
-            ByteCount-=Surplus_count;				//×Ö½ÚÊıµİ¼õ
+            DataBuffer+=Surplus_count;  //æŒ‡é’ˆåç§»
+            StartAddress+=Surplus_count;//å†™åœ°å€åç§»	   
+            ByteCount-=Surplus_count;				//å­—èŠ‚æ•°é€’å‡
             if(ByteCount>4096)
-                Surplus_count=4096; //ÏÂÒ»¸öÉÈÇø»¹ÊÇĞ´²»Íê
+                Surplus_count=4096; //ä¸‹ä¸€ä¸ªæ‰‡åŒºè¿˜æ˜¯å†™ä¸å®Œ
             else 
-                Surplus_count=ByteCount;            //ÏÂÒ»¸öÉÈÇø¿ÉÒÔĞ´ÍêÁË
+                Surplus_count=ByteCount;            //ä¸‹ä¸€ä¸ªæ‰‡åŒºå¯ä»¥å†™å®Œäº†
         }	 
     };
 }

@@ -4,22 +4,22 @@
 
 //////////////////////////////////////////////////////////////////////////////////	 
 
-//IO·½ÏòÉèÖÃ
-#define DS18B20_IO_IN()  {GPIOB->MODER&=0XCFFFFFFF;GPIOB->MODER|=0;}	//PB15ÊäÈëÄ£Ê½
-#define DS18B20_IO_OUT() {GPIOB->MODER&=0XCFFFFFFF;GPIOB->MODER|=0x40000000;} 	//PB15Êä³öÄ£Ê½
+//IOæ–¹å‘è®¾ç½®
+#define DS18B20_IO_IN()  {GPIOB->MODER&=0XCFFFFFFF;GPIOB->MODER|=0;}	//PB15è¾“å…¥æ¨¡å¼
+#define DS18B20_IO_OUT() {GPIOB->MODER&=0XCFFFFFFF;GPIOB->MODER|=0x40000000;} 	//PB15è¾“å‡ºæ¨¡å¼
  
-////IO²Ù×÷º¯Êı											   
-#define	DS18B20_DQ_OUT PBout(15) //Êı¾İ¶Ë¿Ú	PB15
-#define	DS18B20_DQ_IN  PBin(15)  //Êı¾İ¶Ë¿Ú	PB15
+////IOæ“ä½œå‡½æ•°											   
+#define	DS18B20_DQ_OUT PBout(15) //æ•°æ®ç«¯å£	PB15
+#define	DS18B20_DQ_IN  PBin(15)  //æ•°æ®ç«¯å£	PB15
    	
-u8_t DS18B20_Init(void);			   //³õÊ¼»¯DS18B20
-short DS18B20_Get_Temp(void);	 //»ñÈ¡ÎÂ¶È
-void DS18B20_Start(void);		   //¿ªÊ¼ÎÂ¶È×ª»»
-void DS18B20_Write_Byte(u8_t dat);//Ğ´ÈëÒ»¸ö×Ö½Ú
-u8_t DS18B20_Read_Byte(void);		  //¶Á³öÒ»¸ö×Ö½Ú
-u8_t DS18B20_Read_Bit(void);	  	//¶Á³öÒ»¸öÎ»
-u8_t DS18B20_Check(void);			    //¼ì²âÊÇ·ñ´æÔÚDS18B20
-void DS18B20_Rst(void);			    //¸´Î»DS18B20    
+u8_t DS18B20_Init(void);			   //åˆå§‹åŒ–DS18B20
+short DS18B20_Get_Temp(void);	 //è·å–æ¸©åº¦
+void DS18B20_Start(void);		   //å¼€å§‹æ¸©åº¦è½¬æ¢
+void DS18B20_Write_Byte(u8_t dat);//å†™å…¥ä¸€ä¸ªå­—èŠ‚
+u8_t DS18B20_Read_Byte(void);		  //è¯»å‡ºä¸€ä¸ªå­—èŠ‚
+u8_t DS18B20_Read_Bit(void);	  	//è¯»å‡ºä¸€ä¸ªä½
+u8_t DS18B20_Check(void);			    //æ£€æµ‹æ˜¯å¦å­˜åœ¨DS18B20
+void DS18B20_Rst(void);			    //å¤ä½DS18B20    
 #endif
 
 

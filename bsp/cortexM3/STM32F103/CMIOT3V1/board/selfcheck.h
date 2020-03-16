@@ -10,12 +10,12 @@
 typedef struct
 {
 
-	unsigned short SHT20_OK : 1;		//ÎÂÊª¶È´«¸ĞÆ÷Õı³£±êÖ¾Î»
-	unsigned short ADXL345_OK : 1;		//ÈıÖá´«¸ĞÆ÷Õı³£±êÖ¾Î»
-	unsigned short EEPROM_OK : 1;		//´æ´¢Æ÷Õı³£±êÖ¾Î»
-	unsigned short OLED_OK : 1;			//OLEÕı³£±êÖ¾Î»
+	unsigned short SHT20_OK : 1;		//æ¸©æ¹¿åº¦ä¼ æ„Ÿå™¨æ­£å¸¸æ ‡å¿—ä½
+	unsigned short ADXL345_OK : 1;		//ä¸‰è½´ä¼ æ„Ÿå™¨æ­£å¸¸æ ‡å¿—ä½
+	unsigned short EEPROM_OK : 1;		//å­˜å‚¨å™¨æ­£å¸¸æ ‡å¿—ä½
+	unsigned short OLED_OK : 1;			//OLEæ­£å¸¸æ ‡å¿—ä½
 	
-	unsigned short NET_DEVICE_OK : 1;	//ÍøÂçÉè±¸Õı³£±êÖ¾Î»
+	unsigned short NET_DEVICE_OK : 1;	//ç½‘ç»œè®¾å¤‡æ­£å¸¸æ ‡å¿—ä½
 
 } CHECK_INFO;
 

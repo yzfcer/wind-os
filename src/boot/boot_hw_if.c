@@ -23,7 +23,7 @@
 extern "C" {
 #endif
 
-//Í¨ÓÃ»º´æÆ÷£¬Ò»°ãÔÚ¿½±´Êý¾ÝÊ±×ö»º´æ£¬»òÕß½ÓÊÕÃüÁî×Ö·û
+//é€šç”¨ç¼“å­˜å™¨ï¼Œä¸€èˆ¬åœ¨æ‹·è´æ•°æ®æ—¶åšç¼“å­˜ï¼Œæˆ–è€…æŽ¥æ”¶å‘½ä»¤å­—ç¬¦
 
 void boot_delay(w_uint32_t ms)
 {

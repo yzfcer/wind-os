@@ -4,9 +4,9 @@
 
 //////////////////////////////////////////////////////////////////////////////////	 
  	    													  
-void SPI1_Init(void);			 //³õÊ¼»¯SPI1¿Ú
-void SPI1_Setclock(w_uint8_t SPI_Prescaler); //ÉèÖÃSPI1Ê±ÖÓËÙ¶È   
-w_uint8_t SPI1_ReadWriteByte(w_uint8_t writeData);  //SPI1×ÜÏß¶ÁĞ´Ò»¸ö×Ö½Ú
+void SPI1_Init(void);			 //åˆå§‹åŒ–SPI1å£
+void SPI1_Setclock(w_uint8_t SPI_Prescaler); //è®¾ç½®SPI1æ—¶é’Ÿé€Ÿåº¦   
+w_uint8_t SPI1_ReadWriteByte(w_uint8_t writeData);  //SPI1æ€»çº¿è¯»å†™ä¸€ä¸ªå­—èŠ‚
 		 
 #endif
 

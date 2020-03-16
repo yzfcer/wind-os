@@ -7,7 +7,7 @@
 
 
 
-/*SHT20 设备操作相关宏定义，详见手册*/
+/*SHT20 璁惧鎿嶄綔鐩稿叧瀹忓畾涔夛紝璇﹁鎵嬪唽*/
 #define SHT20_ADDRESS  0X40
 #define SHT20_Measurement_RH_HM  0XE5
 #define SHT20_Measurement_T_HM  0XE3

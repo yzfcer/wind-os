@@ -8,9 +8,9 @@
 #define U 1
 #define D 2
 #define L 3 
-#define R 4       //ÉßµÄ×´Ì¬£¬U£ºÉÏ £»D£ºÏÂ£»L:×ó R£ºÓÒ
+#define R 4       //è›‡çš„çŠ¶æ€ï¼ŒUï¼šä¸Š ï¼›Dï¼šä¸‹ï¼›L:å·¦ Rï¼šå³
 
-typedef struct SNAKE //ÉßÉíµÄÒ»¸ö½Úµã
+typedef struct SNAKE //è›‡èº«çš„ä¸€ä¸ªèŠ‚ç‚¹
 {
     int x;
     int y;
@@ -20,19 +20,19 @@ typedef struct SNAKE //ÉßÉíµÄÒ»¸ö½Úµã
 typedef struct __snake_ctx_s
 {
     int score; 
-    int add;//×ÜµÃ·ÖÓëÃ¿´Î³ÔÊ³ÎïµÃ·Ö¡£
+    int add;//æ€»å¾—åˆ†ä¸æ¯æ¬¡åƒé£Ÿç‰©å¾—åˆ†ã€‚
     int status;
-    int movetime;  //ÔËĞĞÊ±¼ä
-    snake *head;//ÉßÍ·Ö¸Õë
-    snake *food;//Ê³ÎïÖ¸Õë
-    snake *q;   //±éÀúÉßµÄÊ±ºòÓÃµ½µÄÖ¸Õë
-    int end_status; //ÓÎÏ·½áÊøµÄÇé¿ö£¬1£º×²µ½Ç½£»2£ºÒ§µ½×Ô¼º£»3£ºÖ÷¶¯ÍË³öÓÎÏ·¡£
+    int movetime;  //è¿è¡Œæ—¶é—´
+    snake *head;//è›‡å¤´æŒ‡é’ˆ
+    snake *food;//é£Ÿç‰©æŒ‡é’ˆ
+    snake *q;   //éå†è›‡çš„æ—¶å€™ç”¨åˆ°çš„æŒ‡é’ˆ
+    int end_status; //æ¸¸æˆç»“æŸçš„æƒ…å†µï¼Œ1ï¼šæ’åˆ°å¢™ï¼›2ï¼šå’¬åˆ°è‡ªå·±ï¼›3ï¼šä¸»åŠ¨é€€å‡ºæ¸¸æˆã€‚
 }snake_ctx_s;
 
 snake_ctx_s ctx;
 
 
-//ÉùÃ÷È«²¿º¯Êı//
+//å£°æ˜å…¨éƒ¨å‡½æ•°//
 static void param_init(void);
 static void Pos();
 static void creatMap();
@@ -49,54 +49,54 @@ static void gameStart();
 
 static void param_init(void)
 {
-    ctx.score = 0;//×ÜµÃ·Ö
-    ctx.add = 12;//Ã¿´Î³ÔÊ³ÎïµÃ·Ö¡£
+    ctx.score = 0;//æ€»å¾—åˆ†
+    ctx.add = 12;//æ¯æ¬¡åƒé£Ÿç‰©å¾—åˆ†ã€‚
     ctx.status = 0;
-    ctx.head = NULL;//ÉßÍ·Ö¸Õë
-    ctx.food = NULL;//Ê³ÎïÖ¸Õë
+    ctx.head = NULL;//è›‡å¤´æŒ‡é’ˆ
+    ctx.food = NULL;//é£Ÿç‰©æŒ‡é’ˆ
     ctx.movetime = 200;
-    ctx.q = NULL;//±éÀúÉßµÄÊ±ºòÓÃµ½µÄÖ¸Õë
-    ctx.end_status = 0; //ÓÎÏ·½áÊøµÄÇé¿ö£¬1£º×²µ½Ç½£»2£ºÒ§µ½×Ô¼º£»3£ºÖ÷¶¯ÍË³öÓÎÏ·¡£
+    ctx.q = NULL;//éå†è›‡çš„æ—¶å€™ç”¨åˆ°çš„æŒ‡é’ˆ
+    ctx.end_status = 0; //æ¸¸æˆç»“æŸçš„æƒ…å†µï¼Œ1ï¼šæ’åˆ°å¢™ï¼›2ï¼šå’¬åˆ°è‡ªå·±ï¼›3ï¼šä¸»åŠ¨é€€å‡ºæ¸¸æˆã€‚
 }
 
-static void Pos(int x, int y)//ÉèÖÃ¹â±êÎ»ÖÃ
+static void Pos(int x, int y)//è®¾ç½®å…‰æ ‡ä½ç½®
 {
     COORD pos;
     HANDLE hOutput;
     pos.X = x;
     pos.Y = y;
-    hOutput = GetStdHandle(STD_OUTPUT_HANDLE);//·µ»Ø±ê×¼µÄÊäÈë¡¢Êä³ö»ò´íÎóµÄÉè±¸µÄ¾ä±ú£¬Ò²¾ÍÊÇ»ñµÃÊäÈë¡¢Êä³ö/´íÎóµÄÆÁÄ»»º³åÇøµÄ¾ä±ú
+    hOutput = GetStdHandle(STD_OUTPUT_HANDLE);//è¿”å›æ ‡å‡†çš„è¾“å…¥ã€è¾“å‡ºæˆ–é”™è¯¯çš„è®¾å¤‡çš„å¥æŸ„ï¼Œä¹Ÿå°±æ˜¯è·å¾—è¾“å…¥ã€è¾“å‡º/é”™è¯¯çš„å±å¹•ç¼“å†²åŒºçš„å¥æŸ„
     SetConsoleCursorPosition(hOutput, pos);
 }
 
-static void creatMap()//´´½¨µØÍ¼
+static void creatMap()//åˆ›å»ºåœ°å›¾
 {
     int i;
-    for (i = 0; i<58; i += 2)//´òÓ¡ÉÏÏÂ±ß¿ò
+    for (i = 0; i<58; i += 2)//æ‰“å°ä¸Šä¸‹è¾¹æ¡†
     {
         Pos(i, 0);
-        printf("¡ö");//Ò»¸ö·½¿éÕ¼Á½¸öÎ»ÖÃ
+        printf("â– ");//ä¸€ä¸ªæ–¹å—å ä¸¤ä¸ªä½ç½®
         Pos(i, 26);
-        printf("¡ö");
+        printf("â– ");
     }
-    for (i = 1; i<26; i++)//´òÓ¡×óÓÒ±ß¿ò
+    for (i = 1; i<26; i++)//æ‰“å°å·¦å³è¾¹æ¡†
     {
         Pos(0, i);
-        printf("¡ö");
+        printf("â– ");
         Pos(56, i);
-        printf("¡ö");
+        printf("â– ");
     }
 }
 
-static void initSnake()//³õÊ¼»¯ÉßÉí
+static void initSnake()//åˆå§‹åŒ–è›‡èº«
 {
     snake *tail;
     int i;
-    tail = (snake*)malloc(sizeof(snake));//´ÓÉßÎ²¿ªÊ¼£¬Í·²å·¨£¬ÒÔx,yÉè¶¨¿ªÊ¼µÄÎ»ÖÃ//
+    tail = (snake*)malloc(sizeof(snake));//ä»è›‡å°¾å¼€å§‹ï¼Œå¤´æ’æ³•ï¼Œä»¥x,yè®¾å®šå¼€å§‹çš„ä½ç½®//
     tail->x = 24;
     tail->y = 5;
     tail->next = NULL;
-    for (i = 1; i <= 4; i++)//³õÊ¼³¤¶ÈÎª4
+    for (i = 1; i <= 4; i++)//åˆå§‹é•¿åº¦ä¸º4
     {
         ctx.head = (snake*)malloc(sizeof(snake));
         ctx.head->next = tail;
@@ -104,15 +104,15 @@ static void initSnake()//³õÊ¼»¯ÉßÉí
         ctx.head->y = 5;
         tail = ctx.head;
     }
-    while (tail != NULL)//´ÓÍ·µ½Îª£¬Êä³öÉßÉí
+    while (tail != NULL)//ä»å¤´åˆ°ä¸ºï¼Œè¾“å‡ºè›‡èº«
     {
         Pos(tail->x, tail->y);
-        printf("¡ö");
+        printf("â– ");
         tail = tail->next;
     }
 }
 //??
-static int biteSelf()//ÅĞ¶ÏÊÇ·ñÒ§µ½ÁË×Ô¼º
+static int biteSelf()//åˆ¤æ–­æ˜¯å¦å’¬åˆ°äº†è‡ªå·±
 {
     snake *self;
     self = ctx.head->next;
@@ -127,12 +127,12 @@ static int biteSelf()//ÅĞ¶ÏÊÇ·ñÒ§µ½ÁË×Ô¼º
     return 0;
 }
 
-static void createFood()//Ëæ»ú³öÏÖÊ³Îï
+static void createFood()//éšæœºå‡ºç°é£Ÿç‰©
 {
     snake *food_1;
-    srand((unsigned)time(NULL));//ÎªÁË·ÀÖ¹Ã¿´Î²úÉúµÄËæ»úÊıÏàÍ¬£¬ÖÖ×ÓÉèÖÃÎªtime
+    srand((unsigned)time(NULL));//ä¸ºäº†é˜²æ­¢æ¯æ¬¡äº§ç”Ÿçš„éšæœºæ•°ç›¸åŒï¼Œç§å­è®¾ç½®ä¸ºtime
     food_1 = (snake*)malloc(sizeof(snake));
-    while ((food_1->x % 2) != 0)    //±£Ö¤ÆäÎªÅ¼Êı£¬Ê¹µÃÊ³ÎïÄÜÓëÉßÍ·¶ÔÆä
+    while ((food_1->x % 2) != 0)    //ä¿è¯å…¶ä¸ºå¶æ•°ï¼Œä½¿å¾—é£Ÿç‰©èƒ½ä¸è›‡å¤´å¯¹å…¶
     {
         food_1->x = rand() % 52 + 2;
     }
@@ -140,7 +140,7 @@ static void createFood()//Ëæ»ú³öÏÖÊ³Îï
     ctx.q = ctx.head;
     while (ctx.q->next == NULL)
     {
-        if (ctx.q->x == food_1->x && ctx.q->y == food_1->y) //ÅĞ¶ÏÉßÉíÊÇ·ñÓëÊ³ÎïÖØºÏ
+        if (ctx.q->x == food_1->x && ctx.q->y == food_1->y) //åˆ¤æ–­è›‡èº«æ˜¯å¦ä¸é£Ÿç‰©é‡åˆ
         {
             free(food_1);
             createFood();
@@ -149,10 +149,10 @@ static void createFood()//Ëæ»ú³öÏÖÊ³Îï
     }
     Pos(food_1->x, food_1->y);
     ctx.food = food_1;
-    printf("¡ö");
+    printf("â– ");
 }
 
-static int cantCrossWall()//²»ÄÜ´©Ç½
+static int cantCrossWall()//ä¸èƒ½ç©¿å¢™
 {
     if (ctx.head->x == 0 || ctx.head->x == 56 || ctx.head->y == 0 || ctx.head->y == 26)
     {
@@ -163,7 +163,7 @@ static int cantCrossWall()//²»ÄÜ´©Ç½
     return 0;
 }
 
-static int snakeMove()//ÉßÇ°½ø,ÉÏU,ÏÂD,×óL,ÓÒR
+static int snakeMove()//è›‡å‰è¿›,ä¸ŠU,ä¸‹D,å·¦L,å³R
 {
     int res;
     snake * nexthead;
@@ -176,7 +176,7 @@ static int snakeMove()//ÉßÇ°½ø,ÉÏU,ÏÂD,×óL,ÓÒR
     {
         nexthead->x = ctx.head->x;
         nexthead->y = ctx.head->y - 1;
-        if (nexthead->x == ctx.food->x && nexthead->y == ctx.food->y)//Èç¹ûÏÂÒ»¸öÓĞÊ³Îï//
+        if (nexthead->x == ctx.food->x && nexthead->y == ctx.food->y)//å¦‚æœä¸‹ä¸€ä¸ªæœ‰é£Ÿç‰©//
         {
             nexthead->next = ctx.head;
             ctx.head = nexthead;
@@ -184,13 +184,13 @@ static int snakeMove()//ÉßÇ°½ø,ÉÏU,ÏÂD,×óL,ÓÒR
             while (ctx.q != NULL)
             {
                 Pos(ctx.q->x, ctx.q->y);
-                printf("¡ö");
+                printf("â– ");
                 ctx.q = ctx.q->next;
             }
             ctx.score = ctx.score + ctx.add;
             createFood();
         }
-        else                                               //Èç¹ûÃ»ÓĞÊ³Îï//
+        else                                               //å¦‚æœæ²¡æœ‰é£Ÿç‰©//
         {
             nexthead->next = ctx.head;
             ctx.head = nexthead;
@@ -198,7 +198,7 @@ static int snakeMove()//ÉßÇ°½ø,ÉÏU,ÏÂD,×óL,ÓÒR
             while (ctx.q->next->next != NULL)
             {
                 Pos(ctx.q->x, ctx.q->y);
-                printf("¡ö");
+                printf("â– ");
                 ctx.q = ctx.q->next;
             }
             Pos(ctx.q->next->x, ctx.q->next->y);
@@ -211,7 +211,7 @@ static int snakeMove()//ÉßÇ°½ø,ÉÏU,ÏÂD,×óL,ÓÒR
     {
         nexthead->x = ctx.head->x;
         nexthead->y = ctx.head->y + 1;
-        if (nexthead->x == ctx.food->x && nexthead->y == ctx.food->y)  //ÓĞÊ³Îï
+        if (nexthead->x == ctx.food->x && nexthead->y == ctx.food->y)  //æœ‰é£Ÿç‰©
         {
             nexthead->next = ctx.head;
             ctx.head = nexthead;
@@ -219,13 +219,13 @@ static int snakeMove()//ÉßÇ°½ø,ÉÏU,ÏÂD,×óL,ÓÒR
             while (ctx.q != NULL)
             {
                 Pos(ctx.q->x, ctx.q->y);
-                printf("¡ö");
+                printf("â– ");
                 ctx.q = ctx.q->next;
             }
             ctx.score = ctx.score + ctx.add;
             createFood();
         }
-        else                               //Ã»ÓĞÊ³Îï
+        else                               //æ²¡æœ‰é£Ÿç‰©
         {
             nexthead->next = ctx.head;
             ctx.head = nexthead;
@@ -233,7 +233,7 @@ static int snakeMove()//ÉßÇ°½ø,ÉÏU,ÏÂD,×óL,ÓÒR
             while (ctx.q->next->next != NULL)
             {
                 Pos(ctx.q->x, ctx.q->y);
-                printf("¡ö");
+                printf("â– ");
                 ctx.q = ctx.q->next;
             }
             Pos(ctx.q->next->x, ctx.q->next->y);
@@ -246,7 +246,7 @@ static int snakeMove()//ÉßÇ°½ø,ÉÏU,ÏÂD,×óL,ÓÒR
     {
         nexthead->x = ctx.head->x - 2;
         nexthead->y = ctx.head->y;
-        if (nexthead->x == ctx.food->x && nexthead->y == ctx.food->y)//ÓĞÊ³Îï
+        if (nexthead->x == ctx.food->x && nexthead->y == ctx.food->y)//æœ‰é£Ÿç‰©
         {
             nexthead->next = ctx.head;
             ctx.head = nexthead;
@@ -254,13 +254,13 @@ static int snakeMove()//ÉßÇ°½ø,ÉÏU,ÏÂD,×óL,ÓÒR
             while (ctx.q != NULL)
             {
                 Pos(ctx.q->x, ctx.q->y);
-                printf("¡ö");
+                printf("â– ");
                 ctx.q = ctx.q->next;
             }
             ctx.score = ctx.score + ctx.add;
             createFood();
         }
-        else                                //Ã»ÓĞÊ³Îï
+        else                                //æ²¡æœ‰é£Ÿç‰©
         {
             nexthead->next = ctx.head;
             ctx.head = nexthead;
@@ -268,7 +268,7 @@ static int snakeMove()//ÉßÇ°½ø,ÉÏU,ÏÂD,×óL,ÓÒR
             while (ctx.q->next->next != NULL)
             {
                 Pos(ctx.q->x, ctx.q->y);
-                printf("¡ö");
+                printf("â– ");
                 ctx.q = ctx.q->next;
             }
             Pos(ctx.q->next->x, ctx.q->next->y);
@@ -281,7 +281,7 @@ static int snakeMove()//ÉßÇ°½ø,ÉÏU,ÏÂD,×óL,ÓÒR
     {
         nexthead->x = ctx.head->x + 2;
         nexthead->y = ctx.head->y;
-        if (nexthead->x == ctx.food->x && nexthead->y == ctx.food->y)//ÓĞÊ³Îï
+        if (nexthead->x == ctx.food->x && nexthead->y == ctx.food->y)//æœ‰é£Ÿç‰©
         {
             nexthead->next = ctx.head;
             ctx.head = nexthead;
@@ -289,13 +289,13 @@ static int snakeMove()//ÉßÇ°½ø,ÉÏU,ÏÂD,×óL,ÓÒR
             while (ctx.q != NULL)
             {
                 Pos(ctx.q->x, ctx.q->y);
-                printf("¡ö");
+                printf("â– ");
                 ctx.q = ctx.q->next;
             }
             ctx.score = ctx.score + ctx.add;
             createFood();
         }
-        else                                         //Ã»ÓĞÊ³Îï
+        else                                         //æ²¡æœ‰é£Ÿç‰©
         {
             nexthead->next = ctx.head;
             ctx.head = nexthead;
@@ -303,7 +303,7 @@ static int snakeMove()//ÉßÇ°½ø,ÉÏU,ÏÂD,×óL,ÓÒR
             while (ctx.q->next->next != NULL)
             {
                 Pos(ctx.q->x, ctx.q->y);
-                printf("¡ö");
+                printf("â– ");
                 ctx.q = ctx.q->next;
             }
             Pos(ctx.q->next->x, ctx.q->next->y);
@@ -312,7 +312,7 @@ static int snakeMove()//ÉßÇ°½ø,ÉÏU,ÏÂD,×óL,ÓÒR
             ctx.q->next = NULL;
         }
     }
-    if (biteSelf() == 1)       //ÅĞ¶ÏÊÇ·ñ»áÒ§µ½×Ô¼º
+    if (biteSelf() == 1)       //åˆ¤æ–­æ˜¯å¦ä¼šå’¬åˆ°è‡ªå·±
     {
         ctx.end_status = 2;
         //endGame();
@@ -321,7 +321,7 @@ static int snakeMove()//ÉßÇ°½ø,ÉÏU,ÏÂD,×óL,ÓÒR
     return 0;
 }
 
-static void pause()//ÔİÍ£
+static void pause()//æš‚åœ
 {
     while (1)
     {
@@ -382,34 +382,34 @@ static void readKey(void)
             ctx.movetime = ctx.movetime + 30;
             ctx.add = ctx.add - 2;
             if (ctx.add < 1)
-                ctx.add = 1;  //±£Ö¤×îµÍ·ÖÎª1
+                ctx.add = 1;  //ä¿è¯æœ€ä½åˆ†ä¸º1
             Sleep(500);
         }
     }
 }
 
 
-static int runGame()//¿ØÖÆÓÎÏ·        
+static int runGame()//æ§åˆ¶æ¸¸æˆ        
 {
     int res;
     int time = 0;
     Pos(64, 15);
-    printf("²»ÄÜ´©Ç½£¬²»ÄÜÒ§µ½×Ô¼º\n");
+    printf("ä¸èƒ½ç©¿å¢™ï¼Œä¸èƒ½å’¬åˆ°è‡ªå·±\n");
     Pos(64, 16);
-    printf("ÓÃ¡ü.¡ı.¡û.¡ú·Ö±ğ¿ØÖÆÉßµÄÒÆ¶¯.");
+    printf("ç”¨â†‘.â†“.â†.â†’åˆ†åˆ«æ§åˆ¶è›‡çš„ç§»åŠ¨.");
     Pos(64, 17);
-    printf("F1 Îª¼ÓËÙ£¬F2 Îª¼õËÙ\n");
+    printf("F1 ä¸ºåŠ é€Ÿï¼ŒF2 ä¸ºå‡é€Ÿ\n");
     Pos(64, 18);
-    printf("ESC £ºÍË³öÓÎÏ·.space£ºÔİÍ£ÓÎÏ·.");
+    printf("ESC ï¼šé€€å‡ºæ¸¸æˆ.spaceï¼šæš‚åœæ¸¸æˆ.");
     Pos(64, 20);
-    printf("CÓïÑÔÑĞ¾¿ÖĞĞÄ www.clang.cc");
+    printf("Cè¯­è¨€ç ”ç©¶ä¸­å¿ƒ www.clang.cc");
     ctx.status = R;
     while (1)
     {
         Pos(64, 10);
-        printf("µÃ·Ö£º%d  ", ctx.score);
+        printf("å¾—åˆ†ï¼š%d  ", ctx.score);
         Pos(64, 11);
-        printf("Ã¿¸öÊ³ÎïµÃ·Ö£º%d·Ö", ctx.add);
+        printf("æ¯ä¸ªé£Ÿç‰©å¾—åˆ†ï¼š%dåˆ†", ctx.add);
 
         readKey();
         if(ctx.status == 0x1B)
@@ -429,52 +429,52 @@ static int runGame()//¿ØÖÆÓÎÏ·
     return 0;
 }
 
-static void initGame()//¿ªÊ¼½çÃæ
+static void initGame()//å¼€å§‹ç•Œé¢
 {
     Pos(40, 12);
 
-    system("title CÓïÑÔÑĞ¾¿ÖĞĞÄ   www.clang.cc");
-    printf("»¶Ó­À´µ½Ì°Ê³ÉßÓÎÏ·£¡");
+    system("title Cè¯­è¨€ç ”ç©¶ä¸­å¿ƒ   www.clang.cc");
+    printf("æ¬¢è¿æ¥åˆ°è´ªé£Ÿè›‡æ¸¸æˆï¼");
     Pos(40, 25);
-    printf("              CÓïÑÔÑĞ¾¿ÖĞĞÄ  www.clang.cc.\n");
+    printf("              Cè¯­è¨€ç ”ç©¶ä¸­å¿ƒ  www.clang.cc.\n");
     system("pause");
     system("cls");
     Pos(25, 12);
-    printf("ÓÃ¡ü.¡ı.¡û.¡ú·Ö±ğ¿ØÖÆÉßµÄÒÆ¶¯\n");
+    printf("ç”¨â†‘.â†“.â†.â†’åˆ†åˆ«æ§åˆ¶è›‡çš„ç§»åŠ¨\n");
     Pos(25, 13);
-    printf("F1 Îª¼ÓËÙ£¬F2 Îª¼õËÙ\n");
+    printf("F1 ä¸ºåŠ é€Ÿï¼ŒF2 ä¸ºå‡é€Ÿ\n");
     Pos(25, 14);
-    printf("¼ÓËÙ½«ÄÜµÃµ½¸ü¸ßµÄ·ÖÊı!!!\n");
+    printf("åŠ é€Ÿå°†èƒ½å¾—åˆ°æ›´é«˜çš„åˆ†æ•°!!!\n");
     system("pause");
     system("cls");
 }
 
-static int endGame()//½áÊøÓÎÏ·
+static int endGame()//ç»“æŸæ¸¸æˆ
 {
     system("cls");
     Pos(24, 12);
     if (ctx.end_status == 1)
     {
-        printf("¶Ô²»Æğ£¬Äú×²µ½Ç½ÁË¡£ÓÎÏ·½áÊø.");
+        printf("å¯¹ä¸èµ·ï¼Œæ‚¨æ’åˆ°å¢™äº†ã€‚æ¸¸æˆç»“æŸ.");
     }
     else if (ctx.end_status == 2)
     {
-        printf("¶Ô²»Æğ£¬ÄúÒ§µ½×Ô¼ºÁË¡£ÓÎÏ·½áÊø.");
+        printf("å¯¹ä¸èµ·ï¼Œæ‚¨å’¬åˆ°è‡ªå·±äº†ã€‚æ¸¸æˆç»“æŸ.");
     }
     else if (ctx.end_status == 3)
     {
-        printf("ÄúµÄÒÑ¾­½áÊøÁËÓÎÏ·¡£");
+        printf("æ‚¨çš„å·²ç»ç»“æŸäº†æ¸¸æˆã€‚");
     }
     Pos(24, 13);
-    printf("ÄúµÄµÃ·ÖÊÇ%d\n", ctx.score);
+    printf("æ‚¨çš„å¾—åˆ†æ˜¯%d\n", ctx.score);
 	system("pause");
-    //printf("ÔÙÀ´Ò»´Î?[y]");
+    //printf("å†æ¥ä¸€æ¬¡?[y]");
     //if (getchar() != 'y')
     //    return -1;
     return 0;
 }
 
-static void gameStart()//ÓÎÏ·³õÊ¼»¯
+static void gameStart()//æ¸¸æˆåˆå§‹åŒ–
 {
     system("mode con cols=100 lines=30");
     initGame();
@@ -495,7 +495,7 @@ int snake_main(int argc,char **argv)
             break;
         endGame();
     }
-    system("mode con cols=100 lines=50");//ÉèÖÃ´°¿Ú´óĞ¡
+    system("mode con cols=100 lines=50");//è®¾ç½®çª—å£å¤§å°
     return 0;
 }
 #endif

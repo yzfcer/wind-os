@@ -19,7 +19,7 @@
 
 #define TREEFS_BLK_SIZE 128
 
-#define F_TREEFILE_DIR (0x01 << 0) //±ê¼Çtreefile¶ÔÏóÊÇ·ñÊÇÒ»¸öÄ¿Â¼
+#define F_TREEFILE_DIR (0x01 << 0) //æ ‡è®°treefileå¯¹è±¡æ˜¯å¦æ˜¯ä¸€ä¸ªç›®å½•
 #define IS_F_TREEFILE_DIR(treefile) ((treefile->attr & F_TREEFILE_DIR) == F_TREEFILE_DIR)
 #define SET_F_TREEFILE_DIR(treefile) (treefile->attr |= F_TREEFILE_DIR)
 #define CLR_F_TREEFILE_DIR(treefile) (treefile->attr &= (~F_TREEFILE_DIR))

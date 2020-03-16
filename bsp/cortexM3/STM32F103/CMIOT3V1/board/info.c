@@ -2,39 +2,39 @@
 	************************************************************
 	************************************************************
 	************************************************************
-	*	ÎÄ¼şÃû£º 	info.c
+	*	æ–‡ä»¶åï¼š 	info.c
 	*
-	*	×÷Õß£º 		ÕÅ¼ÌÈğ
+	*	ä½œè€…ï¼š 		å¼ ç»§ç‘
 	*
-	*	ÈÕÆÚ£º 		2017-02-23
+	*	æ—¥æœŸï¼š 		2017-02-23
 	*
-	*	°æ±¾£º 		V1.1
+	*	ç‰ˆæœ¬ï¼š 		V1.1
 	*
-	*	ËµÃ÷£º 		V1.0£ºSSID¡¢PSWD¡¢DEVID¡¢APIKEY¡¢PROID¡¢AUIF±£´æ¼°¶ÁÈ¡¡£
-	*				V1.1£ºÈ¡ÏûÁËSSIDºÍPSWDµÄ±£´æºÍ¶ÁĞ´£¬Ìæ»»ÎªÁËÖÇÄÜÅäÍø£¬wifiÀàĞÍµÄÍøÂçÉè±¸¿ÉÒÔ×Ô¶¯±£´æ¡£
+	*	è¯´æ˜ï¼š 		V1.0ï¼šSSIDã€PSWDã€DEVIDã€APIKEYã€PROIDã€AUIFä¿å­˜åŠè¯»å–ã€‚
+	*				V1.1ï¼šå–æ¶ˆäº†SSIDå’ŒPSWDçš„ä¿å­˜å’Œè¯»å†™ï¼Œæ›¿æ¢ä¸ºäº†æ™ºèƒ½é…ç½‘ï¼Œwifiç±»å‹çš„ç½‘ç»œè®¾å¤‡å¯ä»¥è‡ªåŠ¨ä¿å­˜ã€‚
 	*
-	*				ÖØÒª£ºÖ»ÓĞµ±Íâ²¿´æ´¢Æ÷´æÔÚÊ±£¬²Å´ÓÖĞ¶ÁÈ¡ĞÅÏ¢
-	*					  Èô²»´æÔÚ£¬»á¶ÁÈ¡¹Ì»¯ÔÚ´úÂëÀïµÄĞÅÏ¢
+	*				é‡è¦ï¼šåªæœ‰å½“å¤–éƒ¨å­˜å‚¨å™¨å­˜åœ¨æ—¶ï¼Œæ‰ä»ä¸­è¯»å–ä¿¡æ¯
+	*					  è‹¥ä¸å­˜åœ¨ï¼Œä¼šè¯»å–å›ºåŒ–åœ¨ä»£ç é‡Œçš„ä¿¡æ¯
 	*
-	*	ĞŞ¸Ä¼ÇÂ¼£º	
+	*	ä¿®æ”¹è®°å½•ï¼š	
 	************************************************************
 	************************************************************
 	************************************************************
 **/
 
-//Ó²¼şÇı¶¯
+//ç¡¬ä»¶é©±åŠ¨
 #include "info.h"
 #include "at24c02.h"
 #include "delay.h"
 #include "usart.h"
 
-//Ğ­Òé
+//åè®®
 #include "onenet.h"
 
-//ÍøÂçÉè±¸
+//ç½‘ç»œè®¾å¤‡
 #include "net_device.h"
 
-//C¿â
+//Cåº“
 #include <string.h>
 #include <stdlib.h>
 
@@ -43,17 +43,17 @@
 
 /*
 ************************************************************
-*	º¯ÊıÃû³Æ£º	Info_Check
+*	å‡½æ•°åç§°ï¼š	Info_Check
 *
-*	º¯Êı¹¦ÄÜ£º	¼ì²éĞÅÏ¢ÊÇ·ñ´æÔÚ
+*	å‡½æ•°åŠŸèƒ½ï¼š	æ£€æŸ¥ä¿¡æ¯æ˜¯å¦å­˜åœ¨
 *
-*	Èë¿Ú²ÎÊı£º	ÎŞ
+*	å…¥å£å‚æ•°ï¼š	æ— 
 *
-*	·µ»Ø²ÎÊı£º	¼ì²é½á¹û
+*	è¿”å›å‚æ•°ï¼š	æ£€æŸ¥ç»“æœ
 *
-*	ËµÃ÷£º		ÅĞ¶ÏwifiµÄssidºÍpswdÊÇ·ñ´æÔÚ
-*				0-ok	1-ÎŞssid	2-ÎŞpswd
-*				3-ÎŞdevid	4-ÎŞapikey
+*	è¯´æ˜ï¼š		åˆ¤æ–­wifiçš„ssidå’Œpswdæ˜¯å¦å­˜åœ¨
+*				0-ok	1-æ— ssid	2-æ— pswd
+*				3-æ— devid	4-æ— apikey
 ************************************************************
 */
 unsigned char Info_Check(void)
@@ -61,20 +61,20 @@ unsigned char Info_Check(void)
 	
 	unsigned char rData = 0;
 	
-	AT24C02_ReadByte(DEVID_ADDRESS, &rData);	//¶ÁÈ¡³¤¶ÈÖµ
-	if(rData == 0 || rData >= 10)				//Èç¹ûÎª0»ò³¬³ö
+	AT24C02_ReadByte(DEVID_ADDRESS, &rData);	//è¯»å–é•¿åº¦å€¼
+	if(rData == 0 || rData >= 10)				//å¦‚æœä¸º0æˆ–è¶…å‡º
 		return 1;
 	
-	AT24C02_ReadByte(AKEY_ADDRESS, &rData);		//¶ÁÈ¡³¤¶ÈÖµ
-	if(rData == 0 || rData >= 30)				//Èç¹ûÎª0»ò³¬³ö
+	AT24C02_ReadByte(AKEY_ADDRESS, &rData);		//è¯»å–é•¿åº¦å€¼
+	if(rData == 0 || rData >= 30)				//å¦‚æœä¸º0æˆ–è¶…å‡º
 		return 2;
 	
-	AT24C02_ReadByte(PROID_ADDRESS, &rData);	//¶ÁÈ¡³¤¶ÈÖµ
-	if(rData == 0 || rData >= 10)				//Èç¹ûÎª0»ò³¬³ö
+	AT24C02_ReadByte(PROID_ADDRESS, &rData);	//è¯»å–é•¿åº¦å€¼
+	if(rData == 0 || rData >= 10)				//å¦‚æœä¸º0æˆ–è¶…å‡º
 		return 3;
 	
-	AT24C02_ReadByte(AUIF_ADDRESS, &rData);		//¶ÁÈ¡³¤¶ÈÖµ
-	if(rData == 0 || rData >= 50)				//Èç¹ûÎª0»ò³¬³ö
+	AT24C02_ReadByte(AUIF_ADDRESS, &rData);		//è¯»å–é•¿åº¦å€¼
+	if(rData == 0 || rData >= 50)				//å¦‚æœä¸º0æˆ–è¶…å‡º
 		return 4;
         
 	return 0;
@@ -83,16 +83,16 @@ unsigned char Info_Check(void)
 
 /*
 ************************************************************
-*	º¯ÊıÃû³Æ£º	Info_WifiLen
+*	å‡½æ•°åç§°ï¼š	Info_WifiLen
 *
-*	º¯Êı¹¦ÄÜ£º	»ñÈ¡ĞÅÏ¢³¤¶È
+*	å‡½æ•°åŠŸèƒ½ï¼š	è·å–ä¿¡æ¯é•¿åº¦
 *
-*	Èë¿Ú²ÎÊı£º	sp£ºĞèÒª¼ì²éµÄĞÅÏ¢-¼ûËµÃ÷
+*	å…¥å£å‚æ•°ï¼š	spï¼šéœ€è¦æ£€æŸ¥çš„ä¿¡æ¯-è§è¯´æ˜
 *
-*	·µ»Ø²ÎÊı£º	¼ì²é½á¹û
+*	è¿”å›å‚æ•°ï¼š	æ£€æŸ¥ç»“æœ
 *
-*	ËµÃ÷£º		»ñÈ¡0-ssid³¤¶È	1-pswd³¤¶È	
-*				2-devid³¤¶È		3-apikey³¤¶È
+*	è¯´æ˜ï¼š		è·å–0-ssidé•¿åº¦	1-pswdé•¿åº¦	
+*				2-devidé•¿åº¦		3-apikeyé•¿åº¦
 ************************************************************
 */
 unsigned char Info_WifiLen(unsigned char sp)
@@ -103,26 +103,26 @@ unsigned char Info_WifiLen(unsigned char sp)
     switch(sp)
     {
         case 1:
-            AT24C02_ReadByte(DEVID_ADDRESS, &len);		//¶ÁÈ¡³¤¶ÈÖµ
-			if(len == 0 || len >= 10)					//Èç¹ûÎª0»ò³¬³ö
+            AT24C02_ReadByte(DEVID_ADDRESS, &len);		//è¯»å–é•¿åº¦å€¼
+			if(len == 0 || len >= 10)					//å¦‚æœä¸º0æˆ–è¶…å‡º
 				return 1;
         break;
         
         case 2:
-            AT24C02_ReadByte(AKEY_ADDRESS, &len);		//¶ÁÈ¡³¤¶ÈÖµ
-			if(len == 0 || len >= 30)					//Èç¹ûÎª0»ò³¬³ö
+            AT24C02_ReadByte(AKEY_ADDRESS, &len);		//è¯»å–é•¿åº¦å€¼
+			if(len == 0 || len >= 30)					//å¦‚æœä¸º0æˆ–è¶…å‡º
 				return 1;
         break;
 			
 		case 3:
-            AT24C02_ReadByte(PROID_ADDRESS, &len);		//¶ÁÈ¡³¤¶ÈÖµ
-			if(len == 0 || len >= 10)					//Èç¹ûÎª0»ò³¬³ö
+            AT24C02_ReadByte(PROID_ADDRESS, &len);		//è¯»å–é•¿åº¦å€¼
+			if(len == 0 || len >= 10)					//å¦‚æœä¸º0æˆ–è¶…å‡º
 				return 1;
         break;
 			
 		case 4:
-            AT24C02_ReadByte(AUIF_ADDRESS, &len);		//¶ÁÈ¡³¤¶ÈÖµ
-			if(len == 0 || len >= 50)					//Èç¹ûÎª0»ò³¬³ö
+            AT24C02_ReadByte(AUIF_ADDRESS, &len);		//è¯»å–é•¿åº¦å€¼
+			if(len == 0 || len >= 50)					//å¦‚æœä¸º0æˆ–è¶…å‡º
 				return 1;
         break;
     }
@@ -133,27 +133,27 @@ unsigned char Info_WifiLen(unsigned char sp)
 
 /*
 ************************************************************
-*	º¯ÊıÃû³Æ£º	Info_CountLen
+*	å‡½æ•°åç§°ï¼š	Info_CountLen
 *
-*	º¯Êı¹¦ÄÜ£º	¼ÆËã×Ö¶Î³¤¶È
+*	å‡½æ•°åŠŸèƒ½ï¼š	è®¡ç®—å­—æ®µé•¿åº¦
 *
-*	Èë¿Ú²ÎÊı£º	info£ºĞèÒª¼ì²éµÄ×Ö¶Î
+*	å…¥å£å‚æ•°ï¼š	infoï¼šéœ€è¦æ£€æŸ¥çš„å­—æ®µ
 *
-*	·µ»Ø²ÎÊı£º	×Ö¶Î³¤¶È
+*	è¿”å›å‚æ•°ï¼š	å­—æ®µé•¿åº¦
 *
-*	ËµÃ÷£º		¼ÆËã´®1·¢¹ıÀ´µÄ×Ö¶Î³¤¶È   ÒÔ"\r\n"½áÎ²
+*	è¯´æ˜ï¼š		è®¡ç®—ä¸²1å‘è¿‡æ¥çš„å­—æ®µé•¿åº¦   ä»¥"\r\n"ç»“å°¾
 ************************************************************
 */
 unsigned char Info_CountLen(char *info)
 {
 
 	unsigned char len = 0;
-	char *buf = strstr(info, ":");		//ÕÒµ½':'
+	char *buf = strstr(info, ":");		//æ‰¾åˆ°':'
 	
-	buf++;								//Æ«ÒÆµ½ÏÂÒ»¸ö×Ö½Ú£¬´ú±í×Ö¶ÎĞÅÏ¢¿ªÊ¼
+	buf++;								//åç§»åˆ°ä¸‹ä¸€ä¸ªå­—èŠ‚ï¼Œä»£è¡¨å­—æ®µä¿¡æ¯å¼€å§‹
 	while(1)
 	{
-		if(*buf == '\r')				//Ö±µ½'\r'ÎªÖ¹
+		if(*buf == '\r')				//ç›´åˆ°'\r'ä¸ºæ­¢
 			return len;
 		
 		buf++;
@@ -164,34 +164,34 @@ unsigned char Info_CountLen(char *info)
 
 /*
 ************************************************************
-*	º¯ÊıÃû³Æ£º	Info_Read
+*	å‡½æ•°åç§°ï¼š	Info_Read
 *
-*	º¯Êı¹¦ÄÜ£º	¶ÁÈ¡ssid¡¢pswd¡¢devid¡¢apikey
+*	å‡½æ•°åŠŸèƒ½ï¼š	è¯»å–ssidã€pswdã€devidã€apikey
 *
-*	Èë¿Ú²ÎÊı£º	ÎŞ
+*	å…¥å£å‚æ•°ï¼š	æ— 
 *
-*	·µ»Ø²ÎÊı£º	¶ÁÈ¡½á¹û
+*	è¿”å›å‚æ•°ï¼š	è¯»å–ç»“æœ
 *
-*	ËµÃ÷£º		0-³É¹¦		1-Ê§°Ü
+*	è¯´æ˜ï¼š		0-æˆåŠŸ		1-å¤±è´¥
 ************************************************************
 */
 _Bool Info_Read(void)
 {
 	
-    memset(oneNetInfo.devID, 0, sizeof(oneNetInfo.devID));											//Çå³ıÖ®Ç°µÄÄÚÈİ
-	AT24C02_ReadBytes(DEVID_ADDRESS + 1, (unsigned char *)oneNetInfo.devID, Info_WifiLen(1));		//»ñÈ¡devid³¤¶È  ¶Ádevid
-    DelayXms(10);																					//ÑÓÊ±
+    memset(oneNetInfo.devID, 0, sizeof(oneNetInfo.devID));											//æ¸…é™¤ä¹‹å‰çš„å†…å®¹
+	AT24C02_ReadBytes(DEVID_ADDRESS + 1, (unsigned char *)oneNetInfo.devID, Info_WifiLen(1));		//è·å–devidé•¿åº¦  è¯»devid
+    DelayXms(10);																					//å»¶æ—¶
                 
-    memset(oneNetInfo.apiKey, 0, sizeof(oneNetInfo.apiKey));										//Çå³ıÖ®Ç°µÄÄÚÈİ
-	AT24C02_ReadBytes(AKEY_ADDRESS + 1, (unsigned char *)oneNetInfo.apiKey, Info_WifiLen(2));		//»ñÈ¡apikey³¤¶È  ¶Áapikey
-    DelayXms(10);																					//ÑÓÊ±
+    memset(oneNetInfo.apiKey, 0, sizeof(oneNetInfo.apiKey));										//æ¸…é™¤ä¹‹å‰çš„å†…å®¹
+	AT24C02_ReadBytes(AKEY_ADDRESS + 1, (unsigned char *)oneNetInfo.apiKey, Info_WifiLen(2));		//è·å–apikeyé•¿åº¦  è¯»apikey
+    DelayXms(10);																					//å»¶æ—¶
 	
-	memset(oneNetInfo.proID, 0, sizeof(oneNetInfo.proID));											//Çå³ıÖ®Ç°µÄÄÚÈİ
-	AT24C02_ReadBytes(PROID_ADDRESS + 1, (unsigned char *)oneNetInfo.proID, Info_WifiLen(3));		//»ñÈ¡proid³¤¶È  ¶Áproid
-    DelayXms(10);																					//ÑÓÊ±
+	memset(oneNetInfo.proID, 0, sizeof(oneNetInfo.proID));											//æ¸…é™¤ä¹‹å‰çš„å†…å®¹
+	AT24C02_ReadBytes(PROID_ADDRESS + 1, (unsigned char *)oneNetInfo.proID, Info_WifiLen(3));		//è·å–proidé•¿åº¦  è¯»proid
+    DelayXms(10);																					//å»¶æ—¶
 	
-	memset(oneNetInfo.auif, 0, sizeof(oneNetInfo.auif));											//Çå³ıÖ®Ç°µÄÄÚÈİ
-	AT24C02_ReadBytes(AUIF_ADDRESS + 1, (unsigned char *)oneNetInfo.auif, Info_WifiLen(4));			//»ñÈ¡auif³¤¶È  ¶Áauif
+	memset(oneNetInfo.auif, 0, sizeof(oneNetInfo.auif));											//æ¸…é™¤ä¹‹å‰çš„å†…å®¹
+	AT24C02_ReadBytes(AUIF_ADDRESS + 1, (unsigned char *)oneNetInfo.auif, Info_WifiLen(4));			//è·å–auifé•¿åº¦  è¯»auif
 
     return 0;
 
@@ -199,15 +199,15 @@ _Bool Info_Read(void)
 
 /*
 ************************************************************
-*	º¯ÊıÃû³Æ£º	Info_Alter
+*	å‡½æ•°åç§°ï¼š	Info_Alter
 *
-*	º¯Êı¹¦ÄÜ£º	¸ü¸ÄwifiĞÅÏ¢ºÍÏîÄ¿ĞÅÏ¢
+*	å‡½æ•°åŠŸèƒ½ï¼š	æ›´æ”¹wifiä¿¡æ¯å’Œé¡¹ç›®ä¿¡æ¯
 *
-*	Èë¿Ú²ÎÊı£º	ĞèÒª±£´æµÄ×Ö¶Î
+*	å…¥å£å‚æ•°ï¼š	éœ€è¦ä¿å­˜çš„å­—æ®µ
 *
-*	·µ»Ø²ÎÊı£º	±£´æ½á¹û
+*	è¿”å›å‚æ•°ï¼š	ä¿å­˜ç»“æœ
 *
-*	ËµÃ÷£º		0-²»ĞèÒªÖØĞÂÁ¬½Ó		1-ĞèÒªÖØĞÂÁ¬½Ó
+*	è¯´æ˜ï¼š		0-ä¸éœ€è¦é‡æ–°è¿æ¥		1-éœ€è¦é‡æ–°è¿æ¥
 ************************************************************
 */
 _Bool Info_Alter(char *info)
@@ -217,18 +217,18 @@ _Bool Info_Alter(char *info)
     unsigned char usart1Count = 0;
 	_Bool flag = 0;
         
-	if((usart1Tmp = strstr(info, "DEVID:")) != (void *)0)								//ÌáÈ¡devid
+	if((usart1Tmp = strstr(info, "DEVID:")) != (void *)0)								//æå–devid
 	{
-		usart1Count = Info_CountLen(usart1Tmp);											//¼ÆËã³¤¶È
+		usart1Count = Info_CountLen(usart1Tmp);											//è®¡ç®—é•¿åº¦
         if(usart1Count > 0)
         {
-            memset(oneNetInfo.devID, 0, sizeof(oneNetInfo.devID));						//Çå³ıÖ®Ç°µÄÄÚÈİ
+            memset(oneNetInfo.devID, 0, sizeof(oneNetInfo.devID));						//æ¸…é™¤ä¹‹å‰çš„å†…å®¹
             strncpy(oneNetInfo.devID, usart1Tmp + 6, usart1Count);
             UsartPrintf(USART_DEBUG, "Tips:	Save DEVID: %s\r\n", oneNetInfo.devID);
 
-			AT24C02_WriteByte(DEVID_ADDRESS, strlen(oneNetInfo.devID));					//±£´ædevid³¤¶È
+			AT24C02_WriteByte(DEVID_ADDRESS, strlen(oneNetInfo.devID));					//ä¿å­˜devidé•¿åº¦
 			RTOS_TimeDly(2);
-			AT24C02_WriteBytes(DEVID_ADDRESS + 1,										//±£´ædevid
+			AT24C02_WriteBytes(DEVID_ADDRESS + 1,										//ä¿å­˜devid
 								(unsigned char *)oneNetInfo.devID,
 								strlen(oneNetInfo.devID));
             
@@ -236,18 +236,18 @@ _Bool Info_Alter(char *info)
         }
 	}
         
-	if((usart1Tmp = strstr(info, "APIKEY:")) != (void *)0)								//ÌáÈ¡apikey
+	if((usart1Tmp = strstr(info, "APIKEY:")) != (void *)0)								//æå–apikey
 	{
-		usart1Count = Info_CountLen(usart1Tmp);											//¼ÆËã³¤¶È
+		usart1Count = Info_CountLen(usart1Tmp);											//è®¡ç®—é•¿åº¦
         if(usart1Count > 0)
         {
-            memset(oneNetInfo.apiKey, 0, sizeof(oneNetInfo.apiKey));					//Çå³ıÖ®Ç°µÄÄÚÈİ
+            memset(oneNetInfo.apiKey, 0, sizeof(oneNetInfo.apiKey));					//æ¸…é™¤ä¹‹å‰çš„å†…å®¹
             strncpy(oneNetInfo.apiKey, usart1Tmp + 7, usart1Count);
             UsartPrintf(USART_DEBUG, "Tips:	Save APIKEY: %s\r\n", oneNetInfo.apiKey);
 
-			AT24C02_WriteByte(AKEY_ADDRESS, strlen(oneNetInfo.apiKey));					//±£´æapikey³¤¶È
+			AT24C02_WriteByte(AKEY_ADDRESS, strlen(oneNetInfo.apiKey));					//ä¿å­˜apikeyé•¿åº¦
 			RTOS_TimeDly(2);
-			AT24C02_WriteBytes(AKEY_ADDRESS + 1,										//±£´æapikey
+			AT24C02_WriteBytes(AKEY_ADDRESS + 1,										//ä¿å­˜apikey
 								(unsigned char *)oneNetInfo.apiKey,
 								strlen(oneNetInfo.apiKey));
             
@@ -255,18 +255,18 @@ _Bool Info_Alter(char *info)
         }
 	}
 	
-	if((usart1Tmp = strstr(info, "PROID:")) != (void *)0)								//ÌáÈ¡proID
+	if((usart1Tmp = strstr(info, "PROID:")) != (void *)0)								//æå–proID
 	{
-		usart1Count = Info_CountLen(usart1Tmp);											//¼ÆËã³¤¶È
+		usart1Count = Info_CountLen(usart1Tmp);											//è®¡ç®—é•¿åº¦
         if(usart1Count > 0)
         {
-            memset(oneNetInfo.proID, 0, sizeof(oneNetInfo.proID));						//Çå³ıÖ®Ç°µÄÄÚÈİ
+            memset(oneNetInfo.proID, 0, sizeof(oneNetInfo.proID));						//æ¸…é™¤ä¹‹å‰çš„å†…å®¹
             strncpy(oneNetInfo.proID, usart1Tmp + 6, usart1Count);
             UsartPrintf(USART_DEBUG, "Tips:	Save PROID: %s\r\n", oneNetInfo.proID);
 
-			AT24C02_WriteByte(PROID_ADDRESS, strlen(oneNetInfo.proID));					//±£´æproID³¤¶È
+			AT24C02_WriteByte(PROID_ADDRESS, strlen(oneNetInfo.proID));					//ä¿å­˜proIDé•¿åº¦
 			RTOS_TimeDly(2);
-			AT24C02_WriteBytes(PROID_ADDRESS + 1,										//±£´æproID
+			AT24C02_WriteBytes(PROID_ADDRESS + 1,										//ä¿å­˜proID
 								(unsigned char *)oneNetInfo.proID,
 								strlen(oneNetInfo.proID));
             
@@ -274,18 +274,18 @@ _Bool Info_Alter(char *info)
         }
 	}
 	
-	if((usart1Tmp = strstr(info, "AUIF:")) != (void *)0)								//ÌáÈ¡auif
+	if((usart1Tmp = strstr(info, "AUIF:")) != (void *)0)								//æå–auif
 	{
-		usart1Count = Info_CountLen(usart1Tmp);											//¼ÆËã³¤¶È
+		usart1Count = Info_CountLen(usart1Tmp);											//è®¡ç®—é•¿åº¦
         if(usart1Count > 0)
         {
-            memset(oneNetInfo.auif, 0, sizeof(oneNetInfo.auif));						//Çå³ıÖ®Ç°µÄÄÚÈİ
+            memset(oneNetInfo.auif, 0, sizeof(oneNetInfo.auif));						//æ¸…é™¤ä¹‹å‰çš„å†…å®¹
             strncpy(oneNetInfo.auif, usart1Tmp + 5, usart1Count);
             UsartPrintf(USART_DEBUG, "Tips:	Save AUIF: %s\r\n", oneNetInfo.auif);
 
-			AT24C02_WriteByte(AUIF_ADDRESS, strlen(oneNetInfo.auif));					//±£´æauif³¤¶È
+			AT24C02_WriteByte(AUIF_ADDRESS, strlen(oneNetInfo.auif));					//ä¿å­˜auifé•¿åº¦
 			RTOS_TimeDly(2);
-			AT24C02_WriteBytes(AUIF_ADDRESS + 1,										//±£´æauif
+			AT24C02_WriteBytes(AUIF_ADDRESS + 1,										//ä¿å­˜auif
 								(unsigned char *)oneNetInfo.auif,
 								strlen(oneNetInfo.auif));
             

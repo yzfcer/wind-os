@@ -7,13 +7,13 @@
 
 
 
-#define SSID_ADDR		0x0807F800 //ÕËºÅ±£´æµØÖ·	 							µØÖ·±ØÐëÊÇ2µÄ±¶Êý
-#define PSWD_ADDR		0x0807F8A0 //ÃÜÂë±£´æµØÖ·	³¤¶ÈÆ«ÒÆ160×Ö½Ú(80¸ö°ë×Ö)	µØÖ·±ØÐëÊÇ2µÄ±¶Êý
+#define SSID_ADDR		0x0807F800 //è´¦å·ä¿å­˜åœ°å€	 							åœ°å€å¿…é¡»æ˜¯2çš„å€æ•°
+#define PSWD_ADDR		0x0807F8A0 //å¯†ç ä¿å­˜åœ°å€	é•¿åº¦åç§»160å­—èŠ‚(80ä¸ªåŠå­—)	åœ°å€å¿…é¡»æ˜¯2çš„å€æ•°
 
-#define DEVID_ADDR      0x0807F000 //devid±£´æµØÖ·	 							µØÖ·±ØÐëÊÇ2µÄ±¶Êý
-#define AKEY_ADDR       0x0807F0A0 //apikey±£´æµØÖ·	³¤¶ÈÆ«ÒÆ160×Ö½Ú(80¸ö°ë×Ö)	µØÖ·±ØÐëÊÇ2µÄ±¶Êý
+#define DEVID_ADDR      0x0807F000 //devidä¿å­˜åœ°å€	 							åœ°å€å¿…é¡»æ˜¯2çš„å€æ•°
+#define AKEY_ADDR       0x0807F0A0 //apikeyä¿å­˜åœ°å€	é•¿åº¦åç§»160å­—èŠ‚(80ä¸ªåŠå­—)	åœ°å€å¿…é¡»æ˜¯2çš„å€æ•°
 
-#define W_G_ADDR		0x0807E800 //Æô¶¯Ê±µÄÑ¡Ôñ·½Ê½							µØÖ·±ØÐëÊÇ2µÄ±¶Êý
+#define W_G_ADDR		0x0807E800 //å¯åŠ¨æ—¶çš„é€‰æ‹©æ–¹å¼							åœ°å€å¿…é¡»æ˜¯2çš„å€æ•°
 
 
 

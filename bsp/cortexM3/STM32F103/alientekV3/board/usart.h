@@ -5,12 +5,12 @@
 #include "stm32f10x.h"
 
 
-#define USART_DEBUG		USART1		//µ÷ÊÔ´òÓ¡ËùÊ¹ÓÃµÄ´®¿Ú×é
+#define USART_DEBUG		USART1		//è°ƒè¯•æ‰“å°æ‰€ä½¿ç”¨çš„ä¸²å£ç»„
 
 
-#define USART_DMA_TX_EN		0		//1-Ê¹ÄÜDMA·¢ËÍ		0-Ê§ÄÜDMA·¢ËÍ
+#define USART_DMA_TX_EN		0		//1-ä½¿èƒ½DMAå‘é€		0-å¤±èƒ½DMAå‘é€
 
-#define USART_DMA_RX_EN		0		//1-Ê¹ÄÜDMA½ÓÊÕ		0-Ê§ÄÜDMA½ÓÊÕ
+#define USART_DMA_RX_EN		0		//1-ä½¿èƒ½DMAæŽ¥æ”¶		0-å¤±èƒ½DMAæŽ¥æ”¶
 
 
 #define USART_TX_TYPE		0

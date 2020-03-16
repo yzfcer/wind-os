@@ -1,34 +1,34 @@
 #include "led.h" 
 
 /*********************************************************************************
-*************************MCUÆôÃ÷ STM32F407ºËĞÄ¿ª·¢°å******************************
+*************************MCUå¯æ˜ STM32F407æ ¸å¿ƒå¼€å‘æ¿******************************
 **********************************************************************************
-* ÎÄ¼şÃû³Æ: led.c                                                                *
-* ÎÄ¼ş¼òÊö£ºLED³õÊ¼»¯                                                            *
-* ´´½¨ÈÕÆÚ£º2015.03.03                                                           *
-* °æ    ±¾£ºV1.0                                                                 *
-* ×÷    Õß£ºClever                                                               *
-* Ëµ    Ã÷£ºLED¶ÔÓ¦IO¿Ú³õÊ¼»¯                                                    * 
+* æ–‡ä»¶åç§°: led.c                                                                *
+* æ–‡ä»¶ç®€è¿°ï¼šLEDåˆå§‹åŒ–                                                            *
+* åˆ›å»ºæ—¥æœŸï¼š2015.03.03                                                           *
+* ç‰ˆ    æœ¬ï¼šV1.0                                                                 *
+* ä½œ    è€…ï¼šClever                                                               *
+* è¯´    æ˜ï¼šLEDå¯¹åº”IOå£åˆå§‹åŒ–                                                    * 
 **********************************************************************************
 *********************************************************************************/
 
-//LED¶ÔÓ¦IO³õÊ¼»¯
+//LEDå¯¹åº”IOåˆå§‹åŒ–
 void LED_Init(int mask)
 {
     static int flag = 0;
     GPIO_InitTypeDef  GPIO_InitStructure;
     if(flag == 1)
         return;
-    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOG, ENABLE);//Ê¹ÄÜGPIOGÊ±ÖÓ
+    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOG, ENABLE);//ä½¿èƒ½GPIOGæ—¶é’Ÿ
 
-    //PG13¡¢PG14ºÍPG15³õÊ¼»¯ÉèÖÃ
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15;//LED0¡¢LED1ºÍLED2¶ÔÓ¦IO¿Ú
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;                  //ÆÕÍ¨Êä³öÄ£Ê½
-    GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;                 //ÍÆÍìÊä³ö
+    //PG13ã€PG14å’ŒPG15åˆå§‹åŒ–è®¾ç½®
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15;//LED0ã€LED1å’ŒLED2å¯¹åº”IOå£
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;                  //æ™®é€šè¾“å‡ºæ¨¡å¼
+    GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;                 //æ¨æŒ½è¾“å‡º
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;             //100MHz
-    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;                   //ÉÏÀ­
-    GPIO_Init(GPIOG, &GPIO_InitStructure);                         //³õÊ¼»¯GPIO
-    //GPIOG13,G14,G15ÉèÖÃ¸ß£¬µÆÃğ
+    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;                   //ä¸Šæ‹‰
+    GPIO_Init(GPIOG, &GPIO_InitStructure);                         //åˆå§‹åŒ–GPIO
+    //GPIOG13,G14,G15è®¾ç½®é«˜ï¼Œç¯ç­
     GPIO_SetBits(GPIOG, GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15);
     flag = 1;
 }

@@ -4,35 +4,35 @@
 #include "wind_type.h"
 ////////////////////////////////////////////////////////////////////////////////// 	
 
-//IIC_SDAÏßIO·½ÏòÅäÖÃ
-#define SDA_IN()  {GPIOB->MODER&=~(3<<18);GPIOB->MODER|=0<<18;}	//PB9ÊäÈëÄ£Ê½
-#define SDA_OUT() {GPIOB->MODER&=~(3<<18);GPIOB->MODER|=1<<18;} //PB9Êä³öÄ£Ê½
-//IO²Ù×÷º¯Êý	 
+//IIC_SDAçº¿IOæ–¹å‘é…ç½®
+#define SDA_IN()  {GPIOB->MODER&=~(3<<18);GPIOB->MODER|=0<<18;}	//PB9è¾“å…¥æ¨¡å¼
+#define SDA_OUT() {GPIOB->MODER&=~(3<<18);GPIOB->MODER|=1<<18;} //PB9è¾“å‡ºæ¨¡å¼
+//IOæ“ä½œå‡½æ•°	 
 #define IIC_SCL      PBout(8) //SCL
-#define IIC_SDAOUT   PBout(9) //Êä³öSDA	 
-#define IIC_SDAIN    PBin(9)  //ÊäÈëSDA 
+#define IIC_SDAOUT   PBout(9) //è¾“å‡ºSDA	 
+#define IIC_SDAIN    PBin(9)  //è¾“å…¥SDA 
 
-//IICÏà¹Øº¯Êý
-void IIC_Init(void);          //³õÊ¼»¯IICµÄIO¿Ú				 
-void IIC_Start(void);				  //·¢ËÍIIC¿ªÊ¼ÐÅºÅ
-void IIC_Stop(void);	  			//·¢ËÍIICÍ£Ö¹ÐÅºÅ
-w_uint8_t MCU_Wait_Ack(void); 				//IICµÈ´ýACKÐÅºÅ
-void MCU_Send_Ack(void);					  //IIC·¢ËÍACKÐÅºÅ
-void MCU_NOAck(void);				  //IIC²»·¢ËÍACKÐÅºÅ
+//IICç›¸å…³å‡½æ•°
+void IIC_Init(void);          //åˆå§‹åŒ–IICçš„IOå£				 
+void IIC_Start(void);				  //å‘é€IICå¼€å§‹ä¿¡å·
+void IIC_Stop(void);	  			//å‘é€IICåœæ­¢ä¿¡å·
+w_uint8_t MCU_Wait_Ack(void); 				//IICç­‰å¾…ACKä¿¡å·
+void MCU_Send_Ack(void);					  //IICå‘é€ACKä¿¡å·
+void MCU_NOAck(void);				  //IICä¸å‘é€ACKä¿¡å·
 void IIC_write_OneByte(w_uint8_t Senddata);
 w_uint8_t IIC_Read_OneByte(w_uint8_t ack);
 	
-//EEPROM24c02Ïà¹Øº¯Êý
-w_uint8_t AT24C02_ReadByte(w_uint8_t ReadAddr);							     //Ö¸¶¨µØÖ·¶ÁÈ¡Ò»¸ö×Ö½Ú
-void AT24C02_WriteByte(w_uint8_t WriteAddr,w_uint8_t DataToWrite);		//Ö¸¶¨µØÖ·Ð´ÈëÒ»¸ö×Ö½Ú
+//EEPROM24c02ç›¸å…³å‡½æ•°
+w_uint8_t AT24C02_ReadByte(w_uint8_t ReadAddr);							     //æŒ‡å®šåœ°å€è¯»å–ä¸€ä¸ªå­—èŠ‚
+void AT24C02_WriteByte(w_uint8_t WriteAddr,w_uint8_t DataToWrite);		//æŒ‡å®šåœ°å€å†™å…¥ä¸€ä¸ªå­—èŠ‚
 
 w_uint32_t Buf_4Byte(w_uint8_t *pBuffer,w_uint32_t Date_4Byte,w_uint8_t Byte_num,w_uint8_t mode);
 
-void AT24C02_Write(w_uint8_t WriteAddr,w_uint8_t *pBuffer,w_uint8_t WriteNum);	//´ÓÖ¸¶¨µØÖ·¿ªÊ¼Ð´ÈëÖ¸¶¨³¤¶ÈµÄÊý¾Ý
-void AT24C02_Read(w_uint8_t ReadAddr,w_uint8_t *pBuffer,w_uint8_t ReadNum);   	//´ÓÖ¸¶¨µØÖ·¿ªÊ¼¶Á³öÖ¸¶¨³¤¶ÈµÄÊý¾Ý
+void AT24C02_Write(w_uint8_t WriteAddr,w_uint8_t *pBuffer,w_uint8_t WriteNum);	//ä»ŽæŒ‡å®šåœ°å€å¼€å§‹å†™å…¥æŒ‡å®šé•¿åº¦çš„æ•°æ®
+void AT24C02_Read(w_uint8_t ReadAddr,w_uint8_t *pBuffer,w_uint8_t ReadNum);   	//ä»ŽæŒ‡å®šåœ°å€å¼€å§‹è¯»å‡ºæŒ‡å®šé•¿åº¦çš„æ•°æ®
 
-w_uint8_t AT24C02_Test(void);  //¼ì²éÆ÷¼þ
-void AT24C02_Init(void); //³õÊ¼»¯IIC
+w_uint8_t AT24C02_Test(void);  //æ£€æŸ¥å™¨ä»¶
+void AT24C02_Init(void); //åˆå§‹åŒ–IIC
 #endif
 
 

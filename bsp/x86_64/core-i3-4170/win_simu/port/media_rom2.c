@@ -15,7 +15,7 @@
 #include "boot_media.h"
 #include "wind_string.h"
 #include "wind_debug.h"
-//Ó²¼şRAMÊıÁ¿ºÍ»ùµØÖ·ºÍ¿Õ¼ä´óĞ¡¶¨Òå
+//ç¡¬ä»¶RAMæ•°é‡å’ŒåŸºåœ°å€å’Œç©ºé—´å¤§å°å®šä¹‰
 #define ROM2_SIZE 0x80000
 #define ROM2_BLKSIZE 512
 static w_uint8_t g_rom2[ROM2_SIZE];

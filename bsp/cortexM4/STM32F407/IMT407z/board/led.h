@@ -4,13 +4,13 @@
 
 ////////////////////////////////////////////////////////////////////////////////////	
 
-//LED¶Ë¿Ú¶¨Òå
+//LEDç«¯å£å®šä¹‰
 #define LED0 PGout(13)	 
 #define LED1 PGout(14)	 
 #define LED2 PGout(15)	  
 
-//º¯ÊıÉùÃ÷
-void LED_Init(int mask);//³õÊ¼»¯	
+//å‡½æ•°å£°æ˜
+void LED_Init(int mask);//åˆå§‹åŒ–	
 void LED_On(unsigned int ledidx);
 void LED_Off(unsigned int ledidx);
 #endif

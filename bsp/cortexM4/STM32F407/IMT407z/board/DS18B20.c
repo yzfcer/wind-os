@@ -1,35 +1,35 @@
 #include "ds18b20.h"
 
 /*********************************************************************************
-*************************MCUÆôÃ÷ STM32F407ºËÐÄ¿ª·¢°å******************************
+*************************MCUå¯æ˜Ž STM32F407æ ¸å¿ƒå¼€å‘æ¿******************************
 **********************************************************************************
-* ÎÄ¼þÃû³Æ: ds18b20.c                                                            *
-* ÎÄ¼þ¼òÊö£ºds18b20ÏÔÊ¾Çý¶¯³ÌÐò                                                  *
-* ´´½¨ÈÕÆÚ£º2015.03.25                                                           *
-* °æ    ±¾£ºV1.0                                                                 *
-* ×÷    Õß£ºClever                                                               *
-* Ëµ    Ã÷£º                                                                     * 
+* æ–‡ä»¶åç§°: ds18b20.c                                                            *
+* æ–‡ä»¶ç®€è¿°ï¼šds18b20æ˜¾ç¤ºé©±åŠ¨ç¨‹åº                                                  *
+* åˆ›å»ºæ—¥æœŸï¼š2015.03.25                                                           *
+* ç‰ˆ    æœ¬ï¼šV1.0                                                                 *
+* ä½œ    è€…ï¼šClever                                                               *
+* è¯´    æ˜Žï¼š                                                                     * 
 **********************************************************************************
 *********************************************************************************/
   
 
-//¸´Î»DS18B20
+//å¤ä½DS18B20
 void DS18B20_Rst(void)	   
 {                 
 	DS18B20_IO_OUT(); //SET PG11 OUTPUT
-  DS18B20_DQ_OUT=0; //À­µÍDQ
-  delay_us(750);    //À­µÍ750us
+  DS18B20_DQ_OUT=0; //æ‹‰ä½ŽDQ
+  delay_us(750);    //æ‹‰ä½Ž750us
   DS18B20_DQ_OUT=1; //DQ=1 
 	delay_us(15);     //15US
 }
 
 /****************************************************************************
-* Ãû    ³Æ: u8_t DS18B20_Check(void)
-* ¹¦    ÄÜ£ºµÈ´ýDS18B20µÄ»ØÓ¦
-* Èë¿Ú²ÎÊý£ºÎÞ
-* ·µ»Ø²ÎÊý£º·µ»Ø1:Î´¼ì²âµ½DS18B20µÄ´æÔÚ
-*           ·µ»Ø0:´æÔÚ
-* Ëµ    Ã÷£º       
+* å    ç§°: u8_t DS18B20_Check(void)
+* åŠŸ    èƒ½ï¼šç­‰å¾…DS18B20çš„å›žåº”
+* å…¥å£å‚æ•°ï¼šæ— 
+* è¿”å›žå‚æ•°ï¼šè¿”å›ž1:æœªæ£€æµ‹åˆ°DS18B20çš„å­˜åœ¨
+*           è¿”å›ž0:å­˜åœ¨
+* è¯´    æ˜Žï¼š       
 ****************************************************************************/	
 u8_t DS18B20_Check(void) 	   
 {   
@@ -51,7 +51,7 @@ u8_t DS18B20_Check(void)
 	return 0;
 }
 
-//´ÓDS18B20¶ÁÈ¡Ò»¸öÎ»    ·µ»ØÖµ£º1/0
+//ä»ŽDS18B20è¯»å–ä¸€ä¸ªä½    è¿”å›žå€¼ï¼š1/0
 u8_t DS18B20_Read_Bit(void) 			 // read one bit
 {
   u8_t data;
@@ -68,11 +68,11 @@ u8_t DS18B20_Read_Bit(void) 			 // read one bit
 }
 
 /****************************************************************************
-* Ãû    ³Æ: u8_t DS18B20_Read_Byte(void)
-* ¹¦    ÄÜ£º´ÓDS18B20¶ÁÈ¡Ò»¸ö×Ö½Ú 
-* Èë¿Ú²ÎÊý£ºÎÞ
-* ·µ»Ø²ÎÊý£º¶Áµ½µÄÒ»¸ö×Ö½ÚÊý¾Ý
-* Ëµ    Ã÷£º       
+* å    ç§°: u8_t DS18B20_Read_Byte(void)
+* åŠŸ    èƒ½ï¼šä»ŽDS18B20è¯»å–ä¸€ä¸ªå­—èŠ‚ 
+* å…¥å£å‚æ•°ï¼šæ— 
+* è¿”å›žå‚æ•°ï¼šè¯»åˆ°çš„ä¸€ä¸ªå­—èŠ‚æ•°æ®
+* è¯´    æ˜Žï¼š       
 ****************************************************************************/
 u8_t DS18B20_Read_Byte(void)     
 {        
@@ -87,11 +87,11 @@ u8_t DS18B20_Read_Byte(void)
 }
 
 /****************************************************************************
-* Ãû    ³Æ: void DS18B20_Write_Byte(u8_t dat)
-* ¹¦    ÄÜ£ºÐ´Ò»¸ö×Ö½Úµ½DS18B20
-* Èë¿Ú²ÎÊý£ºdat£ºÒªÐ´ÈëµÄ×Ö½Ú
-* ·µ»Ø²ÎÊý£ºÎÞ
-* Ëµ    Ã÷£º       
+* å    ç§°: void DS18B20_Write_Byte(u8_t dat)
+* åŠŸ    èƒ½ï¼šå†™ä¸€ä¸ªå­—èŠ‚åˆ°DS18B20
+* å…¥å£å‚æ•°ï¼šdatï¼šè¦å†™å…¥çš„å­—èŠ‚
+* è¿”å›žå‚æ•°ï¼šæ— 
+* è¯´    æ˜Žï¼š       
 ****************************************************************************/
 void DS18B20_Write_Byte(u8_t dat)     
  {             
@@ -119,7 +119,7 @@ void DS18B20_Write_Byte(u8_t dat)
     }
 }
  
-//¿ªÊ¼ÎÂ¶È×ª»»
+//å¼€å§‹æ¸©åº¦è½¬æ¢
 void DS18B20_Start(void)// ds1820 start convert
 {   						               
     DS18B20_Rst();	   
@@ -129,37 +129,37 @@ void DS18B20_Start(void)// ds1820 start convert
 } 
 
 /****************************************************************************
-* Ãû    ³Æ: u8_t DS18B20_Init(void)
-* ¹¦    ÄÜ£º³õÊ¼»¯DS18B20µÄIO¿ÚDQ Í¬Ê±¼ì²â18B20µÄ´æÔÚ
-* Èë¿Ú²ÎÊý£ºdat£ºÒªÐ´ÈëµÄ×Ö½Ú
-* ·µ»Ø²ÎÊý£º·µ»Ø1:²»´æÔÚ
-*           ·µ»Ø0:´æÔÚ 
-* Ëµ    Ã÷£º       
+* å    ç§°: u8_t DS18B20_Init(void)
+* åŠŸ    èƒ½ï¼šåˆå§‹åŒ–DS18B20çš„IOå£DQ åŒæ—¶æ£€æµ‹18B20çš„å­˜åœ¨
+* å…¥å£å‚æ•°ï¼šdatï¼šè¦å†™å…¥çš„å­—èŠ‚
+* è¿”å›žå‚æ•°ï¼šè¿”å›ž1:ä¸å­˜åœ¨
+*           è¿”å›ž0:å­˜åœ¨ 
+* è¯´    æ˜Žï¼š       
 ****************************************************************************/	 
 u8_t DS18B20_Init(void)
 {
 	GPIO_InitTypeDef  GPIO_InitStructure;
 
-  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);//Ê¹ÄÜGPIOGÊ±ÖÓ
+  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);//ä½¿èƒ½GPIOGæ—¶é’Ÿ
 
   //GPIOG9
   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_15;
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;//ÆÕÍ¨Êä³öÄ£Ê½
-  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;//ÍÆÍìÊä³ö
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;//æ™®é€šè¾“å‡ºæ¨¡å¼
+  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;//æŽ¨æŒ½è¾“å‡º
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;//50MHz
-  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;//ÉÏÀ­
-  GPIO_Init(GPIOB, &GPIO_InitStructure);//³õÊ¼»¯
+  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;//ä¸Šæ‹‰
+  GPIO_Init(GPIOB, &GPIO_InitStructure);//åˆå§‹åŒ–
  
  	DS18B20_Rst();
 	return DS18B20_Check();
 }
 
 /****************************************************************************
-* Ãû    ³Æ: short DS18B20_Get_Temp(void)
-* ¹¦    ÄÜ£º´Óds18b20µÃµ½ÎÂ¶ÈÖµ
-* Èë¿Ú²ÎÊý£ºÎÞ
-* ·µ»Ø²ÎÊý£ºÎÂ¶ÈÖµ £¨-550~1250£© 
-* Ëµ    Ã÷£º       
+* å    ç§°: short DS18B20_Get_Temp(void)
+* åŠŸ    èƒ½ï¼šä»Žds18b20å¾—åˆ°æ¸©åº¦å€¼
+* å…¥å£å‚æ•°ï¼šæ— 
+* è¿”å›žå‚æ•°ï¼šæ¸©åº¦å€¼ ï¼ˆ-550~1250ï¼‰ 
+* è¯´    æ˜Žï¼š       
 ****************************************************************************/
 short DS18B20_Get_Temp(void)
 {
@@ -177,13 +177,13 @@ short DS18B20_Get_Temp(void)
     {
         TH=~TH;
         TL=~TL; 
-        temp=0;//ÎÂ¶ÈÎª¸º  
-    }else temp=1;//ÎÂ¶ÈÎªÕý	  	  
-    tem=TH; //»ñµÃ¸ß°ËÎ»
+        temp=0;//æ¸©åº¦ä¸ºè´Ÿ  
+    }else temp=1;//æ¸©åº¦ä¸ºæ­£	  	  
+    tem=TH; //èŽ·å¾—é«˜å…«ä½
     tem<<=8;    
-    tem+=TL;//»ñµÃµ×°ËÎ»
-    tem=(double)tem*0.625;//×ª»»     
-	if(temp)return tem; //·µ»ØÎÂ¶ÈÖµ
+    tem+=TL;//èŽ·å¾—åº•å…«ä½
+    tem=(double)tem*0.625;//è½¬æ¢     
+	if(temp)return tem; //è¿”å›žæ¸©åº¦å€¼
 	else return -tem;    
 }
 

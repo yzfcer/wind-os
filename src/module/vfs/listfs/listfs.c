@@ -1,24 +1,24 @@
 /****************************************Copyright (c)**************************************************
-**                                       Çå  ·ç  º£  °¶
+**                                       æ¸…  é£  æµ·  å²¸
 **
 **                                       yzfcer@163.com
 **
-**--------------ÎÄ¼şĞÅÏ¢--------------------------------------------------------------------------------
-**ÎÄ   ¼ş   Ãû: listfs.c
-**´´   ½¨   ÈË: Jason Zhou
-**×îºóĞŞ¸ÄÈÕÆÚ: 2019.04.05
-**Ãè        Êö: listfsÎÄ¼şÏµÍ³Ö÷Ìå¹¦ÄÜ
+**--------------æ–‡ä»¶ä¿¡æ¯--------------------------------------------------------------------------------
+**æ–‡   ä»¶   å: listfs.c
+**åˆ›   å»º   äºº: Jason Zhou
+**æœ€åä¿®æ”¹æ—¥æœŸ: 2019.04.05
+**æ        è¿°: listfsæ–‡ä»¶ç³»ç»Ÿä¸»ä½“åŠŸèƒ½
 **              
-**--------------ÀúÊ·°æ±¾ĞÅÏ¢----------------------------------------------------------------------------
-** ´´½¨ÈË: Jason Zhou
-** °æ  ±¾: v1.0
-** ÈÕ¡¡ÆÚ: 2019.04.05
-** Ãè¡¡Êö: Ô­Ê¼°æ±¾
+**--------------å†å²ç‰ˆæœ¬ä¿¡æ¯----------------------------------------------------------------------------
+** åˆ›å»ºäºº: Jason Zhou
+** ç‰ˆ  æœ¬: v1.0
+** æ—¥ã€€æœŸ: 2019.04.05
+** æã€€è¿°: åŸå§‹ç‰ˆæœ¬
 **
-**--------------µ±Ç°°æ±¾ĞŞ¶©----------------------------------------------------------------------------
-** ĞŞ¸ÄÈË: Jason Zhou
-** ÈÕ¡¡ÆÚ: 2019.04.05
-** Ãè¡¡Êö: 
+**--------------å½“å‰ç‰ˆæœ¬ä¿®è®¢----------------------------------------------------------------------------
+** ä¿®æ”¹äºº: Jason Zhou
+** æ—¥ã€€æœŸ: 2019.04.05
+** æã€€è¿°: 
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
@@ -129,7 +129,7 @@ static w_err_t lfs_search_file(w_listfs_s *lfs,w_listfile_s *file,const char *pa
     do 
     {
         err = W_ERR_OK;
-        //¿½±´ºÍ·Ö¸îÎÄ¼şÂ·¾¶
+        //æ‹·è´å’Œåˆ†å‰²æ–‡ä»¶è·¯å¾„
         wind_debug("search node path:%s",path);
         len = wind_strlen(path);
         tmppath = listfs_mem_malloc(len+1);
@@ -141,17 +141,17 @@ static w_err_t lfs_search_file(w_listfs_s *lfs,w_listfile_s *file,const char *pa
             tmppath[len-1] = 0;
         }
 
-        //·Ö¸îÄ¿Â¼
+        //åˆ†å‰²ç›®å½•
         nameseg = (char **)listfs_mem_malloc(LISTFS_DIR_LAYCNT * sizeof(char*));
         WIND_ASSERT_BREAK(nameseg,W_ERR_MEM,"malloc nameseg failed");
         segcnt = wind_strsplit(tmppath,'/',nameseg,LISTFS_DIR_LAYCNT);
         WIND_ASSERT_BREAK(segcnt > 0,W_ERR_INVALID,"split path failed");
         
-        //·ÖÅäÎÄ¼şĞÅÏ¢ºÍÊı¾İ¿éĞÅÏ¢½á¹¹
+        //åˆ†é…æ–‡ä»¶ä¿¡æ¯å’Œæ•°æ®å—ä¿¡æ¯ç»“æ„
         finfo = listfs_mem_malloc(sizeof(lfile_info_s));
         WIND_ASSERT_BREAK(finfo,W_ERR_MEM,"malloc finfo failed");
 
-        //¶ÁÈ¡¸ùÄ¿Â¼ÎÄ¼şĞÅÏ¢
+        //è¯»å–æ ¹ç›®å½•æ–‡ä»¶ä¿¡æ¯
         err = fileinfo_read(finfo,lfs->blkdev,lfs->lfs_info.root_addr);
         WIND_ASSERT_BREAK(err == W_ERR_OK,err,"read root failed");
         if(segcnt == 1)
@@ -162,7 +162,7 @@ static w_err_t lfs_search_file(w_listfs_s *lfs,w_listfile_s *file,const char *pa
         }
         //WIND_CHECK_BREAK(segcnt != 1,W_ERR_OK);
 
-        //´Ó¸ùÄ¿Â¼¿ªÊ¼ËÑË÷×ÓÎÄ¼ş
+        //ä»æ ¹ç›®å½•å¼€å§‹æœç´¢å­æ–‡ä»¶
         err = W_ERR_OK;
         for(i = 1;i < segcnt;i ++)
         {
@@ -308,7 +308,7 @@ static w_err_t lfs_make_file(w_listfs_s *lfs,w_listfile_s *file,char *path)
     do
     {
         err = W_ERR_OK;
-        //·ÖÅäÄÚ´æ
+        //åˆ†é…å†…å­˜
         pathlen = wind_strlen(path);
         tmppath = listfs_mem_malloc(pathlen+1);
         WIND_ASSERT_BREAK(tmppath != W_NULL,W_ERR_MEM,"malloc tmppath failed.");
@@ -318,7 +318,7 @@ static w_err_t lfs_make_file(w_listfs_s *lfs,w_listfile_s *file,char *path)
         WIND_ASSERT_BREAK(finfo != W_NULL,W_ERR_MEM,"malloc finfo failed.");
 
 
-        //¿½±´·Ö¸îÎÄ¼şÂ·¾¶
+        //æ‹·è´åˆ†å‰²æ–‡ä»¶è·¯å¾„
         wind_strcpy(tmppath,path);
         if(tmppath[pathlen - 1] == '/')
         {
@@ -328,7 +328,7 @@ static w_err_t lfs_make_file(w_listfs_s *lfs,w_listfile_s *file,char *path)
         cnt = wind_strsplit(tmppath,'/',nameseg,LISTFS_DIR_LAYCNT);
         WIND_ASSERT_BREAK(cnt > 1,W_ERR_OK,"split path failed.");
 
-        //»ñÈ¡¸ù
+        //è·å–æ ¹
         err = fileinfo_read(finfo,lfs->blkdev,lfs->lfs_info.root_addr);
         WIND_ASSERT_BREAK(err == W_ERR_OK,err,"read root failed");
 
@@ -734,18 +734,18 @@ w_listfile_s* listfile_open(w_listfs_s *lfs,const char *path,w_uint8_t mode)
         
         err = lfs_search_file(lfs,file,path);
         if((err != W_ERR_OK) && (!is_crt))
-        {   //Ã»ÓĞ´´½¨±ê¼Ç£¬ÇÒÎÄ¼ş²»´æÔÚ
+        {   //æ²¡æœ‰åˆ›å»ºæ ‡è®°ï¼Œä¸”æ–‡ä»¶ä¸å­˜åœ¨
             err = W_ERR_FAIL;
             break;
         }
         else if((err == W_ERR_OK) && (!is_crt))
-        {   //Ã»ÓĞ´´½¨±ê¼Ç£¬ÇÒÎÄ¼ş´æÔÚ
+        {   //æ²¡æœ‰åˆ›å»ºæ ‡è®°ï¼Œä¸”æ–‡ä»¶å­˜åœ¨
             err = W_ERR_OK;
             file->lfs->file_ref ++;
             break;
         }
 
-        //ÓĞ´´½¨±ê¼Ç£¬ÇÒÎÄ¼ş²»´æÔÚ
+        //æœ‰åˆ›å»ºæ ‡è®°ï¼Œä¸”æ–‡ä»¶ä¸å­˜åœ¨
         err = lfs_make_file(lfs,file,(char*)path);
         WIND_ASSERT_BREAK(err == W_ERR_OK,err,"make file failed");
         file->lfs->file_ref ++;
@@ -755,7 +755,7 @@ w_listfile_s* listfile_open(w_listfs_s *lfs,const char *path,w_uint8_t mode)
     }while(0);
     
     if(err != W_ERR_OK)
-    {   //´ò¿ªÎÄ¼ş¹ı³ÌÖĞ³ö´í
+    {   //æ‰“å¼€æ–‡ä»¶è¿‡ç¨‹ä¸­å‡ºé”™
         listfile_destroy(file);
         return W_NULL;
     }

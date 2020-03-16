@@ -2,33 +2,33 @@
 	************************************************************
 	************************************************************
 	************************************************************
-	*	ÎÄ¼þÃû£º 	oled.c
+	*	æ–‡ä»¶åï¼š 	oled.c
 	*
-	*	×÷Õß£º 		ÕÅ¼ÌÈð
+	*	ä½œè€…ï¼š 		å¼ ç»§ç‘ž
 	*
-	*	ÈÕÆÚ£º 		2016-11-23
+	*	æ—¥æœŸï¼š 		2016-11-23
 	*
-	*	°æ±¾£º 		V1.0
+	*	ç‰ˆæœ¬ï¼š 		V1.0
 	*
-	*	ËµÃ÷£º 		OLED³õÊ¼»¯£¬ÏÔÊ¾¿ØÖÆ
+	*	è¯´æ˜Žï¼š 		OLEDåˆå§‹åŒ–ï¼Œæ˜¾ç¤ºæŽ§åˆ¶
 	*
-	*	ÐÞ¸Ä¼ÇÂ¼£º	
+	*	ä¿®æ”¹è®°å½•ï¼š	
 	************************************************************
 	************************************************************
 	************************************************************
 **/
 
-//Ó²¼þÇý¶¯
+//ç¡¬ä»¶é©±åŠ¨
 #include "oled.h"
 #include "i2c.h"
 #include "delay.h"
 #include "selfcheck.h"
 #include "hwtimer.h"
 
-//×Ö¿â
+//å­—åº“
 #include "font.h"
 
-//C¿â
+//Cåº“
 #include <stdarg.h>
 #include <stdio.h>
 
@@ -39,15 +39,15 @@
 
 /*
 ************************************************************
-*	º¯ÊýÃû³Æ£º	OLED_SendByte
+*	å‡½æ•°åç§°ï¼š	OLED_SendByte
 *
-*	º¯Êý¹¦ÄÜ£º	OLED·¢ËÍÒ»¸ö×Ö½Ú
+*	å‡½æ•°åŠŸèƒ½ï¼š	OLEDå‘é€ä¸€ä¸ªå­—èŠ‚
 *
-*	Èë¿Ú²ÎÊý£º	byte£ºÐèÒª·¢ËÍµÄ×Ö½Ú
+*	å…¥å£å‚æ•°ï¼š	byteï¼šéœ€è¦å‘é€çš„å­—èŠ‚
 *
-*	·µ»Ø²ÎÊý£º	ÎÞ
+*	è¿”å›žå‚æ•°ï¼š	æ— 
 *
-*	ËµÃ÷£º		
+*	è¯´æ˜Žï¼š		
 ************************************************************
 */
 void OLED_SendByte(unsigned char byte)
@@ -75,15 +75,15 @@ void OLED_SendByte(unsigned char byte)
 
 /*
 ************************************************************
-*	º¯ÊýÃû³Æ£º	OLED_WriteData
+*	å‡½æ•°åç§°ï¼š	OLED_WriteData
 *
-*	º¯Êý¹¦ÄÜ£º	OLEDÐ´ÈëÒ»¸öÊý¾Ý
+*	å‡½æ•°åŠŸèƒ½ï¼š	OLEDå†™å…¥ä¸€ä¸ªæ•°æ®
 *
-*	Èë¿Ú²ÎÊý£º	byte£ºÐèÒªÐ´ÈëµÄÊý¾Ý
+*	å…¥å£å‚æ•°ï¼š	byteï¼šéœ€è¦å†™å…¥çš„æ•°æ®
 *
-*	·µ»Ø²ÎÊý£º	Ð´Èë½á¹û
+*	è¿”å›žå‚æ•°ï¼š	å†™å…¥ç»“æžœ
 *
-*	ËµÃ÷£º		0-³É¹¦		1-Ê§°Ü
+*	è¯´æ˜Žï¼š		0-æˆåŠŸ		1-å¤±è´¥
 ************************************************************
 */
 _Bool OLED_WriteData(unsigned char byte)
@@ -92,21 +92,21 @@ _Bool OLED_WriteData(unsigned char byte)
 	IIC_Start();
 	
 	OLED_SendByte(OLED_ADDRESS);
-	if(IIC_WaitAck(5000))	//µÈ´ýÓ¦´ð
+	if(IIC_WaitAck(5000))	//ç­‰å¾…åº”ç­”
 	{
 		IIC_Stop();
 		return 1;
 	}
 	
 	OLED_SendByte(0x40);	//write data
-	if(IIC_WaitAck(5000))	//µÈ´ýÓ¦´ð
+	if(IIC_WaitAck(5000))	//ç­‰å¾…åº”ç­”
 	{
 		IIC_Stop();
 		return 1;
 	}
 	
 	OLED_SendByte(byte);
-	if(IIC_WaitAck(5000))	//µÈ´ýÓ¦´ð
+	if(IIC_WaitAck(5000))	//ç­‰å¾…åº”ç­”
 	{
 		IIC_Stop();
 		return 1;
@@ -120,15 +120,15 @@ _Bool OLED_WriteData(unsigned char byte)
 
 /*
 ************************************************************
-*	º¯ÊýÃû³Æ£º	OLED_WriteCom
+*	å‡½æ•°åç§°ï¼š	OLED_WriteCom
 *
-*	º¯Êý¹¦ÄÜ£º	OLEDÐ´ÈëÒ»¸öÃüÁî
+*	å‡½æ•°åŠŸèƒ½ï¼š	OLEDå†™å…¥ä¸€ä¸ªå‘½ä»¤
 *
-*	Èë¿Ú²ÎÊý£º	cmd£ºÐèÒªÐ´ÈëµÄÃüÁî
+*	å…¥å£å‚æ•°ï¼š	cmdï¼šéœ€è¦å†™å…¥çš„å‘½ä»¤
 *
-*	·µ»Ø²ÎÊý£º	Ð´Èë½á¹û
+*	è¿”å›žå‚æ•°ï¼š	å†™å…¥ç»“æžœ
 *
-*	ËµÃ÷£º		0-³É¹¦		1-Ê§°Ü
+*	è¯´æ˜Žï¼š		0-æˆåŠŸ		1-å¤±è´¥
 ************************************************************
 */
 _Bool OLED_WriteCom(unsigned char cmd)
@@ -136,22 +136,22 @@ _Bool OLED_WriteCom(unsigned char cmd)
 	
 	IIC_Start();
 	
-	OLED_SendByte(OLED_ADDRESS);	//Éè±¸µØÖ·
-	if(IIC_WaitAck(5000))			//µÈ´ýÓ¦´ð
+	OLED_SendByte(OLED_ADDRESS);	//è®¾å¤‡åœ°å€
+	if(IIC_WaitAck(5000))			//ç­‰å¾…åº”ç­”
 	{
 		IIC_Stop();
 		return 1;
 	}
 	
 	OLED_SendByte(0x00);
-	if(IIC_WaitAck(5000))			//µÈ´ýÓ¦´ð
+	if(IIC_WaitAck(5000))			//ç­‰å¾…åº”ç­”
 	{
 		IIC_Stop();
 		return 1;
 	}
 	
 	OLED_SendByte(cmd);
-	if(IIC_WaitAck(5000))			//µÈ´ýÓ¦´ð
+	if(IIC_WaitAck(5000))			//ç­‰å¾…åº”ç­”
 	{
 		IIC_Stop();
 		return 1;
@@ -165,38 +165,38 @@ _Bool OLED_WriteCom(unsigned char cmd)
 
 /*
 ************************************************************
-*	º¯ÊýÃû³Æ£º	OLED_Init
+*	å‡½æ•°åç§°ï¼š	OLED_Init
 *
-*	º¯Êý¹¦ÄÜ£º	OLED³õÊ¼»¯
+*	å‡½æ•°åŠŸèƒ½ï¼š	OLEDåˆå§‹åŒ–
 *
-*	Èë¿Ú²ÎÊý£º	ÎÞ
+*	å…¥å£å‚æ•°ï¼š	æ— 
 *
-*	·µ»Ø²ÎÊý£º	ÎÞ
+*	è¿”å›žå‚æ•°ï¼š	æ— 
 *
-*	ËµÃ÷£º		
+*	è¯´æ˜Žï¼š		
 ************************************************************
 */
 void OLED_Init(void)
 {
 #if 1
-	OLED_WriteCom(0xAE); //¹Ø±ÕÏÔÊ¾
+	OLED_WriteCom(0xAE); //å…³é—­æ˜¾ç¤º
 	OLED_WriteCom(0x20); //Set Memory Addressing Mode	
 	OLED_WriteCom(0x10); //00,Horizontal Addressing Mode;01,Vertical Addressing Mode;10,Page Addressing Mode (RESET);11,Invalid
 	OLED_WriteCom(0xb0); //Set Page Start Address for Page Addressing Mode,0-7
-	OLED_WriteCom(0xa1); //0xa0£¬XÖáÕý³£ÏÔÊ¾£»0xa1£¬XÖá¾µÏñÏÔÊ¾
-	OLED_WriteCom(0xc8); //0xc0£¬YÖáÕý³£ÏÔÊ¾£»0xc8£¬YÖá¾µÏñÏÔÊ¾
-	OLED_WriteCom(0x00); //ÉèÖÃÁÐµØÖ·µÍ4Î»
-	OLED_WriteCom(0x10); //ÉèÖÃÁÐµØÖ·¸ß4Î»
-	OLED_WriteCom(0x40); //ÉèÖÃÆðÊ¼ÏßµØÖ·
-	OLED_WriteCom(0x81); //ÉèÖÃ¶Ô±È¶ÈÖµ
+	OLED_WriteCom(0xa1); //0xa0ï¼ŒXè½´æ­£å¸¸æ˜¾ç¤ºï¼›0xa1ï¼ŒXè½´é•œåƒæ˜¾ç¤º
+	OLED_WriteCom(0xc8); //0xc0ï¼ŒYè½´æ­£å¸¸æ˜¾ç¤ºï¼›0xc8ï¼ŒYè½´é•œåƒæ˜¾ç¤º
+	OLED_WriteCom(0x00); //è®¾ç½®åˆ—åœ°å€ä½Ž4ä½
+	OLED_WriteCom(0x10); //è®¾ç½®åˆ—åœ°å€é«˜4ä½
+	OLED_WriteCom(0x40); //è®¾ç½®èµ·å§‹çº¿åœ°å€
+	OLED_WriteCom(0x81); //è®¾ç½®å¯¹æ¯”åº¦å€¼
 	OLED_WriteCom(0x7f); //------
-	OLED_WriteCom(0xa6); //0xa6,Õý³£ÏÔÊ¾Ä£Ê½;0xa7£¬
+	OLED_WriteCom(0xa6); //0xa6,æ­£å¸¸æ˜¾ç¤ºæ¨¡å¼;0xa7ï¼Œ
 	OLED_WriteCom(0xa8); //--set multiplex ratio(1 to 64)
 	OLED_WriteCom(0x3F); //------
-	OLED_WriteCom(0xa4); //0xa4,ÏÔÊ¾¸úËæRAMµÄ¸Ä±ä¶ø¸Ä±ä;0xa5,ÏÔÊ¾ÄÚÈÝºöÂÔRAMµÄÄÚÈÝ
-	OLED_WriteCom(0xd3); //ÉèÖÃÏÔÊ¾Æ«ÒÆ
+	OLED_WriteCom(0xa4); //0xa4,æ˜¾ç¤ºè·ŸéšRAMçš„æ”¹å˜è€Œæ”¹å˜;0xa5,æ˜¾ç¤ºå†…å®¹å¿½ç•¥RAMçš„å†…å®¹
+	OLED_WriteCom(0xd3); //è®¾ç½®æ˜¾ç¤ºåç§»
 	OLED_WriteCom(0x00); //------
-	OLED_WriteCom(0xd5); //ÉèÖÃÄÚ²¿ÏÔÊ¾Ê±ÖÓÆµÂÊ
+	OLED_WriteCom(0xd5); //è®¾ç½®å†…éƒ¨æ˜¾ç¤ºæ—¶é’Ÿé¢‘çŽ‡
 	OLED_WriteCom(0xf0); //------
 	OLED_WriteCom(0xd9); //--set pre-charge period//
 	OLED_WriteCom(0x22); //------
@@ -206,7 +206,7 @@ void OLED_Init(void)
 	OLED_WriteCom(0x20); //------
 	OLED_WriteCom(0x8d); //--set DC-DC enable//
 	OLED_WriteCom(0x14); //------
-	OLED_WriteCom(0xaf); //´ò¿ªÏÔÊ¾
+	OLED_WriteCom(0xaf); //æ‰“å¼€æ˜¾ç¤º
 #else
 	OLED_WriteCom(0xAE);   //display off
 	OLED_WriteCom(0x00);	//Set Memory Addressing Mode	
@@ -242,41 +242,41 @@ void OLED_Init(void)
 
 /*
 ************************************************************
-*	º¯ÊýÃû³Æ£º	OLED_Address
+*	å‡½æ•°åç§°ï¼š	OLED_Address
 *
-*	º¯Êý¹¦ÄÜ£º	ÉèÖÃOLEDÏÔÊ¾µØÖ·
+*	å‡½æ•°åŠŸèƒ½ï¼š	è®¾ç½®OLEDæ˜¾ç¤ºåœ°å€
 *
-*	Èë¿Ú²ÎÊý£º	x£ºÐÐµØÖ·
-*				y£ºÁÐµØÖ·
+*	å…¥å£å‚æ•°ï¼š	xï¼šè¡Œåœ°å€
+*				yï¼šåˆ—åœ°å€
 *
-*	·µ»Ø²ÎÊý£º	ÎÞ
+*	è¿”å›žå‚æ•°ï¼š	æ— 
 *
-*	ËµÃ÷£º		
+*	è¯´æ˜Žï¼š		
 ************************************************************
 */
 void OLED_Address(unsigned char x, unsigned char y)
 {
 
-	OLED_WriteCom(0xb0 + x);					//ÉèÖÃÐÐµØÖ·
+	OLED_WriteCom(0xb0 + x);					//è®¾ç½®è¡Œåœ°å€
 	DelayUs(iicInfo.speed);
-	OLED_WriteCom(((y & 0xf0) >> 4) | 0x10);	//ÉèÖÃÁÐµØÖ·µÄ¸ß4Î»
+	OLED_WriteCom(((y & 0xf0) >> 4) | 0x10);	//è®¾ç½®åˆ—åœ°å€çš„é«˜4ä½
 	DelayUs(iicInfo.speed);
-	OLED_WriteCom(y & 0x0f);					//ÉèÖÃÁÐµØÖ·µÄµÍ4Î»
+	OLED_WriteCom(y & 0x0f);					//è®¾ç½®åˆ—åœ°å€çš„ä½Ž4ä½
 	DelayUs(iicInfo.speed);
 	
 }
 
 /*
 ************************************************************
-*	º¯ÊýÃû³Æ£º	OLED_ClearScreen
+*	å‡½æ•°åç§°ï¼š	OLED_ClearScreen
 *
-*	º¯Êý¹¦ÄÜ£º	OLEDÈ«ÆÁÇå³ý
+*	å‡½æ•°åŠŸèƒ½ï¼š	OLEDå…¨å±æ¸…é™¤
 *
-*	Èë¿Ú²ÎÊý£º	ÎÞ
+*	å…¥å£å‚æ•°ï¼š	æ— 
 *
-*	·µ»Ø²ÎÊý£º	ÎÞ
+*	è¿”å›žå‚æ•°ï¼š	æ— 
 *
-*	ËµÃ÷£º		
+*	è¯´æ˜Žï¼š		
 ************************************************************
 */
 void OLED_ClearScreen(void)
@@ -309,15 +309,15 @@ void OLED_ClearScreen(void)
 
 /*
 ************************************************************
-*	º¯ÊýÃû³Æ£º	OLED_ClearAt
+*	å‡½æ•°åç§°ï¼š	OLED_ClearAt
 *
-*	º¯Êý¹¦ÄÜ£º	OLEDÇå³ýÖ¸¶¨ÐÐ
+*	å‡½æ•°åŠŸèƒ½ï¼š	OLEDæ¸…é™¤æŒ‡å®šè¡Œ
 *
-*	Èë¿Ú²ÎÊý£º	x£ºÐèÒªÇå³ýµÄÐÐ
+*	å…¥å£å‚æ•°ï¼š	xï¼šéœ€è¦æ¸…é™¤çš„è¡Œ
 *
-*	·µ»Ø²ÎÊý£º	ÎÞ
+*	è¿”å›žå‚æ•°ï¼š	æ— 
 *
-*	ËµÃ÷£º		
+*	è¯´æ˜Žï¼š		
 ************************************************************
 */
 void OLED_ClearAt(unsigned char x)
@@ -345,15 +345,15 @@ void OLED_ClearAt(unsigned char x)
 
 /*
 ************************************************************
-*	º¯ÊýÃû³Æ£º	OLED_Dis12864_Pic
+*	å‡½æ•°åç§°ï¼š	OLED_Dis12864_Pic
 *
-*	º¯Êý¹¦ÄÜ£º	ÏÔÊ¾Ò»·ù128*64µÄÍ¼Æ¬
+*	å‡½æ•°åŠŸèƒ½ï¼š	æ˜¾ç¤ºä¸€å¹…128*64çš„å›¾ç‰‡
 *
-*	Èë¿Ú²ÎÊý£º	dp£ºÍ¼Æ¬Êý¾ÝÖ¸Õë
+*	å…¥å£å‚æ•°ï¼š	dpï¼šå›¾ç‰‡æ•°æ®æŒ‡é’ˆ
 *
-*	·µ»Ø²ÎÊý£º	ÎÞ
+*	è¿”å›žå‚æ•°ï¼š	æ— 
 *
-*	ËµÃ÷£º		
+*	è¯´æ˜Žï¼š		
 ************************************************************
 */
 void OLED_Dis12864_Pic(const unsigned char *dp)
@@ -371,7 +371,7 @@ void OLED_Dis12864_Pic(const unsigned char *dp)
 			
 			for (i = 0; i < 128; i++)
 			{	
-				OLED_WriteData(*dp++); //Ð´Êý¾Ýµ½LCD,Ã¿Ð´ÍêÒ»¸ö8Î»µÄÊý¾ÝºóÁÐµØÖ·×Ô¶¯¼Ó1
+				OLED_WriteData(*dp++); //å†™æ•°æ®åˆ°LCD,æ¯å†™å®Œä¸€ä¸ª8ä½çš„æ•°æ®åŽåˆ—åœ°å€è‡ªåŠ¨åŠ 1
 			}
 		}
 		
@@ -382,15 +382,15 @@ void OLED_Dis12864_Pic(const unsigned char *dp)
 
 /*
 ************************************************************
-*	º¯ÊýÃû³Æ£º	OLED_DisChar16x16
+*	å‡½æ•°åç§°ï¼š	OLED_DisChar16x16
 *
-*	º¯Êý¹¦ÄÜ£º	ÏÔÊ¾16x16µÄµãÕóÊý¾Ý
+*	å‡½æ•°åŠŸèƒ½ï¼š	æ˜¾ç¤º16x16çš„ç‚¹é˜µæ•°æ®
 *
-*	Èë¿Ú²ÎÊý£º	dp£ºÍ¼Æ¬Êý¾ÝÖ¸Õë
+*	å…¥å£å‚æ•°ï¼š	dpï¼šå›¾ç‰‡æ•°æ®æŒ‡é’ˆ
 *
-*	·µ»Ø²ÎÊý£º	ÎÞ
+*	è¿”å›žå‚æ•°ï¼š	æ— 
 *
-*	ËµÃ÷£º		ÏÔÊ¾16x16µãÕóÍ¼Ïñ¡¢ºº×Ö¡¢ÉúÆ§×Ö»ò16x16µãÕóµÄÆäËûÍ¼±ê
+*	è¯´æ˜Žï¼š		æ˜¾ç¤º16x16ç‚¹é˜µå›¾åƒã€æ±‰å­—ã€ç”Ÿåƒ»å­—æˆ–16x16ç‚¹é˜µçš„å…¶ä»–å›¾æ ‡
 ************************************************************
 */
 void OLED_DisChar16x16(unsigned short x, unsigned short y, const unsigned char *dp)
@@ -400,7 +400,7 @@ void OLED_DisChar16x16(unsigned short x, unsigned short y, const unsigned char *
 	
 	if(checkInfo.OLED_OK)
 	{
-		IIC_SpeedCtl(20);					//i2cËÙ¶È¿ØÖÆ
+		IIC_SpeedCtl(20);					//i2cé€Ÿåº¦æŽ§åˆ¶
 		
 		RTOS_ENTER_CRITICAL();
 		
@@ -410,7 +410,7 @@ void OLED_DisChar16x16(unsigned short x, unsigned short y, const unsigned char *
 			
 			for (i = 0; i < 16; i++)
 			{
-				OLED_WriteData(*dp++);		//Ð´Êý¾Ýµ½OLED,Ã¿Ð´ÍêÒ»¸ö8Î»µÄÊý¾ÝºóÁÐµØÖ·×Ô¶¯¼Ó1
+				OLED_WriteData(*dp++);		//å†™æ•°æ®åˆ°OLED,æ¯å†™å®Œä¸€ä¸ª8ä½çš„æ•°æ®åŽåˆ—åœ°å€è‡ªåŠ¨åŠ 1
 			}
 			
 			x++;
@@ -423,17 +423,17 @@ void OLED_DisChar16x16(unsigned short x, unsigned short y, const unsigned char *
 
 /*
 ************************************************************
-*	º¯ÊýÃû³Æ£º	OLED_DisString6x8
+*	å‡½æ•°åç§°ï¼š	OLED_DisString6x8
 *
-*	º¯Êý¹¦ÄÜ£º	ÏÔÊ¾6x8µÄµãÕóÊý¾Ý
+*	å‡½æ•°åŠŸèƒ½ï¼š	æ˜¾ç¤º6x8çš„ç‚¹é˜µæ•°æ®
 *
-*	Èë¿Ú²ÎÊý£º	x£ºÏÔÊ¾ÐÐ
-*				y£ºÏÔÊ¾ÁÐ
-*				fmt£º²»¶¨³¤²Î
+*	å…¥å£å‚æ•°ï¼š	xï¼šæ˜¾ç¤ºè¡Œ
+*				yï¼šæ˜¾ç¤ºåˆ—
+*				fmtï¼šä¸å®šé•¿å‚
 *
-*	·µ»Ø²ÎÊý£º	ÎÞ
+*	è¿”å›žå‚æ•°ï¼š	æ— 
 *
-*	ËµÃ÷£º		ÄÜÏÔÊ¾7ÐÐ
+*	è¯´æ˜Žï¼š		èƒ½æ˜¾ç¤º7è¡Œ
 ************************************************************
 */
 void OLED_DisString6x8(unsigned char x, unsigned char y, char *fmt, ...)
@@ -452,7 +452,7 @@ void OLED_DisString6x8(unsigned char x, unsigned char y, char *fmt, ...)
 	if(checkInfo.OLED_OK)
 	{
 		y += 2;
-		IIC_SpeedCtl(20);							//i2cËÙ¶È¿ØÖÆ
+		IIC_SpeedCtl(20);							//i2cé€Ÿåº¦æŽ§åˆ¶
 		RTOS_ENTER_CRITICAL();
 		
 		while(*pStr != '\0')
@@ -480,17 +480,17 @@ void OLED_DisString6x8(unsigned char x, unsigned char y, char *fmt, ...)
 
 /*
 ************************************************************
-*	º¯ÊýÃû³Æ£º	OLED_DisString8x16
+*	å‡½æ•°åç§°ï¼š	OLED_DisString8x16
 *
-*	º¯Êý¹¦ÄÜ£º	ÏÔÊ¾8x16µÄµãÕóÊý¾Ý
+*	å‡½æ•°åŠŸèƒ½ï¼š	æ˜¾ç¤º8x16çš„ç‚¹é˜µæ•°æ®
 *
-*	Èë¿Ú²ÎÊý£º	x£ºÏÔÊ¾ÐÐ
-*				y£ºÏÔÊ¾ÁÐ
-*				fmt£º²»¶¨³¤²Î
+*	å…¥å£å‚æ•°ï¼š	xï¼šæ˜¾ç¤ºè¡Œ
+*				yï¼šæ˜¾ç¤ºåˆ—
+*				fmtï¼šä¸å®šé•¿å‚
 *
-*	·µ»Ø²ÎÊý£º	ÎÞ
+*	è¿”å›žå‚æ•°ï¼š	æ— 
 *
-*	ËµÃ÷£º		ÄÜÏÔÊ¾4ÐÐ
+*	è¯´æ˜Žï¼š		èƒ½æ˜¾ç¤º4è¡Œ
 ************************************************************
 */
 void OLED_DisString8x16(unsigned char x, unsigned char y, char *fmt, ...)
@@ -509,7 +509,7 @@ void OLED_DisString8x16(unsigned char x, unsigned char y, char *fmt, ...)
 	if(checkInfo.OLED_OK)
 	{
 		y += 2;
-		IIC_SpeedCtl(20);							//i2cËÙ¶È¿ØÖÆ
+		IIC_SpeedCtl(20);							//i2cé€Ÿåº¦æŽ§åˆ¶
 		RTOS_ENTER_CRITICAL();
 		
 		while(*pStr != '\0')

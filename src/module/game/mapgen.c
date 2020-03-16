@@ -62,7 +62,7 @@ void init_map(map_s *map)
     {
         for (j = 0; j < map->cols; j++)
         {
-            map->va_arr[i][j] = 1; //Ìî³äËùÓĞµÄÇ½
+            map->va_arr[i][j] = 1; //å¡«å……æ‰€æœ‰çš„å¢™
         }
     }
 }
@@ -129,12 +129,12 @@ void set_map_box(map_s *map)
 
 
 
-void setMap (map_s *map)//³õÊ¼»¯Ëæ»úµØÍ¼
+void setMap (map_s *map)//åˆå§‹åŒ–éšæœºåœ°å›¾
 {
 	int i,j;
 	int dir,set;
 	int rows,cols;
-    int nowR = 1,temp=1; //µ±Ç°×ù±êµãÎ»ÖÃ£¬¼°´æ´¢×ù±êµÄÁÙÊ±±äÁ¿
+    int nowR = 1,temp=1; //å½“å‰åº§æ ‡ç‚¹ä½ç½®ï¼ŒåŠå­˜å‚¨åº§æ ‡çš„ä¸´æ—¶å˜é‡
 	rows = map->rows;
 	cols = map->cols;
     init_map(map);
@@ -144,15 +144,15 @@ void setMap (map_s *map)//³õÊ¼»¯Ëæ»úµØÍ¼
 #if 0
     for (i = 1; i < rows /2 ;i+=2)
     {
-        char *pRwo = map->va_arr[i]; //Ö¸ÕëÖ¸ÏòµÚÒ»ĞĞÊı×é
+        char *pRwo = map->va_arr[i]; //æŒ‡é’ˆæŒ‡å‘ç¬¬ä¸€è¡Œæ•°ç»„
 
     loop:
-        dir = arc4random_uniform(2)+1; //»ñÈ¡×óÓÒËæ»ú·½Ïò
-        set = arc4random_uniform(cols-2-2)+2;//»ñÈ¡Ëæ»ú²½½øÖµ
+        dir = arc4random_uniform(2)+1; //è·å–å·¦å³éšæœºæ–¹å‘
+        set = arc4random_uniform(cols-2-2)+2;//è·å–éšæœºæ­¥è¿›å€¼
 
         switch (dir)
         {
-            case 1:  //Ïò×óÍÚ¿ÓÒÆ¶¯
+            case 1:  //å‘å·¦æŒ–å‘ç§»åŠ¨
                 if (nowR-2 < set)
                 {
                     goto loop;
@@ -168,7 +168,7 @@ void setMap (map_s *map)//³õÊ¼»¯Ëæ»úµØÍ¼
                     nowR = temp;
                     break;
                 }
-            case 2: //ÏòÓÒÍÚ¿ÓÒÆ¶¯
+            case 2: //å‘å³æŒ–å‘ç§»åŠ¨
                 if (set > cols -2 - nowR)
                 {
                     goto loop;
@@ -186,27 +186,27 @@ void setMap (map_s *map)//³õÊ¼»¯Ëæ»úµØÍ¼
                 }
 
         }
-        map->va_arr[i+2][nowR] = 0; //ÏòÏÂÍÚ¿ÓÒÆ¶¯
+        map->va_arr[i+2][nowR] = 0; //å‘ä¸‹æŒ–å‘ç§»åŠ¨
         map->va_arr[i+2][nowR+1] = 0;
         map->va_arr[i+2][nowR-1] = 0;
-        map->va_arr[i+3][nowR] = 0; //ÏòÏÂÍÚ¿ÓÒÆ¶¯
+        map->va_arr[i+3][nowR] = 0; //å‘ä¸‹æŒ–å‘ç§»åŠ¨
         map->va_arr[i+3][nowR+1] = 0;
         map->va_arr[i+3][nowR-1] = 0;
 
     }
 
-    for (i = rows-2; i > rows /2 ;i-=2) //ÓÉÏÂÍùÉÏÍÚ¿Ó£¬µ½ÖĞ¼äÖµ½ØÖ¹
+    for (i = rows-2; i > rows /2 ;i-=2) //ç”±ä¸‹å¾€ä¸ŠæŒ–å‘ï¼Œåˆ°ä¸­é—´å€¼æˆªæ­¢
     {
-        char *pRwo = map->va_arr[i]; //Ö¸ÕëÖ¸ÏòµÚÒ»ĞĞÊı×é
+        char *pRwo = map->va_arr[i]; //æŒ‡é’ˆæŒ‡å‘ç¬¬ä¸€è¡Œæ•°ç»„
 
     loop2:
         printf ("");
-        dir = arc4random_uniform(2)+1; //×óÓÒËæ»ú·½Ïò
+        dir = arc4random_uniform(2)+1; //å·¦å³éšæœºæ–¹å‘
         set = arc4random_uniform(cols-2-2)+2;
 
         switch (dir)
         {
-            case 1:  //Ïò×óÍÚ¿ÓÒÆ¶¯
+            case 1:  //å‘å·¦æŒ–å‘ç§»åŠ¨
                 if (nowR-2 < set)
                 {
                     goto loop2;
@@ -222,7 +222,7 @@ void setMap (map_s *map)//³õÊ¼»¯Ëæ»úµØÍ¼
                     nowR = temp;
                     break;
                 }
-            case 2: //ÏòÓÒÍÚ¿ÓÒÆ¶¯
+            case 2: //å‘å³æŒ–å‘ç§»åŠ¨
                 if (set > cols -2 - nowR)
                 {
                     goto loop2;
@@ -240,14 +240,14 @@ void setMap (map_s *map)//³õÊ¼»¯Ëæ»úµØÍ¼
                 }
 
         }
-        map->va_arr[i-2][nowR] = 0; //ÏòÏÂÒÆ¶¯
+        map->va_arr[i-2][nowR] = 0; //å‘ä¸‹ç§»åŠ¨
         map->va_arr[i-2][nowR+1] = 0;
         map->va_arr[i-2][nowR-1] = 0;
-        map->va_arr[i-3][nowR] = 0; //ÏòÏÂÒÆ¶¯
+        map->va_arr[i-3][nowR] = 0; //å‘ä¸‹ç§»åŠ¨
         map->va_arr[i-3][nowR+1] = 0;
         map->va_arr[i-3][nowR-1] = 0;
     }
-    for (i = 1; i < cols-1; i++ ) //ÎªÄ©ĞĞ¡¢Ê×ÏÈºÍÖĞ¼äĞĞÍÚÈ«¿Ó
+    for (i = 1; i < cols-1; i++ ) //ä¸ºæœ«è¡Œã€é¦–å…ˆå’Œä¸­é—´è¡ŒæŒ–å…¨å‘
     {
         map->va_arr[rows-2][i]= 0;
         map->va_arr[rows-3][i]= 0;
@@ -255,13 +255,13 @@ void setMap (map_s *map)//³õÊ¼»¯Ëæ»úµØÍ¼
         map->va_arr[1][i]= 0;
         map->va_arr[2][i]= 0;
     }
-    map->va_arr[rows-1][cols-2] = 0; //³õÊ¼»¯ÖÕµã¡¢Ğ¡ÈË¡¢Ïä×ÓÎ»ÖÃ
+    map->va_arr[rows-1][cols-2] = 0; //åˆå§‹åŒ–ç»ˆç‚¹ã€å°äººã€ç®±å­ä½ç½®
     map->va_arr[1][1] = 3;
     map->va_arr[2][2] = 4;
 #endif
 }
 
-void printMap (map_s *map)//´òÓ¡µØÍ¼
+void printMap (map_s *map)//æ‰“å°åœ°å›¾
 {
 	int i,j;
     for (i = 0; i < map->rows; i++ )
@@ -271,25 +271,25 @@ void printMap (map_s *map)//´òÓ¡µØÍ¼
             switch(map->va_arr[i][j])
    	   	   {
    	   	   	    case 0:
-   	   	   	    	printf("  "); //¿Õ°×µÄµØ·½
+   	   	   	    	printf("  "); //ç©ºç™½çš„åœ°æ–¹
    	   	   	    	break;
    	   	   	    case 1:
-   	   	   	    	printf("¡ö"); //Ç½ 
+   	   	   	    	printf("â– "); //å¢™ 
    	   	   	    	break;
    	   	   	    case 2:
-   	   	   	    	printf("¡â"); //ÈË 
+   	   	   	    	printf("â™€"); //äºº 
 				    break;
 				case 3:
-					printf("¡î"); //Ïä×Ó 
+					printf("â˜†"); //ç®±å­ 
 				    break;
 			    case 4:
-			    	printf("¡ò"); //ÖÕµãµØ·½ 
+			    	printf("â—"); //ç»ˆç‚¹åœ°æ–¹ 
 				     break; 
 				case 6:
-					printf("¡á");//ÈË¼ÓÖÕµãÎ»ÖÃ 
+					printf("â™‚");//äººåŠ ç»ˆç‚¹ä½ç½® 
 					break;
 			    case 7: 
-				    printf("¡ï") ;//Ïä×Ó¼ÓÖÕµãÎ»ÖÃ
+				    printf("â˜…") ;//ç®±å­åŠ ç»ˆç‚¹ä½ç½®
 					break;
 			 }
         }

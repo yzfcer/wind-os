@@ -3,56 +3,56 @@
 #include "beep.h"
 
 /*********************************************************************************
-*************************MCUÆôÃ÷ STM32F407ºËĞÄ¿ª·¢°å******************************
+*************************MCUå¯æ˜ STM32F407æ ¸å¿ƒå¼€å‘æ¿******************************
 **********************************************************************************
-* ÎÄ¼şÃû³Æ: timer.c                                                              *
-* ÎÄ¼ş¼òÊö£ºtimer¶¨Ê±                                                            *
-* ´´½¨ÈÕÆÚ£º2015.03.07                                                           *
-* °æ    ±¾£ºV1.0                                                                 *
-* ×÷    Õß£ºClever                                                               *
-* Ëµ    Ã÷£º¶¨Ê±Æ÷2¶¨Ê±µ½LED1·­×ªºÍ·äÃùÆ÷Ïì±Õ                                    * 
+* æ–‡ä»¶åç§°: timer.c                                                              *
+* æ–‡ä»¶ç®€è¿°ï¼štimerå®šæ—¶                                                            *
+* åˆ›å»ºæ—¥æœŸï¼š2015.03.07                                                           *
+* ç‰ˆ    æœ¬ï¼šV1.0                                                                 *
+* ä½œ    è€…ï¼šClever                                                               *
+* è¯´    æ˜ï¼šå®šæ—¶å™¨2å®šæ—¶åˆ°LED1ç¿»è½¬å’Œèœ‚é¸£å™¨å“é—­                                    * 
 **********************************************************************************
 *********************************************************************************/ 
 
 /****************************************************************************
-* Ãû    ³Æ: TIM2_Init(u16_t auto_data,u16_t fractional)
-* ¹¦    ÄÜ£º¶¨Ê±Æ÷2³õÊ¼»¯
-* Èë¿Ú²ÎÊı£ºauto_data: ×Ô¶¯ÖØ×°Öµ
-*           fractional: Ê±ÖÓÔ¤·ÖÆµÊı
-* ·µ»Ø²ÎÊı£ºÎŞ
-* Ëµ    Ã÷£º¶¨Ê±Æ÷Òç³öÊ±¼ä¼ÆËã·½·¨:Tout=((auto_data+1)*(fractional+1))/Ft(us)  Ft¶¨Ê±Æ÷Ê±ÖÓ
+* å    ç§°: TIM2_Init(u16_t auto_data,u16_t fractional)
+* åŠŸ    èƒ½ï¼šå®šæ—¶å™¨2åˆå§‹åŒ–
+* å…¥å£å‚æ•°ï¼šauto_data: è‡ªåŠ¨é‡è£…å€¼
+*           fractional: æ—¶é’Ÿé¢„åˆ†é¢‘æ•°
+* è¿”å›å‚æ•°ï¼šæ— 
+* è¯´    æ˜ï¼šå®šæ—¶å™¨æº¢å‡ºæ—¶é—´è®¡ç®—æ–¹æ³•:Tout=((auto_data+1)*(fractional+1))/Ft(us)  Ftå®šæ—¶å™¨æ—¶é’Ÿ
 ****************************************************************************/
 void TIM2_Init(u16_t auto_data,u16_t fractional)
 {
 	TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStructure;
 	NVIC_InitTypeDef NVIC_InitStructure;
 	
-	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2,ENABLE);      //Ê¹ÄÜTIM2Ê±ÖÓ
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2,ENABLE);      //ä½¿èƒ½TIM2æ—¶é’Ÿ
 	
-  TIM_TimeBaseInitStructure.TIM_Period = auto_data; 	     //×Ô¶¯ÖØ×°ÔØÖµ
-	TIM_TimeBaseInitStructure.TIM_Prescaler=fractional;      //¶¨Ê±Æ÷·ÖÆµ
-	TIM_TimeBaseInitStructure.TIM_CounterMode=TIM_CounterMode_Up; //ÏòÉÏ¼ÆÊıÄ£Ê½
+  TIM_TimeBaseInitStructure.TIM_Period = auto_data; 	     //è‡ªåŠ¨é‡è£…è½½å€¼
+	TIM_TimeBaseInitStructure.TIM_Prescaler=fractional;      //å®šæ—¶å™¨åˆ†é¢‘
+	TIM_TimeBaseInitStructure.TIM_CounterMode=TIM_CounterMode_Up; //å‘ä¸Šè®¡æ•°æ¨¡å¼
 	TIM_TimeBaseInitStructure.TIM_ClockDivision=TIM_CKD_DIV1; 
 	
-	TIM_TimeBaseInit(TIM2,&TIM_TimeBaseInitStructure);//³õÊ¼»¯TIM2
+	TIM_TimeBaseInit(TIM2,&TIM_TimeBaseInitStructure);//åˆå§‹åŒ–TIM2
 	
-	TIM_ITConfig(TIM2,TIM_IT_Update,ENABLE); //ÔÊĞí¶¨Ê±Æ÷2¸üĞÂÖĞ¶Ï
-	TIM_Cmd(TIM2,ENABLE);                    //Ê¹ÄÜ¶¨Ê±Æ÷2
+	TIM_ITConfig(TIM2,TIM_IT_Update,ENABLE); //å…è®¸å®šæ—¶å™¨2æ›´æ–°ä¸­æ–­
+	TIM_Cmd(TIM2,ENABLE);                    //ä½¿èƒ½å®šæ—¶å™¨2
 	
-	NVIC_InitStructure.NVIC_IRQChannel=TIM2_IRQn; //¶¨Ê±Æ÷2ÖĞ¶Ï
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=0x01; //ÇÀÕ¼ÓÅÏÈ¼¶1
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority=0x03;  //×ÓÓÅÏÈ¼¶3
+	NVIC_InitStructure.NVIC_IRQChannel=TIM2_IRQn; //å®šæ—¶å™¨2ä¸­æ–­
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=0x01; //æŠ¢å ä¼˜å…ˆçº§1
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority=0x03;  //å­ä¼˜å…ˆçº§3
 	NVIC_InitStructure.NVIC_IRQChannelCmd=ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
 }
 
-//¶¨Ê±Æ÷3ÖĞ¶Ï·şÎñº¯Êı
+//å®šæ—¶å™¨3ä¸­æ–­æœåŠ¡å‡½æ•°
 void TIM2_IRQHandler(void)
 {
-	if(TIM_GetITStatus(TIM2,TIM_IT_Update)==SET) //Òç³öÖĞ¶Ï
+	if(TIM_GetITStatus(TIM2,TIM_IT_Update)==SET) //æº¢å‡ºä¸­æ–­
 	{
-		LED1=!LED1;//LED1·­×ª
+		LED1=!LED1;//LED1ç¿»è½¬
 		BEEP=!BEEP;
 	}
-	TIM_ClearITPendingBit(TIM2,TIM_IT_Update);  //Çå³ıÖĞ¶Ï±êÖ¾Î»
+	TIM_ClearITPendingBit(TIM2,TIM_IT_Update);  //æ¸…é™¤ä¸­æ–­æ ‡å¿—ä½
 }

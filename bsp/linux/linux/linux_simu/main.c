@@ -64,7 +64,7 @@ static void save_argv(int argc,char *argv[])
 int main(int argc,char *argv[])
 {
     //HANDLE hproc;
-    //system("mode con cols=100 lines=50");//设置窗口大小
+    //system("mode con cols=100 lines=50");//璁剧疆绐楀彛澶у皬
     save_argv(argc,argv);
     //hproc = GetModuleHandle(NULL);
     //SetPriorityClass(hproc,REALTIME_PRIORITY_CLASS);

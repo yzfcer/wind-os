@@ -2,26 +2,26 @@
 	************************************************************
 	************************************************************
 	************************************************************
-	*	ÎÄ¼þÃû£º 	spilcd.c
+	*	æ–‡ä»¶åï¼š 	spilcd.c
 	*
-	*	×÷Õß£º 		ÕÅ¼ÌÈð
+	*	ä½œè€…ï¼š 		å¼ ç»§ç‘ž
 	*
-	*	ÈÕÆÚ£º 		2017-04-15
+	*	æ—¥æœŸï¼š 		2017-04-15
 	*
-	*	°æ±¾£º 		V1.0
+	*	ç‰ˆæœ¬ï¼š 		V1.0
 	*
-	*	ËµÃ÷£º 		SPI TFT-LCDÇý¶¯
+	*	è¯´æ˜Žï¼š 		SPI TFT-LCDé©±åŠ¨
 	*
-	*	ÐÞ¸Ä¼ÇÂ¼£º	
+	*	ä¿®æ”¹è®°å½•ï¼š	
 	************************************************************
 	************************************************************
 	************************************************************
 **/
 
-//µ¥Æ¬»úÍ·ÎÄ¼þ
+//å•ç‰‡æœºå¤´æ–‡ä»¶
 #include "stm32f10x.h"
 
-//Ó²¼þÇý¶¯
+//ç¡¬ä»¶é©±åŠ¨
 #include "spilcd.h"
 #include "delay.h"
 #include "hwtimer.h"
@@ -29,7 +29,7 @@
 #include "spi.h"
 #endif
 
-//C¿â
+//Cåº“
 #include <stdarg.h>
 #include <stdio.h>
 
@@ -39,15 +39,15 @@ SPILCD_INFO spilcd_info;
 
 /*
 ************************************************************
-*	º¯ÊýÃû³Æ£º	LCD_SendByte
+*	å‡½æ•°åç§°ï¼š	LCD_SendByte
 *
-*	º¯Êý¹¦ÄÜ£º	·¢ËÍÒ»¸ö×Ö½Ú
+*	å‡½æ•°åŠŸèƒ½ï¼š	å‘é€ä¸€ä¸ªå­—èŠ‚
 *
-*	Èë¿Ú²ÎÊý£º	ÎÞ
+*	å…¥å£å‚æ•°ï¼š	æ— 
 *
-*	·µ»Ø²ÎÊý£º	ÎÞ
+*	è¿”å›žå‚æ•°ï¼š	æ— 
 *
-*	ËµÃ÷£º		
+*	è¯´æ˜Žï¼š		
 ************************************************************
 */
 void LCD_SendByte(unsigned char byte)
@@ -129,15 +129,15 @@ void LCD_Rst(void)
 
 /*
 ************************************************************
-*	º¯ÊýÃû³Æ£º	LCD_Init
+*	å‡½æ•°åç§°ï¼š	LCD_Init
 *
-*	º¯Êý¹¦ÄÜ£º	LCD³õÊ¼»¯
+*	å‡½æ•°åŠŸèƒ½ï¼š	LCDåˆå§‹åŒ–
 *
-*	Èë¿Ú²ÎÊý£º	ÎÞ
+*	å…¥å£å‚æ•°ï¼š	æ— 
 *
-*	·µ»Ø²ÎÊý£º	ÎÞ
+*	è¿”å›žå‚æ•°ï¼š	æ— 
 *
-*	ËµÃ÷£º		PA8-±³¹â	PB12-CS		PB14-MISO	PB15-MOSI
+*	è¯´æ˜Žï¼š		PA8-èƒŒå…‰	PB12-CS		PB14-MISO	PB15-MOSI
 *				PC9-RST		PB13-CLK	
 ************************************************************
 */
@@ -160,11 +160,11 @@ void SPILCD_Init(void)
 	gpioInitStruct.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_Init(GPIOB, &gpioInitStruct);
 	
-	//¸´Î»
+	//å¤ä½
 	gpioInitStruct.GPIO_Pin = GPIO_Pin_9;
 	GPIO_Init(GPIOC, &gpioInitStruct);
 	
-	//±³¹â
+	//èƒŒå…‰
 	TIM3_PWM_Init(250, 1799);
 	
 	LCD_Rst();
@@ -277,18 +277,18 @@ void SPILCD_BL_Ctl(unsigned char value)
 
 /*
 ************************************************************
-*	º¯ÊýÃû³Æ£º	LCD_SetAddress
+*	å‡½æ•°åç§°ï¼š	LCD_SetAddress
 *
-*	º¯Êý¹¦ÄÜ£º	ÉèÖÃÏÔÊ¾µØÖ·ÇøÓò
+*	å‡½æ•°åŠŸèƒ½ï¼š	è®¾ç½®æ˜¾ç¤ºåœ°å€åŒºåŸŸ
 *
-*	Èë¿Ú²ÎÊý£º	xStart£ºXÖáÆðÊ¼µØÖ·
-*				yStart£ºYÖáÆðÊ¼µØÖ·
-*				xEnd£ºXÖá½áÊøµØÖ·
-*				yEnd£ºYÖá½áÊøµØÖ·
+*	å…¥å£å‚æ•°ï¼š	xStartï¼šXè½´èµ·å§‹åœ°å€
+*				yStartï¼šYè½´èµ·å§‹åœ°å€
+*				xEndï¼šXè½´ç»“æŸåœ°å€
+*				yEndï¼šYè½´ç»“æŸåœ°å€
 *
-*	·µ»Ø²ÎÊý£º	ÎÞ
+*	è¿”å›žå‚æ•°ï¼š	æ— 
 *
-*	ËµÃ÷£º		ÔÚ´ËÇøÓòÄÚÐ´Êý¾ÝÊ±£¬µØÖ·×Ô¶¯×ÔÔö
+*	è¯´æ˜Žï¼š		åœ¨æ­¤åŒºåŸŸå†…å†™æ•°æ®æ—¶ï¼Œåœ°å€è‡ªåŠ¨è‡ªå¢ž
 ************************************************************
 */
 void LCD_SetAddress(unsigned short xStart, unsigned short yStart, unsigned short xEnd, unsigned short yEnd)
@@ -312,17 +312,17 @@ void LCD_SetAddress(unsigned short xStart, unsigned short yStart, unsigned short
 
 /*
 ************************************************************
-*	º¯ÊýÃû³Æ£º	LCD_DrawPoint
+*	å‡½æ•°åç§°ï¼š	LCD_DrawPoint
 *
-*	º¯Êý¹¦ÄÜ£º	»­µã
+*	å‡½æ•°åŠŸèƒ½ï¼š	ç”»ç‚¹
 *
-*	Èë¿Ú²ÎÊý£º	x£ºXÖáÎ»ÖÃ
-*				y£ºYÖáÎ»ÖÃ
-*				color£ºÑÕÉ«Öµ
+*	å…¥å£å‚æ•°ï¼š	xï¼šXè½´ä½ç½®
+*				yï¼šYè½´ä½ç½®
+*				colorï¼šé¢œè‰²å€¼
 *
-*	·µ»Ø²ÎÊý£º	ÎÞ
+*	è¿”å›žå‚æ•°ï¼š	æ— 
 *
-*	ËµÃ÷£º		
+*	è¯´æ˜Žï¼š		
 ************************************************************
 */
 void SPILCD_DrawPoint(unsigned short x, unsigned short y, unsigned short color)
@@ -339,19 +339,19 @@ void SPILCD_DrawPoint(unsigned short x, unsigned short y, unsigned short color)
 
 /*
 ************************************************************
-*	º¯ÊýÃû³Æ£º	SPILCD_FillRect
+*	å‡½æ•°åç§°ï¼š	SPILCD_FillRect
 *
-*	º¯Êý¹¦ÄÜ£º	»­Rect
+*	å‡½æ•°åŠŸèƒ½ï¼š	ç”»Rect
 *
-*	Èë¿Ú²ÎÊý£º	xStart£ºXÖáÆðÊ¼µØÖ·
-*				yStart£ºYÖáÆðÊ¼µØÖ·
-*				xEnd£ºXÖá½áÊøµØÖ·
-*				yEnd£ºYÖá½áÊøµØÖ·
-*				color£ºÑÕÉ«Öµ
+*	å…¥å£å‚æ•°ï¼š	xStartï¼šXè½´èµ·å§‹åœ°å€
+*				yStartï¼šYè½´èµ·å§‹åœ°å€
+*				xEndï¼šXè½´ç»“æŸåœ°å€
+*				yEndï¼šYè½´ç»“æŸåœ°å€
+*				colorï¼šé¢œè‰²å€¼
 *
-*	·µ»Ø²ÎÊý£º	ÎÞ
+*	è¿”å›žå‚æ•°ï¼š	æ— 
 *
-*	ËµÃ÷£º		
+*	è¯´æ˜Žï¼š		
 ************************************************************
 */
 void SPILCD_FillRect(unsigned short xStart, unsigned short yStart, unsigned short xEnd, unsigned short yEnd, unsigned short color)
@@ -377,18 +377,18 @@ void SPILCD_FillRect(unsigned short xStart, unsigned short yStart, unsigned shor
 
 /*
 ************************************************************
-*	º¯ÊýÃû³Æ£º	SPILCD_Draw16BPP
+*	å‡½æ•°åç§°ï¼š	SPILCD_Draw16BPP
 *
-*	º¯Êý¹¦ÄÜ£º	»­Í¼
+*	å‡½æ•°åŠŸèƒ½ï¼š	ç”»å›¾
 *
-*	Èë¿Ú²ÎÊý£º	x£ºXÖáÎ»ÖÃ
-*				y£ºYÖáÎ»ÖÃ
-*				color£ºÑÕÉ«Öµ
-*				xySize£º»­µã´ÎÊý
+*	å…¥å£å‚æ•°ï¼š	xï¼šXè½´ä½ç½®
+*				yï¼šYè½´ä½ç½®
+*				colorï¼šé¢œè‰²å€¼
+*				xySizeï¼šç”»ç‚¹æ¬¡æ•°
 *
-*	·µ»Ø²ÎÊý£º	ÎÞ
+*	è¿”å›žå‚æ•°ï¼š	æ— 
 *
-*	ËµÃ÷£º		×¨¹©ucGUIÊ¹ÓÃ
+*	è¯´æ˜Žï¼š		ä¸“ä¾›ucGUIä½¿ç”¨
 ************************************************************
 */
 void SPILCD_Draw16BPP(unsigned short x, unsigned short y, const unsigned short *color, const unsigned short *pTrans,
@@ -452,7 +452,7 @@ void SPILCD_Draw16BPP(unsigned short x, unsigned short y, const unsigned short *
 ************************************************************************************************************
 
 
-									ÒÔÏÂÎª²»Ê¹ÓÃÍ¼ÐÎÏµÍ³Ê±×¨ÓÃµÄº¯Êý
+									ä»¥ä¸‹ä¸ºä¸ä½¿ç”¨å›¾å½¢ç³»ç»Ÿæ—¶ä¸“ç”¨çš„å‡½æ•°
 
 
 ************************************************************************************************************
@@ -461,15 +461,15 @@ void SPILCD_Draw16BPP(unsigned short x, unsigned short y, const unsigned short *
 
 /*
 ************************************************************
-*	º¯ÊýÃû³Æ£º	LCD_Clear
+*	å‡½æ•°åç§°ï¼š	LCD_Clear
 *
-*	º¯Êý¹¦ÄÜ£º	Ìî³äÆÁÄ»
+*	å‡½æ•°åŠŸèƒ½ï¼š	å¡«å……å±å¹•
 *
-*	Èë¿Ú²ÎÊý£º	color£ºÑÕÉ«Öµ
+*	å…¥å£å‚æ•°ï¼š	colorï¼šé¢œè‰²å€¼
 *
-*	·µ»Ø²ÎÊý£º	ÎÞ
+*	è¿”å›žå‚æ•°ï¼š	æ— 
 *
-*	ËµÃ÷£º		
+*	è¯´æ˜Žï¼š		
 ************************************************************
 */
 void SPILCD_Clear(unsigned short color)
@@ -495,19 +495,19 @@ void SPILCD_Clear(unsigned short color)
 
 /*
 ************************************************************
-*	º¯ÊýÃû³Æ£º	SPILCD_DrawLine
+*	å‡½æ•°åç§°ï¼š	SPILCD_DrawLine
 *
-*	º¯Êý¹¦ÄÜ£º	ÔÚÆÁÄ»ÉÏ»­Ò»ÌõÏß
+*	å‡½æ•°åŠŸèƒ½ï¼š	åœ¨å±å¹•ä¸Šç”»ä¸€æ¡çº¿
 *
-*	Èë¿Ú²ÎÊý£º	x1£ºXÖáÆðÊ¼µã
-*				y1£ºYÖáÆðÊ¼µã
-*				x2£ºXÖá½áÊøµã
-*				y2£ºYÖá½áÊøµã
-*				color£ºÑÕÉ«Öµ
+*	å…¥å£å‚æ•°ï¼š	x1ï¼šXè½´èµ·å§‹ç‚¹
+*				y1ï¼šYè½´èµ·å§‹ç‚¹
+*				x2ï¼šXè½´ç»“æŸç‚¹
+*				y2ï¼šYè½´ç»“æŸç‚¹
+*				colorï¼šé¢œè‰²å€¼
 *
-*	·µ»Ø²ÎÊý£º	ÎÞ
+*	è¿”å›žå‚æ•°ï¼š	æ— 
 *
-*	ËµÃ÷£º		
+*	è¯´æ˜Žï¼š		
 ************************************************************
 */
 void SPILCD_DrawLine(unsigned short x1, unsigned short y1, unsigned short x2, unsigned short y2, unsigned short color)
@@ -517,15 +517,15 @@ void SPILCD_DrawLine(unsigned short x1, unsigned short y1, unsigned short x2, un
 	int xerr = 0, yerr = 0, delta_x, delta_y, distance;
 	int incx, incy, uRow, uCol;
 	
-	delta_x = x2 - x1;										//¼ÆËã×ø±êÔöÁ¿
+	delta_x = x2 - x1;										//è®¡ç®—åæ ‡å¢žé‡
 	delta_y = y2 - y1;
 	uRow = x1;
 	uCol = y1;
 
 	if(delta_x > 0)
-		incx = 1;											//ÉèÖÃµ¥²½·½Ïò
+		incx = 1;											//è®¾ç½®å•æ­¥æ–¹å‘
 	else if(delta_x == 0)
-		incx = 0;											//´¹Ö±Ïß
+		incx = 0;											//åž‚ç›´çº¿
 	else
 	{
 		incx = -1;
@@ -535,7 +535,7 @@ void SPILCD_DrawLine(unsigned short x1, unsigned short y1, unsigned short x2, un
 	if(delta_y > 0)
 		incy = 1;
 	else if(delta_y == 0)
-		incy = 0;											//Ë®Æ½Ïß
+		incy = 0;											//æ°´å¹³çº¿
 	else
 	{
 		incy = -1;
@@ -543,13 +543,13 @@ void SPILCD_DrawLine(unsigned short x1, unsigned short y1, unsigned short x2, un
 	}
 
 	if(delta_x > delta_y)
-		distance = delta_x;									//Ñ¡È¡»ù±¾ÔöÁ¿×ø±êÖá
+		distance = delta_x;									//é€‰å–åŸºæœ¬å¢žé‡åæ ‡è½´
 	else
 		distance = delta_y;
 
-	for(t = 0; t <= distance + 1; t++)						//»­ÏßÊä³ö
+	for(t = 0; t <= distance + 1; t++)						//ç”»çº¿è¾“å‡º
 	{
-		SPILCD_DrawPoint(uRow, uCol, color);				//»­µã
+		SPILCD_DrawPoint(uRow, uCol, color);				//ç”»ç‚¹
 		xerr += delta_x ;
 		yerr += delta_y ;
 
@@ -570,19 +570,19 @@ void SPILCD_DrawLine(unsigned short x1, unsigned short y1, unsigned short x2, un
 
 /*
 ************************************************************
-*	º¯ÊýÃû³Æ£º	SPILCD_DrawRectangle
+*	å‡½æ•°åç§°ï¼š	SPILCD_DrawRectangle
 *
-*	º¯Êý¹¦ÄÜ£º	ÔÚÆÁÄ»ÉÏ»­Ò»¸ö¿ÕÐÄ¾ØÐÎ
+*	å‡½æ•°åŠŸèƒ½ï¼š	åœ¨å±å¹•ä¸Šç”»ä¸€ä¸ªç©ºå¿ƒçŸ©å½¢
 *
-*	Èë¿Ú²ÎÊý£º	x1£ºXÖáÆðÊ¼µã
-*				y1£ºYÖáÆðÊ¼µã
-*				x2£ºXÖá½áÊøµã
-*				y2£ºYÖá½áÊøµã
-*				color£ºÑÕÉ«Öµ
+*	å…¥å£å‚æ•°ï¼š	x1ï¼šXè½´èµ·å§‹ç‚¹
+*				y1ï¼šYè½´èµ·å§‹ç‚¹
+*				x2ï¼šXè½´ç»“æŸç‚¹
+*				y2ï¼šYè½´ç»“æŸç‚¹
+*				colorï¼šé¢œè‰²å€¼
 *
-*	·µ»Ø²ÎÊý£º	ÎÞ
+*	è¿”å›žå‚æ•°ï¼š	æ— 
 *
-*	ËµÃ÷£º		
+*	è¯´æ˜Žï¼š		
 ************************************************************
 */
 void SPILCD_DrawRectangle(unsigned short x1, unsigned short y1, unsigned short x2, unsigned short y2, unsigned short color)
@@ -597,18 +597,18 @@ void SPILCD_DrawRectangle(unsigned short x1, unsigned short y1, unsigned short x
 
 /*
 ************************************************************
-*	º¯ÊýÃû³Æ£º	SPILCD_DrawCircle
+*	å‡½æ•°åç§°ï¼š	SPILCD_DrawCircle
 *
-*	º¯Êý¹¦ÄÜ£º	ÔÚÆÁÄ»ÉÏ»­Ò»¸öÔ²ÐÎ
+*	å‡½æ•°åŠŸèƒ½ï¼š	åœ¨å±å¹•ä¸Šç”»ä¸€ä¸ªåœ†å½¢
 *
-*	Èë¿Ú²ÎÊý£º	x0£ºÔ²ÐÄXÖá×ø±ê
-*				y0£ºÔ²ÐÄYÖá×ø±ê
-*				r£º°ë¾¶
-*				color£ºÑÕÉ«Öµ
+*	å…¥å£å‚æ•°ï¼š	x0ï¼šåœ†å¿ƒXè½´åæ ‡
+*				y0ï¼šåœ†å¿ƒYè½´åæ ‡
+*				rï¼šåŠå¾„
+*				colorï¼šé¢œè‰²å€¼
 *
-*	·µ»Ø²ÎÊý£º	ÎÞ
+*	è¿”å›žå‚æ•°ï¼š	æ— 
 *
-*	ËµÃ÷£º		
+*	è¯´æ˜Žï¼š		
 ************************************************************
 */
 void SPILCD_DrawCircle(unsigned short x0, unsigned short y0, unsigned char r, unsigned short color)
@@ -619,7 +619,7 @@ void SPILCD_DrawCircle(unsigned short x0, unsigned short y0, unsigned char r, un
 	
 	a = 0;
 	b = r;
-	di = 3 - (r << 1);       //ÅÐ¶ÏÏÂ¸öµãÎ»ÖÃµÄ±êÖ¾
+	di = 3 - (r << 1);       //åˆ¤æ–­ä¸‹ä¸ªç‚¹ä½ç½®çš„æ ‡å¿—
 
 	while(a <= b)
 	{
@@ -633,7 +633,7 @@ void SPILCD_DrawCircle(unsigned short x0, unsigned short y0, unsigned char r, un
 		SPILCD_DrawPoint(x0 - b, y0 - a, color);        //7
 		a++;
 
-		//Ê¹ÓÃBresenhamËã·¨»­Ô²
+		//ä½¿ç”¨Bresenhamç®—æ³•ç”»åœ†
 		if(di < 0)
 			di += 4 * a + 6;
 		else
@@ -646,15 +646,15 @@ void SPILCD_DrawCircle(unsigned short x0, unsigned short y0, unsigned char r, un
 
 /*
 ************************************************************
-*	º¯ÊýÃû³Æ£º	SPILCD_DrawPic
+*	å‡½æ•°åç§°ï¼š	SPILCD_DrawPic
 *
-*	º¯Êý¹¦ÄÜ£º	»­Í¼
+*	å‡½æ•°åŠŸèƒ½ï¼š	ç”»å›¾
 *
-*	Èë¿Ú²ÎÊý£º	pic£º¸ù¾ÝÍ¼Æ¬Á÷Ö¸Õë»­Í¼
+*	å…¥å£å‚æ•°ï¼š	picï¼šæ ¹æ®å›¾ç‰‡æµæŒ‡é’ˆç”»å›¾
 *
-*	·µ»Ø²ÎÊý£º	ÎÞ
+*	è¿”å›žå‚æ•°ï¼š	æ— 
 *
-*	ËµÃ÷£º		
+*	è¯´æ˜Žï¼š		
 ************************************************************
 */
 void SPILCD_DrawPic(const unsigned char *pic)
@@ -685,46 +685,46 @@ extern const unsigned char asc2_1608[95][16];
 extern const unsigned char asc2_2412[95][36];
 /*
 ************************************************************
-*	º¯ÊýÃû³Æ£º	SPILCD_DisChar
+*	å‡½æ•°åç§°ï¼š	SPILCD_DisChar
 *
-*	º¯Êý¹¦ÄÜ£º	ÏÔÊ¾Ò»¸öASCII×Ö·û
+*	å‡½æ•°åŠŸèƒ½ï¼š	æ˜¾ç¤ºä¸€ä¸ªASCIIå­—ç¬¦
 *
-*	Èë¿Ú²ÎÊý£º	x£ºX×ø±ê
-*				y£ºY×ø±ê
-*				size£º×Ö·û³ß´ç
-*				color£ºÏÔÊ¾µÄÑÕÉ«
-*				mode£º0-µþ¼ÓÏÔÊ¾		1-²»µþ¼ÓÏÔÊ¾
-*				Char£º×Ö·ûË÷Òý
+*	å…¥å£å‚æ•°ï¼š	xï¼šXåæ ‡
+*				yï¼šYåæ ‡
+*				sizeï¼šå­—ç¬¦å°ºå¯¸
+*				colorï¼šæ˜¾ç¤ºçš„é¢œè‰²
+*				modeï¼š0-å åŠ æ˜¾ç¤º		1-ä¸å åŠ æ˜¾ç¤º
+*				Charï¼šå­—ç¬¦ç´¢å¼•
 *
-*	·µ»Ø²ÎÊý£º	ÎÞ
+*	è¿”å›žå‚æ•°ï¼š	æ— 
 *
-*	ËµÃ÷£º		
+*	è¯´æ˜Žï¼š		
 ************************************************************
 */
-void SPILCD_DisChar(unsigned short x, unsigned short y, unsigned char size, unsigned short color, _Bool mode, unsigned char Char)    //ÄÜÏÔÊ¾¶¯Ì¬Êý¾Ý  Ò»¸ö×Ö·ûÕ¼ÓÃ12ÏñËØ¿í  24ÏñËØ¸ß
+void SPILCD_DisChar(unsigned short x, unsigned short y, unsigned char size, unsigned short color, _Bool mode, unsigned char Char)    //èƒ½æ˜¾ç¤ºåŠ¨æ€æ•°æ®  ä¸€ä¸ªå­—ç¬¦å ç”¨12åƒç´ å®½  24åƒç´ é«˜
 {
 
 	unsigned char temp, t1, t;
 	unsigned short y0 = y;
-	unsigned char csize = ((size >> 3) + ((size % 8) ? 1 : 0)) * (size >> 1);	//µÃµ½×ÖÌåÒ»¸ö×Ö·û¶ÔÓ¦µãÕó¼¯ËùÕ¼µÄ×Ö½ÚÊý  12  16¶¼Ã»±ä  24±ä36
+	unsigned char csize = ((size >> 3) + ((size % 8) ? 1 : 0)) * (size >> 1);	//å¾—åˆ°å­—ä½“ä¸€ä¸ªå­—ç¬¦å¯¹åº”ç‚¹é˜µé›†æ‰€å çš„å­—èŠ‚æ•°  12  16éƒ½æ²¡å˜  24å˜36
 
-	Char -= 32;//µÃµ½Æ«ÒÆºóµÄÖµ£¨ASCII×Ö¿âÊÇ´Ó¿Õ¸ñ¿ªÊ¼È¡Ä££¬ËùÒÔ-' '¾ÍÊÇ¶ÔÓ¦×Ö·ûµÄ×Ö¿â£©
+	Char -= 32;//å¾—åˆ°åç§»åŽçš„å€¼ï¼ˆASCIIå­—åº“æ˜¯ä»Žç©ºæ ¼å¼€å§‹å–æ¨¡ï¼Œæ‰€ä»¥-' 'å°±æ˜¯å¯¹åº”å­—ç¬¦çš„å­—åº“ï¼‰
 
 	for(t = 0; t < csize; t++)
 	{
 		if(size == 12)
-			temp = asc2_1206[Char][t]; 	 //µ÷ÓÃ1206×ÖÌå
+			temp = asc2_1206[Char][t]; 	 //è°ƒç”¨1206å­—ä½“
 		else if(size == 16)
-			temp = asc2_1608[Char][t];	//µ÷ÓÃ1608×ÖÌå
+			temp = asc2_1608[Char][t];	//è°ƒç”¨1608å­—ä½“
 		else if(size == 24)
-			temp = asc2_2412[Char][t];	//µ÷ÓÃ2412×ÖÌå
+			temp = asc2_2412[Char][t];	//è°ƒç”¨2412å­—ä½“
 		else
-			return;						//Ã»ÓÐµÄ×Ö¿â
+			return;						//æ²¡æœ‰çš„å­—åº“
 
 		for(t1 = 0; t1 < 8; t1++)
 		{
 			if(mode)
-				SPILCD_DrawPoint(x, y, BGC);    //Ð´±³¾°É«²Á³ý
+				SPILCD_DrawPoint(x, y, BGC);    //å†™èƒŒæ™¯è‰²æ“¦é™¤
 
 			if(temp & 0x80)
 				SPILCD_DrawPoint(x, y, color);
@@ -745,20 +745,20 @@ void SPILCD_DisChar(unsigned short x, unsigned short y, unsigned char size, unsi
 
 /*
 ************************************************************
-*	º¯ÊýÃû³Æ£º	SPILCD_DisString
+*	å‡½æ•°åç§°ï¼š	SPILCD_DisString
 *
-*	º¯Êý¹¦ÄÜ£º	ÏÔÊ¾Ò»¸ö×Ö·û´®
+*	å‡½æ•°åŠŸèƒ½ï¼š	æ˜¾ç¤ºä¸€ä¸ªå­—ç¬¦ä¸²
 *
-*	Èë¿Ú²ÎÊý£º	x£ºX×ø±ê
-*				y£ºY×ø±ê
-*				size£º×Ö·û³ß´ç
-*				color£ºÏÔÊ¾µÄÑÕÉ«
-*				mode£º0-µþ¼ÓÏÔÊ¾		1-²»µþ¼ÓÏÔÊ¾
+*	å…¥å£å‚æ•°ï¼š	xï¼šXåæ ‡
+*				yï¼šYåæ ‡
+*				sizeï¼šå­—ç¬¦å°ºå¯¸
+*				colorï¼šæ˜¾ç¤ºçš„é¢œè‰²
+*				modeï¼š0-å åŠ æ˜¾ç¤º		1-ä¸å åŠ æ˜¾ç¤º
 *				...
 *
-*	·µ»Ø²ÎÊý£º	ÎÞ
+*	è¿”å›žå‚æ•°ï¼š	æ— 
 *
-*	ËµÃ÷£º		
+*	è¯´æ˜Žï¼š		
 ************************************************************
 */
 void SPILCD_DisString(unsigned short x, unsigned short y, unsigned char size, unsigned short color, unsigned char mode, char *fmt, ...)
@@ -783,19 +783,19 @@ void SPILCD_DisString(unsigned short x, unsigned short y, unsigned char size, un
 
 /*
 ************************************************************
-*	º¯ÊýÃû³Æ£º	SPILCD_DisZW
+*	å‡½æ•°åç§°ï¼š	SPILCD_DisZW
 *
-*	º¯Êý¹¦ÄÜ£º	ÏÔÊ¾Ò»¸ö×Öºº×Ö
+*	å‡½æ•°åŠŸèƒ½ï¼š	æ˜¾ç¤ºä¸€ä¸ªå­—æ±‰å­—
 *
-*	Èë¿Ú²ÎÊý£º	x£ºX×ø±ê
-*				y£ºY×ø±ê
-*				color£ºÑÕÉ«Öµ
-*				zw£º×Ö¿âÊý¾ÝÖ¸Õë
+*	å…¥å£å‚æ•°ï¼š	xï¼šXåæ ‡
+*				yï¼šYåæ ‡
+*				colorï¼šé¢œè‰²å€¼
+*				zwï¼šå­—åº“æ•°æ®æŒ‡é’ˆ
 *
-*	·µ»Ø²ÎÊý£º	ÎÞ
+*	è¿”å›žå‚æ•°ï¼š	æ— 
 *
-*	ËµÃ÷£º		´Ëº¯ÊýÖ»ÏÔÊ¾16x16µÄ×ÝÏòÈ¡ÃþµÄºº×Ö(ÎªÁËºÍOLEDÊ¹ÓÃÏàÍ¬µÄ×Ö¿âÊý¾Ý)
-*				ÏÔÊ¾·½Ê½£º16x16·Ö2ÅÅ£¬Ã¿ÅÅ16ÁÐ£¬Ã¿ÅÅÃ¿ÁÐÎªÒ»¸ö×Ö½Ú
+*	è¯´æ˜Žï¼š		æ­¤å‡½æ•°åªæ˜¾ç¤º16x16çš„çºµå‘å–æ‘¸çš„æ±‰å­—(ä¸ºäº†å’ŒOLEDä½¿ç”¨ç›¸åŒçš„å­—åº“æ•°æ®)
+*				æ˜¾ç¤ºæ–¹å¼ï¼š16x16åˆ†2æŽ’ï¼Œæ¯æŽ’16åˆ—ï¼Œæ¯æŽ’æ¯åˆ—ä¸ºä¸€ä¸ªå­—èŠ‚
 *
 *				B0								B0
 *				B1								B1
@@ -823,19 +823,19 @@ void SPILCD_DisZW(unsigned short x, unsigned short y, unsigned short color, cons
 	unsigned char i = 0, j = 0, k = 0;
 	unsigned char byte = 0;
 	
-	for(; i < 2; i++)													//ÅÅÊý
+	for(; i < 2; i++)													//æŽ’æ•°
 	{
-		for(j = 0; j < 16; j++)											//ÁÐÊý
+		for(j = 0; j < 16; j++)											//åˆ—æ•°
 		{
-			byte = zw[j + (i << 4)];									//È¡Ò»¸ö×Ö½ÚÏÔÊ¾µ½LCDÉÏ£»16x16ºº×Ö£¬¹²32×Ö½Ú
-			for(k = 0; k < 8; k++)										//Ò»¸öºº×Ö×Ö½ÚÀïÓÐ8Î»£¬Ã¿Î»´ú±íÒ»¸öµã
+			byte = zw[j + (i << 4)];									//å–ä¸€ä¸ªå­—èŠ‚æ˜¾ç¤ºåˆ°LCDä¸Šï¼›16x16æ±‰å­—ï¼Œå…±32å­—èŠ‚
+			for(k = 0; k < 8; k++)										//ä¸€ä¸ªæ±‰å­—å­—èŠ‚é‡Œæœ‰8ä½ï¼Œæ¯ä½ä»£è¡¨ä¸€ä¸ªç‚¹
 			{
-				SPILCD_DrawPoint(x + j, y + k + (i << 3), BGC);			//Ð´±³¾°É«²Á³ý
+				SPILCD_DrawPoint(x + j, y + k + (i << 3), BGC);			//å†™èƒŒæ™¯è‰²æ“¦é™¤
 				
-				if(byte & 0x01)											//´ËµãÓÐÊý¾Ý£¬ÔòÏÔÊ¾
+				if(byte & 0x01)											//æ­¤ç‚¹æœ‰æ•°æ®ï¼Œåˆ™æ˜¾ç¤º
 					SPILCD_DrawPoint(x + j, y + k + (i << 3), color);
 				
-				byte >>= 1;												//µÍÎ»ÔÚÇ°
+				byte >>= 1;												//ä½Žä½åœ¨å‰
 			}
 		}
 	}

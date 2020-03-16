@@ -32,7 +32,7 @@
 ;   <o> Stack Size (in Bytes) <0x0-0xFFFFFFFF:8>
 ; </h>
 
-Stack_Size      EQU     0x00000400  ;ջ��С-1024B-�ɱ������Զ������ͷ� ����ź����Ĳ���ֵ���ֲ�������ֵ�ȡ�
+Stack_Size      EQU     0x00000400  ;栈大小-1024B-由编译器自动分配释放 ，存放函数的参数值，局部变量的值等。
 
                 AREA    STACK, NOINIT, READWRITE, ALIGN=3
 Stack_Mem       SPACE   Stack_Size

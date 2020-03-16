@@ -2,11 +2,11 @@
 #define _ADXL345_H_
 
 
-    //0 ��16g��13λģʽ
+    //0 ±16g，13位模式
 #define DATA_FORMAT_REG  0x31
-    //0x08 ����ģʽ
+    //0x08 测量模式
 #define POWER_CTL                0x2d
-    //0x80 ʹ��DATA_READY�ж�,��Ҫ����Ҫ��ֹ�İɡ�
+    //0x80 使能DATA_READY中断,需要吗，需要禁止的吧。
 #define INT_ENABLE       0x2e
 #define BW_RATE 0x2c
 #define OFSX 0x1e

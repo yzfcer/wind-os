@@ -1,24 +1,24 @@
 /****************************************Copyright (c)**************************************************
-**                                       ��  ��  ��  ��
+**                                       清  风  海  岸
 **
 **                                       yzfcer@163.com
 **
-**--------------�ļ���Ϣ--------------------------------------------------------------------------------
-**��   ��   ��: listfs.h
-**��   ��   ��: Jason Zhou
-**����޸�����: 2019.04.05
-**��        ��: listfs�ļ�ϵͳ���幦��
+**--------------文件信息--------------------------------------------------------------------------------
+**文   件   名: listfs.h
+**创   建   人: Jason Zhou
+**最后修改日期: 2019.04.05
+**描        述: listfs文件系统主体功能
 **              
-**--------------��ʷ�汾��Ϣ----------------------------------------------------------------------------
-** ������: Jason Zhou
-** ��  ��: v1.0
-** �ա���: 2019.04.05
-** �衡��: ԭʼ�汾
+**--------------历史版本信息----------------------------------------------------------------------------
+** 创建人: Jason Zhou
+** 版  本: v1.0
+** 日　期: 2019.04.05
+** 描　述: 原始版本
 **
-**--------------��ǰ�汾�޶�----------------------------------------------------------------------------
-** �޸���: Jason Zhou
-** �ա���: 2019.04.05
-** �衡��: 
+**--------------当前版本修订----------------------------------------------------------------------------
+** 修改人: Jason Zhou
+** 日　期: 2019.04.05
+** 描　述: 
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
@@ -34,7 +34,7 @@
 #include "listfs_bitmap.h"
 
 #if WIND_LISTFS_SUPPORT
-//�ļ�����ģʽ
+//文件操作模式
 #define LFMODE_R   0x01
 #define LFMODE_W   0x02
 #define LFMODE_RW  0x03
@@ -43,17 +43,17 @@
 
 #define LISTFS_MAGIC 0x49AC7D53
 
-#define LISTFS_DIR_LAYCNT 32 //Ŀ¼���
-//#define LISTFS_BLK_SIZE 512  //���С
+#define LISTFS_DIR_LAYCNT 32 //目录深度
+//#define LISTFS_BLK_SIZE 512  //块大小
 
-#define LISTFS_MAX_FILE_SIZE 0x7fffffff //�ļ��������ƣ�2GB
+#define LISTFS_MAX_FILE_SIZE 0x7fffffff //文件长度限制，2GB
 
-//�ļ�����
-#define LFILE_ATTR_DIR    (0x01 << 0) //�Ƿ�Ŀ¼
-#define LFILE_ATTR_RDEN   (0x01 << 1) //�Ƿ�ɶ�
-#define LFILE_ATTR_WREN   (0x01 << 2) //�Ƿ��д
-#define LFILE_ATTR_HIDE   (0x01 << 3) //�Ƿ�����
-#define LFILE_ATTR_VERIFY (0x01 << 4) //�Ƿ�У��
+//文件属性
+#define LFILE_ATTR_DIR    (0x01 << 0) //是否目录
+#define LFILE_ATTR_RDEN   (0x01 << 1) //是否可读
+#define LFILE_ATTR_WREN   (0x01 << 2) //是否可写
+#define LFILE_ATTR_HIDE   (0x01 << 3) //是否隐藏
+#define LFILE_ATTR_VERIFY (0x01 << 4) //是否校验
 #define LFILE_ATTR_COMMAN (LFILE_ATTR_RDEN | LFILE_ATTR_WREN)
 
 #define IS_LFILE_ATTR_DIR(attr) (attr & LFILE_ATTR_DIR)
@@ -78,40 +78,40 @@
 
 
 
-//�̻��ļ�ϵͳ��Ϣ
+//固化文件系统信息
 typedef struct __lfs_info_s
 {
-    w_uint32_t magic;        //ħ����
-    w_uint32_t blkcount;     //������
-    w_uint16_t unit_size;    //�ļ���λ��С
-    w_uint16_t blksize;      //���С
-    w_uint16_t reserve_blk;  //��������
-    w_uint16_t attr;         //�ļ�ϵͳ����
-    w_uint32_t bitmap_cnt;   //λͼ����
-    w_uint32_t   bitmap1_addr; //��λͼ��ַ
-    w_uint32_t   bitmap2_addr; //����λͼ��ַ
-    w_uint32_t   root_addr;    //��Ŀ¼λ��
+    w_uint32_t magic;        //魔术字
+    w_uint32_t blkcount;     //块数量
+    w_uint16_t unit_size;    //文件单位大小
+    w_uint16_t blksize;      //块大小
+    w_uint16_t reserve_blk;  //保留块数
+    w_uint16_t attr;         //文件系统属性
+    w_uint32_t bitmap_cnt;   //位图块数
+    w_uint32_t   bitmap1_addr; //主位图地址
+    w_uint32_t   bitmap2_addr; //备份位图地址
+    w_uint32_t   root_addr;    //根目录位置
 }lfs_info_s;
 
-//����������ļ�ϵͳ��Ϣ
+//程序关联的文件系统信息
 typedef struct __listfs_s
 {
-    lfs_info_s lfs_info;  //�ļ�ϵͳ��Ϣ
-    w_blkdev_s *blkdev;   //�����Ŀ��豸
-    lfs_bitmap_s bitmap;  //��ʹ��λͼ
-    w_int32_t  file_ref;  //�򿪵��ļ�����
-    w_uint32_t blkused;   //�Ѿ�ʹ�õĿ�����
+    lfs_info_s lfs_info;  //文件系统信息
+    w_blkdev_s *blkdev;   //关联的块设备
+    lfs_bitmap_s bitmap;  //块使用位图
+    w_int32_t  file_ref;  //打开的文件数量
+    w_uint32_t blkused;   //已经使用的块数量
 }w_listfs_s;
 
-//����������ļ���Ϣ
+//程序关联的文件信息
 typedef struct __listfile_s
 {
-    lfile_info_s info;        //�ļ�������Ϣ
-    w_listfs_s *lfs;          //��Ӧ���ļ�ϵͳ
-    w_uint8_t mode;           //��ģʽ
-    w_int32_t offset;         //�ļ�ƫ����
-    lfile_blkinfo_s *blkinfo; //��ǰ���ݿ���Ϣ
-    lfile_info_s *subinfo;    //���ļ���Ϣ
+    lfile_info_s info;        //文件基本信息
+    w_listfs_s *lfs;          //对应的文件系统
+    w_uint8_t mode;           //打开模式
+    w_int32_t offset;         //文件偏移量
+    lfile_blkinfo_s *blkinfo; //当前数据块信息
+    lfile_info_s *subinfo;    //子文件信息
 }w_listfile_s;
 
 void lfs_info_be2le(lfs_info_s *info);

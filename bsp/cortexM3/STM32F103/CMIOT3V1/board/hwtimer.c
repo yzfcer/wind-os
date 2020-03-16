@@ -2,26 +2,26 @@
 	************************************************************
 	************************************************************
 	************************************************************
-	*	ÎÄ¼şÃû£º 	hwtimer.c
+	*	æ–‡ä»¶åï¼š 	hwtimer.c
 	*
-	*	×÷Õß£º 		ÕÅ¼ÌÈğ
+	*	ä½œè€…ï¼š 		å¼ ç»§ç‘
 	*
-	*	ÈÕÆÚ£º 		2016-11-23
+	*	æ—¥æœŸï¼š 		2016-11-23
 	*
-	*	°æ±¾£º 		V1.0
+	*	ç‰ˆæœ¬ï¼š 		V1.0
 	*
-	*	ËµÃ÷£º 		µ¥Æ¬»ú¶¨Ê±Æ÷³õÊ¼»¯
+	*	è¯´æ˜ï¼š 		å•ç‰‡æœºå®šæ—¶å™¨åˆå§‹åŒ–
 	*
-	*	ĞŞ¸Ä¼ÇÂ¼£º	
+	*	ä¿®æ”¹è®°å½•ï¼š	
 	************************************************************
 	************************************************************
 	************************************************************
 **/
 
-//OSÍ·ÎÄ¼ş
+//OSå¤´æ–‡ä»¶
 //#include "includes.h"
 
-//Ó²¼şÇı¶¯
+//ç¡¬ä»¶é©±åŠ¨
 #include "wind_config.h"
 #include "hwtimer.h"
 
@@ -29,17 +29,17 @@
 
 /*
 ************************************************************
-*	º¯ÊıÃû³Æ£º	Timer1_8_Init
+*	å‡½æ•°åç§°ï¼š	Timer1_8_Init
 *
-*	º¯Êı¹¦ÄÜ£º	Timer1»ò8µÄPWMÅäÖÃ
+*	å‡½æ•°åŠŸèƒ½ï¼š	Timer1æˆ–8çš„PWMé…ç½®
 *
-*	Èë¿Ú²ÎÊı£º	TIMx£ºTIM1 »òÕß TIM8
-*				arr£ºÖØÔØÖµ
-*				psc·ÖÆµÖµ
+*	å…¥å£å‚æ•°ï¼š	TIMxï¼šTIM1 æˆ–è€… TIM8
+*				arrï¼šé‡è½½å€¼
+*				pscåˆ†é¢‘å€¼
 *
-*	·µ»Ø²ÎÊı£º	ÎŞ
+*	è¿”å›å‚æ•°ï¼š	æ— 
 *
-*	ËµÃ÷£º		
+*	è¯´æ˜ï¼š		
 ************************************************************
 */
 void Timer1_8_Init(TIM_TypeDef * TIMx, unsigned short arr, unsigned short psc)
@@ -70,36 +70,36 @@ void Timer1_8_Init(TIM_TypeDef * TIMx, unsigned short arr, unsigned short psc)
 	timerInitStruct.TIM_Prescaler = psc;
 	TIM_TimeBaseInit(TIMx, &timerInitStruct);
 	
-	timerOCInitStruct.TIM_OCMode = TIM_OCMode_PWM2;				//Ñ¡Ôñ¶¨Ê±Æ÷Ä£Ê½:TIMÂö³å¿í¶Èµ÷ÖÆÄ£Ê½2
- 	timerOCInitStruct.TIM_OutputState = TIM_OutputState_Enable; //±È½ÏÊä³öÊ¹ÄÜ
-	timerOCInitStruct.TIM_OCPolarity = TIM_OCPolarity_Low;		//Êä³ö¼«ĞÔ:TIMÊä³ö±È½Ï¼«ĞÔµÍ
+	timerOCInitStruct.TIM_OCMode = TIM_OCMode_PWM2;				//é€‰æ‹©å®šæ—¶å™¨æ¨¡å¼:TIMè„‰å†²å®½åº¦è°ƒåˆ¶æ¨¡å¼2
+ 	timerOCInitStruct.TIM_OutputState = TIM_OutputState_Enable; //æ¯”è¾ƒè¾“å‡ºä½¿èƒ½
+	timerOCInitStruct.TIM_OCPolarity = TIM_OCPolarity_Low;		//è¾“å‡ºææ€§:TIMè¾“å‡ºæ¯”è¾ƒææ€§ä½
 	timerOCInitStruct.TIM_Pulse = 0;
 	TIM_OC2Init(TIMx, &timerOCInitStruct);
 	TIM_OC3Init(TIMx, &timerOCInitStruct);
 	
-	TIM_CtrlPWMOutputs(TIMx, ENABLE);							//MOE Ö÷Êä³öÊ¹ÄÜ	
+	TIM_CtrlPWMOutputs(TIMx, ENABLE);							//MOE ä¸»è¾“å‡ºä½¿èƒ½	
 	
-	TIM_OC2PreloadConfig(TIMx, TIM_OCPreload_Enable);			//Ê¹ÄÜTIMxÔÚCCR1ÉÏµÄÔ¤×°ÔØ¼Ä´æÆ÷
-	TIM_OC3PreloadConfig(TIMx, TIM_OCPreload_Enable);			//Ê¹ÄÜTIMxÔÚCCR1ÉÏµÄÔ¤×°ÔØ¼Ä´æÆ÷
+	TIM_OC2PreloadConfig(TIMx, TIM_OCPreload_Enable);			//ä½¿èƒ½TIMxåœ¨CCR1ä¸Šçš„é¢„è£…è½½å¯„å­˜å™¨
+	TIM_OC3PreloadConfig(TIMx, TIM_OCPreload_Enable);			//ä½¿èƒ½TIMxåœ¨CCR1ä¸Šçš„é¢„è£…è½½å¯„å­˜å™¨
  
-	TIM_ARRPreloadConfig(TIMx, ENABLE);							//ARPEÊ¹ÄÜ
+	TIM_ARRPreloadConfig(TIMx, ENABLE);							//ARPEä½¿èƒ½
 	
-	TIM_Cmd(TIMx, ENABLE);										//Ê¹ÄÜTIMx
+	TIM_Cmd(TIMx, ENABLE);										//ä½¿èƒ½TIMx
 
 }
 
 /*
 ************************************************************
-*	º¯ÊıÃû³Æ£º	TIM3_PWM_Init
+*	å‡½æ•°åç§°ï¼š	TIM3_PWM_Init
 *
-*	º¯Êı¹¦ÄÜ£º	Timer3_PWMÅäÖÃ
+*	å‡½æ•°åŠŸèƒ½ï¼š	Timer3_PWMé…ç½®
 *
-*	Èë¿Ú²ÎÊı£º	arr£ºÖØÔØÖµ
-*				psc·ÖÆµÖµ
+*	å…¥å£å‚æ•°ï¼š	arrï¼šé‡è½½å€¼
+*				pscåˆ†é¢‘å€¼
 *
-*	·µ»Ø²ÎÊı£º	ÎŞ
+*	è¿”å›å‚æ•°ï¼š	æ— 
 *
-*	ËµÃ÷£º		
+*	è¯´æ˜ï¼š		
 ************************************************************
 */
 void TIM3_PWM_Init(unsigned short arr, unsigned short psc)
@@ -122,35 +122,35 @@ void TIM3_PWM_Init(unsigned short arr, unsigned short psc)
 	timerInitStruct.TIM_Prescaler = psc;
 	TIM_TimeBaseInit(TIM3, &timerInitStruct);
 	
-	timerOCInitStruct.TIM_OCMode = TIM_OCMode_PWM2;				//Ñ¡Ôñ¶¨Ê±Æ÷Ä£Ê½:TIMÂö³å¿í¶Èµ÷ÖÆÄ£Ê½1
- 	timerOCInitStruct.TIM_OutputState = TIM_OutputState_Enable; //±È½ÏÊä³öÊ¹ÄÜ
-	timerOCInitStruct.TIM_OCPolarity = TIM_OCPolarity_Low;		//Êä³ö¼«ĞÔ:TIMÊä³ö±È½Ï¼«ĞÔµÍ
+	timerOCInitStruct.TIM_OCMode = TIM_OCMode_PWM2;				//é€‰æ‹©å®šæ—¶å™¨æ¨¡å¼:TIMè„‰å†²å®½åº¦è°ƒåˆ¶æ¨¡å¼1
+ 	timerOCInitStruct.TIM_OutputState = TIM_OutputState_Enable; //æ¯”è¾ƒè¾“å‡ºä½¿èƒ½
+	timerOCInitStruct.TIM_OCPolarity = TIM_OCPolarity_Low;		//è¾“å‡ºææ€§:TIMè¾“å‡ºæ¯”è¾ƒææ€§ä½
 	timerOCInitStruct.TIM_Pulse = 0;
 	TIM_OC1Init(TIM3, &timerOCInitStruct);
 	
-	TIM_CtrlPWMOutputs(TIM3, ENABLE);							//MOE Ö÷Êä³öÊ¹ÄÜ	
+	TIM_CtrlPWMOutputs(TIM3, ENABLE);							//MOE ä¸»è¾“å‡ºä½¿èƒ½	
 	
-	TIM_OC1PreloadConfig(TIM3, TIM_OCPreload_Enable);			//Ê¹ÄÜTIMxÔÚCCR1ÉÏµÄÔ¤×°ÔØ¼Ä´æÆ÷
+	TIM_OC1PreloadConfig(TIM3, TIM_OCPreload_Enable);			//ä½¿èƒ½TIMxåœ¨CCR1ä¸Šçš„é¢„è£…è½½å¯„å­˜å™¨
  
-	TIM_ARRPreloadConfig(TIM3, ENABLE);							//ARPEÊ¹ÄÜ
+	TIM_ARRPreloadConfig(TIM3, ENABLE);							//ARPEä½¿èƒ½
 	
-	TIM_Cmd(TIM3, ENABLE);										//Ê¹ÄÜTIMx
+	TIM_Cmd(TIM3, ENABLE);										//ä½¿èƒ½TIMx
 
 }
 
 /*
 ************************************************************
-*	º¯ÊıÃû³Æ£º	Timer6_7_Init
+*	å‡½æ•°åç§°ï¼š	Timer6_7_Init
 *
-*	º¯Êı¹¦ÄÜ£º	Timer6»ò7µÄ¶¨Ê±ÅäÖÃ
+*	å‡½æ•°åŠŸèƒ½ï¼š	Timer6æˆ–7çš„å®šæ—¶é…ç½®
 *
-*	Èë¿Ú²ÎÊı£º	TIMx£ºTIM6 »òÕß TIM7
-*				arr£ºÖØÔØÖµ
-*				psc·ÖÆµÖµ
+*	å…¥å£å‚æ•°ï¼š	TIMxï¼šTIM6 æˆ–è€… TIM7
+*				arrï¼šé‡è½½å€¼
+*				pscåˆ†é¢‘å€¼
 *
-*	·µ»Ø²ÎÊı£º	ÎŞ
+*	è¿”å›å‚æ•°ï¼š	æ— 
 *
-*	ËµÃ÷£º		timer6ºÍtimer7Ö»¾ßÓĞ¸üĞÂÖĞ¶Ï¹¦ÄÜ
+*	è¯´æ˜ï¼š		timer6å’Œtimer7åªå…·æœ‰æ›´æ–°ä¸­æ–­åŠŸèƒ½
 ************************************************************
 */
 void Timer6_7_Init(TIM_TypeDef * TIMx, unsigned short arr, unsigned short psc)
@@ -178,7 +178,7 @@ void Timer6_7_Init(TIM_TypeDef * TIMx, unsigned short arr, unsigned short psc)
 	
 	TIM_TimeBaseInit(TIMx, &timerInitStruct);
 	
-	TIM_ITConfig(TIMx, TIM_IT_Update, ENABLE);					//Ê¹ÄÜ¸üĞÂÖĞ¶Ï
+	TIM_ITConfig(TIMx, TIM_IT_Update, ENABLE);					//ä½¿èƒ½æ›´æ–°ä¸­æ–­
 	
 	nvicInitStruct.NVIC_IRQChannelCmd = ENABLE;
 	nvicInitStruct.NVIC_IRQChannelPreemptionPriority = 1;
@@ -186,42 +186,42 @@ void Timer6_7_Init(TIM_TypeDef * TIMx, unsigned short arr, unsigned short psc)
 	
 	NVIC_Init(&nvicInitStruct);
 	
-	TIM_Cmd(TIMx, ENABLE); //Ê¹ÄÜ¶¨Ê±Æ÷
+	TIM_Cmd(TIMx, ENABLE); //ä½¿èƒ½å®šæ—¶å™¨
 
 }
 
 /*
 ************************************************************
-*	º¯ÊıÃû³Æ£º	RTOS_TimerInit
+*	å‡½æ•°åç§°ï¼š	RTOS_TimerInit
 *
-*	º¯Êı¹¦ÄÜ£º	RTOSµÄĞÄÌø¶¨Ê±³õÊ¼»¯
+*	å‡½æ•°åŠŸèƒ½ï¼š	RTOSçš„å¿ƒè·³å®šæ—¶åˆå§‹åŒ–
 *
-*	Èë¿Ú²ÎÊı£º	ÎŞ
+*	å…¥å£å‚æ•°ï¼š	æ— 
 *
-*	·µ»Ø²ÎÊı£º	ÎŞ
+*	è¿”å›å‚æ•°ï¼š	æ— 
 *
-*	ËµÃ÷£º		APB1--36MHz£¬APB1×ÜÏß·ÖÆµ²»Îª1£¬Ôò¶¨Ê±Æ÷Ê±ÖÓÒª³ËÒÔ2
-*				¶¨Ê±5ms
+*	è¯´æ˜ï¼š		APB1--36MHzï¼ŒAPB1æ€»çº¿åˆ†é¢‘ä¸ä¸º1ï¼Œåˆ™å®šæ—¶å™¨æ—¶é’Ÿè¦ä¹˜ä»¥2
+*				å®šæ—¶5ms
 ************************************************************
 */
 void RTOS_TimerInit(void)
 {
 
-	Timer6_7_Init(TIM6, 10000 / OS_TICKS_PER_SEC, 7199);	//72MHz£¬7200·ÖÆµ-100us£¬50ÖØÔØÖµ¡£ÔòÖĞ¶ÏÖÜÆÚÎª100us * 50 = 5ms
+	Timer6_7_Init(TIM6, 10000 / OS_TICKS_PER_SEC, 7199);	//72MHzï¼Œ7200åˆ†é¢‘-100usï¼Œ50é‡è½½å€¼ã€‚åˆ™ä¸­æ–­å‘¨æœŸä¸º100us * 50 = 5ms
 
 }
 
 /*
 ************************************************************
-*	º¯ÊıÃû³Æ£º	TIM6_IRQHandler
+*	å‡½æ•°åç§°ï¼š	TIM6_IRQHandler
 *
-*	º¯Êı¹¦ÄÜ£º	RTOSµÄĞÄÌø¶¨Ê±ÖĞ¶Ï
+*	å‡½æ•°åŠŸèƒ½ï¼š	RTOSçš„å¿ƒè·³å®šæ—¶ä¸­æ–­
 *
-*	Èë¿Ú²ÎÊı£º	ÎŞ
+*	å…¥å£å‚æ•°ï¼š	æ— 
 *
-*	·µ»Ø²ÎÊı£º	ÎŞ
+*	è¿”å›å‚æ•°ï¼š	æ— 
 *
-*	ËµÃ÷£º		
+*	è¯´æ˜ï¼š		
 ************************************************************
 */
 #if 0
@@ -242,15 +242,15 @@ void TIM6_IRQHandler(void)
 #endif
 /*
 ************************************************************
-*	º¯ÊıÃû³Æ£º	TIM7_IRQHandler
+*	å‡½æ•°åç§°ï¼š	TIM7_IRQHandler
 *
-*	º¯Êı¹¦ÄÜ£º	Timer7¸üĞÂÖĞ¶Ï·şÎñº¯Êı
+*	å‡½æ•°åŠŸèƒ½ï¼š	Timer7æ›´æ–°ä¸­æ–­æœåŠ¡å‡½æ•°
 *
-*	Èë¿Ú²ÎÊı£º	ÎŞ
+*	å…¥å£å‚æ•°ï¼š	æ— 
 *
-*	·µ»Ø²ÎÊı£º	ÎŞ
+*	è¿”å›å‚æ•°ï¼š	æ— 
 *
-*	ËµÃ÷£º		
+*	è¯´æ˜ï¼š		
 ************************************************************
 */
 void TIM7_IRQHandler(void)

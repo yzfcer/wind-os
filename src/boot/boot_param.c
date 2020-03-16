@@ -94,7 +94,7 @@ w_err_t boot_param_reset(void)
 }
 
 
-//¼ì²é²ÎÊıÊÇ·ñÓĞĞ§£¬ÓĞĞ§·µ»Ø1£¬ÎŞĞ§·µ»Ø0
+//æ£€æŸ¥å‚æ•°æ˜¯å¦æœ‰æ•ˆï¼Œæœ‰æ•ˆè¿”å›1ï¼Œæ— æ•ˆè¿”å›0
 w_err_t boot_param_check_valid(w_uint8_t *buff)
 {
     w_int32_t index;

@@ -14,7 +14,7 @@
 #include "boot_media.h"
 #include "wind_string.h"
 #include "wind_debug.h"
-//Ó²¼şRAMÊıÁ¿ºÍ»ùµØÖ·ºÍ¿Õ¼ä´óĞ¡¶¨Òå
+//ç¡¬ä»¶RAMæ•°é‡å’ŒåŸºåœ°å€å’Œç©ºé—´å¤§å°å®šä¹‰
 #define RAM1_BASE 0x20000000
 #define RAM1_SIZE 0x100000
 #define RAM1_BLKSIZE 512

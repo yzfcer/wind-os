@@ -59,11 +59,11 @@ w_err_t fat32_format(EmbeddedFileSystem *fs,char *blkname)
 		fat32_root[35] = (w_uint8_t)((sec_tot&0xFF000000)>>24); 
 		fat32_root[34] = (w_uint8_t)((sec_tot&0x00FF0000)>>16);  
 		fat32_root[33] = (w_uint8_t)((sec_tot&0x0000FF00)>>8); 
-		fat32_root[32] = (w_uint8_t)((sec_tot&0x000000FF)); 		 //总扇区数
+		fat32_root[32] = (w_uint8_t)((sec_tot&0x000000FF)); 		 //鎬绘墖鍖烘暟
 		fat32_root[39] = (w_uint8_t)((sec_fat&0xFF000000)>>24); 
 		fat32_root[38] = (w_uint8_t)((sec_fat&0x00FF0000)>>16); 
 		fat32_root[37] = (w_uint8_t)((sec_fat&0x0000FF00)>>8); 
-		fat32_root[36] = (w_uint8_t)((sec_fat&0x000000FF)); 		     //FAT表扇区数
+		fat32_root[36] = (w_uint8_t)((sec_fat&0x000000FF)); 		     //FAT琛ㄦ墖鍖烘暟
 		if_writeBuf(&fs->myCard,0,fat32_root);
 		if_writeBuf(&fs->myCard,0x02,fat32_root);
 

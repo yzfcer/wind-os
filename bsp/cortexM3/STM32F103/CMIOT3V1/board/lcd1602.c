@@ -2,30 +2,30 @@
 	************************************************************
 	************************************************************
 	************************************************************
-	*	ÎÄ¼şÃû£º 	lcd1602.c
+	*	æ–‡ä»¶åï¼š 	lcd1602.c
 	*
-	*	×÷Õß£º 		ÕÅ¼ÌÈğ
+	*	ä½œè€…ï¼š 		å¼ ç»§ç‘
 	*
-	*	ÈÕÆÚ£º 		2016-11-23
+	*	æ—¥æœŸï¼š 		2016-11-23
 	*
-	*	°æ±¾£º 		V1.1
+	*	ç‰ˆæœ¬ï¼š 		V1.1
 	*
-	*	ËµÃ÷£º 		LCD1602³õÊ¼»¯£¬ÏÔÊ¾
+	*	è¯´æ˜ï¼š 		LCD1602åˆå§‹åŒ–ï¼Œæ˜¾ç¤º
 	*
-	*	ĞŞ¸Ä¼ÇÂ¼£º	V1.1£º¸ü¸ÄÁËEN½Å½Ó¿Ú
+	*	ä¿®æ”¹è®°å½•ï¼š	V1.1ï¼šæ›´æ”¹äº†ENè„šæ¥å£
 	************************************************************
 	************************************************************
 	************************************************************
 **/
 
-//µ¥Æ¬»úÍ·ÎÄ¼ş
+//å•ç‰‡æœºå¤´æ–‡ä»¶
 #include "stm32f10x.h"
 
-//Ó²¼şÇı¶¯
+//ç¡¬ä»¶é©±åŠ¨
 #include "lcd1602.h"
 #include "delay.h"
 
-//C¿â
+//Cåº“
 #include <stdarg.h>
 #include <stdio.h>
 
@@ -33,15 +33,15 @@
 
 
 
-//Êı¾İ¡¢ÃüÁî¿ØÖÆ
+//æ•°æ®ã€å‘½ä»¤æ§åˆ¶
 #define RS_H	GPIO_SetBits(GPIOC, GPIO_Pin_6)
 #define RS_L	GPIO_ResetBits(GPIOC, GPIO_Pin_6)
 
-//¶ÁĞ´¿ØÖÆ
+//è¯»å†™æ§åˆ¶
 #define RW_H	GPIO_SetBits(GPIOA, GPIO_Pin_11)
 #define RW_L	GPIO_ResetBits(GPIOA, GPIO_Pin_11)
 
-//Ê¹ÄÜ¿ØÖÆ
+//ä½¿èƒ½æ§åˆ¶
 #define EN_H	GPIO_SetBits(GPIOB, GPIO_Pin_4)
 #define EN_L	GPIO_ResetBits(GPIOB, GPIO_Pin_4)
 
@@ -53,15 +53,15 @@
 
 /*
 ************************************************************
-*	º¯ÊıÃû³Æ£º	Lcd1602_SendByte
+*	å‡½æ•°åç§°ï¼š	Lcd1602_SendByte
 *
-*	º¯Êı¹¦ÄÜ£º	ÏòLCD1602Ğ´Ò»¸ö×Ö½Ú
+*	å‡½æ•°åŠŸèƒ½ï¼š	å‘LCD1602å†™ä¸€ä¸ªå­—èŠ‚
 *
-*	Èë¿Ú²ÎÊı£º	byte£ºĞèÒªĞ´ÈëµÄÊı¾İ
+*	å…¥å£å‚æ•°ï¼š	byteï¼šéœ€è¦å†™å…¥çš„æ•°æ®
 *
-*	·µ»Ø²ÎÊı£º	ÎŞ
+*	è¿”å›å‚æ•°ï¼š	æ— 
 *
-*	ËµÃ÷£º		
+*	è¯´æ˜ï¼š		
 ************************************************************
 */
 void Lcd1602_SendByte(unsigned char byte)
@@ -69,15 +69,15 @@ void Lcd1602_SendByte(unsigned char byte)
 	
 	unsigned short value = 0;
 	
-	value = GPIO_ReadOutputData(GPIOB);					//¶ÁÈ¡GPIOBµÄÊı¾İ
-	value &= ~(0x001F << 5);							//Çå³ıbit5~8
-	value |= ((unsigned short)byte & 0x001F) << 5;		//½«ÒªĞ´ÈëµÄÊı¾İÈ¡µÍ5Î»²¢×óÒÆ5Î»
-	GPIO_Write(GPIOB, value);							//Ğ´ÈëGPIOB
+	value = GPIO_ReadOutputData(GPIOB);					//è¯»å–GPIOBçš„æ•°æ®
+	value &= ~(0x001F << 5);							//æ¸…é™¤bit5~8
+	value |= ((unsigned short)byte & 0x001F) << 5;		//å°†è¦å†™å…¥çš„æ•°æ®å–ä½5ä½å¹¶å·¦ç§»5ä½
+	GPIO_Write(GPIOB, value);							//å†™å…¥GPIOB
 	
-	value = GPIO_ReadOutputData(GPIOC);					//¶ÁÈ¡GPIOCµÄÊı¾İ
-	value &= ~(0x0007 << 0);							//Çå³ıbit0~2
-	value |= ((unsigned short)byte & 0x00E0) >> 5;		//½«ÒªĞ´ÈëµÄÊı¾İÈ¡¸ß3Î»²¢ÓÒÒÆ5Î»
-	GPIO_Write(GPIOC, value);							//Ğ´ÈëGPIOC
+	value = GPIO_ReadOutputData(GPIOC);					//è¯»å–GPIOCçš„æ•°æ®
+	value &= ~(0x0007 << 0);							//æ¸…é™¤bit0~2
+	value |= ((unsigned short)byte & 0x00E0) >> 5;		//å°†è¦å†™å…¥çš„æ•°æ®å–é«˜3ä½å¹¶å³ç§»5ä½
+	GPIO_Write(GPIOC, value);							//å†™å…¥GPIOC
 	
 	DelayUs(10);
 
@@ -85,24 +85,24 @@ void Lcd1602_SendByte(unsigned char byte)
 
 /*
 ************************************************************
-*	º¯ÊıÃû³Æ£º	Lcd1602_WriteCom
+*	å‡½æ•°åç§°ï¼š	Lcd1602_WriteCom
 *
-*	º¯Êı¹¦ÄÜ£º	ÏòLCD1602Ğ´ÃüÁî
+*	å‡½æ•°åŠŸèƒ½ï¼š	å‘LCD1602å†™å‘½ä»¤
 *
-*	Èë¿Ú²ÎÊı£º	byte£ºĞèÒªĞ´ÈëµÄÃüÁî
+*	å…¥å£å‚æ•°ï¼š	byteï¼šéœ€è¦å†™å…¥çš„å‘½ä»¤
 *
-*	·µ»Ø²ÎÊı£º	ÎŞ
+*	è¿”å›å‚æ•°ï¼š	æ— 
 *
-*	ËµÃ÷£º		
+*	è¯´æ˜ï¼š		
 ************************************************************
 */
 void Lcd1602_WriteCom(unsigned char byte)
 {
 
-	RS_L;						//RSÀ­µÍ£¬ÃüÁîÄ£Ê½
-	RW_L;						//RWÀ­µÍ£¬Ğ´Ä£Ê½
+	RS_L;						//RSæ‹‰ä½ï¼Œå‘½ä»¤æ¨¡å¼
+	RW_L;						//RWæ‹‰ä½ï¼Œå†™æ¨¡å¼
 	
-	Lcd1602_SendByte(byte);		//·¢ËÍÒ»¸ö×Ö½Ú
+	Lcd1602_SendByte(byte);		//å‘é€ä¸€ä¸ªå­—èŠ‚
 	
 	EN_H;
 	DelayUs(20);
@@ -113,15 +113,15 @@ void Lcd1602_WriteCom(unsigned char byte)
 
 /*
 ************************************************************
-*	º¯ÊıÃû³Æ£º	Lcd1602_WriteCom_Busy
+*	å‡½æ•°åç§°ï¼š	Lcd1602_WriteCom_Busy
 *
-*	º¯Êı¹¦ÄÜ£º	ÏòLCD1602Ğ´ÃüÁî
+*	å‡½æ•°åŠŸèƒ½ï¼š	å‘LCD1602å†™å‘½ä»¤
 *
-*	Èë¿Ú²ÎÊı£º	byte£ºĞèÒªĞ´ÈëµÄÃüÁî
+*	å…¥å£å‚æ•°ï¼š	byteï¼šéœ€è¦å†™å…¥çš„å‘½ä»¤
 *
-*	·µ»Ø²ÎÊı£º	ÎŞ
+*	è¿”å›å‚æ•°ï¼š	æ— 
 *
-*	ËµÃ÷£º		
+*	è¯´æ˜ï¼š		
 ************************************************************
 */
 void Lcd1602_WriteCom_Busy(unsigned char byte)
@@ -143,24 +143,24 @@ void Lcd1602_WriteCom_Busy(unsigned char byte)
 
 /*
 ************************************************************
-*	º¯ÊıÃû³Æ£º	Lcd1602_WriteData
+*	å‡½æ•°åç§°ï¼š	Lcd1602_WriteData
 *
-*	º¯Êı¹¦ÄÜ£º	ÏòLCD1602Ğ´Ò»¸öÊı¾İ
+*	å‡½æ•°åŠŸèƒ½ï¼š	å‘LCD1602å†™ä¸€ä¸ªæ•°æ®
 *
-*	Èë¿Ú²ÎÊı£º	byte£ºĞèÒªĞ´ÈëµÄÊı¾İ
+*	å…¥å£å‚æ•°ï¼š	byteï¼šéœ€è¦å†™å…¥çš„æ•°æ®
 *
-*	·µ»Ø²ÎÊı£º	ÎŞ
+*	è¿”å›å‚æ•°ï¼š	æ— 
 *
-*	ËµÃ÷£º		
+*	è¯´æ˜ï¼š		
 ************************************************************
 */
 void Lcd1602_WriteData(unsigned char byte)
 {
 
-	RS_H;						//RSÀ­¸ß£¬Êı¾İÄ£Ê½
-	RW_L;						//RWÀ­µÍ£¬Ğ´Ä£Ê½
+	RS_H;						//RSæ‹‰é«˜ï¼Œæ•°æ®æ¨¡å¼
+	RW_L;						//RWæ‹‰ä½ï¼Œå†™æ¨¡å¼
 	
-	Lcd1602_SendByte(byte);		//·¢ËÍÒ»¸ö×Ö½Ú
+	Lcd1602_SendByte(byte);		//å‘é€ä¸€ä¸ªå­—èŠ‚
 
 	EN_H;
 	DelayUs(20);
@@ -171,15 +171,15 @@ void Lcd1602_WriteData(unsigned char byte)
 
 /*
 ************************************************************
-*	º¯ÊıÃû³Æ£º	Lcd1602_Init
+*	å‡½æ•°åç§°ï¼š	Lcd1602_Init
 *
-*	º¯Êı¹¦ÄÜ£º	LCD1602³õÊ¼»¯
+*	å‡½æ•°åŠŸèƒ½ï¼š	LCD1602åˆå§‹åŒ–
 *
-*	Èë¿Ú²ÎÊı£º	ÎŞ
+*	å…¥å£å‚æ•°ï¼š	æ— 
 *
-*	·µ»Ø²ÎÊı£º	ÎŞ
+*	è¿”å›å‚æ•°ï¼š	æ— 
 *
-*	ËµÃ÷£º		RW-PA11		RS-PC6		EN-PC3
+*	è¯´æ˜ï¼š		RW-PA11		RS-PC6		EN-PC3
 *				DATA0~4-PB5~9		DATA5~7-PC0~2
 ************************************************************
 */
@@ -190,7 +190,7 @@ void Lcd1602_Init(void)
 	
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA | RCC_APB2Periph_GPIOB | RCC_APB2Periph_GPIOC, ENABLE);
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
-    GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable, ENABLE);				//½ûÖ¹JTAG¹¦ÄÜ
+    GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable, ENABLE);				//ç¦æ­¢JTAGåŠŸèƒ½
 	
 	gpioInitStrcut.GPIO_Mode = GPIO_Mode_Out_PP;
 	gpioInitStrcut.GPIO_Pin = GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_7 | GPIO_Pin_8 | GPIO_Pin_9;
@@ -221,15 +221,15 @@ void Lcd1602_Init(void)
 
 /*
 ************************************************************
-*	º¯ÊıÃû³Æ£º	Lcd1602_Clear
+*	å‡½æ•°åç§°ï¼š	Lcd1602_Clear
 *
-*	º¯Êı¹¦ÄÜ£º	LCD1602Çå³ıÖ¸¶¨ĞĞ
+*	å‡½æ•°åŠŸèƒ½ï¼š	LCD1602æ¸…é™¤æŒ‡å®šè¡Œ
 *
-*	Èë¿Ú²ÎÊı£º	pos£ºÖ¸¶¨µÄĞĞ
+*	å…¥å£å‚æ•°ï¼š	posï¼šæŒ‡å®šçš„è¡Œ
 *
-*	·µ»Ø²ÎÊı£º	ÎŞ
+*	è¿”å›å‚æ•°ï¼š	æ— 
 *
-*	ËµÃ÷£º		0x80-µÚÒ»ĞĞ		0xC0-µÚ¶şĞĞ		0xFF-Á½ĞĞ
+*	è¯´æ˜ï¼š		0x80-ç¬¬ä¸€è¡Œ		0xC0-ç¬¬äºŒè¡Œ		0xFF-ä¸¤è¡Œ
 ************************************************************
 */
 void Lcd1602_Clear(unsigned char pos)
@@ -260,16 +260,16 @@ void Lcd1602_Clear(unsigned char pos)
 
 /*
 ************************************************************
-*	º¯ÊıÃû³Æ£º	Lcd1602_DisString
+*	å‡½æ•°åç§°ï¼š	Lcd1602_DisString
 *
-*	º¯Êı¹¦ÄÜ£º	ÉèÖÃLCD1602ÏÔÊ¾µÄÄÚÈİ
+*	å‡½æ•°åŠŸèƒ½ï¼š	è®¾ç½®LCD1602æ˜¾ç¤ºçš„å†…å®¹
 *
-*	Èë¿Ú²ÎÊı£º	pos£ºÒªÏÔÊ¾µÄĞĞ
-*				fmt£º²»¶¨³¤²Î
+*	å…¥å£å‚æ•°ï¼š	posï¼šè¦æ˜¾ç¤ºçš„è¡Œ
+*				fmtï¼šä¸å®šé•¿å‚
 *
-*	·µ»Ø²ÎÊı£º	ÎŞ
+*	è¿”å›å‚æ•°ï¼š	æ— 
 *
-*	ËµÃ÷£º		
+*	è¯´æ˜ï¼š		
 ************************************************************
 */
 void Lcd1602_DisString(unsigned char pos, char *fmt,...)
@@ -277,15 +277,15 @@ void Lcd1602_DisString(unsigned char pos, char *fmt,...)
 
 	unsigned char LcdPrintfBuf[33];
 	unsigned char count = 0;
-	unsigned char remain = 0;					//Ò»ĞĞÊ£Óà¿Õ¼ä
+	unsigned char remain = 0;					//ä¸€è¡Œå‰©ä½™ç©ºé—´
 	va_list ap;
 	unsigned char *pStr = LcdPrintfBuf;
 	
 	va_start(ap,fmt);
-	vsnprintf((char *)LcdPrintfBuf, sizeof(LcdPrintfBuf), fmt, ap);		//¸ñÊ½»¯
+	vsnprintf((char *)LcdPrintfBuf, sizeof(LcdPrintfBuf), fmt, ap);		//æ ¼å¼åŒ–
 	va_end(ap);
 	
-	remain = 0x8f - pos;						//ÕâÀï½â¾öbug£¬ÒÔÇ°Ö»¹ÜĞ´16´Î£¬Õâ´ÎÒª¸ù¾İ¿ªÊ¼µÄÎ»ÖÃÀ´¼ÆËã
+	remain = 0x8f - pos;						//è¿™é‡Œè§£å†³bugï¼Œä»¥å‰åªç®¡å†™16æ¬¡ï¼Œè¿™æ¬¡è¦æ ¹æ®å¼€å§‹çš„ä½ç½®æ¥è®¡ç®—
 	
 	Lcd1602_WriteCom_Busy(pos);
 	

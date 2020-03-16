@@ -1,21 +1,21 @@
 /****************************************Copyright (c)**************************************************
-**                                       Çå  ·ç  º£  °¶
-** ÎÄ   ¼ş   Ãû: RBTree.h / RBTree.c
-** ´´   ½¨   ÈË: Jason Zhou
-** ×îºóĞŞ¸ÄÈÕÆÚ: 2015/2/6 21:16:45
-** Ãè        Êö: 
+**                                       æ¸…  é£  æµ·  å²¸
+** æ–‡   ä»¶   å: RBTree.h / RBTree.c
+** åˆ›   å»º   äºº: Jason Zhou
+** æœ€åä¿®æ”¹æ—¥æœŸ: 2015/2/6 21:16:45
+** æ        è¿°: 
 **  
-**--------------ÀúÊ·°æ±¾ĞÅÏ¢----------------------------------------------------------------------------
-** ´´½¨ÈË: Jason Zhou
-** °æ  ±¾: v1.0
-** ÈÕ¡¡ÆÚ: 2015/2/6 21:16:45
-** Ãè¡¡Êö: Ô­Ê¼°æ±¾
+**--------------å†å²ç‰ˆæœ¬ä¿¡æ¯----------------------------------------------------------------------------
+** åˆ›å»ºäºº: Jason Zhou
+** ç‰ˆ  æœ¬: v1.0
+** æ—¥ã€€æœŸ: 2015/2/6 21:16:45
+** æã€€è¿°: åŸå§‹ç‰ˆæœ¬
 **
-**--------------µ±Ç°°æ±¾ĞŞ¶©----------------------------------------------------------------------------
-** ĞŞ¸ÄÈË: 
-** ÈÕ¡¡ÆÚ: 
-** Ãè¡¡Êö: ºìºÚÊ÷µÄÍ¨ÓÃÊµÏÖ·½·¨
-** ±¾ÎÄ¼şÓÉCÓïÑÔÔ´ÎÄ¼şÄ£°åÈí¼şÉú³É¡£------------Çå·çº£°¶³öÆ·£¬±ØÊô¾«Æ·£¡------------
+**--------------å½“å‰ç‰ˆæœ¬ä¿®è®¢----------------------------------------------------------------------------
+** ä¿®æ”¹äºº: 
+** æ—¥ã€€æœŸ: 
+** æã€€è¿°: çº¢é»‘æ ‘çš„é€šç”¨å®ç°æ–¹æ³•
+** æœ¬æ–‡ä»¶ç”±Cè¯­è¨€æºæ–‡ä»¶æ¨¡æ¿è½¯ä»¶ç”Ÿæˆã€‚------------æ¸…é£æµ·å²¸å‡ºå“ï¼Œå¿…å±ç²¾å“ï¼------------
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
 /*********************************************header file***********************************************/
@@ -32,7 +32,7 @@ extern "C" {
 
 /********************************************internal variables**********************************************/
 static w_rbt_node_s __nil;
-static w_rbt_node_s *nil = W_NULL; //ÎªÁË±ÜÃâÌÖÂÛ½áµãµÄ±ß½çÇé¿ö£¬¶¨ÒåÒ»¸önil½áµã´úÌæËùÓĞµÄNULL 
+static w_rbt_node_s *nil = W_NULL; //ä¸ºäº†é¿å…è®¨è®ºç»“ç‚¹çš„è¾¹ç•Œæƒ…å†µï¼Œå®šä¹‰ä¸€ä¸ªnilç»“ç‚¹ä»£æ›¿æ‰€æœ‰çš„NULL 
 
 #define rbt_set_black(node) (node)->color=TREE_BLACK
 #define rbt_set_red(node) (node)->color=TREE_RED
@@ -47,19 +47,19 @@ static w_rbt_node_s *nil = W_NULL; //ÎªÁË±ÜÃâÌÖÂÛ½áµãµÄ±ß½çÇé¿ö£¬¶¨ÒåÒ»¸önil½áµã
 
 /********************************************internal functions**********************************************/
 
-w_rbt_node_s* rbt_parent(w_rbt_node_s *z) //·µ»ØÄ³½áµãµÄ¸¸Ä¸ 
+w_rbt_node_s* rbt_parent(w_rbt_node_s *z) //è¿”å›æŸç»“ç‚¹çš„çˆ¶æ¯ 
 { 
     return z->parent; 
 } 
-static w_rbt_node_s* rbt_left(w_rbt_node_s *z) //·µ»Ø×ó×ÓÊ÷ 
+static w_rbt_node_s* rbt_left(w_rbt_node_s *z) //è¿”å›å·¦å­æ ‘ 
 { 
     return z->left; 
 } 
-static w_rbt_node_s *rbt_right(w_rbt_node_s *z) //·µ»ØÓÒ×ÓÊ÷ 
+static w_rbt_node_s *rbt_right(w_rbt_node_s *z) //è¿”å›å³å­æ ‘ 
 { 
     return z->right; 
 } 
-static void left_rotate(w_rbt_node_s **root, w_rbt_node_s *x) //×óĞı×ª£º½áµãxÔ­À´µÄÓÒ×ÓÊ÷yĞı×ª³ÉÎªxµÄ¸¸Ä¸ 
+static void left_rotate(w_rbt_node_s **root, w_rbt_node_s *x) //å·¦æ—‹è½¬ï¼šç»“ç‚¹xåŸæ¥çš„å³å­æ ‘yæ—‹è½¬æˆä¸ºxçš„çˆ¶æ¯ 
 { 
     w_rbt_node_s *y;
 
@@ -93,7 +93,7 @@ static void left_rotate(w_rbt_node_s **root, w_rbt_node_s *x) //×óĞı×ª£º½áµãxÔ­À
     x->parent=y; 
 } 
 
-static void right_rotate(w_rbt_node_s **root, w_rbt_node_s *x) //ÓÒĞı×ª£º½áµãxÔ­À´µÄ×ó×ÓÊ÷yĞı×ª³ÉÎªxµÄ¸¸Ä¸ 
+static void right_rotate(w_rbt_node_s **root, w_rbt_node_s *x) //å³æ—‹è½¬ï¼šç»“ç‚¹xåŸæ¥çš„å·¦å­æ ‘yæ—‹è½¬æˆä¸ºxçš„çˆ¶æ¯ 
 { 
     w_rbt_node_s *y;
 
@@ -130,18 +130,18 @@ static void right_rotate(w_rbt_node_s **root, w_rbt_node_s *x) //ÓÒĞı×ª£º½áµãxÔ­
     x->parent=y; 
 }
 
-static void insert_fixup(w_rbt_node_s **root, w_rbt_node_s *z) //²åÈë½áµãºó, ÒªÎ¬³ÖºìºÚÊ÷ËÄÌõĞÔÖÊµÄ²»±äĞÔ 
+static void insert_fixup(w_rbt_node_s **root, w_rbt_node_s *z) //æ’å…¥ç»“ç‚¹å, è¦ç»´æŒçº¢é»‘æ ‘å››æ¡æ€§è´¨çš„ä¸å˜æ€§ 
 { 
     w_rbt_node_s *y; 
     if(root == W_NULL || z == W_NULL) 
         return;
-    while( rbt_parent(z)->color == TREE_RED ) //ÒòÎª²åÈëµÄ½áµãÊÇºìÉ«µÄ£¬ËùÒÔÖ»¿ÉÄÜÎ¥±³ĞÔÖÊ3,¼´¼ÙÈç¸¸½áµãÒ²ÊÇºìÉ«µÄ£¬Òª×öµ÷Õû 
+    while( rbt_parent(z)->color == TREE_RED ) //å› ä¸ºæ’å…¥çš„ç»“ç‚¹æ˜¯çº¢è‰²çš„ï¼Œæ‰€ä»¥åªå¯èƒ½è¿èƒŒæ€§è´¨3,å³å‡å¦‚çˆ¶ç»“ç‚¹ä¹Ÿæ˜¯çº¢è‰²çš„ï¼Œè¦åšè°ƒæ•´ 
     { 
-        if( rbt_parent(rbt_parent(z))->left == rbt_parent(z) ) //Èç¹ûÒª²åÈëµÄ½áµãzÊÇÆä¸¸½áµãµÄ×ó×ÓÊ÷ 
+        if( rbt_parent(rbt_parent(z))->left == rbt_parent(z) ) //å¦‚æœè¦æ’å…¥çš„ç»“ç‚¹zæ˜¯å…¶çˆ¶ç»“ç‚¹çš„å·¦å­æ ‘ 
         { 
-            y=rbt_parent(rbt_parent(z))->right; // yÉèÖÃÎªzµÄÊå¸¸½áµã 
-            if( y->color == TREE_RED ) //case 1: Èç¹ûyµÄÑÕÉ«ÎªºìÉ«£¬ÄÇÃ´½«yÓëzµÄ¸¸Ç×Í¬Ê±×ÅÎªºÚÉ«£¬È»ºó°ÑzµÄ 
-            { //×æ¸¸±äÎªºìÉ«£¬ÕâÑù×ÓzµÄ×æ¸¸½áµã¿ÉÄÜÎ¥±³ĞÔÖÊ3,½«zÉÏÒÆ³ÉzµÄ×æ¸¸½áµã 
+            y=rbt_parent(rbt_parent(z))->right; // yè®¾ç½®ä¸ºzçš„å”çˆ¶ç»“ç‚¹ 
+            if( y->color == TREE_RED ) //case 1: å¦‚æœyçš„é¢œè‰²ä¸ºçº¢è‰²ï¼Œé‚£ä¹ˆå°†yä¸zçš„çˆ¶äº²åŒæ—¶ç€ä¸ºé»‘è‰²ï¼Œç„¶åæŠŠzçš„ 
+            { //ç¥–çˆ¶å˜ä¸ºçº¢è‰²ï¼Œè¿™æ ·å­zçš„ç¥–çˆ¶ç»“ç‚¹å¯èƒ½è¿èƒŒæ€§è´¨3,å°†zä¸Šç§»æˆzçš„ç¥–çˆ¶ç»“ç‚¹ 
                 y->color=TREE_BLACK; 
                 z->parent->color=TREE_BLACK; 
                 z->parent->parent->color=TREE_RED; 
@@ -149,17 +149,17 @@ static void insert_fixup(w_rbt_node_s **root, w_rbt_node_s *z) //²åÈë½áµãºó, ÒªÎ
             } 
             else 
             { 
-                if( z == z->parent->right ) //case 2: Èç¹ûyµÄÑÕÉ«ÎªºÚÉ«£¬²¢ÇÒzÊÇzµÄ¸¸Ä¸µÄÓÒ½áµã£¬Ôòz×óĞı×ª£¬²¢ÇÒ½«z±äÎªÔ­À´zµÄparent. 
+                if( z == z->parent->right ) //case 2: å¦‚æœyçš„é¢œè‰²ä¸ºé»‘è‰²ï¼Œå¹¶ä¸”zæ˜¯zçš„çˆ¶æ¯çš„å³ç»“ç‚¹ï¼Œåˆ™zå·¦æ—‹è½¬ï¼Œå¹¶ä¸”å°†zå˜ä¸ºåŸæ¥zçš„parent. 
                 { 
                     z=z->parent; 
                     left_rotate(root, z); 
                 } 
-                z->parent->color=TREE_BLACK; //case 3: Èç¹ûyµÄÑÕÉ«ÎªºÚÉ«£¬²¢ÇÒzÊÇzµÄ¸¸Ä¸µÄ×ó½áµã£¬ÄÇÃ´½«zµÄ 
-                z->parent->parent->color=TREE_RED; //¸¸Ç×µÄÑÕÉ«±äÎªºÚ£¬½«zµÄ×æ¸¸µÄÑÕÉ«±äÎªºì£¬È»ºóĞı×ªzµÄ×æ¸¸ 
+                z->parent->color=TREE_BLACK; //case 3: å¦‚æœyçš„é¢œè‰²ä¸ºé»‘è‰²ï¼Œå¹¶ä¸”zæ˜¯zçš„çˆ¶æ¯çš„å·¦ç»“ç‚¹ï¼Œé‚£ä¹ˆå°†zçš„ 
+                z->parent->parent->color=TREE_RED; //çˆ¶äº²çš„é¢œè‰²å˜ä¸ºé»‘ï¼Œå°†zçš„ç¥–çˆ¶çš„é¢œè‰²å˜ä¸ºçº¢ï¼Œç„¶åæ—‹è½¬zçš„ç¥–çˆ¶ 
                 right_rotate(root,z->parent->parent); 
             } 
         } 
-        else //ÓëÇ°Ò»ÖÖÇé¿ö¶Ô³Æ£¬Òª²åÈëµÄ½áµãzÊÇÆä¸¸½áµãµÄÓÒ×ÓÊ÷,×¢ÊÍÂÔÈ¥ 
+        else //ä¸å‰ä¸€ç§æƒ…å†µå¯¹ç§°ï¼Œè¦æ’å…¥çš„ç»“ç‚¹zæ˜¯å…¶çˆ¶ç»“ç‚¹çš„å³å­æ ‘,æ³¨é‡Šç•¥å» 
         { 
             y=rbt_parent(rbt_parent(z))->left; 
             if( y->color == TREE_RED) 
@@ -182,15 +182,15 @@ static void insert_fixup(w_rbt_node_s **root, w_rbt_node_s *z) //²åÈë½áµãºó, ÒªÎ
             } 
         } 
     } 
-    (*root)->color=TREE_BLACK; //×îºóÈç¹ûÉÏÉıÎªrootµÄ¸ùµÄ»°£¬°ÑrootµÄÑÕÉ«ÉèÖÃÎªºÚÉ« 
+    (*root)->color=TREE_BLACK; //æœ€åå¦‚æœä¸Šå‡ä¸ºrootçš„æ ¹çš„è¯ï¼ŒæŠŠrootçš„é¢œè‰²è®¾ç½®ä¸ºé»‘è‰² 
 } 
 
-w_rbt_node_s* successor(w_rbt_s *tree, w_rbt_node_s *x) //Ñ°ÕÒ½áµãxµÄÖĞĞòºó¼Ì 
+w_rbt_node_s* successor(w_rbt_s *tree, w_rbt_node_s *x) //å¯»æ‰¾ç»“ç‚¹xçš„ä¸­åºåç»§ 
 { 
     w_rbt_node_s *q; 
     w_rbt_node_s *p; 
     w_rbt_node_s *y; 
-    if( x->right != nil ) //Èç¹ûxµÄÓÒ×ÓÊ÷²»Îª¿Õ£¬ÄÇÃ´ÎªÓÒ×ÓÊ÷ÖĞ×î×ó±ßµÄ½áµã 
+    if( x->right != nil ) //å¦‚æœxçš„å³å­æ ‘ä¸ä¸ºç©ºï¼Œé‚£ä¹ˆä¸ºå³å­æ ‘ä¸­æœ€å·¦è¾¹çš„ç»“ç‚¹ 
     { 
         q=nil; 
         p=x->right; 
@@ -201,7 +201,7 @@ w_rbt_node_s* successor(w_rbt_s *tree, w_rbt_node_s *x) //Ñ°ÕÒ½áµãxµÄÖĞĞòºó¼Ì
         } 
         return q; 
     } 
-    else //Èç¹ûxµÄÓÒ×ÓÊ÷Îª¿Õ£¬ÄÇÃ´xµÄºó¼ÌÎªxµÄËùÓĞ×æÏÈÖĞÎª×ó×ÓÊ÷µÄ×æÏÈ 
+    else //å¦‚æœxçš„å³å­æ ‘ä¸ºç©ºï¼Œé‚£ä¹ˆxçš„åç»§ä¸ºxçš„æ‰€æœ‰ç¥–å…ˆä¸­ä¸ºå·¦å­æ ‘çš„ç¥–å…ˆ 
     { 
         y=x->parent; 
         while( y != nil && x == y->right ) 
@@ -222,14 +222,14 @@ w_int32_t rbt_delete_fixup(w_rbt_node_s **root, w_rbt_node_s *node)
         parent = node->parent;              
         if(node == parent->left)      
         {         
-            brother = parent->right; /* Case 1: ĞÖµÜ½áµãÎªºìÉ«:  ÒÔparentÎªÖ§µã, ×óĞı´¦Àí */          
+            brother = parent->right; /* Case 1: å…„å¼Ÿç»“ç‚¹ä¸ºçº¢è‰²:  ä»¥parentä¸ºæ”¯ç‚¹, å·¦æ—‹å¤„ç† */          
             if(rbt_is_red(brother))          
             {               
                 rbt_set_red(parent);           
                 rbt_set_black(brother);           
-                rbt_left_rotate(root, parent);  /* ²ÎÕÕ½áµãnode²»±ä, ĞÖµÜ½áµã¸ÄÎªparent->right */                
-                brother = parent->right;  /* ×¢Òâ: ´ËÊ±´¦Àí»¹Ã»ÓĞ½áÊø£¬»¹ĞèÒª×öºóĞøµÄµ÷Õû´¦Àí */           
-            }            /* Case 2: ĞÖµÜ½áµãÎªºÚÉ«(Ä¬ÈÏ), ÇÒĞÖµÜ½áµãµÄ2¸ö×Ó½áµã¶¼ÎªºÚÉ« */        
+                rbt_left_rotate(root, parent);  /* å‚ç…§ç»“ç‚¹nodeä¸å˜, å…„å¼Ÿç»“ç‚¹æ”¹ä¸ºparent->right */                
+                brother = parent->right;  /* æ³¨æ„: æ­¤æ—¶å¤„ç†è¿˜æ²¡æœ‰ç»“æŸï¼Œè¿˜éœ€è¦åšåç»­çš„è°ƒæ•´å¤„ç† */           
+            }            /* Case 2: å…„å¼Ÿç»“ç‚¹ä¸ºé»‘è‰²(é»˜è®¤), ä¸”å…„å¼Ÿç»“ç‚¹çš„2ä¸ªå­ç»“ç‚¹éƒ½ä¸ºé»‘è‰² */        
             if(rbt_is_black(brother->left) && rbt_is_black(brother->right))          
             {                
                 rbt_set_red(brother);              
@@ -237,17 +237,17 @@ w_int32_t rbt_delete_fixup(w_rbt_node_s **root, w_rbt_node_s *node)
             }           
             else            
             {                
-                /* Case 3: ĞÖµÜ½áµãÎªºÚÉ«(Ä¬ÈÏ),ĞÖµÜ½ÚµãµÄ×ó×Ó½áµãÎªºìÉ«, ÓÒ×Ó½áµãÎªºÚÉ«:  ÒÔbrotherÎªÖ§µã, ÓÒĞı´¦Àí */               
+                /* Case 3: å…„å¼Ÿç»“ç‚¹ä¸ºé»‘è‰²(é»˜è®¤),å…„å¼ŸèŠ‚ç‚¹çš„å·¦å­ç»“ç‚¹ä¸ºçº¢è‰², å³å­ç»“ç‚¹ä¸ºé»‘è‰²:  ä»¥brotherä¸ºæ”¯ç‚¹, å³æ—‹å¤„ç† */               
                 if(rbt_is_black(brother->right))              
                 {                   
                     rbt_set_black(brother->left);                   
                     rbt_set_red(brother);                   
                     rbt_right_rotate(root, brother);                    
 
-                    /* ²ÎÕÕ½áµãnode²»±ä */                    
+                    /* å‚ç…§ç»“ç‚¹nodeä¸å˜ */                    
                     brother = parent->right;                
                 }                               
-                /* Case 4: ĞÖµÜ½áµãÎªºÚÉ«(Ä¬ÈÏ), ĞÖµÜ½áµãÓÒº¢×Ó½áµãÎªºìÉ«:  ÒÔparentÎªÖ§µã, ×óĞı´¦Àí */               
+                /* Case 4: å…„å¼Ÿç»“ç‚¹ä¸ºé»‘è‰²(é»˜è®¤), å…„å¼Ÿç»“ç‚¹å³å­©å­ç»“ç‚¹ä¸ºçº¢è‰²:  ä»¥parentä¸ºæ”¯ç‚¹, å·¦æ—‹å¤„ç† */               
                 rbt_copy_color(brother, parent);               
                 rbt_set_black(brother->right);              
                 rbt_set_black(parent);                
@@ -258,17 +258,17 @@ w_int32_t rbt_delete_fixup(w_rbt_node_s **root, w_rbt_node_s *node)
         else      
         {
             brother = parent->left;           
-            /* Case 1: ĞÖµÜ½áµãÎªºìÉ«:  ÒÔparentÎªÖ§µã, ÓÒĞı´¦Àí */         
+            /* Case 1: å…„å¼Ÿç»“ç‚¹ä¸ºçº¢è‰²:  ä»¥parentä¸ºæ”¯ç‚¹, å³æ—‹å¤„ç† */         
             if(rbt_is_red(brother))        
             {              
                 rbt_set_red(parent);         
                 rbt_set_black(brother);        
                 rbt_right_rotate(root, parent);                
-                /* ²ÎÕÕ½áµãnode²»±ä */        
+                /* å‚ç…§ç»“ç‚¹nodeä¸å˜ */        
                 brother = parent->left;                               
-                /* ×¢Òâ: ´ËÊ±´¦Àí»¹Ã»ÓĞ½áÊø£¬»¹ĞèÒª×öºóĞøµÄµ÷Õû´¦Àí */            
+                /* æ³¨æ„: æ­¤æ—¶å¤„ç†è¿˜æ²¡æœ‰ç»“æŸï¼Œè¿˜éœ€è¦åšåç»­çš„è°ƒæ•´å¤„ç† */            
             }            
-            /* Case 2: ĞÖµÜ½áµãÎªºÚÉ«(Ä¬ÈÏ), ÇÒĞÖµÜ½áµãµÄ2¸ö×Ó½áµã¶¼ÎªºÚÉ« */      
+            /* Case 2: å…„å¼Ÿç»“ç‚¹ä¸ºé»‘è‰²(é»˜è®¤), ä¸”å…„å¼Ÿç»“ç‚¹çš„2ä¸ªå­ç»“ç‚¹éƒ½ä¸ºé»‘è‰² */      
             if(rbt_is_black(brother->left) && rbt_is_black(brother->right))         
             {              
                 rbt_set_red(brother);             
@@ -276,18 +276,18 @@ w_int32_t rbt_delete_fixup(w_rbt_node_s **root, w_rbt_node_s *node)
             }          
             else           
             {                
-                /* Case 3: ĞÖµÜ½áµãÎªºÚÉ«(Ä¬ÈÏ),ĞÖµÜ½ÚµãµÄÓÒ×Ó½áµãÎªºìÉ«, ×ó×Ó½áµãÎªºÚÉ«:  ÒÔbrotherÎªÖ§µã, ×óĞı´¦Àí */             
+                /* Case 3: å…„å¼Ÿç»“ç‚¹ä¸ºé»‘è‰²(é»˜è®¤),å…„å¼ŸèŠ‚ç‚¹çš„å³å­ç»“ç‚¹ä¸ºçº¢è‰², å·¦å­ç»“ç‚¹ä¸ºé»‘è‰²:  ä»¥brotherä¸ºæ”¯ç‚¹, å·¦æ—‹å¤„ç† */             
                 if(rbt_is_black(brother->left))         
                 {                 
                     rbt_set_red(brother);                
                     rbt_set_black(brother->right);               
                     rbt_left_rotate(root, brother);                    
 
-                    /* ²ÎÕÕ½áµãnode²»±ä */             
+                    /* å‚ç…§ç»“ç‚¹nodeä¸å˜ */             
                     brother = parent->left;              
                 }                            
 
-                /* Case 4: ĞÖµÜ½áµãÎªºÚÉ«(Ä¬ÈÏ), ĞÖµÜ½áµã×óº¢×Ó½áµãÎªºìÉ«: ÒÔparentÎªÖ§µã, ÓÒĞı´¦Àí */               
+                /* Case 4: å…„å¼Ÿç»“ç‚¹ä¸ºé»‘è‰²(é»˜è®¤), å…„å¼Ÿç»“ç‚¹å·¦å­©å­ç»“ç‚¹ä¸ºçº¢è‰²: ä»¥parentä¸ºæ”¯ç‚¹, å³æ—‹å¤„ç† */               
                 rbt_copy_color(brother, parent);            
                 rbt_set_black(brother->left);             
                 rbt_set_black(parent);              
@@ -303,7 +303,7 @@ w_int32_t rbt_delete_fixup(w_rbt_node_s **root, w_rbt_node_s *node)
 
 w_int32_t _rb_delete(w_rbt_node_s **root, w_rbt_node_s *dnode)
 {   
-    w_rbt_node_s *next = W_NULL, *refer = W_NULL;    /* ²éÕÒdnodeµÄºó¼Ì½áµãnext */    
+    w_rbt_node_s *next = W_NULL, *refer = W_NULL;    /* æŸ¥æ‰¾dnodeçš„åç»§ç»“ç‚¹next */    
 
     if((nil == dnode->left) || (nil == dnode->right))   
     {   
@@ -316,7 +316,7 @@ w_int32_t _rb_delete(w_rbt_node_s **root, w_rbt_node_s *dnode)
         {          
             next = next->left;    
         }   
-    }    /* ÉèÖÃÌæ´úºó¼Ì½áµãµÄ½áµãrefer(²Î¿¼½áµã) */   
+    }    /* è®¾ç½®æ›¿ä»£åç»§ç»“ç‚¹çš„ç»“ç‚¹refer(å‚è€ƒç»“ç‚¹) */   
     if(nil != next->left)   
     {      
         refer = next->left;   
@@ -351,11 +351,11 @@ w_int32_t _rb_delete(w_rbt_node_s **root, w_rbt_node_s *dnode)
         return RBT_SUCCESS;   
     }   
     //free(next);   
-    return rbt_delete_fixup(root, refer); /* ĞŞ¸´ºìºÚÊ÷ĞÔÖÊ */
+    return rbt_delete_fixup(root, refer); /* ä¿®å¤çº¢é»‘æ ‘æ€§è´¨ */
 }
 
 /*
-* ²éÕÒÌØ¶¨µÄ½Úµã£¬ĞèÒªÍâ²¿¼ÓËø
+* æŸ¥æ‰¾ç‰¹å®šçš„èŠ‚ç‚¹ï¼Œéœ€è¦å¤–éƒ¨åŠ é”
 */
 static void __rbt_middle_tranverse(w_rbt_node_s **root,rbt_access_fn access,void *arg)
 { 
@@ -372,7 +372,7 @@ static void __rbt_middle_tranverse(w_rbt_node_s **root,rbt_access_fn access,void
 } 
 
 /*
-* ²éÕÒÌØ¶¨µÄ½Úµã£¬ĞèÒªÍâ²¿¼ÓËø
+* æŸ¥æ‰¾ç‰¹å®šçš„èŠ‚ç‚¹ï¼Œéœ€è¦å¤–éƒ¨åŠ é”
 */
 w_rbt_node_s* __rbt_search(w_rbt_node_s **root,w_rbt_node_s *z,rbt_access_fn access,void *arg)
 { 
@@ -411,9 +411,9 @@ w_rbt_node_s* __rbt_search(w_rbt_node_s **root,w_rbt_node_s *z,rbt_access_fn acc
 
 
 
-w_int32_t rbt_insert(w_rbt_s *tree, w_rbt_node_s *z) //²åÈë½áµã 
+w_int32_t rbt_insert(w_rbt_s *tree, w_rbt_node_s *z) //æ’å…¥ç»“ç‚¹ 
 { 
-    w_rbt_node_s *x; //ÓÃx±£´æµ±Ç°¶¥µãµÄ¸¸Ä¸½áµã£¬ÓÃp±£´æµ±Ç°µÄ½áµã 
+    w_rbt_node_s *x; //ç”¨xä¿å­˜å½“å‰é¡¶ç‚¹çš„çˆ¶æ¯ç»“ç‚¹ï¼Œç”¨pä¿å­˜å½“å‰çš„ç»“ç‚¹ 
     w_rbt_node_s *p; 
     w_rbt_node_s **root = &tree->root;
 
@@ -427,17 +427,17 @@ w_int32_t rbt_insert(w_rbt_s *tree, w_rbt_node_s *z) //²åÈë½áµã
     {
         *root = z;
         nil = &__nil;
-        nil->color=TREE_BLACK; //nilµÄÑÕÉ«ÉèÖÃÎªºÚ 
+        nil->color=TREE_BLACK; //nilçš„é¢œè‰²è®¾ç½®ä¸ºé»‘ 
         (*root)->left=nil; 
         (*root)->right=nil; 
         (*root)->parent=nil; 
-        (*root)->color=TREE_BLACK; //ÎªÁËÂú×ãĞÔÖÊ2,¸ùµÄÑÕÉ«ÉèÖÃÎªºÚÉ« 
+        (*root)->color=TREE_BLACK; //ä¸ºäº†æ»¡è¶³æ€§è´¨2,æ ¹çš„é¢œè‰²è®¾ç½®ä¸ºé»‘è‰² 
     }
-    else //Èç¹û´ËÊ÷ÒÑ¾­²»Îª¿Õ£¬ÄÇÃ´´Ó¸ù¿ªÊ¼£¬´ÓÉÏÍùÏÂ²éÕÒ²åÈëµã 
+    else //å¦‚æœæ­¤æ ‘å·²ç»ä¸ä¸ºç©ºï¼Œé‚£ä¹ˆä»æ ¹å¼€å§‹ï¼Œä»ä¸Šå¾€ä¸‹æŸ¥æ‰¾æ’å…¥ç‚¹ 
     { 
-        x=*root; //ÓÃx±£´æµ±Ç°¶¥µãµÄ¸¸Ä¸½áµã£¬ÓÃp±£´æµ±Ç°µÄ½áµã 
+        x=*root; //ç”¨xä¿å­˜å½“å‰é¡¶ç‚¹çš„çˆ¶æ¯ç»“ç‚¹ï¼Œç”¨pä¿å­˜å½“å‰çš„ç»“ç‚¹ 
         p=nil; 
-        while(x != nil) //Èç¹ûz->keyĞ¡ÓÚµ±Ç°½áµãµÄvalueÖµ£¬Ôò´Ó×ó±ßÏÂÈ¥£¬·ñÔò´ÓÓÒ±ßÏÂÈ¥ 
+        while(x != nil) //å¦‚æœz->keyå°äºå½“å‰ç»“ç‚¹çš„valueå€¼ï¼Œåˆ™ä»å·¦è¾¹ä¸‹å»ï¼Œå¦åˆ™ä»å³è¾¹ä¸‹å» 
         { 
             p=x; 
             if(z->key < x->key ) 
@@ -456,7 +456,7 @@ w_int32_t rbt_insert(w_rbt_s *tree, w_rbt_node_s *z) //²åÈë½áµã
 
         } 
         x = z;
-        x->color=TREE_RED; //ĞÂ²åÈëµÄ½áµãÑÕÉ«ÉèÖÃÎªºìÉ« 
+        x->color=TREE_RED; //æ–°æ’å…¥çš„ç»“ç‚¹é¢œè‰²è®¾ç½®ä¸ºçº¢è‰² 
         x->left=nil; 
         x->right=nil; 
         x->parent=p; 
@@ -469,7 +469,7 @@ w_int32_t rbt_insert(w_rbt_s *tree, w_rbt_node_s *z) //²åÈë½áµã
         { 
             p->right = x; 
         } 
-        insert_fixup(root, x); //²åÈëºó¶ÔÊ÷½øĞĞµ÷Õû 
+        insert_fixup(root, x); //æ’å…¥åå¯¹æ ‘è¿›è¡Œè°ƒæ•´ 
     }
     RB_TREE_UNLOCK(tree->treeLock);
     return 0;
@@ -477,7 +477,7 @@ w_int32_t rbt_insert(w_rbt_s *tree, w_rbt_node_s *z) //²åÈë½áµã
 
 
 
-w_int32_t rbt_delete(w_rbt_s *tree, w_rbt_node_s *z) //ÔÚºìºÚÊ÷rootÖĞÉ¾³ı½áµãz 
+w_int32_t rbt_delete(w_rbt_s *tree, w_rbt_node_s *z) //åœ¨çº¢é»‘æ ‘rootä¸­åˆ é™¤ç»“ç‚¹z 
 {    
     w_rbt_node_s *node;// = *root;
     w_rbt_node_s **root = &tree->root;
@@ -492,7 +492,7 @@ w_int32_t rbt_delete(w_rbt_s *tree, w_rbt_node_s *z) //ÔÚºìºÚÊ÷rootÖĞÉ¾³ı½áµãz
     {     
         if(z->key == node->key)
         {           
-            return _rb_delete(root, node); /* É¾³ı½áµã */       
+            return _rb_delete(root, node); /* åˆ é™¤ç»“ç‚¹ */       
         }       
         else if(z->key< node->key)
         {

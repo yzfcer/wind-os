@@ -10,7 +10,7 @@
 
 
 
-//¶ÁºÜ¼òµ¥£¬°ÉµØÖ·×÷ÎªÖ¸ÕëÈ¥¶ÁÈ¡Àï±ßµÄÄÚÈİ¼´¿É£¬Êµ¼ÊÉÏÓë²»Éæ¼°µ½flashµÄ±£»¤µÄ²Ù×÷£¬½ö½öÊÇÈ¡µØÖ·Àï±ßµÄÖµ¶øÒÑ
+//è¯»å¾ˆç®€å•ï¼Œå§åœ°å€ä½œä¸ºæŒ‡é’ˆå»è¯»å–é‡Œè¾¹çš„å†…å®¹å³å¯ï¼Œå®é™…ä¸Šä¸ä¸æ¶‰åŠåˆ°flashçš„ä¿æŠ¤çš„æ“ä½œï¼Œä»…ä»…æ˜¯å–åœ°å€é‡Œè¾¹çš„å€¼è€Œå·²
 void Flash_Read(unsigned int addr, char *rBuf, unsigned short len)
 {
 
@@ -19,26 +19,26 @@ void Flash_Read(unsigned int addr, char *rBuf, unsigned short len)
 	
 	for(; lenCount < len; lenCount++)
 	{
-		charBuf = *(volatile unsigned char *)addr; //×ªÎªucharÀàĞÍ
-		if(charBuf == 0xff) //Èç¹û¶Áµ½ÁË0xFF£¬Ôò´ú±íÊı¾İ¶ÁÍêÁË£¬ÒòÎª¸÷¸öÈËµÄssidºÍpassword³¤¶È²»Í¬
+		charBuf = *(volatile unsigned char *)addr; //è½¬ä¸ºucharç±»å‹
+		if(charBuf == 0xff) //å¦‚æœè¯»åˆ°äº†0xFFï¼Œåˆ™ä»£è¡¨æ•°æ®è¯»å®Œäº†ï¼Œå› ä¸ºå„ä¸ªäººçš„ssidå’Œpasswordé•¿åº¦ä¸åŒ
 			break;
 		
-		rBuf[lenCount] = (char)charBuf; //×ª»»Ò»ÏÂ£¬¸³Öµ
+		rBuf[lenCount] = (char)charBuf; //è½¬æ¢ä¸€ä¸‹ï¼Œèµ‹å€¼
 		
-		addr += 2; //´«ÈëµÄµØÖ·±ØĞëÊÇ2µÄ±¶Êı
+		addr += 2; //ä¼ å…¥çš„åœ°å€å¿…é¡»æ˜¯2çš„å€æ•°
 	}
 
 }
 
-//ÅĞ¶ÏÊÇ·ñĞèÒª²Á³ı
-_Bool Flash_NeedErase(void) //1-ĞèÒª²Á³ı(ÓĞÊı¾İ)		0-²»ĞèÒª²Á³ı(ÎŞÊı¾İ)
+//åˆ¤æ–­æ˜¯å¦éœ€è¦æ“¦é™¤
+_Bool Flash_NeedErase(void) //1-éœ€è¦æ“¦é™¤(æœ‰æ•°æ®)		0-ä¸éœ€è¦æ“¦é™¤(æ— æ•°æ®)
 {
 
 	unsigned short rCount = 0;
 	
-	unsigned int addr = SSID_ADDR; //Ò³ÆğÊ¼µØÖ·
+	unsigned int addr = SSID_ADDR; //é¡µèµ·å§‹åœ°å€
 	
-	for(; rCount < 1024; rCount++) //¶Á³ö2KBÊı¾İ		¶ÁÒ»´ÎÖÁÉÙÊÇ°ë×Ö£¬ËùÒÔÕâÀïÊÇ1024
+	for(; rCount < 1024; rCount++) //è¯»å‡º2KBæ•°æ®		è¯»ä¸€æ¬¡è‡³å°‘æ˜¯åŠå­—ï¼Œæ‰€ä»¥è¿™é‡Œæ˜¯1024
 	{
 		if(*(volatile unsigned short *)addr != 0xffff)
 			return 1;
@@ -50,28 +50,28 @@ _Bool Flash_NeedErase(void) //1-ĞèÒª²Á³ı(ÓĞÊı¾İ)		0-²»ĞèÒª²Á³ı(ÎŞÊı¾İ)
 
 }
 
-//Ğ´±È½Ï¸´ÔÓµã£¬×¢ÒâÈıµã£¬1.½âËø¡£2.Ö»ÓĞµØÖ·Àï±ßµÄÖµÎª0xFFFFÊ±ÄÜ¹»±»Ğ´ÈëÆäËûÊı¾İ£¬ËùÒÔÖØĞ´ssidºÍpswdÇ°ĞèÒª²Á³ıÒ»´Î¡£3.Ğ´ÍêÉÏËø¡£
+//å†™æ¯”è¾ƒå¤æ‚ç‚¹ï¼Œæ³¨æ„ä¸‰ç‚¹ï¼Œ1.è§£é”ã€‚2.åªæœ‰åœ°å€é‡Œè¾¹çš„å€¼ä¸º0xFFFFæ—¶èƒ½å¤Ÿè¢«å†™å…¥å…¶ä»–æ•°æ®ï¼Œæ‰€ä»¥é‡å†™ssidå’Œpswdå‰éœ€è¦æ“¦é™¤ä¸€æ¬¡ã€‚3.å†™å®Œä¸Šé”ã€‚
 void Flash_Write(unsigned int addr, char *wBuf, unsigned short len)
 {
 	
 	unsigned short lenCount = 0;
 	
-	FLASH_Unlock();	//½âËø
+	FLASH_Unlock();	//è§£é”
 
-	//Ö®Ç°ÔÚÕâÀïsbÁË£¬ÎÒÊÇ·ÖÁ½´ÎĞ´ÈëssidºÍpswdµÄ£¬½á¹ûÃ»×¢ÊÍÕâÀï£¬ssid±»²Á³ıÁË£¬µ÷ÊÔÁË´ó°ëÌì¡£¡£¡£ÎÒÈ¥
-//	if(Flash_NeedErase()) //ĞèÒª²Á³ı
+	//ä¹‹å‰åœ¨è¿™é‡Œsbäº†ï¼Œæˆ‘æ˜¯åˆ†ä¸¤æ¬¡å†™å…¥ssidå’Œpswdçš„ï¼Œç»“æœæ²¡æ³¨é‡Šè¿™é‡Œï¼Œssidè¢«æ“¦é™¤äº†ï¼Œè°ƒè¯•äº†å¤§åŠå¤©ã€‚ã€‚ã€‚æˆ‘å»
+//	if(Flash_NeedErase()) //éœ€è¦æ“¦é™¤
 //	{
 //		FLASH_ErasePage(SSID_ADDRESS);
 //	}
 	
 	for(; lenCount < len; lenCount++)
 	{
-		//FLASH_ProgramOptionByteData(addr, wBuf[lenCount]); //Ğ´Èë //ÕâÖÖ·½Ê½Ğ´ÈëÎÒÃ»µ÷³öÀ´£¬·´Õı±¾ÖÊÉÏ¶¼ÊÇĞ´°ë×Ö£¬Ë÷ĞÔÓÃÏÂÃæµÄ·½Ê½
-		FLASH_ProgramHalfWord(addr, (unsigned short)wBuf[lenCount]); //Ğ´Èë
+		//FLASH_ProgramOptionByteData(addr, wBuf[lenCount]); //å†™å…¥ //è¿™ç§æ–¹å¼å†™å…¥æˆ‘æ²¡è°ƒå‡ºæ¥ï¼Œåæ­£æœ¬è´¨ä¸Šéƒ½æ˜¯å†™åŠå­—ï¼Œç´¢æ€§ç”¨ä¸‹é¢çš„æ–¹å¼
+		FLASH_ProgramHalfWord(addr, (unsigned short)wBuf[lenCount]); //å†™å…¥
 
-		addr += 2; //µØÖ·±ØĞëÊÇ2µÄ±¶Êı
+		addr += 2; //åœ°å€å¿…é¡»æ˜¯2çš„å€æ•°
 	}
 	
-	FLASH_Lock(); //ÉÏËø
+	FLASH_Lock(); //ä¸Šé”
 
 }

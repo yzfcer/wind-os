@@ -11,11 +11,11 @@
 	EXPORT  PendSV_Handler
         	
      
-NVIC_INT_CTRL   	EQU     0xE000ED04  ; ÖĞ¶Ï¿ØÖÆ¼Ä´æÆ÷
-NVIC_SYSPRI2    	EQU     0xE000ED22  ; ÏµÍ³ÓÅÏÈ¼¶¼Ä´æÆ÷(2)
-NVIC_PENDSV_PRI 	EQU         0xFFFF  ; PendSVÖĞ¶ÏºÍÏµÍ³½ÚÅÄÖĞ¶Ï
-                                        ; (¶¼Îª×îµÍ£¬0xff).
-NVIC_PENDSVSET  	EQU     0x10000000  ; ´¥·¢Èí¼şÖĞ¶ÏµÄÖµ.
+NVIC_INT_CTRL   	EQU     0xE000ED04  ; ä¸­æ–­æ§åˆ¶å¯„å­˜å™¨
+NVIC_SYSPRI2    	EQU     0xE000ED22  ; ç³»ç»Ÿä¼˜å…ˆçº§å¯„å­˜å™¨(2)
+NVIC_PENDSV_PRI 	EQU         0xFFFF  ; PendSVä¸­æ–­å’Œç³»ç»ŸèŠ‚æ‹ä¸­æ–­
+                                        ; (éƒ½ä¸ºæœ€ä½ï¼Œ0xff).
+NVIC_PENDSVSET  	EQU     0x10000000  ; è§¦å‘è½¯ä»¶ä¸­æ–­çš„å€¼.
 
 
 	PRESERVE8 
@@ -24,23 +24,23 @@ NVIC_PENDSVSET  	EQU     0x10000000  ; ´¥·¢Èí¼şÖĞ¶ÏµÄÖµ.
     
            
 wind_save_sr
-    MRS     R0, PRIMASK  	;¶ÁÈ¡PRIMASKµ½R0,R0Îª·µ»ØÖµ 
-    CPSID   I				;PRIMASK=1,¹ØÖĞ¶Ï(NMIºÍÓ²¼şFAULT¿ÉÒÔÏìÓ¦)
-    BX      LR			    ;·µ»Ø
+    MRS     R0, PRIMASK  	;è¯»å–PRIMASKåˆ°R0,R0ä¸ºè¿”å›å€¼ 
+    CPSID   I				;PRIMASK=1,å…³ä¸­æ–­(NMIå’Œç¡¬ä»¶FAULTå¯ä»¥å“åº”)
+    BX      LR			    ;è¿”å›
 
 wind_restore_sr
-    MSR     PRIMASK, R0	   	;¶ÁÈ¡R0µ½PRIMASKÖĞ,R0Îª²ÎÊı
-    BX      LR				;·µ»Ø
+    MSR     PRIMASK, R0	   	;è¯»å–R0åˆ°PRIMASKä¸­,R0ä¸ºå‚æ•°
+    BX      LR				;è¿”å›
 
 
 ;/**************************************************************************************
-;* º¯ÊıÃû³Æ: wind_start_switch
+;* å‡½æ•°åç§°: wind_start_switch
 ;*
-;* ¹¦ÄÜÃèÊö: Ê¹ÓÃµ÷¶ÈÆ÷ÔËĞĞµÚÒ»¸öÏß³Ì
+;* åŠŸèƒ½æè¿°: ä½¿ç”¨è°ƒåº¦å™¨è¿è¡Œç¬¬ä¸€ä¸ªçº¿ç¨‹
 ;* 
-;* ²Î    Êı: None
+;* å‚    æ•°: None
 ;*
-;* ·µ »Ø Öµ: None
+;* è¿” å› å€¼: None
 ;**************************************************************************************/  
 
 wind_start_switch
@@ -55,7 +55,7 @@ wind_start_switch
 	MOV     R5, #1
 	STRB    R5, [R4]
 
-								   ;ÇĞ»»µ½×î¸ßÓÅÏÈ¼¶µÄÏß³Ì
+								   ;åˆ‡æ¢åˆ°æœ€é«˜ä¼˜å…ˆçº§çš„çº¿ç¨‹
 	LDR     R4, =NVIC_INT_CTRL     ;trigger the PendSV exception (causes context switch)
 	LDR     R5, =NVIC_PENDSVSET
 	STR     R5, [R4]
@@ -65,36 +65,36 @@ WIND_OS_HANG
 	B       WIND_OS_HANG            ;should never get here
 
 ;/**************************************************************************************
-;* º¯ÊıÃû³Æ: wind_thread_switch
+;* å‡½æ•°åç§°: wind_thread_switch
 ;*
-;* ¹¦ÄÜÃèÊö: Ïß³Ì¼¶ÉÏÏÂÎÄÇĞ»»         
+;* åŠŸèƒ½æè¿°: çº¿ç¨‹çº§ä¸Šä¸‹æ–‡åˆ‡æ¢         
 ;*
-;* ²Î    Êı: None
+;* å‚    æ•°: None
 ;*
-;* ·µ »Ø Öµ: None
+;* è¿” å› å€¼: None
 ;***************************************************************************************/
   
 wind_thread_switch
 	PUSH    {R4, R5}
-	LDR     R4, =NVIC_INT_CTRL  	;´¥·¢PendSVÒì³£ (causes context switch)
+	LDR     R4, =NVIC_INT_CTRL  	;è§¦å‘PendSVå¼‚å¸¸ (causes context switch)
 	LDR     R5, =NVIC_PENDSVSET
 	STR     R5, [R4]
 	POP     {R4, R5}
 	BX      LR
 
 ;/**************************************************************************************
-;* º¯ÊıÃû³Æ: wind_interrupt_switch
+;* å‡½æ•°åç§°: wind_interrupt_switch
 ;*
-;* ¹¦ÄÜÃèÊö: ÖĞ¶Ï¼¶Ïß³ÌÇĞ»»
+;* åŠŸèƒ½æè¿°: ä¸­æ–­çº§çº¿ç¨‹åˆ‡æ¢
 ;*
-;* ²Î    Êı: None
+;* å‚    æ•°: None
 ;*
-;* ·µ »Ø Öµ: None
+;* è¿” å› å€¼: None
 ;***************************************************************************************/
 
 wind_interrupt_switch
 	PUSH    {R4, R5}
-	LDR     R4, =NVIC_INT_CTRL      ;´¥·¢PendSVÒì³£ (causes context switch)
+	LDR     R4, =NVIC_INT_CTRL      ;è§¦å‘PendSVå¼‚å¸¸ (causes context switch)
 	LDR     R5, =NVIC_PENDSVSET
 	STR     R5, [R4]
 	POP     {R4, R5}
@@ -102,18 +102,18 @@ wind_interrupt_switch
 	NOP
 
 ;/**************************************************************************************
-;* º¯ÊıÃû³Æ: PendSV_Handler
+;* å‡½æ•°åç§°: PendSV_Handler
 ;*
-;* ¹¦ÄÜÃèÊö: PendSV is used to cause a context switch.
+;* åŠŸèƒ½æè¿°: PendSV is used to cause a context switch.
 ;*
-;* ²Î    Êı: None
+;* å‚    æ•°: None
 ;*
-;* ·µ »Ø Öµ: None
+;* è¿” å› å€¼: None
 ;***************************************************************************************/
 
 PendSV_Handler
     CPSID   I                                                   ; Prevent interruption during context switch
-    MRS     R0, PSP                                             ; PSP is process stack pointer Èç¹ûÔÚÓÃPSP¶ÑÕ»,Ôò¿ÉÒÔºöÂÔ±£´æ¼Ä´æÆ÷,²Î¿¼CM3È¨ÍşÖĞµÄË«¶ÑÕ»-°×²Ë×¢
+    MRS     R0, PSP                                             ; PSP is process stack pointer å¦‚æœåœ¨ç”¨PSPå †æ ˆ,åˆ™å¯ä»¥å¿½ç•¥ä¿å­˜å¯„å­˜å™¨,å‚è€ƒCM3æƒå¨ä¸­çš„åŒå †æ ˆ-ç™½èœæ³¨
     CBZ     R0, PendSV_Handler_Nosave		                    ; Skip register save the first time
 	
 	;Is the task using the FPU context? If so, push high vfp registers.

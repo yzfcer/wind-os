@@ -4,11 +4,11 @@
 
 //////////////////////////////////////////////////////////////////////////////////	 
 
-//LED¶Ë¿Ú¶¨Òå
-#define BEEP PGout(7)	// ·äÃùÆ÷¿ØÖÆIO 
+//LEDç«¯å£å®šä¹‰
+#define BEEP PGout(7)	// èœ‚é¸£å™¨æŽ§åˆ¶IO 
 
-//º¯ÊýÉùÃ÷
-void BEEP_Init(void); //³õÊ¼»¯		 				    
+//å‡½æ•°å£°æ˜Ž
+void BEEP_Init(void); //åˆå§‹åŒ–		 				    
 #endif
 
 

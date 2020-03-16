@@ -1,25 +1,25 @@
 /****************************************Copyright (c)**************************************************
-**                                       Çå  ·ç  º£  °¶
+**                                       æ¸…  é£Ž  æµ·  å²¸
 **
 **                                       yzfcer@163.com
 **
-**--------------ÎÄ¼þÐÅÏ¢--------------------------------------------------------------------------------
-**ÎÄ   ¼þ   Ãû: wind_daemon.h
-**ÎÄ   ¼þ   Ãû: wind_daemon.h
-**´´   ½¨   ÈË: Jason Zhou
-**×îºóÐÞ¸ÄÈÕÆÚ: 2019.02.23
-**Ãè        Êö: wind osµÄÏß³ÌÊØ»¤¶ÔÏó
+**--------------æ–‡ä»¶ä¿¡æ¯--------------------------------------------------------------------------------
+**æ–‡   ä»¶   å: wind_daemon.h
+**æ–‡   ä»¶   å: wind_daemon.h
+**åˆ›   å»º   äºº: Jason Zhou
+**æœ€åŽä¿®æ”¹æ—¥æœŸ: 2019.02.23
+**æ        è¿°: wind osçš„çº¿ç¨‹å®ˆæŠ¤å¯¹è±¡
 **              
-**--------------ÀúÊ·°æ±¾ÐÅÏ¢----------------------------------------------------------------------------
-** ´´½¨ÈË: Jason Zhou
-** °æ  ±¾: v1.0
-** ÈÕ¡¡ÆÚ: 2019.02.23
-** Ãè¡¡Êö: Ô­Ê¼°æ±¾
+**--------------åŽ†å²ç‰ˆæœ¬ä¿¡æ¯----------------------------------------------------------------------------
+** åˆ›å»ºäºº: Jason Zhou
+** ç‰ˆ  æœ¬: v1.0
+** æ—¥ã€€æœŸ: 2019.02.23
+** æã€€è¿°: åŽŸå§‹ç‰ˆæœ¬
 **
-**--------------µ±Ç°°æ±¾ÐÞ¶©----------------------------------------------------------------------------
-** ÐÞ¸ÄÈË: Jason Zhou
-** ÈÕ¡¡ÆÚ: 2012.10.20
-** Ãè¡¡Êö: 
+**--------------å½“å‰ç‰ˆæœ¬ä¿®è®¢----------------------------------------------------------------------------
+** ä¿®æ”¹äºº: Jason Zhou
+** æ—¥ã€€æœŸ: 2012.10.20
+** æã€€è¿°: 
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
@@ -39,12 +39,12 @@ extern "C" {
 #if WIND_DAEMON_SUPPORT
 #define WIND_DAEMON_MAGIC 0x576C5A4C
 
-#define F_DAEMON_POOL (0x01 << 0) //±ê¼Çdaemon¶ÔÏóÊÇ·ñÍ¨¹ýÄÚ´æ³Ø·ÖÅä
+#define F_DAEMON_POOL (0x01 << 0) //æ ‡è®°daemonå¯¹è±¡æ˜¯å¦é€šè¿‡å†…å­˜æ± åˆ†é…
 #define IS_F_DAEMON_POOL(daemon) ((daemon->obj.flag & F_DAEMON_POOL) == F_DAEMON_POOL)
 #define SET_F_DAEMON_POOL(daemon) (daemon->obj.flag |= F_DAEMON_POOL)
 #define CLR_F_DAEMON_POOL(daemon) (daemon->obj.flag &= (~F_DAEMON_POOL))
 
-#define F_DAEMON_ENABLE (0x01 << 1) //±ê¼Çdaemon¶ÔÏóÊÇ·ñÊ¹ÄÜ
+#define F_DAEMON_ENABLE (0x01 << 1) //æ ‡è®°daemonå¯¹è±¡æ˜¯å¦ä½¿èƒ½
 #define IS_F_DAEMON_ENABLE(daemon) ((daemon->obj.flag & F_DAEMON_ENABLE) == F_DAEMON_ENABLE)
 #define SET_F_DAEMON_ENABLE(daemon) (daemon->obj.flag |= F_DAEMON_ENABLE)
 #define CLR_F_DAEMON_ENABLE(daemon) (daemon->obj.flag &= (~F_DAEMON_ENABLE))

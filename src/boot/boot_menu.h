@@ -24,11 +24,11 @@ extern "C" {
 typedef w_err_t (*menu_handle_fn)(void);
 typedef struct
 {
-    char key;//ÊäÈëµÄ¼üÖµ
-    char prio;//²Ëµ¥È¨ÏŞ
-    char prio_bak;//²Ëµ¥È¨ÏŞµÄ±¸·İ
-    const char *menu_item;//²Ëµ¥Ïî
-    menu_handle_fn handle;//´¦ÀíµÄ¾ä±ú
+    char key;//è¾“å…¥çš„é”®å€¼
+    char prio;//èœå•æƒé™
+    char prio_bak;//èœå•æƒé™çš„å¤‡ä»½
+    const char *menu_item;//èœå•é¡¹
+    menu_handle_fn handle;//å¤„ç†çš„å¥æŸ„
 }w_menu_tb_s;
 
 w_err_t run_menu(void);

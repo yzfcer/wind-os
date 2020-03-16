@@ -2,23 +2,23 @@
 	************************************************************
 	************************************************************
 	************************************************************
-	*	ÎÄ¼þÃû£º 	selfcheck.c
+	*	æ–‡ä»¶åï¼š 	selfcheck.c
 	*
-	*	×÷Õß£º 		ÕÅ¼ÌÈð
+	*	ä½œè€…ï¼š 		å¼ ç»§ç‘ž
 	*
-	*	ÈÕÆÚ£º 		2016-11-23
+	*	æ—¥æœŸï¼š 		2016-11-23
 	*
-	*	°æ±¾£º 		V1.0
+	*	ç‰ˆæœ¬ï¼š 		V1.0
 	*
-	*	ËµÃ÷£º 		LED³õÊ¼»¯£¬ÁÁÃðLED
+	*	è¯´æ˜Žï¼š 		LEDåˆå§‹åŒ–ï¼Œäº®ç­LED
 	*
-	*	ÐÞ¸Ä¼ÇÂ¼£º	
+	*	ä¿®æ”¹è®°å½•ï¼š	
 	************************************************************
 	************************************************************
 	************************************************************
 **/
 
-//Ó²¼þÇý¶¯
+//ç¡¬ä»¶é©±åŠ¨
 #include "selfcheck.h"
 #include "i2c.h"
 #include "usart.h"
@@ -34,16 +34,16 @@ CHECK_INFO checkInfo = {DEV_ERR, DEV_ERR, DEV_ERR, DEV_ERR, DEV_ERR};
 
 /*
 ************************************************************
-*	º¯ÊýÃû³Æ£º	Check_PowerOn
+*	å‡½æ•°åç§°ï¼š	Check_PowerOn
 *
-*	º¯Êý¹¦ÄÜ£º	Íâ½ÓÉè±¸¼ì²â
+*	å‡½æ•°åŠŸèƒ½ï¼š	å¤–æŽ¥è®¾å¤‡æ£€æµ‹
 *
-*	Èë¿Ú²ÎÊý£º	ÎÞ
+*	å…¥å£å‚æ•°ï¼š	æ— 
 *
-*	·µ»Ø²ÎÊý£º	ÎÞ
+*	è¿”å›žå‚æ•°ï¼š	æ— 
 *
-*	ËµÃ÷£º		IICÉè±¸¿ÉÒÔ¶ÁÈ¡¼Ä´æÆ÷À´²é¿´ÏìÓ¦Çé¿ö
-*				Ö÷Òª¼ì²ésht20¡¢adxl345¡¢gy30¡¢eeprom
+*	è¯´æ˜Žï¼š		IICè®¾å¤‡å¯ä»¥è¯»å–å¯„å­˜å™¨æ¥æŸ¥çœ‹å“åº”æƒ…å†µ
+*				ä¸»è¦æ£€æŸ¥sht20ã€adxl345ã€gy30ã€eeprom
 ************************************************************
 */
 void Check_PowerOn(void)
@@ -51,8 +51,8 @@ void Check_PowerOn(void)
 
 	unsigned char value = 0;
 	
-	//¼ì²âSH20
-	I2C_ReadByte(0X40, 0XE7, &value);					//¶ÁÈ¡ÓÃ»§¼Ä´æÆ÷
+	//æ£€æµ‹SH20
+	I2C_ReadByte(0X40, 0XE7, &value);					//è¯»å–ç”¨æˆ·å¯„å­˜å™¨
 	if(value)
 	{
 		UsartPrintf(USART_DEBUG, "SHT20 :Ok\r\n");
@@ -62,7 +62,7 @@ void Check_PowerOn(void)
 		UsartPrintf(USART_DEBUG, "SHT20 :Error\r\n");
 	DelayXms(1);
 	
-	//¼ì²âADXL345
+	//æ£€æµ‹ADXL345
 	I2C_ReadByte(0x53, 0x00, &value);
 	if(value == 229)
 	{
@@ -73,7 +73,7 @@ void Check_PowerOn(void)
 		UsartPrintf(USART_DEBUG, "ADXL345 :Error\r\n");
 	DelayXms(1);
 	
-	//¼ì²âEEPROM
+	//æ£€æµ‹EEPROM
 	if(!I2C_ReadByte(0x50, 255, &value))
 	{
 		UsartPrintf(USART_DEBUG, "EEPROM :Ok\r\n");
@@ -83,8 +83,8 @@ void Check_PowerOn(void)
 		UsartPrintf(USART_DEBUG, "EEPROM :Error\r\n");
 	DelayXms(1);
 	
-	//¼ì²âOLED
-	if(!OLED_WriteCom(0xAE))								//¹Ø±ÕÏÔÊ¾£¬ÅÐ¶ÏACK
+	//æ£€æµ‹OLED
+	if(!OLED_WriteCom(0xAE))								//å…³é—­æ˜¾ç¤ºï¼Œåˆ¤æ–­ACK
 	{
 		UsartPrintf(USART_DEBUG, "OLED :Ok\r\n");
 		checkInfo.OLED_OK = DEV_OK;

@@ -19,7 +19,7 @@ w_err_t tb_entry_modify(w_tb_s *tb,w_int32_t row_idx,void *data,w_int32_t data_s
 w_err_t tb_entry_modify_value(w_tb_s *tb,char *mbrname,w_int32_t row_idx,void *data,w_int32_t data_size);
 w_err_t tb_entry_query_count(w_tb_s *tb,w_int32_t *count);
 
-//cond�ĸ�ʽΪ"mbrname1=value1&&mbr2=value2"���Ƶĸ�ʽ
+//cond的格式为"mbrname1=value1&&mbr2=value2"类似的格式
 w_err_t tb_entry_query_cond_count(w_tb_s *tb,char *cond,w_int32_t *idxlist,w_int32_t cnt);
 
 w_err_t tb_entry_print_info(w_tb_s *tb);

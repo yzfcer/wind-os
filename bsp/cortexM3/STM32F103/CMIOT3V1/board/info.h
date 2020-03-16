@@ -2,11 +2,11 @@
 #define _INFO_H_
 
 
-#define DEVID_ADDRESS       120		//��ʼ��ַ����һ�����ݱ�ʾ���ȡ����19�ֽڡ�
-#define AKEY_ADDRESS        140		//��ʼ��ַ����һ�����ݱ�ʾ���ȡ����59�ֽڡ�
+#define DEVID_ADDRESS       120		//起始地址，第一个数据表示长度。最大19字节。
+#define AKEY_ADDRESS        140		//起始地址，第一个数据表示长度。最大59字节。
 
-#define PROID_ADDRESS		200		//��ʼ��ַ����һ�����ݱ�ʾ���ȡ����9�ֽڡ���ƷID
-#define AUIF_ADDRESS		210		//��ʼ��ַ����һ�����ݱ�ʾ���ȡ����49�ֽڡ��Զ����Ȩ��Ϣ
+#define PROID_ADDRESS		200		//起始地址，第一个数据表示长度。最大9字节。产品ID
+#define AUIF_ADDRESS		210		//起始地址，第一个数据表示长度。最大49字节。自定义鉴权信息
 
 
 

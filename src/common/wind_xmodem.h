@@ -38,29 +38,29 @@ typedef w_int32_t (*xm_read_fn)(w_uint8_t *ch,w_uint32_t time_out);
 
 typedef struct 
 {
-    xm_stat_e stat;//xmodem×´Ì¬¼¸×´Ì¬
-    xm_dir_e dir;//´«Êä·½Ïò
-    w_uint8_t crcmode;//Ğ£ÑéÄ£Ê½£¬1Îªcrc£¬0ÎªĞ£ÑéºÍ
-    w_uint8_t trychar;//¿ØÖÆ×Ö·û
-    w_uint8_t  pack_no;//ÕıĞòºÅ
-    w_uint8_t  ack;//Ó¦´ğ
-    w_int8_t retry;//ÖØÊÔ´ÎÊı
+    xm_stat_e stat;//xmodemçŠ¶æ€å‡ çŠ¶æ€
+    xm_dir_e dir;//ä¼ è¾“æ–¹å‘
+    w_uint8_t crcmode;//æ ¡éªŒæ¨¡å¼ï¼Œ1ä¸ºcrcï¼Œ0ä¸ºæ ¡éªŒå’Œ
+    w_uint8_t trychar;//æ§åˆ¶å­—ç¬¦
+    w_uint8_t  pack_no;//æ­£åºå·
+    w_uint8_t  ack;//åº”ç­”
+    w_int8_t retry;//é‡è¯•æ¬¡æ•°
     
-    //Ö¡Êı¾İ»º´æ
-    w_uint8_t *frbuff;//Ö¡Êı¾İ»º´æ
-    w_int16_t frbuffsize;//Êı¾İÖ¡»º´æ¿Õ¼ä´óĞ¡
-    w_int16_t frlen;//Êı¾İÖ¡¿Õ¼ä³¤¶È
-    w_int16_t frdatalen;//Ã¿Ö¡ÖĞµÄÊı¾İ²¿·Ö³¤¶È
-    w_int16_t fridx;//Ö¡Êı¾İÏÂ±ê
+    //å¸§æ•°æ®ç¼“å­˜
+    w_uint8_t *frbuff;//å¸§æ•°æ®ç¼“å­˜
+    w_int16_t frbuffsize;//æ•°æ®å¸§ç¼“å­˜ç©ºé—´å¤§å°
+    w_int16_t frlen;//æ•°æ®å¸§ç©ºé—´é•¿åº¦
+    w_int16_t frdatalen;//æ¯å¸§ä¸­çš„æ•°æ®éƒ¨åˆ†é•¿åº¦
+    w_int16_t fridx;//å¸§æ•°æ®ä¸‹æ ‡
 
-    //ÓĞĞ§Êı¾İ»º´æ
-    w_uint8_t *buff;//´«ÊäµÄÊı¾İ»º´æ
-    w_int16_t bufflen;//´«ÊäµÄÊı¾İ³¤¶È
-    w_int16_t buffidx;//´«ÊäµÄÊı¾İ³¤¶È
+    //æœ‰æ•ˆæ•°æ®ç¼“å­˜
+    w_uint8_t *buff;//ä¼ è¾“çš„æ•°æ®ç¼“å­˜
+    w_int16_t bufflen;//ä¼ è¾“çš„æ•°æ®é•¿åº¦
+    w_int16_t buffidx;//ä¼ è¾“çš„æ•°æ®é•¿åº¦
 
-    //´«Êä½Ó¿Ú
-    xm_write_fn write;//Êä³ö½Ó¿Ú
-    xm_read_fn read;//ÊäÈë½Ó¿Ú
+    //ä¼ è¾“æ¥å£
+    xm_write_fn write;//è¾“å‡ºæ¥å£
+    xm_read_fn read;//è¾“å…¥æ¥å£
 }xm_ctx_s;
 
 

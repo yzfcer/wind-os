@@ -1,24 +1,24 @@
 /****************************************Copyright (c)**************************************************
-**                                       Çå  ·ç  º£  °¶
+**                                       æ¸…  é£  æµ·  å²¸
 **
 **                                       yzfcer@163.com
 **
-**--------------ÎÄ¼şĞÅÏ¢--------------------------------------------------------------------------------
-**ÎÄ   ¼ş   Ãû: hostfs.h
-**´´   ½¨   ÈË: Jason Zhou
-**×îºóĞŞ¸ÄÈÕÆÚ: 2019.09.08
-**Ãè        Êö: hostfsËŞÖ÷»úÎÄ¼şÏµÍ³Ö÷Ìâ¹¦ÄÜ
+**--------------æ–‡ä»¶ä¿¡æ¯--------------------------------------------------------------------------------
+**æ–‡   ä»¶   å: hostfs.h
+**åˆ›   å»º   äºº: Jason Zhou
+**æœ€åä¿®æ”¹æ—¥æœŸ: 2019.09.08
+**æ        è¿°: hostfså®¿ä¸»æœºæ–‡ä»¶ç³»ç»Ÿä¸»é¢˜åŠŸèƒ½
 **              
-**--------------ÀúÊ·°æ±¾ĞÅÏ¢----------------------------------------------------------------------------
-** ´´½¨ÈË: Jason Zhou
-** °æ  ±¾: v1.0
-** ÈÕ¡¡ÆÚ: 2019.09.08
-** Ãè¡¡Êö: Ô­Ê¼°æ±¾
+**--------------å†å²ç‰ˆæœ¬ä¿¡æ¯----------------------------------------------------------------------------
+** åˆ›å»ºäºº: Jason Zhou
+** ç‰ˆ  æœ¬: v1.0
+** æ—¥ã€€æœŸ: 2019.09.08
+** æã€€è¿°: åŸå§‹ç‰ˆæœ¬
 **
-**--------------µ±Ç°°æ±¾ĞŞ¶©----------------------------------------------------------------------------
-** ĞŞ¸ÄÈË: Jason Zhou
-** ÈÕ¡¡ÆÚ: 2019.09.08
-** Ãè¡¡Êö: 
+**--------------å½“å‰ç‰ˆæœ¬ä¿®è®¢----------------------------------------------------------------------------
+** ä¿®æ”¹äºº: Jason Zhou
+** æ—¥ã€€æœŸ: 2019.09.08
+** æã€€è¿°: 
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
@@ -49,9 +49,9 @@ typedef struct _finddata_t _finddata_t;
 
 #define HOSTFS_MAGIC   0x49AC7D53
 #define HOSTFILE_MAGIC 0x2576DA83
-#define HFILE_NAME_LEN 64    //ÎÄ¼şÃû³¤¶È
-#define HOSTFS_DIR_LAYCNT 32 //Ä¿Â¼Éî¶È
-#define HOSTFS_MAX_FILE_SIZE 0x7fffffff //ÎÄ¼ş³¤¶ÈÏŞÖÆ£¬2GB
+#define HFILE_NAME_LEN 64    //æ–‡ä»¶åé•¿åº¦
+#define HOSTFS_DIR_LAYCNT 32 //ç›®å½•æ·±åº¦
+#define HOSTFS_MAX_FILE_SIZE 0x7fffffff //æ–‡ä»¶é•¿åº¦é™åˆ¶ï¼Œ2GB
 
 #define HFMODE_R   0x01
 #define HFMODE_W   0x02
@@ -59,12 +59,12 @@ typedef struct _finddata_t _finddata_t;
 #define HFMODE_CRT 0x04
 
 
-//ÎÄ¼şÊôĞÔ
-#define HFILE_ATTR_DIR    (0x01 << 0) //ÊÇ·ñÄ¿Â¼
-#define HFILE_ATTR_RDEN   (0x01 << 1) //ÊÇ·ñ¿É¶Á
-#define HFILE_ATTR_WREN   (0x01 << 2) //ÊÇ·ñ¿ÉĞ´
-#define HFILE_ATTR_HIDE   (0x01 << 3) //ÊÇ·ñÒş²Ø
-#define HFILE_ATTR_VERIFY (0x01 << 4) //ÊÇ·ñĞ£Ñé
+//æ–‡ä»¶å±æ€§
+#define HFILE_ATTR_DIR    (0x01 << 0) //æ˜¯å¦ç›®å½•
+#define HFILE_ATTR_RDEN   (0x01 << 1) //æ˜¯å¦å¯è¯»
+#define HFILE_ATTR_WREN   (0x01 << 2) //æ˜¯å¦å¯å†™
+#define HFILE_ATTR_HIDE   (0x01 << 3) //æ˜¯å¦éšè—
+#define HFILE_ATTR_VERIFY (0x01 << 4) //æ˜¯å¦æ ¡éªŒ
 #define HFILE_ATTR_COMMAN (HFILE_ATTR_RDEN | HFILE_ATTR_WREN)
 
 #define IS_HFILE_ATTR_DIR(attr) (attr & HFILE_ATTR_DIR)
@@ -96,7 +96,7 @@ typedef enum
     HFILE_TYPE_FILE = 2,
 }hfileattr_e;
 
-//³ÌĞò¹ØÁªµÄÎÄ¼şÏµÍ³ĞÅÏ¢
+//ç¨‹åºå…³è”çš„æ–‡ä»¶ç³»ç»Ÿä¿¡æ¯
 typedef struct __hostfs_s
 {
     w_uint32_t magic;
@@ -110,23 +110,23 @@ typedef struct
     char *name;
  }w_subinfo_s;
 
-//³ÌĞò¹ØÁªµÄÎÄ¼şĞÅÏ¢
+//ç¨‹åºå…³è”çš„æ–‡ä»¶ä¿¡æ¯
 struct __hostfile_s
 {
-    w_uint32_t magic;  //Ä§Êõ×Ö
-    w_hostfs_s *hfs;   //Ö÷»úÎÄ¼şÏµÍ³¶ÔÏó
-    char *path;        //ÎÄ¼şÂ·¾¶£¬Ïà¶ÔÓÚ¹ÒÔØµØÖ·
-    char *name;        //ÎÄ¼şÃû
-    w_uint8_t mode;    //´ò¿ªÄ£Ê½
-    w_uint8_t attr;    //ÎÄ¼şÊôĞÔ
-    w_uint8_t isdir;   //ÊÇ·ñÄ¿Â¼
-    //w_uint8_t has_sub;   //ÊÇ·ñÓĞ×ÓÎÄ¼ş
-    w_hostfile_s *subhfile;//×ÓÎÄ¼ş(»òÄ¿Â¼)
-    FILE* fd;          //ÎÄ¼ş¾ä±ú
+    w_uint32_t magic;  //é­”æœ¯å­—
+    w_hostfs_s *hfs;   //ä¸»æœºæ–‡ä»¶ç³»ç»Ÿå¯¹è±¡
+    char *path;        //æ–‡ä»¶è·¯å¾„ï¼Œç›¸å¯¹äºæŒ‚è½½åœ°å€
+    char *name;        //æ–‡ä»¶å
+    w_uint8_t mode;    //æ‰“å¼€æ¨¡å¼
+    w_uint8_t attr;    //æ–‡ä»¶å±æ€§
+    w_uint8_t isdir;   //æ˜¯å¦ç›®å½•
+    //w_uint8_t has_sub;   //æ˜¯å¦æœ‰å­æ–‡ä»¶
+    w_hostfile_s *subhfile;//å­æ–‡ä»¶(æˆ–ç›®å½•)
+    FILE* fd;          //æ–‡ä»¶å¥æŸ„
     w_subinfo_s subinfo;
 #if (HOST_OS_TYPE == HOST_OS_WINDOWS)
-    intptr_t handle;  //×ÓÎÄ¼ş¾ä±ú(windowsÏµÍ³)
-    _finddata_t finddata;//×ÓÎÄ¼şĞÅÏ¢
+    intptr_t handle;  //å­æ–‡ä»¶å¥æŸ„(windowsç³»ç»Ÿ)
+    _finddata_t finddata;//å­æ–‡ä»¶ä¿¡æ¯
 #endif
 #if (HOST_OS_TYPE == HOST_OS_LINUX)
     DIR *dir;

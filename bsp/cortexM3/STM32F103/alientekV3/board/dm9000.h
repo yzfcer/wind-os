@@ -3,37 +3,37 @@
 #include "sys.h"
 #include "lwip/pbuf.h"
 //////////////////////////////////////////////////////////////////////////////////	 
-//±¾³ÌĞòÖ»¹©Ñ§Ï°Ê¹ÓÃ£¬Î´¾­×÷ÕßĞí¿É£¬²»µÃÓÃÓÚÆäËüÈÎºÎÓÃÍ¾
-//ALIENTEKÕ½½¢STM32¿ª·¢°åV3
-//DM9000Çı¶¯´úÂë	   
-//ÕıµãÔ­×Ó@ALIENTEK
-//¼¼ÊõÂÛÌ³:www.openedv.com
-//´´½¨ÈÕÆÚ:2015/3/15
-//°æ±¾£ºV1.0
-//°æÈ¨ËùÓĞ£¬µÁ°æ±Ø¾¿¡£
-//Copyright(C) ¹ãÖİÊĞĞÇÒíµç×Ó¿Æ¼¼ÓĞÏŞ¹«Ë¾ 2009-2019
+//æœ¬ç¨‹åºåªä¾›å­¦ä¹ ä½¿ç”¨ï¼Œæœªç»ä½œè€…è®¸å¯ï¼Œä¸å¾—ç”¨äºå…¶å®ƒä»»ä½•ç”¨é€”
+//ALIENTEKæˆ˜èˆ°STM32å¼€å‘æ¿V3
+//DM9000é©±åŠ¨ä»£ç 	   
+//æ­£ç‚¹åŸå­@ALIENTEK
+//æŠ€æœ¯è®ºå›:www.openedv.com
+//åˆ›å»ºæ—¥æœŸ:2015/3/15
+//ç‰ˆæœ¬ï¼šV1.0
+//ç‰ˆæƒæ‰€æœ‰ï¼Œç›—ç‰ˆå¿…ç©¶ã€‚
+//Copyright(C) å¹¿å·å¸‚æ˜Ÿç¿¼ç”µå­ç§‘æŠ€æœ‰é™å…¬å¸ 2009-2019
 //All rights reserved									  
 ////////////////////////////////////////////////////////////////////////////////// 
 
-#define DM9000_RST		PDout(7)		//DM9000¸´Î»Òı½Å
-#define DM9000_INT		PGin(6)			//DM9000ÖĞ¶ÏÒı½Å
+#define DM9000_RST		PDout(7)		//DM9000å¤ä½å¼•è„š
+#define DM9000_INT		PGin(6)			//DM9000ä¸­æ–­å¼•è„š
 
-//DM9000µØÖ·½á¹¹Ìå
+//DM9000åœ°å€ç»“æ„ä½“
 typedef struct
 {
 	vu16 REG;
 	vu16 DATA;
 }DM9000_TypeDef;
-//Ê¹ÓÃNOR/SRAMµÄ Bank1.sector2,µØÖ·Î»HADDR[27,26]=01 A7×÷ÎªÊı¾İÃüÁîÇø·ÖÏß 
-//×¢ÒâÉèÖÃÊ±STM32ÄÚ²¿»áÓÒÒÆÒ»Î»¶ÔÆä! 			    
+//ä½¿ç”¨NOR/SRAMçš„ Bank1.sector2,åœ°å€ä½HADDR[27,26]=01 A7ä½œä¸ºæ•°æ®å‘½ä»¤åŒºåˆ†çº¿ 
+//æ³¨æ„è®¾ç½®æ—¶STM32å†…éƒ¨ä¼šå³ç§»ä¸€ä½å¯¹å…¶! 			    
 #define DM9000_BASE        ((u32)(0x64000000|0x000000FE))
 #define DM9000             ((DM9000_TypeDef *) DM9000_BASE)
 
 #define DM9000_ID			0X90000A46	//DM9000 ID
-#define DM9000_PKT_MAX		1536		//DM9000×î´ó½ÓÊÕ°ü³¤¶È
+#define DM9000_PKT_MAX		1536		//DM9000æœ€å¤§æ¥æ”¶åŒ…é•¿åº¦
 
-#define DM9000_PHY			0X40		//DM9000 PHY¼Ä´æÆ÷·ÃÎÊ±êÖ¾
-//DM9000¼Ä´æÆ÷
+#define DM9000_PHY			0X40		//DM9000 PHYå¯„å­˜å™¨è®¿é—®æ ‡å¿—
+//DM9000å¯„å­˜å™¨
 #define DM9000_NCR			0X00
 #define DM9000_NSR			0X01
 #define DM9000_TCR			0X02
@@ -50,8 +50,8 @@ typedef struct
 #define DM9000_EPDRL		0X0D	
 #define DM9000_EPDRH		0X0E
 #define DM9000_WCR			0X0F
-#define DM9000_PAR			0X10		//ÎïÀíµØÖ·0X10~0X15
-#define DM9000_MAR			0X16		//¶à²¥µØÖ·0X16~0X1D
+#define DM9000_PAR			0X10		//ç‰©ç†åœ°å€0X10~0X15
+#define DM9000_MAR			0X16		//å¤šæ’­åœ°å€0X16~0X1D
 #define DM9000_GPCR			0X1E
 #define DM9000_GPR			0X1F
 #define DM9000_TRPAL		0X22
@@ -100,9 +100,9 @@ typedef struct
 
 #define IMR_PAR             0X80	
 #define IMR_ROOI            0X08	
-#define IMR_POI             0X04		//Ê¹ÄÜ½ÓÊÕÒç³öÖĞ¶Ï
-#define IMR_PTI             0X02		//Ê¹ÄÜ·¢ËÍÖĞ¶Ï
-#define IMR_PRI             0X01		//Ê¹ÄÜ½ÓÊÕÖĞ¶Ï
+#define IMR_POI             0X04		//ä½¿èƒ½æ¥æ”¶æº¢å‡ºä¸­æ–­
+#define IMR_PTI             0X02		//ä½¿èƒ½å‘é€ä¸­æ–­
+#define IMR_PRI             0X01		//ä½¿èƒ½æ¥æ”¶ä¸­æ–­
 
 #define ISR_LNKCHGS         (1<<5)
 #define ISR_ROOS            (1<<3)
@@ -111,7 +111,7 @@ typedef struct
 #define ISR_PRS             (1<<0)
 #define ISR_CLR_STATUS      (ISR_ROOS | ISR_ROS | ISR_PTS | ISR_PRS)
 
-//DM9000ÄÚ²¿PHY¼Ä´æÆ÷
+//DM9000å†…éƒ¨PHYå¯„å­˜å™¨
 #define DM9000_PHY_BMCR		0X00
 #define DM9000_PHY_BMSR		0X01
 #define DM9000_PHY_PHYID1	0X02
@@ -125,26 +125,26 @@ typedef struct
 #define DM9000_PHY_PWDOR	0X13
 #define DM9000_PHY_SCR		0X14
 
-//DM9000¹¤×÷Ä£Ê½¶¨Òå
+//DM9000å·¥ä½œæ¨¡å¼å®šä¹‰
 enum DM9000_PHY_mode
 {
-	DM9000_10MHD 	= 	0, 					//10M°ëË«¹¤
-	DM9000_100MHD 	= 	1,					//100M°ëË«¹¤	
-	DM9000_10MFD 	= 	4, 					//10MÈ«Ë«¹¤
-	DM9000_100MFD 	= 	5,					//100MÈ«Ë«¹¤
-	DM9000_AUTO  	= 	8, 					//×Ô¶¯Ğ­ÉÌ
+	DM9000_10MHD 	= 	0, 					//10MåŠåŒå·¥
+	DM9000_100MHD 	= 	1,					//100MåŠåŒå·¥	
+	DM9000_10MFD 	= 	4, 					//10Må…¨åŒå·¥
+	DM9000_100MFD 	= 	5,					//100Må…¨åŒå·¥
+	DM9000_AUTO  	= 	8, 					//è‡ªåŠ¨åå•†
 };
 
-//DM9000ÅäÖÃ½á¹¹Ìå
+//DM9000é…ç½®ç»“æ„ä½“
 struct dm9000_config
 {
-	enum DM9000_PHY_mode mode;				//¹¤×÷Ä£Ê½
-	u8  imr_all;							//ÖĞ¶ÏÀàĞÍ 
-	u16 queue_packet_len;					//Ã¿¸öÊı¾İ°ü´óĞ¡
-	u8  mac_addr[6];						//MACµØÖ·
-	u8  multicase_addr[8];					//×é²¥µØÖ·
+	enum DM9000_PHY_mode mode;				//å·¥ä½œæ¨¡å¼
+	u8  imr_all;							//ä¸­æ–­ç±»å‹ 
+	u16 queue_packet_len;					//æ¯ä¸ªæ•°æ®åŒ…å¤§å°
+	u8  mac_addr[6];						//MACåœ°å€
+	u8  multicase_addr[8];					//ç»„æ’­åœ°å€
 };
-extern struct dm9000_config dm9000cfg;		//dm9000ÅäÖÃ½á¹¹Ìå
+extern struct dm9000_config dm9000cfg;		//dm9000é…ç½®ç»“æ„ä½“
 
 u8   DM9000_Init(void);
 u16  DM9000_ReadReg(u16 reg);
