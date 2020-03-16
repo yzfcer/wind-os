@@ -30,7 +30,8 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif
+#endif // #ifdef __cplusplus
+
 
 typedef struct __stat_s
 {
@@ -56,8 +57,6 @@ typedef struct __stat_s
 
 #ifdef __cplusplus
 }
-#endif
-
-
-#endif
+#endif // #ifdef __cplusplus
+#endif // #ifndef WIND_STAT_H__
 

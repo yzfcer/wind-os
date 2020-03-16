@@ -28,6 +28,11 @@
 #include "wind_debug.h"
 #include "wind_board_port.h"
 #include "wind_core.h"
+#ifdef __cplusplus
+extern "C" {
+#endif // #ifdef __cplusplus
+
+
 const char* versioninfo = \
 "E-mail:yzfcer@163.com.\r\n";
 
@@ -78,3 +83,6 @@ void _wind_print_sysinfo(void)
     wind_printf("running time : %d:%d:%d\r\n\r\n",sec/3600,sec%3600/60,sec%60);
 }
 
+#ifdef __cplusplus
+}
+#endif // #ifdef __cplusplus

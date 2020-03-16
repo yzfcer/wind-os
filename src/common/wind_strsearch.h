@@ -25,6 +25,10 @@
 #ifndef WIND_STRSEARCH_H__
 #define WIND_STRSEARCH_H__
 #include "wind_type.h"
+#ifdef __cplusplus
+extern "C" {
+#endif //#ifdef __cplusplus
+
 #define KMP_SUBSTR_LEN 32
 typedef struct  __w_kmp_context_s
 {
@@ -34,10 +38,13 @@ typedef struct  __w_kmp_context_s
 
 w_err_t kmp_init(w_kmp_context_s *ctx,char *substr);
 
-w_int32_t kmp_search(w_kmp_context_s *ctx,char *str, char *substr, w_int32_t pos);
+w_int32_t kmp_search(w_kmp_context_s *ctx,char *str,char *substr,w_int32_t pos);
 
 w_err_t kmp_print_next(w_kmp_context_s *ctx);
 
-w_int32_t bm_search(char *str, char *substr, w_int32_t pos);
+w_int32_t bm_search(char *str,char *substr,w_int32_t pos);
 
-#endif
+#ifdef __cplusplus
+}
+#endif //#ifdef __cplusplus
+#endif //#ifndef WIND_STRSEARCH_H__

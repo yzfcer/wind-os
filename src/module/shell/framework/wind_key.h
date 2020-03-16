@@ -1,4 +1,4 @@
-﻿/****************************************Copyright (c)**************************************************
+/****************************************Copyright (c)**************************************************
 **                                       清  风  海  岸
 **
 **                                       yzfcer@163.com
@@ -131,13 +131,13 @@ extern "C" {
 
 #define WVK_DEL          0x7f            /* del */
 
-//KEY event
+//KEY event code
 #define KEY_EVT_UP           0x1B5B41
 #define KEY_EVT_DOWN         0x1B5B42
 #define KEY_EVT_LEFT         0x1B5B44
 #define KEY_EVT_RIGHT        0x1B5B43
 
-//KEY event
+//KEY event code
 #define KEY_UP_PRT           0xE048
 #define KEY_DOWN_PRT         0xE050
 #define KEY_LEFT_PRT         0xE04B

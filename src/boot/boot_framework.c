@@ -4,7 +4,7 @@
   *Author:      Jason Zhou
   *Version:     1.0
   *Date:        2017/04/08
-  *Description:  
+  *Description: 
   *Others:  
   *History:  
      1.Date:
@@ -110,7 +110,7 @@ static w_err_t boot_first_check(void)
 
 static w_err_t boot_chip_lock_check(void)
 {
-    if(is_chip_lock())
+    if(boot_is_chip_lock())
     {
         wind_notice("MCU chip is locked.");
     }

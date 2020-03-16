@@ -23,7 +23,7 @@ extern "C" {
 #endif // #ifdef __cplusplus
 
 
-/*********************************************头文件定义***********************************************/
+/*********************************************header file***********************************************/
 #include "wind_config.h"
 #include "wind_type.h"
 #include "wind_fsm.h"
@@ -32,11 +32,14 @@ extern "C" {
 #include "wind_obj.h"
 #include "wind_pool.h"
 #if WIND_FSM_SUPPORT
+#ifdef __cplusplus
+extern "C" {
+#endif // #ifdef __cplusplus
 
 #define NODE_TO_FSM(node) (w_fsm_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((w_fsm_s*)0)->obj.objnode)))
 
 
-/********************************************内部变量定义**********************************************/
+/********************************************internal variables**********************************************/
 static w_dlist_s modellist;
 static w_dlist_s fsmlist;
 static w_fsm_s *cur_fsm;
@@ -44,7 +47,7 @@ static WIND_POOL(fsmpool,WIND_FSM_MAX_NUM,sizeof(w_fsm_s));
 
 
 
-/********************************************内部函数定义*********************************************/
+/********************************************internal functions**********************************************/
 static w_fsm_s *fsm_malloc()
 {
     return (w_fsm_s *)wind_pool_malloc(fsmpool);
@@ -89,11 +92,11 @@ static char *fsm_state_str(w_fsm_state_e state)
     return "unknown";
 }
 
-/********************************************全局变量定义**********************************************/
+/********************************************global variables**********************************************/
 
 
 
-/********************************************全局函数定义**********************************************/
+/********************************************global functions**********************************************/
 w_err_t _wind_fsm_mod_init(void)
 {
     w_err_t err;
@@ -291,7 +294,8 @@ w_err_t wind_fsm_print(void)
     wind_print_space(7);
     return W_ERR_OK;
 }
-#endif
+
+#endif // #if WIND_FSM_SUPPORT
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

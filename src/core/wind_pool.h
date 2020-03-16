@@ -32,7 +32,8 @@
 #include "wind_stati.h"
 #ifdef __cplusplus
 extern "C" {
-#endif
+#endif // #ifdef __cplusplus
+
 #define WIND_POOL_MAGIC 0x5d9c843e
 #define WIND_POOLITEM_MAGIC 0x507c
 
@@ -45,6 +46,7 @@ typedef struct __w_poolitem_s w_poolitem_s;
 typedef struct __w_pool_s w_pool_s;
 #define WIND_POOL_ALIGN(size) (((size)+7) & (~0x07))
 
+//Memory pool item header structure
 typedef struct
 {
     w_uint16_t magic;
@@ -52,28 +54,28 @@ typedef struct
     w_poolitem_s* next;
 }w_pihead_s;
 
-//一个基本的内存池对象结构体
+//Memory pool item object structure
 struct __w_poolitem_s
 {
-    w_pihead_s head;
-    w_uint8_t buff[8];
+    w_pihead_s head;   //Memory pool item header
+    w_uint8_t buff[8]; //Element buffer(at least 8 bytes)
 };
 
-//内存池的基本描述信息结构体
+//Basic description information structure of memory pool
 struct __w_pool_s
 {
-    w_obj_s obj;
-    w_stati_s stati;
-    void *head;//内存池的头部位置
-    w_uint32_t size;//内存池的实际可用空间大小
-    w_uint32_t itemsize;//每个块的大小
-    w_int32_t itemnum;//分成的内存块的数量
-    w_poolitem_s* free_head;//空闲块的指针
-    w_poolitem_s* free_end;//最后一个空闲块的指针
-    w_int32_t pad;
+    w_obj_s obj;                //Basic object information
+    w_stati_s stati;            //Memory pool statistics
+    void *head;                 //Head location of memory pool
+    w_uint32_t size;            //Actual free space size of memory pool
+    w_uint32_t itemsize;        //Element size
+    w_int32_t itemnum;          //Element number
+    w_poolitem_s* free_head;    //Free element list head
+    w_poolitem_s* free_end;     //Last free element tail
+    w_int32_t pad;              //Memory fill alignment
 };
 
-//定义内存池的方法
+//To define a memory pool
 #define WIND_POOL(pool,itemnum,itemsize) w_uint8_t pool[sizeof(w_pool_s) + itemnum *(WIND_POOL_ALIGN(itemsize) + sizeof(w_pihead_s))+8]
 
 
@@ -98,8 +100,6 @@ void wind_pool_stati_print(void);
 
 #ifdef __cplusplus
 }
-#endif
-
-
-#endif
+#endif // #ifdef __cplusplus
+#endif // #ifndef WIND_POOL_H__
 

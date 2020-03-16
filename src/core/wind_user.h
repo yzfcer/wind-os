@@ -24,15 +24,13 @@
 *******************************************************************************************************/
 #ifndef WIND_USER_H__
 #define WIND_USER_H__
-
-
 #include "wind_config.h"
 #include "wind_type.h"
 #include "wind_dlist.h"
 
 #ifdef __cplusplus
 extern "C" {
-#endif
+#endif // #ifdef __cplusplus
 
 #if WIND_USER_SUPPORT
 #define USER_NAME_MAXLEN 32
@@ -40,26 +38,26 @@ extern "C" {
 
 #define WIND_USER_MAGIC 0x3A6372A9
 
-#define F_USER_POOL (0x01 << 0) //标记user对象是否通过内存池分配
+#define F_USER_POOL (0x01 << 0) //Mark whether the user object is allocated through the memory pool
 #define IS_F_USER_POOL(user) ((user->flag & F_USER_POOL) == F_USER_POOL)
 #define SET_F_USER_POOL(user) (user->flag |= F_USER_POOL)
 #define CLR_F_USER_POOL(user) (user->flag &= (~F_USER_POOL))
 
 typedef enum
 {
-    USER_SUPER = 0,
-    USER_ADMIN = 1,
-    USER_COMMON = 2,
+    USER_SUPER = 0, //Super user
+    USER_ADMIN = 1, //Administrator user
+    USER_COMMON = 2,//Common users
 }w_user_e;
 
 typedef struct _wind_user
 {
-    w_uint32_t magic;
-    char name[USER_NAME_MAXLEN];
-    char passwd[PASSWD_MAXLEN];
-    w_uint16_t flag;
-    w_user_e usertype;
-    w_dnode_s usernode;
+    w_uint32_t magic;            //Magic code
+    char name[USER_NAME_MAXLEN]; //User name
+    char passwd[PASSWD_MAXLEN];  //User password
+    w_uint16_t flag;             //User Attribute tag
+    w_user_e usertype;           //user type
+    w_dnode_s usernode;          //Node for adding user to user list 
 }w_user_s;
 
 w_err_t _wind_user_mod_init(void);
@@ -70,9 +68,9 @@ w_err_t wind_user_destroy(w_user_s *user);
 w_err_t wind_user_modify_passwd(w_user_s *user,const char *newpasswd);
 w_err_t wind_user_print(void);
 
-#endif
+#endif // #if WIND_USER_SUPPORT
 #ifdef __cplusplus
 }
-#endif
-#endif//#ifndef WIND_USER_H__
+#endif // #ifdef __cplusplus
+#endif// #ifndef WIND_USER_H__
 

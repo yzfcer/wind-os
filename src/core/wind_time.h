@@ -25,17 +25,16 @@
 
 #ifndef WIND_TIME_H__
 #define WIND_TIME_H__
-
 #include "wind_type.h"
-
 #ifdef __cplusplus
 extern "C" {
-#endif
+#endif // #ifdef __cplusplus
+
 
 #if WIND_DATETIME_SUPPORT
 
-#define HOUR_TYPE_12 1//定义为12小时制
-#define HOUR_TYPE_24 2//定义为24小时制
+#define HOUR_TYPE_12 1//Defined as 12-hour system
+#define HOUR_TYPE_24 2//Defined as 24-hour system
 #define HOUR_TYPE HOUR_TYPE_24
 
 #define DAY_AM 0
@@ -58,13 +57,13 @@ typedef struct __w_date_s
 
 typedef enum __w_week_e
 {
-    SUN = 0,
-    MON = 1,
-    TUS = 2,
-    WED = 3,
-    THU = 4,
-    FRI = 5,
-    SAT = 6,
+    SUN = 0, //Sunday
+    MON = 1, //Monday
+    TUS = 2, //Tuesday
+    WED = 3, //Wednesday
+    THU = 4, //Thursday
+    FRI = 5, //Friday
+    SAT = 6, //Saturday
 }w_week_e;
 
 typedef struct __datetime_s
@@ -88,11 +87,8 @@ w_err_t wind_datetime_copy(datetime_s *desdt,datetime_s *srcdt);
 void wind_msecond_inc(void);
 void _wind_datetime_tick_isr(void);
 
-#endif
-
-
+#endif // #if WIND_DATETIME_SUPPORT
 #ifdef __cplusplus
 }
-#endif
-
-#endif  //WIND_TIME_H__
+#endif // #ifdef __cplusplus
+#endif  // #ifndef WIND_TIME_H__

@@ -30,6 +30,10 @@
 #include "wind_time.h"
 #include "wind_string.h"
 #include "wind_chdev.h"
+#ifdef __cplusplus
+extern "C" {
+#endif // #ifdef __cplusplus
+
 #if WIND_DATETIME_SUPPORT
 #define JAN_1ST_1900 2415021
 #define NTP_FRACTIONAL_TO_MS (((double)1000.0)/0xFFFFFFFF)
@@ -493,8 +497,10 @@ void _wind_datetime_tick_isr(void)
     wind_enable_interrupt();
 }
 
-#endif
-
+#endif // #if WIND_DATETIME_SUPPORT
+#ifdef __cplusplus
+}
+#endif // #ifdef __cplusplus
 
 
 

@@ -30,23 +30,23 @@
 #include "wind_obj.h"
 #ifdef __cplusplus
 extern "C" {
-#endif
+#endif // #ifdef __cplusplus
 
 #if WIND_TIMER_SUPPORT
 #define TIMER_PERIOD 10
 #define WIND_TIMER_MAGIC 0x34F574B2
 
-#define F_TIMER_POOL (0x01 << 0) //标记timer对象是否通过内存池分配
+#define F_TIMER_POOL (0x01 << 0) //Mark whether timer object is allocated through memory pool
 #define IS_F_TIMER_POOL(timer) ((timer->obj.flag & F_TIMER_POOL) == F_TIMER_POOL)
 #define SET_F_TIMER_POOL(timer) (timer->obj.flag |= F_TIMER_POOL)
 #define CLR_F_TIMER_POOL(timer) (timer->obj.flag &= (~F_TIMER_POOL))
 
-#define F_TIMER_RUN (0x01 << 1) //标记timer对象是否处于启动运行状态
+#define F_TIMER_RUN (0x01 << 1) //Mark whether the timer object is running
 #define IS_F_TIMER_RUN(timer) ((timer->obj.flag & F_TIMER_RUN) == F_TIMER_RUN)
 #define SET_F_TIMER_RUN(timer) (timer->obj.flag |= F_TIMER_RUN)
 #define CLR_F_TIMER_RUN(timer) (timer->obj.flag &= (~F_TIMER_RUN))
 
-#define F_TIMER_REPEAT (0x01 << 2) //标记timer对象是否重复触发
+#define F_TIMER_REPEAT (0x01 << 2) //Mark whether timer object is triggered repeatedly
 #define IS_F_TIMER_REPEAT(timer) ((timer->obj.flag & F_TIMER_REPEAT) == F_TIMER_REPEAT)
 #define SET_F_TIMER_REPEAT(timer) (timer->obj.flag |= F_TIMER_REPEAT)
 #define CLR_F_TIMER_REPEAT(timer) (timer->obj.flag &= (~F_TIMER_REPEAT))
@@ -55,10 +55,10 @@ typedef struct __w_timer_s w_timer_s;
 typedef void (*w_timer_fn)(w_timer_s* timer,void *arg);
 struct __w_timer_s
 {
-    w_obj_s obj;
-    w_uint32_t value;
-    w_uint32_t period;
-    w_timer_fn handle;
+    w_obj_s obj;       //Basic object information
+    w_uint32_t value;  //Timer current value
+    w_uint32_t period; //Timer cycle
+    w_timer_fn handle; //Timer interrupt processing function
     void *arg;
 };
 
@@ -85,10 +85,9 @@ w_err_t wind_timer_setflag(w_timer_s* timer,w_uint16_t flag);
 w_err_t wind_timer_clrflag(w_timer_s* timer,w_uint16_t flag);
 w_err_t wind_timer_print(void);
 
-#endif //#if WIND_TIMER_SUPPORT
+#endif // #if WIND_TIMER_SUPPORT
 #ifdef __cplusplus
 }
-#endif
-
-#endif //#define WIND_TICKTIMER_H__
+#endif // #ifdef __cplusplus
+#endif // #ifndef WIND_TICKTIMER_H__
 

@@ -33,15 +33,19 @@
 #include "wind_time.h"
 #include "wind_core.h"
 #include "wind_board_port.h"
+#ifdef __cplusplus
+extern "C" {
+#endif // #ifdef __cplusplus
+
 #if WIND_SOFTIRQ_SUPPORT
 #define SOFT_FLAG_ARR_CNT ((WIND_SOFTINT_MAX_NUM + 31) >> 5)
-//���ж��̵߳Ķ�ջ
+
 static w_stack_t softirq_stk[THREAD_SOFTINT_STKSIZE];
 static w_thread_s *softirq_thread = W_NULL;
 w_softirq_fn softirq_vectors[WIND_SOFTINT_MAX_NUM];
 w_uint32_t softirq_flag[SOFT_FLAG_ARR_CNT];
 
-//��ʼ�����жϵ�һЩ��ز���
+
 w_err_t _wind_softirq_mod_init(void)
 {
     wind_memset(softirq_flag,0,sizeof(softirq_flag));
@@ -51,7 +55,7 @@ w_err_t _wind_softirq_mod_init(void)
 }
 
 
-//�����ж�ģ��ע��һ���ж�������Ӧ����
+
 w_err_t wind_softirq_reg(w_uint16_t irqid,w_softirq_fn func)
 {
     wind_notice("register softirq %d",irqid);
@@ -60,7 +64,7 @@ w_err_t wind_softirq_reg(w_uint16_t irqid,w_softirq_fn func)
     return W_ERR_OK;
 }
 
-//ȡ��һ�����жϵ�ע��
+
 w_err_t wind_softirq_unreg(w_int32_t irqid)
 {
     WIND_ASSERT_RETURN(irqid < WIND_SOFTINT_MAX_NUM,W_ERR_OVERFLOW);
@@ -69,7 +73,7 @@ w_err_t wind_softirq_unreg(w_int32_t irqid)
     return W_ERR_OK;
 }
 
-//����һ�������ж�
+
 w_err_t wind_softirq_trig(w_int32_t irqid)
 {
     w_thread_s *thread;
@@ -132,10 +136,8 @@ static w_err_t thread_softirq(w_int32_t argc,char **argv)
             {
                 thread->cause = CAUSE_COMMON;
                 thread->runstat = THREAD_STATUS_SUSPEND;
-                //wind_enable_interrupt();
                 break;
             }
-
             if(func != W_NULL)
                 func();
         }
@@ -143,7 +145,7 @@ static w_err_t thread_softirq(w_int32_t argc,char **argv)
     return W_ERR_OK;
 }
 
-//���������ж��߳�
+
 w_err_t _wind_create_thread_softirq(void)
 {
     w_thread_s *thread;
@@ -158,5 +160,7 @@ w_err_t _wind_create_thread_softirq(void)
 
 
 
-#endif
-
+#endif // #if WIND_SOFTIRQ_SUPPORT
+#ifdef __cplusplus
+}
+#endif // #ifdef __cplusplus

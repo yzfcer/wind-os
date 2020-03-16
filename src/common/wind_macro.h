@@ -26,92 +26,91 @@
 #define INTER_PROCRESS_H__
 
 #include "wind_type.h"
-#ifdef c_plusplus__
-extern {
-#endif
+#ifdef __cplusplus
+extern "C" {
+#endif //#ifdef __cplusplus
 
-#define MEM_B(addr) (*((w_uint8_t *)(addr)))//从给定的地址上获取一个字节
-#define MEM_W(addr) (*((w_uint16_t *)(addr)))//从给定的地址上获取一个字
-#define MEM_DW(addr) (*(w_uint32_t *)(addr))//从给定的地址上获取一个双字
 
-#define MAX(x, y) (((x) > (y))?(x):(y))
-#define MAX3(x, y, z) MAX(MAX(x,y),z)
-#define MAX4(x, y, z, w) MAX(MAX(x,y),MAX(z,w))
-#define MIN(x, y) (((x) < (y))?(x):(y))
-#define MIN3(x, y, z) MINMIN(x,y),z)
-#define MIN4(x, y, z, w) MIN(MIN(x,y),MIN(z,w))
+#define MEM_B(addr) (*((w_uint8_t *)(addr)))//Get a byte from a given address
+#define MEM_W(addr) (*((w_uint16_t *)(addr)))//Get a word from a given address
+#define MEM_DW(addr) (*(w_uint32_t *)(addr))//Get a doubleword from a given address
+
+#define MAX(x,y) (((x) > (y))? (x): (y))
+#define MAX3(x,y,z) MAX(MAX(x,y),z)
+#define MAX4(x,y,z,w) MAX(MAX(x,y),MAX(z,w))
+#define MIN(x,y) (((x) < (y))? (x): (y))
+#define MIN3(x,y,z) MINMIN(x,y),z)
+#define MIN4(x,y,z,w) MIN(MIN(x,y),MIN(z,w))
             
 
-//获得结构体中一个字段的偏移量
-#define MBR_OFFSET(type, mbr) ((w_addr_t)&(((type*)0)->mbr))
+//Get the offset of a field in the structure
+#define MBR_OFFSET(type,mbr) ((w_addr_t)&(((type*)0)->mbr))
 
-//得到一个结构体中的某个字段的长度
+//Get the length of a field in a structure
 #define MBR_SIZE(type,mbr) sizeof(((type *)0)->mbr)
 
-//根据字段地址找到结构地址
+//Find the structure address according to the field address
 #define OBJ_FROM_MBR(ptr,type,mbr) (void*)(((char*)(ptr))-((w_addr_t)&(((type*)0)->mbr)))
 
-//按照LSB格式把两个字节转化为一个u16_t
+//Convert two bytes to one U16 bit in LSB format
 #define FLIPW(arr) ( (((w_uint16_t) (arr)[0]) *256) + (arr)[1] )
 
-//按照LSB格式把一个u16_t转化为两个字节
-#define FLOPW( arr, val ) do{(arr)[0] = ((val) / 256);(arr)[1] = ((val) & 0xFF);}while(0)
+//Convert a U16 bit to two bytes in LSB format
+#define FLOPW( arr,val ) do{(arr)[0] = ((val) / 256);(arr)[1] = ((val) & 0xFF);}while(0)
 
 
-//得到一个变量的地址（w_uint16_t宽度）
+//Get the address of a variable (uint16 width)
 #define PTR_BYTE(var) ((w_uint8_t *)(void *)&(var))
 #define PTR_WORD(var) ((w_uint16_t *)(void *)&(var))
 
-//得到一个字的高位和低位字节
+//Get the high and low bytes of a word
 #define WORD_LO(x) ((w_uint8_t) ((w_uint16_t)(x) & 0xff))
 #define WORD_HI(x) ((w_uint8_t) ((w_uint16_t)(x) >> 8))
 
-//获取一个长整型的各个字节
+//Get each byte of a long integer
 #define DWORD_HBYTE1(x) ((w_uint8_t)((((w_uint32_t)(x)) >> 24) & 0xff))
 #define DWORD_HBYTE2(x) ((w_uint8_t)((((w_uint32_t)(x)) >> 16) & 0xff))
 #define DWORD_HBYTE3(x) ((w_uint8_t)((((w_uint32_t)(x)) >> 8) & 0xff))
 #define DWORD_HBYTE4(x) ((w_uint8_t)((((w_uint32_t)(x)) >> 0) & 0xff))
 
 
-//将整形数字向右对齐，align为2的N次方
+//Align the integer number to the right to the nth power of 2
 #define RIGHT_ALIGN(x,align) ((((x) + (align-1)) / (align) ) *(align))
-//将整形数字向左对齐，align为2的N次方
+//Align the integer number to the left to the nth power of 2
 #define LEFT_ALIGN(x,align) ((x)/(align)*(align))
 
-//将一个字母转换为大写
-#define UPCASE(c) (((c) >= 'a' && (c) <= 'z')?((c) - 0x20):(c))
+//Convert a letter to uppercase
+#define UPCASE(c) (((c) >= 'a' && (c) <= 'z')? ((c) - 0x20): (c))
 
-////将一个字母转换为大写
-#define LOWERCASE(c) (((c) >= 'A' && (c) <= 'Z')?((c) + 0x20):(c))
+//Convert a letter to lowercase
+#define LOWERCASE(c) (((c) >= 'A' && (c) <= 'Z')? ((c) + 0x20): (c))
 
-//判断字符是不是10进值的数字
+//Determines whether a character is a 10 digit value or not
 #define IS_DECIMAL(c) ((c) >= '0' && (c) <= '9')
 
-//判断字符是不是16进值的数字
+//Determines whether a character is a 16 in value
 #define IS_HEX( c ) (((c) >= '0' && (c) <= '9') ||\
 ((c) >= 'A' && (c) <= 'F') ||\
 ((c) >= 'a' && (c) <= 'f'))
 
-//判断字符是不是字母
-#define IS_ALPHABET(c) (((c) >= 'A' && (c) <= 'Z')||((c) >= 'a' && (c) <= 'z'))
+//Determine whether a character is a letter
+#define IS_ALPHABET(c) (((c) >= 'A' && (c) <= 'Z')|| ((c) >= 'a' && (c) <= 'z'))
 
 
 
 
-//防止溢出的一个方法
-#define INC_SAT(val) (val=((val)+1>(val))?(val)+1:(val))
+//Increment prevents overflow
+#define INC_SAT(val) (val=((val)+1>(val))? (val)+1: (val))
 
 
-//返回数组元素的个数
+//Get the number of array elements
 #define ARR_SIZE(arr) (sizeof((arr))/sizeof((arr[0])))
 
-//返回一个无符号数n尾的值MOD_BY_POWER_OF_TWO(X,n)=X%(2^n)
-#define MOD_BY_POWER_OF_TWO( val, mod_by ) \
-((w_uint32_t)(val) & (w_uint32_t)((mod_by)-1))
+//Get the modulus of an unsigned number
+#define MOD_BY_POWER_OF_TWO( val,mod_by ) ((w_uint32_t)(val) & (w_uint32_t)((mod_by)-1))
 
-#ifdef c_plusplus__
+
+#ifdef __cplusplus
 }
-#endif
-
-
-#endif
+#endif //#ifdef __cplusplus
+#endif //#ifndef INTER_PROCRESS_H__

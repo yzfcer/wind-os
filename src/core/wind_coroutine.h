@@ -33,17 +33,17 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif
+#endif // #ifdef __cplusplus
 
 #if WIND_COROUTINE_SUPPORT
 #define WIND_COROUTINE_MAGIC 0x67F52854
 
-#define F_COROUTINE_POOL (0x01 << 0) //标记coroutine对象是否通过内存池分配
+#define F_COROUTINE_POOL (0x01 << 0) //Mark whether the coroutine object is allocated through the memory pool
 #define IS_F_COROUTINE_POOL(coroutine) ((coroutine->obj.flag & F_COROUTINE_POOL) == F_COROUTINE_POOL)
 #define SET_F_COROUTINE_POOL(coroutine) (coroutine->obj.flag |= F_COROUTINE_POOL)
 #define CLR_F_COROUTINE_POOL(coroutine) (coroutine->obj.flag &= (~F_COROUTINE_POOL))
 
-#define F_COROUTINE_READY (0x01 << 1) //标记coroutine对象是否ready
+#define F_COROUTINE_READY (0x01 << 1) //Mark whether the coroutine object is ready
 #define IS_F_COROUTINE_READY(coroutine) ((coroutine->obj.flag & F_COROUTINE_READY) == F_COROUTINE_READY)
 #define SET_F_COROUTINE_READY(coroutine) (coroutine->obj.flag |= F_COROUTINE_READY)
 #define CLR_F_COROUTINE_READY(coroutine) (coroutine->obj.flag &= (~F_COROUTINE_READY))
@@ -53,13 +53,12 @@ typedef w_err_t (*coroutine_fn)(void *arg);
 
 typedef struct _w_coroutine_s
 {
-    w_obj_s obj;
-    w_cid_t cid;
-    //w_thread_s *thread;
-    w_stack_t *stack;
-    coroutine_fn func;
-    void *arg;
-    w_stack_t stackbuff[WIND_COROUTINE_STKSIZE];
+    w_obj_s obj;       //Basic object information
+    w_cid_t cid;       //Coroutine ID
+    w_stack_t *stack;  //Coroutine stack pointer
+    coroutine_fn func; //Coroutine function
+    void *arg;         //Coroutine parameter
+    w_stack_t stackbuff[WIND_COROUTINE_STKSIZE];//Coroutine stack buffer
 }w_coroutine_s;
 
 w_err_t _wind_coroutine_mod_init(void);
@@ -73,9 +72,10 @@ w_err_t wind_coroutine_yeild(w_coroutine_s *coroutine,void *arg);
 w_err_t wind_coroutine_resume(w_coroutine_s *coroutine,void *arg);
 
 w_err_t wind_coroutine_print(void);
-#endif
+
+#endif // #if WIND_COROUTINE_SUPPORT
 #ifdef __cplusplus
 }
-#endif
-#endif//#ifndef WIND_COROUTINE_H__
+#endif // #ifdef __cplusplus
+#endif// #ifndef WIND_COROUTINE_H__
 

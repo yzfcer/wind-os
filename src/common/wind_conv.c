@@ -25,6 +25,9 @@
 #include "wind_type.h"
 #include "wind_string.h"
 #include "wind_conv.h"
+#ifdef __cplusplus
+extern "C" {
+#endif //#ifdef __cplusplus
 
 w_endian_e wind_endian(void)
 {
@@ -80,7 +83,7 @@ void wind_int_to_str(char *str,w_int32_t value)
         char tmp = *beg;  
         *beg++ = *end;  
         *end-- = tmp;  
-    }  
+    }
 }
 
 //把字符串转换成无符号整数
@@ -120,7 +123,7 @@ void wind_uint_to_str(char *str,w_uint32_t value)
         tmp = *beg;  
         *beg++ = *end;  
         *end-- = tmp;  
-    }  
+    }
 }
 
 static w_int32_t c2i(char ch)  
@@ -151,7 +154,7 @@ w_bool_t wind_hexstr_to_int(char *hex,w_uint32_t *value)
     w_int32_t i;  
 
     len = wind_strlen(hex);  
-    for (i=0, temp=0; i<len; i++, temp=0)
+    for (i=0,temp=0; i<len; i++,temp=0)
     {  
         temp = c2i( *(hex + i));
         if(temp < 0)
@@ -162,7 +165,7 @@ w_bool_t wind_hexstr_to_int(char *hex,w_uint32_t *value)
     }
     *value = num;
     return W_TRUE;  
-}  
+}
 
 void wind_int_to_hexstr(char *hex,w_uint32_t value)
 {
@@ -278,4 +281,7 @@ w_bool_t wind_to_float64(w_uint8_t *arr,w_fp64_t *value)
     return wind_to_uint64(arr,pvalue);
 }
 
+#ifdef __cplusplus
+}
+#endif //#ifdef __cplusplus
 

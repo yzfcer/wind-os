@@ -28,8 +28,11 @@
 #include "wind_core.h"
 #include "wind_string.h"
 #include "wind_pool.h"
-
+#ifdef __cplusplus
+extern "C" {
+#endif // #ifdef __cplusplus
 #if WIND_SEM_SUPPORT
+
 #define NODE_TO_SEM(node) (w_sem_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((w_sem_s*)0)->obj.objnode)))
 static w_dlist_s semlist;
 static WIND_POOL(sempool,WIND_SEM_MAX_NUM,sizeof(w_sem_s));
@@ -87,7 +90,7 @@ w_sem_s *wind_sem_create(const char *name,w_int8_t sem_value)
     return W_NULL;
 }
 
-//试图销毁一个信号量，如果有线程被阻塞，则释放将终止
+
 w_err_t wind_sem_trydestroy(w_sem_s *sem)
 {
     w_dnode_s *dnode;
@@ -135,7 +138,7 @@ w_err_t wind_sem_post(w_sem_s *sem)
     WIND_ASSERT_RETURN(sem != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(sem->obj.magic == WIND_SEM_MAGIC,W_ERR_INVALID);
     wind_disable_switch();
-    //无阻塞的线程，减少信号量后直接返回
+    
     dnode = dlist_head(&sem->waitlist);
     if(dnode == W_NULL)
     {
@@ -145,7 +148,7 @@ w_err_t wind_sem_post(w_sem_s *sem)
         return W_ERR_OK;
     }
     
-    //激活被阻塞的线程，从睡眠队列移除,触发线程切换
+    
     dlist_remove(&sem->waitlist,dnode);
     thread = PRIDNODE_TO_THREAD(dnode,suspendnode);
     if(thread->runstat == THREAD_STATUS_SLEEP)
@@ -169,7 +172,7 @@ w_err_t wind_sem_wait(w_sem_s *sem,w_uint32_t timeout)
     if(ticks == 0)
         ticks = 1;
 
-    //信号量有效，直接返回
+    
     wind_disable_switch();
     if (sem->sem_num > 0)
     {
@@ -180,7 +183,7 @@ w_err_t wind_sem_wait(w_sem_s *sem,w_uint32_t timeout)
     if(timeout == 0)
         return W_ERR_FAIL;
 
-    //将当前线程加入睡眠和阻塞队列，触发线程切换
+    
     thread = wind_thread_current();
     thread->cause = CAUSE_SEM;
     if(timeout != SLEEP_TIMEOUT_MAX)
@@ -196,7 +199,7 @@ w_err_t wind_sem_wait(w_sem_s *sem,w_uint32_t timeout)
     _wind_thread_dispatch();
 
     wind_disable_switch();
-    //如果是超时唤醒的，则移除出睡眠队列
+    
     if(thread->cause == CAUSE_SLEEP)
         dlist_remove(&sem->waitlist,&thread->suspendnode.dnode);
     wind_enable_switch();
@@ -211,7 +214,6 @@ w_err_t wind_sem_trywait(w_sem_s *sem)
     WIND_ASSERT_RETURN(sem != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(sem->obj.magic == WIND_SEM_MAGIC,W_ERR_INVALID);
 
-    //信号量有效，直接返回
     wind_disable_switch();
     if (sem->sem_num > 0)
     {
@@ -246,5 +248,8 @@ w_err_t wind_sem_print(void)
     return W_ERR_OK;
 }
 
-#endif
+#endif // #if WIND_SEM_SUPPORT
+#ifdef __cplusplus
+}
+#endif // #ifdef __cplusplus
 

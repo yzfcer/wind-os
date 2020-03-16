@@ -33,7 +33,8 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif
+#endif // #ifdef __cplusplus
+
 
 #if WIND_DAEMON_SUPPORT
 #define WIND_DAEMON_MAGIC 0x576C5A4C
@@ -56,8 +57,8 @@ typedef w_err_t (*w_daemon_fn)(void);
 
 struct __w_daemon_s
 {
-    w_obj_s obj;
-    w_daemon_fn daemon_func;
+    w_obj_s obj;            //Basic object information
+    w_daemon_fn daemon_func;//Daemon function
 };
 
 
@@ -76,10 +77,9 @@ w_err_t _wind_daemon_period_check(void);
 w_err_t wind_daemon_print(void);
 
 
-#endif //WIND_DAEMON_SUPPORT
-
+#endif // #if WIND_DAEMON_SUPPORT
 #ifdef __cplusplus
 }
-#endif
-#endif  //WIND_DAEMON_H__
+#endif // #ifdef __cplusplus
+#endif  // #ifndef WIND_DAEMON_H__
 

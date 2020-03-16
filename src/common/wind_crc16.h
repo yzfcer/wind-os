@@ -28,12 +28,12 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif
-w_uint16_t wind_crc16(const unsigned char *data, int len,w_uint16_t crc);
+#endif //#ifdef __cplusplus
+
+w_uint16_t wind_crc16(const unsigned char *data,int len,w_uint16_t crc);
 
 
 #ifdef __cplusplus
 }
-#endif
-
-#endif
+#endif //#ifdef __cplusplus
+#endif //#ifndef WIND_CRC16_H__

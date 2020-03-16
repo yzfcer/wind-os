@@ -27,6 +27,9 @@
 #include "wind_core.h"
 #include "wind_string.h"
 #include "wind_diagnose.h"
+#ifdef __cplusplus
+extern "C" {
+#endif // #ifdef __cplusplus
 
 #define NODE_TO_POOL(node) (w_pool_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((w_pool_s*)0)->obj.objnode)))
 #define WIND_MPOOL_ALIGN_R(x) (((x)+7) & (~0x07))
@@ -291,5 +294,9 @@ void wind_pool_stati_print(void)
     wind_enable_switch();
     wind_print_space(7);
 }
+
+#ifdef __cplusplus
+}
+#endif // #ifdef __cplusplus
 
 

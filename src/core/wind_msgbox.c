@@ -27,6 +27,9 @@
 #include "wind_debug.h"
 #include "wind_string.h"
 #include "wind_pool.h"
+#ifdef __cplusplus
+extern "C" {
+#endif // #ifdef __cplusplus
 
 #if WIND_MSGBOX_SUPPORT
 #define NODE_TO_MSGBOX(node) (w_msgbox_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((w_msgbox_s*)0)->obj.objnode)))
@@ -81,7 +84,6 @@ w_err_t wind_msgbox_init(w_msgbox_s *msgbox,const char *name)
 }
 
 
-//创建邮箱，创建邮箱的那个线程才能从中读取消息
 w_msgbox_s *wind_msgbox_create(const char *name)
 {
     w_err_t err;
@@ -156,12 +158,10 @@ w_err_t wind_msgbox_post(w_msgbox_s *msgbox,w_msg_s *pmsg)
     WIND_ASSERT_RETURN(pmsg != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(msgbox->obj.magic == WIND_MSGBOX_MAGIC,W_ERR_FAIL);
     WIND_ASSERT_RETURN(msgbox->owner,W_ERR_FAIL);
-    //将消息加入邮箱
     wind_disable_switch();
     dlist_insert_tail(&msgbox->msglist,&pmsg->msgnode);
     msgbox->msgnum ++;
 
-    //激活被阻塞的线程
     thread = msgbox->owner;
     if((thread->runstat != THREAD_STATUS_SLEEP) 
        || (thread->cause != CAUSE_MSG))
@@ -171,7 +171,7 @@ w_err_t wind_msgbox_post(w_msgbox_s *msgbox,w_msg_s *pmsg)
     }
     msgbox->owner->runstat = THREAD_STATUS_READY;
     wind_enable_switch();
-    _wind_thread_dispatch();//切换线程
+    _wind_thread_dispatch();
     return W_ERR_OK;
 }
 
@@ -189,7 +189,6 @@ w_err_t wind_msgbox_wait(w_msgbox_s *msgbox,w_msg_s **pmsg,w_uint32_t timeout)
     WIND_ASSERT_RETURN(msgbox->owner,W_ERR_FAIL);
     thread = wind_thread_current();
     WIND_ASSERT_RETURN(msgbox->owner == thread,W_ERR_FAIL);
-    //如果邮箱中有消息，就直接返回消息
     wind_disable_switch();
     if(msgbox->msgnum > 0)
     {
@@ -200,7 +199,6 @@ w_err_t wind_msgbox_wait(w_msgbox_s *msgbox,w_msg_s **pmsg,w_uint32_t timeout)
         return W_ERR_OK;
     }
 
-    //否则将线程加入睡眠队列
     ticks = timeout *WIND_TICK_PER_SEC / 1000;
     if(ticks == 0)
         ticks = 1;
@@ -244,7 +242,6 @@ w_err_t wind_msgbox_trywait(w_msgbox_s *msgbox,w_msg_s **pmsg)
     WIND_ASSERT_RETURN(msgbox->owner,W_ERR_FAIL);
     thread = wind_thread_current();
     WIND_ASSERT_RETURN(msgbox->owner == thread,W_ERR_FAIL);
-    //如果邮箱中有消息，就直接返回消息
     wind_disable_switch();
     if(msgbox->msgnum > 0)
     {
@@ -285,4 +282,6 @@ w_err_t wind_msgbox_print(void)
 }
 
 #endif  //WIND_MSGBOX_SUPPORT
-
+#ifdef __cplusplus
+}
+#endif // #ifdef __cplusplus

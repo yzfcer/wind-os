@@ -30,6 +30,9 @@
 #include "wind_pool.h"
 #include "wind_daemon.h"
 #include "wind_board_port.h"
+#ifdef __cplusplus
+extern "C" {
+#endif // #ifdef __cplusplus
 
 #if WIND_COROUTINE_SUPPORT
 #define NODE_TO_COROUTINE(node) (w_coroutine_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((w_coroutine_s*)0)->obj.objnode)))
@@ -224,5 +227,7 @@ w_err_t wind_coroutine_print(void)
     return W_ERR_OK;
 }
 
-#endif
-
+#endif //if WIND_COROUTINE_SUPPORT
+#ifdef __cplusplus
+}
+#endif // #ifdef __cplusplus

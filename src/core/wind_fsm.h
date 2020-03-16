@@ -24,7 +24,8 @@
 extern "C" {
 #endif // #ifdef __cplusplus
 
-/*********************************************头文件定义***********************************************/
+
+/*********************************************header file***********************************************/
 #include "wind_config.h"
 #include "wind_type.h"
 #include "wind_obj.h"
@@ -33,7 +34,7 @@ extern "C" {
 
 
 
-/***********************************************宏定义*************************************************/
+/***********************************************macros*************************************************/
 #define WIND_FSM_MODEL_MAGIC 0x26A451FE
 #define WIND_FSM_MAGIC 0x3852FA95
 
@@ -43,55 +44,57 @@ extern "C" {
 
 
 
-/**********************************************枚举定义************************************************/
+/***********************************************enum*************************************************/
 typedef enum
 {
-    FSM_STAT_IDLE,
-    FSM_STAT_READY,
-    FSM_STAT_SLEEP,
-    FSM_STAT_SUSPEND,
-    FSM_STAT_STOP,
+    FSM_STAT_IDLE,    //FSM idle state (initialization state)
+    FSM_STAT_READY,   //FSM ready status
+    FSM_STAT_SLEEP,   //FSM sleep state
+    FSM_STAT_SUSPEND, //FSM blocking status
+    FSM_STAT_STOP,    //FSM stop status
 }w_fsm_state_e;
 
 
 
-/*********************************************结构体定义***********************************************/
+/***********************************************struct*************************************************/
 
 typedef w_err_t (*fsm_step_fn)(void *arg,w_int32_t arglen);
 
 typedef struct __fsm_step_s
 {
-    char *step_name;
-    w_int32_t step_id;
-    fsm_step_fn func;
+    char *step_name;   //FSM step name
+    w_int32_t step_id; //FSM step index
+    fsm_step_fn func;  //FSM step execution function
 }w_fsm_step_s;
 
+//FSM model,for building state machine objects
 typedef struct 
 {
-    w_obj_s obj;
-    w_int32_t step_cnt;
-    w_fsm_step_s *steplist;
+    w_obj_s obj;            //Basic object information
+    w_int32_t step_cnt;     //FSM step number
+    w_fsm_step_s *steplist; //FSM step list
 }w_fsm_model_s;
 
+//FSM execution object
 typedef struct __w_fsm_s
 {
-    w_obj_s obj;
-    w_int32_t id;
-    w_uint32_t sleep_ms;
-    w_uint32_t sleep_tick;
-    w_fsm_state_e state;
-    w_int32_t cur_step;
-    void *arg;
-    w_int32_t arglen;
-    w_fsm_model_s *model;
+    w_obj_s obj;           //Basic object information
+    w_int32_t id;          //FSM object ID
+    w_uint32_t sleep_ms;   //FSM sleep time remaining (in milliseconds)
+    w_uint32_t sleep_tick; //Tick value when FSM sleep
+    w_fsm_state_e state;   //FSM state
+    w_int32_t cur_step;    //FSM current step ID
+    void *arg;             //FSM input parameter
+    w_int32_t arglen;      //FSM input parameter lenth
+    w_fsm_model_s *model;  //Model of the FSM object
 }w_fsm_s;
 
 
-/********************************************全局变量申明**********************************************/
+/********************************************global variable declare**********************************************/
 
 
 
-/********************************************全局函数申明**********************************************/
+/********************************************global function declare**********************************************/
 w_err_t _wind_fsm_mod_init(void);
 
 w_err_t wind_fsm_model_register(w_fsm_model_s *fsm_model);
@@ -113,7 +116,7 @@ w_err_t wind_fsm_schedule(void);
 w_err_t wind_fsm_print(void);
 
 
-#endif //#if WIND_FSM_SUPPORT
+#endif // #if WIND_FSM_SUPPORT
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

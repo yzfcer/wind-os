@@ -25,18 +25,23 @@
 #ifndef __WIND_DLIST_H__
 #define __WIND_DLIST_H__
 #include "wind_type.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif //#ifdef __cplusplus
+
 typedef struct __w_dnode_s w_dnode_s;
 typedef struct __w_pridnode_s w_prinode_s;
 typedef struct __w_dlist_s w_dlist_s;
 
-//链表节点结构
+//Double linked list node
 struct __w_dnode_s 
 {
     w_dnode_s *prev;
     w_dnode_s *next;
 };
 
-//带优先级链表节点结构
+//Double linked list with priority
 struct __w_pridnode_s 
 {
     w_dnode_s dnode;
@@ -44,7 +49,7 @@ struct __w_pridnode_s
 };
 
 
-//链表头部结构
+//Double Linked List header
 struct __w_dlist_s 
 {
     w_dnode_s *head;
@@ -64,50 +69,53 @@ struct __w_dlist_s
 #define foreach_node(dnode,list) for(dnode = dlist_head(list);dnode != (w_dnode_s*)W_NULL;dnode = dnode_next(dnode))
 
 
-//获取链表头部节点
+//get double Linked List header node
 w_dnode_s *dlist_head(w_dlist_s *dlist);
 
-// 获取链表尾部节点
+//get Double Linked List tail node
 w_dnode_s *dlist_tail(w_dlist_s *dlist);
 
-// 获取给定节点的下一个节点
+//get the next node of the current node
 w_dnode_s *dnode_next(w_dnode_s *dnode);
 
-// 获取给定节点的下一个节点
+//get the previous node of the current node
 w_dnode_s *dnode_prev(w_dnode_s *dnode); 
 
 
-// 在链表头部插入一个节点
+//insert a node at the header of the list
 void dlist_insert_head(w_dlist_s *dlist,w_dnode_s *dnode);
 
-//在链 表尾部插入一个节点
+//insert a node at the tail of the list
 void dlist_insert_tail(w_dlist_s *dlist,w_dnode_s *dnode);
 
-// 在指定节点后插入一个节点
+//insert a node following a certain node of the list
 void dlist_insert(w_dlist_s *dlist,w_dnode_s *lpAfter,w_dnode_s *dnode);
 
-// 从链表头部弹出一个节点
+//remove the first node of the list
 w_dnode_s *dlist_remove_head(w_dlist_s *dlist);
 
-// 从链表尾部弹出一个节点
+//remove the last node of the list
 w_dnode_s *dlist_remove_tail(w_dlist_s *dlist);
 
-// 从链表中删除给定节点
+//remove a certain node of the list
 w_dnode_s *dlist_remove(w_dlist_s *dlist,w_dnode_s *dnode);
 
-// 检查 链表是否为空
+//check if the list is empty
 w_bool_t dlist_is_empty(w_dlist_s *dlist);
 
-// 获取链表中的节点数
+//Get the number of nodes in the linked list
 w_int32_t dlist_get_count(w_dlist_s *dlist);
 
-// 合并两个链表
+//merge two linked lists into one
 w_dlist_s *dlist_combine(w_dlist_s *dlist1,w_dlist_s *dlist2);
 
-// 在链表插入一个带优先级节点
+//insert a node with priority in the linked list
 void dlist_insert_prio(w_dlist_s *dlist,w_prinode_s *prinode,w_uint32_t prio);
 
-// 从链表中删除给定带优先级节点
+//delete the given node with priority from the linked list
 w_prinode_s *dlist_remove_prio(w_dlist_s *dlist,w_prinode_s *prinode);
 
-#endif//__dlist_s_H__
+#ifdef __cplusplus
+}
+#endif //#ifdef __cplusplus
+#endif//#ifndef __WIND_DLIST_H__

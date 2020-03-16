@@ -30,6 +30,9 @@
 #include "wind_mutex.h"
 #include "wind_board_port.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif // #ifdef __cplusplus
 
 
 #if WIND_DIAGNOSE_SUPPORT
@@ -156,5 +159,7 @@ w_err_t wind_diagnose_print(void)
     return W_ERR_OK;
 }
 
-#endif
-
+#endif #if WIND_DIAGNOSE_SUPPORT
+#ifdef __cplusplus
+}
+#endif // #ifdef __cplusplus

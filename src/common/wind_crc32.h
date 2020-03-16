@@ -29,7 +29,8 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif
+#endif //#ifdef __cplusplus
+
 void wind_crc32_init(void);
 
 w_uint32_t wind_crc32(w_uint8_t *data,w_uint32_t size,w_uint32_t crc);
@@ -37,6 +38,5 @@ w_uint32_t wind_crc32(w_uint8_t *data,w_uint32_t size,w_uint32_t crc);
 
 #ifdef __cplusplus
 }
-#endif
-
-#endif
+#endif //#ifdef __cplusplus
+#endif //#ifndef WIND_CRC32_H__

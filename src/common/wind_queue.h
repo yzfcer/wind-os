@@ -27,22 +27,22 @@
 #include "wind_type.h"
 
 #ifdef __cplusplus
-extern "C"{
-#endif
+extern "C" {
+#endif //#ifdef __cplusplus
 
 #define WIND_QUEUE_MAGIC 0x25a5c629
 
 typedef struct __queue_s
 {
     w_uint32_t magic;
-    w_uint8_t *rd;// 指向数据输出位置         
-    w_uint8_t *wr; // 指向数据输入位置        
-    w_uint8_t *end;// 指向buf的结束位置       
-    w_uint32_t count;// 队列中数据个数          
-    w_uint32_t capacity;// 队列中允许存储的数据个数 
-    w_uint32_t  itemsize; // 元素的数据宽度
-    w_uint8_t buf[4]; // 存储数据的空间          
-} w_queue_s;
+    w_uint8_t *rd;// Point to data read location         
+    w_uint8_t *wr; // Point to data write location      
+    w_uint8_t *end;// Point to the end of buf    
+    w_uint32_t count;// Number of existing data in the queue          
+    w_uint32_t capacity;// Number of elements allowed to be stored in the queue
+    w_uint32_t itemsize; // Data width of element
+    w_uint8_t buf[4]; // Space for data storage,for station
+}w_queue_s;
 
 
 
@@ -63,8 +63,7 @@ w_err_t wind_queue_destory(void *queue);
 #ifdef __cplusplus
 }
 #endif//#ifdef __cplusplus
-
-#endif  //WIND_QUEUE_H_
+#endif//WIND_QUEUE_H_
 
 /*********************************************************************************************************
 **                            End Of File

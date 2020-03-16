@@ -23,6 +23,10 @@
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
 #include "wind_type.h"
+#ifdef __cplusplus
+extern "C" {
+#endif //#ifdef __cplusplus
+
 static w_uint32_t crc32_table[256];
 void wind_crc32_init(void)
 {
@@ -59,3 +63,6 @@ w_uint32_t wind_crc32(w_uint8_t *data,w_uint32_t size,w_uint32_t crc)
         crc = (crc >> 8)^(crc32_table[(crc ^ *data++)&0xff]);
     return crc;
 }
+#ifdef __cplusplus
+}
+#endif //#ifdef __cplusplus

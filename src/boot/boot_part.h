@@ -1,3 +1,16 @@
+/*********************************************************************************
+  *Copyright(C),2017-2020,yzfcer@163.com
+  *FileName:  
+  *Author:      Jason Zhou
+  *Version:     1.0
+  *Date:        2017/04/08
+  *Description: 
+  *Others:  
+  *History:  
+     1.Date:
+       Author:
+       Modification:
+**********************************************************************************/
 #ifndef BOOT_PART_H__
 #define BOOT_PART_H__
 #include "wind_type.h"
@@ -6,7 +19,7 @@
 #define PART_NAME_LEN 12
 #define INVALID_REAL_ADDR 0xffffffff
 
-//标准分区名称，
+//Standard partition name
 #define PART_BOOT     "boot"
 #define PART_PARAM1   "param1"
 #define PART_PARAM2   "param2"
@@ -26,7 +39,7 @@ typedef enum
     MEM_ERROR=2,      
 }w_mem_status_e;
 
-//空间分区表
+//Spatial partition table
 typedef struct 
 {
     char name[PART_NAME_LEN];

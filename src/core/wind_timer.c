@@ -27,6 +27,9 @@
 #include "wind_core.h"
 #include "wind_string.h"
 #include "wind_pool.h"
+#ifdef __cplusplus
+extern "C" {
+#endif // #ifdef __cplusplus
 
 #if WIND_TIMER_SUPPORT
 #define NODE_TO_TIMER(node) (w_timer_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((w_timer_s*)0)->obj.objnode)))
@@ -220,6 +223,8 @@ void _wind_timer_event(void)
     }
 }
 
-#endif //#if WIND_TIMER_SUPPORT
-
+#endif // #if WIND_TIMER_SUPPORT
+#ifdef __cplusplus
+}
+#endif // #ifdef __cplusplus
 

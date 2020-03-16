@@ -27,6 +27,9 @@
 #include "wind_debug.h"
 #include "wind_string.h"
 #include "wind_pool.h"
+#ifdef __cplusplus
+extern "C" {
+#endif // #ifdef __cplusplus
 
 #if WIND_EVENT_SUPPORT
 #define NODE_TO_EVET(node) (w_event_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((w_event_s*)0)->obj.objnode)))
@@ -167,5 +170,7 @@ w_err_t wind_event_print(void)
     return W_ERR_OK;
 }
 
-#endif  //WIND_EVENT_H__
-
+#endif  // #if WIND_EVENT_SUPPORT
+#ifdef __cplusplus
+}
+#endif // #ifdef __cplusplus

@@ -26,6 +26,10 @@
 #include "wind_string.h"
 #include "wind_debug.h"
 #include "wind_macro.h"
+#ifdef __cplusplus
+extern "C" {
+#endif //#ifdef __cplusplus
+
 #define WIND_STRCHECK(cond,res) {if(!(cond)) {return res;}}
 
 char* wind_strcpy(char *dest,const char *src)
@@ -59,7 +63,7 @@ char* wind_strncpy(char *dest,const char *src,w_int32_t count)
 
 
 
-char *wind_strcat(char *dest, const char *src)
+char *wind_strcat(char *dest,const char *src)
 {
     w_int32_t i,j;
     WIND_STRCHECK(dest != W_NULL,dest);
@@ -75,7 +79,7 @@ char *wind_strcat(char *dest, const char *src)
 }
 
 
-char* wind_strncat(char *dest, const char *src, w_int32_t count)
+char* wind_strncat(char *dest,const char *src,w_int32_t count)
 {
     char *tmp = dest;
     WIND_STRCHECK(dest != W_NULL,dest);
@@ -100,7 +104,7 @@ char* wind_strncat(char *dest, const char *src, w_int32_t count)
 w_int32_t wind_strcmp(const char *dest,const char *src)
 {
     w_int32_t err;
-    WIND_STRCHECK((dest != W_NULL)||(src != W_NULL),0);
+    WIND_STRCHECK((dest != W_NULL)|| (src != W_NULL),0);
     WIND_STRCHECK(dest != W_NULL,-1);
     WIND_STRCHECK(src != W_NULL,1);
     while (1) 
@@ -114,7 +118,7 @@ w_int32_t wind_strcmp(const char *dest,const char *src)
 w_int32_t wind_strncmp(const char* dest,const char *src,w_int32_t count)
 {
     w_int32_t err = 0;
-    WIND_STRCHECK((dest != W_NULL)||(src != W_NULL),0);
+    WIND_STRCHECK((dest != W_NULL)|| (src != W_NULL),0);
     WIND_STRCHECK(dest != W_NULL,-1);
     WIND_STRCHECK(src != W_NULL,1);
     while (count) 
@@ -127,7 +131,7 @@ w_int32_t wind_strncmp(const char* dest,const char *src,w_int32_t count)
     return err;
 }
 
-char* wind_strchr(const char *dest, w_uint32_t c)
+char* wind_strchr(const char *dest,w_uint32_t c)
 {
     WIND_STRCHECK(dest != W_NULL,(char *)W_NULL);
     for(; *dest != (char) c; ++dest)
@@ -136,7 +140,7 @@ char* wind_strchr(const char *dest, w_uint32_t c)
     return (char *) dest;
 }
 
-char *wind_strrchr(const char *dest, char c)
+char *wind_strrchr(const char *dest,char c)
 {
     const char *p;
     WIND_STRCHECK(dest != W_NULL,(char *)W_NULL);
@@ -145,7 +149,7 @@ char *wind_strrchr(const char *dest, char c)
     {
         if (*p == (char)c)
            return (char *)p;
-    } while (--p >= dest);
+    }while (--p >= dest);
     return (char*)W_NULL;
 }
 
@@ -158,7 +162,7 @@ w_int32_t wind_strlen(const char *dest)
     return (w_int32_t)(sc - dest);
 }
 
-w_int32_t wind_strnlen(const char *dest, w_int32_t count)
+w_int32_t wind_strnlen(const char *dest,w_int32_t count)
 {
     const char *sc;
     WIND_STRCHECK(dest != W_NULL,0);
@@ -168,7 +172,7 @@ w_int32_t wind_strnlen(const char *dest, w_int32_t count)
 }
 
 
-w_uint32_t wind_strspn(const char *dest, const char *accept)
+w_uint32_t wind_strspn(const char *dest,const char *accept)
 {
     const char *p;
     const char *a;
@@ -233,13 +237,10 @@ char *wind_strlower(char *dest)
     return dest;
 }
 
-//描述:从字符串中查找特定的子串
-//str     : 原字符串
-//sub     : 需要查找的子串
-//返回值  : 第一个匹配的位置
+
 char *wind_strstr(const char *str,const char *sub)
 {
-    w_int32_t l1, l2;
+    w_int32_t l1,l2;
     WIND_STRCHECK(str != W_NULL,W_NULL);
     WIND_STRCHECK(sub != W_NULL,W_NULL);
 
@@ -258,11 +259,6 @@ char *wind_strstr(const char *str,const char *sub)
 }
 
 
-//描述:从字符串中跳过特定的子串
-//str    : 原字符串
-//sub    : 需要跳过的子串
-//count  : 原字符串最大长度
-//返回值 : 跳过子串后的新字符串
 char *wind_strskip(char *str,char *sub,w_int32_t count)
 {
     w_int32_t i;
@@ -325,8 +321,8 @@ w_fp64_t wind_strtod(const char *str,char **endptr)
         { 
             factor *= 0.1; 
             value  += (*p++ - '0') * factor; 
-        } 
-    } 
+        }
+    }
     if(*p=='e'||*p=='E') 
     { 
         p++;
@@ -351,18 +347,11 @@ w_fp64_t wind_strtod(const char *str,char **endptr)
         else
             for(i=0;i <exp;i++) 
                 value*=10; 
-    } 
+    }
     return (sign == '-' ? -value : value); 
-} 
+}
 
 
-//描述:将字符串按照特定字符分割，最多分割成maxcnt个字符串
-//str : 原字符串
-//ch  : 指定的分隔字符
-//substr : 返回分割后的子串
-//maxcnt : 最多分割的子串数量
-//返回值 : 实际分割的子串数量
-//空串返回0，无指定字符返回1，
 w_int32_t wind_strsplit(char *str,char ch,char **substr,w_int32_t maxcnt)
 {
     w_int32_t i,j,cnt;
@@ -415,7 +404,7 @@ void *wind_memset(void *mem,char c,w_uint32_t count)
     return mem;
 }
 
-char *wind_bcopy(const char *src, char *dest, w_int32_t count)
+char *wind_bcopy(const char *src,char *dest,w_int32_t count)
 {
     char *tmp = dest;
     WIND_STRCHECK(src != W_NULL,W_NULL);
@@ -442,7 +431,7 @@ void *wind_memcpy(void *dest,const void *src,w_int32_t count)
 
 void *wind_memmove(void *dest,const void *src,w_int32_t count)
 {
-    char *tmp, *s;
+    char *tmp,*s;
     WIND_STRCHECK(dest != W_NULL,W_NULL);
     WIND_STRCHECK(src != W_NULL,W_NULL);
     WIND_STRCHECK(count > 0,W_NULL);
@@ -466,18 +455,18 @@ void *wind_memmove(void *dest,const void *src,w_int32_t count)
 
 w_int32_t wind_memcmp(const void *dest,const void *src,w_int32_t count)
 {
-    const w_uint8_t *su1, *su2;
+    const w_uint8_t *su1,*su2;
     signed char res = 0;
-    WIND_STRCHECK((dest != W_NULL)||(src != W_NULL),0);
+    WIND_STRCHECK((dest != W_NULL)|| (src != W_NULL),0);
     WIND_STRCHECK(dest != W_NULL,-1);
     WIND_STRCHECK(src != W_NULL,1);
-    for( su1 = dest, su2 = src; 0 < count; ++su1, ++su2, count--)
+    for( su1 = dest,su2 = src; 0 < count; ++su1,++su2,count--)
         if ((res = *su1 - *su2) != 0)
             break;
     return res;
 }
 
-void *wind_memscan(void *mem, w_uint32_t c, w_int32_t count)
+void *wind_memscan(void *mem,w_uint32_t c,w_int32_t count)
 {
     w_uint8_t *p = (w_uint8_t *) mem;
     WIND_STRCHECK(mem != W_NULL,W_NULL);
@@ -492,3 +481,6 @@ void *wind_memscan(void *mem, w_uint32_t c, w_int32_t count)
     return (void *) p;
 }
 
+#ifdef __cplusplus
+}
+#endif //#ifdef __cplusplus

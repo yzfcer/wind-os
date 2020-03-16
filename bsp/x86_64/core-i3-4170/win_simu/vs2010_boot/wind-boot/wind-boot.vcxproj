@@ -14,7 +14,6 @@
     <ClInclude Include="..\..\..\..\..\..\src\boot\boot_framework.h" />
     <ClInclude Include="..\..\..\..\..\..\src\boot\boot_hw_if.h" />
     <ClInclude Include="..\..\..\..\..\..\src\boot\boot_img.h" />
-    <ClInclude Include="..\..\..\..\..\..\src\boot\boot_imghead.h" />
     <ClInclude Include="..\..\..\..\..\..\src\boot\boot_media.h" />
     <ClInclude Include="..\..\..\..\..\..\src\boot\boot_menu.h" />
     <ClInclude Include="..\..\..\..\..\..\src\boot\boot_param.h" />
@@ -25,6 +24,7 @@
     <ClInclude Include="..\..\..\..\..\..\src\common\wind_crc32.h" />
     <ClInclude Include="..\..\..\..\..\..\src\common\wind_debug.h" />
     <ClInclude Include="..\..\..\..\..\..\src\common\wind_encrypt.h" />
+    <ClInclude Include="..\..\..\..\..\..\src\common\wind_imghead.h" />
     <ClInclude Include="..\..\..\..\..\..\src\common\wind_string.h" />
     <ClInclude Include="..\..\port\boot_port.h" />
     <ClInclude Include="..\..\port\wind_config.h" />
@@ -35,7 +35,6 @@
     <ClCompile Include="..\..\..\..\..\..\src\boot\boot_framework.c" />
     <ClCompile Include="..\..\..\..\..\..\src\boot\boot_hw_if.c" />
     <ClCompile Include="..\..\..\..\..\..\src\boot\boot_img.c" />
-    <ClCompile Include="..\..\..\..\..\..\src\boot\boot_imghead.c" />
     <ClCompile Include="..\..\..\..\..\..\src\boot\boot_media.c" />
     <ClCompile Include="..\..\..\..\..\..\src\boot\boot_menu.c" />
     <ClCompile Include="..\..\..\..\..\..\src\boot\boot_param.c" />
@@ -46,6 +45,7 @@
     <ClCompile Include="..\..\..\..\..\..\src\common\wind_crc32.c" />
     <ClCompile Include="..\..\..\..\..\..\src\common\wind_debug.c" />
     <ClCompile Include="..\..\..\..\..\..\src\common\wind_encrypt.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\common\wind_imghead.c" />
     <ClCompile Include="..\..\..\..\..\..\src\common\wind_string.c" />
     <ClCompile Include="..\..\port\boot_port.c" />
     <ClCompile Include="..\..\port\media_ram1.c" />
@@ -81,7 +81,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(ProjectDir)..\..\..\..\..\..\src\boot;$(ProjectDir)..\..\..\..\..\..\hardware\intel\core-i3-4170\windows_simulation\port;$(ProjectDir)..\..\..\..\..\..\src\encrypt;$(ProjectDir)..\..\..\..\..\..\src\common;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\..\..\..\..\..\src\boot;$(ProjectDir)..\..\..\..\..\..\bsp\x86_64\core-i3-4170\win_simu\port;$(ProjectDir)..\..\..\..\..\..\src\encrypt;$(ProjectDir)..\..\..\..\..\..\src\common;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

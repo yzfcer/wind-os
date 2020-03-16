@@ -28,8 +28,9 @@
 #include "wind_string.h"
 #include "wind_pool.h"
 #include "wind_macro.h"
-//#include "wind_mutex.h"
-//#include "wind_board_port.h"
+#ifdef __cplusplus
+extern "C" {
+#endif // #ifdef __cplusplus
 
 #if WIND_USER_SUPPORT
 #define NODE_TO_USER(node) (w_user_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((w_user_s*)0)->usernode)))
@@ -213,5 +214,7 @@ w_err_t wind_user_print(void)
     return W_ERR_OK;
 }
 
-#endif
-
+#endif // #if WIND_USER_SUPPORT
+#ifdef __cplusplus
+}
+#endif // #ifdef __cplusplus

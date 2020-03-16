@@ -30,11 +30,11 @@
 #include "wind_type.h"
 #include "wind_obj.h"
 #include "wind_stati.h"
-
 #ifdef __cplusplus
 extern "C" {
-#endif
-#if WIND_HEAP_SUPPORT > 0
+#endif // #ifdef __cplusplus
+
+#if WIND_HEAP_SUPPORT
 
 
 #define WIND_HEAP_MIN_SIZE    256
@@ -47,52 +47,53 @@ extern "C" {
 #define WIND_HEAP_ITEM_SIZE  HEAP_ALIGN_R(sizeof(w_heapitem_s))
 
 
-
-#define F_HEAP_PRIVATE (0x01 << 0) //���heap�����Ƿ�ͨ���ڴ�ط���
+#define F_HEAP_PRIVATE (0x01 << 0) //Mark whether the heap object is private
 #define IS_F_HEAP_PRIVATE(heap) ((heap->obj.flag & F_HEAP_PRIVATE) == F_HEAP_PRIVATE)
 #define SET_F_HEAP_PRIVATE(heap) (heap->obj.flag |= F_HEAP_PRIVATE)
 #define CLR_F_HEAP_PRIVATE(heap) (heap->obj.flag &= (~F_HEAP_PRIVATE))
 
 
-#define F_HEAPITEM_USED (0x01 << 0) //���heapitem�����Ƿ��Ѿ�������
+#define F_HEAPITEM_USED (0x01 << 0) //Mark whether the heap element object is used
 #define IS_F_HEAPITEM_USED(heapitem) ((heapitem->flag & F_HEAPITEM_USED) == F_HEAPITEM_USED)
 #define SET_F_HEAPITEM_USED(heapitem) (heapitem->flag |= F_HEAPITEM_USED)
 #define CLR_F_HEAPITEM_USED(heapitem) (heapitem->flag &= (~F_HEAPITEM_USED))
 
+//Heap allocation tag ID
 typedef enum
 {
-    HP_ALLOCID_COMMON = 0,
-    HP_ALLOCID_VFS    = 1,
-    HP_ALLOCID_LISTFS = 2,
-    HP_ALLOCID_TREEFS = 3,
-    HP_ALLOCID_HOSTFS = 4,
-    HP_ALLOCID_DB     = 5,
-    HP_ALLOCID_CJSON  = 6,
-    HP_ALLOCID_ALL    = 255,
+    HP_ALLOCID_COMMON = 0,  //General assignment ID
+    HP_ALLOCID_VFS    = 1,  //VFS module assignment ID
+    HP_ALLOCID_LISTFS = 2,  //listfs module assignment ID
+    HP_ALLOCID_TREEFS = 3,  //treefs module assignment ID
+    HP_ALLOCID_HOSTFS = 4,  //hostfs module assignment ID
+    HP_ALLOCID_DB     = 5,  //DB module assignment ID
+    HP_ALLOCID_CJSON  = 6,  //cJSON module assignment ID
+    HP_ALLOCID_ALL    = 255,//undefined module assignment ID
 }w_allocid_e;
 
 typedef struct __w_heapitem_s w_heapitem_s;
 typedef struct __w_heap_s w_heap_s;
+
+//Heap allocation block object information
 struct __w_heapitem_s
 {
-    w_uint16_t magic;
-    w_uint8_t  flag;
-    w_uint8_t  allocid;
-    w_uint32_t size;
-    w_heap_s *heap;
-    w_prinode_s itemnode;
+    w_uint16_t magic;      //Magic code
+    w_uint8_t  flag;       //Heapitem attribute tag
+    w_uint8_t  allocid;    //Allocate ID,mark which module the heapitem belong to
+    w_uint32_t size;       //The heapitem size,contains the allocated memory
+    w_heap_s *heap;        //The heap which allocating heaitem
+    w_prinode_s itemnode;  //Hepitem linked list node
 };
 
-
+//Heap object information
 struct __w_heap_s
 {
-    w_obj_s   obj;
-    w_addr_t  addr;
-    w_stati_s stati;
-    w_dlist_s used_list;
-    w_dlist_s free_list;
-    void *mutex; 
-    //w_uint32_t pad; 
+    w_obj_s   obj;       //Basic object information
+    w_addr_t  addr;      //Allocatable memory address
+    w_stati_s stati;     //Memory allocation statistics
+    w_dlist_s used_list; //List of allocated memory blocks
+    w_dlist_s free_list; //List of unallocated memory blocks
+    void *mutex;         //Heap mutex
 };
 
 
@@ -105,8 +106,8 @@ w_heap_s *wind_heap_create(const char *name,w_addr_t base,w_uint32_t size,w_uint
 w_err_t wind_heap_destroy(w_heap_s *heap);
 
 w_err_t wind_heap_setflag(w_heap_s *heap,w_int16_t flag);
-w_err_t wind_heap_clrflag(w_heap_s *heap,w_int16_t flag);
 
+w_err_t wind_heap_clrflag(w_heap_s *heap,w_int16_t flag);
 
 void *wind_heap_malloc(w_heap_s* heap, w_uint32_t size);
 
@@ -139,11 +140,8 @@ w_err_t wind_free(void *ptr);
 
 
 
-#endif
-
+#endif // #if WIND_HEAP_SUPPORT
 #ifdef __cplusplus
 }
-#endif
-
-
-#endif
+#endif // #ifdef __cplusplus
+#endif // #ifndef WIND_HEAP_H__

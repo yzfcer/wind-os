@@ -14,15 +14,22 @@
 #ifndef WIND_ENCRYPT_H__
 #define WIND_ENCRYPT_H__
 #include "wind_type.h"
+#ifdef __cplusplus
+extern "C" {
+#endif //#ifdef __cplusplus
+
 #define ENCRYPT_PASSWD_MIN_LEN 12
 typedef struct 
 {
-    w_int32_t i, j;
+    w_int32_t i,j;
     w_uint8_t sbox[256];
 }w_encypt_ctx_s;
 
-w_err_t wind_encrypt_init(w_encypt_ctx_s *ctx,w_uint8_t *passwd, w_int32_t len);
-w_int32_t wind_encrypt(w_encypt_ctx_s *ctx,w_uint8_t *data, w_int32_t len);
-w_int32_t wind_decrypt(w_encypt_ctx_s *ctx,w_uint8_t *data, w_int32_t len);
+w_err_t wind_encrypt_init(w_encypt_ctx_s *ctx,w_uint8_t *passwd,w_int32_t len);
+w_int32_t wind_encrypt(w_encypt_ctx_s *ctx,w_uint8_t *data,w_int32_t len);
+w_int32_t wind_decrypt(w_encypt_ctx_s *ctx,w_uint8_t *data,w_int32_t len);
 
-#endif
+#ifdef __cplusplus
+}
+#endif //#ifdef __cplusplus
+#endif //#ifndef WIND_ENCRYPT_H__

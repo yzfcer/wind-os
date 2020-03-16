@@ -20,7 +20,7 @@
 *******************************************************************************************************/
 #ifndef __TEST_FRAMEWORK_H__
 #define __TEST_FRAMEWORK_H__
-/*********************************************头文件定义***********************************************/
+/*********************************************header file***********************************************/
 #include "wind_config.h"
 #include "wind_debug.h"
 //#include "test_port.h"
@@ -31,7 +31,7 @@ extern "C" {
 
 
 
-/***********************************************宏定义*************************************************/
+/***********************************************macros*************************************************/
 #define TEST_CASE_NAME_LEN 24
 #define TEST_SUITE_NAME_LEN 24
 #define TEST_FAIL_LIST_CNT 100
@@ -44,7 +44,7 @@ extern void test_suite_err(w_uint32_t line);
 
 //#define EXPECT_EQ(x,y) test_printf("FILE:%s,LINE:%d,expected %s,in fact %s\r\n",__FILE__,__LINE__,#x,#y)
 
-/**********************************************枚举定义************************************************/
+/***********************************************enum*************************************************/
 
 
 #ifndef W_NULL
@@ -56,7 +56,7 @@ extern void test_suite_err(w_uint32_t line);
 #define TEST_ASSERT_RETURN(x,y)
 #define test_printf wind_printf
 
-/*********************************************结构体定义***********************************************/
+/***********************************************struct*************************************************/
 //全局的test suite列表
 typedef struct __w_test_case_s w_test_case_s;
 typedef struct __w_test_suite_s w_test_suite_s;
@@ -65,28 +65,28 @@ typedef struct __w_test_stati_s w_test_stati_s;
 typedef struct __w_fail_info_s w_fail_info_s;
 typedef struct __w_stati_info_s w_stati_info_s;
 
-//测试用例结构
+//testcase structure
 struct __w_test_case_s
 {
-    char name[TEST_CASE_NAME_LEN];
-    w_err_t (*setup)(void);
-    w_err_t (*teardown)(void);
-    void (*test)(void);
+    char name[TEST_CASE_NAME_LEN];//testcase name
+    w_err_t (*setup)(void);//setup function of the testcase
+    w_err_t (*teardown)(void);//teardown function of the testcase
+    void (*test)(void);//test function of the testcase
 };
 
-//测试套结构
+//test suite structure
 struct __w_test_suite_s
 {
-    char name[TEST_SUITE_NAME_LEN];
-    w_uint32_t case_cnt;//测试用例的数量
-    w_test_case_s *tcase;
+    char name[TEST_SUITE_NAME_LEN];//test suite name
+    w_uint32_t case_cnt;//testcase count
+    w_test_case_s *tcase;//pointor to the first testcase of the suite
     //void (*init)(void);
-    w_err_t (*setup)(void);
-    w_err_t (*teardown)(void);
-    w_test_suite_s *next;
+    w_err_t (*setup)(void);//setup function of the test suite 
+    w_err_t (*teardown)(void);//teardown function of the test suite 
+    w_test_suite_s *next;//pointor to the next suite
 };
 
-
+//test suite list head
 struct __w_suite_list_s
 {
     w_test_suite_s *head;
@@ -95,6 +95,7 @@ struct __w_suite_list_s
 };
 
 //执行失败的信息
+//failed execution information
 struct __w_fail_info_s
 {
     w_test_suite_s *suite;
@@ -103,7 +104,7 @@ struct __w_fail_info_s
     w_fail_info_s *next;
 };
 
-//用例执行结果统计信息
+//testcases executing statistics result 
 struct __w_test_stati_s
 {
     w_uint32_t tot_suite;
@@ -120,26 +121,26 @@ struct __w_test_stati_s
 
 struct __w_stati_info_s
 {
-    //统计信息
+    //statistics information
     w_test_stati_s stat;
 
-    //错误信息列表
+    //error information
     w_fail_info_s *failhead;
     w_fail_info_s *lastfail;
     w_uint32_t failcnt;
 
-    //当前测试信息
+    //current test information
     w_test_suite_s *suite;
     w_test_case_s *tcase;
     w_uint32_t case_err;
     w_uint32_t suite_err;
 };
 
-/********************************************全局变量申明**********************************************/
+/********************************************global variable declare**********************************************/
 
 
 
-/********************************************全局函数申明**********************************************/
+/********************************************global function declare**********************************************/
 //static w_int32_t stringlenth(char *str);
 w_int32_t stringcmp(const char *cs,const char *ct);
 

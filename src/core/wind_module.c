@@ -30,7 +30,12 @@
 #include "wind_core.h"
 #include "wind_heap.h"
 #include "wind_string.h"
-#if WIND_MODULE_MAGIC
+#ifdef __cplusplus
+extern "C" {
+#endif // #ifdef __cplusplus
+
+
+#if WIND_MODULE_SUPPORT
 typedef struct 
 {
     char *modname;
@@ -170,6 +175,9 @@ w_err_t wind_module_print(void)
 }
 
 
-#endif
+#endif // #if WIND_MODULE_SUPPORT
+#ifdef __cplusplus
+}
+#endif // #ifdef __cplusplus
 
 

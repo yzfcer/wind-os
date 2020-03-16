@@ -32,7 +32,8 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif
+#endif // #ifdef __cplusplus
+
 
 #if WIND_DBGPOINT_SUPPORT
 #define WIND_DBGPOINT_MAGIC 0x357892A9
@@ -41,11 +42,11 @@ typedef w_int32_t (*dbgpoint_write_fn)(w_uint8_t *buff,w_int32_t lenth);
 
 typedef struct _wind_dbgpoint
 {
-    w_obj_s obj;
-    w_int32_t lenth;
-    void *mutex;
-    dbgpoint_read_fn read;
-    dbgpoint_write_fn write;
+    w_obj_s obj;             //Basic object information
+    w_int32_t lenth;         //Debug point cache length
+    void *mutex;             //Debug point mutex
+    dbgpoint_read_fn read;   //Function for reading information
+    dbgpoint_write_fn write; //Function for writing information
 }w_dbgpoint_s;
 
 #define DBGP_DEF(name,lenth,read,write) \
@@ -62,9 +63,9 @@ w_int32_t wind_dbgpoint_read(w_dbgpoint_s *dbgpoint,w_uint8_t *buff,w_int32_t le
 w_int32_t wind_dbgpoint_write(w_dbgpoint_s *dbgpoint,w_uint8_t *buff,w_int32_t len);
 w_err_t wind_dbgpoint_print(void);
 
-#endif
+#endif // #if WIND_DBGPOINT_SUPPORT
 #ifdef __cplusplus
 }
-#endif
-#endif//#ifndef WIND_DBGPOINT_H__
+#endif // #ifdef __cplusplus
+#endif// #ifndef WIND_DBGPOINT_H__
 

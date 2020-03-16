@@ -30,6 +30,9 @@
 #include "wind_pool.h"
 #include "wind_timer.h"
 #include "wind_board_port.h"
+#ifdef __cplusplus
+extern "C" {
+#endif // #ifdef __cplusplus
 
 #if WIND_WATCHDOG_SUPPORT
 #define NODE_TO_WATCHDOG(node) (w_watchdog_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((w_watchdog_s*)0)->obj.objnode)))
@@ -190,5 +193,7 @@ w_err_t wind_watchdog_print(void)
     return W_ERR_OK;
 }
 
-#endif
-
+#endif // #if WIND_WATCHDOG_SUPPORT
+#ifdef __cplusplus
+}
+#endif // #ifdef __cplusplus

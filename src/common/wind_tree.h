@@ -25,6 +25,10 @@
 #ifndef WIND_TREE_H__
 #define WIND_TREE_H__
 #include "wind_dlist.h"
+#ifdef __cplusplus
+extern "C" {
+#endif //#ifdef __cplusplus
+
 typedef struct __w_tree_s w_tree_s;
 struct __w_tree_s
 {
@@ -41,5 +45,8 @@ w_err_t wind_tree_remove_brother(w_tree_s *oldbrother,w_tree_s *newbrother);
 w_err_t wind_tree_search(w_tree_s *root,w_tree_s *tree);
 w_err_t wind_tree_visit(w_tree_s *root,void (*visit)(w_tree_s *tree));
 
-#endif
+#ifdef __cplusplus
+}
+#endif //#ifdef __cplusplus
+#endif //#ifndef WIND_TREE_H__
 

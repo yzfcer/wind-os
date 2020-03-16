@@ -32,25 +32,27 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif
+#endif // #ifdef __cplusplus
+
 
 #if WIND_DIAGNOSE_SUPPORT
 #define WIND_DIAGNOSE_MAGIC 0x387A5247
 typedef w_int32_t (*diagnose_fn)(void);
 typedef enum
 {
-    DIAG_RES_OK = 0,
-    DIAG_RES_ERROR,
-    DIAG_RES_DIAG_MAGIC_ERROR,
-    DIAG_RES_OBJ_MAGIC_ERROR,
-    DIAG_RES_FUNC_NULL,
+    DIAG_RES_OK = 0,           //The diagnosis is normal
+    DIAG_RES_ERROR,            //The diagnosis is error
+    DIAG_RES_DIAG_MAGIC_ERROR, //Diagnose object magic value error
+    DIAG_RES_OBJ_MAGIC_ERROR,  //Target object magic value error
+    DIAG_RES_FUNC_NULL,        //The diagnosis function is NULL
 }w_diag_res_e;
+
 
 typedef struct _wind_diagnose
 {
-    w_obj_s obj;
-    w_int32_t result;
-    diagnose_fn diagnose_func;
+    w_obj_s obj;                 //Basic object information
+    w_int32_t result;            //diagnosis result
+    diagnose_fn diagnose_func;   //diagnosis function
 }w_diagnose_s;
 
 
@@ -67,9 +69,9 @@ w_err_t wind_diagnose_unregister(w_diagnose_s *diagnose);
 w_err_t wind_diagnose_check(void);
 w_err_t wind_diagnose_print(void);
 
-#endif
+#endif #if WIND_DIAGNOSE_SUPPORT
 #ifdef __cplusplus
 }
-#endif
-#endif//#ifndef WIND_DIAGNOSE_H__
+#endif // #ifdef __cplusplus
+#endif// #ifndef WIND_DIAGNOSE_H__
 

@@ -3,6 +3,10 @@
 #include "wind_debug.h"  
 #include "wind_crc16.h"  
 #include "wind_log.h"  
+#ifdef __cplusplus
+extern "C" {
+#endif //#ifdef __cplusplus
+
 #if WIND_XMODEM_SUPPORT
 #define SOH  0x01
 #define STX  0x02
@@ -17,14 +21,14 @@
 #define WAIT_START_SEC 60
 
 
-static w_int32_t xm_check_verify(w_uint8_t *data, w_int32_t count,w_int32_t crcmode)
+static w_int32_t xm_check_verify(w_uint8_t *data,w_int32_t count,w_int32_t crcmode)
 {
     w_int32_t i;
     w_uint16_t crc,frcrc;
     w_uint8_t cks = 0;
     if(crcmode)
     {
-        crc = wind_crc16(data, count,0);
+        crc = wind_crc16(data,count,0);
         frcrc  = data[count];
         frcrc = (frcrc<<8)+data[count+1];
         if(crc == frcrc)
@@ -38,7 +42,7 @@ static w_int32_t xm_check_verify(w_uint8_t *data, w_int32_t count,w_int32_t crcm
             return 1;
     }
     return 0;
-}  
+}
 
 
 static w_err_t xm_check_recv_data(xm_ctx_s *ctx)
@@ -55,7 +59,7 @@ static w_err_t xm_check_recv_data(xm_ctx_s *ctx)
         return W_ERR_FAIL;
     }
         
-    if(!xm_check_verify(&ctx->frbuff[3], ctx->frdatalen,ctx->crcmode))
+    if(!xm_check_verify(&ctx->frbuff[3],ctx->frdatalen,ctx->crcmode))
     {
         wind_log_error("verify error.");
         return W_ERR_FAIL;
@@ -158,7 +162,7 @@ static w_err_t xm_recv_copy_data(xm_ctx_s *ctx)
     if(xm_check_recv_data(ctx) == W_ERR_OK)
     {
         wind_log_notice("check recv data OK");
-        wind_memcpy(&ctx->buff[ctx->buffidx], &ctx->frbuff[3], ctx->frdatalen);
+        wind_memcpy(&ctx->buff[ctx->buffidx],&ctx->frbuff[3],ctx->frdatalen);
         ctx->buffidx += ctx->frdatalen;
         ctx->pack_no ++;
         ctx->retry = 0;
@@ -234,7 +238,7 @@ w_err_t xmodem_init(xm_ctx_s *ctx,xm_dir_e dir,
 
 
 
-w_int32_t xmodem_recv(xm_ctx_s *ctx,w_uint8_t *data, w_int32_t size)
+w_int32_t xmodem_recv(xm_ctx_s *ctx,w_uint8_t *data,w_int32_t size)
 {
     WIND_ASSERT_RETURN(ctx != W_NULL,-1);
     WIND_ASSERT_RETURN(data != W_NULL,-1);
@@ -309,8 +313,8 @@ static w_err_t xm_send_wait_start(xm_ctx_s *ctx)
         default:
             wind_log_notice("unexepcted req:0x%x",ch);
             break;    
-        }  
-    } 
+        }
+    }
     wind_log_error("wait send req failed");
     ctx->stat = XM_ERROR;
     return W_ERR_FAIL;
@@ -349,8 +353,8 @@ static w_err_t xm_send_wait_ack(xm_ctx_s *ctx)
         default:
             wind_log_notice("unexepcted req:0x%x",ch);
             break;
-        }  
-    } 
+        }
+    }
     ctx->stat = XM_ERROR;
     return W_ERR_FAIL;
 }
@@ -363,7 +367,7 @@ static w_int32_t xm_send_set_data_verify(xm_ctx_s *ctx)
     w_uint16_t ccrc;
     if(ctx->crcmode)
     {
-        ccrc = wind_crc16(&ctx->frbuff[3], ctx->frdatalen,0);
+        ccrc = wind_crc16(&ctx->frbuff[3],ctx->frdatalen,0);
         ctx->frbuff[ctx->frdatalen+3] =((ccrc>>8) & 0xFF);
         ctx->frbuff[ctx->frdatalen+4] = (ccrc & 0xFF);
         ctx->frlen = ctx->frdatalen+5;
@@ -404,8 +408,8 @@ static w_int32_t xm_send_pack_data(xm_ctx_s *ctx)
     ctx->frbuff[0] = SOH;
     ctx->frbuff[1] = ctx->pack_no;
     ctx->frbuff[2] = ~ctx->pack_no;
-    wind_memset(&ctx->frbuff[3], CTRLZ, ctx->frdatalen);
-    wind_memcpy(&ctx->frbuff[3], &ctx->buff[ctx->buffidx],len);
+    wind_memset(&ctx->frbuff[3],CTRLZ,ctx->frdatalen);
+    wind_memcpy(&ctx->frbuff[3],&ctx->buff[ctx->buffidx],len);
     xm_send_set_data_verify(ctx);
     ctx->stat = XM_SEND_DATA;
     return ctx->frlen;
@@ -440,7 +444,7 @@ static w_err_t xm_send_eot(xm_ctx_s *ctx)
     return W_ERR_FAIL;
 }
 
-w_int32_t xmodem_send(xm_ctx_s *ctx,w_uint8_t *data, w_int32_t size)
+w_int32_t xmodem_send(xm_ctx_s *ctx,w_uint8_t *data,w_int32_t size)
 {
     WIND_ASSERT_RETURN(ctx != W_NULL,-1);
     WIND_ASSERT_RETURN(data != W_NULL,-1);
@@ -481,8 +485,8 @@ w_int32_t xmodem_send(xm_ctx_s *ctx,w_uint8_t *data, w_int32_t size)
         default:
             return 0;
         }
-    }  
-}  
+    }
+}
 
 w_err_t xmodem_end(xm_ctx_s *ctx)
 {
@@ -505,5 +509,8 @@ w_err_t xmodem_end(xm_ctx_s *ctx)
     return W_ERR_OK;
 }
 
+#ifdef __cplusplus
+}
+#endif //#ifdef __cplusplus
 #endif //#if WIND_XMODEM_SUPPORT
 

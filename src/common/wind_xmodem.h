@@ -2,6 +2,10 @@
 #define WIND_XMODEM_H__
 #include "wind_config.h"
 #include "wind_type.h"  
+#ifdef __cplusplus
+extern "C" {
+#endif //#ifdef __cplusplus
+
 #if WIND_XMODEM_SUPPORT
 #define XMODEM_BUFF_LEN 1030
 #define XMODEM_MIN_LEN 128
@@ -64,12 +68,15 @@ w_err_t xmodem_init(xm_ctx_s *ctx,xm_dir_e dir,w_uint8_t *frbuff,
                     w_int32_t frbuff_size,
                     xm_write_fn write,xm_read_fn read);
 
-w_int32_t xmodem_recv(xm_ctx_s *ctx,w_uint8_t *data, w_int32_t size);
+w_int32_t xmodem_recv(xm_ctx_s *ctx,w_uint8_t *data,w_int32_t size);
 
-w_int32_t xmodem_send(xm_ctx_s *ctx,w_uint8_t *data, w_int32_t size);
+w_int32_t xmodem_send(xm_ctx_s *ctx,w_uint8_t *data,w_int32_t size);
 
 w_err_t xmodem_end(xm_ctx_s *ctx);
 
 #endif //#if WIND_XMODEM_SUPPORT
+#ifdef __cplusplus
+}
+#endif //#ifdef __cplusplus
 #endif //#ifndef WIND_XMODEM_H__
 

@@ -46,6 +46,9 @@
 #include "wind_time.h"
 #include "wind_std.h"
 #include "wind_debug.h"
+#ifdef __cplusplus
+extern "C" {
+#endif // #ifdef __cplusplus
 
 
 extern void wind_thread_switch(void);
@@ -55,11 +58,18 @@ extern int _create_thread_init(void);
 extern w_sreg_t  wind_save_sr(void);
 extern void   wind_restore_sr(w_sreg_t cpu_sr);
 
+//Basic global parameters of wind-os and chain headers of various kernel resources
+w_core_var_s g_core;
 
-w_core_var_s g_core;//wind-os的基本全局参数和各种内核资源的链表头
-volatile w_bool_t gwind_start_flag = W_FALSE;//wind-os开始启动线程调度的标记w_stack_t **gwind_high_stack;//高优先级线程栈指针
-w_stack_t **gwind_high_stack;//高优先级线程栈指针w_stack_t **gwind_cur_stack;//当前线程栈指针
-w_stack_t **gwind_cur_stack;//当前线程栈指针
+//Flag for wind-os to start thread scheduling
+volatile w_bool_t gwind_start_flag = W_FALSE;
+
+//High priority thread stack pointer
+w_stack_t **gwind_high_stack;
+
+//Current thread stack pointer
+w_stack_t **gwind_cur_stack;
+
 void _wind_corevar_init(void)
 {
     g_core.irq_nest = 0;
@@ -197,7 +207,7 @@ void wind_exit_irq(void)
 }
 
 
-//系统调度开始启动运行
+
 static void wind_run()
 {
     w_thread_s *thread;
@@ -209,7 +219,6 @@ static void wind_run()
 }
 
 
-//在线程中切换到高优先级的线程
 void _wind_thread_dispatch(void)
 {
 #if WIND_REALTIME_CORE_SUPPORT
@@ -259,8 +268,6 @@ void _wind_switchto_thread(w_thread_s *thread)
 }
 
 
-
-//获取tick计数器
 w_uint32_t wind_get_tick(void)
 {
     return g_core.ticks_cnt;
@@ -271,10 +278,10 @@ w_uint32_t wind_get_seconds(void)
     return g_core.sec_count;
 }
 
-//tick中断调用的函数
+
 void wind_tick_callback(void)
 {
-    g_core.ticks_cnt ++;//更新tick计数器
+    g_core.ticks_cnt ++;
     g_core.ms_cnt ++;
     if(g_core.ms_cnt % WIND_TICK_PER_SEC == 0)
         g_core.sec_count ++;
@@ -293,11 +300,11 @@ void wind_tick_isr(void)
 }
 
 
-//操作系统初始化
+
 static void _wind_init()
 {
 	wind_init_hook();
-    _wind_std_init();//调试端口初始化
+    _wind_std_init();
     _wind_os_print_logo();
     _wind_print_sysinfo();
     _wind_pool_mod_init();
@@ -339,7 +346,7 @@ static void _wind_init()
 
 
 
-//****************************wind_entry***********************************************
+//****************************wind-os launch entry***********************************************
 int wind_os_launch(void)
 {
     _wind_corevar_init();
@@ -352,5 +359,7 @@ int wind_os_launch(void)
     return W_ERR_OK;
 }
 
-
+#ifdef __cplusplus
+}
+#endif // #ifdef __cplusplus
 

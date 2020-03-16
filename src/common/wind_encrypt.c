@@ -14,10 +14,13 @@
 #include "wind_type.h"
 #include "wind_debug.h"
 #include "wind_encrypt.h"
+#ifdef __cplusplus
+extern "C" {
+#endif //#ifdef __cplusplus
 
-static void rc4_init(w_encypt_ctx_s *ctx, w_uint8_t *key, w_int32_t len)
+static void rc4_init(w_encypt_ctx_s *ctx,w_uint8_t *key,w_int32_t len)
 {
-    w_int32_t i = 0, j = 0;
+    w_int32_t i = 0,j = 0;
     w_uint8_t k[256] = { 0 };
     w_uint8_t tmp = 0;
     ctx->i = 0;
@@ -36,9 +39,9 @@ static void rc4_init(w_encypt_ctx_s *ctx, w_uint8_t *key, w_int32_t len)
     }
 }
 
-static w_int32_t rc4_crypt(w_encypt_ctx_s *ctx,w_uint8_t *data, w_int32_t len)
+static w_int32_t rc4_crypt(w_encypt_ctx_s *ctx,w_uint8_t *data,w_int32_t len)
 {
-    //w_int32_t i = 0, j = 0, t = 0;
+    //w_int32_t i = 0,j = 0,t = 0;
     w_int32_t t;
     w_int32_t k = 0;
     w_uint8_t tmp;
@@ -55,7 +58,7 @@ static w_int32_t rc4_crypt(w_encypt_ctx_s *ctx,w_uint8_t *data, w_int32_t len)
     return len;
 }
  
-w_err_t wind_encrypt_init(w_encypt_ctx_s *ctx,w_uint8_t *passwd, w_int32_t len)
+w_err_t wind_encrypt_init(w_encypt_ctx_s *ctx,w_uint8_t *passwd,w_int32_t len)
 {
     WIND_ASSERT_RETURN(passwd != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(len >= ENCRYPT_PASSWD_MIN_LEN,W_ERR_INVALID);
@@ -64,11 +67,16 @@ w_err_t wind_encrypt_init(w_encypt_ctx_s *ctx,w_uint8_t *passwd, w_int32_t len)
     return W_ERR_OK;
 
 }
-w_int32_t wind_encrypt(w_encypt_ctx_s *ctx,w_uint8_t *data, w_int32_t len)
+w_int32_t wind_encrypt(w_encypt_ctx_s *ctx,w_uint8_t *data,w_int32_t len)
 {
     return rc4_crypt(ctx,data,len);
 }
-w_int32_t wind_decrypt(w_encypt_ctx_s *ctx,w_uint8_t *data, w_int32_t len)
+
+w_int32_t wind_decrypt(w_encypt_ctx_s *ctx,w_uint8_t *data,w_int32_t len)
 {
     return rc4_crypt(ctx,data,len);
 }
+
+#ifdef __cplusplus
+}
+#endif //#ifdef __cplusplus

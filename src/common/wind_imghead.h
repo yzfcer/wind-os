@@ -27,6 +27,9 @@
 
 #include "wind_config.h"
 #include "wind_type.h"
+#ifdef __cplusplus
+extern "C" {
+#endif //#ifdef __cplusplus
 
 #define IMG_MAGIC 0x4528AB6D
 #define IMG_HEAD_VER 0x01
@@ -55,7 +58,9 @@ w_err_t wind_img_head_set(w_img_head_s *head,w_uint8_t *buff);
 
 
 
-
-#endif
+#ifdef __cplusplus
+}
+#endif //#ifdef __cplusplus
+#endif //#ifndef WIND_IMGHEAD_H__
 
 

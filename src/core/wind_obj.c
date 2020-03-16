@@ -26,6 +26,10 @@
 #include "wind_string.h"
 #include "wind_debug.h"
 #include "wind_core.h"
+#ifdef __cplusplus
+extern "C" {
+#endif // #ifdef __cplusplus
+
 #define OBJ_MAX_LEN 32
 #define NODE_TO_OBJ(node) (w_obj_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((w_obj_s*)0)->objnode)))
 
@@ -145,6 +149,9 @@ w_err_t wind_obj_deinit(w_obj_s *obj,w_uint32_t magic,w_dlist_s *list)
     return W_ERR_OK;  
 }
 
+#ifdef __cplusplus
+}
+#endif // #ifdef __cplusplus
 
 
 

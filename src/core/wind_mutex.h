@@ -31,27 +31,28 @@
 #include "wind_thread.h"
 #ifdef __cplusplus
 extern "C" {
-#endif
+#endif // #ifdef __cplusplus
+
 #if WIND_MUTEX_SUPPORT
 #define WIND_MUTEX_MAGIC 0x37AD490F
 
-#define F_MUTEX_POOL (0x01 << 0) //标记mutex对象是否通过内存池分配
+#define F_MUTEX_POOL (0x01 << 0) //Mark whether mutex objects are allocated through memory pool
 #define IS_F_MUTEX_POOL(mutex) ((mutex->obj.flag & F_MUTEX_POOL) == F_MUTEX_POOL)
 #define SET_F_MUTEX_POOL(mutex) (mutex->obj.flag |= F_MUTEX_POOL)
 #define CLR_F_MUTEX_POOL(mutex) (mutex->obj.flag &= (~F_MUTEX_POOL))
 
-#define F_MUTEX_LOCKED (0x01 << 1) //标记mutex对象当前的锁定状态
+#define F_MUTEX_LOCKED (0x01 << 1) //Mark the current locking state of mutex object
 #define IS_F_MUTEX_LOCKED(mutex) ((mutex->obj.flag & F_MUTEX_LOCKED) == F_MUTEX_LOCKED)
 #define SET_F_MUTEX_LOCKED(mutex) (mutex->obj.flag |= F_MUTEX_LOCKED)
 #define CLR_F_MUTEX_LOCKED(mutex) (mutex->obj.flag &= (~F_MUTEX_LOCKED))
 
-
+//Mutex object
 typedef struct _w_mutex_s
 {
-    w_obj_s obj;
-    w_uint16_t nest;  //同一线程互斥锁嵌套层次
-    w_thread_s *owner;//当前持有互斥锁的线程
-    w_dlist_s waitlist;  //等待线程队列
+    w_obj_s obj;       //Basic object information
+    w_uint16_t nest;   //Nesting level of mutex in the same thread
+    w_thread_s *owner; //Thread that holding mutexes
+    w_dlist_s waitlist;//Waiting thread list
 }w_mutex_s;
 
 
@@ -66,12 +67,11 @@ w_err_t wind_mutex_trylock(w_mutex_s *mutex);
 w_err_t wind_mutex_unlock(w_mutex_s *mutex);
 w_err_t wind_mutex_print(void);
 
-#endif
+#endif // #if WIND_MUTEX_SUPPORT
 
 #ifdef __cplusplus
 }
-#endif
+#endif // #ifdef __cplusplus
 
-
-#endif
+#endif // #ifndef WIND_LOCK_H__
 

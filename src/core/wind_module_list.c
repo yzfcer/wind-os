@@ -25,10 +25,11 @@
 #include "wind_type.h"
 #include "wind_module.h"
 #include "wind_debug.h"
-#if WIND_MODULE_SUPPORT
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
+#if WIND_MODULE_SUPPORT
+
 
 #if WIND_MODULE_SHELL_SUPPORT
 MODULE_DECLARE(shell);
@@ -91,7 +92,7 @@ w_err_t _wind_register_modules(void)
     return W_ERR_OK;
 }
 
+#endif // #if WIND_MODULE_SUPPORT
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
-#endif

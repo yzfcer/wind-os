@@ -31,7 +31,8 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif
+#endif // #ifdef __cplusplus
+
 
 typedef struct __w_core_var_s
 {
@@ -76,7 +77,6 @@ void wind_exit_irq(void);
 
 #ifdef __cplusplus
 }
-#endif
-
-#endif
+#endif // #ifdef __cplusplus
+#endif // #ifndef WIND_CORE_H__
 

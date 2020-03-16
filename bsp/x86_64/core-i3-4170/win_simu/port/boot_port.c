@@ -112,17 +112,17 @@ void boot_jump_to_system(void)
     }
 }
 
-void feed_watchdog(void)
+void boot_feed_watchdog(void)
 {
 
 }
 
-w_bool_t is_chip_lock()
+w_bool_t boot_is_chip_lock()
 {
     return W_TRUE;
 }
 
-void set_chip_lock(w_uint8_t lock_enable)
+void boot_set_chip_lock(w_uint8_t lock_enable)
 {
 
 }

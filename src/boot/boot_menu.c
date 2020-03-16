@@ -4,7 +4,7 @@
   *Author:      Jason Zhou
   *Version:     1.0
   *Date:        2017/04/08
-  *Description:  
+  *Description: 
   *Others:  
   *History:  
      1.Date:
@@ -209,24 +209,24 @@ static w_err_t show_media_map(void)
 
 static w_err_t lock_mcu(void)
 {
-    if(is_chip_lock())
+    if(boot_is_chip_lock())
     {
         wind_notice("MCU has been locked before.");
         return W_ERR_FAIL;
     }
-    set_chip_lock(1);
+    boot_set_chip_lock(1);
     exit_menu();
     return W_ERR_OK;
 }
 
 static w_err_t unlock_mcu(void)
 {
-    if(!is_chip_lock())
+    if(!boot_is_chip_lock())
     {
         wind_notice("MCU has NOT been locked before.");
         return W_ERR_FAIL;
     }
-    set_chip_lock(0);
+    boot_set_chip_lock(0);
     exit_menu();
     return W_ERR_OK;
 }
@@ -254,7 +254,7 @@ static void do_clear_flash_data(w_uint8_t unlock)
     boot_param_reset();
     boot_param_flush();
     if(unlock)
-        set_chip_lock(0);
+        boot_set_chip_lock(0);
 }
 
 static w_err_t clear_boot_param(void)

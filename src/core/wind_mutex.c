@@ -28,6 +28,9 @@
 #include "wind_core.h"
 #include "wind_pool.h"
 #include "wind_string.h"
+#ifdef __cplusplus
+extern "C" {
+#endif // #ifdef __cplusplus
 
 #if WIND_MUTEX_SUPPORT
 #define NODE_TO_MUTEX(node) (w_mutex_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((w_mutex_s*)0)->obj.objnode)))
@@ -66,7 +69,6 @@ w_err_t wind_mutex_init(w_mutex_s *mutex,const char *name)
     return W_ERR_OK;
 }
 
-//创建一个mutex对象，并加入所有mutex列表
 w_mutex_s *wind_mutex_create(const char *name)
 {
     w_err_t err;
@@ -83,7 +85,6 @@ w_mutex_s *wind_mutex_create(const char *name)
     return W_NULL;
 }
 
-//试图销毁一个互斥锁，如果有线程被阻塞，则销毁将终止
 w_err_t wind_mutex_trydestroy(w_mutex_s *mutex)
 {
     WIND_ASSERT_RETURN(mutex != W_NULL,W_ERR_PTR_NULL);
@@ -95,7 +96,6 @@ w_err_t wind_mutex_trydestroy(w_mutex_s *mutex)
     return W_ERR_OK;    
 }
 
-//强制性销毁互斥锁，并把所有的被该互斥锁阻塞的线程全部激活
 w_err_t wind_mutex_destroy(w_mutex_s *mutex)
 {
     w_err_t err;
@@ -172,7 +172,6 @@ w_err_t wind_mutex_trylock(w_mutex_s *mutex)
 }
 
 
-//试图打开一个互斥锁，如果有线程被阻塞，则优先激活线程
 w_err_t wind_mutex_unlock(w_mutex_s *mutex)
 {
     w_dnode_s *dnode;
@@ -196,7 +195,7 @@ w_err_t wind_mutex_unlock(w_mutex_s *mutex)
         CLR_F_MUTEX_LOCKED(mutex);
         mutex->owner = W_NULL;
         wind_enable_switch();
-        return W_ERR_OK; //信号量有效，直接返回效，
+        return W_ERR_OK; 
     }
 
     dlist_remove_head(&mutex->waitlist);
@@ -231,5 +230,7 @@ w_err_t wind_mutex_print(void)
     return W_ERR_OK;
 }
 
-#endif
-
+#endif // #if WIND_MUTEX_SUPPORT
+#ifdef __cplusplus
+}
+#endif // #ifdef __cplusplus

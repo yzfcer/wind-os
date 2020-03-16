@@ -33,7 +33,10 @@
 #include "wind_heap.h"
 #include "wind_diagnose.h"
 #include "wind_board_port.h"
-//用来表示
+#ifdef __cplusplus
+extern "C" {
+#endif // #ifdef __cplusplus
+
 #define SYS_PRIO_START 1
 #define SYS_PRIO_END   32767
 #define USER_PRIO_START 1000
@@ -240,7 +243,7 @@ w_err_t wind_thread_init(w_thread_s *thread,
     return W_ERR_OK;
 }
 
-//创建一个线程
+
 w_thread_s *wind_thread_create(const char *name,
                     w_err_t (*thread_func)(w_int32_t argc,char **argv),
                     w_int16_t argc,
@@ -297,7 +300,7 @@ w_err_t wind_thread_destroy(w_thread_s *thread)
     wind_notice("distroy thread:%s",thread->name);
     wind_disable_interrupt();
     dlist_remove(&threadlist,&thread->validnode.dnode);
-    //这里需要先释放一些与这个线程相关的一些东西后才能释放这个thread
+    //Here need to release something related to this thread before releasing this thread
 #if WIND_STKPOOL_SUPPORT
     if(IS_F_THREAD_STKPOOL(thread))
         wind_pool_free(stkbufpool,thread->stack_start);
@@ -399,7 +402,7 @@ w_err_t wind_thread_resume(w_thread_s *thread)
 }
 
 
-//退出线程，在对应的线程中调用
+
 w_err_t wind_thread_exit(w_err_t exitcode)
 {
     w_thread_s *thread;
@@ -414,7 +417,6 @@ w_err_t wind_thread_exit(w_err_t exitcode)
 }
 
 
-//睡眠一段时间,不能在中断中调用这个函数
 w_err_t wind_thread_sleep(w_int32_t ms)
 {
     w_uint32_t stcnt;
@@ -483,7 +485,6 @@ w_dlist_s *_wind_thread_sleep_list(void)
 }
 
 
-//调试时用到的函数，打印当前的系统中的线程的信息
 w_err_t wind_thread_print(void)
 {
     w_int32_t usage;
@@ -550,4 +551,8 @@ w_err_t wind_thread_print_stack(w_thread_s *thread)
         print_mem(cur,len);
     return W_ERR_OK;
 }
-//**********************************************extern functions******************************
+
+#ifdef __cplusplus
+}
+#endif // #ifdef __cplusplus
+

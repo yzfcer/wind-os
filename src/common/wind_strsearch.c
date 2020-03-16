@@ -25,6 +25,9 @@
 #include "wind_strsearch.h"
 #include <wind_string.h>
 #include <wind_debug.h>
+#ifdef __cplusplus
+extern "C" {
+#endif //#ifdef __cplusplus
 
 w_err_t kmp_init(w_kmp_context_s *ctx,char *substr)
 {
@@ -51,7 +54,7 @@ w_err_t kmp_init(w_kmp_context_s *ctx,char *substr)
     return W_ERR_OK;
 }
  
-w_int32_t kmp_search(w_kmp_context_s *ctx,char *str, char *substr, w_int32_t pos)
+w_int32_t kmp_search(w_kmp_context_s *ctx,char *str,char *substr,w_int32_t pos)
 {
     w_int32_t i;
     w_int32_t j;
@@ -86,11 +89,11 @@ w_err_t kmp_print_next(w_kmp_context_s *ctx)
    w_int32_t i;
    WIND_ASSERT_RETURN(ctx != W_NULL,W_ERR_PTR_NULL);
    for (i = 0; i < ctx->len; i++) 
-       wind_printf("next[%d] = %d\n", i, ctx->next[i]);
+       wind_printf("next[%d] = %d\n",i,ctx->next[i]);
    return W_ERR_OK;
 }
 
-w_int32_t bm_search(char *str, char *substr, w_int32_t pos)
+w_int32_t bm_search(char *str,char *substr,w_int32_t pos)
 {
     w_int32_t i,j;
     w_int32_t slen,sublen;
@@ -127,22 +130,25 @@ w_int32_t bm_search(char *str, char *substr, w_int32_t pos)
 w_kmp_context_s ctx;
 w_int32_t strsearch_test(void)
 {
-    char *str = "ababcabcacbab";
+    char *str = "ababcabcacbabjhabcacgg";
     char *substr = "abcac";
     w_int32_t pos = 0;
     w_int32_t index;
 
  
     wind_printf("================ BM ==============\n");
-    index = bm_search(str, substr, pos);
-    wind_printf("index = %d\n", index);
+    index = bm_search(str,substr,pos);
+    wind_printf("index = %d\n",index);
  
     wind_printf("================ KMP ==============\n");
     kmp_init(&ctx,substr);
     kmp_print_next(&ctx);
  
-    index = kmp_search(&ctx,str, substr, pos);
-    wind_printf("index = %d\n", index);
+    index = kmp_search(&ctx,str,substr,pos);
+    wind_printf("index = %d\n",index);
 }
 
-#endif
+#endif //#if 0
+#ifdef __cplusplus
+}
+#endif //#ifdef __cplusplus

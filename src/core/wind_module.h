@@ -30,40 +30,42 @@
 #include "wind_module.h"
 #include "wind_dlist.h"
 #include "wind_mutex.h"
-
 #ifdef __cplusplus
 extern "C" {
-#endif
+#endif // #ifdef __cplusplus
+
 
 #if WIND_MODULE_SUPPORT
 
 #define WIND_MODULE_MAGIC 0x6A47326A
 
-#define F_MODULE_OPEN (0x01 << 0) //标记module对象是否已经打开
+#define F_MODULE_OPEN (0x01 << 0) //Mark whether the module object is already open
 #define IS_F_MODULE_OPEN(module) ((module->obj.flag & F_MODULE_OPEN) == F_MODULE_OPEN)
 #define SET_F_MODULE_OPEN(module) (module->obj.flag |= F_MODULE_OPEN)
 #define CLR_F_MODULE_OPEN(module) (module->obj.flag &= (~F_MODULE_OPEN))
 
+//Module status enumeration
 typedef enum
 {
-    MOD_IDLE,
-    MOD_INIT,
-    MOD_OK,
-    MOD_ERROR
+    MOD_IDLE, //Idle state (initialization)
+    MOD_OK,   //Normal state
+    MOD_ERROR //Error state
 }mod_status_e;
 
 
 
 typedef struct __w_module_s w_module_s;
 typedef struct __w_module_ops_s w_module_ops_s;
+
+//Module object information
 struct __w_module_s
 {
-    w_obj_s obj;
-    mod_status_e status;
-    w_int32_t version;
-    char *depend;
-    w_err_t (*init)(void);
-    w_err_t (*exit)(void);
+    w_obj_s obj;          //Basic object information
+    mod_status_e status;  //Module status
+    w_int32_t version;    //Module version
+    char *depend;         //Module dependency information
+    w_err_t (*init)(void);//Module initialization function
+    w_err_t (*exit)(void);//Module exit function
 };
 
 #define MODULE_INIT(module) w_err_t module##_init(void)
@@ -86,10 +88,8 @@ w_err_t wind_module_unregister(w_module_s *module);
 
 w_err_t wind_module_print(void);
 
-#endif
-
+#endif // #if WIND_MODULE_SUPPORT
 #ifdef __cplusplus
 }
-#endif
-
-#endif //WIND_DEV_H__
+#endif // #ifdef __cplusplus
+#endif // #ifndef WIND_DEV_H__

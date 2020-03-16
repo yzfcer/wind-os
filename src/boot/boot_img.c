@@ -4,7 +4,7 @@
   *Author:      Jason Zhou
   *Version:     1.0
   *Date:        2017/04/08
-  *Description:  
+  *Description: 
   *Others:  
   *History:  
      1.Date:
@@ -25,11 +25,11 @@
 #include "wind_encrypt.h"
 #include "wind_string.h"
 #include "wind_conv.h"
-#include "boot_imghead.h"
+#include "wind_imghead.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-img_head_s img_head;
+w_img_head_s img_head;
 static w_encypt_ctx_s ctx;
 static w_uint8_t keys[] = ENCRYPT_KEY;
 
@@ -113,7 +113,7 @@ w_part_s *boot_img_get_new_normal_img(void)
    
 }
 
-static w_err_t check_img_hwinfo(img_head_s *head)
+static w_err_t check_img_hwinfo(w_img_head_s *head)
 {
     if(0 != wind_memcmp(head->board_name,BOARD_NAME,wind_strlen(BOARD_NAME)))
     {
@@ -139,7 +139,7 @@ static w_err_t decrypt_img(w_part_s *img)
     w_int32_t len;
     w_uint32_t fsize;
     w_uint8_t *buff;
-    img_head_s *head = &img_head;
+    w_img_head_s *head = &img_head;
     if(head->magic != IMG_MAGIC)
         return W_ERR_FAIL;
     if(!ENCRYPT_TYPE)
@@ -172,7 +172,7 @@ static w_err_t check_img_file_crc(w_part_s *cache)
     //w_int32_t blkcnt;
     w_int32_t size;    
     w_uint8_t *buff;
-    img_head_s *head;
+    w_img_head_s *head;
     w_uint32_t offset;
     w_uint32_t crc = 0xffffffff;
 
@@ -200,18 +200,18 @@ static w_err_t check_img_file_crc(w_part_s *cache)
 
 static w_err_t check_img_valid(w_part_s *cache)
 {
-    img_head_s *head;
+    w_img_head_s *head;
     w_int32_t len;
     w_uint8_t *buff;
     w_err_t err;
-    feed_watchdog();
+    boot_feed_watchdog();
     head = &img_head;
     cache = boot_part_get(PART_CACHE);
     buff = get_common_buffer();
     len = boot_part_read(cache,0,buff,COMMBUF_SIZE,W_FALSE);
     WIND_ASSERT_RETURN(len > 0,W_ERR_FAIL);
-    wind_memset(head,0,sizeof(img_head_s));
-    err = boot_img_head_get(head,buff);
+    wind_memset(head,0,sizeof(w_img_head_s));
+    err = wind_img_head_get(head,buff);
     WIND_ASSERT_RETURN(head->magic == IMG_MAGIC,W_ERR_INVALID);
 
     if(W_ERR_OK != check_img_hwinfo(head))
@@ -220,9 +220,9 @@ static w_err_t check_img_valid(w_part_s *cache)
         return W_ERR_FAIL;
     }
     
-    feed_watchdog();
+    boot_feed_watchdog();
     err = check_img_file_crc(cache);
-    feed_watchdog();
+    boot_feed_watchdog();
     WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_FAIL);
     wind_notice("img file verify OK.");
     return W_ERR_OK;
@@ -258,7 +258,7 @@ w_err_t boot_img_flush_cache_to_part(w_part_s **part,w_int32_t count)
 {
     w_err_t err;
     w_part_s *cache;
-    img_head_s *head = &img_head;
+    w_img_head_s *head = &img_head;
     w_int32_t len;
     w_uint8_t *buff;
 
@@ -269,8 +269,8 @@ w_err_t boot_img_flush_cache_to_part(w_part_s **part,w_int32_t count)
     WIND_ASSERT_RETURN(len > 0,W_ERR_FAIL);
     if(head->magic != IMG_MAGIC)
     {
-        wind_memset(head,0,sizeof(img_head_s));
-        err = boot_img_head_get(head,buff);
+        wind_memset(head,0,sizeof(w_img_head_s));
+        err = wind_img_head_get(head,buff);
         wind_notice("get image file head %s",err == W_ERR_OK?"OK":"ERROR");
         WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_FAIL);
     }

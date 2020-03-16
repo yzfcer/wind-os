@@ -28,26 +28,27 @@
 #include "wind_config.h"
 #include "wind_type.h"
 #include "wind_obj.h"
-
 #ifdef __cplusplus
 extern "C" {
-#endif
+#endif // #ifdef __cplusplus
 
-#if (WIND_PIPE_SUPPORT)
+
+#if WIND_PIPE_SUPPORT
 
 #define WIND_PIPE_MAGIC 0x56384c6a
 #define PIPE_NAME_LEN 12
 
-#define F_PIPE_POOL (0x01 << 0) //标记pipe对象是否通过内存池分配
+#define F_PIPE_POOL (0x01 << 0) //Mark whether the pipe object is allocated through the memory pool
 #define IS_F_PIPE_POOL(pipe) ((pipe->obj.flag & F_PIPE_POOL) == F_PIPE_POOL)
 #define SET_F_PIPE_POOL(pipe) (pipe->obj.flag |= F_PIPE_POOL)
 #define CLR_F_PIPE_POOL(pipe) (pipe->obj.flag &= (~F_PIPE_POOL))
 
+//Pipe object structure
 typedef struct __w_pipe_s
 {
-    w_obj_s obj;
-    void *buff;
-    w_int32_t buflen;
+    w_obj_s obj;      //Basic object information
+    void *buff;       //Pipeline cache
+    w_int32_t buflen; //Pipeline cache length
 }w_pipe_s;
 
 w_err_t _wind_pipe_mod_init(void);
@@ -60,11 +61,9 @@ w_err_t wind_pipe_destroy(w_pipe_s* pipe);
 w_err_t wind_pipe_print(void);
 
 
-#endif //WIND_PIPE_SUPPORT
+#endif // #if WIND_PIPE_SUPPORT
 #ifdef __cplusplus
 }
-#endif
-
-
-#endif
+#endif // #ifdef __cplusplus
+#endif // #ifndef WIND_PIPE_H__
 

@@ -28,13 +28,13 @@
 #include "wind_string.h"
 #include "wind_conv.h"
 #include "wind_std.h"
-#include "wind_thread.h"
-#include "wind_core.h"
+//#include "wind_thread.h"
+//#include "wind_core.h"
+#ifdef __cplusplus
+extern "C" {
+#endif //#ifdef __cplusplus
 
 #if WIND_DEBUG_SUPPORT
-
-
-
 
 #define ZEROPAD 1       
 #define SIGN    2       
@@ -91,9 +91,9 @@ static char * wind_fp64(char *str,w_fp64_t flt)
     return str;
 }
 
-static char *wind_number(char *str, w_int32_t num, w_int32_t base, w_int32_t size, w_int32_t precision,w_int32_t type)
+static char *wind_number(char *str,w_int32_t num,w_int32_t base,w_int32_t size,w_int32_t precision,w_int32_t type)
 {
-    char c, sign, tmp[66];
+    char c,sign,tmp[66];
     const char *digits = "0123456789abcdefghijklmnopqrstuvwxyz";
     w_int32_t i;
 
@@ -110,10 +110,10 @@ static char *wind_number(char *str, w_int32_t num, w_int32_t base, w_int32_t siz
             sign = '-';
             num = -num;
             size--;
-        } else if (type & PLUS) {
+        }else if (type & PLUS) {
             sign = '+';
             size--;
-        } else if (type & SPACE) {
+        }else if (type & SPACE) {
             sign = ' ';
             size--;
         }
@@ -133,7 +133,7 @@ static char *wind_number(char *str, w_int32_t num, w_int32_t base, w_int32_t siz
     {
         while (num != 0)
         {
-            tmp[i++] = digits[do_div(num, base)];
+            tmp[i++] = digits[do_div(num,base)];
         }
     }
 
@@ -180,11 +180,11 @@ char * wind_binary(char *str,w_uint32_t bin)
 }
 #endif
 
-w_int32_t wind_vsprintf(char *buf, const char *fmt, wind_va_list args)
+w_int32_t wind_vsprintf(char *buf,const char *fmt,wind_va_list args)
 {
     w_int32_t len;
     w_uint32_t num;
-    w_int32_t i, base;
+    w_int32_t i,base;
     char *str;
     w_fp64_t vargdouble;
     //w_uint32_t vargint;
@@ -193,7 +193,7 @@ w_int32_t wind_vsprintf(char *buf, const char *fmt, wind_va_list args)
     w_int32_t field_width;    /* width of output field */
     w_int32_t precision;      /* min. # of digits for integers; max
                    wind_number of chars for from string */
-    w_int32_t qualifier;      /* 'h', 'l', or 'L' for integer fields */
+    w_int32_t qualifier;      /* 'h','l',or 'L' for integer fields */
 
     for (str = buf; *fmt; ++fmt) {
         if (*fmt != '%') {
@@ -230,7 +230,7 @@ w_int32_t wind_vsprintf(char *buf, const char *fmt, wind_va_list args)
         else if (*fmt == '*') {
             ++fmt;
             /* it's the next argument */
-            field_width = wind_va_arg(args, w_int32_t);
+            field_width = wind_va_arg(args,w_int32_t);
             if (field_width < 0) {
                 field_width = -field_width;
                 flags |= LEFT;
@@ -246,7 +246,7 @@ w_int32_t wind_vsprintf(char *buf, const char *fmt, wind_va_list args)
             else if (*fmt == '*') {
                 ++fmt;
                 /* it's the next argument */
-                precision = wind_va_arg(args, w_int32_t);
+                precision = wind_va_arg(args,w_int32_t);
             }
             if (precision < 0)
                 precision = 0;
@@ -267,14 +267,14 @@ w_int32_t wind_vsprintf(char *buf, const char *fmt, wind_va_list args)
             if (!(flags & LEFT))
                 while (--field_width > 0)
                     *str++ = ' ';
-            *str++ = (w_uint8_t)wind_va_arg(args, w_int32_t);
+            *str++ = (w_uint8_t)wind_va_arg(args,w_int32_t);
             while (--field_width > 0)
                 *str++ = ' ';
             continue;
 
         case 's':
-            s = wind_va_arg(args, char *);
-            len = wind_strnlen(s, 65535);
+            s = wind_va_arg(args,char *);
+            len = wind_strnlen(s,65535);
 
             if (!(flags & LEFT))
                 while (len < field_width--)
@@ -291,16 +291,16 @@ w_int32_t wind_vsprintf(char *buf, const char *fmt, wind_va_list args)
                 flags |= ZEROPAD;
             }
             str = wind_number(str,
-                     (w_int32_t)(w_addr_t)wind_va_arg(args, void *), 16,
-                     field_width, precision, flags);
+                     (w_int32_t)(w_addr_t)wind_va_arg(args,void *),16,
+                     field_width,precision,flags);
             continue;
 
         case 'n':
             if (qualifier == 'l') {
-                w_int32_t *ip = wind_va_arg(args, w_int32_t *);
+                w_int32_t *ip = wind_va_arg(args,w_int32_t *);
                 *ip = (str - buf);
-            } else {
-                w_int32_t *ip = wind_va_arg(args, w_int32_t *);
+            }else {
+                w_int32_t *ip = wind_va_arg(args,w_int32_t *);
                 *ip = (str - buf);
             }
             continue;
@@ -322,7 +322,7 @@ w_int32_t wind_vsprintf(char *buf, const char *fmt, wind_va_list args)
         #if 0
         case 'b':
         case 'B':
-            vargint = wind_va_arg(args, w_uint32_t);
+            vargint = wind_va_arg(args,w_uint32_t);
             str = wind_binary(str,vargint);
             break;
         #endif
@@ -335,9 +335,9 @@ w_int32_t wind_vsprintf(char *buf, const char *fmt, wind_va_list args)
         case 'f':
         case 'g':
             
-            vargdouble = (w_fp64_t)wind_va_arg(args, w_fp64_t);
-            /*wind_va_arg(ap, type), if type is narrow type (char, short, float) an error is given in strict ANSI
-            mode, or a warning otherwise.In non-strict ANSI mode, 'type' is allowed to be any expression. */
+            vargdouble = (w_fp64_t)wind_va_arg(args,w_fp64_t);
+            /*wind_va_arg(ap,type),if type is narrow type (char,short,float) an error is given in strict ANSI
+            mode,or a warning otherwise.In non-strict ANSI mode,'type' is allowed to be any expression. */
             str = wind_fp64(str,vargdouble);
             break;
         default:
@@ -349,22 +349,22 @@ w_int32_t wind_vsprintf(char *buf, const char *fmt, wind_va_list args)
             continue;
         }
         if (qualifier == 'l')
-            num = wind_va_arg(args, w_uint32_t);
+            num = wind_va_arg(args,w_uint32_t);
         else if (qualifier == 'h') {
-            num = (unsigned short)wind_va_arg(args, w_int32_t);
+            num = (unsigned short)wind_va_arg(args,w_int32_t);
             if (flags & SIGN)
                 num = (short)num;
-        } else if (flags & SIGN)
-            num = wind_va_arg(args, w_int32_t);
+        }else if (flags & SIGN)
+            num = wind_va_arg(args,w_int32_t);
         else
-            num = wind_va_arg(args, w_uint32_t);
-        str = wind_number(str, num, base, field_width, precision, flags);
+            num = wind_va_arg(args,w_uint32_t);
+        str = wind_number(str,num,base,field_width,precision,flags);
     }
     *str = '\0';
     return str - buf;
 }
  
-w_int32_t wind_printf(const char *fmt, ...)
+w_int32_t wind_printf(const char *fmt,...)
 {
     static char buff[512];
     w_int32_t count;
@@ -377,31 +377,31 @@ w_int32_t wind_printf(const char *fmt, ...)
     wind_std_lock();
     wind_memset(buff,0,sizeof(buff));
 #ifdef USE_SYS_VSPRINTF
-	va_start(args, fmt);
-	count = vsprintf(buff, fmt, args);
+	va_start(args,fmt);
+	count = vsprintf(buff,fmt,args);
 	va_end(args);
 #else
-    wind_va_start(args, fmt);
-	count = wind_vsprintf(buff, fmt, args);
+    wind_va_start(args,fmt);
+	count = wind_vsprintf(buff,fmt,args);
     wind_va_end(args);
 #endif
-	wind_std_output((w_uint8_t *)buff, count);
+	wind_std_output((w_uint8_t *)buff,count);
     wind_std_unlock();
     return count;
 }
 
-w_int32_t wind_sprintf(char *buff, const char *fmt, ...)
+w_int32_t wind_sprintf(char *buff,const char *fmt,...)
 {
     w_int32_t count;
 #ifdef USE_SYS_VSPRINTF
     va_list args;
-    va_start(args, fmt);
-	count = vsprintf(buff, fmt, args);
+    va_start(args,fmt);
+	count = vsprintf(buff,fmt,args);
     va_end(args);
 #else
     wind_va_list args;
-    wind_va_start(args, fmt);
-	count = wind_vsprintf(buff, fmt, args);
+    wind_va_start(args,fmt);
+	count = wind_vsprintf(buff,fmt,args);
     wind_va_end(args);
 #endif
     return count;
@@ -421,20 +421,20 @@ void wind_print_space(w_int32_t space8_cnt)
 
 enum _WVSCANF__flag
 {
-    WVSCANF_Suppress = 0x2U,      /*!< Suppress Flag. */
-    WVSCANF_DestMask = 0x7cU,     /*!< Destination Mask. */
-    WVSCANF_DestChar = 0x4U,      /*!< Destination Char Flag. */
-    WVSCANF_DestString = 0x8U,    /*!< Destination String FLag. */
-    WVSCANF_DestSet = 0x10U,      /*!< Destination Set Flag. */
-    WVSCANF_DestInt = 0x20U,      /*!< Destination w_int32_t Flag. */
-    WVSCANF_DestFloat = 0x30U,    /*!< Destination Float Flag. */
-    WVSCANF_LengthMask = 0x1f00U, /*!< Length Mask Flag. */
-    WVSCANF_LengthChar = 0x100U,        /*!< Length Char Flag. */
-    WVSCANF_LengthShortInt = 0x200U,    /*!< Length ShortInt Flag. */
-    WVSCANF_LengthLongInt = 0x400U,     /*!< Length LongInt Flag. */
-    WVSCANF_LengthLongLongInt = 0x800U, /*!< Length LongLongInt Flag. */
-    WVSCANF_LengthLongLongDouble = 0x1000U, /*!< Length LongLongDuoble Flag. */
-    WVSCANF_TypeSinged = 0x2000U,           /*!< TypeSinged Flag. */
+    WVSCANF_Suppress = 0x2U,/*!< Suppress Flag. */
+    WVSCANF_DestMask = 0x7cU,/*!< Destination Mask. */
+    WVSCANF_DestChar = 0x4U,/*!< Destination Char Flag. */
+    WVSCANF_DestString = 0x8U,/*!< Destination String FLag. */
+    WVSCANF_DestSet = 0x10U,/*!< Destination Set Flag. */
+    WVSCANF_DestInt = 0x20U,/*!< Destination w_int32_t Flag. */
+    WVSCANF_DestFloat = 0x30U,/*!< Destination Float Flag. */
+    WVSCANF_LengthMask = 0x1f00U,/*!< Length Mask Flag. */
+    WVSCANF_LengthChar = 0x100U,/*!< Length Char Flag. */
+    WVSCANF_LengthShortInt = 0x200U,/*!< Length ShortInt Flag. */
+    WVSCANF_LengthLongInt = 0x400U,/*!< Length LongInt Flag. */
+    WVSCANF_LengthLongLongInt = 0x800U,/*!< Length LongLongInt Flag. */
+    WVSCANF_LengthLongLongDouble = 0x1000U,/*!< Length LongLongDuoble Flag. */
+    WVSCANF_TypeSinged = 0x2000U,/*!< TypeSinged Flag. */
 };
 
 
@@ -453,7 +453,7 @@ static w_uint32_t skip_space(const char **s)
 }
 
 
-w_int32_t wind_vsscanf(const char *str, const char *format, wind_va_list args)
+w_int32_t wind_vsscanf(const char *str,const char *format,wind_va_list args)
 {
     static w_fp64_t fnum = 0.0;
     w_uint8_t base;
@@ -494,8 +494,8 @@ w_int32_t wind_vsscanf(const char *str, const char *format, wind_va_list args)
             }
             else
             {
-                /* Match failure. Misalignment with C99, the unmatched characters need to be pushed back to stream.
-                 * However, it is deserted now. */
+                /* Match failure. Misalignment with C99,the unmatched characters need to be pushed back to stream.
+                 * However,it is deserted now. */
                 break;
             }
         }
@@ -588,7 +588,7 @@ w_int32_t wind_vsscanf(const char *str, const char *format, wind_va_list args)
                         {
                             field_width = field_width * 10 + *c - '0';
                             c++;
-                        } while ((*c >= '0') && (*c <= '9'));
+                        }while ((*c >= '0') && (*c <= '9'));
                         break;
                     case 'd':
                         base = 10;
@@ -662,7 +662,7 @@ w_int32_t wind_vsscanf(const char *str, const char *format, wind_va_list args)
             {
                 case WVSCANF_DestChar:
                     s = (const char *)p;
-                    buf = wind_va_arg(args, char *);
+                    buf = wind_va_arg(args,char *);
                     while ((field_width--) && (*p))
                     {
                         if (!(flag & WVSCANF_Suppress))
@@ -684,7 +684,7 @@ w_int32_t wind_vsscanf(const char *str, const char *format, wind_va_list args)
                 case WVSCANF_DestString:
                     n_decode += skip_space(&p);
                     s = p;
-                    buf = wind_va_arg(args, char *);
+                    buf = wind_va_arg(args,char *);
                     while ((field_width--) && (*p != '\0') && (*p != ' ') && (*p != '\t') && (*p != '\n') &&
                            (*p != '\r') && (*p != '\v') && (*p != '\f'))
                     {
@@ -793,52 +793,52 @@ w_int32_t wind_vsscanf(const char *str, const char *format, wind_va_list args)
                             case WVSCANF_LengthChar:
                                 if (flag & WVSCANF_TypeSinged)
                                 {
-                                    *wind_va_arg(args, w_int8_t *) = (w_int8_t)val;
+                                    *wind_va_arg(args,w_int8_t *) = (w_int8_t)val;
                                 }
                                 else
                                 {
-                                    *wind_va_arg(args, w_uint8_t *) = (w_uint8_t)val;
+                                    *wind_va_arg(args,w_uint8_t *) = (w_uint8_t)val;
                                 }
                                 break;
                             case WVSCANF_LengthShortInt:
                                 if (flag & WVSCANF_TypeSinged)
                                 {
-                                    *wind_va_arg(args, signed short *) = (signed short)val;
+                                    *wind_va_arg(args,signed short *) = (signed short)val;
                                 }
                                 else
                                 {
-                                    *wind_va_arg(args, unsigned short *) = (unsigned short)val;
+                                    *wind_va_arg(args,unsigned short *) = (unsigned short)val;
                                 }
                                 break;
                             case WVSCANF_LengthLongInt:
                                 if (flag & WVSCANF_TypeSinged)
                                 {
-                                    *wind_va_arg(args, w_int32_t *) = (w_int32_t)val;
+                                    *wind_va_arg(args,w_int32_t *) = (w_int32_t)val;
                                 }
                                 else
                                 {
-                                    *wind_va_arg(args, w_uint32_t *) = (w_uint32_t)val;
+                                    *wind_va_arg(args,w_uint32_t *) = (w_uint32_t)val;
                                 }
                                 break;
                             case WVSCANF_LengthLongLongInt:
                                 if (flag & WVSCANF_TypeSinged)
                                 {
-                                    *wind_va_arg(args, w_int64_t *) = (w_int64_t)val;
+                                    *wind_va_arg(args,w_int64_t *) = (w_int64_t)val;
                                 }
                                 else
                                 {
-                                    *wind_va_arg(args, w_uint64_t *) = (w_uint64_t)val;
+                                    *wind_va_arg(args,w_uint64_t *) = (w_uint64_t)val;
                                 }
                                 break;
                             default:
                                 /* The default type is the type w_int32_t. */
                                 if (flag & WVSCANF_TypeSinged)
                                 {
-                                    *wind_va_arg(args, w_int32_t *) = (w_int32_t)val;
+                                    *wind_va_arg(args,w_int32_t *) = (w_int32_t)val;
                                 }
                                 else
                                 {
-                                    *wind_va_arg(args, w_uint32_t *) = (w_uint32_t)val;
+                                    *wind_va_arg(args,w_uint32_t *) = (w_uint32_t)val;
                                 }
                                 break;
                         }
@@ -848,7 +848,7 @@ w_int32_t wind_vsscanf(const char *str, const char *format, wind_va_list args)
                     break;
                 case WVSCANF_DestFloat:
                     n_decode += skip_space(&p);
-                    fnum = wind_strtod(p, (char **)&s);
+                    fnum = wind_strtod(p,(char **)&s);
 
                     if ((fnum >= HUGE_VAL) || (fnum <= -HUGE_VAL))
                     {
@@ -861,11 +861,11 @@ w_int32_t wind_vsscanf(const char *str, const char *format, wind_va_list args)
                     {
                         if (flag & WVSCANF_LengthLongLongDouble)
                         {
-                            *wind_va_arg(args, double *) = fnum;
+                            *wind_va_arg(args,double *) = fnum;
                         }
                         else
                         {
-                            *wind_va_arg(args, float *) = (float)fnum;
+                            *wind_va_arg(args,float *) = (float)fnum;
                         }
                         nassigned++;
                     }
@@ -924,17 +924,19 @@ w_int32_t wind_scanf(const char *fmt,...)
 }
 #endif
 
-w_int32_t wind_sscanf(const char *buff, const char *fmt,...)
+w_int32_t wind_sscanf(const char *buff,const char *fmt,...)
 {
     wind_va_list args;
     w_int32_t count;
-    wind_va_start(args, fmt);
-    count = wind_vsscanf(buff, fmt, args);
+    wind_va_start(args,fmt);
+    count = wind_vsscanf(buff,fmt,args);
     wind_va_end(args);
     return count;
 }
 
 
 #endif
-
+#ifdef __cplusplus
+}
+#endif //#ifdef __cplusplus
 

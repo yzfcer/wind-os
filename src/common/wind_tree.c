@@ -24,6 +24,10 @@
 *******************************************************************************************************/
 #include "wind_tree.h"
 #include "wind_debug.h"
+#ifdef __cplusplus
+extern "C" {
+#endif //#ifdef __cplusplus
+
 #define NODE_TO_TREE(dnode) (w_tree_s*)(((w_uint8_t*)(dnode))-((w_addr_t)&(((w_tree_s*)0)->treenode)))
 w_err_t wind_tree_init(w_tree_s *tree)
 {
@@ -105,4 +109,6 @@ w_err_t wind_tree_visit(w_tree_s *root,void (*visit)(w_tree_s *tree))
     return W_ERR_OK;
 }
 
-
+#ifdef __cplusplus
+}
+#endif //#ifdef __cplusplus

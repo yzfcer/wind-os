@@ -28,6 +28,9 @@
 #include "wind_string.h"
 #include "wind_mutex.h"
 #include "wind_board_port.h"
+#ifdef __cplusplus
+extern "C" {
+#endif // #ifdef __cplusplus
 
 #if WIND_DBGPOINT_SUPPORT
 #define NODE_TO_DBGPOINT(node) (w_dbgpoint_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((w_dbgpoint_s*)0)->obj.objnode)))
@@ -102,7 +105,7 @@ w_int32_t wind_dbgpoint_write(w_dbgpoint_s *dbgpoint,w_uint8_t *buff,w_int32_t l
     w_int32_t lenth = -1;
     WIND_ASSERT_RETURN(dbgpoint != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(buff != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(len >= dbgpoint->lenth,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(len <= dbgpoint->lenth,W_ERR_INVALID);
     WIND_ASSERT_RETURN(dbgpoint->obj.magic == WIND_DBGPOINT_MAGIC,W_ERR_INVALID);
     WIND_ASSERT_RETURN(dbgpoint->mutex != W_NULL,W_ERR_FAIL);
     wind_mutex_lock(dbgpoint->mutex);
@@ -133,5 +136,8 @@ w_err_t wind_dbgpoint_print(void)
     return W_ERR_OK;
 }
 
-#endif
+#endif // #if WIND_DBGPOINT_SUPPORT
+#ifdef __cplusplus
+}
+#endif // #ifdef __cplusplus
 

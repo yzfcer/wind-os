@@ -28,8 +28,11 @@
 #include "wind_queue.h"
 #include "wind_string.h"
 #include "wind_pool.h"
+#ifdef __cplusplus
+extern "C" {
+#endif // #ifdef __cplusplus
 
-#if (WIND_PIPE_SUPPORT)
+#if WIND_PIPE_SUPPORT
 #define NODE_TO_PIPE(node) (w_pipe_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((w_pipe_s*)0)->obj.objnode)))
 static w_dlist_s pipelist;
 static WIND_POOL(pipepool,WIND_PIPE_MAX_NUM,sizeof(w_pipe_s));
@@ -159,6 +162,6 @@ w_err_t wind_pipe_print(void)
 }
 #endif //WIND_PIPE_SUPPORT
 
-
-//**********************************************extern functions******************************
-
+#ifdef __cplusplus
+}
+#endif // #ifdef __cplusplus

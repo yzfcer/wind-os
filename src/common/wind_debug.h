@@ -33,30 +33,30 @@
 #endif
 #ifdef __cplusplus
 extern "C" {
-#endif
+#endif //#ifdef __cplusplus
 
 //---------------------------------------------------------------------
-//系统错误代码定义
-#define W_ERR_OK                 0 //正常返回结果
-#define W_ERR_FAIL              -1 //一般错误
-#define W_ERR_PTR_NULL          -2 //指针为空
-#define W_ERR_NO_OBJ            -3 //对象不存在
-#define W_ERR_OVERFLOW          -4 //传入的参数超出了范围
-#define W_ERR_MEM               -5 //存储空间受到限制
-#define W_ERR_INVALID           -6 //参数无效
-#define W_ERR_TIMEOUT           -7 //操作超时，返回失败
-#define W_ERR_STATUS            -8 //当前状态错误
-#define W_ERR_REPEAT            -9 //特定条件下对象重复
-#define W_ERR_NOFILE           -10 //文件不存在
-#define W_ERR_FILE_OPENED      -11 //文件已经打开
-#define W_ERR_NOT_SUPPORT      -12 //文件系统不支持
-#define W_ERR_CRC              -13 //CRC检验错误
-#define W_ERR_HARDFAULT        -14 //硬件故障错误
-#define W_ERR_VERSION          -15 //版本信息错误
+//system error code
+#define W_ERR_OK                 0 //Successful implementation
+#define W_ERR_FAIL              -1 //Common error
+#define W_ERR_PTR_NULL          -2 //Error caused by null pointer 
+#define W_ERR_NO_OBJ            -3 //Error raised by object NOT exsisting
+#define W_ERR_OVERFLOW          -4 //Error caused by parameter out of bounds
+#define W_ERR_MEM               -5 //Error caused by memory allocation failure
+#define W_ERR_INVALID           -6 //Error caused by invalid parameter
+#define W_ERR_TIMEOUT           -7 //Error caused by operation timeout
+#define W_ERR_STATUS            -8 //Error caused by error status
+#define W_ERR_REPEAT            -9 //Error caused by duplicate object
+#define W_ERR_NOFILE           -10 //Error caused by file not existing
+#define W_ERR_FILE_OPENED      -11 //Error caused by file already open
+#define W_ERR_NOT_SUPPORT      -12 //Error caused by feature not supported
+#define W_ERR_CRC              -13 //Error caused by CRC checking error
+#define W_ERR_HARDFAULT        -14 //Error caused by hardware fault
+#define W_ERR_VERSION          -15 //Error caused by version information
 
 
 //---------------------------------------------------------------------
-//打印函数的定义
+//print functions
 #ifndef WIND_DEBUG_SUPPORT
 #define WIND_DEBUG_SUPPORT 1
 #endif
@@ -85,30 +85,30 @@ extern "C" {
 typedef char *  wind_va_list;
 extern w_int32_t wind_std_output(w_uint8_t *buff,w_int32_t len);
 extern w_int32_t wind_std_input(w_uint8_t *buff,w_int32_t len);
-w_int32_t wind_vsprintf(char *buf, const char *fmt, wind_va_list args);
-w_int32_t wind_printf(const char *fmt, ...);
-w_int32_t wind_sprintf(char *buff, const char *fmt, ...);
+w_int32_t wind_vsprintf(char *buf,const char *fmt,wind_va_list args);
+w_int32_t wind_printf(const char *fmt,...);
+w_int32_t wind_sprintf(char *buff,const char *fmt,...);
 
-w_int32_t wind_vsscanf(const char *buf, const char *fmt, wind_va_list args);
+w_int32_t wind_vsscanf(const char *buf,const char *fmt,wind_va_list args);
 w_int32_t wind_scanf(const char *fmt,...);
-w_int32_t wind_sscanf(const char *buff, const char *fmt,...);
+w_int32_t wind_sscanf(const char *buff,const char *fmt,...);
 
 void wind_print_space(w_int32_t space8_cnt);
 #else
-#define wind_printf(fmt, ...) 0
-#define wind_vsprintf(buf, fmt, args) 0
-#define wind_printf(fmt, ...) 0
-#define wind_sprintf(buff,fmt, ...) 0
+#define wind_printf(fmt,...) 0
+#define wind_vsprintf(buf,fmt,args) 0
+#define wind_printf(fmt,...) 0
+#define wind_sprintf(buff,fmt,...) 0
 
-#define wind_vsscanf(buf, fmt, args) 0
-#define wind_scanf(fmt, ...) 0
-#define wind_sscanf(buff,fmt, ...) 0
+#define wind_vsscanf(buf,fmt,args) 0
+#define wind_scanf(fmt,...) 0
+#define wind_sscanf(buff,fmt,...) 0
 
 #define wind_print_space(a)
 #endif
 
 //---------------------------------------------------------------------
-//系统调试信息打印级别
+//System debugging printing level
 #define PRINT_LV_DEBUG   1
 #define PRINT_LV_TRACE   2
 #define PRINT_LV_NOTICE  3
@@ -119,6 +119,7 @@ void wind_print_space(w_int32_t space8_cnt);
 #define PRINT_LEVEL PRINT_LV_NOTICE//PRINT_LV_DEBUG//
 
 //---------------------------------------------------------------------
+//Various print level functions
 #if (WIND_DEBUG_SUPPORT && (PRINT_LEVEL <= PRINT_LV_DEBUG))
 #define wind_debug(fmt,...) do{wind_printf("%s[%s,%d] "fmt"\r\n","[debug] ",__FUNCTION__,__LINE__,##__VA_ARGS__);}while(0)
 #else 
@@ -162,7 +163,7 @@ void wind_print_space(w_int32_t space8_cnt);
 
 
 //---------------------------------------------------------------------
-//判断条件断言
+//Judgment condition assertion
 #define WIND_ASSERT_RETURN(cond,res) do{if(!(cond)) {wind_error("ASSERT(%s)",#cond);return res;}}while(0)
 #define WIND_ASSERT_TODO_RETURN(cond,todo,res) do{if(!(cond)) {wind_error("ASSERT(%s)",#cond);todo;return res;}}while(0)
 #define WIND_ASSERT_TODO(cond,todo) do{if(!(cond)) {wind_error("ASSERT(%s)",#cond);todo;}}while(0)
@@ -179,7 +180,6 @@ void wind_print_space(w_int32_t space8_cnt);
 
 #ifdef __cplusplus
 }
-#endif
-
+#endif //#ifdef __cplusplus
 #endif  //WIND_DEBUG_H__
 

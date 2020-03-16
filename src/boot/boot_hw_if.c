@@ -4,7 +4,7 @@
   *Author:      Jason Zhou
   *Version:     1.0
   *Date:        2017/04/08
-  *Description:  
+  *Description: 
   *Others:  
   *History:  
      1.Date:
@@ -44,7 +44,7 @@ w_err_t wait_for_key_input(w_int32_t to_sec,char *ch,w_int32_t print_flag)
         wind_printf("\r\nwaiting:%ds",second);
     while(1)
     {
-        feed_watchdog();
+        boot_feed_watchdog();
         if(wind_std_input((w_uint8_t*)ch,1) > 0)
         {
             err = W_ERR_OK;
@@ -136,7 +136,7 @@ static void wait_file_send_compete(void)
     while(1)
     {
         //err = wait_for_key_input(3,&ch,0);
-        feed_watchdog();
+        boot_feed_watchdog();
         boot_delay(100);
         if(0 < wind_std_input(&ch))
         {
@@ -200,7 +200,7 @@ w_int32_t boot_receive_img(w_uint32_t addr,w_uint32_t maxlen)
                         g_recvstat.stat = RECV_END;
                     }
                 }
-                feed_watchdog();
+                boot_feed_watchdog();
                 break;
             case RECV_END:
                 wind_printf("\r\n");

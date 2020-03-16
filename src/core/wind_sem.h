@@ -24,30 +24,28 @@
 *******************************************************************************************************/
 #ifndef WIND_SEM_H__
 #define WIND_SEM_H__
-
-
 #include "wind_config.h"
 #include "wind_type.h"
 #include "wind_obj.h"
 
 #ifdef __cplusplus
 extern "C" {
-#endif
+#endif // #ifdef __cplusplus
 
 #if WIND_SEM_SUPPORT
 #define WIND_SEM_MAGIC 0x36F7A854
 
-#define F_SEM_POOL (0x01 << 0) //标记sem对象是否通过内存池分配
+#define F_SEM_POOL (0x01 << 0) //Mark whether the SEM object is allocated through the memory pool
 #define IS_F_SEM_POOL(sem) ((sem->obj.flag & F_SEM_POOL) == F_SEM_POOL)
 #define SET_F_SEM_POOL(sem) (sem->obj.flag |= F_SEM_POOL)
 #define CLR_F_SEM_POOL(sem) (sem->obj.flag &= (~F_SEM_POOL))
 
 typedef struct _w_sem_s
 {
-    w_obj_s obj;
-    w_dlist_s waitlist;  //等待线程队列
-    w_int8_t sem_tot;    //初始化的信号量的值
-    w_int8_t sem_num;    //当前的信号量的值
+    w_obj_s obj;         //SEM basic object information
+    w_dlist_s waitlist;  //List of threads waiting for semaphores
+    w_int8_t sem_tot;    //Initial value of semaphore
+    w_int8_t sem_num;    //Current value of semaphore
 }w_sem_s;
 
 w_err_t _wind_sem_mod_init(void);
@@ -62,9 +60,10 @@ w_err_t wind_sem_wait(w_sem_s *sem,w_uint32_t timeout);
 w_err_t wind_sem_trywait(w_sem_s *sem);
 
 w_err_t wind_sem_print(void);
-#endif
+
+#endif // #if WIND_SEM_SUPPORT
 #ifdef __cplusplus
 }
-#endif
-#endif//#ifndef WIND_SEM_H__
+#endif // #ifdef __cplusplus
+#endif// #ifndef WIND_SEM_H__
 

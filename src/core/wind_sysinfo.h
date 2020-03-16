@@ -28,7 +28,8 @@
 #include "wind_type.h"
 #ifdef __cplusplus
 extern "C" {
-#endif
+#endif // #ifdef __cplusplus
+
 #define WIND_OS_VERSION 0x00010117
 typedef struct 
 {
@@ -51,8 +52,6 @@ void _wind_print_sysinfo(void);
 
 #ifdef __cplusplus
 }
-#endif
-
-
-#endif
+#endif // #ifdef __cplusplus
+#endif // #ifndef WIND_SYSINFO_H__
 

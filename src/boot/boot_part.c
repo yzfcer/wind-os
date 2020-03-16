@@ -1,4 +1,16 @@
-
+/*********************************************************************************
+  *Copyright(C),2017-2020,yzfcer@163.com
+  *FileName:    
+  *Author:      Jason Zhou
+  *Version:     1.0
+  *Date:        2017/04/08
+  *Description: 
+  *Others:  
+  *History:  
+     1.Date:
+       Author:
+       Modification:
+**********************************************************************************/
 #include "wind_config.h"
 #include "boot_hw_if.h"
 #include "boot_part.h"
@@ -269,7 +281,7 @@ static void print_copy_percents(w_int32_t numerator, w_int32_t denominator,w_int
         wind_printf("%c%c%c%c",8,8,8,8);
     wind_printf("\r%s",stage);
     wind_printf(" %3d%%",persent);
-    feed_watchdog();
+    boot_feed_watchdog();
 }
 
 w_err_t boot_part_copy_data(w_part_s *src,w_part_s *dest)
@@ -324,7 +336,7 @@ w_err_t boot_part_copy_data(w_part_s *src,w_part_s *dest)
         }
         offset += len2;
         print_copy_percents(i,blocks,1);
-        feed_watchdog();
+        boot_feed_watchdog();
     }
     print_copy_percents(i,blocks,1);
     wind_printf("\r\n");

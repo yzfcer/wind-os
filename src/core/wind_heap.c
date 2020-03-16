@@ -30,6 +30,9 @@
 #include "wind_core.h"
 #include "wind_diagnose.h"
 #include "wind_board_port.h"
+#ifdef __cplusplus
+extern "C" {
+#endif // #ifdef __cplusplus
 
 #if WIND_HEAP_SUPPORT
 #define NODE_TO_HEAP(node) (w_heap_s*)(((w_addr_t)(node))-((w_addr_t)&(((w_heap_s*)0)->obj.objnode)))
@@ -295,7 +298,7 @@ static w_err_t combine_heapitem(w_heapitem_s* item1,w_heapitem_s* item2)
     return W_ERR_OK;
 }
 
-//���ڴ���зֳ�һ��ռ�
+
 void *wind_heap_malloc(w_heap_s* heap,w_uint32_t size)
 {
     void *p = W_NULL;
@@ -667,5 +670,7 @@ void *wind_calloc(w_uint32_t count, w_uint32_t size)
 
 
 
-#endif
-
+#endif // #if WIND_HEAP_SUPPORT
+#ifdef __cplusplus
+}
+#endif // #ifdef __cplusplus
