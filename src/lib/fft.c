@@ -1,26 +1,26 @@
 #include <math.h>
 /****************************************************************************************
-//控制参数
-// l: l = 0, 傅立叶变换; l = 1, 逆傅立叶变换
-// n: 输入的点数，为偶数，一般为32，64，128，...,1024等
-// k: 满足n=2^k(k>0),实质上k是n个采样数据可以分解为偶次幂和奇次幂的次数
-// 入口参数：
-// pr[]: l=0时，存放N点采样数据的实部
-// l=1时,逆傅立叶变换 存放原傅立叶变换的N个实部
-// pi[]: l=0时，存放N点采样数据的虚部 
-// l=1时,逆傅立叶变换 存放原傅立叶变换的N个虚部
-// 出口参数：
-// fr[]: l=0, 返回傅立叶变换的实部
-// l=1, 返回逆傅立叶变换的实部
-// fi[]: l=0, 返回傅立叶变换的虚部
-// l=1, 返回逆傅立叶变换的虚部
+//Control parameter
+// l: l = 0, Fourier transform; l = 1, inverse Fourier transform
+// n: The number of input points is even, generally 32, 64128,..., 1024, etc
+// k: In fact, k is the number of times that n sampling data can be decomposed into even power and odd power
+// Input parameters:
+// pr[]: When l = 0, store the real part of N-point sampling data
+// When l = 1, the inverse Fourier transform stores n real parts of the original Fourier transform
+// pi[]: When l = 0, store the virtual part of N-point sampling data 
+// When l = 1, the inverse Fourier transform stores n imaginary parts of the original Fourier transform
+// Output parameters:
+// fr[]: When l = 0, return the real part of Fourier transform
+// When l = 1, return the real part of inverse Fourier transform
+// fi[]: When l = 0, return the imaginary part of Fourier transform
+// When l = 1, return the imaginary part of inverse Fourier transform
 ****************************************************************************************/
 void kbfft(int l,int n,int k,float *pr,float *pi,float *fr,float *fi)
 { 
     int it,m,is,i,j,nv,l0;
     float p,q,s,vr,vi,poddr,poddi;
 
-    //排序
+    //sort
     for (it=0; it<=n-1; it++) 
     { 
         m=it; 
@@ -35,7 +35,7 @@ void kbfft(int l,int n,int k,float *pr,float *pi,float *fr,float *fi)
         }
     }
     
-    //蝶形运算
+    //Butterfly operation
     pr[0]=1.0; pi[0]=0.0;
     p=6.283185306/(1.0*n);
     pr[1]=cos(p); pi[1]=-sin(p);

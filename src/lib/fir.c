@@ -229,7 +229,7 @@ double fir_double_h(double input, int ntaps, const double h[],
     return accum;
 }
 /****************************************************************************
-* main: This provides a simple test suite for the functions above. An
+* fir_test: This provides a simple test suite for the functions above. An
 * impulse is fed into each filter implementation, so the output should be
 * the "impulse response", that is, the coefficients of the filter. You
 * should see some zeroes, followed by the "coefficents" below, followed by a

@@ -42,8 +42,8 @@ static double bessel0(double x)
     return(sum);
 }
 
-
-static double kaiser(int i,int n,double beta)//因凯塞窗的表达式复杂，调用贝塞尔窗表达式
+//Because the expression of caser window is complex, the expression of Bessel window is called
+static double kaiser(int i,int n,double beta)
 {
     double a,w,a2,b1,b2,beta1;
     b1=bessel0(beta);
@@ -55,10 +55,10 @@ static double kaiser(int i,int n,double beta)//因凯塞窗的表达式复杂，
     return(w);
 }
 
-/*返回窗函数的表达式
-n:窗口长度
-type:选择窗函数的类型
-beta:生成凯塞窗的系数*/
+/*Returns the expression of a window function
+n:Window length
+type:Select the type of window function
+beta:Coefficient to generate Kaiser window*/
 static double window(int type,int n,int i,double beta)
 {    
     int k;
@@ -70,27 +70,27 @@ static double window(int type,int n,int i,double beta)
     switch(type)
     {
     case 1:
-        w=1.0;//矩形窗
+        w=1.0;//Rectangular window
         break;
     case 2:
         k=(n-2)/10;
         if(i<=k)
-        w=0.5*(1.0-cos(i*pi/(k+1)));//图基窗
+        w=0.5*(1.0-cos(i*pi/(k+1)));//Tukey window
         break;
     case 3:
-        w=1.0-fabs(1.0-2*i/(n-1.0));//三角窗
+        w=1.0-fabs(1.0-2*i/(n-1.0));//Triangular window
         break;
     case 4:
-        w=0.5*(1.0-cos(2*i*pi/(n-1)));//汉宁窗
+        w=0.5*(1.0-cos(2*i*pi/(n-1)));//Hanning window
         break;
     case 5:
-        w=0.54-0.46*cos(2*i*pi/(n-1));//海明窗
+        w=0.54-0.46*cos(2*i*pi/(n-1));//hamming window
         break;
     case 6:
-        w=0.42-0.5*cos(2*i*pi/(n-1))+0.08*cos(4*i*pi/(n-1));//布莱克曼窗
+        w=0.42-0.5*cos(2*i*pi/(n-1))+0.08*cos(4*i*pi/(n-1));//blackman window
         break;
     case 7:
-        w=kaiser(i,n,beta);//凯塞窗
+        w=kaiser(i,n,beta);//Kaiser window
         break;
     default:
         w = 0.0;
@@ -102,14 +102,14 @@ static double window(int type,int n,int i,double beta)
 
 
 
-/*n:滤波器的阶数,n是奇数时可用来设计各种滤波器
-band:滤波器类型1、2、3、4分别对应低通，高通，带通，带阻
-fln:通带下边界频率
-fhn:通带上边界频率
-wn:窗函数的类型1-7分别对应7中不同的窗函数
-h:长度为n+1,存放滤波器的系数
-fs:采样频率
-beta:如果滤波器采用凯瑟窗，就表示生成凯塞窗的系数，对其他穿函数无效*/
+/*n:The order of the filter, n is an odd number can be used to design a variety of filters
+band:Filter types 1, 2, 3 and 4 correspond to low pass, high pass, band pass and band stop respectively
+fln:Lower boundary frequency of passband
+fhn:Upper boundary frequency of passband
+wn:Types 1-7 of window functions correspond to different window functions in 7
+h:The length is n + 1, which stores the coefficients of the filter
+fs:sampling frequency
+beta:If the filter adopts Kaiser window, it means the coefficient of generating Kaiser window, which is invalid for other window functions*/
 
 void firGen(int n,int band,double fln,double fhn,int wn,double *h,double beta)
 {
@@ -117,19 +117,19 @@ void firGen(int n,int band,double fln,double fhn,int wn,double *h,double beta)
     double s,pi,wc1,wc2,delay,fs;
     pi=4.0*atan(1.0);//pi=PI;
 
-    if((n%2)==0)/*如果阶数n是偶数*/
+    if((n%2)==0)
     {    
-        n2=n/2+1;/**/
+        n2=n/2+1;
         mid=1;//
     }
     else
     {    
-        n2=n/2;//n是奇数,则窗口长度为偶数
-        mid=0;//
+        n2=n/2;
+        mid=0;
     }
     delay=n/2.0;
     wc1=2.0*pi*fln;//
-    if(band>=3) /*先判断用户输入的数据，如果band参数大于3*/
+    if(band>=3)
         wc2=2.0*pi*fhn;    
 
     switch(band)
@@ -138,17 +138,17 @@ void firGen(int n,int band,double fln,double fhn,int wn,double *h,double beta)
         for(i=0;i<=n2;i++)
         {    
             s=i-delay;//
-            h[i]=(sin(wc1*s/fs)/(pi*s))*window(wn,n+1,i,beta);//低通,窗口长度=阶数+1，故为n+1
+            h[i]=(sin(wc1*s/fs)/(pi*s))*window(wn,n+1,i,beta);//low pass
             h[n-i]=h[i];
         }
         if(mid==1)    
-            h[n/2]=wc1/pi;//n为偶数时，修正中间值系数
+            h[n/2]=wc1/pi;
         break;
     case 2:    
         for(i=0;i<=n2;i++)
         {
             s=i-delay;
-            h[i]=(sin(pi*s)-sin(wc1*s/fs))/(pi*s);//高通-//对
+            h[i]=(sin(pi*s)-sin(wc1*s/fs))/(pi*s);//high pass
             h[i]=h[i]*window(wn,n+1,i,beta);
             h[n-i]=h[i];
         }
@@ -160,7 +160,7 @@ void firGen(int n,int band,double fln,double fhn,int wn,double *h,double beta)
         for(i=0;i<n2;i++)
         {    
             s=i-delay;
-            h[i]=(sin(wc2*s/fs)-sin(wc1*s/fs))/(pi*s);//带通-//对
+            h[i]=(sin(wc2*s/fs)-sin(wc1*s/fs))/(pi*s);//band pass
             h[i]=h[i]*window(wn,n+1,i,beta);
             h[n-i]=h[i];
         }
@@ -171,7 +171,7 @@ void firGen(int n,int band,double fln,double fhn,int wn,double *h,double beta)
         for(i=0;i<=n2;i++)
         {    
             s=i-delay;
-            h[i]=(sin(wc1*s/fs)+sin(pi*s)-sin(wc2*s/fs))/(pi*s);//带阻-//对
+            h[i]=(sin(wc1*s/fs)+sin(pi*s)-sin(wc2*s/fs))/(pi*s);//band stop
             h[i]=h[i]*window(wn,n+1,i,beta);
             h[n-i]=h[i];
         }
