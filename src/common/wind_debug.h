@@ -175,6 +175,7 @@ void wind_print_space(w_int32_t space8_cnt);
 #define WIND_CHECK_RETURN(cond,res) {if(!(cond)) {wind_debug("EXPECT(%s)",#cond);return res;}}
 #define WIND_CHECK_RETURN_VOID(cond) {if(!(cond)) {wind_debug("EXPECT(%s)",#cond);return ;}}
 #define WIND_CHECK_TODO_RETURN(cond,todo,res) {if(!(cond)) do{if(!(cond)) {wind_debug("EXPECT(%s)",#cond);todo;return res;}}while(0)
+#define WIND_CHECK_TODO_BREAK(cond,todo,res) {if(!(cond)) do{if(!(cond)) {wind_debug("EXPECT(%s)",#cond);todo;break;}}while(0)
 
 #define WIND_ASSERT_MSG_RETURN(cond,res,msg,...) do{if(!(cond)){wind_error(msg,##__VA_ARGS__);return res;}}while(0)
 

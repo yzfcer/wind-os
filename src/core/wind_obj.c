@@ -48,7 +48,7 @@ static w_err_t insert_obj(w_dlist_s *list,w_obj_s *obj)
 {
     w_err_t err;
     w_dnode_s *dnode;
-    w_obj_s *obj1;
+    w_obj_s *tmpobj;
     w_int32_t res;
     WIND_ASSERT_RETURN(list != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(obj != W_NULL,W_ERR_PTR_NULL);
@@ -70,8 +70,8 @@ static w_err_t insert_obj(w_dlist_s *list,w_obj_s *obj)
         }
         foreach_node(dnode,list)
         {
-            obj1 = NODE_TO_OBJ(dnode);
-            res = wind_strcmp(obj->name,obj1->name);
+            tmpobj = NODE_TO_OBJ(dnode);
+            res = wind_strcmp(obj->name,tmpobj->name);
             if(res == 0)
             {
                 wind_error("object \"%s\" has been in the list",obj->name);

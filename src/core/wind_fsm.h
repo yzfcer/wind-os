@@ -41,7 +41,7 @@ extern "C" {
 #define FSM_STEP_START(fsm) w_fsm_step_s g_fsm_##fsm[] = {
 #define FSM_STEP(step_id,func) {#step_id,step_id,func},
 #define FSM_STEP_END };
-
+#define FSM_MODEL_DEF(fsm) w_fsm_model_s g_fsmmodel_##fsm = {#fsm,sizeof(g_fsm_##fsm)/sizeof(w_fsm_step_s),g_fsm_##fsm};
 
 
 /***********************************************enum*************************************************/
@@ -58,7 +58,7 @@ typedef enum
 
 /***********************************************struct*************************************************/
 
-typedef w_err_t (*fsm_step_fn)(void *arg,w_int32_t arglen);
+typedef w_err_t (*fsm_step_fn)(w_fsm_s *fsm,void *arg,w_int32_t arglen);
 
 typedef struct __fsm_step_s
 {
