@@ -13,7 +13,7 @@
 #define XVAL_ERROR -1 
 
 /*�ж��Ƿ�ո������xml�ָ��ַ� */ 
-static int is_space(char c) 
+static int is_separation_character(char c) 
 { 
     switch(c)
     { 
@@ -109,7 +109,7 @@ int xnode_modify_data(xtree_s *xtree,xstring_s *data)
 xstring_s *delete_prefix_space(xstring_s *xbuf) 
 { 
     xstring_s *p;
-    for(p = xbuf;is_space(*(char*)p);p ++);
+    for(p = xbuf;is_separation_character(*(char*)p);p ++);
     return (p);
 }
 

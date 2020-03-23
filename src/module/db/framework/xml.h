@@ -39,7 +39,7 @@ xnode_s * xnode_add_brother(xtree_s *xtree,xstring_s *name);
 xnode_s * xnode_add_child(xtree_s *xtree,xstring_s *name);
 xnode_s *xnode_get_parent(xtree_s *xtree);
 int xnode_modify_data(xtree_s *xtree,xstring_s *data);
-xstring_s *delete_space(xstring_s *xbuf);
+xstring_s *delete_prefix_space(xstring_s *xbuf);
 int xml_handle_attr(xtree_s *xtree,xstring_s *attr_str);
 int xml_read_xnode_value(xtree_s *xtree,xstring_s *value_str);
 int xml_parse(xtree_s *xtree,xstring_s *xmlbuf,int xmlsize);

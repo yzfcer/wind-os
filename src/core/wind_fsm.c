@@ -138,19 +138,17 @@ w_fsm_model_s *wind_fsm_model_get(char *name)
     return (w_fsm_model_s *)wind_obj_get(name,&modellist);
 }
 
-w_fsm_s *wind_fsm_create(char *name,w_int32_t id,char *modelname)
+w_err_t wind_fsm_init(w_fsm_s *fsm,char *name,w_int32_t id,char *modelname)
 {
     w_err_t err;
-    w_fsm_s *fsm = (w_fsm_s *)W_NULL;
     w_fsm_model_s *model;
-    WIND_ASSERT_RETURN(name != W_NULL,(w_fsm_s *)W_NULL);
-    WIND_ASSERT_RETURN(modelname != W_NULL,(w_fsm_s *)W_NULL);
+    WIND_ASSERT_RETURN(fsm != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(name != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(modelname != W_NULL,W_ERR_PTR_NULL);
     do
     {
         model = wind_fsm_model_get(modelname);
         WIND_ASSERT_BREAK(model != W_NULL,W_ERR_FAIL,"get fsm model:%s failed",modelname);
-        fsm = fsm_malloc();
-        WIND_ASSERT_RETURN(fsm != W_NULL,(w_fsm_s *)W_NULL);
         fsm->id = id;
         fsm->sleep_ms = 0;
         fsm->sleep_tick = 0;
@@ -159,6 +157,22 @@ w_fsm_s *wind_fsm_create(char *name,w_int32_t id,char *modelname)
         fsm->arg = W_NULL;
         fsm->model= model;
         err = wind_obj_init(&fsm->obj,WIND_FSM_MAGIC,name,&fsmlist);
+    }while(0);
+    return err;
+}
+
+w_fsm_s *wind_fsm_create(char *name,w_int32_t id,char *modelname)
+{
+    w_err_t err;
+    w_fsm_s *fsm = (w_fsm_s *)W_NULL;
+    
+    WIND_ASSERT_RETURN(name != W_NULL,(w_fsm_s *)W_NULL);
+    WIND_ASSERT_RETURN(modelname != W_NULL,(w_fsm_s *)W_NULL);
+    do
+    {
+        fsm = fsm_malloc();
+        WIND_ASSERT_RETURN(fsm != W_NULL,(w_fsm_s *)W_NULL);
+        err = wind_fsm_init(fsm,name,id,modelname);
         
     }while(0);
     if(err != W_ERR_OK)

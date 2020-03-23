@@ -46,45 +46,50 @@ static w_uint16_t calc_obj_key(const char *name)
 
 static w_err_t insert_obj(w_dlist_s *list,w_obj_s *obj)
 {
+    w_err_t err;
     w_dnode_s *dnode;
     w_obj_s *obj1;
     w_int32_t res;
     WIND_ASSERT_RETURN(list != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(obj != W_NULL,W_ERR_PTR_NULL);
     wind_disable_switch();
-    if(list->head == W_NULL)
+    do
     {
-        dlist_insert_head(list,&obj->objnode);
-        wind_enable_switch();
-        return W_ERR_OK;
-    }
-    if(obj->name == W_NULL)
-    {
-        dlist_insert_tail(list,&obj->objnode);
-        wind_enable_switch();
-        return W_ERR_OK;
-    }
-    
-    foreach_node(dnode,list)
-    {
-        obj1 = NODE_TO_OBJ(dnode);
-        res = wind_strcmp(obj->name,obj1->name);
-        if(res == 0)
+        err = W_ERR_OK;
+        if(list->head == W_NULL)
         {
-            wind_error("object \"%s\" has been in the list",obj->name);
-            wind_enable_switch();
-			return W_ERR_FAIL;
+            dlist_insert_head(list,&obj->objnode);
+            err = W_ERR_OK;
+            break;
         }
-        else if (res < 0)
+        if(obj->name == W_NULL)
         {
-            dlist_insert(list,dnode->prev,&obj->objnode);
-            wind_enable_switch();
-            return W_ERR_OK;
+            dlist_insert_tail(list,&obj->objnode);
+            err = W_ERR_OK;
+            break;
         }
-    }
-    dlist_insert_tail(list,&obj->objnode);
+        foreach_node(dnode,list)
+        {
+            obj1 = NODE_TO_OBJ(dnode);
+            res = wind_strcmp(obj->name,obj1->name);
+            if(res == 0)
+            {
+                wind_error("object \"%s\" has been in the list",obj->name);
+                err = W_ERR_FAIL;
+                break;
+            }
+            else if (res < 0)
+            {
+                dlist_insert(list,dnode->prev,&obj->objnode);
+                err = W_ERR_OK;
+                break;
+            }
+        }
+        if(dnode == W_NULL)
+            dlist_insert_tail(list,&obj->objnode);
+    }while(0);
     wind_enable_switch();
-    return W_ERR_OK;
+    return err;
 }
 
 const char *wind_obj_name(void *obj)
@@ -95,6 +100,7 @@ const char *wind_obj_name(void *obj)
 
 w_obj_s *wind_obj_get(const char *name,w_dlist_s *list)
 {
+    w_err_t err;
     w_int16_t key;
     w_obj_s *obj;
     w_dnode_s *dnode;
@@ -102,22 +108,26 @@ w_obj_s *wind_obj_get(const char *name,w_dlist_s *list)
     WIND_ASSERT_RETURN(list != W_NULL,W_NULL);
     key = calc_obj_key(name);
     wind_disable_switch();
-    if(list->head == W_NULL)
+    do
     {
-        wind_enable_switch();
-        return W_NULL;
-    }
-    foreach_node(dnode,list)
-    {
-        obj = NODE_TO_OBJ(dnode);
-        if(obj->key != key)
-            continue;
-        if(obj->name && (wind_strcmp(name,obj->name) == 0))
+        err = W_ERR_OK;
+        if(list->head == W_NULL)
         {
             wind_enable_switch();
-            return obj;
+            return W_NULL;
         }
-    }
+        foreach_node(dnode,list)
+        {
+            obj = NODE_TO_OBJ(dnode);
+            if(obj->key != key)
+                continue;
+            if(obj->name && (wind_strcmp(name,obj->name) == 0))
+            {
+                wind_enable_switch();
+                return obj;
+            }
+        }
+    }while(0);
     wind_enable_switch();
     return W_NULL;
 }
