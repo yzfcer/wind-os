@@ -41,7 +41,7 @@ extern "C" {
 #define FSM_STEP_START(fsm) w_fsm_step_s g_fsm_##fsm[] = {
 #define FSM_STEP(step_id,func) {#step_id,step_id,func},
 #define FSM_STEP_END };
-#define FSM_MODEL_DEF(fsm) w_fsm_model_s g_fsmmodel_##fsm = {#fsm,sizeof(g_fsm_##fsm)/sizeof(w_fsm_step_s),g_fsm_##fsm};
+#define FSM_MODEL_DEF(fsm) //w_fsm_model_s g_fsmmodel_##fsm = {#fsm,sizeof(g_fsm_##fsm)/sizeof(w_fsm_step_s),g_fsm_##fsm};
 
 
 /***********************************************enum*************************************************/

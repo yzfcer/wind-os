@@ -1,3 +1,19 @@
+/*********************************************************************************
+  *Copyright(C),2017-2020,yzfcer@163.com
+  *FileName:    wind_xml_fsm.c
+  *Author:      Jason Zhou
+  *Version:     1.0
+  *Date:        2020/03/24
+  *Description: 
+  *Others:  
+  *History:  
+     1.Date:
+       Author:
+       Modification:
+**********************************************************************************/
+#ifdef __cplusplus
+extern "C" {
+#endif // #ifdef __cplusplus
 #define PTR_OFFSET(ptr1,ptr2) (w_int32_t)(w_addr_t)(ptr2 - ptr1)
 static w_bool_t is_separation_character(char c) 
 { 
@@ -112,3 +128,7 @@ FSM_STEP(XML_STAT_NODE_TAIL, xml_handle_node_tail)
 FSM_STEP(XML_STAT_END,       xml_handle_end)
 FSM_STEP_END
 FSM_MODEL_DEF(xml)
+#ifdef __cplusplus
+}
+#endif // #ifdef __cplusplus
+
