@@ -575,17 +575,17 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\db\framework\cmd_tbmodel.c">
       <Filter>module_db</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\src\module\db\framework\xml.c">
-      <Filter>module_db</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\..\src\module\db\framework\tb_model_file.c">
       <Filter>module_db</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\src\module\db\framework\wind_xml.c">
-      <Filter>module_db</Filter>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\xml\wind_xml.c">
+      <Filter>module_xml</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\src\module\db\framework\wind_xml_fsm.c">
-      <Filter>module_db</Filter>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\xml\wind_xml_fsm.c">
+      <Filter>module_xml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\xml\xml.c">
+      <Filter>module_xml</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -639,6 +639,9 @@
     </Filter>
     <Filter Include="module_dict">
       <UniqueIdentifier>{b32fc16d-e4c5-4583-9809-7b081d330e77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="module_xml">
+      <UniqueIdentifier>{2cf9ba98-46a4-4394-a4c9-16cf48b9ef25}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -957,11 +960,14 @@
     <ClInclude Include="..\..\..\..\..\..\..\src\module\db\framework\tb_model_file.h">
       <Filter>module_db</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\..\src\module\db\framework\wind_xml.h">
-      <Filter>module_db</Filter>
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\xml\wind_xml.h">
+      <Filter>module_xml</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\..\src\module\db\framework\wind_xml_fsm.h">
-      <Filter>module_db</Filter>
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\xml\wind_xml_fsm.h">
+      <Filter>module_xml</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\xml\xml.h">
+      <Filter>module_xml</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

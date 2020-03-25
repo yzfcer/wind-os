@@ -37,7 +37,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(ProjectDir)..\..\..\port;$(ProjectDir)..\..\..\..\..\..\..\src\common;$(ProjectDir)..\..\..\..\..\..\..\src\module\shell\cmd;$(ProjectDir)..\..\..\..\..\..\..\src\module\shell\framework;$(ProjectDir)..\..\..\..\..\..\..\src\core;$(ProjectDir)..\..\..\..\..\..\..\src\hal;$(ProjectDir)..\..\..\..\..\..\..\src\module\cutest\framework;$(ProjectDir)..\..\..\..\..\..\..\src\module\cutest\port;$(ProjectDir)..\..\..\..\..\..\..\src\module\cutest\testcase;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs\treefs;$(ProjectDir)..\..\..\..\..\..\..\src\module\lua-5.3.4\src;$(ProjectDir)..\..\..\..\..\..\..\src\module\db\framework;$(ProjectDir)..\..\..\..\..\..\..\src\module\db\dbbase;$(ProjectDir)..\..\..\..\..\..\..\src\module\dict;$(ProjectDir)..\..\..\..\..\..\..\src\tools\pack;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs\listfs;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs\hostfs;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\..\..\port;$(ProjectDir)..\..\..\..\..\..\..\src\common;$(ProjectDir)..\..\..\..\..\..\..\src\module\shell\cmd;$(ProjectDir)..\..\..\..\..\..\..\src\module\shell\framework;$(ProjectDir)..\..\..\..\..\..\..\src\core;$(ProjectDir)..\..\..\..\..\..\..\src\hal;$(ProjectDir)..\..\..\..\..\..\..\src\module\cutest\framework;$(ProjectDir)..\..\..\..\..\..\..\src\module\cutest\port;$(ProjectDir)..\..\..\..\..\..\..\src\module\cutest\testcase;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs\treefs;$(ProjectDir)..\..\..\..\..\..\..\src\module\lua-5.3.4\src;$(ProjectDir)..\..\..\..\..\..\..\src\module\db\framework;$(ProjectDir)..\..\..\..\..\..\..\src\module\db\dbbase;$(ProjectDir)..\..\..\..\..\..\..\src\module\dict;$(ProjectDir)..\..\..\..\..\..\..\src\module\xml;$(ProjectDir)..\..\..\..\..\..\..\src\tools\pack;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs\listfs;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs\hostfs;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>$(ProjectDir)..\..\..\port;$(ProjectDir)..\..\..\..\..\..\..\src\common;$(ProjectDir)..\..\..\..\..\..\..\src\core;$(ProjectDir)..\..\..\..\..\..\..\src\hal;$(ProjectDir)..\..\..\..\..\..\..\src\module\shell\framework;$(ProjectDir)..\..\..\..\..\..\..\src\module\shell\cmd;$(ProjectDir)..\..\..\..\..\..\..\src\module\cutest\framework;$(ProjectDir)..\..\..\..\..\..\..\src\module\cutest\port;$(ProjectDir)..\..\..\..\..\..\..\src\module\cutest\testcase;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs\treefs;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs\listfs;$(ProjectDir)..\..\..\..\..\..\..\src\module\lua-5.3.4\src;$(ProjectDir)..\..\..\..\..\..\..\src\module\db\framework;$(ProjectDir)..\..\..\..\..\..\..\src\module\db\dbbase;$(ProjectDir)..\..\..\..\..\..\..\src\tools\pack;$(IncludePath)</IncludePath>
@@ -126,9 +126,6 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\db\framework\tb_model.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\db\framework\tb_model_file.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\db\framework\tb_print.c" />
-    <ClCompile Include="..\..\..\..\..\..\..\src\module\db\framework\wind_xml.c" />
-    <ClCompile Include="..\..\..\..\..\..\..\src\module\db\framework\wind_xml_fsm.c" />
-    <ClCompile Include="..\..\..\..\..\..\..\src\module\db\framework\xml.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\dict\module_dict.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\dict\wind_dict.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\game\gobang.c" />
@@ -252,6 +249,9 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_watchdog.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\hal\wind_blkdev.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\hal\wind_chdev.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\xml\wind_xml.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\xml\wind_xml_fsm.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\xml\xml.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\systhread\thread_coroutine.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\systhread\thread_daemon.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\systhread\thread_idle.c" />
@@ -300,8 +300,6 @@
     <ClInclude Include="..\..\..\..\..\..\..\src\module\db\framework\tb_entry.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\db\framework\tb_model.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\db\framework\tb_model_file.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\src\module\db\framework\wind_xml.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\src\module\db\framework\wind_xml_fsm.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\db\framework\xml.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\dict\wind_dict.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lapi.h" />
@@ -372,6 +370,9 @@
     <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_watchdog.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\hal\wind_blkdev.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\hal\wind_chdev.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\xml\wind_xml.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\xml\wind_xml_fsm.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\xml\xml.h" />
     <ClInclude Include="..\..\..\port\file_port.h" />
     <ClInclude Include="..\..\..\port\wind_board_port.h" />
     <ClInclude Include="..\..\..\port\wind_config.h" />

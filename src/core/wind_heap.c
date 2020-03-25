@@ -130,10 +130,10 @@ static w_err_t heap_diagnose_init(void)
 w_err_t _wind_heap_mod_init(void)
 {
     w_err_t err;
-    wind_printf("sizeof(w_obj_s)=%d\n",sizeof(w_obj_s));
-    wind_printf("WIND_HEAP_ITEM_SIZE=%d\n",WIND_HEAP_ITEM_SIZE);
-    wind_printf("WIND_HEAP_ITEM_SIZE=%d\n",WIND_HEAP_ITEM_SIZE);
-    wind_printf("sizeof(w_heap_s)=%d\n",sizeof(w_heap_s));
+    //wind_printf("sizeof(w_obj_s)=%d\n",sizeof(w_obj_s));
+    //wind_printf("WIND_HEAP_ITEM_SIZE=%d\n",WIND_HEAP_ITEM_SIZE);
+    //wind_printf("WIND_HEAP_ITEM_SIZE=%d\n",WIND_HEAP_ITEM_SIZE);
+    //wind_printf("sizeof(w_heap_s)=%d\n",sizeof(w_heap_s));
     DLIST_INIT(heaplist);
     _wind_heaps_create();
     err = heap_diagnose_init();
