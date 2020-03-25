@@ -13,6 +13,7 @@
 **********************************************************************************/
 #ifndef WIND_XML_FSM_H__
 #define WIND_XML_FSM_H__
+#include "wind_fsm.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
@@ -32,7 +33,7 @@ typedef enum
 typedef struct
 {
     w_fsm_s *fsm;
-    char buff[XML_FSM_BUFLEN];
+    char *buff;//[XML_FSM_BUFLEN];
     w_int32_t bufflen;
     w_int32_t idx;
     

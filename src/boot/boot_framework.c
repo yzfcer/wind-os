@@ -207,7 +207,8 @@ static w_err_t boot_enter_menu(void)
 static w_err_t boot_load_img(void)
 {
     w_mem_status_e mem_stat = MEM_ERROR;
-    w_part_s *part = W_NULL,*tmp;
+    w_part_s *part = W_NULL;
+    w_part_s *tmp;
     boot_param_s *bp = W_NULL; 
 
     wind_notice("load image to running space...");

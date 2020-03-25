@@ -109,7 +109,7 @@ typedef struct __listfile_s
     lfile_info_s info;        //文件基本信息
     w_listfs_s *lfs;          //对应的文件系统
     w_uint8_t mode;           //打开模式
-    w_int32_t offset;         //文件偏移量
+    w_uint32_t offset;         //文件偏移量
     lfile_blkinfo_s *blkinfo; //当前数据块信息
     lfile_info_s *subinfo;    //子文件信息
 }w_listfile_s;

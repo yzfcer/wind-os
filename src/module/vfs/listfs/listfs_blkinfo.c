@@ -181,7 +181,7 @@ w_err_t blkinfo_get_tail(lfile_blkinfo_s *info,w_blkdev_s *blkdev)
 }
 
 
-w_err_t blkinfo_get_byoffset(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_int32_t offset)
+w_err_t blkinfo_get_byoffset(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_uint32_t offset)
 {
     w_err_t err;
     lfile_blkinfo_s *tmpinfo = W_NULL;

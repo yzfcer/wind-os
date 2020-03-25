@@ -37,11 +37,14 @@ extern "C" {
 /***********************************************macros*************************************************/
 #define WIND_FSM_MODEL_MAGIC 0x26A451FE
 #define WIND_FSM_MAGIC 0x3852FA95
+typedef struct __w_fsm_s w_fsm_s;
+typedef struct __fsm_step_s w_fsm_step_s;
+typedef struct __w_fsm_model_s w_fsm_model_s;
 
 #define FSM_STEP_START(fsm) w_fsm_step_s g_fsm_##fsm[] = {
 #define FSM_STEP(step_id,func) {#step_id,step_id,func},
 #define FSM_STEP_END };
-#define FSM_MODEL_DEF(fsm) //w_fsm_model_s g_fsmmodel_##fsm = {#fsm,sizeof(g_fsm_##fsm)/sizeof(w_fsm_step_s),g_fsm_##fsm};
+#define FSM_MODEL_DEF(fsm) w_fsm_model_s g_fsmmodel_##fsm = {{WIND_FSM_MODEL_MAGIC,#fsm,W_NULL,W_NULL,0,0},sizeof(g_fsm_##fsm)/sizeof(w_fsm_step_s),g_fsm_##fsm};
 
 
 /***********************************************enum*************************************************/
@@ -60,23 +63,23 @@ typedef enum
 
 typedef w_err_t (*fsm_step_fn)(w_fsm_s *fsm,void *arg,w_int32_t arglen);
 
-typedef struct __fsm_step_s
+struct __fsm_step_s
 {
     char *step_name;   //FSM step name
     w_int32_t step_id; //FSM step index
     fsm_step_fn func;  //FSM step execution function
-}w_fsm_step_s;
+};
 
 //FSM model,for building state machine objects
-typedef struct 
+struct __w_fsm_model_s
 {
     w_obj_s obj;            //Basic object information
     w_int32_t step_cnt;     //FSM step number
     w_fsm_step_s *steplist; //FSM step list
-}w_fsm_model_s;
+};
 
 //FSM execution object
-typedef struct __w_fsm_s
+struct __w_fsm_s
 {
     w_obj_s obj;           //Basic object information
     w_int32_t id;          //FSM object ID
@@ -87,7 +90,7 @@ typedef struct __w_fsm_s
     void *arg;             //FSM input parameter
     w_int32_t arglen;      //FSM input parameter lenth
     w_fsm_model_s *model;  //Model of the FSM object
-}w_fsm_s;
+};
 
 
 /********************************************global variable declare**********************************************/

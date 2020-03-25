@@ -37,7 +37,7 @@ struct __treefile_s
     w_uint8_t mode;
     w_uint32_t offset;
     w_uint32_t filelen;
-    w_int32_t bufflen;
+    w_uint32_t bufflen;
     w_dlist_s datalist;
 };
 

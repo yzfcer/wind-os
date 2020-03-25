@@ -11,6 +11,8 @@
        Author:
        Modification:
 **********************************************************************************/
+#include "wind_type.h"
+#include "wind_xml_fsm.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
@@ -54,18 +56,19 @@ static void xmlfsm_update_buff(xml_fsm_s *xmlfsm,char *buff)
 
 static w_err_t xml_handle_idle(w_fsm_s *fsm,void *arg,w_int32_t arglen)
 {
-    w_int32_t idx;
+    //w_int32_t idx;
     xml_fsm_s *xmlfsm;
+    char *buff;
     WIND_CHECK_RETURN(arg != W_NULL,W_ERR_PTR_NULL);
     WIND_CHECK_RETURN(arglen > 0,W_ERR_INVALID);
-    char *buff = (char*)arg;
+    buff = (char*)arg;
     xmlfsm = (xml_fsm_s*)fsm;
     buff = skip_prefix_space(buff);
     WIND_ASSERT_RETURN(buff[0] == '<',W_ERR_INVALID);
-    xmlfsm_update_buff(fsm,buff);
+    xmlfsm_update_buff(xmlfsm,buff);
     if(buff[1] == '/')
         wind_fsm_change_step(fsm,XML_STAT_NODE_TAIL);
-    else if(is_valid_prefix(buff[1])
+    else if(is_valid_prefix(buff[1]))
         wind_fsm_change_step(fsm,XML_STAT_NODE_NAME);
     else
     {
@@ -80,39 +83,40 @@ static w_err_t xml_handle_node_name(w_fsm_s *fsm,void *arg,w_int32_t arglen)
 {
     WIND_CHECK_RETURN(arg != W_NULL,W_ERR_PTR_NULL);
     WIND_CHECK_RETURN(arglen > 0,W_ERR_INVALID);
+    return W_ERR_FAIL;
 }
 
 static w_err_t xml_handle_attr_name(w_fsm_s *fsm,void *arg,w_int32_t arglen)
 {
     WIND_CHECK_RETURN(arg != W_NULL,W_ERR_PTR_NULL);
     WIND_CHECK_RETURN(arglen > 0,W_ERR_INVALID);
-
+    return W_ERR_FAIL;
 }
 
 static w_err_t xml_handle_attr_value(w_fsm_s *fsm,void *arg,w_int32_t arglen)
 {
     WIND_CHECK_RETURN(arg != W_NULL,W_ERR_PTR_NULL);
     WIND_CHECK_RETURN(arglen > 0,W_ERR_INVALID);
-
+    return W_ERR_FAIL;
 }
 static w_err_t xml_handle_value(w_fsm_s *fsm,void *arg,w_int32_t arglen)
 {
     WIND_CHECK_RETURN(arg != W_NULL,W_ERR_PTR_NULL);
     WIND_CHECK_RETURN(arglen > 0,W_ERR_INVALID);
-
+    return W_ERR_FAIL;
 }
 
 static w_err_t xml_handle_node_tail(w_fsm_s *fsm,void *arg,w_int32_t arglen)
 {
     WIND_CHECK_RETURN(arg != W_NULL,W_ERR_PTR_NULL);
     WIND_CHECK_RETURN(arglen > 0,W_ERR_INVALID);
-
+    return W_ERR_FAIL;
 }
 static w_err_t xml_handle_end(w_fsm_s *fsm,void *arg,w_int32_t arglen)
 {
     WIND_CHECK_RETURN(arg != W_NULL,W_ERR_PTR_NULL);
     WIND_CHECK_RETURN(arglen > 0,W_ERR_INVALID);
-    return W_ERR_OK;
+    return W_ERR_FAIL;
 }
 
 

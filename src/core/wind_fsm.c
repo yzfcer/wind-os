@@ -45,8 +45,6 @@ static w_dlist_s fsmlist;
 static w_fsm_s *cur_fsm;
 static WIND_POOL(fsmpool,WIND_FSM_MAX_NUM,sizeof(w_fsm_s));
 
-
-
 /********************************************internal functions**********************************************/
 static w_fsm_s *fsm_malloc()
 {
@@ -206,6 +204,7 @@ w_err_t wind_fsm_start(w_fsm_s *fsm)
     fsm->state = FSM_STAT_READY;
     return W_ERR_OK;
 }
+
 w_err_t wind_fsm_stop(w_fsm_s *fsm)
 {
     WIND_ASSERT_RETURN(fsm != W_NULL,W_ERR_PTR_NULL);
@@ -276,7 +275,7 @@ w_err_t wind_fsm_schedule(void)
             return W_ERR_OK;
         cur_fsm = fsm;
         func = fsm->model->steplist[fsm->cur_step].func;
-        err = func(fsm->arg,fsm->arglen);
+        err = func(fsm,fsm->arg,fsm->arglen);
         if(err != W_ERR_OK)
         {
             dnode = cur_fsm->obj.objnode.next;

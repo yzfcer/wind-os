@@ -65,7 +65,7 @@ static w_int32_t bm_alloc_blk(lfs_bitmap_s *bm,w_uint32_t *addr,w_int32_t cnt)
 static w_int32_t bm_free_blk(lfs_bitmap_s *bm,w_uint32_t *addr,w_int32_t cnt)
 {
     w_int32_t i,free_cnt = 0;
-    w_int32_t byteidx;
+    w_uint32_t byteidx;
     
     for(i = 0;i < cnt;i ++)
     {
@@ -131,7 +131,7 @@ static w_err_t bm_check_free_bitmap(lfs_bitmap_s *bm)
 
 static w_err_t bm_update_freeidx(lfs_bitmap_s *bm)
 {
-    w_uint32_t i;
+    w_int32_t i;
     w_err_t err;
     WIND_ASSERT_RETURN(bm != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(bm->magic == LISTFS_BITMAP_MAGIC,W_ERR_INVALID);

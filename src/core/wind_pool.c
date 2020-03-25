@@ -138,7 +138,7 @@ w_pool_s *wind_pool_get(const char *name)
 
 w_err_t wind_pool_create(const char *name,void *mem,w_uint32_t memsize,w_uint32_t obj_size)
 {
-    w_uint32_t i;
+    w_int32_t i;
     w_poolitem_s* item;
     w_pool_s *pm;
     wind_notice("create pool:%s",name?name:"null");

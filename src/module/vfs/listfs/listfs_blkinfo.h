@@ -48,10 +48,10 @@ typedef struct __lfile_blkinfo_s
     w_uint32_t self_addr;    //��ǰ��ַ
     w_uint32_t prevblk_addr; //�Ͽ��ַ
     w_uint32_t nextblk_addr; //�¿��ַ
-    w_int32_t  blksize;      //���С
-    w_int32_t  offset;       //��ǰ���Ӧ���ļ�����ʼƫ����
-    w_int32_t  blkused;      //��ǰ���Ѿ�ʹ�õ�����
-    w_int32_t  byteused;     //��ǰ���Ѿ�ʹ�õ��ֽ�����
+    w_uint32_t  blksize;      //���С
+    w_uint32_t  offset;       //��ǰ���Ӧ���ļ�����ʼƫ����
+    w_uint32_t  blkused;      //��ǰ���Ѿ�ʹ�õ�����
+    w_uint32_t  byteused;     //��ǰ���Ѿ�ʹ�õ��ֽ�����
     w_uint32_t dataaddr[LFILE_LBLK_CNT];  //���ݿ���Ϣ
 }lfile_blkinfo_s;
 
@@ -77,7 +77,7 @@ w_err_t blkinfo_get_next(lfile_blkinfo_s *info,w_blkdev_s *blkdev);
 
 w_err_t blkinfo_get_tail(lfile_blkinfo_s *info,w_blkdev_s *blkdev);
 
-w_err_t blkinfo_get_byoffset(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_int32_t offset);
+w_err_t blkinfo_get_byoffset(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_uint32_t offset);
 
 w_err_t blkinfo_update_prev(lfile_blkinfo_s *info,w_blkdev_s *blkdev);
 

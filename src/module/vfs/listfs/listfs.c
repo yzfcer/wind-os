@@ -715,15 +715,15 @@ w_listfile_s* listfile_open(w_listfs_s *lfs,const char *path,w_uint8_t mode)
 {
     w_err_t err;
     w_bool_t is_crt;
-    w_listfile_s *file = W_NULL;
-    WIND_ASSERT_RETURN(lfs != W_NULL,W_NULL);
-    WIND_ASSERT_RETURN(path != W_NULL,W_NULL);
+    w_listfile_s *file = (w_listfile_s*)W_NULL;
+    WIND_ASSERT_RETURN(lfs != W_NULL,(w_listfile_s*)W_NULL);
+    WIND_ASSERT_RETURN(path != W_NULL,(w_listfile_s*)W_NULL);
     wind_trace("open file:%s",path);
     do 
     {
         err = W_ERR_OK;
         file = listfs_mem_malloc(sizeof(w_listfile_s));
-        WIND_ASSERT_RETURN(file != W_NULL,W_NULL);
+        WIND_ASSERT_BREAK(file != W_NULL,W_ERR_MEM,"alloc listfile failed");
         file->lfs = lfs;
         file->mode = mode;
         file->offset = 0;
@@ -881,15 +881,15 @@ w_bool_t listfile_existing(w_listfs_s *lfs,const char *path)
 w_err_t listfile_seek(w_listfile_s* file,w_int32_t offset)
 {
     w_err_t err;
-    lfile_blkinfo_s *blkinfo = W_NULL;
+    lfile_blkinfo_s *blkinfo = (w_uint8_t *)W_NULL;
     WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(offset >= 0,W_ERR_OVERFLOW);
     WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,W_ERR_INVALID);
     do 
     {
         err = W_ERR_OK;
-        blkinfo = listfs_mem_malloc(sizeof(lfile_blkinfo_s));
-        WIND_ASSERT_RETURN(blkinfo != W_NULL, W_ERR_MEM);
+        blkinfo = (w_uint8_t *)listfs_mem_malloc(sizeof(lfile_blkinfo_s));
+        WIND_ASSERT_BREAK(blkinfo != W_NULL, W_ERR_MEM,"alloc blkinfo failed");
         if(file->info.filesize < offset)
             offset = file->info.filesize;
         wind_memcpy(blkinfo,file->blkinfo,sizeof(lfile_blkinfo_s));
@@ -917,7 +917,7 @@ static w_int32_t do_read_file(w_listfile_s* file,w_uint8_t *buff,w_int32_t size)
     w_err_t err;
     w_uint32_t addr; 
     w_int32_t len,blkidx,buffidx,cpsize;
-    w_uint8_t *blk = W_NULL;
+    w_uint8_t *blk = (w_uint8_t *)W_NULL;
     if(!BLKINFO_HAS_OFFSET(file->blkinfo, file->offset, file->lfs->lfs_info.blksize))
     {
         err = blkinfo_get_byoffset(file->blkinfo,file->lfs->blkdev, file->offset);
@@ -929,7 +929,7 @@ static w_int32_t do_read_file(w_listfile_s* file,w_uint8_t *buff,w_int32_t size)
         err = W_ERR_OK;
         if(blk == W_NULL)
         {
-            blk = listfs_mem_malloc(file->blkinfo->blksize);
+            blk = (w_uint8_t *)listfs_mem_malloc(file->blkinfo->blksize);
             WIND_ASSERT_BREAK(blk != W_NULL, W_ERR_MEM, "malloc blk failed");
         }
         
@@ -961,7 +961,7 @@ static w_int32_t do_write_file(w_listfile_s* file,w_uint8_t *buff,w_int32_t size
     w_err_t err;
     w_uint32_t addr; 
     w_int32_t len,blkidx,buffidx,cpsize;
-    w_uint8_t *blk = W_NULL;
+    w_uint8_t *blk = (w_uint8_t *)W_NULL;
     blkinfo_read(file->blkinfo,file->lfs->blkdev,file->blkinfo->self_addr);
     if(!BLKINFO_HAS_OFFSET(file->blkinfo, file->offset, file->lfs->lfs_info.blksize))
     {

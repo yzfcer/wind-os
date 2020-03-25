@@ -581,6 +581,12 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\db\framework\tb_model_file.c">
       <Filter>module_db</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\db\framework\wind_xml.c">
+      <Filter>module_db</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\db\framework\wind_xml_fsm.c">
+      <Filter>module_db</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">
@@ -949,6 +955,12 @@
       <Filter>module_db</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\..\src\module\db\framework\tb_model_file.h">
+      <Filter>module_db</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\db\framework\wind_xml.h">
+      <Filter>module_db</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\db\framework\wind_xml_fsm.h">
       <Filter>module_db</Filter>
     </ClInclude>
   </ItemGroup>

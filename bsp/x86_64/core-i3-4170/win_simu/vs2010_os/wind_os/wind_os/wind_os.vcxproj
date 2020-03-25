@@ -47,6 +47,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_AMD64_;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4819;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -125,6 +126,8 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\db\framework\tb_model.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\db\framework\tb_model_file.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\db\framework\tb_print.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\db\framework\wind_xml.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\db\framework\wind_xml_fsm.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\db\framework\xml.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\dict\module_dict.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\dict\wind_dict.c" />
@@ -297,6 +300,8 @@
     <ClInclude Include="..\..\..\..\..\..\..\src\module\db\framework\tb_entry.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\db\framework\tb_model.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\db\framework\tb_model_file.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\db\framework\wind_xml.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\db\framework\wind_xml_fsm.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\db\framework\xml.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\dict\wind_dict.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lapi.h" />

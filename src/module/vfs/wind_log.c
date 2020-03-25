@@ -36,7 +36,7 @@ w_err_t wind_log_open(void)
     WIND_ASSERT_RETURN(tfs != W_NULL,W_ERR_FAIL);
     logfile = treefile_open(tfs,"/sys.log",TF_FMODE_W | TF_FMODE_CRT);
     WIND_ASSERT_RETURN(logfile != W_NULL,W_ERR_FAIL);
-    treefile_seek(logfile,0xffffff);
+    treefile_seek(logfile,0xffffffff);
     return W_ERR_OK;
 }
 

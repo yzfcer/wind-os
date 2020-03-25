@@ -240,7 +240,7 @@ w_bool_t treefile_existing(w_treefs_s *tfs,const char *path)
     return W_FALSE;
 }
 
-w_err_t treefile_seek(w_treefile_s* file,w_int32_t offset)
+w_err_t treefile_seek(w_treefile_s* file,w_uint32_t offset)
 {
     WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(file->magic == TREEFILE_MAGIC,W_ERR_INVALID);
@@ -274,7 +274,7 @@ w_int32_t treefile_read(w_treefile_s* file,w_uint8_t *buff, w_int32_t size)
     WIND_ASSERT_RETURN(buff != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(size > 0,W_ERR_INVALID);
     
-    rsize = file->filelen - file->offset > size?size:file->filelen - file->offset;
+    rsize = (w_int32_t)(file->filelen - file->offset > (w_uint32_t)size?(w_uint32_t)size:file->filelen - file->offset);
     dnode = get_node_by_offset(&file->datalist,file->offset);
     dataidx = get_dataidx_by_offset(file->offset);
     bufidx = 0;

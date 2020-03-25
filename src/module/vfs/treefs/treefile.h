@@ -16,7 +16,7 @@ w_err_t treefile_close(w_treefile_s* file);
 
 w_bool_t treefile_existing(w_treefs_s *tfs,const char *path);
 
-w_err_t treefile_seek(w_treefile_s* file,w_int32_t offset);
+w_err_t treefile_seek(w_treefile_s* file,w_uint32_t offset);
 
 w_int32_t treefile_ftell(w_treefile_s* file);
 

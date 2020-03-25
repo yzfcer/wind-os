@@ -41,8 +41,8 @@ static w_err_t hostfs_op_opsinit(void)
 static void* hostfs_op_init(w_vfs_s *vfs)
 {
     w_err_t err;
-    w_hostfs_s *hfs = W_NULL;
-    char *prefix = W_NULL;
+    w_hostfs_s *hfs = (w_hostfs_s *)W_NULL;
+    char *prefix = (char*)W_NULL;
     w_bool_t isexist;
     WIND_ASSERT_RETURN(vfs != W_NULL, W_NULL);
     do

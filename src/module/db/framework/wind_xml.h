@@ -13,20 +13,22 @@
 **********************************************************************************/
 #ifndef WIND_XML_H__
 #define WIND_XML_H__
+#include "wind_dlist.h"
+#include "wind_tree.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
 
 #define MAX_XNODE_LEVEL 15
 #define TREE_TO_XNODE(tree) (w_xmlnode_s*)(((w_uint8_t*)(tree))-((w_addr_t)&(((w_xmlnode_s*)0)->tree)))
-#define NODE_TO_XATTR(node) (w_xmlattr_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((w_xmlattr_s*)0)->node)))
+#define NODE_TO_XATTR(node) (w_xmlattr_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((w_xmlattr_s*)0)->attr_node)))
 
 //XML node attribution struct
 typedef struct
 {
-    w_dnode_s node;  //xml-node attribution 
-    char *attr_name; //xml-node attribution name
-    char *attr_value;//xml-node attribution value
+    w_dnode_s attr_node;//xml-attr_node attribution 
+    char *attr_name;    //xml-attr_node attribution name
+    char *attr_value;   //xml-attr_node attribution value
 }w_xmlattr_s;
 
 
@@ -40,6 +42,7 @@ typedef struct
     w_uint8_t attr_cnt; //xml node attribution count
     w_uint8_t node_cnt; //tree child node count
     w_uint8_t level;    //tree node level
+    w_uint8_t is_leaf;  //is tree node a leaf node?
     w_dlist_s attrlist; //xml node attribution list,see w_xmlattr_s
 }w_xmlnode_s;
 
@@ -55,12 +58,13 @@ typedef struct
 w_err_t wind_xml_parse(w_xmlnode_s *xnode,char *xmlstr,w_int32_t len);
 w_err_t wind_xml_print(w_xmlnode_s *xnode);
 
-w_xmlnode_s *wind_xmlnode_create(char *name);
+w_xmlnode_s *wind_xmlnode_create(char *name,w_uint8_t is_leaf);
 w_err_t      wind_xmlnode_destroy(w_xmlnode_s *xnode);
 w_xmlnode_s *wind_xmlnode_get_parent(w_xmlnode_s *xnode);
 w_xmlnode_s *wind_xmlnode_get_child(w_xmlnode_s *xnode);
 w_xmlnode_s *wind_xmlnode_get_next(w_xmlnode_s *xnode);
 w_xmlnode_s *wind_xmlnode_get_prev(w_xmlnode_s *xnode);
+w_err_t      wind_xmlnode_modify(w_xmlnode_s *xnode,char *node_value);
 w_err_t      wind_xmlnode_insert(w_xmlnode_s *parent,w_xmlnode_s *child);
 w_err_t      wind_xmlnode_remove(w_xmlnode_s *parent,w_xmlnode_s *child);
 

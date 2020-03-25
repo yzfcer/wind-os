@@ -102,7 +102,8 @@ static char *wind_thread_status(w_thread_stat_e stat)
 
 static w_int32_t thread_stk_usage(w_thread_s *thread)
 {
-    w_int32_t idx,usage = 0;
+    w_uint32_t idx;
+    w_int32_t usage = 0;
     for(idx = 1;idx < thread->stksize;idx ++)
     {
         if(thread->stack_start[idx] != 0)

@@ -32,7 +32,7 @@ extern "C" {
 w_err_t wind_tree_init(w_tree_s *tree)
 {
     WIND_ASSERT_RETURN(tree != W_NULL,W_ERR_PTR_NULL);
-    tree->parent = W_NULL;
+    tree->parent = (w_tree_s *)W_NULL;
     DLIST_INIT(tree->child_list);
     DNODE_INIT(tree->treenode);
     return W_ERR_OK;
@@ -61,7 +61,7 @@ w_err_t wind_tree_remove_child(w_tree_s *parent,w_tree_s *child)
     WIND_ASSERT_RETURN(child != W_NULL,W_ERR_PTR_NULL);
     dnode = dlist_remove(&parent->child_list,&child->treenode);
     WIND_ASSERT_RETURN(dnode != W_NULL,W_ERR_INVALID);
-    child->parent = W_NULL;
+    child->parent = (w_tree_s *)W_NULL;
     //DNODE_INIT(child->treenode);
     return W_ERR_OK;
 }
