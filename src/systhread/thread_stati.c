@@ -34,14 +34,16 @@ static w_err_t thread_stati(w_int32_t argc,char **argv)
 {
     w_uint32_t statcnt = 0;
     w_int32_t stati_ms = 1000;
+    //w_core_var_s core_var;
+    //wind_get_core_var(&core_var)
     while(1)
     {
         statcnt = g_core.idle_cnt;
         wind_thread_sleep(stati_ms);
         statcnt = g_core.idle_cnt - statcnt;
-        WIND_CPU_USAGE = (IDLE_CNT_PER_SEC - statcnt) *100 / IDLE_CNT_PER_SEC;
-        if(WIND_CPU_USAGE > 100)
-            WIND_CPU_USAGE = 0;
+        g_core.cpu_usage = (g_core.idle_cnt_max - statcnt) *100 / g_core.idle_cnt_max;
+        if(g_core.cpu_usage > 100)
+            g_core.cpu_usage = 0;
     }
     return W_ERR_OK;
 }

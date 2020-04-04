@@ -155,7 +155,7 @@ void wind_start_switch(void)
 	w_stack_t *stk;
 	w_int32_t ctx_size;
     gwind_start_flag = W_TRUE;
-    IDLE_CNT_PER_SEC = 1000000;
+    g_core.idle_cnt_max = 1000000;
 	wind_debug("sizeof(sigset_t)=%d\n",sizeof(sigset_t));
 	wind_debug("sizeof(w_sreg_t)=%d\n",sizeof(w_sreg_t));
 	getcontext(&mainctx);

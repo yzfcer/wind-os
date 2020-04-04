@@ -86,9 +86,9 @@ w_err_t wind_softirq_trig(w_int32_t irqid)
     idx1 = (irqid >> 5);
     idx2 = (irqid & 0x1f);
     softirq_flag[idx1] |= (1 << idx2);
-	wind_printf("g_core.sreg_idx=%d\r\n",g_core.sreg_idx);
-    wind_enable_interrupt();
+	//wind_printf("g_core.sreg_idx=%d\r\n",g_core.sreg_idx);
     wind_thread_resume(thread);
+    wind_enable_interrupt();
     _wind_switchto_thread(thread);
     return W_ERR_OK;
 }

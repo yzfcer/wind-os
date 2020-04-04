@@ -108,7 +108,7 @@ struct __w_file_s
 
 #define FS_OPS_DEF(fs) \
 w_fsops_s fs##_ops = {\
-{WIND_FSTYPE_MAGIC,#fs,{(w_dnode_s*)W_NULL,(w_dnode_s*)W_NULL},0,0},\
+{WIND_FSTYPE_MAGIC,0,0,#fs,{(w_dnode_s*)W_NULL,(w_dnode_s*)W_NULL}},\
 fs##_op_opsinit,\
 fs##_op_init,\
 fs##_op_deinit,\

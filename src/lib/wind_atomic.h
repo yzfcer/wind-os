@@ -18,8 +18,8 @@
 ** 本文件由C语言源文件模板软件生成。------------清风海岸出品，必属精品！------------
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
-#ifndef __WIND_ATOMIC_H__
-#define __WIND_ATOMIC_H__
+#ifndef WIND_ATOMIC_H__
+#define WIND_ATOMIC_H__
 
 /*********************************************header file***********************************************/
 #include "wind_config.h"
@@ -63,5 +63,5 @@ void atomic_get(w_atomic_t atom,w_uint32_t *value);
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus
-#endif // #ifndef __WIND_ATOMIC_H__
+#endif // #ifndef WIND_ATOMIC_H__
 

@@ -139,7 +139,7 @@ void wind_start_switch(void)
     w_thread_s *cur,*high;
     wind_thread_init(&mainthr,"main",main_thread,0,W_NULL,mainstk,2048);
     gwind_start_flag = W_TRUE;
-    IDLE_CNT_PER_SEC = 1000000;
+    g_core.idle_cnt_max = 1000000;
     cur = &mainthr;
     high = &mainthr;//GET_OBJ(gwind_high_stack,w_thread_s,stack);
     gwind_cur_stack = &mainthr.stack_cur;

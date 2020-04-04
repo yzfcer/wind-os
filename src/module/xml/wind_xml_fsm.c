@@ -50,7 +50,7 @@ static void xmlfsm_update_buff(xml_fsm_s *xmlfsm,char *buff)
     w_int32_t diff;
     diff = PTR_OFFSET(xmlfsm->buff,buff);
     xmlfsm->bufflen -= diff;
-    xmlfsm->buff = buff;
+    //xmlfsm->buff = buff;
 }
 
 
@@ -99,6 +99,7 @@ static w_err_t xml_handle_attr_value(w_fsm_s *fsm,void *arg,w_int32_t arglen)
     WIND_CHECK_RETURN(arglen > 0,W_ERR_INVALID);
     return W_ERR_FAIL;
 }
+
 static w_err_t xml_handle_value(w_fsm_s *fsm,void *arg,w_int32_t arglen)
 {
     WIND_CHECK_RETURN(arg != W_NULL,W_ERR_PTR_NULL);
@@ -119,6 +120,10 @@ static w_err_t xml_handle_end(w_fsm_s *fsm,void *arg,w_int32_t arglen)
     return W_ERR_FAIL;
 }
 
+w_err_t wind_xml_fsm_init(xml_fsm_s *xfsm)
+{
+    
+}
 
 
 
@@ -132,6 +137,10 @@ FSM_STEP(XML_STAT_NODE_TAIL, xml_handle_node_tail)
 FSM_STEP(XML_STAT_END,       xml_handle_end)
 FSM_STEP_END
 FSM_MODEL_DEF(xml)
+
+
+
+
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

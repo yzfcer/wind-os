@@ -184,6 +184,7 @@ extern "C" {
 #define WIND_MODULE_LUA_SUPPORT 1 //是否支持lua功能模块
 #define WIND_MODULE_CJSON_SUPPORT 1 //是否支持cjson功能模块
 #define WIND_MODULE_DICT_SUPPORT 1 //是否支持数据字典功能模块
+#define WIND_MODULE_XML_SUPPORT 1
 
 #define WIND_MODULE_TOOLS_SUPPORT 1 //是否wind-os相关工具集模块
 #define WIND_MODULE_GAME_SUPPORT 1 //是否支持游戏模块
@@ -247,6 +248,7 @@ extern "C" {
 #define TEST_FILEPATH_SUPPORT 1 //是否支持文件系统路径测试
 #define TEST_DIAGNOSE_SUPPORT 1 //是否支持诊断功能测试
 #define TEST_DICT_SUPPORT 1     //是否支持参数字典功能测试
+#define TEST_XML_SUPPORT 0
 #endif
 
 

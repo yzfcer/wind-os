@@ -38,15 +38,13 @@ extern "C" {
 
 #define NODE_TO_FSM(node) (w_fsm_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((w_fsm_s*)0)->obj.objnode)))
 
-
 /********************************************internal variables**********************************************/
 static w_dlist_s modellist;
 static w_dlist_s fsmlist;
-static w_fsm_s *cur_fsm;
 static WIND_POOL(fsmpool,WIND_FSM_MAX_NUM,sizeof(w_fsm_s));
 
 /********************************************internal functions**********************************************/
-static w_fsm_s *fsm_malloc()
+static w_fsm_s *fsm_malloc(void)
 {
     return (w_fsm_s *)wind_pool_malloc(fsmpool);
 }
@@ -56,24 +54,6 @@ static w_err_t fsm_free(w_fsm_s *fsm)
     return wind_pool_free(fsmpool,fsm);
 }
 
-static w_fsm_s *get_reay_fsm(void)
-{
-    w_fsm_s *fsm;
-    w_dnode_s *dnode = &cur_fsm->obj.objnode;
-    for(;dnode != W_NULL;dnode = dnode->next)
-    {
-        fsm = NODE_TO_FSM(dnode);
-        if(fsm->state == FSM_STAT_READY)
-            return fsm;
-    }
-    for(dnode = fsmlist.head;dnode != &cur_fsm->obj.objnode;dnode = dnode->next)
-    {
-        fsm = NODE_TO_FSM(dnode);
-        if(fsm->state == FSM_STAT_READY)
-            return fsm;
-    }
-    return (w_fsm_s *)W_NULL;
-}
 
 static char *fsm_state_str(w_fsm_state_e state)
 {
@@ -83,8 +63,8 @@ static char *fsm_state_str(w_fsm_state_e state)
         return "ready";
     else if(state == FSM_STAT_SLEEP)
         return "sleep";
-    else if(state == FSM_STAT_SUSPEND)
-        return "suspend";
+    else if(state == FSM_STAT_WAIT)
+        return "wait";
     else if(state == FSM_STAT_STOP)
         return "stop";
     return "unknown";
@@ -100,7 +80,6 @@ w_err_t _wind_fsm_mod_init(void)
     w_err_t err;
     DLIST_INIT(modellist);
     DLIST_INIT(fsmlist);
-    cur_fsm = (w_fsm_s*)W_NULL;
     err = wind_pool_create("fsm",fsmpool,sizeof(fsmpool),sizeof(w_fsm_s));
     return err;
 }
@@ -154,6 +133,8 @@ w_err_t wind_fsm_init(w_fsm_s *fsm,char *name,w_int32_t id,char *modelname)
         fsm->cur_step = 0;
         fsm->arg = W_NULL;
         fsm->model= model;
+        err = wind_mutex_init(&fsm->mutex,name);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"init fsm mutex failed");
         err = wind_obj_init(&fsm->obj,WIND_FSM_MAGIC,name,&fsmlist);
     }while(0);
     return err;
@@ -171,8 +152,10 @@ w_fsm_s *wind_fsm_create(char *name,w_int32_t id,char *modelname)
         fsm = fsm_malloc();
         WIND_ASSERT_RETURN(fsm != W_NULL,(w_fsm_s *)W_NULL);
         err = wind_fsm_init(fsm,name,id,modelname);
-        
+        if(err == W_ERR_OK)
+            SET_F_FSM_POOL(fsm);
     }while(0);
+    
     if(err != W_ERR_OK)
     {
         if(fsm != W_NULL)
@@ -201,7 +184,10 @@ w_err_t wind_fsm_start(w_fsm_s *fsm)
 {
     WIND_ASSERT_RETURN(fsm != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(fsm->obj.magic == WIND_FSM_MAGIC,W_ERR_INVALID);
+    wind_mutex_lock(&fsm->mutex);
     fsm->state = FSM_STAT_READY;
+    wind_fsm_run(fsm);
+    wind_mutex_unlock(&fsm->mutex);
     return W_ERR_OK;
 }
 
@@ -209,16 +195,18 @@ w_err_t wind_fsm_stop(w_fsm_s *fsm)
 {
     WIND_ASSERT_RETURN(fsm != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(fsm->obj.magic == WIND_FSM_MAGIC,W_ERR_INVALID);
+    wind_mutex_lock(&fsm->mutex);
     fsm->state = FSM_STAT_STOP;
     fsm->cur_step = 0;
     return W_ERR_OK;
 }
 
-w_err_t wind_fsm_suspend(w_fsm_s *fsm)
+w_err_t wind_fsm_wait(w_fsm_s *fsm)
 {
     WIND_ASSERT_RETURN(fsm != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(fsm->obj.magic == WIND_FSM_MAGIC,W_ERR_INVALID);
-    fsm->state = FSM_STAT_SUSPEND;
+    wind_mutex_lock(&fsm->mutex);
+    fsm->state = FSM_STAT_WAIT;
     return W_ERR_OK;
 }
 
@@ -226,6 +214,7 @@ w_err_t wind_fsm_resume(w_fsm_s *fsm)
 {
     WIND_ASSERT_RETURN(fsm != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(fsm->obj.magic == WIND_FSM_MAGIC,W_ERR_INVALID);
+    wind_mutex_lock(&fsm->mutex);
     fsm->state = FSM_STAT_READY;
     return W_ERR_OK;
 }
@@ -235,6 +224,7 @@ w_err_t wind_fsm_sleep(w_fsm_s *fsm,w_int32_t time_ms)
 {
     WIND_ASSERT_RETURN(fsm != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(fsm->obj.magic == WIND_FSM_MAGIC,W_ERR_INVALID);
+    wind_mutex_lock(&fsm->mutex);
     fsm->state = FSM_STAT_SLEEP;
     fsm->sleep_ms = time_ms;
     fsm->sleep_tick = wind_get_tick();
@@ -246,6 +236,7 @@ w_err_t wind_fsm_change_step(w_fsm_s *fsm,w_int32_t cur_step)
     WIND_ASSERT_RETURN(fsm != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(fsm->obj.magic == WIND_FSM_MAGIC,W_ERR_INVALID);
     WIND_ASSERT_RETURN(cur_step < fsm->model->step_cnt,W_ERR_PTR_NULL);
+    wind_mutex_lock(&fsm->mutex);
     fsm->cur_step = cur_step;
     fsm->state = FSM_STAT_READY;
     return W_ERR_FAIL;
@@ -255,6 +246,7 @@ w_err_t wind_fsm_input(w_fsm_s *fsm,void *arg,w_int32_t arglen)
 {
     WIND_ASSERT_RETURN(fsm != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(fsm->obj.magic == WIND_FSM_MAGIC,W_ERR_INVALID);
+    wind_mutex_lock(&fsm->mutex);
     fsm->arg = arg;
     fsm->arglen = arglen; 
     fsm->state = FSM_STAT_READY;
@@ -262,28 +254,24 @@ w_err_t wind_fsm_input(w_fsm_s *fsm,void *arg,w_int32_t arglen)
 }
 
 
-w_err_t wind_fsm_schedule(void)
+w_err_t wind_fsm_run(w_fsm_s *fsm)
 {
-    w_fsm_s *fsm;
     w_err_t err;
-    w_dnode_s *dnode;
     fsm_step_fn func;
-    while(1)
+    WIND_ASSERT_RETURN(fsm != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(fsm->obj.magic == WIND_FSM_MAGIC,W_ERR_INVALID);
+    err = W_ERR_OK;
+    wind_mutex_lock(&fsm->mutex);
+    while(fsm->state == FSM_STAT_READY)
     {
-        fsm = get_reay_fsm();
-        if(fsm != W_NULL)
-            return W_ERR_OK;
-        cur_fsm = fsm;
         func = fsm->model->steplist[fsm->cur_step].func;
         err = func(fsm,fsm->arg,fsm->arglen);
         if(err != W_ERR_OK)
         {
-            dnode = cur_fsm->obj.objnode.next;
-            cur_fsm = NODE_TO_FSM(dnode);
-            err = wind_fsm_destroy(fsm);
-            WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_FAIL);
+            break;
         }
     }
+    return err;
 }
 
 

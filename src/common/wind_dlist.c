@@ -238,4 +238,4 @@ w_prinode_s *dlist_remove_prio(w_dlist_s *dlist,w_prinode_s *prinode)
 #ifdef __cplusplus
 }
 #endif //#ifdef __cplusplus
-#endif//#ifndef __WIND_DLIST_H__
+#endif//#ifndef WIND_DLIST_H__

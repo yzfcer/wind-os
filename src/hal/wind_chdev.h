@@ -86,7 +86,7 @@ struct __w_chdev_ops_s
 };
 
 #define WIND_CHDEV_DEF(name,devtype,devid,ops) \
-    {{(~WIND_CHDEV_MAGIC),name,{W_NULL,W_NULL},0,0},devtype,devid,W_NULL,ops}
+    {{(~WIND_CHDEV_MAGIC),0,0,name,{W_NULL,W_NULL}},devtype,devid,W_NULL,ops}
 
 
 w_err_t _wind_chdev_mod_init(void);

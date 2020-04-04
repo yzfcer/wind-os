@@ -22,8 +22,8 @@
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
-#ifndef __WIND_DLIST_H__
-#define __WIND_DLIST_H__
+#ifndef WIND_DLIST_H__
+#define WIND_DLIST_H__
 #include "wind_type.h"
 
 #ifdef __cplusplus
@@ -118,4 +118,4 @@ w_prinode_s *dlist_remove_prio(w_dlist_s *dlist,w_prinode_s *prinode);
 #ifdef __cplusplus
 }
 #endif //#ifdef __cplusplus
-#endif//#ifndef __WIND_DLIST_H__
+#endif//#ifndef WIND_DLIST_H__

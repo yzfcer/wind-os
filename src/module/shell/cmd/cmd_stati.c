@@ -31,11 +31,6 @@
 
 #if (CMD_STATI_SUPPORT)
 
-
-
-
-
-
 w_err_t cmd_stat_show_pool_main(w_int32_t argc,char **argv)
 {
     wind_pool_stati_print();
@@ -52,7 +47,9 @@ w_err_t cmd_stat_show_heap_main(w_int32_t argc,char **argv)
 
 w_err_t cmd_stat_show_cpuusage_main(w_int32_t argc,char **argv)
 {
-    wind_printf("cpu usage persage:%d%%\r\n",WIND_CPU_USAGE);
+    w_core_var_s core_var;
+    wind_get_core_var(&core_var);
+    wind_printf("cpu usage persage:%d%%\r\n",core_var.cpu_usage);
     return W_ERR_OK;    
 }
 

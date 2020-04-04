@@ -66,11 +66,11 @@ static w_stack_t initstk[THREAD_INIT_STKSIZE];
 static void set_idle_cnt(void)
 {
     wind_thread_sleep(500);
-    IDLE_CNT_PER_SEC = g_core.idle_cnt;
+    g_core.idle_cnt_max = g_core.idle_cnt;
     wind_thread_sleep(1000);
-    IDLE_CNT_PER_SEC = g_core.idle_cnt - IDLE_CNT_PER_SEC;
+    g_core.idle_cnt_max = g_core.idle_cnt - g_core.idle_cnt_max;
     wind_printf("idle:%d\r\n",g_core.idle_cnt);
-    wind_printf("idle count:%d\r\n",IDLE_CNT_PER_SEC);
+    wind_printf("idle count:%d\r\n",g_core.idle_cnt_max);
 }
 
 

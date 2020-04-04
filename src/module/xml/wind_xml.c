@@ -54,6 +54,8 @@ static w_err_t xattr_destroy(w_xmlattr_s *attr)
 
 w_err_t wind_xml_parse(w_xmlnode_s *xnode,char *xmlstr,w_int32_t len)
 {
+    //w_int32_t len;
+    //xml_fsm_s *fsm;
     return W_ERR_FAIL;
 }
 

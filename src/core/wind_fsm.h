@@ -18,8 +18,8 @@
 ** 本文件由C语言源文件模板软件生成。------------清风海岸出品，必属精品！------------
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
-#ifndef __WIND_FSM_H__
-#define __WIND_FSM_H__
+#ifndef WIND_FSM_H__
+#define WIND_FSM_H__
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
@@ -30,6 +30,7 @@ extern "C" {
 #include "wind_type.h"
 #include "wind_obj.h"
 #include "wind_debug.h"
+#include "wind_mutex.h"
 #if WIND_FSM_SUPPORT
 
 
@@ -40,11 +41,16 @@ extern "C" {
 typedef struct __w_fsm_s w_fsm_s;
 typedef struct __fsm_step_s w_fsm_step_s;
 typedef struct __w_fsm_model_s w_fsm_model_s;
+#define F_FSM_POOL (0x01 << 0) //Mark whether the FSM object is allocated through the memory pool
+#define IS_F_FSM_POOL(fsm) ((fsm->obj.flag & F_FSM_POOL) == F_FSM_POOL)
+#define SET_F_FSM_POOL(fsm) (fsm->obj.flag |= F_FSM_POOL)
+#define CLR_F_FSM_POOL(fsm) (fsm->obj.flag &= (~F_FSM_POOL))
 
 #define FSM_STEP_START(fsm) w_fsm_step_s g_fsm_##fsm[] = {
 #define FSM_STEP(step_id,func) {#step_id,step_id,func},
 #define FSM_STEP_END };
-#define FSM_MODEL_DEF(fsm) w_fsm_model_s g_fsmmodel_##fsm = {{WIND_FSM_MODEL_MAGIC,#fsm,W_NULL,W_NULL,0,0},sizeof(g_fsm_##fsm)/sizeof(w_fsm_step_s),g_fsm_##fsm};
+#define FSM_MODEL_DEF(fsm) w_fsm_model_s g_fsmmodel_##fsm = {{WIND_FSM_MODEL_MAGIC,0,0,#fsm,W_NULL,W_NULL},sizeof(g_fsm_##fsm)/sizeof(w_fsm_step_s),g_fsm_##fsm};
+
 
 
 /***********************************************enum*************************************************/
@@ -53,7 +59,7 @@ typedef enum
     FSM_STAT_IDLE,    //FSM idle state (initialization state)
     FSM_STAT_READY,   //FSM ready status
     FSM_STAT_SLEEP,   //FSM sleep state
-    FSM_STAT_SUSPEND, //FSM blocking status
+    FSM_STAT_WAIT, //FSM blocking status
     FSM_STAT_STOP,    //FSM stop status
 }w_fsm_state_e;
 
@@ -89,6 +95,7 @@ struct __w_fsm_s
     w_int32_t cur_step;    //FSM current step ID
     void *arg;             //FSM input parameter
     w_int32_t arglen;      //FSM input parameter lenth
+    w_mutex_s mutex;       //FSM mutex lock
     w_fsm_model_s *model;  //Model of the FSM object
 };
 
@@ -110,12 +117,12 @@ w_fsm_s *wind_fsm_get(char *name);
 
 w_err_t wind_fsm_start(w_fsm_s *fsm);
 w_err_t wind_fsm_stop(w_fsm_s *fsm);
-w_err_t wind_fsm_suspend(w_fsm_s *fsm);
+w_err_t wind_fsm_wait(w_fsm_s *fsm);
 w_err_t wind_fsm_resume(w_fsm_s *fsm);
 w_err_t wind_fsm_sleep(w_fsm_s *fsm,w_int32_t time_ms);
 w_err_t wind_fsm_change_step(w_fsm_s *fsm,w_int32_t cur_step);
 w_err_t wind_fsm_input(w_fsm_s *fsm,void *arg,w_int32_t arglen);
-w_err_t wind_fsm_schedule(void);
+w_err_t wind_fsm_run(w_fsm_s *fsm);
 w_err_t wind_fsm_print(void);
 
 
@@ -123,4 +130,4 @@ w_err_t wind_fsm_print(void);
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus
-#endif // #ifndef __WIND_FSM_H__
+#endif // #ifndef WIND_FSM_H__

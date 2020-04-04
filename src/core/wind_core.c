@@ -107,10 +107,10 @@ void wind_enable_switch(void)
 void wind_disable_interrupt(void)
 {
     w_sreg_t cpu_sr;
-    if(g_core.sreg_idx < 30)
+    if(g_core.sreg_idx < IRQ_NEST_DEPTH - 1)
     {
 		cpu_sr = wind_save_sr();
-		g_core.ssr[g_core.sreg_idx] = cpu_sr;
+		g_core.irq_mask[g_core.sreg_idx] = cpu_sr;
 		g_core.sreg_idx ++;
     }
 	else
@@ -126,7 +126,7 @@ void wind_enable_interrupt(void)
     if(g_core.sreg_idx > 0)
 	{
 		g_core.sreg_idx --;
-		cpu_sr = g_core.ssr[g_core.sreg_idx];
+		cpu_sr = g_core.irq_mask[g_core.sreg_idx];
 		wind_restore_sr(cpu_sr);
 	}
 	else
@@ -137,7 +137,7 @@ void wind_enable_interrupt(void)
 
 void wind_enter_irq(void)
 {
-    if(RUN_FLAG == W_FALSE)
+    if(gwind_start_flag == W_FALSE)
     {
         wind_error("enter not rd.");
         return;
@@ -181,9 +181,9 @@ static w_thread_s *wind_search_highthread(void)
 void wind_exit_irq(void)
 {
     w_thread_s *thread;
-    if(RUN_FLAG == W_FALSE)
+    if(gwind_start_flag == W_FALSE)
     {
-        wind_error("exit not rd %d",RUN_FLAG);
+        wind_error("exit not rd %d",gwind_start_flag);
         return;
     }
     wind_disable_interrupt();
@@ -223,7 +223,7 @@ void _wind_thread_dispatch(void)
 {
 #if WIND_REALTIME_CORE_SUPPORT
     w_thread_s *thread;
-    if(RUN_FLAG == W_FALSE)
+    if(gwind_start_flag == W_FALSE)
         return;
     wind_disable_interrupt();
     if(!is_switch_enable())
@@ -271,6 +271,15 @@ void _wind_switchto_thread(w_thread_s *thread)
 w_uint32_t wind_get_tick(void)
 {
     return g_core.ticks_cnt;
+}
+
+w_err_t wind_get_core_var(w_core_var_s *core_var)
+{
+    WIND_ASSERT_RETURN(core_var != W_NULL,W_ERR_PTR_NULL);
+    wind_disable_interrupt();
+    wind_memcpy(core_var,&g_core,sizeof(w_core_var_s));
+    wind_enable_interrupt();
+    return W_ERR_OK;
 }
 
 w_uint32_t wind_get_seconds(void)
