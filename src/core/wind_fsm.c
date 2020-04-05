@@ -70,6 +70,27 @@ static char *fsm_state_str(w_fsm_state_e state)
     return "unknown";
 }
 
+static w_err_t wind_fsm_run(w_fsm_s *fsm)
+{
+    w_err_t err;
+    fsm_step_fn func;
+    WIND_ASSERT_RETURN(fsm != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(fsm->obj.magic == WIND_FSM_MAGIC,W_ERR_INVALID);
+    err = W_ERR_OK;
+    wind_mutex_lock(&fsm->mutex);
+    while(fsm->state == FSM_STAT_READY)
+    {
+        func = fsm->model->steplist[fsm->cur_step].func;
+        err = func(fsm,fsm->arg,fsm->arglen);
+        if(err != W_ERR_OK)
+        {
+            break;
+        }
+    }
+    wind_mutex_unlock(&fsm->mutex);
+    return err;
+}
+
 /********************************************global variables**********************************************/
 
 
@@ -221,7 +242,7 @@ w_err_t wind_fsm_wait(w_fsm_s *fsm)
         fsm->state = FSM_STAT_WAIT;
         wind_mutex_unlock(&fsm->mutex);
     }while(0);
-    return W_ERR_OK;
+    return err;
 }
 
 w_err_t wind_fsm_input(w_fsm_s *fsm,void *arg,w_int32_t arglen)
@@ -240,7 +261,7 @@ w_err_t wind_fsm_input(w_fsm_s *fsm,void *arg,w_int32_t arglen)
         wind_fsm_run(fsm);
     }while(0);
     wind_mutex_unlock(&fsm->mutex);
-    return W_ERR_FAIL;
+    return err;
 }
 
 
@@ -294,32 +315,12 @@ w_err_t wind_fsm_change_step(w_fsm_s *fsm,w_int32_t cur_step)
     fsm->cur_step = cur_step;
     fsm->state = FSM_STAT_READY;
     wind_mutex_unlock(&fsm->mutex);
-    return W_ERR_FAIL;
+    return W_ERR_OK;
 }
 
 
 
 
-w_err_t wind_fsm_run(w_fsm_s *fsm)
-{
-    w_err_t err;
-    fsm_step_fn func;
-    WIND_ASSERT_RETURN(fsm != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(fsm->obj.magic == WIND_FSM_MAGIC,W_ERR_INVALID);
-    err = W_ERR_OK;
-    wind_mutex_lock(&fsm->mutex);
-    while(fsm->state == FSM_STAT_READY)
-    {
-        func = fsm->model->steplist[fsm->cur_step].func;
-        err = func(fsm,fsm->arg,fsm->arglen);
-        if(err != W_ERR_OK)
-        {
-            break;
-        }
-    }
-    wind_mutex_unlock(&fsm->mutex);
-    return err;
-}
 
 
 w_err_t wind_fsm_print(void)

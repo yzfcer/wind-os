@@ -115,6 +115,7 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\test_softirq.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\test_tree.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\test_treefs.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\test_xml.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\db\dbbase\db_demo.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\db\dbbase\db_demo1.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\db\framework\cmd_db.c" />

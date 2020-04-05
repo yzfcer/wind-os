@@ -75,6 +75,9 @@ DECLARE_SUITE(diagnose);
 #if TEST_DICT_SUPPORT
 DECLARE_SUITE(dict);
 #endif
+#if TEST_XML_SUPPORT
+DECLARE_SUITE(xml);
+#endif
 
 
 extern void test_suite_list_init(void);
@@ -130,6 +133,9 @@ void test_suite_register_all(void)
 #endif
 #if TEST_DICT_SUPPORT
     REGSTER_SUITE(dict);
+#endif
+#if TEST_XML_SUPPORT
+    REGSTER_SUITE(xml);
 #endif
 }
 

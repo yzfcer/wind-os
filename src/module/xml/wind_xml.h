@@ -65,7 +65,7 @@ w_err_t      wind_xmlattr_destroy(w_xmlattr_s *attr);
 w_xmlattr_s *wind_xmlattr_get(w_xmlnode_s *xnode,char *attr_name);
 w_err_t      wind_xmlattr_modify(w_xmlattr_s *xattr,char *attr_value);
 
-w_xmlnode_s *wind_xmlnode_create(char *name,w_uint8_t is_leaf);
+w_xmlnode_s *wind_xmlnode_create(char *name);
 w_err_t      wind_xmlnode_destroy(w_xmlnode_s *xnode);
 w_xmlnode_s *wind_xmlnode_get_parent(w_xmlnode_s *xnode);
 w_xmlnode_s *wind_xmlnode_get_child(w_xmlnode_s *xnode);

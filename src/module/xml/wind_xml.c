@@ -127,8 +127,7 @@ w_err_t wind_xml_deinit(w_xml_s *xml)
 
 w_err_t wind_xml_parse(w_xml_s *xml,char *xmlstr,w_int32_t len)
 {
-    //w_int32_t len;
-    //xml_fsm_s *fsm;
+    //wind_fsm_input(w_fsm_s * fsm,void * arg,w_int32_t arglen)
     return W_ERR_FAIL;
 }
 
@@ -175,7 +174,7 @@ w_err_t wind_xml_print(w_xmlnode_s *xnode)
 }
 
 
-w_xmlnode_s *wind_xmlnode_create(char *name,w_uint8_t is_leaf)
+w_xmlnode_s *wind_xmlnode_create(char *name)
 {
     w_err_t err;
     w_bool_t isvalid;
@@ -189,7 +188,7 @@ w_xmlnode_s *wind_xmlnode_create(char *name,w_uint8_t is_leaf)
         wind_memset(xnode,0,sizeof(w_xmlnode_s));
         xnode->name = (char*)wind_salloc(name,0);
         WIND_ASSERT_BREAK(xnode->name != W_NULL,W_ERR_MEM,"alloc xnode name failed");
-        xnode->is_leaf = is_leaf;
+        xnode->is_leaf = 1;
     }while(0);
     if(err != W_ERR_OK)
     {
@@ -299,6 +298,7 @@ w_err_t wind_xmlnode_insert(w_xmlnode_s *parent,w_xmlnode_s *child)
         child->level = parent->level + 1;
         WIND_ASSERT_BREAK(parent->node_cnt < 255,W_ERR_FAIL,"child node is too many");
         parent->node_cnt ++;
+        parent->is_leaf = 0;
     }while(0);
     return err;
 }
@@ -315,6 +315,8 @@ w_err_t wind_xmlnode_remove(w_xmlnode_s *parent,w_xmlnode_s *child)
         WIND_ASSERT_BREAK(parent->node_cnt > 0,W_ERR_FAIL,"child node count error");
         parent->node_cnt --;
         child->level = 0;
+        if(parent->node_cnt == 0)
+            parent->is_leaf = 1;
     }while(0);
     return err;
 }

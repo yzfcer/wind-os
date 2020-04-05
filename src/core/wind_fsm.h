@@ -122,7 +122,7 @@ w_err_t wind_fsm_input(w_fsm_s *fsm,void *arg,w_int32_t arglen);
 w_err_t wind_fsm_sleep(w_fsm_s *fsm,w_int32_t time_ms);
 w_err_t wind_fsm_wakeup(w_fsm_s *fsm);
 w_err_t wind_fsm_change_step(w_fsm_s *fsm,w_int32_t cur_step);
-w_err_t wind_fsm_run(w_fsm_s *fsm);
+//w_err_t wind_fsm_run(w_fsm_s *fsm);
 w_err_t wind_fsm_print(void);
 
 
