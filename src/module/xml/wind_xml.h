@@ -20,6 +20,7 @@ extern "C" {
 #endif // #ifdef __cplusplus
 
 #define MAX_XNODE_LEVEL 15
+#define MAX_XNODE_CHILD 32767
 #define TREE_TO_XNODE(tree) (w_xmlnode_s*)(((w_uint8_t*)(tree))-((w_addr_t)&(((w_xmlnode_s*)0)->tree)))
 #define NODE_TO_XATTR(node) (w_xmlattr_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((w_xmlattr_s*)0)->attr_node)))
 
@@ -36,14 +37,14 @@ typedef struct
 //XML node struct
 typedef struct
 {
-    w_tree_s tree;      //xml node tree struct
-    char *name;         //xml node name
-    char *value;        //xml node value,sometimes null if has children
-    w_uint8_t attr_cnt; //xml node attribution count
-    w_uint8_t node_cnt; //tree child node count
-    w_uint8_t level;    //tree node level
-    w_uint8_t is_leaf;  //is tree node a leaf node?
-    w_dlist_s attrlist; //xml node attribution list,see w_xmlattr_s
+    w_tree_s tree;         //xml node tree struct
+    char *name;            //xml node name
+    char *value;           //xml node value,sometimes null if has children
+    w_uint16_t node_cnt:15;//tree child node count
+    w_uint16_t is_leaf:1;  //is tree node a leaf node?
+    w_uint8_t attr_cnt;    //xml node attribution count
+    w_uint8_t level;       //tree node level
+    w_dlist_s attrlist;    //xml node attribution list,see w_xmlattr_s
 }w_xmlnode_s;
 
 typedef struct __xml_fsm_s xml_fsm_s;

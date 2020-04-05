@@ -131,23 +131,28 @@ w_err_t wind_xml_parse(w_xml_s *xml,char *xmlstr,w_int32_t len)
     return W_ERR_FAIL;
 }
 
-w_err_t wind_xml_print(w_xmlnode_s *xnode)
+static void print_align(w_xmlnode_s *xnode)
 {
     w_int32_t i;
+    char prefix[MAX_XNODE_LEVEL+1];
+    wind_memset(prefix,0,sizeof(prefix));
+    for(i = 0;i < xnode->level;i ++)
+        prefix[i] = '\t';
+    wind_printf(prefix);
+}
+
+w_err_t wind_xml_print(w_xmlnode_s *xnode)
+{
     w_err_t err;
     w_dnode_s *dnode;
     w_xmlattr_s *attr;
     //w_tree_s *tree;
     w_xmlnode_s *tmp_xndoe;
-    char prefix[MAX_XNODE_LEVEL+1];
     WIND_ASSERT_RETURN(xnode != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(xnode->name != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(xnode->level < MAX_XNODE_LEVEL,W_ERR_FAIL);
     err = W_ERR_OK;
-    wind_memset(prefix,0,sizeof(prefix));
-    for(i = 0;i < xnode->level;i ++)
-        prefix[i] = '\t';
-    wind_printf(prefix);
+    print_align(xnode);
     wind_printf("<%s ",xnode->name);
     foreach_node(dnode,&xnode->attrlist)
     {
@@ -162,13 +167,14 @@ w_err_t wind_xml_print(w_xmlnode_s *xnode)
         wind_printf("\r\n");
         foreach_node(dnode,&xnode->tree.child_list)
         {
-            //tree = NODE_TO_XNODE(dnode);
             tmp_xndoe = NODE_TO_XNODE(dnode);
             err = wind_xml_print(tmp_xndoe);
             WIND_ASSERT_BREAK(err == W_ERR_OK,err,"print child xnode failed");
         }
-        wind_printf("\r\n");
+        //wind_printf("\r\n");
     }
+    if(!xnode->is_leaf)
+        print_align(xnode);
     wind_printf("</%s>\r\n",xnode->name);
     return W_ERR_OK;
 }
@@ -296,7 +302,7 @@ w_err_t wind_xmlnode_insert(w_xmlnode_s *parent,w_xmlnode_s *child)
         err = wind_tree_insert_child(&parent->tree,&child->tree);
         WIND_ASSERT_BREAK(err == W_ERR_OK,err,"insert child failed");
         child->level = parent->level + 1;
-        WIND_ASSERT_BREAK(parent->node_cnt < 255,W_ERR_FAIL,"child node is too many");
+        WIND_ASSERT_BREAK(parent->node_cnt < MAX_XNODE_CHILD,W_ERR_FAIL,"child node is too many");
         parent->node_cnt ++;
         parent->is_leaf = 0;
     }while(0);

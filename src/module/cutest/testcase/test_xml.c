@@ -56,11 +56,60 @@ CASE_FUNC(func)
     EXPECT_NE(root,W_NULL);
     xattr = wind_xmlattr_crate("name","root");
     EXPECT_NE(xattr,W_NULL);
-    wind_xmlnode_insert_attr(root,xattr);
+    err = wind_xmlnode_insert_attr(root,xattr);
+    EXPECT_EQ(err,W_ERR_OK);
     xattr = wind_xmlattr_crate("lenth","324");
     EXPECT_NE(xattr,W_NULL);
-    wind_xmlnode_insert_attr(root,xattr);
-    wind_xml_print(root);
+    err = wind_xmlnode_insert_attr(root,xattr);
+    EXPECT_EQ(err,W_ERR_OK);
+
+    tmp = wind_xmlnode_create("child1");
+    EXPECT_NE(tmp,W_NULL);
+    xattr = wind_xmlattr_crate("name","level1");
+    EXPECT_NE(xattr,W_NULL);
+    err = wind_xmlnode_insert_attr(tmp,xattr);
+    EXPECT_EQ(err,W_ERR_OK);
+    err = wind_xmlnode_insert(root,tmp);
+    EXPECT_EQ(err,W_ERR_OK);
+    
+    tmp = wind_xmlnode_create("child2");
+    EXPECT_NE(tmp,W_NULL);
+    xattr = wind_xmlattr_crate("name","level2");
+    EXPECT_NE(xattr,W_NULL);
+    err = wind_xmlnode_insert_attr(tmp,xattr);
+    EXPECT_EQ(err,W_ERR_OK);
+    err = wind_xmlnode_insert(root,tmp);
+    EXPECT_EQ(err,W_ERR_OK);
+
+    root = tmp;
+    tmp = wind_xmlnode_create("child3");
+    EXPECT_NE(tmp,W_NULL);
+    xattr = wind_xmlattr_crate("name","level3");
+    EXPECT_NE(xattr,W_NULL);
+    err = wind_xmlnode_insert_attr(tmp,xattr);
+    EXPECT_EQ(err,W_ERR_OK);
+    err = wind_xmlnode_insert(root,tmp);
+    EXPECT_EQ(err,W_ERR_OK);
+
+    root = tmp;
+    tmp = wind_xmlnode_create("child4");
+    EXPECT_NE(tmp,W_NULL);
+    xattr = wind_xmlattr_crate("name","level4");
+    EXPECT_NE(xattr,W_NULL);
+    err = wind_xmlnode_insert_attr(tmp,xattr);
+    EXPECT_EQ(err,W_ERR_OK);
+    err = wind_xmlnode_insert(root,tmp);
+    EXPECT_EQ(err,W_ERR_OK);
+
+    root = wind_xmlnode_get_parent(root);
+    EXPECT_NE(root,W_NULL);
+    root = wind_xmlnode_get_parent(root);
+    EXPECT_NE(root,W_NULL);
+    //wind_printf("sizeof xndoe=%d\r\n",sizeof(w_xmlnode_s));
+    err = wind_xml_print(root);
+    EXPECT_EQ(err,W_ERR_OK);
+    root = wind_xmlnode_get_parent(root);
+    EXPECT_EQ(root,W_NULL);
 }
 
 
