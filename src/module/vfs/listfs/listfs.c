@@ -881,14 +881,14 @@ w_bool_t listfile_existing(w_listfs_s *lfs,const char *path)
 w_err_t listfile_seek(w_listfile_s* file,w_int32_t offset)
 {
     w_err_t err;
-    lfile_blkinfo_s *blkinfo = (w_uint8_t *)W_NULL;
+    lfile_blkinfo_s *blkinfo = (lfile_blkinfo_s *)W_NULL;
     WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(offset >= 0,W_ERR_OVERFLOW);
     WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,W_ERR_INVALID);
     do 
     {
         err = W_ERR_OK;
-        blkinfo = (w_uint8_t *)listfs_mem_malloc(sizeof(lfile_blkinfo_s));
+        blkinfo = (lfile_blkinfo_s *)listfs_mem_malloc(sizeof(lfile_blkinfo_s));
         WIND_ASSERT_BREAK(blkinfo != W_NULL, W_ERR_MEM,"alloc blkinfo failed");
         if(file->info.filesize < offset)
             offset = file->info.filesize;

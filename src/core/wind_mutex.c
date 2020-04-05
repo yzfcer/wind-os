@@ -126,7 +126,6 @@ w_err_t wind_mutex_lock(w_mutex_s *mutex)
     WIND_ASSERT_RETURN(mutex->obj.magic == WIND_MUTEX_MAGIC,W_ERR_INVALID);
     wind_disable_switch();
     thread = wind_thread_current();
-
     if (!IS_F_MUTEX_LOCKED(mutex))
     {
         SET_F_MUTEX_LOCKED(mutex);

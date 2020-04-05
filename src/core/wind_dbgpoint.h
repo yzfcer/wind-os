@@ -29,6 +29,7 @@
 #include "wind_config.h"
 #include "wind_type.h"
 #include "wind_obj.h"
+#include "wind_mutex.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -44,7 +45,7 @@ typedef struct _wind_dbgpoint
 {
     w_obj_s obj;             //Basic object information
     w_int32_t lenth;         //Debug point cache length
-    void *mutex;             //Debug point mutex
+    w_mutex_s mutex;             //Debug point mutex
     dbgpoint_read_fn read;   //Function for reading information
     dbgpoint_write_fn write; //Function for writing information
 }w_dbgpoint_s;

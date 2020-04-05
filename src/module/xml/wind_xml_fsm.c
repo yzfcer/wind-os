@@ -122,7 +122,7 @@ static w_err_t xml_handle_end(w_fsm_s *fsm,void *arg,w_int32_t arglen)
 
 w_err_t wind_xml_fsm_init(xml_fsm_s *xfsm)
 {
-    
+    return W_ERR_FAIL;
 }
 
 

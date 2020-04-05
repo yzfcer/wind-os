@@ -116,20 +116,26 @@ w_err_t wind_daemon_init(w_daemon_s *daemon,const char *name,w_daemon_fn daemon_
 w_daemon_s *wind_daemon_create(const char *name,w_daemon_fn daemon_func)
 {
     w_err_t err;
-    w_daemon_s *daemon;
-    daemon = wind_daemon_get(name);
-    if(daemon != W_NULL)
-        return daemon;
-    daemon = daemon_malloc();
-    WIND_ASSERT_RETURN(daemon != W_NULL,W_NULL);
-    err = wind_daemon_init(daemon,name,daemon_func);
-    if(err == W_ERR_OK)
+    w_daemon_s *new_daemon = W_NULL;
+    w_daemon_s *old_daemon = W_NULL;
+    do
     {
-        SET_F_DAEMON_POOL(daemon);
-        return daemon;
+        err = W_ERR_OK;
+        old_daemon = wind_daemon_get(name);
+        WIND_ASSERT_BREAK(old_daemon == W_NULL,W_ERR_REPEAT,"daemon obj has been exsit");
+        new_daemon = daemon_malloc();
+        WIND_ASSERT_BREAK(new_daemon != W_NULL,W_ERR_MEM,"alloc daemon obj failed");
+        err = wind_daemon_init(new_daemon,name,daemon_func);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"init daemon obj failed");
+        SET_F_DAEMON_POOL(new_daemon);
+    }while(0);
+    if(err != W_ERR_OK)
+    {
+        if(new_daemon != W_NULL)
+            daemon_free(new_daemon);
+        new_daemon = W_NULL;
     }
-    daemon_free(daemon);
-    return daemon;
+    return new_daemon;
 }
 
 
@@ -140,17 +146,21 @@ w_err_t wind_daemon_destroy(w_daemon_s *daemon)
     w_thread_s *thread;
     WIND_ASSERT_RETURN(daemon != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(daemon->obj.magic == WIND_DAEMON_MAGIC,W_ERR_INVALID);
-    wind_notice("destroy daemon:%s",daemon->obj.name?daemon->obj.name:"null");
-    err = wind_obj_deinit(&daemon->obj,WIND_DAEMON_MAGIC,&daemonlist);
-    WIND_ASSERT_RETURN(err == W_ERR_OK, W_ERR_FAIL);
-    
-    thread = wind_thread_get(daemon->obj.name);
-    WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_INVALID);
-    wind_thread_clrflag(thread,F_THREAD_DAEMON);
-
-    if(IS_F_DAEMON_POOL(daemon))
-        daemon_free(daemon);
-    return W_ERR_OK;
+    do
+    {
+        err = W_ERR_OK;
+        wind_notice("destroy daemon:%s",daemon->obj.name?daemon->obj.name:"null");
+        err = wind_obj_deinit(&daemon->obj,WIND_DAEMON_MAGIC,&daemonlist);
+        WIND_ASSERT_BREAK(err == W_ERR_OK, W_ERR_FAIL,"deinit damon obj failed");
+        
+        thread = wind_thread_get(daemon->obj.name);
+        WIND_ASSERT_BREAK(thread != W_NULL,W_ERR_NO_OBJ,"thread is NOT exist");
+        wind_thread_clrflag(thread,F_THREAD_DAEMON);
+        
+        if(IS_F_DAEMON_POOL(daemon))
+            daemon_free(daemon);
+    }while(0);
+    return err;
 }
 
 

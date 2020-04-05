@@ -83,7 +83,7 @@ static void switch_context(w_thread_s* srcthr, w_thread_s* destthr)
 
 static sigset_t g_sig[32];
 static int sig_idx = 0;
-w_sreg_t wind_save_sr(void)
+w_irqreg_t wind_save_sr(void)
 {
     sigset_t set;
 	int idx;
@@ -97,7 +97,7 @@ w_sreg_t wind_save_sr(void)
     return &g_sig[idx];
 }
 
-void wind_restore_sr(w_sreg_t sreg)
+void wind_restore_sr(w_irqreg_t sreg)
 {
 	sig_idx --;
 	//printf("sig_idx[%d] unblock:%p\n",sig_idx,&g_sig[sig_idx]);
@@ -157,7 +157,7 @@ void wind_start_switch(void)
     gwind_start_flag = W_TRUE;
     g_core.idle_cnt_max = 1000000;
 	wind_debug("sizeof(sigset_t)=%d\n",sizeof(sigset_t));
-	wind_debug("sizeof(w_sreg_t)=%d\n",sizeof(w_sreg_t));
+	wind_debug("sizeof(w_irqreg_t)=%d\n",sizeof(w_irqreg_t));
 	getcontext(&mainctx);
 
 	if(init_flag == 0)

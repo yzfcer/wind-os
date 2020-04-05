@@ -59,7 +59,7 @@ typedef enum
     FSM_STAT_IDLE,    //FSM idle state (initialization state)
     FSM_STAT_READY,   //FSM ready status
     FSM_STAT_SLEEP,   //FSM sleep state
-    FSM_STAT_WAIT, //FSM blocking status
+    FSM_STAT_WAIT,    //FSM blocking status
     FSM_STAT_STOP,    //FSM stop status
 }w_fsm_state_e;
 
@@ -89,7 +89,7 @@ struct __w_fsm_s
 {
     w_obj_s obj;           //Basic object information
     w_int32_t id;          //FSM object ID
-    w_uint32_t sleep_ms;   //FSM sleep time remaining (in milliseconds)
+    w_uint32_t sleep_cnt;   //FSM sleep time remaining (in milliseconds)
     w_uint32_t sleep_tick; //Tick value when FSM sleep
     w_fsm_state_e state;   //FSM state
     w_int32_t cur_step;    //FSM current step ID
@@ -118,10 +118,10 @@ w_fsm_s *wind_fsm_get(char *name);
 w_err_t wind_fsm_start(w_fsm_s *fsm);
 w_err_t wind_fsm_stop(w_fsm_s *fsm);
 w_err_t wind_fsm_wait(w_fsm_s *fsm);
-w_err_t wind_fsm_resume(w_fsm_s *fsm);
-w_err_t wind_fsm_sleep(w_fsm_s *fsm,w_int32_t time_ms);
-w_err_t wind_fsm_change_step(w_fsm_s *fsm,w_int32_t cur_step);
 w_err_t wind_fsm_input(w_fsm_s *fsm,void *arg,w_int32_t arglen);
+w_err_t wind_fsm_sleep(w_fsm_s *fsm,w_int32_t time_ms);
+w_err_t wind_fsm_wakeup(w_fsm_s *fsm);
+w_err_t wind_fsm_change_step(w_fsm_s *fsm,w_int32_t cur_step);
 w_err_t wind_fsm_run(w_fsm_s *fsm);
 w_err_t wind_fsm_print(void);
 

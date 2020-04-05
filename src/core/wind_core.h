@@ -37,15 +37,15 @@ extern "C" {
 typedef struct __w_core_var_s
 {
     volatile w_uint32_t idle_cnt;//空闲计算器
+    volatile w_uint32_t idle_cnt_max;//在一段时间内的idle任务的计数值
     volatile w_int32_t irq_nest;//全局的中断嵌套计数值
     volatile w_int32_t switch_nest;//全局的禁止线程切换嵌套计数值
     volatile w_uint32_t sec_count;
     volatile w_uint32_t ms_cnt;//毫秒计时
     volatile w_uint32_t ticks_cnt;//tick计时
-    volatile w_uint32_t idle_cnt_max;//在一段时间内的idle任务的计数值
     volatile w_uint32_t cpu_usage;
-    volatile w_int32_t sreg_idx;
-    volatile w_sreg_t irq_mask[IRQ_NEST_DEPTH];
+    volatile w_int32_t irq_mask_idx;
+    volatile w_irqreg_t irq_mask[IRQ_NEST_DEPTH];
 }w_core_var_s;
 
 extern w_core_var_s g_core;//内核相关的参数集
@@ -54,10 +54,6 @@ extern w_stack_t **gwind_high_stack;
 extern w_stack_t **gwind_cur_stack;
 
 void _wind_corevar_init(void);
-
-//#define WIND_CPU_USAGE (g_core.cpu_usage)
-//#define g_core.idle_cnt_max (g_core.idle_cnt_max)
-//#define gwind_start_flag (gwind_start_flag)
 
 w_err_t wind_get_core_var(w_core_var_s *core_var);
 w_uint32_t wind_get_tick(void);

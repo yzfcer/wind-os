@@ -50,39 +50,41 @@ w_dbgpoint_s *wind_dbgpoint_get(const char *name)
 
 w_err_t wind_dbgpoint_register(w_dbgpoint_s *dbgpoint)
 {
+    w_err_t err;
     w_dbgpoint_s *dbgp;
     WIND_ASSERT_RETURN(dbgpoint != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(dbgpoint->obj.magic == WIND_DBGPOINT_MAGIC,W_ERR_INVALID);
-    wind_notice("register dbgpoint:%s",wind_obj_name(&dbgpoint->obj));
-    dbgp = wind_dbgpoint_get(dbgpoint->obj.name);
-    if(dbgp != W_NULL)
+    do
     {
-        wind_notice("dbgpoint has been registered.\r\n");
-        return W_ERR_OK;
-    }
+        err = W_ERR_OK;
+        wind_notice("register dbgpoint:%s",wind_obj_name(&dbgpoint->obj));
+        dbgp = wind_dbgpoint_get(dbgpoint->obj.name);
+        WIND_CHECK_BREAK(dbgp == W_NULL,W_ERR_OK);
 
-    dbgpoint->mutex = wind_mutex_create(dbgpoint->obj.name);
-    wind_disable_switch();
-    dlist_insert_tail(&dbgpointlist,&dbgpoint->obj.objnode);
-    wind_enable_switch();
-    return W_ERR_OK;
+        err = wind_mutex_init(&dbgpoint->mutex,dbgpoint->obj.name);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"init mutex failed");
+        err = wind_obj_init(&dbgpoint->obj,WIND_DBGPOINT_MAGIC,wind_obj_name(&dbgpoint->obj),&dbgpointlist);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"init obj failed");
+    }while(0);
+
+    return err;
 }
 
 w_err_t wind_dbgpoint_unregister(w_dbgpoint_s *dbgpoint)
 {
-    w_dnode_s *dnode;
-    w_dbgpoint_s *dbgp;
+    w_err_t err;
     WIND_ASSERT_RETURN(dbgpoint != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(dbgpoint->obj.magic == WIND_DBGPOINT_MAGIC,W_ERR_INVALID);
-    wind_notice("unregister dbgpoint:%s",wind_obj_name(&dbgpoint->obj));
-    wind_disable_switch();
-	dnode = dlist_remove(&dbgpointlist,&dbgpoint->obj.objnode);
-    wind_enable_switch();
-    WIND_ASSERT_RETURN(dnode != W_NULL,W_ERR_INVALID);
-    dbgp = NODE_TO_DBGPOINT(dnode);
-    if(dbgp->mutex)
-        wind_mutex_destroy(dbgp->mutex);
-    return W_ERR_OK;  
+    do
+    {
+        err = W_ERR_OK;
+        wind_notice("unregister dbgpoint:%s",wind_obj_name(&dbgpoint->obj));
+        err = wind_obj_deinit(&dbgpoint->obj,WIND_DBGPOINT_MAGIC,&dbgpointlist);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"deinit obj failed");
+        err = wind_mutex_destroy(&dbgpoint->mutex);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"deinit mutex failed");
+    }while(0);
+    return err;
 }
 
 w_int32_t wind_dbgpoint_read(w_dbgpoint_s *dbgpoint,w_uint8_t *buff,w_int32_t len)
@@ -92,11 +94,10 @@ w_int32_t wind_dbgpoint_read(w_dbgpoint_s *dbgpoint,w_uint8_t *buff,w_int32_t le
     WIND_ASSERT_RETURN(buff != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(len >= dbgpoint->lenth,W_ERR_INVALID);
     WIND_ASSERT_RETURN(dbgpoint->obj.magic == WIND_DBGPOINT_MAGIC,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(dbgpoint->mutex != W_NULL,W_ERR_FAIL);
-    wind_mutex_lock(dbgpoint->mutex);
+    wind_mutex_lock(&dbgpoint->mutex);
     if(dbgpoint->read)
         lenth = dbgpoint->read(buff,len);
-    wind_mutex_unlock(dbgpoint->mutex);
+    wind_mutex_unlock(&dbgpoint->mutex);
     return lenth;
 }
 
@@ -107,11 +108,10 @@ w_int32_t wind_dbgpoint_write(w_dbgpoint_s *dbgpoint,w_uint8_t *buff,w_int32_t l
     WIND_ASSERT_RETURN(buff != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(len <= dbgpoint->lenth,W_ERR_INVALID);
     WIND_ASSERT_RETURN(dbgpoint->obj.magic == WIND_DBGPOINT_MAGIC,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(dbgpoint->mutex != W_NULL,W_ERR_FAIL);
-    wind_mutex_lock(dbgpoint->mutex);
+    wind_mutex_lock(&dbgpoint->mutex);
     if(dbgpoint->write)
         lenth = dbgpoint->write(buff,len);
-    wind_mutex_unlock(dbgpoint->mutex);
+    wind_mutex_unlock(&dbgpoint->mutex);
     return lenth;
 }
 

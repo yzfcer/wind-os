@@ -46,6 +46,7 @@
 #include "wind_time.h"
 #include "wind_std.h"
 #include "wind_debug.h"
+#include "wind_string.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
@@ -55,8 +56,8 @@ extern void wind_thread_switch(void);
 extern void wind_interrupt_switch(void);
 extern void wind_start_switch(void);
 extern int _create_thread_init(void);
-extern w_sreg_t  wind_save_sr(void);
-extern void   wind_restore_sr(w_sreg_t cpu_sr);
+extern w_irqreg_t  wind_save_sr(void);
+extern void   wind_restore_sr(w_irqreg_t cpu_sr);
 
 //Basic global parameters of wind-os and chain headers of various kernel resources
 w_core_var_s g_core;
@@ -79,7 +80,7 @@ void _wind_corevar_init(void)
     g_core.ticks_cnt = 0;
     g_core.ms_cnt = 0;
     g_core.sec_count = 0;
-    g_core.sreg_idx = 0;
+    g_core.irq_mask_idx = 0;
 }
 
 static w_bool_t is_switch_enable(void)
@@ -106,12 +107,12 @@ void wind_enable_switch(void)
 
 void wind_disable_interrupt(void)
 {
-    w_sreg_t cpu_sr;
-    if(g_core.sreg_idx < IRQ_NEST_DEPTH - 1)
+    w_irqreg_t cpu_sr;
+    if(g_core.irq_mask_idx < IRQ_NEST_DEPTH - 1)
     {
 		cpu_sr = wind_save_sr();
-		g_core.irq_mask[g_core.sreg_idx] = cpu_sr;
-		g_core.sreg_idx ++;
+		g_core.irq_mask[g_core.irq_mask_idx] = cpu_sr;
+		g_core.irq_mask_idx ++;
     }
 	else
 	{
@@ -122,11 +123,11 @@ void wind_disable_interrupt(void)
 
 void wind_enable_interrupt(void)
 {
-    w_sreg_t cpu_sr;
-    if(g_core.sreg_idx > 0)
+    w_irqreg_t cpu_sr;
+    if(g_core.irq_mask_idx > 0)
 	{
-		g_core.sreg_idx --;
-		cpu_sr = g_core.irq_mask[g_core.sreg_idx];
+		g_core.irq_mask_idx --;
+		cpu_sr = g_core.irq_mask[g_core.irq_mask_idx];
 		wind_restore_sr(cpu_sr);
 	}
 	else
@@ -208,7 +209,7 @@ void wind_exit_irq(void)
 
 
 
-static void wind_run()
+static void wind_enter_thread_mode()
 {
     w_thread_s *thread;
     thread = wind_search_highthread();
@@ -297,7 +298,6 @@ void wind_tick_callback(void)
 #if WIND_DATETIME_SUPPORT
     _wind_datetime_tick_isr();
 #endif
-	//printf("_wind_thread_wakeup\n");
     _wind_thread_wakeup();
 }
 
@@ -363,8 +363,7 @@ int wind_os_launch(void)
     _wind_init();
     _create_thread_init();
     wind_enable_interrupt();
-	wind_debug("wind_run\n");
-    wind_run();
+    wind_enter_thread_mode();
     return W_ERR_OK;
 }
 
