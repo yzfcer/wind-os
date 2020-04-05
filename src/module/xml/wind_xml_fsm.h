@@ -20,6 +20,7 @@ extern "C" {
 #endif // #ifdef __cplusplus
 
 #define XML_FSM_BUFLEN 512
+typedef struct __xml_fsm_s xml_fsm_s;
 typedef enum
 {
     XML_STAT_IDLE,
@@ -31,18 +32,21 @@ typedef enum
     XML_STAT_END
 }xml_state_e;
 
-typedef struct
+struct __xml_fsm_s
 {
     w_fsm_s *fsm;
     w_xmlnode_s *root;
     w_xmlnode_s *cur;
     w_xmlnode_s *newnode;
+    w_xmlattr_s *newattr;
     char buff[XML_FSM_BUFLEN];
     w_int32_t bufflen;
-    w_int32_t idx;
+    w_int32_t buffidx;
+    w_int32_t argidx;
     
-}xml_fsm_s;
-
+};
+w_err_t wind_xml_fsm_init(xml_fsm_s *xfsm,char *name);
+w_err_t wind_xml_fsm_deinit(xml_fsm_s *xfsm);
 
 #ifdef __cplusplus
 }

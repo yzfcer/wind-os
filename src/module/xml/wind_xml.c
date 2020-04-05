@@ -12,6 +12,7 @@
        Modification:
 **********************************************************************************/
 #include "wind_xml.h"
+#include "wind_xml_fsm.h"
 #include "wind_debug.h"
 #include "wind_macro.h"
 #include "wind_heap.h"
@@ -40,7 +41,33 @@ static w_bool_t is_xml_name_valid(char *name)
     return W_TRUE;
 }
 
-static w_err_t xattr_destroy(w_xmlattr_s *attr)
+w_xmlattr_s *wind_xmlattr_crate(char *attr_name,char *attr_value)
+{
+    w_err_t err;
+    w_xmlattr_s *xattr = (w_xmlattr_s *)W_NULL;
+    WIND_ASSERT_RETURN(attr_name != W_NULL,(w_xmlattr_s *)W_NULL);
+    WIND_ASSERT_RETURN(attr_value != W_NULL,(w_xmlattr_s *)W_NULL);
+    do
+    {
+    
+        err = W_ERR_OK;
+        xattr = (w_xmlattr_s *)wind_malloc(sizeof(w_xmlattr_s));
+        WIND_ASSERT_BREAK(xattr != W_NULL,W_ERR_MEM,"alloc xattr failed");
+        wind_memset(xattr,0,sizeof(w_xmlattr_s));
+        xattr->attr_name = (char*)wind_salloc(attr_name,0);
+        WIND_ASSERT_BREAK(xattr != W_NULL,W_ERR_MEM,"alloc xattr name failed");
+        xattr->attr_value = (char*)wind_salloc(attr_value,0);
+        WIND_ASSERT_BREAK(xattr != W_NULL,W_ERR_MEM,"alloc xattr value failed");
+    }while(0);
+    if(err != W_ERR_OK)
+    {
+        wind_xmlattr_destroy(xattr);
+        xattr = (w_xmlattr_s *)W_NULL;
+    }
+    return xattr;
+}
+
+w_err_t wind_xmlattr_destroy(w_xmlattr_s *attr)
 {
     WIND_CHECK_RETURN(attr != W_NULL,W_ERR_PTR_NULL);
     if(attr->attr_name)
@@ -51,8 +78,54 @@ static w_err_t xattr_destroy(w_xmlattr_s *attr)
     return W_ERR_OK;
 }
 
+w_err_t    wind_xmlattr_modify(w_xmlattr_s *xattr,char *attr_value)
+{
+    WIND_ASSERT_RETURN(xattr != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(attr_value != W_NULL,W_ERR_PTR_NULL);
+    if(xattr->attr_value != W_NULL)
+        wind_free(xattr->attr_value);
+    xattr->attr_value = (char*)wind_salloc(attr_value,0);
+    WIND_ASSERT_RETURN(xattr->attr_value != W_NULL,W_ERR_MEM);
+    return W_ERR_OK;
+}
 
-w_err_t wind_xml_parse(w_xmlnode_s *xnode,char *xmlstr,w_int32_t len)
+w_xmlattr_s *wind_xmlattr_get(w_xmlnode_s *xnode,char *attr_name)
+{
+    w_dnode_s *dnode;
+    w_xmlattr_s *attr = (w_xmlattr_s *)W_NULL;
+    WIND_ASSERT_RETURN(xnode != W_NULL,(w_xmlattr_s *)W_NULL);
+    WIND_ASSERT_RETURN(attr_name != W_NULL,(w_xmlattr_s *)W_NULL);
+    foreach_node(dnode,&xnode->attrlist)
+    {
+        attr = NODE_TO_XATTR(dnode);
+        if(wind_strcmp(attr->attr_name,attr_name) == 0)
+            return attr;
+    }
+    return (w_xmlattr_s *)W_NULL;
+}
+
+
+w_err_t wind_xml_init(w_xml_s *xml)
+{
+    WIND_ASSERT_RETURN(xml != W_NULL,W_ERR_PTR_NULL);
+    wind_memset(xml,0,sizeof(w_xml_s));
+    return W_ERR_OK;
+}
+
+w_err_t wind_xml_deinit(w_xml_s *xml)
+{
+    WIND_ASSERT_RETURN(xml != W_NULL,W_ERR_PTR_NULL);
+    if(xml->version)
+        wind_xmlnode_destroy(xml->version);
+    if(xml->root)
+        wind_xmlnode_destroy(xml->root);
+    if(xml->xfsm)
+        wind_xml_fsm_deinit(xml->xfsm);
+    return W_ERR_OK;
+}
+
+
+w_err_t wind_xml_parse(w_xml_s *xml,char *xmlstr,w_int32_t len)
 {
     //w_int32_t len;
     //xml_fsm_s *fsm;
@@ -140,7 +213,7 @@ w_err_t wind_xmlnode_destroy(w_xmlnode_s *xnode)
     foreach_node(dnode,&xnode->attrlist)
     {
         attr = NODE_TO_XATTR(dnode);
-        xattr_destroy(attr);
+        wind_xmlattr_destroy(attr);
     }
     err = W_ERR_OK;
     for(;;)
@@ -248,87 +321,28 @@ w_err_t wind_xmlnode_remove(w_xmlnode_s *parent,w_xmlnode_s *child)
 
 
 
-w_err_t wind_xmlnode_insert_attr(w_xmlnode_s *xnode,char *attr_name,char *attr_value)
+w_err_t wind_xmlnode_insert_attr(w_xmlnode_s *xnode,w_xmlattr_s *xattr)
 {
-    w_err_t err;
-    w_xmlattr_s *attr = (w_xmlattr_s *)W_NULL;
     WIND_ASSERT_RETURN(xnode != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(attr_name != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(attr_value != W_NULL,W_ERR_PTR_NULL);
-    do
-    {
-        err = W_ERR_OK;
-        attr = (w_xmlattr_s *)wind_malloc(sizeof(w_xmlattr_s));
-        WIND_ASSERT_BREAK(attr != W_NULL,W_ERR_MEM,"alloc attr failed");
-        wind_memset(attr,0,sizeof(w_xmlattr_s));
-        attr->attr_name = (char*)wind_salloc(attr_name,0);
-        WIND_ASSERT_BREAK(attr != W_NULL,W_ERR_MEM,"alloc attr name failed");
-        attr->attr_value = (char*)wind_salloc(attr_value,0);
-        WIND_ASSERT_BREAK(attr != W_NULL,W_ERR_MEM,"alloc attr value failed");
-        dlist_insert_tail(&xnode->attrlist,&attr->attr_node);
-        WIND_ASSERT_BREAK(xnode->attr_cnt < 255,W_ERR_FAIL,"attr is too many");
-        xnode->attr_cnt ++;
-    }while(0);
-    if(err != W_ERR_OK)
-    {
-        xattr_destroy(attr);
-    }
-    return err;
-}
-
-w_err_t    wind_xmlnode_modify_attr(w_xmlnode_s *xnode,char *attr_name,char *attr_value)
-{
-    w_xmlattr_s *attr;
-    WIND_ASSERT_RETURN(xnode != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(attr_name != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(attr_value != W_NULL,W_ERR_PTR_NULL);
-    attr = wind_xmlnode_get_attr(xnode,attr_name);
-    WIND_ASSERT_RETURN(attr != W_NULL,W_ERR_NO_OBJ);
-    if(attr->attr_value != W_NULL)
-        wind_free(attr->attr_value);
-    attr->attr_value = (char*)wind_salloc(attr_value,0);
-    WIND_ASSERT_RETURN(attr->attr_value != W_NULL,W_ERR_MEM);
+    WIND_ASSERT_RETURN(xattr != W_NULL,W_ERR_PTR_NULL);
+    dlist_insert_tail(&xnode->attrlist,&xattr->attr_node);
+    WIND_ASSERT_RETURN(xnode->attr_cnt < 255,W_ERR_FAIL);
+    xnode->attr_cnt ++;
     return W_ERR_OK;
 }
 
-w_xmlattr_s *wind_xmlnode_get_attr(w_xmlnode_s *xnode,char *attr_name)
-{
-    w_dnode_s *dnode;
-    w_xmlattr_s *attr = (w_xmlattr_s *)W_NULL;
-    WIND_ASSERT_RETURN(xnode != W_NULL,(w_xmlattr_s *)W_NULL);
-    WIND_ASSERT_RETURN(attr_name != W_NULL,(w_xmlattr_s *)W_NULL);
-    foreach_node(dnode,&xnode->attrlist)
-    {
-        attr = NODE_TO_XATTR(dnode);
-        if(wind_strcmp(attr->attr_name,attr_name) == 0)
-            return attr;
-    }
-    return (w_xmlattr_s *)W_NULL;
-}
 
-w_err_t wind_xmlnode_delete_attr(w_xmlnode_s *xnode,char *attr_name)
+w_err_t wind_xmlnode_remove_attr(w_xmlnode_s *xnode,w_xmlattr_s *xattr)
 {
-    w_err_t err;
-    w_dnode_s *dnode;
-    w_xmlattr_s *attr = (w_xmlattr_s *)W_NULL;
+
     WIND_ASSERT_RETURN(xnode != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(attr_name != W_NULL,W_ERR_PTR_NULL);
-    do
-    {
-        err = W_ERR_OK;
-        foreach_node(dnode,&xnode->attrlist)
-        {
-            attr = NODE_TO_XATTR(dnode);
-            if(wind_strcmp(attr->attr_name,attr_name) == 0)
-                break;
-        }
-        WIND_ASSERT_BREAK(dnode != W_NULL,W_ERR_NO_OBJ,"no such a attr:%s",attr_name);
-        WIND_ASSERT_BREAK(xnode->attr_cnt > 0,W_ERR_FAIL,"attr count error");
-        xnode->attr_cnt --;
-        dlist_remove(&xnode->attrlist,&attr->attr_node);
-        err = xattr_destroy(attr);
-    }while(0);
-    return err;
+    WIND_ASSERT_RETURN(xattr != W_NULL,W_ERR_PTR_NULL);
+
+    WIND_ASSERT_RETURN(xnode->attr_cnt > 0,W_ERR_FAIL);
+    xnode->attr_cnt --;
+    dlist_remove(&xnode->attrlist,&xattr->attr_node);
+
+    return W_ERR_OK;
 }
 
 

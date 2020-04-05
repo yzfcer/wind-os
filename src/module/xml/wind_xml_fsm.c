@@ -12,6 +12,7 @@
        Modification:
 **********************************************************************************/
 #include "wind_type.h"
+#include "wind_string.h"
 #include "wind_xml_fsm.h"
 #ifdef __cplusplus
 extern "C" {
@@ -45,37 +46,59 @@ char *skip_prefix_space(char *buff)
 }
 
 
-static void xmlfsm_update_buff(xml_fsm_s *xmlfsm,char *buff)
+static void xmlfsm_update_buff(xml_fsm_s *xmlfsm,w_uint8_t *arg,w_int32_t arglen)
 {
-    w_int32_t diff;
-    diff = PTR_OFFSET(xmlfsm->buff,buff);
-    xmlfsm->bufflen -= diff;
-    //xmlfsm->buff = buff;
+    w_int32_t len;
+    if(xmlfsm->buffidx >= xmlfsm->bufflen)
+        xmlfsm->buffidx = 0;
+    if(xmlfsm->buffidx > 0)
+    {
+        wind_memcpy(xmlfsm->buff,&xmlfsm->buff[xmlfsm->buffidx],xmlfsm->bufflen - xmlfsm->buffidx);
+        xmlfsm->bufflen = xmlfsm->bufflen - xmlfsm->buffidx;
+        xmlfsm->buffidx = 0;
+    }
+    if(xmlfsm->argidx < arglen)
+    {
+        len = XML_FSM_BUFLEN - xmlfsm->bufflen;
+        len = len < arglen - xmlfsm->argidx?len:arglen - xmlfsm->argidx;
+        wind_memcpy(&xmlfsm->buff[xmlfsm->bufflen],&arg[xmlfsm->argidx],len);
+        xmlfsm->argidx += len;
+    }
 }
 
 
 static w_err_t xml_handle_idle(w_fsm_s *fsm,void *arg,w_int32_t arglen)
 {
-    //w_int32_t idx;
+    w_err_t err;
     xml_fsm_s *xmlfsm;
     char *buff;
     WIND_CHECK_RETURN(arg != W_NULL,W_ERR_PTR_NULL);
     WIND_CHECK_RETURN(arglen > 0,W_ERR_INVALID);
-    buff = (char*)arg;
-    xmlfsm = (xml_fsm_s*)fsm;
-    buff = skip_prefix_space(buff);
-    WIND_ASSERT_RETURN(buff[0] == '<',W_ERR_INVALID);
-    xmlfsm_update_buff(xmlfsm,buff);
-    if(buff[1] == '/')
-        wind_fsm_change_step(fsm,XML_STAT_NODE_TAIL);
-    else if(is_valid_prefix(buff[1]))
-        wind_fsm_change_step(fsm,XML_STAT_NODE_NAME);
-    else
+    do
     {
-        wind_error("xml format error");
-        wind_fsm_stop(fsm);
-        return W_ERR_FAIL;
-    }
+        err = W_ERR_OK;
+        xmlfsm = (xml_fsm_s*)fsm;
+        while(xmlfsm->argidx < arglen)
+        {
+            xmlfsm_update_buff(xmlfsm,arg,arglen);
+            
+            buff = (char*)arg;
+            buff = skip_prefix_space(buff);
+            WIND_ASSERT_RETURN(buff[0] == '<',W_ERR_INVALID);
+			xmlfsm_update_buff(xmlfsm,arg,arglen);
+            if(buff[1] == '/')
+                wind_fsm_change_step(fsm,XML_STAT_NODE_TAIL);
+            else if(is_valid_prefix(buff[1]))
+                wind_fsm_change_step(fsm,XML_STAT_NODE_NAME);
+            else
+            {
+                wind_error("xml format error");
+                wind_fsm_stop(fsm);
+                return W_ERR_FAIL;
+            }
+        }
+    }while(0);
+
     return W_ERR_OK;
 }
 
@@ -120,11 +143,31 @@ static w_err_t xml_handle_end(w_fsm_s *fsm,void *arg,w_int32_t arglen)
     return W_ERR_FAIL;
 }
 
-w_err_t wind_xml_fsm_init(xml_fsm_s *xfsm)
+
+w_err_t wind_xml_fsm_init(xml_fsm_s *xfsm,char *name)
 {
-    return W_ERR_FAIL;
+    static w_int32_t xid = 0;
+    wind_memset(xfsm,0,sizeof(xml_fsm_s));
+    xfsm->fsm = wind_fsm_create(name,xid,"xml");
+    xid ++;
+    if(xid < 0)
+        xid = 0;
+    WIND_ASSERT_RETURN(xfsm->fsm != W_NULL,W_ERR_FAIL);
+    return W_ERR_OK;
 }
 
+w_err_t wind_xml_fsm_deinit(xml_fsm_s *xfsm)
+{
+    if(xfsm->fsm)
+        wind_fsm_destroy(xfsm->fsm);
+    if(xfsm->root)
+        wind_xmlnode_destroy(xfsm->root);
+    if(xfsm->newnode)
+        wind_xmlnode_destroy(xfsm->newnode);
+    if(xfsm->newattr)
+        wind_xmlattr_destroy(xfsm->newattr);
+    return W_ERR_OK;
+}
 
 
 FSM_STEP_START(xml)

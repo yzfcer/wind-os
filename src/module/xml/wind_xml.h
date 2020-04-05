@@ -46,17 +46,24 @@ typedef struct
     w_dlist_s attrlist; //xml node attribution list,see w_xmlattr_s
 }w_xmlnode_s;
 
-
+typedef struct __xml_fsm_s xml_fsm_s;
 //xml tree infomation struct
 typedef struct
 {
-    w_xmlnode_s *version; //
-    w_xmlnode_s *root;
-    
+    w_xmlnode_s *version; //XMl version node
+    w_xmlnode_s *root;    //XML root node
+    xml_fsm_s *xfsm;
 }w_xml_s;
 
-w_err_t wind_xml_parse(w_xmlnode_s *xnode,char *xmlstr,w_int32_t len);
+w_err_t wind_xml_init(w_xml_s *xml);
+w_err_t wind_xml_deinit(w_xml_s *xml);
+w_err_t wind_xml_parse(w_xml_s *xml,char *xmlstr,w_int32_t len);
 w_err_t wind_xml_print(w_xmlnode_s *xnode);
+
+w_xmlattr_s *wind_xmlattr_crate(char *attr_name,char *attr_value);
+w_err_t      wind_xmlattr_destroy(w_xmlattr_s *attr);
+w_xmlattr_s *wind_xmlattr_get(w_xmlnode_s *xnode,char *attr_name);
+w_err_t      wind_xmlattr_modify(w_xmlattr_s *xattr,char *attr_value);
 
 w_xmlnode_s *wind_xmlnode_create(char *name,w_uint8_t is_leaf);
 w_err_t      wind_xmlnode_destroy(w_xmlnode_s *xnode);
@@ -67,11 +74,9 @@ w_xmlnode_s *wind_xmlnode_get_prev(w_xmlnode_s *xnode);
 w_err_t      wind_xmlnode_modify(w_xmlnode_s *xnode,char *node_value);
 w_err_t      wind_xmlnode_insert(w_xmlnode_s *parent,w_xmlnode_s *child);
 w_err_t      wind_xmlnode_remove(w_xmlnode_s *parent,w_xmlnode_s *child);
+w_err_t      wind_xmlnode_insert_attr(w_xmlnode_s *xnode,w_xmlattr_s *xattr);
+w_err_t      wind_xmlnode_remove_attr(w_xmlnode_s *xnode,w_xmlattr_s *xattr);
 
-w_xmlattr_s *wind_xmlnode_get_attr(w_xmlnode_s *xnode,char *attr_name);
-w_err_t      wind_xmlnode_insert_attr(w_xmlnode_s *xnode,char *attr_name,char *attr_value);
-w_err_t      wind_xmlnode_modify_attr(w_xmlnode_s *xnode,char *attr_name,char *attr_value);
-w_err_t      wind_xmlnode_delete_attr(w_xmlnode_s *xnode,char *attr_name);
 
 
 #ifdef __cplusplus
