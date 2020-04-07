@@ -23,13 +23,15 @@ extern "C" {
 typedef struct __xml_fsm_s xml_fsm_s;
 typedef enum
 {
-    XML_STAT_IDLE,
-    XML_STAT_NODE_NAME,
-    XML_STAT_ATTR_NAME,
-    XML_STAT_ATTR_VALUE,
-    XML_STAT_VALUE,
-    XML_STAT_NODE_TAIL,
-    XML_STAT_END
+    XML_STEP_IDLE,
+    XML_STEP_VERSION,
+    XML_STEP_NOTE,
+    XML_STEP_NODE_NAME,
+    XML_STEP_ATTR_NAME,
+    XML_STEP_ATTR_VALUE,
+    XML_STEP_NODE_VALUE,
+    XML_STEP_NODE_TAIL,
+    XML_STEP_END
 }xml_state_e;
 
 struct __xml_fsm_s
