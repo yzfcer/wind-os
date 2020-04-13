@@ -47,6 +47,8 @@ w_int32_t wind_strncmp(const char* dest,const char *src,w_int32_t count);
 
 char* wind_strchr(const char *dest,w_uint32_t c);
 
+char* wind_strnchr(const char *dest,w_uint32_t c,w_int32_t count);
+
 char *wind_strrchr(const char *dest,char c);
 
 w_int32_t wind_strlen(const char *dest);

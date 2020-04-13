@@ -49,7 +49,7 @@ CASE_TEARDOWN(func) FUNC_EMPTY
 CASE_FUNC(func)
 {
     w_err_t err;
-    w_xmlnode_s *root;
+    w_xmlnode_s *root,*root1;
     w_xmlnode_s *tmp;
     w_xmlattr_s *xattr;
     root = wind_xmlnode_create("testroot");
@@ -108,8 +108,10 @@ CASE_FUNC(func)
     //wind_printf("sizeof xndoe=%d\r\n",sizeof(w_xmlnode_s));
     err = wind_xml_print(root);
     EXPECT_EQ(err,W_ERR_OK);
-    root = wind_xmlnode_get_parent(root);
-    EXPECT_EQ(root,W_NULL);
+    root1 = wind_xmlnode_get_parent(root);
+    EXPECT_EQ(root1,W_NULL);
+    err = wind_xmlnode_destroy(root);
+    EXPECT_EQ(err,W_ERR_OK);
 }
 
 

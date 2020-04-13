@@ -235,6 +235,7 @@ w_err_t wind_xmlnode_destroy(w_xmlnode_s *xnode)
         err = wind_xmlnode_destroy(child);
         WIND_ASSERT_BREAK(err == W_ERR_OK,err,"destroy xnode failed");
     }
+    wind_free(xnode);
     return err;
     
 }

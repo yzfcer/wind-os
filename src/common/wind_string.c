@@ -140,6 +140,20 @@ char* wind_strchr(const char *dest,w_uint32_t c)
     return (char *) dest;
 }
 
+char* wind_strnchr(const char *dest,w_uint32_t c,w_int32_t count)
+{
+    w_int32_t i;
+    WIND_STRCHECK(dest != W_NULL,(char *)W_NULL);
+    for(i = 0;i < count;i ++)
+    {
+        if (dest[i] == '\0')
+            return (char*)W_NULL;
+        if(dest[i] == (char) c)
+            return &dest[i];
+    }
+    return (char*)W_NULL;
+}
+
 char *wind_strrchr(const char *dest,char c)
 {
     const char *p;

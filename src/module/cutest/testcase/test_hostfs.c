@@ -276,6 +276,7 @@ CASE_FUNC(format)
 SUITE_SETUP(hostfs)
 {
     w_err_t err;
+    wind_memset(&g_hfs,0,sizeof(g_hfs));
     err = hfs_init();
     EXPECT_EQ(err,W_ERR_OK);
     return W_ERR_OK;
