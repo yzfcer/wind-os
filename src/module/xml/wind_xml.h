@@ -72,7 +72,7 @@ w_xmlnode_s *wind_xmlnode_get_parent(w_xmlnode_s *xnode);
 w_xmlnode_s *wind_xmlnode_get_child(w_xmlnode_s *xnode);
 w_xmlnode_s *wind_xmlnode_get_next(w_xmlnode_s *xnode);
 w_xmlnode_s *wind_xmlnode_get_prev(w_xmlnode_s *xnode);
-w_err_t      wind_xmlnode_modify(w_xmlnode_s *xnode,char *node_value);
+w_err_t      wind_xmlnode_set_value(w_xmlnode_s *xnode,char *node_value);
 w_err_t      wind_xmlnode_insert(w_xmlnode_s *parent,w_xmlnode_s *child);
 w_err_t      wind_xmlnode_remove(w_xmlnode_s *parent,w_xmlnode_s *child);
 w_err_t      wind_xmlnode_insert_attr(w_xmlnode_s *xnode,w_xmlattr_s *xattr);

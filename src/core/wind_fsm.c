@@ -81,7 +81,7 @@ static w_err_t wind_fsm_run(w_fsm_s *fsm)
     while(fsm->state == FSM_STAT_READY)
     {
         func = fsm->model->steplist[fsm->cur_step].func;
-        err = func(fsm,fsm->arg,fsm->arglen);
+        err = func(fsm);
         if(err != W_ERR_OK)
         {
             break;
@@ -147,11 +147,12 @@ w_err_t wind_fsm_init(w_fsm_s *fsm,char *name,w_int32_t id,char *modelname)
     {
         model = wind_fsm_model_get(modelname);
         WIND_ASSERT_BREAK(model != W_NULL,W_ERR_FAIL,"get fsm model:%s failed",modelname);
-        fsm->id = id;
         fsm->sleep_cnt = 0;
         fsm->sleep_tick = 0;
         fsm->state = FSM_STAT_IDLE;
+        fsm->id = id;
         fsm->cur_step = 0;
+        fsm->sub_step = 0;
         fsm->arg = W_NULL;
         fsm->model= model;
         err = wind_mutex_init(&fsm->mutex,name);

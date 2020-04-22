@@ -698,8 +698,6 @@ static w_err_t do_host_file_readdir(w_hostfile_s *hfile)
 w_err_t hostfile_readdir(w_hostfile_s* dir,w_hostfile_s** sub)
 {
     w_err_t err;
-    w_hostfile_s *hfile;
-    //w_hostfile_s *tmp = *sub;
     WIND_ASSERT_RETURN(dir != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(sub != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(dir->magic == HOSTFILE_MAGIC,W_ERR_INVALID);

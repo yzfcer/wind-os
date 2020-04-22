@@ -88,11 +88,12 @@ struct __w_fsm_model_s
 struct __w_fsm_s
 {
     w_obj_s obj;           //Basic object information
-    w_int32_t id;          //FSM object ID
     w_uint32_t sleep_cnt;  //FSM sleep time remaining (in milliseconds)
     w_uint32_t sleep_tick; //Tick value when FSM sleep
     w_fsm_state_e state;   //FSM state
-    w_int32_t cur_step;    //FSM current step ID
+    w_int32_t id;          //FSM object ID
+    w_int16_t cur_step;    //FSM current step ID
+    w_int16_t sub_step;    //FSM subscript step ID
     void      *arg;        //FSM input parameter
     w_int32_t arglen;      //FSM input parameter lenth
     w_mutex_s mutex;       //FSM mutex lock

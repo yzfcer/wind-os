@@ -31,7 +31,7 @@ static w_bool_t is_separation_character(char c)
     return W_FALSE;
 }
 
-static int is_valid_prefix(int c) 
+static w_int32_t is_valid_prefix(int c) 
 { 
     return (c >= 'A' && c <= 'Z') || 
         (c >= 'a' && c <= 'z') || 
@@ -42,161 +42,171 @@ char *skip_prefix_space(char *buff)
 { 
     char *p;
     for(p = buff;is_separation_character(*p);p ++);
-    return (p);
+        return (p);
 }
 
-
-
-static void xmlfsm_update_buff(w_fsm_s *fsm)
+static void xmlfsm_clear_buff(xml_fsm_s *xmlfsm)
 {
-    w_int32_t len;
-    char *parg;
-    xml_fsm_s *xmlfsm;
-    xmlfsm = (xml_fsm_s*)fsm;
-    if(xmlfsm->buffidx >= xmlfsm->bufflen)
-    {
-        xmlfsm->buffidx = 0;
-        xmlfsm->bufflen = 0;
-    }
-        
-    if(xmlfsm->buffidx > 0)
-    {
-        wind_memcpy(xmlfsm->buff,&xmlfsm->buff[xmlfsm->buffidx],xmlfsm->bufflen - xmlfsm->buffidx);
-        xmlfsm->bufflen = xmlfsm->bufflen - xmlfsm->buffidx;
-        xmlfsm->buffidx = 0;
-    }
-    if(xmlfsm->argidx < fsm->arglen)
-    {
-        len = XML_FSM_BUFLEN - xmlfsm->bufflen;
-        len = len < fsm->arglen - xmlfsm->argidx?len:fsm->arglen - xmlfsm->argidx;
-        parg = fsm->arg;
-        wind_memcpy(&xmlfsm->buff[xmlfsm->bufflen],&parg[xmlfsm->argidx],len);
-        xmlfsm->argidx += len;
-    }
+    xmlfsm->buffidx = 0;
+    wind_memset(xmlfsm->buff,0,XML_FSM_BUFLEN);
 }
 
-static char* xml_find_char(w_fsm_s *fsm,char *ch)
+static void xmlfsm_change_step(w_fsm_s *fsm,w_int32_t new_step)
 {
-    char *buff;
-    w_int32_t i;
-    xml_fsm_s *xmlfsm;
-    xmlfsm = (xml_fsm_s*)fsm;
-    xmlfsm_update_buff(fsm);
-    while(xmlfsm->buffidx < xmlfsm->bufflen)
-    {
-        buff = xmlfsm->buff;
-        for(i = xmlfsm->buffidx;i < xmlfsm->bufflen;i ++)
-            if(buff[i] == ch) //find charactor '<'
-                return &buff[i];
-        if(i >= xmlfsm->bufflen)
-        {
-            xmlfsm_update_buff(fsm);//copy to fsm cache
-            continue;
-        }
-    }
-    return (char *)W_NULL;
-
+    fsm->sub_step = 0;
+    wind_fsm_change_step(fsm,new_step);
 }
 
-static char* xml_skip_space(w_fsm_s *fsm,char *ch)
+
+static void xmlfsm_new_node(xml_fsm_s *xmlfsm)
+{
+    if(xmlfsm->ver_flag)
+    {
+        xmlfsm->version = xmlfsm->newnode;
+        xmlfsm->ver_flag = 0;
+        xmlfsm->newnode = W_NULL;
+    }
+    else
+    {
+        if(xmlfsm->cur == W_NULL)
+            xmlfsm->cur = xmlfsm->newnode;
+        else
+            wind_xmlnode_insert(xmlfsm->cur,xmlfsm->newnode);
+        xmlfsm->newnode = W_NULL;
+    }
+    xmlfsm_change_step(xmlfsm->fsm,XML_STEP_NODE_VALUE);
+}
+
+
+static w_err_t xml_find_char(w_fsm_s *fsm,char ch)
 {
     char *buff;
     w_int32_t i;
     xml_fsm_s *xmlfsm;
     xmlfsm = (xml_fsm_s*)fsm;
-    xmlfsm_update_buff(fsm);
-    while(xmlfsm->buffidx < xmlfsm->bufflen)
+    buff = fsm->arg;
+    for(i = xmlfsm->argidx;i < fsm->arglen;i ++)
     {
-        buff = xmlfsm->buff;
-        for(i = xmlfsm->buffidx;i < xmlfsm->bufflen;i ++)
-            if(!is_separation_character(buff[i])) //find charactor '<'
-                return &buff[i];
-        if(i >= xmlfsm->bufflen)
+        if(buff[i] == ch)
         {
-            xmlfsm_update_buff(fsm);//copy to fsm cache
-            continue;
+            xmlfsm->argidx = i;
+            return W_ERR_OK;
         }
     }
-    return (char *)W_NULL;
-
+    xmlfsm->argidx = i;
+    return W_ERR_FAIL;
 }
 
+static w_err_t xml_skip_space(w_fsm_s *fsm)
+{
+    char *buff;
+    w_int32_t i;
+    xml_fsm_s *xmlfsm;
+    xmlfsm = (xml_fsm_s*)fsm;
+    buff = fsm->arg;
+    for(i = xmlfsm->argidx;i < fsm->arglen;i ++)
+    {
+        if(!is_separation_character(buff[i]))
+        {
+            xmlfsm->argidx = i;
+            return W_ERR_OK;
+        }
+    }
+    xmlfsm->argidx = i;
+    return W_ERR_FAIL;
+}
 
 
 static w_err_t xml_handle_idle(w_fsm_s *fsm)
 {
     w_err_t err;
-    w_int32_t i;
+    w_int32_t idx;
     xml_fsm_s *xmlfsm;
     char *buff;
     WIND_CHECK_RETURN(fsm->arg != W_NULL,W_ERR_PTR_NULL);
     WIND_CHECK_RETURN(fsm->arglen > 0,W_ERR_INVALID);
-    do
+    buff = fsm->arg;
+    xmlfsm = (xml_fsm_s*)fsm;
+    while(xmlfsm->argidx < fsm->arglen)
     {
-        err = W_ERR_OK;
-        buff = xml_find_char(fsm,'<');
-        WIND_CHECK_BREAK(buff != W_NULL,W_ERR_FAIL);
-        if(buff == W_NULL)
-            break;
-        xmlfsm->buffidx = (buff - xmlfsm->buff);
-        if(buff[i+1] == '?')
-            wind_fsm_change_step(fsm,XML_STEP_VERSION);
-        else if((buff[i+1] == '!') && (buff[i+2] == '?') && (buff[i+3] == '?'))
-            wind_fsm_change_step(fsm,XML_STEP_NOTE);
-        else if(buff[i+1] == '/')
-            wind_fsm_change_step(fsm,XML_STEP_NODE_TAIL);
-        else
-            wind_fsm_change_step(fsm,XML_STEP_NODE_NAME);
-        if(fsm->cur_step == XML_STEP_IDLE)
-            wind_fsm_wait(fsm);
-        
-    }while(0);
-
-    return err;
-}
-
-static w_err_t xml_handle_version(w_fsm_s *fsm)
-{
-    w_err_t err;
-    w_int32_t i;
-    xml_fsm_s *xmlfsm;
-    char *buff;
-    WIND_CHECK_RETURN(fsm->arg != W_NULL,W_ERR_PTR_NULL);
-    WIND_CHECK_RETURN(fsm->arglen > 0,W_ERR_INVALID);
-    do
-    {
-        err = W_ERR_OK;
-        xmlfsm = (xml_fsm_s*)fsm;
-        xmlfsm_update_buff(fsm);
-        while(xmlfsm->buffidx < fsm->arglen)
+        switch(fsm->sub_step)
         {
-            buff = xmlfsm->buff;
-            for(i = xmlfsm->buffidx;i < xmlfsm->bufflen;i ++)
-                if(buff[i] == '?') 
-                    break;
-            if(i >= xmlfsm->bufflen)
-            {
-                xmlfsm_update_buff(fsm);//copy to fsm cache
-                continue;
-            }
-            WIND_ASSERT_BREAK(buff[i+1] == '>',W_ERR_FAIL,"xml version info error");
-            xmlfsm->buffidx = i + 2;
-            wind_fsm_change_step(fsm,XML_STEP_IDLE);
+            case 0://skip separate characters
+                err = xml_skip_space(fsm);
+                WIND_CHECK_RETURN(err == W_ERR_OK,W_ERR_OK);
+                fsm->sub_step ++;
+                break;
+            case 1://skip '<'
+                WIND_ASSERT_RETURN(buff[xmlfsm->argidx] == '<',W_ERR_FAIL);
+                xmlfsm->argidx ++;
+                fsm->sub_step ++;
+                break;
+            case 2://goto next step depengding on the next character
+                idx = xmlfsm->argidx;
+                if(buff[idx] == '?')
+                {
+                    xmlfsm->ver_flag = 1;
+                    xmlfsm_change_step(fsm,XML_STEP_NODE_NAME);
+                }
+                else if(buff[idx+1] == '!')
+                    xmlfsm_change_step(fsm,XML_STEP_NOTE);
+                else if(buff[idx+1] == '/')
+                    xmlfsm_change_step(fsm,XML_STEP_NODE_TAIL);
+                else
+                    xmlfsm_change_step(fsm,XML_STEP_NODE_NAME);
+                return W_ERR_OK;
+            default:
+                return W_ERR_FAIL;
         }
-        
-    }while(0);
-    if(fsm->cur_step == XML_STEP_IDLE)
-        wind_fsm_wait(fsm);
-
-    return err;
-
+    }
+    //if(fsm->cur_step == XML_STEP_IDLE)
+    wind_fsm_wait(fsm);
+    return W_ERR_OK;
 }
+
+
 
 static w_err_t xml_handle_note(w_fsm_s *fsm)
 {
+    w_err_t err;
+    xml_fsm_s *xmlfsm;
+    char *buff;
     WIND_CHECK_RETURN(fsm->arg != W_NULL,W_ERR_PTR_NULL);
     WIND_CHECK_RETURN(fsm->arglen > 0,W_ERR_INVALID);
-    return W_ERR_FAIL;
+    buff = fsm->arg;
+    xmlfsm = (xml_fsm_s*)fsm;
+    while(xmlfsm->argidx < fsm->arglen)
+    {
+        switch(fsm->sub_step)
+        {
+            case 0://skip '!'
+                WIND_ASSERT_RETURN(buff[xmlfsm->argidx] == '!',W_ERR_FAIL);
+                xmlfsm->argidx ++;
+                fsm->sub_step ++;
+                break;
+            case 1:
+            case 2:
+            case 4://skip '-'
+                WIND_ASSERT_RETURN(buff[xmlfsm->argidx] == '-',W_ERR_FAIL);
+                xmlfsm->argidx ++;
+                fsm->sub_step ++;
+                break;
+            case 3://find the end of character '-'
+                err = xml_find_char(fsm,'-');
+                WIND_CHECK_RETURN(err == W_ERR_OK,W_ERR_OK);
+                xmlfsm->argidx ++;
+                fsm->sub_step ++;
+                break;
+            case 5://skip '>' and goto idle step
+                WIND_ASSERT_RETURN(buff[xmlfsm->argidx] == '>',W_ERR_FAIL);
+                xmlfsm->argidx ++;
+                xmlfsm_change_step(fsm,XML_STEP_IDLE);
+                return W_ERR_OK;
+            default:
+                return W_ERR_FAIL;
+        }
+    }
+    return W_ERR_OK;
 }
 
 static w_err_t xml_handle_node_name(w_fsm_s *fsm)
@@ -207,44 +217,204 @@ static w_err_t xml_handle_node_name(w_fsm_s *fsm)
     char *buff;
     WIND_CHECK_RETURN(fsm->arg != W_NULL,W_ERR_PTR_NULL);
     WIND_CHECK_RETURN(fsm->arglen > 0,W_ERR_INVALID);
-    do
+    buff = fsm->arg;
+    xmlfsm = (xml_fsm_s*)fsm;
+    while(xmlfsm->argidx < fsm->arglen)
     {
-        buff = skip_prefix_space(buff);
-        WIND_ASSERT_RETURN(buff[0] == '<',W_ERR_INVALID);
-        xmlfsm_update_buff(fsm);
-
-        if(is_valid_prefix(buff[1]))
-            wind_fsm_change_step(fsm,XML_STEP_NODE_NAME);
-        else
+        switch(fsm->sub_step)
         {
-            wind_error("xml format error");
-            wind_fsm_stop(fsm);
-            return W_ERR_FAIL;
+            case 0://skip separate characters
+                err = xml_skip_space(fsm);
+                WIND_CHECK_RETURN(err == W_ERR_OK,W_ERR_OK);
+                xmlfsm_clear_buff(xmlfsm);
+                fsm->sub_step ++;
+                break;
+            case 1://copy node name string
+                for(i = xmlfsm->argidx;i < fsm->arglen;i ++)
+                {
+                    WIND_ASSERT_RETURN(xmlfsm->buffidx < XML_FSM_BUFLEN,W_ERR_FAIL);
+                    if(!is_separation_character(buff[i]))
+                    {
+                        xmlfsm->buff[xmlfsm->buffidx] = buff[i];
+                        xmlfsm->argidx ++;
+                        xmlfsm->buffidx ++;
+                    }
+                    else
+                    {
+                        fsm->sub_step ++;
+                        break;
+                    }
+                }
+                break;
+            case 2://create xml node
+                xmlfsm->buff[xmlfsm->buffidx] = 0;
+                xmlfsm->newnode = wind_xmlnode_create(xmlfsm->buff);
+                WIND_ASSERT_RETURN(xmlfsm->newnode != W_NULL,W_ERR_MEM);
+                xmlfsm->argidx ++;
+                xmlfsm_change_step(fsm,XML_STEP_ATTR_VALUE);
+                return W_ERR_OK;
+            default:
+                return W_ERR_FAIL;
         }
-
-    }while(0);
-    return W_ERR_FAIL;
+    }
+    return W_ERR_OK;
 }
 
 static w_err_t xml_handle_attr_name(w_fsm_s *fsm)
 {
+    w_err_t err;
+    w_int32_t i;
+    xml_fsm_s *xmlfsm;
+    char *buff;
     WIND_CHECK_RETURN(fsm->arg != W_NULL,W_ERR_PTR_NULL);
     WIND_CHECK_RETURN(fsm->arglen > 0,W_ERR_INVALID);
-    return W_ERR_FAIL;
+    buff = fsm->arg;
+    xmlfsm = (xml_fsm_s*)fsm;
+    while(xmlfsm->argidx < fsm->arglen)
+    {
+        switch(fsm->sub_step)
+        {
+            case 0://skip separate characters
+                err = xml_skip_space(fsm);
+                WIND_CHECK_RETURN(err == W_ERR_OK,W_ERR_OK);
+                xmlfsm_clear_buff(xmlfsm);
+                fsm->sub_step ++;
+                break;
+            case 1:
+                if(buff[xmlfsm->argidx] == '>')
+                {
+                    xmlfsm_new_node(xmlfsm);
+                    return W_ERR_OK;
+                }
+                for(i = xmlfsm->argidx;i < fsm->arglen;i ++)
+                {
+                    WIND_ASSERT_RETURN(xmlfsm->buffidx < XML_FSM_BUFLEN,W_ERR_FAIL);
+                    if(!is_separation_character(buff[i]) && (buff[i] != '='))
+                    {
+                        xmlfsm->buff[xmlfsm->buffidx] = buff[i];
+                        xmlfsm->argidx ++;
+                        xmlfsm->buffidx ++;
+                    }
+                    else
+                    {
+                        fsm->sub_step ++;
+                        break;
+                    }
+                }
+                break;
+            case 2:
+                xmlfsm->buff[xmlfsm->buffidx] = 0;
+                xmlfsm->newattr = wind_xmlattr_crate(xmlfsm->buff,"");
+                WIND_ASSERT_RETURN(xmlfsm->newattr != W_NULL,W_ERR_FAIL);
+                xmlfsm_change_step(fsm,XML_STEP_ATTR_NAME);
+                return W_ERR_OK;
+            default:
+                return W_ERR_FAIL;
+        }
+    }
+    return W_ERR_OK;
 }
 
 static w_err_t xml_handle_attr_value(w_fsm_s *fsm)
 {
+    w_err_t err;
+    w_int32_t i;
+    xml_fsm_s *xmlfsm;
+    char *buff;
     WIND_CHECK_RETURN(fsm->arg != W_NULL,W_ERR_PTR_NULL);
     WIND_CHECK_RETURN(fsm->arglen > 0,W_ERR_INVALID);
-    return W_ERR_FAIL;
+    buff = fsm->arg;
+    xmlfsm = (xml_fsm_s*)fsm;
+    while(xmlfsm->argidx < fsm->arglen)
+    {
+        switch(fsm->sub_step)
+        {
+            case 0:
+                err = xml_find_char(fsm,'\"');
+                WIND_CHECK_RETURN(err == W_ERR_OK,W_ERR_OK);
+                xmlfsm_clear_buff(xmlfsm);
+                fsm->sub_step ++;
+                break;
+            case 1:
+                for(i = xmlfsm->argidx;i < fsm->arglen;i ++)
+                {
+                    if(xmlfsm->buffidx >= XML_FSM_BUFLEN)
+                        return W_ERR_FAIL;
+                    if((buff[i] != '\"'))
+                    {
+                        xmlfsm->buff[xmlfsm->buffidx] = buff[i];
+                        xmlfsm->argidx ++;
+                        xmlfsm->buffidx ++;
+                    }
+                    else
+                    {
+                        xmlfsm->buff[xmlfsm->buffidx] = 0;
+                        WIND_ASSERT_RETURN(xmlfsm->newattr != W_NULL,W_ERR_MEM);
+                        wind_xmlattr_modify(xmlfsm->newattr,xmlfsm->buff);
+                        wind_xmlnode_insert_attr(xmlfsm->newnode,xmlfsm->newattr);
+                        xmlfsm_change_step(fsm,XML_STEP_ATTR_NAME);
+                        return W_ERR_OK;
+                    }
+                }
+            default:
+                return W_ERR_FAIL;
+        }
+    }
+    return W_ERR_OK;
 }
 
-static w_err_t xml_handle_value(w_fsm_s *fsm)
+static w_err_t xml_handle_node_value(w_fsm_s *fsm)
 {
+    w_err_t err;
+    w_int32_t i;
+    xml_fsm_s *xmlfsm;
+    char *buff;
     WIND_CHECK_RETURN(fsm->arg != W_NULL,W_ERR_PTR_NULL);
     WIND_CHECK_RETURN(fsm->arglen > 0,W_ERR_INVALID);
-    return W_ERR_FAIL;
+    buff = fsm->arg;
+    xmlfsm = (xml_fsm_s*)fsm;
+    while(xmlfsm->argidx < fsm->arglen)
+    {
+        switch(fsm->sub_step)
+        {
+            case 0://skip separate characters
+                err = xml_skip_space(fsm);
+                WIND_CHECK_RETURN(err == W_ERR_OK,W_ERR_OK);
+                xmlfsm_clear_buff(xmlfsm);
+                fsm->sub_step ++;
+                break;
+            case 1://copy node name string
+                for(i = xmlfsm->argidx;i < fsm->arglen;i ++)
+                {
+                    WIND_ASSERT_RETURN(xmlfsm->buffidx < XML_FSM_BUFLEN,W_ERR_FAIL);
+                    if(buff[i] != '<')
+                    {
+                        xmlfsm->buff[xmlfsm->buffidx] = buff[i];
+                        xmlfsm->argidx ++;
+                        xmlfsm->buffidx ++;
+                    }
+                    else
+                    {
+                        fsm->sub_step ++;
+                        break;
+                    }
+                }
+                break;
+            case 2://create xml node
+                xmlfsm->buff[xmlfsm->buffidx] = 0;
+                for(i = xmlfsm->buffidx - 1;i > 0;i --)
+                    if(is_separation_character(xmlfsm->buff[i]))
+                        xmlfsm->buff[i] = 0;
+                WIND_ASSERT_RETURN(xmlfsm->newnode != W_NULL,W_ERR_FAIL);
+                wind_xmlnode_set_value(xmlfsm->newnode,xmlfsm->buff);
+                //xmlfsm->argidx ++;
+                xmlfsm_change_step(fsm,XML_STEP_ATTR_VALUE);
+                return W_ERR_OK;
+            default:
+                return W_ERR_FAIL;
+        }
+    }
+    return W_ERR_OK;
 }
 
 static w_err_t xml_handle_node_tail(w_fsm_s *fsm)
@@ -252,6 +422,7 @@ static w_err_t xml_handle_node_tail(w_fsm_s *fsm)
     WIND_CHECK_RETURN(fsm->arg != W_NULL,W_ERR_PTR_NULL);
     WIND_CHECK_RETURN(fsm->arglen > 0,W_ERR_INVALID);
     return W_ERR_FAIL;
+    
 }
 static w_err_t xml_handle_end(w_fsm_s *fsm)
 {
@@ -289,12 +460,11 @@ w_err_t wind_xml_fsm_deinit(xml_fsm_s *xfsm)
 
 FSM_STEP_START(xml)
 FSM_STEP(XML_STEP_IDLE,      xml_handle_idle)
-FSM_STEP(XML_STEP_VERSION  , xml_handle_version)
-FSM_STEP(XML_STEP_NOTE     , xml_handle_version)
+FSM_STEP(XML_STEP_NOTE     , xml_handle_note)
 FSM_STEP(XML_STEP_NODE_NAME, xml_handle_node_name)
 FSM_STEP(XML_STEP_ATTR_NAME, xml_handle_attr_name)
 FSM_STEP(XML_STEP_ATTR_VALUE,xml_handle_attr_value)
-FSM_STEP(XML_STEP_NODE_VALUE,xml_handle_value)
+FSM_STEP(XML_STEP_NODE_VALUE,xml_handle_node_value)
 FSM_STEP(XML_STEP_NODE_TAIL, xml_handle_node_tail)
 FSM_STEP(XML_STEP_END,       xml_handle_end)
 FSM_STEP_END

@@ -286,7 +286,7 @@ w_xmlnode_s *wind_xmlnode_get_prev(w_xmlnode_s *xnode)
     return tmp_xnode;
 }
 
-w_err_t wind_xmlnode_modify(w_xmlnode_s *xnode,char *node_value)
+w_err_t wind_xmlnode_set_value(w_xmlnode_s *xnode,char *node_value)
 {
     WIND_ASSERT_RETURN(xnode != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(xnode->is_leaf,W_ERR_INVALID);

@@ -149,7 +149,7 @@ char* wind_strnchr(const char *dest,w_uint32_t c,w_int32_t count)
         if (dest[i] == '\0')
             return (char*)W_NULL;
         if(dest[i] == (char) c)
-            return &dest[i];
+            return (char*)&dest[i];
     }
     return (char*)W_NULL;
 }
