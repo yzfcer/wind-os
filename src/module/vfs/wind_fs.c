@@ -51,7 +51,7 @@ w_vfs_s *wind_vfs_obj_init(char *name)
     w_err_t err;
     w_vfs_s *vfs;
     WIND_ASSERT_RETURN(name != W_NULL,W_NULL);
-    vfs = wind_pool_malloc(fspool);
+    vfs = (w_vfs_s *)wind_pool_malloc(fspool);
     WIND_ASSERT_RETURN(vfs != W_NULL,W_NULL);
     wind_memset(vfs,0,sizeof(w_vfs_s));
     err = wind_obj_init(&vfs->obj,WIND_VFS_MAGIC,name,&fslist);

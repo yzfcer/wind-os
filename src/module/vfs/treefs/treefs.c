@@ -108,7 +108,7 @@ w_treefs_s *wind_treefs_create(char *name)
 {
     w_err_t err;
     w_treefs_s *treefs;
-    treefs = wind_pool_malloc(&treefspool);
+    treefs = (w_treefs_s *)wind_pool_malloc(&treefspool);
     WIND_ASSERT_RETURN(treefs != W_NULL,W_NULL);
     err = wind_treefs_init(treefs,name);
     if(err == W_ERR_OK)

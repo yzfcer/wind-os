@@ -28,6 +28,7 @@
 #include "wind_type.h"
 #include "wind_obj.h"
 #include "wind_thread.h"
+#include "wind_mutex.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
@@ -56,6 +57,7 @@ struct __w_event_s
     w_obj_s obj;     //Basic object information
     w_int16_t cbcnt; //Number of callback functions
     w_dlist_s cblist;//List of callback functions
+    w_mutex_s lock;
 };
 
 w_err_t _wind_event_mod_init(void);

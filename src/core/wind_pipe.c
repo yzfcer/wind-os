@@ -127,7 +127,7 @@ w_err_t wind_pipe_destroy(w_pipe_s* pipe)
     w_err_t err;
     WIND_ASSERT_RETURN(pipe != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(pipe->obj.magic == WIND_PIPE_MAGIC,W_ERR_INVALID);
-    wind_notice("destroy pipe:%s",pipe->obj.name?pipe->obj.name:"null");
+    wind_notice("destroy pipe:%s",wind_obj_name(&pipe->obj));
     err = wind_obj_deinit(&pipe->obj,WIND_PIPE_MAGIC,&pipelist);
     WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_FAIL);
     if(IS_F_PIPE_POOL(pipe))
@@ -154,7 +154,7 @@ w_err_t wind_pipe_print(void)
         size = wind_queue_max_count(queue);
         used = wind_queue_data_count(queue);
         wind_printf("%-16s %-8d %-10d\r\n",
-            pipe->obj.name?pipe->obj.name:"null",size,used);
+            wind_obj_name(&pipe->obj),size,used);
     }
     wind_enable_switch();
     wind_print_space(5);

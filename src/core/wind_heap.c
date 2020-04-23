@@ -209,7 +209,7 @@ w_err_t wind_heap_destroy(w_heap_s *heap)
     w_err_t err;
     WIND_ASSERT_RETURN(heap != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(heap->obj.magic == WIND_HEAP_MAGIC,W_ERR_INVALID);
-    wind_notice("destroy heap:%s",heap->obj.name?heap->obj.name:"null");
+    wind_notice("destroy heap:%s",wind_obj_name(&heap->obj));
     wind_mutex_lock(heap->mutex);
     err = wind_obj_deinit(&heap->obj,WIND_HEAP_MAGIC,&heaplist);
     wind_mutex_unlock(heap->mutex);
@@ -401,7 +401,7 @@ w_err_t wind_heap_free(w_heap_s* heap,void *ptr)
         WIND_ASSERT_BREAK(item->magic == WIND_HEAPITEM_MAGIC,W_ERR_INVALID,"invalid pointer");
         WIND_ASSERT_BREAK(IS_F_HEAPITEM_USED(item),W_ERR_INVALID,"memory is NOT alloced");
         WIND_ASSERT_BREAK(item->heap == heap,W_ERR_INVALID,"pointer is NOT in this heap");       
-        wind_debug("heap_free %s,%p",heap->obj.name?heap->obj.name:"null",ptr);
+        wind_debug("heap_free %s,%p",wind_obj_name(&heap->obj),ptr);
         heap = item->heap;
         WIND_ASSERT_BREAK(heap != W_NULL,W_ERR_INVALID,"null heap");
         WIND_ASSERT_BREAK(heap->obj.magic == WIND_HEAP_MAGIC,W_ERR_INVALID,"magic error");
@@ -457,7 +457,7 @@ w_err_t wind_heap_print(void)
         heap = NODE_TO_HEAP(dnode);
         wind_mutex_lock(heap->mutex);
         wind_printf("%-16s 0x%08x %-12d %-10s\r\n",
-            heap->obj.name?heap->obj.name:"null",heap->addr,heap->stati.tot,
+            wind_obj_name(&heap->obj),heap->addr,heap->stati.tot,
             IS_F_HEAP_PRIVATE(heap)?"YES":"NO");
         wind_mutex_unlock(heap->mutex);
     }

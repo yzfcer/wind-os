@@ -38,7 +38,7 @@ WIND_POOL(daemonpool,WIND_DAEMON_MAX_NUM,sizeof(w_daemon_s));
 
 static w_daemon_s *daemon_malloc(void)
 {
-    return wind_pool_malloc(daemonpool);
+    return (w_daemon_s *)wind_pool_malloc(daemonpool);
 }
 
 static w_err_t daemon_free(w_daemon_s *daemon)
@@ -149,7 +149,7 @@ w_err_t wind_daemon_destroy(w_daemon_s *daemon)
     do
     {
         err = W_ERR_OK;
-        wind_notice("destroy daemon:%s",daemon->obj.name?daemon->obj.name:"null");
+        wind_notice("destroy daemon:%s",wind_obj_name(&daemon->obj));
         err = wind_obj_deinit(&daemon->obj,WIND_DAEMON_MAGIC,&daemonlist);
         WIND_ASSERT_BREAK(err == W_ERR_OK, W_ERR_FAIL,"deinit damon obj failed");
         

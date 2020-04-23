@@ -303,6 +303,7 @@ w_err_t wind_xmlnode_insert(w_xmlnode_s *parent,w_xmlnode_s *child)
     w_err_t err;
     WIND_ASSERT_RETURN(parent != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(child != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(parent->value == W_NULL,W_ERR_INVALID);
     do
     {
         WIND_ASSERT_BREAK(parent->level < MAX_XNODE_LEVEL - 1,W_ERR_FAIL,"xnode level is too deep");

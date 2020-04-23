@@ -221,7 +221,7 @@ w_err_t wind_mutex_print(void)
     {
         mutex = NODE_TO_MUTEX(dnode);
         wind_printf("%-16s %-8s %-16s \r\n",
-            mutex->obj.name?mutex->obj.name:"null",IS_F_MUTEX_LOCKED(mutex)?"lock":"unlock",
+            wind_obj_name(&mutex->obj),IS_F_MUTEX_LOCKED(mutex)?"lock":"unlock",
             mutex->owner != W_NULL?mutex->owner->name:"null");
     }
     wind_enable_switch();

@@ -180,7 +180,7 @@ w_err_t wind_pool_destroy(void *mem)
     w_pool_s *pm;
     pm = wind_pool_get_by_mem(mem);
     WIND_ASSERT_RETURN(pm != W_NULL,W_ERR_PTR_NULL);
-    wind_notice("destroy pool:%s",pm->obj.name?pm->obj.name:"null");
+    wind_notice("destroy pool:%s",wind_obj_name(&pm->obj));
     err = wind_obj_deinit(&pm->obj,WIND_POOL_MAGIC,&poollist);
     WIND_ASSERT_RETURN(err == W_ERR_OK, W_ERR_FAIL);
     return W_ERR_OK;
@@ -269,7 +269,7 @@ void wind_pool_print_list(void)
     {
         pm = NODE_TO_POOL(dnode);
         wind_printf("%-12s 0x%-10x %-8d %-8d %-8d\r\n",
-            pm->obj.name?pm->obj.name:"null",pm->head,pm->size,pm->itemnum,pm->itemsize);
+            wind_obj_name(&pm->obj),pm->head,pm->size,pm->itemnum,pm->itemsize);
     }
     wind_enable_switch();
     wind_print_space(7);

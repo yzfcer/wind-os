@@ -42,7 +42,7 @@ WIND_POOL(filepool,WIND_FILE_MAX_NUM,sizeof(w_file_s));
 static w_file_s *file_malloc(void)
 {
     w_file_s *file = (w_file_s *)W_NULL;
-    file = wind_pool_malloc(filepool);
+    file = (w_file_s *)wind_pool_malloc(filepool);
     return file;
 }
 

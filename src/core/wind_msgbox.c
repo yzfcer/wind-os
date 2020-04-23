@@ -39,7 +39,7 @@ WIND_POOL(msgboxpool,WIND_MBOX_MAX_NUM,sizeof(w_msgbox_s));
 
 static w_msgbox_s *msgbox_malloc(void)
 {
-    return wind_pool_malloc(msgboxpool);
+    return (w_msgbox_s *)wind_pool_malloc(msgboxpool);
 }
 
 static w_err_t msgbox_free(w_msgbox_s *msgbox)
@@ -128,7 +128,7 @@ w_err_t wind_msgbox_destroy(w_msgbox_s *msgbox)
     w_thread_s *thread;
     WIND_ASSERT_RETURN(msgbox != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(msgbox->obj.magic == WIND_MSGBOX_MAGIC,W_ERR_INVALID);
-    wind_notice("destroy msgbox:%s",msgbox->obj.name?msgbox->obj.name:"null");
+    wind_notice("destroy msgbox:%s",wind_obj_name(&msgbox->obj));
     thread = wind_thread_current();
     WIND_ASSERT_RETURN(msgbox->owner == thread,W_ERR_FAIL);
     err = wind_obj_deinit(&msgbox->obj,WIND_MSGBOX_MAGIC,&msgboxlist);
@@ -144,7 +144,7 @@ w_err_t wind_msgbox_destroy(w_msgbox_s *msgbox)
     dnode = dlist_head(&msgbox->msglist);
     if(dnode != W_NULL)
     {
-        wind_warn("msgbox:%s is NOT empty while destroying it.",msgbox->obj.name?msgbox->obj.name:"null");
+        wind_warn("msgbox:%s is NOT empty while destroying it.",wind_obj_name(&msgbox->obj));
     }
     if(IS_F_MSGBOX_POOL(msgbox))
         msgbox_free(msgbox);
@@ -273,7 +273,7 @@ w_err_t wind_msgbox_print(void)
     {
         msgbox = NODE_TO_MSGBOX(dnode);
         wind_printf("%-16s %-8d %-16s\r\n",
-            msgbox->obj.name?msgbox->obj.name:"null",msgbox->msgnum,
+            wind_obj_name(&msgbox->obj),msgbox->msgnum,
             msgbox->owner->name?msgbox->owner->name:"null");
     }
     wind_enable_switch();

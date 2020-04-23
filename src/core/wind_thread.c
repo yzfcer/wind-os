@@ -276,7 +276,7 @@ w_thread_s *wind_thread_create_default(const char *name,
     int stksize;
     w_thread_s *thread;
     stksize = WIND_STK_SIZE;
-    pstk = wind_pool_malloc(stkbufpool);
+    pstk = (w_stack_t *)wind_pool_malloc(stkbufpool);
     WIND_ASSERT_RETURN(pstk != W_NULL,W_NULL);
     thread = wind_thread_create(name,thread_func,argc,argv,pstk,stksize);
     if(thread == W_NULL)

@@ -96,6 +96,8 @@ CASE_FUNC(func)
     EXPECT_NE(tmp,W_NULL);
     xattr = wind_xmlattr_crate("name","level4");
     EXPECT_NE(xattr,W_NULL);
+    err = wind_xmlnode_set_value(tmp,"level4 value");
+    EXPECT_EQ(err,W_ERR_OK);
     err = wind_xmlnode_insert_attr(tmp,xattr);
     EXPECT_EQ(err,W_ERR_OK);
     err = wind_xmlnode_insert(root,tmp);

@@ -30,7 +30,7 @@ extern "C" {
 
 
 WIND_POOL(test_pool,TNUM,TSIZE);
-void *testblk[TNUM+1];
+static w_uint8_t *testblk[TNUM+1];
 
 
 CASE_SETUP(info)

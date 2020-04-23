@@ -107,7 +107,7 @@ CASE_FUNC(func)
     w_err_t err;
     w_msg_s *msg;
     test_msg_s *tmsg,*tmsg1;
-    tmsg1 = wind_pool_malloc(testmsg_pool);
+    tmsg1 = (test_msg_s *)wind_pool_malloc(testmsg_pool);
     msgbox = wind_msgbox_create("test");
     err = wind_msgbox_wait(msgbox,&msg,100);
     EXPECT_EQ(err,W_ERR_TIMEOUT);

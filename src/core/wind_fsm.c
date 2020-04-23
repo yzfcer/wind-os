@@ -315,7 +315,7 @@ w_err_t wind_fsm_change_step(w_fsm_s *fsm,w_int32_t new_step)
     wind_mutex_lock(&fsm->mutex);
     wind_notice("fsm %s goto step %s",wind_obj_name(&fsm->obj),
                 fsm->model->steplist[new_step]);
-    fsm->cur_step = new_step;
+	fsm->cur_step = (w_int16_t)new_step;
     fsm->state = FSM_STAT_READY;
     wind_mutex_unlock(&fsm->mutex);
     return W_ERR_OK;

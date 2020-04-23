@@ -4,7 +4,7 @@
   *Author:      Jason Zhou
   *Version:     1.0
   *Date:        2020/03/24
-  *Description: 
+  *Description: XML parsing finite state machine
   *Others:  
   *History:  
      1.Date:
@@ -21,7 +21,7 @@ extern "C" {
 static w_bool_t is_separation_character(char c) 
 { 
     switch(c)
-    { 
+    {
         case 0x20: 
         case 0xD: 
         case 0xA: 
@@ -62,16 +62,16 @@ static void xmlfsm_new_node(xml_fsm_s *xmlfsm)
 {
     if(xmlfsm->ver_flag)
     {
-        xmlfsm->version = xmlfsm->newnode;
+        xmlfsm->xhead = xmlfsm->newnode;
         xmlfsm->ver_flag = 0;
         xmlfsm->newnode = W_NULL;
     }
     else
     {
-        if(xmlfsm->cur == W_NULL)
-            xmlfsm->cur = xmlfsm->newnode;
+        if(xmlfsm->parent == W_NULL)
+            xmlfsm->parent = xmlfsm->newnode;
         else
-            wind_xmlnode_insert(xmlfsm->cur,xmlfsm->newnode);
+            wind_xmlnode_insert(xmlfsm->parent,xmlfsm->newnode);
         xmlfsm->newnode = W_NULL;
     }
     xmlfsm_change_step(xmlfsm->fsm,XML_STEP_NODE_VALUE);
@@ -116,6 +116,15 @@ static w_err_t xml_skip_space(w_fsm_s *fsm)
     return W_ERR_FAIL;
 }
 
+static void xml_parse_arg_end(xml_fsm_s *xfsm)
+{
+    w_fsm_s *fsm = xfsm->fsm;
+    xfsm->argidx = 0;
+    fsm->arg = W_NULL;
+    fsm->arglen = 0;
+    wind_fsm_wait(fsm);
+}
+
 
 static w_err_t xml_handle_idle(w_fsm_s *fsm)
 {
@@ -150,8 +159,6 @@ static w_err_t xml_handle_idle(w_fsm_s *fsm)
                 }
                 else if(buff[idx+1] == '!')
                     xmlfsm_change_step(fsm,XML_STEP_NOTE);
-                else if(buff[idx+1] == '/')
-                    xmlfsm_change_step(fsm,XML_STEP_NODE_TAIL);
                 else
                     xmlfsm_change_step(fsm,XML_STEP_NODE_NAME);
                 return W_ERR_OK;
@@ -159,8 +166,7 @@ static w_err_t xml_handle_idle(w_fsm_s *fsm)
                 return W_ERR_FAIL;
         }
     }
-    //if(fsm->cur_step == XML_STEP_IDLE)
-    wind_fsm_wait(fsm);
+    xml_parse_arg_end(fsm);
     return W_ERR_OK;
 }
 
@@ -206,6 +212,7 @@ static w_err_t xml_handle_note(w_fsm_s *fsm)
                 return W_ERR_FAIL;
         }
     }
+    xml_parse_arg_end(fsm);
     return W_ERR_OK;
 }
 
@@ -251,12 +258,13 @@ static w_err_t xml_handle_node_name(w_fsm_s *fsm)
                 xmlfsm->newnode = wind_xmlnode_create(xmlfsm->buff);
                 WIND_ASSERT_RETURN(xmlfsm->newnode != W_NULL,W_ERR_MEM);
                 xmlfsm->argidx ++;
-                xmlfsm_change_step(fsm,XML_STEP_ATTR_VALUE);
+                xmlfsm_change_step(fsm,XML_STEP_ATTR_NAME);
                 return W_ERR_OK;
             default:
                 return W_ERR_FAIL;
         }
     }
+    xml_parse_arg_end(fsm);
     return W_ERR_OK;
 }
 
@@ -280,12 +288,24 @@ static w_err_t xml_handle_attr_name(w_fsm_s *fsm)
                 xmlfsm_clear_buff(xmlfsm);
                 fsm->sub_step ++;
                 break;
-            case 1:
+            case 1://check if has attribution
                 if(buff[xmlfsm->argidx] == '>')
                 {
-                    xmlfsm_new_node(xmlfsm);
+                    xmlfsm->argidx ++;
+                    xmlfsm_change_step(fsm,XML_STEP_NODE_VALUE);
                     return W_ERR_OK;
                 }
+                else if(buff[xmlfsm->argidx] == '/')
+                {
+                    xmlfsm_change_step(fsm,XML_STEP_NODE_TAIL);
+                    return W_ERR_OK;
+                }
+                else
+                {
+                    fsm->sub_step ++;
+                    break;
+                }
+            case 2:
                 for(i = xmlfsm->argidx;i < fsm->arglen;i ++)
                 {
                     WIND_ASSERT_RETURN(xmlfsm->buffidx < XML_FSM_BUFLEN,W_ERR_FAIL);
@@ -302,16 +322,17 @@ static w_err_t xml_handle_attr_name(w_fsm_s *fsm)
                     }
                 }
                 break;
-            case 2:
+            case 3:
                 xmlfsm->buff[xmlfsm->buffidx] = 0;
                 xmlfsm->newattr = wind_xmlattr_crate(xmlfsm->buff,"");
                 WIND_ASSERT_RETURN(xmlfsm->newattr != W_NULL,W_ERR_FAIL);
-                xmlfsm_change_step(fsm,XML_STEP_ATTR_NAME);
+                xmlfsm_change_step(fsm,XML_STEP_ATTR_VALUE);
                 return W_ERR_OK;
             default:
                 return W_ERR_FAIL;
         }
     }
+    xml_parse_arg_end(fsm);
     return W_ERR_OK;
 }
 
@@ -338,8 +359,7 @@ static w_err_t xml_handle_attr_value(w_fsm_s *fsm)
             case 1:
                 for(i = xmlfsm->argidx;i < fsm->arglen;i ++)
                 {
-                    if(xmlfsm->buffidx >= XML_FSM_BUFLEN)
-                        return W_ERR_FAIL;
+                    WIND_ASSERT_RETURN(xmlfsm->buffidx < XML_FSM_BUFLEN,W_ERR_FAIL);
                     if((buff[i] != '\"'))
                     {
                         xmlfsm->buff[xmlfsm->buffidx] = buff[i];
@@ -348,18 +368,23 @@ static w_err_t xml_handle_attr_value(w_fsm_s *fsm)
                     }
                     else
                     {
-                        xmlfsm->buff[xmlfsm->buffidx] = 0;
-                        WIND_ASSERT_RETURN(xmlfsm->newattr != W_NULL,W_ERR_MEM);
-                        wind_xmlattr_modify(xmlfsm->newattr,xmlfsm->buff);
-                        wind_xmlnode_insert_attr(xmlfsm->newnode,xmlfsm->newattr);
-                        xmlfsm_change_step(fsm,XML_STEP_ATTR_NAME);
-                        return W_ERR_OK;
+                        fsm->sub_step ++;
+                        break;
                     }
                 }
+                break;
+            case 2:
+                xmlfsm->buff[xmlfsm->buffidx] = 0;
+                WIND_ASSERT_RETURN(xmlfsm->newattr != W_NULL,W_ERR_MEM);
+                wind_xmlattr_modify(xmlfsm->newattr,xmlfsm->buff);
+                wind_xmlnode_insert_attr(xmlfsm->newnode,xmlfsm->newattr);
+                xmlfsm_change_step(fsm,XML_STEP_ATTR_NAME);
+                return W_ERR_OK;
             default:
                 return W_ERR_FAIL;
         }
     }
+    xml_parse_arg_end(fsm);
     return W_ERR_OK;
 }
 
@@ -407,13 +432,13 @@ static w_err_t xml_handle_node_value(w_fsm_s *fsm)
                         xmlfsm->buff[i] = 0;
                 WIND_ASSERT_RETURN(xmlfsm->newnode != W_NULL,W_ERR_FAIL);
                 wind_xmlnode_set_value(xmlfsm->newnode,xmlfsm->buff);
-                //xmlfsm->argidx ++;
-                xmlfsm_change_step(fsm,XML_STEP_ATTR_VALUE);
+                xmlfsm_change_step(fsm,XML_STEP_NODE_TAIL);
                 return W_ERR_OK;
             default:
                 return W_ERR_FAIL;
         }
     }
+    xml_parse_arg_end(fsm);
     return W_ERR_OK;
 }
 

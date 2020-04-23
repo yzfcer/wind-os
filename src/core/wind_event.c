@@ -39,7 +39,7 @@ WIND_POOL(eventpool,WIND_EVENT_MAX_NUM,sizeof(w_event_s));
 
 static w_event_s *event_malloc(void)
 {
-    return wind_pool_malloc(eventpool);
+    return (w_event_s *)wind_pool_malloc(eventpool);
 }
 
 static w_err_t event_free(w_event_s *event)
@@ -64,10 +64,13 @@ w_event_s *wind_event_get(const char *name)
 
 w_err_t wind_event_init(w_event_s *event,const char *name)
 {
+    w_err_t err;
     wind_notice("init event:%s",name?name:"null");
     WIND_ASSERT_RETURN(event != W_NULL,W_ERR_PTR_NULL);
     DLIST_INIT(event->cblist);
     event->cbcnt = 0;
+    err = wind_mutex_init(&event->lock,name);
+    WIND_ASSERT_RETURN(err == W_ERR_OK,err);
     wind_obj_init(&event->obj, WIND_EVENT_MAGIC,name,&eventlist);
     return W_ERR_OK;
 }
@@ -94,16 +97,19 @@ w_err_t wind_event_destroy(w_event_s *event)
 {
     w_err_t err;
     w_dnode_s *dnode;
-    wind_notice("destroy event:%s",event->obj.name?event->obj.name:"null");
+    wind_notice("destroy event:%s",wind_obj_name(&event->obj));
     WIND_ASSERT_RETURN(event != W_NULL,W_ERR_PTR_NULL);
+    wind_mutex_lock(&event->lock);
     err = wind_obj_deinit(&event->obj, WIND_EVENT_MAGIC,&eventlist);
+    wind_mutex_unlock(&event->lock);
     WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_FAIL);
-    
+    err = wind_mutex_destroy(&event->lock);
+    WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_FAIL);
     dnode = dlist_head(&event->cblist);
     if(dnode != W_NULL)
     {
         wind_warn("event:%s is NOT empty while destroying it.",
-            event->obj.name?event->obj.name:"null");
+            wind_obj_name(&event->obj));
     }
     if(IS_F_EVENT_POOL(event))
         event_free(event);
@@ -116,10 +122,10 @@ w_err_t wind_event_regcb(w_event_s *event,w_event_cb *cb)
     WIND_ASSERT_RETURN(event != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(cb != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(event->obj.magic == WIND_EVENT_MAGIC,W_ERR_INVALID);
-    wind_disable_switch();
+    wind_mutex_lock(&event->lock);
     dlist_insert_tail(&event->cblist,&cb->listenernode);
     event->cbcnt ++;
-    wind_enable_switch();
+    wind_mutex_unlock(&event->lock);
     return W_ERR_OK;
 }
 
@@ -128,10 +134,10 @@ w_err_t wind_event_unregcb(w_event_s *event,w_event_cb *cb)
     WIND_ASSERT_RETURN(event != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(cb != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(event->obj.magic == WIND_EVENT_MAGIC,W_ERR_INVALID);
-    wind_disable_switch();
+    wind_mutex_lock(&event->lock);
     dlist_remove(&event->cblist,&cb->listenernode);
     event->cbcnt --;
-    wind_enable_switch();
+    wind_mutex_unlock(&event->lock);
     return W_ERR_OK;
 }
 
@@ -141,12 +147,14 @@ w_err_t wind_event_trig(w_event_s *event,void *arg)
     w_event_cb *cb;
     WIND_ASSERT_RETURN(event != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(event->obj.magic == WIND_EVENT_MAGIC,W_ERR_FAIL);
+    wind_mutex_lock(&event->lock);
     foreach_node(dnode,&event->cblist)
     {
         cb = NODE_TO_EVCB(dnode);
         if(cb != W_NULL)
             cb->cb_fn(event,arg);
     }
+    wind_mutex_unlock(&event->lock);
     return W_ERR_OK;
 }
 
@@ -156,6 +164,7 @@ w_err_t wind_event_print(void)
     w_dnode_s *dnode;
     w_event_s *event;
     w_dlist_s *list = &eventlist;
+    //wind_mutex_lock(&event->lock);
     wind_printf("\r\n\r\nevent list:\r\n");
     wind_print_space(2);
     wind_printf("%-16s\r\n","event");
@@ -164,9 +173,10 @@ w_err_t wind_event_print(void)
     foreach_node(dnode,list)
     {
         event = NODE_TO_EVET(dnode);
-        wind_printf("%-16s\r\n",event->obj.name?event->obj.name:"null");            
+        wind_printf("%-16s\r\n",wind_obj_name(&event->obj));            
     }
     wind_print_space(2);
+    //wind_mutex_unlock(&event->lock);
     return W_ERR_OK;
 }
 
