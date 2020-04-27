@@ -13,6 +13,7 @@
 **********************************************************************************/
 #include "wind_type.h"
 #include "wind_string.h"
+#include "wind_heap.h"
 #include "wind_xml_fsm.h"
 #ifdef __cplusplus
 extern "C" {
@@ -118,13 +119,19 @@ static w_err_t xmlfsm_skip_space(w_fsm_s *fsm)
     return W_ERR_FAIL;
 }
 
-static void xml_parse_arg_end(xml_fsm_s *xfsm)
+static void xmlfsm_parse_arg_end(xml_fsm_s *xfsm)
 {
     w_fsm_s *fsm = xfsm->fsm;
     xfsm->argidx = 0;
     fsm->arg = W_NULL;
     fsm->arglen = 0;
     wind_fsm_wait(fsm);
+}
+
+static void xmlfsm_parse_fail(xml_fsm_s *xfsm)
+{
+    wind_xml_fsm_deinit(xfsm);
+    
 }
 
 
@@ -142,17 +149,15 @@ static w_err_t xml_handle_idle(w_fsm_s *fsm)
     {
         switch(fsm->sub_step)
         {
-            case 0://skip separate characters
+            case 0://skip separate characters and '<'
                 err = xmlfsm_skip_space(fsm);
                 WIND_CHECK_RETURN(err == W_ERR_OK,W_ERR_OK);
-                fsm->sub_step ++;
-                break;
-            case 1://skip '<'
                 WIND_ASSERT_RETURN(buff[xmlfsm->argidx] == '<',W_ERR_FAIL);
                 xmlfsm->argidx ++;
                 fsm->sub_step ++;
+                //fsm->sub_step ++;
                 break;
-            case 2://goto next step depengding on the next character
+            case 1://goto next step depengding on the next character
                 idx = xmlfsm->argidx;
                 if(buff[idx] == '?')
                 {
@@ -168,7 +173,7 @@ static w_err_t xml_handle_idle(w_fsm_s *fsm)
                 return W_ERR_FAIL;
         }
     }
-    xml_parse_arg_end(xmlfsm);
+    xmlfsm_parse_arg_end(xmlfsm);
     return W_ERR_OK;
 }
 
@@ -214,7 +219,7 @@ static w_err_t xml_handle_note(w_fsm_s *fsm)
                 return W_ERR_FAIL;
         }
     }
-    xml_parse_arg_end(xmlfsm);
+    xmlfsm_parse_arg_end(xmlfsm);
     return W_ERR_OK;
 }
 
@@ -266,7 +271,7 @@ static w_err_t xml_handle_node_name(w_fsm_s *fsm)
                 return W_ERR_FAIL;
         }
     }
-    xml_parse_arg_end(xmlfsm);
+    xmlfsm_parse_arg_end(xmlfsm);
     return W_ERR_OK;
 }
 
@@ -335,7 +340,7 @@ static w_err_t xml_handle_attr_name(w_fsm_s *fsm)
                 return W_ERR_FAIL;
         }
     }
-    xml_parse_arg_end(xmlfsm);
+    xmlfsm_parse_arg_end(xmlfsm);
     return W_ERR_OK;
 }
 
@@ -388,7 +393,7 @@ static w_err_t xml_handle_attr_value(w_fsm_s *fsm)
                 return W_ERR_FAIL;
         }
     }
-    xml_parse_arg_end(xmlfsm);
+    xmlfsm_parse_arg_end(xmlfsm);
     return W_ERR_OK;
 }
 
@@ -443,7 +448,7 @@ static w_err_t xml_handle_node_value(w_fsm_s *fsm)
                 return W_ERR_FAIL;
         }
     }
-    xml_parse_arg_end(xmlfsm);
+    xmlfsm_parse_arg_end(xmlfsm);
     return W_ERR_OK;
 }
 
@@ -513,9 +518,8 @@ static w_err_t xml_handle_node_tail(w_fsm_s *fsm)
                 return W_ERR_FAIL;
         }
     }
-    xml_parse_arg_end(xmlfsm);
+    xmlfsm_parse_arg_end(xmlfsm);
     return W_ERR_OK;
-    
 }
 static w_err_t xml_handle_end(w_fsm_s *fsm)
 {
@@ -527,22 +531,45 @@ static w_err_t xml_handle_end(w_fsm_s *fsm)
 
 w_err_t wind_xml_fsm_init(xml_fsm_s *xfsm,char *name)
 {
-    static w_int32_t xid = 0;
+    static w_int32_t xfsm_id = 0;
+    char *fsmname = wind_malloc(16);
+    WIND_ASSERT_RETURN(fsmname != W_NULL,W_ERR_MEM);
+    wind_memset(fsmname,0,16);
+    wind_sprintf(fsmname,"xml%d",xfsm_id);
     wind_memset(xfsm,0,sizeof(xml_fsm_s));
-    xfsm->fsm = wind_fsm_create(name,xid,"xml");
-    xid ++;
-    if(xid < 0)
-        xid = 0;
+    xfsm->fsm = wind_fsm_create(fsmname,xfsm_id,name);
+    xfsm_id ++;
+    if(xfsm_id < 0)
+        xfsm_id = 0;
     WIND_ASSERT_RETURN(xfsm->fsm != W_NULL,W_ERR_FAIL);
     return W_ERR_OK;
 }
 
+w_err_t wind_xml_fsm_input(xml_fsm_s *xfsm,char *xstr,w_int32_t len)
+{
+    w_err_t err;
+    WIND_ASSERT_RETURN(xfsm != W_NULL,W_ERR_PTR_NULL);
+    err = wind_fsm_input(xfsm->fsm,xstr,len);
+    return err;
+}
+
+
 w_err_t wind_xml_fsm_deinit(xml_fsm_s *xfsm)
 {
+    WIND_ASSERT_RETURN(xfsm != W_NULL,W_ERR_PTR_NULL);
     if(xfsm->fsm)
+    {
+        wind_free(xfsm->fsm->obj.name);
         wind_fsm_destroy(xfsm->fsm);
+    }
+        
+    xfsm->fsm = (w_fsm_s*)W_NULL;
     if(xfsm->root)
         wind_xmlnode_destroy(xfsm->root);
+    if(xfsm->xhead)
+        wind_xmlnode_destroy(xfsm->xhead);
+    if(xfsm->parent)
+        wind_xmlnode_destroy(xfsm->parent);
     if(xfsm->newnode)
         wind_xmlnode_destroy(xfsm->newnode);
     if(xfsm->newattr)

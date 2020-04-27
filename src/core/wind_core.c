@@ -41,6 +41,7 @@
 #include "wind_softirq.h"
 #include "wind_daemon.h"
 #include "wind_diagnose.h"
+#include "wind_fsm.h"
 
 #include "wind_core.h"
 #include "wind_time.h"
@@ -342,6 +343,9 @@ static void _wind_init()
 #endif
 #if WIND_TIMER_SUPPORT
     _wind_timer_mod_init();
+#endif
+#if WIND_FSM_SUPPORT
+    _wind_fsm_mod_init();
 #endif
 #if WIND_SOFTIRQ_SUPPORT
     _wind_softirq_mod_init();

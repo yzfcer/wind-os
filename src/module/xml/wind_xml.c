@@ -221,11 +221,15 @@ w_err_t wind_xmlnode_destroy(w_xmlnode_s *xnode)
         wind_free(xnode->name);
     if(xnode->value != W_NULL)
         wind_free(xnode->value);
+    xnode->name = W_NULL;
+    xnode->value= W_NULL;
+    
     foreach_node(dnode,&xnode->attrlist)
     {
         attr = NODE_TO_XATTR(dnode);
         wind_xmlattr_destroy(attr);
     }
+    DLIST_INIT(xnode->attrlist);
     err = W_ERR_OK;
     for(;;)
     {
@@ -235,6 +239,7 @@ w_err_t wind_xmlnode_destroy(w_xmlnode_s *xnode)
         err = wind_xmlnode_destroy(child);
         WIND_ASSERT_BREAK(err == W_ERR_OK,err,"destroy xnode failed");
     }
+    wind_tree_init(&xnode->tree);
     wind_free(xnode);
     return err;
     

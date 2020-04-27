@@ -20,7 +20,9 @@
 *******************************************************************************************************/
 /*********************************************header file***********************************************/
 #include "wind_cut.h"
+#include "wind_string.h"
 #include "wind_xml.h"
+#include "wind_xml_fsm.h"
 #include "wind_core.h"
 #if (WIND_MODULE_CUTEST_SUPPORT && TEST_XML_SUPPORT)
 #ifdef __cplusplus
@@ -28,7 +30,7 @@ extern "C" {
 #endif // #ifdef __cplusplus
 
 /********************************************internal variables**********************************************/
-
+static xml_fsm_s s_xfsm;
 
 
 
@@ -116,6 +118,29 @@ CASE_FUNC(func)
     EXPECT_EQ(err,W_ERR_OK);
 }
 
+CASE_SETUP(parse) FUNC_EMPTY
+CASE_TEARDOWN(parse) FUNC_EMPTY
+CASE_FUNC(parse)
+{
+    w_err_t err;
+    char *xstr = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\
+    <!-- xml test here   -->\
+    <note>\
+    <to>  George  </to>\
+    <from>John</from>\
+    <!-- xml version=\"1.0\" encoding=\"ISO-8859-1\"   -->\
+    <heading >Reminder   </heading >\
+    <heading1 Reminder =   	\"uhsdksd\\\"jidj\\\"\" />\
+    <body>Don't forget the meeting!</body>\
+    </note>";
+    err = wind_xml_fsm_init(&s_xfsm,"xml");
+    EXPECT_EQ(err,W_ERR_OK);
+	err = wind_xml_fsm_input(&s_xfsm,xstr,wind_strlen(xstr));
+    EXPECT_EQ(err,W_ERR_OK);
+    err = wind_xml_fsm_deinit(&s_xfsm);
+    EXPECT_EQ(err,W_ERR_OK);
+}
+
 
 
 SUITE_SETUP(xml) FUNC_EMPTY
@@ -123,6 +148,7 @@ SUITE_TEARDOWN(xml) FUNC_EMPTY
 
 TEST_CASES_START(xml)
 TEST_CASE(func)
+TEST_CASE(parse)
 TEST_CASES_END
 TEST_SUITE(xml)
 
