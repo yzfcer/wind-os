@@ -112,6 +112,7 @@ w_err_t _wind_fsm_mod_init(void);
 w_err_t wind_fsm_model_register(w_fsm_model_s *fsm_model);
 w_err_t wind_fsm_model_unregister(w_fsm_model_s *fsm_model);
 w_fsm_model_s *wind_fsm_model_get(char *name);
+w_err_t wind_fsm_model_print(void);
 
 w_err_t wind_fsm_init(w_fsm_s *fsm,char *name,w_int32_t id,char *modelname);
 w_fsm_s *wind_fsm_create(char *name,w_int32_t id,char *modelname);

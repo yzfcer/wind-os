@@ -73,7 +73,7 @@ struct __w_module_s
 
 
 #define MODULE_DEF(module,version,depend) \
-    w_module_s mod_##module = {WIND_OBJ((~WIND_MODULE_MAGIC),0,#module),MOD_IDLE,version,depend,module##_init,module##_exit}
+    w_module_s mod_##module = {WIND_OBJ(WIND_MODULE_MAGIC,0,#module),MOD_IDLE,version,depend,module##_init,module##_exit}
 #define MODULE_DECLARE(module) extern w_module_s mod_##module;
 #define MODULE(module) &mod_##module
 

@@ -37,6 +37,7 @@ extern "C" {
 #endif // #ifdef __cplusplus
 
 #define NODE_TO_FSM(node) (w_fsm_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((w_fsm_s*)0)->obj.objnode)))
+#define NODE_TO_FSM_MODEL(node) (w_fsm_model_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((w_fsm_model_s*)0)->obj.objnode)))
 
 /********************************************internal variables**********************************************/
 static w_dlist_s modellist;
@@ -134,6 +135,11 @@ w_err_t wind_fsm_model_unregister(w_fsm_model_s *fsm_model)
 w_fsm_model_s *wind_fsm_model_get(char *name)
 {
     return (w_fsm_model_s *)wind_obj_get(name,&modellist);
+}
+
+w_err_t wind_fsm_model_print(void)
+{
+    return wind_obj_print_list(&modellist);
 }
 
 w_err_t wind_fsm_init(w_fsm_s *fsm,char *name,w_int32_t id,char *modelname)

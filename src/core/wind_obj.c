@@ -159,6 +159,27 @@ w_err_t wind_obj_deinit(w_obj_s *obj,w_uint32_t magic,w_dlist_s *list)
     return W_ERR_OK;  
 }
 
+w_err_t wind_obj_print_list(w_dlist_s *dlist)
+{
+    w_dnode_s *dnode;
+    w_obj_s *obj;
+    int cnt = 0;
+    w_dlist_s *list = dlist;
+    WIND_ASSERT_RETURN(list != W_NULL,W_ERR_PTR_NULL);
+    wind_printf("\r\nobject list:\r\n");
+
+    foreach_node(dnode,list)
+    {
+        obj = NODE_TO_OBJ(dnode);
+        wind_printf("%-12s ",obj->name);
+        cnt ++;
+        if((cnt & 0x03) == 0)
+            wind_printf("\r\n");
+    }
+    return W_ERR_OK;
+}
+
+
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

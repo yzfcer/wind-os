@@ -58,6 +58,9 @@ MODULE_DECLARE(game);
 #if WIND_MODULE_TOOLS_SUPPORT
 MODULE_DECLARE(tools);
 #endif
+#if WIND_MODULE_XML_SUPPORT
+MODULE_DECLARE(xml);
+#endif
 
 w_err_t _wind_register_modules(void)
 {
@@ -88,6 +91,9 @@ w_err_t _wind_register_modules(void)
 
 #if WIND_MODULE_GAME_SUPPORT
 	wind_module_register(MODULE(game));
+#endif
+#if WIND_MODULE_XML_SUPPORT
+    wind_module_register(MODULE(xml));
 #endif
     return W_ERR_OK;
 }

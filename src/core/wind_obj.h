@@ -31,7 +31,7 @@ extern "C" {
 #endif // #ifdef __cplusplus
 
 
-#define WIND_OBJ(magic,flag,name) {magic,0,flag,name,{(w_dnode_s*)W_NULL,(w_dnode_s*)W_NULL}}
+#define WIND_OBJ(magic,flag,name) {(~magic),0,flag,name,{(w_dnode_s*)W_NULL,(w_dnode_s*)W_NULL}}
 //Basic object information structure
 typedef struct _wind_obj
 {
@@ -47,7 +47,7 @@ const char *wind_obj_name(void *obj);
 w_obj_s *wind_obj_get(const char *name,w_dlist_s *list);
 w_err_t wind_obj_init(w_obj_s *obj,w_uint32_t magic,const char *name,w_dlist_s *list);
 w_err_t wind_obj_deinit(w_obj_s *obj,w_uint32_t magic,w_dlist_s *list);
-
+w_err_t wind_obj_print_list(w_dlist_s *dlist);
 
 #ifdef __cplusplus
 }

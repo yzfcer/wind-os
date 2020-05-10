@@ -97,6 +97,7 @@ COMMAND_USAGE(list)
 #endif
 #if WIND_FSM_SUPPORT
     wind_printf("list fsm:--show fsm list infomation.\r\n");
+    wind_printf("list fsm_model:--show fsm_model list.\r\n");
 #endif
 }
 
@@ -217,6 +218,11 @@ COMMAND_MAIN(list,argc,argv)
     else if(0 == wind_strcmp(argv[1],"fsm"))
     {
         wind_fsm_print();
+        return W_ERR_OK;
+    }
+    else if(0 == wind_strcmp(argv[1],"fsm_model"))
+    {
+        wind_fsm_model_print();
         return W_ERR_OK;
     }
 #endif
