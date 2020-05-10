@@ -30,6 +30,8 @@
 extern "C" {
 #endif // #ifdef __cplusplus
 
+
+#define WIND_OBJ(magic,flag,name) {magic,0,flag,name,{(w_dnode_s*)W_NULL,(w_dnode_s*)W_NULL}}
 //Basic object information structure
 typedef struct _wind_obj
 {

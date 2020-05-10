@@ -46,7 +46,7 @@ char *skip_prefix_space(char *buff)
         return (p);
 }
 
-static void xmlfsm_clear_buff(xml_fsm_s *xmlfsm)
+static void xmlfsm_clear_buff(w_xmlfsm_s *xmlfsm)
 {
     xmlfsm->buffidx = 0;
     wind_memset(xmlfsm->buff,0,XML_FSM_BUFLEN);
@@ -59,14 +59,14 @@ static void xmlfsm_change_step(w_fsm_s *fsm,w_int32_t new_step)
 }
 
 
-static w_err_t xmlfsm_new_node(xml_fsm_s *xmlfsm)
+static w_err_t xmlfsm_new_node(w_xmlfsm_s *xmlfsm)
 {
     if(xmlfsm->xhead_flag)
     {
         WIND_ASSERT_RETURN(xmlfsm->xhead == W_NULL,W_ERR_FAIL);
         xmlfsm->xhead_flag = 0;
         xmlfsm->xhead = xmlfsm->newnode;
-        xmlfsm->newnode = W_NULL;
+		xmlfsm->newnode = (w_xmlnode_s*)W_NULL;
     }
     else
     {
@@ -74,7 +74,7 @@ static w_err_t xmlfsm_new_node(xml_fsm_s *xmlfsm)
             xmlfsm->parent = xmlfsm->newnode;
         else
             wind_xmlnode_insert(xmlfsm->parent,xmlfsm->newnode);
-        xmlfsm->newnode = W_NULL;
+        xmlfsm->newnode = (w_xmlnode_s*)W_NULL;
     }
     xmlfsm_change_step(xmlfsm->fsm,XML_STEP_NODE_VALUE);
     return W_ERR_OK;
@@ -85,9 +85,9 @@ static w_err_t xmlfsm_find_char(w_fsm_s *fsm,char ch)
 {
     char *buff;
     w_int32_t i;
-    xml_fsm_s *xmlfsm;
-    xmlfsm = (xml_fsm_s*)fsm;
-    buff = fsm->arg;
+    w_xmlfsm_s *xmlfsm;
+    xmlfsm = (w_xmlfsm_s*)fsm;
+    buff = (char*)fsm->arg;
     for(i = xmlfsm->argidx;i < fsm->arglen;i ++)
     {
         if(buff[i] == ch)
@@ -104,9 +104,9 @@ static w_err_t xmlfsm_skip_space(w_fsm_s *fsm)
 {
     char *buff;
     w_int32_t i;
-    xml_fsm_s *xmlfsm;
-    xmlfsm = (xml_fsm_s*)fsm;
-    buff = fsm->arg;
+    w_xmlfsm_s *xmlfsm;
+    xmlfsm = (w_xmlfsm_s*)fsm;
+    buff = (char*)fsm->arg;
     for(i = xmlfsm->argidx;i < fsm->arglen;i ++)
     {
         if(!is_separation_character(buff[i]))
@@ -119,7 +119,7 @@ static w_err_t xmlfsm_skip_space(w_fsm_s *fsm)
     return W_ERR_FAIL;
 }
 
-static void xmlfsm_parse_arg_end(xml_fsm_s *xfsm)
+static void xmlfsm_parse_arg_end(w_xmlfsm_s *xfsm)
 {
     w_fsm_s *fsm = xfsm->fsm;
     xfsm->argidx = 0;
@@ -128,7 +128,7 @@ static void xmlfsm_parse_arg_end(xml_fsm_s *xfsm)
     wind_fsm_wait(fsm);
 }
 
-static void xmlfsm_parse_fail(xml_fsm_s *xfsm)
+static void xmlfsm_parse_fail(w_xmlfsm_s *xfsm)
 {
     wind_xml_fsm_deinit(xfsm);
     
@@ -139,12 +139,12 @@ static w_err_t xml_handle_idle(w_fsm_s *fsm)
 {
     w_err_t err;
     w_int32_t idx;
-    xml_fsm_s *xmlfsm;
+    w_xmlfsm_s *xmlfsm;
     char *buff;
     WIND_CHECK_RETURN(fsm->arg != W_NULL,W_ERR_PTR_NULL);
     WIND_CHECK_RETURN(fsm->arglen > 0,W_ERR_INVALID);
-    buff = fsm->arg;
-    xmlfsm = (xml_fsm_s*)fsm;
+    buff = (char*)fsm->arg;
+    xmlfsm = (w_xmlfsm_s*)fsm;
     while(xmlfsm->argidx < fsm->arglen)
     {
         switch(fsm->sub_step)
@@ -182,12 +182,12 @@ static w_err_t xml_handle_idle(w_fsm_s *fsm)
 static w_err_t xml_handle_note(w_fsm_s *fsm)
 {
     w_err_t err;
-    xml_fsm_s *xmlfsm;
+    w_xmlfsm_s *xmlfsm;
     char *buff;
     WIND_CHECK_RETURN(fsm->arg != W_NULL,W_ERR_PTR_NULL);
     WIND_CHECK_RETURN(fsm->arglen > 0,W_ERR_INVALID);
-    buff = fsm->arg;
-    xmlfsm = (xml_fsm_s*)fsm;
+    buff = (char*)fsm->arg;
+    xmlfsm = (w_xmlfsm_s*)fsm;
     while(xmlfsm->argidx < fsm->arglen)
     {
         switch(fsm->sub_step)
@@ -227,12 +227,12 @@ static w_err_t xml_handle_node_name(w_fsm_s *fsm)
 {
     w_err_t err;
     w_int32_t i;
-    xml_fsm_s *xmlfsm;
+    w_xmlfsm_s *xmlfsm;
     char *buff;
     WIND_CHECK_RETURN(fsm->arg != W_NULL,W_ERR_PTR_NULL);
     WIND_CHECK_RETURN(fsm->arglen > 0,W_ERR_INVALID);
-    buff = fsm->arg;
-    xmlfsm = (xml_fsm_s*)fsm;
+    buff = (char*)fsm->arg;
+    xmlfsm = (w_xmlfsm_s*)fsm;
     while(xmlfsm->argidx < fsm->arglen)
     {
         switch(fsm->sub_step)
@@ -279,12 +279,12 @@ static w_err_t xml_handle_attr_name(w_fsm_s *fsm)
 {
     w_err_t err;
     w_int32_t i;
-    xml_fsm_s *xmlfsm;
+    w_xmlfsm_s *xmlfsm;
     char *buff;
     WIND_CHECK_RETURN(fsm->arg != W_NULL,W_ERR_PTR_NULL);
     WIND_CHECK_RETURN(fsm->arglen > 0,W_ERR_INVALID);
-    buff = fsm->arg;
-    xmlfsm = (xml_fsm_s*)fsm;
+    buff = (char*)fsm->arg;
+    xmlfsm = (w_xmlfsm_s*)fsm;
     while(xmlfsm->argidx < fsm->arglen)
     {
         switch(fsm->sub_step)
@@ -348,12 +348,12 @@ static w_err_t xml_handle_attr_value(w_fsm_s *fsm)
 {
     w_err_t err;
     w_int32_t i;
-    xml_fsm_s *xmlfsm;
+    w_xmlfsm_s *xmlfsm;
     char *buff;
     WIND_CHECK_RETURN(fsm->arg != W_NULL,W_ERR_PTR_NULL);
     WIND_CHECK_RETURN(fsm->arglen > 0,W_ERR_INVALID);
-    buff = fsm->arg;
-    xmlfsm = (xml_fsm_s*)fsm;
+    buff = (char*)fsm->arg;
+    xmlfsm = (w_xmlfsm_s*)fsm;
     while(xmlfsm->argidx < fsm->arglen)
     {
         switch(fsm->sub_step)
@@ -401,12 +401,12 @@ static w_err_t xml_handle_node_value(w_fsm_s *fsm)
 {
     w_err_t err;
     w_int32_t i;
-    xml_fsm_s *xmlfsm;
+    w_xmlfsm_s *xmlfsm;
     char *buff;
     WIND_CHECK_RETURN(fsm->arg != W_NULL,W_ERR_PTR_NULL);
     WIND_CHECK_RETURN(fsm->arglen > 0,W_ERR_INVALID);
-    buff = fsm->arg;
-    xmlfsm = (xml_fsm_s*)fsm;
+    buff = (char*)fsm->arg;
+    xmlfsm = (w_xmlfsm_s*)fsm;
     while(xmlfsm->argidx < fsm->arglen)
     {
         switch(fsm->sub_step)
@@ -455,13 +455,13 @@ static w_err_t xml_handle_node_value(w_fsm_s *fsm)
 static w_err_t xml_handle_node_tail(w_fsm_s *fsm)
 {
     w_int32_t i;
-    w_err_t err;
-    xml_fsm_s *xmlfsm;
+    //w_err_t err;
+    w_xmlfsm_s *xmlfsm;
     char *buff;
     WIND_CHECK_RETURN(fsm->arg != W_NULL,W_ERR_PTR_NULL);
     WIND_CHECK_RETURN(fsm->arglen > 0,W_ERR_INVALID);
-    buff = fsm->arg;
-    xmlfsm = (xml_fsm_s*)fsm;
+    buff = (char*)fsm->arg;
+    xmlfsm = (w_xmlfsm_s*)fsm;
     while(xmlfsm->argidx < fsm->arglen)
     {
         switch(fsm->sub_step)
@@ -529,14 +529,14 @@ static w_err_t xml_handle_end(w_fsm_s *fsm)
 }
 
 
-w_err_t wind_xml_fsm_init(xml_fsm_s *xfsm,char *name)
+w_err_t wind_xml_fsm_init(w_xmlfsm_s *xfsm,char *name)
 {
     static w_int32_t xfsm_id = 0;
-    char *fsmname = wind_malloc(16);
+    char *fsmname = (char*)wind_malloc(16);
     WIND_ASSERT_RETURN(fsmname != W_NULL,W_ERR_MEM);
     wind_memset(fsmname,0,16);
     wind_sprintf(fsmname,"xml%d",xfsm_id);
-    wind_memset(xfsm,0,sizeof(xml_fsm_s));
+    wind_memset(xfsm,0,sizeof(w_xmlfsm_s));
     xfsm->fsm = wind_fsm_create(fsmname,xfsm_id,name);
     xfsm_id ++;
     if(xfsm_id < 0)
@@ -545,7 +545,7 @@ w_err_t wind_xml_fsm_init(xml_fsm_s *xfsm,char *name)
     return W_ERR_OK;
 }
 
-w_err_t wind_xml_fsm_input(xml_fsm_s *xfsm,char *xstr,w_int32_t len)
+w_err_t wind_xml_fsm_input(w_xmlfsm_s *xfsm,char *xstr,w_int32_t len)
 {
     w_err_t err;
     WIND_ASSERT_RETURN(xfsm != W_NULL,W_ERR_PTR_NULL);
@@ -554,7 +554,7 @@ w_err_t wind_xml_fsm_input(xml_fsm_s *xfsm,char *xstr,w_int32_t len)
 }
 
 
-w_err_t wind_xml_fsm_deinit(xml_fsm_s *xfsm)
+w_err_t wind_xml_fsm_deinit(w_xmlfsm_s *xfsm)
 {
     WIND_ASSERT_RETURN(xfsm != W_NULL,W_ERR_PTR_NULL);
     if(xfsm->fsm)

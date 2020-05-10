@@ -30,7 +30,7 @@ extern "C" {
 #endif // #ifdef __cplusplus
 
 /********************************************internal variables**********************************************/
-static xml_fsm_s s_xfsm;
+static w_xmlfsm_s s_xfsm;
 
 
 

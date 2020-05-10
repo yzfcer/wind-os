@@ -47,9 +47,9 @@ struct __xml_fsm_s
     w_int32_t argidx;          //XML FSM argument's current index
     w_int32_t xhead_flag;      //Flag which mark a xhead node    
 };
-w_err_t wind_xml_fsm_init(xml_fsm_s *xfsm,char *name);
-w_err_t wind_xml_fsm_input(xml_fsm_s *xfsm,char *xstr,w_int32_t len);
-w_err_t wind_xml_fsm_deinit(xml_fsm_s *xfsm);
+w_err_t wind_xml_fsm_init(w_xmlfsm_s *xfsm,char *name);
+w_err_t wind_xml_fsm_input(w_xmlfsm_s *xfsm,char *xstr,w_int32_t len);
+w_err_t wind_xml_fsm_deinit(w_xmlfsm_s *xfsm);
 
 #ifdef __cplusplus
 }

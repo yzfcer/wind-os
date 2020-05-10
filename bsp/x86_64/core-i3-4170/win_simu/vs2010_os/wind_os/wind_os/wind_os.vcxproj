@@ -250,6 +250,7 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_watchdog.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\hal\wind_blkdev.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\hal\wind_chdev.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\xml\module_xml.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\xml\wind_xml.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\xml\wind_xml_fsm.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\xml\xml.c" />

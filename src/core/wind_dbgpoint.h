@@ -52,7 +52,7 @@ typedef struct _wind_dbgpoint
 
 #define DBGP_DEF(name,lenth,read,write) \
     static g_dbgp_##name = \
-    {{(~WIND_DBGPOINT_SUPPORT),#name,{W_NULL,W_NULL},0,0},lenth,read,write};
+    {WIND_OBJ((~WIND_DBGPOINT_SUPPORT),0,#name),lenth,read,write};
 #define DBGP(name) &g_dbgp_##name
 
 

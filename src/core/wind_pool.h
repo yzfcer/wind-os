@@ -76,7 +76,8 @@ struct __w_pool_s
 };
 
 //To define a memory pool
-#define WIND_POOL(pool,itemnum,itemsize) w_uint8_t pool[sizeof(w_pool_s) + itemnum *(WIND_POOL_ALIGN(itemsize) + sizeof(w_pihead_s))+8]
+#define WIND_POOL(pool,itemnum,itemsize) \
+    w_uint8_t pool[sizeof(w_pool_s) + itemnum *(WIND_POOL_ALIGN(itemsize) + sizeof(w_pihead_s))+8]
 
 
 w_err_t _wind_pool_mod_init(void);

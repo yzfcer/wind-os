@@ -72,7 +72,7 @@
 
 #define TBMODEL_DEF(name,attr) \
     tb_model_s tb_param_##name = \
-    {{~TB_MODEL_MAGIC,0,attr,#name,{W_NULL,W_NULL}},\
+    {WIND_OBJ((~TB_MODEL_MAGIC),0,#name),\
     sizeof(db_info_list_##name)/sizeof(tbmodel_item_s),(tbmodel_item_s*)&db_info_list_##name,\
     }; 
 

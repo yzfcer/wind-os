@@ -47,13 +47,13 @@ typedef struct
     w_dlist_s attrlist;    //xml node attribution list,see w_xmlattr_s
 }w_xmlnode_s;
 
-typedef struct __xml_fsm_s xml_fsm_s;
+typedef struct __xml_fsm_s w_xmlfsm_s;
 //xml tree infomation struct
 typedef struct
 {
     w_xmlnode_s *version; //XMl version node
     w_xmlnode_s *root;    //XML root node
-    xml_fsm_s *xfsm;
+    w_xmlfsm_s *xfsm;
 }w_xml_s;
 
 w_err_t wind_xml_init(w_xml_s *xml);
