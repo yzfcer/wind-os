@@ -159,13 +159,48 @@ w_err_t wind_obj_deinit(w_obj_s *obj,w_uint32_t magic,w_dlist_s *list)
     return W_ERR_OK;  
 }
 
+w_err_t wind_obj_register(w_obj_s *obj,w_dlist_s *dlist)
+{
+    w_obj_s *tmpobj;
+    WIND_ASSERT_RETURN(obj != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(dlist != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(obj->name != W_NULL,W_ERR_PTR_NULL);
+    tmpobj = wind_obj_get(obj->name,dlist);
+    WIND_ASSERT_RETURN(tmpobj == W_NULL,W_ERR_REPEAT);
+
+    DNODE_INIT(obj->objnode);
+    obj->key = calc_obj_key(obj->name);
+    insert_obj(dlist,obj);
+    obj->magic = (!obj->magic);
+    return W_ERR_OK;
+    
+}
+w_err_t wind_obj_unregister(w_obj_s *obj,w_dlist_s *dlist)
+{
+    w_obj_s *tmpobj;
+    w_dnode_s *dnode;
+    WIND_ASSERT_RETURN(obj != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(dlist != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(obj->name != W_NULL,W_ERR_PTR_NULL);
+    tmpobj = wind_obj_get(obj->name,dlist);
+    WIND_ASSERT_RETURN(tmpobj != W_NULL,W_ERR_NO_OBJ);
+
+    wind_disable_switch();
+    dnode = dlist_remove(dlist,&obj->objnode);
+    wind_enable_switch();
+    WIND_ASSERT_RETURN(dnode != W_NULL,W_ERR_INVALID);
+    obj->magic = (~obj->magic);
+    return W_ERR_OK;  
+}
+
+
 w_err_t wind_obj_print_list(w_dlist_s *dlist)
 {
     w_dnode_s *dnode;
     w_obj_s *obj;
     int cnt = 0;
     w_dlist_s *list = dlist;
-    WIND_ASSERT_RETURN(list != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(dlist != W_NULL,W_ERR_PTR_NULL);
     wind_printf("\r\nobject list:\r\n");
 
     foreach_node(dnode,list)
