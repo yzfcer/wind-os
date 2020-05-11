@@ -35,7 +35,7 @@ typedef enum
 
 struct __xml_fsm_s
 {
-    w_fsm_s *fsm;              //XML FSM object
+    w_fsm_s fsm;               //XML FSM object
     w_xmlnode_s *root;         //XML root node
     w_xmlnode_s *xhead;        //XML head declaration
     w_xmlnode_s *parent;       //XML parent node
