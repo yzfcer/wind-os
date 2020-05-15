@@ -123,16 +123,17 @@ CASE_TEARDOWN(parse) FUNC_EMPTY
 CASE_FUNC(parse)
 {
     w_err_t err;
-    char *xstr = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\
-    <!-- xml test here   -->\
-    <note>\
-    <to>  George  </to>\
-    <from>John</from>\
-    <!-- xml version=\"1.0\" encoding=\"ISO-8859-1\"   -->\
-    <heading >Reminder   </heading >\
-    <heading1 Reminder =   	\"uhsdksd\\\"jidj\\\"\" />\
-    <body>Don't forget the meeting!</body>\
-    </note>";
+    char *xstr = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\r\n\
+    <!-- xml test here   -->\r\n\
+    <note>\r\n\
+    <to>  George  </to>\r\n\
+    <from>John</from>\r\n\
+    <!-- xml version=\"1.0\" encoding=\"ISO-8859-1\"   -->\r\n\
+    <heading >Reminder   </heading >\r\n\
+    <heading1 Reminder =   	\"uhsdksd\\\"jidj\\\"\" />\r\n\
+    <body>Don't forget the meeting!</body>\r\n\
+    </note>\r\n";
+    wind_printf("xml=%s\r\n",xstr);
     err = wind_xml_fsm_init(&s_xfsm,"xml");
     EXPECT_EQ(err,W_ERR_OK);
 	err = wind_xml_fsm_input(&s_xfsm,xstr,wind_strlen(xstr));

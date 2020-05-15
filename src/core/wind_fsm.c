@@ -198,8 +198,9 @@ w_err_t wind_fsm_destroy(w_fsm_s *fsm)
     w_err_t err;
     err = wind_obj_deinit(&fsm->obj,WIND_FSM_MAGIC,&fsmlist);
     WIND_ASSERT_RETURN(err == W_ERR_OK,err);
-    err = fsm_free(fsm);
-    WIND_ASSERT_RETURN(err == W_ERR_OK,err);
+    if(IS_F_FSM_POOL(fsm))
+        fsm_free(fsm);
+    //WIND_ASSERT_RETURN(err == W_ERR_OK,err);
     return err;
 }
 
