@@ -584,9 +584,6 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\xml\wind_xml_fsm.c">
       <Filter>module_xml</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\src\module\xml\xml.c">
-      <Filter>module_xml</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\test_xml.c">
       <Filter>module_cutest</Filter>
     </ClCompile>
@@ -970,9 +967,6 @@
       <Filter>module_xml</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\..\src\module\xml\wind_xml_fsm.h">
-      <Filter>module_xml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\..\src\module\xml\xml.h">
       <Filter>module_xml</Filter>
     </ClInclude>
   </ItemGroup>

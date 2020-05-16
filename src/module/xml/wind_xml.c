@@ -41,7 +41,7 @@ static w_bool_t is_xml_name_valid(char *name)
     return W_TRUE;
 }
 
-w_xmlattr_s *wind_xmlattr_crate(char *attr_name,char *attr_value)
+w_xmlattr_s *wind_xmlattr_create(char *attr_name,char *attr_value)
 {
     w_err_t err;
     w_xmlattr_s *xattr = (w_xmlattr_s *)W_NULL;
@@ -227,6 +227,7 @@ w_err_t wind_xmlnode_destroy(w_xmlnode_s *xnode)
     foreach_node(dnode,&xnode->attrlist)
     {
         attr = NODE_TO_XATTR(dnode);
+        wind_xmlnode_remove_attr(xnode,attr);
         wind_xmlattr_destroy(attr);
     }
     DLIST_INIT(xnode->attrlist);

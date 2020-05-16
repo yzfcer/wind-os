@@ -61,7 +61,7 @@ w_err_t wind_xml_deinit(w_xml_s *xml);
 w_err_t wind_xml_parse(w_xml_s *xml,char *xmlstr,w_int32_t len);
 w_err_t wind_xml_print(w_xmlnode_s *xnode);
 
-w_xmlattr_s *wind_xmlattr_crate(char *attr_name,char *attr_value);
+w_xmlattr_s *wind_xmlattr_create(char *attr_name,char *attr_value);
 w_err_t      wind_xmlattr_destroy(w_xmlattr_s *attr);
 w_xmlattr_s *wind_xmlattr_get(w_xmlnode_s *xnode,char *attr_name);
 w_err_t      wind_xmlattr_modify(w_xmlattr_s *xattr,char *attr_value);

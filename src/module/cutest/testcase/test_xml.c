@@ -56,18 +56,18 @@ CASE_FUNC(func)
     w_xmlattr_s *xattr;
     root = wind_xmlnode_create("testroot");
     EXPECT_NE(root,W_NULL);
-    xattr = wind_xmlattr_crate("name","root");
+    xattr = wind_xmlattr_create("name","root");
     EXPECT_NE(xattr,W_NULL);
     err = wind_xmlnode_insert_attr(root,xattr);
     EXPECT_EQ(err,W_ERR_OK);
-    xattr = wind_xmlattr_crate("lenth","324");
+    xattr = wind_xmlattr_create("lenth","324");
     EXPECT_NE(xattr,W_NULL);
     err = wind_xmlnode_insert_attr(root,xattr);
     EXPECT_EQ(err,W_ERR_OK);
 
     tmp = wind_xmlnode_create("child1");
     EXPECT_NE(tmp,W_NULL);
-    xattr = wind_xmlattr_crate("name","level1");
+    xattr = wind_xmlattr_create("name","level1");
     EXPECT_NE(xattr,W_NULL);
     err = wind_xmlnode_insert_attr(tmp,xattr);
     EXPECT_EQ(err,W_ERR_OK);
@@ -76,7 +76,7 @@ CASE_FUNC(func)
     
     tmp = wind_xmlnode_create("child2");
     EXPECT_NE(tmp,W_NULL);
-    xattr = wind_xmlattr_crate("name","level2");
+    xattr = wind_xmlattr_create("name","level2");
     EXPECT_NE(xattr,W_NULL);
     err = wind_xmlnode_insert_attr(tmp,xattr);
     EXPECT_EQ(err,W_ERR_OK);
@@ -86,7 +86,7 @@ CASE_FUNC(func)
     root = tmp;
     tmp = wind_xmlnode_create("child3");
     EXPECT_NE(tmp,W_NULL);
-    xattr = wind_xmlattr_crate("name","level3");
+    xattr = wind_xmlattr_create("name","level3");
     EXPECT_NE(xattr,W_NULL);
     err = wind_xmlnode_insert_attr(tmp,xattr);
     EXPECT_EQ(err,W_ERR_OK);
@@ -96,7 +96,7 @@ CASE_FUNC(func)
     root = tmp;
     tmp = wind_xmlnode_create("child4");
     EXPECT_NE(tmp,W_NULL);
-    xattr = wind_xmlattr_crate("name","level4");
+    xattr = wind_xmlattr_create("name","level4");
     EXPECT_NE(xattr,W_NULL);
     err = wind_xmlnode_set_value(tmp,"level4 value");
     EXPECT_EQ(err,W_ERR_OK);
@@ -138,6 +138,12 @@ CASE_FUNC(parse)
     EXPECT_EQ(err,W_ERR_OK);
 	err = wind_xml_fsm_input(&s_xfsm,xstr,wind_strlen(xstr));
     EXPECT_EQ(err,W_ERR_OK);
+
+    err = wind_xml_print(s_xfsm.xhead);
+    EXPECT_EQ(err,W_ERR_OK);
+    err = wind_xml_print(s_xfsm.root);
+    EXPECT_EQ(err,W_ERR_OK);
+    
     err = wind_xml_fsm_deinit(&s_xfsm);
     EXPECT_EQ(err,W_ERR_OK);
 }

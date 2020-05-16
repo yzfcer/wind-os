@@ -19,7 +19,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v110</PlatformToolset>
+
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -254,7 +254,6 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\xml\module_xml.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\xml\wind_xml.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\xml\wind_xml_fsm.c" />
-    <ClCompile Include="..\..\..\..\..\..\..\src\module\xml\xml.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\systhread\thread_coroutine.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\systhread\thread_daemon.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\systhread\thread_idle.c" />
@@ -375,7 +374,6 @@
     <ClInclude Include="..\..\..\..\..\..\..\src\hal\wind_chdev.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\xml\wind_xml.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\xml\wind_xml_fsm.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\src\module\xml\xml.h" />
     <ClInclude Include="..\..\..\port\file_port.h" />
     <ClInclude Include="..\..\..\port\wind_board_port.h" />
     <ClInclude Include="..\..\..\port\wind_config.h" />
