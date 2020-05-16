@@ -159,7 +159,7 @@ w_err_t wind_xml_print(w_xmlnode_s *xnode)
         attr = NODE_TO_XATTR(dnode);
         wind_printf(" %s=\"%s\"",attr->attr_name,attr->attr_value);
     }
-    if(xnode->is_leaf && xnode->attr_cnt > 0)
+    if(xnode->is_leaf && xnode->value == W_NULL)
         wind_printf("/>\r\n");
     else
         wind_printf(">");
@@ -176,10 +176,10 @@ w_err_t wind_xml_print(w_xmlnode_s *xnode)
         }
         //wind_printf("\r\n");
     }
-    if(!xnode->is_leaf || xnode->attr_cnt == 0)
+    if(!xnode->is_leaf || xnode->value != W_NULL)
     {
-        //if(!xnode->is_leaf)
-        print_align(xnode);
+        if(!xnode->is_leaf)
+            print_align(xnode);
         wind_printf("</%s>\r\n",xnode->name);
     }
     return W_ERR_OK;

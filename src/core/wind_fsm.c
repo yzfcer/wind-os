@@ -320,7 +320,7 @@ w_err_t wind_fsm_change_step(w_fsm_s *fsm,w_int32_t new_step)
     WIND_ASSERT_RETURN(fsm->obj.magic == WIND_FSM_MAGIC,W_ERR_INVALID);
     WIND_ASSERT_RETURN(new_step < fsm->model->step_cnt,W_ERR_PTR_NULL);
     wind_mutex_lock(&fsm->mutex);
-    wind_notice("fsm %s goto step %s",wind_obj_name(&fsm->obj),
+    wind_debug("fsm %s goto step %s",wind_obj_name(&fsm->obj),
                 fsm->model->steplist[new_step]);
 	fsm->cur_step = (w_int16_t)new_step;
     fsm->state = FSM_STAT_READY;

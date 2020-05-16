@@ -76,7 +76,7 @@ static w_err_t xmlfsm_copy_until(w_xmlfsm_s *xfsm,char *chlist)
         else
         {
             xfsm->buff[xfsm->buffidx] = 0;
-            wind_notice("item name:%s",xfsm->buff);
+            wind_debug("item name:%s",xfsm->buff);
             return W_ERR_OK;
         }
     }
@@ -91,7 +91,7 @@ static w_err_t xmlfsm_open_xnode(w_xmlfsm_s *xfsm,char *name)
     do
     {
         err = W_ERR_OK;
-        wind_notice("open node name:%s",name);
+        wind_debug("open node name:%s",name);
         newnode = wind_xmlnode_create(xfsm->buff);
         WIND_ASSERT_BREAK(newnode != W_NULL,W_ERR_MEM,"create xnode fail:%s");
         if(xfsm->xhead_flag) //add xml head info
@@ -123,7 +123,7 @@ static w_err_t xmlfsm_open_xnode(w_xmlfsm_s *xfsm,char *name)
 
 static w_err_t xmlfsm_close_xnode(w_xmlfsm_s *xfsm,char *name)
 {
-    wind_notice("close node name:%s",name);
+    wind_debug("close node name:%s",name);
     if(xfsm->xhead_flag)
     {
         xfsm->newnode = W_NULL;
@@ -143,11 +143,11 @@ static w_err_t xmlfsm_close_xnode(w_xmlfsm_s *xfsm,char *name)
     return W_ERR_FAIL;
 }
 
-static w_err_t xmlfsm_new_attr(w_xmlfsm_s *xfsm)
+static w_err_t xmlfsm_new_attr(w_xmlfsm_s *xfsm,char *attr_name)
 {
     w_err_t err;
-    wind_notice("attr name:%s",xfsm->buff);
-    xfsm->newattr = wind_xmlattr_create(xfsm->buff,"");
+    wind_debug("attr name:%s",attr_name);
+    xfsm->newattr = wind_xmlattr_create(attr_name,"");
     WIND_ASSERT_RETURN(xfsm->newattr != W_NULL,W_ERR_MEM);
     err = wind_xmlnode_insert_attr(xfsm->newnode,xfsm->newattr);
     return err;
@@ -332,6 +332,7 @@ static w_err_t xmlfsm_handle_node_name(w_fsm_s *fsm)
                     fsm->sub_step ++;
                 break;
             case 2://create xml node
+                wind_debug("xnode name:%s",xfsm->buff);
                 err = xmlfsm_open_xnode(xfsm,xfsm->buff);
                 WIND_ASSERT_RETURN(err == W_ERR_OK,err);
                 if(buff[xfsm->argidx] != '>')
@@ -392,7 +393,8 @@ static w_err_t xmlfsm_handle_attr_name(w_fsm_s *fsm)
                 break;
             case 3:
                 xfsm->argidx ++;
-                err = xmlfsm_new_attr(xfsm);
+                //wind_debug("xattr name:%s",xfsm->buff);
+                err = xmlfsm_new_attr(xfsm,xfsm->buff);
                 WIND_ASSERT_RETURN(err == W_ERR_OK,err);
                 xmlfsm_change_step(xfsm,XML_STEP_ATTR_VALUE);
                 return W_ERR_OK;
@@ -431,7 +433,7 @@ static w_err_t xmlfsm_handle_attr_value(w_fsm_s *fsm)
                 break;
             case 2:
                 xfsm->argidx ++;
-                wind_notice("attr value:%s",xfsm->buff);
+                wind_debug("xattr value:%s",xfsm->buff);
                 WIND_ASSERT_RETURN(xfsm->newattr != W_NULL,W_ERR_MEM);
                 wind_xmlattr_modify(xfsm->newattr,xfsm->buff);
                 xfsm->newattr = W_NULL;
@@ -480,6 +482,7 @@ static w_err_t xmlfsm_handle_node_value(w_fsm_s *fsm)
                         break;
                 }
                 WIND_ASSERT_RETURN(xfsm->newnode != W_NULL,W_ERR_FAIL);
+                wind_debug("xnode value:%s",xfsm->buff);
                 if(xfsm->buff[0] != 0)
                     wind_xmlnode_set_value(xfsm->newnode,xfsm->buff);
                 //xfsm->argidx ++;
