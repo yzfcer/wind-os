@@ -58,7 +58,7 @@ w_pipe_s* wind_pipe_create(const char *name,void *buff,w_int32_t buflen);
 w_int32_t wind_pipe_read(w_pipe_s* pipe,w_int8_t *str,w_int32_t len);
 w_int32_t wind_pipe_write(w_pipe_s* pipe,w_int8_t *str,w_int32_t len);
 w_err_t wind_pipe_destroy(w_pipe_s* pipe);
-w_err_t wind_pipe_print(void);
+w_err_t wind_pipe_print_detail(void);
 
 
 #endif // #if WIND_PIPE_SUPPORT

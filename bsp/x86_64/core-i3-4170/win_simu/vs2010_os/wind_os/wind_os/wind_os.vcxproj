@@ -26,7 +26,6 @@
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
-
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -172,6 +171,7 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_daemon.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_datetime.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_dbgpoint.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_detail.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_diagnose.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_echo.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_fs.c" />

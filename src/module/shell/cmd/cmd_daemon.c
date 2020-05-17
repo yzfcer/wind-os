@@ -63,7 +63,7 @@ COMMAND_MAIN(daemon,argc,argv)
     WIND_ASSERT_RETURN(argc >= 2,W_ERR_INVALID);
     if(wind_strcmp(argv[1],"list") == 0)
     {
-        wind_daemon_print();
+        wind_daemon_print_list();
         return W_ERR_OK;
     }
     else if(wind_strcmp(argv[1],"enable") == 0)

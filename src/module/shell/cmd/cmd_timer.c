@@ -60,7 +60,7 @@ COMMAND_MAIN(timer,argc,argv)
     w_timer_s *timer;
     WIND_ASSERT_RETURN(argc >= 2,W_ERR_INVALID);
     if(wind_strcmp(argv[1],"list") == 0)
-        return wind_timer_print();
+        return wind_timer_print_detail();
     
     WIND_ASSERT_RETURN(argc >= 3, W_ERR_FAIL);
     timer = wind_timer_get(argv[2]);

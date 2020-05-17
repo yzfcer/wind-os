@@ -43,7 +43,7 @@ static w_err_t cmd_mount(w_int32_t argc,char **argv)
     w_vfs_s *vfs;
     if(argc == 1)
     {
-        return wind_vfs_print();
+        return wind_vfs_print_detail();
     }
     WIND_ASSERT_RETURN(argc >= 4,W_ERR_INVALID);
     vfs = wind_vfs_get_free();

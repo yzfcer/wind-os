@@ -227,7 +227,7 @@ w_err_t wind_sem_trywait(w_sem_s *sem)
 }
 
 
-w_err_t wind_sem_print(void)
+w_err_t wind_sem_print_detail(void)
 {
     w_dnode_s *dnode;
     w_sem_s *sem;

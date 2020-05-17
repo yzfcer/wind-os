@@ -164,7 +164,7 @@ w_err_t wind_daemon_destroy(w_daemon_s *daemon)
 }
 
 
-w_err_t wind_daemon_print(void)
+w_err_t wind_daemon_print_list(void)
 {
     w_dnode_s *dnode;
     w_daemon_s *daemon;

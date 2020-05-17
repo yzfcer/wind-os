@@ -212,7 +212,7 @@ w_vfs_s *wind_vfs_get_bypath(const char *path)
     return retfs;
 }
 
-w_err_t wind_vfs_print(void)
+w_err_t wind_vfs_print_detail(void)
 {
     w_dnode_s *dnode;
     w_vfs_s *vfs;

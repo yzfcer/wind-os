@@ -86,7 +86,7 @@ w_err_t wind_module_register(w_module_s *module);
 w_err_t wind_module_unregister(w_module_s *module);
 
 
-w_err_t wind_module_print(void);
+w_err_t wind_module_print_list(void);
 
 #endif // #if WIND_MODULE_SUPPORT
 #ifdef __cplusplus

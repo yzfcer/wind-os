@@ -35,6 +35,10 @@ COMMAND_DECLARE(sysinfo);
 #if CMD_LIST_SUPPORT
 COMMAND_DECLARE(list);
 #endif
+#if CMD_DETAIL_SUPPORT
+COMMAND_DECLARE(detail);
+#endif
+
 #if CMD_STATI_SUPPORT
 COMMAND_DECLARE(stati);
 #endif
@@ -97,6 +101,9 @@ void _wind_register_all_cmd(void)
 #endif
 #if CMD_LIST_SUPPORT
     wind_cmd_register(COMMAND(list));
+#endif
+#if CMD_DETAIL_SUPPORT
+    wind_cmd_register(COMMAND(detail));
 #endif
 #if CMD_STATI_SUPPORT
     wind_cmd_register(COMMAND(stati));

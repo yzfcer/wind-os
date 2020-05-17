@@ -159,6 +159,7 @@
 #define CMD_ECHO_SUPPORT 1 //是否支持回显命令
 #define CMD_FS_SUPPORT 1 //是否支持文件系统命令
 #define CMD_LIST_SUPPORT 1 //是否支持内核对象列表命令
+#define CMD_DETAIL_SUPPORT 1 //是否支持内核对象列表命令
 #define CMD_MEM_SUPPORT 1 //是否支持内存值查看命令
 #define CMD_RESET_SUPPORT 1 //是否支持系统复位命令
 #define CMD_STATI_SUPPORT 1 //是否支持统计命令

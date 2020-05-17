@@ -254,8 +254,12 @@ w_err_t wind_pool_free(void *mem,void *block)
     return W_ERR_OK;
 }
 
+w_err_t wind_pool_print_list(void)
+{
+    return wind_obj_print_list(&poollist);
+}
 
-void wind_pool_print_list(void)
+void wind_pool_print_detail(void)
 {
     w_dnode_s *dnode;
     w_pool_s *pm;

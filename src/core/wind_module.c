@@ -154,7 +154,7 @@ w_module_s *wind_module_get(const char *name)
 }
 
 
-w_err_t wind_module_print(void)
+w_err_t wind_module_print_list(void)
 {
     w_dnode_s *dnode;
     w_module_s *module;

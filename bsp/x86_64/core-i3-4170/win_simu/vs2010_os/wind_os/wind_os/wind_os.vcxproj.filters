@@ -572,6 +572,9 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\xml\module_xml.c">
       <Filter>module_xml</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_detail.c">
+      <Filter>module_shell</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">

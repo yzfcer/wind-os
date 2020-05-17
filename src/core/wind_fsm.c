@@ -137,7 +137,7 @@ w_fsm_model_s *wind_fsm_model_get(char *name)
     return (w_fsm_model_s *)wind_obj_get(name,&modellist);
 }
 
-w_err_t wind_fsm_model_print(void)
+w_err_t wind_fsm_model_print_list(void)
 {
     return wind_obj_print_list(&modellist);
 }
@@ -333,7 +333,7 @@ w_err_t wind_fsm_change_step(w_fsm_s *fsm,w_int32_t new_step)
 
 
 
-w_err_t wind_fsm_print(void)
+w_err_t wind_fsm_print_detail(void)
 {
     w_dnode_s *dnode;
     w_fsm_s *fsm;

@@ -135,7 +135,7 @@ w_err_t wind_pipe_destroy(w_pipe_s* pipe)
     return W_ERR_OK;
 }
 
-w_err_t wind_pipe_print(void)
+w_err_t wind_pipe_print_detail(void)
 {
     w_dnode_s *dnode;
     w_pipe_s *pipe;

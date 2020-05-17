@@ -76,7 +76,7 @@ w_err_t wind_watchdog_destroy(w_watchdog_s *watchdog);
 w_err_t wind_watchdog_feed(w_watchdog_s *watchdog);
 w_err_t wind_watchdog_setflag(w_watchdog_s *watchdog,w_uint16_t flag);
 w_err_t wind_watchdog_clrflag(w_watchdog_s *watchdog,w_uint16_t flag);
-w_err_t wind_watchdog_print(void);
+w_err_t wind_watchdog_print_detail(void);
 
 #endif // #if WIND_WATCHDOG_SUPPORT
 #ifdef __cplusplus

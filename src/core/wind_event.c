@@ -159,7 +159,7 @@ w_err_t wind_event_trig(w_event_s *event,void *arg)
 }
 
 
-w_err_t wind_event_print(void)
+w_err_t wind_event_print_detail(void)
 {
     w_dnode_s *dnode;
     w_event_s *event;

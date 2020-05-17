@@ -83,7 +83,7 @@ w_err_t wind_timer_destroy(w_timer_s* timer);
 w_err_t wind_timer_set_period(w_timer_s* timer,w_uint32_t period_ms);
 w_err_t wind_timer_setflag(w_timer_s* timer,w_uint16_t flag);
 w_err_t wind_timer_clrflag(w_timer_s* timer,w_uint16_t flag);
-w_err_t wind_timer_print(void);
+w_err_t wind_timer_print_detail(void);
 
 #endif // #if WIND_TIMER_SUPPORT
 #ifdef __cplusplus

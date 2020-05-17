@@ -74,7 +74,7 @@ w_err_t wind_daemon_clrflag(w_daemon_s *daemon,w_int16_t flag);
 
 w_err_t _wind_daemon_period_check(void);
 
-w_err_t wind_daemon_print(void);
+w_err_t wind_daemon_print_list(void);
 
 
 #endif // #if WIND_DAEMON_SUPPORT

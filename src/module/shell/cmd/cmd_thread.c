@@ -66,7 +66,7 @@ COMMAND_MAIN(thread,argc,argv)
     WIND_ASSERT_RETURN(argc >= 2,W_ERR_INVALID);
     if(wind_strcmp(argv[1],"list") == 0)
     {
-        wind_thread_print();
+        wind_thread_print_detail();
         return W_ERR_OK;
     }
 	thread = wind_thread_get(argv[2]);

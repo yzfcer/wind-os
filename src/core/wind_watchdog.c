@@ -173,7 +173,7 @@ w_err_t wind_watchdog_clrflag(w_watchdog_s *watchdog,w_uint16_t flag)
 }
 
 
-w_err_t wind_watchdog_print(void)
+w_err_t wind_watchdog_print_detail(void)
 {
     w_dnode_s *dnode;
     w_watchdog_s *watchdog;

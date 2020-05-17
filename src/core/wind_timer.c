@@ -177,7 +177,7 @@ w_err_t wind_timer_clrflag(w_timer_s* timer,w_uint16_t flag)
 }
 
 
-w_err_t wind_timer_print(void)
+w_err_t wind_timer_print_detail(void)
 {
     w_dnode_s *dnode;
     w_timer_s *timer;

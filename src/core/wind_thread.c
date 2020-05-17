@@ -486,7 +486,7 @@ w_dlist_s *_wind_thread_sleep_list(void)
 }
 
 
-w_err_t wind_thread_print(void)
+w_err_t wind_thread_print_detail(void)
 {
     w_int32_t usage;
     w_dnode_s *dnode;

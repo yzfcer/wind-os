@@ -55,7 +55,7 @@ COMMAND_MAIN(blkdev,argc,argv)
     WIND_ASSERT_RETURN(argc>= 2,W_ERR_INVALID);
     if(0 == wind_strcmp(argv[1],"list"))
     {
-        wind_blkdev_print();
+        wind_blkdev_print_detail();
         return W_ERR_OK;
     }
 

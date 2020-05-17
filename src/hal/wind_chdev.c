@@ -174,7 +174,7 @@ w_err_t wind_chdev_close(w_chdev_s *chdev)
     return err;
 }
 
-w_err_t wind_chdev_print(void)
+w_err_t wind_chdev_print_list(void)
 {
     w_dnode_s *dnode;
     w_chdev_s *chdev;

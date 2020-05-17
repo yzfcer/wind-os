@@ -65,7 +65,7 @@ w_err_t wind_mutex_destroy(w_mutex_s *mutex);
 w_err_t wind_mutex_lock(w_mutex_s *mutex);
 w_err_t wind_mutex_trylock(w_mutex_s *mutex);
 w_err_t wind_mutex_unlock(w_mutex_s *mutex);
-w_err_t wind_mutex_print(void);
+w_err_t wind_mutex_print_detail(void);
 
 #endif // #if WIND_MUTEX_SUPPORT
 

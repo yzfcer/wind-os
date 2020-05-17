@@ -369,7 +369,7 @@ void *wind_heap_realloc(w_heap_s* heap, void* ptr, w_uint32_t newsize)
         {
             wind_error("error realloc,need size:%d.",newsize);
             wind_heap_stati_print();
-            wind_heapitem_print(HP_ALLOCID_ALL);
+            wind_heapitem_print_detail(HP_ALLOCID_ALL);
         }
         //dlist_remove(&heap->used_list,&old->itemnode.dnode);
         wind_free(ptr);
@@ -442,7 +442,7 @@ w_err_t wind_heap_free(w_heap_s* heap,void *ptr)
     return err;
 }
 
-w_err_t wind_heap_print(void)
+w_err_t wind_heap_print_detail(void)
 {
     w_dnode_s *dnode;
     w_heap_s* heap;
@@ -465,7 +465,7 @@ w_err_t wind_heap_print(void)
     return W_ERR_OK;
 }
 
-w_err_t wind_heapitem_print(w_allocid_e allocid)
+w_err_t wind_heapitem_print_detail(w_allocid_e allocid)
 {   
     w_err_t err;
     w_dnode_s *dnode,*dnode1;

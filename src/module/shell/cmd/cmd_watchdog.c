@@ -93,7 +93,7 @@ COMMAND_MAIN(wdog,argc,argv)
 {
     WIND_ASSERT_RETURN(argc >= 2,W_ERR_INVALID);
     if(wind_strcmp(argv[1],"list") == 0)
-        return wind_watchdog_print();
+        return wind_watchdog_print_detail();
     else if(wind_strcmp(argv[1],"enable") == 0)
         return enable_watchdog(argc,argv);
     else if(wind_strcmp(argv[1],"disable") == 0)

@@ -95,7 +95,9 @@ void   *wind_pool_malloc(void *mem);
 
 w_err_t wind_pool_free(void *mem,void *block);
 
-void wind_pool_print_list(void);
+w_err_t wind_pool_print_list(void);
+
+void wind_pool_print_detail(void);
 
 void wind_pool_stati_print(void);
 

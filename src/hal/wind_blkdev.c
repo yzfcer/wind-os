@@ -216,7 +216,7 @@ w_err_t wind_blkdev_close(w_blkdev_s *blkdev)
 }
 
 
-w_err_t wind_blkdev_print(void)
+w_err_t wind_blkdev_print_detail(void)
 {
     w_dnode_s *dnode;
     w_blkdev_s *blkdev;

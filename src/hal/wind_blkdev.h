@@ -95,7 +95,7 @@ w_int32_t wind_blkdev_write(w_blkdev_s *blkdev,w_addr_t blkaddr,w_uint8_t *buf,w
 w_err_t wind_blkdev_erase(w_blkdev_s *blkdev,w_addr_t blkaddr,w_int32_t blkcnt);
 w_err_t wind_blkdev_eraseall(w_blkdev_s *blkdev);
 w_err_t wind_blkdev_close(w_blkdev_s *blkdev);
-w_err_t wind_blkdev_print(void);
+w_err_t wind_blkdev_print_detail(void);
 
 #endif
 

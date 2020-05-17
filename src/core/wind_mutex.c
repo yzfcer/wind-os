@@ -207,7 +207,7 @@ w_err_t wind_mutex_unlock(w_mutex_s *mutex)
 }
 
 
-w_err_t wind_mutex_print(void)
+w_err_t wind_mutex_print_detail(void)
 {
     w_dnode_s *dnode;
     w_mutex_s *mutex;

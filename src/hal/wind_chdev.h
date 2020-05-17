@@ -101,7 +101,7 @@ w_err_t wind_chdev_ioctl(w_chdev_s *chdev,w_int32_t cmd,void *param);
 w_int32_t wind_chdev_read(w_chdev_s *chdev,w_uint8_t *buf,w_int32_t len);
 w_int32_t wind_chdev_write(w_chdev_s *chdev,w_uint8_t *buf,w_int32_t len);
 w_err_t wind_chdev_close(w_chdev_s *chdev);
-w_err_t wind_chdev_print(void);
+w_err_t wind_chdev_print_list(void);
 
 #endif
 
