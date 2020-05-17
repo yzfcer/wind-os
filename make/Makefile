@@ -75,6 +75,7 @@ WINDOS_INC += -I$(ROOTDIR)/src/module/vfs
 WINDOS_INC += -I$(ROOTDIR)/src/module/vfs/hostfs
 WINDOS_INC += -I$(ROOTDIR)/src/module/vfs/listfs
 WINDOS_INC += -I$(ROOTDIR)/src/module/vfs/treefs
+WINDOS_INC += -I$(ROOTDIR)/src/module/xml
 
 CFLAGS = -g -Wall -rdynamic ${WINDOS_INC} ${CROSS_COMPILE_INCLUDE}
 CLIBFLAGS = -g -rdynamic -L/usr/lib/86_64-linux-gnu -lm 
