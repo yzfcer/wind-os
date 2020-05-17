@@ -110,12 +110,8 @@ w_obj_s *wind_obj_get(const char *name,w_dlist_s *list)
     wind_disable_switch();
     do
     {
-        err = W_ERR_OK;
-        if(list->head == W_NULL)
-        {
-            wind_enable_switch();
-            return W_NULL;
-        }
+        err = W_ERR_FAIL;
+        WIND_CHECK_BREAK(list->head != W_NULL,W_ERR_FAIL);
         foreach_node(dnode,list)
         {
             obj = NODE_TO_OBJ(dnode);
@@ -123,13 +119,15 @@ w_obj_s *wind_obj_get(const char *name,w_dlist_s *list)
                 continue;
             if(obj->name && (wind_strcmp(name,obj->name) == 0))
             {
-                wind_enable_switch();
-                return obj;
+                err = W_ERR_OK;
+                break;
             }
         }
     }while(0);
     wind_enable_switch();
-    return W_NULL;
+    if(err != W_ERR_OK)
+        return W_NULL;
+    return obj;
 }
 
 w_err_t wind_obj_init(w_obj_s *obj,w_uint32_t magic,const char *name,w_dlist_s *list)
