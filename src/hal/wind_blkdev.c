@@ -215,6 +215,10 @@ w_err_t wind_blkdev_close(w_blkdev_s *blkdev)
     return err;
 }
 
+w_err_t wind_blkdev_print_list(void)
+{
+    return wind_obj_print_list(&blkdevlist);
+}
 
 w_err_t wind_blkdev_print_detail(void)
 {

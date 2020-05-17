@@ -442,6 +442,11 @@ w_err_t wind_heap_free(w_heap_s* heap,void *ptr)
     return err;
 }
 
+w_err_t wind_heap_print_list(void)
+{
+    return wind_obj_print_list(&heaplist);
+}
+
 w_err_t wind_heap_print_detail(void)
 {
     w_dnode_s *dnode;

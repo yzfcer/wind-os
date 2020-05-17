@@ -71,7 +71,6 @@ COMMAND_USAGE(list)
 #endif
 #if WIND_HEAP_SUPPORT
     wind_printf("list heap:--show all heap map infomation.\r\n");
-    wind_printf("list heapitem:--show all heapitems infomation.\r\n");
 #endif
 #if WIND_TIMER_SUPPORT
     wind_printf("list timer:--show all timer infomation.\r\n");
@@ -103,72 +102,63 @@ COMMAND_USAGE(list)
 
 COMMAND_MAIN(list,argc,argv)
 {
-    w_uint32_t allocid;
     WIND_ASSERT_RETURN(argc >= 2,W_ERR_INVALID);
     if(0 == wind_strcmp(argv[1],"thread"))
     {
-        wind_thread_print_detail();
+        wind_thread_print_list();
         return W_ERR_OK;
     }
     else if(0 == wind_strcmp(argv[1],"pool"))
     {
-        wind_pool_print_detail();
+        wind_pool_print_list();
         return W_ERR_OK;
     }
 #if WIND_MUTEX_SUPPORT
     else if(0 == wind_strcmp(argv[1],"mutex"))
     {
-        wind_mutex_print_detail();
+        wind_mutex_print_list();
         return W_ERR_OK;
     }
 #endif
 #if WIND_SEM_SUPPORT
     else if(0 == wind_strcmp(argv[1],"sem"))
     {
-        wind_sem_print_detail();
+        wind_sem_print_list();
         return W_ERR_OK;
     }
 #endif
 #if WIND_EVENT_SUPPORT
     else if(0 == wind_strcmp(argv[1],"event"))
     {
-        wind_event_print_detail();
+        wind_event_print_list();
         return W_ERR_OK;
     }
 #endif
 #if WIND_PIPE_SUPPORT
     else if(0 == wind_strcmp(argv[1],"pipe"))
     {
-        wind_pipe_print_detail();
+        wind_pipe_print_list();
         return W_ERR_OK;
     }
 #endif
 #if WIND_MSGBOX_SUPPORT
     else if(0 == wind_strcmp(argv[1],"msgbox"))
     {
-        wind_msgbox_print_detail();
+        wind_msgbox_print_list();
         return W_ERR_OK;
     }
 #endif
 #if WIND_HEAP_SUPPORT
     else if(0 == wind_strcmp(argv[1],"heap"))
     {
-        wind_heap_print_detail();
-        return W_ERR_OK;
-    }
-    else if(0 == wind_strcmp(argv[1],"heapitem"))
-    {
-        allocid = HP_ALLOCID_ALL;
-        if(argc >= 3)
-            wind_str_to_uint(argv[2],&allocid);
-        wind_heapitem_print_detail((w_allocid_e)allocid);
+        wind_heap_print_list();
         return W_ERR_OK;
     }
 #endif
 #if WIND_TIMER_SUPPORT
     else if(0 == wind_strcmp(argv[1],"timer"))
     {
-        wind_timer_print_detail();
+        wind_timer_print_list();
         return W_ERR_OK;
     }
 #endif
@@ -182,14 +172,14 @@ COMMAND_MAIN(list,argc,argv)
 #if WIND_BLKDEV_SUPPORT
     else if(0 == wind_strcmp(argv[1],"blkdev"))
     {
-        wind_blkdev_print_detail();
+        wind_blkdev_print_list();
         return W_ERR_OK;
     }
 #endif
 #if WIND_WATCHDOG_SUPPORT
     else if(0 == wind_strcmp(argv[1],"watchdog"))
     {
-        wind_watchdog_print_detail();
+        wind_watchdog_print_list();
         return W_ERR_OK;
     }
 #endif
@@ -203,7 +193,7 @@ COMMAND_MAIN(list,argc,argv)
 #if WIND_MODULE_VFS_SUPPORT
     else if(0 == wind_strcmp(argv[1],"vfs"))
     {
-        wind_vfs_print_detail();
+        wind_vfs_print_list();
         return W_ERR_OK;
     }
 #endif
@@ -217,7 +207,7 @@ COMMAND_MAIN(list,argc,argv)
 #if WIND_FSM_SUPPORT
     else if(0 == wind_strcmp(argv[1],"fsm"))
     {
-        wind_fsm_print_detail();
+        wind_fsm_print_list();
         return W_ERR_OK;
     }
     else if(0 == wind_strcmp(argv[1],"fsm_model"))

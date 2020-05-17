@@ -485,7 +485,25 @@ w_dlist_s *_wind_thread_sleep_list(void)
     return &sleeplist;
 }
 
+w_err_t wind_thread_print_list(void)
+{
+    w_dnode_s *dnode;
+    w_thread_s *thread;
+    int cnt = 0;
+    w_dlist_s *list = &threadlist;
+    WIND_ASSERT_RETURN(list != W_NULL,W_ERR_PTR_NULL);
+    wind_printf("\r\nobject list:\r\n");
 
+    foreach_node(dnode,list)
+    {
+        thread = PRIDNODE_TO_THREAD(dnode,validnode);
+        wind_printf("%-12s ",thread->name);
+        cnt ++;
+        if((cnt & 0x03) == 0)
+            wind_printf("\r\n");
+    }
+    return W_ERR_OK;
+}
 w_err_t wind_thread_print_detail(void)
 {
     w_int32_t usage;

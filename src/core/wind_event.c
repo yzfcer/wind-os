@@ -158,6 +158,10 @@ w_err_t wind_event_trig(w_event_s *event,void *arg)
     return W_ERR_OK;
 }
 
+w_err_t wind_event_print_list(void)
+{
+    return wind_obj_print_list(&eventlist);
+}
 
 w_err_t wind_event_print_detail(void)
 {

@@ -206,6 +206,10 @@ w_err_t wind_mutex_unlock(w_mutex_s *mutex)
     return W_ERR_OK;    
 }
 
+w_err_t wind_mutex_print_list(void)
+{
+    return wind_obj_print_list(&mutexlist);
+}
 
 w_err_t wind_mutex_print_detail(void)
 {

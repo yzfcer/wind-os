@@ -115,6 +115,8 @@ void *wind_heap_realloc(w_heap_s* heap, void* ptr, w_uint32_t newsize);
 
 w_err_t wind_heap_free(w_heap_s* heap,void *ptr);
 
+w_err_t wind_heap_print_list(void);
+
 w_err_t wind_heap_print_detail(void);
 
 w_err_t wind_heapitem_print_detail(w_allocid_e allocid);

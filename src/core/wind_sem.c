@@ -226,6 +226,10 @@ w_err_t wind_sem_trywait(w_sem_s *sem)
     return err;
 }
 
+w_err_t wind_sem_print_list(void)
+{
+    return wind_obj_print_list(&semlist);
+}
 
 w_err_t wind_sem_print_detail(void)
 {

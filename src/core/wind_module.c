@@ -153,8 +153,12 @@ w_module_s *wind_module_get(const char *name)
     return (w_module_s*)wind_obj_get(name,&modulelist);
 }
 
-
 w_err_t wind_module_print_list(void)
+{
+    return wind_obj_print_list(&modulelist);
+}
+
+w_err_t wind_module_print_detail(void)
 {
     w_dnode_s *dnode;
     w_module_s *module;

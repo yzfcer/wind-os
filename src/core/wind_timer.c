@@ -176,6 +176,10 @@ w_err_t wind_timer_clrflag(w_timer_s* timer,w_uint16_t flag)
     return W_ERR_OK;
 }
 
+w_err_t wind_timer_print_list(void)
+{
+    return wind_obj_print_list(&timerlist);
+}
 
 w_err_t wind_timer_print_detail(void)
 {

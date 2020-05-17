@@ -39,6 +39,7 @@ w_vfs_s *wind_vfs_get_free(void);
 w_vfs_s *wind_vfs_get_byidx(w_int32_t index);
 
 w_vfs_s *wind_vfs_get_bypath(const char *path);
+w_err_t wind_vfs_print_list(void);
 w_err_t wind_vfs_print_detail(void);
 
 w_err_t wind_vfs_mount(char *fsname,char *fstype,char *devname,char *path);

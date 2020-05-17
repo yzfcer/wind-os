@@ -172,6 +172,10 @@ w_err_t wind_watchdog_clrflag(w_watchdog_s *watchdog,w_uint16_t flag)
     return W_ERR_OK;
 }
 
+w_err_t wind_watchdog_print_list(void)
+{
+    return wind_obj_print_list(&watchdoglist);
+}
 
 w_err_t wind_watchdog_print_detail(void)
 {

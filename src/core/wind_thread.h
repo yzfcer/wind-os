@@ -189,6 +189,7 @@ w_err_t wind_thread_clrflag(w_thread_s *thread,w_int16_t flag);
 w_err_t wind_thread_sleep(w_int32_t ms);
 w_err_t wind_thread_exit(w_err_t exitcode);
 
+w_err_t wind_thread_print_list(void);
 w_err_t wind_thread_print_detail(void);
 
 w_err_t wind_thread_print_stack(w_thread_s *thread);

@@ -59,6 +59,7 @@ w_err_t wind_sem_post(w_sem_s *sem);
 w_err_t wind_sem_wait(w_sem_s *sem,w_uint32_t timeout);
 w_err_t wind_sem_trywait(w_sem_s *sem);
 
+w_err_t wind_sem_print_list(void);
 w_err_t wind_sem_print_detail(void);
 
 #endif // #if WIND_SEM_SUPPORT

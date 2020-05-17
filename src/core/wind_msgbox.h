@@ -73,6 +73,7 @@ w_err_t wind_msgbox_destroy(w_msgbox_s *msgbox);
 w_err_t wind_msgbox_post(w_msgbox_s *msgbox,w_msg_s *pmsg);
 w_err_t wind_msgbox_wait(w_msgbox_s *msgbox,w_msg_s **pmsg,w_uint32_t timeout);
 w_err_t wind_msgbox_trywait(w_msgbox_s *msgbox,w_msg_s **pmsg);
+w_err_t wind_msgbox_print_list(void);
 w_err_t wind_msgbox_print_detail(void);
 
 #endif // #if WIND_MSGBOX_SUPPORT

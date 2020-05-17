@@ -259,6 +259,12 @@ w_err_t wind_msgbox_trywait(w_msgbox_s *msgbox,w_msg_s **pmsg)
     return err;
 }
 
+w_err_t wind_msgbox_print_list(void)
+{
+    return wind_obj_print_list(&msgboxlist);
+}
+
+
 w_err_t wind_msgbox_print_detail(void)
 {
     w_dnode_s *dnode;

@@ -331,6 +331,10 @@ w_err_t wind_fsm_change_step(w_fsm_s *fsm,w_int32_t new_step)
 
 
 
+w_err_t wind_fsm_print_list(void)
+{
+    return wind_obj_print_list(&fsmlist);
+}
 
 
 w_err_t wind_fsm_print_detail(void)

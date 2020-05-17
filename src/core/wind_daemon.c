@@ -166,22 +166,7 @@ w_err_t wind_daemon_destroy(w_daemon_s *daemon)
 
 w_err_t wind_daemon_print_list(void)
 {
-    w_dnode_s *dnode;
-    w_daemon_s *daemon;
-    int cnt = 0;
-    w_dlist_s *list = &daemonlist;
-    WIND_ASSERT_RETURN(list != W_NULL,W_ERR_PTR_NULL);
-    wind_printf("\r\n\r\ndaemon list:\r\n");
-    
-    foreach_node(dnode,list)
-    {
-        daemon = NODE_TO_DAEMON(dnode);
-        wind_printf("%-12s ",daemon->obj.name);
-        cnt ++;
-        if((cnt & 0x03) == 0)
-            wind_printf("\r\n");
-    }
-    return W_ERR_OK;
+    return wind_obj_print_list(&daemonlist);
 }
 
 
