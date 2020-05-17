@@ -201,10 +201,6 @@ static void xmlfsm_parse_arg_end(w_xmlfsm_s *xfsm)
     wind_fsm_wait(fsm);
 }
 
-static void xmlfsm_parse_fail(w_xmlfsm_s *xfsm)
-{
-    wind_xml_fsm_deinit(xfsm);
-}
 
 
 static w_err_t xmlfsm_handle_idle(w_fsm_s *fsm)

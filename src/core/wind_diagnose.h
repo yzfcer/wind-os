@@ -69,7 +69,7 @@ w_err_t wind_diagnose_unregister(w_diagnose_s *diagnose);
 w_err_t wind_diagnose_check(void);
 w_err_t wind_diagnose_print(void);
 
-#endif #if WIND_DIAGNOSE_SUPPORT
+#endif //#if WIND_DIAGNOSE_SUPPORT
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus
