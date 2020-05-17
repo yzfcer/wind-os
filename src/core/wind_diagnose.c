@@ -159,7 +159,7 @@ w_err_t wind_diagnose_print(void)
     return W_ERR_OK;
 }
 
-#endif #if WIND_DIAGNOSE_SUPPORT
+#endif //#if WIND_DIAGNOSE_SUPPORT
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus
