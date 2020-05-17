@@ -449,24 +449,6 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\framework\module_cutest.c">
       <Filter>module_cutest</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\src\module\game\gobang.c">
-      <Filter>module_game</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\src\module\game\module_game.c">
-      <Filter>module_game</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\src\module\game\pushbox.c">
-      <Filter>module_game</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\src\module\game\snake.c">
-      <Filter>module_game</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\src\module\game\tank.c">
-      <Filter>module_game</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\src\module\game\tetris.c">
-      <Filter>module_game</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\module_vfs.c">
       <Filter>module_vfs</Filter>
     </ClCompile>
@@ -633,9 +615,6 @@
     </Filter>
     <Filter Include="module_cjson">
       <UniqueIdentifier>{cb956575-b568-4d7e-9038-5d90b331c8b2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="module_game">
-      <UniqueIdentifier>{e69be643-f424-45d0-99c5-6390248d091a}</UniqueIdentifier>
     </Filter>
     <Filter Include="module_tools">
       <UniqueIdentifier>{1c022046-ee88-4360-a89f-e2fcc86e9b22}</UniqueIdentifier>

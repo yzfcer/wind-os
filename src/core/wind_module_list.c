@@ -52,9 +52,7 @@ MODULE_DECLARE(cjson);
 #if WIND_MODULE_DICT_SUPPORT
 MODULE_DECLARE(dict);
 #endif
-#if WIND_MODULE_GAME_SUPPORT
-MODULE_DECLARE(game);
-#endif
+
 #if WIND_MODULE_TOOLS_SUPPORT
 MODULE_DECLARE(tools);
 #endif
@@ -89,9 +87,6 @@ w_err_t _wind_register_modules(void)
 	wind_module_register(MODULE(tools));
 #endif
 
-#if WIND_MODULE_GAME_SUPPORT
-	wind_module_register(MODULE(game));
-#endif
 #if WIND_MODULE_XML_SUPPORT
     wind_module_register(MODULE(xml));
 #endif

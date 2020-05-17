@@ -187,7 +187,6 @@ extern "C" {
 #define WIND_MODULE_XML_SUPPORT 1
 
 #define WIND_MODULE_TOOLS_SUPPORT 1 //是否wind-os相关工具集模块
-#define WIND_MODULE_GAME_SUPPORT 1 //是否支持游戏模块
 
 
 #endif
