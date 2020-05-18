@@ -22,7 +22,7 @@
 #include "wind_cut.h"
 #include "wind_string.h"
 #include "wind_xml.h"
-#include "wind_xml_fsm.h"
+//#include "wind_xml_fsm.h"
 #include "wind_core.h"
 #if (WIND_MODULE_CUTEST_SUPPORT && TEST_XML_SUPPORT)
 #ifdef __cplusplus
@@ -30,7 +30,7 @@ extern "C" {
 #endif // #ifdef __cplusplus
 
 /********************************************internal variables**********************************************/
-static w_xmlfsm_s s_xfsm;
+//static w_xmlfsm_s s_xfsm;
 
 
 
@@ -123,6 +123,7 @@ CASE_TEARDOWN(parse) FUNC_EMPTY
 CASE_FUNC(parse)
 {
     w_err_t err;
+    w_xml_s xml;
     char *xstr = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\r\n\
     <!-- xml test here   -->\r\n\
     <note>\r\n\
@@ -134,17 +135,20 @@ CASE_FUNC(parse)
     <body>Don't forget the meeting!</body>\r\n\
     </note>\r\n";
     wind_printf("xml=%s\r\n",xstr);
-    err = wind_xml_fsm_init(&s_xfsm,"xml");
+    //err = wind_xml_fsm_init(&s_xfsm,"xml");
+    err = wind_xml_init(&xml);
     EXPECT_EQ(err,W_ERR_OK);
-	err = wind_xml_fsm_input(&s_xfsm,xstr,wind_strlen(xstr));
+	//err = wind_xml_fsm_input(&s_xfsm,xstr,wind_strlen(xstr));
+	err = wind_xml_parse(&xml,xstr,wind_strlen(xstr));
     EXPECT_EQ(err,W_ERR_OK);
 
-    err = wind_xml_print(s_xfsm.xhead);
+    err = wind_xml_print(xml.xhead);
     EXPECT_EQ(err,W_ERR_OK);
-    err = wind_xml_print(s_xfsm.root);
+    err = wind_xml_print(xml.root);
     EXPECT_EQ(err,W_ERR_OK);
     
-    err = wind_xml_fsm_deinit(&s_xfsm);
+    //err = wind_xml_fsm_deinit(&xml);
+    err = wind_xml_deinit(&xml);
     EXPECT_EQ(err,W_ERR_OK);
 }
 

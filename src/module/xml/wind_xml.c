@@ -107,27 +107,46 @@ w_xmlattr_s *wind_xmlattr_get(w_xmlnode_s *xnode,char *attr_name)
 
 w_err_t wind_xml_init(w_xml_s *xml)
 {
+    w_err_t err;
     WIND_ASSERT_RETURN(xml != W_NULL,W_ERR_PTR_NULL);
     wind_memset(xml,0,sizeof(w_xml_s));
-    return W_ERR_OK;
+    xml->xfsm = wind_malloc(sizeof(w_xmlfsm_s));
+    err = wind_xml_fsm_init(xml->xfsm,"xml");
+    return err;
 }
 
 w_err_t wind_xml_deinit(w_xml_s *xml)
 {
     WIND_ASSERT_RETURN(xml != W_NULL,W_ERR_PTR_NULL);
-    if(xml->version)
-        wind_xmlnode_destroy(xml->version);
-    if(xml->root)
-        wind_xmlnode_destroy(xml->root);
+    WIND_ASSERT_RETURN(xml->xfsm != W_NULL,W_ERR_PTR_NULL);
+    //if(xml->version)
+    //    wind_xmlnode_destroy(xml->version);
+    //if(xml->root)
+    //    wind_xmlnode_destroy(xml->root);
     if(xml->xfsm)
+    {
         wind_xml_fsm_deinit(xml->xfsm);
+        wind_free(xml->xfsm);
+    }
+        
     return W_ERR_OK;
 }
 
 
 w_err_t wind_xml_parse(w_xml_s *xml,char *xmlstr,w_int32_t len)
 {
-    //wind_fsm_input(w_fsm_s * fsm,void * arg,w_int32_t arglen)
+    w_err_t err;
+    WIND_ASSERT_RETURN(xml != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(xmlstr != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(len > 0,W_ERR_OVERFLOW);
+    err = wind_xml_fsm_input(xml->xfsm,xmlstr,len);
+    WIND_ASSERT_RETURN(err == W_ERR_OK,err);
+    if(xml->xfsm->complete_flag)
+    {
+        xml->xhead = xml->xfsm->xhead;
+        xml->root = xml->xfsm->root;
+        return W_ERR_OK;
+    }
     return W_ERR_FAIL;
 }
 

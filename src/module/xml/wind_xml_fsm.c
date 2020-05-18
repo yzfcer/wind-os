@@ -556,9 +556,12 @@ static w_err_t xmlfsm_handle_node_tail(w_fsm_s *fsm)
 
 static w_err_t xmlfsm_handle_end(w_fsm_s *fsm)
 {
+    w_xmlfsm_s *xfsm;
     WIND_CHECK_RETURN(fsm->arg != W_NULL,W_ERR_PTR_NULL);
     WIND_CHECK_RETURN(fsm->arglen > 0,W_ERR_INVALID);
-    wind_notice("xfsm parse complete");
+    xfsm = (w_xmlfsm_s*)fsm;
+    wind_debug("xfsm parse complete");
+    xfsm->complete_flag = 1;
     return W_ERR_FAIL;
 }
 
@@ -566,8 +569,11 @@ static w_err_t xmlfsm_handle_end(w_fsm_s *fsm)
 w_err_t wind_xml_fsm_init(w_xmlfsm_s *xfsm,char *name)
 {
     w_err_t err;
+    char *fsmname;
     static w_int32_t xfsm_id = 0;
-    char *fsmname = (char*)wind_malloc(16);
+    WIND_ASSERT_RETURN(xfsm != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(name != W_NULL,W_ERR_PTR_NULL);
+    fsmname = (char*)wind_malloc(16);
     WIND_ASSERT_RETURN(fsmname != W_NULL,W_ERR_MEM);
     wind_memset(fsmname,0,16);
     wind_sprintf(fsmname,"xml%d",xfsm_id);

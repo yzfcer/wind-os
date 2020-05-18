@@ -51,7 +51,7 @@ typedef struct __xml_fsm_s w_xmlfsm_s;
 //xml tree infomation struct
 typedef struct
 {
-    w_xmlnode_s *version; //XMl version node
+    w_xmlnode_s *xhead;   //XMl xhead node
     w_xmlnode_s *root;    //XML root node
     w_xmlfsm_s *xfsm;
 }w_xml_s;
