@@ -182,7 +182,7 @@ w_err_t wind_xml_print(w_xmlnode_s *xnode)
         wind_printf("/>\r\n");
     else
         wind_printf(">");
-    if(xnode->is_leaf)
+    if(xnode->is_leaf  && xnode->value != W_NULL)
         wind_printf("%s",xnode->value);
     else if(dlist_head(&xnode->tree.child_list))
     {
