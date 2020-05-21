@@ -1,0 +1,31 @@
+if [ $# -lt 3 ]
+then
+    echo "usage:conv_encode <dir> <encode> <suffix1 [suffix2 [suffix3 [...]]]>"
+    echo "      encode:should be utf-8,GB2312,etc"
+    echo "      suffix:should be a file type,such as c,h,asm,txt,etc"
+    echo "      eg:conv_encode utf-8 c h"
+    exit 0
+fi
+DIR=$1
+ENCODE=$2
+cli="find ${DIR} -type f \( "
+
+for arg in ${@:2:$#-2}
+do
+	cli="$cli -iname \*.$arg -o "
+done
+cli="$cli -iname \*.${@: -1} \)"
+echo "cli="$cli
+PRE_IFS=$IFS
+IFS=$'\n'
+for i in `eval $cli`
+do
+	echo "convert to code:${ENCODE},file:$i,"
+	enca -x ${ENCODE} $i
+done
+IFS=$PRE_IFS
+echo "convert complete!"
+
+
+
+

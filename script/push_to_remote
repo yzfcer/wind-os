@@ -1,0 +1,6 @@
+#!/bin/sh
+WIND_ROOT=/home/jason/wind-os
+cd ${WIND_ROOT}
+git commit -a
+git push https://www.github.com/yzfcer/wind-os.git origin/yzfcer:yzfcer
+git push https://www.gitee.com/yzfcer/wind-os.git origin/yzfcer:yzfcer
