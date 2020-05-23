@@ -30,16 +30,17 @@
 extern "C" {
 #endif // #ifdef __cplusplus
 
+//init an object struct
+#define WIND_OBJ(magic,flag,name) {(~magic),0,flag,{(w_dnode_s*)W_NULL,(w_dnode_s*)W_NULL},name}
 
-#define WIND_OBJ(magic,flag,name) {(~magic),0,flag,name,{(w_dnode_s*)W_NULL,(w_dnode_s*)W_NULL}}
 //Basic object information structure
 typedef struct _wind_obj
 {
     w_uint32_t magic;  //magic code
     w_uint16_t key;    //Key value, used to speed up object search
     w_uint16_t flag;   //Object attribute tag
-    char *name;        //Object name
     w_dnode_s objnode; //Object list node
+    char *name;        //Object name
 }w_obj_s;
 
 

@@ -422,7 +422,7 @@ w_err_t      wind_xmlnode_to_string(w_xmlnode_s *xnode,w_xmlout_fn xmlout)
         len = wind_sprintf(buff,"/>\r\n");
         xmlout(buff,len);
     }
-        
+
     else
     {
         len = wind_sprintf(buff,">");
@@ -434,7 +434,6 @@ w_err_t      wind_xmlnode_to_string(w_xmlnode_s *xnode,w_xmlout_fn xmlout)
         len = wind_sprintf(buff,"%s",xnode->value);
         xmlout(buff,len);
     }
-        
     else if(dlist_head(&xnode->tree.child_list))
     {
         len = wind_sprintf(buff,"\r\n");
@@ -445,7 +444,6 @@ w_err_t      wind_xmlnode_to_string(w_xmlnode_s *xnode,w_xmlout_fn xmlout)
             err = wind_xml_print(tmp_xndoe);
             WIND_ASSERT_BREAK(err == W_ERR_OK,err,"print child xnode failed");
         }
-        //wind_printf("\r\n");
     }
     if(!xnode->is_leaf || xnode->value != W_NULL)
     {

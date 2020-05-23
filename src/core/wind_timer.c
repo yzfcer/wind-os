@@ -74,7 +74,7 @@ w_err_t wind_timer_init(w_timer_s* timer,
     if(count <= 0)
         count = 1;
 
-    timer->value = count;
+    timer->value = 0;
     timer->period = count;
     
     timer->arg = arg;
@@ -109,15 +109,23 @@ w_timer_s* wind_timer_create(const char *name,
 w_err_t wind_timer_start(w_timer_s* timer)
 {
     WIND_ASSERT_RETURN(timer != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(timer->obj.magic == WIND_TIMER_MAGIC,W_ERR_INVALID);    
+    WIND_ASSERT_RETURN(timer->obj.magic == WIND_TIMER_MAGIC,W_ERR_INVALID);
     SET_F_TIMER_RUN(timer);
+    return W_ERR_OK;
+}
+
+w_err_t wind_timer_reset(w_timer_s* timer)
+{
+    WIND_ASSERT_RETURN(timer != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(timer->obj.magic == WIND_TIMER_MAGIC,W_ERR_INVALID);
+    timer->value = 0;
     return W_ERR_OK;
 }
 
 w_err_t wind_timer_stop(w_timer_s* timer)
 {
     WIND_ASSERT_RETURN(timer != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(timer->obj.magic == WIND_TIMER_MAGIC,W_ERR_INVALID);    
+    WIND_ASSERT_RETURN(timer->obj.magic == WIND_TIMER_MAGIC,W_ERR_INVALID);
     CLR_F_TIMER_RUN(timer);
     return W_ERR_OK;
 }
@@ -126,7 +134,7 @@ w_err_t wind_timer_destroy(w_timer_s* timer)
 {
     w_err_t err;
     WIND_ASSERT_RETURN(timer != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(timer->obj.magic == WIND_TIMER_MAGIC,W_ERR_INVALID);    
+    WIND_ASSERT_RETURN(timer->obj.magic == WIND_TIMER_MAGIC,W_ERR_INVALID);
     wind_notice("destroy timer:%s",wind_obj_name(&timer->obj));
     err = wind_obj_deinit(&timer->obj,WIND_TIMER_MAGIC,&timerlist);
     WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_FAIL);
@@ -144,7 +152,7 @@ w_err_t wind_timer_set_period(w_timer_s* timer,w_uint32_t period_ms)
     if(count <= 0)
         count = 1;
     timer->period = count;
-    timer->value = count;
+    //timer->value = 0;
     return W_ERR_OK;
 }
 
@@ -158,7 +166,7 @@ w_err_t wind_timer_setflag(w_timer_s* timer,w_uint16_t flag)
     {
         if(!IS_F_TIMER_RUN(timer))
         {
-            timer->value = timer->period;
+            timer->value = 0;
             SET_F_TIMER_RUN(timer);
         }
     }
@@ -212,13 +220,13 @@ void _wind_timer_event(void)
     foreach_node(dnode,list)
     {
         timer = NODE_TO_TIMER(dnode);
-        if(timer->value > 0)
-            timer->value --;
-        if(timer->value == 0 && IS_F_TIMER_RUN(timer))
+        if(timer->value < 0xffffffff)
+            timer->value ++;
+        if((timer->value >= timer->period) && IS_F_TIMER_RUN(timer))
         {
             timer->handle(timer,timer->arg);
             if(IS_F_TIMER_REPEAT(timer))
-                timer->value = timer->period;
+                timer->value = 0;
             else
             {
                 wind_timer_stop(timer);

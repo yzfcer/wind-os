@@ -52,7 +52,7 @@ w_err_t wind_log_open(void)
     WIND_ASSERT_RETURN(s_logfile == W_NULL,W_ERR_FILE_OPENED);
     s_logfile = wind_fopen(LOG_FILE,FMODE_W | FMODE_CRT);
     WIND_ASSERT_RETURN(s_logfile != W_NULL,W_ERR_FAIL);
-    wind_fseek(s_logfile,0xffffffff);
+    wind_fseek(s_logfile,0x7fffffff);
     return W_ERR_OK;
 }
 
