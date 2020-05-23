@@ -130,6 +130,7 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\db\framework\tb_print.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\dict\module_dict.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\dict\wind_dict.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\log\cmd_log.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\log\module_log.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\log\wind_log.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\port\lua_port.c" />

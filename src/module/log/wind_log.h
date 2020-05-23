@@ -1,6 +1,6 @@
 /*********************************************************************************
   *Copyright(C),2017-2020,yzfcer@163.com
-  *FileName:  
+  *FileName:    wind_log.h
   *Author:      Jason Zhou
   *Version:     1.0
   *Date:        2020/05/23
@@ -16,7 +16,7 @@
 #include "wind_config.h"
 #include "wind_type.h"
 
-#if WIND_MODULE_VFS_SUPPORT
+#if WIND_MODULE_LOG_SUPPORT
 typedef enum
 {
     WIND_LOG_CRIT=0,

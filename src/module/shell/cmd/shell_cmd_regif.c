@@ -93,6 +93,9 @@ COMMAND_DECLARE(daemon);
 #if CMD_TIMER_SUPPORT
 COMMAND_DECLARE(timer);
 #endif
+#if CMD_LOG_SUPPORT
+COMMAND_DECLARE(log);
+#endif
 
 void _wind_register_all_cmd(void)
 {
@@ -157,6 +160,9 @@ void _wind_register_all_cmd(void)
 #endif
 #if CMD_TIMER_SUPPORT
     wind_cmd_register(COMMAND(timer));
+#endif
+#if CMD_LOG_SUPPORT
+    wind_cmd_register(COMMAND(log));
 #endif
 
 }

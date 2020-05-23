@@ -145,6 +145,7 @@
 #define WIND_MODULE_CJSON_SUPPORT 1 //是否支持cjson功能模块
 #define WIND_MODULE_DICT_SUPPORT 1 //是否支持数据字典功能模块
 #define WIND_MODULE_XML_SUPPORT 1
+#define WIND_MODULE_LOG_SUPPORT 1
 
 #define WIND_MODULE_TOOLS_SUPPORT 0 //是否wind-os相关工具集模块
 #endif
@@ -174,6 +175,7 @@
 #define CMD_DIAGNOSE_SUPPORT 1 //是否支持系统诊断命令
 #define CMD_TIMER_SUPPORT 0 //是否支持定时器操作命令
 #define CMD_DB_SUPPORT 0 //是否支持DB模块操作命令
+#define CMD_LOG_SUPPORT 1 //
 
 #define CMD_BEEP_SUPPORT 0 //是否支持蜂鸣器命令
 #define CMD_LED_SUPPORT 0 //是否支持LED操作命令

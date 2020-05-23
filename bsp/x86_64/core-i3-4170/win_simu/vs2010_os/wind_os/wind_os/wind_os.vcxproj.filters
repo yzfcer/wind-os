@@ -578,6 +578,9 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\log\wind_log.c">
       <Filter>module_log</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\log\cmd_log.c">
+      <Filter>module_log</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">
