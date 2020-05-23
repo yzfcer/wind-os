@@ -18,8 +18,8 @@
 ** 本文件由C语言源文件模板软件生成。------------清风海岸出品，必属精品！------------
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
-#ifndef __SHELL_FRAMEWORK_H__
-#define __SHELL_FRAMEWORK_H__
+#ifndef SHELL_FRAMEWORK_H__
+#define SHELL_FRAMEWORK_H__
 #include "wind_config.h"
 #include "wind_type.h"
 #include "wind_debug.h"
@@ -102,4 +102,4 @@ void _wind_register_all_cmd(void);
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus
-#endif // #ifndef __CONSOLE_FRAMEWORK_H__
+#endif // #ifndef SHELL_FRAMEWORK_H__

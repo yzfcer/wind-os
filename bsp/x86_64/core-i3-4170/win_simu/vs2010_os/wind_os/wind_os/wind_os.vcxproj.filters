@@ -392,9 +392,6 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\treefs\treefs.c">
       <Filter>module_vfs</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\wind_log.c">
-      <Filter>module_vfs</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\cutest_register.c">
       <Filter>module_cutest</Filter>
     </ClCompile>
@@ -575,6 +572,12 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_detail.c">
       <Filter>module_shell</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\log\module_log.c">
+      <Filter>module_log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\log\wind_log.c">
+      <Filter>module_log</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">
@@ -627,6 +630,9 @@
     </Filter>
     <Filter Include="module_xml">
       <UniqueIdentifier>{2cf9ba98-46a4-4394-a4c9-16cf48b9ef25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="module_log">
+      <UniqueIdentifier>{f0f5ceb6-6d70-4d11-bdf1-e2561b2ae591}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -879,9 +885,6 @@
     <ClInclude Include="..\..\..\..\..\..\..\src\module\shell\framework\wind_key.h">
       <Filter>module_shell</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\wind_log.h">
-      <Filter>module_vfs</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\listfs\listfs_fileinfo.h">
       <Filter>module_vfs</Filter>
     </ClInclude>
@@ -950,6 +953,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\..\src\module\xml\wind_xml_fsm.h">
       <Filter>module_xml</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\log\wind_log.h">
+      <Filter>module_log</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

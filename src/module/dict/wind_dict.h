@@ -18,8 +18,8 @@
 ** ���ļ���C����Դ�ļ�ģ���������ɡ�------------��纣����Ʒ��������Ʒ��------------
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
-#ifndef __SHELL_FRAMEWORK_H__
-#define __SHELL_FRAMEWORK_H__
+#ifndef SHELL_FRAMEWORK_H__
+#define SHELL_FRAMEWORK_H__
 #include "wind_config.h"
 #include "wind_type.h"
 #include "wind_mutex.h"
@@ -73,4 +73,4 @@ w_err_t wind_dict_print(w_dict_s *dict);
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus
-#endif // #ifndef __CONSOLE_FRAMEWORK_H__
+#endif // #ifndef CONSOLE_FRAMEWORK_H__

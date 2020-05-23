@@ -160,6 +160,7 @@ static void print_align(w_xmlnode_s *xnode)
     wind_printf(prefix);
 }
 
+#if 0
 w_err_t wind_xml_print(w_xmlnode_s *xnode)
 {
     w_err_t err;
@@ -203,7 +204,12 @@ w_err_t wind_xml_print(w_xmlnode_s *xnode)
     }
     return W_ERR_OK;
 }
-
+#else
+w_err_t wind_xml_print(w_xmlnode_s *xnode)
+{
+    return wind_xmlnode_to_string(xnode,wind_std_output);
+}
+#endif
 
 w_xmlnode_s *wind_xmlnode_create(char *name)
 {
@@ -386,6 +392,71 @@ w_err_t wind_xmlnode_remove_attr(w_xmlnode_s *xnode,w_xmlattr_s *xattr)
     return W_ERR_OK;
 }
 
+
+w_err_t      wind_xmlnode_to_string(w_xmlnode_s *xnode,w_xmlout_fn xmlout)
+{
+    w_err_t err;
+    char *buff;
+    w_int32_t len;
+    w_dnode_s *dnode;
+    w_xmlattr_s *attr;
+    w_xmlnode_s *tmp_xndoe;
+    WIND_ASSERT_RETURN(xnode != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(xnode->name != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(xnode->level < MAX_XNODE_LEVEL,W_ERR_FAIL);
+    buff = wind_malloc(XML_OUTBUF_LEN);
+    WIND_ASSERT_RETURN(buff != W_NULL,W_ERR_MEM);
+    
+    err = W_ERR_OK;
+    print_align(xnode);
+    len = wind_sprintf(buff,"<%s",xnode->name);
+    xmlout(buff,len);
+    foreach_node(dnode,&xnode->attrlist)
+    {
+        attr = NODE_TO_XATTR(dnode);
+        len = wind_sprintf(buff," %s=\"%s\"",attr->attr_name,attr->attr_value);
+        xmlout(buff,len);
+    }
+    if(xnode->is_leaf && xnode->value == W_NULL)
+    {
+        len = wind_sprintf(buff,"/>\r\n");
+        xmlout(buff,len);
+    }
+        
+    else
+    {
+        len = wind_sprintf(buff,">");
+        xmlout(buff,len);
+    }
+        
+    if(xnode->is_leaf  && xnode->value != W_NULL)
+    {
+        len = wind_sprintf(buff,"%s",xnode->value);
+        xmlout(buff,len);
+    }
+        
+    else if(dlist_head(&xnode->tree.child_list))
+    {
+        len = wind_sprintf(buff,"\r\n");
+        xmlout(buff,len);
+        foreach_node(dnode,&xnode->tree.child_list)
+        {
+            tmp_xndoe = NODE_TO_XNODE(dnode);
+            err = wind_xml_print(tmp_xndoe);
+            WIND_ASSERT_BREAK(err == W_ERR_OK,err,"print child xnode failed");
+        }
+        //wind_printf("\r\n");
+    }
+    if(!xnode->is_leaf || xnode->value != W_NULL)
+    {
+        if(!xnode->is_leaf)
+            print_align(xnode);
+        len = wind_sprintf(buff,"</%s>\r\n",xnode->name);
+        xmlout(buff,len);
+    }
+    wind_free(buff);
+    return W_ERR_OK;
+}
 
 
 

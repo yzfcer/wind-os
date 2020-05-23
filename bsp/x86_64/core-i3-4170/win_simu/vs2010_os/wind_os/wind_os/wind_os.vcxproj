@@ -19,7 +19,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v100</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -130,6 +130,8 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\db\framework\tb_print.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\dict\module_dict.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\dict\wind_dict.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\log\module_log.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\log\wind_log.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\port\lua_port.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lapi.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lauxlib.c" />
@@ -223,7 +225,6 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\wind_filepath.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\wind_fs.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\wind_fsops.c" />
-    <ClCompile Include="..\..\..\..\..\..\..\src\module\vfs\wind_log.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_core.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_coroutine.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_daemon.c" />
@@ -299,6 +300,7 @@
     <ClInclude Include="..\..\..\..\..\..\..\src\module\db\framework\tb_model_file.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\db\framework\xml.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\dict\wind_dict.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\log\wind_log.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lapi.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lauxlib.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lcode.h" />
@@ -343,7 +345,6 @@
     <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\wind_filepath.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\wind_fs.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\wind_fsops.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\wind_log.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_core.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_coroutine.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_daemon.h" />
