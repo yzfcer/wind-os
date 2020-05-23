@@ -449,6 +449,12 @@ w_err_t wind_thread_sleep(w_int32_t ms)
     return W_ERR_OK;
 }
 
+
+w_err_t wind_std_wait(w_int32_t ms)
+{ //just for wind std input
+    return wind_thread_sleep(ms);
+}
+
 w_err_t _wind_thread_wakeup(void)
 {
     w_dnode_s *dnode;

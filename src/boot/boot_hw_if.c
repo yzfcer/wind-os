@@ -30,6 +30,11 @@ void boot_delay(w_uint32_t ms)
     w_uint32_t tick = boot_get_sys_ms();
     while(boot_get_sys_ms() - tick < ms);
 }
+w_err_t wind_std_wait(w_int32_t ms)
+{
+    boot_delay(ms);
+    return W_ERR_OK;
+}
 
 w_err_t wait_for_key_input(w_int32_t to_sec,char *ch,w_int32_t print_flag)
 {
@@ -69,7 +74,12 @@ w_err_t wait_for_key_input(w_int32_t to_sec,char *ch,w_int32_t print_flag)
     return err;
 }
 
-
+void wind_disable_switch(void)
+{
+}
+void wind_enable_switch(void)
+{
+}
 
 
 

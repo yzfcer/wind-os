@@ -28,13 +28,15 @@
 #include "wind_string.h"
 #include "wind_conv.h"
 #include "wind_std.h"
-//#include "wind_thread.h"
-//#include "wind_core.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif //#ifdef __cplusplus
 
 #if WIND_DEBUG_SUPPORT
+extern void wind_disable_switch(void);
+extern void wind_enable_switch(void);
+w_err_t wind_std_wait(w_int32_t ms);
 
 #define ZEROPAD 1       
 #define SIGN    2       
@@ -46,10 +48,10 @@ extern "C" {
 
 w_int32_t _div(w_int32_t* n,unsigned base)
 {
-     w_int32_t __res; 
-     __res = ((w_uint32_t) *n) % (unsigned) base; 
+     w_int32_t res; 
+     res = ((w_uint32_t) *n) % (unsigned) base; 
      *n = ((w_uint32_t) *n) / (unsigned) base; 
-     return __res;
+     return res;
 }
 
 static w_int32_t wind_isdigit(w_int32_t ch)
@@ -374,7 +376,7 @@ w_int32_t wind_printf(const char *fmt,...)
 	wind_va_list args;
 #endif
 
-    wind_std_lock();
+    wind_disable_switch();
     wind_memset(buff,0,sizeof(buff));
 #ifdef USE_SYS_VSPRINTF
 	va_start(args,fmt);
@@ -386,7 +388,7 @@ w_int32_t wind_printf(const char *fmt,...)
     wind_va_end(args);
 #endif
 	wind_std_output((w_uint8_t *)buff,count);
-    wind_std_unlock();
+    wind_enable_switch();
     return count;
 }
 
@@ -888,7 +890,7 @@ static w_int32_t scan_read_line(char *buff,w_int32_t maxlen)
     {
         len = wind_std_input((w_uint8_t*)&ch,1);
         if(len <= 0)
-            wind_thread_sleep(10);
+            wind_std_wait(5);
         else
         {
             if((ch == 0x0d) || (ch == 0x0a))
@@ -914,12 +916,12 @@ w_int32_t wind_scanf(const char *fmt,...)
     static char buff[512];
     wind_va_list args;
     w_int32_t count;
-    wind_std_lock();
+    wind_disable_switch();
     count = scan_read_line(buff,sizeof(buff));
     wind_va_start(args,fmt);
     count = wind_vsscanf(buff,fmt,args);
     wind_va_end(args);
-    wind_std_unlock();
+    wind_enable_switch();
     return count;
 }
 #endif

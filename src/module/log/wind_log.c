@@ -12,13 +12,15 @@
        Modification:
 **********************************************************************************/
 #include "wind_log.h"
-#include "treefs.h"
-#include "treefile.h"
+//#include "treefs.h"
+//#include "treefile.h"
+#include "wind_file.h"
 #include "wind_debug.h"
 #include "wind_string.h"
 
 #if WIND_MODULE_LOG_SUPPORT
-static w_treefile_s *s_logfile = W_NULL;
+#define LOG_FILE "/sys.log"
+static w_file_s *s_logfile = W_NULL;
 static w_int32_t s_loglevel = WIND_LOG_NOTICE;
 w_err_t wind_log_set_level(w_int32_t level)
 {
@@ -47,12 +49,10 @@ w_err_t wind_log_print_level(w_loglevel_e level)
 
 w_err_t wind_log_open(void)
 {
-    w_treefs_s *tfs;
-    tfs = wind_treefs_get("tfs0");
-    WIND_ASSERT_RETURN(tfs != W_NULL,W_ERR_FAIL);
-    s_logfile = treefile_open(tfs,"/sys.log",TF_FMODE_W | TF_FMODE_CRT);
+    WIND_ASSERT_RETURN(s_logfile == W_NULL,W_ERR_FILE_OPENED);
+    s_logfile = wind_fopen(LOG_FILE,FMODE_W | FMODE_CRT);
     WIND_ASSERT_RETURN(s_logfile != W_NULL,W_ERR_FAIL);
-    treefile_seek(s_logfile,0xffffffff);
+    wind_fseek(s_logfile,0xffffffff);
     return W_ERR_OK;
 }
 
@@ -68,14 +68,14 @@ w_err_t wind_log_printf(w_loglevel_e level,const char *fmt,...)
     wind_va_start(args, fmt);
     count = wind_vsprintf(buff, fmt, args);
     wind_va_end(args);
-    treefile_write(s_logfile,(w_uint8_t*)buff,count);
+    wind_fwrite(s_logfile,(w_uint8_t*)buff,count);
     return W_ERR_OK;
 }
 
 w_err_t wind_log_close(void)
 {
     WIND_ASSERT_RETURN(s_logfile != W_NULL,W_ERR_FAIL);
-    treefile_close(s_logfile);
+    wind_fclose(s_logfile);
     s_logfile = W_NULL;
     return W_ERR_OK;
 }
