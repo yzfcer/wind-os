@@ -7,7 +7,7 @@
 ** FileName    : wind_os_hwif.c
 ** Author      : Jason Zhou
 ** Last Date   : 2012.09.26
-** Description : wind os的CPU体系相关的代码
+** Description : wind os stdard input/output function API
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

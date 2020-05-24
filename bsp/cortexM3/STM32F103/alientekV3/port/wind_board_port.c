@@ -7,12 +7,12 @@
 ** FileName    : wind_board_port.c
 ** Author      : Jason Zhou
 ** Last Date   : 2012.09.26
-** Description : wind os的单板相关的接口代码
+** Description : wind os board adapter interface
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou
 ** Version     : v1.0
-** Date        : 2012.09.26
+** Date        : 2012.09.26    
 ** Description : First version
 **
 **--------------Cureent version-------------------------------------------------------------------------
@@ -32,57 +32,44 @@
 #include "core_cm3.h"
 
 #ifndef SYSCLK
-#define SYSCLK 72    //系统时钟
+#define SYSCLK 72    //System tick by MHz
 #endif
 
 /*
- * 设备进入多线程模式后函数的初始化处理的钩子函数，为了保证tick
- * 中断的稳定，一般配置系统tick中断会放到系统进入线程状态时开始
- * 执行，在进入线程之前，不让tick触发中断级线程切换。
+ Hook function of function initialization after the device enters multithreading mode. 
+ In order to ensure the stability of tick interrupt, generally configure the system tick 
+ interrupt to be executed when the system enters the thread state. Before entering the 
+ thread, do not let tick trigger the interrupt level thread switch.
  */
 void wind_enter_thread_hook(void)
 {
-
 	w_uint32_t reload;
  	SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK_Div8);
-	reload=SYSCLK/8;		//每秒钟的计数次数 单位为K	   
-	reload*=1000000/WIND_TICK_PER_SEC;//根据OS_TICKS_PER_SEC设定溢出时间
-	SysTick->CTRL|=SysTick_CTRL_TICKINT_Msk;   	//开启SYSTICK中断
-	SysTick->LOAD=reload; 	//每1/OS_TICKS_PER_SEC秒中断一次	
-	SysTick->CTRL|=SysTick_CTRL_ENABLE_Msk;   	//开启SYSTICK
-
+	reload=SYSCLK/8;
+	reload*=1000000/WIND_TICK_PER_SEC;
+	SysTick->CTRL|=SysTick_CTRL_TICKINT_Msk;
+	SysTick->LOAD=reload;
+	SysTick->CTRL|=SysTick_CTRL_ENABLE_Msk;
 }
 
 /*
- * 触发CPU设备重启,一般的MCU都有软件触发重启的功能，在这个函数实现即可，
- * 这个功能不是必须的,如无必要可以不用实现，直接空置即可。
+To trigger the restart of CPU device, general MCU has the function of software triggering 
+the restart, which can be realized in this function. This function is not necessary. 
+If it is unnecessary, it can be directly vacant. 
  */
 void wind_system_reset(void)
 {
     NVIC_SystemReset();
 }
 
-#if WIND_MODULE_VFS_SUPPORT
-
-
-/*
- * 在系统需要支持文件系统功能时，需要在这里初始化mount的规则，
- * 在不需要文件系统时，可以不实现
- */ 
-
-#include "wind_file.h"
-void _wind_fs_mount_init(void)
-{
-    wind_vfs_mount("fs0","treefs","null","/");
-}
-#endif
 
 
 #if WIND_HEAP_SUPPORT
 /*
- * 在系统需要支持内存堆功能时，需要内存堆的起始地址和对的大小，
- * wind-os可以支持创建多个不连续的内存堆，并且可以在内存对中
- * 申请一块空间创建一个嵌套的内存堆，用于某些特定的目的
+When the system needs to support the memory heap function, it needs the starting 
+address of the memory heap and the size of the pair. Wind OS can support the creation 
+of multiple discontinuous memory heaps, and can apply for a piece of space in the 
+memory pair to create a nested memory heap for some specific purposes
  */ 
 #include "wind_heap.h"
 extern unsigned char Image$$ER_HEAP$$ZI$$Base;
@@ -94,16 +81,26 @@ void _wind_heaps_create(void)
 {
     wind_heap_create("heap1",(w_addr_t)(HEAP1_HEAD),HEAD1_LENTH,0);
 }
-
-
 #endif
 
 
+#if WIND_MODULE_VFS_SUPPORT
+/*
+When the system needs to support the file system function, it needs to initialize 
+the rule of Mount here. When the file system is not needed, it need not be implemented
+ */ 
+#include "wind_file.h"
+void _wind_fs_mount_init(void)
+{
+    wind_vfs_mount("fs0","treefs","null","/");
+}
+#endif
 
 /*
- * 初始化线程栈，用于线程初次切换时，从栈里面取出初始化参数
- * 填入参数的顺序可以参考相应的CPU线程进出栈的顺序
- */ 
+Initialization thread stack is used to take initialization parameters from the 
+stack when the thread is switched for the first time. The order of filling in the 
+parameters can refer to the order of CPU threads entering and leaving the stack 
+*/ 
 w_stack_t *_wind_thread_stack_init(thread_run_f pfunc,void *pdata, w_stack_t *pstkbt,w_int32_t stk_depth)
 {
     w_stack_t *stk;

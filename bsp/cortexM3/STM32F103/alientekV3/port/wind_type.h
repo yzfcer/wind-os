@@ -7,7 +7,7 @@
 ** FileName    : wind_type.h
 ** Author      : Jason Zhou
 ** Last Date   : 2012.09.26
-** Description : wind os的类型定义
+** Description : wind os data type description
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou
@@ -64,7 +64,7 @@ typedef signed long long w_int64_t;
 typedef unsigned long w_size_t; 
 #endif
 
-//SREG，CPU状态寄存器对应的数据位宽，当关闭中断时需要保存这个寄存器
+//CPU interrupt status register, which needs to be saved when the interrupt is closed
 typedef w_uint32_t w_irqreg_t;
 
 #ifndef w_fp32_t

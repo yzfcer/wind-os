@@ -7,7 +7,7 @@
 ** FileName    : wind_cpu_port.h
 ** Author      : Jason Zhou
 ** Last Date   : 2012.09.26
-** Description : wind os的时间管理代码头文件
+** Description : wind os stdard input/output function header
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

@@ -1,3 +1,27 @@
+/****************************************Copyright (c)**************************************************
+**                                       God's harbor
+**
+**                                       yzfcer@163.com
+**
+**--------------File infomation-------------------------------------------------------------------------
+** FileName    : stdport.c
+** Author      : Jason Zhou
+** Last Date   : 2012.09.26
+** Description : wind os print function user interface,maybe aborted now!
+**              
+**--------------History---------------------------------------------------------------------------------
+** Author      : Jason Zhou
+** Version     : v1.0
+** Date        : 2012.09.26    
+** Description : First version
+**
+**--------------Cureent version-------------------------------------------------------------------------
+** Modify      : Jason Zhou
+** Date        : 2012.10.20
+** Description : 
+**
+**------------------------------------------------------------------------------------------------------
+*******************************************************************************************************/
 #include "stdio.h"
 #include "wind_std.h"
 #include "shell_framework.h"
@@ -41,7 +65,7 @@ int _sys_read(FILEHANDLE fh, unsigned char*buf, unsigned len, int mode)
     return 0;
 }
 
-//检查句柄是否为终端
+//Check if handle is terminal
 
 int _sys_istty(FILEHANDLE fh)
 {
@@ -53,7 +77,7 @@ int _sys_seek(FILEHANDLE fh, long pos)
     return 0;
 }
 
-//刷新句柄关联的缓冲区
+//Refresh buffer associated with handle
 
 int _sys_ensure(FILEHANDLE fh)
 {
@@ -62,7 +86,7 @@ int _sys_ensure(FILEHANDLE fh)
 
  
 
-//返回文件当前长度
+//Return the file length 
 
 long _sys_flen(FILEHANDLE fh)
 {
@@ -79,7 +103,7 @@ int _sys_tmpnam(char *name, int fileno, unsigned maxlength)
 			 return 0;
 }
 
-//将一个字符写入控制台
+//Write a character to the console
 
 void _ttywrch(int ch)
 {
@@ -98,7 +122,7 @@ char *_sys_command_string(char *cmd, int len)
 
 int fputc(int ch, FILE *f)
 { 
-	wind_std_output((w_uint8_t*)&ch,1);//你的串口发送字符函数  
+	wind_std_output((w_uint8_t*)&ch,1);
 	return ch;
 }
 

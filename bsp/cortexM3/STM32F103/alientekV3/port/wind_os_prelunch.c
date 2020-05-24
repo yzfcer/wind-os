@@ -7,8 +7,9 @@
 ** FileName    : wind_os_prelaunch.c
 ** Author      : Jason Zhou
 ** Last Date   : 2019.01.06
-** Description : wind os的预启动文件
-**功        能: 启动前硬件初始化，初始化外部RAM，初始化数据段，跳转到wind_o_lunch
+** Description : wind os prepare for starting
+** Function    : Hardware initialization, external RAM initialization, data segment initialization, and 
+**              jump to wind_o_lunch
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou
