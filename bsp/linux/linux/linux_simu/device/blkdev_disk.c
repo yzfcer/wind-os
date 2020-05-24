@@ -40,8 +40,8 @@ w_err_t   make_virtual_disk(w_blkdev_s *dev,w_int32_t blkcnt)
     //size = blkcnt * dev->blksize;
 
     file = fopen(FILE_NAME,"r");
-    WIND_ASSERT_RETURN(file  != W_NULL,W_ERR_FAIL);
-    WIND_ASSERT_RETURN(file != W_NULL,W_ERR_FAIL);
+    //WIND_ASSERT_RETURN(file  != W_NULL,W_ERR_FAIL);
+    //WIND_ASSERT_RETURN(file != W_NULL,W_ERR_FAIL);
     if(file != W_NULL)
     {
         fclose(file);
@@ -61,7 +61,7 @@ w_err_t   disk_open(w_blkdev_s *dev)
     //errno_t errno;
     file = fopen(FILE_NAME,"rb+");
     WIND_ASSERT_RETURN(file  != W_NULL,W_ERR_FAIL);
-    WIND_ASSERT_RETURN(file != W_NULL,W_ERR_FAIL);
+    //WIND_ASSERT_RETURN(file != W_NULL,W_ERR_FAIL);
     dev->user_arg = file;
     return W_ERR_OK;
 }
