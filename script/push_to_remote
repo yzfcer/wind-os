@@ -1,6 +1,8 @@
 #!/bin/sh
-WIND_ROOT=/home/jason/wind-os
+WIND_ROOT=$(cd `dirname $0`;pwd)/..
+#echo $WIND_ROOT
 cd ${WIND_ROOT}
+echo "wind-os root:"$(pwd)
 git commit -a
 git push https://www.github.com/yzfcer/wind-os.git origin/yzfcer:yzfcer
 git push https://www.gitee.com/yzfcer/wind-os.git origin/yzfcer:yzfcer
