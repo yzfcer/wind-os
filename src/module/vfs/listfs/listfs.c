@@ -1,24 +1,24 @@
 /****************************************Copyright (c)**************************************************
-**                                       清  风  海  岸
+**                                       God's harbor
 **
 **                                       yzfcer@163.com
 **
-**--------------文件信息--------------------------------------------------------------------------------
-**文   件   名: listfs.c
-**创   建   人: Jason Zhou
-**最后修改日期: 2019.04.05
-**描        述: listfs文件系统主体功能
+**--------------File infomation--------------------------------------------------------------------------------
+**FileName: listfs.c
+**Author: Jason Zhou
+**Last Date: 2019.04.05
+**Description: listfs文件系统主体功能
 **              
-**--------------历史版本信息----------------------------------------------------------------------------
-** 创建人: Jason Zhou
-** 版  本: v1.0
-** 日　期: 2019.04.05
-** 描　述: 原始版本
+**--------------History----------------------------------------------------------------------------
+**Author: Jason Zhou
+** Version: v1.0
+** Date: 2019.04.05
+** Description: First version
 **
-**--------------当前版本修订----------------------------------------------------------------------------
-** 修改人: Jason Zhou
-** 日　期: 2019.04.05
-** 描　述: 
+**--------------Cureent version----------------------------------------------------------------------------
+** Modify: Jason Zhou
+** Date: 2019.04.05
+** Description: 
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
@@ -147,11 +147,11 @@ static w_err_t lfs_search_file(w_listfs_s *lfs,w_listfile_s *file,const char *pa
         segcnt = wind_strsplit(tmppath,'/',nameseg,LISTFS_DIR_LAYCNT);
         WIND_ASSERT_BREAK(segcnt > 0,W_ERR_INVALID,"split path failed");
         
-        //分配文件信息和数据块信息结构
+        //分配File infomation和数据块信息结构
         finfo = listfs_mem_malloc(sizeof(lfile_info_s));
         WIND_ASSERT_BREAK(finfo,W_ERR_MEM,"malloc finfo failed");
 
-        //读取根目录文件信息
+        //读取根目录File infomation
         err = fileinfo_read(finfo,lfs->blkdev,lfs->lfs_info.root_addr);
         WIND_ASSERT_BREAK(err == W_ERR_OK,err,"read root failed");
         if(segcnt == 1)
