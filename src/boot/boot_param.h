@@ -39,7 +39,7 @@ typedef struct
     w_uint8_t wait_sec;   //等待键盘事件秒数
     w_uint8_t run_type;   //运行在RAM或Flash
     w_uint8_t encrypt_type;//程序加密使能
-    w_uint8_t lock_en;     //芯片锁定使能
+    w_uint8_t lock_en;     //Chip lock enable
     w_int8_t part_cnt;
     char arch_name[ARCH_NAME_LEN];
     char cpu_name[CPU_NAME_LEN];

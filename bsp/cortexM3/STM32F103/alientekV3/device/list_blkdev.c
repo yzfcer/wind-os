@@ -7,7 +7,7 @@
 ** FileName    : list_dev.c
 ** Author      : Jason Zhou
 ** Last Date   : 2018.03.26
-** Description : 块设备驱动注册文件
+** Description : registration entry
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

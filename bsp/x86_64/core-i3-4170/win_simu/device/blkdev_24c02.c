@@ -7,7 +7,7 @@
 ** FileName    : blkdev_24c02.c
 ** Author      : Jason Zhou
 ** Last Date   : 2018.03.26
-** Description : 24C02 EEPROM块设备注册文件
+** Description : 24C02 EEPROM block device registration file
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

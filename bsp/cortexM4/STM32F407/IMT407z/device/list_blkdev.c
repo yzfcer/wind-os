@@ -7,7 +7,7 @@
 ** FileName    : list_dev.c
 ** Author      : Jason Zhou
 ** Last Date   : 2018.03.26
-** Description : 块设备驱动注册文件
+** Description : Registration entry of block device drivers 
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou
