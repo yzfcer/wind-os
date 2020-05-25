@@ -7,7 +7,7 @@
 ** FileName    : wind_dlist.c
 ** Author      : Jason Zhou
 ** Last Date   : 2017.12.10
-** Description : 双向链表的实现方法
+** Description : Double linked list function
 **              
 **--------------History---------------------------------------------------------------------------------
 Author: 

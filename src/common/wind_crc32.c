@@ -7,7 +7,7 @@
 ** FileName    : wind_crc32.c
 ** Author      : Jason Zhou
 ** Last Date   : 2017.12.10
-** Description : 32位CRC校验方法
+** Description : 32 bit CRC verification method
 **              
 **--------------History---------------------------------------------------------------------------------
 Author: 

@@ -7,7 +7,7 @@
 ** FileName    : wind_tree.h / wind_tree.c
 ** Author      : Jason Zhou
 ** Last Date   : 2012.09.26
-** Description : 兄弟孩子多叉树形结构的操作方法
+** Description : Multi tree function module
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

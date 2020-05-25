@@ -7,7 +7,7 @@
 ** FileName    : wind_debug.h
 ** Author      : Jason Zhou
 ** Last Date   : 2012.09.26
-** Description : 调试信息的输出方式头文件
+** Description : Debug information printing module
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

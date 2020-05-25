@@ -1,12 +1,12 @@
 /****************************************Copyright (c)**************************************************
 **                                       God's harbor
 ** FileName: wind_fsm.h
-** Author: 周江村
+** Author: Jason Zhou
 ** Last Date: 2019/12/1 15:34:56
 ** Description : 
 **  
 **--------------History---------------------------------------------------------------------------------
-Author: 周江村
+Author: Jason Zhou
 ** Version     : v1.0
 ** Date        : 2019/12/1 15:34:56
 ** Description : First version

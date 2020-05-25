@@ -5,12 +5,12 @@
 **
 **--------------File infomation-------------------------------------------------------------------------
 ** FileName    : cmd_history.c
-** Author      : 周江村
+** Author      : Jason Zhou
 ** Last Date   : 
 ** Description : 处理控制台的历史命令记录
 **              
 **--------------History---------------------------------------------------------------------------------
-Author: 周江村
+Author: Jason Zhou
 ** Version     : v1.0
 ** Date        : 2013.08.10
 ** Description : First version

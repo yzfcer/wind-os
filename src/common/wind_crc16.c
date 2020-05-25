@@ -7,7 +7,7 @@
 ** FileName    : wind_crc16.c
 ** Author      : Jason Zhou
 ** Last Date   : 2017.12.10
-** Description : 16位CRC校验方法
+** Description : 16 bit CRC verification method
 **              
 **--------------History---------------------------------------------------------------------------------
 Author: 

@@ -5,18 +5,18 @@
 **
 **--------------File infomation-------------------------------------------------------------------------
 ** FileName    : wind_tree.h / wind_tree.c
-** Author      : 周江村
+** Author      : Jason Zhou
 ** Last Date   : 2012.09.26
-** Description : 兄弟孩子多叉树形结构的操作方法
+** Description : Multi tree function module
 **              
 **--------------History---------------------------------------------------------------------------------
-Author: 周江村
+Author: Jason Zhou
 ** Version     : v1.0
 ** Date        : 2013.11.27
 ** Description : First version
 **
 **--------------Cureent version-------------------------------------------------------------------------
-** Modify      : 周江村
+** Modify      : Jason Zhou
 ** Date        : 2013.11.27
 ** Description : 
 **

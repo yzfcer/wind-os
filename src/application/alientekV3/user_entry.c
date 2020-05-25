@@ -7,7 +7,7 @@
 ** FileName    : entry.c
 ** Author      : Jason Zhou
 ** Last Date   : 2012.09.26
-** Description : wind os的用户态程序入口
+** Description : User program entry of wind-os
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou
@@ -24,10 +24,11 @@
 *******************************************************************************************************/
 
 /*
-这个文件是用户程序的入口，用户程序由wind_main函数进入开始执行，但这个函数的所在线程的
-优先级很高，因此不建议用户程序在这里直接执行，最好是用户在这里创建具有中等优先级的线程
-并转到新的线程中执行用户程序。同时这个程序不需要死循环，可以退出，但新线程如果在退出时
-没有创建，则用户程序将不会再次被执行到。因为wind_main函数只会被系统调用一次
+This file is the entry of the user program. The user program is created by wind_main function starts to execute, 
+but the thread of this function has a high priority. Therefore, it is not recommended that the user program 
+execute directly here. It is better for the user to create a thread with medium priority here and transfer it 
+to a new thread to execute the user program. At the same time, this program does not need a dead cycle and can exit,
+but if a new thread is not created at the time of exit, the user program will not be executed again. 
 */
 
 #include "wind_debug.h"
