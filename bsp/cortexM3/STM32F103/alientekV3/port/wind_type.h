@@ -127,7 +127,7 @@ typedef w_int16_t w_err_t;
 #endif
 
 
-#ifndef w_stack_t  //堆栈宽度的定义
+#ifndef w_stack_t  //Definition of call stack element type
 typedef w_uint32_t w_stack_t;
 #endif
 

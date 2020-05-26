@@ -43,7 +43,7 @@ Author:
 
 static w_dlist_s fslist;
 static char *fsname[] = {"fs0","fs1","fs2","fs3","fs4"};
-WIND_POOL(fspool,WIND_FS_MAX_NUM,sizeof(w_vfs_s));
+WIND_POOL(fspool,WIND_VFS_MAX_NUM,sizeof(w_vfs_s));
 
 
 w_vfs_s *wind_vfs_obj_init(char *name)
@@ -65,9 +65,9 @@ static w_err_t vfs_all_vfs_objs_init(void)
     w_int32_t i;
     w_err_t err;
     w_vfs_s *vfs;
-    WIND_ASSERT_RETURN(sizeof(fsname)/sizeof(char *) >=  WIND_FS_MAX_NUM,W_ERR_FAIL);
+    WIND_ASSERT_RETURN(sizeof(fsname)/sizeof(char *) >=  WIND_VFS_MAX_NUM,W_ERR_FAIL);
     err = W_ERR_OK;
-    for(i = 0;i < WIND_FS_MAX_NUM;i ++)
+    for(i = 0;i < WIND_VFS_MAX_NUM;i ++)
     {
         vfs = wind_vfs_obj_init(fsname[i]);
         WIND_ASSERT_BREAK(vfs != W_NULL,W_ERR_FAIL,"init vfs obj %s failed",fsname[i]);
@@ -183,7 +183,7 @@ w_vfs_s *wind_vfs_get_free(void)
 
 w_vfs_s *wind_vfs_get_byidx(w_int32_t index)
 {
-    WIND_ASSERT_RETURN(index < WIND_FS_MAX_NUM,W_NULL);
+    WIND_ASSERT_RETURN(index < WIND_VFS_MAX_NUM,W_NULL);
     WIND_ASSERT_RETURN(index >= 0,W_NULL);
     return wind_vfs_get(fsname[index]);    
 }

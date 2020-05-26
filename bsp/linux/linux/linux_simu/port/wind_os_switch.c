@@ -9,7 +9,7 @@
 ** Last Date   : 2019.01.06
 ** Description : wind os prepare for starting
 ** Function    : Hardware initialization, external RAM initialization, data segment initialization, and 
-**              jump to wind_o_lunch
+**               jump to wind_o_lunch
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou
@@ -59,24 +59,19 @@ static void switch_context(w_thread_s* srcthr, w_thread_s* destthr)
 	ctx_size = 4 + sizeof(ucontext_t)/sizeof(w_stack_t);
     stk = (w_stack_t*)(srcthr->stack_start + srcthr->stksize - 1 - ctx_size);
 	srcctx = (ucontext_t *)stk;
-	//if(destthr == W_NULL)
-	//	WIND_TRAP();
 
 	if(destthr != W_NULL)
 	{
 		ctx_size = 4 + sizeof(ucontext_t)/sizeof(w_stack_t);
 		stk = (w_stack_t*)(destthr->stack_start + destthr->stksize - 1 - ctx_size);
 		destctx = (ucontext_t *)stk;
-		//destctx->uc_link = (ucontext_t *)stk;
 		destctx->uc_link = NULL;
 	}
 	else
 	{
 		//wind_printf("switch_context to main\n");
 		destctx = &mainctx;
-		//destctx->uc_link = &mainctx;
 		destctx->uc_link = NULL;
-		//return;
 	}
 	swapcontext(srcctx,destctx);
 }
@@ -105,14 +100,6 @@ void wind_restore_sr(w_irqreg_t sreg)
     sigprocmask(SIG_SETMASK, sreg, NULL);
 }
 
-#if 0
-static w_err_t main_thread(w_int32_t argc,char **argv)
-{
-
-    return W_ERR_OK;
-}
-#endif
-
 static void sig_ticks_timer(int signo)
 {
 	//printf("wind_tick_isr\n");
@@ -121,7 +108,6 @@ static void sig_ticks_timer(int signo)
 
 static void tick_timer_run(void)
 {
-#if 1
 	static int timer_flag = 0;
 	struct itimerval tv, otv;
 	if(timer_flag == 0)
@@ -137,12 +123,9 @@ static void tick_timer_run(void)
 			printf("setitimer err %d\n", errno);	
 	}
 
-#endif
-	//int cnt = 0;
 	while(1) 
 	{
 		sleep(10);
-		//*(char*)0 = 0;
 	}
 }
 
@@ -169,7 +152,6 @@ void wind_start_switch(void)
 		stk = (w_stack_t*)(high->stack_start + high->stksize - 1 - ctx_size);
 		ctx = (ucontext_t *)stk;
 		setcontext(ctx);
-		//swapcontext(&mainctx,ctx);
 	}
 	//wind_printf("tick_timer_run\n");
 	tick_timer_run();
@@ -197,9 +179,6 @@ w_err_t do_switch(void)
     //wind_printf("do_switch\n");
     if(high == W_NULL)
  	{
-        //high = wind_thread_get("idle");
-		//return W_ERR_FAIL;
-		//wind_printf("high == W_NULL\n");
 	}
 	if(cur == W_NULL)
 	{
@@ -214,7 +193,6 @@ w_err_t do_switch(void)
     if(high == cur)
 	{
 		//WIND_TRAP();
-		//return;
 	}
 
     switch_context(cur,high);

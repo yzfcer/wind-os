@@ -9,7 +9,7 @@
 ** Last Date   : 2019.01.06
 ** Description : wind os prepare for starting
 ** Function    : Hardware initialization, external RAM initialization, data segment initialization, and 
-**              jump to wind_o_lunch
+**               jump to wind_o_lunch
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

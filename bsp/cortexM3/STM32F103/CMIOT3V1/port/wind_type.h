@@ -64,7 +64,7 @@ typedef signed long long w_int64_t;
 typedef unsigned long w_size_t; 
 #endif
 
-//SREG，CPU状态寄存器对应的数据位宽，当关闭中断时需要保存这个寄存器
+//CPU interrupt status register, which needs to be saved when the interrupt is closed
 typedef w_uint32_t w_irqreg_t;
 
 #ifndef w_fp32_t
@@ -127,7 +127,7 @@ typedef w_int16_t w_err_t;
 #endif
 
 
-#ifndef w_stack_t  //堆栈宽度的定义
+#ifndef w_stack_t  //Definition of call stack element type
 typedef w_uint32_t w_stack_t;
 #endif
 

@@ -44,7 +44,6 @@ void _wind_fs_mount_init(void);
 #endif
 
 typedef  void (*thread_run_f)(void *pargs);
-//�̶߳�ջ�ĳ�ʼ����ڣ���ֲ��Ҫ����ʵ��
 w_stack_t *_wind_thread_stack_init(thread_run_f pfunc,void *pdata, w_stack_t *pstkbt,w_int32_t stk_depth);
 
 

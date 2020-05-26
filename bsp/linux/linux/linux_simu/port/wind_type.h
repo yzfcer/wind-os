@@ -66,7 +66,7 @@ typedef unsigned int w_size_t;
 #endif
 
 #include <signal.h>
-//SREG，CPU状态寄存器对应的数据位宽，当关闭中断时需要保存这个寄存器
+//CPU interrupt status register, which needs to be saved when the interrupt is closed
 typedef sigset_t* w_irqreg_t;
 
 
@@ -130,7 +130,7 @@ typedef w_int32_t w_err_t;
 #endif
 
 
-#ifndef w_stack_t  //堆栈宽度的定义
+#ifndef w_stack_t  //Definition of call stack element type
 typedef w_addr_t w_stack_t;//,*w_pstack_t;
 typedef w_stack_t* *w_pstack_t;
 #endif

@@ -110,7 +110,7 @@ w_err_t wind_xml_init(w_xml_s *xml)
     w_err_t err;
     WIND_ASSERT_RETURN(xml != W_NULL,W_ERR_PTR_NULL);
     wind_memset(xml,0,sizeof(w_xml_s));
-    xml->xfsm = wind_malloc(sizeof(w_xmlfsm_s));
+    xml->xfsm = (w_xmlfsm_s*)wind_malloc(sizeof(w_xmlfsm_s));
     err = wind_xml_fsm_init(xml->xfsm,"xml");
     return err;
 }
@@ -207,7 +207,7 @@ w_err_t wind_xml_print(w_xmlnode_s *xnode)
 #else
 w_err_t wind_xml_print(w_xmlnode_s *xnode)
 {
-    return wind_xmlnode_to_string(xnode,wind_std_output);
+    return wind_xmlnode_to_string(xnode,(w_xmlout_fn)wind_std_output);
 }
 #endif
 
@@ -246,8 +246,8 @@ w_err_t wind_xmlnode_destroy(w_xmlnode_s *xnode)
         wind_free(xnode->name);
     if(xnode->value != W_NULL)
         wind_free(xnode->value);
-    xnode->name = W_NULL;
-    xnode->value= W_NULL;
+    xnode->name = (char*)W_NULL;
+    xnode->value= (char*)W_NULL;
     
     foreach_node(dnode,&xnode->attrlist)
     {
@@ -404,7 +404,7 @@ w_err_t      wind_xmlnode_to_string(w_xmlnode_s *xnode,w_xmlout_fn xmlout)
     WIND_ASSERT_RETURN(xnode != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(xnode->name != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(xnode->level < MAX_XNODE_LEVEL,W_ERR_FAIL);
-    buff = wind_malloc(XML_OUTBUF_LEN);
+    buff = (char*)wind_malloc(XML_OUTBUF_LEN);
     WIND_ASSERT_RETURN(buff != W_NULL,W_ERR_MEM);
     
     err = W_ERR_OK;

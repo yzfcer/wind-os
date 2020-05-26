@@ -31,9 +31,9 @@ extern "C" {
 //-------------------------------------------------------------------------------
 //Hardware & version information
 //-------------------------------------------------------------------------------
-#define ARCH_NAME "x86_x64"
-#define CPU_NAME "core-i3-4170"
-#define BOARD_NAME "win-simu"
+#define ARCH_NAME "linux"
+#define CPU_NAME "linux"
+#define BOARD_NAME "linux-simu"
 #define HW_VERSION 0x000003
 #define SOFT_VERSION 0x000102
 
@@ -51,20 +51,20 @@ extern "C" {
 //-------------------------------------------------------------------------------
 //Bootloader parameter configuration
 //-------------------------------------------------------------------------------
-#define BOOT_SIZE 0xE000    //bootloader程序区
-#define PARAM1_SIZE 0x1000  //bootloader参数区
-#define PARAM2_SIZE 0x1000  //bootloader参数备份区
-#define IMG1_SIZE 0x10000   //系统程序存储区
-#define IMG2_SIZE 0x10000   //系统程序备份区
-#define IMG_PARA_SIZE 0x1000  //系统程序参数区
-#define FS_SIZE 0x20000     //文件系统分区
+#define BOOT_SIZE 0xE000    //Bootloader program region size
+#define PARAM1_SIZE 0x1000  //Bootloader param region size
+#define PARAM2_SIZE 0x1000  //Bootloader param backup region size
+#define IMG1_SIZE 0x10000   //System program storage region size
+#define IMG2_SIZE 0x10000   //System program storage backup region size
+#define IMG_PARA_SIZE 0x1000  //System program parameter region size
+#define FS_SIZE 0x20000     //File system partition size
 
-#define SHARE_SIZE 0x1000   //boot和系统共享参数区
-#define CACHE_SIZE 0x40000  //系统程序下载/升级缓存区
-#define SYSRUN_SIZE 0x10000 //系统程序运行区(ROM或RAM)
+#define SHARE_SIZE 0x1000   //Boot and system shared parameter area size
+#define CACHE_SIZE 0x40000  //System program download / upgrade cache size
+#define SYSRUN_SIZE 0x10000 //Size of system program running area (ROM or RAM)
 
-#define BOOT_DEBUG_ENABLE 0 //使能debug信息打印功能
-#define BOOT_TEST_ENABLE 1 //测试功能使能
+#define BOOT_DEBUG_ENABLE 0 //Debug information printing function enable
+#define BOOT_TEST_ENABLE 1 //Test function enable
 
 //Encryption method
 #define ENCRYPT_NONE 0
@@ -114,38 +114,38 @@ extern "C" {
 #define WIND_MUTEX_MAX_NUM 20 //Maximum number of mutexes that can be supported
 
 #define WIND_SEM_SUPPORT 1 //Whether semaphoreis supported
-#define WIND_SEM_MAX_NUM 8 //最大的信号量的数量
+#define WIND_SEM_MAX_NUM 8 //Maximum number of semaphores
 
 #define WIND_PIPE_SUPPORT 1  //Whether pipe is supported
-#define WIND_PIPE_MAX_NUM 2  //最大的管道数量
+#define WIND_PIPE_MAX_NUM 2  //Maximum number of pipes
 
 #define WIND_MSGBOX_SUPPORT 1  //Whether message box is supported
-#define WIND_MBOX_MAX_NUM 2//邮箱的数量
+#define WIND_MBOX_MAX_NUM 2//Maximum number of message boxes
 
 #define WIND_EVENT_SUPPORT 1  //Whether event is supported
-#define WIND_EVENT_MAX_NUM 5//事件的数量
+#define WIND_EVENT_MAX_NUM 5//Maximum number of events
 
 #define WIND_WATCHDOG_SUPPORT 1 //Whether thread level watchdog is supported
-#define WIND_WATCHDOG_MAX_NUM 5//线程级看门狗的数量
+#define WIND_WATCHDOG_MAX_NUM 5//Maximum number of watchdogs
 
 #define WIND_TIMER_SUPPORT 1  //Whether software timer is supported
-#define WIND_TIMER_MAX_NUM 2  //tick定时器的数量
+#define WIND_TIMER_MAX_NUM 2  //Maximum number of software timers
 
-#define WIND_SOFTIRQ_SUPPORT 1 //Whether interrupt framework is supported
-#define WIND_SOFTINT_MAX_NUM 256 //软中断向量表的长度
+#define WIND_SOFTIRQ_SUPPORT 1 //Whether software interrupt framework is supported
+#define WIND_SOFTINT_MAX_NUM 256 //Maximum number of software interrupts
 
 #define WIND_DAEMON_SUPPORT 1    //Whether thread daemon is supported
-#define WIND_DAEMON_MAX_NUM 5    //支持可守护线程数量
+#define WIND_DAEMON_MAX_NUM 5    //Maximum number of thread daemons
 
 #define WIND_USER_SUPPORT 1 //Whether user account is supported
-#define WIND_USER_MAX_NUM 5 //用户账号的数量
+#define WIND_USER_MAX_NUM 5 //Maximum number of user accounts
 
 #define WIND_FSM_SUPPORT 1 //Whether finite state machine framework is supported
-#define WIND_FSM_MAX_NUM 5 //有限状态机的数量
+#define WIND_FSM_MAX_NUM 5 //Maximum number of finite state machines
 
 #define WIND_DBGPOINT_SUPPORT 1//Whether debugging point is supported
 
-#define WIND_TICK_PER_SEC 100 //一秒钟所经历的的时间节拍
+#define WIND_TICK_PER_SEC 100 //The number of tick beats in a second
 
 #define WIND_REALTIME_CORE_SUPPORT 1 //Whether preemptive switching is supported
 
@@ -165,7 +165,7 @@ extern "C" {
 #define WIND_CHDEV_SUPPORT 1  //Whether character device driver frame is supported
 
 #define WIND_BLKDEV_SUPPORT 1  //Whether block device drive frame is supported
-#define WIND_NULLDEV_MAX_NUM 5  //空块设备的数量
+#define WIND_NULLDEV_MAX_NUM 5  //Maximum number of block devices
 
 #define WIND_LUA_SUPPORT 1 //Whether Lua scripting language is supported
 
@@ -212,35 +212,35 @@ extern "C" {
 //-------------------------------------------------------------------------------
 #if WIND_MODULE_SHELL_SUPPORT
 #define SHELL_NO_ECHO_BACK 
-#define CMD_BLKDEV_SUPPORT 1 //是否支持块设备操作命令
-#define CMD_CHDEV_SUPPORT 1 //是否支持字符设备操作命令
-#define CMD_DATETIME_SUPPORT 0 //是否支持日期时间命令
-#define CMD_ECHO_SUPPORT 1 //是否支持回显命令
-#define CMD_FS_SUPPORT 1 //是否支持文件系统命令
-#define CMD_LIST_SUPPORT 1 //是否支持内核对象列表命令
-#define CMD_DETAIL_SUPPORT 1 //是否支持内核对象列表命令
-#define CMD_MEM_SUPPORT 1 //是否支持内存值查看命令
-#define CMD_RESET_SUPPORT 1 //是否支持系统复位命令
-#define CMD_STATI_SUPPORT 1 //是否支持统计命令
-#define CMD_THREAD_SUPPORT 1 //是否支持线程操作命令
-#define CMD_XMODEM_SUPPORT 1 //是否支持xmodem协议命令
-#define CMD_SYSINFO_SUPPORT 1 //是否支持系统信息命令
-#define CMD_CUTEST_SUPPORT 1 //是否支持单元测试命令
-#define CMD_DBGPOINT_SUPPORT 1 //是否支持系统调试点功能命令
-#define CMD_USER_SUPPORT 1 //是否支持用户管理命令
-#define CMD_WATCHDOG_SUPPORT 1 //是否支持软件看门狗命令
-#define CMD_DAEMON_SUPPORT 1 //是否支持线程守护命令
-#define CMD_DIAGNOSE_SUPPORT 1 //是否支持系统诊断命令
-#define CMD_TIMER_SUPPORT 1 //是否支持定时器操作命令
-#define CMD_DB_SUPPORT 0 //是否支持DB模块操作命令
-#define CMD_LOG_SUPPORT 1 //
+#define CMD_BLKDEV_SUPPORT 1 //Whether block device operation command is supported
+#define CMD_CHDEV_SUPPORT 1 //Whether character device operation command is supported
+#define CMD_DATETIME_SUPPORT 0 //Whether datetime command is supported
+#define CMD_ECHO_SUPPORT 1 //Whether echo command is supported
+#define CMD_FS_SUPPORT 1 //Whether file system command is supported
+#define CMD_LIST_SUPPORT 1 //Whether kernel object list command is supported
+#define CMD_DETAIL_SUPPORT 1 //Whether kernel object detail command is supported
+#define CMD_MEM_SUPPORT 1 //Whether memory value viewing command is supported
+#define CMD_RESET_SUPPORT 1 //Whether system reset command is supported
+#define CMD_STATI_SUPPORT 1 //Whether statistics command is supported
+#define CMD_THREAD_SUPPORT 1 //Whether thread operation command is supported
+#define CMD_XMODEM_SUPPORT 1 //Whether XMODEM command is supported
+#define CMD_SYSINFO_SUPPORT 1 //Whether system information command is supported
+#define CMD_CUTEST_SUPPORT 1 //Whether unit test command is supported
+#define CMD_DBGPOINT_SUPPORT 1 //Whether the system debugging point function command is supported
+#define CMD_USER_SUPPORT 1 //Whether user management command is supported
+#define CMD_WATCHDOG_SUPPORT 1 //Whether the software watchdog command is supported
+#define CMD_DAEMON_SUPPORT 1 //Whether thread daemon command is supported
+#define CMD_DIAGNOSE_SUPPORT 1 //Whether system diagnostic command is supported
+#define CMD_TIMER_SUPPORT 1 //Whether timer operation command is supported
+#define CMD_DB_SUPPORT 0 //Whether DB module operation command is supported
+#define CMD_LOG_SUPPORT 1 //Whether log operation command is supported
 
-#define CMD_BEEP_SUPPORT 0 //是否支持蜂鸣器命令
-#define CMD_LED_SUPPORT 0 //是否支持LED操作命令
+#define CMD_BEEP_SUPPORT 0 //Whether beep command is supported
+#define CMD_LED_SUPPORT 0 //Whether LED operation command is supported
 
-#define CMD_MKFS_SUPPORT 0 //是否支持创建文件系统镜像命令,pc
-#define CMD_PACK_SUPPORT 0 //是否支持对固件打包的命令,pc
-#define CMD_RCP_SUPPORT 0 //是否支持在主机与wind-os之间拷贝文件的命令,pc
+#define CMD_MKFS_SUPPORT 0 //Whether the command of creating file system image is supported
+#define CMD_PACK_SUPPORT 0 //Whether the command to package firmware is supported
+#define CMD_RCP_SUPPORT 0 //Whether the command to copy files between the host and wind-os is supported
 
 #endif
 
@@ -249,24 +249,24 @@ extern "C" {
 //framework and corresponding function modules
 //-------------------------------------------------------------------------------
 #if WIND_MODULE_CUTEST_SUPPORT
-#define TEST_HEAP_SUPPORT 1 //是否支持内存堆测试
-#define TEST_MSGBOX_SUPPORT 1 //是否支持消息邮箱测试
-#define TEST_MUTEX_SUPPORT 1 //是否支持互斥所测试
-#define TEST_PIPE_SUPPORT 1 //是否支持管道测试
-#define TEST_POOL_SUPPORT 1 //是否支持内存池测试
-#define TEST_QUEUE_SUPPORT 1 //是否支持队列测试
-#define TEST_SEM_SUPPORT 1 //Whether semaphoreis supported测试
-#define TEST_EVENT_SUPPORT 1 //是否支持事件测试
-#define TEST_SOFTIRQ_SUPPORT 1 //是否支持软中断测试
-#define TEST_TREE_SUPPORT 1 //是否支持树形结构对象测试
-#define TEST_TREEFS_SUPPORT 1 //是否支持treefs文件系统测试
-#define TEST_LISTFS_SUPPORT 1 //是否支持listfs文件系统测试
-#define TEST_HOSTFS_SUPPORT 1 //是否支持hostfs主机文件系统测试
-#define TEST_FS_SUPPORT 1 //是否支持fs文件系统接口测试
-#define TEST_FILEPATH_SUPPORT 1 //是否支持文件系统路径测试
-#define TEST_DIAGNOSE_SUPPORT 1 //是否支持诊断功能测试
-#define TEST_DICT_SUPPORT 1     //是否支持参数字典功能测试
-#define TEST_XML_SUPPORT 1
+#define TEST_HEAP_SUPPORT 1 //Whether memory heap test is supported
+#define TEST_MSGBOX_SUPPORT 1 //Whether message mailbox test is supported
+#define TEST_MUTEX_SUPPORT 1 //Whether mutual exclusion test is supported
+#define TEST_PIPE_SUPPORT 1 //Whether pipeline test is supported
+#define TEST_POOL_SUPPORT 1 //Whether memory pool test is supported
+#define TEST_QUEUE_SUPPORT 1 //Whether queue test is supported
+#define TEST_SEM_SUPPORT 1 //Whether semaphore test is supported
+#define TEST_EVENT_SUPPORT 1 //Whether event test is supported
+#define TEST_SOFTIRQ_SUPPORT 1 //Whether soft interrupt test is supported
+#define TEST_TREE_SUPPORT 1 //Whether tree structure  test is supported
+#define TEST_TREEFS_SUPPORT 1 //Whether treefs file system  test is supported
+#define TEST_LISTFS_SUPPORT 1 //Whether listfs file system  test is supported
+#define TEST_HOSTFS_SUPPORT 1 //Whether hostfs file system  test is supported
+#define TEST_FS_SUPPORT 1 //Whether file system interface test is supported
+#define TEST_FILEPATH_SUPPORT 1 //Whether file path function test is supported
+#define TEST_DIAGNOSE_SUPPORT 1 //Whether diagnostic function test is supported
+#define TEST_DICT_SUPPORT 1     //Whether parameter dictionary function test is supported
+#define TEST_XML_SUPPORT 1 //Whether XML function test is supported
 #endif
 
 
@@ -275,15 +275,15 @@ extern "C" {
 //virtual file system framework
 //-------------------------------------------------------------------------------
 #if WIND_MODULE_VFS_SUPPORT
-#define WIND_FS_MAX_NUM 5 //允许支持的文件系统的数量
-#define WIND_FILE_MAX_NUM 5 //允许同时打开的文件的数量
+#define WIND_VFS_MAX_NUM 5 //Maximum number of file system objects allowed
+#define WIND_FILE_MAX_NUM 5 //Maximum number of files allowed to open at the same time
 
-#define WIND_TREEFS_SUPPORT 1 //是否支持内存文件系统
-#define WIND_TREEFS_MAX_NUM 2 //支持treefs结构的数量
+#define WIND_TREEFS_SUPPORT 1 //Whether memory file system treefs is supported
+#define WIND_TREEFS_MAX_NUM 2 //Maximum number of treefs objects supported
 
-#define WIND_LISTFS_SUPPORT 1//是否支持listfs文件系统
+#define WIND_LISTFS_SUPPORT 1//Whether listfs is supported
 
-#define WIND_HOSTFS_SUPPORT 1//是否支持宿主机文件系统
+#define WIND_HOSTFS_SUPPORT 1//Whether hostfs is supported
 
 #endif
 
