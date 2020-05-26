@@ -1,14 +1,14 @@
 /*********************************************************************************
   *Copyright(C),2017-2020,yzfcer@163.com
-  *FileName:    wind_log.h
-  *Author:      Jason Zhou
+  *FileName    :    wind_log.h
+  *** Author      :      Jason Zhou
   *Version:     1.0
   *Date:        2020/05/23
   *Description: wind-s log function header
   *Others:  
   *History:  
      1.Date:
-       Author:
+       ** Author      :
        Modification:
 **********************************************************************************/
 #ifndef WIND_LOG_H__

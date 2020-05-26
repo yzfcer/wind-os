@@ -7,7 +7,7 @@
 ** FileName    : wind_diagnose.h
 ** Author      : Jason Zhou
 ** Last Date   : 2019.02.24
-** Description : 系统故障诊断处理模块
+** Description : System diagnosis processing module
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

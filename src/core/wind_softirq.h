@@ -7,8 +7,9 @@
 ** FileName    : wind_softirq.h / wind_softirq.c
 ** Author      : Jason Zhou
 ** Last Date   : 
-** Description : 用于实现系统的软中断的功能，软中断主要是提供一种在高优先级运行的任务模式，在该模块执行
-**              执行期间将不会被其他的任务所中断，但却可以被硬件中断所打断的该优先级模式
+** Description : It is used to realize the function of soft interrupt of the system. Soft interrupt mainly 
+**               provides a task mode that runs at high priority. During the execution of the module, it 
+**               will not be interrupted by other tasks, but it can be interrupted by hardware interrupt
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou
@@ -19,7 +20,7 @@
 **--------------Cureent version-------------------------------------------------------------------------
 ** Modify      : 
 ** Date        : 
-** Description : 2013.10.23未完待续
+** Description : 
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/

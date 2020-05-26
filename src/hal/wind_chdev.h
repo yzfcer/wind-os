@@ -10,7 +10,7 @@
 ** Description : 字符设备标准化API接口
 **              
 **--------------History---------------------------------------------------------------------------------
-Author: 
+** Author      : 
 ** Version     : v1.0
 ** Date        : 
 ** Description : First version

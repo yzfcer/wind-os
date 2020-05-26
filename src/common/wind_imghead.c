@@ -10,7 +10,7 @@
 ** Description : Firmware header definition
 **              
 **--------------History---------------------------------------------------------------------------------
-Author: 
+** Author      : 
 ** Version     : v1.0
 ** Date        : 2018.11.10
 ** Description : First version

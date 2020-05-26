@@ -7,7 +7,7 @@
 ** FileName    : wind_watchdog.c
 ** Author      : Jason Zhou
 ** Last Date   : 2018.08.12
-** Description : 线程粒度的看门狗，主要是监控线程得不到CPU而饿死
+** Description : Thread granularity watchdog is mainly used to monitor the starvation of threads without CPU
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

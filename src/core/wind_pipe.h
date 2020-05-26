@@ -7,7 +7,7 @@
 ** FileName    : wind_pipe.h
 ** Author      : Jason Zhou
 ** Last Date   : 2012.09.26
-** Description : wind os的管道相关的代码,管道是一种数据通信机制，不是线程同步机制
+** Description : wind-os pipeline function set
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

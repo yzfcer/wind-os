@@ -4,9 +4,9 @@
 **                                       yzfcer@163.com
 **
 **--------------File infomation-------------------------------------------------------------------------
-** FileName    : wind_stat.h
+** FileName    : wind_stati.h
 ** Author      : Jason Zhou
-** Last Date   : wind os的资源统计相关的代码
+** Last Date   : wind-os definition of resource statistics
 ** Description : 
 **              
 **--------------History---------------------------------------------------------------------------------

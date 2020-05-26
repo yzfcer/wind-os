@@ -7,7 +7,7 @@
 ** FileName    : wind_core.h
 ** Author      : Jason Zhou
 ** Last Date   : 2012.09.26
-** Description : wind os的核心启动和线程调度功能
+** Description : wind-os core startup and thread scheduling
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou
@@ -36,20 +36,20 @@ extern "C" {
 #define IRQ_NEST_DEPTH 32
 typedef struct __w_core_var_s
 {
-    volatile w_uint32_t idle_cnt;//空闲计算器
-    volatile w_uint32_t idle_cnt_max;//在一段时间内的idle任务的计数值
-    volatile w_int32_t irq_nest;//全局的中断嵌套计数值
-    volatile w_int32_t switch_nest;//全局的禁止线程切换嵌套计数值
-    volatile w_uint32_t sec_count;
-    volatile w_uint32_t ms_cnt;//毫秒计时
+    volatile w_uint32_t idle_cnt;//Idle counter
+    volatile w_uint32_t idle_cnt_max;//The count of idle tasks over a period of time
+    volatile w_int32_t irq_nest;//Global interrupt nesting count
+    volatile w_int32_t switch_nest;//Global disable thread switching nested count
+    volatile w_uint32_t sec_count;//Second time
+    volatile w_uint32_t ms_cnt;//Millisecond time
     volatile w_uint32_t ticks_cnt;//tick计时
-    volatile w_uint32_t cpu_usage;
-    volatile w_int32_t irq_mask_idx;
-    volatile w_irqreg_t irq_mask[IRQ_NEST_DEPTH];
+    volatile w_uint32_t cpu_usage;//CPU usage
+    volatile w_int32_t irq_mask_idx;//Interrupt nesting index
+    volatile w_irqreg_t irq_mask[IRQ_NEST_DEPTH];//Interrupt nesting cache
 }w_core_var_s;
 
-extern w_core_var_s g_core;//内核相关的参数集
-extern volatile w_bool_t gwind_start_flag;//开始调度的标志
+extern w_core_var_s g_core;//Kernel related parameter set
+extern volatile w_bool_t gwind_start_flag;//Flag to start scheduling
 extern w_stack_t **gwind_high_stack;
 extern w_stack_t **gwind_cur_stack;
 

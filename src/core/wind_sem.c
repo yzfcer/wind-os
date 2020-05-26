@@ -7,7 +7,7 @@
 ** FileName    : wind_sem.h
 ** Author      : Jason Zhou
 ** Last Date   : 2012.09.26
-** Description : wind os的信号量头文件
+** Description : wind-os semaphore function set
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

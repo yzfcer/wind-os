@@ -7,7 +7,7 @@
 ** FileName    : wind_dbgpoint.h
 ** Author      : Jason Zhou
 ** Last Date   : 2019.01.28
-** Description : 新增加一种调试方法，该方法可以方便的通过命令来实现变量查看与改写
+** Description : View and rewrite variables through debuging command
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

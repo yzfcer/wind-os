@@ -8,7 +8,7 @@
 ** FileName    : wind_daemon.h
 ** Author      : Jason Zhou
 ** Last Date   : 2019.02.23
-** Description : wind os的线程守护对象
+** Description : wind-os thread guard function
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou
@@ -39,12 +39,12 @@ extern "C" {
 #if WIND_DAEMON_SUPPORT
 #define WIND_DAEMON_MAGIC 0x576C5A4C
 
-#define F_DAEMON_POOL (0x01 << 0) //标记daemon对象是否通过内存池分配
+#define F_DAEMON_POOL (0x01 << 0) //Mark whether daemon object is allocated through the memory pool
 #define IS_F_DAEMON_POOL(daemon) ((daemon->obj.flag & F_DAEMON_POOL) == F_DAEMON_POOL)
 #define SET_F_DAEMON_POOL(daemon) (daemon->obj.flag |= F_DAEMON_POOL)
 #define CLR_F_DAEMON_POOL(daemon) (daemon->obj.flag &= (~F_DAEMON_POOL))
 
-#define F_DAEMON_ENABLE (0x01 << 1) //标记daemon对象是否使能
+#define F_DAEMON_ENABLE (0x01 << 1) //Mark whether the daemon object is enabled
 #define IS_F_DAEMON_ENABLE(daemon) ((daemon->obj.flag & F_DAEMON_ENABLE) == F_DAEMON_ENABLE)
 #define SET_F_DAEMON_ENABLE(daemon) (daemon->obj.flag |= F_DAEMON_ENABLE)
 #define CLR_F_DAEMON_ENABLE(daemon) (daemon->obj.flag &= (~F_DAEMON_ENABLE))

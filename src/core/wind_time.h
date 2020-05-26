@@ -7,7 +7,7 @@
 ** FileName    : wind_time.h
 ** Author      : Jason Zhou
 ** Last Date   : 2012.09.26
-** Description : wind os的时间管理代码头文件
+** Description : wind-os date & time management module
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

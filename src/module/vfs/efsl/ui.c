@@ -96,7 +96,7 @@ short listFiles(FileSystem *fs, char *dirname)
 					 (fileEntry.FileName[0]>='0' && fileEntry.FileName[0]<='9')
 					)
 					{
-						wind_debug("Filename: %s\n",fileEntry.FileName);
+						wind_debug("FileName    : %s\n",fileEntry.FileName);
 						counter++;
 					}
 				}

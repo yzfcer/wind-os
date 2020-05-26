@@ -1,8 +1,8 @@
 /****************************************Copyright (c)**************************************************
 **                                       God's harbor
-** FileName: wind_atomic.h / wind_atomic.c
+** FileName    : wind_atomic.h / wind_atomic.c
 ** Author      : Jason Zhou
-** Last Date: 2014/10/26 2:20:23
+** Last Date   : 2014/10/26 2:20:23
 ** Description : 基本原子操作函数方法
 **  
 **--------------History---------------------------------------------------------------------------------

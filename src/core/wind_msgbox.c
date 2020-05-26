@@ -7,7 +7,7 @@
 ** FileName    : wind_message.c
 ** Author      : Jason Zhou
 ** Last Date   : 2012.09.26
-** Description : wind os的消息相关的代码
+** Description : wind-os message mailbox function set
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

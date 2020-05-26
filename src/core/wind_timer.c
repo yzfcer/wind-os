@@ -7,7 +7,7 @@
 ** FileName    : wind_timer.h
 ** Author      : Jason Zhou
 ** Last Date   : 2012.09.26
-** Description : wind os的以tick为精度的代定时器的代码，非精确定时，绝对时间误差为一个tick周期
+** Description : wind-os software timer module
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

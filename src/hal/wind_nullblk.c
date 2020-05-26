@@ -10,7 +10,7 @@
 ** Description : 创建空的块设备的接口
 **              
 **--------------History---------------------------------------------------------------------------------
-Author: 
+** Author      : 
 ** Version     : v1.0
 ** Date        : 
 ** Description : First version

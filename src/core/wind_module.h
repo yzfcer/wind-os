@@ -6,11 +6,11 @@
 **--------------File infomation-------------------------------------------------------------------------
 ** FileName    : wind_module.h
 ** Author      : Jason Zhou
-** Last Date   : 
-** Description : wind-os模块框架
+** Last Date   : 2019.12.19
+** Description : wind-os module management framework
 **              
 **--------------History---------------------------------------------------------------------------------
-Author: 
+** Author      : 
 ** Version     : v1.0
 ** Date        : 
 ** Description : First version

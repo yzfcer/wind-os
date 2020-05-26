@@ -7,7 +7,7 @@
 ** FileName    : wind_type.h
 ** Author      : Jason Zhou
 ** Last Date   : 2012.09.26
-** Description : wind os data type description
+** Description : wind-os data type description
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

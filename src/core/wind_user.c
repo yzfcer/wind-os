@@ -7,7 +7,7 @@
 ** FileName    : wind_user.c
 ** Author      : Jason Zhou
 ** Last Date   : 2019.01.28
-** Description : 系统用户管理模块
+** Description : System user management module
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

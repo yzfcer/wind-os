@@ -7,7 +7,7 @@
 ** FileName    : wind_mutex.c
 ** Author      : Jason Zhou
 ** Last Date   : 2012.09.26
-** Description : 系统的互斥锁
+** Description : wind-os mutex function set
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

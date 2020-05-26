@@ -10,7 +10,7 @@
 ** Description : MD5算法模块
 **              
 **--------------History---------------------------------------------------------------------------------
-Author: 
+** Author      : 
 ** Version     : v1.0
 ** Date        : 2019.2.18
 ** Description : First version

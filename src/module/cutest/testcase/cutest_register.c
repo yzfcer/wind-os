@@ -1,12 +1,12 @@
 /****************************************Copyright (c)**************************************************
 **                                       God's harbor
-** FileName: test_port.h / test_port.c
-** Author: Jason Zhou
-** Last Date: 2015/1/24 15:42:27
+** FileName    : test_port.h / test_port.c
+** Author      : Jason Zhou
+** Last Date   : 2015/1/24 15:42:27
 ** Description : wind_os的系统的测试框架移植接口
 **  
 **--------------History---------------------------------------------------------------------------------
-Author: Jason Zhou
+** Author      : Jason Zhou
 ** Version     : v1.0
 ** Date        : 2015/1/24 15:42:27
 ** Description : First version

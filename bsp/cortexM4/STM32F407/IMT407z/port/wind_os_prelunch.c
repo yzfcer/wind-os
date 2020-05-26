@@ -7,7 +7,7 @@
 ** FileName    : wind_os_prelaunch.c
 ** Author      : Jason Zhou
 ** Last Date   : 2019.01.06
-** Description : wind os prepare for starting
+** Description : wind-os prepare for starting
 ** Function    : Hardware initialization, external RAM initialization, data segment initialization, and 
 **               jump to wind_o_lunch
 **              

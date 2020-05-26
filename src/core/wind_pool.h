@@ -7,7 +7,7 @@
 ** FileName    : wind_mpool.h / wind_mpool.c
 ** Author      : Jason Zhou
 ** Last Date   : 2012.09.26
-** Description : wind os的内存池管理相关的功能函数
+** Description : wind-os functions related to memory pool management
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou
@@ -37,7 +37,7 @@ extern "C" {
 #define WIND_POOL_MAGIC 0x5d9c843e
 #define WIND_POOLITEM_MAGIC 0x507c
 
-#define F_POOLITEM_USED (0x01 << 0) //标记sem对象是否通过内存池分配
+#define F_POOLITEM_USED (0x01 << 0) //Mark whether objects are allocated through the memory pool
 #define IS_F_POOLITEM_USED(item) ((item->head.flag & F_POOLITEM_USED) == F_POOLITEM_USED)
 #define SET_F_POOLITEM_USED(item) (item->head.flag |= F_POOLITEM_USED)
 #define CLR_F_POOLITEM_USED(item) (item->head.flag &= (~F_POOLITEM_USED))

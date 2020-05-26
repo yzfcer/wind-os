@@ -7,7 +7,7 @@
 ** FileName    : wind_strsearch.h
 ** Author      : Jason Zhou
 ** Last Date   : 2019.05.07
-** Description : 字符串搜索算法KMP与BM
+** Description : KMP and BM string search algorithm
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou
@@ -41,9 +41,9 @@ w_err_t kmp_init(w_kmp_context_s *ctx,char *substr)
     ctx->next[j] = k;
     while (j < len)
     {
-        if ( (k == -1) || (substr[j] == substr[k]) ) //注意等号是==，而不是=
+        if ( (k == -1) || (substr[j] == substr[k]) )
         {
-            ++k; // 注意是先加后使用
+            ++k;
             ++j;
             ctx->next[j] = k;
             ctx->len = j + 1;

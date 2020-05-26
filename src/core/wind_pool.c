@@ -7,7 +7,7 @@
 ** FileName    : wind_mpool.h / wind_mpool.c
 ** Author      : Jason Zhou
 ** Last Date   : 2012.09.26
-** Description : wind os的内存池管理相关的功能函数
+** Description : wind-os functions related to memory pool management
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

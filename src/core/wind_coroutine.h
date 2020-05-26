@@ -7,7 +7,7 @@
 ** FileName    : wind_coroutine.h
 ** Author      : Jason Zhou
 ** Last Date   : 2012.09.26
-** Description : wind os的协程功能模块
+** Description : wind-os coroutine function module
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

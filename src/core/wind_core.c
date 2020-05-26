@@ -7,7 +7,7 @@
 ** FileName    : wind_core.c
 ** Author      : Jason Zhou
 ** Last Date   : 2012.09.26
-** Description : wind os的核心启动和线程调度功能
+** Description : wind-os core startup and thread scheduling
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

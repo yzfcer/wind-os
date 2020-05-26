@@ -7,10 +7,10 @@
 ** FileName    : wind_conv.h
 ** Author      : Jason Zhou
 ** Last Date   : 2017.12.10
-** Description : 
+** Description : Data conversion function set
 **              
 **--------------History---------------------------------------------------------------------------------
-Author: 
+** Author      : 
 ** Version     : v1.0
 ** Date        : 2017.12.10
 ** Description : First version

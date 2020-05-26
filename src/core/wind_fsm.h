@@ -1,12 +1,12 @@
 /****************************************Copyright (c)**************************************************
 **                                       God's harbor
-** FileName: wind_fsm.h
-** Author: Jason Zhou
-** Last Date: 2019/12/1 15:34:56
-** Description : 
+** FileName    : wind_fsm.h
+** Author      : Jason Zhou
+** Last Date   : 2019/12/1 15:34:56
+** Description : Functional model framework of FSM
 **  
 **--------------History---------------------------------------------------------------------------------
-Author: Jason Zhou
+** Author      : Jason Zhou
 ** Version     : v1.0
 ** Date        : 2019/12/1 15:34:56
 ** Description : First version
@@ -14,7 +14,7 @@ Author: Jason Zhou
 **--------------Cureent version-------------------------------------------------------------------------
 ** Modify      : 
 ** Date        : 
-** Description : 有限状态机功能模型框架
+** Description : 
 ** 
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/

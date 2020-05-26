@@ -7,7 +7,7 @@
 ** FileName    : wind_sysinfo.h / wind_sysinfo.c
 ** Author      : Jason Zhou
 ** Last Date   : 2012.09.26
-** Description : wind os的核心代码
+** Description : wind-os system infomation
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

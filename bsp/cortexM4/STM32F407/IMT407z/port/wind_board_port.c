@@ -7,7 +7,7 @@
 ** FileName    : wind_board_port.c
 ** Author      : Jason Zhou
 ** Last Date   : 2012.09.26
-** Description : wind os board adapter interface
+** Description : wind-os board adapter interface
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou
@@ -66,7 +66,7 @@ void wind_system_reset(void)
 #if WIND_HEAP_SUPPORT
 /*
  When the system needs to support the memory heap function, it needs the starting 
- address of the memory heap and the size of the pair. Wind OS can support the creation 
+ address of the memory heap and the size of the pair. wind-os can support the creation 
  of multiple discontinuous memory heaps, and can apply for a piece of space in the 
  memory pair to create a nested memory heap for some specific purposes
  */ 

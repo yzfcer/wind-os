@@ -10,7 +10,7 @@
 ** Description : 处理控制台的历史命令记录
 **              
 **--------------History---------------------------------------------------------------------------------
-Author: Jason Zhou
+** Author      : Jason Zhou
 ** Version     : v1.0
 ** Date        : 2013.08.10
 ** Description : First version

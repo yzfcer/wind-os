@@ -1,14 +1,14 @@
 /*********************************************************************************
   *Copyright(C),2017-2020,yzfcer@163.com
-  *FileName:  
-  *Author:      Jason Zhou
+  *FileName    :  
+  *** Author      :      Jason Zhou
   *Version:     1.0
   *Date:        2016/11/04
   *Description:  
   *Others:  
   *History:  
      1.Date:
-       Author:
+       ** Author      :
        Modification:
 **********************************************************************************/
 #ifndef WIND_ENCRYPT_H__

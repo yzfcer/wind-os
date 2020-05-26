@@ -7,7 +7,7 @@
 ** FileName    : wind_obj.h
 ** Author      : Jason Zhou
 ** Last Date   : 2019.01.28
-** Description : 系统用户管理模块
+** Description : Kernel object common abstraction
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

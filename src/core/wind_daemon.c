@@ -7,7 +7,7 @@
 ** FileName    : wind_daemon.c
 ** Author      : Jason Zhou
 ** Last Date   : 2019.02.23
-** Description : wind os的线程守护对象
+** Description : wind-os thread guard function
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

@@ -7,10 +7,10 @@
 ** FileName    : wind_conv.c
 ** Author      : Jason Zhou
 ** Last Date   : 2017.12.10
-** Description : 
+** Description : Data conversion function set
 **              
 **--------------History---------------------------------------------------------------------------------
-Author: 
+** Author      : 
 ** Version     : v1.0
 ** Date        : 2017.12.10
 ** Description : First version
@@ -38,7 +38,7 @@ w_endian_e wind_endian(void)
         return ENDIAN_BIG;
 }
 
-//把字符串转换成带符号整数
+
 w_bool_t wind_str_to_int(char *str,w_int32_t *value)
 {
     w_uint8_t sign;
@@ -86,7 +86,7 @@ void wind_int_to_str(char *str,w_int32_t value)
     }
 }
 
-//把字符串转换成无符号整数
+
 w_bool_t wind_str_to_uint(char *str,w_uint32_t *value)
 {
     w_uint32_t num = 0;

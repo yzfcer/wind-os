@@ -7,7 +7,7 @@
 ** FileName    : wind_strsearch.h
 ** Author      : Jason Zhou
 ** Last Date   : 2019.05.07
-** Description : 字符串搜索算法KMP与BM
+** Description : KMP and BM string search algorithm
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

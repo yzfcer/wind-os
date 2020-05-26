@@ -10,7 +10,7 @@
 ** Description : Multi tree function module
 **              
 **--------------History---------------------------------------------------------------------------------
-Author: Jason Zhou
+** Author      : Jason Zhou
 ** Version     : v1.0
 ** Date        : 2013.11.27
 ** Description : First version

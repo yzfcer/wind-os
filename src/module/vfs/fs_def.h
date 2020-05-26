@@ -1,8 +1,8 @@
 /****************************************Copyright (c)**************************************************
 **                                       God's harbor
-** FileName: fs_def.h
+** FileName    : fs_def.h
 ** Author      : Jason Zhou
-** Last Date: 2019/1/24 20:24:37
+** Last Date   : 2019/1/24 20:24:37
 ** Description : vfs结构定义
 **  
 **--------------History---------------------------------------------------------------------------------
@@ -38,12 +38,12 @@
 #define FMODE_CRT  0x04
 #define FMODE_A    0x08
 
-#define F_VFS_POOL (0x01 << 0) //标记fs对象是否通过内存池分配
+#define F_VFS_POOL (0x01 << 0) //Mark whether the vfs object is enabled
 #define IS_F_VFS_POOL(fs) ((fs->obj.flag & F_VFS_POOL) == F_VFS_POOL)
 #define SET_F_VFS_POOL(fs) (fs->obj.flag |= F_VFS_POOL)
 #define CLR_F_VFS_POOL(fs) (fs->obj.flag &= (~F_VFS_POOL))
 
-#define F_VFS_MOUNT (0x01 << 1) //标记fs对象是否是否已被挂载
+#define F_VFS_MOUNT (0x01 << 1) //Mark whether the FS object has been mounted
 #define IS_F_VFS_MOUNT(vfs) ((vfs->obj.flag & F_VFS_MOUNT) == F_VFS_MOUNT)
 #define SET_F_VFS_MOUNT(vfs) (vfs->obj.flag |= F_VFS_MOUNT)
 #define CLR_F_VFS_MOUNT(vfs) (vfs->obj.flag &= (~F_VFS_MOUNT))

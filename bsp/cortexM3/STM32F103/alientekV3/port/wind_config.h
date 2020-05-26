@@ -7,7 +7,7 @@
 ** FileName    : wind_config.h
 ** Author      : Jason Zhou
 ** Last Date   : 2012.09.26
-** Description : wind os top configuration file
+** Description : wind-os top configuration file
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou
