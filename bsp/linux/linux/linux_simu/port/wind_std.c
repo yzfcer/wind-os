@@ -4,7 +4,7 @@
 **                                       yzfcer@163.com
 **
 **--------------File infomation-------------------------------------------------------------------------
-** FileName    : wind_os_hwif.c
+** FileName    : Wind_std.c
 ** Author      : Jason Zhou
 ** Last Date   : 2012.09.26
 ** Description : wind-os stdard input/output function API

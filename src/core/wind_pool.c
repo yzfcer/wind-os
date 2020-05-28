@@ -4,7 +4,7 @@
 **                                       yzfcer@163.com
 **
 **--------------File infomation-------------------------------------------------------------------------
-** FileName    : wind_mpool.h / wind_mpool.c
+** FileName    : wind_pool.c
 ** Author      : Jason Zhou
 ** Last Date   : 2012.09.26
 ** Description : wind-os functions related to memory pool management

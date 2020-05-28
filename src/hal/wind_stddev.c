@@ -4,7 +4,7 @@
 **                                       yzfcer@163.com
 **
 **--------------File infomation-------------------------------------------------------------------------
-** FileName    : dev_stddev.c
+** FileName    : wind_stddev.c
 ** Author      : Jason Zhou
 ** Last Date   : 2018.03.26
 ** Description : Standard I / O device driver interface

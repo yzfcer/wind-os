@@ -1,6 +1,6 @@
 /****************************************Copyright (c)**************************************************
 **                                       God's harbor
-** FileName    : cmd_dbgp.c
+** FileName    : Cmd_dbgpoint.c
 ** Author      : Jason Zhou
 ** Last Date   : 2019/1/29 21:45:25
 ** Description : Debug point read / write operation command

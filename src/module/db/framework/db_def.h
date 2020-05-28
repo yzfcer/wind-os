@@ -4,7 +4,7 @@
 **                                       yzfcer@163.com
 **
 **--------------File infomation-------------------------------------------------------------------------
-** FileName    : db.c
+** FileName    : db_def.c
 ** Author      : Jason Zhou
 ** Last Date   : 2017.12.19
 ** Description : Basic data structure definition of DB module

@@ -1,6 +1,6 @@
 /****************************************Copyright (c)**************************************************
 **                                       God's harbor
-** FileName    : cmd_watchdog.c
+** FileName    : cmd_xmodem.c
 ** Author      : Jason Zhou
 ** Last Date   : 2015/1/24 20:24:37
 ** Description : XMODEM operation command

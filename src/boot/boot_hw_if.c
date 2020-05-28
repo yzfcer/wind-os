@@ -1,11 +1,11 @@
 /*********************************************************************************
 ** Copyright(C),2017-2020,yzfcer@163.com
-** FileName    :  
-** Author      :      Jason Zhou
-** Version     :     1.0
-** Date        :        2017/04/08
+** FileName    : boot_hw_if.c
+** Author      : Jason Zhou
+** Version     : 1.0
+** Date        : 2017/04/08
 ** Description : 
-** Others      :  
+** Others      : 
 ** Modify      :  
 ** Date        :
 ** Author      :

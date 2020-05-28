@@ -4,7 +4,7 @@
 **                                       yzfcer@163.com
 **
 **--------------File infomation-------------------------------------------------------------------------
-** FileName    : fir.c
+** FileName    : firwin.c
 ** Author      : Jason Zhou
 ** Last Date   : 2012.09.26
 ** Description : Generation function of FIR filter，filter parameters can be obtained by inputting the 

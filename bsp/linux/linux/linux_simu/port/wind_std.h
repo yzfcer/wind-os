@@ -4,7 +4,7 @@
 **                                       yzfcer@163.com
 **
 **--------------File infomation-------------------------------------------------------------------------
-** FileName    : wind_cpu_port.h
+** FileName    : Wind_std.h
 ** Author      : Jason Zhou
 ** Last Date   : 2012.09.26
 ** Description : wind-os stdard input/output function header

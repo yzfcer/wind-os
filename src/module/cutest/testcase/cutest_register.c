@@ -1,6 +1,6 @@
 /****************************************Copyright (c)**************************************************
 **                                       God's harbor
-** FileName    : test_port.h / test_port.c
+** FileName    : cutest_register.c
 ** Author      : Jason Zhou
 ** Last Date   : 2015/1/24 15:42:27
 ** Description : wind-os test framework's testsuite registration entry

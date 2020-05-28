@@ -1,11 +1,11 @@
 /*********************************************************************************
 ** Copyright(C),2017-2020,yzfcer@163.com
-** FileName    :    wind_xml_fsm.h
-** Author      :      Jason Zhou
-** Version     :     1.0
-** Date        :        2020/03/24
+** FileName    : wind_xml_fsm.h
+** Author      : Jason Zhou
+** Version     : 1.0
+** Date        : 2020/03/24
 ** Description : XML parsing finite state machine
-** Others      :  
+** Others      : 
 ** History     :  
 ** Date        :
 ** Author      :

@@ -4,7 +4,7 @@
 **                                       yzfcer@163.com
 **
 **--------------File infomation-------------------------------------------------------------------------
-** FileName    : list_dev.c
+** FileName    : list_blkdev.c
 ** Author      : Jason Zhou
 ** Last Date   : 2018.03.26
 ** Description : Registration entry of block device drivers 

@@ -4,7 +4,7 @@
 **                                       yzfcer@163.com
 **
 **--------------File infomation-------------------------------------------------------------------------
-** FileName    : boot_pack.c
+** FileName    : cmd_pack.c
 ** Author      : Jason Zhou
 ** Last Date   : 
 ** Description : wind-os firmware packager command

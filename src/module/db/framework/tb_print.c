@@ -4,7 +4,7 @@
 **                                       yzfcer@163.com
 **
 **--------------File infomation-------------------------------------------------------------------------
-** FileName    : tb_model_file.c
+** FileName    : tb_print.c
 ** Author      : Jason Zhou
 ** Last Date   : 2020.3.9
 ** Description : DB information printing function

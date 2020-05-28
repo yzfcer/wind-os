@@ -4,7 +4,7 @@
 **                                       yzfcer@163.com
 **
 **--------------File infomation-------------------------------------------------------------------------
-** FileName    : blkdev_memblk.c
+** FileName    : Blkdev_disk.c
 ** Author      : Jason Zhou
 ** Last Date   : 2018.03.26
 ** Description : Block device registration file for file virtualization

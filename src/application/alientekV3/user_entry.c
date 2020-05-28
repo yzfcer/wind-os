@@ -4,7 +4,7 @@
 **                                       yzfcer@163.com
 **
 **--------------File infomation-------------------------------------------------------------------------
-** FileName    : entry.c
+** FileName    : user_entry.c
 ** Author      : Jason Zhou
 ** Last Date   : 2012.09.26
 ** Description : User program entry of wind-os

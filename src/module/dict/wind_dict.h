@@ -1,6 +1,6 @@
 /****************************************Copyright (c)**************************************************
 **                                       God's harbor
-** FileName    : module_dict.c
+** FileName    : wind_dict.c
 ** Author      : Jason Zhou
 ** Last Date   : 2019/11/04 20:24:37
 ** Description : Parameter dictionary function set

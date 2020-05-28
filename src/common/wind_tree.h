@@ -4,7 +4,7 @@
 **                                       yzfcer@163.com
 **
 **--------------File infomation-------------------------------------------------------------------------
-** FileName    : wind_tree.h / wind_tree.c
+** FileName    : wind_tree.h
 ** Author      : Jason Zhou
 ** Last Date   : 2012.09.26
 ** Description : Multi tree function module

@@ -4,7 +4,7 @@
 **                                       yzfcer@163.com
 **
 **--------------File infomation-------------------------------------------------------------------------
-** FileName    : wind_softirq.h / wind_softirq.c
+** FileName    : wind_softirq.h
 ** Author      : Jason Zhou
 ** Last Date   : 
 ** Description : It is used to realize the function of soft interrupt of the system. Soft interrupt mainly 

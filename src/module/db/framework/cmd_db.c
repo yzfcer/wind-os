@@ -4,7 +4,7 @@
 **                                       yzfcer@163.com
 **
 **--------------File infomation-------------------------------------------------------------------------
-** FileName    : cmd_DB.c
+** FileName    : cmd_db.c
 ** Author      : Jason Zhou
 ** Last Date   : 
 ** Description : DB module operation command
