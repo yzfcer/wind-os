@@ -1,15 +1,15 @@
 /*********************************************************************************
-  *Copyright(C),2017-2020,yzfcer@163.com
-  *FileName    :    cmd_log.c
-  *** Author      :      Jason Zhou
-  *Version:     1.0
-  *Date:        2020/05/23
-  *Description: wind-s log command function
-  *Others:  
-  *History:  
-     1.Date:
-       ** Author      :
-       Modification:
+** Copyright(C),2017-2020,yzfcer@163.com
+** FileName    :    cmd_log.c
+** Author      :      Jason Zhou
+** Version     :     1.0
+** Date        :        2020/05/23
+** Description : wind-s log command function
+** Others      :  
+** Modify      :  
+** Date        :
+** Author      :
+** Modify      :
 **********************************************************************************/
 #include "wind_cmd.h"
 #include "wind_log.h"

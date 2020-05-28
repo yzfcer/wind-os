@@ -7,7 +7,7 @@
 ** FileName    : wind_blkdev.c
 ** Author      : Jason Zhou
 ** Last Date   : 
-** Description : 块设备标准化API接口
+** Description : Block device standardized API interface
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : 

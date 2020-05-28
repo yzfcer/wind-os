@@ -1,15 +1,15 @@
 /*********************************************************************************
-  *Copyright(C),2017-2020,yzfcer@163.com
-  *FileName    :  
-  *** Author      :      Jason Zhou
-  *Version:     1.0
-  *Date:        2017/04/08
-  *Description: 
-  *Others:  
-  *History:  
-     1.Date:
-       ** Author      :
-       Modification:
+** Copyright(C),2017-2020,yzfcer@163.com
+** FileName    :  
+** Author      :      Jason Zhou
+** Version     :     1.0
+** Date        :        2017/04/08
+** Description : 
+** Others      :  
+** History     :  
+** Date        :
+** Author      :
+** Modify      :
 **********************************************************************************/
 #ifndef BOOT_TEST_H__
 #define BOOT_TEST_H__

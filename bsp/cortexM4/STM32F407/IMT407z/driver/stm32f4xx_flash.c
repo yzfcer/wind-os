@@ -1073,8 +1073,8 @@ void FLASH_OB_WRP1Config(uint32_t OB_WRP, FunctionalState NewState)
   * 
   * @note   This function can be used only for STM32F42xxx/43xxx and STM32F401xx/411xE devices.       
   * 
-  * @note   After PCROP activation, Option Byte modification is not possible. 
-  *         Exception made for the global Read Out Protection modification level (level1 to level0) 
+  * @note   After PCROP activation, Option Byte ** Modify      : is not possible. 
+  *         Exception made for the global Read Out Protection ** Modify      : level (level1 to level0) 
   * @note   Once SPRMOD bit is active unprotection of a protected sector is not possible 
   *   
   * @note   Read a protected sector will set RDERR Flag and write a protected sector will set WRPERR Flag

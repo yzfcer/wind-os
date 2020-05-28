@@ -3,7 +3,7 @@
 ** FileName    : module_lua.c
 ** Author      : Jason Zhou
 ** Last Date   : 2015/1/24 20:24:37
-** Description : lua脚本启动命令
+** Description : Lua module entry
 **  
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

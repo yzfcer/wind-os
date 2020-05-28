@@ -3,7 +3,7 @@
 ** FileName    : wind_atomic.h / wind_atomic.c
 ** Author      : Jason Zhou
 ** Last Date   : 2014/10/26 2:20:23
-** Description : 基本原子操作函数方法
+** Description : Atomic variable operation function
 **  
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

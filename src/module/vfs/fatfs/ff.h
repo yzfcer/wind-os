@@ -5,7 +5,7 @@
 / Copyright (C) 2018, ChaN, all right reserved.
 /
 / FatFs module is an open source software. Redistribution and use of FatFs in
-/ source and binary forms, with or without modification, are permitted provided
+/ source and binary forms, with or without ** Modify      :, are permitted provided
 / that the following condition is met:
 
 / 1. Redistributions of source code must retain the above copyright notice,

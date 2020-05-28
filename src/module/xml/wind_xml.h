@@ -1,15 +1,15 @@
 /*********************************************************************************
-  *Copyright(C),2017-2020,yzfcer@163.com
-  *FileName    :    wind_xml.h
-  *** Author      :      Jason Zhou
-  *Version:     1.0
-  *Date:        2020/03/24
-  *Description: 
-  *Others:      An external mutex is required when used in a multithreaded environment,  
-  *History:  
-     1.Date:
-       ** Author      :
-       Modification:
+** Copyright(C),2017-2020,yzfcer@163.com
+** FileName    :    wind_xml.h
+** Author      :      Jason Zhou
+** Version     :     1.0
+** Date        :        2020/03/24
+** Description : 
+** Others      :      An external mutex is required when used in a multithreaded environment,  
+** History     :  
+** Date        :
+** Author      :
+** Modify      :
 **********************************************************************************/
 #ifndef WIND_XML_H__
 #define WIND_XML_H__

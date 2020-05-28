@@ -1,15 +1,15 @@
 /*********************************************************************************
-  *Copyright(C),2017-2020,yzfcer@163.com
-  *FileName    :    wind_log.c
-  *** Author      :      Jason Zhou
-  *Version:     1.0
-  *Date:        2020/05/23
-  *Description: wind-s log function source
-  *Others:  
-  *History:  
-     1.Date:
-       ** Author      :
-       Modification:
+** Copyright(C),2017-2020,yzfcer@163.com
+** FileName    :    wind_log.c
+** Author      :      Jason Zhou
+** Version     :     1.0
+** Date        :        2020/05/23
+** Description : wind-s log function source
+** Others      :  
+** Modify      :  
+** Date        :
+** Author      :
+** Modify      :
 **********************************************************************************/
 #include "wind_log.h"
 //#include "treefs.h"

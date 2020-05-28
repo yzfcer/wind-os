@@ -7,7 +7,8 @@
 ** FileName    : fir.c
 ** Author      : Jason Zhou
 ** Last Date   : 2012.09.26
-** Description : 关于Fir滤波器的生成函数集，对于firwin函数，输入相关性能参数就可以得到滤波器参数
+** Description : Generation function of FIR filter，filter parameters can be obtained by inputting the 
+**               filter performance parameters
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

@@ -3,7 +3,7 @@
 ** FileName    : module_cjson.c
 ** Author      : Jason Zhou
 ** Last Date   : 2015/1/24 20:24:37
-** Description : cjson模块入口
+** Description : cjson module entry
 **  
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

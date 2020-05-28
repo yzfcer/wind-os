@@ -84,7 +84,7 @@ void dir_createDefaultEntry(FileSystem *fs,FileRecord *filerec,eint8* fatfilenam
 
 /* ****************************************************************************  
  * void dir_setFirstCluster(File *file,euint32 cluster_addr)
- * Description: This function requires modification to release it from
+ * Description: This function requires ** Modify      : to release it from
  * depending on the file object.
  * Return value:
 */
@@ -235,7 +235,7 @@ euint32 dir_findinRootArea(FileSystem *fs,eint8* fatname, FileLocation *loc, eui
 	euint8 *buf=0;
 	
 	if((fs->type != FAT12) && (fs->type != FAT16))return(0);
-	//yzfcer modify£¬maybe a bug occured
+	//yzfcer modifyï¿½ï¿½maybe a bug occured
     //for(c=fs->FirstSectorRootDir;c<=(fs->FirstSectorRootDir+fs->volumeId.RootEntryCount/32);c++){
 	for(c=fs->FirstSectorRootDir;c<(fs->FirstSectorRootDir+fs->volumeId.RootEntryCount/32);c++){
 		buf = part_getSect(fs->part,c,IOM_MODE_READONLY);

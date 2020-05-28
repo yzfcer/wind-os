@@ -7,7 +7,7 @@
 ** FileName    : wind_nullblk.h
 ** Author      : Jason Zhou
 ** Last Date   : 
-** Description : 创建空的块设备的接口
+** Description : Create an interface for an null block device
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : 

@@ -7,7 +7,7 @@
 ** FileName    : wind_memblk.h
 ** Author      : Jason Zhou
 ** Last Date   : 
-** Description : 创建内存块设备的接口
+** Description : Creating an interface for a memory block device
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : 

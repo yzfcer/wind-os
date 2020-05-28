@@ -7,7 +7,7 @@
 ** FileName    : wind_stack.h
 ** Author      : Jason Zhou
 ** Last Date   : 2013.10.05
-** Description : wind-os的FILO栈结构相关功能
+** Description : wind-os wind-os filo stack structure model
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

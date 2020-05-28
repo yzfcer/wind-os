@@ -1,15 +1,15 @@
 /*********************************************************************************
-  *Copyright(C),2017-2020,yzfcer@163.com
-  *FileName    :    wind_xml_fsm.c
-  *** Author      :      Jason Zhou
-  *Version:     1.0
-  *Date:        2020/03/24
-  *Description: XML parsing finite state machine
-  *Others:  
-  *History:  
-     1.Date:
-       ** Author      :
-       Modification:
+** Copyright(C),2017-2020,yzfcer@163.com
+** FileName    :    wind_xml_fsm.c
+** Author      :      Jason Zhou
+** Version     :     1.0
+** Date        :        2020/03/24
+** Description : XML parsing finite state machine
+** Others      :  
+** History     :  
+** Date        :
+** Author      :
+** Modify      :
 **********************************************************************************/
 #include "wind_type.h"
 #include "wind_string.h"

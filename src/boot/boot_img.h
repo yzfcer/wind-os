@@ -6,10 +6,10 @@
 *Date:        2017/04/08
 *Description:  
 *Others:  
-*History:  
+** History     :  
  1.Date:
    ** Author      :
-   Modification:
+   ** Modify      ::
 **********************************************************************************/
 #ifndef BOOT_IMG_H__
 #define BOOT_IMG_H__

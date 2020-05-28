@@ -7,7 +7,7 @@
 ** FileName    : wind_chdev.c
 ** Author      : Jason Zhou
 ** Last Date   : 
-** Description : 字符设备标准化API接口
+** Description : Character device standardized API interface
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : 
