@@ -7,7 +7,7 @@
 ** FileName    : wind_md5.h
 ** Author      : Jason Zhou
 ** Last Date   : 2019.2.18
-** Description : MD5算法模块
+** Description : MD5 algorithm function
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : 

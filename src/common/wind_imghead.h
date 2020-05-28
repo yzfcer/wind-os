@@ -7,7 +7,7 @@
 ** FileName    : wind_imghead.h
 ** Author      : Jason Zhou
 ** Last Date   : 
-** Description : wind-os的image文件头部处理函数
+** Description : Firmware header definition
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

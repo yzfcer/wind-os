@@ -7,7 +7,7 @@
 ** FileName    : wind_macro.h
 ** Author      : Jason Zhou
 ** Last Date   : 2017.12.10
-** Description : 一些基本的宏定义
+** Description : Common basic macro definitions
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : 

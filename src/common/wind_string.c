@@ -7,7 +7,7 @@
 ** FileName    : wind_string.c
 ** Author      : Jason Zhou
 ** Last Date   : 2012.09.26
-** Description : 重写的字符串函数
+** Description : Overridden string function
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

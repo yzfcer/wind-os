@@ -7,7 +7,7 @@
 ** FileName    : wind_queue.h
 ** Author      : Jason Zhou
 ** Last Date   : 2012.09.26
-** Description : 基本FIFO队列的实现方法
+** Description : Implementation of basic FIFO queue
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou
@@ -18,7 +18,7 @@
 **--------------Cureent version-------------------------------------------------------------------------
 ** Modify      : Jason Zhou
 ** Date        : 2014.11.2
-** Description : 修改了队列的互斥方法，允许系统在操作队列时局部锁定或者不锁定
+** Description :Allow the system to locally lock or not lock while operating the queue
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
