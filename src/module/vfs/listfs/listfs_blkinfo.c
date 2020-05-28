@@ -4,10 +4,10 @@
 **                                       yzfcer@163.com
 **
 **--------------File infomation-------------------------------------------------------------------------
-** FileName    : listfs_fileinfo.c
+** FileName    : listfs_blkinfo.c
 ** Author      : Jason Zhou
 ** Last Date   : 2019.04.05
-** Description : 文件系统对块设备的操作接口
+** Description : Operation interface of file block information
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

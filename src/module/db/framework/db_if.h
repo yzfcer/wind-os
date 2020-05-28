@@ -3,7 +3,7 @@
 ** FileName    : db_if.h
 ** Author      : Jason Zhou
 ** Last Date   : 2017/11/23
-** Description : 
+** Description : DB API interface header
 **  
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

@@ -3,7 +3,7 @@
 ** FileName    : cmd_user.c
 ** Author      : Jason Zhou
 ** Last Date   : 2019/2/4 
-** Description : 用户管理命令
+** Description : User management command
 **  
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

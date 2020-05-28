@@ -7,7 +7,7 @@
 ** FileName    : wind_cut.h
 ** Author      : Jason Zhou
 ** Last Date   : 
-** Description : 用户使用的测试框架头文件
+** Description : Test framework's user header file
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : 

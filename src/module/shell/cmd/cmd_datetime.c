@@ -7,7 +7,7 @@
 ** FileName    : cmd_datetime.c
 ** Author      : Jason Zhou
 ** Last Date   : 2013.10.19
-** Description : 处理系统的日期和时间命令
+** Description : System date and time operation command
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

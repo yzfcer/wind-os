@@ -7,7 +7,7 @@
 ** FileName    : cmd_blkdev.c
 ** Author      : Jason Zhou
 ** Last Date   : 2013.10.19
-** Description : 块设备操作命令
+** Description : block device operating command
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

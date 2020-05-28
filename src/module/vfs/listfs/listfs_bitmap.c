@@ -7,7 +7,7 @@
 ** FileName    : listfs_bitmap.c
 ** Author      : Jason Zhou
 ** Last Date   : 2019.04.05
-** Description : 文件系统对块位图的操作接口
+** Description : Operating interface of file system block bitmap
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

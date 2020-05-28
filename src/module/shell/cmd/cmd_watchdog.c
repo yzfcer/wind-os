@@ -3,7 +3,7 @@
 ** FileName    : cmd_watchdog.c
 ** Author      : Jason Zhou
 ** Last Date   : 2015/1/24 20:24:37
-** Description : 看门狗模块管理命令
+** Description : Watchdog module management command
 **  
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

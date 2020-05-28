@@ -7,7 +7,7 @@
 ** FileName    : cmd_mem.c
 ** Author      : Jason Zhou
 ** Last Date   : 2017.08.16
-** Description : 查看（打印）系统的内存区域值的命令，也可查看线程栈
+** Description : Commands for viewing memory area values for a system
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

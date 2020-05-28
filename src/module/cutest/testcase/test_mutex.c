@@ -3,7 +3,7 @@
 ** FileName    : test_mutex.c
 ** Author      : Jason Zhou
 ** Last Date   : 2017/10/22 16:29:55
-** Description : 互斥锁单元测试
+** Description : Mutex unit test suite
 **  
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

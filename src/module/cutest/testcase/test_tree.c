@@ -3,7 +3,7 @@
 ** FileName    : test_tree.c
 ** Author      : Jason Zhou
 ** Last Date   : 2017/10/22 16:29:55
-** Description : 多叉树单元测试
+** Description : Multi tree unit test suite
 **  
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

@@ -3,7 +3,7 @@
 ** FileName    : test_softirq.c
 ** Author      : Jason Zhou
 ** Last Date   : 2017/10/22 16:29:55
-** Description : 软中断单元测试
+** Description : Software interrupt unit test
 **  
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

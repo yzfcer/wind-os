@@ -3,7 +3,7 @@
 ** FileName    : test_listfs.c
 ** Author      : Jason Zhou
 ** Last Date   : 2017/10/22 16:29:55
-** Description : listfs文件系统单元测试
+** Description : listfs file system unit test suite
 **  
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

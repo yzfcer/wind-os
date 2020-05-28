@@ -7,7 +7,7 @@
 ** FileName    : listfs_cache.c
 ** Author      : Jason Zhou
 ** Last Date   : 2019.04.05
-** Description : 文件系统对块设备的操作接口
+** Description : File system data cache operation interface
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

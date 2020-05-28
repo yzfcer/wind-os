@@ -7,7 +7,7 @@
 ** FileName    : wind_fsops.h
 ** Author      : Jason Zhou
 ** Last Date   : 
-** Description : 文件系统标准化操作集API接口
+** Description : File system standardized operation set API
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : 

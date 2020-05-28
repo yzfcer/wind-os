@@ -7,7 +7,7 @@
 ** FileName    : dev_led.c
 ** Author      : Jason Zhou
 ** Last Date   : 2018.03.26
-** Description : LED设备驱动接口文件
+** Description : LED device driver interface
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

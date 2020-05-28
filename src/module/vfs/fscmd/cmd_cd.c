@@ -3,7 +3,7 @@
 ** FileName    : cmd_cd.c
 ** Author      : Jason Zhou
 ** Last Date   : 2018/5/13 20:24:37
-** Description : 文件系统操作命令
+** Description : Switch current file directory command
 **  
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

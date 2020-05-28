@@ -7,7 +7,7 @@
 ** FileName    : cmd_history.h
 ** Author      : Jason Zhou
 ** Last Date   : 
-** Description : 处理控制台的历史命令记录
+** Description : Record shell history commands
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

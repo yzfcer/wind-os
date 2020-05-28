@@ -3,7 +3,7 @@
 ** FileName    : cmd_rcp.c
 ** Author      : Jason Zhou
 ** Last Date   : 2015/1/24 20:24:37
-** Description : 在主机文件系统与wind-os文件系统之间的文件拷贝命令
+** Description : File copy command between host file system and wind OS file system
 **  
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

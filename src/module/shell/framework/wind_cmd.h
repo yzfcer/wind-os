@@ -3,7 +3,7 @@
 ** FileName    : wind_cmd.h
 ** Author      : Jason Zhou
 ** Last Date   : 2015/1/24 20:24:37
-** Description : 提供给命令对象使用的符号定义
+** Description : Test framework user header file
 **  
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

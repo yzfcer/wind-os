@@ -3,7 +3,7 @@
 ** FileName    : test_filepath.c
 ** Author      : Jason Zhou
 ** Last Date   : 2017/10/22 16:29:55
-** Description : 文件路径函数单元测试
+** Description : Filepath function test suite
 **  
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

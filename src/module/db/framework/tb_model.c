@@ -7,8 +7,9 @@
 ** FileName    : tb_model.c
 ** Author      : Jason Zhou
 ** Last Date   : 2019.3.13
-** Description : 数据表模型框架,数据表模型定义了一个表的基本结构和相关的属性，系统可以根据该模型在不同的
-**              的DB中创建相同的数据表而不会导致访问冲突
+** Description : Data table model framework, which defines the basic structure and related attributes of 
+**               a table. The system can create the same data table in different DB according to the model 
+**               without causing access conflict
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : 

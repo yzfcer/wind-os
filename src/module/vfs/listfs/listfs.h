@@ -7,7 +7,7 @@
 ** FileName    : listfs.h
 ** Author      : Jason Zhou
 ** Last Date   : 2019.04.05
-** Description : listfs文件系统主体功能
+** Description : Main functions of listfs file system
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

@@ -7,7 +7,7 @@
 ** FileName    : boot_pack.c
 ** Author      : Jason Zhou
 ** Last Date   : 
-** Description : wind-os的固件打包程序
+** Description : wind-os firmware packager command
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

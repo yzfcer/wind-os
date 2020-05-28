@@ -3,7 +3,7 @@
 ** FileName    : module_cutest.c
 ** Author      : Jason Zhou
 ** Last Date   : 2015/1/24 20:24:37
-** Description : cutest模块入口
+** Description : Cutest module entry
 **  
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

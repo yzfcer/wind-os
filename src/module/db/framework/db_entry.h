@@ -7,7 +7,7 @@
 ** FileName    : db_entry.h
 ** Author      : Jason Zhou
 ** Last Date   : 2017.12.19
-** Description : 
+** Description : DB basic operation function header
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : 

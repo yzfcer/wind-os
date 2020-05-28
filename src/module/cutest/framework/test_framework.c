@@ -3,7 +3,7 @@
 ** FileName    : test_framework.h / test_framework.c
 ** Author      : Jason Zhou
 ** Last Date   : 2015/1/24 15:42:27
-** Description : wind_os的系统的测试框架文件，在框架下继承了各种功能的单元测试
+** Description : wind_os Unit test framework
 **  
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

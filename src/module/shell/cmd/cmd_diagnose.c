@@ -3,7 +3,7 @@
 ** FileName    : cmd_diagnose.c
 ** Author      : Jason Zhou
 ** Last Date   : 2019/2/24
-** Description : 系统故障诊断命令
+** Description : System diagnosis fault command
 **  
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

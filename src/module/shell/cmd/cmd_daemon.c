@@ -3,7 +3,7 @@
 ** FileName    : cmd_daemon.c
 ** Author      : Jason Zhou
 ** Last Date   : 2019/1/29 21:45:25
-** Description : daemon对象操作命令
+** Description : Daemon object operation command
 **  
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

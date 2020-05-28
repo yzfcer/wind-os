@@ -3,7 +3,7 @@
 ** FileName    : cmd_format.c
 ** Author      : Jason Zhou
 ** Last Date   : 2018/5/13 20:24:37
-** Description : 文件系统格式化命令
+** Description : File system format command
 **  
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

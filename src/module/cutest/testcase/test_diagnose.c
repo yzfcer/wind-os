@@ -3,7 +3,7 @@
 ** FileName    : test_diagnose.c
 ** Author      : Jason Zhou
 ** Last Date   : 2017/10/22 16:29:55
-** Description : 诊断功能测试
+** Description : Diagnostic function test suite
 **  
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

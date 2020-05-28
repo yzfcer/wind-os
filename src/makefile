@@ -1,5 +1,5 @@
 CUR_DIR=$(shell pwd)
-#子目录的Makefile直接读取其子目录就行
+#Read the subdirectory of the current directory
 SUBDIRS=application
 SUBDIRS+=core
 SUBDIRS+=common
@@ -8,7 +8,7 @@ SUBDIRS+=hal
 SUBDIRS+=module
 SUBDIRS+=systhread
 
-#以下同根目录下的makefile的相同代码的解释
+#Export all source and target files
 CUR_SOURCE=${wildcard *.c}
 CUR_OBJS=${patsubst %.c, %.o, $(CUR_SOURCE)}
 #SUBSRC=$(shell find $(SUBDIRS) -name '*.c')

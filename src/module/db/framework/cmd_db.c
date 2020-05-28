@@ -7,7 +7,7 @@
 ** FileName    : cmd_DB.c
 ** Author      : Jason Zhou
 ** Last Date   : 
-** Description : DB模块操作命令
+** Description : DB module operation command
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

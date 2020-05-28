@@ -3,7 +3,7 @@
 ** FileName    : test_pool.c
 ** Author      : Jason Zhou
 ** Last Date   : 2017/10/22 16:29:55
-** Description : 内存池单元测试
+** Description : Memory pool unit test suite
 **  
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

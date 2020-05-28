@@ -7,7 +7,7 @@
 ** FileName    : cmd_led.c
 ** Author      : Jason Zhou
 ** Last Date   : 2013.10.19
-** Description : LED灯操作命令
+** Description : Led operation command
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

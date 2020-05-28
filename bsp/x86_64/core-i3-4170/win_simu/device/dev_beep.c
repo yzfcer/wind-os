@@ -7,7 +7,7 @@
 ** FileName    : dev_beep.c
 ** Author      : Jason Zhou
 ** Last Date   : 2018.03.26
-** Description : 蜂鸣器设备驱动接口文件
+** Description : Beep device driver interface
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

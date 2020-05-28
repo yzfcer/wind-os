@@ -1,3 +1,27 @@
+/****************************************Copyright (c)**************************************************
+**                                       God's harbor
+**
+**                                       yzfcer@163.com
+**
+**--------------File infomation-------------------------------------------------------------------------
+** FileName    : treefs.c
+** Author      : Jason Zhou
+** Last Date   : 2019.04.05
+** Description : Treefs file system infomation operation interface
+**              
+**--------------History---------------------------------------------------------------------------------
+** Author      : Jason Zhou
+** Version     : v1.0
+** Date        : 2019.04.05
+** Description : First version
+**
+**--------------Cureent version-------------------------------------------------------------------------
+** Modify      : Jason Zhou
+** Date        : 2019.04.05
+** Description : 
+**
+**------------------------------------------------------------------------------------------------------
+*******************************************************************************************************/
 #ifndef WIND_TREEFS_H__
 #define WIND_TREEFS_H__
 #include "wind_config.h"
@@ -7,7 +31,7 @@
 #include "treefs_def.h"
 #if WIND_TREEFS_SUPPORT
 
-#define F_TREEFS_POOL (0x01 << 0) //标记treefs对象是否通过内存池分�?
+#define F_TREEFS_POOL (0x01 << 0) //标记treefs对象是否通过内存池分�?
 #define IS_F_TREEFS_POOL(sem) ((sem->obj.flag & F_TREEFS_POOL) == F_TREEFS_POOL)
 #define SET_F_TREEFS_POOL(sem) (sem->obj.flag |= F_TREEFS_POOL)
 #define CLR_F_TREEFS_POOL(sem) (sem->obj.flag &= (~F_TREEFS_POOL))

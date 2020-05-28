@@ -7,7 +7,7 @@
 ** FileName    : cmd_reset.c
 ** Author      : Jason Zhou
 ** Last Date   : 
-** Description : 重启系统命令
+** Description : Restart system command
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

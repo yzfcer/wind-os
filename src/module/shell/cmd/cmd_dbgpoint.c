@@ -3,7 +3,7 @@
 ** FileName    : cmd_dbgp.c
 ** Author      : Jason Zhou
 ** Last Date   : 2019/1/29 21:45:25
-** Description : 调试点读写操作命令
+** Description : Debug point read / write operation command
 **  
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

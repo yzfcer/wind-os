@@ -3,7 +3,7 @@
 ** FileName    : cmd_timer.c
 ** Author      : Jason Zhou
 ** Last Date   : 2019/5/12 
-** Description : 定时器调试命令
+** Description : Timer debugging command
 **  
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

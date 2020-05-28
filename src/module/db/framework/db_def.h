@@ -7,7 +7,7 @@
 ** FileName    : db.c
 ** Author      : Jason Zhou
 ** Last Date   : 2017.12.19
-** Description : 
+** Description : Basic data structure definition of DB module
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : 

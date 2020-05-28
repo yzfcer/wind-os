@@ -3,7 +3,7 @@
 ** FileName    : test_xml.c
 ** Author      : Jason Zhou
 ** Last Date   : 2017/10/22 16:29:55
-** Description : xml功能测试
+** Description : XML functional unit test suite
 **  
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

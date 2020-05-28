@@ -4,10 +4,10 @@
 **                                       yzfcer@163.com
 **
 **--------------File infomation-------------------------------------------------------------------------
-** FileName    : list_dev.c
+** FileName    : blkdev_spi_flash.c
 ** Author      : Jason Zhou
 ** Last Date   : 2018.03.26
-** Description : 设备注册文件
+** Description : spi flash block device registration file
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

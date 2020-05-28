@@ -3,7 +3,7 @@
 ** FileName    : fs_cmd_list.c
 ** Author      : Jason Zhou
 ** Last Date   : 2018/5/13 20:24:37
-** Description : 文件系统操作命令集注册接口
+** Description : File system operation command set registration interface
 **  
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

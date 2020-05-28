@@ -3,7 +3,7 @@
 ** FileName    : test_fs.c
 ** Author      : Jason Zhou
 ** Last Date   : 2018/10/04 16:29:55
-** Description : fs文件系统接口单元测试
+** Description : Virtual file system interface unit test suite
 **  
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

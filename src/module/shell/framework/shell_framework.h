@@ -1,9 +1,9 @@
 /****************************************Copyright (c)**************************************************
 **                                       God's harbor
-** FileName    : module_shell.c
+** FileName    : shell_framework.h
 ** Author      : Jason Zhou
 ** Last Date   : 2015/1/24 20:24:37
-** Description : shell模块入口
+** Description : Shell module basic framework header
 **  
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

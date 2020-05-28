@@ -3,7 +3,7 @@
 ** FileName    : test_port.h / test_port.c
 ** Author      : Jason Zhou
 ** Last Date   : 2015/1/24 15:42:27
-** Description : wind_os的系统的测试框架移植接口
+** Description : wind-os test framework's testsuite registration entry
 **  
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

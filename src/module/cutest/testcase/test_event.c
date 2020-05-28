@@ -3,7 +3,7 @@
 ** FileName    : test_event.c
 ** Author      : Jason Zhou
 ** Last Date   : 2018/9/30 19:24:52
-** Description : 事件单元测试
+** Description : Event function test suite
 **  
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

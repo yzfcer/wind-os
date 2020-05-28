@@ -7,7 +7,7 @@
 ** FileName    : hostfs.h
 ** Author      : Jason Zhou
 ** Last Date   : 2019.09.08
-** Description : hostfs宿主机文件系统主题功能
+** Description : hostfs host file system principal function
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

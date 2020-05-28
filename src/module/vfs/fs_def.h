@@ -3,7 +3,7 @@
 ** FileName    : fs_def.h
 ** Author      : Jason Zhou
 ** Last Date   : 2019/1/24 20:24:37
-** Description : vfs结构定义
+** Description : VFS structure definition
 **  
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

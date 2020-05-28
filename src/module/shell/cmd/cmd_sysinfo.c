@@ -3,7 +3,7 @@
 ** FileName    : cmd_sysinfo.c
 ** Author      : Jason Zhou
 ** Last Date   : 2018/9/29 21:24:27
-** Description : 打印系统信息命令
+** Description : Print system information command
 **  
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

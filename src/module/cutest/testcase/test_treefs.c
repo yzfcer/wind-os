@@ -3,7 +3,7 @@
 ** FileName    : test_treefs.c
 ** Author      : Jason Zhou
 ** Last Date   : 2017/10/22 16:29:55
-** Description : treefs文件系统单元测试
+** Description : treefs file system unit test suite
 **  
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

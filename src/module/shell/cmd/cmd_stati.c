@@ -7,7 +7,7 @@
 ** FileName    : cmd_stati.c
 ** Author      : Jason Zhou
 ** Last Date   : 2013.10.19
-** Description : 系统的内存池，内存堆和CPU占用率等统计信息查看命令
+** Description : System memory pool, memory heap, CPU usage and other statistics viewing command
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

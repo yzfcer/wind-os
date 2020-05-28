@@ -3,7 +3,7 @@
 ** FileName    : cmd_echo.c
 ** Author      : Jason Zhou
 ** Last Date   : 2015/1/24 20:24:37
-** Description : 回声输出命令
+** Description : Echo output command
 **  
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

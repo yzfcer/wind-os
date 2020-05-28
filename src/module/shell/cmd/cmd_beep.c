@@ -7,7 +7,7 @@
 ** FileName    : cmd_bee.c
 ** Author      : Jason Zhou
 ** Last Date   : 2013.10.19
-** Description : 蜂鸣器开关命令
+** Description : beep device operating command
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

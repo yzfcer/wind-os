@@ -3,7 +3,7 @@
 ** FileName    : module_xml.c
 ** Author      : Jason Zhou
 ** Last Date   : 2015/1/24 20:24:37
-** Description : xml模块入口
+** Description : XML module entry
 **  
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

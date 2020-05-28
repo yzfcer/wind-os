@@ -7,7 +7,7 @@
 ** FileName    : wind_key.h
 ** Author      : Jason Zhou
 ** Last Date   : 
-** Description : 关于PC的键盘的ASCII码值的定义
+** Description : Definition of ASCII value of PC keyboard
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

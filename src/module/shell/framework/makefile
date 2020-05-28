@@ -1,7 +1,7 @@
 CUR_DIR=$(shell pwd)
-#子目录的Makefile直接读取其子目录就行
+#Read the subdirectory of the current directory
 SUBDIRS=$(shell ls -l | grep ^d | awk '{print $$9}')
-#以下同根目录下的makefile的相同代码的解释
+#Export all source and target files
 CUR_SOURCE=${wildcard *.c}
 CUR_OBJS=${patsubst %.c, %.o, $(CUR_SOURCE)}
 profile:$(SUBDIRS) $(CUR_OBJS) install

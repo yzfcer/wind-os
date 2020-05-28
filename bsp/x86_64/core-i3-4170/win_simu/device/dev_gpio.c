@@ -7,7 +7,7 @@
 ** FileName    : dev_gpio.c
 ** Author      : Jason Zhou
 ** Last Date   : 2018.03.26
-** Description : GPIO设备驱动接口文件
+** Description : GPIO device driver interface
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

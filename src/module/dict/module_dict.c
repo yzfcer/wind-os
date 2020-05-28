@@ -3,7 +3,7 @@
 ** FileName    : module_dict.c
 ** Author      : Jason Zhou
 ** Last Date   : 2019/11/04 20:24:37
-** Description : dict参数字典模块入口
+** Description : Parameter dictionary module entry
 **  
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

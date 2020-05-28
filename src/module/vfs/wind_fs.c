@@ -7,7 +7,7 @@
 ** FileName    : wind_fs.c
 ** Author      : Jason Zhou
 ** Last Date   : 
-** Description : 文件系统标准化API接口
+** Description : VFS file system standardized API function
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : 

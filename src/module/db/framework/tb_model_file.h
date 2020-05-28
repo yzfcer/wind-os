@@ -7,7 +7,7 @@
 ** FileName    : tb_model_file.c
 ** Author      : Jason Zhou
 ** Last Date   : 2020.3.9
-** Description : 数据表模型框架序列化功能函数即
+** Description : Datasheet model framework serialization function set header
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : 

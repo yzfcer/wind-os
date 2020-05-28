@@ -7,7 +7,7 @@
 ** FileName    : cmd_tbmodel.c
 ** Author      : Jason Zhou
 ** Last Date   : 
-** Description : DB模块数据表模型操作命令
+** Description : DB module data table model operation command
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

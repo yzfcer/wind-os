@@ -7,7 +7,7 @@
 ** FileName    : list_dev.c
 ** Author      : Jason Zhou
 ** Last Date   : 2018.03.26
-** Description : 字符设备注册文件
+** Description : Character device registration entry
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

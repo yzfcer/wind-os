@@ -3,7 +3,7 @@
 ** FileName    : test_pipe.c
 ** Author      : Jason Zhou
 ** Last Date   : 2018/01/09 16:29:55
-** Description : 管道单元测试
+** Description : Pipe unit test suite
 **  
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

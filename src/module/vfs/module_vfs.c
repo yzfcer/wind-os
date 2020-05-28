@@ -3,7 +3,7 @@
 ** FileName    : module_vfs.c
 ** Author      : Jason Zhou
 ** Last Date   : 2015/1/24 20:24:37
-** Description : vfs模块入口
+** Description : VFS structure definition
 **  
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

@@ -3,7 +3,7 @@
 ** FileName    : module_shell.c
 ** Author      : Jason Zhou
 ** Last Date   : 2015/1/24 20:24:37
-** Description : shell模块入口
+** Description : Shell module entry
 **  
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

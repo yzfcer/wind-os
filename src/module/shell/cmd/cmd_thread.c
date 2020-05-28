@@ -3,7 +3,7 @@
 ** FileName    : cmd_thread.c
 ** Author      : Jason Zhou
 ** Last Date   : 2018/9/14 21:24:37
-** Description : 线程基本操作命令
+** Description : Thread operation command
 **  
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou

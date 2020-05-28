@@ -3,7 +3,7 @@
 ** FileName    : cmd_touch.c
 ** Author      : Jason Zhou
 ** Last Date   : 2018/5/13 20:24:37
-** Description : 文件系统操作命令
+** Description : Create file command
 **  
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou
