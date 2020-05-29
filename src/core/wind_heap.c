@@ -67,7 +67,7 @@ static w_int32_t heapitem_diagnose(w_heap_s *heap)
         heapitem = NODE_TO_HEAPITEM(dnode);
         if(heapitem->magic != (w_uint16_t)(~WIND_HEAPITEM_MAGIC))
         {
-            wind_error("heapitem magic error,ptr=%p",heapitem);
+            wind_error("heap %s heapitem magic error,ptr=%p",heap->obj.name,heapitem);
             return DIAG_RES_OBJ_MAGIC_ERROR;
         }
     }
@@ -76,7 +76,7 @@ static w_int32_t heapitem_diagnose(w_heap_s *heap)
         heapitem = NODE_TO_HEAPITEM(dnode);
         if(heapitem->magic != (w_uint16_t)WIND_HEAPITEM_MAGIC)
         {
-            wind_error("heapitem magic error,ptr=%p",heapitem);
+            wind_error("heap %s heapitem magic error,ptr=%p",heap->obj.name,heapitem);
             return DIAG_RES_OBJ_MAGIC_ERROR;
         }
     }

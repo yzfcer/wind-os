@@ -5,5 +5,5 @@ cd ${WIND_ROOT}
 echo "wind-os root:"$(pwd)
 pwd
 git commit -a
-git push https://www.github.com/yzfcer/wind-os.git origin/yzfcer:yzfcer
-git push https://www.gitee.com/yzfcer/wind-os.git origin/yzfcer:yzfcer
+git push https://www.github.com/yzfcer/wind-os.git yzfcer:yzfcer
+git push https://www.gitee.com/yzfcer/wind-os.git yzfcer:yzfcer

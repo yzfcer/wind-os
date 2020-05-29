@@ -67,7 +67,7 @@ CASE_FUNC(multi)
     w_int32_t i;
     w_int32_t res;
     w_err_t err;
-    w_int32_t len = 8;
+    w_int32_t len = 16;
     for(i = 0;i < 12;i ++)
     {
         len += 8;

@@ -84,7 +84,6 @@ extern void test_suite_list_init(void);
 void test_suite_register_all(void)
 {
     test_suite_list_init();
-
 #if TEST_POOL_SUPPORT
     REGSTER_SUITE(pool);
 #endif
@@ -121,21 +120,20 @@ void test_suite_register_all(void)
 #if TEST_HOSTFS_SUPPORT
     REGSTER_SUITE(hostfs);
 #endif
-
 #if TEST_FS_SUPPORT
     REGSTER_SUITE(fs);
 #endif
 #if TEST_FILEPATH_SUPPORT
     REGSTER_SUITE(filepath);
 #endif
-#if TEST_DIAGNOSE_SUPPORT
-    REGSTER_SUITE(diagnose);
-#endif
 #if TEST_DICT_SUPPORT
     REGSTER_SUITE(dict);
 #endif
 #if TEST_XML_SUPPORT
     REGSTER_SUITE(xml);
+#endif
+#if TEST_DIAGNOSE_SUPPORT
+    REGSTER_SUITE(diagnose);
 #endif
 }
 
