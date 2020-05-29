@@ -579,10 +579,10 @@ w_err_t wind_xml_fsm_init(w_xmlfsm_s *xfsm,char *name)
     wind_sprintf(fsmname,"xml%d",xfsm_id);
     wind_memset(xfsm,0,sizeof(w_xmlfsm_s));
     err = wind_fsm_init(&xfsm->fsm,fsmname,xfsm_id,name);
+    WIND_ASSERT_RETURN(err == W_ERR_OK,err);
     xfsm_id ++;
     if(xfsm_id < 0)
         xfsm_id = 0;
-    WIND_ASSERT_RETURN(err == W_ERR_OK,err);
     wind_fsm_start(&xfsm->fsm);
     wind_fsm_wait(&xfsm->fsm);
     return W_ERR_OK;

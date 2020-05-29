@@ -62,8 +62,9 @@ w_mutex_s *wind_mutex_get(const char *name)
 w_err_t wind_mutex_init(w_mutex_s *mutex,const char *name)
 {
     WIND_ASSERT_RETURN(mutex != W_NULL,W_ERR_PTR_NULL);
+    wind_debug("init mutex:%s",name?name:"null");
     mutex->nest = 0;
-    mutex->owner = W_NULL;
+    mutex->owner = (w_thread_s*)W_NULL;
     DLIST_INIT(mutex->waitlist);
     wind_obj_init(&mutex->obj,WIND_MUTEX_MAGIC,name,&mutexlist);
     return W_ERR_OK;
@@ -102,6 +103,7 @@ w_err_t wind_mutex_destroy(w_mutex_s *mutex)
     w_dnode_s *dnode;
     w_thread_s *thread;
     WIND_ASSERT_RETURN(mutex != W_NULL,W_ERR_PTR_NULL);
+    wind_debug("destroy mutex:%s",wind_obj_name(&mutex->obj));
     err = wind_obj_deinit(&mutex->obj,WIND_MUTEX_MAGIC,&mutexlist);
     WIND_ASSERT_RETURN(err == W_ERR_OK, W_ERR_FAIL);
     wind_disable_switch();
