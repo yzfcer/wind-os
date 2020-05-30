@@ -39,7 +39,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(ProjectDir)..\..\..\port;$(ProjectDir)..\..\..\..\..\..\..\src\common;$(ProjectDir)..\..\..\..\..\..\..\src\module\shell\cmd;$(ProjectDir)..\..\..\..\..\..\..\src\module\shell\framework;$(ProjectDir)..\..\..\..\..\..\..\src\core;$(ProjectDir)..\..\..\..\..\..\..\src\hal;$(ProjectDir)..\..\..\..\..\..\..\src\module\cutest\framework;$(ProjectDir)..\..\..\..\..\..\..\src\module\cutest\port;$(ProjectDir)..\..\..\..\..\..\..\src\module\cutest\testcase;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs\treefs;$(ProjectDir)..\..\..\..\..\..\..\src\module\lua-5.3.4\src;$(ProjectDir)..\..\..\..\..\..\..\src\module\db\framework;$(ProjectDir)..\..\..\..\..\..\..\src\module\db\dbbase;$(ProjectDir)..\..\..\..\..\..\..\src\module\dict;$(ProjectDir)..\..\..\..\..\..\..\src\module\xml;$(ProjectDir)..\..\..\..\..\..\..\src\tools\pack;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs\listfs;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs\hostfs;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\..\..\port;$(ProjectDir)..\..\..\..\..\..\..\src\common;$(ProjectDir)..\..\..\..\..\..\..\src\module\shell\cmd;$(ProjectDir)..\..\..\..\..\..\..\src\module\shell\framework;$(ProjectDir)..\..\..\..\..\..\..\src\core;$(ProjectDir)..\..\..\..\..\..\..\src\hal;$(ProjectDir)..\..\..\..\..\..\..\src\module\cutest\framework;$(ProjectDir)..\..\..\..\..\..\..\src\module\cutest\port;$(ProjectDir)..\..\..\..\..\..\..\src\module\cutest\testcase;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs\treefs;$(ProjectDir)..\..\..\..\..\..\..\src\module\lua-5.3.4\src;$(ProjectDir)..\..\..\..\..\..\..\src\module\db\framework;$(ProjectDir)..\..\..\..\..\..\..\src\module\db\dbbase;$(ProjectDir)..\..\..\..\..\..\..\src\module\dict;$(ProjectDir)..\..\..\..\..\..\..\src\module\xml;$(ProjectDir)..\..\..\..\..\..\..\src\module\xmodem;$(ProjectDir)..\..\..\..\..\..\..\src\tools\pack;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs\listfs;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs\hostfs;$(ProjectDir)..\..\..\..\..\..\..\src\module\log;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>$(ProjectDir)..\..\..\port;$(ProjectDir)..\..\..\..\..\..\..\src\common;$(ProjectDir)..\..\..\..\..\..\..\src\core;$(ProjectDir)..\..\..\..\..\..\..\src\hal;$(ProjectDir)..\..\..\..\..\..\..\src\module\shell\framework;$(ProjectDir)..\..\..\..\..\..\..\src\module\shell\cmd;$(ProjectDir)..\..\..\..\..\..\..\src\module\cutest\framework;$(ProjectDir)..\..\..\..\..\..\..\src\module\cutest\port;$(ProjectDir)..\..\..\..\..\..\..\src\module\cutest\testcase;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs\treefs;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs\listfs;$(ProjectDir)..\..\..\..\..\..\..\src\module\lua-5.3.4\src;$(ProjectDir)..\..\..\..\..\..\..\src\module\db\framework;$(ProjectDir)..\..\..\..\..\..\..\src\module\db\dbbase;$(ProjectDir)..\..\..\..\..\..\..\src\tools\pack;$(IncludePath)</IncludePath>
@@ -190,7 +190,6 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_timer.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_user.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_watchdog.c" />
-    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_xmodem.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\shell_cmd_regif.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\framework\cmd_history.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\framework\module_shell.c" />
@@ -252,6 +251,9 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\xml\module_xml.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\xml\wind_xml.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\xml\wind_xml_fsm.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\xmodem\cmd_xmodem.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\xmodem\module_xmodem.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\xmodem\wind_xmodem.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\systhread\thread_coroutine.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\systhread\thread_daemon.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\systhread\thread_idle.c" />
@@ -372,6 +374,7 @@
     <ClInclude Include="..\..\..\..\..\..\..\src\hal\wind_chdev.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\xml\wind_xml.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\xml\wind_xml_fsm.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\xmodem\wind_xmodem.h" />
     <ClInclude Include="..\..\..\port\file_port.h" />
     <ClInclude Include="..\..\..\port\wind_board_port.h" />
     <ClInclude Include="..\..\..\port\wind_config.h" />

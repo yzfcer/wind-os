@@ -38,7 +38,7 @@ extern "C" {
 
 
 /********************************************internal functions**********************************************/
-//extern w_int32_t xmodem_send(w_uint8_t *src, w_int32_t srcsz);
+//extern w_int32_t wind_xmodem_send(w_uint8_t *src, w_int32_t srcsz);
 //extern w_int32_t xmodem_recv_bak(w_uint8_t *dest, w_int32_t destsz);
 xm_ctx_s ctx;
 
@@ -97,11 +97,11 @@ static w_err_t cmd_xmodem_get(int argc,char **argv)
         goto XM_GET_END;
     }
     
-    xmodem_init(&ctx,XM_DIR_RECV,xbuff,XMODEM_BUFF_LEN,xm_write,xm_read);
+    wind_xmodem_init(&ctx,XM_DIR_RECV,xbuff,XMODEM_BUFF_LEN,xm_write,xm_read);
     for(;;)
     {
         wind_memset(buff,0,4096);
-        len = xmodem_recv(&ctx,buff,4096);
+        len = wind_xmodem_recv(&ctx,buff,4096);
         if(len < 0)
         {
             wind_error("xmodem receive failed.");
@@ -114,7 +114,7 @@ static w_err_t cmd_xmodem_get(int argc,char **argv)
         }
         wind_fwrite(file,buff,len);
     }
-    xmodem_end(&ctx);
+    wind_xmodem_end(&ctx);
 XM_GET_END:
     wind_fclose(file);
     wind_free(buff);
@@ -153,14 +153,14 @@ static w_err_t cmd_xmodem_put(int argc,char **argv)
         goto XM_PUT_END;
     }
     
-    xmodem_init(&ctx,XM_DIR_SEND,xbuff,XMODEM_BUFF_LEN,xm_write,xm_read);
+    wind_xmodem_init(&ctx,XM_DIR_SEND,xbuff,XMODEM_BUFF_LEN,xm_write,xm_read);
     for(;;)
     {
         wind_memset(buff,0,4096);
         len = wind_fread(file,buff,4096);
         if(len <= 0)
             break;
-        len = xmodem_send(&ctx,buff,len);
+        len = wind_xmodem_send(&ctx,buff,len);
         if(len <= 0)
         {
             wind_error("xmodem send failed.");
@@ -168,7 +168,7 @@ static w_err_t cmd_xmodem_put(int argc,char **argv)
             break;
         }
     }
-    xmodem_end(&ctx);
+    wind_xmodem_end(&ctx);
 XM_PUT_END:
     if(file != W_NULL)
         wind_fclose(file);
@@ -185,18 +185,18 @@ XM_PUT_END:
 
 
 /********************************************global functions**********************************************/
-COMMAND_DISC(xm)
+COMMAND_DISC(xmodem)
 {
     wind_printf("to translate file data via xmodem protocol.\r\n");
 }
 
-COMMAND_USAGE(xm)
+COMMAND_USAGE(xmodem)
 {
-    wind_printf("xm get <localfile>:--to receive a file save as localfile.\r\n");
-    wind_printf("xm put <localfile>:--to send localfile to remote host via xmodem.\r\n");
+    wind_printf("xmodem get <localfile>:--to receive a file save as localfile.\r\n");
+    wind_printf("xmodem put <localfile>:--to send localfile to remote host via xmodem.\r\n");
 }
 
-COMMAND_MAIN(xm,argc,argv)
+COMMAND_MAIN(xmodem,argc,argv)
 {
     WIND_ASSERT_RETURN(argc >= 3,W_ERR_INVALID);
     if(wind_strcmp(argv[1],"get") == 0)
@@ -206,7 +206,7 @@ COMMAND_MAIN(xm,argc,argv)
     return W_ERR_OK;
 }
 
-COMMAND_DEF(xm);
+COMMAND_DEF(xmodem);
 
 #endif
 #ifdef __cplusplus

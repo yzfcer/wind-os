@@ -143,9 +143,6 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_beep.c">
       <Filter>module_shell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_xmodem.c">
-      <Filter>module_shell</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_blkdev.c">
       <Filter>module_shell</Filter>
     </ClCompile>
@@ -581,6 +578,15 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\log\cmd_log.c">
       <Filter>module_log</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\xmodem\cmd_xmodem.c">
+      <Filter>module_xmodem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\xmodem\module_xmodem.c">
+      <Filter>module_xmodem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\xmodem\wind_xmodem.c">
+      <Filter>module_xmodem</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">
@@ -636,6 +642,9 @@
     </Filter>
     <Filter Include="module_log">
       <UniqueIdentifier>{f0f5ceb6-6d70-4d11-bdf1-e2561b2ae591}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="module_xmodem">
+      <UniqueIdentifier>{fbf005ab-0afb-4c32-954c-606057ff4c32}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -959,6 +968,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\..\src\module\log\wind_log.h">
       <Filter>module_log</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\xmodem\wind_xmodem.h">
+      <Filter>module_xmodem</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

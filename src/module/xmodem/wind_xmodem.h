@@ -4,7 +4,7 @@
 **                                       yzfcer@163.com
 **
 **--------------File infomation-------------------------------------------------------------------------
-** FileName    : wind_xmodem.h / wind_xmodem.c
+** FileName    : wind_xmodem.h
 ** Author      : Jason Zhou
 ** Last Date   : 2013.11.27
 ** Description : xmodem protocol function
@@ -62,41 +62,41 @@ typedef w_int32_t (*xm_read_fn)(w_uint8_t *ch,w_uint32_t time_out);
 
 typedef struct 
 {
-    xm_stat_e stat;//xmodem状态几状态
-    xm_dir_e dir;//传输方向
-    w_uint8_t crcmode;//校验模式，1为crc，0为校验和
-    w_uint8_t trychar;//控制字符
-    w_uint8_t  pack_no;//正序号
-    w_uint8_t  ack;//应答
-    w_int8_t retry;//重试次数
+    xm_stat_e stat;//xmodem FSM status
+    xm_dir_e dir;//Transmission direction
+    w_uint8_t crcmode;//Check mode, 1 is CRC, 0 is check sum
+    w_uint8_t trychar;//Control character
+    w_uint8_t  pack_no;//sequence number
+    w_uint8_t  ack;//answer
+    w_int8_t retry;//retry count
     
-    //帧数据缓存
-    w_uint8_t *frbuff;//帧数据缓存
-    w_int16_t frbuffsize;//数据帧缓存空间大小
-    w_int16_t frlen;//数据帧空间长度
-    w_int16_t frdatalen;//每帧中的数据部分长度
-    w_int16_t fridx;//帧数据下标
+    //Frame data parameter
+    w_uint8_t *frbuff;//Frame data cache
+    w_int16_t frbuffsize;//Data frame cache space size
+    w_int16_t frlen;//Frame length
+    w_int16_t frdatalen;//Frame data length
+    w_int16_t fridx;//Frame data index
 
-    //有效数据缓存
-    w_uint8_t *buff;//传输的数据缓存
-    w_int16_t bufflen;//传输的数据长度
-    w_int16_t buffidx;//传输的数据长度
+    //Effective data cache
+    w_uint8_t *buff;//Transmitted data cache
+    w_int16_t bufflen;//Data length transmitted
+    w_int16_t buffidx;//Transmitted data index
 
-    //传输接口
-    xm_write_fn write;//输出接口
-    xm_read_fn read;//输入接口
+    //Transmission interface
+    xm_write_fn write;//Output interface
+    xm_read_fn read;//Input interface
 }xm_ctx_s;
 
 
-w_err_t xmodem_init(xm_ctx_s *ctx,xm_dir_e dir,w_uint8_t *frbuff,
+w_err_t wind_xmodem_init(xm_ctx_s *ctx,xm_dir_e dir,w_uint8_t *frbuff,
                     w_int32_t frbuff_size,
                     xm_write_fn write,xm_read_fn read);
 
-w_int32_t xmodem_recv(xm_ctx_s *ctx,w_uint8_t *data,w_int32_t size);
+w_int32_t wind_xmodem_recv(xm_ctx_s *ctx,w_uint8_t *data,w_int32_t size);
 
-w_int32_t xmodem_send(xm_ctx_s *ctx,w_uint8_t *data,w_int32_t size);
+w_int32_t wind_xmodem_send(xm_ctx_s *ctx,w_uint8_t *data,w_int32_t size);
 
-w_err_t xmodem_end(xm_ctx_s *ctx);
+w_err_t wind_xmodem_end(xm_ctx_s *ctx);
 
 #endif //#if WIND_XMODEM_SUPPORT
 #ifdef __cplusplus

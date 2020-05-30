@@ -62,6 +62,9 @@ MODULE_DECLARE(xml);
 #if WIND_MODULE_LOG_SUPPORT
 MODULE_DECLARE(log);
 #endif
+#if WIND_MODULE_XMODEM_SUPPORT
+MODULE_DECLARE(xmodem);
+#endif
 
 w_err_t _wind_register_modules(void)
 {
@@ -95,6 +98,9 @@ w_err_t _wind_register_modules(void)
 #endif
 #if WIND_MODULE_LOG_SUPPORT
     wind_module_register(MODULE(log));
+#endif
+#if WIND_MODULE_XMODEM_SUPPORT
+    wind_module_register(MODULE(xmodem));
 #endif
     return W_ERR_OK;
 }

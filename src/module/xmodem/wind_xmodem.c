@@ -26,7 +26,7 @@
 #include "wind_string.h"  
 #include "wind_debug.h"  
 #include "wind_crc16.h"  
-#include "wind_log.h"  
+#include "wind_log.h"
 #ifdef __cplusplus
 extern "C" {
 #endif //#ifdef __cplusplus
@@ -229,7 +229,7 @@ static w_err_t xm_recv_eot(xm_ctx_s *ctx)
 }
 
 
-w_err_t xmodem_init(xm_ctx_s *ctx,xm_dir_e dir,
+w_err_t wind_xmodem_init(xm_ctx_s *ctx,xm_dir_e dir,
                     w_uint8_t *frbuff,w_int32_t frbuffsize,
                     xm_write_fn write,xm_read_fn read)
 {
@@ -262,7 +262,7 @@ w_err_t xmodem_init(xm_ctx_s *ctx,xm_dir_e dir,
 
 
 
-w_int32_t xmodem_recv(xm_ctx_s *ctx,w_uint8_t *data,w_int32_t size)
+w_int32_t wind_xmodem_recv(xm_ctx_s *ctx,w_uint8_t *data,w_int32_t size)
 {
     WIND_ASSERT_RETURN(ctx != W_NULL,-1);
     WIND_ASSERT_RETURN(data != W_NULL,-1);
@@ -303,7 +303,7 @@ w_int32_t xmodem_recv(xm_ctx_s *ctx,w_uint8_t *data,w_int32_t size)
             return ctx->buffidx;
         case XM_ERROR:
             wind_log_notice("XM_ERROR");
-            xmodem_end(ctx);
+            wind_xmodem_end(ctx);
             return -1;
         case XM_IDLE:
         default:
@@ -468,7 +468,7 @@ static w_err_t xm_send_eot(xm_ctx_s *ctx)
     return W_ERR_FAIL;
 }
 
-w_int32_t xmodem_send(xm_ctx_s *ctx,w_uint8_t *data,w_int32_t size)
+w_int32_t wind_xmodem_send(xm_ctx_s *ctx,w_uint8_t *data,w_int32_t size)
 {
     WIND_ASSERT_RETURN(ctx != W_NULL,-1);
     WIND_ASSERT_RETURN(data != W_NULL,-1);
@@ -503,7 +503,7 @@ w_int32_t xmodem_send(xm_ctx_s *ctx,w_uint8_t *data,w_int32_t size)
             break;
         case XM_ERROR:
             wind_log_notice("XM_ERROR");
-            xmodem_end(ctx);
+            wind_xmodem_end(ctx);
             return -1;
         case XM_IDLE:
         default:
@@ -512,10 +512,10 @@ w_int32_t xmodem_send(xm_ctx_s *ctx,w_uint8_t *data,w_int32_t size)
     }
 }
 
-w_err_t xmodem_end(xm_ctx_s *ctx)
+w_err_t wind_xmodem_end(xm_ctx_s *ctx)
 {
     WIND_ASSERT_RETURN(ctx != W_NULL,W_ERR_PTR_NULL);
-    wind_log_notice("xmodem_end");
+    wind_log_notice("wind_xmodem_end");
     if((ctx->stat == XM_SEND_PACK_DATA)&&(ctx->dir == XM_DIR_SEND))
     {
         wind_log_notice("send eot req");

@@ -61,9 +61,7 @@ COMMAND_DECLARE(blkdev);
 #if CMD_FS_SUPPORT
 COMMAND_DECLARE(fs);
 #endif
-#if CMD_XMODEM_SUPPORT
-COMMAND_DECLARE(xm);
-#endif
+
 #if CMD_DBGPOINT_SUPPORT
 COMMAND_DECLARE(dbgp);
 #endif
@@ -128,9 +126,6 @@ void _wind_register_all_cmd(void)
 #endif
 #if CMD_FS_SUPPORT
     wind_cmd_register(COMMAND(fs));
-#endif
-#if CMD_XMODEM_SUPPORT
-    wind_cmd_register(COMMAND(xm));
 #endif
 #if CMD_DBGPOINT_SUPPORT
     wind_cmd_register(COMMAND(dbgp));

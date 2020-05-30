@@ -197,6 +197,7 @@ extern "C" {
 #define WIND_MODULE_DICT_SUPPORT 1 //Whether data dictionary module is supported
 #define WIND_MODULE_XML_SUPPORT 1 //Whether XML module is supported
 #define WIND_MODULE_LOG_SUPPORT 1 //Whether log function module is supported
+#define WIND_MODULE_XMODEM_SUPPORT 1 //Whether xmodem protocol module is supported
 
 #define WIND_MODULE_TOOLS_SUPPORT 1 //Whether system tool module is supported
 
@@ -219,7 +220,7 @@ extern "C" {
 #define CMD_RESET_SUPPORT 1 //Whether system reset command is supported
 #define CMD_STATI_SUPPORT 1 //Whether statistics command is supported
 #define CMD_THREAD_SUPPORT 1 //Whether thread operation command is supported
-#define CMD_XMODEM_SUPPORT 0 //Whether XMODEM command is supported
+#define CMD_XMODEM_SUPPORT 1 //Whether XMODEM command is supported
 #define CMD_SYSINFO_SUPPORT 1 //Whether system information command is supported
 #define CMD_CUTEST_SUPPORT 1 //Whether unit test command is supported
 #define CMD_DBGPOINT_SUPPORT 1 //Whether the system debugging point function command is supported

@@ -146,6 +146,7 @@
 #define WIND_MODULE_DICT_SUPPORT 1 //Whether data dictionary module is supported
 #define WIND_MODULE_XML_SUPPORT 1 //Whether XML module is supported
 #define WIND_MODULE_LOG_SUPPORT 1 //Whether log function module is supported
+#define WIND_MODULE_XMODEM_SUPPORT 1 //Whether xmodem protocol module is supported
 
 #define WIND_MODULE_TOOLS_SUPPORT 0 //Whether system tool module is supported
 #endif
