@@ -431,9 +431,6 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cutest\testcase\test_filepath.c">
       <Filter>module_cutest</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_module.c">
-      <Filter>os_core</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\framework\module_shell.c">
       <Filter>module_shell</Filter>
     </ClCompile>
@@ -454,9 +451,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\..\src\module\cjson\module_cjson.c">
       <Filter>module_cjson</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\src\core\wind_module_list.c">
-      <Filter>os_core</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\..\src\module\tools\cmd_pack.c">
       <Filter>module_tools</Filter>
@@ -587,6 +581,12 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\xmodem\wind_xmodem.c">
       <Filter>module_xmodem</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\wind_module.c">
+      <Filter>module</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\wind_module_list.c">
+      <Filter>module</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">
@@ -645,6 +645,9 @@
     </Filter>
     <Filter Include="module_xmodem">
       <UniqueIdentifier>{fbf005ab-0afb-4c32-954c-606057ff4c32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="module">
+      <UniqueIdentifier>{44c17c7c-5f3e-45e5-bf69-ad298a4e1f79}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -930,9 +933,6 @@
     <ClInclude Include="..\..\..\port\file_port.h">
       <Filter>os_port</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\..\src\core\wind_module.h">
-      <Filter>os_core</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\..\src\module\vfs\wind_fsops.h">
       <Filter>module_vfs</Filter>
     </ClInclude>
@@ -971,6 +971,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\..\src\module\xmodem\wind_xmodem.h">
       <Filter>module_xmodem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\wind_module.h">
+      <Filter>module</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

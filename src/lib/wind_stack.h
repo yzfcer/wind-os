@@ -7,7 +7,7 @@
 ** FileName    : wind_stack.h
 ** Author      : Jason Zhou
 ** Last Date   : 2013.10.05
-** Description : wind-os wind-os filo stack structure model
+** Description : wind-os filo stack structure model
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou
@@ -35,16 +35,12 @@ extern "C" {
 #if WIND_STACK_SUPPORT
 
 #ifndef NOT_OK
-#define NOT_OK              -3                        /* 参数错误                                     */
-#endif
+#define NOT_OK              -3
 
-#define STACK_OK            0                           /* 操作成功                                     */
+#define STACK_OK            0
 #define STACK_ERR           -1
-#define STACK_FULL          -2                           /* 队列满                                       */
-#define STACK_EMPTY         -3                           /* 无数据                                       */
-
-//#define Q_WRITE_MODE        1                           /* 操作成功                                     */
-//#define Q_WRITE_FRONT_MODE  2                           /* 操作成功                                     */
+#define STACK_FULL          -2
+#define STACK_EMPTY         -3
 
 #ifndef STACK_DATA_TYPE
 #define STACK_DATA_TYPE     w_uint8_t
@@ -53,17 +49,17 @@ extern "C" {
 typedef struct __w_stack_s w_stack_s;
 struct __w_stack_s
 {
-    STACK_DATA_TYPE     *out;                   /* 指向数据输出位置         */
-    STACK_DATA_TYPE     *in;                    /* 指向数据输入位置         */      
-    STACK_DATA_TYPE     *top;                    /* 指向Buf的结束位置        */
-    w_uint16_t              item_cnt;                  /* 队列中数据个数           */
-    w_uint16_t              item_max;                /* 队列中允许存储的数据个数 */
-    w_uint8_t                item_size;                /* 元素的数据宽度 */  
+    STACK_DATA_TYPE     *out;
+    STACK_DATA_TYPE     *in;
+    STACK_DATA_TYPE     *top;
+    w_uint16_t              item_cnt;
+    w_uint16_t              item_max;
+    w_uint8_t                item_size;
     w_uint32_t              emptycnt;
     w_uint32_t              fullcnt;
-    w_err_t               (* read_empty)(w_stack_s *pstk,void *data);     /* 读空处理函数             */
-    w_err_t               (* write_full)(w_stack_s *pstk,void *data);        /* 写满处理函数             */
-    STACK_DATA_TYPE     buff[1];                 /* 存储数据的空间           */
+    w_err_t               (*read_empty)(w_stack_s *pstk,void *data);
+    w_err_t               (*write_full)(w_stack_s *pstk,void *data);
+    STACK_DATA_TYPE     buff[1];
 };
 
 
