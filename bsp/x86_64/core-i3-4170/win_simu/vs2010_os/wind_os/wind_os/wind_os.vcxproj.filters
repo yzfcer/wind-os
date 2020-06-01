@@ -101,9 +101,6 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\hal\wind_chdev.c">
       <Filter>os_hal</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\port\wind_os_prelunch.c">
-      <Filter>os_port</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\device\list_blkdev.c">
       <Filter>device</Filter>
     </ClCompile>
@@ -586,6 +583,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\..\src\module\wind_module_list.c">
       <Filter>module</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\port\wind_os_prelaunch.c">
+      <Filter>os_port</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

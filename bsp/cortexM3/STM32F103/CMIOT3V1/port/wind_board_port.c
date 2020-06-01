@@ -48,11 +48,11 @@ void wind_enter_thread_hook(void)
 
 	w_uint32_t reload;
  	SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK_Div8);
-	reload=SYSCLK/8;		//每秒钟的计数次数 单位为K	   
-	reload*=1000000/WIND_TICK_PER_SEC;//根据OS_TICKS_PER_SEC设定溢出时间
-	SysTick->CTRL|=SysTick_CTRL_TICKINT_Msk;   	//开启SYSTICK中断
-	SysTick->LOAD=reload; 	//每1/OS_TICKS_PER_SEC秒中断一次	
-	SysTick->CTRL|=SysTick_CTRL_ENABLE_Msk;   	//开启SYSTICK
+	reload=SYSCLK/8;		//Count times per second in thousand	   
+	reload*=1000000/WIND_TICK_PER_SEC;//Tick timer overflow value
+	SysTick->CTRL|=SysTick_CTRL_TICKINT_Msk;   	//Enable systick interrupt
+	SysTick->LOAD=reload; 	
+	SysTick->CTRL|=SysTick_CTRL_ENABLE_Msk;   	//enable systick
 
 }
 

@@ -31,7 +31,7 @@
 extern "C" {
 #endif //#ifdef __cplusplus
 
-void wind_crc32_init(void);
+//void wind_crc32_init(void);
 
 w_uint32_t wind_crc32(w_uint8_t *data,w_uint32_t size,w_uint32_t crc);
 

@@ -266,7 +266,7 @@
     <ClCompile Include="..\..\..\device\list_dev.c" />
     <ClCompile Include="..\..\..\port\file_port.c" />
     <ClCompile Include="..\..\..\port\wind_board_port.c" />
-    <ClCompile Include="..\..\..\port\wind_os_prelunch.c" />
+    <ClCompile Include="..\..\..\port\wind_os_prelaunch.c" />
     <ClCompile Include="..\..\..\port\wind_os_switch.c" />
     <ClCompile Include="..\..\..\port\wind_std.c" />
     <ClCompile Include="main.c" />
