@@ -1,6 +1,6 @@
 /****************************************Copyright (c)**************************************************
 **                                       God's harbor
-** FileName    : wind_atomic.h / wind_atomic.c
+** FileName    : wind_atomic.h
 ** Author      : Jason Zhou
 ** Last Date   : 2014/10/26 2:20:23
 ** Description : Atomic variable operation interface

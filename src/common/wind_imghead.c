@@ -72,27 +72,24 @@ w_err_t wind_img_head_get(w_img_head_s *head,w_uint8_t *buff)
     w_uint32_t crc_calc,crc_read;
     w_int32_t index = 0;
     head->magic = (~IMG_MAGIC);
-    wind_to_uint32(&buff[index],&head->magic);
+    wind_bytearr_to_uint32(&buff[index],&head->magic);
 
-    //�������Ӧ����bin�ļ�û�а���ͷ���ṹ
-    //if(head->magic != IMG_MAGIC)
-    //    return W_ERR_OK;
     index += 4;
-    wind_to_uint32(&buff[index],&head->img_len);
+    wind_bytearr_to_uint32(&buff[index],&head->img_len);
     index += 4;
-    wind_to_uint32(&buff[index],&head->head_len);
+    wind_bytearr_to_uint32(&buff[index],&head->head_len);
     index += 4;
-    wind_to_uint32(&buff[index],&head->head_ver);
+    wind_bytearr_to_uint32(&buff[index],&head->head_ver);
     index += 4;
-    wind_to_uint32(&buff[index],&head->hard_ver);
+    wind_bytearr_to_uint32(&buff[index],&head->hard_ver);
     index += 4;
-    wind_to_uint32(&buff[index],&head->soft_ver);
+    wind_bytearr_to_uint32(&buff[index],&head->soft_ver);
     index += 4;
-    wind_to_uint32(&buff[index],&head->bin_crc);
+    wind_bytearr_to_uint32(&buff[index],&head->bin_crc);
     index += 4;
-    wind_to_uint32(&buff[index],&head->bin_offset);
+    wind_bytearr_to_uint32(&buff[index],&head->bin_offset);
     index += 4;
-    wind_to_uint32(&buff[index],&head->encrypt_type);
+    wind_bytearr_to_uint32(&buff[index],&head->encrypt_type);
     index += 4;
     wind_memset(head->img_name,0,sizeof(head->img_name));
     wind_strcpy(head->img_name,(const char*)&buff[index]);
@@ -110,7 +107,7 @@ w_err_t wind_img_head_get(w_img_head_s *head,w_uint8_t *buff)
     wind_strcpy(head->board_name,(const char*)&buff[index]);
     index += sizeof(head->board_name);
 
-    wind_to_uint32(&buff[head->head_len-4],&crc_read);
+    wind_bytearr_to_uint32(&buff[head->head_len-4],&crc_read);
     crc_calc = wind_crc32(buff,head->head_len - 4,0xffffffff);
     if(crc_calc != crc_read)
     {
@@ -128,24 +125,24 @@ w_err_t wind_img_head_set(w_img_head_s *head,w_uint8_t *buff)
     w_uint32_t crc;
     w_int32_t index = 0;
     wind_memset(buff,0,head->head_len);
-    wind_from_uint32(&buff[index],head->magic);
+    wind_bytearr_from_uint32(&buff[index],head->magic);
 
     index += 4;
-    wind_from_uint32(&buff[index],head->img_len);
+    wind_bytearr_from_uint32(&buff[index],head->img_len);
     index += 4;
-    wind_from_uint32(&buff[index],head->head_len);
+    wind_bytearr_from_uint32(&buff[index],head->head_len);
     index += 4;
-    wind_from_uint32(&buff[index],head->head_ver);
+    wind_bytearr_from_uint32(&buff[index],head->head_ver);
     index += 4;
-    wind_from_uint32(&buff[index],head->hard_ver);
+    wind_bytearr_from_uint32(&buff[index],head->hard_ver);
     index += 4;
-    wind_from_uint32(&buff[index],head->soft_ver);
+    wind_bytearr_from_uint32(&buff[index],head->soft_ver);
     index += 4;
-    wind_from_uint32(&buff[index],head->bin_crc);
+    wind_bytearr_from_uint32(&buff[index],head->bin_crc);
     index += 4;
-    wind_from_uint32(&buff[index],head->bin_offset);
+    wind_bytearr_from_uint32(&buff[index],head->bin_offset);
     index += 4;
-    wind_from_uint32(&buff[index],head->encrypt_type);
+    wind_bytearr_from_uint32(&buff[index],head->encrypt_type);
     index += 4;
     wind_strcpy((char*)&buff[index],(const char*)head->img_name);
     index += sizeof(head->img_name);
@@ -161,7 +158,7 @@ w_err_t wind_img_head_set(w_img_head_s *head,w_uint8_t *buff)
     
     crc = wind_crc32(buff,head->head_len - 4,0xffffffff);
     index = head->head_len - 4;
-    wind_from_uint32(&buff[index],crc);
+    wind_bytearr_from_uint32(&buff[index],crc);
     return W_ERR_OK;
 }
 

@@ -57,18 +57,18 @@ void wind_uint_to_str(char *str,w_uint32_t value);
 void wind_int_to_hexstr(char *hex,w_uint32_t value);
 
 //Convert number to string
-w_bool_t wind_from_uint16(w_uint8_t *arr,w_uint16_t value);
-w_bool_t wind_from_uint32(w_uint8_t *arr,w_uint32_t value);
-w_bool_t wind_from_uint64(w_uint8_t *arr,w_uint64_t value);
-w_bool_t wind_from_float32(w_uint8_t *arr,w_fp32_t value);
-w_bool_t wind_from_float64(w_uint8_t *arr,w_fp64_t value);
+w_bool_t wind_bytearr_from_uint16(w_uint8_t *arr,w_uint16_t value);
+w_bool_t wind_bytearr_from_uint32(w_uint8_t *arr,w_uint32_t value);
+w_bool_t wind_bytearr_from_uint64(w_uint8_t *arr,w_uint64_t value);
+w_bool_t wind_bytearr_from_float32(w_uint8_t *arr,w_fp32_t value);
+w_bool_t wind_bytearr_from_float64(w_uint8_t *arr,w_fp64_t value);
 
 //Convert string to number
-w_bool_t wind_to_uint16(w_uint8_t *arr,w_uint16_t *value);
-w_bool_t wind_to_uint32(w_uint8_t *arr,w_uint32_t *value);
-w_bool_t wind_to_uint64(w_uint8_t *arr,w_uint64_t *value);
-w_bool_t wind_to_float32(w_uint8_t *arr,w_fp32_t *value);
-w_bool_t wind_to_float64(w_uint8_t *arr,w_fp64_t *value);
+w_bool_t wind_bytearr_to_uint16(w_uint8_t *arr,w_uint16_t *value);
+w_bool_t wind_bytearr_to_uint32(w_uint8_t *arr,w_uint32_t *value);
+w_bool_t wind_bytearr_to_uint64(w_uint8_t *arr,w_uint64_t *value);
+w_bool_t wind_bytearr_to_float32(w_uint8_t *arr,w_fp32_t *value);
+w_bool_t wind_bytearr_to_float64(w_uint8_t *arr,w_fp64_t *value);
 
 #ifdef __cplusplus
 }

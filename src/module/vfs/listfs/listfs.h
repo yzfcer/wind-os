@@ -34,7 +34,7 @@
 #include "listfs_bitmap.h"
 
 #if WIND_LISTFS_SUPPORT
-//文件操作模式
+//Open mode
 #define LFMODE_R   0x01
 #define LFMODE_W   0x02
 #define LFMODE_RW  0x03
@@ -43,17 +43,17 @@
 
 #define LISTFS_MAGIC 0x49AC7D53
 
-#define LISTFS_DIR_LAYCNT 32 //目录深度
-//#define LISTFS_BLK_SIZE 512  //块大小
+#define LISTFS_DIR_LAYCNT 32 //Catalog depth
+//#define LISTFS_BLK_SIZE 512  //Block size
 
-#define LISTFS_MAX_FILE_SIZE 0x7fffffff //文件长度限制，2GB
+#define LISTFS_MAX_FILE_SIZE 0x7fffffff //File length limit，2GB
 
-//文件属性
-#define LFILE_ATTR_DIR    (0x01 << 0) //是否目录
-#define LFILE_ATTR_RDEN   (0x01 << 1) //是否可读
-#define LFILE_ATTR_WREN   (0x01 << 2) //是否可写
-#define LFILE_ATTR_HIDE   (0x01 << 3) //是否隐藏
-#define LFILE_ATTR_VERIFY (0x01 << 4) //是否校验
+//File properties
+#define LFILE_ATTR_DIR    (0x01 << 0) //Directory or not
+#define LFILE_ATTR_RDEN   (0x01 << 1) //Readable or not
+#define LFILE_ATTR_WREN   (0x01 << 2) //Writable or not
+#define LFILE_ATTR_HIDE   (0x01 << 3) //Hide or not
+#define LFILE_ATTR_VERIFY (0x01 << 4) //Check or not
 #define LFILE_ATTR_COMMAN (LFILE_ATTR_RDEN | LFILE_ATTR_WREN)
 
 #define IS_LFILE_ATTR_DIR(attr) (attr & LFILE_ATTR_DIR)
@@ -78,40 +78,40 @@
 
 
 
-//固化文件系统信息
+//Solidified file system information
 typedef struct __lfs_info_s
 {
-    w_uint32_t magic;        //魔术字
-    w_uint32_t blkcount;     //块数量
-    w_uint16_t unit_size;    //文件单位大小
-    w_uint16_t blksize;      //块大小
-    w_uint16_t reserve_blk;  //保留块数
-    w_uint16_t attr;         //文件系统属性
-    w_uint32_t bitmap_cnt;   //位图块数
-    w_uint32_t   bitmap1_addr; //主位图地址
-    w_uint32_t   bitmap2_addr; //备份位图地址
-    w_uint32_t   root_addr;    //根目录位置
+    w_uint32_t magic;        //Magic word
+    w_uint32_t blkcount;     //Number of blocks
+    w_uint16_t unit_size;    //File unit size
+    w_uint16_t blksize;      //Block size
+    w_uint16_t reserve_blk;  //Number of reserved blocks
+    w_uint16_t attr;         //File system properties
+    w_uint32_t bitmap_cnt;   //Number of bitmap blocks
+    w_uint32_t   bitmap1_addr; //Primary bitmap address
+    w_uint32_t   bitmap2_addr; //Backup bitmap address
+    w_uint32_t   root_addr;    //Root address
 }lfs_info_s;
 
-//程序关联的文件系统信息
+//File system information associated with the program
 typedef struct __listfs_s
 {
-    lfs_info_s lfs_info;  //文件系统信息
-    w_blkdev_s *blkdev;   //关联的块设备
-    lfs_bitmap_s bitmap;  //块使用位图
-    w_int32_t  file_ref;  //打开的文件数量
-    w_uint32_t blkused;   //已经使用的块数量
+    lfs_info_s lfs_info;  //file system information
+    w_blkdev_s *blkdev;   //Associated block device
+    lfs_bitmap_s bitmap;  //Block usage bitmap
+    w_int32_t  file_ref;  //Number of open files
+    w_uint32_t blkused;   //Number of blocks used
 }w_listfs_s;
 
-//程序关联的File infomation
+//File information associated with program
 typedef struct __listfile_s
 {
-    lfile_info_s info;        //文件基本信息
-    w_listfs_s *lfs;          //对应的文件系统
-    w_uint8_t mode;           //打开模式
-    w_uint32_t offset;         //文件偏移量
-    lfile_blkinfo_s *blkinfo; //当前数据块信息
-    lfile_info_s *subinfo;    //子File infomation
+    lfile_info_s info;        //Basic information of documents
+    w_listfs_s *lfs;          //Corresponding file system
+    w_uint8_t mode;           //Open mode
+    w_uint32_t offset;         //File offset
+    lfile_blkinfo_s *blkinfo; //Current block information
+    lfile_info_s *subinfo;    //Subfile information
 }w_listfile_s;
 
 void lfs_info_be2le(lfs_info_s *info);

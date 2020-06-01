@@ -189,7 +189,7 @@ void wind_int_to_hexstr(char *hex,w_uint32_t value)
 
 
 
-w_bool_t wind_from_uint16(w_uint8_t *arr,w_uint16_t value)
+w_bool_t wind_bytearr_from_uint16(w_uint8_t *arr,w_uint16_t value)
 {
     int i;
     for(i = 0;i < 2;i ++)
@@ -199,7 +199,7 @@ w_bool_t wind_from_uint16(w_uint8_t *arr,w_uint16_t value)
     return W_TRUE;
 }
 
-w_bool_t wind_from_uint32(w_uint8_t *arr,w_uint32_t value)
+w_bool_t wind_bytearr_from_uint32(w_uint8_t *arr,w_uint32_t value)
 {
     int i;
     for(i = 0;i < 4;i ++)
@@ -209,7 +209,7 @@ w_bool_t wind_from_uint32(w_uint8_t *arr,w_uint32_t value)
     return W_TRUE;
 }
 
-w_bool_t wind_from_uint64(w_uint8_t *arr,w_uint64_t value)
+w_bool_t wind_bytearr_from_uint64(w_uint8_t *arr,w_uint64_t value)
 {
     int i;
     for(i = 0;i < 8;i ++)
@@ -220,20 +220,20 @@ w_bool_t wind_from_uint64(w_uint8_t *arr,w_uint64_t value)
 }
 
 
-w_bool_t wind_from_float32(w_uint8_t *arr,w_fp32_t value)
+w_bool_t wind_bytearr_from_float32(w_uint8_t *arr,w_fp32_t value)
 {
     w_uint32_t *pvalue = (w_uint32_t*)&value;
-    return wind_from_uint32(arr,*pvalue);
+    return wind_bytearr_from_uint32(arr,*pvalue);
 }
 
-w_bool_t wind_from_float64(w_uint8_t *arr,w_fp64_t value)
+w_bool_t wind_bytearr_from_float64(w_uint8_t *arr,w_fp64_t value)
 {
     w_uint64_t *pvalue = (w_uint64_t*)&value;
-    return wind_from_uint64(arr,*pvalue);
+    return wind_bytearr_from_uint64(arr,*pvalue);
 }
 
 
-w_bool_t wind_to_uint16(w_uint8_t *arr,w_uint16_t *value)
+w_bool_t wind_bytearr_to_uint16(w_uint8_t *arr,w_uint16_t *value)
 {
     int i;
     w_uint16_t va = 0;
@@ -245,7 +245,7 @@ w_bool_t wind_to_uint16(w_uint8_t *arr,w_uint16_t *value)
     return W_TRUE;
 }
 
-w_bool_t wind_to_uint32(w_uint8_t *arr,w_uint32_t *value)
+w_bool_t wind_bytearr_to_uint32(w_uint8_t *arr,w_uint32_t *value)
 {
     int i;
     w_uint32_t va = 0;
@@ -257,7 +257,7 @@ w_bool_t wind_to_uint32(w_uint8_t *arr,w_uint32_t *value)
     return W_TRUE;
 }
 
-w_bool_t wind_to_uint64(w_uint8_t *arr,w_uint64_t *value)
+w_bool_t wind_bytearr_to_uint64(w_uint8_t *arr,w_uint64_t *value)
 {
     int i;
     w_uint64_t va = 0;
@@ -269,16 +269,16 @@ w_bool_t wind_to_uint64(w_uint8_t *arr,w_uint64_t *value)
     return W_TRUE;
 }
 
-w_bool_t wind_to_float32(w_uint8_t *arr,w_fp32_t *value)
+w_bool_t wind_bytearr_to_float32(w_uint8_t *arr,w_fp32_t *value)
 {
     w_uint32_t *pvalue = (w_uint32_t*)value;
-    return wind_to_uint32(arr,pvalue);
+    return wind_bytearr_to_uint32(arr,pvalue);
 }
 
-w_bool_t wind_to_float64(w_uint8_t *arr,w_fp64_t *value)
+w_bool_t wind_bytearr_to_float64(w_uint8_t *arr,w_fp64_t *value)
 {
     w_uint64_t *pvalue = (w_uint64_t*)value;
-    return wind_to_uint64(arr,pvalue);
+    return wind_bytearr_to_uint64(arr,pvalue);
 }
 
 #ifdef __cplusplus

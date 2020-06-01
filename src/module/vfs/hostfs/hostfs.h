@@ -49,9 +49,9 @@ typedef struct _finddata_t _finddata_t;
 
 #define HOSTFS_MAGIC   0x49AC7D53
 #define HOSTFILE_MAGIC 0x2576DA83
-#define HFILE_NAME_LEN 64    //文件名长度
-#define HOSTFS_DIR_LAYCNT 32 //目录深度
-#define HOSTFS_MAX_FILE_SIZE 0x7fffffff //文件长度限制，2GB
+#define HFILE_NAME_LEN 64    //File name length
+#define HOSTFS_DIR_LAYCNT 32 //Catalog depth
+#define HOSTFS_MAX_FILE_SIZE 0x7fffffff //File length limit，2GB
 
 #define HFMODE_R   0x01
 #define HFMODE_W   0x02
@@ -59,12 +59,12 @@ typedef struct _finddata_t _finddata_t;
 #define HFMODE_CRT 0x04
 
 
-//文件属性
-#define HFILE_ATTR_DIR    (0x01 << 0) //是否目录
-#define HFILE_ATTR_RDEN   (0x01 << 1) //是否可读
-#define HFILE_ATTR_WREN   (0x01 << 2) //是否可写
-#define HFILE_ATTR_HIDE   (0x01 << 3) //是否隐藏
-#define HFILE_ATTR_VERIFY (0x01 << 4) //是否校验
+//File properties
+#define HFILE_ATTR_DIR    (0x01 << 0) //Directory or not
+#define HFILE_ATTR_RDEN   (0x01 << 1) //Readable or not
+#define HFILE_ATTR_WREN   (0x01 << 2) //Writable or not
+#define HFILE_ATTR_HIDE   (0x01 << 3) //Hide or not
+#define HFILE_ATTR_VERIFY (0x01 << 4) //Check or not
 #define HFILE_ATTR_COMMAN (HFILE_ATTR_RDEN | HFILE_ATTR_WREN)
 
 #define IS_HFILE_ATTR_DIR(attr) (attr & HFILE_ATTR_DIR)
@@ -96,7 +96,7 @@ typedef enum
     HFILE_TYPE_FILE = 2,
 }hfileattr_e;
 
-//程序关联的文件系统信息
+//Host associated file system information
 typedef struct __hostfs_s
 {
     w_uint32_t magic;
@@ -110,23 +110,23 @@ typedef struct
     char *name;
  }w_subinfo_s;
 
-//程序关联的File infomation
+//Host associated File infomation
 struct __hostfile_s
 {
-    w_uint32_t magic;  //魔术字
-    w_hostfs_s *hfs;   //主机文件系统对象
-    char *path;        //文件路径，相对于挂载地址
-    char *name;        //文件名
-    w_uint8_t mode;    //打开模式
-    w_uint8_t attr;    //文件属性
-    w_uint8_t isdir;   //是否目录
-    //w_uint8_t has_sub;   //是否有子文件
-    w_hostfile_s *subhfile;//子文件(或目录)
-    FILE* fd;          //文件句柄
+    w_uint32_t magic;  //Magic word
+    w_hostfs_s *hfs;   //Host file system object
+    char *path;        //File path, relative to mount address
+    char *name;        //file name
+    w_uint8_t mode;    //Open mode
+    w_uint8_t attr;    //File properties
+    w_uint8_t isdir;   //Directory or not
+    //w_uint8_t has_sub;   //Whether there are sub files
+    w_hostfile_s *subhfile;//Subfile (or subdirectory)
+    FILE* fd;          //File handle
     w_subinfo_s subinfo;
 #if (HOST_OS_TYPE == HOST_OS_WINDOWS)
-    intptr_t handle;  //子文件句柄(windows系统)
-    _finddata_t finddata;//子File infomation
+    intptr_t handle;  //Subfile handle (Windows system)
+    _finddata_t finddata;//Subfile information
 #endif
 #if (HOST_OS_TYPE == HOST_OS_LINUX)
     DIR *dir;

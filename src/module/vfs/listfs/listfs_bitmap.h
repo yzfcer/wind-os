@@ -37,14 +37,14 @@
 typedef struct
 {
     w_uint32_t magic;
-    w_uint32_t addr1;         //主位图块起始地址
-    w_uint32_t addr2;         //备份位图块起始地址
-    w_int32_t bmblk_cnt;    //位图块数量
-    w_uint32_t data_addr;      //数据块起始位置
-    w_int32_t cur_blkidx;   //空闲位图块位置
-    w_int32_t cur_byteidx;  //空闲位图字节位置
+    w_uint32_t addr1;         //Master bitmap block start address
+    w_uint32_t addr2;         //Backup bitmap block start address
+    w_int32_t bmblk_cnt;    //Number of bitmap blocks
+    w_uint32_t data_addr;      //Start position of data block
+    w_int32_t cur_blkidx;   //Free bitmap block location
+    w_int32_t cur_byteidx;  //Free bitmap byte position
     w_blkdev_s *blkdev;      
-    w_uint8_t *blk;          //数据块
+    w_uint8_t *blk;          //data block
 }lfs_bitmap_s;
 
 w_err_t listfs_bitmap_init(lfs_bitmap_s *bm,w_uint32_t start_addr,w_int32_t count,w_blkdev_s *blkdev);

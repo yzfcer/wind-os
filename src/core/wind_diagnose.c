@@ -56,7 +56,7 @@ w_err_t wind_diagnose_register(w_diagnose_s *diagnose)
 {
     w_diagnose_s *diag;    
     wind_notice("register diagnose:%s", wind_obj_name(&diagnose->obj));
-    //wind_notice("diagnose magic:%-08x,%-08x", diagnose->obj.magic,(~WIND_DIAGNOSE_MAGIC));
+    wind_debug("diagnose magic:%-08x,%-08x", diagnose->obj.magic,(~WIND_DIAGNOSE_MAGIC));
     WIND_ASSERT_RETURN(diagnose != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(diagnose->obj.magic == (~WIND_DIAGNOSE_MAGIC),W_ERR_INVALID);
     diag = wind_diagnose_get(diagnose->obj.name);

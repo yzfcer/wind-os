@@ -94,7 +94,7 @@ w_err_t boot_param_reset(void)
 }
 
 
-//检查参数是否有效，有效返回1，无效返回0
+//Check whether the parameter is valid, valid return 1, invalid return 0
 w_err_t boot_param_check_valid(w_uint8_t *buff)
 {
     w_int32_t index;

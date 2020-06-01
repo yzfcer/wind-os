@@ -39,7 +39,7 @@ extern "C" {
 
 #define WIND_CHDEV_MAGIC 0x68353D6A
 
-#define F_CHDEV_OPEN (0x01 << 0) //标记chdev对象是否已经打开
+#define F_CHDEV_OPEN (0x01 << 0) //Mark whether the chdev object is open
 #define IS_F_CHDEV_OPEN(chdev) ((chdev->obj.flag & F_CHDEV_OPEN) == F_CHDEV_OPEN)
 #define SET_F_CHDEV_OPEN(chdev) (chdev->obj.flag |= F_CHDEV_OPEN)
 #define CLR_F_CHDEV_OPEN(chdev) (chdev->obj.flag &= (~F_CHDEV_OPEN))

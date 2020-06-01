@@ -73,11 +73,11 @@ struct __w_vfs_s
 struct __w_fsops_s
 {
     w_obj_s obj;
-    w_err_t (*opsinit)(void);//文件系统操作集初始化
-    void*   (*init)(w_vfs_s *fs);//文件系统类型初始化
-    w_err_t (*deinit)(w_vfs_s *fs);//文件系统类型反初始化
-    w_err_t (*format)(w_vfs_s *fs);//格式化
-    w_err_t (*matchfs)(char *devname);//检测块设备文件系统是否匹配
+    w_err_t (*opsinit)(void);//File system operation set initialization
+    void*   (*init)(w_vfs_s *fs);//File system type initialization
+    w_err_t (*deinit)(w_vfs_s *fs);//File system type uninitialization
+    w_err_t (*format)(w_vfs_s *fs);//File system format
+    w_err_t (*matchfs)(char *devname);//Check if the block device file system matches
     
     w_err_t (*open)(w_file_s *file,w_uint8_t fmode);
     w_err_t (*close)(w_file_s* file);
@@ -93,16 +93,16 @@ struct __w_fsops_s
 struct __w_file_s
 {
     w_obj_s obj;
-    char *fullpath;//完整的文件系统路径
-    char *realpath;//实际的文件系统路径
-    w_vfs_s *vfs;//关联的文件系统
-    w_mutex_s *mutex;//文件锁
-    w_file_s *childfile;//子文件,在需要遍历目录时使用
+    char *fullpath;//Full file system path
+    char *realpath;//Actual file system path
+    w_vfs_s *vfs;//Associated file system
+    w_mutex_s *mutex;//File lock
+    w_file_s *childfile;//Child files, used when traversing directories
     
-    void *fileobj;//实际文件对象
-    w_uint8_t fmode;//打开模式
-    w_uint8_t isdir;//是否是目录
-    w_uint32_t offset;//文件偏移位置
+    void *fileobj;//Actual file object
+    w_uint8_t fmode;//Open mode
+    w_uint8_t isdir;//Is it a directory
+    w_uint32_t offset;//File offset
 };
 
 

@@ -31,9 +31,9 @@
 
 #define LISTFILE_MAGIC 0x7D5349AC
 
-#define LFILE_NAME_LEN 64    //文件名长度
+#define LFILE_NAME_LEN 64    //File name length
 
-//从fileinfo数据块中取出blkinfo
+//Get blkinfo from FileInfo data block
 #define FILEINFO_BLKINFO(blk) (lfile_blkinfo_s*)&blk[sizeof(lfile_info_s)]
 
 //#define BLKINFO_HAS_OFFSET(info,ofst,blksize) ((ofst >= info->offset)&&(ofst < info->offset + info->blkused * blksize))
@@ -41,22 +41,22 @@
 
 
 
-//固化文件头部信息
+//Solidified file header information
 typedef struct __lfile_info_s
 {
-    w_uint32_t magic;                //魔术字
-    char       name[LFILE_NAME_LEN]; //文件名
-    w_int32_t  filesize;             //文件大小
-    w_int32_t  spacesize;            //文件空间大小
-    w_uint32_t   parent_addr;          //父地址
-    w_uint32_t   self_addr;            //当前地址
-    w_uint32_t   last_addr;            //最后一个块信息地址
-    w_uint32_t   prevfile_addr;        //下一个文件地址
-    w_uint32_t   nextfile_addr;        //下一个文件地址
-    w_int32_t  children_cnt;         //子文件的数量
-    w_uint32_t   headchild_addr;       //第一个子文件地址
-    w_uint32_t   tailchild_addr;       //最后一个文件地址
-    w_uint8_t  attr;                 //是否目录，可读，可写，隐藏，校验
+    w_uint32_t magic;                //Magic word
+    char       name[LFILE_NAME_LEN]; //file name
+    w_int32_t  filesize;             //file size
+    w_int32_t  spacesize;            //File space size
+    w_uint32_t   parent_addr;          //Parent file address
+    w_uint32_t   self_addr;            //Current address
+    w_uint32_t   last_addr;            //Last block information address
+    w_uint32_t   prevfile_addr;        //Next file address
+    w_uint32_t   nextfile_addr;        //Next file address
+    w_int32_t  children_cnt;         //Number of sub files
+    w_uint32_t   headchild_addr;       //First subfile address
+    w_uint32_t   tailchild_addr;       //Last subfile address
+    w_uint8_t  attr;                 //Directory, readable, writable, hidden, and verified
 }lfile_info_s;
 
 void fileinfo_be2le(lfile_info_s *info);

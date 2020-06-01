@@ -129,7 +129,7 @@ static w_err_t lfs_search_file(w_listfs_s *lfs,w_listfile_s *file,const char *pa
     do 
     {
         err = W_ERR_OK;
-        //拷贝和分割文件路径
+        //Copy and split file paths
         wind_debug("search node path:%s",path);
         len = wind_strlen(path);
         tmppath = listfs_mem_malloc(len+1);
@@ -141,17 +141,17 @@ static w_err_t lfs_search_file(w_listfs_s *lfs,w_listfile_s *file,const char *pa
             tmppath[len-1] = 0;
         }
 
-        //分割目录
+        //Split catalog
         nameseg = (char **)listfs_mem_malloc(LISTFS_DIR_LAYCNT * sizeof(char*));
         WIND_ASSERT_BREAK(nameseg,W_ERR_MEM,"malloc nameseg failed");
         segcnt = wind_strsplit(tmppath,'/',nameseg,LISTFS_DIR_LAYCNT);
         WIND_ASSERT_BREAK(segcnt > 0,W_ERR_INVALID,"split path failed");
         
-        //分配File infomation和数据块信息结构
+        //Allocate file information and block information structure
         finfo = listfs_mem_malloc(sizeof(lfile_info_s));
         WIND_ASSERT_BREAK(finfo,W_ERR_MEM,"malloc finfo failed");
 
-        //读取根目录File infomation
+        //Read the root directory file information
         err = fileinfo_read(finfo,lfs->blkdev,lfs->lfs_info.root_addr);
         WIND_ASSERT_BREAK(err == W_ERR_OK,err,"read root failed");
         if(segcnt == 1)
@@ -162,7 +162,7 @@ static w_err_t lfs_search_file(w_listfs_s *lfs,w_listfile_s *file,const char *pa
         }
         //WIND_CHECK_BREAK(segcnt != 1,W_ERR_OK);
 
-        //从根目录开始搜索子文件
+        //Search for child files from root
         err = W_ERR_OK;
         for(i = 1;i < segcnt;i ++)
         {
@@ -308,7 +308,7 @@ static w_err_t lfs_make_file(w_listfs_s *lfs,w_listfile_s *file,char *path)
     do
     {
         err = W_ERR_OK;
-        //分配内存
+        //Allocate memory
         pathlen = wind_strlen(path);
         tmppath = listfs_mem_malloc(pathlen+1);
         WIND_ASSERT_BREAK(tmppath != W_NULL,W_ERR_MEM,"malloc tmppath failed.");
@@ -318,7 +318,7 @@ static w_err_t lfs_make_file(w_listfs_s *lfs,w_listfile_s *file,char *path)
         WIND_ASSERT_BREAK(finfo != W_NULL,W_ERR_MEM,"malloc finfo failed.");
 
 
-        //拷贝分割文件路径
+        //Copy split file path
         wind_strcpy(tmppath,path);
         if(tmppath[pathlen - 1] == '/')
         {
@@ -328,7 +328,7 @@ static w_err_t lfs_make_file(w_listfs_s *lfs,w_listfile_s *file,char *path)
         cnt = wind_strsplit(tmppath,'/',nameseg,LISTFS_DIR_LAYCNT);
         WIND_ASSERT_BREAK(cnt > 1,W_ERR_OK,"split path failed.");
 
-        //获取根
+        //Get root information
         err = fileinfo_read(finfo,lfs->blkdev,lfs->lfs_info.root_addr);
         WIND_ASSERT_BREAK(err == W_ERR_OK,err,"read root failed");
 
@@ -531,7 +531,7 @@ w_err_t lfs_info_read(lfs_info_s *lfs_info,w_blkdev_s *blkdev)
         if(cnt <= 0)
             cnt = wind_blkdev_read(blkdev,1,blk,1);
         WIND_ASSERT_BREAK(cnt > 0,W_ERR_HARDFAULT,"read fsinfo failed.");
-        wind_to_uint32(&blk[blkdev->blksize-4],&crc);
+        wind_bytearr_to_uint32(&blk[blkdev->blksize-4],&crc);
         calc_crc = wind_crc32(blk,blkdev->blksize-4,0xffffffff);
         WIND_ASSERT_BREAK(calc_crc == crc,W_ERR_INVALID,"check lfs info crc failed");
         tmpinfo = (lfs_info_s*)blk;
@@ -562,7 +562,7 @@ w_err_t lfs_info_write(lfs_info_s *lfs_info,w_blkdev_s *blkdev)
 
         wind_memcpy(blk,lfs_info,sizeof(lfs_info_s));
         crc = wind_crc32(blk,blkdev->blksize-4,0xffffffff);
-        wind_from_uint32(&blk[blkdev->blksize-4],crc);
+        wind_bytearr_from_uint32(&blk[blkdev->blksize-4],crc);
         
         cnt = wind_blkdev_write(blkdev,0,blk,1);
         WIND_ASSERT_BREAK(cnt > 0,W_ERR_HARDFAULT,"write fsinfo failed.");
@@ -699,7 +699,7 @@ w_err_t listfs_match(w_blkdev_s *blkdev)
         WIND_CHECK_BREAK(fsinfo->unit_size > 0,W_ERR_FAIL);
         WIND_CHECK_BREAK(fsinfo->blksize >= 512,W_ERR_FAIL);
         WIND_CHECK_BREAK(fsinfo->bitmap1_addr + fsinfo->bitmap_cnt == fsinfo->bitmap1_addr,W_ERR_FAIL);
-        wind_to_uint32(&blk[blkdev->blksize-4],&crc);
+        wind_bytearr_to_uint32(&blk[blkdev->blksize-4],&crc);
         calc_crc = wind_crc32(blk,blkdev->blksize-4,0xffffffff);
         WIND_CHECK_BREAK(calc_crc == crc,W_ERR_INVALID);
     }while(0);
@@ -734,18 +734,18 @@ w_listfile_s* listfile_open(w_listfs_s *lfs,const char *path,w_uint8_t mode)
         
         err = lfs_search_file(lfs,file,path);
         if((err != W_ERR_OK) && (!is_crt))
-        {   //没有创建标记，且文件不存在
+        {   //Has no creating flag and file does not exist
             err = W_ERR_FAIL;
             break;
         }
         else if((err == W_ERR_OK) && (!is_crt))
-        {   //没有创建标记，且文件存在
+        {   //Has no creating flag and file exists
             err = W_ERR_OK;
             file->lfs->file_ref ++;
             break;
         }
 
-        //有创建标记，且文件不存在
+        //Has creating flag and file does not exist
         err = lfs_make_file(lfs,file,(char*)path);
         WIND_ASSERT_BREAK(err == W_ERR_OK,err,"make file failed");
         file->lfs->file_ref ++;
@@ -755,7 +755,7 @@ w_listfile_s* listfile_open(w_listfs_s *lfs,const char *path,w_uint8_t mode)
     }while(0);
     
     if(err != W_ERR_OK)
-    {   //打开文件过程中出错
+    {   //Error opening file
         listfile_destroy(file);
         return W_NULL;
     }

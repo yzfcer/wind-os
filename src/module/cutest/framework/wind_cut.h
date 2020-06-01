@@ -27,20 +27,20 @@
 #include "test_framework.h"
 #if WIND_MODULE_CUTEST_SUPPORT
 
-//断言命题x为真
+//Expecting proposition x is true
 #define EXPECT_TRUE(x) \
     do{if(!(x)) \
     {FAIL_EXPECT_FALSE_OUT(x,"TRUE");test_suite_err(__LINE__);}\
     }while(0)
 
-//断言命题x为假
+//Expecting proposition x is false
 #define EXPECT_FALSE(x) \
     do{if(!(!(x))) \
     {FAIL_EXPECT_FALSE_OUT(x,"FALSE");test_suite_err(__LINE__);}\
     }while(0)
     
 
-//断言x == y
+//Expecting x == y
 #define EXPECT_EQ(x,y) \
     do{if(!((x) == (y))) \
     {FAIL_EXPECT_OUT(x,y,"==");test_suite_err(__LINE__);}\
@@ -48,43 +48,43 @@
 
 
 
-//断言x != y
+//Expecting x != y
 #define EXPECT_NE(x,y) \
     do{if(!((x) != (y))) \
     {FAIL_EXPECT_OUT(x,y,"!=");test_suite_err(__LINE__);}\
     }while(0)
 
-//断言x > y
+//Expecting x > y
 #define EXPECT_GREATER(x,y) \
     do{if(!((x) > (y))) \
     {FAIL_EXPECT_OUT(x,y,">");test_suite_err(__LINE__);}\
     }while(0)
 
-//断言x < y
+//Expecting x < y
 #define EXPECT_SMALLER(x,y) \
     do{if(!((x) < (y))) \
     {FAIL_EXPECT_OUT(x,y,"<");test_suite_err(__LINE__);}\
     }while(0)
 
-//断言x <= y
+//Expecting x <= y
 #define EXPECT_NOT_GREATER(x,y) \
     do{if(!((x) <= (y))) \
     {FAIL_EXPECT_OUT(x,y,"<=");test_suite_err(__LINE__);}\
     }while(0)
 
-//断言x >= y
+//Expecting x >= y
 #define EXPECT_NOT_SMALLER(x,y) \
     do{if(!((x) >= (y))) \
     {FAIL_EXPECT_OUT(x,y,">=");test_suite_err(__LINE__);}\
     }while(0)
 
-//断言字符串相同
+//Expecting same string
 #define EXPECT_STR_EQ(x,y) \
     do{if(!(stringcmp((x),(y)) == 0)) \
     {FAIL_EXPECT_OUT(x,y,"!=");test_suite_err(__LINE__);}\
     }while(0)
     
-//断言字符串不同
+//Expecting string is not equal
 #define EXPECT_STR_NE(x,y) \
             do{if(!(stringcmp((x),(y)) != 0)) \
             {FAIL_EXPECT_OUT(x,y,"==");test_suite_err(__LINE__);}\

@@ -4,7 +4,7 @@
 **                                       yzfcer@163.com
 **
 **--------------File infomation-------------------------------------------------------------------------
-** FileName    : wind_xmodem.h / wind_xmodem.c
+** FileName    : wind_xmodem.c
 ** Author      : Jason Zhou
 ** Last Date   : 2013.11.27
 ** Description : xmodem protocol function

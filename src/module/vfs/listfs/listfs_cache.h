@@ -58,7 +58,7 @@ typedef struct __lcache_item_s
     w_uint8_t  *blk;
 }lcache_item_s;
 
-//���������Ϣ
+
 typedef struct __lfs_cache_s
 {
     w_obj_s obj;
@@ -66,9 +66,9 @@ typedef struct __lfs_cache_s
     w_uint32_t r_miss;
     w_uint32_t w_hit;
     w_uint32_t w_miss;
-    w_uint32_t itemcount;     //����Ԫ������
-    //w_uint32_t itemsize;      //����Ԫ�ش�С
-    w_dlist_s itemlist;       //����Ԫ���б�
+    w_uint32_t itemcount;
+    //w_uint32_t itemsize;
+    w_dlist_s itemlist;
     
 }lfs_cache_s;
 

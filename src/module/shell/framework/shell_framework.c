@@ -606,7 +606,7 @@ w_err_t thread_shell(w_int32_t argc,char **argv)
     w_int32_t index = 0;
     w_shell_ctx_s *ctx;
     if(argc >= 2)
-        wind_to_uint32((w_uint8_t*)argv[1],(w_uint32_t*)&index);
+        wind_bytearr_to_uint32((w_uint8_t*)argv[1],(w_uint32_t*)&index);
     else 
         index = 0;
     WIND_ASSERT_RETURN(index >= 0,W_ERR_INVALID);

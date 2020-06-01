@@ -31,7 +31,7 @@
 #include "treefs_def.h"
 #if WIND_TREEFS_SUPPORT
 
-#define F_TREEFS_POOL (0x01 << 0) //标记treefs对象是否通过内存池分�?
+#define F_TREEFS_POOL (0x01 << 0) //Mark whether the trees object is allocated through the memory pool
 #define IS_F_TREEFS_POOL(sem) ((sem->obj.flag & F_TREEFS_POOL) == F_TREEFS_POOL)
 #define SET_F_TREEFS_POOL(sem) (sem->obj.flag |= F_TREEFS_POOL)
 #define CLR_F_TREEFS_POOL(sem) (sem->obj.flag &= (~F_TREEFS_POOL))

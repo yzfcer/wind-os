@@ -32,7 +32,7 @@
 
 #define DB_NEXT(dbinfo) (w_db_s*)(dbinfo->base+dbinfo->next_offset)
 
-//数据库函数
+
 w_err_t db_entry_init(void);
 w_db_s *db_get_byname(char *dbname);
 w_bool_t db_entry_exist(char *dbname);

@@ -27,20 +27,20 @@ extern "C" {
 #define CPU_NAME_LEN 24
 #define BOARD_NAME_LEN 24
 
-//存储于flash参数区的数据的整体结构，
-//这部分数据在内存中没有备份，在需要时从flash读出
+//The overall structure of the data stored in the flash parameter area, 
+//which is not backed up in memory and read out from flash when necessary
 typedef struct 
 {
-    w_uint32_t magic;//魔术字，用于参数头部校验
-    w_uint32_t lenth;//本参数结构体的长度
+    w_uint32_t magic;//Magic word 
+    w_uint32_t lenth;//Length of the structure of this parameter
     
-    w_uint32_t version;    //bootloader`
-    w_uint8_t debug_mode; //调试模式
-    w_uint8_t wait_sec;   //等待键盘事件秒数
-    w_uint8_t run_type;   //运行在RAM或Flash
-    w_uint8_t encrypt_type;//程序加密使能
+    w_uint32_t version;    //bootloader version
+    w_uint8_t debug_mode; //Debug mode flag
+    w_uint8_t wait_sec;   //Seconds to wait for keyboard events
+    w_uint8_t run_type;   //Running in RAM or Flash
+    w_uint8_t encrypt_type;//Program encryption method
     w_uint8_t lock_en;     //Chip lock enable
-    w_int8_t part_cnt;
+    w_int8_t part_cnt;     //Partition count
     char arch_name[ARCH_NAME_LEN];
     char cpu_name[CPU_NAME_LEN];
     char board_name[BOARD_NAME_LEN];

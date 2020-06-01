@@ -21,8 +21,8 @@
 #include "tb_model.h"
 #include "db_demo1.h"
 #include "db_entry.h"
-//定义数据库结构
 
+//Define database structure
 TBMODEL_START(tb_demo1)
 TBMODEL_ITEM_A(tb_demo1,w_int32_t,key,DB_ATTR_KEY_ITEM)
 TBMODEL_ITEM(tb_demo1,w_int32_t,ademo1)

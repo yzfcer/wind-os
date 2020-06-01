@@ -24,11 +24,11 @@ extern "C" {
 typedef w_err_t (*menu_handle_fn)(void);
 typedef struct
 {
-    char key;//输入的键值
-    char prio;//菜单权限
-    char prio_bak;//菜单权限的备份
-    const char *menu_item;//菜单项
-    menu_handle_fn handle;//处理的句柄
+    char key;//Command value entered
+    char prio;//Menu permissions
+    char prio_bak;//Backup of menu permissions
+    const char *menu_item;//menu item
+    menu_handle_fn handle;//Menu processing handle
 }w_menu_tb_s;
 
 w_err_t run_menu(void);

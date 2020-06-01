@@ -23,7 +23,7 @@
 extern "C" {
 #endif
 
-//通用缓存器，一般在拷贝数据时做缓存，或者接收命令字符
+//General purpose buffer, which can cache or receive command characters when copying data
 
 void boot_delay(w_uint32_t ms)
 {

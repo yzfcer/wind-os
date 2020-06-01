@@ -31,28 +31,28 @@
 
 #define LISTFILE_BLK_MAGIC 0x725A4967
 
-#define LFILE_NAME_LEN 64    //�ļ�������
+#define LFILE_NAME_LEN 64    //File name lenth
 
-#define LFILE_LBLK_CNT 64    //ÿ����������¼�Ĺ���������
+#define LFILE_LBLK_CNT 64    //Block address count in one fileinfo
 
-//��fileinfo���ݿ���ȡ��blkinfo
+
 #define FILEINFO_BLKINFO(blk) (lfile_blkinfo_s*)&blk[sizeof(lfile_info_s)]
 //#define BLKINFO_HAS_OFFSET(info,offset) 
 //((offset >= info->offset)&&(offset < info->offset + info->blkused * info->blksize))
 #define BLKINFO_HAS_OFFSET(info,offset1,blksize) ((offset1 >= info->offset)&&(offset1 < info->offset + info->blkused * blksize))
 
-//�ļ����ݿ�ͷ����Ϣ
+
 typedef struct __lfile_blkinfo_s
 {
-    w_uint32_t magic;        //����ħ����
-    w_uint32_t self_addr;    //��ǰ��ַ
-    w_uint32_t prevblk_addr; //�Ͽ��ַ
-    w_uint32_t nextblk_addr; //�¿��ַ
-    w_uint32_t  blksize;      //���С
-    w_uint32_t  offset;       //��ǰ���Ӧ���ļ�����ʼƫ����
-    w_uint32_t  blkused;      //��ǰ���Ѿ�ʹ�õ�����
-    w_uint32_t  byteused;     //��ǰ���Ѿ�ʹ�õ��ֽ�����
-    w_uint32_t dataaddr[LFILE_LBLK_CNT];  //���ݿ���Ϣ
+    w_uint32_t magic;        //
+    w_uint32_t self_addr;    //
+    w_uint32_t prevblk_addr; //
+    w_uint32_t nextblk_addr; //
+    w_uint32_t  blksize;      //
+    w_uint32_t  offset;       //
+    w_uint32_t  blkused;      //
+    w_uint32_t  byteused;     //
+    w_uint32_t dataaddr[LFILE_LBLK_CNT];  //
 }lfile_blkinfo_s;
 
 void blkinfo_be2le(lfile_blkinfo_s *info);

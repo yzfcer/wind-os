@@ -32,24 +32,24 @@
 
 #define TB_MODEL_MAGIC 0x236F79AC
 
-//�ֶ����Զ���
-#define DB_ATTR_KEY          (0x0001<<0) //�ɶ�
-#define DB_ATTR_RD           (0x0001<<1) //�ɶ�
-#define DB_ATTR_WR           (0x0001<<2) //��д
-#define DB_ATTR_CRYPT        (0x0001<<3) //����
-#define DB_ATTR_VISIBLE      (0x0001<<4) //�ɼ�
-#define DB_ATTR_NOT_NULL     (0x0001<<5) //���ܿ�
-#define DB_ATTR_FLUSH        (0x0001<<6) //Ҫˢ��
-#define DB_ATTR_SINGLE       (0x0001<<7) //����Ŀ
+//DB attribution
+#define DB_ATTR_KEY          (0x0001<<0) //KEY value flag
+#define DB_ATTR_RD           (0x0001<<1) //Readable flag
+#define DB_ATTR_WR           (0x0001<<2) //Writable flag
+#define DB_ATTR_CRYPT        (0x0001<<3) //Encypt flag
+#define DB_ATTR_VISIBLE      (0x0001<<4) //Visible flag
+#define DB_ATTR_NOT_NULL     (0x0001<<5) //Non empty 
+#define DB_ATTR_FLUSH        (0x0001<<6) //Brush disk mark
+#define DB_ATTR_SINGLE       (0x0001<<7) //Single instance
 
-#define DB_ATTR_KEY_ITEM     (DB_ATTR_RD | DB_ATTR_VISIBLE | DB_ATTR_NOT_NULL | DB_ATTR_KEY)//��ֵ
-#define DB_ATTR_DEFAULT_ITEM (DB_ATTR_RD | DB_ATTR_VISIBLE | DB_ATTR_WR )//Ĭ���ֶ�����
+#define DB_ATTR_KEY_ITEM     (DB_ATTR_RD | DB_ATTR_VISIBLE | DB_ATTR_NOT_NULL | DB_ATTR_KEY)
+#define DB_ATTR_DEFAULT_ITEM (DB_ATTR_RD | DB_ATTR_VISIBLE | DB_ATTR_WR )
 #define DB_ATTR_READONLY     (DB_ATTR_RD | DB_ATTR_VISIBLE | DB_ATTR_NOT_NULL)
 #define DB_ATTR_RAMONLY      (DB_ATTR_RD | DB_ATTR_VISIBLE | DB_ATTR_NOT_NULL)
 
 
 
-//�ж������Ƿ�����
+//Check DB attribution flag
 #define DB_ATTR_EQ(attr,va)    (((attr)&(va))==(va))
 #define DB_IS_KEY(attr)        DB_ATTR_EQ((attr),DB_ATTR_KEY)
 #define DB_IS_RD(attr)         DB_ATTR_EQ((attr),DB_ATTR_RD)
@@ -59,7 +59,7 @@
 #define DB_IS_NOT_W_NULL(attr) DB_ATTR_EQ((attr),DB_ATTR_NOT_NULL)
 
 
-//���ݱ�����
+
 #define TB_OFFSET(name,mbr) (w_uint16_t)(w_addr_t)(&(((name*)0)->mbr))
 #define TB_MBRSIZE(name,mbr) (sizeof(((name*)0)->mbr))
 #define TB_MBRCNT(name,mbr_type,mbr) (sizeof(((name*)0)->mbr)/sizeof(mbr_type))

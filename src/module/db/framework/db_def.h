@@ -29,9 +29,9 @@
 #include "wind_dlist.h"
 #include "wind_mutex.h"
 #define DB_BLK_SIZE 512
-#define DB_NAME_LEN 20   //数据库名字长度
-#define TB_NAME_LEN 20   //数据表名字长度
-#define MBR_NAME_LEN 20  //数据名字长度
+#define DB_NAME_LEN 20   //Database name length
+#define TB_NAME_LEN 20   //Data table name length
+#define MBR_NAME_LEN 20  //Data field name length
 
 typedef enum 
 {
@@ -64,7 +64,7 @@ struct __db_entry_s
     w_dnode_s dbnode;
     w_dlist_s tblist;
     char name[DB_NAME_LEN];
-    w_addr_t base;//绝对地址
+    w_addr_t base;//Absolute address
     w_uint16_t attr;
     w_int32_t hash;
     w_int32_t tb_count;
@@ -77,7 +77,7 @@ struct __tb_entry_s
     w_dlist_s data_list;
     char dbname[DB_NAME_LEN];
     char tbname[TB_NAME_LEN];
-    w_addr_t base;//绝对地址
+    w_addr_t base;//Absolute address
     w_db_s *db;
     
     w_mutex_s mutex;
@@ -87,7 +87,7 @@ struct __tb_entry_s
     
     w_uint16_t data_cnt;
     w_uint16_t data_size;
-    //偏移地址
+    //Offset address
     w_int16_t mbrname_offset;
     w_int16_t type_offset;
     w_int16_t count_offset;
