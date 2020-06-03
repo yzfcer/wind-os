@@ -89,14 +89,42 @@ void _wind_heaps_create(void)
 #endif
 
 #if WIND_MODULE_VFS_SUPPORT
+#include "wind_fs.h"
+static w_err_t create_dirs(void)
+{
+    w_err_t err;
+    w_file_s *file;
+    do
+    {
+        err = W_ERR_OK;
+        file = wind_fopen("/usr/",FMODE_R | FMODE_CRT);
+        WIND_ASSERT_BREAK(file != W_NULL,W_ERR_FAIL,"create dir %s fail","/usr/");
+        wind_fclose(file);
+        file = wind_fopen("/mnt/",FMODE_R | FMODE_CRT);
+        WIND_ASSERT_BREAK(file != W_NULL,W_ERR_FAIL,"create dir %s fail","/mnt/");
+        wind_fclose(file);
+        file = wind_fopen("/var/",FMODE_R | FMODE_CRT);
+        WIND_ASSERT_BREAK(file != W_NULL,W_ERR_FAIL,"create dir %s fail","/var/");
+        wind_fclose(file);
+        file = wind_fopen("/host/",FMODE_R | FMODE_CRT);
+        WIND_ASSERT_BREAK(file != W_NULL,W_ERR_FAIL,"create dir %s fail","/host/");
+        wind_fclose(file);
+        file = wind_fopen("/mem/",FMODE_R | FMODE_CRT);
+        WIND_ASSERT_BREAK(file != W_NULL,W_ERR_FAIL,"create dir %s fail","/mem/");
+        wind_fclose(file);
+    }while(0);
+    return err;
+}
 /*
  When the system needs to support the file system function, it needs to initialize 
  the rule of Mount here. When the file system is not needed, it need not be implemented
  */ 
-#include "wind_fs.h"
 void _wind_fs_mount_init(void)
 {
+    w_err_t err;
     wind_vfs_mount("fs0","listfs","disk0","/");
+    err = create_dirs();
+    WIND_ASSERT_RETURN_VOID(err == W_ERR_OK);
     wind_vfs_mount("fs1","listfs","memblk","/mem");
     wind_vfs_mount("fs2","treefs","null0","/var");
     wind_vfs_mount("fs3","treefs","null1","/mnt/");
