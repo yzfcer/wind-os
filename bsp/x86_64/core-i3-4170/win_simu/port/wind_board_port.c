@@ -78,6 +78,7 @@ void _wind_heaps_create(void)
 
 #if WIND_MODULE_VFS_SUPPORT
 #include "wind_fs.h"
+#include "wind_file.h"
 static w_err_t create_dirs(void)
 {
     w_err_t err;
