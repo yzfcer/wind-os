@@ -90,6 +90,7 @@ void _wind_heaps_create(void)
 
 #if WIND_MODULE_VFS_SUPPORT
 #include "wind_fs.h"
+#include "wind_file.h"
 static w_err_t create_dirs(void)
 {
     w_err_t err;
@@ -99,6 +100,7 @@ static w_err_t create_dirs(void)
         err = W_ERR_OK;
         file = wind_fopen("/usr/",FMODE_R | FMODE_CRT);
         WIND_ASSERT_BREAK(file != W_NULL,W_ERR_FAIL,"create dir %s fail","/usr/");
+		wind_notice("file:%p",file);
         wind_fclose(file);
         file = wind_fopen("/mnt/",FMODE_R | FMODE_CRT);
         WIND_ASSERT_BREAK(file != W_NULL,W_ERR_FAIL,"create dir %s fail","/mnt/");
@@ -146,7 +148,7 @@ w_stack_t *_wind_thread_stack_init(thread_run_f pfunc,void *pdata, w_stack_t *ps
 	ucontext_t *ctx;   
     w_int32_t ctx_size;
     w_stack_t* stk;
-	
+
 	ctx_size = 4 + sizeof(ucontext_t)/sizeof(w_stack_t);
     stk = (w_stack_t*)(pstkbt + stk_depth - 1 - ctx_size);
 	

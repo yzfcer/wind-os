@@ -211,7 +211,7 @@ w_file_s* wind_fopen(const char *path,w_uint8_t fmode)
     w_uint8_t isdir;
     w_int32_t pathlen;
     w_file_s *file = W_NULL;
-    WIND_ASSERT_RETURN(path != W_NULL,W_NULL);
+	WIND_ASSERT_RETURN(path != W_NULL,W_NULL);
     WIND_ASSERT_RETURN(path[0] != 0,W_NULL);
     err = wind_filepath_check_valid(path);
     WIND_ASSERT_RETURN(err == W_ERR_OK,W_NULL);
@@ -236,7 +236,6 @@ w_err_t wind_fclose(w_file_s *file)
 {
     w_err_t err = W_ERR_FAIL;
     WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
-    wind_debug("close file:%s.",file->realpath);
     wind_mutex_lock(file->mutex);
     if(file->vfs->ops->close)
         err = file->vfs->ops->close(file);

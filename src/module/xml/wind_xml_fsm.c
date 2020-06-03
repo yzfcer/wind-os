@@ -407,10 +407,8 @@ static w_err_t xmlfsm_handle_attr_value(w_fsm_s *fsm)
 {
     w_err_t err;
     w_xmlfsm_s *xfsm;
-    char *buff;
     WIND_CHECK_RETURN(fsm->arg != W_NULL,W_ERR_PTR_NULL);
     WIND_CHECK_RETURN(fsm->arglen > 0,W_ERR_INVALID);
-    buff = (char*)fsm->arg;
     xfsm = (w_xmlfsm_s*)fsm;
     while(xfsm->argidx < fsm->arglen)
     {
@@ -449,10 +447,8 @@ static w_err_t xmlfsm_handle_node_value(w_fsm_s *fsm)
     w_err_t err;
     w_int32_t i;
     w_xmlfsm_s *xfsm;
-    char *buff;
     WIND_CHECK_RETURN(fsm->arg != W_NULL,W_ERR_PTR_NULL);
     WIND_CHECK_RETURN(fsm->arglen > 0,W_ERR_INVALID);
-    buff = (char*)fsm->arg;
     xfsm = (w_xmlfsm_s*)fsm;
     while(xfsm->argidx < fsm->arglen)
     {

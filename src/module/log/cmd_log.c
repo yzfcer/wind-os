@@ -51,17 +51,15 @@ COMMAND_USAGE(log)
 
 COMMAND_MAIN(log,argc,argv)
 {
-    char *str;
     w_int32_t i;
     w_int32_t level,oldlevel;
     
     WIND_ASSERT_RETURN(argc >= 2,W_ERR_INVALID);
-    str = argv[1];
     if(wind_strcmp(argv[1],"setlevel") == 0)
     {
         WIND_ASSERT_RETURN(argc >= 3,W_ERR_INVALID);
         oldlevel = wind_log_get_level();
-        if(wind_str_to_int(argv[2],(w_uint32_t*)&level))
+        if(wind_str_to_int(argv[2],(w_int32_t*)&level))
         {
             wind_log_set_level(level);
             level = wind_log_get_level();

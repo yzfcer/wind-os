@@ -12,8 +12,6 @@
 ** Modify      :
 **********************************************************************************/
 #include "wind_log.h"
-//#include "treefs.h"
-//#include "treefile.h"
 #include "wind_file.h"
 #include "wind_debug.h"
 #include "wind_string.h"
@@ -79,4 +77,4 @@ w_err_t wind_log_close(void)
     s_logfile = W_NULL;
     return W_ERR_OK;
 }
-#endif #if WIND_MODULE_LOG_SUPPORT
+#endif //#if WIND_MODULE_LOG_SUPPORT

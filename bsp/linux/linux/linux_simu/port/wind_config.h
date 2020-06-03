@@ -176,13 +176,13 @@ extern "C" {
 //-------------------------------------------------------------------------------
 //Thread stack space size configuration
 //-------------------------------------------------------------------------------
-#define THREAD_DAEMON_STKSIZE 0x20000
-#define THREAD_IDLE_STKSIZE 0x20000
-#define THREAD_INIT_STKSIZE 0x20000
-#define THREAD_STATI_STKSIZE 0x20000
-#define THREAD_TIMER_STKSIZE 0x20000
-#define THREAD_SHELL_STKSIZE 0x80000
-#define THREAD_COROUT_STKSIZE 0x20000
+#define THREAD_DAEMON_STKSIZE  0x20000
+#define THREAD_IDLE_STKSIZE    0x20000
+#define THREAD_INIT_STKSIZE    0x20000
+#define THREAD_STATI_STKSIZE   0x20000
+#define THREAD_TIMER_STKSIZE   0x20000
+#define THREAD_SHELL_STKSIZE   0x80000
+#define THREAD_COROUT_STKSIZE  0x20000
 #define THREAD_SOFTINT_STKSIZE 0x20000 
 
 
