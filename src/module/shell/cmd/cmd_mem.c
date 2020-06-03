@@ -35,7 +35,6 @@ static w_bool_t str2int64(const char *str,w_uint64_t *value)
         if ((*str < '0') || (*str > '9'))  
             return W_FALSE;
         temp = temp *10 + (*str - '0');
-        str++;
     }
     *value = temp;
     return W_TRUE;
@@ -44,7 +43,6 @@ static w_bool_t str2int64(const char *str,w_uint64_t *value)
 static w_bool_t strh2int64(const char *str,w_uint64_t *value)
 {
     w_uint64_t temp = 0;
-    wind_printf("str:%s,",str);
     while(*str != 0)
     {
         if ((*str >= '0') && (*str <= '9'))  

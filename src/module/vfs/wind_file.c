@@ -227,7 +227,9 @@ w_file_s* wind_fopen(const char *path,w_uint8_t fmode)
         isdir = path[pathlen-1] == '/'?1:0;
         file = wind_file_create(fs,path,fmode, isdir);
     }while(0);
-    return file;
+    if(err != W_ERR_OK)
+        return (w_file_s*)W_NULL;
+	return file;
 }
 
 w_err_t wind_fclose(w_file_s *file)
