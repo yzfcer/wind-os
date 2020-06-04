@@ -1360,7 +1360,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>component_vfs</GroupName>
+          <GroupName>module_vfs</GroupName>
           <Files>
             <File>
               <FileName>adapter_treefs.c</FileName>
@@ -1475,7 +1475,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>component_shell</GroupName>
+          <GroupName>module_shell</GroupName>
           <Files>
             <File>
               <FileName>cmd_history.c</FileName>
@@ -1615,7 +1615,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>component_cutest</GroupName>
+          <GroupName>module_cutest</GroupName>
           <Files>
             <File>
               <FileName>test_framework.c</FileName>
@@ -1700,7 +1700,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>component_lua</GroupName>
+          <GroupName>module_lua</GroupName>
           <Files>
             <File>
               <FileName>lapi.c</FileName>

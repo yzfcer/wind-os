@@ -491,19 +491,20 @@ w_err_t wind_heapitem_print_detail(w_allocid_e allocid)
         foreach_node(dnode1,&heap->free_list)
         {
             heapitem = NODE_TO_HEAPITEM(dnode1);
-            WIND_ASSERT_BREAK(heapitem->magic = (w_uint16_t)(~WIND_HEAPITEM_MAGIC),
-                            W_ERR_MEM,"heap memory has been illegally accessed .");
+            WIND_ASSERT_BREAK(heapitem->magic == (w_uint16_t)(~WIND_HEAPITEM_MAGIC),
+                            W_ERR_MEM,"%d != %d.",heapitem->magic,~WIND_HEAPITEM_MAGIC);
             if((allocid == 255)||(allocid == heapitem->allocid))
             {
                 wind_printf("0x%-16x %-10d %-10s %-8d\r\n",heapitem,heapitem->size,
                     IS_F_HEAPITEM_USED(heapitem)?"used":"free",heapitem->allocid);
             }
         }
+        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"heap memory error.");
         foreach_node(dnode1,&heap->used_list)
         {
             heapitem = NODE_TO_HEAPITEM(dnode1);
-            WIND_ASSERT_BREAK(heapitem->magic = (w_uint16_t)(~WIND_HEAPITEM_MAGIC),
-                            W_ERR_MEM,"heap memory has been illegally accessed .");
+            WIND_ASSERT_BREAK(heapitem->magic == (w_uint16_t)(WIND_HEAPITEM_MAGIC),
+                            W_ERR_MEM,"%d != %d.",heapitem->magic,WIND_HEAPITEM_MAGIC);
             if((allocid == 255)||(allocid == heapitem->allocid))
             {
                 wind_printf("0x%-16x %-10d %-10s %-8d\r\n",heapitem,heapitem->size,
