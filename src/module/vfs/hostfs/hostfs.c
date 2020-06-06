@@ -334,6 +334,7 @@ w_err_t hostfs_deinit(w_hostfs_s *hfs)
     WIND_ASSERT_RETURN(hfs != W_NULL,W_ERR_PTR_NULL);
     if(hfs->dir_prefix != W_NULL)
         wind_free(hfs->dir_prefix);
+    wind_memset(hfs,0,sizeof(w_hostfs_s));
     return W_ERR_OK;
 }
 

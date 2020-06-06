@@ -34,7 +34,7 @@ extern "C" {
 #endif
 
 //=================================================================
-w_hostfs_s g_hfs;
+w_hostfs_s g_hfs = {0,(char*)W_NULL};
 
 static w_err_t hfs_init(void)
 {
