@@ -35,6 +35,7 @@ static w_bool_t str2int64(const char *str,w_uint64_t *value)
         if ((*str < '0') || (*str > '9'))  
             return W_FALSE;
         temp = temp *10 + (*str - '0');
+        str ++;
     }
     *value = temp;
     return W_TRUE;
@@ -84,10 +85,10 @@ static w_bool_t get_addr(char *str,w_addr_t *value)
     if((wind_memcmp(str,"0x",2) == 0) || 
        (wind_memcmp(str,"0X",2) == 0)) 
     {
-        return strh2int64(&str[2],&tmpva);
+        res = strh2int64(&str[2],&tmpva);
     }
     else
-        return str2int64(str,&tmpva);
+        res = str2int64(str,&tmpva);
     if(res)
         *value = (w_addr_t)tmpva;
     return res;
@@ -98,7 +99,7 @@ static void print_mem(w_addr_t start,w_uint32_t len)
     w_uint32_t i,va;
     start = ((start >> 2) << 2);
     len = ((len + 3) >> 2);
-    wind_printf("memory %p %d\r\n",start,len);
+    wind_printf("memory addr: %p,size: %d\r\n",start,len);
     for(i = 0;i < len;i ++)
     {
         if((i & 0x03) == 0)
