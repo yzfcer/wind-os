@@ -96,18 +96,29 @@ static w_bool_t get_addr(char *str,w_addr_t *value)
 
 static void print_mem(w_addr_t start,w_uint32_t len)
 {
-    w_uint32_t i,va;
+    w_uint32_t i,j,va;
+    char *strptr;
     start = ((start >> 2) << 2);
     len = ((len + 3) >> 2);
     wind_printf("memory addr: %p,size: %d\r\n",start,len);
     for(i = 0;i < len;i ++)
     {
         if((i & 0x03) == 0)
+        {
             wind_printf("%p:  ",start+i*4);
+            strptr = (char*)(start+i*4);
+        }
+            
         va = *(w_addr_t*)((void*)(start+i*4));
 		wind_printf("%08x ",va);
         if(((i+1) & 0x03) == 0)
+        {
+            wind_printf("        ");
+            for(j = 0;j < 16;j ++)
+                wind_printf("%c",(strptr[j] >= 0x20 && strptr[j] < 0x7f)?strptr[j]:'.');
             wind_printf("\r\n");
+        }
+            //wind_printf("\r\n");
     }
     wind_printf("\r\n");
 }
