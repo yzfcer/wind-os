@@ -453,7 +453,18 @@ w_err_t wind_heap_print_detail(void)
 {
     w_dnode_s *dnode;
     w_heap_s* heap;
+    char * hdr_fmt,*dat_fmt;
     w_dlist_s *list = &heaplist;
+    if(sizeof(w_addr_t) == 8)
+    {
+        hdr_fmt = "%-16s %-18s %-12s %-10s \r\n";
+        dat_fmt = "%-16s %-18p %-12d %-10s\r\n";
+    }
+    else
+    {
+        hdr_fmt = "%-16s %-10s %-12s %-10s \r\n";
+        dat_fmt = "%-16s %-10p %-12d %-10s\r\n";
+    }
     wind_printf("\r\n\r\nheap list:\r\n");
     wind_print_space(7);
     wind_printf("%-16s %-10s %-12s %-10s \r\n","heap","base","size","isprivate");
@@ -478,9 +489,9 @@ w_err_t wind_heapitem_print_detail(w_allocid_e allocid)
     w_err_t err;
     w_dnode_s *dnode,*dnode1;
     w_heap_s *heap;
+    char * hdr_fmt,*dat_fmt;
     w_heapitem_s *heapitem;
     w_dlist_s *list = &heaplist;
-    char * hdr_fmt,*dat_fmt;
     WIND_ASSERT_RETURN(list->head != W_NULL,W_ERR_PTR_NULL);
     if(sizeof(w_addr_t) == 8)
     {
@@ -495,10 +506,7 @@ w_err_t wind_heapitem_print_detail(w_allocid_e allocid)
 
     wind_printf("\r\n\r\nheapitem list:\r\n");
     wind_print_space(6);
-    //if(sizeof(w_addr_t) == 4)
-        wind_printf(hdr_fmt,"addr","size","state","allocid");
-    //else
-    //    wind_printf("%-18s %-10s %-10s %-8s\r\n","addr","size","state","allocid");
+    wind_printf(hdr_fmt,"addr","size","state","allocid");
     wind_print_space(6);
     
     foreach_node(dnode,list)
