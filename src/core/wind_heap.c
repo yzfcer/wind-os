@@ -68,6 +68,7 @@ static w_int32_t heapitem_diagnose(w_heap_s *heap)
         if(heapitem->magic != (w_uint16_t)(~WIND_HEAPITEM_MAGIC))
         {
             wind_error("heap %s heapitem magic error,ptr=%p",heap->obj.name,heapitem);
+            wind_error("magic is expected 0x%4x,but in fact 0x%4x",(w_uint16_t)(~WIND_HEAPITEM_MAGIC),heapitem->magic);
             return DIAG_RES_OBJ_MAGIC_ERROR;
         }
     }
@@ -77,6 +78,7 @@ static w_int32_t heapitem_diagnose(w_heap_s *heap)
         if(heapitem->magic != (w_uint16_t)WIND_HEAPITEM_MAGIC)
         {
             wind_error("heap %s heapitem magic error,ptr=%p",heap->obj.name,heapitem);
+            wind_error("magic is expected 0x%4x,but in fact 0x%4x",WIND_HEAPITEM_MAGIC,heapitem->magic);
             return DIAG_RES_OBJ_MAGIC_ERROR;
         }
     }
@@ -502,7 +504,7 @@ w_err_t wind_heapitem_print_detail(w_allocid_e allocid)
         foreach_node(dnode1,&heap->used_list)
         {
             heapitem = NODE_TO_HEAPITEM(dnode1);
-            WIND_ASSERT_BREAK(heapitem->magic == (w_uint16_t)(~WIND_HEAPITEM_MAGIC),
+            WIND_ASSERT_BREAK(heapitem->magic == (w_uint16_t)(WIND_HEAPITEM_MAGIC),
                             W_ERR_MEM,"heap memory has been illegally accessed .");
             if((allocid == 255)||(allocid == heapitem->allocid))
             {

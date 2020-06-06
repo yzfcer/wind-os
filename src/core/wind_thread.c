@@ -544,10 +544,7 @@ static void print_mem(w_addr_t start,w_uint32_t len)
         if((i & 0x03) == 0)
             wind_printf("%p:  ",start+i*4);
         va = *(w_addr_t*)((void*)(start+i*4));
-		if(sizeof(w_addr_t) == 8)
-		    wind_printf("%016x ",va);
-		else
-		    wind_printf("%08x ",va);
+		wind_printf("%08x ",va);
         if(((i+1) & 0x03) == 0)
             wind_printf("\r\n");
     }
