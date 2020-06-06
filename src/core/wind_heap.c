@@ -472,6 +472,7 @@ w_err_t wind_heap_print_detail(void)
     return W_ERR_OK;
 }
 
+
 w_err_t wind_heapitem_print_detail(w_allocid_e allocid)
 {   
     w_err_t err;
@@ -479,13 +480,25 @@ w_err_t wind_heapitem_print_detail(w_allocid_e allocid)
     w_heap_s *heap;
     w_heapitem_s *heapitem;
     w_dlist_s *list = &heaplist;
+    char * hdr_fmt,*dat_fmt;
     WIND_ASSERT_RETURN(list->head != W_NULL,W_ERR_PTR_NULL);
+    if(sizeof(w_addr_t) == 8)
+    {
+        hdr_fmt = "%-18s   %-10s %-10s %-8s\r\n";
+        dat_fmt = "0x%016x   %-10d %-10s %-8d\r\n";
+    }
+    else
+    {
+        hdr_fmt = "%-10s   %-10s %-10s %-8s\r\n";
+        dat_fmt = "0x%08x   %-10d %-10s %-8d\r\n";
+    }
+
     wind_printf("\r\n\r\nheapitem list:\r\n");
     wind_print_space(6);
-    if(sizeof(w_addr_t) == 4)
-        wind_printf("%-12s %-10s %-10s %-8s\r\n","addr","size","state","allocid");
-    else
-        wind_printf("%-18s %-10s %-10s %-8s\r\n","addr","size","state","allocid");
+    //if(sizeof(w_addr_t) == 4)
+        wind_printf(hdr_fmt,"addr","size","state","allocid");
+    //else
+    //    wind_printf("%-18s %-10s %-10s %-8s\r\n","addr","size","state","allocid");
     wind_print_space(6);
     
     foreach_node(dnode,list)
@@ -500,7 +513,7 @@ w_err_t wind_heapitem_print_detail(w_allocid_e allocid)
                             W_ERR_MEM,"heap memory has been illegally accessed .");
             if((allocid == 255)||(allocid == heapitem->allocid))
             {
-                wind_printf("%p   %-10d %-10s %-8d\r\n",heapitem,heapitem->size,
+                wind_printf(dat_fmt,heapitem,heapitem->size,
                     IS_F_HEAPITEM_USED(heapitem)?"used":"free",heapitem->allocid);
             }
         }
@@ -512,7 +525,7 @@ w_err_t wind_heapitem_print_detail(w_allocid_e allocid)
                             W_ERR_MEM,"%d != %d.",heapitem->magic,WIND_HEAPITEM_MAGIC);
             if((allocid == 255)||(allocid == heapitem->allocid))
             {
-                wind_printf("%p   %-10d %-10s %-8d\r\n",heapitem,heapitem->size,
+                wind_printf(dat_fmt,heapitem,heapitem->size,
                     IS_F_HEAPITEM_USED(heapitem)?"used":"free",heapitem->allocid);
             }
         }
