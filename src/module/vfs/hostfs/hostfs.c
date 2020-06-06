@@ -282,7 +282,7 @@ static w_err_t host_remove_dir(char *fullpath)
         WIND_ASSERT_BREAK(cmd != W_NULL,W_ERR_MEM,"alloc cmd failed");
         wind_strcpy(cmd,"rm -rf ");
         wind_strcat(cmd,fullpath);
-		host_filepath_remove_tail(cmd);
+		//host_filepath_remove_tail(cmd);
         wind_printf("execute cmd:%s\r\n",cmd);
         system(cmd);
     }while(0);
