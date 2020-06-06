@@ -485,27 +485,20 @@ w_err_t wind_heapitem_print_detail(w_allocid_e allocid)
     if(sizeof(w_addr_t) == 8)
     {
         hdr_fmt = "%-18s   %-10s %-10s %-8s\r\n";
-        dat_fmt = "0x%016x   %-10d %-10s %-8d\r\n";
+        dat_fmt = "%-18p   %-10d %-10s %-8d\r\n";
     }
     else
     {
         hdr_fmt = "%-10s   %-10s %-10s %-8s\r\n";
-        dat_fmt = "0x%08x   %-10d %-10s %-8d\r\n";
+        dat_fmt = "%-10p   %-10d %-10s %-8d\r\n";
     }
 
     wind_printf("\r\n\r\nheapitem list:\r\n");
     wind_print_space(6);
-<<<<<<< HEAD
-    if(sizeof(w_addr_t) == 4)
-        wind_printf("%-12s %-10s %-10s %-8s\r\n","addr","size","state","allocid");
-    else
-        wind_printf("%-20s %-10s %-10s %-8s\r\n","addr","size","state","allocid");
-=======
     //if(sizeof(w_addr_t) == 4)
         wind_printf(hdr_fmt,"addr","size","state","allocid");
     //else
     //    wind_printf("%-18s %-10s %-10s %-8s\r\n","addr","size","state","allocid");
->>>>>>> 9b785feb637ce080c8639094ac0c0876415331c0
     wind_print_space(6);
     
     foreach_node(dnode,list)
@@ -520,11 +513,7 @@ w_err_t wind_heapitem_print_detail(w_allocid_e allocid)
                             W_ERR_MEM,"heap memory has been illegally accessed .");
             if((allocid == 255)||(allocid == heapitem->allocid))
             {
-<<<<<<< HEAD
-                wind_printf("%0p %-10d %-10s %-8d\r\n",heapitem,heapitem->size,
-=======
                 wind_printf(dat_fmt,heapitem,heapitem->size,
->>>>>>> 9b785feb637ce080c8639094ac0c0876415331c0
                     IS_F_HEAPITEM_USED(heapitem)?"used":"free",heapitem->allocid);
             }
         }
@@ -536,11 +525,7 @@ w_err_t wind_heapitem_print_detail(w_allocid_e allocid)
                             W_ERR_MEM,"%d != %d.",heapitem->magic,WIND_HEAPITEM_MAGIC);
             if((allocid == 255)||(allocid == heapitem->allocid))
             {
-<<<<<<< HEAD
-                wind_printf("%0p %-10d %-10s %-8d\r\n",heapitem,heapitem->size,
-=======
                 wind_printf(dat_fmt,heapitem,heapitem->size,
->>>>>>> 9b785feb637ce080c8639094ac0c0876415331c0
                     IS_F_HEAPITEM_USED(heapitem)?"used":"free",heapitem->allocid);
             }
         }
