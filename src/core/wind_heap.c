@@ -458,25 +458,24 @@ w_err_t wind_heap_print_detail(void)
     if(sizeof(w_addr_t) == 8)
     {
         hdr_fmt = "%-16s %-18s %-12s %-10s \r\n";
-        dat_fmt = "%-16s %-18p %-12d %-10s\r\n";
+        dat_fmt = "%-16s %-16p %-12d %-10s\r\n";
     }
     else
     {
         hdr_fmt = "%-16s %-10s %-12s %-10s \r\n";
-        dat_fmt = "%-16s %-10p %-12d %-10s\r\n";
+        dat_fmt = "%-16s %-8p %-12d %-10s\r\n";
     }
     wind_printf("\r\n\r\nheap list:\r\n");
     wind_print_space(7);
-    wind_printf("%-16s %-10s %-12s %-10s \r\n","heap","base","size","isprivate");
+    wind_printf(hdr_fmt,"heap","base","size","isprivate");
     wind_print_space(7);
 
     foreach_node(dnode,list)
     {
         heap = NODE_TO_HEAP(dnode);
         wind_mutex_lock(heap->mutex);
-        wind_printf("%-16s 0x%08x %-12d %-10s\r\n",
-            wind_obj_name(&heap->obj),heap->addr,heap->stati.tot,
-            IS_F_HEAP_PRIVATE(heap)?"YES":"NO");
+        wind_printf(dat_fmt,wind_obj_name(&heap->obj),heap->addr,
+            heap->stati.tot,IS_F_HEAP_PRIVATE(heap)?"YES":"NO");
         wind_mutex_unlock(heap->mutex);
     }
     wind_print_space(7);
@@ -496,12 +495,12 @@ w_err_t wind_heapitem_print_detail(w_allocid_e allocid)
     if(sizeof(w_addr_t) == 8)
     {
         hdr_fmt = "%-18s   %-10s %-10s %-8s\r\n";
-        dat_fmt = "%-18p   %-10d %-10s %-8d\r\n";
+        dat_fmt = "%-16p   %-10d %-10s %-8d\r\n";
     }
     else
     {
         hdr_fmt = "%-10s   %-10s %-10s %-8s\r\n";
-        dat_fmt = "%-10p   %-10d %-10s %-8d\r\n";
+        dat_fmt = "%-8p   %-10d %-10s %-8d\r\n";
     }
 
     wind_printf("\r\n\r\nheapitem list:\r\n");
