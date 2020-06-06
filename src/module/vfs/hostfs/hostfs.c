@@ -170,7 +170,9 @@ static w_err_t get_subinfo(w_hostfile_s *hfile,char *path)
         hfile->dirinfo = readdir(hfile->dir);
         WIND_CHECK_BREAK(hfile->dirinfo,W_ERR_FAIL);
         hfile->subinfo.attr = (hfile->dirinfo->d_type == DT_DIR)?HFILE_ATTR_DIR:0;
-        hfile->subinfo.name = (char*)wind_salloc(hfile->dirinfo->d_name,HP_ALLOCID_HOSTFS);
+        if(hfile->subinfo.name != W_NULL)
+            wind_free(hfile->subinfo.name);
+		hfile->subinfo.name = (char*)wind_salloc(hfile->dirinfo->d_name,HP_ALLOCID_HOSTFS);
 		//wind_notice("hfile->subinfo.name=%s",hfile->subinfo.name);
     }while(0);
     return err;
@@ -209,7 +211,7 @@ static char *host_filepath_generate(const char *pre_path,const char *relative_pa
     len2 = wind_strlen(relative_path);
 
     len = len1 + len2 + 3;
-    path = (char*)wind_alloc(len,HP_ALLOCID_VFS);
+    path = (char*)hostfs_mem_malloc(len);
     wind_memset(path,0,len);
     wind_strcpy(path,pre_path);
     if(pre_path[len1-1] != '/')
@@ -301,7 +303,7 @@ w_err_t _wind_hostfs_mod_init(void)
 void *hostfs_mem_malloc(w_int32_t size)
 {
     void *ptr;
-    wind_trace("hostfs_mem_malloc:%d",size);
+    wind_notice("hostfs_mem_malloc:%d",size);
     ptr = wind_alloc(size,HP_ALLOCID_HOSTFS);
     return ptr;
 }
