@@ -485,7 +485,7 @@ w_err_t wind_heapitem_print_detail(w_allocid_e allocid)
     if(sizeof(w_addr_t) == 4)
         wind_printf("%-12s %-10s %-10s %-8s\r\n","addr","size","state","allocid");
     else
-        wind_printf("%-18s %-10s %-10s %-8s\r\n","addr","size","state","allocid");
+        wind_printf("%-20s %-10s %-10s %-8s\r\n","addr","size","state","allocid");
     wind_print_space(6);
     
     foreach_node(dnode,list)
@@ -500,7 +500,7 @@ w_err_t wind_heapitem_print_detail(w_allocid_e allocid)
                             W_ERR_MEM,"heap memory has been illegally accessed .");
             if((allocid == 255)||(allocid == heapitem->allocid))
             {
-                wind_printf("%p   %-10d %-10s %-8d\r\n",heapitem,heapitem->size,
+                wind_printf("%0p %-10d %-10s %-8d\r\n",heapitem,heapitem->size,
                     IS_F_HEAPITEM_USED(heapitem)?"used":"free",heapitem->allocid);
             }
         }
@@ -512,7 +512,7 @@ w_err_t wind_heapitem_print_detail(w_allocid_e allocid)
                             W_ERR_MEM,"%d != %d.",heapitem->magic,WIND_HEAPITEM_MAGIC);
             if((allocid == 255)||(allocid == heapitem->allocid))
             {
-                wind_printf("%p   %-10d %-10s %-8d\r\n",heapitem,heapitem->size,
+                wind_printf("%0p %-10d %-10s %-8d\r\n",heapitem,heapitem->size,
                     IS_F_HEAPITEM_USED(heapitem)?"used":"free",heapitem->allocid);
             }
         }
