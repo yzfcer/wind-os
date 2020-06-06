@@ -292,6 +292,8 @@ w_int32_t wind_vsprintf(char *buf,const char *fmt,wind_va_list args)
                 field_width = 2 * sizeof(void *);
                 flags |= ZEROPAD;
             }
+            *str++ = '0';
+            *str++ = 'x';
             str = wind_number(str,
                      (w_int32_t)(w_addr_t)wind_va_arg(args,void *),16,
                      field_width,precision,flags);
