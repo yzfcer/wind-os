@@ -12,7 +12,7 @@ CUR_PATH=$(cd $(dirname $0); pwd)
 STORPATH=$1
 FILENAME=$2
 #DATETIME=`date + "%Y/%m/%D %H:%M:%S"`
-DATETIME="date +%Y-%m-%d"
+DATETIME=`date +%Y-%m-%d`
 AUTHOR="Jason\ Zhou"
 HEADERFILE=${STORPATH}/${FILENAME}.h
 SOURCEFILE=${STORPATH}/${FILENAME}.c
@@ -36,7 +36,7 @@ gen_file_head()
 	PREINFO+="**                                       yzfcer@163.com\r\n"
 	PREINFO+="**\r\n"
 	PREINFO+="**--------------File infomation-------------------------------------------------------------------------\r\n"
-	PREINFO+="** FileName     : "${filename}"\r\n"
+	PREINFO+="** FileName    : "${filename}"\r\n"
 	PREINFO+="** Author      : Jason Zhou\r\n"
 	PREINFO+="** Last Date   : "${DATETIME}"\r\n"
 	PREINFO+="** Description : \r\n"
@@ -54,7 +54,7 @@ gen_file_head()
 	PREINFO+="**\r\n"
 	PREINFO+="**------------------------------------------------------------------------------------------------------\r\n"
 	PREINFO+="*******************************************************************************************************/\r\n"
-	echo -e ${PREINFO}
+	echo -e "${PREINFO}"
 
 }
 
@@ -62,8 +62,8 @@ touch ${HEADERFILE}
 touch ${SOURCEFILE}
 
 gen_file_head ${FILENAME}.h
-echo -e ${PREINFO} > ${HEADERFILE}
+echo -e "${PREINFO}" > ${HEADERFILE}
 
 gen_file_head ${FILENAME}.c
-echo -e ${PREINFO} > ${SOURCEFILE}
+echo -e "${PREINFO}" > ${SOURCEFILE}
 
