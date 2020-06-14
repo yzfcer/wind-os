@@ -1,4 +1,5 @@
 #!/bin/sh
+
 WIND_ROOT=$(cd `dirname $0`;pwd)/..
 #echo $WIND_ROOT
 cd ${WIND_ROOT}

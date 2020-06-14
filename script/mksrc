@@ -1,3 +1,5 @@
+#!/bin/sh
+
 usage()
 {
 	echo "mksrc usage:"
@@ -8,16 +10,6 @@ usage()
 
 
 
-CUR_PATH=$(cd $(dirname $0); pwd)
-STORPATH=$1
-FILENAME=$2
-#DATETIME=`date + "%Y/%m/%D %H:%M:%S"`
-DATETIME=`date +%Y-%m-%d`
-AUTHOR="Jason\ Zhou"
-HEADERFILE=${STORPATH}/${FILENAME}.h
-SOURCEFILE=${STORPATH}/${FILENAME}.c
-PREINFO=""
-
 show_info()
 {
 	echo "header_file:"${HEADERFILE}
@@ -27,8 +19,9 @@ show_info()
 gen_file_head()
 {
 	filename=$1
-	datet=${DATETIME}
-	echo $datet
+	defstr=`echo ${FILENAME^^}`
+	defstr=$defstr"_H__"
+	echo $defstr
 	PREINFO=""
 	PREINFO+="/****************************************Copyright (c)**************************************************\r\n"
 	PREINFO+="**                                       God's harbor\r\n"
@@ -37,26 +30,64 @@ gen_file_head()
 	PREINFO+="**\r\n"
 	PREINFO+="**--------------File infomation-------------------------------------------------------------------------\r\n"
 	PREINFO+="** FileName    : "${filename}"\r\n"
-	PREINFO+="** Author      : Jason Zhou\r\n"
+	PREINFO+="** Author      : "${AUTHOR}"\r\n"
 	PREINFO+="** Last Date   : "${DATETIME}"\r\n"
 	PREINFO+="** Description : \r\n"
 	PREINFO+="**              \r\n"
 	PREINFO+="**--------------History---------------------------------------------------------------------------------\r\n"
-	PREINFO+="** Author      : Jason Zhou\r\n"
+	PREINFO+="** Author      : "${AUTHOR}"\r\n"
 	PREINFO+="** Version     : v1.0\r\n"
 	PREINFO+="** Date        : "${DATETIME}"\r\n"
 	PREINFO+="** Description : First version\r\n"
 	PREINFO+="**\r\n"
 	PREINFO+="**--------------Cureent version-------------------------------------------------------------------------\r\n"
-	PREINFO+="** Modify      : Jason Zhou\r\n"
+	PREINFO+="** Modify      : "${AUTHOR}"\r\n"
 	PREINFO+="** Date        : "${DATETIME}"\r\n"
 	PREINFO+="** Description : \r\n"
 	PREINFO+="**\r\n"
 	PREINFO+="**------------------------------------------------------------------------------------------------------\r\n"
 	PREINFO+="*******************************************************************************************************/\r\n"
+	if [[ $filename == *".h" ]]
+	then
+		PREINFO+="#include \"wind_config.h\"\r\n"
+		PREINFO+="#include \"wind_type.h\"\r\n"
+		PREINFO+="#ifndef "$defstr"\r\n"
+		PREINFO+="#define "$defstr"\r\n"
+	elif [[ $filename == *".c" ]]
+	then
+		PREINFO+="#include \""${FILENAME}".h\"\r\n"
+	fi
+	PREINFO+="#ifdef __cplusplus\r\n"
+	PREINFO+="extern \"C\" {\r\n"
+	PREINFO+="#endif // #ifdef __cplusplus\r\n\r\n\r\n\r\n\r\n"
+	PREINFO+="#ifdef __cplusplus\r\n"
+	PREINFO+="}\r\n"
+	PREINFO+="#endif // #ifdef __cplusplus\r\n"
+	if [[ $filename == *".h" ]]
+	then
+		PREINFO+="#endif //#ifndef "$defstr"\r\n"
+	fi
+	
 	echo -e "${PREINFO}"
 
 }
+
+if [ $# -lt 2 ]
+then
+	usage
+	exit 0
+fi
+CUR_PATH=$(cd $(dirname $0); pwd)
+STORPATH=$1
+FILENAME=$2
+#DATETIME=`date + "%Y/%m/%D %H:%M:%S"`
+DATETIME=`date +%Y-%m-%d`
+AUTHOR="Jason Zhou"
+HEADERFILE=${STORPATH}/${FILENAME}.h
+SOURCEFILE=${STORPATH}/${FILENAME}.c
+PREINFO=""
+
+show_info
 
 touch ${HEADERFILE}
 touch ${SOURCEFILE}

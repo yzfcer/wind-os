@@ -1,3 +1,4 @@
+#!/bin/sh
 if [ $# -lt 3 ]
 then
     echo "usage:conv_encode <dir> <encode> <suffix1 [suffix2 [suffix3 [...]]]>"
