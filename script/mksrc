@@ -93,7 +93,10 @@ touch ${SOURCEFILE}
 
 gen_file_head ${FILENAME}.h
 echo -e "${PREINFO}" > ${HEADERFILE}
+sed -i 's///g' ${HEADERFILE}
 
 gen_file_head ${FILENAME}.c
 echo -e "${PREINFO}" > ${SOURCEFILE}
+sed -i 's///g' ${SOURCEFILE}
+
 
