@@ -254,6 +254,9 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\xmodem\cmd_xmodem.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\xmodem\module_xmodem.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\xmodem\wind_xmodem.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\ymodem\cmd_ymodem.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\ymodem\module_ymodem.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\ymodem\wind_ymodem.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\systhread\thread_coroutine.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\systhread\thread_daemon.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\systhread\thread_idle.c" />
@@ -375,6 +378,7 @@
     <ClInclude Include="..\..\..\..\..\..\..\src\module\xml\wind_xml.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\xml\wind_xml_fsm.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\xmodem\wind_xmodem.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\ymodem\wind_ymodem.h" />
     <ClInclude Include="..\..\..\port\file_port.h" />
     <ClInclude Include="..\..\..\port\wind_board_port.h" />
     <ClInclude Include="..\..\..\port\wind_config.h" />

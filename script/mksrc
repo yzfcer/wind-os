@@ -1,0 +1,69 @@
+usage()
+{
+	echo "mksrc usage:"
+	echo "mksrc <dirname> <objname>"
+	echo "      dirname: the storage path of C source and header file"
+	echo "      objname: the file name of C source and header file"
+}
+
+
+
+CUR_PATH=$(cd $(dirname $0); pwd)
+STORPATH=$1
+FILENAME=$2
+#DATETIME=`date + "%Y/%m/%D %H:%M:%S"`
+DATETIME="date +%Y-%m-%d"
+AUTHOR="Jason\ Zhou"
+HEADERFILE=${STORPATH}/${FILENAME}.h
+SOURCEFILE=${STORPATH}/${FILENAME}.c
+PREINFO=""
+
+show_info()
+{
+	echo "header_file:"${HEADERFILE}
+	echo "source_file:"${SOURCEFILE}
+}
+
+gen_file_head()
+{
+	filename=$1
+	datet=${DATETIME}
+	echo $datet
+	PREINFO=""
+	PREINFO+="/****************************************Copyright (c)**************************************************\r\n"
+	PREINFO+="**                                       God's harbor\r\n"
+	PREINFO+="**\r\n"
+	PREINFO+="**                                       yzfcer@163.com\r\n"
+	PREINFO+="**\r\n"
+	PREINFO+="**--------------File infomation-------------------------------------------------------------------------\r\n"
+	PREINFO+="** FileName     : "${filename}"\r\n"
+	PREINFO+="** Author      : Jason Zhou\r\n"
+	PREINFO+="** Last Date   : "${DATETIME}"\r\n"
+	PREINFO+="** Description : \r\n"
+	PREINFO+="**              \r\n"
+	PREINFO+="**--------------History---------------------------------------------------------------------------------\r\n"
+	PREINFO+="** Author      : Jason Zhou\r\n"
+	PREINFO+="** Version     : v1.0\r\n"
+	PREINFO+="** Date        : "${DATETIME}"\r\n"
+	PREINFO+="** Description : First version\r\n"
+	PREINFO+="**\r\n"
+	PREINFO+="**--------------Cureent version-------------------------------------------------------------------------\r\n"
+	PREINFO+="** Modify      : Jason Zhou\r\n"
+	PREINFO+="** Date        : "${DATETIME}"\r\n"
+	PREINFO+="** Description : \r\n"
+	PREINFO+="**\r\n"
+	PREINFO+="**------------------------------------------------------------------------------------------------------\r\n"
+	PREINFO+="*******************************************************************************************************/\r\n"
+	echo -e ${PREINFO}
+
+}
+
+touch ${HEADERFILE}
+touch ${SOURCEFILE}
+
+gen_file_head ${FILENAME}.h
+echo -e ${PREINFO} > ${HEADERFILE}
+
+gen_file_head ${FILENAME}.c
+echo -e ${PREINFO} > ${SOURCEFILE}
+
