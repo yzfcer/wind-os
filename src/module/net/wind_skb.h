@@ -32,12 +32,13 @@ extern "C" {
 #define PROTO_802_1P 0x8100
 #define PROTO_IP     0x0800
 
+typedef struct __w_netdev_s w_netdev_s;
+
 typedef struct 
 {
     w_uint32_t vlanid:12;
     w_uint32_t vlanpri:3;
     w_uint32_t vlantci:3;
-    
 }w_vlan_s;
 
 typedef struct
@@ -57,7 +58,7 @@ w_uint32_t wind_skb_get_uint32(w_skb_s *skb,w_uint16_t idx);
 
 void wind_skb_get_ether_srcmac(w_skb_s *skb,w_uint8_t *macaddr);
 void wind_skb_get_ether_dstmac(w_skb_s *skb,w_uint8_t *macaddr);
-w_uint16_t wind_skb_get_lay3_proto(w_skb_s *skb,w_uint16_t *proto);
+w_uint16_t wind_skb_get_lay3_proto(w_skb_s *skb);
 w_bool_t wind_skb_has_vlan(w_skb_s *skb);
 w_err_t wind_skb_get_vlan(w_skb_s *skb,w_vlan_s *vlan);
 

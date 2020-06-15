@@ -24,6 +24,7 @@
 *******************************************************************************************************/
 #include "wind_config.h"
 #include "wind_type.h"
+#include "wind_obj.h"
 #ifndef WIND_NETDEV_H__
 #define WIND_NETDEV_H__
 #ifdef __cplusplus

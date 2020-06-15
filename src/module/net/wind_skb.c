@@ -23,6 +23,9 @@
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
 #include "wind_skb.h"
+#include "wind_mac.h"
+#include "wind_string.h"
+#include "wind_debug.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
@@ -57,7 +60,7 @@ void wind_skb_get_ether_dstmac(w_skb_s *skb,w_uint8_t *macaddr)
 }
 
 
-w_uint16_t wind_skb_get_lay3_proto(w_skb_s *skb,w_uint16_t *proto)
+w_uint16_t wind_skb_get_lay3_proto(w_skb_s *skb)
 {
     w_uint16_t proto;
     proto = wind_skb_get_uint16(skb,skb->lay2_idx+12);
@@ -69,13 +72,13 @@ w_uint16_t wind_skb_get_lay3_proto(w_skb_s *skb,w_uint16_t *proto)
 w_bool_t wind_skb_has_vlan(w_skb_s *skb)
 {
     w_uint16_t proto;
-    wind_memcpy(&skb->packbuf[skb->lay2_idx+12],proto,2);
+    proto = wind_skb_get_uint16(skb,skb->lay2_idx+12);
     return proto == 0x8100?W_TRUE:W_FALSE;
 }
 
 w_err_t wind_skb_get_vlan(w_skb_s *skb,w_vlan_s *vlan)
 {
-    w_uint16_t value£»
+    w_uint16_t value;
     value = wind_skb_get_uint16(skb,14);
     vlan->vlantci = value >> 15;
     vlan->vlanpri = ((value >> 12) & 0x07);
@@ -147,7 +150,6 @@ w_uint32_t wind_skb_get_ip_dest(w_skb_s *skb)
 
 void wind_skb_set_lay3_idx(w_skb_s *skb)
 {
-    w_uint8_t headlen;
     w_uint16_t proto = wind_skb_get_uint16(skb,skb->lay2_idx+12);
     if(proto == 0x8100)
         skb->lay3_idx = skb->lay2_idx + 18;
