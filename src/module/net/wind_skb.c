@@ -113,14 +113,14 @@ w_uint16_t wind_skb_get_ip_identification(w_skb_s *skb)
 
 w_uint8_t wind_skb_get_ip_flags(w_skb_s *skb)
 {
-    return (skb->packbuf[skb->lay3_idx+6] & 0x07);
+    return ((skb->packbuf[skb->lay3_idx+6] >> 13) & 0x07);
 }
 
 w_uint16_t wind_skb_get_ip_offset(w_skb_s *skb)
 {
     w_uint16_t value;
     value = wind_skb_get_uint16(skb,skb->lay3_idx+6);
-    return (value >> 3);
+    return (value & 0x1fff);
 }
 
 w_uint8_t wind_skb_get_ip_ttl(w_skb_s *skb)
