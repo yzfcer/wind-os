@@ -80,20 +80,20 @@ w_err_t wind_skb_get_vlan(w_skb_s *skb,w_vlan_s *vlan)
 {
     w_uint16_t value;
     value = wind_skb_get_uint16(skb,14);
-    vlan->vlantci = value >> 15;
-    vlan->vlanpri = ((value >> 12) & 0x07);
-    vlan->vlanpri = ((value >> 0) & 0x3f);
+    vlan->vlanpri = ((value >> 13) & 0x07);
+    vlan->vlantci = ((value >> 12) & 0x01);
+    vlan->vlanid = ((value >> 0) & 0x3f);
     return W_ERR_OK;
 }
 
 w_uint8_t wind_skb_get_ip_version(w_skb_s *skb)
 {
-    return (skb->packbuf[skb->lay3_idx] & 0x0f);
+    return ((skb->packbuf[skb->lay3_idx] >> 4) & 0x0f) * 4;
 }
 
 w_uint8_t wind_skb_get_ip_headlen(w_skb_s *skb)
 {
-    return ((skb->packbuf[skb->lay3_idx] >> 4) & 0x0f) * 4;
+    return (skb->packbuf[skb->lay3_idx] & 0x0f);
 }
 
 w_uint8_t wind_skb_get_ip_tos(w_skb_s *skb)
