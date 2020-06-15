@@ -30,15 +30,32 @@
 extern "C" {
 #endif // #ifdef __cplusplus
 
+#define F_OBJ_ENABLE (0x01 << 0) //Mark whether the object is enable
+#define IS_F_OBJ_ENABLE(obj) ((obj.objflag & F_OBJ_ENABLE) == F_OBJ_ENABLE)
+#define SET_F_OBJ_ENABLE(obj) (obj.objflag |= F_OBJ_ENABLE)
+#define CLR_F_OBJ_ENABLE(obj) (obj.objflag &= (~F_OBJ_ENABLE))
+
+#define F_OBJ_POOL   (0x01 << 1) //Mark whether the object is allocated by memory pool
+#define IS_F_OBJ_POOL(obj) ((obj.objflag & F_OBJ_POOL) == F_OBJ_POOL)
+#define SET_F_OBJ_POOL(obj) (obj.objflag |= F_OBJ_POOL)
+#define CLR_F_OBJ_POOL(obj) (obj.objflag &= (~F_OBJ_POOL))
+
+#define F_OBJ_HEAP   (0x01 << 2) //Mark whether the object is allocated by heap
+#define IS_F_OBJ_HEAP(obj) ((obj.objflag & F_OBJ_HEAP) == F_OBJ_HEAP)
+#define SET_F_OBJ_HEAP(obj) (obj.objflag |= F_OBJ_HEAP)
+#define CLR_F_OBJ_HEAP(obj) (obj.objflag &= (~F_OBJ_HEAP))
+
+
 //init an object struct
-#define WIND_OBJ(magic,flag,name) {(~magic),0,flag,{(w_dnode_s*)W_NULL,(w_dnode_s*)W_NULL},name}
+#define WIND_OBJ(magic,flag,name) {(~magic),0,(w_uint8_t)F_OBJ_ENABLE,flag,{(w_dnode_s*)W_NULL,(w_dnode_s*)W_NULL},name}
 
 //Basic object information structure
 typedef struct _wind_obj
 {
     w_uint32_t magic;  //magic code
     w_uint16_t key;    //Key value, used to speed up object search
-    w_uint16_t flag;   //Object attribute tag
+    w_uint8_t objflag; //Object attribute tag
+    w_uint8_t flag;    //Object attribute tag
     w_dnode_s objnode; //Object list node
     char *name;        //Object name
 }w_obj_s;
