@@ -24,11 +24,21 @@
 *******************************************************************************************************/
 #include "wind_config.h"
 #include "wind_type.h"
+#include "wind_debug.h"
 #ifndef WIND_ICMP_H__
 #define WIND_ICMP_H__
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
+
+typedef struct
+{
+    w_uint8_t type;
+    w_uint8_t code;
+    w_uint16_t chksum;
+    w_uint16_t sessionid;
+    w_uint16_t seq;
+}w_icmphead_s;
 
 
 

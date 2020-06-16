@@ -27,6 +27,22 @@
 extern "C" {
 #endif // #ifdef __cplusplus
 
+static w_err_t udp_handle_req(w_netnode_s *netnode,w_skb_s *skb,w_udphead_s *udphead)
+{
+    return W_ERR_FAIL;
+}
+static w_err_t udp_handle_ack(w_netnode_s *netnode,w_skb_s *skb,w_udphead_s *udphead)
+{
+    return W_ERR_FAIL;
+}
+static w_err_t udp_input(w_netnode_s *netnode,w_skb_s *skb)
+{
+    return W_ERR_FAIL;
+}
+static w_err_t udp_output(w_netnode_s *netnode,w_skb_s *skb)
+{
+    return W_ERR_FAIL;
+}
 
 
 

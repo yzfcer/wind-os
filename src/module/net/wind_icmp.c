@@ -27,6 +27,22 @@
 extern "C" {
 #endif // #ifdef __cplusplus
 
+static w_err_t icmp_handle_req(w_netnode_s *netnode,w_skb_s *skb,w_icmphead_s *icmphead)
+{
+    return W_ERR_FAIL;
+}
+static w_err_t icmp_handle_ack(w_netnode_s *netnode,w_skb_s *skb,w_icmphead_s *icmphead)
+{
+    return W_ERR_FAIL;
+}
+static w_err_t icmp_input(w_netnode_s *netnode,w_skb_s *skb)
+{
+    return W_ERR_FAIL;
+}
+static w_err_t icmp_output(w_netnode_s *netnode,w_skb_s *skb)
+{
+    return W_ERR_FAIL;
+}
 
 
 

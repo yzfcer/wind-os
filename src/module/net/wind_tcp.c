@@ -27,6 +27,22 @@
 extern "C" {
 #endif // #ifdef __cplusplus
 
+static w_err_t tcp_handle_req(w_netnode_s *netnode,w_skb_s *skb,w_tcphead_s *tcphead)
+{
+    return W_ERR_FAIL;
+}
+static w_err_t tcp_handle_ack(w_netnode_s *netnode,w_skb_s *skb,w_tcphead_s *tcphead)
+{
+    return W_ERR_FAIL;
+}
+static w_err_t tcp_input(w_netnode_s *netnode,w_skb_s *skb)
+{
+    return W_ERR_FAIL;
+}
+static w_err_t tcp_output(w_netnode_s *netnode,w_skb_s *skb)
+{
+    return W_ERR_FAIL;
+}
 
 
 

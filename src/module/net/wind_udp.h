@@ -30,6 +30,14 @@
 extern "C" {
 #endif // #ifdef __cplusplus
 
+typedef struct
+{
+    w_uint16_t src_port;
+    w_uint16_t dst_port;
+    w_uint16_t lenth;
+    w_uint16_t chksum;
+}w_udphead_s;
+
 
 
 

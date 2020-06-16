@@ -24,11 +24,26 @@
 *******************************************************************************************************/
 #include "wind_config.h"
 #include "wind_type.h"
+#include "wind_debug.h"
 #ifndef WIND_TCP_H__
 #define WIND_TCP_H__
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
+
+typedef struct
+{
+    w_uint16_t src_port;
+    w_uint16_t dst_port;
+    w_uint32_t seq_num;
+    w_uint32_t ack_num;
+    w_uint16_t offset;
+    w_uint8_t flags;
+    w_uint16_t window;
+    w_uint16_t chksum;
+    w_uint16_t emerge_ptr;
+    w_uint32_t group_addr;
+}w_tcphead_s;
 
 
 

@@ -27,7 +27,27 @@
 extern "C" {
 #endif // #ifdef __cplusplus
 
+static w_err_t arp_handle_req(w_netnode_s *netnode,w_skb_s *skb,w_arp_s *arp)
+{
+    return W_ERR_FAIL;
+}
+static w_err_t arp_handle_ack(w_netnode_s *netnode,w_skb_s *skb,w_arp_s *arp)
+{
+    return W_ERR_FAIL;
+}
+static w_err_t arp_input(w_netnode_s *netnode,w_skb_s *skb)
+{
+    return W_ERR_FAIL;
+}
+static w_err_t arp_output(w_netnode_s *netnode,w_skb_s *skb)
+{
+    return W_ERR_FAIL;
+}
 
+static w_err_t arp_update_table(w_netnode_s *netnode,w_arp_table_s *arp_table)
+{
+    return W_ERR_FAIL;
+}
 
 
 #ifdef __cplusplus
