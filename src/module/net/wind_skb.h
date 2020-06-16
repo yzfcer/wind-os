@@ -29,8 +29,17 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
+
+#define PROTO_ARP    0x0806
 #define PROTO_802_1P 0x8100
 #define PROTO_IP     0x0800
+#define PROTO_PPPOE  0x8864
+#define PROTO_PPP    0x0021
+
+#define PROTO_ICMP   0x01
+#define PROTO_IGMP   0x02
+#define PROTO_TCP    0x06
+#define PROTO_UDP    0x11
 
 typedef struct __w_netdev_s w_netdev_s;
 
