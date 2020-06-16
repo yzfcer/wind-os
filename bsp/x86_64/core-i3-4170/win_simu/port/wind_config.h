@@ -198,6 +198,8 @@ extern "C" {
 #define WIND_MODULE_XML_SUPPORT 1 //Whether XML module is supported
 #define WIND_MODULE_LOG_SUPPORT 1 //Whether log function module is supported
 #define WIND_MODULE_XMODEM_SUPPORT 1 //Whether xmodem protocol module is supported
+#define WIND_MODULE_NET_SUPPORT 0 //Whether TCP/IP NET protocol module is supported
+
 #define WIND_MODULE_TOOLS_SUPPORT 1 //Whether system tool module is supported
 #endif
 
@@ -280,6 +282,23 @@ extern "C" {
 #define WIND_HOSTFS_SUPPORT 1//Whether hostfs is supported
 
 #endif
+
+
+
+//-------------------------------------------------------------------------------
+//TCP/IP net protocol stack configuration, provided that the system supports the 
+//net protocol stack
+//-------------------------------------------------------------------------------
+#if WIND_MODULE_NET_SUPPORT
+#define WIND_NET_ARP_SUPPORT  1
+#define WIND_NET_ICMP_SUPPORT 1
+#define WIND_NET_IGMP_SUPPORT 1
+#define WIND_NET_IP_SUPPORT   1
+#define WIND_NET_TCP_SUPPORT  1
+#define WIND_NET_UDP_SUPPORT  1
+#define WIND_NET_DHCP_SUPPORT 1
+#define WIND_NET_DNS_SUPPORT  1
+#define WIND_NET_TFTP_SUPPORT 1
 
 #ifdef __cplusplus
 }

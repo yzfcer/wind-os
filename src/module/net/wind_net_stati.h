@@ -45,6 +45,8 @@ typedef struct
     
 }w_net_stati_s;
 
+#define NET_STATI_NULL {0,0,0,0,0,0,0,0}
+
 #define SEND_PACK_CNT_INC(stati) stati.send_pack_cnt ++
 #define RECV_PACK_CNT_INC(stati) stati.recv_pack_cnt ++
 #define DROP_PACK_CNT_INC(stati) stati.drop_pack_cnt ++

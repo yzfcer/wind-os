@@ -26,11 +26,12 @@
 #define WIND_NET_H__
 #include "wind_config.h"
 #include "wind_type.h"
+#include "wind_debug.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
 
-
+w_err_t _wind_net_mod_init(void);
 
 
 #ifdef __cplusplus
