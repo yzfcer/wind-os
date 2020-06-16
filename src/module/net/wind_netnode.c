@@ -67,6 +67,28 @@ w_err_t wind_netnode_disable(w_netnode_s *netnode)
     return W_ERR_OK;
 }
 
+w_err_t wind_netnode_recv(w_netnode_s * netnode,w_skb_s *skb)
+{
+    w_err_t err;
+    RECV_PACK_CNT_INC(netnode->stati)
+    RECV_BYTES_CNT_INC(netnode->stati,skb->packlen);
+    err = netnode->input(netnode,skb);
+    if(err != W_ERR_OK)
+        ERROR_RECV_PACK_CNT_INC(stati);
+    return err;
+}
+
+w_err_t wind_netnode_send(w_netnode_s * netnode,w_skb_s *skb)
+{
+    w_err_t err;
+    SEND_PACK_CNT_INC(netnode->stati)
+    SEND_BYTES_CNT_INC(netnode->stati,skb->packlen);
+    err = netnode->input(netnode,skb);
+    if(err != W_ERR_OK)
+        ERROR_SEND_PACK_CNT_INC(netnode->stati);
+    return err;
+}
+
 
 #ifdef __cplusplus
 }

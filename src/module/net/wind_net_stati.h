@@ -30,7 +30,30 @@
 extern "C" {
 #endif // #ifdef __cplusplus
 
+typedef struct
+{
+    w_uint64_t send_bytes_cnt;
+    w_uint64_t recv_bytes_cnt;
+    w_uint64_t frop_bytes_cnt;
+    
+    w_uint32_t send_pack_cnt;
+    w_uint32_t recv_pack_cnt;
+    w_uint32_t drop_pack_cnt;
+    w_uint32_t error_sendpack_cnt;
+    w_uint32_t error_recvpack_cnt;
+    
+    
+}w_net_stati_s;
 
+#define SEND_PACK_CNT_INC(stati) stati.send_pack_cnt ++
+#define RECV_PACK_CNT_INC(stati) stati.recv_pack_cnt ++
+#define DROP_PACK_CNT_INC(stati) stati.drop_pack_cnt ++
+#define ERROR_SEND_PACK_CNT_INC(stati) stati.error_sendpack_cnt ++
+#define ERROR_RECV_PACK_CNT_INC(stati) stati.error_recvpack_cnt ++
+
+#define SEND_BYTES_CNT_INC(stati,size) stati.send_pack_cnt += size
+#define RECV_BYTES_CNT_INC(stati,size) stati.recv_pack_cnt += size
+#define DROP_BYTES_CNT_INC(stati,size) stati.drop_pack_cnt += size
 
 
 #ifdef __cplusplus
