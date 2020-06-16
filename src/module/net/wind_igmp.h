@@ -30,6 +30,13 @@
 extern "C" {
 #endif // #ifdef __cplusplus
 
+typedef struct
+{
+    w_uint8_t type;
+    w_uint8_t max_resp;
+    w_uint16_t chksum;
+    w_uint32_t group_addr;
+}w_igmphead_s;
 
 
 

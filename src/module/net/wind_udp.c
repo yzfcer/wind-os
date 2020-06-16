@@ -25,6 +25,7 @@
 #include "wind_udp.h"
 #include "wind_skb.h"
 #include "wind_netnode.h"
+#include "wind_debug.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus

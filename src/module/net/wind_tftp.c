@@ -23,10 +23,21 @@
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
 #include "wind_tftp.h"
+#include "wind_skb.h"
+#include "wind_netnode.h"
+#include "wind_debug.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
 
+static w_err_t tftp_input(w_netnode_s *netnode,w_skb_s *skb)
+{
+    return W_ERR_FAIL;
+}
+static w_err_t tftp_output(w_netnode_s *netnode,w_skb_s *skb)
+{
+    return W_ERR_FAIL;
+}
 
 
 

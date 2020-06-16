@@ -30,6 +30,33 @@
 extern "C" {
 #endif // #ifdef __cplusplus
 
+#define TFTP_RRQ     0x0001
+#define TFTP_WRQ     0x0002
+#define TFTP_DATA    0x0003
+#define TFTP_ACK     0x0004
+#define TFTP_ERR     0x0005
+#define TFTP_OPTACK  0x0006
+typedef struct
+{
+    char *filename;
+    char *type;
+    char *optname;
+    char *optvalue;
+}w_tftp_wrq_s;
+
+typedef struct
+{
+    char *optname;
+    char *optvalue;
+}w_tftp_optack_s;
+
+typedef struct
+{
+    w_uint16_t blknum;
+    w_uint8_t buff;
+}w_tftp_data_s;
+
+
 
 
 

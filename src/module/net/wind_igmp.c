@@ -23,10 +23,30 @@
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
 #include "wind_igmp.h"
+#include "wind_debug.h"
+#include "wind_skb.h"
+#include "wind_netnode.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
 
+static w_err_t igmp_handle_req(w_netnode_s *netnode,w_skb_s *skb,w_igmphead_s *igmphead)
+{
+    return W_ERR_FAIL;
+}
+
+static w_err_t igmp_handle_ack(w_netnode_s *netnode,w_skb_s *skb,w_igmphead_s *igmphead)
+{
+    return W_ERR_FAIL;
+}
+static w_err_t igmp_input(w_netnode_s *netnode,w_skb_s *skb)
+{
+    return W_ERR_FAIL;
+}
+static w_err_t igmp_output(w_netnode_s *netnode,w_skb_s *skb)
+{
+    return W_ERR_FAIL;
+}
 
 
 
