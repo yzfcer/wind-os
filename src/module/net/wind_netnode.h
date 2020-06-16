@@ -22,11 +22,12 @@
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
+#ifndef WIND_NETNODE_H__
+#define WIND_NETNODE_H__
 #include "wind_config.h"
 #include "wind_type.h"
 #include "wind_obj.h"
-#ifndef WIND_NETNODE_H__
-#define WIND_NETNODE_H__
+#include "wind_debug.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus

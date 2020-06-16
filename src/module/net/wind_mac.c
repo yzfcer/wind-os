@@ -24,6 +24,7 @@
 *******************************************************************************************************/
 #include "wind_mac.h"
 #include "wind_debug.h"
+#include "wind_string.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus

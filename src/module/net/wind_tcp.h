@@ -22,11 +22,11 @@
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
+#ifndef WIND_TCP_H__
+#define WIND_TCP_H__
 #include "wind_config.h"
 #include "wind_type.h"
 #include "wind_debug.h"
-#ifndef WIND_TCP_H__
-#define WIND_TCP_H__
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus

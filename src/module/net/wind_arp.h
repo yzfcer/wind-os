@@ -22,11 +22,13 @@
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
+#ifndef WIND_ARP_H__
+#define WIND_ARP_H__
 #include "wind_config.h"
 #include "wind_type.h"
 #include "wind_debug.h"
-#ifndef WIND_ARP_H__
-#define WIND_ARP_H__
+#include "wind_dlist.h"
+#include "wind_netdev.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus

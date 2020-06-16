@@ -36,7 +36,7 @@ w_err_t _wind_netnode_mod_init(void)
 
 w_netnode_s* wind_netnode_get(char *name)
 {
-    return wind_obj_get(name,&netnode_list)
+    return (w_netnode_s*)wind_obj_get(name,&netnode_list);
 }
 
 w_err_t wind_netnode_register(w_netnode_s *netnode)

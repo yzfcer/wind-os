@@ -22,10 +22,10 @@
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
-#include "wind_config.h"
-#include "wind_type.h"
 #ifndef WIND_NET_STATI_H__
 #define WIND_NET_STATI_H__
+#include "wind_config.h"
+#include "wind_type.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus

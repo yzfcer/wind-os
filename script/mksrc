@@ -48,10 +48,10 @@ gen_file_head()
 	PREINFO+="*******************************************************************************************************/\r\n"
 	if [[ $filename == *".h" ]]
 	then
-		PREINFO+="#include \"wind_config.h\"\r\n"
-		PREINFO+="#include \"wind_type.h\"\r\n"
 		PREINFO+="#ifndef "$defstr"\r\n"
 		PREINFO+="#define "$defstr"\r\n"
+		PREINFO+="#include \"wind_config.h\"\r\n"
+		PREINFO+="#include \"wind_type.h\"\r\n"
 	elif [[ $filename == *".c" ]]
 	then
 		PREINFO+="#include \""${FILENAME}".h\"\r\n"

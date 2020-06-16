@@ -22,14 +22,17 @@
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
+#ifndef WIND_NETDEV_H__
+#define WIND_NETDEV_H__
 #include "wind_config.h"
 #include "wind_type.h"
 #include "wind_obj.h"
-#ifndef WIND_NETDEV_H__
-#define WIND_NETDEV_H__
+#include "wind_skb.h"
+#include "wind_debug.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
+#define WIND_NETDEV_MAGIC 0x375C6A71
 
 typedef struct __w_netdev_s w_netdev_s;
 struct __w_netdev_s
@@ -38,7 +41,7 @@ struct __w_netdev_s
     w_uint32_t ip;
     w_uint32_t gw;
     w_uint32_t mask;
-    w_vlan_s vlan;
+    //w_vlan_s vlan;
     
     w_err_t (*init)(w_netdev_s *netdev);
     w_err_t (*input)(w_netdev_s *netdev,w_skb_s **skb);
