@@ -51,9 +51,9 @@ typedef struct
 #define ERROR_SEND_PACK_CNT_INC(stati) stati.error_sendpack_cnt ++
 #define ERROR_RECV_PACK_CNT_INC(stati) stati.error_recvpack_cnt ++
 
-#define SEND_BYTES_CNT_INC(stati,size) stati.send_pack_cnt += size
-#define RECV_BYTES_CNT_INC(stati,size) stati.recv_pack_cnt += size
-#define DROP_BYTES_CNT_INC(stati,size) stati.drop_pack_cnt += size
+#define SEND_BYTES_CNT_INC(stati,size) stati.send_bytes_cnt += size
+#define RECV_BYTES_CNT_INC(stati,size) stati.recv_bytes_cnt += size
+#define DROP_BYTES_CNT_INC(stati,size) stati.drop_bytes_cnt += size
 
 
 #ifdef __cplusplus

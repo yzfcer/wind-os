@@ -88,7 +88,7 @@ typedef struct
     w_uint32_t ttl;
     w_uint16_t datalen;
     w_uint8_t *data;
-}w_dns_ques_s;
+}w_dns_ans_s;
 
 
 
