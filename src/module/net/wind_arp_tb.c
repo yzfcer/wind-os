@@ -23,6 +23,9 @@
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
 #include "wind_arp_tb.h"
+#include "wind_timer.h"
+#include "wind_string.h"
+#include "wind_core.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
@@ -128,7 +131,7 @@ w_arp_tb_s *wind_arp_tb_get(w_uint32_t ipaddr)
     wind_disable_switch();
     for(i = 0;i < WIND_ARP_TB_MAX_NUM;i ++)
     {
-        if((arp_tb_list[i].enable) && (ipaddr==arp_tb_list[i].ipaddr)
+        if((arp_tb_list[i].enable) && (ipaddr==arp_tb_list[i].ipaddr))
         {
             arp_tb = &arp_tb_list[i];
             break;
