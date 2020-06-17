@@ -26,11 +26,30 @@
 #define WIND_FDB_H__
 #include "wind_config.h"
 #include "wind_type.h"
+#include "wind_debug.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
+#define  WIND_FDB_TTL 120
 
+//#define NODE_TO_ITEMPTR(type,node,mbr)
+//#define NODE_TO_FDB(node) NODE_TO_ITEMPTR(w_fdb_s,node,dnode)
+typedef struct 
+{
+    w_uint8_t port_id;
+    w_uint8_t is_local:1;
+    w_uint8_t enable:1;
+    w_uint8_t mac[6];
+    w_uint16_t vlanid;
+    w_uint16_t ttl;
+}w_fdb_s;
 
+w_err_t wind_fdb_init(void);
+w_err_t wind_fdb_deinit(void);
+w_err_t wind_fdb_update(w_uint8_t *mac,w_uint16_t vlanid,w_uint8_t portid);
+w_err_t wind_fdb_clear(void);
+w_err_t wind_fdb_flush(void);
+w_fdb_s *wind_fdb_get(w_uint8_t *mac);
 
 
 #ifdef __cplusplus

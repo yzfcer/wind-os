@@ -301,6 +301,8 @@ extern "C" {
 #define WIND_NET_DNS_SUPPORT  1
 #define WIND_NET_TFTP_SUPPORT 1
 
+#define WIND_FDB_MAX_NUM 32
+
 #endif
 
 #ifdef __cplusplus
