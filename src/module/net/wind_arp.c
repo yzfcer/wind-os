@@ -51,7 +51,7 @@ static w_err_t arp_update_table(w_netnode_s *netnode,w_arp_table_s *arp_table)
     return W_ERR_FAIL;
 }
 
-
+WIND_NETNODE_DEF(arp);
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

@@ -41,6 +41,7 @@ static w_err_t tftp_output(w_netnode_s *netnode,w_skb_s *skb)
 
 
 
+WIND_NETNODE_DEF(tftp);
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

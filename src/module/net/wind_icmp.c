@@ -49,6 +49,7 @@ static w_err_t icmp_output(w_netnode_s *netnode,w_skb_s *skb)
 
 
 
+WIND_NETNODE_DEF(icmp);
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

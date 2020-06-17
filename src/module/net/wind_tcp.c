@@ -48,6 +48,7 @@ static w_err_t tcp_output(w_netnode_s *netnode,w_skb_s *skb)
 
 
 
+WIND_NETNODE_DEF(tcp);
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

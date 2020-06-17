@@ -49,6 +49,7 @@ static w_err_t udp_output(w_netnode_s *netnode,w_skb_s *skb)
 
 
 
+WIND_NETNODE_DEF(udp);
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

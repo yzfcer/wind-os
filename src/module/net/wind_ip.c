@@ -23,13 +23,24 @@
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
 #include "wind_ip.h"
+#include "wind_skb.h"
+#include "wind_netnode.h"
+#include "wind_debug.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
 
 
+static w_err_t ip_input(w_netnode_s *netnode,w_skb_s *skb)
+{
+    return W_ERR_FAIL;
+}
+static w_err_t ip_output(w_netnode_s *netnode,w_skb_s *skb)
+{
+    return W_ERR_FAIL;
+}
 
-
+WIND_NETNODE_DEF(ip);
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus
