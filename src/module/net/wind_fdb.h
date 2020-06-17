@@ -30,6 +30,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
+#if WIND_MODULE_NET_SUPPORT
 #define  WIND_FDB_TTL 120
 
 //#define NODE_TO_ITEMPTR(type,node,mbr)
@@ -51,7 +52,7 @@ w_err_t wind_fdb_clear(void);
 w_err_t wind_fdb_flush(void);
 w_fdb_s *wind_fdb_get(w_uint8_t *mac);
 
-
+#endif //#if WIND_MODULE_NET_SUPPORT
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus
