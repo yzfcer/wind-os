@@ -24,6 +24,8 @@
 *******************************************************************************************************/
 #include "wind_route_tb.h"
 #include "wind_debug.h"
+#include "wind_string.h"
+#include "wind_core.h"
 //#include "wind_timer.h"
 #ifdef __cplusplus
 extern "C" {
@@ -48,7 +50,7 @@ w_err_t wind_route_tb_init(void)
     //WIND_ASSERT_RETURN(tmr != W_NULL,err);
     return err;
 }
-?
+
 w_err_t wind_route_tb_deinit(void)
 {
     //w_timer_s *tmr;
@@ -110,7 +112,7 @@ w_err_t wind_route_tb_flush(void)
     wind_disable_switch();
     for(i = 0;i < WIND_ROUTE_TB_MAX_NUM;i ++)
     {
-        if((route_tb_list[i].enable) && (tick - route_tb_list[i].ttl >= WIND_route_tb_TTL))
+        //if((route_tb_list[i].enable) && (tick - route_tb_list[i].ttl >= WIND_ROUTE_TB_TTL))
         {
             route_tb_list[i].enable = 0;
             break;

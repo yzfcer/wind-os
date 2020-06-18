@@ -29,7 +29,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
-
+#define  WIND_FDB_TTL 1200
 typedef struct 
 {
     w_uint8_t port_id;
