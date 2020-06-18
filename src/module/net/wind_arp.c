@@ -37,6 +37,15 @@ static w_err_t arp_handle_ack(w_netnode_s *netnode,w_skb_s *skb,w_arp_s *arp)
 {
     return W_ERR_FAIL;
 }
+
+static w_err_t arp_init(w_netnode_s *netnode)
+{
+    return W_ERR_FAIL;
+}
+static w_err_t arp_deinit(w_netnode_s *netnode)
+{
+    return W_ERR_FAIL;
+}
 static w_err_t arp_input(w_netnode_s *netnode,w_skb_s *skb)
 {
     return W_ERR_FAIL;

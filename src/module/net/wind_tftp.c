@@ -30,6 +30,14 @@
 extern "C" {
 #endif // #ifdef __cplusplus
 
+static w_err_t tftp_init(w_netnode_s *netnode)
+{
+    return W_ERR_FAIL;
+}
+static w_err_t tftp_deinit(w_netnode_s *netnode)
+{
+    return W_ERR_FAIL;
+}
 static w_err_t tftp_input(w_netnode_s *netnode,w_skb_s *skb)
 {
     return W_ERR_FAIL;

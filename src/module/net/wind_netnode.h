@@ -36,7 +36,7 @@ extern "C" {
 #define WIND_NETNODE_MAGIC 0x35FA518C
 
 #define WIND_NETNODE_DEF(name) w_netnode_s netnode_##name = \
-{WIND_OBJ(~WIND_NETNODE_MAGIC,0,#name),NET_STATI_NULL,name##_input,name##_output}
+{WIND_OBJ(~WIND_NETNODE_MAGIC,0,#name),NET_STATI_NULL,name##_init,name##_deinit,name##_input,name##_output}
 #define WIND_NETNODE_DECLARE(name) extern w_netnode_s netnode_##name;
 #define NETNODE(name) &netnode_##name
 
@@ -50,6 +50,8 @@ struct __w_netnode_s
 {
     w_obj_s obj;
     w_net_stati_s stati;
+    w_err_t (*init)(w_netnode_s *netnode);
+    w_err_t (*deinit)(w_netnode_s *netnode);
     w_err_t (*input)(w_netnode_s *netnode,w_skb_s *skb);
     w_err_t (*output)(w_netnode_s *netnode,w_skb_s *skb);
 };
