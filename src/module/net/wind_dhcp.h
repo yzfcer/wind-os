@@ -26,9 +26,19 @@
 #define WIND_DHCP_H__
 #include "wind_config.h"
 #include "wind_type.h"
+#include "wind_skb.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
+
+#define  DHCPTYPE_DISCOVER 0x01
+#define  DHCPTYPE_OFFER    0x02
+#define  DHCPTYPE_REQUEST  0x03
+#define  DHCPTYPE_DECLINE  0x04
+#define  DHCPTYPE_ACK      0x05
+#define  DHCPTYPE_NAK      0x06
+#define  DHCPTYPE_RELEASE  0x07
+#define  DHCPTYPE_INFORM   0x08
 
 typedef struct
 {
@@ -49,7 +59,14 @@ typedef struct
 
 }w_dhcphead_s;
 
+typedef struct 
+{
+    w_uint8_t optid;
+    w_uint8_t lenth;
+    w_uint8_t *data;
+}w_dhcp_ops_s;
 
+w_err_t wind_dhcp_get_opt(w_dhcp_ops_s *opt,w_skb_s *skb,w_int32_t idx);
 
 
 #ifdef __cplusplus
