@@ -35,7 +35,7 @@ extern "C" {
 #endif // #ifdef __cplusplus
 
 #if WIND_COROUTINE_SUPPORT
-#define NODE_TO_COROUTINE(node) (w_coroutine_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((w_coroutine_s*)0)->obj.objnode)))
+#define NODE_TO_COROUTINE(node) NODEPTR_TO_ITEMPTR(node,w_coroutine_s,obj.objnode)
 static w_dlist_s coroutinelist;
 static w_coroutine_s *curcorout;
 static WIND_POOL(coroutinepool,WIND_COROUTINE_MAX_NUM,sizeof(w_coroutine_s));

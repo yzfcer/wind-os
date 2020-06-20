@@ -22,9 +22,11 @@
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
-
 #ifndef WIND_CONFIG_H__
 #define WIND_CONFIG_H__
+#ifdef __cplusplus
+extern "C" {
+#endif //#ifdef __cplusplus
 
 //-------------------------------------------------------------------------------
 //Hardware & version information
@@ -245,5 +247,11 @@
 #define WIND_FDB_MAX_NUM 32
 #define WIND_ARP_TB_MAX_NUM 32
 #define WIND_ROUTE_TB_MAX_NUM 16
-
 #endif
+#endif
+
+#ifdef __cplusplus
+}
+#endif //#ifdef __cplusplus
+#endif //#ifndef WIND_CONFIG_H__
+

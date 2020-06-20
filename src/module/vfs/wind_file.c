@@ -35,7 +35,7 @@
 #include "wind_board_port.h"
 
 #if WIND_MODULE_VFS_SUPPORT
-#define NODE_TO_FILE(dnode) (w_file_s*)(((w_uint8_t*)(dnode))-((w_addr_t)&(((w_file_s*)0)->obj.objnode)))
+#define NODE_TO_FILE(node) NODEPTR_TO_ITEMPTR(node,w_file_s,obj.objnode)
 static w_dlist_s filelist;
 WIND_POOL(filepool,WIND_FILE_MAX_NUM,sizeof(w_file_s));
 

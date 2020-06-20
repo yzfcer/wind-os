@@ -26,9 +26,11 @@
 #define WIND_SKB_H__
 #include "wind_config.h"
 #include "wind_type.h"
+#include "wind_dlist.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
+#define NODE_TO_SKB(node) NODEPTR_TO_ITEMPTR(node,w_daemon_s,dnode)
 
 #define PROTO_ARP    0x0806
 #define PROTO_802_1P 0x8100
@@ -52,6 +54,7 @@ typedef struct
 
 typedef struct
 {
+    w_dnode_s dnode;
     w_uint8_t lay2_idx;
     w_uint8_t lay3_idx;
     w_uint8_t lay4_idx;

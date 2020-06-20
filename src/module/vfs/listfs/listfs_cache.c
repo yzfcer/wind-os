@@ -31,7 +31,7 @@
 #include "wind_core.h"
 #if WIND_LISTFS_SUPPORT
 
-#define NODE_TO_CACHEITEM(node) (lcache_item_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((lcache_item_s*)0)->itemnode)))
+#define NODE_TO_CACHEITEM(node) NODEPTR_TO_ITEMPTR(node,lcache_item_s,itemnode)
 w_dlist_s lfscache_list = {W_NULL,W_NULL};
 
 w_err_t lfs_cache_init(lfs_cache_s *cache,w_uint32_t itemcount,w_uint32_t blksize)

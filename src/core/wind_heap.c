@@ -34,8 +34,8 @@ extern "C" {
 #endif // #ifdef __cplusplus
 
 #if WIND_HEAP_SUPPORT
-#define NODE_TO_HEAP(node) (w_heap_s*)(((w_addr_t)(node))-((w_addr_t)&(((w_heap_s*)0)->obj.objnode)))
-#define NODE_TO_HEAPITEM(node) (w_heapitem_s*)(((w_addr_t)(node))-((w_addr_t)&(((w_heapitem_s*)0)->itemnode)))
+#define NODE_TO_HEAP(node) NODEPTR_TO_ITEMPTR(node,w_heap_s,obj.objnode)
+#define NODE_TO_HEAPITEM(node) NODEPTR_TO_ITEMPTR(node,w_heapitem_s,itemnode)
 static w_dlist_s heaplist;
 
 #define OFFSET_ADDR(base,offset) (((w_addr_t)(base))+(offset))

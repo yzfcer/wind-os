@@ -87,10 +87,50 @@ static w_err_t wind_netnodes_regi(void)
 #endif
     return W_ERR_OK;
 }
+
+static w_err_t wind_netnodes_unregi(void)
+{
+#if WIND_NET_ARP_SUPPORT
+    wind_netnode_unregister(NETNODE(arp));
+#endif
+#if WIND_NET_ICMP_SUPPORT
+    wind_netnode_unregister(NETNODE(icmp));
+#endif
+#if WIND_NET_IGMP_SUPPORT
+    wind_netnode_unregister(NETNODE(igmp));
+#endif
+#if WIND_NET_IP_SUPPORT
+    wind_netnode_unregister(NETNODE(ip));
+#endif
+#if WIND_NET_TCP_SUPPORT
+    wind_netnode_unregister(NETNODE(tcp));
+#endif
+#if WIND_NET_UDP_SUPPORT
+    wind_netnode_unregister(NETNODE(udp));
+#endif
+#if WIND_NET_DHCP_SUPPORT
+    wind_netnode_unregister(NETNODE(dhcp));
+#endif
+#if WIND_NET_DNS_SUPPORT
+    wind_netnode_unregister(NETNODE(dns));
+#endif
+#if WIND_NET_TFTP_SUPPORT
+    wind_netnode_unregister(NETNODE(tftp));
+#endif
+    return W_ERR_OK;
+}
+
 w_err_t _wind_net_mod_init(void)
 {
     w_err_t err;
     err = wind_netnodes_regi();
+    return err;
+}
+
+w_err_t _wind_net_mod_deinit(void)
+{
+    w_err_t err;
+    err = wind_netnodes_unregi();
     return err;
 }
 

@@ -31,7 +31,7 @@ extern "C" {
 #endif // #ifdef __cplusplus
 
 #define OBJ_MAX_LEN 32
-#define NODE_TO_OBJ(node) (w_obj_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((w_obj_s*)0)->objnode)))
+#define NODE_TO_OBJ(node) NODEPTR_TO_ITEMPTR(node,w_obj_s,objnode)
 
 static w_uint16_t calc_obj_key(const char *name)
 {

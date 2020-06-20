@@ -38,7 +38,7 @@
 #include "listfs.h"
 
 #if WIND_MODULE_VFS_SUPPORT
-#define NODE_TO_FSOPS(dnode) (w_fsops_s*)(((w_uint8_t*)(dnode))-((w_addr_t)&(((w_fsops_s*)0)->obj.objnode)))
+#define NODE_TO_FSOPS(node) NODEPTR_TO_ITEMPTR(node,w_fsops_s,obj.objnode)
 
 static w_dlist_s fs_ops_list;
 

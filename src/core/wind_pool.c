@@ -31,7 +31,7 @@
 extern "C" {
 #endif // #ifdef __cplusplus
 
-#define NODE_TO_POOL(node) (w_pool_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((w_pool_s*)0)->obj.objnode)))
+#define NODE_TO_POOL(node) NODEPTR_TO_ITEMPTR(node,w_pool_s,obj.objnode)
 #define WIND_MPOOL_ALIGN_R(x) (((x)+7) & (~0x07))
 #define WIND_MPOOL_ALIGN_L(x) ((x) & (~0x07))
 

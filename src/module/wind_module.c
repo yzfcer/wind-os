@@ -42,7 +42,7 @@ typedef struct
     w_uint32_t version;
 }mod_depend_s;
 
-#define NODE_TO_module(node) (w_module_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((w_module_s*)0)->obj.objnode)))
+#define NODE_TO_module(node) NODEPTR_TO_ITEMPTR(node,w_module_s,obj.objnode)
 static w_dlist_s modulelist;
 w_err_t _wind_module_mod_init(void)
 {

@@ -52,7 +52,7 @@ static w_err_t get_subinfo(w_hostfile_s *hfile,char *path)
 {
     w_err_t err;
     w_int32_t res;
-    char *tmppath = W_NULL;
+    char *tmppath = (char*)W_NULL;
     do
     {
         err = W_ERR_OK;
@@ -322,7 +322,7 @@ w_err_t hostfs_init(w_hostfs_s *hfs,char *dir_prefix)
     WIND_ASSERT_RETURN(dir_prefix != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(dir_prefix[0] != 0,W_ERR_INVALID);
     hfs->magic = HOSTFS_MAGIC;
-    hfs->dir_prefix = wind_salloc(dir_prefix,HP_ALLOCID_HOSTFS);
+    hfs->dir_prefix = (char*)wind_salloc(dir_prefix,HP_ALLOCID_HOSTFS);
     WIND_ASSERT_RETURN(hfs->dir_prefix != W_NULL,W_ERR_MEM);
     return W_ERR_OK;
 }
@@ -383,7 +383,7 @@ static w_hostfile_s*   host_file_create(char *path,w_uint8_t mode,w_uint8_t isdi
         hfile->attr = isdir?HFILE_ATTR_DIR:0;
         hfile->isdir = isdir;
         hfile->subinfo.has_sub = 0;
-        hfile->subhfile = W_NULL;
+        hfile->subhfile = (w_hostfile_s*)W_NULL;
         hfile->fd = fd;
         hfile->path = (char*)wind_salloc(path, HP_ALLOCID_HOSTFS);
         WIND_ASSERT_BREAK(hfile->path != W_NULL, W_ERR_MEM, "alloc path failed");
@@ -408,7 +408,7 @@ static w_hostfile_s*   host_file_open_exist(char *path,w_uint8_t mode)
     //errno_t errno;
     w_err_t err;
     FILE *fd;
-    w_hostfile_s *hfile = W_NULL;
+    w_hostfile_s *hfile = (w_hostfile_s *)W_NULL;
     char *realpath = (char*)W_NULL;
     hfileattr_e attr;
     w_uint8_t isdir;
@@ -428,7 +428,7 @@ static w_hostfile_s*   host_file_open_exist(char *path,w_uint8_t mode)
             WIND_ASSERT_BREAK(fd != W_NULL,W_ERR_FAIL,"open hfile failed");
         }
         else
-            fd = W_NULL;
+            fd = (FILE *)W_NULL;
         
         hfile = host_file_create(path,mode,isdir,fd);
         WIND_ASSERT_BREAK(hfile != W_NULL,W_ERR_FAIL,"create hfile obj failed");
@@ -712,10 +712,10 @@ w_err_t hostfile_readdir(w_hostfile_s* dir,w_hostfile_s** sub)
     do
     {
         err = W_ERR_OK;
-        *sub = W_NULL;
+        *sub = (w_hostfile_s*)W_NULL;
         if(dir->subhfile == W_NULL)
         {
-            dir->subhfile = hostfs_mem_malloc(sizeof(w_hostfile_s));
+            dir->subhfile = (w_hostfile_s*)hostfs_mem_malloc(sizeof(w_hostfile_s));
             WIND_ASSERT_BREAK(dir->subhfile != W_NULL,W_ERR_MEM,"alloc hostfile obj failed");
             wind_memset(dir->subhfile,0,sizeof(w_hostfile_s));
             dir->subhfile->magic = HOSTFILE_MAGIC;
@@ -733,8 +733,8 @@ w_err_t hostfile_readdir(w_hostfile_s* dir,w_hostfile_s** sub)
             host_file_destroy(dir->subhfile);
         }
             
-        dir->subhfile = W_NULL;
-        *sub = W_NULL;
+        dir->subhfile = (w_hostfile_s*)W_NULL;
+        *sub = (w_hostfile_s*)W_NULL;
     }
     return err;
 }

@@ -30,6 +30,7 @@
 extern "C" {
 #endif //#ifdef __cplusplus
 
+#define NODEPTR_TO_ITEMPTR(nodetr,itemtype,structmbr) (itemtype*)(((w_uint8_t*)(nodetr))-((w_addr_t)&(((itemtype*)0)->structmbr)))
 typedef struct __w_dnode_s w_dnode_s;
 typedef struct __w_pridnode_s w_prinode_s;
 typedef struct __w_dlist_s w_dlist_s;

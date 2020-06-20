@@ -31,7 +31,7 @@
 #include "listfs_bitmap.h"
 #if WIND_LISTFS_SUPPORT
 
-#define NODE_TO_LISTFILE(node) (w_listfile_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((w_listfile_s*)0)->list.listnode)))
+#define NODE_TO_LISTFILE(node) NODEPTR_TO_ITEMPTR(node,w_listfile_s,list.listnode)
 w_err_t _wind_listfs_mod_init(void)
 {
     wind_debug("sizeof(lfile_info_s)=%d\r\n",sizeof(lfile_info_s));

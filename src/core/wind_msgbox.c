@@ -32,8 +32,8 @@ extern "C" {
 #endif // #ifdef __cplusplus
 
 #if WIND_MSGBOX_SUPPORT
-#define NODE_TO_MSGBOX(node) (w_msgbox_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((w_msgbox_s*)0)->obj.objnode)))
-#define NODE_TO_MSG(dnode) (w_msg_s*)(((w_uint8_t*)(dnode))-((w_addr_t)&(((w_msg_s*)0)->msgnode)))
+#define NODE_TO_MSGBOX(node) NODEPTR_TO_ITEMPTR(node,w_msgbox_s,obj.objnode)
+#define NODE_TO_MSG(node) NODEPTR_TO_ITEMPTR(node,w_msg_s,msgnode)
 static w_dlist_s msgboxlist;
 WIND_POOL(msgboxpool,WIND_MBOX_MAX_NUM,sizeof(w_msgbox_s));
 
@@ -90,7 +90,7 @@ w_msgbox_s *wind_msgbox_create(const char *name)
     w_msgbox_s *msgbox;
     
     msgbox = msgbox_malloc();
-    WIND_ASSERT_RETURN(msgbox != W_NULL,W_NULL);
+    WIND_ASSERT_RETURN(msgbox != W_NULL,(w_msgbox_s *)W_NULL);
     err = wind_msgbox_init(msgbox,name);
     if(err == W_ERR_OK)
     {
@@ -98,7 +98,7 @@ w_msgbox_s *wind_msgbox_create(const char *name)
         return msgbox;
     }
     msgbox_free(msgbox);
-    return W_NULL;
+    return (w_msgbox_s *)W_NULL;
 }
 
 
@@ -252,7 +252,7 @@ w_err_t wind_msgbox_trywait(w_msgbox_s *msgbox,w_msg_s **pmsg)
     }
     else
     {
-        *pmsg = W_NULL;
+        *pmsg = (w_msg_s *)W_NULL;
         err = W_ERR_FAIL;
     }
     wind_enable_switch();

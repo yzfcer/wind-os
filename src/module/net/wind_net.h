@@ -32,6 +32,7 @@ extern "C" {
 #endif // #ifdef __cplusplus
 
 w_err_t _wind_net_mod_init(void);
+w_err_t _wind_net_mod_deinit(void);
 
 
 #ifdef __cplusplus

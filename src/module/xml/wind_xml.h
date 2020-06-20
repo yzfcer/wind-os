@@ -22,8 +22,8 @@ extern "C" {
 #define MAX_XNODE_LEVEL 15
 #define MAX_XNODE_CHILD 32767
 #define XML_OUTBUF_LEN 512
-#define TREE_TO_XNODE(tree) (w_xmlnode_s*)(((w_uint8_t*)(tree))-((w_addr_t)&(((w_xmlnode_s*)0)->tree)))
-#define NODE_TO_XATTR(node) (w_xmlattr_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((w_xmlattr_s*)0)->attr_node)))
+#define NODE_TO_XNODE(node) NODEPTR_TO_ITEMPTR(node,w_xmlnode_s,tree.treenode)
+#define NODE_TO_XATTR(node) NODEPTR_TO_ITEMPTR(node,w_xmlattr_s,attr_node)
 
 //XML node attribution struct
 typedef struct

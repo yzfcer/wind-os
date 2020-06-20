@@ -28,7 +28,7 @@
 extern "C" {
 #endif //#ifdef __cplusplus
 
-#define NODE_TO_TREE(dnode) (w_tree_s*)(((w_uint8_t*)(dnode))-((w_addr_t)&(((w_tree_s*)0)->treenode)))
+#define NODE_TO_TREE(node) NODEPTR_TO_ITEMPTR(node,w_tree_s,treenode)
 w_err_t wind_tree_init(w_tree_s *tree)
 {
     WIND_ASSERT_RETURN(tree != W_NULL,W_ERR_PTR_NULL);

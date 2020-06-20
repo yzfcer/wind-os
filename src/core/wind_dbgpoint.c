@@ -33,7 +33,7 @@ extern "C" {
 #endif // #ifdef __cplusplus
 
 #if WIND_DBGPOINT_SUPPORT
-#define NODE_TO_DBGPOINT(node) (w_dbgpoint_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((w_dbgpoint_s*)0)->obj.objnode)))
+#define NODE_TO_DBGPOINT(node) NODEPTR_TO_ITEMPTR(node,w_dbgpoint_s,obj.objnode)
 static w_dlist_s dbgpointlist;
 
 

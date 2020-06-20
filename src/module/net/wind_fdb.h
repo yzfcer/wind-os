@@ -33,8 +33,6 @@ extern "C" {
 #if WIND_MODULE_NET_SUPPORT
 #define  WIND_FDB_TTL 120
 
-//#define NODE_TO_ITEMPTR(type,node,mbr)
-//#define NODE_TO_FDB(node) NODE_TO_ITEMPTR(w_fdb_s,node,dnode)
 typedef struct 
 {
     w_uint8_t port_id;

@@ -67,7 +67,7 @@ w_err_t wind_netnode_enable(w_netnode_s *netnode)
 {
     WIND_ASSERT_RETURN(netnode != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(netnode->obj.magic == WIND_NETNODE_MAGIC,W_ERR_INVALID);
-    SET_F_NETNODE_ENABLE(netnode);
+    SET_F_OBJ_ENABLE(netnode);
     return W_ERR_OK;
 }
 
@@ -75,13 +75,16 @@ w_err_t wind_netnode_disable(w_netnode_s *netnode)
 {
     WIND_ASSERT_RETURN(netnode != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(netnode->obj.magic == WIND_NETNODE_MAGIC,W_ERR_INVALID);
-    CLR_F_NETNODE_ENABLE(netnode);
+    CLR_F_OBJ_ENABLE(netnode);
     return W_ERR_OK;
 }
 
 w_err_t wind_netnode_recv(w_netnode_s * netnode,w_skb_s *skb)
 {
     w_err_t err;
+    WIND_ASSERT_RETURN(netnode != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(skb != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(IS_F_OBJ_ENABLE(netnode->obj),W_ERR_NOT_SUPPORT);
     RECV_PACK_CNT_INC(netnode->stati);
     RECV_BYTES_CNT_INC(netnode->stati,skb->packlen);
     wind_netnode_input_hook(netnode,skb);
@@ -96,6 +99,9 @@ w_err_t wind_netnode_recv(w_netnode_s * netnode,w_skb_s *skb)
 w_err_t wind_netnode_send(w_netnode_s * netnode,w_skb_s *skb)
 {
     w_err_t err;
+    WIND_ASSERT_RETURN(netnode != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(skb != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(IS_F_OBJ_ENABLE(netnode->obj),W_ERR_NOT_SUPPORT);
     SEND_PACK_CNT_INC(netnode->stati);
     SEND_BYTES_CNT_INC(netnode->stati,skb->packlen);
      if(err != W_ERR_OK)

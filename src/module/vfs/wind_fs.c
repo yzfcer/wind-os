@@ -39,7 +39,7 @@
 #include "treefs.h"
 
 #if WIND_MODULE_VFS_SUPPORT
-#define NODE_TO_FS(dnode) (w_vfs_s*)(((w_uint8_t*)(dnode))-((w_addr_t)&(((w_vfs_s*)0)->obj.objnode)))
+#define NODE_TO_FS(node) NODEPTR_TO_ITEMPTR(node,w_vfs_s,obj.objnode)
 
 static w_dlist_s fslist;
 static char *fsname[] = {"fs0","fs1","fs2","fs3","fs4"};

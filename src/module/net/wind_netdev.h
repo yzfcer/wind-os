@@ -34,7 +34,7 @@ extern "C" {
 #endif // #ifdef __cplusplus
 #define WIND_NETDEV_MAGIC 0x375C6A71
 
-#define WIND_NETDEV_DEF(name) 
+#define WIND_NETDEV_DEF(name) w_netdev_s netdev_##name = {WIND_NETNODE_INFO(name),{{0,0,0,0,0,0},0,0,0}};
 typedef struct __w_netdev_s w_netdev_s;
 typedef struct 
 {
@@ -46,16 +46,8 @@ typedef struct
 
 struct __w_netdev_s
 {
-    //w_obj_s obj;
     w_netnode_s netnode;
     w_netdev_param_s *param;
-    
-    //w_vlan_s vlan;
-    
-    //w_err_t (*init)(w_netdev_s *netdev);
-    //w_err_t (*deinit)(w_netdev_s *netdev);
-    //w_err_t (*input)(w_netdev_s *netdev,w_skb_s **skb);
-    //w_err_t (*output)(w_netdev_s *netdev,w_skb_s *skb);
 };
 
 w_err_t _wind_netdev_mod_init(void);

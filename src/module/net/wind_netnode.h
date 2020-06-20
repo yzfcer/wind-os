@@ -33,17 +33,12 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
-#define WIND_NETNODE_MAGIC 0x35FA518C
 
-#define WIND_NETNODE_DEF(name) w_netnode_s netnode_##name = \
-{WIND_OBJ(~WIND_NETNODE_MAGIC,0,#name),NET_STATI_NULL,name##_init,name##_deinit,name##_input,name##_output}
+#define WIND_NETNODE_MAGIC 0x35FA518C
+#define WIND_NETNODE_INFO(name) {WIND_OBJ(~WIND_NETNODE_MAGIC,0,#name),NET_STATI_NULL,name##_init,name##_deinit,name##_input,name##_output}
+#define WIND_NETNODE_DEF(name) w_netnode_s netnode_##name = WIND_NETNODE_INFO(name)
 #define WIND_NETNODE_DECLARE(name) extern w_netnode_s netnode_##name;
 #define NETNODE(name) &netnode_##name
-
-#define F_NETNODE_ENABLE (0x01 << 0) //Mark whether the netnode object is enable
-#define IS_F_NETNODE_ENABLE(netnode) ((netnode->obj.flag & F_NETNODE_ENABLE) == F_NETNODE_ENABLE)
-#define SET_F_NETNODE_ENABLE(netnode) (netnode->obj.flag |= F_NETNODE_ENABLE)
-#define CLR_F_NETNODE_ENABLE(netnode) (netnode->obj.flag &= (~F_NETNODE_ENABLE))
 
 typedef struct __w_netnode_s w_netnode_s;
 struct __w_netnode_s
@@ -54,7 +49,7 @@ struct __w_netnode_s
     w_dlist_s outhook_list;
     w_err_t (*init)(w_netnode_s *netnode);
     w_err_t (*deinit)(w_netnode_s *netnode);
-    w_err_t (*input)(w_netnode_s *netnode,w_skb_s *skb);
+    w_err_t (*input)(w_netnode_s *netnode,w_skb_s **skb);
     w_err_t (*output)(w_netnode_s *netnode,w_skb_s *skb);
 };
 

@@ -36,8 +36,8 @@ extern "C" {
 extern "C" {
 #endif // #ifdef __cplusplus
 
-#define NODE_TO_FSM(node) (w_fsm_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((w_fsm_s*)0)->obj.objnode)))
-#define NODE_TO_FSM_MODEL(node) (w_fsm_model_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((w_fsm_model_s*)0)->obj.objnode)))
+#define NODE_TO_FSM(node) NODEPTR_TO_ITEMPTR(node,w_fsm_s,obj.objnode)
+#define NODE_TO_FSM_MODEL(node) NODEPTR_TO_ITEMPTR(node,w_fsm_model_s,obj.objnode)
 
 /********************************************internal variables**********************************************/
 static w_dlist_s modellist;

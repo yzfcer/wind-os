@@ -32,7 +32,7 @@
 #include "db_if.h"
 
 #define MAX_TBM_FILENAME_LEN 128
-#define NODE_TO_TBMODEL(dnode) (tb_model_s*)(((w_uint8_t*)(dnode))-((w_addr_t)&(((tb_model_s*)0)->obj.objnode)))
+#define NODE_TO_TBMODEL(node) NODEPTR_TO_ITEMPTR(node,tb_model_s,obj.objnode)
 
 static w_bool_t is_tbmodel_filename(char *filename)
 {

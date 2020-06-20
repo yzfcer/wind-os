@@ -21,7 +21,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
-#define NODE_TO_XNODE(node) (w_xmlnode_s *)(((w_uint8_t*)(node))-((w_addr_t)&(((w_xmlnode_s*)0)->tree.treenode)))
 static w_bool_t is_xml_name_valid(char *name)
 {
     w_int32_t i;

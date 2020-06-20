@@ -33,7 +33,7 @@ extern "C" {
 #endif // #ifdef __cplusplus
 
 #if WIND_PIPE_SUPPORT
-#define NODE_TO_PIPE(node) (w_pipe_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((w_pipe_s*)0)->obj.objnode)))
+#define NODE_TO_PIPE(node) NODEPTR_TO_ITEMPTR(node,w_pipe_s,obj.objnode)
 static w_dlist_s pipelist;
 static WIND_POOL(pipepool,WIND_PIPE_MAX_NUM,sizeof(w_pipe_s));
 

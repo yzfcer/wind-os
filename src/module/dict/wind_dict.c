@@ -34,8 +34,8 @@ extern "C" {
 /*********************************************header file***********************************************/
 
 /********************************************internal variables**********************************************/
-#define NODE_TO_DICT(node) (w_dict_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((w_dict_s*)0)->dictnode)))
-#define NODE_TO_DICTSET(node) (w_dictset_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((w_dictset_s*)0)->obj.objnode)))
+#define NODE_TO_DICT(node) NODEPTR_TO_ITEMPTR(node,w_dict_s,dictnode)
+#define NODE_TO_DICTSET(node) NODEPTR_TO_ITEMPTR(node,w_dictset_s,obj.objnode)
 w_dlist_s g_dictlist;
 
 

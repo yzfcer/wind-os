@@ -26,6 +26,7 @@
 #define WIND_NETDEV_LO_H__
 #include "wind_config.h"
 #include "wind_type.h"
+#include "wind_netdev.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus

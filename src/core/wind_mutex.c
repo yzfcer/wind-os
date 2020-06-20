@@ -33,7 +33,7 @@ extern "C" {
 #endif // #ifdef __cplusplus
 
 #if WIND_MUTEX_SUPPORT
-#define NODE_TO_MUTEX(node) (w_mutex_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((w_mutex_s*)0)->obj.objnode)))
+#define NODE_TO_MUTEX(node) NODEPTR_TO_ITEMPTR(node,w_mutex_s,obj.objnode)
 static w_dlist_s mutexlist;
 static WIND_POOL(mutexpool,WIND_MUTEX_MAX_NUM,sizeof(w_mutex_s));
 

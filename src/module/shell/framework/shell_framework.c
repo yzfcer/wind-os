@@ -33,7 +33,7 @@ extern "C" {
 
 
 /*********************************************header file***********************************************/
-#define NODE_TO_CMD(node) (w_cmd_s*)(((w_uint8_t*)(node))-((w_addr_t)&(((w_cmd_s*)0)->cmdnode)))
+#define NODE_TO_CMD(node) NODEPTR_TO_ITEMPTR(node,w_cmd_s,cmdnode)
 /********************************************internal variables**********************************************/
 
 w_dlist_s g_cmdlist;
