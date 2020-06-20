@@ -28,6 +28,17 @@
 extern "C" {
 #endif // #ifdef __cplusplus
 static w_dlist_s netnode_list;
+
+
+static w_err_t wind_netnode_input_hook(w_netnode_s * netnode,w_skb_s *skb)
+{
+    return W_ERR_OK;
+}
+
+static w_err_t wind_netnode_output_hook(w_netnode_s * netnode,w_skb_s *skb)
+{
+    return W_ERR_OK;
+}
 w_err_t _wind_netnode_mod_init(void)
 {
     DLIST_INIT(netnode_list);
@@ -73,7 +84,10 @@ w_err_t wind_netnode_recv(w_netnode_s * netnode,w_skb_s *skb)
     w_err_t err;
     RECV_PACK_CNT_INC(netnode->stati);
     RECV_BYTES_CNT_INC(netnode->stati,skb->packlen);
-    err = netnode->input(netnode,skb);
+    wind_netnode_input_hook(netnode,skb);
+    if(err != W_ERR_OK)
+        ERROR_RECV_PACK_CNT_INC(netnode->stati);
+     err = netnode->input(netnode,skb);
     if(err != W_ERR_OK)
         ERROR_RECV_PACK_CNT_INC(netnode->stati);
     return err;
@@ -84,6 +98,8 @@ w_err_t wind_netnode_send(w_netnode_s * netnode,w_skb_s *skb)
     w_err_t err;
     SEND_PACK_CNT_INC(netnode->stati);
     SEND_BYTES_CNT_INC(netnode->stati,skb->packlen);
+     if(err != W_ERR_OK)
+        ERROR_SEND_PACK_CNT_INC(netnode->stati);
     err = netnode->input(netnode,skb);
     if(err != W_ERR_OK)
         ERROR_SEND_PACK_CNT_INC(netnode->stati);

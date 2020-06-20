@@ -26,7 +26,7 @@
 #define WIND_NETDEV_H__
 #include "wind_config.h"
 #include "wind_type.h"
-#include "wind_obj.h"
+#include "wind_netnode.h"
 #include "wind_skb.h"
 #include "wind_debug.h"
 #ifdef __cplusplus
@@ -34,19 +34,28 @@ extern "C" {
 #endif // #ifdef __cplusplus
 #define WIND_NETDEV_MAGIC 0x375C6A71
 
+#define WIND_NETDEV_DEF(name) 
 typedef struct __w_netdev_s w_netdev_s;
-struct __w_netdev_s
+typedef struct 
 {
-    w_obj_s obj;
+    w_uint8_t mac[6];
     w_uint32_t ip;
     w_uint32_t gw;
-    w_uint32_t mask;
+    w_uint32_t mask;    
+}w_netdev_param_s;
+
+struct __w_netdev_s
+{
+    //w_obj_s obj;
+    w_netnode_s netnode;
+    w_netdev_param_s *param;
+    
     //w_vlan_s vlan;
     
-    w_err_t (*init)(w_netdev_s *netdev);
-    w_err_t (*deinit)(w_netdev_s *netdev);
-    w_err_t (*input)(w_netdev_s *netdev,w_skb_s **skb);
-    w_err_t (*output)(w_netdev_s *netdev,w_skb_s *skb);
+    //w_err_t (*init)(w_netdev_s *netdev);
+    //w_err_t (*deinit)(w_netdev_s *netdev);
+    //w_err_t (*input)(w_netdev_s *netdev,w_skb_s **skb);
+    //w_err_t (*output)(w_netdev_s *netdev,w_skb_s *skb);
 };
 
 w_err_t _wind_netdev_mod_init(void);

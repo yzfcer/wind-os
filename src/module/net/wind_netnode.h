@@ -50,6 +50,8 @@ struct __w_netnode_s
 {
     w_obj_s obj;
     w_net_stati_s stati;
+    w_dlist_s inhook_list;
+    w_dlist_s outhook_list;
     w_err_t (*init)(w_netnode_s *netnode);
     w_err_t (*deinit)(w_netnode_s *netnode);
     w_err_t (*input)(w_netnode_s *netnode,w_skb_s *skb);
