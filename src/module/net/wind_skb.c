@@ -26,10 +26,11 @@
 #include "wind_mac.h"
 #include "wind_string.h"
 #include "wind_debug.h"
+#include "wind_netmem.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
-w_skb_s wind_skb_create(w_int32_t buflen)
+w_skb_s *wind_skb_create(w_int32_t buflen)
 {
     w_err_t err;
     w_skb_s *skb = (w_skb_s *)W_NULL;

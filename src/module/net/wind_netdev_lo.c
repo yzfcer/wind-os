@@ -64,7 +64,7 @@ static w_err_t lo_input(w_netnode_s *netnode,w_skb_s **skb)
     wind_enable_switch();
     skb1 = NODE_TO_SKB(dnode);
     WIND_CHECK_RETURN(skb1 != W_NULL,W_ERR_FAIL);
-    skb->indev = WIND_NETDEV(lo);
+    skb1->indev = WIND_NETDEV(lo);
 	*skb = skb1;
     return W_ERR_OK;
 }

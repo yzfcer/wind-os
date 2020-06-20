@@ -65,7 +65,7 @@ typedef struct
     w_netdev_s *outdev;
 }w_skb_s;
 
-w_skb_s wind_skb_create(w_int32_t buflen);
+w_skb_s *wind_skb_create(w_int32_t buflen);
 w_err_t wind_skb_destory(w_skb_s *skb);
 
 w_uint16_t wind_skb_get_uint16(w_skb_s *skb,w_uint16_t idx);
