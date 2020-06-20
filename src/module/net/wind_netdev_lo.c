@@ -30,6 +30,8 @@
 extern "C" {
 #endif // #ifdef __cplusplus
 static w_dlist_s skb_list;
+WIND_NETDEV_DECLARE(lo);
+
 static w_err_t lo_init(w_netnode_s *netnode)
 {
     w_netdev_s *netdev;
@@ -61,6 +63,8 @@ static w_err_t lo_input(w_netnode_s *netnode,w_skb_s **skb)
     dnode = dlist_remove_head(&skb_list);
     wind_enable_switch();
     skb1 = NODE_TO_SKB(dnode);
+    WIND_CHECK_RETURN(skb1 != W_NULL,W_ERR_FAIL);
+    skb->indev = WIND_NETDEV(lo);
 	*skb = skb1;
     return W_ERR_OK;
 }
