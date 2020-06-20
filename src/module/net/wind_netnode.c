@@ -67,7 +67,7 @@ w_err_t wind_netnode_enable(w_netnode_s *netnode)
 {
     WIND_ASSERT_RETURN(netnode != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(netnode->obj.magic == WIND_NETNODE_MAGIC,W_ERR_INVALID);
-    SET_F_OBJ_ENABLE(netnode);
+    SET_F_OBJ_ENABLE(netnode->obj);
     return W_ERR_OK;
 }
 
@@ -75,7 +75,7 @@ w_err_t wind_netnode_disable(w_netnode_s *netnode)
 {
     WIND_ASSERT_RETURN(netnode != W_NULL,W_ERR_PTR_NULL);
     WIND_ASSERT_RETURN(netnode->obj.magic == WIND_NETNODE_MAGIC,W_ERR_INVALID);
-    CLR_F_OBJ_ENABLE(netnode);
+    CLR_F_OBJ_ENABLE(netnode->obj);
     return W_ERR_OK;
 }
 

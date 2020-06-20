@@ -47,7 +47,7 @@ typedef struct
 struct __w_netdev_s
 {
     w_netnode_s netnode;
-    w_netdev_param_s *param;
+    w_netdev_param_s param;
 };
 
 w_err_t _wind_netdev_mod_init(void);

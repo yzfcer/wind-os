@@ -35,7 +35,8 @@ extern "C" {
 #endif // #ifdef __cplusplus
 
 #define WIND_NETNODE_MAGIC 0x35FA518C
-#define WIND_NETNODE_INFO(name) {WIND_OBJ(~WIND_NETNODE_MAGIC,0,#name),NET_STATI_NULL,name##_init,name##_deinit,name##_input,name##_output}
+#define NETNODE_HOOK_NULL {W_NULL,W_NULL},{W_NULL,W_NULL}
+#define WIND_NETNODE_INFO(name) {WIND_OBJ(~WIND_NETNODE_MAGIC,0,#name),NET_STATI_NULL,NETNODE_HOOK_NULL,name##_init,name##_deinit,name##_input,name##_output}
 #define WIND_NETNODE_DEF(name) w_netnode_s netnode_##name = WIND_NETNODE_INFO(name)
 #define WIND_NETNODE_DECLARE(name) extern w_netnode_s netnode_##name;
 #define NETNODE(name) &netnode_##name

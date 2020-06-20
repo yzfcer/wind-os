@@ -30,7 +30,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
-#define NODE_TO_SKB(node) NODEPTR_TO_ITEMPTR(node,w_daemon_s,dnode)
+#define NODE_TO_SKB(node) NODEPTR_TO_ITEMPTR(node,w_skb_s,dnode)
 
 #define PROTO_ARP    0x0806
 #define PROTO_802_1P 0x8100

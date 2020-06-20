@@ -2,13 +2,13 @@
 **                                       God's harbor
 ** FileName    : module_net.c
 ** Author      : Jason Zhou
-** Last Date   : 2015/1/24 20:24:37
+** Last Date   : 2015/06/20
 ** Description : net stack module entry
 **  
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou
 ** Version     : v1.0
-** Date        : 2020/05/11 00:24:37
+** Date        : 2020/06/20
 ** Description : First version
 **
 **--------------Cureent version-------------------------------------------------------------------------
@@ -20,7 +20,7 @@
 *******************************************************************************************************/
 #include "wind_module.h"
 #include "wind_cmd.h"
-#include "wind_net_fsm.h"
+#include "wind_net.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
@@ -56,7 +56,7 @@ MODULE_INIT(net)
 MODULE_EXIT(net)
 {
     w_err_t err;
-    err = _wind_net_mod_init(void)
+    err = _wind_net_mod_init();
     return err;
 }
 
