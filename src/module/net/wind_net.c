@@ -24,6 +24,7 @@
 *******************************************************************************************************/
 #include "wind_net.h"
 #include "wind_netnode.h"
+#include "wind_netdev.h"
 #include "wind_arp_tb.h"
 #include "wind_fdb.h"
 #include "wind_route_tb.h"
@@ -131,6 +132,9 @@ w_err_t _wind_net_mod_init(void)
     wind_arp_tb_init();
     wind_fdb_init();
     err = wind_netnodes_regi();
+    WIND_ASSERT_RETURN(err == W_ERR_OK,err);
+    err = _wind_netdev_mod_init();
+    WIND_ASSERT_RETURN(err == W_ERR_OK,err);
     return err;
 }
 
@@ -138,6 +142,7 @@ w_err_t _wind_net_mod_deinit(void)
 {
     w_err_t err;
     err = wind_netnodes_unregi();
+    WIND_ASSERT_RETURN(err == W_ERR_OK,err);
     wind_route_tb_deinit();
     wind_arp_tb_deinit();
     wind_fdb_deinit();

@@ -31,10 +31,44 @@ extern "C" {
 static w_netdev_s *netdev_list[WIND_NETDEV_MAX_NUM];
 extern void wind_netdevs_register();
 WIND_NETDEV_DECLARE(lo);
+
+static w_err_t add_netdev(w_netdev_s *netdev)
+{
+    w_int32_t i;
+    w_err_t err = W_ERR_FAIL;
+    wind_disable_switch();
+    for(i = 0;i < WIND_NETDEV_MAX_NUM;i ++)
+    {
+        if(netdev_list[i] != W_NULL)
+            continue;
+        netdev_list[i] = netdev;
+        err = W_ERR_OK;
+        break;
+    }
+    wind_enable_switch();
+    return err;
+}
+
+static w_err_t del_netdev(w_netdev_s *netdev)
+{
+    w_int32_t i;
+    w_err_t err = W_ERR_FAIL;
+    wind_disable_switch();
+    for(i = 0;i < WIND_NETDEV_MAX_NUM;i ++)
+    {
+        if(netdev_list[i] != netdev)
+            continue;
+        netdev_list[i] = netdev;
+        err = W_ERR_OK;
+        break;
+    }
+    wind_enable_switch();
+    return err;
+}
+
 w_err_t _wind_netdev_mod_init(void)
 {
     w_int32_t i;
-    //DLIST_INIT(netdev_list);
     for(i = 0;i < WIND_NETDEV_MAX_NUM;i ++)
         netdev_list[i] = (w_netdev_s *)W_NULL;
     wind_netdev_register(WIND_NETDEV(lo));
@@ -49,13 +83,19 @@ w_netdev_s* wind_netdev_get(char *name)
 
 w_err_t wind_netdev_register(w_netdev_s *netdev)
 {
+    w_err_t err;
     WIND_ASSERT_RETURN(netdev != W_NULL,W_ERR_NULL_PTR);
+    err = add_netdev(netdev);
+    WIND_ASSERT_RETURN(err == W_ERR_OK,err);
     return wind_netnode_register(&netdev->netnode);
 }
 
 w_err_t wind_netdev_unregister(w_netdev_s *netdev)
 {
+    w_err_t err;
     WIND_ASSERT_RETURN(netdev != W_NULL,W_ERR_NULL_PTR);
+    err = del_netdev(netdev);
+    WIND_ASSERT_RETURN(err == W_ERR_OK,err);
     return wind_netnode_unregister(&netdev->netnode);
 }
 
