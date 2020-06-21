@@ -30,7 +30,8 @@
 extern "C" {
 #endif // #ifdef __cplusplus
 
-
+w_err_t wind_ip_to_str(w_uint32_t ipaddr,char * ipstr);
+w_err_t wind_ip_from_str(w_uint32_t *ipaddr,char * ipstr);
 
 
 #ifdef __cplusplus

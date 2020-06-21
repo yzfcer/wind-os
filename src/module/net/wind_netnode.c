@@ -81,6 +81,11 @@ w_err_t wind_netnode_disable(w_netnode_s *netnode)
     return W_ERR_OK;
 }
 
+w_err_t wind_netnode_print_list(void)
+{
+    return wind_obj_print_list(&netnode_list);
+}
+
 w_err_t wind_netnode_recv(w_netnode_s * netnode,w_skb_s *skb)
 {
     w_err_t err;

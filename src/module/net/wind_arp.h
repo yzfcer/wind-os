@@ -52,16 +52,6 @@ typedef struct
     w_uint32_t dstip;
 }w_arp_s;
 
-typedef struct
-{
-    w_dnode_s dnode;
-    w_uint32_t ip;
-    w_uint8_t mac[6];
-    w_uint16_t time;
-    w_netdev_s *netdev;
-}w_arp_table_s;
-
-
 
 
 #ifdef __cplusplus

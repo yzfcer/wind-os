@@ -98,6 +98,18 @@ void _wind_fs_mount_init(void)
 }
 #endif
 
+#if WIND_MODULE_NET_SUPPORT
+/*
+ When the system needs to support the net stack function, it needs to register 
+ net devices into the ssytem here
+ */
+#include "wind_netdev.h"
+void wind_netdevs_register(void)
+{
+    //wind_vfs_mount("fs0","treefs","null","/");
+}
+#endif
+
 
 /*
  Initialization thread stack is used to take initialization parameters from the 

@@ -41,6 +41,7 @@
 #include "wind_conv.h"
 #include "wind_module.h"
 #include "wind_fsm.h"
+#include "wind_netnode.h"
 
 #if (CMD_LIST_SUPPORT)
 
@@ -93,6 +94,9 @@ COMMAND_USAGE(list)
 #endif
 #if WIND_MODULE_SUPPORT
     wind_printf("list module:--show wind-os modules infomation.\r\n");
+#endif
+#if WIND_MODULE_NET_SUPPORT
+    wind_printf("list netnode:--show wind-os netnodes infomation.\r\n");
 #endif
 #if WIND_FSM_SUPPORT
     wind_printf("list fsm:--show fsm list infomation.\r\n");
@@ -201,6 +205,13 @@ COMMAND_MAIN(list,argc,argv)
     else if(0 == wind_strcmp(argv[1],"module"))
     {
         wind_module_print_list();
+        return W_ERR_OK;
+    }
+#endif
+#if WIND_MODULE_NET_SUPPORT
+    else if(0 == wind_strcmp(argv[1],"netnode"))
+    {
+        wind_netnode_print_list();
         return W_ERR_OK;
     }
 #endif

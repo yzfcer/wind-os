@@ -61,6 +61,7 @@ w_err_t wind_netnode_register(w_netnode_s *netnode);
 w_err_t wind_netnode_unregister(w_netnode_s *netnode);
 w_err_t wind_netnode_enable(w_netnode_s *netnode);
 w_err_t wind_netnode_disable(w_netnode_s *netnode);
+w_err_t wind_netnode_print_list(void);
 
 w_err_t wind_netnode_recv(w_netnode_s * netnode,w_skb_s *skb);
 w_err_t wind_netnode_send(w_netnode_s * netnode,w_skb_s *skb);

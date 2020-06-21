@@ -101,6 +101,21 @@ static w_err_t create_dirs(void)
     }while(0);
     return err;
 }
+
+
+#if WIND_MODULE_NET_SUPPORT
+/*
+ When the system needs to support the net stack function, it needs to register 
+ net devices into the ssytem here
+ */
+#include "wind_netdev.h"
+void wind_netdevs_register(void)
+{
+    //wind_vfs_mount("fs0","treefs","null","/");
+}
+#endif
+
+
 /*
  When the system needs to support the file system function, it needs to initialize 
  the rule of Mount here. When the file system is not needed, it need not be implemented

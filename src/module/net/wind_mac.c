@@ -34,7 +34,7 @@ w_err_t wind_mac_to_str(w_uint8_t *macaddr,char*str,char *sepch)
 {
     return W_ERR_OK;
 }
-w_err_t wind_mac_to_arr(w_uint8_t *macaddr,char*str)
+w_err_t wind_mac_from_str(w_uint8_t *macaddr,char*str)
 {
     return W_ERR_OK;
 }

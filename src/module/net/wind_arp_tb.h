@@ -48,7 +48,7 @@ w_err_t wind_arp_tb_update(w_arp_tb_s *arp_tb);
 w_err_t wind_arp_tb_clear(void);
 w_err_t wind_arp_tb_flush(void);
 w_arp_tb_s *wind_arp_tb_get(w_uint32_t ipaddr);
-
+w_err_t wind_arp_tb_print(void);
 
 #endif // #if WIND_MODULE_NET_SUPPORT
 #ifdef __cplusplus

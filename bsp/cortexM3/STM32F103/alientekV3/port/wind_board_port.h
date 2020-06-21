@@ -44,6 +44,10 @@ void _wind_heaps_create(void);
 void _wind_fs_mount_init(void);
 #endif
 
+#if WIND_MODULE_NET_SUPPORT
+void wind_netdevs_register(void);
+#endif
+
 
 typedef  void (*thread_run_f)(void *pargs);
 w_stack_t *_wind_thread_stack_init(thread_run_f pfunc,void *pdata, w_stack_t *pstkbt,w_int32_t stk_depth);
