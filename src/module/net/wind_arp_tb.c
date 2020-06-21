@@ -39,7 +39,6 @@ static void arp_tb_timer(w_timer_s *timer,void *arg)
 w_arp_tb_s *find_free_arp_tb(void)
 {
     w_int32_t i;
-    w_err_t err;
     w_arp_tb_s *new_arptb = (w_arp_tb_s*)W_NULL;
     wind_disable_switch();
     for(i = 0;i < WIND_ARP_TB_MAX_NUM;i ++)
@@ -80,7 +79,6 @@ w_err_t wind_arp_tb_deinit(void)
 
 w_err_t wind_arp_tb_update(w_arp_tb_s *arp_tb)
 {
-    w_int32_t i;
     w_err_t err;
     w_arp_tb_s *new_arptb;
     w_uint32_t tick;

@@ -38,7 +38,7 @@ extern "C" {
 
 #define WIND_NETDEV_DEF(name) w_netdev_s netdev_##name = {WIND_NETNODE_INFO(name),{{0,0,0,0,0,0},0,0,0}};
 #define WIND_NETDEV_DECLARE(name) extern w_netdev_s netdev_##name;
-#define WIND_NETDEV(name) &netdev_##name;
+#define WIND_NETDEV(name) &netdev_##name
 
 typedef struct __w_netdev_s w_netdev_s;
 typedef struct 
@@ -62,7 +62,7 @@ w_err_t wind_netdev_register(w_netdev_s *netdev);
 w_err_t wind_netdev_unregister(w_netdev_s *netdev);
 w_err_t wind_netdev_enable(w_netdev_s *netdev);
 w_err_t wind_netdev_disable(w_netdev_s *netdev);
-
+w_err_t wind_netdev_print_list(void);
 
 
 #endif // #if WIND_MODULE_NET_SUPPORT

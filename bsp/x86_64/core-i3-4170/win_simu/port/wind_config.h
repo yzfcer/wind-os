@@ -198,7 +198,7 @@ extern "C" {
 #define WIND_MODULE_XML_SUPPORT 1 //Whether XML module is supported
 #define WIND_MODULE_LOG_SUPPORT 1 //Whether log function module is supported
 #define WIND_MODULE_XMODEM_SUPPORT 1 //Whether xmodem protocol module is supported
-#define WIND_MODULE_NET_SUPPORT 0 //Whether TCP/IP NET protocol module is supported
+#define WIND_MODULE_NET_SUPPORT 1 //Whether TCP/IP NET protocol module is supported
 
 #define WIND_MODULE_TOOLS_SUPPORT 1 //Whether system tool module is supported
 #endif
@@ -303,6 +303,7 @@ extern "C" {
 #define WIND_FDB_MAX_NUM 32
 #define WIND_ARP_TB_MAX_NUM 32
 #define WIND_ROUTE_TB_MAX_NUM 16
+#define WIND_NETDEV_MAX_NUM 8
 #endif
 
 #ifdef __cplusplus

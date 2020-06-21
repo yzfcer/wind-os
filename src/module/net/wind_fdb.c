@@ -77,12 +77,11 @@ w_err_t wind_fdb_update(w_uint8_t *mac,w_uint16_t vlanid,w_uint8_t portid)
         {
             for(i = 0;i < WIND_FDB_MAX_NUM;i ++)
             {
-                if(fdb_list[i].enable == 0)
-                {
-                    fdb_list[i].enable = 1;
-                    fdb = &fdb_list[i];
-                    break;
-                }
+                if(fdb_list[i].enable)
+                    continue;
+                fdb_list[i].enable = 1;
+                fdb = &fdb_list[i];
+                break;
             }
         }
         WIND_ASSERT_BREAK(fdb != W_NULL,W_ERR_MEM,"fdb table full");
@@ -119,7 +118,9 @@ w_err_t wind_fdb_flush(void)
     wind_disable_switch();
     for(i = 0;i < WIND_FDB_MAX_NUM;i ++)
     {
-        if((fdb_list[i].enable) && (tick - fdb_list[i].ttl >= WIND_FDB_TTL))
+        if(!fdb_list[i].enable)
+            continue;
+        if(tick - fdb_list[i].ttl >= WIND_FDB_TTL)
         {
             fdb_list[i].enable = 0;
             break;
@@ -136,7 +137,9 @@ w_fdb_s *wind_fdb_get(w_uint8_t *mac)
     wind_disable_switch();
     for(i = 0;i < WIND_FDB_MAX_NUM;i ++)
     {
-        if((fdb_list[i].enable) && (wind_memcmp(mac,fdb_list[i].mac,6) == 0))
+        if(!fdb_list[i].enable)
+            continue;
+        if(wind_memcmp(mac,fdb_list[i].mac,6) == 0)
         {
             fdb = &fdb_list[i];
             break;

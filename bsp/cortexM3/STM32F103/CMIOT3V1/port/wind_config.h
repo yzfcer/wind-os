@@ -252,6 +252,7 @@ extern "C" {
 #define WIND_FDB_MAX_NUM 32
 #define WIND_ARP_TB_MAX_NUM 32
 #define WIND_ROUTE_TB_MAX_NUM 16
+#define WIND_NETDEV_MAX_NUM 8
 #endif
 
 #ifdef __cplusplus
