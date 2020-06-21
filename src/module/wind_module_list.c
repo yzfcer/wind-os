@@ -65,6 +65,9 @@ MODULE_DECLARE(log);
 #if WIND_MODULE_XMODEM_SUPPORT
 MODULE_DECLARE(xmodem);
 #endif
+#if WIND_MODULE_NET_SUPPORT
+MODULE_DECLARE(net);
+#endif
 
 w_err_t _wind_register_modules(void)
 {
@@ -73,6 +76,9 @@ w_err_t _wind_register_modules(void)
 #endif
 #if WIND_MODULE_VFS_SUPPORT
     wind_module_register(MODULE(vfs));
+#endif
+#if WIND_MODULE_NET_SUPPORT
+    wind_module_register(MODULE(net));
 #endif
 #if WIND_MODULE_DB_SUPPORT
     wind_module_register(MODULE(db));

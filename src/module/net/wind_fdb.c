@@ -43,9 +43,10 @@ w_err_t wind_fdb_init(void)
 {
     w_err_t err;
     w_timer_s *tmr;
+    wind_notice("net:init fdb table");
     err = wind_fdb_clear();
     WIND_ASSERT_RETURN(err == W_ERR_OK,err);
-    tmr = wind_timer_create("fdb_flush",2000,fdb_timer,W_NULL,F_TIMER_RUN | F_TIMER_REPEAT);
+    tmr = wind_timer_create("fdb",2000,fdb_timer,W_NULL,F_TIMER_RUN | F_TIMER_REPEAT);
     WIND_ASSERT_RETURN(tmr != W_NULL,err);
     return err;
 }
@@ -53,6 +54,7 @@ w_err_t wind_fdb_init(void)
 w_err_t wind_fdb_deinit(void)
 {
     w_timer_s *tmr;
+    wind_notice("net:deinit fdb table");
     tmr = wind_timer_get("fdb_flush");
     if(tmr != W_NULL)
         wind_timer_destroy(tmr);
@@ -103,7 +105,7 @@ w_err_t wind_fdb_clear(void)
     {
         fdb_list[i].enable = 0;
     }
-    wind_disable_switch();
+    wind_enable_switch();
     return W_ERR_OK;
 
 }
@@ -123,7 +125,7 @@ w_err_t wind_fdb_flush(void)
             break;
         }
     }
-    wind_disable_switch();
+    wind_enable_switch();
     return W_ERR_OK;
 }
 
@@ -140,7 +142,7 @@ w_fdb_s *wind_fdb_get(w_uint8_t *mac)
             break;
         }
     }
-    wind_disable_switch();
+    wind_enable_switch();
     return fdb;
 }
 

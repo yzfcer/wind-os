@@ -53,6 +53,7 @@ w_netnode_s* wind_netnode_get(char *name)
 w_err_t wind_netnode_register(w_netnode_s *netnode)
 {
     WIND_ASSERT_RETURN(netnode != W_NULL,W_ERR_NULL_PTR);
+    wind_notice("net:register netnode %s",netnode->obj.name);
     wind_netnode_disable(netnode);
     return wind_obj_register(&netnode->obj,&netnode_list);
 }
@@ -60,6 +61,7 @@ w_err_t wind_netnode_register(w_netnode_s *netnode)
 w_err_t wind_netnode_unregister(w_netnode_s *netnode)
 {
     WIND_ASSERT_RETURN(netnode != W_NULL,W_ERR_NULL_PTR);
+    wind_notice("net:unregister netnode %s",netnode->obj.name);
     return wind_obj_unregister(&netnode->obj,&netnode_list);
 }
 

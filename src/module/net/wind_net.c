@@ -24,6 +24,9 @@
 *******************************************************************************************************/
 #include "wind_net.h"
 #include "wind_netnode.h"
+#include "wind_arp_tb.h"
+#include "wind_fdb.h"
+#include "wind_route_tb.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
@@ -122,7 +125,10 @@ static w_err_t wind_netnodes_unregi(void)
 
 w_err_t _wind_net_mod_init(void)
 {
-    w_err_t err;
+    w_err_t err = W_ERR_OK;
+    wind_route_tb_init();
+    wind_arp_tb_init();
+    wind_fdb_init();
     err = wind_netnodes_regi();
     return err;
 }
@@ -131,6 +137,9 @@ w_err_t _wind_net_mod_deinit(void)
 {
     w_err_t err;
     err = wind_netnodes_unregi();
+    wind_route_tb_deinit();
+    wind_arp_tb_deinit();
+    wind_fdb_deinit();
     return err;
 }
 

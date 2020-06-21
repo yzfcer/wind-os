@@ -40,9 +40,10 @@ w_err_t wind_arp_tb_init(void)
 {
     w_err_t err;
     w_timer_s *tmr;
+    wind_notice("net:init arp table");
     err = wind_arp_tb_clear();
     WIND_ASSERT_RETURN(err == W_ERR_OK,err);
-    tmr = wind_timer_create("arp_tb_flush",2000,arp_tb_timer,W_NULL,F_TIMER_RUN | F_TIMER_REPEAT);
+    tmr = wind_timer_create("arp",2000,arp_tb_timer,W_NULL,F_TIMER_RUN | F_TIMER_REPEAT);
     WIND_ASSERT_RETURN(tmr != W_NULL,err);
     return err;
 }
@@ -50,6 +51,7 @@ w_err_t wind_arp_tb_init(void)
 w_err_t wind_arp_tb_deinit(void)
 {
     w_timer_s *tmr;
+    wind_notice("net:deinit arp table");
     tmr = wind_timer_get("arp_tb_flush");
     if(tmr != W_NULL)
         wind_timer_destroy(tmr);
@@ -101,7 +103,7 @@ w_err_t wind_arp_tb_clear(void)
     {
         arp_tb_list[i].enable = 0;
     }
-    wind_disable_switch();
+    wind_enable_switch();
     return W_ERR_OK;
 
 }
@@ -121,7 +123,7 @@ w_err_t wind_arp_tb_flush(void)
             break;
         }
     }
-    wind_disable_switch();
+    wind_enable_switch();
     return W_ERR_OK;
 }
 
@@ -138,7 +140,7 @@ w_arp_tb_s *wind_arp_tb_get(w_uint32_t ipaddr)
             break;
         }
     }
-    wind_disable_switch();
+    wind_enable_switch();
     return arp_tb;
 }
 

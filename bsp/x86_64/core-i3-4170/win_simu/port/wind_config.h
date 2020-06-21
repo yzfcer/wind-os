@@ -126,7 +126,7 @@ extern "C" {
 #define WIND_WATCHDOG_MAX_NUM 5//Maximum number of watchdogs
 
 #define WIND_TIMER_SUPPORT 1  //Whether software timer is supported
-#define WIND_TIMER_MAX_NUM 2  //Maximum number of software timers
+#define WIND_TIMER_MAX_NUM 5  //Maximum number of software timers
 
 #define WIND_SOFTIRQ_SUPPORT 1 //Whether software interrupt framework is supported
 #define WIND_SOFTINT_MAX_NUM 256 //Maximum number of software interrupts

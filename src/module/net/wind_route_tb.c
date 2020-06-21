@@ -44,21 +44,15 @@ static void route_tb_timer(w_timer_s *timer,void *arg)
 w_err_t wind_route_tb_init(void)
 {
     w_err_t err;
-    //w_timer_s *tmr;
+    wind_notice("net:init route table");
     err = wind_route_tb_clear();
-    WIND_ASSERT_RETURN(err == W_ERR_OK,err);
-    //tmr = wind_timer_create("route_tb_flush",2000,route_tb_timer,W_NULL,F_TIMER_RUN | F_TIMER_REPEAT);
-    //WIND_ASSERT_RETURN(tmr != W_NULL,err);
     return err;
 }
 
 w_err_t wind_route_tb_deinit(void)
 {
-    //w_timer_s *tmr;
-    //tmr = wind_timer_get("route_tb_flush");
-    //if(tmr != W_NULL)
-    //    wind_timer_destroy(tmr);
-    return W_ERR_OK;
+    wind_notice("net:deinit route table");
+    return wind_route_tb_clear();
 }
 
 
@@ -100,7 +94,7 @@ w_err_t wind_route_tb_clear(void)
     {
         route_tb_list[i].enable = 0;
     }
-    wind_disable_switch();
+    wind_enable_switch();
     return W_ERR_OK;
 }
 
@@ -119,7 +113,7 @@ w_err_t wind_route_tb_flush(void)
             break;
         }
     }
-    wind_disable_switch();
+    wind_enable_switch();
     return W_ERR_OK;
 }
 
@@ -136,7 +130,7 @@ w_route_tb_s *wind_route_tb_get(w_uint32_t destip)
             break;
         }
     }
-    wind_disable_switch();
+    wind_enable_switch();
     return route_tb;
 }
 
