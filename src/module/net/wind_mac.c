@@ -28,6 +28,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
+#if WIND_MODULE_NET_SUPPORT
 
 
 w_err_t wind_mac_to_str(w_uint8_t *macaddr,char*str,char *sepch)
@@ -61,6 +62,7 @@ w_bool_t wind_mac_is_equal(w_uint8_t *srcamc,w_uint8_t *dstamc)
     return (wind_memcmp(srcamc,dstamc,MAC_ADDR_LEN) == 0)?W_TRUE:W_FALSE;
 }
 
+#endif // #if WIND_MODULE_NET_SUPPORT
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

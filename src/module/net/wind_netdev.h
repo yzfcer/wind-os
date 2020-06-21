@@ -32,6 +32,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
+#if WIND_MODULE_NET_SUPPORT
+
 #define WIND_NETDEV_MAGIC 0x375C6A71
 
 #define WIND_NETDEV_DEF(name) w_netdev_s netdev_##name = {WIND_NETNODE_INFO(name),{{0,0,0,0,0,0},0,0,0}};
@@ -63,6 +65,7 @@ w_err_t wind_netdev_disable(w_netdev_s *netdev);
 
 
 
+#endif // #if WIND_MODULE_NET_SUPPORT
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

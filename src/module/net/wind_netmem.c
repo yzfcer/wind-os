@@ -26,6 +26,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
+#if WIND_MODULE_NET_SUPPORT
 
 void *wind_netmem_malloc(w_int32_t size)
 {
@@ -38,6 +39,7 @@ w_err_t wind_netmem_free(void *ptr)
 }
 
 
+#endif // #if WIND_MODULE_NET_SUPPORT
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

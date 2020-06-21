@@ -30,11 +30,13 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
+#if WIND_MODULE_NET_SUPPORT
 
 w_err_t _wind_net_mod_init(void);
 w_err_t _wind_net_mod_deinit(void);
 
 
+#endif //#if WIND_MODULE_NET_SUPPORT
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

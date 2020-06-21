@@ -29,11 +29,13 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
+#if WIND_NET_IP_SUPPORT
 
 w_err_t wind_ip_to_str(w_uint32_t ipaddr,char * ipstr);
 w_err_t wind_ip_from_str(w_uint32_t *ipaddr,char * ipstr);
 
 
+#endif // #if WIND_NET_IP_SUPPORT
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

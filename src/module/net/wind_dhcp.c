@@ -31,6 +31,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
+#if WIND_NET_DHCP_SUPPORT
 
 static w_err_t dhcp_init(w_netnode_s *netnode)
 {
@@ -62,6 +63,7 @@ w_err_t wind_dhcp_get_opt(w_dhcp_ops_s *opt,w_skb_s *skb,w_int32_t idx)
 
 WIND_NETNODE_DEF(dhcp);
 
+#endif // #if WIND_NET_DHCP_SUPPORT
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

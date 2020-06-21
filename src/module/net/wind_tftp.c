@@ -29,6 +29,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
+#if WIND_NET_TFTP_SUPPORT
 
 static w_err_t tftp_init(w_netnode_s *netnode)
 {
@@ -50,6 +51,7 @@ static w_err_t tftp_output(w_netnode_s *netnode,w_skb_s *skb)
 
 
 WIND_NETNODE_DEF(tftp);
+#endif // #if WIND_NET_TFTP_SUPPORT
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

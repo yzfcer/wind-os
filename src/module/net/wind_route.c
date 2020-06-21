@@ -26,10 +26,12 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
+#if WIND_MODULE_NET_SUPPORT
 
 
 
 
+#endif // #if WIND_MODULE_NET_SUPPORT
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

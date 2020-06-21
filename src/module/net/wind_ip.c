@@ -29,6 +29,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
+#if WIND_NET_IP_SUPPORT
+
 w_err_t wind_ip_to_str(w_uint32_t ipaddr,char * ipstr)
 {
     wind_sprintf(ipstr,"%d.%d.%d.%d",(ipaddr>>24) & 0xff,
@@ -69,6 +71,7 @@ static w_err_t ip_output(w_netnode_s *netnode,w_skb_s *skb)
 }
 
 WIND_NETNODE_DEF(ip);
+#endif // #if WIND_NET_IP_SUPPORT
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

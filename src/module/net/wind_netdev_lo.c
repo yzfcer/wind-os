@@ -29,6 +29,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
+#if WIND_MODULE_NET_SUPPORT
 static w_dlist_s skb_list;
 WIND_NETDEV_DECLARE(lo);
 
@@ -84,6 +85,7 @@ static w_err_t lo_output(w_netnode_s *netnode,w_skb_s *skb)
 WIND_NETDEV_DEF(lo);
 
 
+#endif // #if WIND_MODULE_NET_SUPPORT
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

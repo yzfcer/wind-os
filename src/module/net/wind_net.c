@@ -30,6 +30,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
+#if WIND_MODULE_NET_SUPPORT
 
 #if WIND_NET_ARP_SUPPORT
 WIND_NETNODE_DECLARE(arp);
@@ -144,7 +145,7 @@ w_err_t _wind_net_mod_deinit(void)
 }
 
 
-
+#endif // #if WIND_MODULE_NET_SUPPORT
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

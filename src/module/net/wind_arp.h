@@ -32,6 +32,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
+#if WIND_NET_ARP_SUPPORT
 
 #define ARP_TABLE_NUM 32
 #define ARP_REQ 1
@@ -54,6 +55,7 @@ typedef struct
 
 
 
+#endif // #if WIND_NET_ARP_SUPPORT
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

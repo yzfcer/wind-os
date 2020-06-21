@@ -29,6 +29,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
+#if WIND_NET_DNS_SUPPORT
 
 #define DNS_QTYPE_A 0x0001
 #define DNS_QTYPE_NS 0x0002
@@ -93,6 +94,7 @@ typedef struct
 
 
 
+#endif // #if WIND_NET_DNS_SUPPORT
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

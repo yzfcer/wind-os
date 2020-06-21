@@ -28,6 +28,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
+#if WIND_NET_ARP_SUPPORT
 
 static w_err_t arp_handle_req(w_netnode_s *netnode,w_skb_s *skb,w_arp_s *arp)
 {
@@ -57,6 +58,7 @@ static w_err_t arp_output(w_netnode_s *netnode,w_skb_s *skb)
 
 
 WIND_NETNODE_DEF(arp);
+#endif // #if WIND_NET_ARP_SUPPORT
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

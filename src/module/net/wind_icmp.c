@@ -29,6 +29,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
+#if WIND_NET_ICMP_SUPPORT
 
 static w_err_t icmp_handle_req(w_netnode_s *netnode,w_skb_s *skb,w_icmphead_s *icmphead)
 {
@@ -58,6 +59,7 @@ static w_err_t icmp_output(w_netnode_s *netnode,w_skb_s *skb)
 
 
 WIND_NETNODE_DEF(icmp);
+#endif // #if WIND_NET_ICMP_SUPPORT
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

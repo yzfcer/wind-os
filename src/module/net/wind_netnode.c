@@ -27,6 +27,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
+#if WIND_MODULE_NET_SUPPORT
 static w_dlist_s netnode_list;
 
 
@@ -136,6 +137,7 @@ w_err_t wind_netnode_send(w_netnode_s * netnode,w_skb_s *skb)
 }
 
 
+#endif // #if WIND_MODULE_NET_SUPPORT
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

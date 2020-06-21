@@ -29,6 +29,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
+#if WIND_MODULE_NET_SUPPORT
 
 #define MAC_ADDR_LEN 6
 //typedef char w_macaddr_t[MAC_ADDR_LEN];
@@ -40,6 +41,7 @@ w_bool_t wind_mac_is_equal(w_uint8_t *srcamc,w_uint8_t *dstamc);
 
 
 
+#endif // #if WIND_MODULE_NET_SUPPORT
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

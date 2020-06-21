@@ -30,6 +30,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
+#if WIND_NET_DHCP_SUPPORT
 
 #define  DHCPTYPE_DISCOVER 0x01
 #define  DHCPTYPE_OFFER    0x02
@@ -69,6 +70,7 @@ typedef struct
 w_err_t wind_dhcp_get_opt(w_dhcp_ops_s *opt,w_skb_s *skb,w_int32_t idx);
 
 
+#endif // #if WIND_NET_DHCP_SUPPORT
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

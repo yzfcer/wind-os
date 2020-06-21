@@ -30,6 +30,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
+#if WIND_MODULE_NET_SUPPORT
+
 w_skb_s *wind_skb_alloc(void)
 {
     w_skb_s *skb;
@@ -243,6 +245,7 @@ w_uint8_t wind_skb_get_tcp_headlen(w_skb_s *skb)
 
 
 
+#endif // #if WIND_MODULE_NET_SUPPORT
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

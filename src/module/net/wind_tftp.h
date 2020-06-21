@@ -29,6 +29,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
+#if WIND_NET_TFTP_SUPPORT
 
 #define TFTP_RRQ     0x0001
 #define TFTP_WRQ     0x0002
@@ -60,6 +61,7 @@ typedef struct
 
 
 
+#endif // #if WIND_NET_TFTP_SUPPORT
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

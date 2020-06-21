@@ -29,6 +29,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
+#if WIND_NET_UDP_SUPPORT
 
 static w_err_t udp_handle_req(w_netnode_s *netnode,w_skb_s *skb,w_udphead_s *udphead)
 {
@@ -58,6 +59,7 @@ static w_err_t udp_output(w_netnode_s *netnode,w_skb_s *skb)
 
 
 WIND_NETNODE_DEF(udp);
+#endif // #if WIND_NET_UDP_SUPPORT
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

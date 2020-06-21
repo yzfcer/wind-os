@@ -33,6 +33,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
+#if WIND_MODULE_NET_SUPPORT
 
 #define WIND_NETNODE_MAGIC 0x35FA518C
 #define NETNODE_HOOK_NULL {W_NULL,W_NULL},{W_NULL,W_NULL}
@@ -66,6 +67,7 @@ w_err_t wind_netnode_print_list(void);
 w_err_t wind_netnode_recv(w_netnode_s * netnode,w_skb_s *skb);
 w_err_t wind_netnode_send(w_netnode_s * netnode,w_skb_s *skb);
 
+#endif // #if WIND_MODULE_NET_SUPPORT
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

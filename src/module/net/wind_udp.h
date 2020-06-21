@@ -29,6 +29,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
+#if WIND_NET_UDP_SUPPORT
 
 typedef struct
 {
@@ -41,6 +42,7 @@ typedef struct
 
 
 
+#endif // #if WIND_NET_UDP_SUPPORT
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

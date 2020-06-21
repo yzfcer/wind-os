@@ -28,6 +28,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
+#if WIND_NET_TCP_SUPPORT
 
 static w_err_t tcp_handle_req(w_netnode_s *netnode,w_skb_s *skb,w_tcphead_s *tcphead)
 {
@@ -57,6 +58,7 @@ static w_err_t tcp_output(w_netnode_s *netnode,w_skb_s *skb)
 
 
 WIND_NETNODE_DEF(tcp);
+#endif // #if WIND_NET_TCP_SUPPORT
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

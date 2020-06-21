@@ -29,6 +29,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
+#if WIND_MODULE_NET_SUPPORT
 
 typedef struct
 {
@@ -61,6 +62,7 @@ typedef struct
 #define DROP_BYTES_CNT_INC(stati,size) stati.drop_bytes_cnt += size
 
 
+#endif // #if WIND_MODULE_NET_SUPPORT
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

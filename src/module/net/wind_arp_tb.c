@@ -29,7 +29,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
-#if WIND_MODULE_NET_SUPPORT
+#if WIND_NET_ARP_SUPPORT
 w_arp_tb_s arp_tb_list[WIND_ARP_TB_MAX_NUM];
 static void arp_tb_timer(w_timer_s *timer,void *arg)
 {
@@ -172,7 +172,7 @@ w_err_t wind_arp_tb_print(void)
     return W_ERR_OK;
 }
 
-#endif // #if WIND_MODULE_NET_SUPPORT
+#endif // #if WIND_NET_ARP_SUPPORT
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

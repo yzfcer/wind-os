@@ -26,6 +26,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
+#if WIND_MODULE_NET_SUPPORT
+
 static w_dlist_s netdev_list;
 w_err_t _wind_netdev_mod_init(void)
 {
@@ -68,7 +70,7 @@ w_err_t wind_netdev_disable(w_netdev_s *netdev)
 
 
 
-
+#endif // #if WIND_MODULE_NET_SUPPORT
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus
