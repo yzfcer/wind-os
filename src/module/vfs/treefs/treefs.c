@@ -113,8 +113,8 @@ w_err_t wind_treefs_init(w_treefs_s *treefs,const char *name)
     w_int32_t len;
     char *objname = W_NULL;
     wind_notice("init treefs:%s",name != W_NULL?name:"null");
-    WIND_ASSERT_RETURN(treefs != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(name != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(treefs != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(name != W_NULL,W_ERR_NULL_PTR);
 
     len = wind_strlen(name) + 1;
     objname = tfs_mem_malloc(len);
@@ -148,8 +148,8 @@ w_err_t wind_treefs_destroy(w_treefs_s *treefs)
 {
     w_err_t err;
     
-    WIND_ASSERT_RETURN(treefs != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(treefs->obj.name != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(treefs != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(treefs->obj.name != W_NULL,W_ERR_NULL_PTR);
     wind_notice("destroy treefs:%s",wind_obj_name(&treefs->obj));
     err = wind_obj_deinit(&treefs->obj,TREEFS_MAGIC,&treefslist);
     WIND_ASSERT_RETURN(err == W_ERR_OK, W_ERR_FAIL);

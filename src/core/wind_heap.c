@@ -209,7 +209,7 @@ w_heap_s *wind_heap_create(const char *name,w_addr_t base,w_uint32_t size,w_uint
 w_err_t wind_heap_destroy(w_heap_s *heap)
 {
     w_err_t err;
-    WIND_ASSERT_RETURN(heap != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(heap != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(heap->obj.magic == WIND_HEAP_MAGIC,W_ERR_INVALID);
     wind_notice("destroy heap:%s",wind_obj_name(&heap->obj));
     wind_mutex_lock(heap->mutex);
@@ -223,7 +223,7 @@ w_err_t wind_heap_destroy(w_heap_s *heap)
 
 w_err_t wind_heap_setflag(w_heap_s *heap,w_int16_t flag)
 {
-    WIND_ASSERT_RETURN(heap != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(heap != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(heap->obj.magic == WIND_HEAP_MAGIC,W_ERR_INVALID);
     wind_mutex_lock(heap->mutex);
     if(flag & F_HEAP_PRIVATE)
@@ -234,7 +234,7 @@ w_err_t wind_heap_setflag(w_heap_s *heap,w_int16_t flag)
 }
 w_err_t wind_heap_clrflag(w_heap_s *heap,w_int16_t flag)
 {
-    WIND_ASSERT_RETURN(heap != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(heap != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(heap->obj.magic == WIND_HEAP_MAGIC,W_ERR_INVALID);
     wind_mutex_lock(heap->mutex);
     if(flag & F_HEAP_PRIVATE)
@@ -280,8 +280,8 @@ static void *alloc_from_freeitem(w_heap_s* heap,w_heapitem_s* freeitem,w_uint32_
 
 static w_err_t combine_heapitem(w_heapitem_s* item1,w_heapitem_s* item2)
 {
-    WIND_ASSERT_RETURN(item1 != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(item2 != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(item1 != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(item2 != W_NULL,W_ERR_NULL_PTR);
     wind_debug("heap1=%p,heap2=%p\r\n",item1->heap,item2->heap);
     wind_debug("item1->magic=%d,item2->magic=%d\r\n",item1->magic,item2->magic);
     WIND_ASSERT_RETURN(item1->magic == (w_uint16_t)(~WIND_HEAPITEM_MAGIC),W_ERR_INVALID);
@@ -392,8 +392,8 @@ w_err_t wind_heap_free(w_heap_s* heap,void *ptr)
     w_err_t err;
     w_heapitem_s* item,*tmpitem;
     w_dnode_s *dnode;
-    WIND_ASSERT_RETURN(heap != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(heap->obj.magic == WIND_HEAP_MAGIC,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(heap != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(heap->obj.magic == WIND_HEAP_MAGIC,W_ERR_NULL_PTR);
     WIND_CHECK_RETURN(ptr != W_NULL,W_ERR_OK);
     wind_mutex_lock(heap->mutex);
     do
@@ -491,7 +491,7 @@ w_err_t wind_heapitem_print_detail(w_allocid_e allocid)
     char * hdr_fmt,*dat_fmt;
     w_heapitem_s *heapitem;
     w_dlist_s *list = &heaplist;
-    WIND_ASSERT_RETURN(list->head != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(list->head != W_NULL,W_ERR_NULL_PTR);
     if(sizeof(w_addr_t) == 8)
     {
         hdr_fmt = "%-18s   %-10s %-10s %-8s\r\n";

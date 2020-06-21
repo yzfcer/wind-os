@@ -40,7 +40,7 @@ w_err_t boot_media_register(w_media_s *media)
 {
     w_int32_t i;
     wind_notice("register media: %s",media->name);
-    WIND_ASSERT_RETURN(media != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(media != W_NULL,W_ERR_NULL_PTR);
     for(i = 0;i < MEDIA_COUNT;i ++)
     {
         if(g_media[i] == W_NULL)
@@ -56,7 +56,7 @@ w_err_t boot_media_register(w_media_s *media)
 w_err_t boot_media_unregister(w_media_s *media)
 {
     w_int32_t i;
-    WIND_ASSERT_RETURN(media != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(media != W_NULL,W_ERR_NULL_PTR);
     for(i = 0;i < MEDIA_COUNT;i ++)
     {
         if(g_media[i] == media)

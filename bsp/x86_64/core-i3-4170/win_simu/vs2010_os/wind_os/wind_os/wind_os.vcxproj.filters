@@ -596,6 +596,72 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\ymodem\wind_ymodem.c">
       <Filter>module_ymodem</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\net\module_net.c">
+      <Filter>module_net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_arp.c">
+      <Filter>module_net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_arp_tb.c">
+      <Filter>module_net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_dhcp.c">
+      <Filter>module_net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_dns.c">
+      <Filter>module_net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_fdb.c">
+      <Filter>module_net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_icmp.c">
+      <Filter>module_net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_igmp.c">
+      <Filter>module_net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_ip.c">
+      <Filter>module_net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_mac.c">
+      <Filter>module_net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_net.c">
+      <Filter>module_net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_net_stati.c">
+      <Filter>module_net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_netdev.c">
+      <Filter>module_net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_netdev_lo.c">
+      <Filter>module_net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_netmem.c">
+      <Filter>module_net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_netnode.c">
+      <Filter>module_net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_route.c">
+      <Filter>module_net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_route_tb.c">
+      <Filter>module_net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_skb.c">
+      <Filter>module_net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_tcp.c">
+      <Filter>module_net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_tftp.c">
+      <Filter>module_net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_udp.c">
+      <Filter>module_net</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">
@@ -660,6 +726,9 @@
     </Filter>
     <Filter Include="module_ymodem">
       <UniqueIdentifier>{e3b32da2-5728-4f00-975f-2a1ac60c5243}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="module_net">
+      <UniqueIdentifier>{b8e85fb8-32d4-4e85-92fb-94535e8323e8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -989,6 +1058,69 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\..\src\module\ymodem\wind_ymodem.h">
       <Filter>module_ymodem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_arp.h">
+      <Filter>module_net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_arp_tb.h">
+      <Filter>module_net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_dhcp.h">
+      <Filter>module_net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_dns.h">
+      <Filter>module_net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_fdb.h">
+      <Filter>module_net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_icmp.h">
+      <Filter>module_net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_igmp.h">
+      <Filter>module_net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_ip.h">
+      <Filter>module_net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_mac.h">
+      <Filter>module_net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_net.h">
+      <Filter>module_net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_net_stati.h">
+      <Filter>module_net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_netdev.h">
+      <Filter>module_net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_netdev_lo.h">
+      <Filter>module_net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_netmem.h">
+      <Filter>module_net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_netnode.h">
+      <Filter>module_net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_route.h">
+      <Filter>module_net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_route_tb.h">
+      <Filter>module_net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_skb.h">
+      <Filter>module_net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_tcp.h">
+      <Filter>module_net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_tftp.h">
+      <Filter>module_net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_udp.h">
+      <Filter>module_net</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -239,11 +239,11 @@ w_err_t wind_xmodem_init(xm_ctx_s *ctx,xm_dir_e dir,
                     w_uint8_t *frbuff,w_int32_t frbuffsize,
                     xm_write_fn write,xm_read_fn read)
 {
-    WIND_ASSERT_RETURN(ctx != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(frbuff != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(ctx != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(frbuff != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(frbuffsize >= XMODEM_BUFF_LEN,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(write != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(read != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(write != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(read != W_NULL,W_ERR_NULL_PTR);
     wind_log_open();
     wind_log_notice("--------------------------");
     wind_memset(ctx,0,sizeof(xm_ctx_s));
@@ -257,7 +257,7 @@ w_err_t wind_xmodem_init(xm_ctx_s *ctx,xm_dir_e dir,
     ctx->pack_no = 1;
     
     ctx->frbuff = frbuff;
-    ctx->frbuffsize = frbuffsize;
+	ctx->frbuffsize = (w_int16_t)frbuffsize;
     
     ctx->read = read;
     ctx->write = write;
@@ -274,7 +274,7 @@ w_int32_t wind_xmodem_recv(xm_ctx_s *ctx,w_uint8_t *data,w_int32_t size)
     WIND_ASSERT_RETURN(data != W_NULL,-1);
     WIND_ASSERT_RETURN(size >= XMODEM_MIN_LEN,-1);
     ctx->buff = data;
-    ctx->bufflen = size;
+    ctx->bufflen = (w_int16_t)size;
     ctx->buffidx = 0;
     
     for(;;)
@@ -477,7 +477,7 @@ w_int32_t wind_xmodem_send(xm_ctx_s *ctx,w_uint8_t *data,w_int32_t size)
     WIND_ASSERT_RETURN(data != W_NULL,-1);
     WIND_ASSERT_RETURN(size > 0,-1);
     ctx->buff = data;
-    ctx->bufflen = size;
+    ctx->bufflen = (w_int16_t)size;
     ctx->buffidx = 0;
     for(;;)
     {
@@ -513,7 +513,7 @@ w_int32_t wind_xmodem_send(xm_ctx_s *ctx,w_uint8_t *data,w_int32_t size)
 w_err_t wind_xmodem_end(xm_ctx_s *ctx)
 {
     wind_log_notice("XM_ERROR");
-    WIND_ASSERT_RETURN(ctx != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(ctx != W_NULL,W_ERR_NULL_PTR);
     wind_log_notice("wind_xmodem_end");
     if((ctx->stat == XM_SEND_PACK_DATA)&&(ctx->dir == XM_DIR_SEND))
     {

@@ -65,8 +65,8 @@ w_err_t fileinfo_init(lfile_info_s *info,char *name,
     w_uint32_t self_addr,w_uint32_t parent_addr,w_uint32_t prev_addr,w_uint8_t attr)
 {
     w_int32_t namelen;
-    WIND_ASSERT_RETURN(info != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(name != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(info != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(name != W_NULL,W_ERR_NULL_PTR);
     namelen = wind_strlen(name);
     WIND_ASSERT_RETURN(namelen > 0,W_ERR_INVALID);
     WIND_ASSERT_RETURN(namelen < LFILE_NAME_LEN,W_ERR_INVALID);
@@ -88,8 +88,8 @@ w_err_t fileinfo_read(lfile_info_s *info,w_blkdev_s *blkdev,w_uint32_t addr)
     
     w_uint8_t *blk = W_NULL;
     lfile_info_s *tmpinfo;
-    WIND_ASSERT_RETURN(info != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(info != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_NULL_PTR);
     WIND_CHECK_RETURN(addr != 0,W_ERR_INVALID);
 
     do
@@ -120,8 +120,8 @@ w_err_t fileinfo_write(lfile_info_s *info,w_blkdev_s *blkdev)
     w_err_t err;
     w_int32_t cnt;
     w_uint8_t *blk = W_NULL;
-    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(info != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(info != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(info->self_addr != 0,W_ERR_INVALID);
     if(W_ERR_OK != check_fileinfo(info))
         wind_error("fileinfo addr error");
@@ -144,8 +144,8 @@ w_err_t fileinfo_write(lfile_info_s *info,w_blkdev_s *blkdev)
 
 w_err_t fileinfo_get_parent(lfile_info_s *info,w_blkdev_s *blkdev)
 {
-    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(info != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(info != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(info->magic == LISTFILE_MAGIC,W_ERR_INVALID);
     wind_trace("fileinfo_get_parent");
     return fileinfo_read(info,blkdev,info->parent_addr);
@@ -153,8 +153,8 @@ w_err_t fileinfo_get_parent(lfile_info_s *info,w_blkdev_s *blkdev)
 
 w_err_t fileinfo_get_next(lfile_info_s *info,w_blkdev_s *blkdev)
 {
-    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(info != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(info != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(info->magic == LISTFILE_MAGIC,W_ERR_INVALID);
     wind_trace("fileinfo_get_next");
     return fileinfo_read(info,blkdev,info->nextfile_addr);
@@ -162,8 +162,8 @@ w_err_t fileinfo_get_next(lfile_info_s *info,w_blkdev_s *blkdev)
 
 w_err_t fileinfo_get_prev(lfile_info_s *info,w_blkdev_s *blkdev)
 {
-    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(info != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(info != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(info->magic == LISTFILE_MAGIC,W_ERR_INVALID);
     wind_trace("fileinfo_get_prev");
     return fileinfo_read(info,blkdev,info->prevfile_addr);
@@ -171,8 +171,8 @@ w_err_t fileinfo_get_prev(lfile_info_s *info,w_blkdev_s *blkdev)
 
 w_err_t fileinfo_get_headchild(lfile_info_s *info,w_blkdev_s *blkdev)
 {
-    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(info != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(info != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(info->magic == LISTFILE_MAGIC,W_ERR_INVALID);
     wind_trace("fileinfo_get_headchild");
     return fileinfo_read(info,blkdev,info->headchild_addr);
@@ -180,8 +180,8 @@ w_err_t fileinfo_get_headchild(lfile_info_s *info,w_blkdev_s *blkdev)
 
 w_err_t fileinfo_get_tailchild(lfile_info_s *info,w_blkdev_s *blkdev)
 {
-    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(info != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(info != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(info->magic == LISTFILE_MAGIC,W_ERR_INVALID);
     wind_trace("fileinfo_get_tailchild");
     return fileinfo_read(info,blkdev,info->tailchild_addr);
@@ -195,8 +195,8 @@ w_err_t fileinfo_add_update_parent(lfile_info_s *info,w_blkdev_s *blkdev)
     w_uint32_t self_addr;
     lfile_info_s *tmpinfo = W_NULL;
     
-    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(info != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(info != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(info->parent_addr != 0,W_ERR_INVALID);
     wind_trace("fileinfo_add_update_parent");
     do
@@ -228,8 +228,8 @@ w_err_t fileinfo_add_update_prev(lfile_info_s *info,w_blkdev_s *blkdev)
     w_uint32_t self_addr;
     lfile_info_s *tmpinfo = W_NULL;
     
-    WIND_ASSERT_RETURN(info != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(info != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(info->prevfile_addr != 0,W_ERR_INVALID);
     
     wind_trace("fileinfo_add_update_prev");
@@ -256,8 +256,8 @@ w_err_t fileinfo_rm_update_parent(lfile_info_s *info,w_blkdev_s *blkdev)
     w_err_t err;
     lfile_info_s *tmpinfo = W_NULL;
     
-    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(info != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(info != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(info->parent_addr != 0,W_ERR_INVALID);
     wind_trace("fileinfo_rm_update_parent");
 
@@ -288,8 +288,8 @@ w_err_t fileinfo_rm_update_prev(lfile_info_s *info,w_blkdev_s *blkdev)
     w_err_t err;
     lfile_info_s *tmpinfo = W_NULL;
     
-    WIND_ASSERT_RETURN(info != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(info != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(info->prevfile_addr != 0,W_ERR_INVALID);
     
     wind_trace("fileinfo_rm_update_prev");
@@ -316,8 +316,8 @@ w_err_t fileinfo_rm_update_next(lfile_info_s *info,w_blkdev_s *blkdev)
     w_err_t err;
     lfile_info_s *tmpinfo = W_NULL;
     
-    WIND_ASSERT_RETURN(info != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(info != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(info->nextfile_addr != 0,W_ERR_INVALID);
     
     wind_trace("fileinfo_rm_update_next");

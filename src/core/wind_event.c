@@ -66,7 +66,7 @@ w_err_t wind_event_init(w_event_s *event,const char *name)
 {
     w_err_t err;
     wind_notice("init event:%s",name?name:"null");
-    WIND_ASSERT_RETURN(event != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(event != W_NULL,W_ERR_NULL_PTR);
     DLIST_INIT(event->cblist);
     event->cbcnt = 0;
     err = wind_mutex_init(&event->lock,name);
@@ -98,7 +98,7 @@ w_err_t wind_event_destroy(w_event_s *event)
     w_err_t err;
     w_dnode_s *dnode;
     wind_notice("destroy event:%s",wind_obj_name(&event->obj));
-    WIND_ASSERT_RETURN(event != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(event != W_NULL,W_ERR_NULL_PTR);
     wind_mutex_lock(&event->lock);
     err = wind_obj_deinit(&event->obj, WIND_EVENT_MAGIC,&eventlist);
     wind_mutex_unlock(&event->lock);
@@ -119,8 +119,8 @@ w_err_t wind_event_destroy(w_event_s *event)
 
 w_err_t wind_event_regcb(w_event_s *event,w_event_cb *cb)
 {
-    WIND_ASSERT_RETURN(event != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(cb != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(event != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(cb != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(event->obj.magic == WIND_EVENT_MAGIC,W_ERR_INVALID);
     wind_mutex_lock(&event->lock);
     dlist_insert_tail(&event->cblist,&cb->listenernode);
@@ -131,8 +131,8 @@ w_err_t wind_event_regcb(w_event_s *event,w_event_cb *cb)
 
 w_err_t wind_event_unregcb(w_event_s *event,w_event_cb *cb)
 {
-    WIND_ASSERT_RETURN(event != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(cb != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(event != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(cb != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(event->obj.magic == WIND_EVENT_MAGIC,W_ERR_INVALID);
     wind_mutex_lock(&event->lock);
     dlist_remove(&event->cblist,&cb->listenernode);
@@ -145,7 +145,7 @@ w_err_t wind_event_trig(w_event_s *event,void *arg)
 {
     w_dnode_s *dnode;
     w_event_cb *cb;
-    WIND_ASSERT_RETURN(event != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(event != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(event->obj.magic == WIND_EVENT_MAGIC,W_ERR_FAIL);
     wind_mutex_lock(&event->lock);
     foreach_node(dnode,&event->cblist)

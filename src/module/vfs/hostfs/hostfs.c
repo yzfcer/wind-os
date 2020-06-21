@@ -112,7 +112,7 @@ static w_err_t host_remove_dir(char *fullpath)
     w_int32_t len;
     w_err_t err;
     char *cmd = (char *)W_NULL;
-    WIND_ASSERT_RETURN(fullpath != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(fullpath != W_NULL,W_ERR_NULL_PTR);
     
     wind_trace("fullpath=%s",fullpath);
     do
@@ -270,7 +270,7 @@ static w_err_t host_remove_dir(char *fullpath)
     w_int32_t len;
     w_err_t err;
     char *cmd = (char *)W_NULL;
-    WIND_ASSERT_RETURN(fullpath != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(fullpath != W_NULL,W_ERR_NULL_PTR);
     
     wind_trace("fullpath=%s",fullpath);
     do
@@ -318,8 +318,8 @@ w_err_t hostfs_mem_free(void *ptr)
 
 w_err_t hostfs_init(w_hostfs_s *hfs,char *dir_prefix)
 {
-    WIND_ASSERT_RETURN(hfs != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(dir_prefix != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(hfs != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(dir_prefix != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(dir_prefix[0] != 0,W_ERR_INVALID);
     hfs->magic = HOSTFS_MAGIC;
     hfs->dir_prefix = (char*)wind_salloc(dir_prefix,HP_ALLOCID_HOSTFS);
@@ -331,7 +331,7 @@ w_err_t hostfs_init(w_hostfs_s *hfs,char *dir_prefix)
 
 w_err_t hostfs_deinit(w_hostfs_s *hfs)
 {
-    WIND_ASSERT_RETURN(hfs != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(hfs != W_NULL,W_ERR_NULL_PTR);
     if(hfs->dir_prefix != W_NULL)
         wind_free(hfs->dir_prefix);
     wind_memset(hfs,0,sizeof(w_hostfs_s));
@@ -345,7 +345,7 @@ w_err_t hostfs_match(w_blkdev_s *blkdev)
 
 static w_err_t host_file_destroy(w_hostfile_s *hfile)
 {
-    WIND_ASSERT_RETURN(hfile != W_NULL, W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(hfile != W_NULL, W_ERR_NULL_PTR);
     //WIND_ASSERT_RETURN(hfile->magic == HOSTFILE_MAGIC,W_ERR_INVALID);
     hfile->magic = 0;
     if(hfile->subhfile != W_NULL)
@@ -540,7 +540,7 @@ w_hostfile_s* hostfile_open(w_hostfs_s *hfs,const char *path,w_uint8_t mode)
 
 w_err_t hostfile_close(w_hostfile_s* hfile)
 {
-    WIND_ASSERT_RETURN(hfile != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(hfile != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(hfile->magic == HOSTFILE_MAGIC,W_ERR_INVALID);
 
     if(hfile->isdir == 0)
@@ -562,8 +562,8 @@ w_err_t hostfile_remove(w_hostfs_s *hfs,const char *path)
     w_int32_t len;
     
     char *fullpath = (char*)W_NULL;
-    WIND_ASSERT_RETURN(hfs != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(path != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(hfs != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(path != W_NULL,W_ERR_NULL_PTR);
     do
     {
         err = W_ERR_OK;
@@ -594,7 +594,7 @@ w_err_t hostfile_remove(w_hostfs_s *hfs,const char *path)
 
 w_err_t hostfile_set_attr(w_hostfile_s* hfile,w_uint8_t attr)
 {
-    WIND_ASSERT_RETURN(hfile != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(hfile != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(hfile->magic == HOSTFILE_MAGIC,W_ERR_INVALID);
     hfile->attr = attr;
     return W_ERR_OK;
@@ -602,7 +602,7 @@ w_err_t hostfile_set_attr(w_hostfile_s* hfile,w_uint8_t attr)
 
 w_err_t hostfile_get_attr(w_hostfile_s* hfile,w_uint8_t *attr)
 {
-    WIND_ASSERT_RETURN(hfile != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(hfile != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(hfile->magic == HOSTFILE_MAGIC,W_ERR_INVALID);
     *attr = hfile->attr;
     return W_ERR_OK;
@@ -614,7 +614,7 @@ w_err_t hostfile_get_attr(w_hostfile_s* hfile,w_uint8_t *attr)
 w_err_t hostfile_seek(w_hostfile_s* hfile,w_int32_t offset)
 {
     w_err_t err;
-    WIND_ASSERT_RETURN(hfile != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(hfile != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(hfile->magic == HOSTFILE_MAGIC,W_ERR_INVALID);
     do
     {
@@ -628,7 +628,7 @@ w_int32_t hostfile_ftell(w_hostfile_s* hfile)
 {
     w_err_t err;
     w_int32_t offset = -1;
-    WIND_ASSERT_RETURN(hfile != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(hfile != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(hfile->magic == HOSTFILE_MAGIC,W_ERR_INVALID);
     do
     {
@@ -644,9 +644,9 @@ w_int32_t hostfile_ftell(w_hostfile_s* hfile)
 w_int32_t hostfile_read(w_hostfile_s* hfile,w_uint8_t *buff, w_int32_t size)
 {
     w_int32_t rdsize = 0;
-    WIND_ASSERT_RETURN(hfile != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(hfile != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(hfile->magic == HOSTFILE_MAGIC,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(buff != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(buff != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(hfile->isdir == 0,W_ERR_INVALID);
     WIND_ASSERT_RETURN(hfile->fd != W_NULL, W_ERR_INVALID);
     rdsize = fread(buff,1,size,hfile->fd);
@@ -657,9 +657,9 @@ w_int32_t hostfile_read(w_hostfile_s* hfile,w_uint8_t *buff, w_int32_t size)
 w_int32_t hostfile_write(w_hostfile_s* hfile,w_uint8_t *buff,w_int32_t size)
 {
     w_int32_t wrsize = 0;
-    WIND_ASSERT_RETURN(hfile != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(hfile != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(hfile->magic == HOSTFILE_MAGIC,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(buff != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(buff != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(hfile->isdir == 0,W_ERR_INVALID);
     WIND_ASSERT_RETURN(hfile->fd != W_NULL, W_ERR_INVALID);
     wrsize = fwrite(buff,1,size,hfile->fd);
@@ -673,11 +673,11 @@ static w_err_t do_host_file_readdir(w_hostfile_s *hfile)
 {
     w_err_t err;
     w_hostfile_s *subhfile;
-    WIND_ASSERT_RETURN(hfile != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(hfile != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(hfile->magic == HOSTFILE_MAGIC,W_ERR_INVALID);
     WIND_ASSERT_RETURN(hfile->isdir == 1,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(hfile->path != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(hfile->subhfile != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(hfile->path != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(hfile->subhfile != W_NULL,W_ERR_NULL_PTR);
     do 
     {
         err = W_ERR_OK;
@@ -701,11 +701,11 @@ static w_err_t do_host_file_readdir(w_hostfile_s *hfile)
 w_err_t hostfile_readdir(w_hostfile_s* dir,w_hostfile_s** sub)
 {
     w_err_t err;
-    WIND_ASSERT_RETURN(dir != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(sub != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(dir != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(sub != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(dir->magic == HOSTFILE_MAGIC,W_ERR_INVALID);
 
-    WIND_ASSERT_RETURN(dir->hfs != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(dir->hfs != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(dir->mode & HFMODE_R,W_ERR_INVALID);
     WIND_ASSERT_RETURN(IS_HFILE_ATTR_DIR(dir->attr) != 0,W_ERR_INVALID);
 
@@ -744,7 +744,7 @@ w_uint32_t host_file_size(w_hostfile_s *hfile)
 {
     w_uint32_t len;
     w_int32_t offset;
-    WIND_ASSERT_RETURN(hfile != W_NULL, W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(hfile != W_NULL, W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(hfile->magic == HOSTFILE_MAGIC,W_ERR_INVALID);
     WIND_ASSERT_RETURN(hfile->isdir == 0,W_ERR_INVALID);
     offset = ftell(hfile->fd);

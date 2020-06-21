@@ -36,7 +36,7 @@ w_dlist_s lfscache_list = {W_NULL,W_NULL};
 
 w_err_t lfs_cache_init(lfs_cache_s *cache,w_uint32_t itemcount,w_uint32_t blksize)
 {
-    WIND_ASSERT_RETURN(cache != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(cache != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(itemcount > 0,W_ERR_INVALID);
     WIND_ASSERT_RETURN(blksize > 0,W_ERR_INVALID);
     wind_memset(cache,0,sizeof(lfs_cache_s));
@@ -96,9 +96,9 @@ static w_err_t cacheitem_init(lcache_item_s *cacheitem,w_uint32_t addr,w_int32_t
 w_err_t lfs_cache_read(lfs_cache_s *cache,w_blkdev_s *blkdev,w_uint32_t addr,w_uint8_t *blk)
 {
     lcache_item_s *cacheitem;
-    WIND_ASSERT_RETURN(cache != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(blk != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(cache != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(blk != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(addr > 0,W_ERR_INVALID);
     wind_disable_switch();
     cacheitem = hit_cacheitem(cache,addr);
@@ -127,9 +127,9 @@ w_err_t lfs_cache_read(lfs_cache_s *cache,w_blkdev_s *blkdev,w_uint32_t addr,w_u
 w_err_t lfs_cache_write(lfs_cache_s *cache,w_blkdev_s *blkdev,w_uint32_t addr,w_uint8_t *blk)
 {
     lcache_item_s *cacheitem;
-    WIND_ASSERT_RETURN(cache != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(blk != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(cache != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(blk != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(addr > 0,W_ERR_INVALID);
     wind_disable_switch();
     cacheitem = hit_cacheitem(cache,addr);
@@ -156,8 +156,8 @@ w_err_t lfs_cache_write(lfs_cache_s *cache,w_blkdev_s *blkdev,w_uint32_t addr,w_
 
 w_err_t lfs_cache_flush(lfs_cache_s *cache,w_blkdev_s *blkdev)
 {
-    WIND_ASSERT_RETURN(cache != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(cache != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_NULL_PTR);
     return W_ERR_FAIL;
 }
 

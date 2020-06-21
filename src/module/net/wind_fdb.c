@@ -89,7 +89,7 @@ w_err_t wind_fdb_update(w_uint8_t *mac,w_uint16_t vlanid,w_uint8_t portid)
         wind_memcpy(fdb->mac,mac,6);
         fdb->vlanid = vlanid;
         fdb->port_id = portid;
-        fdb->ttl = tick;
+		fdb->ttl = (w_uint16_t)tick;
     }while(0);
     wind_enable_switch();
     return err;

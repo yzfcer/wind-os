@@ -64,8 +64,8 @@ w_err_t wind_pipe_init(w_pipe_s* pipe,const char *name,void *buff,w_int32_t bufl
 {
     w_err_t err;
     wind_notice("init pipe:%s",name?name:"null");
-    WIND_ASSERT_RETURN((pipe != W_NULL),W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN((buff != W_NULL),W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN((pipe != W_NULL),W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN((buff != W_NULL),W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(buflen > 0,W_ERR_INVALID);
     err = wind_queue_create(buff,buflen,1);
     WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_FAIL);
@@ -99,8 +99,8 @@ w_pipe_s* wind_pipe_create(const char *name,void *buff,w_int32_t buflen)
 w_int32_t wind_pipe_read(w_pipe_s* pipe,w_int8_t *str,w_int32_t len)
 {
     w_int32_t count = -1;
-    WIND_ASSERT_RETURN(pipe != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(str != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(pipe != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(str != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(len > 0,W_ERR_INVALID);
     WIND_ASSERT_RETURN(pipe->obj.magic == WIND_PIPE_MAGIC,W_ERR_INVALID);
     wind_disable_switch();
@@ -112,9 +112,9 @@ w_int32_t wind_pipe_read(w_pipe_s* pipe,w_int8_t *str,w_int32_t len)
 w_int32_t wind_pipe_write(w_pipe_s* pipe,w_int8_t *str,w_int32_t len)
 {
     w_int32_t cnt = -1;
-    WIND_ASSERT_RETURN(pipe != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(pipe != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(pipe->obj.magic == WIND_PIPE_MAGIC,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(str != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(str != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(len > 0,W_ERR_INVALID);
     wind_disable_switch();
     cnt = wind_queue_write(pipe->buff,str,len);
@@ -125,7 +125,7 @@ w_int32_t wind_pipe_write(w_pipe_s* pipe,w_int8_t *str,w_int32_t len)
 w_err_t wind_pipe_destroy(w_pipe_s* pipe)
 {
     w_err_t err;
-    WIND_ASSERT_RETURN(pipe != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(pipe != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(pipe->obj.magic == WIND_PIPE_MAGIC,W_ERR_INVALID);
     wind_notice("destroy pipe:%s",wind_obj_name(&pipe->obj));
     err = wind_obj_deinit(&pipe->obj,WIND_PIPE_MAGIC,&pipelist);

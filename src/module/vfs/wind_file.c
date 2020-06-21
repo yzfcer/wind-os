@@ -49,7 +49,7 @@ static w_file_s *file_malloc(void)
 static w_err_t file_free(w_file_s *file)
 {
     w_err_t err;
-    WIND_ASSERT_RETURN(file != W_NULL, W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(file != W_NULL, W_ERR_NULL_PTR);
     err = wind_pool_free(filepool,file);
     return err;
 }
@@ -186,7 +186,7 @@ static w_file_s *wind_file_create(w_vfs_s *fs,const char *path,w_uint8_t fmode,w
 
 static w_err_t wind_file_destroy(w_file_s *file)
 {
-    WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(file != W_NULL,W_ERR_NULL_PTR);
     wind_disable_switch();
     if(file->obj.magic == WIND_FILE_MAGIC)
         wind_obj_deinit(&file->obj,WIND_FILE_MAGIC,&filelist);
@@ -235,7 +235,7 @@ w_file_s* wind_fopen(const char *path,w_uint8_t fmode)
 w_err_t wind_fclose(w_file_s *file)
 {
     w_err_t err = W_ERR_FAIL;
-    WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(file != W_NULL,W_ERR_NULL_PTR);
     wind_mutex_lock(file->mutex);
     if(file->vfs->ops->close)
         err = file->vfs->ops->close(file);
@@ -249,8 +249,8 @@ w_err_t wind_fremove(const char *path)
     w_int32_t res;
     w_err_t err = W_ERR_FAIL;
     w_file_s *file = (w_file_s *)W_NULL;
-    WIND_ASSERT_RETURN(path != W_NULL, W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(path[0] != 0, W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(path != W_NULL, W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(path[0] != 0, W_ERR_NULL_PTR);
     do
     {
         err = W_ERR_OK;
@@ -318,7 +318,7 @@ w_file_s *wind_freaddir(w_file_s *dir)
 w_err_t wind_fseek(w_file_s *file,w_uint32_t offset)
 {
     w_err_t err = W_ERR_FAIL;
-    WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(file != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(offset >= 0,W_ERR_INVALID);
     WIND_ASSERT_RETURN(!file->isdir,W_ERR_INVALID);
     wind_mutex_lock(file->mutex);
@@ -333,8 +333,8 @@ w_err_t wind_fseek(w_file_s *file,w_uint32_t offset)
 w_err_t wind_frename(w_file_s *file,char *newname)
 {
     w_err_t err = W_ERR_FAIL;
-    WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(newname != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(file != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(newname != W_NULL,W_ERR_NULL_PTR);
     wind_mutex_lock(file->mutex);
     if(file->vfs->ops->rename)
         err = file->vfs->ops->rename(file,newname);
@@ -387,8 +387,8 @@ w_int32_t wind_fwrite(w_file_s *file,w_uint8_t *buff, w_int32_t size)
 w_err_t wind_fgets(w_file_s *file,char *buff, w_int32_t maxlen)
 {
     w_int32_t i,len;
-    WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(buff != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(file != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(buff != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(maxlen > 0,W_ERR_INVALID);
     WIND_ASSERT_RETURN(file->isdir == 0, W_ERR_FAIL);
     len = wind_fread(file,(w_uint8_t*)buff,maxlen);
@@ -408,8 +408,8 @@ w_err_t wind_fgets(w_file_s *file,char *buff, w_int32_t maxlen)
 w_err_t wind_fputs(w_file_s *file,char *buff)
 {
     w_int32_t len;
-    WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(buff != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(file != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(buff != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(file->isdir == 0, W_ERR_FAIL);
     len = wind_strlen(buff);
     len = wind_fwrite(file,(w_uint8_t*)buff,len);

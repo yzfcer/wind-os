@@ -102,10 +102,10 @@ w_err_t wind_module_register(w_module_s *module)
 {
     w_module_s *devi;    
     w_err_t err;
-    WIND_ASSERT_RETURN(module != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(module != W_NULL,W_ERR_NULL_PTR);
 
     WIND_ASSERT_RETURN(module->obj.magic == (~WIND_MODULE_MAGIC),W_ERR_INVALID);
-    WIND_ASSERT_RETURN(module->obj.name != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(module->obj.name != W_NULL,W_ERR_NULL_PTR);
     wind_notice("register module:%s",wind_obj_name(&module->obj));
     devi = wind_module_get(module->obj.name);
     if(devi != W_NULL)
@@ -134,7 +134,7 @@ w_err_t wind_module_register(w_module_s *module)
 w_err_t wind_module_unregister(w_module_s *module)
 {
     w_err_t err;
-    WIND_ASSERT_RETURN(module != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(module != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(module->obj.magic == WIND_MODULE_MAGIC,W_ERR_INVALID);
     wind_notice("unregister module:%s",module->obj.name);
     err = wind_obj_deinit(&module->obj,WIND_MODULE_MAGIC,&modulelist);
@@ -164,7 +164,7 @@ w_err_t wind_module_print_detail(void)
     w_module_s *module;
     int cnt = 0;
     w_dlist_s *list = &modulelist;
-    WIND_ASSERT_RETURN(list != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(list != W_NULL,W_ERR_NULL_PTR);
     wind_printf("\r\n\r\nmodule list:\r\n");
     
     foreach_node(dnode,list)

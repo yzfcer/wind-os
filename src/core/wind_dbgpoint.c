@@ -52,7 +52,7 @@ w_err_t wind_dbgpoint_register(w_dbgpoint_s *dbgpoint)
 {
     w_err_t err;
     w_dbgpoint_s *dbgp;
-    WIND_ASSERT_RETURN(dbgpoint != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(dbgpoint != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(dbgpoint->obj.magic == WIND_DBGPOINT_MAGIC,W_ERR_INVALID);
     do
     {
@@ -73,7 +73,7 @@ w_err_t wind_dbgpoint_register(w_dbgpoint_s *dbgpoint)
 w_err_t wind_dbgpoint_unregister(w_dbgpoint_s *dbgpoint)
 {
     w_err_t err;
-    WIND_ASSERT_RETURN(dbgpoint != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(dbgpoint != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(dbgpoint->obj.magic == WIND_DBGPOINT_MAGIC,W_ERR_INVALID);
     do
     {
@@ -90,8 +90,8 @@ w_err_t wind_dbgpoint_unregister(w_dbgpoint_s *dbgpoint)
 w_int32_t wind_dbgpoint_read(w_dbgpoint_s *dbgpoint,w_uint8_t *buff,w_int32_t len)
 {
     w_int32_t lenth = -1;
-    WIND_ASSERT_RETURN(dbgpoint != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(buff != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(dbgpoint != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(buff != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(len >= dbgpoint->lenth,W_ERR_INVALID);
     WIND_ASSERT_RETURN(dbgpoint->obj.magic == WIND_DBGPOINT_MAGIC,W_ERR_INVALID);
     wind_mutex_lock(&dbgpoint->mutex);
@@ -104,8 +104,8 @@ w_int32_t wind_dbgpoint_read(w_dbgpoint_s *dbgpoint,w_uint8_t *buff,w_int32_t le
 w_int32_t wind_dbgpoint_write(w_dbgpoint_s *dbgpoint,w_uint8_t *buff,w_int32_t len)
 {
     w_int32_t lenth = -1;
-    WIND_ASSERT_RETURN(dbgpoint != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(buff != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(dbgpoint != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(buff != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(len <= dbgpoint->lenth,W_ERR_INVALID);
     WIND_ASSERT_RETURN(dbgpoint->obj.magic == WIND_DBGPOINT_MAGIC,W_ERR_INVALID);
     wind_mutex_lock(&dbgpoint->mutex);
@@ -121,7 +121,7 @@ w_err_t wind_dbgpoint_print(void)
     w_dbgpoint_s *dbgpoint;
     int cnt = 0;
     w_dlist_s *list = &dbgpointlist;
-    WIND_ASSERT_RETURN(list != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(list != W_NULL,W_ERR_NULL_PTR);
     wind_printf("\r\n\r\ndebug point list:\r\n");
     wind_disable_switch();
     foreach_node(dnode,list)

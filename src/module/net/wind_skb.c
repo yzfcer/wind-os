@@ -30,38 +30,33 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
-w_skb_s *wind_skb_create(w_int32_t buflen)
+w_skb_s *wind_skb_alloc(void)
 {
-    w_err_t err;
-    w_skb_s *skb = (w_skb_s *)W_NULL;
-    do
-    {
-        err = W_ERR_OK;
-        skb = (w_skb_s*)wind_netmem_malloc(sizeof(w_skb_s));
-        WIND_ASSERT_BREAK(skb != W_NULL,W_ERR_MEM,"alloc skb fail");
-        wind_memset(skb,0,sizeof(w_skb_s));
-        skb->packbuf = (w_uint8_t*)wind_netmem_malloc(buflen);
-        WIND_ASSERT_BREAK(skb != W_NULL,W_ERR_MEM,"alloc skb fail");
-        skb->packlen = buflen;
-    }while(0);
-    if(err != W_ERR_OK)
-    {
-        if(skb != W_NULL)
-            wind_netmem_free(skb);
-        skb = (w_skb_s*)W_NULL;
-    }
+    w_skb_s *skb;
+    skb = (w_skb_s*)wind_netmem_malloc(sizeof(w_skb_s));
+    WIND_ASSERT_RETURN(skb != W_NULL,(w_skb_s*)W_NULL);
+    wind_memset(skb,0,sizeof(w_skb_s));
     return skb;
 }
 
-w_err_t wind_skb_destory(w_skb_s *skb)
+w_err_t wind_skb_free(w_skb_s *skb)
 {
-    WIND_CHECK_RETURN(skb != W_NULL,W_ERR_PTR_NULL);
+    WIND_CHECK_RETURN(skb != W_NULL,W_ERR_NULL_PTR);
     if(skb != W_NULL)
     {
         if(skb->packbuf != W_NULL)
             wind_netmem_free(skb->packbuf);
         wind_netmem_free(skb);
     }
+    return W_ERR_OK;
+}
+
+w_err_t wind_skb_alloc_buf(w_skb_s *skb,w_int32_t buflen)
+{
+    WIND_CHECK_RETURN(skb != W_NULL,W_ERR_NULL_PTR);
+    skb->packbuf = (w_uint8_t*)wind_netmem_malloc(buflen);
+    WIND_ASSERT_RETURN(skb != W_NULL,W_ERR_MEM);
+	skb->packlen = (w_uint16_t)buflen;
     return W_ERR_OK;
 }
 
@@ -148,7 +143,8 @@ w_uint16_t wind_skb_get_ip_identification(w_skb_s *skb)
 
 w_uint8_t wind_skb_get_ip_flags(w_skb_s *skb)
 {
-    return ((skb->packbuf[skb->lay3_idx+6] >> 13) & 0x07);
+    w_uint16_t value = wind_skb_get_uint16(skb,skb->lay3_idx+6);
+    return ((value >> 13) & 0x07);
 }
 
 w_uint16_t wind_skb_get_ip_offset(w_skb_s *skb)

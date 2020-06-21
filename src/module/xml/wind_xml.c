@@ -68,7 +68,7 @@ w_xmlattr_s *wind_xmlattr_create(char *attr_name,char *attr_value)
 
 w_err_t wind_xmlattr_destroy(w_xmlattr_s *attr)
 {
-    WIND_CHECK_RETURN(attr != W_NULL,W_ERR_PTR_NULL);
+    WIND_CHECK_RETURN(attr != W_NULL,W_ERR_NULL_PTR);
     if(attr->attr_name)
         wind_free(attr->attr_name);
     if(attr->attr_value)
@@ -79,8 +79,8 @@ w_err_t wind_xmlattr_destroy(w_xmlattr_s *attr)
 
 w_err_t    wind_xmlattr_modify(w_xmlattr_s *xattr,char *attr_value)
 {
-    WIND_ASSERT_RETURN(xattr != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(attr_value != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(xattr != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(attr_value != W_NULL,W_ERR_NULL_PTR);
     if(xattr->attr_value != W_NULL)
         wind_free(xattr->attr_value);
     xattr->attr_value = (char*)wind_salloc(attr_value,0);
@@ -107,7 +107,7 @@ w_xmlattr_s *wind_xmlattr_get(w_xmlnode_s *xnode,char *attr_name)
 w_err_t wind_xml_init(w_xml_s *xml)
 {
     w_err_t err;
-    WIND_ASSERT_RETURN(xml != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(xml != W_NULL,W_ERR_NULL_PTR);
     wind_memset(xml,0,sizeof(w_xml_s));
     xml->xfsm = (w_xmlfsm_s*)wind_malloc(sizeof(w_xmlfsm_s));
     err = wind_xml_fsm_init(xml->xfsm,"xml");
@@ -116,8 +116,8 @@ w_err_t wind_xml_init(w_xml_s *xml)
 
 w_err_t wind_xml_deinit(w_xml_s *xml)
 {
-    WIND_ASSERT_RETURN(xml != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(xml->xfsm != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(xml != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(xml->xfsm != W_NULL,W_ERR_NULL_PTR);
     //if(xml->version)
     //    wind_xmlnode_destroy(xml->version);
     //if(xml->root)
@@ -135,8 +135,8 @@ w_err_t wind_xml_deinit(w_xml_s *xml)
 w_err_t wind_xml_parse(w_xml_s *xml,char *xmlstr,w_int32_t len)
 {
     w_err_t err;
-    WIND_ASSERT_RETURN(xml != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(xmlstr != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(xml != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(xmlstr != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(len > 0,W_ERR_OVERFLOW);
     err = wind_xml_fsm_input(xml->xfsm,xmlstr,len);
     WIND_ASSERT_RETURN(err == W_ERR_OK,err);
@@ -167,8 +167,8 @@ w_err_t wind_xml_print(w_xmlnode_s *xnode)
     w_xmlattr_s *attr;
     //w_tree_s *tree;
     w_xmlnode_s *tmp_xndoe;
-    WIND_ASSERT_RETURN(xnode != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(xnode->name != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(xnode != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(xnode->name != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(xnode->level < MAX_XNODE_LEVEL,W_ERR_FAIL);
     err = W_ERR_OK;
     print_align(xnode);
@@ -240,7 +240,7 @@ w_err_t wind_xmlnode_destroy(w_xmlnode_s *xnode)
     w_xmlattr_s *attr;
     w_dnode_s *dnode;
     w_xmlnode_s *child;
-    WIND_ASSERT_RETURN(xnode != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(xnode != W_NULL,W_ERR_NULL_PTR);
     if(xnode->name != W_NULL)
         wind_free(xnode->name);
     if(xnode->value != W_NULL)
@@ -318,7 +318,7 @@ w_xmlnode_s *wind_xmlnode_get_prev(w_xmlnode_s *xnode)
 
 w_err_t wind_xmlnode_set_value(w_xmlnode_s *xnode,char *node_value)
 {
-    WIND_ASSERT_RETURN(xnode != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(xnode != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(xnode->is_leaf,W_ERR_INVALID);
     if(xnode->value != W_NULL)
         wind_free(xnode->value);
@@ -331,8 +331,8 @@ w_err_t wind_xmlnode_set_value(w_xmlnode_s *xnode,char *node_value)
 w_err_t wind_xmlnode_insert(w_xmlnode_s *parent,w_xmlnode_s *child)
 {
     w_err_t err;
-    WIND_ASSERT_RETURN(parent != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(child != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(parent != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(child != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(parent->value == W_NULL,W_ERR_INVALID);
     do
     {
@@ -350,8 +350,8 @@ w_err_t wind_xmlnode_insert(w_xmlnode_s *parent,w_xmlnode_s *child)
 w_err_t wind_xmlnode_remove(w_xmlnode_s *parent,w_xmlnode_s *child)
 {
     w_err_t err;
-    WIND_ASSERT_RETURN(parent != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(child != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(parent != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(child != W_NULL,W_ERR_NULL_PTR);
     do
     {
         err = wind_tree_remove_child(&parent->tree,&child->tree);
@@ -369,8 +369,8 @@ w_err_t wind_xmlnode_remove(w_xmlnode_s *parent,w_xmlnode_s *child)
 
 w_err_t wind_xmlnode_insert_attr(w_xmlnode_s *xnode,w_xmlattr_s *xattr)
 {
-    WIND_ASSERT_RETURN(xnode != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(xattr != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(xnode != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(xattr != W_NULL,W_ERR_NULL_PTR);
     dlist_insert_tail(&xnode->attrlist,&xattr->attr_node);
     WIND_ASSERT_RETURN(xnode->attr_cnt < 255,W_ERR_FAIL);
     xnode->attr_cnt ++;
@@ -381,8 +381,8 @@ w_err_t wind_xmlnode_insert_attr(w_xmlnode_s *xnode,w_xmlattr_s *xattr)
 w_err_t wind_xmlnode_remove_attr(w_xmlnode_s *xnode,w_xmlattr_s *xattr)
 {
 
-    WIND_ASSERT_RETURN(xnode != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(xattr != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(xnode != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(xattr != W_NULL,W_ERR_NULL_PTR);
 
     WIND_ASSERT_RETURN(xnode->attr_cnt > 0,W_ERR_FAIL);
     xnode->attr_cnt --;
@@ -400,8 +400,8 @@ w_err_t      wind_xmlnode_to_string(w_xmlnode_s *xnode,w_xmlout_fn xmlout)
     w_dnode_s *dnode;
     w_xmlattr_s *attr;
     w_xmlnode_s *tmp_xndoe;
-    WIND_ASSERT_RETURN(xnode != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(xnode->name != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(xnode != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(xnode->name != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(xnode->level < MAX_XNODE_LEVEL,W_ERR_FAIL);
     buff = (char*)wind_malloc(XML_OUTBUF_LEN);
     WIND_ASSERT_RETURN(buff != W_NULL,W_ERR_MEM);

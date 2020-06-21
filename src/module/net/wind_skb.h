@@ -58,15 +58,16 @@ typedef struct
     w_uint8_t lay2_idx;
     w_uint8_t lay3_idx;
     w_uint8_t lay4_idx;
-    w_uint8_t lay7_idx;
+    w_uint8_t lay5_idx;
     w_uint16_t packlen;
     w_uint8_t *packbuf;
     w_netdev_s *indev;
     w_netdev_s *outdev;
 }w_skb_s;
 
-w_skb_s *wind_skb_create(w_int32_t buflen);
-w_err_t wind_skb_destory(w_skb_s *skb);
+w_skb_s *wind_skb_alloc(void);
+w_err_t wind_skb_free(w_skb_s *skb);
+w_err_t wind_skb_alloc_buf(w_skb_s *skb,w_int32_t buflen);
 
 w_uint16_t wind_skb_get_uint16(w_skb_s *skb,w_uint16_t idx);
 w_uint32_t wind_skb_get_uint32(w_skb_s *skb,w_uint16_t idx);

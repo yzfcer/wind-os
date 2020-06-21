@@ -34,7 +34,7 @@ extern "C" {
 w_err_t cmd_history_print(w_cmd_his_s *his)
 {
     int i;
-    WIND_ASSERT_RETURN(his != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(his != W_NULL,W_ERR_NULL_PTR);
     for(i = 0;i < CMD_HISTORY_COUNT;i ++)
     {
         wind_printf("cmd:%s\r\n",his->hiscmd[i]);
@@ -45,7 +45,7 @@ w_err_t cmd_history_print(w_cmd_his_s *his)
 w_err_t cmd_history_init(w_cmd_his_s *his)
 {
     w_int32_t i;
-    WIND_ASSERT_RETURN(his != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(his != W_NULL,W_ERR_NULL_PTR);
     his->hiscnt = 0;
     his->buf_used = 0;
     his->curidx = -1;
@@ -123,8 +123,8 @@ w_err_t cmd_history_append(w_cmd_his_s *his,char *cmd)
     w_err_t err;
     w_int32_t rest;
     w_int32_t len;
-    WIND_ASSERT_RETURN(his != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(cmd != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(his != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(cmd != W_NULL,W_ERR_NULL_PTR);
     WIND_CHECK_RETURN(cmd[0] != 0,W_ERR_INVALID);
     WIND_CHECK_RETURN(cmd[0] != 0x1b,W_ERR_INVALID);
     len = wind_strlen(cmd);
@@ -147,8 +147,8 @@ w_err_t cmd_history_append(w_cmd_his_s *his,char *cmd)
 
 w_err_t cmd_history_get_next(w_cmd_his_s *his,char *cmd)
 {
-    WIND_ASSERT_RETURN(his != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(cmd != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(his != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(cmd != W_NULL,W_ERR_NULL_PTR);
     if(his->curidx < his->hiscnt - 1)
         his->curidx += 1;
     if(his->curidx >= his->hiscnt)
@@ -167,8 +167,8 @@ w_err_t cmd_history_get_next(w_cmd_his_s *his,char *cmd)
 w_err_t cmd_history_get_prev(w_cmd_his_s *his,char *cmd)
 {
     
-    WIND_ASSERT_RETURN(his != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(cmd != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(his != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(cmd != W_NULL,W_ERR_NULL_PTR);
     if(his->curidx < 0)
     {
         his->curidx = -1;

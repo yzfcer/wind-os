@@ -38,7 +38,7 @@ static w_err_t dns_deinit(w_netnode_s *netnode)
 {
     return W_ERR_FAIL;
 }
-static w_err_t dns_input(w_netnode_s *netnode,w_skb_s **skb)
+static w_err_t dns_input(w_netnode_s *netnode,w_skb_s *skb)
 {
     return W_ERR_FAIL;
 }

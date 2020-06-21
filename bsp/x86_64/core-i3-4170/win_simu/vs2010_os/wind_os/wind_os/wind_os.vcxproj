@@ -39,7 +39,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(ProjectDir)..\..\..\port;$(ProjectDir)..\..\..\..\..\..\..\src\common;$(ProjectDir)..\..\..\..\..\..\..\src\module\shell\cmd;$(ProjectDir)..\..\..\..\..\..\..\src\module\shell\framework;$(ProjectDir)..\..\..\..\..\..\..\src\core;$(ProjectDir)..\..\..\..\..\..\..\src\hal;$(ProjectDir)..\..\..\..\..\..\..\src\module;$(ProjectDir)..\..\..\..\..\..\..\src\module\cutest\framework;$(ProjectDir)..\..\..\..\..\..\..\src\module\cutest\port;$(ProjectDir)..\..\..\..\..\..\..\src\module\cutest\testcase;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs\treefs;$(ProjectDir)..\..\..\..\..\..\..\src\module\lua-5.3.4\src;$(ProjectDir)..\..\..\..\..\..\..\src\module\db\framework;$(ProjectDir)..\..\..\..\..\..\..\src\module\db\dbbase;$(ProjectDir)..\..\..\..\..\..\..\src\module\dict;$(ProjectDir)..\..\..\..\..\..\..\src\module\xml;$(ProjectDir)..\..\..\..\..\..\..\src\module\xmodem;$(ProjectDir)..\..\..\..\..\..\..\src\tools\pack;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs\listfs;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs\hostfs;$(ProjectDir)..\..\..\..\..\..\..\src\module\log;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\..\..\port;$(ProjectDir)..\..\..\..\..\..\..\src\common;$(ProjectDir)..\..\..\..\..\..\..\src\module\shell\cmd;$(ProjectDir)..\..\..\..\..\..\..\src\module\shell\framework;$(ProjectDir)..\..\..\..\..\..\..\src\core;$(ProjectDir)..\..\..\..\..\..\..\src\hal;$(ProjectDir)..\..\..\..\..\..\..\src\module;$(ProjectDir)..\..\..\..\..\..\..\src\module\cutest\framework;$(ProjectDir)..\..\..\..\..\..\..\src\module\cutest\port;$(ProjectDir)..\..\..\..\..\..\..\src\module\cutest\testcase;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs\treefs;$(ProjectDir)..\..\..\..\..\..\..\src\module\lua-5.3.4\src;$(ProjectDir)..\..\..\..\..\..\..\src\module\db\framework;$(ProjectDir)..\..\..\..\..\..\..\src\module\db\dbbase;$(ProjectDir)..\..\..\..\..\..\..\src\module\dict;$(ProjectDir)..\..\..\..\..\..\..\src\module\xml;$(ProjectDir)..\..\..\..\..\..\..\src\module\xmodem;$(ProjectDir)..\..\..\..\..\..\..\src\tools\pack;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs\listfs;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs\hostfs;$(ProjectDir)..\..\..\..\..\..\..\src\module\log;$(ProjectDir)..\..\..\..\..\..\..\src\module\net;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>$(ProjectDir)..\..\..\port;$(ProjectDir)..\..\..\..\..\..\..\src\common;$(ProjectDir)..\..\..\..\..\..\..\src\core;$(ProjectDir)..\..\..\..\..\..\..\src\hal;$(ProjectDir)..\..\..\..\..\..\..\src\module\shell\framework;$(ProjectDir)..\..\..\..\..\..\..\src\module\shell\cmd;$(ProjectDir)..\..\..\..\..\..\..\src\module\cutest\framework;$(ProjectDir)..\..\..\..\..\..\..\src\module\cutest\port;$(ProjectDir)..\..\..\..\..\..\..\src\module\cutest\testcase;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs\treefs;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs\listfs;$(ProjectDir)..\..\..\..\..\..\..\src\module\lua-5.3.4\src;$(ProjectDir)..\..\..\..\..\..\..\src\module\db\framework;$(ProjectDir)..\..\..\..\..\..\..\src\module\db\dbbase;$(ProjectDir)..\..\..\..\..\..\..\src\tools\pack;$(IncludePath)</IncludePath>
@@ -168,6 +168,28 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lvm.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lzio.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\module_lua.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\net\module_net.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_arp.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_arp_tb.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_dhcp.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_dns.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_fdb.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_icmp.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_igmp.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_ip.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_mac.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_net.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_netdev.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_netdev_lo.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_netmem.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_netnode.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_net_stati.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_route.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_route_tb.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_skb.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_tcp.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_tftp.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_udp.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_beep.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_blkdev.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_daemon.c" />
@@ -333,6 +355,27 @@
     <ClInclude Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lundump.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lvm.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lzio.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_arp.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_arp_tb.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_dhcp.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_dns.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_fdb.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_icmp.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_igmp.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_ip.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_mac.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_net.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_netdev.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_netdev_lo.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_netmem.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_netnode.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_net_stati.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_route.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_route_tb.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_skb.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_tcp.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_tftp.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_udp.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\shell\framework\cmd_history.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\shell\framework\shell_framework.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\shell\framework\wind_cmd.h" />

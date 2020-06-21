@@ -41,7 +41,7 @@ w_err_t wind_filepath_set_current(const char *path)
 {
     w_err_t err;
     w_int32_t len;
-    WIND_ASSERT_RETURN(path != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(path != W_NULL,W_ERR_NULL_PTR);
     err = wind_filepath_check_valid(path);
     WIND_ASSERT_RETURN(err == W_ERR_OK,err);
     len = wind_strlen(path);
@@ -150,7 +150,7 @@ w_bool_t wind_filepath_isdir(const char *path)
 
 w_err_t wind_filepath_release(char *path)
 {
-    WIND_ASSERT_RETURN(path != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(path != W_NULL,W_ERR_NULL_PTR);
     return wind_free(path);
 }
 
@@ -192,7 +192,7 @@ w_int32_t wind_filepath_split(char *path,char **layers,w_int32_t layercnt)
 w_err_t wind_filepath_check_valid(const char *path)
 {
     w_int32_t i,len;
-    WIND_ASSERT_RETURN(path != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(path != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(path[0] == '/',W_ERR_INVALID);
     len = wind_strlen(path);
     WIND_ASSERT_RETURN(len > 0,W_ERR_INVALID);

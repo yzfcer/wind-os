@@ -31,7 +31,7 @@ extern "C" {
 #define NODE_TO_TREE(node) NODEPTR_TO_ITEMPTR(node,w_tree_s,treenode)
 w_err_t wind_tree_init(w_tree_s *tree)
 {
-    WIND_ASSERT_RETURN(tree != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(tree != W_NULL,W_ERR_NULL_PTR);
     tree->parent = (w_tree_s *)W_NULL;
     DLIST_INIT(tree->child_list);
     DNODE_INIT(tree->treenode);
@@ -40,8 +40,8 @@ w_err_t wind_tree_init(w_tree_s *tree)
 
 w_err_t wind_tree_insert_child(w_tree_s *parent,w_tree_s *child)
 {
-    WIND_ASSERT_RETURN(parent != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(child != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(parent != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(child != W_NULL,W_ERR_NULL_PTR);
     child->parent = parent;
     dlist_insert_tail(&parent->child_list,&child->treenode);
     return W_ERR_OK;
@@ -49,16 +49,16 @@ w_err_t wind_tree_insert_child(w_tree_s *parent,w_tree_s *child)
 
 w_err_t wind_tree_insert_brother(w_tree_s *oldbrother,w_tree_s *newbrother)
 {
-    WIND_ASSERT_RETURN(oldbrother != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(newbrother != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(oldbrother != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(newbrother != W_NULL,W_ERR_NULL_PTR);
     return wind_tree_insert_child(oldbrother->parent,newbrother);
 }
 
 w_err_t wind_tree_remove_child(w_tree_s *parent,w_tree_s *child)
 {
     w_dnode_s *dnode;
-    WIND_ASSERT_RETURN(parent != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(child != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(parent != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(child != W_NULL,W_ERR_NULL_PTR);
     dnode = dlist_remove(&parent->child_list,&child->treenode);
     WIND_ASSERT_RETURN(dnode != W_NULL,W_ERR_INVALID);
     child->parent = (w_tree_s *)W_NULL;
@@ -68,9 +68,9 @@ w_err_t wind_tree_remove_child(w_tree_s *parent,w_tree_s *child)
 
 w_err_t wind_tree_remove_brother(w_tree_s *oldbrother,w_tree_s *newbrother)
 {
-    WIND_ASSERT_RETURN(oldbrother != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(newbrother != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(oldbrother->parent != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(oldbrother != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(newbrother != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(oldbrother->parent != W_NULL,W_ERR_NULL_PTR);
 
     return wind_tree_remove_child(oldbrother->parent,newbrother);
 }

@@ -332,7 +332,7 @@ w_err_t wind_cmd_register(w_cmd_s *cmd)
 {
     w_cmd_s *old;
     w_dlist_s *cgl = &g_cmdlist;
-    WIND_ASSERT_RETURN(cmd != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(cmd != W_NULL,W_ERR_NULL_PTR);
     old = wind_cmd_get(cmd->name);
     if(old != W_NULL)
         return W_ERR_OK;
@@ -346,7 +346,7 @@ w_err_t wind_cmd_unregister(w_cmd_s *cmd)
 {
     w_cmd_s *dest;
     w_dlist_s *cgl = &g_cmdlist;
-    WIND_ASSERT_RETURN(cmd != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(cmd != W_NULL,W_ERR_NULL_PTR);
     dest = wind_cmd_get(cmd->name);
     WIND_ASSERT_RETURN(dest != W_NULL, W_ERR_FAIL);
     dlist_remove(cgl, &dest->cmdnode);

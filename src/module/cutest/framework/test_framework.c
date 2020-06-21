@@ -107,7 +107,7 @@ void test_suite_list_init(void)
 err_t test_suite_register(w_test_suite_s *test_suite)
 {
     w_suite_list_s *tsl = &suite_list;
-    TEST_ASSERT_RETURN(test_suite == W_NULL,W_ERR_PTR_NULL);
+    TEST_ASSERT_RETURN(test_suite == W_NULL,W_ERR_NULL_PTR);
     if(tsl->tail == W_NULL)
     {
         tsl->tail = test_suite;

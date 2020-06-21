@@ -83,7 +83,7 @@ hfileattr_e host_file_type(char *path)
 w_err_t host_filepath_check_valid(char *path)
 {
     w_int32_t i,len;
-    WIND_ASSERT_RETURN(path != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(path != W_NULL,W_ERR_NULL_PTR);
     wind_trace("path=%s",path);
     len = wind_strlen(path);
     WIND_ASSERT_RETURN(len > 0,W_ERR_INVALID);
@@ -168,7 +168,7 @@ w_err_t host_filepath_set_current(char *path)
 {
     w_err_t err;
     w_int32_t len;
-    WIND_ASSERT_RETURN(path != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(path != W_NULL,W_ERR_NULL_PTR);
     err = host_filepath_check_valid(path);
     WIND_ASSERT_RETURN(err == W_ERR_OK,err);
     len = wind_strlen(path);
@@ -207,7 +207,7 @@ char * host_filepath_copy(char *path)
 
 w_err_t host_filepath_release(char *path)
 {
-    WIND_ASSERT_RETURN(path != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(path != W_NULL,W_ERR_NULL_PTR);
     wind_trace("path=%s",path);
     return wind_free(path);
 }

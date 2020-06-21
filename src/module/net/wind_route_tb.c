@@ -30,6 +30,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
+#if WIND_MODULE_NET_SUPPORT
 
 
 w_route_tb_s route_tb_list[WIND_ROUTE_TB_MAX_NUM];
@@ -140,6 +141,7 @@ w_route_tb_s *wind_route_tb_get(w_uint32_t destip)
 }
 
 
+#endif // #if WIND_MODULE_NET_SUPPORT
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

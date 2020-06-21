@@ -30,8 +30,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
+#if WIND_MODULE_NET_SUPPORT
 #define  WIND_ARP_TB_TTL 150
-
 typedef struct 
 {
     w_uint32_t ipaddr;
@@ -50,6 +50,7 @@ w_err_t wind_arp_tb_flush(void);
 w_arp_tb_s *wind_arp_tb_get(w_uint32_t ipaddr);
 
 
+#endif // #if WIND_MODULE_NET_SUPPORT
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

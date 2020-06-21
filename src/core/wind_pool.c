@@ -143,7 +143,7 @@ w_err_t wind_pool_create(const char *name,void *mem,w_uint32_t memsize,w_uint32_
     w_pool_s *pm;
     wind_notice("create pool:%s",name?name:"null");
     pm = wind_pool_get_by_mem(mem);
-    WIND_ASSERT_RETURN(pm != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(pm != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(obj_size > 0,W_ERR_INVALID);
     obj_size = WIND_MPOOL_ALIGN_R(obj_size);
     WIND_ASSERT_RETURN(memsize >= sizeof(w_pool_s)+obj_size+sizeof(w_pihead_s),W_ERR_INVALID);
@@ -179,7 +179,7 @@ w_err_t wind_pool_destroy(void *mem)
     w_err_t err;
     w_pool_s *pm;
     pm = wind_pool_get_by_mem(mem);
-    WIND_ASSERT_RETURN(pm != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(pm != W_NULL,W_ERR_NULL_PTR);
     wind_notice("destroy pool:%s",wind_obj_name(&pm->obj));
     err = wind_obj_deinit(&pm->obj,WIND_POOL_MAGIC,&poollist);
     WIND_ASSERT_RETURN(err == W_ERR_OK, W_ERR_FAIL);
@@ -230,8 +230,8 @@ w_err_t wind_pool_free(void *mem,void *block)
     w_poolitem_s* item;
     
     pm = wind_pool_get_by_mem(mem);
-    WIND_ASSERT_RETURN(pm != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(block != W_NULL,W_ERR_PTR_NULL);    
+    WIND_ASSERT_RETURN(pm != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(block != W_NULL,W_ERR_NULL_PTR);    
     item = (w_poolitem_s*)POOL_ITEM(block,w_poolitem_s,buff);
     WIND_ASSERT_RETURN(item->head.magic == WIND_POOLITEM_MAGIC,W_ERR_INVALID);
     WIND_ASSERT_RETURN(IS_F_POOLITEM_USED(item),W_ERR_INVALID);

@@ -223,7 +223,7 @@ w_err_t tb_entry_destroy(w_tb_s *tb)
     
     w_dnode_s *dnode;
     w_err_t err;
-    WIND_ASSERT_RETURN(tb != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(tb != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(tb->magic == TB_MAGIC,W_ERR_INVALID);
     err = db_entry_remove_tb(tb->db,tb);
     WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_FAIL);
@@ -243,9 +243,9 @@ w_err_t tb_entry_insert(w_tb_s *tb,void *data,w_int32_t datasize)
 {
     w_int32_t size;
     w_dnode_s *dnode;
-    WIND_ASSERT_RETURN(tb != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(tb != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(tb->magic == TB_MAGIC,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(data != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(data != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(datasize == tb->data_size,W_ERR_INVALID);
 
     size = sizeof(w_dnode_s) + tb->data_size;
@@ -262,7 +262,7 @@ w_err_t tb_entry_delete(w_tb_s *tb,w_int32_t row_idx)
     w_dnode_s *dnode;
     w_int32_t idx = 0;
     WIND_ASSERT_RETURN(row_idx >= 0,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(tb != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(tb != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(tb->magic == TB_MAGIC,W_ERR_INVALID);
     WIND_ASSERT_RETURN(tb->data_cnt > 0,W_ERR_FAIL);
     WIND_ASSERT_RETURN(row_idx < tb->data_cnt,W_ERR_INVALID);
@@ -284,7 +284,7 @@ w_err_t tb_entry_get_data(w_tb_s *tb,w_int32_t row_idx,void *data,w_int32_t data
     w_dnode_s *dnode;
     w_int32_t idx = 0;
     WIND_ASSERT_RETURN(row_idx >= 0,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(tb != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(tb != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(tb->magic == TB_MAGIC,W_ERR_INVALID);
     WIND_ASSERT_RETURN(row_idx < tb->data_cnt,W_ERR_INVALID);
     WIND_ASSERT_RETURN(data_size >= tb->data_size,W_ERR_INVALID);
@@ -305,7 +305,7 @@ w_err_t tb_entry_modify(w_tb_s *tb,w_int32_t row_idx,void *data,w_int32_t data_s
     w_dnode_s *dnode;
     w_int32_t idx = 0;
     WIND_ASSERT_RETURN(row_idx >= 0,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(tb != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(tb != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(tb->magic == TB_MAGIC,W_ERR_INVALID);
     WIND_ASSERT_RETURN(row_idx < tb->data_cnt,W_ERR_INVALID);
     WIND_ASSERT_RETURN(data_size >= tb->data_size,W_ERR_INVALID);
@@ -328,7 +328,7 @@ w_err_t tb_entry_modify_value(w_tb_s *tb,char *mbrname,w_int32_t row_idx,void *d
     w_addr_t addr;
     w_uint16_t *offset;
     WIND_ASSERT_RETURN(row_idx >= 0,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(tb != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(tb != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(tb->magic == TB_MAGIC,W_ERR_INVALID);
     item_idx = get_mbr_index(tb,mbrname);
     WIND_ASSERT_RETURN(item_idx >= 0,W_ERR_INVALID);
@@ -351,7 +351,7 @@ w_err_t tb_entry_modify_value(w_tb_s *tb,char *mbrname,w_int32_t row_idx,void *d
 w_err_t tb_entry_query_count(w_tb_s *tb,w_int32_t *count)
 {
     //w_int32_t idx = 0;
-    WIND_ASSERT_RETURN(tb != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(tb != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(tb->magic == TB_MAGIC,W_ERR_INVALID);
     *count = tb->data_cnt;
     return W_ERR_OK;
@@ -361,7 +361,7 @@ w_err_t tb_entry_query_count(w_tb_s *tb,w_int32_t *count)
 
 w_err_t tb_entry_query_cond_count(w_tb_s *tb,char *cond,w_int32_t *idxlist,w_int32_t cnt)
 {
-    WIND_ASSERT_RETURN(tb != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(tb != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(tb->magic == TB_MAGIC,W_ERR_INVALID);
     wind_printf("tb_entry_query_cond_count is NOT supported.\r\n");
     return W_ERR_FAIL;
@@ -369,7 +369,7 @@ w_err_t tb_entry_query_cond_count(w_tb_s *tb,char *cond,w_int32_t *idxlist,w_int
 
 w_err_t tb_entry_print_info(w_tb_s *tb)
 {
-    WIND_ASSERT_RETURN(tb != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(tb != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(tb->magic == TB_MAGIC,W_ERR_INVALID);
     wind_printf("\r\ntable info:\r\n");
     wind_printf("DB    name :%s\r\n",tb->dbname);
@@ -394,7 +394,7 @@ w_err_t tb_entry_print_data(w_tb_s *tb)
     w_dnode_s *dnode;
     w_uint8_t *data;
     w_int32_t idx = 0;
-    WIND_ASSERT_RETURN(tb != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(tb != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(tb->magic == TB_MAGIC,W_ERR_INVALID);
     wind_printf("|   |---<table name=%s>\r\n",tb->tbname);
     foreach_node(dnode,&tb->data_list)

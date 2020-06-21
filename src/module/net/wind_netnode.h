@@ -50,7 +50,7 @@ struct __w_netnode_s
     w_dlist_s outhook_list;
     w_err_t (*init)(w_netnode_s *netnode);
     w_err_t (*deinit)(w_netnode_s *netnode);
-    w_err_t (*input)(w_netnode_s *netnode,w_skb_s **skb);
+    w_err_t (*input)(w_netnode_s *netnode,w_skb_s *skb);
     w_err_t (*output)(w_netnode_s *netnode,w_skb_s *skb);
 };
 

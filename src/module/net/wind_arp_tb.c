@@ -29,6 +29,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
+#if WIND_MODULE_NET_SUPPORT
 w_arp_tb_s arp_tb_list[WIND_ARP_TB_MAX_NUM];
 static void arp_tb_timer(w_timer_s *timer,void *arg)
 {
@@ -86,7 +87,7 @@ w_err_t wind_arp_tb_update(w_arp_tb_s *arp_tb)
         tmp_arptb->ipaddr = arp_tb->ipaddr;
         tmp_arptb->hwtype = arp_tb->hwtype;
         tmp_arptb->flags = arp_tb->flags;
-        tmp_arptb->ttl = tick;
+        tmp_arptb->ttl = (w_uint16_t)tick;
     }while(0);
     wind_enable_switch();
     return err;
@@ -142,6 +143,7 @@ w_arp_tb_s *wind_arp_tb_get(w_uint32_t ipaddr)
 }
 
 
+#endif // #if WIND_MODULE_NET_SUPPORT
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

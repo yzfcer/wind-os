@@ -111,9 +111,9 @@ w_err_t wind_memblk_create(w_blkdev_s  *blkdev,    char *name,void *mem,w_int32_
 {
     w_err_t err;
     w_int32_t blkcnt;
-    WIND_ASSERT_RETURN(blkdev != W_NULL, W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(name != W_NULL, W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(mem != W_NULL, W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(blkdev != W_NULL, W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(name != W_NULL, W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(mem != W_NULL, W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(memsize > 0, W_ERR_INVALID);
     WIND_ASSERT_RETURN(blksize > 0, W_ERR_INVALID);
     blkcnt = memsize / blksize;
@@ -136,7 +136,7 @@ w_err_t wind_memblk_create(w_blkdev_s  *blkdev,    char *name,void *mem,w_int32_
 w_err_t wind_memblk_destroy(w_blkdev_s *blkdev)
 {
     w_err_t err;
-    WIND_ASSERT_RETURN(blkdev != W_NULL, W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(blkdev != W_NULL, W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(blkdev->obj.magic  == WIND_BLKDEV_MAGIC, W_ERR_INVALID);
     WIND_ASSERT_RETURN(blkdev->devtype == BLKDEV_RAM, W_ERR_INVALID);
     err = wind_blkdev_unregister(blkdev);

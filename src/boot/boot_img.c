@@ -178,7 +178,7 @@ static w_err_t check_img_file_crc(w_part_s *cache)
 
     
 
-    WIND_ASSERT_RETURN(cache != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(cache != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(cache->datalen > 0,W_ERR_INVALID);
     buff = get_common_buffer();
     //blkcnt = COMMBUF_SIZE / cache->blksize;

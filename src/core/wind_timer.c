@@ -68,8 +68,8 @@ w_err_t wind_timer_init(w_timer_s* timer,
 {
     w_int32_t count;
     wind_notice("init timer:%s",name != W_NULL?name:"null");
-    WIND_ASSERT_RETURN(timer != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(func != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(timer != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(func != W_NULL,W_ERR_NULL_PTR);
     count = period_ms / TIMER_PERIOD;
     if(count <= 0)
         count = 1;
@@ -108,7 +108,7 @@ w_timer_s* wind_timer_create(const char *name,
 
 w_err_t wind_timer_start(w_timer_s* timer)
 {
-    WIND_ASSERT_RETURN(timer != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(timer != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(timer->obj.magic == WIND_TIMER_MAGIC,W_ERR_INVALID);
     SET_F_TIMER_RUN(timer);
     return W_ERR_OK;
@@ -116,7 +116,7 @@ w_err_t wind_timer_start(w_timer_s* timer)
 
 w_err_t wind_timer_reset(w_timer_s* timer)
 {
-    WIND_ASSERT_RETURN(timer != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(timer != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(timer->obj.magic == WIND_TIMER_MAGIC,W_ERR_INVALID);
     timer->value = 0;
     return W_ERR_OK;
@@ -124,7 +124,7 @@ w_err_t wind_timer_reset(w_timer_s* timer)
 
 w_err_t wind_timer_stop(w_timer_s* timer)
 {
-    WIND_ASSERT_RETURN(timer != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(timer != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(timer->obj.magic == WIND_TIMER_MAGIC,W_ERR_INVALID);
     CLR_F_TIMER_RUN(timer);
     return W_ERR_OK;
@@ -133,7 +133,7 @@ w_err_t wind_timer_stop(w_timer_s* timer)
 w_err_t wind_timer_destroy(w_timer_s* timer)
 {
     w_err_t err;
-    WIND_ASSERT_RETURN(timer != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(timer != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(timer->obj.magic == WIND_TIMER_MAGIC,W_ERR_INVALID);
     wind_notice("destroy timer:%s",wind_obj_name(&timer->obj));
     err = wind_obj_deinit(&timer->obj,WIND_TIMER_MAGIC,&timerlist);
@@ -146,7 +146,7 @@ w_err_t wind_timer_destroy(w_timer_s* timer)
 w_err_t wind_timer_set_period(w_timer_s* timer,w_uint32_t period_ms)
 {
     w_int32_t count;
-    WIND_ASSERT_RETURN(timer != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(timer != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(timer->obj.magic == WIND_TIMER_MAGIC,W_ERR_INVALID);
     count = period_ms / TIMER_PERIOD;
     if(count <= 0)
@@ -158,7 +158,7 @@ w_err_t wind_timer_set_period(w_timer_s* timer,w_uint32_t period_ms)
 
 w_err_t wind_timer_setflag(w_timer_s* timer,w_uint16_t flag)
 {
-    WIND_ASSERT_RETURN(timer != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(timer != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(timer->obj.magic == WIND_TIMER_MAGIC,W_ERR_INVALID);
     if(flag & F_TIMER_REPEAT)
         SET_F_TIMER_REPEAT(timer);
@@ -175,7 +175,7 @@ w_err_t wind_timer_setflag(w_timer_s* timer,w_uint16_t flag)
 
 w_err_t wind_timer_clrflag(w_timer_s* timer,w_uint16_t flag)
 {
-    WIND_ASSERT_RETURN(timer != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(timer != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(timer->obj.magic == WIND_TIMER_MAGIC,W_ERR_INVALID);
     if(flag & F_TIMER_REPEAT)
         CLR_F_TIMER_REPEAT(timer);
@@ -194,7 +194,7 @@ w_err_t wind_timer_print_detail(void)
     w_dnode_s *dnode;
     w_timer_s *timer;
     w_dlist_s *list = &timerlist;
-    WIND_ASSERT_RETURN(list != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(list != W_NULL,W_ERR_NULL_PTR);
     wind_printf("\r\n\r\ntimer list:\r\n");
     wind_print_space(7);
     wind_printf("%-16s %-10s %-10s %-10s %-10s\r\n","timer","period","value","status","repeat");

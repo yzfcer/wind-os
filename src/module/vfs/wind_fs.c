@@ -94,7 +94,7 @@ static w_err_t check_dir_path_valid(char *path)
         if((path[0] == '/') && (path[1] == 0))
             break;
         file = wind_fopen(path,FMODE_R);
-        WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
+        WIND_ASSERT_RETURN(file != W_NULL,W_ERR_NULL_PTR);
         WIND_ASSERT_RETURN(file->isdir != 0,W_ERR_FAIL);        
     }while(0);
     if(file != W_NULL)
@@ -110,10 +110,10 @@ static w_err_t mount_param_check(char *fsname,char *fstype,char *blkname,char *p
     w_int32_t len;
     w_bool_t is_match;
     w_err_t err;
-    WIND_ASSERT_RETURN(fsname != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(fstype != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(blkname != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(path != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(fsname != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(fstype != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(blkname != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(path != W_NULL,W_ERR_NULL_PTR);
     vfs = wind_vfs_get(fsname);
     WIND_ASSERT_RETURN(vfs != W_NULL,W_ERR_REPEAT);
     ops = wind_fsops_get(fstype);
@@ -310,7 +310,7 @@ w_err_t wind_vfs_mount(char *fsname,char *fstype,char *blkname,char *path)
 w_err_t wind_vfs_unmount(char *fsname)
 {
     w_vfs_s *vfs;
-    WIND_ASSERT_RETURN(fsname != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(fsname != W_NULL,W_ERR_NULL_PTR);
     vfs = wind_vfs_get(fsname);
     WIND_ASSERT_RETURN(vfs != W_NULL,W_ERR_INVALID);
     wind_notice("umount %s",fsname);
@@ -332,8 +332,8 @@ w_err_t wind_vfs_unmount(char *fsname)
 w_err_t wind_vfs_format(w_vfs_s *vfs)
 {
     w_err_t err = W_ERR_OK;
-    WIND_ASSERT_RETURN(vfs != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(vfs->ops != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(vfs != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(vfs->ops != W_NULL,W_ERR_NULL_PTR);
     if(vfs->ops->format != W_NULL)
         err = vfs->ops->format(vfs);
     return err;

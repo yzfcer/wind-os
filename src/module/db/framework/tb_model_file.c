@@ -63,7 +63,7 @@ w_err_t tbmodel_file_load_all(char *dirpath)
     char *fullpath = (char*)W_NULL;
     w_file_s *sub;
     w_file_s *dir = (w_file_s*)W_NULL;
-    WIND_ASSERT_RETURN(dirpath != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(dirpath != W_NULL,W_ERR_NULL_PTR);
     do
     {
         err = W_ERR_OK;
@@ -104,7 +104,7 @@ w_err_t tbmodel_file_save_all(char *dirpath)
     tb_model_s *tbmodel;
     char *fullpath = (char*)W_NULL;
     char *tbm_filename = (char*)W_NULL;
-    WIND_ASSERT_RETURN(dirpath != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(dirpath != W_NULL,W_ERR_NULL_PTR);
     do
     {
         err = W_ERR_OK;

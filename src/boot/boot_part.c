@@ -109,7 +109,7 @@ w_err_t boot_part_calc_crc(w_part_s *part,w_int32_t offset,w_int32_t len,w_bool_
     w_int32_t size;    
     w_uint8_t *buff;
     w_uint32_t crc = 0xffffffff;
-    WIND_ASSERT_RETURN(part != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(part != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(part->datalen > 0,W_ERR_INVALID);
     WIND_ASSERT_RETURN(offset >= 0,W_ERR_INVALID);
     WIND_ASSERT_RETURN((offset & (part->blksize-1)) == 0,W_ERR_INVALID);
@@ -145,13 +145,13 @@ w_int32_t boot_part_read(w_part_s *part,w_int32_t offset,w_uint8_t *data,w_uint3
     w_uint32_t blkcnt;
     w_uint32_t size;
     w_media_s *media;
-    WIND_ASSERT_RETURN(part != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(part != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(offset < part->size,W_ERR_INVALID);
     if(!read_space)
         WIND_ASSERT_RETURN(offset < part->datalen,W_ERR_INVALID);
     else
         WIND_ASSERT_RETURN(offset < part->size,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(data != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(data != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(datalen > 0,W_ERR_INVALID);
     WIND_ASSERT_RETURN(0 == (offset & (part->blksize-1)),W_ERR_INVALID);
     //wind_debug("read part:%s,offset:%d,lenth:%d",part->name,offset,datalen);
@@ -172,9 +172,9 @@ w_int32_t boot_part_write(w_part_s *part,w_int32_t offset,w_uint8_t *data,w_uint
     w_uint32_t blkcnt;
     w_uint32_t size;
     w_media_s *media;
-    WIND_ASSERT_RETURN(part != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(part != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(offset <= part->datalen,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(data != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(data != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(datalen > 0,W_ERR_INVALID);
     WIND_ASSERT_RETURN(datalen < part->size,W_ERR_INVALID);
     WIND_ASSERT_RETURN(datalen + offset < part->size,W_ERR_INVALID);
@@ -194,7 +194,7 @@ w_err_t boot_part_erase(w_part_s *part)
 {
     w_uint32_t blkcnt;
     w_media_s *media;
-    WIND_ASSERT_RETURN(part != NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(part != NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(part->size > 0,W_ERR_INVALID);
     WIND_ASSERT_RETURN(part->blksize > 0,W_ERR_INVALID);
     wind_notice("erase part:%s",part->name);

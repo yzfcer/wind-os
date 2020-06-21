@@ -34,11 +34,13 @@ typedef struct
 {
     w_uint64_t send_bytes_cnt;
     w_uint64_t recv_bytes_cnt;
-    w_uint64_t frop_bytes_cnt;
+    w_uint64_t drop_send_bytes_cnt;
+    w_uint64_t drop_recv_bytes_cnt;
     
     w_uint32_t send_pack_cnt;
     w_uint32_t recv_pack_cnt;
-    w_uint32_t drop_pack_cnt;
+    w_uint32_t drop_send_pack_cnt;
+    w_uint32_t drop_recv_pack_cnt;
     w_uint32_t error_sendpack_cnt;
     w_uint32_t error_recvpack_cnt;
     
@@ -49,7 +51,8 @@ typedef struct
 
 #define SEND_PACK_CNT_INC(stati) stati.send_pack_cnt ++
 #define RECV_PACK_CNT_INC(stati) stati.recv_pack_cnt ++
-#define DROP_PACK_CNT_INC(stati) stati.drop_pack_cnt ++
+#define DROP_SEND_PACK_CNT_INC(stati) stati.drop_send_pack_cnt ++
+#define DROP_RECV_PACK_CNT_INC(stati) stati.drop_recv_pack_cnt ++
 #define ERROR_SEND_PACK_CNT_INC(stati) stati.error_sendpack_cnt ++
 #define ERROR_RECV_PACK_CNT_INC(stati) stati.error_recvpack_cnt ++
 

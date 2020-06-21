@@ -84,8 +84,8 @@ static w_int16_t inner_devid = 0;
 w_err_t wind_nullblk_create(w_blkdev_s  *blkdev, char *name)
 {
     w_err_t err;
-    WIND_ASSERT_RETURN(blkdev != W_NULL, W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(name != W_NULL, W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(blkdev != W_NULL, W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(name != W_NULL, W_ERR_NULL_PTR);
     wind_memset(blkdev, 0, sizeof(w_blkdev_s));
     blkdev->obj.magic = (~WIND_BLKDEV_MAGIC);
     blkdev->obj.name = name;
@@ -104,7 +104,7 @@ w_err_t wind_nullblk_create(w_blkdev_s  *blkdev, char *name)
 w_err_t wind_nullblk_destroy(w_blkdev_s *blkdev)
 {
     w_err_t err;
-    WIND_ASSERT_RETURN(blkdev != W_NULL, W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(blkdev != W_NULL, W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(blkdev->obj.magic  == WIND_BLKDEV_MAGIC, W_ERR_INVALID);
     WIND_ASSERT_RETURN(blkdev->devtype == BLKDEV_NULL, W_ERR_INVALID);
     err = wind_blkdev_unregister(blkdev);

@@ -320,7 +320,7 @@ static w_err_t hwrtc_set_datetime(datetime_s *datetime)
     systick_s tick64;
 #if WIND_RTC_SUPPORT
     w_chdev_s *dev;
-    WIND_ASSERT_RETURN(datetime != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(datetime != W_NULL,W_ERR_NULL_PTR);
     dev = wind_chdev_get("rtc");
     WIND_ASSERT_RETURN(dev != W_NULL,W_ERR_INVALID);
     wind_chdev_open(dev);
@@ -339,7 +339,7 @@ static w_err_t hwrtc_get_datetime(datetime_s *datetime)
 {
 #if WIND_RTC_SUPPORT
     w_chdev_s *dev;
-    WIND_ASSERT_RETURN(datetime != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(datetime != W_NULL,W_ERR_NULL_PTR);
     dev = wind_chdev_get("rtc");
     WIND_ASSERT_RETURN(dev != W_NULL,W_ERR_INVALID);
     wind_chdev_open(dev);

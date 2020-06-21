@@ -51,7 +51,7 @@ static w_err_t check_user_name_format(const char *username)
 {
     w_int32_t i;
     w_int32_t namelen;
-    WIND_ASSERT_RETURN(username != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(username != W_NULL,W_ERR_NULL_PTR);
     namelen = wind_strlen(username);
     WIND_ASSERT_RETURN(namelen > 0,W_ERR_INVALID);
     WIND_ASSERT_RETURN(namelen < USER_NAME_MAXLEN,W_ERR_INVALID);
@@ -70,7 +70,7 @@ static w_err_t check_passwd_format(const char *passwd)
 {
     w_int32_t i;
     w_int32_t pwdlen;
-    WIND_ASSERT_RETURN(passwd != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(passwd != W_NULL,W_ERR_NULL_PTR);
     pwdlen = wind_strlen(passwd);
     WIND_ASSERT_RETURN(pwdlen >= 6,W_ERR_INVALID);
     WIND_ASSERT_RETURN(pwdlen < PASSWD_MAXLEN,W_ERR_INVALID);
@@ -122,7 +122,7 @@ w_user_s *wind_user_get(const char *name)
 w_err_t wind_user_init(w_user_s *user,w_user_e usertype,const char *username,const char *passwd)
 {
     wind_notice("init user:%s",username != W_NULL?username:"null");
-    WIND_ASSERT_RETURN(user != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(user != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(check_user_name_format(username) == W_ERR_OK,W_ERR_INVALID);
     WIND_ASSERT_RETURN(check_passwd_format(passwd) == W_ERR_OK,W_ERR_INVALID);
 
@@ -161,7 +161,7 @@ w_user_s *wind_user_create(w_user_e usertype,const char *username,const char *pa
 w_err_t wind_user_destroy(w_user_s *user)
 {
     w_dnode_s *dnode;
-    WIND_ASSERT_RETURN(user != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(user != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(user->magic == WIND_USER_MAGIC,W_ERR_INVALID);
     WIND_ASSERT_RETURN(user->usertype != USER_SUPER,W_ERR_FAIL);
     wind_notice("destroy user:%s",user->name != W_NULL?user->name:"null");
@@ -178,7 +178,7 @@ w_err_t wind_user_destroy(w_user_s *user)
 w_err_t wind_user_modify_passwd(w_user_s *user,const char *newpasswd)
 {
     w_int32_t pwdlen;
-    WIND_ASSERT_RETURN(user != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(user != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(user->magic == WIND_USER_MAGIC,W_ERR_INVALID);
     WIND_ASSERT_RETURN(check_passwd_format(newpasswd) == W_ERR_OK,W_ERR_INVALID);
     
@@ -198,7 +198,7 @@ w_err_t wind_user_print(void)
     w_dnode_s *dnode;
     w_user_s *user;
     w_dlist_s *list = &userlist;
-    WIND_ASSERT_RETURN(list != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(list != W_NULL,W_ERR_NULL_PTR);
     wind_printf("\r\n\r\nuser list:\r\n");
     wind_disable_switch();
     wind_print_space(3);

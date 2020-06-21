@@ -64,7 +64,7 @@ w_sem_s *wind_sem_get(const char *name)
 w_err_t wind_sem_init(w_sem_s *sem,const char *name,w_int8_t sem_value)
 {
     wind_notice("init sem:%s",name != W_NULL?name:"null");
-    WIND_ASSERT_RETURN(sem != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(sem != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(sem_value >= 0,W_ERR_INVALID);
     sem->sem_num = sem_value;
     sem->sem_tot = sem_value;
@@ -94,7 +94,7 @@ w_sem_s *wind_sem_create(const char *name,w_int8_t sem_value)
 w_err_t wind_sem_trydestroy(w_sem_s *sem)
 {
     w_dnode_s *dnode;
-    WIND_ASSERT_RETURN(sem != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(sem != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(sem->obj.magic == WIND_SEM_MAGIC,W_ERR_INVALID);
     wind_disable_switch();
     dnode = dlist_head(&sem->waitlist);
@@ -112,7 +112,7 @@ w_err_t wind_sem_destroy(w_sem_s *sem)
     w_err_t err;
     w_dnode_s *dnode;
     w_thread_s *thread;
-    WIND_ASSERT_RETURN(sem != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(sem != W_NULL,W_ERR_NULL_PTR);
     wind_notice("destroy sem:%s",wind_obj_name(&sem->obj));
     err = wind_obj_deinit(&sem->obj,WIND_SEM_MAGIC,&semlist);
     WIND_ASSERT_RETURN(err == W_ERR_OK, W_ERR_FAIL);
@@ -135,7 +135,7 @@ w_err_t wind_sem_post(w_sem_s *sem)
     w_dnode_s *dnode;
     w_thread_s *thread;
     w_dlist_s *sleeplist = _wind_thread_sleep_list();
-    WIND_ASSERT_RETURN(sem != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(sem != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(sem->obj.magic == WIND_SEM_MAGIC,W_ERR_INVALID);
     wind_disable_switch();
     
@@ -166,7 +166,7 @@ w_err_t wind_sem_wait(w_sem_s *sem,w_uint32_t timeout)
     w_int32_t ticks;
     w_thread_s *thread;
     w_dlist_s *sleeplist = _wind_thread_sleep_list();
-    WIND_ASSERT_RETURN(sem != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(sem != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(sem->obj.magic == WIND_SEM_MAGIC,W_ERR_INVALID);
     ticks = timeout *WIND_TICK_PER_SEC / 1000;
     if(ticks == 0)
@@ -211,7 +211,7 @@ w_err_t wind_sem_wait(w_sem_s *sem,w_uint32_t timeout)
 w_err_t wind_sem_trywait(w_sem_s *sem)
 {
     w_err_t err;
-    WIND_ASSERT_RETURN(sem != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(sem != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(sem->obj.magic == WIND_SEM_MAGIC,W_ERR_INVALID);
 
     wind_disable_switch();

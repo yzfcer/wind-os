@@ -103,7 +103,7 @@ w_err_t wind_dictset_destroy(w_dictset_s *dictset)
     w_err_t err;
     w_dnode_s *dnode;
     w_dict_s *dict;
-    WIND_ASSERT_RETURN(dictset != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(dictset != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(dictset->obj.magic == WIND_DICTSET_MAGIC,W_ERR_INVALID);
     do
     {
@@ -129,8 +129,8 @@ w_err_t wind_dictset_destroy(w_dictset_s *dictset)
 
 w_err_t wind_dictset_insert(w_dictset_s *dictset,w_dict_s *dict)
 {
-    WIND_ASSERT_RETURN(dictset != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(dict != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(dictset != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(dict != W_NULL,W_ERR_NULL_PTR);
     wind_mutex_lock(dictset->mutex);
     dlist_insert_tail(&dictset->list,&dict->dictnode);
     wind_mutex_unlock(dictset->mutex);
@@ -139,8 +139,8 @@ w_err_t wind_dictset_insert(w_dictset_s *dictset,w_dict_s *dict)
 
 w_err_t wind_dictset_remove(w_dictset_s *dictset,w_dict_s *dict)
 {
-    WIND_ASSERT_RETURN(dictset != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(dict != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(dictset != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(dict != W_NULL,W_ERR_NULL_PTR);
     wind_mutex_lock(dictset->mutex);
     dlist_remove(&dictset->list,&dict->dictnode);
     wind_mutex_unlock(dictset->mutex);
@@ -152,7 +152,7 @@ w_err_t wind_dictset_print(w_dictset_s *dictset)
     w_err_t err;
     w_dnode_s *dnode;
     w_dict_s *dict;
-    WIND_ASSERT_RETURN(dictset != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(dictset != W_NULL,W_ERR_NULL_PTR);
     wind_printf("[dictset name:%s]\r\n",dictset->obj.name);
     wind_mutex_lock(dictset->mutex);
     do
@@ -253,7 +253,7 @@ w_dict_s *wind_dict_create(char *name,char *value)
 
 w_err_t wind_dict_destroy(w_dict_s *dict)
 {
-    WIND_ASSERT_RETURN(dict != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(dict != W_NULL,W_ERR_NULL_PTR);
     if(dict->name != W_NULL)
         wind_free(dict->name);
     if(dict->value != W_NULL)
@@ -264,9 +264,9 @@ w_err_t wind_dict_destroy(w_dict_s *dict)
 
 w_err_t wind_dict_print(w_dict_s *dict)
 {
-    WIND_ASSERT_RETURN(dict != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(dict->name != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(dict->value != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(dict != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(dict->name != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(dict->value != W_NULL,W_ERR_NULL_PTR);
     wind_printf("%s=%s\r\n",dict->name,dict->value);
     return W_ERR_OK;
 }

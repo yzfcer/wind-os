@@ -57,7 +57,7 @@ w_err_t wind_diagnose_register(w_diagnose_s *diagnose)
     w_diagnose_s *diag;    
     wind_notice("register diagnose:%s", wind_obj_name(&diagnose->obj));
     wind_debug("diagnose magic:%-08x,%-08x", diagnose->obj.magic,(~WIND_DIAGNOSE_MAGIC));
-    WIND_ASSERT_RETURN(diagnose != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(diagnose != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(diagnose->obj.magic == (~WIND_DIAGNOSE_MAGIC),W_ERR_INVALID);
     diag = wind_diagnose_get(diagnose->obj.name);
     if(diag != W_NULL)
@@ -77,7 +77,7 @@ w_err_t wind_diagnose_unregister(w_diagnose_s *diagnose)
 {
     w_dnode_s *dnode;
     w_diagnose_s *diag;
-    WIND_ASSERT_RETURN(diagnose != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(diagnose != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(diagnose->obj.magic == WIND_DIAGNOSE_MAGIC,W_ERR_INVALID);
     wind_notice("unregister diagnose:%s", wind_obj_name(&diagnose->obj));
     diag = wind_diagnose_get(diagnose->obj.name);
@@ -146,7 +146,7 @@ w_err_t wind_diagnose_print(void)
     w_diagnose_s *diagnose;
     int cnt = 0;
     w_dlist_s *list = &diagnoselist;
-    WIND_ASSERT_RETURN(list != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(list != W_NULL,W_ERR_NULL_PTR);
     wind_printf("\r\n\r\ndiagnose list:\r\n");
     foreach_node(dnode,list)
     {

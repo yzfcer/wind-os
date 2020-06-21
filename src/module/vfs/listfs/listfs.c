@@ -80,9 +80,9 @@ static w_err_t lfs_search_child(lfile_info_s *info,char *name,w_blkdev_s *blkdev
 {
     w_err_t err;
     lfile_info_s *tmpinfo = W_NULL;
-    WIND_ASSERT_RETURN(info != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(name != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(info != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(name != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_NULL_PTR);
     
     do
     {
@@ -122,9 +122,9 @@ static w_err_t lfs_search_file(w_listfs_s *lfs,w_listfile_s *file,const char *pa
     char *tmppath = W_NULL;
     lfile_info_s *finfo = W_NULL;
     
-    WIND_ASSERT_RETURN(lfs != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(path != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(lfs != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(file != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(path != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(path[0] != 0,W_ERR_INVALID);
     do 
     {
@@ -245,9 +245,9 @@ static w_err_t lfs_make_child(w_listfs_s *lfs,lfile_info_s *pinfo,char *name,w_u
     w_uint32_t self_addr,cnt;
     lfile_info_s *info;
     lfile_blkinfo_s *blkinfo;
-    WIND_ASSERT_RETURN(lfs != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(pinfo != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(name != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(lfs != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(pinfo != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(name != W_NULL,W_ERR_NULL_PTR);
     
     do 
     {
@@ -300,9 +300,9 @@ static w_err_t lfs_make_file(w_listfs_s *lfs,w_listfile_s *file,char *path)
     lfile_info_s *finfo = W_NULL;
     char *tmppath = W_NULL;
 
-    WIND_ASSERT_RETURN(lfs != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(path != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(lfs != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(file != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(path != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(path[0] != 0,W_ERR_INVALID);
     
     do
@@ -482,8 +482,8 @@ static w_err_t lfs_get_fsinfo_by_blk(lfs_info_s *fsinfo,w_blkdev_s *blkdev,w_uin
     w_err_t err;
     w_int32_t cnt;
     w_uint8_t *blk = W_NULL;
-    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(fsinfo != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(fsinfo != W_NULL,W_ERR_NULL_PTR);
     do
     {
         err = W_ERR_OK;
@@ -519,8 +519,8 @@ w_err_t lfs_info_read(lfs_info_s *lfs_info,w_blkdev_s *blkdev)
     w_uint32_t crc,calc_crc;
     lfs_info_s *tmpinfo;
     w_uint8_t *blk = W_NULL;
-    WIND_ASSERT_RETURN(lfs_info != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(lfs_info != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_NULL_PTR);
     do
     {
         err = W_ERR_OK;
@@ -551,8 +551,8 @@ w_err_t lfs_info_write(lfs_info_s *lfs_info,w_blkdev_s *blkdev)
     w_int32_t cnt;
     w_uint32_t crc;
     w_uint8_t *blk = W_NULL;
-    WIND_ASSERT_RETURN(lfs_info != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(lfs_info != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_NULL_PTR);
     do 
     {
         err = W_ERR_OK;
@@ -606,8 +606,8 @@ w_err_t listfs_format(w_listfs_s *lfs,w_blkdev_s *blkdev)
 {
     w_err_t err;
     
-    WIND_ASSERT_RETURN(lfs != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(lfs != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(blkdev->obj.magic == WIND_BLKDEV_MAGIC,W_ERR_INVALID);
     wind_notice("listfs format,blkdev:%s",wind_obj_name(&blkdev->obj));
     do
@@ -632,8 +632,8 @@ w_err_t listfs_init(w_listfs_s *lfs,w_blkdev_s *blkdev)
 {
     w_err_t err;
     lfile_info_s *finfo = W_NULL;
-    WIND_ASSERT_RETURN(lfs != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(lfs != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_NULL_PTR);
     do 
     {
         err = W_ERR_OK;
@@ -663,8 +663,8 @@ w_err_t listfs_init(w_listfs_s *lfs,w_blkdev_s *blkdev)
 w_err_t listfs_deinit(w_listfs_s *lfs)
 {
     w_err_t err;
-    WIND_ASSERT_RETURN(lfs != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(lfs->blkdev != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(lfs != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(lfs->blkdev != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(lfs->lfs_info.magic == LISTFS_MAGIC,W_ERR_INVALID);
     lfs->lfs_info.magic = (~LISTFS_MAGIC);
     err = listfs_bitmap_deinit(&lfs->bitmap);
@@ -682,7 +682,7 @@ w_err_t listfs_match(w_blkdev_s *blkdev)
     w_uint32_t crc,calc_crc;
     lfs_info_s *fsinfo = W_NULL;
     w_uint8_t *blk = W_NULL;
-    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_NULL_PTR);
     do
     {
         err = W_ERR_OK;
@@ -766,7 +766,7 @@ w_listfile_s* listfile_open(w_listfs_s *lfs,const char *path,w_uint8_t mode)
 w_err_t listfile_close(w_listfile_s* file)
 {
     w_err_t err;
-    WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(file != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,W_ERR_INVALID);
     WIND_ASSERT_RETURN(file->lfs->file_ref > 0,W_ERR_INVALID);
     wind_trace("close file:%s",file->info.name);
@@ -820,11 +820,11 @@ w_err_t listfile_remove(w_listfs_s *lfs,const char *path)
 {
     w_err_t err;
     w_listfile_s *file;
-    WIND_ASSERT_RETURN(lfs != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(path != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(lfs != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(path != W_NULL,W_ERR_NULL_PTR);
     wind_trace("remove file:%s",path);
     file = listfile_open(lfs,path,LFMODE_R);
-    WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(file != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(lfs->lfs_info.magic == LISTFS_MAGIC,W_ERR_INVALID);
 
     do
@@ -846,7 +846,7 @@ w_err_t listfile_set_attr(w_listfile_s* file,w_uint8_t attr)
 {
     w_err_t err;
     w_uint8_t tmpattr = 0;
-    WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(file != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,W_ERR_INVALID);
     tmpattr = (file->info.attr & LFILE_ATTR_DIR);
     (attr & LFILE_ATTR_RDEN)?(tmpattr |= LFILE_ATTR_RDEN):(tmpattr &= ~LFILE_ATTR_RDEN);
@@ -860,8 +860,8 @@ w_err_t listfile_set_attr(w_listfile_s* file,w_uint8_t attr)
 
 w_err_t listfile_get_attr(w_listfile_s* file,w_uint8_t *attr)
 {
-    WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(attr != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(file != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(attr != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,W_ERR_INVALID);
     *attr = file->info.attr;
     return W_ERR_OK;
@@ -882,7 +882,7 @@ w_err_t listfile_seek(w_listfile_s* file,w_int32_t offset)
 {
     w_err_t err;
     lfile_blkinfo_s *blkinfo = (lfile_blkinfo_s *)W_NULL;
-    WIND_ASSERT_RETURN(file != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(file != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(offset >= 0,W_ERR_OVERFLOW);
     WIND_ASSERT_RETURN(file->info.magic == LISTFILE_MAGIC,W_ERR_INVALID);
     do 
@@ -1123,10 +1123,10 @@ w_err_t listfile_readdir(w_listfile_s* dir,w_listfile_s** sub)
 {
     w_err_t err;
     w_listfile_s* sublfile;
-    WIND_ASSERT_RETURN(dir != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(sub != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(dir->lfs != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(dir->lfs->blkdev != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(dir != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(sub != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(dir->lfs != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(dir->lfs->blkdev != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(dir->info.magic == LISTFILE_MAGIC,W_ERR_INVALID);
     WIND_ASSERT_RETURN(dir->mode & LFMODE_R,W_ERR_INVALID);
     WIND_ASSERT_RETURN(IS_LFILE_ATTR_DIR(dir->info.attr) != 0,W_ERR_INVALID);

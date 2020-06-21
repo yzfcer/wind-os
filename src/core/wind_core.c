@@ -277,7 +277,7 @@ w_uint32_t wind_get_tick(void)
 
 w_err_t wind_get_core_var(w_core_var_s *core_var)
 {
-    WIND_ASSERT_RETURN(core_var != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(core_var != W_NULL,W_ERR_NULL_PTR);
     wind_disable_interrupt();
     wind_memcpy(core_var,&g_core,sizeof(w_core_var_s));
     wind_enable_interrupt();

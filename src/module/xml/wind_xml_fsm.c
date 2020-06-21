@@ -208,7 +208,7 @@ static w_err_t xmlfsm_handle_idle(w_fsm_s *fsm)
     w_err_t err;
     w_xmlfsm_s *xfsm;
     char *buff;
-    WIND_CHECK_RETURN(fsm->arg != W_NULL,W_ERR_PTR_NULL);
+    WIND_CHECK_RETURN(fsm->arg != W_NULL,W_ERR_NULL_PTR);
     WIND_CHECK_RETURN(fsm->arglen > 0,W_ERR_INVALID);
     buff = (char*)fsm->arg;
     xfsm = (w_xmlfsm_s*)fsm;
@@ -258,7 +258,7 @@ static w_err_t xmlfsm_handle_note(w_fsm_s *fsm)
     w_err_t err;
     w_xmlfsm_s *xfsm;
     char *buff;
-    WIND_CHECK_RETURN(fsm->arg != W_NULL,W_ERR_PTR_NULL);
+    WIND_CHECK_RETURN(fsm->arg != W_NULL,W_ERR_NULL_PTR);
     WIND_CHECK_RETURN(fsm->arglen > 0,W_ERR_INVALID);
     buff = (char*)fsm->arg;
     xfsm = (w_xmlfsm_s*)fsm;
@@ -309,7 +309,7 @@ static w_err_t xmlfsm_handle_node_name(w_fsm_s *fsm)
     w_err_t err;
     w_xmlfsm_s *xfsm;
     char *buff;
-    WIND_CHECK_RETURN(fsm->arg != W_NULL,W_ERR_PTR_NULL);
+    WIND_CHECK_RETURN(fsm->arg != W_NULL,W_ERR_NULL_PTR);
     WIND_CHECK_RETURN(fsm->arglen > 0,W_ERR_INVALID);
     buff = (char*)fsm->arg;
     xfsm = (w_xmlfsm_s*)fsm;
@@ -351,7 +351,7 @@ static w_err_t xmlfsm_handle_attr_name(w_fsm_s *fsm)
     w_err_t err;
     w_xmlfsm_s *xfsm;
     char *buff;
-    WIND_CHECK_RETURN(fsm->arg != W_NULL,W_ERR_PTR_NULL);
+    WIND_CHECK_RETURN(fsm->arg != W_NULL,W_ERR_NULL_PTR);
     WIND_CHECK_RETURN(fsm->arglen > 0,W_ERR_INVALID);
     buff = (char*)fsm->arg;
     xfsm = (w_xmlfsm_s*)fsm;
@@ -407,7 +407,7 @@ static w_err_t xmlfsm_handle_attr_value(w_fsm_s *fsm)
 {
     w_err_t err;
     w_xmlfsm_s *xfsm;
-    WIND_CHECK_RETURN(fsm->arg != W_NULL,W_ERR_PTR_NULL);
+    WIND_CHECK_RETURN(fsm->arg != W_NULL,W_ERR_NULL_PTR);
     WIND_CHECK_RETURN(fsm->arglen > 0,W_ERR_INVALID);
     xfsm = (w_xmlfsm_s*)fsm;
     while(xfsm->argidx < fsm->arglen)
@@ -447,7 +447,7 @@ static w_err_t xmlfsm_handle_node_value(w_fsm_s *fsm)
     w_err_t err;
     w_int32_t i;
     w_xmlfsm_s *xfsm;
-    WIND_CHECK_RETURN(fsm->arg != W_NULL,W_ERR_PTR_NULL);
+    WIND_CHECK_RETURN(fsm->arg != W_NULL,W_ERR_NULL_PTR);
     WIND_CHECK_RETURN(fsm->arglen > 0,W_ERR_INVALID);
     xfsm = (w_xmlfsm_s*)fsm;
     while(xfsm->argidx < fsm->arglen)
@@ -494,7 +494,7 @@ static w_err_t xmlfsm_handle_node_tail(w_fsm_s *fsm)
     w_err_t err;
     w_xmlfsm_s *xfsm;
     char *buff;
-    WIND_CHECK_RETURN(fsm->arg != W_NULL,W_ERR_PTR_NULL);
+    WIND_CHECK_RETURN(fsm->arg != W_NULL,W_ERR_NULL_PTR);
     WIND_CHECK_RETURN(fsm->arglen > 0,W_ERR_INVALID);
     buff = (char*)fsm->arg;
     xfsm = (w_xmlfsm_s*)fsm;
@@ -553,7 +553,7 @@ static w_err_t xmlfsm_handle_node_tail(w_fsm_s *fsm)
 static w_err_t xmlfsm_handle_end(w_fsm_s *fsm)
 {
     w_xmlfsm_s *xfsm;
-    WIND_CHECK_RETURN(fsm->arg != W_NULL,W_ERR_PTR_NULL);
+    WIND_CHECK_RETURN(fsm->arg != W_NULL,W_ERR_NULL_PTR);
     WIND_CHECK_RETURN(fsm->arglen > 0,W_ERR_INVALID);
     xfsm = (w_xmlfsm_s*)fsm;
     wind_debug("xfsm parse complete");
@@ -567,8 +567,8 @@ w_err_t wind_xml_fsm_init(w_xmlfsm_s *xfsm,char *name)
     w_err_t err;
     char *fsmname;
     static w_int32_t xfsm_id = 0;
-    WIND_ASSERT_RETURN(xfsm != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(name != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(xfsm != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(name != W_NULL,W_ERR_NULL_PTR);
     fsmname = (char*)wind_malloc(16);
     WIND_ASSERT_RETURN(fsmname != W_NULL,W_ERR_MEM);
     wind_memset(fsmname,0,16);
@@ -587,7 +587,7 @@ w_err_t wind_xml_fsm_init(w_xmlfsm_s *xfsm,char *name)
 w_err_t wind_xml_fsm_input(w_xmlfsm_s *xfsm,char *xstr,w_int32_t len)
 {
     w_err_t err;
-    WIND_ASSERT_RETURN(xfsm != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(xfsm != W_NULL,W_ERR_NULL_PTR);
     err = wind_fsm_input(&xfsm->fsm,xstr,len);
     return err;
 }
@@ -595,7 +595,7 @@ w_err_t wind_xml_fsm_input(w_xmlfsm_s *xfsm,char *xstr,w_int32_t len)
 
 w_err_t wind_xml_fsm_deinit(w_xmlfsm_s *xfsm)
 {
-    WIND_ASSERT_RETURN(xfsm != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(xfsm != W_NULL,W_ERR_NULL_PTR);
 
     wind_free(xfsm->fsm.obj.name);
     wind_fsm_destroy(&xfsm->fsm);

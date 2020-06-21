@@ -102,7 +102,7 @@ CASE_FUNC(alloc)
         EXPECT_EQ(itm->head.next,W_NULL);
     }
     err = wind_pool_free(test_pool,testblk[TNUM]);
-    EXPECT_EQ(err,W_ERR_PTR_NULL);
+    EXPECT_EQ(err,W_ERR_NULL_PTR);
     err = wind_pool_free(test_pool,(void*)&err);
     EXPECT_EQ(err,W_ERR_INVALID);
     err = wind_pool_free(test_pool,testblk[0]);

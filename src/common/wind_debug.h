@@ -39,7 +39,7 @@ extern "C" {
 //system error code
 #define W_ERR_OK                 0 //Successful implementation
 #define W_ERR_FAIL              -1 //Common error
-#define W_ERR_PTR_NULL          -2 //Error caused by null pointer 
+#define W_ERR_NULL_PTR          -2 //Error caused by null pointer 
 #define W_ERR_NO_OBJ            -3 //Error raised by object NOT exsisting
 #define W_ERR_OVERFLOW          -4 //Error caused by parameter out of bounds
 #define W_ERR_MEM               -5 //Error caused by memory allocation failure
@@ -53,6 +53,7 @@ extern "C" {
 #define W_ERR_CRC              -13 //Error caused by CRC checking error
 #define W_ERR_HARDFAULT        -14 //Error caused by hardware fault
 #define W_ERR_VERSION          -15 //Error caused by version information
+#define W_ERR_DROP_PACK        -16 //Error caused by package droped
 
 
 //---------------------------------------------------------------------

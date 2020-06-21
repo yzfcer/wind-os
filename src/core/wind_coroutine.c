@@ -128,9 +128,9 @@ w_err_t wind_coroutine_init(w_coroutine_s *coroutine,const char *name,w_uint16_t
 {
     w_thread_s *thread;
     wind_notice("init coroutine:%s",name != W_NULL?name:"null");
-    WIND_ASSERT_RETURN(coroutine != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(name != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(func != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(coroutine != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(name != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(func != W_NULL,W_ERR_NULL_PTR);
     thread = wind_thread_current();
     WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_FAIL);
     coroutine->cid = cid;
@@ -170,8 +170,8 @@ w_err_t wind_coroutine_destroy(w_coroutine_s *coroutine)
     w_err_t err;
     w_thread_s *thread;
     thread = wind_thread_current();
-    WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(coroutine != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(coroutine != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(coroutine->obj.magic == WIND_COROUTINE_MAGIC,W_ERR_INVALID);
     wind_notice("destroy coroutine:%s",wind_obj_name(coroutine));
     wind_disable_switch();
@@ -187,8 +187,8 @@ w_err_t wind_coroutine_yeild(w_coroutine_s *coroutine,void *arg)
 {
     w_thread_s *thread;
     thread = wind_thread_current();
-    WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(coroutine != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(coroutine != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(coroutine->obj.magic == WIND_COROUTINE_MAGIC,W_ERR_INVALID);
     CLR_F_COROUTINE_READY(coroutine);
     _wind_coroutine_dispatch();
@@ -199,7 +199,7 @@ w_err_t wind_coroutine_yeild(w_coroutine_s *coroutine,void *arg)
 w_err_t wind_coroutine_resume(w_coroutine_s *coroutine,void *arg)
 {
     //w_dlist_s *sleeplist = _wind_thread_sleep_list();
-    WIND_ASSERT_RETURN(coroutine != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(coroutine != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(coroutine->obj.magic == WIND_COROUTINE_MAGIC,W_ERR_INVALID);
     SET_F_COROUTINE_READY(coroutine);
     return W_ERR_OK;

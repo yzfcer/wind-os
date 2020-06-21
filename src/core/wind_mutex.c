@@ -61,7 +61,7 @@ w_mutex_s *wind_mutex_get(const char *name)
 
 w_err_t wind_mutex_init(w_mutex_s *mutex,const char *name)
 {
-    WIND_ASSERT_RETURN(mutex != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(mutex != W_NULL,W_ERR_NULL_PTR);
     wind_debug("init mutex:%s",name?name:"null");
     mutex->nest = 0;
     mutex->owner = (w_thread_s*)W_NULL;
@@ -88,7 +88,7 @@ w_mutex_s *wind_mutex_create(const char *name)
 
 w_err_t wind_mutex_trydestroy(w_mutex_s *mutex)
 {
-    WIND_ASSERT_RETURN(mutex != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(mutex != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(mutex->obj.magic == WIND_MUTEX_MAGIC,W_ERR_INVALID);
     wind_disable_switch();
     WIND_ASSERT_TODO_RETURN(!IS_F_MUTEX_LOCKED(mutex),wind_enable_interrupt(),W_ERR_FAIL);
@@ -102,7 +102,7 @@ w_err_t wind_mutex_destroy(w_mutex_s *mutex)
     w_err_t err;
     w_dnode_s *dnode;
     w_thread_s *thread;
-    WIND_ASSERT_RETURN(mutex != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(mutex != W_NULL,W_ERR_NULL_PTR);
     wind_debug("destroy mutex:%s",wind_obj_name(&mutex->obj));
     err = wind_obj_deinit(&mutex->obj,WIND_MUTEX_MAGIC,&mutexlist);
     WIND_ASSERT_RETURN(err == W_ERR_OK, W_ERR_FAIL);
@@ -124,7 +124,7 @@ w_err_t wind_mutex_destroy(w_mutex_s *mutex)
 w_err_t wind_mutex_lock(w_mutex_s *mutex)
 {
     w_thread_s *thread;
-    WIND_ASSERT_RETURN(mutex != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(mutex != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(mutex->obj.magic == WIND_MUTEX_MAGIC,W_ERR_INVALID);
     wind_disable_switch();
     thread = wind_thread_current();
@@ -157,7 +157,7 @@ w_err_t wind_mutex_lock(w_mutex_s *mutex)
 w_err_t wind_mutex_trylock(w_mutex_s *mutex)
 {
     w_err_t err;
-    WIND_ASSERT_RETURN(mutex != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(mutex != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(mutex->obj.magic == WIND_MUTEX_MAGIC,W_ERR_INVALID);
     wind_disable_switch();
     if (!IS_F_MUTEX_LOCKED(mutex))
@@ -177,7 +177,7 @@ w_err_t wind_mutex_unlock(w_mutex_s *mutex)
 {
     w_dnode_s *dnode;
     w_thread_s *thread;
-    WIND_ASSERT_RETURN(mutex != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(mutex != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(mutex->obj.magic == WIND_MUTEX_MAGIC,W_ERR_INVALID);
     wind_disable_switch();
     WIND_ASSERT_TODO_RETURN(IS_F_MUTEX_LOCKED(mutex),wind_enable_switch(),W_ERR_OK);

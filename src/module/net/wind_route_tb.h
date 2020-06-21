@@ -29,6 +29,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
+#if WIND_MODULE_NET_SUPPORT
 #define  WIND_FDB_TTL 1200
 typedef struct 
 {
@@ -41,12 +42,13 @@ typedef struct
 }w_route_tb_s;
 
 w_err_t wind_route_tb_insert(w_route_tb_s *route_tb);
-w_err_t wind_route_tb_tb_clear(void);
-w_err_t wind_route_tb_tb_init(void);
-w_err_t wind_route_tb_tb_flush(void);
+w_err_t wind_route_tb_clear(void);
+w_err_t wind_route_tb_init(void);
+w_err_t wind_route_tb_flush(void);
 w_route_tb_s *wind_route_tb_get(w_uint32_t destip);
 
 
+#endif // #if WIND_MODULE_NET_SUPPORT
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

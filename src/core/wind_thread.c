@@ -207,9 +207,9 @@ w_err_t wind_thread_init(w_thread_s *thread,
     w_stack_t *tmpstk;
     wind_notice("init thread:%s",name);
     wind_debug("pstk=0x%08x,stksize=0x%x",pstk,stksize);
-    WIND_ASSERT_RETURN(name != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(thread_func != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(pstk != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(name != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(thread_func != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(pstk != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(stksize > 0,W_ERR_INVALID);
     thread->magic = WIND_THREAD_MAGIC;
     PRIO_DNODE_INIT(thread->validnode);
@@ -291,7 +291,7 @@ w_thread_s *wind_thread_create_default(const char *name,
 
 w_err_t wind_thread_destroy(w_thread_s *thread)
 {
-    WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(thread->magic == WIND_THREAD_MAGIC,W_ERR_INVALID);
     if(IS_F_THREAD_NO_KILL(thread))
     {
@@ -316,7 +316,7 @@ w_err_t wind_thread_destroy(w_thread_s *thread)
 
 w_err_t wind_thread_setflag(w_thread_s *thread,w_int16_t flag)
 {
-    WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(thread->magic == WIND_THREAD_MAGIC,W_ERR_INVALID);
     if(flag & F_THREAD_NO_KILL)
         SET_F_THREAD_NO_KILL(thread);
@@ -330,7 +330,7 @@ w_err_t wind_thread_setflag(w_thread_s *thread,w_int16_t flag)
 
 w_err_t wind_thread_clrflag(w_thread_s *thread,w_int16_t flag)
 {
-    WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(thread->magic == WIND_THREAD_MAGIC,W_ERR_INVALID);
     if(flag & F_THREAD_NO_KILL)
         CLR_F_THREAD_NO_KILL(thread);
@@ -345,7 +345,7 @@ w_err_t wind_thread_clrflag(w_thread_s *thread,w_int16_t flag)
 w_err_t wind_thread_set_priority(w_thread_s *thread,w_int16_t prio)
 {
     w_int16_t minlim = 0,maxlim = 32767;
-    WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(thread->magic == WIND_THREAD_MAGIC,W_ERR_INVALID);
     if(!IS_F_THREAD_SYSTEM(thread))
     {
@@ -367,7 +367,7 @@ w_err_t wind_thread_set_priority(w_thread_s *thread,w_int16_t prio)
 
 w_err_t wind_thread_start(w_thread_s *thread)
 {
-    WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(thread->magic == WIND_THREAD_MAGIC,W_ERR_INVALID);
     wind_disable_interrupt();   
     thread->runstat = THREAD_STATUS_READY;
@@ -380,7 +380,7 @@ w_err_t wind_thread_start(w_thread_s *thread)
 
 w_err_t wind_thread_suspend(w_thread_s *thread)
 {
-    WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(thread->magic == WIND_THREAD_MAGIC,W_ERR_INVALID);
     wind_disable_interrupt();
     thread->runstat = THREAD_STATUS_SUSPEND;
@@ -393,7 +393,7 @@ w_err_t wind_thread_suspend(w_thread_s *thread)
 
 w_err_t wind_thread_resume(w_thread_s *thread)
 {
-    WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(thread->magic == WIND_THREAD_MAGIC,W_ERR_INVALID);
     wind_disable_interrupt();
     thread->runstat = THREAD_STATUS_READY;
@@ -408,7 +408,7 @@ w_err_t wind_thread_exit(w_err_t exitcode)
 {
     w_thread_s *thread;
     thread = wind_thread_current();
-    WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(thread->magic == WIND_THREAD_MAGIC,W_ERR_INVALID);
     wind_notice("exit thread:%s,exitcode:%d",thread->name,exitcode);
     CLR_F_THREAD_NO_KILL(thread);
@@ -497,7 +497,7 @@ w_err_t wind_thread_print_list(void)
     w_thread_s *thread;
     int cnt = 0;
     w_dlist_s *list = &threadlist;
-    WIND_ASSERT_RETURN(list != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(list != W_NULL,W_ERR_NULL_PTR);
     wind_printf("\r\nobject list:\r\n");
 
     foreach_node(dnode,list)

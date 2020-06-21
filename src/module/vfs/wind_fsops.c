@@ -72,7 +72,7 @@ w_err_t wind_fsops_register(w_fsops_s *ops)
 {
     w_err_t err = W_ERR_OK;
     w_fsops_s *tmpops;
-    WIND_ASSERT_RETURN(ops != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(ops != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(ops->obj.magic == (~WIND_FSTYPE_MAGIC),W_ERR_INVALID);
     wind_notice("register vfs ops:%s",wind_obj_name(&ops->obj));
     tmpops = wind_fsops_get(ops->obj.name);
@@ -93,7 +93,7 @@ w_err_t wind_fsops_register(w_fsops_s *ops)
 w_err_t wind_fsops_unregister(w_fsops_s *ops)
 {
     w_err_t err;
-    WIND_ASSERT_RETURN(ops != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(ops != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(ops->obj.magic == WIND_FSTYPE_MAGIC,W_ERR_INVALID);
     wind_notice("unregister vfs ops:%s",wind_obj_name(&ops->obj));
     err = wind_obj_deinit(&ops->obj,WIND_FSTYPE_MAGIC,&fs_ops_list);

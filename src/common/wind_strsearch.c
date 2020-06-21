@@ -34,7 +34,7 @@ w_err_t kmp_init(w_kmp_context_s *ctx,char *substr)
     w_int32_t k = -1;
     w_int32_t j = 0;
     w_int32_t len;
-    WIND_ASSERT_RETURN(ctx != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(ctx != W_NULL,W_ERR_NULL_PTR);
     wind_memset(ctx,0,sizeof(w_kmp_context_s));
     len = wind_strlen(substr);
     WIND_ASSERT_RETURN(len < KMP_SUBSTR_LEN,W_ERR_OVERFLOW);
@@ -87,7 +87,7 @@ w_int32_t kmp_search(w_kmp_context_s *ctx,char *str,char *substr,w_int32_t pos)
 w_err_t kmp_print_next(w_kmp_context_s *ctx)
 {
    w_int32_t i;
-   WIND_ASSERT_RETURN(ctx != W_NULL,W_ERR_PTR_NULL);
+   WIND_ASSERT_RETURN(ctx != W_NULL,W_ERR_NULL_PTR);
    for (i = 0; i < ctx->len; i++) 
        wind_printf("next[%d] = %d\n",i,ctx->next[i]);
    return W_ERR_OK;

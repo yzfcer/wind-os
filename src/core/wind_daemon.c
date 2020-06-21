@@ -56,7 +56,7 @@ w_err_t _wind_daemon_mod_init(void)
 }
 w_err_t wind_daemon_setflag(w_daemon_s *daemon,w_int16_t flag)
 {
-    WIND_ASSERT_RETURN(daemon != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(daemon != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(daemon->obj.magic == WIND_DAEMON_MAGIC,W_ERR_INVALID);
     if(flag & F_DAEMON_ENABLE)
         SET_F_DAEMON_ENABLE(daemon);
@@ -64,7 +64,7 @@ w_err_t wind_daemon_setflag(w_daemon_s *daemon,w_int16_t flag)
 }
 w_err_t wind_daemon_clrflag(w_daemon_s *daemon,w_int16_t flag)
 {
-    WIND_ASSERT_RETURN(daemon != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(daemon != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(daemon->obj.magic == WIND_DAEMON_MAGIC,W_ERR_INVALID);
     if(flag & F_DAEMON_ENABLE)
         CLR_F_DAEMON_ENABLE(daemon);
@@ -102,8 +102,8 @@ w_err_t wind_daemon_init(w_daemon_s *daemon,const char *name,w_daemon_fn daemon_
 {
     w_thread_s *thread;
     wind_notice("init daemon:%s",name?name:"null");
-    WIND_ASSERT_RETURN(daemon != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(daemon_func != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(daemon != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(daemon_func != W_NULL,W_ERR_NULL_PTR);
     thread = wind_thread_get(name);
     WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_INVALID);
     wind_thread_setflag(thread, F_THREAD_DAEMON | F_THREAD_SYSTEM);
@@ -144,7 +144,7 @@ w_err_t wind_daemon_destroy(w_daemon_s *daemon)
 {
     w_err_t err;
     w_thread_s *thread;
-    WIND_ASSERT_RETURN(daemon != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(daemon != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(daemon->obj.magic == WIND_DAEMON_MAGIC,W_ERR_INVALID);
     do
     {

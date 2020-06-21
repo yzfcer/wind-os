@@ -239,11 +239,11 @@ w_err_t wind_ymodem_init(ym_ctx_s *ctx,ym_dir_e dir,
                     w_uint8_t *frbuff,w_int32_t frbuffsize,
                     ym_write_fn write,ym_read_fn read)
 {
-    WIND_ASSERT_RETURN(ctx != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(frbuff != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(ctx != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(frbuff != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(frbuffsize >= YMODEM_BUFF_LEN,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(write != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(read != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(write != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(read != W_NULL,W_ERR_NULL_PTR);
     wind_log_open();
     wind_log_notice("--------------------------");
     wind_memset(ctx,0,sizeof(ym_ctx_s));
@@ -514,7 +514,7 @@ w_err_t wind_ymodem_end(ym_ctx_s *ctx)
 {
     wind_log_notice("YM_ERROR");
     wind_log_notice("YM_ERROR");
-    WIND_ASSERT_RETURN(ctx != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(ctx != W_NULL,W_ERR_NULL_PTR);
     wind_log_notice("wind_ymodem_end");
     if((ctx->stat == YM_SEND_PACK_DATA)&&(ctx->dir == YM_DIR_SEND))
     {

@@ -73,7 +73,7 @@ w_msgbox_s *wind_msgbox_get(const char *name)
 w_err_t wind_msgbox_init(w_msgbox_s *msgbox,const char *name)
 {
     wind_notice("init msgbox:%s",name?name:"null");
-    WIND_ASSERT_RETURN(msgbox != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(msgbox != W_NULL,W_ERR_NULL_PTR);
     DLIST_INIT(msgbox->msglist);
     msgbox->msgnum = 0;
     CLR_F_MSGBOX_POOL(msgbox);
@@ -106,7 +106,7 @@ w_err_t wind_msgbox_trydestroy(w_msgbox_s *msgbox)
 {
     w_dnode_s *dnode;
     w_thread_s *thread;
-    WIND_ASSERT_RETURN(msgbox != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(msgbox != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(msgbox->obj.magic == WIND_MSGBOX_MAGIC,W_ERR_INVALID);
     thread = wind_thread_current();
     WIND_ASSERT_RETURN(msgbox->owner == thread,W_ERR_FAIL);
@@ -126,7 +126,7 @@ w_err_t wind_msgbox_destroy(w_msgbox_s *msgbox)
     w_err_t err;
     w_dnode_s *dnode;
     w_thread_s *thread;
-    WIND_ASSERT_RETURN(msgbox != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(msgbox != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(msgbox->obj.magic == WIND_MSGBOX_MAGIC,W_ERR_INVALID);
     wind_notice("destroy msgbox:%s",wind_obj_name(&msgbox->obj));
     thread = wind_thread_current();
@@ -154,8 +154,8 @@ w_err_t wind_msgbox_destroy(w_msgbox_s *msgbox)
 w_err_t wind_msgbox_post(w_msgbox_s *msgbox,w_msg_s *pmsg)
 {
     w_thread_s *thread;
-    WIND_ASSERT_RETURN(msgbox != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(pmsg != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(msgbox != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(pmsg != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(msgbox->obj.magic == WIND_MSGBOX_MAGIC,W_ERR_FAIL);
     WIND_ASSERT_RETURN(msgbox->owner,W_ERR_FAIL);
     wind_disable_switch();
@@ -183,8 +183,8 @@ w_err_t wind_msgbox_wait(w_msgbox_s *msgbox,w_msg_s **pmsg,w_uint32_t timeout)
     w_dnode_s *dnode;
     w_thread_s *thread;
     w_dlist_s *sleeplist = _wind_thread_sleep_list();
-    WIND_ASSERT_RETURN(msgbox != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(pmsg != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(msgbox != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(pmsg != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(msgbox->obj.magic == WIND_MSGBOX_MAGIC,W_ERR_FAIL);
     WIND_ASSERT_RETURN(msgbox->owner,W_ERR_FAIL);
     thread = wind_thread_current();
@@ -214,7 +214,7 @@ w_err_t wind_msgbox_wait(w_msgbox_s *msgbox,w_msg_s **pmsg,w_uint32_t timeout)
         if(msgbox->msgnum <= 0)
         {
             thread->runstat = THREAD_STATUS_READY;
-            return W_ERR_PTR_NULL;
+            return W_ERR_NULL_PTR;
         }
         dnode = dlist_remove_head(&msgbox->msglist);
         *pmsg = NODE_TO_MSG(dnode);
@@ -236,8 +236,8 @@ w_err_t wind_msgbox_trywait(w_msgbox_s *msgbox,w_msg_s **pmsg)
     w_err_t err;
     w_dnode_s *dnode;
     w_thread_s *thread;
-    WIND_ASSERT_RETURN(msgbox != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(pmsg != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(msgbox != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(pmsg != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(msgbox->obj.magic == WIND_MSGBOX_MAGIC,W_ERR_FAIL);
     WIND_ASSERT_RETURN(msgbox->owner,W_ERR_FAIL);
     thread = wind_thread_current();

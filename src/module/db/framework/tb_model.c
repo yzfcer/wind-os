@@ -62,9 +62,9 @@ tb_model_s *wind_tbmodel_get(const char *name)
 w_err_t wind_tbmodel_register(tb_model_s *tbmodel)
 {
     tb_model_s *tbm;    
-    WIND_ASSERT_RETURN(tbmodel != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(tbmodel != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(tbmodel->obj.magic == (~TB_MODEL_MAGIC),W_ERR_INVALID);
-    WIND_ASSERT_RETURN(tbmodel->obj.name != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(tbmodel->obj.name != W_NULL,W_ERR_NULL_PTR);
     wind_notice("register table:%s",tbmodel->obj.name);
     tbm = wind_tbmodel_get(tbmodel->obj.name);
     if(tbm != W_NULL)
@@ -79,7 +79,7 @@ w_err_t wind_tbmodel_register(tb_model_s *tbmodel)
 w_err_t wind_tbmodel_unregister(tb_model_s *tbmodel)
 {
     w_err_t err;
-    WIND_ASSERT_RETURN(tbmodel != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(tbmodel != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(tbmodel->obj.magic == TB_MODEL_MAGIC,W_ERR_INVALID);
     wind_notice("unregister table:%s",tbmodel->obj.name);
     err = wind_obj_deinit(&tbmodel->obj,TB_MODEL_MAGIC,&tbmodellist);
@@ -118,7 +118,7 @@ w_err_t wind_tbmodel_print(tb_model_s *tbmodel)
 {
     w_int32_t i;
     tbmodel_item_s *item;
-    WIND_ASSERT_RETURN(tbmodel != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(tbmodel != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(tbmodel->obj.magic == TB_MODEL_MAGIC,W_ERR_INVALID);
     wind_printf("\r\ntable %s member attribution:\r\n",tbmodel->obj.name);
     wind_print_space(7);
@@ -143,7 +143,7 @@ w_err_t wind_tbmodel_print_list(void)
     tb_model_s *tbmodel;
     int cnt = 0;
     w_dlist_s *list = &tbmodellist;
-    WIND_ASSERT_RETURN(list != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(list != W_NULL,W_ERR_NULL_PTR);
     wind_printf("\r\n\r\ntbmodel list:\r\n");
     foreach_node(dnode,list)
     {

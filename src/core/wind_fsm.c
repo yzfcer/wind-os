@@ -75,7 +75,7 @@ static w_err_t wind_fsm_run(w_fsm_s *fsm)
 {
     w_err_t err;
     fsm_step_fn func;
-    WIND_ASSERT_RETURN(fsm != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(fsm != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(fsm->obj.magic == WIND_FSM_MAGIC,W_ERR_INVALID);
     err = W_ERR_OK;
     wind_mutex_lock(&fsm->mutex);
@@ -109,9 +109,9 @@ w_err_t _wind_fsm_mod_init(void)
 w_err_t wind_fsm_model_register(w_fsm_model_s *fsm_model)
 {
     w_fsm_model_s *model;    
-    WIND_ASSERT_RETURN(fsm_model != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(fsm_model != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(fsm_model->obj.magic == (~WIND_FSM_MODEL_MAGIC),W_ERR_INVALID);
-    WIND_ASSERT_RETURN(fsm_model->obj.name != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(fsm_model->obj.name != W_NULL,W_ERR_NULL_PTR);
     wind_notice("register fsm_model:%s",wind_obj_name(&fsm_model->obj));
     model = wind_fsm_model_get(fsm_model->obj.name);
     if(model != W_NULL)
@@ -126,7 +126,7 @@ w_err_t wind_fsm_model_register(w_fsm_model_s *fsm_model)
 w_err_t wind_fsm_model_unregister(w_fsm_model_s *fsm_model)
 {
     w_err_t err;
-    WIND_ASSERT_RETURN(fsm_model != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(fsm_model != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(fsm_model->obj.magic == WIND_FSM_MODEL_MAGIC,W_ERR_INVALID);
     err = wind_obj_deinit(&fsm_model->obj,WIND_FSM_MODEL_MAGIC,&modellist);
     return err;
@@ -146,9 +146,9 @@ w_err_t wind_fsm_init(w_fsm_s *fsm,char *name,w_int32_t id,char *modelname)
 {
     w_err_t err;
     w_fsm_model_s *model;
-    WIND_ASSERT_RETURN(fsm != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(name != W_NULL,W_ERR_PTR_NULL);
-    WIND_ASSERT_RETURN(modelname != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(fsm != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(name != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(modelname != W_NULL,W_ERR_NULL_PTR);
     do
     {
         model = wind_fsm_model_get(modelname);
@@ -196,7 +196,7 @@ w_fsm_s *wind_fsm_create(char *name,w_int32_t id,char *modelname)
 w_err_t wind_fsm_destroy(w_fsm_s *fsm)
 {
     w_err_t err;
-    WIND_ASSERT_RETURN(fsm != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(fsm != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(fsm->obj.magic == WIND_FSM_MAGIC,W_ERR_INVALID);
     do
     {
@@ -218,7 +218,7 @@ w_fsm_s *wind_fsm_get(char *name)
 w_err_t wind_fsm_start(w_fsm_s *fsm)
 {
     w_err_t err;
-    WIND_ASSERT_RETURN(fsm != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(fsm != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(fsm->obj.magic == WIND_FSM_MAGIC,W_ERR_INVALID);
     wind_mutex_lock(&fsm->mutex);
     do
@@ -234,7 +234,7 @@ w_err_t wind_fsm_start(w_fsm_s *fsm)
 
 w_err_t wind_fsm_stop(w_fsm_s *fsm)
 {
-    WIND_ASSERT_RETURN(fsm != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(fsm != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(fsm->obj.magic == WIND_FSM_MAGIC,W_ERR_INVALID);
     wind_mutex_lock(&fsm->mutex);
     fsm->state = FSM_STAT_STOP;
@@ -246,7 +246,7 @@ w_err_t wind_fsm_stop(w_fsm_s *fsm)
 w_err_t wind_fsm_wait(w_fsm_s *fsm)
 {
     w_err_t err;
-    WIND_ASSERT_RETURN(fsm != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(fsm != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(fsm->obj.magic == WIND_FSM_MAGIC,W_ERR_INVALID);
     wind_mutex_lock(&fsm->mutex);
     do
@@ -262,7 +262,7 @@ w_err_t wind_fsm_wait(w_fsm_s *fsm)
 w_err_t wind_fsm_input(w_fsm_s *fsm,void *arg,w_int32_t arglen)
 {
     w_err_t err;
-    WIND_ASSERT_RETURN(fsm != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(fsm != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(fsm->obj.magic == WIND_FSM_MAGIC,W_ERR_INVALID);
     wind_mutex_lock(&fsm->mutex);
     do
@@ -284,7 +284,7 @@ w_err_t wind_fsm_input(w_fsm_s *fsm,void *arg,w_int32_t arglen)
 w_err_t wind_fsm_sleep(w_fsm_s *fsm,w_int32_t time_ms)
 {
     w_err_t err;
-    WIND_ASSERT_RETURN(fsm != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(fsm != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(fsm->obj.magic == WIND_FSM_MAGIC,W_ERR_INVALID);
     wind_mutex_lock(&fsm->mutex);
     do
@@ -303,7 +303,7 @@ w_err_t wind_fsm_wakeup(w_fsm_s *fsm)
 {
     w_err_t err;
     w_uint32_t tick;
-    WIND_ASSERT_RETURN(fsm != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(fsm != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(fsm->obj.magic == WIND_FSM_MAGIC,W_ERR_INVALID);
     wind_mutex_lock(&fsm->mutex);
     do
@@ -322,9 +322,9 @@ w_err_t wind_fsm_wakeup(w_fsm_s *fsm)
 
 w_err_t wind_fsm_change_step(w_fsm_s *fsm,w_int32_t new_step)
 {
-    WIND_ASSERT_RETURN(fsm != W_NULL,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(fsm != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(fsm->obj.magic == WIND_FSM_MAGIC,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(new_step < fsm->model->step_cnt,W_ERR_PTR_NULL);
+    WIND_ASSERT_RETURN(new_step < fsm->model->step_cnt,W_ERR_NULL_PTR);
     wind_mutex_lock(&fsm->mutex);
     wind_debug("fsm %s goto step %s",wind_obj_name(&fsm->obj),
                 fsm->model->steplist[new_step]);
