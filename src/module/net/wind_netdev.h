@@ -39,7 +39,7 @@ extern "C" {
 #define WIND_NETDEV_DEF(name) w_netdev_s netdev_##name = {WIND_NETNODE_INFO(name),{{0,0,0,0,0,0},0,0,0}};
 #define WIND_NETDEV_DECLARE(name) extern w_netdev_s netdev_##name;
 #define WIND_NETDEV(name) &netdev_##name
-
+extern struct __w_netdev_s;
 typedef struct __w_netdev_s w_netdev_s;
 typedef struct 
 {

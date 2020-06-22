@@ -92,12 +92,12 @@ void wind_skb_get_ether_dstmac(w_skb_s *skb,w_uint8_t *macaddr)
 }
 
 
-w_uint16_t wind_skb_get_lay3_proto(w_skb_s *skb)
+w_uint16_t wind_skb_get_ether_proto(w_skb_s *skb)
 {
     w_uint16_t proto;
     proto = wind_skb_get_uint16(skb,skb->lay2_idx+12);
     if(proto == 0x8100)
-        proto = wind_skb_get_uint16(skb,16);
+        proto = wind_skb_get_uint16(skb,skb->lay2_idx+16);
     return proto;
 }
 

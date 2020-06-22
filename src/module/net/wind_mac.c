@@ -108,9 +108,9 @@ w_bool_t wind_mac_is_mult(w_uint8_t *macaddr)
     return W_FALSE;
 }
 
-w_bool_t wind_mac_is_equal(w_uint8_t *srcamc,w_uint8_t *dstamc)
+w_bool_t wind_mac_is_equal(w_uint8_t *srcmac,w_uint8_t *dstmac)
 {
-    return (wind_memcmp(srcamc,dstamc,MAC_ADDR_LEN) == 0)?W_TRUE:W_FALSE;
+    return (wind_memcmp(srcmac,dstmac,MAC_ADDR_LEN) == 0)?W_TRUE:W_FALSE;
 }
 
 #endif // #if WIND_MODULE_NET_SUPPORT

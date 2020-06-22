@@ -37,7 +37,7 @@ w_err_t wind_mac_from_str(w_uint8_t *macaddr,char*macstr);
 w_bool_t wind_mac_is_broad(w_uint8_t *macaddr);
 w_bool_t wind_mac_is_zero(w_uint8_t *macaddr);
 w_bool_t wind_mac_is_mult(w_uint8_t *macaddr);
-w_bool_t wind_mac_is_equal(w_uint8_t *srcamc,w_uint8_t *dstamc);
+w_bool_t wind_mac_is_equal(w_uint8_t *srcmac,w_uint8_t *dstmac);
 
 
 
