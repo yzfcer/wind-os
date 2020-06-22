@@ -290,15 +290,16 @@ extern "C" {
 //net protocol stack
 //-------------------------------------------------------------------------------
 #if WIND_MODULE_NET_SUPPORT
-#define WIND_NET_ARP_SUPPORT  1
-#define WIND_NET_ICMP_SUPPORT 1
-#define WIND_NET_IGMP_SUPPORT 1
-#define WIND_NET_IP_SUPPORT   1
-#define WIND_NET_TCP_SUPPORT  1
-#define WIND_NET_UDP_SUPPORT  1
-#define WIND_NET_DHCP_SUPPORT 1
-#define WIND_NET_DNS_SUPPORT  1
-#define WIND_NET_TFTP_SUPPORT 1
+#define WIND_NET_ETHER_SUPPORT  1
+#define WIND_NET_ARP_SUPPORT    1
+#define WIND_NET_ICMP_SUPPORT   1
+#define WIND_NET_IGMP_SUPPORT   1
+#define WIND_NET_IP_SUPPORT     1
+#define WIND_NET_TCP_SUPPORT    1
+#define WIND_NET_UDP_SUPPORT    1
+#define WIND_NET_DHCP_SUPPORT   1
+#define WIND_NET_DNS_SUPPORT    1
+#define WIND_NET_TFTP_SUPPORT   1
 
 #define WIND_FDB_MAX_NUM 32
 #define WIND_ARP_TB_MAX_NUM 32

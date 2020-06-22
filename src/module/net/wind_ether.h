@@ -4,56 +4,45 @@
 **                                       yzfcer@163.com
 **
 **--------------File infomation-------------------------------------------------------------------------
-** FileName    : wind_arp_tb.h
+** FileName    : wind_ether.h
 ** Author      : Jason Zhou
-** Last Date   : 2020-06-17
+** Last Date   : 2020-06-16
 ** Description : 
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou
 ** Version     : v1.0
-** Date        : 2020-06-17
+** Date        : 2020-06-16
 ** Description : First version
 **
 **--------------Cureent version-------------------------------------------------------------------------
 ** Modify      : Jason Zhou
-** Date        : 2020-06-17
+** Date        : 2020-06-16
 ** Description : 
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
-#ifndef WIND_ARP_TB_H__
-#define WIND_ARP_TB_H__
+#ifndef WIND_ETHER_H__
+#define WIND_ETHER_H__
 #include "wind_config.h"
 #include "wind_type.h"
-#include "wind_debug.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
-#if WIND_MODULE_NET_SUPPORT
-#define  WIND_ARP_TB_TTL 150
-typedef struct 
+#if WIND_NET_ETHER_SUPPORT
+
+typedef struct
 {
-    w_uint32_t ipaddr;
-    w_uint8_t hwtype;
-    w_uint8_t flags;
-    w_uint8_t mac[6];
-    w_uint16_t enable:1;
-    w_uint16_t ttl;
-    char *dev_name;
-}w_arp_tb_s;
+    w_uint8_t srcmac[6];
+    w_uint8_t dstmac[6];
+    w_uint16_t l3proto;
+}w_etherhead_s;
 
-w_err_t wind_arp_tb_init(void);
-w_err_t wind_arp_tb_deinit(void);
-w_err_t wind_arp_tb_update(w_arp_tb_s *arp_tb);
-w_err_t wind_arp_tb_clear(void);
-w_err_t wind_arp_tb_flush(void);
-w_arp_tb_s *wind_arp_tb_get(w_uint32_t ipaddr);
-w_err_t wind_arp_tb_print(void);
 
-#endif // #if WIND_MODULE_NET_SUPPORT
+
+#endif // #if WIND_NET_ETHER_SUPPORT
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus
-#endif //#ifndef WIND_ARP_TB_H__
+#endif //#ifndef WIND_ETHER_H__
 

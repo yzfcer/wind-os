@@ -26,6 +26,8 @@
 #include "wind_timer.h"
 #include "wind_string.h"
 #include "wind_core.h"
+#include "wind_ip.h"
+#include "wind_mac.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
@@ -160,13 +162,21 @@ w_err_t wind_arp_tb_print(void)
 {
     w_int32_t i;
     w_arp_tb_s *arpt;
+    char macstr[20];
+    char ipstr[16];
+    wind_print_space(7);
+    wind_printf("%-20s %-16s %-6s %-12s","mac_addr","ip_addr","hwtype","dev");
+    wind_print_space(7);
     for(i = 0;i < WIND_ARP_TB_MAX_NUM;i ++)
     {
         if(!arp_tb_list[i].enable)
             continue;
         arpt = &arp_tb_list[i];
-
+        wind_mac_to_str(arpt->mac,macstr,':');
+        wind_ip_to_str(arpt->ipaddr,ipstr);
+        wind_printf("%-20s %-16s %-6d %-12s",macstr,ipstr,arpt->hwtype,arpt->dev_name);
     }
+    wind_print_space(7);
     return W_ERR_OK;
 }
 

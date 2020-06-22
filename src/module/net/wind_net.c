@@ -33,6 +33,9 @@ extern "C" {
 #endif // #ifdef __cplusplus
 #if WIND_MODULE_NET_SUPPORT
 
+#if WIND_NET_ETHER_SUPPORT
+WIND_NETNODE_DECLARE(ether);
+#endif
 #if WIND_NET_ARP_SUPPORT
 WIND_NETNODE_DECLARE(arp);
 #endif
@@ -63,6 +66,9 @@ WIND_NETNODE_DECLARE(tftp);
 
 static w_err_t wind_netnodes_regi(void)
 {
+#if WIND_NET_ETHER_SUPPORT
+    wind_netnode_register(NETNODE(ether));
+#endif
 #if WIND_NET_ARP_SUPPORT
     wind_netnode_register(NETNODE(arp));
 #endif

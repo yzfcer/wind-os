@@ -32,12 +32,13 @@ extern "C" {
 #if WIND_MODULE_NET_SUPPORT
 typedef struct 
 {
-    w_uint8_t port_id;
+    //w_uint8_t port_id;
     w_uint8_t mask_bits;
     w_uint8_t is_default:1;
     w_uint8_t enable    :1;
     w_uint32_t destip;
     w_uint32_t next_hop;
+    char *dev_name;
 }w_route_tb_s;
 
 w_err_t wind_route_tb_init(void);
@@ -46,6 +47,7 @@ w_err_t wind_route_tb_insert(w_route_tb_s *route_tb);
 w_err_t wind_route_tb_clear(void);
 w_err_t wind_route_tb_flush(void);
 w_route_tb_s *wind_route_tb_get(w_uint32_t destip);
+w_err_t wind_route_tb_print(void);
 
 
 #endif // #if WIND_MODULE_NET_SUPPORT

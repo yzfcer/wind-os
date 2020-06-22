@@ -173,6 +173,7 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_arp_tb.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_dhcp.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_dns.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_ether.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_fdb.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_icmp.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_igmp.c" />
@@ -359,6 +360,7 @@
     <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_arp_tb.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_dhcp.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_dns.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_ether.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_fdb.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_icmp.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_igmp.h" />

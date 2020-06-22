@@ -46,7 +46,7 @@ typedef struct
     w_uint8_t mac[6];
     w_uint32_t ip;
     w_uint32_t gw;
-    w_uint32_t mask;    
+    w_uint32_t mask;
 }w_netdev_param_s;
 
 struct __w_netdev_s

@@ -4,56 +4,65 @@
 **                                       yzfcer@163.com
 **
 **--------------File infomation-------------------------------------------------------------------------
-** FileName    : wind_arp_tb.h
+** FileName    : wind_ether.c
 ** Author      : Jason Zhou
-** Last Date   : 2020-06-17
+** Last Date   : 2020-06-16
 ** Description : 
 **              
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou
 ** Version     : v1.0
-** Date        : 2020-06-17
+** Date        : 2020-06-16
 ** Description : First version
 **
 **--------------Cureent version-------------------------------------------------------------------------
 ** Modify      : Jason Zhou
-** Date        : 2020-06-17
+** Date        : 2020-06-16
 ** Description : 
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
-#ifndef WIND_ARP_TB_H__
-#define WIND_ARP_TB_H__
-#include "wind_config.h"
-#include "wind_type.h"
+#include "wind_ether.h"
 #include "wind_debug.h"
+#include "wind_skb.h"
+#include "wind_netnode.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
-#if WIND_MODULE_NET_SUPPORT
-#define  WIND_ARP_TB_TTL 150
-typedef struct 
+#if WIND_NET_ETHER_SUPPORT
+
+static w_err_t ether_handle_req(w_netnode_s *netnode,w_skb_s *skb,w_etherhead_s *etherhead)
 {
-    w_uint32_t ipaddr;
-    w_uint8_t hwtype;
-    w_uint8_t flags;
-    w_uint8_t mac[6];
-    w_uint16_t enable:1;
-    w_uint16_t ttl;
-    char *dev_name;
-}w_arp_tb_s;
+    return W_ERR_FAIL;
+}
 
-w_err_t wind_arp_tb_init(void);
-w_err_t wind_arp_tb_deinit(void);
-w_err_t wind_arp_tb_update(w_arp_tb_s *arp_tb);
-w_err_t wind_arp_tb_clear(void);
-w_err_t wind_arp_tb_flush(void);
-w_arp_tb_s *wind_arp_tb_get(w_uint32_t ipaddr);
-w_err_t wind_arp_tb_print(void);
+static w_err_t ether_handle_ack(w_netnode_s *netnode,w_skb_s *skb,w_etherhead_s *etherhead)
+{
+    return W_ERR_FAIL;
+}
+static w_err_t ether_init(w_netnode_s *netnode)
+{
+    return W_ERR_FAIL;
+}
+static w_err_t ether_deinit(w_netnode_s *netnode)
+{
+    return W_ERR_FAIL;
+}
 
-#endif // #if WIND_MODULE_NET_SUPPORT
+static w_err_t ether_input(w_netnode_s *netnode,w_skb_s *skb)
+{
+    return W_ERR_FAIL;
+}
+static w_err_t ether_output(w_netnode_s *netnode,w_skb_s *skb)
+{
+    return W_ERR_FAIL;
+}
+
+
+
+WIND_NETNODE_DEF(ether);
+#endif // #if WIND_NET_ETHER_SUPPORT
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus
-#endif //#ifndef WIND_ARP_TB_H__
 
