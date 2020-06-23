@@ -27,6 +27,7 @@
 #include "wind_skb.h"
 #include "wind_mac.h"
 #include "wind_netnode.h"
+#include "wind_netdev.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
