@@ -37,11 +37,6 @@ extern "C" {
 #if WIND_EVENT_SUPPORT
 #define WIND_EVENT_MAGIC 0x5A9C524C
 
-#define F_EVENT_POOL (0x01 << 0) //Mark whether the event object is allocated through the memory pool
-#define IS_F_EVENT_POOL(event) ((event->obj.userflag & F_EVENT_POOL) == F_EVENT_POOL)
-#define SET_F_EVENT_POOL(event) (event->obj.userflag |= F_EVENT_POOL)
-#define CLR_F_EVENT_POOL(event) (event->obj.userflag &= (~F_EVENT_POOL))
-
 typedef struct __w_event_s w_event_s;
 typedef void (*w_event_cb_fn)(w_event_s *event,void *arg);
 

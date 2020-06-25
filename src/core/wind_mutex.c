@@ -79,7 +79,7 @@ w_mutex_s *wind_mutex_create(const char *name)
     err = wind_mutex_init(mutex,name);
     if(err == W_ERR_OK)
     {
-        SET_F_MUTEX_POOL(mutex);
+		SET_F_OBJ_POOL(mutex->obj);
         return mutex;
     }
     mutex_free(mutex);
@@ -119,7 +119,7 @@ w_err_t wind_mutex_destroy(w_mutex_s *mutex)
         thread->cause = CAUSE_LOCK;
     }
     wind_enable_switch();
-    if(IS_F_MUTEX_POOL(mutex))
+    if(IS_F_OBJ_POOL(mutex->obj))
         mutex_free(mutex);
     return W_ERR_OK;
 }

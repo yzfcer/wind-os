@@ -76,7 +76,7 @@ w_err_t wind_msgbox_init(w_msgbox_s *msgbox,const char *name)
     WIND_ASSERT_RETURN(msgbox != W_NULL,W_ERR_NULL_PTR);
     DLIST_INIT(msgbox->msglist);
     msgbox->msgnum = 0;
-    CLR_F_MSGBOX_POOL(msgbox);
+	CLR_F_OBJ_POOL(msgbox->obj);
     msgbox->owner = wind_thread_current();
     wind_obj_init(&msgbox->obj,WIND_MSGBOX_MAGIC,name,&msgboxlist);
 
@@ -94,7 +94,7 @@ w_msgbox_s *wind_msgbox_create(const char *name)
     err = wind_msgbox_init(msgbox,name);
     if(err == W_ERR_OK)
     {
-        SET_F_MSGBOX_POOL(msgbox);
+        SET_F_OBJ_POOL(msgbox->obj);
         return msgbox;
     }
     msgbox_free(msgbox);
@@ -146,7 +146,7 @@ w_err_t wind_msgbox_destroy(w_msgbox_s *msgbox)
     {
         wind_warn("msgbox:%s is NOT empty while destroying it.",wind_obj_name(&msgbox->obj));
     }
-    if(IS_F_MSGBOX_POOL(msgbox))
+    if(IS_F_OBJ_POOL(msgbox->obj))
         msgbox_free(msgbox);
     return W_ERR_OK;
 }

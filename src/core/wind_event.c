@@ -84,7 +84,7 @@ w_event_s *wind_event_create(const char *name)
     err = wind_event_init(event,name);
     if(err == W_ERR_OK)
     {
-        SET_F_EVENT_POOL(event);
+        SET_F_OBJ_POOL(event->obj);
         return event;
     }
     event_free(event);
@@ -111,7 +111,7 @@ w_err_t wind_event_destroy(w_event_s *event)
         wind_warn("event:%s is NOT empty while destroying it.",
             wind_obj_name(&event->obj));
     }
-    if(IS_F_EVENT_POOL(event))
+    if(IS_F_OBJ_POOL(event->obj))
         event_free(event);
     event->cbcnt = 0;
     return W_ERR_OK;

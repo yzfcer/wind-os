@@ -71,7 +71,7 @@ COMMAND_MAIN(daemon,argc,argv)
         WIND_ASSERT_RETURN(argc == 3,W_ERR_INVALID);
         daemon = wind_daemon_get(argv[2]);
         WIND_ASSERT_RETURN(daemon != W_NULL,W_ERR_INVALID);
-        wind_daemon_setflag(daemon,F_DAEMON_ENABLE);
+		wind_obj_setflag(&daemon->obj,F_OBJ_ENABLE);
         return W_ERR_OK;
     }
     else if(wind_strcmp(argv[1],"disable") == 0)
@@ -79,7 +79,7 @@ COMMAND_MAIN(daemon,argc,argv)
         WIND_ASSERT_RETURN(argc == 3,W_ERR_INVALID);
         daemon = wind_daemon_get(argv[2]);
         WIND_ASSERT_RETURN(daemon != W_NULL,W_ERR_INVALID);
-        wind_daemon_clrflag(daemon,F_DAEMON_ENABLE);
+		wind_obj_clrflag(&daemon->obj,F_OBJ_ENABLE);
         return W_ERR_OK;
     }
     return W_ERR_FAIL;

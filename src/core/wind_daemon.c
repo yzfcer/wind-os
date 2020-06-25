@@ -54,22 +54,7 @@ w_err_t _wind_daemon_mod_init(void)
     err = wind_pool_create("daemon",daemonpool,sizeof(daemonpool),sizeof(w_daemon_s));
     return err;
 }
-w_err_t wind_daemon_setflag(w_daemon_s *daemon,w_int16_t flag)
-{
-    WIND_ASSERT_RETURN(daemon != W_NULL,W_ERR_NULL_PTR);
-    WIND_ASSERT_RETURN(daemon->obj.magic == WIND_DAEMON_MAGIC,W_ERR_INVALID);
-    if(flag & F_DAEMON_ENABLE)
-        SET_F_DAEMON_ENABLE(daemon);
-    return W_ERR_OK;
-}
-w_err_t wind_daemon_clrflag(w_daemon_s *daemon,w_int16_t flag)
-{
-    WIND_ASSERT_RETURN(daemon != W_NULL,W_ERR_NULL_PTR);
-    WIND_ASSERT_RETURN(daemon->obj.magic == WIND_DAEMON_MAGIC,W_ERR_INVALID);
-    if(flag & F_DAEMON_ENABLE)
-        CLR_F_DAEMON_ENABLE(daemon);
-    return W_ERR_OK;
-}
+
 
 w_err_t _wind_daemon_period_check(void)
 {
@@ -80,7 +65,7 @@ w_err_t _wind_daemon_period_check(void)
     foreach_node(dnode,&daemonlist)
     {
         daemon = NODE_TO_DAEMON(dnode);
-        if(!IS_F_DAEMON_ENABLE(daemon))
+        if(!IS_F_OBJ_ENABLE(daemon->obj))
             continue;
         thread = wind_thread_get(daemon->obj.name);
         if(thread == W_NULL)
@@ -109,7 +94,7 @@ w_err_t wind_daemon_init(w_daemon_s *daemon,const char *name,w_daemon_fn daemon_
     wind_thread_setflag(thread, F_THREAD_DAEMON | F_THREAD_SYSTEM);
     daemon->daemon_func = daemon_func;
     wind_obj_init(&daemon->obj,WIND_DAEMON_MAGIC,name,&daemonlist);
-    SET_F_DAEMON_ENABLE(daemon);
+    SET_F_OBJ_ENABLE(daemon->obj);
     return W_ERR_OK;
 }
 
@@ -127,7 +112,7 @@ w_daemon_s *wind_daemon_create(const char *name,w_daemon_fn daemon_func)
         WIND_ASSERT_BREAK(new_daemon != W_NULL,W_ERR_MEM,"alloc daemon obj failed");
         err = wind_daemon_init(new_daemon,name,daemon_func);
         WIND_ASSERT_BREAK(err == W_ERR_OK,err,"init daemon obj failed");
-        SET_F_DAEMON_POOL(new_daemon);
+        SET_F_OBJ_POOL(new_daemon->obj);
     }while(0);
     if(err != W_ERR_OK)
     {
@@ -157,7 +142,7 @@ w_err_t wind_daemon_destroy(w_daemon_s *daemon)
         WIND_ASSERT_BREAK(thread != W_NULL,W_ERR_NO_OBJ,"thread is NOT exist");
         wind_thread_clrflag(thread,F_THREAD_DAEMON);
         
-        if(IS_F_DAEMON_POOL(daemon))
+        if(IS_F_OBJ_POOL(daemon->obj))
             daemon_free(daemon);
     }while(0);
     return err;

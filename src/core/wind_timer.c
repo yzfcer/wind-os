@@ -99,7 +99,7 @@ w_timer_s* wind_timer_create(const char *name,
     err = wind_timer_init(timer,name,period_ms,func,arg,flag);
     if(err == W_ERR_OK)
     {
-        SET_F_TIMER_POOL(timer);
+		SET_F_OBJ_POOL(timer->obj);
         return timer;
     }
     timer_free(timer);
@@ -138,7 +138,7 @@ w_err_t wind_timer_destroy(w_timer_s* timer)
     wind_notice("destroy timer:%s",wind_obj_name(&timer->obj));
     err = wind_obj_deinit(&timer->obj,WIND_TIMER_MAGIC,&timerlist);
     WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_FAIL);
-    if(IS_F_TIMER_POOL(timer))
+	if(IS_F_OBJ_POOL(timer->obj))
         timer_free(timer);
     return W_ERR_OK;
 }

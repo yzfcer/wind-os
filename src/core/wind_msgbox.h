@@ -38,11 +38,6 @@ extern "C" {
 #if WIND_MSGBOX_SUPPORT
 #define WIND_MSGBOX_MAGIC 0x378A523B
 
-#define F_MSGBOX_POOL (0x01 << 0) //Mark whether the msgbox object is allocated through the memory pool
-#define IS_F_MSGBOX_POOL(msgbox) ((msgbox->obj.userflag & F_MSGBOX_POOL) == F_MSGBOX_POOL)
-#define SET_F_MSGBOX_POOL(msgbox) (msgbox->obj.userflag |= F_MSGBOX_POOL)
-#define CLR_F_MSGBOX_POOL(msgbox) (msgbox->obj.userflag &= (~F_MSGBOX_POOL))
-
 //Message header information
 typedef struct _w_msg_s
 {

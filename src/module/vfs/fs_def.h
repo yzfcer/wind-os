@@ -37,12 +37,6 @@
 #define FMODE_RW   0x03
 #define FMODE_CRT  0x04
 #define FMODE_A    0x08
-#if 0
-#define F_VFS_POOL (0x01 << 0) //Mark whether the vfs object is enabled
-#define IS_F_VFS_POOL(fs) ((fs->userflag & F_VFS_POOL) == F_VFS_POOL)
-#define SET_F_VFS_POOL(fs) (fs->userflag |= F_VFS_POOL)
-#define CLR_F_VFS_POOL(fs) (fs->userflag &= (~F_VFS_POOL))
-#endif
 
 #define F_VFS_MOUNT (0x01 << 0) //Mark whether the FS object has been mounted
 #define IS_F_VFS_MOUNT(vfs) ((vfs->obj.userflag & F_VFS_MOUNT) == F_VFS_MOUNT)

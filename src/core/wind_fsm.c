@@ -181,7 +181,7 @@ w_fsm_s *wind_fsm_create(char *name,w_int32_t id,char *modelname)
         WIND_ASSERT_RETURN(fsm != W_NULL,(w_fsm_s *)W_NULL);
         err = wind_fsm_init(fsm,name,id,modelname);
         if(err == W_ERR_OK)
-            SET_F_FSM_POOL(fsm);
+            SET_F_OBJ_POOL(fsm->obj);
     }while(0);
     
     if(err != W_ERR_OK)
@@ -204,7 +204,7 @@ w_err_t wind_fsm_destroy(w_fsm_s *fsm)
         WIND_ASSERT_BREAK(err == W_ERR_OK,err,"destroy fsm mutex failed\r\n");
         err = wind_obj_deinit(&fsm->obj,WIND_FSM_MAGIC,&fsmlist);
         WIND_ASSERT_BREAK(err == W_ERR_OK,err,"deinit fsm obj failed\r\n");
-        if(IS_F_FSM_POOL(fsm))
+        if(IS_F_OBJ_POOL(fsm->obj))
             fsm_free(fsm);
     }while(0);
     return err;

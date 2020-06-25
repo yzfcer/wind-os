@@ -41,10 +41,6 @@ extern "C" {
 typedef struct __w_fsm_s w_fsm_s;
 typedef struct __fsm_step_s w_fsm_step_s;
 typedef struct __w_fsm_model_s w_fsm_model_s;
-#define F_FSM_POOL (0x01 << 0) //Mark whether the FSM object is allocated through the memory pool
-#define IS_F_FSM_POOL(fsm) ((fsm->obj.userflag & F_FSM_POOL) == F_FSM_POOL)
-#define SET_F_FSM_POOL(fsm) (fsm->obj.userflag |= F_FSM_POOL)
-#define CLR_F_FSM_POOL(fsm) (fsm->obj.userflag &= (~F_FSM_POOL))
 
 #define FSM_STEP_START(fsm) w_fsm_step_s g_fsm_##fsm[] = {
 #define FSM_STEP(step_id,func) {#step_id,step_id,func},

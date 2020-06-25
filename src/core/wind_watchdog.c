@@ -57,7 +57,7 @@ static void watchdog_timer(w_timer_s *timer,void * arg)
     foreach_node(dnode,&watchdoglist)
     {
         watchdog = NODE_TO_WATCHDOG(dnode);
-        if(!IS_F_WATCHDOG_ENABLE(watchdog))
+        if(!IS_F_OBJ_ENABLE(watchdog->obj))
             continue;
         wind_disable_interrupt();
         watchdog->time_cur --;
@@ -101,7 +101,8 @@ w_err_t wind_watchdog_init(w_watchdog_s *watchdog,const char *name,w_int16_t tim
     watchdog->thread = wind_thread_current();
 
     wind_obj_init(&watchdog->obj,WIND_WATCHDOG_MAGIC,name,&watchdoglist);
-    wind_watchdog_setflag(watchdog,F_WATCHDOG_ENABLE|F_WATCHDOG_WARN);
+    SET_F_OBJ_ENABLE(watchdog->obj);
+    wind_watchdog_setflag(watchdog,F_WATCHDOG_WARN);
     return W_ERR_OK;
 }
 
@@ -115,7 +116,7 @@ w_watchdog_s *wind_watchdog_create(const char *name,w_int16_t timeout_1s)
     err = wind_watchdog_init(watchdog,name,timeout_1s);
     if(err == W_ERR_OK)
     {
-        SET_F_WATCHDOG_POOL(watchdog);
+        SET_F_OBJ_POOL(watchdog->obj);
         return watchdog;
     }
     watchdog_free(watchdog);
@@ -131,7 +132,7 @@ w_err_t wind_watchdog_destroy(w_watchdog_s *watchdog)
     wind_notice("destroy watchdog:%s",wind_obj_name(&watchdog->obj));
     err = wind_obj_deinit(&watchdog->obj,WIND_WATCHDOG_MAGIC,&watchdoglist);
     WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_FAIL);
-    if(IS_F_WATCHDOG_POOL(watchdog))
+    if(IS_F_OBJ_POOL(watchdog->obj))
         watchdog_free(watchdog);
     return W_ERR_OK;    
 }
@@ -150,8 +151,6 @@ w_err_t wind_watchdog_setflag(w_watchdog_s *watchdog,w_uint16_t flag)
 {
     WIND_ASSERT_RETURN(watchdog != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(watchdog->obj.magic == WIND_WATCHDOG_MAGIC,W_ERR_INVALID);
-    if(flag & F_WATCHDOG_ENABLE)
-        SET_F_WATCHDOG_ENABLE(watchdog);
     if(flag & F_WATCHDOG_WARN)
         SET_F_WATCHDOG_WARN(watchdog);
     if(flag & F_WATCHDOG_RESET)
@@ -163,8 +162,6 @@ w_err_t wind_watchdog_clrflag(w_watchdog_s *watchdog,w_uint16_t flag)
 {
     WIND_ASSERT_RETURN(watchdog != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(watchdog->obj.magic == WIND_WATCHDOG_MAGIC,W_ERR_INVALID);
-    if(flag & F_WATCHDOG_ENABLE)
-        CLR_F_WATCHDOG_ENABLE(watchdog);
     if(flag & F_WATCHDOG_WARN)
         CLR_F_WATCHDOG_WARN(watchdog);
     if(flag & F_WATCHDOG_RESET)

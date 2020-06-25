@@ -159,6 +159,29 @@ w_err_t wind_obj_deinit(w_obj_s *obj,w_uint32_t magic,w_dlist_s *list)
     return W_ERR_OK;  
 }
 
+w_err_t wind_obj_setflag(w_obj_s *obj,w_uint8_t flag)
+{
+    WIND_ASSERT_RETURN(obj != W_NULL,W_ERR_NULL_PTR);
+    if(flag & F_OBJ_ENABLE)
+        obj->objflag |= F_OBJ_ENABLE;
+    if(flag & F_OBJ_POOL)
+        obj->objflag |= F_OBJ_POOL;
+    if(flag & F_OBJ_HEAP)
+        obj->objflag |= F_OBJ_HEAP;
+    return W_ERR_OK;
+}
+w_err_t wind_obj_clrflag(w_obj_s *obj,w_uint8_t flag)
+{
+    WIND_ASSERT_RETURN(obj != W_NULL,W_ERR_NULL_PTR);
+    if(flag & F_OBJ_ENABLE)
+        obj->objflag &= (~F_OBJ_ENABLE);
+    if(flag & F_OBJ_POOL)
+        obj->objflag &= (~F_OBJ_POOL);
+    if(flag & F_OBJ_HEAP)
+        obj->objflag &= (~F_OBJ_HEAP);
+    return W_ERR_OK;
+}
+
 w_err_t wind_obj_register(w_obj_s *obj,w_dlist_s *dlist)
 {
     w_obj_s *tmpobj;

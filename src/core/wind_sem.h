@@ -35,11 +35,6 @@ extern "C" {
 #if WIND_SEM_SUPPORT
 #define WIND_SEM_MAGIC 0x36F7A854
 
-#define F_SEM_POOL (0x01 << 0) //Mark whether the SEM object is allocated through the memory pool
-#define IS_F_SEM_POOL(sem) ((sem->obj.userflag & F_SEM_POOL) == F_SEM_POOL)
-#define SET_F_SEM_POOL(sem) (sem->obj.userflag |= F_SEM_POOL)
-#define CLR_F_SEM_POOL(sem) (sem->obj.userflag &= (~F_SEM_POOL))
-
 typedef struct _w_sem_s
 {
     w_obj_s obj;         //SEM basic object information

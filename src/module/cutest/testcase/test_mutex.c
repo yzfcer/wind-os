@@ -54,7 +54,7 @@ CASE_FUNC(init)
     EXPECT_EQ(&test_mtx,mtx);
     EXPECT_EQ(mtx->obj.magic,WIND_MUTEX_MAGIC);
     EXPECT_FALSE(IS_F_MUTEX_LOCKED(mtx));
-    EXPECT_FALSE(IS_F_MUTEX_POOL(mtx));
+	EXPECT_FALSE(IS_F_OBJ_POOL(mtx->obj));
     EXPECT_EQ(mtx->waitlist.head,W_NULL);
     EXPECT_EQ(mtx->waitlist.tail,W_NULL);
     err = wind_mutex_destroy(&test_mtx);
@@ -79,7 +79,7 @@ CASE_FUNC(info)
     mutexs[0] = wind_mutex_create("test");
     EXPECT_NE(mutexs[0],W_NULL);
     EXPECT_FALSE(IS_F_MUTEX_LOCKED(mutexs[0]));
-    EXPECT_TRUE(IS_F_MUTEX_POOL(mutexs[0]));
+	EXPECT_TRUE(IS_F_OBJ_POOL(mutexs[0]->obj));
     EXPECT_EQ(mutexs[0]->waitlist.head,W_NULL);
     EXPECT_EQ(mutexs[0]->waitlist.tail,W_NULL);
     err = wind_mutex_destroy(mutexs[0]);

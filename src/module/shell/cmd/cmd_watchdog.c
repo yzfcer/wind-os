@@ -48,7 +48,7 @@ static w_err_t enable_watchdog(w_int32_t argc,char **argv)
     WIND_ASSERT_RETURN(argc >= 3,W_ERR_INVALID);
     watchdog = wind_watchdog_get(argv[3]);
     WIND_ASSERT_RETURN(watchdog != W_NULL,W_ERR_INVALID);
-    SET_F_WATCHDOG_ENABLE(watchdog);
+    SET_F_OBJ_ENABLE(watchdog->obj);
     return W_ERR_OK;
 }
 
@@ -64,7 +64,7 @@ static w_err_t disable_watchdog(w_int32_t argc,char **argv)
     WIND_ASSERT_RETURN(argc >= 3,W_ERR_INVALID);
     watchdog = wind_watchdog_get(argv[3]);
     WIND_ASSERT_RETURN(watchdog != W_NULL,W_ERR_INVALID);
-    CLR_F_WATCHDOG_ENABLE(watchdog);
+    CLR_F_OBJ_ENABLE(watchdog->obj);
     return W_ERR_OK;
 }
 

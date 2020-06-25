@@ -36,17 +36,12 @@ extern "C" {
 #define TIMER_PERIOD 10
 #define WIND_TIMER_MAGIC 0x34F574B2
 
-#define F_TIMER_POOL (0x01 << 0) //Mark whether timer object is allocated through memory pool
-#define IS_F_TIMER_POOL(timer) ((timer->obj.userflag & F_TIMER_POOL) == F_TIMER_POOL)
-#define SET_F_TIMER_POOL(timer) (timer->obj.userflag |= F_TIMER_POOL)
-#define CLR_F_TIMER_POOL(timer) (timer->obj.userflag &= (~F_TIMER_POOL))
-
-#define F_TIMER_RUN (0x01 << 1) //Mark whether the timer object is running
+#define F_TIMER_RUN (0x01 << 0) //Mark whether the timer object is running
 #define IS_F_TIMER_RUN(timer) ((timer->obj.userflag & F_TIMER_RUN) == F_TIMER_RUN)
 #define SET_F_TIMER_RUN(timer) (timer->obj.userflag |= F_TIMER_RUN)
 #define CLR_F_TIMER_RUN(timer) (timer->obj.userflag &= (~F_TIMER_RUN))
 
-#define F_TIMER_REPEAT (0x01 << 2) //Mark whether timer object is triggered repeatedly
+#define F_TIMER_REPEAT (0x01 << 1) //Mark whether timer object is triggered repeatedly
 #define IS_F_TIMER_REPEAT(timer) ((timer->obj.userflag & F_TIMER_REPEAT) == F_TIMER_REPEAT)
 #define SET_F_TIMER_REPEAT(timer) (timer->obj.userflag |= F_TIMER_REPEAT)
 #define CLR_F_TIMER_REPEAT(timer) (timer->obj.userflag &= (~F_TIMER_REPEAT))

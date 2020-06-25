@@ -70,7 +70,7 @@ w_err_t wind_sem_init(w_sem_s *sem,const char *name,w_int8_t sem_value)
     sem->sem_tot = sem_value;
     DLIST_INIT(sem->waitlist);
     wind_obj_init(&sem->obj,WIND_SEM_MAGIC,name,&semlist);
-    CLR_F_SEM_POOL(sem);
+	CLR_F_OBJ_POOL(sem->obj);
     return W_ERR_OK;
 }
 
@@ -83,7 +83,7 @@ w_sem_s *wind_sem_create(const char *name,w_int8_t sem_value)
     err = wind_sem_init(sem,name,sem_value);
     if(err == W_ERR_OK)
     {
-        SET_F_SEM_POOL(sem);
+		SET_F_OBJ_POOL(sem->obj);
         return sem;
     }
     sem_free(sem);
@@ -125,7 +125,7 @@ w_err_t wind_sem_destroy(w_sem_s *sem)
         thread->cause = CAUSE_SEM;
     }
     wind_enable_switch();
-    if(IS_F_SEM_POOL(sem))
+	if(IS_F_OBJ_POOL(sem->obj))
         sem_free(sem);
     return W_ERR_OK;    
 }

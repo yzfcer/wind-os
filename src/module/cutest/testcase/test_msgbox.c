@@ -65,7 +65,7 @@ CASE_FUNC(init)
     EXPECT_NE(msgbox,W_NULL);
     EXPECT_EQ(msgbox->obj.magic,WIND_MSGBOX_MAGIC);
     EXPECT_EQ(msgbox->msgnum,0);
-    EXPECT_FALSE(IS_F_MSGBOX_POOL(msgbox));
+	EXPECT_FALSE(IS_F_OBJ_POOL(msgbox->obj));
     EXPECT_EQ(msgbox->msglist.head,W_NULL);
     EXPECT_EQ(msgbox->msglist.tail,W_NULL);
     EXPECT_EQ(msgbox->owner,thr);
@@ -92,7 +92,7 @@ CASE_FUNC(info)
     EXPECT_NE(msgbox,W_NULL);
     EXPECT_EQ(msgbox->obj.magic,WIND_MSGBOX_MAGIC);
     EXPECT_EQ(msgbox->msgnum,0);
-    EXPECT_TRUE(IS_F_MSGBOX_POOL(msgbox));
+	EXPECT_TRUE(IS_F_OBJ_POOL(msgbox->obj));
     EXPECT_EQ(msgbox->msglist.head,W_NULL);
     EXPECT_EQ(msgbox->msglist.tail,W_NULL);
     EXPECT_EQ(msgbox->owner,thr);

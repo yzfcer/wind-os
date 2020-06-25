@@ -57,7 +57,7 @@ CASE_FUNC(init)
     EXPECT_NE(pipe,W_NULL);
     EXPECT_EQ(pipe->obj.magic,WIND_PIPE_MAGIC);
     EXPECT_STR_EQ(pipe->obj.name,"test");
-    EXPECT_FALSE(IS_F_PIPE_POOL(pipe));
+	EXPECT_FALSE(IS_F_OBJ_POOL(pipe->obj));
     EXPECT_EQ(pipe->buff,pipebuf);
     EXPECT_EQ(pipe->buflen,sizeof(pipebuf));
     err = wind_pipe_destroy(pipe);
@@ -82,7 +82,7 @@ CASE_FUNC(info)
     EXPECT_NE(pipe,W_NULL);
     EXPECT_EQ(pipe->obj.magic,WIND_PIPE_MAGIC);
     EXPECT_STR_EQ(pipe->obj.name,"test");
-    EXPECT_TRUE(IS_F_PIPE_POOL(pipe));
+	EXPECT_TRUE(IS_F_OBJ_POOL(pipe->obj));
     EXPECT_EQ(pipe->buff,pipebuf);
     EXPECT_EQ(pipe->buflen,sizeof(pipebuf));
     err = wind_pipe_destroy(pipe);

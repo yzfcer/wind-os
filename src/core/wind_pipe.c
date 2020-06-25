@@ -88,7 +88,7 @@ w_pipe_s* wind_pipe_create(const char *name,void *buff,w_int32_t buflen)
     err = wind_pipe_init(pipe,name,buff,buflen);
     if(err == W_ERR_OK)
     {
-        SET_F_PIPE_POOL(pipe);
+		SET_F_OBJ_POOL(pipe->obj);
         return pipe;
     }
     pipe_free(pipe);
@@ -130,7 +130,7 @@ w_err_t wind_pipe_destroy(w_pipe_s* pipe)
     wind_notice("destroy pipe:%s",wind_obj_name(&pipe->obj));
     err = wind_obj_deinit(&pipe->obj,WIND_PIPE_MAGIC,&pipelist);
     WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_FAIL);
-    if(IS_F_PIPE_POOL(pipe))
+	if(IS_F_OBJ_POOL(pipe->obj))
         pipe_free(pipe);
     return W_ERR_OK;
 }

@@ -139,7 +139,7 @@ w_err_t wind_coroutine_init(w_coroutine_s *coroutine,const char *name,w_uint16_t
     coroutine->stack = _wind_thread_stack_init((thread_run_f)func,arg,coroutine->stackbuff,WIND_COROUTINE_STKSIZE);
     wind_obj_init(&coroutine->obj,WIND_COROUTINE_MAGIC,name,&thread->coroutlist);
     SET_F_COROUTINE_READY(coroutine);
-    CLR_F_COROUTINE_POOL(coroutine);
+    CLR_F_OBJ_POOL(coroutine->obj);
     return W_ERR_OK;
 }
 
@@ -155,7 +155,7 @@ w_coroutine_s *wind_coroutine_create(const char *name,w_uint16_t cid,coroutine_f
     err = wind_coroutine_init(coroutine,name,cid,func,arg);
     if(err == W_ERR_OK)
     {
-        SET_F_COROUTINE_POOL(coroutine);
+        SET_F_OBJ_POOL(coroutine->obj);
         wind_enable_switch();
         return coroutine;
     }
@@ -177,7 +177,7 @@ w_err_t wind_coroutine_destroy(w_coroutine_s *coroutine)
     wind_disable_switch();
     err = wind_obj_deinit(&coroutine->obj,WIND_COROUTINE_MAGIC,&thread->coroutlist);
     //WIND_ASSERT_TODO_RETURN(err == W_ERR_OK,wind_enable_switch(),W_ERR_FAIL);
-    if(IS_F_COROUTINE_POOL(coroutine))
+    if(IS_F_OBJ_POOL(coroutine->obj))
         coroutine_free(coroutine);
     wind_enable_switch();
     return err;
