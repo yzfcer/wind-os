@@ -35,6 +35,21 @@ extern "C" {
 static w_netnode_s *vlan_node = (w_netnode_s *)W_NULL;
 static w_netnode_s *arp_node = (w_netnode_s *)W_NULL;
 static w_netnode_s *ip_node = (w_netnode_s *)W_NULL;
+
+static w_err_t check_skb_dest_mactype(w_netdev_s *netdev,w_uint8_t *macaddr)
+{
+    WIND_CHECK_RETURN(netdev != W_NULL,W_ERR_NULL_PTR);
+    if(IS_F_NETDEV_BROADTCAST(netdev) && wind_mac_is_broad(macaddr))
+        return W_ERR_OK;
+    if(IS_F_NETDEV_MULTCAST(netdev) && wind_mac_is_mult(macaddr))
+        return W_ERR_OK;
+    if(IS_F_NETDEV_UNICAST(netdev) && wind_mac_is_equal(macaddr,netdev->param.mac))
+        return W_ERR_OK;
+    return W_ERR_FAIL;
+}
+
+
+
 static w_err_t ether_handle_req(w_netnode_s *netnode,w_skb_s *skb,w_etherhead_s *etherhead)
 {
     return W_ERR_FAIL;
@@ -60,6 +75,8 @@ static w_err_t ether_deinit(w_netnode_s *netnode)
     return W_ERR_FAIL;
 }
 
+
+
 static w_err_t ether_input(w_netnode_s *netnode,w_skb_s *skb)
 {
     w_uint8_t dstmac[6];
@@ -70,9 +87,7 @@ static w_err_t ether_input(w_netnode_s *netnode,w_skb_s *skb)
     WIND_ASSERT_RETURN(skb->indev != W_NULL,W_ERR_INVALID);
     wind_skb_get_ether_dstmac(skb,dstmac);
     inmac = skb->indev->param.mac;
-    if(!wind_mac_is_equal(inmac,dstmac) &&
-        !wind_mac_is_broad(dstmac) &&
-        !wind_mac_is_mult(dstmac))
+    if(check_skb_dest_mactype(skb->indev,dstmac) != W_ERR_OK)
         return W_ERR_DROP_PACK;
     l3proto = wind_skb_get_ether_proto(skb);
     if(l3proto == PROTO_IP)

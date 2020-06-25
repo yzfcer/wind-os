@@ -36,20 +36,21 @@ extern "C" {
 
 #define WIND_NETDEV_MAGIC 0x375C6A71
 
-#define F_OBJ_ENABLE (0x01 << 0) //Mark whether the object is enable
-#define IS_F_OBJ_ENABLE(obj) ((obj.objflag & F_OBJ_ENABLE) == F_OBJ_ENABLE)
-#define SET_F_OBJ_ENABLE(obj) (obj.objflag |= F_OBJ_ENABLE)
-#define CLR_F_OBJ_ENABLE(obj) (obj.objflag &= (~F_OBJ_ENABLE))
+#define F_NETDEV_UNICAST (0x01 << 0) //Mark whether the object is enable unicast
+#define IS_F_NETDEV_UNICAST(netdev) ((netdev->netnode.obj.userflag & F_NETDEV_UNICAST) == F_NETDEV_UNICAST)
+#define SET_F_NETDEV_UNICAST(netdev) (netdev->netnode.obj.userflag |= F_NETDEV_UNICAST)
+#define CLR_F_NETDEV_UNICAST(netdev) (netdev->netnode.obj.userflag &= (~F_NETDEV_UNICAST))
 
-#define F_OBJ_ENABLE (0x01 << 0) //Mark whether the object is enable
-#define IS_F_OBJ_ENABLE(obj) ((obj.objflag & F_OBJ_ENABLE) == F_OBJ_ENABLE)
-#define SET_F_OBJ_ENABLE(obj) (obj.objflag |= F_OBJ_ENABLE)
-#define CLR_F_OBJ_ENABLE(obj) (obj.objflag &= (~F_OBJ_ENABLE))
+#define F_NETDEV_BROADTCAST (0x01 << 1) //Mark whether the object is enable broadcast
+#define IS_F_NETDEV_BROADTCAST(netdev) ((netdev->netnode.obj.userflag & F_NETDEV_BROADTCAST) == F_NETDEV_BROADTCAST)
+#define SET_F_NETDEV_BROADTCAST(netdev) (netdev->netnode.obj.userflag |= F_NETDEV_BROADTCAST)
+#define CLR_F_NETDEV_BROADTCAST(netdev) (netdev->netnode.obj.userflag &= (~F_NETDEV_BROADTCAST))
 
-#define F_OBJ_ENABLE (0x01 << 0) //Mark whether the object is enable
-#define IS_F_OBJ_ENABLE(obj) ((obj.objflag & F_OBJ_ENABLE) == F_OBJ_ENABLE)
-#define SET_F_OBJ_ENABLE(obj) (obj.objflag |= F_OBJ_ENABLE)
-#define CLR_F_OBJ_ENABLE(obj) (obj.objflag &= (~F_OBJ_ENABLE))
+#define F_NETDEV_MULTCAST (0x01 << 2) //Mark whether the object is enable unicast
+#define IS_F_NETDEV_MULTCAST(netdev) ((netdev->netnode.obj.userflag & F_NETDEV_MULTCAST) == F_NETDEV_MULTCAST)
+#define SET_F_NETDEV_MULTCAST(netdev) (netdev->netnode.obj.userflag |= F_NETDEV_MULTCAST)
+#define CLR_F_NETDEV_MULTCAST(netdev) (netdev->netnode.obj.userflag &= (~F_NETDEV_MULTCAST))
+
 
 #define WIND_NETDEV_DEF(name) w_netdev_s netdev_##name = {WIND_NETNODE_INFO(name),{{0,0,0,0,0,0},0,0,0}};
 #define WIND_NETDEV_DECLARE(name) extern w_netdev_s netdev_##name;
