@@ -29,6 +29,7 @@
 #include "wind_netnode.h"
 #include "wind_skb.h"
 #include "wind_debug.h"
+#include "wind_vlan.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
@@ -51,6 +52,11 @@ extern "C" {
 #define SET_F_NETDEV_MULTCAST(netdev) (netdev->netnode.obj.userflag |= F_NETDEV_MULTCAST)
 #define CLR_F_NETDEV_MULTCAST(netdev) (netdev->netnode.obj.userflag &= (~F_NETDEV_MULTCAST))
 
+#define F_NETDEV_VLAN_EN (0x01 << 3) //Mark whether the object is enable vlan
+#define IS_F_NETDEV_VLAN_EN(netdev) ((netdev->netnode.obj.userflag & F_NETDEV_VLAN_EN) == F_NETDEV_VLAN_EN)
+#define SET_F_NETDEV_VLAN_EN(netdev) (netdev->netnode.obj.userflag |= F_NETDEV_VLAN_EN)
+#define CLR_F_NETDEV_VLAN_EN(netdev) (netdev->netnode.obj.userflag &= (~F_NETDEV_VLAN_EN))
+
 
 #define WIND_NETDEV_DEF(name) w_netdev_s netdev_##name = {WIND_NETNODE_INFO(name),{{0,0,0,0,0,0},0,0,0}};
 #define WIND_NETDEV_DECLARE(name) extern w_netdev_s netdev_##name;
@@ -63,6 +69,7 @@ typedef struct
     w_uint32_t ip;
     w_uint32_t gw;
     w_uint32_t mask;
+    w_vlan_s vlan;
 }w_netdev_param_s;
 
 struct __w_netdev_s
@@ -79,6 +86,10 @@ w_err_t wind_netdev_unregister(w_netdev_s *netdev);
 w_err_t wind_netdev_enable(w_netdev_s *netdev);
 w_err_t wind_netdev_disable(w_netdev_s *netdev);
 w_err_t wind_netdev_print_list(void);
+
+
+w_err_t wind_netdev_set_ip(w_netdev_s *netdev,w_uint32_t ip,w_uint32_t mask,w_uint32_t gw);
+w_err_t wind_netdev_set_vlan(w_netdev_s *netdev,w_vlan_s *vlan);
 
 
 #endif // #if WIND_MODULE_NET_SUPPORT

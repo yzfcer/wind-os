@@ -30,6 +30,12 @@
 extern "C" {
 #endif // #ifdef __cplusplus
 #if WIND_NET_VLAN_SUPPORT
+typedef struct 
+{
+    w_uint32_t vlanid:12;
+    w_uint32_t vlanpri:3;
+    w_uint32_t vlantci:1;
+}w_vlan_s;
 
 
 #endif // #if WIND_NET_VLAN_SUPPORT

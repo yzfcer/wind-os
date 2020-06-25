@@ -27,6 +27,7 @@
 #include "wind_config.h"
 #include "wind_type.h"
 #include "wind_dlist.h"
+#include "wind_vlan.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
@@ -46,13 +47,6 @@ extern "C" {
 #define PROTO_UDP    0x11
 
 typedef struct __w_netdev_s w_netdev_s;
-
-typedef struct 
-{
-    w_uint32_t vlanid:12;
-    w_uint32_t vlanpri:3;
-    w_uint32_t vlantci:3;
-}w_vlan_s;
 
 typedef struct
 {

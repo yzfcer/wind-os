@@ -24,6 +24,7 @@
 *******************************************************************************************************/
 #include "wind_netdev.h"
 #include "wind_core.h"
+#include "wind_string.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
@@ -135,6 +136,21 @@ w_err_t wind_netdev_print_list(void)
     return W_ERR_OK;
 }
 
+w_err_t wind_netdev_set_ip(w_netdev_s *netdev,w_uint32_t ip,w_uint32_t mask,w_uint32_t gw)
+{
+    WIND_ASSERT_RETURN(netdev != W_NULL,W_ERR_NULL_PTR);
+    netdev->param.ip = ip;
+    netdev->param.mask = mask;
+    netdev->param.gw = gw;
+    return W_ERR_OK;
+}
+w_err_t wind_netdev_set_vlan(w_netdev_s *netdev,w_vlan_s *vlan)
+{
+    WIND_ASSERT_RETURN(netdev != W_NULL,W_ERR_NULL_PTR);
+    wind_memcpy(&netdev->param.vlan,vlan,sizeof(w_vlan_s));
+    SET_F_NETDEV_VLAN_EN(netdev);
+    return W_ERR_OK;
+}
 
 #endif // #if WIND_MODULE_NET_SUPPORT
 #ifdef __cplusplus
