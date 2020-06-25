@@ -111,7 +111,7 @@ w_treefs_s *wind_treefs_get(const char *name)
 w_err_t wind_treefs_init(w_treefs_s *treefs,const char *name)
 {
     w_int32_t len;
-    char *objname = W_NULL;
+    char *objname = (char*)W_NULL;
     wind_notice("init treefs:%s",name != W_NULL?name:"null");
     WIND_ASSERT_RETURN(treefs != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(name != W_NULL,W_ERR_NULL_PTR);
@@ -121,7 +121,7 @@ w_err_t wind_treefs_init(w_treefs_s *treefs,const char *name)
     WIND_ASSERT_RETURN(objname != W_NULL,W_ERR_MEM);
     wind_strcpy(objname,name);
     wind_obj_init(&treefs->obj,TREEFS_MAGIC,objname,&treefslist);
-    CLR_F_TREEFS_POOL(treefs);
+    CLR_F_OBJ_POOL(treefs->obj);
     treefs->fs_size = 0;
     treefs->root = W_NULL;       
     
@@ -133,15 +133,15 @@ w_treefs_s *wind_treefs_create(char *name)
     w_err_t err;
     w_treefs_s *treefs;
     treefs = (w_treefs_s *)wind_pool_malloc(&treefspool);
-    WIND_ASSERT_RETURN(treefs != W_NULL,W_NULL);
+    WIND_ASSERT_RETURN(treefs != W_NULL,(w_treefs_s *)W_NULL);
     err = wind_treefs_init(treefs,name);
     if(err == W_ERR_OK)
     {
-        SET_F_TREEFS_POOL(treefs);
+        SET_F_OBJ_POOL(treefs->obj);
         return treefs;
     }
     tfs_mem_free(treefs);
-    return W_NULL;
+    return (w_treefs_s *)W_NULL;
 }
 
 w_err_t wind_treefs_destroy(w_treefs_s *treefs)
@@ -157,7 +157,7 @@ w_err_t wind_treefs_destroy(w_treefs_s *treefs)
     WIND_ASSERT_RETURN(err == W_ERR_OK, W_ERR_FAIL);
     tfs_mem_free(treefs->obj.name);
     treefs->obj.name = W_NULL;
-    if(IS_F_TREEFS_POOL(treefs))
+    if(IS_F_OBJ_POOL(treefs->obj))
         wind_pool_free(&treefspool,treefs);
     return W_ERR_OK;
 }

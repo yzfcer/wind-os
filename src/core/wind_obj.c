@@ -104,8 +104,8 @@ w_obj_s *wind_obj_get(const char *name,w_dlist_s *list)
     w_int16_t key;
     w_obj_s *obj;
     w_dnode_s *dnode;
-    WIND_ASSERT_RETURN(name != W_NULL,W_NULL);
-    WIND_ASSERT_RETURN(list != W_NULL,W_NULL);
+    WIND_ASSERT_RETURN(name != W_NULL,(w_obj_s *)W_NULL);
+    WIND_ASSERT_RETURN(list != W_NULL,(w_obj_s *)W_NULL);
     key = calc_obj_key(name);
     wind_disable_switch();
     do
@@ -126,7 +126,7 @@ w_obj_s *wind_obj_get(const char *name,w_dlist_s *list)
     }while(0);
     wind_enable_switch();
     if(err != W_ERR_OK)
-        return W_NULL;
+        return (w_obj_s *)W_NULL;
     return obj;
 }
 
@@ -137,7 +137,8 @@ w_err_t wind_obj_init(w_obj_s *obj,w_uint32_t magic,const char *name,w_dlist_s *
     obj->name = (char*)name;
     DNODE_INIT(obj->objnode);
     obj->key = name == W_NULL?0:calc_obj_key(name);
-    obj->flag = 0;
+    obj->objflag = F_OBJ_ENABLE;
+    obj->userflag = 0;
     insert_obj(list,obj);
     obj->magic = magic;
     return W_ERR_OK;
@@ -154,6 +155,7 @@ w_err_t wind_obj_deinit(w_obj_s *obj,w_uint32_t magic,w_dlist_s *list)
     wind_enable_switch();
     WIND_ASSERT_RETURN(dnode != W_NULL,W_ERR_INVALID);
     obj->magic = (~magic);
+    obj->objflag &= (~F_OBJ_ENABLE);
     return W_ERR_OK;  
 }
 

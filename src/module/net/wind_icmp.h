@@ -31,6 +31,17 @@ extern "C" {
 #endif // #ifdef __cplusplus
 #if WIND_NET_ICMP_SUPPORT
 
+#define ICMP_TYPE_ECHO_REPLAY  0x00
+#define ICMP_TYPE_UNREACHABLE  0x03
+#define ICMP_TYPE_INHIBIT_SRC  0x04
+#define ICMP_TYPE_REDIRECT     0x05
+#define ICMP_TYPE_ECHO_REQUEST 0x08
+#define ICMP_TYPE_ROUTER_BROAD  0x09
+#define ICMP_TYPE_ROUTER_REQ   0x0A
+#define ICMP_TYPE_TIMEOUT      0x0B
+#define ICMP_TYPE_SUBNET_REQ  0x11
+#define ICMP_TYPE_SUBNET_ACK  0x12
+
 typedef struct
 {
     w_uint8_t type;

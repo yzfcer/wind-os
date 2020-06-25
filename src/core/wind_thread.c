@@ -460,7 +460,11 @@ w_err_t _wind_thread_wakeup(void)
     w_dnode_s *dnode;
     w_thread_s *thread;
     wind_disable_interrupt();
-    WIND_ASSERT_TODO_RETURN(gwind_start_flag,wind_enable_interrupt(),W_ERR_OK);
+    if(!gwind_start_flag)
+    {
+        wind_enable_interrupt();
+        return W_ERR_OK;
+    }
     foreach_node(dnode,&sleeplist)
     {
         thread = PRIDNODE_TO_THREAD(dnode,sleepnode);

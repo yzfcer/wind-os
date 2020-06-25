@@ -55,7 +55,7 @@ typedef struct _wind_obj
     w_uint32_t magic;  //magic code
     w_uint16_t key;    //Key value, used to speed up object search
     w_uint8_t objflag; //Object attribute tag
-    w_uint8_t flag;    //Object attribute tag
+    w_uint8_t userflag;//Object attribute tag
     w_dnode_s objnode; //Object list node
     char *name;        //Object name
 }w_obj_s;

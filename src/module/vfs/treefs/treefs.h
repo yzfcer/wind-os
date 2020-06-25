@@ -31,11 +31,6 @@
 #include "treefs_def.h"
 #if WIND_TREEFS_SUPPORT
 
-#define F_TREEFS_POOL (0x01 << 0) //Mark whether the trees object is allocated through the memory pool
-#define IS_F_TREEFS_POOL(sem) ((sem->obj.flag & F_TREEFS_POOL) == F_TREEFS_POOL)
-#define SET_F_TREEFS_POOL(sem) (sem->obj.flag |= F_TREEFS_POOL)
-#define CLR_F_TREEFS_POOL(sem) (sem->obj.flag &= (~F_TREEFS_POOL))
-
 w_err_t _wind_treefs_mod_init(void);
 
 void *tfs_mem_malloc(w_int32_t size);

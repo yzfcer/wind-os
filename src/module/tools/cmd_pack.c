@@ -415,20 +415,26 @@ static w_err_t check_file_space(void)
 static w_err_t pack_files_to_img(w_int32_t argc,char **argv) 
 {
     w_err_t err;
-    pack_info_init();
-    err = get_cfginfo(argv[2],databuff,sizeof(databuff));
-    WIND_ASSERT_RETURN(err == W_ERR_OK,-1);
-    err = parse_file(databuff,&pack_info);
-    WIND_ASSERT_RETURN(err == W_ERR_OK,-1);
-    sort_input_file();
-    err = check_file_space();
-    WIND_ASSERT_TODO_RETURN(err == W_ERR_OK,release_file_buff(),err);
-    err = read_bin_files();
-    WIND_ASSERT_TODO_RETURN(err == W_ERR_OK,release_file_buff(),err);
-    err = pack_files(&pack_info);
-    WIND_ASSERT_TODO_RETURN(err == W_ERR_OK,release_file_buff(),-1);
-    release_file_buff();
-    return W_ERR_OK;
+    do
+    {
+        err = W_ERR_OK;
+        pack_info_init();
+        err = get_cfginfo(argv[2],databuff,sizeof(databuff));
+        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"get cfg info fail");
+        err = parse_file(databuff,&pack_info);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"parse cfg filr fail");
+        sort_input_file();
+        err = check_file_space();
+        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"");
+        err = read_bin_files();
+        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"");
+        err = pack_files(&pack_info);
+        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"");
+        release_file_buff();   
+    }while(0);
+    if(err != W_ERR_OK)
+        release_file_buff();
+    return err;
 }
 
 w_int32_t pack_main(w_int32_t argc,char **argv)

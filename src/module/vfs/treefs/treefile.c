@@ -54,28 +54,43 @@ static w_uint32_t get_dataidx_by_offset(w_uint32_t offset)
 
 w_treefile_s *treefs_mk_subnode(w_treefile_s *parent,char *nodename,w_uint8_t isdir)
 {
-    w_treefile_s *treefile;
-    int len = wind_strlen(nodename);
+    int len;
+    w_err_t err;
+    w_treefile_s *treefile = W_NULL;
     WIND_ASSERT_RETURN(nodename != W_NULL,W_NULL);
-    treefile = tfs_mem_malloc(sizeof(w_treefile_s));
-    WIND_ASSERT_RETURN(treefile != W_NULL,W_NULL);
-    treefile->filename = tfs_mem_malloc(len+1);
-    WIND_ASSERT_TODO_RETURN(treefile->filename != W_NULL,tfs_mem_free(treefile),W_NULL);
-    
-    treefile->magic = TREEFILE_MAGIC;
-    wind_tree_init(&treefile->tree);
-    wind_memset(treefile->filename,0,len+1);
-    wind_strcpy(treefile->filename,nodename);
-    
-    treefile->isdir = isdir?1:0;
-    treefile->mode = 0;
-    treefile->offset = 0;
-    treefile->filelen = 0;
-    treefile->bufflen = 0;
-    DLIST_INIT(treefile->datalist);
-    if(parent != W_NULL)
-    {        
-        wind_tree_insert_child(&parent->tree,&treefile->tree);
+    do
+    {
+        err = W_ERR_OK;
+        len = wind_strlen(nodename);
+        treefile = tfs_mem_malloc(sizeof(w_treefile_s));
+        WIND_ASSERT_BREAK(treefile != W_NULL,W_ERR_MEM,"alloc treefile fail");
+        wind_memset(treefile,0,sizeof(w_treefile_s));
+        treefile->filename = tfs_mem_malloc(len+1);
+        WIND_ASSERT_BREAK(treefile->filename != W_NULL,W_ERR_MEM,"alloc filename fail");
+        
+        treefile->magic = TREEFILE_MAGIC;
+        wind_tree_init(&treefile->tree);
+        wind_memset(treefile->filename,0,len+1);
+        wind_strcpy(treefile->filename,nodename);
+        
+        treefile->isdir = isdir?1:0;
+        treefile->mode = 0;
+        treefile->offset = 0;
+        treefile->filelen = 0;
+        treefile->bufflen = 0;
+        DLIST_INIT(treefile->datalist);
+        if(parent != W_NULL)
+        {        
+            wind_tree_insert_child(&parent->tree,&treefile->tree);
+        }
+    }while(0);
+    if(err != W_ERR_OK)
+    {
+        if(treefile && treefile->filename)
+            tfs_mem_free(treefile->filename);
+        if(treefile)
+            tfs_mem_free(treefile);
+        treefile = W_NULL;
     }
     return treefile;
 }

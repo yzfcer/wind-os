@@ -40,14 +40,14 @@ extern "C" {
 #define WIND_DAEMON_MAGIC 0x576C5A4C
 
 #define F_DAEMON_POOL (0x01 << 0) //Mark whether daemon object is allocated through the memory pool
-#define IS_F_DAEMON_POOL(daemon) ((daemon->obj.flag & F_DAEMON_POOL) == F_DAEMON_POOL)
-#define SET_F_DAEMON_POOL(daemon) (daemon->obj.flag |= F_DAEMON_POOL)
-#define CLR_F_DAEMON_POOL(daemon) (daemon->obj.flag &= (~F_DAEMON_POOL))
+#define IS_F_DAEMON_POOL(daemon) ((daemon->obj.userflag & F_DAEMON_POOL) == F_DAEMON_POOL)
+#define SET_F_DAEMON_POOL(daemon) (daemon->obj.userflag |= F_DAEMON_POOL)
+#define CLR_F_DAEMON_POOL(daemon) (daemon->obj.userflag &= (~F_DAEMON_POOL))
 
 #define F_DAEMON_ENABLE (0x01 << 1) //Mark whether the daemon object is enabled
-#define IS_F_DAEMON_ENABLE(daemon) ((daemon->obj.flag & F_DAEMON_ENABLE) == F_DAEMON_ENABLE)
-#define SET_F_DAEMON_ENABLE(daemon) (daemon->obj.flag |= F_DAEMON_ENABLE)
-#define CLR_F_DAEMON_ENABLE(daemon) (daemon->obj.flag &= (~F_DAEMON_ENABLE))
+#define IS_F_DAEMON_ENABLE(daemon) ((daemon->obj.userflag & F_DAEMON_ENABLE) == F_DAEMON_ENABLE)
+#define SET_F_DAEMON_ENABLE(daemon) (daemon->obj.userflag |= F_DAEMON_ENABLE)
+#define CLR_F_DAEMON_ENABLE(daemon) (daemon->obj.userflag &= (~F_DAEMON_ENABLE))
 
 
 typedef struct __w_daemon_s w_daemon_s;

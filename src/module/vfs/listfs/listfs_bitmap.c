@@ -334,7 +334,11 @@ w_int32_t listfs_bitmap_calc_usedblk(lfs_bitmap_s *bm)
     for(i = 1;i < bm->bmblk_cnt; i ++)
     {
         cnt = wind_blkdev_read(blkdev,bm->addr1+1,blk,1);
-        WIND_ASSERT_TODO_RETURN(cnt == 1,listfs_mem_free(blk),0xffffffff);
+        if(cnt != 1)
+        {
+            blkused = -1;
+            break;
+        }
         blkused += bm_calc_blkused(blk,blkdev->blksize);
     }
     if(blk != W_NULL)

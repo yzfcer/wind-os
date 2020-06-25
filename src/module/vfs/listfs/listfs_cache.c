@@ -63,24 +63,30 @@ static lcache_item_s *hit_cacheitem(lfs_cache_s *cache,w_uint32_t addr)
 }
 static lcache_item_s *alloc_cacheitem(lfs_cache_s *cache,w_int32_t blksize)
 {
+    w_err_t err;
     w_dnode_s *dnode;
     w_uint32_t itemsize;
     lcache_item_s *cacheitem;
-    
-    if(cache->itemcount < LFS_CACHEITEM_MAX_CNT)
+    wind_disable_switch();
+    do
     {
-        itemsize = sizeof(lcache_item_s) + blksize;
-        cacheitem = listfs_mem_malloc(itemsize);
-        cacheitem->flag = 0;
-        WIND_ASSERT_TODO_RETURN(cacheitem == W_NULL,wind_enable_switch(),W_NULL);
-        cache->itemcount ++;
-    }
-    else
-    {
-        dnode = dlist_remove_tail(&cache->itemlist);
-        cacheitem = NODE_TO_CACHEITEM(dnode);
-        SET_F_LFSCACHE_SW(cacheitem);
-    }
+        err = W_ERR_OK;
+        if(cache->itemcount < LFS_CACHEITEM_MAX_CNT)
+        {
+            itemsize = sizeof(lcache_item_s) + blksize;
+            cacheitem = listfs_mem_malloc(itemsize);
+            WIND_ASSERT_BREAK(cacheitem != W_NULL,W_ERR_MEM,"alloc cache item fail");
+            cacheitem->flag = 0;
+            cache->itemcount ++;
+        }
+        else
+        {
+            dnode = dlist_remove_tail(&cache->itemlist);
+            cacheitem = NODE_TO_CACHEITEM(dnode);
+            SET_F_LFSCACHE_SW(cacheitem);
+        }
+    }while(0);
+    wind_enable_switch();
     return cacheitem;
 }
 
@@ -95,61 +101,68 @@ static w_err_t cacheitem_init(lcache_item_s *cacheitem,w_uint32_t addr,w_int32_t
 
 w_err_t lfs_cache_read(lfs_cache_s *cache,w_blkdev_s *blkdev,w_uint32_t addr,w_uint8_t *blk)
 {
+    w_err_t err;
     lcache_item_s *cacheitem;
     WIND_ASSERT_RETURN(cache != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(blk != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(addr > 0,W_ERR_INVALID);
     wind_disable_switch();
-    cacheitem = hit_cacheitem(cache,addr);
-    if(cacheitem != W_NULL)
+    do
     {
-        cache->r_hit ++;
-        wind_memcpy(blk,cacheitem->blk,blkdev->blksize);
-        dlist_remove(&cache->itemlist,&cacheitem->itemnode);
+        err = W_ERR_OK;
+        cacheitem = hit_cacheitem(cache,addr);
+        if(cacheitem != W_NULL)
+        {
+            cache->r_hit ++;
+            wind_memcpy(blk,cacheitem->blk,blkdev->blksize);
+            dlist_remove(&cache->itemlist,&cacheitem->itemnode);
+            dlist_insert_head(&cache->itemlist,&cacheitem->itemnode);
+            break;
+        }
+        
+        cache->r_miss ++;
+        cacheitem = alloc_cacheitem(cache,blkdev->blksize);
+        WIND_ASSERT_BREAK(cacheitem != W_NULL,W_ERR_MEM,"alloc mem fail");
+        if(IS_F_LFSCACHE_DIRTY(cache))
+        cacheitem_init(cacheitem,addr,blkdev->blksize);
+        wind_memcmp(cacheitem->blk,blk,blkdev->blksize);
         dlist_insert_head(&cache->itemlist,&cacheitem->itemnode);
-        wind_enable_switch();
-        return W_ERR_OK;
-    }
 
-    cache->r_miss ++;
-    cacheitem = alloc_cacheitem(cache,blkdev->blksize);
-    WIND_ASSERT_TODO_RETURN(cacheitem != W_NULL,wind_enable_switch(),W_ERR_MEM);
-    if(IS_F_LFSCACHE_DIRTY(cache))
-    cacheitem_init(cacheitem,addr,blkdev->blksize);
-    wind_memcmp(cacheitem->blk,blk,blkdev->blksize);
-    dlist_insert_head(&cache->itemlist,&cacheitem->itemnode);
+    }while(0);
     
     wind_enable_switch();
-    return W_ERR_OK;
+    return err;
 }
 
 w_err_t lfs_cache_write(lfs_cache_s *cache,w_blkdev_s *blkdev,w_uint32_t addr,w_uint8_t *blk)
 {
+    w_err_t err;
     lcache_item_s *cacheitem;
     WIND_ASSERT_RETURN(cache != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(blk != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(addr > 0,W_ERR_INVALID);
     wind_disable_switch();
-    cacheitem = hit_cacheitem(cache,addr);
-    if(cacheitem != W_NULL)
+    do
     {
-        cache->w_hit ++;
-        wind_memcpy(cacheitem->blk,blk,blkdev->blksize);
-        dlist_remove(&cache->itemlist,&cacheitem->itemnode);
+        cacheitem = hit_cacheitem(cache,addr);
+        if(cacheitem != W_NULL)
+        {
+            cache->w_hit ++;
+            wind_memcpy(cacheitem->blk,blk,blkdev->blksize);
+            dlist_remove(&cache->itemlist,&cacheitem->itemnode);
+            dlist_insert_head(&cache->itemlist,&cacheitem->itemnode);
+            break;
+        }
+        
+        cache->w_miss ++;
+        cacheitem = alloc_cacheitem(cache,blkdev->blksize);
+        WIND_ASSERT_BREAK(cacheitem != W_NULL,W_ERR_MEM,"alloc mem fail");
+        cacheitem_init(cacheitem,addr,blkdev->blksize);
+        wind_memcmp(cacheitem->blk,blk,blkdev->blksize);
         dlist_insert_head(&cache->itemlist,&cacheitem->itemnode);
-        wind_enable_switch();
-        return W_ERR_OK;
-    }
-    
-    cache->w_miss ++;
-    
-    cacheitem = alloc_cacheitem(cache,blkdev->blksize);
-    WIND_ASSERT_TODO_RETURN(cacheitem != W_NULL,wind_enable_switch(),W_ERR_MEM);
-    cacheitem_init(cacheitem,addr,blkdev->blksize);
-    wind_memcmp(cacheitem->blk,blk,blkdev->blksize);
-    dlist_insert_head(&cache->itemlist,&cacheitem->itemnode);
+    }while(0);
     wind_enable_switch();
     return W_ERR_OK;
 }

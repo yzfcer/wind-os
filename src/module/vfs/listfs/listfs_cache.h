@@ -34,17 +34,17 @@
 
 #define LFS_CACHEITEM_MAX_CNT 5
 
-#define F_LFSCACHE_DIRTY (0x01 << 0) //��ǻ���������Ƿ������
-#define IS_F_LFSCACHE_DIRTY(cache) ((cache->obj.flag & F_LFSCACHE_DIRTY) == F_LFSCACHE_DIRTY)
-#define SET_F_LFSCACHE_DIRTY(cache) (cache->obj.flag |= F_LFSCACHE_DIRTY)
-#define CLR_F_LFSCACHE_DIRTY(cache) (cache->obj.flag &= (~F_LFSCACHE_DIRTY))
+#define F_LFSCACHE_DIRTY (0x01 << 0) ////Mark whether the lfs cached data is dirty
+#define IS_F_LFSCACHE_DIRTY(cache) ((cache->obj.userflag & F_LFSCACHE_DIRTY) == F_LFSCACHE_DIRTY)
+#define SET_F_LFSCACHE_DIRTY(cache) (cache->obj.userflag |= F_LFSCACHE_DIRTY)
+#define CLR_F_LFSCACHE_DIRTY(cache) (cache->obj.userflag &= (~F_LFSCACHE_DIRTY))
 
-#define F_LFSCACHE_HIT (0x01 << 1) //��ǻ�������������е�
+#define F_LFSCACHE_HIT (0x01 << 1) ////Mark whether the lfs cached item is hit
 #define IS_F_LFSCACHE_HIT(cacheitem) ((cacheitem->flag & F_LFSCACHE_HIT) == F_LFSCACHE_HIT)
 #define SET_F_LFSCACHE_HIT(cacheitem) (cacheitem->flag |= F_LFSCACHE_HIT)
 #define CLR_F_LFSCACHE_HIT(cacheitem) (cacheitem->flag &= (~F_LFSCACHE_HIT))
 
-#define F_LFSCACHE_SW (0x01 << 2) //��ǻ�����������û���
+#define F_LFSCACHE_SW (0x01 << 2) ////Mark whether the FSM object is allocated through the memory pool
 #define IS_F_LFSCACHE_SW(cacheitem) ((cacheitem->flag & F_LFSCACHE_SW) == F_LFSCACHE_SW)
 #define SET_F_LFSCACHE_SW(cacheitem) (cacheitem->flag |= F_LFSCACHE_SW)
 #define CLR_F_LFSCACHE_SW(cacheitem) (cacheitem->flag &= (~F_LFSCACHE_SW))

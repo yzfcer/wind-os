@@ -31,6 +31,15 @@ extern "C" {
 #endif // #ifdef __cplusplus
 #if WIND_NET_IGMP_SUPPORT
 
+#define IGMP_V1 0x0
+#define IGMP_V2 0x1
+#define IGMP_V3 0x2
+
+#define IGMP_TYPE_QUERY   0x1
+#define IGMP_TYPE_REPORT1 0x2
+#define IGMP_TYPE_REPORT2 0x6
+#define IGMP_TYPE_LEAVE   0x7
+
 typedef struct
 {
     w_uint8_t type;

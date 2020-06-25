@@ -38,9 +38,9 @@ extern "C" {
 
 #define WIND_BLKDEV_MAGIC 0xB88F3D9A
 #define F_BLKDEV_OPEN (0x01 << 0) //Mark whether the blkdev object is open
-#define IS_F_BLKDEV_OPEN(chdev) ((chdev->obj.flag & F_BLKDEV_OPEN) == F_BLKDEV_OPEN)
-#define SET_F_BLKDEV_OPEN(chdev) (chdev->obj.flag |= F_BLKDEV_OPEN)
-#define CLR_F_BLKDEV_OPEN(chdev) (chdev->obj.flag &= (~F_BLKDEV_OPEN))
+#define IS_F_BLKDEV_OPEN(chdev) ((chdev->obj.userflag & F_BLKDEV_OPEN) == F_BLKDEV_OPEN)
+#define SET_F_BLKDEV_OPEN(chdev) (chdev->obj.userflag |= F_BLKDEV_OPEN)
+#define CLR_F_BLKDEV_OPEN(chdev) (chdev->obj.userflag &= (~F_BLKDEV_OPEN))
 typedef enum 
 {
     BLKDEV_COMMON = 0x01,

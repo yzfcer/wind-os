@@ -40,7 +40,6 @@ w_int32_t read_file(char *filename,w_int32_t offset,w_uint8_t *buff,w_int32_t si
 
     fseek(file,offset,SEEK_SET); 
     len = fread(buff,1,size,file);
-    WIND_ASSERT_TODO_RETURN(len > 0,fclose(file),W_ERR_FAIL);
     fclose(file);
     return len;
 }

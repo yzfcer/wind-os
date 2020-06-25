@@ -39,9 +39,9 @@ extern "C" {
 #define PIPE_NAME_LEN 12
 
 #define F_PIPE_POOL (0x01 << 0) //Mark whether the pipe object is allocated through the memory pool
-#define IS_F_PIPE_POOL(pipe) ((pipe->obj.flag & F_PIPE_POOL) == F_PIPE_POOL)
-#define SET_F_PIPE_POOL(pipe) (pipe->obj.flag |= F_PIPE_POOL)
-#define CLR_F_PIPE_POOL(pipe) (pipe->obj.flag &= (~F_PIPE_POOL))
+#define IS_F_PIPE_POOL(pipe) ((pipe->obj.userflag & F_PIPE_POOL) == F_PIPE_POOL)
+#define SET_F_PIPE_POOL(pipe) (pipe->obj.userflag |= F_PIPE_POOL)
+#define CLR_F_PIPE_POOL(pipe) (pipe->obj.userflag &= (~F_PIPE_POOL))
 
 //Pipe object structure
 typedef struct __w_pipe_s

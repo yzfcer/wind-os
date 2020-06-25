@@ -91,7 +91,11 @@ w_err_t wind_mutex_trydestroy(w_mutex_s *mutex)
     WIND_ASSERT_RETURN(mutex != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(mutex->obj.magic == WIND_MUTEX_MAGIC,W_ERR_INVALID);
     wind_disable_switch();
-    WIND_ASSERT_TODO_RETURN(!IS_F_MUTEX_LOCKED(mutex),wind_enable_interrupt(),W_ERR_FAIL);
+    if(IS_F_MUTEX_LOCKED(mutex))
+    {
+        wind_enable_interrupt();
+        return W_ERR_FAIL;
+    }
     wind_mutex_destroy(mutex);
     wind_enable_switch();
     return W_ERR_OK;    
@@ -180,9 +184,17 @@ w_err_t wind_mutex_unlock(w_mutex_s *mutex)
     WIND_ASSERT_RETURN(mutex != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(mutex->obj.magic == WIND_MUTEX_MAGIC,W_ERR_INVALID);
     wind_disable_switch();
-    WIND_ASSERT_TODO_RETURN(IS_F_MUTEX_LOCKED(mutex),wind_enable_switch(),W_ERR_OK);
+    if(!IS_F_MUTEX_LOCKED(mutex))
+    {
+        wind_enable_switch();
+        return W_ERR_OK;
+    }
     thread = wind_thread_current();
-    WIND_ASSERT_TODO_RETURN(mutex->owner == thread,wind_enable_switch(),W_ERR_FAIL);
+    if(mutex->owner != thread)
+    {
+        wind_enable_switch();
+        return W_ERR_OK;
+    }
     if(mutex->nest > 0)
         mutex->nest --;
     if(mutex->nest > 0)

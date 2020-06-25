@@ -40,9 +40,9 @@ extern "C" {
 #define WIND_MODULE_MAGIC 0x6A47326A
 
 #define F_MODULE_OPEN (0x01 << 0) //Mark whether the module object is already open
-#define IS_F_MODULE_OPEN(module) ((module->obj.flag & F_MODULE_OPEN) == F_MODULE_OPEN)
-#define SET_F_MODULE_OPEN(module) (module->obj.flag |= F_MODULE_OPEN)
-#define CLR_F_MODULE_OPEN(module) (module->obj.flag &= (~F_MODULE_OPEN))
+#define IS_F_MODULE_OPEN(module) ((module->obj.userflag & F_MODULE_OPEN) == F_MODULE_OPEN)
+#define SET_F_MODULE_OPEN(module) (module->obj.userflag |= F_MODULE_OPEN)
+#define CLR_F_MODULE_OPEN(module) (module->obj.userflag &= (~F_MODULE_OPEN))
 
 //Module status enumeration
 typedef enum

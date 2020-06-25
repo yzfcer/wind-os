@@ -36,6 +36,21 @@ extern "C" {
 
 #define WIND_NETDEV_MAGIC 0x375C6A71
 
+#define F_OBJ_ENABLE (0x01 << 0) //Mark whether the object is enable
+#define IS_F_OBJ_ENABLE(obj) ((obj.objflag & F_OBJ_ENABLE) == F_OBJ_ENABLE)
+#define SET_F_OBJ_ENABLE(obj) (obj.objflag |= F_OBJ_ENABLE)
+#define CLR_F_OBJ_ENABLE(obj) (obj.objflag &= (~F_OBJ_ENABLE))
+
+#define F_OBJ_ENABLE (0x01 << 0) //Mark whether the object is enable
+#define IS_F_OBJ_ENABLE(obj) ((obj.objflag & F_OBJ_ENABLE) == F_OBJ_ENABLE)
+#define SET_F_OBJ_ENABLE(obj) (obj.objflag |= F_OBJ_ENABLE)
+#define CLR_F_OBJ_ENABLE(obj) (obj.objflag &= (~F_OBJ_ENABLE))
+
+#define F_OBJ_ENABLE (0x01 << 0) //Mark whether the object is enable
+#define IS_F_OBJ_ENABLE(obj) ((obj.objflag & F_OBJ_ENABLE) == F_OBJ_ENABLE)
+#define SET_F_OBJ_ENABLE(obj) (obj.objflag |= F_OBJ_ENABLE)
+#define CLR_F_OBJ_ENABLE(obj) (obj.objflag &= (~F_OBJ_ENABLE))
+
 #define WIND_NETDEV_DEF(name) w_netdev_s netdev_##name = {WIND_NETNODE_INFO(name),{{0,0,0,0,0,0},0,0,0}};
 #define WIND_NETDEV_DECLARE(name) extern w_netdev_s netdev_##name;
 #define WIND_NETDEV(name) &netdev_##name

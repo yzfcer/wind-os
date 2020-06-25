@@ -37,14 +37,14 @@ extern "C" {
 #define WIND_MUTEX_MAGIC 0x37AD490F
 
 #define F_MUTEX_POOL (0x01 << 0) //Mark whether mutex objects are allocated through memory pool
-#define IS_F_MUTEX_POOL(mutex) ((mutex->obj.flag & F_MUTEX_POOL) == F_MUTEX_POOL)
-#define SET_F_MUTEX_POOL(mutex) (mutex->obj.flag |= F_MUTEX_POOL)
-#define CLR_F_MUTEX_POOL(mutex) (mutex->obj.flag &= (~F_MUTEX_POOL))
+#define IS_F_MUTEX_POOL(mutex) ((mutex->obj.userflag & F_MUTEX_POOL) == F_MUTEX_POOL)
+#define SET_F_MUTEX_POOL(mutex) (mutex->obj.userflag |= F_MUTEX_POOL)
+#define CLR_F_MUTEX_POOL(mutex) (mutex->obj.userflag &= (~F_MUTEX_POOL))
 
 #define F_MUTEX_LOCKED (0x01 << 1) //Mark the current locking state of mutex object
-#define IS_F_MUTEX_LOCKED(mutex) ((mutex->obj.flag & F_MUTEX_LOCKED) == F_MUTEX_LOCKED)
-#define SET_F_MUTEX_LOCKED(mutex) (mutex->obj.flag |= F_MUTEX_LOCKED)
-#define CLR_F_MUTEX_LOCKED(mutex) (mutex->obj.flag &= (~F_MUTEX_LOCKED))
+#define IS_F_MUTEX_LOCKED(mutex) ((mutex->obj.userflag & F_MUTEX_LOCKED) == F_MUTEX_LOCKED)
+#define SET_F_MUTEX_LOCKED(mutex) (mutex->obj.userflag |= F_MUTEX_LOCKED)
+#define CLR_F_MUTEX_LOCKED(mutex) (mutex->obj.userflag &= (~F_MUTEX_LOCKED))
 
 //Mutex object
 typedef struct _w_mutex_s

@@ -47,10 +47,13 @@ static w_err_t icmp_deinit(w_netnode_s *netnode)
 {
     return W_ERR_FAIL;
 }
+
 static w_err_t icmp_input(w_netnode_s *netnode,w_skb_s *skb)
 {
+    //w_icmphead_s
     return W_ERR_FAIL;
 }
+
 static w_err_t icmp_output(w_netnode_s *netnode,w_skb_s *skb)
 {
     return W_ERR_FAIL;

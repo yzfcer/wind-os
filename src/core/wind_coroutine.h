@@ -39,14 +39,14 @@ extern "C" {
 #define WIND_COROUTINE_MAGIC 0x67F52854
 
 #define F_COROUTINE_POOL (0x01 << 0) //Mark whether the coroutine object is allocated through the memory pool
-#define IS_F_COROUTINE_POOL(coroutine) ((coroutine->obj.flag & F_COROUTINE_POOL) == F_COROUTINE_POOL)
-#define SET_F_COROUTINE_POOL(coroutine) (coroutine->obj.flag |= F_COROUTINE_POOL)
-#define CLR_F_COROUTINE_POOL(coroutine) (coroutine->obj.flag &= (~F_COROUTINE_POOL))
+#define IS_F_COROUTINE_POOL(coroutine) ((coroutine->obj.userflag & F_COROUTINE_POOL) == F_COROUTINE_POOL)
+#define SET_F_COROUTINE_POOL(coroutine) (coroutine->obj.userflag |= F_COROUTINE_POOL)
+#define CLR_F_COROUTINE_POOL(coroutine) (coroutine->obj.userflag &= (~F_COROUTINE_POOL))
 
 #define F_COROUTINE_READY (0x01 << 1) //Mark whether the coroutine object is ready
-#define IS_F_COROUTINE_READY(coroutine) ((coroutine->obj.flag & F_COROUTINE_READY) == F_COROUTINE_READY)
-#define SET_F_COROUTINE_READY(coroutine) (coroutine->obj.flag |= F_COROUTINE_READY)
-#define CLR_F_COROUTINE_READY(coroutine) (coroutine->obj.flag &= (~F_COROUTINE_READY))
+#define IS_F_COROUTINE_READY(coroutine) ((coroutine->obj.userflag & F_COROUTINE_READY) == F_COROUTINE_READY)
+#define SET_F_COROUTINE_READY(coroutine) (coroutine->obj.userflag |= F_COROUTINE_READY)
+#define CLR_F_COROUTINE_READY(coroutine) (coroutine->obj.userflag &= (~F_COROUTINE_READY))
 
 typedef w_uint16_t w_cid_t;
 typedef w_err_t (*coroutine_fn)(void *arg);

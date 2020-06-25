@@ -47,9 +47,9 @@ extern "C" {
 
 
 #define F_HEAP_PRIVATE (0x01 << 0) //Mark whether the heap object is private
-#define IS_F_HEAP_PRIVATE(heap) ((heap->obj.flag & F_HEAP_PRIVATE) == F_HEAP_PRIVATE)
-#define SET_F_HEAP_PRIVATE(heap) (heap->obj.flag |= F_HEAP_PRIVATE)
-#define CLR_F_HEAP_PRIVATE(heap) (heap->obj.flag &= (~F_HEAP_PRIVATE))
+#define IS_F_HEAP_PRIVATE(heap) ((heap->obj.userflag & F_HEAP_PRIVATE) == F_HEAP_PRIVATE)
+#define SET_F_HEAP_PRIVATE(heap) (heap->obj.userflag |= F_HEAP_PRIVATE)
+#define CLR_F_HEAP_PRIVATE(heap) (heap->obj.userflag &= (~F_HEAP_PRIVATE))
 
 
 #define F_HEAPITEM_USED (0x01 << 0) //Mark whether the heap element object is used

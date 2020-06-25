@@ -176,11 +176,11 @@ w_err_t wind_coroutine_destroy(w_coroutine_s *coroutine)
     wind_notice("destroy coroutine:%s",wind_obj_name(coroutine));
     wind_disable_switch();
     err = wind_obj_deinit(&coroutine->obj,WIND_COROUTINE_MAGIC,&thread->coroutlist);
-    WIND_ASSERT_TODO_RETURN(err == W_ERR_OK,wind_enable_switch(),W_ERR_FAIL);
+    //WIND_ASSERT_TODO_RETURN(err == W_ERR_OK,wind_enable_switch(),W_ERR_FAIL);
     if(IS_F_COROUTINE_POOL(coroutine))
         coroutine_free(coroutine);
     wind_enable_switch();
-    return W_ERR_OK;
+    return err;
 }
 
 w_err_t wind_coroutine_yeild(w_coroutine_s *coroutine,void *arg)
