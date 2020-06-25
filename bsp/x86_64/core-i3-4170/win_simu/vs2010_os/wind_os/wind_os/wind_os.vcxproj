@@ -191,6 +191,7 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_tcp.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_tftp.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_udp.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_vlan.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_beep.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_blkdev.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\cmd\cmd_daemon.c" />
@@ -378,6 +379,7 @@
     <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_tcp.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_tftp.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_udp.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_vlan.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\shell\framework\cmd_history.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\shell\framework\shell_framework.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\shell\framework\wind_cmd.h" />

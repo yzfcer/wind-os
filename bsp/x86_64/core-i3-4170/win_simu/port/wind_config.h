@@ -291,6 +291,7 @@ extern "C" {
 //-------------------------------------------------------------------------------
 #if WIND_MODULE_NET_SUPPORT
 #define WIND_NET_ETHER_SUPPORT  1
+#define WIND_NET_VLAN_SUPPORT   1
 #define WIND_NET_ARP_SUPPORT    1
 #define WIND_NET_ICMP_SUPPORT   1
 #define WIND_NET_IGMP_SUPPORT   1

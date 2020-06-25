@@ -36,6 +36,9 @@ extern "C" {
 #if WIND_NET_ETHER_SUPPORT
 WIND_NETNODE_DECLARE(ether);
 #endif
+#if WIND_NET_VLAN_SUPPORT
+WIND_NETNODE_DECLARE(vlan);
+#endif
 #if WIND_NET_ARP_SUPPORT
 WIND_NETNODE_DECLARE(arp);
 #endif
@@ -67,7 +70,10 @@ WIND_NETNODE_DECLARE(tftp);
 static w_err_t wind_netnodes_regi(void)
 {
 #if WIND_NET_ETHER_SUPPORT
-    wind_netnode_register(NETNODE(ether));
+        wind_netnode_register(NETNODE(ether));
+#endif
+#if WIND_NET_VLAN_SUPPORT
+    wind_netnode_register(NETNODE(vlan));
 #endif
 #if WIND_NET_ARP_SUPPORT
     wind_netnode_register(NETNODE(arp));

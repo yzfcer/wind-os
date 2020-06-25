@@ -665,6 +665,9 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_ether.c">
       <Filter>module_net</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_vlan.c">
+      <Filter>module_net</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">
@@ -1126,6 +1129,9 @@
       <Filter>module_net</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_ether.h">
+      <Filter>module_net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_vlan.h">
       <Filter>module_net</Filter>
     </ClInclude>
   </ItemGroup>
