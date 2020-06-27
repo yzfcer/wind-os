@@ -35,11 +35,11 @@ extern "C" {
 
 static w_err_t dhcp_init(w_netnode_s *netnode)
 {
-    return W_ERR_FAIL;
+    return W_ERR_OK;
 }
 static w_err_t dhcp_deinit(w_netnode_s *netnode)
 {
-    return W_ERR_FAIL;
+    return W_ERR_OK;
 }
 
 static w_err_t dhcp_input(w_netnode_s *netnode,w_skb_s *skb)

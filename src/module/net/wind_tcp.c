@@ -40,11 +40,11 @@ static w_err_t tcp_handle_ack(w_netnode_s *netnode,w_skb_s *skb,w_tcphead_s *tcp
 }
 static w_err_t tcp_init(w_netnode_s *netnode)
 {
-    return W_ERR_FAIL;
+    return W_ERR_OK;
 }
 static w_err_t tcp_deinit(w_netnode_s *netnode)
 {
-    return W_ERR_FAIL;
+    return W_ERR_OK;
 }
 static w_err_t tcp_input(w_netnode_s *netnode,w_skb_s *skb)
 {

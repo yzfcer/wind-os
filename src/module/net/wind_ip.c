@@ -136,11 +136,11 @@ w_bool_t wind_ip_is_zero(w_uint32_t ipaddr,w_uint32_t mask)
 
 static w_err_t ip_init(w_netnode_s *netnode)
 {
-    return W_ERR_FAIL;
+    return W_ERR_OK;
 }
 static w_err_t ip_deinit(w_netnode_s *netnode)
 {
-    return W_ERR_FAIL;
+    return W_ERR_OK;
 }
 
 static w_err_t ip_input(w_netnode_s *netnode,w_skb_s *skb)

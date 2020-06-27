@@ -42,11 +42,11 @@ static w_err_t igmp_handle_ack(w_netnode_s *netnode,w_skb_s *skb,w_igmphead_s *i
 }
 static w_err_t igmp_init(w_netnode_s *netnode)
 {
-    return W_ERR_FAIL;
+    return W_ERR_OK;
 }
 static w_err_t igmp_deinit(w_netnode_s *netnode)
 {
-    return W_ERR_FAIL;
+    return W_ERR_OK;
 }
 
 static w_err_t igmp_input(w_netnode_s *netnode,w_skb_s *skb)

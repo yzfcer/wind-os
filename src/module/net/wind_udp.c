@@ -41,11 +41,11 @@ static w_err_t udp_handle_ack(w_netnode_s *netnode,w_skb_s *skb,w_udphead_s *udp
 }
 static w_err_t udp_init(w_netnode_s *netnode)
 {
-    return W_ERR_FAIL;
+    return W_ERR_OK;
 }
 static w_err_t udp_deinit(w_netnode_s *netnode)
 {
-    return W_ERR_FAIL;
+    return W_ERR_OK;
 }
 static w_err_t udp_input(w_netnode_s *netnode,w_skb_s *skb)
 {
