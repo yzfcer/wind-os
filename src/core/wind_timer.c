@@ -152,7 +152,7 @@ w_err_t wind_timer_set_period(w_timer_s* timer,w_uint32_t period_ms)
     if(count <= 0)
         count = 1;
     timer->period = count;
-    //timer->value = 0;
+    timer->value = 0;
     return W_ERR_OK;
 }
 

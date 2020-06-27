@@ -148,6 +148,9 @@ COMMAND_DECLARE(route);
 #if CMD_NETNODE_SUPPORT
 COMMAND_DECLARE(netnode);
 #endif
+#if CMD_ARP_SUPPORT
+COMMAND_DECLARE(arp);
+#endif
 w_err_t wind_netcmd_regi(void)
 {
 #if CMD_IFCONFIG_SUPPORT
@@ -158,6 +161,9 @@ w_err_t wind_netcmd_regi(void)
 #endif
 #if CMD_NETNODE_SUPPORT
     wind_cmd_register(COMMAND(netnode));
+#endif
+#if CMD_ARP_SUPPORT
+    wind_cmd_register(COMMAND(arp));
 #endif
     return W_ERR_OK;
 }
@@ -172,6 +178,9 @@ w_err_t wind_netcmd_unregi(void)
 #endif
 #if CMD_NETNODE_SUPPORT
     wind_cmd_unregister(COMMAND(netnode));
+#endif
+#if CMD_ARP_SUPPORT
+    wind_cmd_unregister(COMMAND(arp));
 #endif
     return W_ERR_OK;
 }

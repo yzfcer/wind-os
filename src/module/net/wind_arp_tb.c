@@ -32,6 +32,7 @@
 extern "C" {
 #endif // #ifdef __cplusplus
 #if WIND_NET_ARP_SUPPORT
+static w_uint32_t arp_tb_ttl = WIND_ARP_TB_TTL;
 w_arp_tb_s arp_tb_list[WIND_ARP_TB_MAX_NUM];
 static void arp_tb_timer(w_timer_s *timer,void *arg)
 {
@@ -79,7 +80,7 @@ w_err_t wind_arp_tb_deinit(void)
 
 
 
-w_err_t wind_arp_tb_update(w_arp_tb_s *arp_tb)
+w_err_t wind_arp_tb_insert(w_arp_tb_s *arp_tb)
 {
     w_err_t err;
     w_arp_tb_s *new_arptb;
@@ -88,7 +89,6 @@ w_err_t wind_arp_tb_update(w_arp_tb_s *arp_tb)
     do
     {
         err = W_ERR_OK;
-        wind_disable_switch();
         new_arptb = wind_arp_tb_get(arp_tb->ipaddr);
         if(new_arptb == W_NULL)
             new_arptb = find_free_arp_tb();
@@ -104,6 +104,25 @@ w_err_t wind_arp_tb_update(w_arp_tb_s *arp_tb)
     wind_enable_switch();
     return err;
 }
+
+w_err_t wind_arp_tb_remove(w_arp_tb_s *arp_tb)
+{
+    w_err_t err;
+    w_arp_tb_s *tmp_arptb;
+    wind_disable_switch();
+    do
+    {
+        err = W_ERR_OK;
+        tmp_arptb = wind_arp_tb_get(arp_tb->ipaddr);
+        WIND_ASSERT_BREAK(tmp_arptb != W_NULL,W_ERR_FAIL,"find arp table rule fail");
+        if(wind_memcmp(tmp_arptb->mac,arp_tb->mac,MAC_ADDR_LEN) != 0)
+            break;
+        tmp_arptb->enable = 0;
+    }while(0);
+    wind_enable_switch();
+    return err;
+}
+
 
 w_err_t wind_arp_tb_clear(void)
 {
@@ -129,7 +148,9 @@ w_err_t wind_arp_tb_flush(void)
     {
         if(!arp_tb_list[i].enable)
             continue;
-        if(tick - arp_tb_list[i].ttl >= WIND_ARP_TB_TTL)
+        if(arp_tb_list[i].is_static)
+            continue;
+        if(tick - arp_tb_list[i].ttl >= arp_tb_ttl)
         {
             arp_tb_list[i].enable = 0;
             break;
@@ -138,6 +159,25 @@ w_err_t wind_arp_tb_flush(void)
     wind_enable_switch();
     return W_ERR_OK;
 }
+
+w_err_t wind_arp_tb_set_ttl(w_uint32_t ttl)
+{
+    w_err_t err;
+    w_timer_s *timer;
+    if(ttl > WIND_ARP_TB_MAX_TTL)
+        ttl = WIND_ARP_TB_MAX_TTL;
+    arp_tb_ttl = ttl;
+    timer = wind_timer_get("arp");
+    WIND_ASSERT_RETURN(timer != W_NULL,W_ERR_FAIL);
+    err = wind_timer_set_period(timer,arp_tb_ttl);
+    return err;
+}
+
+w_int32_t wind_arp_tb_get_ttl(void)
+{
+    return arp_tb_ttl;
+}
+
 
 w_arp_tb_s *wind_arp_tb_get(w_uint32_t ipaddr)
 {
