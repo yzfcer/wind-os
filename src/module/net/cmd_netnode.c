@@ -2,13 +2,13 @@
 **                                       God's harbor
 ** FileName    : cmd_netnode.c
 ** Author      : Jason Zhou
-** Last Date   : 2015/1/24 20:24:37
+** Last Date   : 2020-06-27
 ** Description : netnode table configure command
 **  
 **--------------History---------------------------------------------------------------------------------
 ** Author      : Jason Zhou
 ** Version     : v1.0
-** Date        : 2015/1/24 20:24:37
+** Date        : 2020-06-27
 ** Description : First version
 **
 **--------------Cureent version-------------------------------------------------------------------------
