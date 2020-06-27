@@ -33,14 +33,8 @@ extern "C" {
 #endif // #ifdef __cplusplus
 #if WIND_MODULE_NET_SUPPORT
 
-
+w_route_tb_s *default_routetb = (w_route_tb_s *)W_NULL;
 w_route_tb_s route_tb_list[WIND_ROUTE_TB_MAX_NUM];
-#if 0
-static void route_tb_timer(w_timer_s *timer,void *arg)
-{
-    //wind_route_tb_flush();
-}
-#endif
 
 w_err_t wind_route_tb_init(void)
 {
@@ -66,7 +60,6 @@ w_err_t wind_route_tb_insert(w_route_tb_s *route_tb)
     do
     {
         err = W_ERR_OK;
-        wind_disable_switch();
         tmp_routetb = wind_route_tb_get(route_tb->destip);
         if(tmp_routetb == W_NULL)
         {
@@ -82,6 +75,36 @@ w_err_t wind_route_tb_insert(w_route_tb_s *route_tb)
         WIND_ASSERT_BREAK(tmp_routetb != W_NULL,W_ERR_MEM,"route_tb table full");
         wind_memcpy(tmp_routetb,route_tb,sizeof(w_route_tb_s));
         route_tb_list[i].enable = 1;
+        if(route_tb_list[i].is_default)
+        {
+            if(default_routetb != W_NULL)
+                default_routetb->is_default = 0;
+            default_routetb = &route_tb_list[i];
+        }
+    }while(0);
+    wind_enable_switch();
+    return err;
+}
+
+w_err_t wind_route_tb_remove(w_route_tb_s *route_tb)
+{
+    w_err_t err;
+    w_route_tb_s *tmp_routetb;
+    wind_disable_switch();
+    do
+    {
+        err = W_ERR_OK;
+        tmp_routetb = wind_route_tb_get(route_tb->destip);
+        WIND_ASSERT_BREAK(tmp_routetb != W_NULL,W_ERR_FAIL,"find route table rule fail");
+        if(tmp_routetb->mask_bits != route_tb->mask_bits)
+            break;
+        if(tmp_routetb->next_hop != route_tb->next_hop)
+            break;
+        if(wind_strcmp(tmp_routetb->dev_name,route_tb->dev_name) != 0)
+            break;
+        tmp_routetb->enable = 0;
+        if(tmp_routetb == default_routetb)
+            default_routetb = (w_route_tb_s *)W_NULL;
     }while(0);
     wind_enable_switch();
     return err;
@@ -150,7 +173,7 @@ w_err_t wind_route_tb_print(void)
         wind_ip_to_str(route_tb_list[i].destip,destipstr);
         wind_ip_to_str(route_tb_list[i].next_hop,gwipstr);
         wind_printf("%s/%d via %s dev %s\r\n",destipstr,
-            route_tb_list[i].mask_bits,gwipstr);
+            route_tb_list[i].mask_bits,gwipstr,route_tb_list[i].dev_name);
     }
     return W_ERR_OK;
 }
