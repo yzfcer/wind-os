@@ -45,7 +45,7 @@ w_err_t wind_route_tb_deinit(void);
 w_err_t wind_route_tb_insert(w_route_tb_s *route_tb);
 w_err_t wind_route_tb_remove(w_route_tb_s *route_tb);
 w_err_t wind_route_tb_clear(void);
-w_err_t wind_route_tb_flush(void);
+//w_err_t wind_route_tb_flush(void);
 w_route_tb_s *wind_route_tb_get(w_uint32_t destip);
 w_err_t wind_route_tb_print(void);
 

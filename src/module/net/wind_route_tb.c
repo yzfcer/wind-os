@@ -122,6 +122,7 @@ w_err_t wind_route_tb_clear(void)
     return W_ERR_OK;
 }
 
+#if 0
 w_err_t wind_route_tb_flush(void)
 {
     w_int32_t i;
@@ -140,6 +141,7 @@ w_err_t wind_route_tb_flush(void)
     wind_enable_switch();
     return W_ERR_OK;
 }
+#endif
 
 w_route_tb_s *wind_route_tb_get(w_uint32_t destip)
 {
