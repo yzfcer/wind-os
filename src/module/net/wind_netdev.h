@@ -42,6 +42,18 @@ extern "C" {
 #define WIND_NETDEV_MAGIC 0x375C6A71
 #define NETDEV_MAX_NAMELEN 12
 
+#define IS_F_NETDEV_ENABLE(netdev) IS_F_OBJ_ENABLE(netdev->netnode.obj)
+#define SET_F_NETDEV_ENABLE(netdev) SET_F_OBJ_ENABLE(netdev->netnode.obj)
+#define CLR_F_NETDEV_ENABLE(netdev) CLR_F_OBJ_ENABLE(netdev->netnode.obj)
+
+#define IS_F_NETDEV_POOL(netdev) IS_F_OBJ_POOL(netdev->netnode.obj)
+#define SET_F_NETDEV_POOL(netdev) SET_F_OBJ_POOL(netdev->netnode.obj)
+#define CLR_F_NETDEV_POOL(netdev) CLR_F_OBJ_POOL(netdev->netnode.obj)
+
+#define IS_F_NETDEV_HEAP(netdev) IS_F_OBJ_HEAP(netdev->netnode.obj)
+#define SET_F_NETDEV_HEAP(netdev) SET_F_OBJ_HEAP(netdev->netnode.obj)
+#define CLR_F_NETDEV_HEAP(netdev) CLR_F_OBJ_HEAP(netdev->netnode.obj)
+
 #define F_NETDEV_UNICAST (0x01 << 0) //Mark whether the netdev object is enable unicast
 #define IS_F_NETDEV_UNICAST(netdev) ((netdev->netnode.obj.userflag & F_NETDEV_UNICAST) == F_NETDEV_UNICAST)
 #define SET_F_NETDEV_UNICAST(netdev) (netdev->netnode.obj.userflag |= F_NETDEV_UNICAST)

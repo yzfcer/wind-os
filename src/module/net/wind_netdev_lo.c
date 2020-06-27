@@ -49,8 +49,10 @@ static w_err_t lo_init(w_netnode_s *netnode)
     SET_F_NETDEV_BROADCAST(netdev);
     SET_F_NETDEV_MULTCAST(netdev);
     SET_F_NETDEV_IP_READY(netdev);
+    SET_F_NETDEV_ENABLE(netdev);
     return W_ERR_OK;
 }
+
 static w_err_t lo_deinit(w_netnode_s *netnode)
 {
     w_netdev_s *netdev;

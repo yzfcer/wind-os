@@ -75,46 +75,57 @@ COMMAND_MAIN(ifconfig,argc,argv)
     if(wind_strcmp(argv[1],"setip") == 0)
     {
         WIND_ASSERT_RETURN(argc >= 6,W_ERR_FAIL);
+        
         netdev = wind_netdev_get(argv[2]);
         WIND_ASSERT_RETURN(netdev != W_NULL,W_ERR_FAIL);
+        
         err = wind_ip_from_str(&ip,argv[3]);
         WIND_ASSERT_RETURN(err == W_ERR_OK,err);
+        
         err = wind_ip_from_str(&mask,argv[4]);
         WIND_ASSERT_RETURN(err == W_ERR_OK,err);
+        
         err = wind_ip_from_str(&gw,argv[5]);
         WIND_ASSERT_RETURN(err == W_ERR_OK,err);
+        
         return wind_netdev_set_ip(netdev,ip,mask,gw);
     }
     if(wind_strcmp(argv[1],"setmac") == 0)
     {
         WIND_ASSERT_RETURN(argc >= 4,W_ERR_FAIL);
+        
         netdev = wind_netdev_get(argv[2]);
         WIND_ASSERT_RETURN(netdev != W_NULL,W_ERR_FAIL);
+        
         err = wind_mac_from_str(mac,argv[3]);
         WIND_ASSERT_RETURN(err == W_ERR_OK,err);
+        
         return wind_netdev_set_mac(netdev,mac);
     }
     if(wind_strcmp(argv[1],"setvlan") == 0)
     {
         WIND_ASSERT_RETURN(argc >= 5,W_ERR_FAIL);
+        
         netdev = wind_netdev_get(argv[2]);
         WIND_ASSERT_RETURN(netdev != W_NULL,W_ERR_FAIL);
+        
         wind_memset(&vlan,0,sizeof(w_vlan_s));
         res = wind_str_to_uint(argv[3],&value);
         WIND_ASSERT_RETURN(res == W_TRUE,W_ERR_FAIL);
         WIND_ASSERT_RETURN(value <= 4095,W_ERR_FAIL);
         WIND_ASSERT_RETURN(value >= 0,W_ERR_FAIL);
         vlan.vlanid = value;
+        
         res = wind_str_to_uint(argv[4],&value);
         WIND_ASSERT_RETURN(res == W_TRUE,W_ERR_FAIL);
         WIND_ASSERT_RETURN(value <= 7,W_ERR_FAIL);
         WIND_ASSERT_RETURN(value >= 0,W_ERR_FAIL);
         vlan.vlanpri = value;
+        
         return wind_netdev_set_vlan(netdev,&vlan);
     }
-    
 
-    return W_ERR_OK;
+    return W_ERR_FAIL;
 }
 
 COMMAND_DEF(ifconfig);

@@ -142,10 +142,16 @@ static w_err_t wind_netnodes_unregi(void)
 #if CMD_IFCONFIG_SUPPORT
 COMMAND_DECLARE(ifconfig);
 #endif
+#if CMD_ROUTE_SUPPORT
+COMMAND_DECLARE(route);
+#endif
 w_err_t wind_netcmd_regi(void)
 {
 #if CMD_IFCONFIG_SUPPORT
     wind_cmd_register(COMMAND(ifconfig));
+#endif
+#if CMD_ROUTE_SUPPORT
+    wind_cmd_register(COMMAND(route));
 #endif
     return W_ERR_OK;
 }
@@ -154,6 +160,9 @@ w_err_t wind_netcmd_unregi(void)
 {
 #if CMD_IFCONFIG_SUPPORT
     wind_cmd_unregister(COMMAND(ifconfig));
+#endif
+#if CMD_ROUTE_SUPPORT
+    wind_cmd_unregister(COMMAND(route));
 #endif
     return W_ERR_OK;
 }

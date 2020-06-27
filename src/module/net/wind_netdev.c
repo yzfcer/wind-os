@@ -198,7 +198,8 @@ static w_err_t print_netdev_detail(w_netdev_s *netdev)
     wind_mac_to_str(netdev->param.mac,macstr,':');
 
     wind_printf("%-12s mac %s\r\n",netdev->netnode.obj.name,macstr);
-    wind_printf("%-12s %s %s %s\r\n","",
+    wind_printf("%-12s %s %s %s %s\r\n","",
+        IS_F_NETDEV_ENABLE(netdev)?"ENABLED":"DISABLED",
         IS_F_NETDEV_UNICAST(netdev)?"UNICAST":"",
         IS_F_NETDEV_BROADCAST(netdev)?"BROADCAST":"",
         IS_F_NETDEV_MULTCAST(netdev)?"MULTCAST":"");

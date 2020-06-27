@@ -303,7 +303,8 @@ extern "C" {
 #define WIND_NET_DNS_SUPPORT    1
 #define WIND_NET_TFTP_SUPPORT   1
 
-#define CMD_IFCONFIG_SUPPORT 1
+#define CMD_IFCONFIG_SUPPORT    1
+#define CMD_ROUTE_SUPPORT       1   
 
 #define WIND_FDB_MAX_NUM 32
 #define WIND_ARP_TB_MAX_NUM 32
