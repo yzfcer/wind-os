@@ -102,10 +102,11 @@ w_err_t wind_netnode_recv(w_netnode_s * netnode,w_skb_s *skb)
     w_err_t err;
     WIND_ASSERT_RETURN(netnode != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(skb != W_NULL,W_ERR_NULL_PTR);
-    WIND_ASSERT_RETURN(IS_F_OBJ_ENABLE(netnode->obj),W_ERR_NOT_SUPPORT);
+    
     do
     {
         err = W_ERR_OK;
+        WIND_CHECK_BREAK(IS_F_OBJ_ENABLE(netnode->obj),W_ERR_NOT_SUPPORT);
         RECV_PACK_CNT_INC(netnode->stati);
         RECV_BYTES_CNT_INC(netnode->stati,skb->packlen);
         err = wind_netnode_input_hook(netnode,skb);
@@ -127,10 +128,10 @@ w_err_t wind_netnode_send(w_netnode_s * netnode,w_skb_s *skb)
     w_err_t err;
     WIND_ASSERT_RETURN(netnode != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(skb != W_NULL,W_ERR_NULL_PTR);
-    WIND_ASSERT_RETURN(IS_F_OBJ_ENABLE(netnode->obj),W_ERR_NOT_SUPPORT);
     do
     {
         err = W_ERR_OK;
+        WIND_CHECK_BREAK(IS_F_OBJ_ENABLE(netnode->obj),W_ERR_NOT_SUPPORT);
         SEND_PACK_CNT_INC(netnode->stati);
         SEND_BYTES_CNT_INC(netnode->stati,skb->packlen);
         err = wind_netnode_output_hook(netnode,skb);
