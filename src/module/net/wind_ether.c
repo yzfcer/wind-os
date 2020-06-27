@@ -39,7 +39,7 @@ static w_netnode_s *ip_node = (w_netnode_s *)W_NULL;
 static w_err_t check_skb_dest_mactype(w_netdev_s *netdev,w_uint8_t *macaddr)
 {
     WIND_CHECK_RETURN(netdev != W_NULL,W_ERR_NULL_PTR);
-    if(IS_F_NETDEV_BROADTCAST(netdev) && wind_mac_is_broad(macaddr))
+    if(IS_F_NETDEV_BROADCAST(netdev) && wind_mac_is_broad(macaddr))
         return W_ERR_OK;
     if(IS_F_NETDEV_MULTCAST(netdev) && wind_mac_is_mult(macaddr))
         return W_ERR_OK;

@@ -668,6 +668,9 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\net\wind_vlan.c">
       <Filter>module_net</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\net\cmd_ifconfig.c">
+      <Filter>module_net</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">

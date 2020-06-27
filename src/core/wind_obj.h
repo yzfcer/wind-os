@@ -70,6 +70,11 @@ w_err_t wind_obj_clrflag(w_obj_s *obj,w_uint8_t flag);
 w_err_t wind_obj_register(w_obj_s *obj,w_dlist_s *dlist);
 w_err_t wind_obj_unregister(w_obj_s *obj,w_dlist_s *dlist);
 w_err_t wind_obj_print_list(w_dlist_s *dlist);
+w_err_t wind_obj_set_objflag(w_obj_s *obj,w_uint8_t objflag);
+w_err_t wind_obj_clr_objflag(w_obj_s *obj,w_uint8_t objflag);
+w_err_t wind_obj_set_userflag(w_obj_s *obj,w_uint8_t userflag);
+w_err_t wind_obj_clr_userflag(w_obj_s *obj,w_uint8_t userflag);
+
 
 #ifdef __cplusplus
 }

@@ -33,7 +33,12 @@ extern "C" {
 
 w_err_t wind_ip_to_str(w_uint32_t ipaddr,char * ipstr);
 w_err_t wind_ip_from_str(w_uint32_t *ipaddr,char * ipstr);
+w_int32_t wind_ip_to_maskbits(w_uint32_t ipaddr,w_uint32_t maskbits);
+w_err_t wind_ip_from_maskbits(w_uint32_t *ipaddr,w_uint32_t maskbits);
 
+w_bool_t wind_ip_is_broad(w_uint32_t ipaddr,w_uint32_t mask);
+w_bool_t wind_ip_is_mult(w_uint32_t ipaddr);
+w_bool_t wind_ip_is_zero(w_uint32_t ipaddr,w_uint32_t mask);
 
 #endif // #if WIND_NET_IP_SUPPORT
 #ifdef __cplusplus

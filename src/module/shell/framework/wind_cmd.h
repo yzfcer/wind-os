@@ -40,7 +40,7 @@ typedef struct
 #define COMMAND_USAGE(cmdname) static void cmd_##cmdname##_help(void)
 #define COMMAND_MAIN(cmdname,argc,argv) static w_err_t cmd_##cmdname##_main(w_int32_t argc,char **argv)
 #define COMMAND_DEF(cmdname) w_cmd_s g_cmd_##cmdname = { \
-{W_NULL,W_NULL},#cmdname,cmd_##cmdname##_disc,\
+{(w_dnode_s*)W_NULL,(w_dnode_s*)W_NULL},#cmdname,cmd_##cmdname##_disc,\
 cmd_##cmdname##_help,cmd_##cmdname##_main}
 
 #define COMMAND_DECLARE(cmdname) extern w_cmd_s g_cmd_##cmdname

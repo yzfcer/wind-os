@@ -237,6 +237,37 @@ w_err_t wind_obj_print_list(w_dlist_s *dlist)
     return W_ERR_OK;
 }
 
+w_err_t wind_obj_set_objflag(w_obj_s *obj,w_uint8_t objflag)
+{
+    WIND_ASSERT_RETURN(obj != W_NULL,W_ERR_NULL_PTR);
+    obj->objflag |= objflag;
+    return W_ERR_OK;
+}
+
+w_err_t wind_obj_clr_objflag(w_obj_s *obj,w_uint8_t objflag)
+{
+    WIND_ASSERT_RETURN(obj != W_NULL,W_ERR_NULL_PTR);
+    obj->objflag &= (~objflag);
+    return W_ERR_OK;
+}
+
+w_err_t wind_obj_set_userflag(w_obj_s *obj,w_uint8_t userflag)
+{
+    WIND_ASSERT_RETURN(obj != W_NULL,W_ERR_NULL_PTR);
+    obj->userflag |= userflag;
+    return W_ERR_OK;
+}
+
+w_err_t wind_obj_clr_userflag(w_obj_s *obj,w_uint8_t userflag)
+{
+    WIND_ASSERT_RETURN(obj != W_NULL,W_ERR_NULL_PTR);
+    obj->userflag &= (~userflag);
+    return W_ERR_OK;
+}
+
+
+
+
 
 #ifdef __cplusplus
 }

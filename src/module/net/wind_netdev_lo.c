@@ -44,7 +44,11 @@ static w_err_t lo_init(w_netnode_s *netnode)
     wind_memset(netdev->param.mac,0,sizeof(netdev->param.mac));
     netdev->param.ip = 0x7F000001;
     netdev->param.mask = 0xFF000000;
-    netdev->param.gw = 0x7F000001;
+    netdev->param.gw = 0x00000000;
+    SET_F_NETDEV_UNICAST(netdev);
+    SET_F_NETDEV_BROADCAST(netdev);
+    SET_F_NETDEV_MULTCAST(netdev);
+    SET_F_NETDEV_IP_READY(netdev);
     return W_ERR_OK;
 }
 static w_err_t lo_deinit(w_netnode_s *netnode)
@@ -55,6 +59,7 @@ static w_err_t lo_deinit(w_netnode_s *netnode)
     netdev->param.ip = 0;
     netdev->param.mask = 0;
     netdev->param.gw = 0;
+    
     return W_ERR_OK;
 }
 

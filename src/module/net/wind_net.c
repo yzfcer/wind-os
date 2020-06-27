@@ -27,6 +27,7 @@
 #include "wind_netdev.h"
 #include "wind_arp_tb.h"
 #include "wind_fdb.h"
+#include "wind_cmd.h"
 #include "wind_route_tb.h"
 #ifdef __cplusplus
 extern "C" {
@@ -70,7 +71,7 @@ WIND_NETNODE_DECLARE(tftp);
 static w_err_t wind_netnodes_regi(void)
 {
 #if WIND_NET_ETHER_SUPPORT
-        wind_netnode_register(NETNODE(ether));
+    wind_netnode_register(NETNODE(ether));
 #endif
 #if WIND_NET_VLAN_SUPPORT
     wind_netnode_register(NETNODE(vlan));
@@ -137,6 +138,26 @@ static w_err_t wind_netnodes_unregi(void)
     return W_ERR_OK;
 }
 
+
+#if CMD_IFCONFIG_SUPPORT
+COMMAND_DECLARE(ifconfig);
+#endif
+w_err_t wind_netcmd_regi(void)
+{
+#if CMD_IFCONFIG_SUPPORT
+    wind_cmd_register(COMMAND(ifconfig));
+#endif
+    return W_ERR_OK;
+}
+
+w_err_t wind_netcmd_unregi(void)
+{
+#if CMD_IFCONFIG_SUPPORT
+    wind_cmd_unregister(COMMAND(ifconfig));
+#endif
+    return W_ERR_OK;
+}
+
 w_err_t _wind_net_mod_init(void)
 {
     w_err_t err = W_ERR_OK;
@@ -147,12 +168,16 @@ w_err_t _wind_net_mod_init(void)
     WIND_ASSERT_RETURN(err == W_ERR_OK,err);
     err = _wind_netdev_mod_init();
     WIND_ASSERT_RETURN(err == W_ERR_OK,err);
+    err = wind_netcmd_regi();
+    WIND_ASSERT_RETURN(err == W_ERR_OK,err);
     return err;
 }
 
 w_err_t _wind_net_mod_deinit(void)
 {
     w_err_t err;
+    err = wind_netcmd_unregi();
+    WIND_ASSERT_RETURN(err == W_ERR_OK,err);
     err = wind_netnodes_unregi();
     WIND_ASSERT_RETURN(err == W_ERR_OK,err);
     wind_route_tb_deinit();

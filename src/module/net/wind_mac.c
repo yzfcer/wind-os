@@ -69,7 +69,6 @@ w_err_t wind_mac_from_str(w_uint8_t *macaddr,char *macstr)
         {
             macaddr[i] = hex_to_dec(macstr[j++]);
             macaddr[i] = (macaddr[i] << 4) + hex_to_dec(macstr[j++]);
-            j ++;
         }
     }
     else
@@ -78,6 +77,7 @@ w_err_t wind_mac_from_str(w_uint8_t *macaddr,char *macstr)
         {
             macaddr[i] = hex_to_dec(macstr[j++]);
             macaddr[i] = (macaddr[i] << 4) + hex_to_dec(macstr[j++]);
+            j ++;
         }
     }
     return W_ERR_OK;
