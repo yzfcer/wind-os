@@ -207,7 +207,7 @@ w_err_t wind_route_tb_print(void)
             continue;
         wind_ip_to_str(rtb->destip,destipstr);
         wind_ip_to_str(rtb->next_hop,gwipstr);
-        wind_printf("%s%s/%d via %s dev %s\r\n",destipstr,
+        wind_printf("%s/%d via %s dev %s\r\n",destipstr,
             rtb->mask_bits,gwipstr,rtb->dev_name);
     }
     return W_ERR_OK;

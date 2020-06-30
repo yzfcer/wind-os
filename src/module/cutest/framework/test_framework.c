@@ -394,10 +394,6 @@ void show_test_suites(void)
     w_test_suite_s *ts;
     test_printf("\r\nTest Suites List As Following:\r\n");
     test_printf("TestSuites\r\n");
-    if(suite_list.head == W_NULL)
-    {
-        test_suite_register_all();
-    }
     ts = suite_list.head;
     for(i = 0;i < suite_list.cnt;i ++)
     {
@@ -469,7 +465,6 @@ void execute_all_suites(char* suitefilter,char *casefilter)
 w_err_t cutest_main(w_int32_t argc,char **argv)
 {
     WIND_ASSERT_RETURN(argc >= 2,W_ERR_FAIL);
-    test_suite_register_all();
     if(0 == stringcmp(argv[1],"list"))
     {
         show_test_suites();

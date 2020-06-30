@@ -30,6 +30,8 @@ extern "C" {
 /*********************************************header file***********************************************/
 
 #if (WIND_MODULE_CUTEST_SUPPORT)
+extern void test_suite_register_all(void);
+
 
 /********************************************internal variables**********************************************/
 
@@ -85,6 +87,7 @@ COMMAND_DEF(cutest);
 MODULE_INIT(cutest)
 {
     w_err_t err = W_ERR_NOT_SUPPORT;
+    test_suite_register_all();
 #if CMD_CUTEST_SUPPORT
     err = wind_cmd_register(COMMAND(cutest));
 #endif
