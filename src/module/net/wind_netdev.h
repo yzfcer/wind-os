@@ -79,8 +79,13 @@ extern "C" {
 #define SET_F_NETDEV_IP_READY(netdev) (netdev->netnode.obj.userflag |= F_NETDEV_IP_READY)
 #define CLR_F_NETDEV_IP_READY(netdev) (netdev->netnode.obj.userflag &= (~F_NETDEV_IP_READY))
 
+#define F_NETDEV_LOCAL (0x01 << 5) //Mark whether the netdev object ip address is a local device
+#define IS_F_NETDEV_LOCAL(netdev) ((netdev->netnode.obj.userflag & F_NETDEV_LOCAL) == F_NETDEV_LOCAL)
+#define SET_F_NETDEV_LOCAL(netdev) (netdev->netnode.obj.userflag |= F_NETDEV_LOCAL)
+#define CLR_F_NETDEV_LOCAL(netdev) (netdev->netnode.obj.userflag &= (~F_NETDEV_LOCAL))
 
-#define WIND_NETDEV_DEF(name) w_netdev_s netdev_##name = {WIND_NETNODE_INFO(name),{{0,0,0,0,0,0},0,0,0}};
+
+#define WIND_NETDEV_DEF(name) w_netdev_s netdev_##name = {WIND_NETNODE_INFO(name),{{0,0,0,0,0,0},0,0,0,0,IP_STATIC,{0,0,0,0}}};
 #define WIND_NETDEV_DECLARE(name) extern w_netdev_s netdev_##name;
 #define WIND_NETDEV(name) &netdev_##name
 extern struct __w_netdev_s;
@@ -96,6 +101,7 @@ typedef enum
 typedef struct 
 {
     w_uint8_t mac[MAC_ADDR_LEN];
+    w_uint8_t devid;
     w_uint32_t ip;
     w_uint32_t gw;
     w_uint32_t mask;
@@ -111,6 +117,7 @@ struct __w_netdev_s
 
 w_err_t _wind_netdev_mod_init(void);
 w_netdev_s* wind_netdev_get(char *name);
+w_netdev_s* wind_netdev_get_byid(w_uint16_t devid);
 
 w_err_t wind_netdev_register(w_netdev_s *netdev);
 w_err_t wind_netdev_unregister(w_netdev_s *netdev);
@@ -122,6 +129,7 @@ w_err_t wind_netdev_print_list(void);
 w_err_t wind_netdev_set_ip(w_netdev_s *netdev,w_uint32_t ip,w_uint32_t mask,w_uint32_t gw);
 w_err_t wind_netdev_set_vlan(w_netdev_s *netdev,w_vlan_s *vlan);
 w_err_t wind_netdev_set_mac(w_netdev_s *netdev,w_uint8_t *mac);
+w_err_t wind_netdev_set_iptype(w_netdev_s *netdev,ip_type_e iptype);
 w_err_t wind_netdev_print_detail(char *devname);
 
 

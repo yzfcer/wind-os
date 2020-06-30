@@ -35,20 +35,22 @@ extern "C" {
 
 typedef struct 
 {
-    w_uint8_t port_id;
     w_uint8_t is_local:1;
     w_uint8_t enable:1;
     w_uint8_t mac[6];
+    w_uint8_t dev_id;
     w_uint16_t vlanid;
     w_uint16_t ttl;
 }w_fdb_s;
 
 w_err_t wind_fdb_init(void);
 w_err_t wind_fdb_deinit(void);
-w_err_t wind_fdb_update(w_uint8_t *mac,w_uint16_t vlanid,w_uint8_t portid);
+w_err_t wind_fdb_insert(w_fdb_s *fdb);
+w_err_t wind_fdb_remove(w_fdb_s *fdb);
 w_err_t wind_fdb_clear(void);
 w_err_t wind_fdb_flush(void);
 w_fdb_s *wind_fdb_get(w_uint8_t *mac);
+w_err_t wind_fdb_print(void);
 
 #endif //#if WIND_MODULE_NET_SUPPORT
 #ifdef __cplusplus

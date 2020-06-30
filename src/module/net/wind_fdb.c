@@ -61,40 +61,57 @@ w_err_t wind_fdb_deinit(void)
     return W_ERR_OK;
 }
 
-w_err_t wind_fdb_update(w_uint8_t *mac,w_uint16_t vlanid,w_uint8_t portid)
+w_err_t wind_fdb_insert(w_fdb_s *fdb)
 {
     w_int32_t i;
     w_err_t err;
-    w_fdb_s *fdb;
+    w_fdb_s *tmpfdb;
     w_uint32_t tick;
     wind_disable_switch();
     do
     {
         err = W_ERR_OK;
         wind_disable_switch();
-        fdb = wind_fdb_get(mac);
-        if(fdb == W_NULL)
+        tmpfdb = wind_fdb_get(fdb->mac);
+        if(tmpfdb == W_NULL)
         {
             for(i = 0;i < WIND_FDB_MAX_NUM;i ++)
             {
                 if(fdb_list[i].enable)
                     continue;
                 fdb_list[i].enable = 1;
-                fdb = &fdb_list[i];
+                tmpfdb = &fdb_list[i];
                 break;
             }
         }
-        WIND_ASSERT_BREAK(fdb != W_NULL,W_ERR_MEM,"fdb table full");
+        WIND_ASSERT_BREAK(tmpfdb != W_NULL,W_ERR_MEM,"fdb table full");
         tick = wind_get_tick();
         tick /= WIND_TICK_PER_SEC;
-        wind_memcpy(fdb->mac,mac,6);
-        fdb->vlanid = vlanid;
-        fdb->port_id = portid;
+        wind_memcpy(tmpfdb,fdb,sizeof(w_fdb_s));
 		fdb->ttl = (w_uint16_t)tick;
     }while(0);
     wind_enable_switch();
     return err;
 }
+
+w_err_t wind_fdb_remove(w_fdb_s *fdb)
+{
+    w_err_t err;
+    w_fdb_s *tmp_fdb;
+    wind_disable_switch();
+    do
+    {
+        err = W_ERR_OK;
+        tmp_fdb = wind_fdb_get(fdb->mac);
+        WIND_ASSERT_BREAK(tmp_fdb != W_NULL,W_ERR_FAIL,"find route table rule fail");
+        if(tmp_fdb->dev_id != fdb->dev_id)
+            break;
+        tmp_fdb->enable = 0;
+    }while(0);
+    wind_enable_switch();
+    return err;
+}
+
 
 w_err_t wind_fdb_clear(void)
 {
@@ -148,6 +165,12 @@ w_fdb_s *wind_fdb_get(w_uint8_t *mac)
     wind_enable_switch();
     return fdb;
 }
+
+w_err_t wind_fdb_print(void)
+{
+    
+}
+
 
 
 #endif //#if WIND_MODULE_NET_SUPPORT

@@ -114,13 +114,13 @@ COMMAND_MAIN(ifconfig,argc,argv)
         WIND_ASSERT_RETURN(res == W_TRUE,W_ERR_FAIL);
         WIND_ASSERT_RETURN(value <= 4095,W_ERR_FAIL);
         WIND_ASSERT_RETURN(value >= 0,W_ERR_FAIL);
-        vlan.vlanid = value;
+		vlan.vlanid = (w_uint16_t)value;
         
         res = wind_str_to_uint(argv[4],&value);
         WIND_ASSERT_RETURN(res == W_TRUE,W_ERR_FAIL);
         WIND_ASSERT_RETURN(value <= 7,W_ERR_FAIL);
         WIND_ASSERT_RETURN(value >= 0,W_ERR_FAIL);
-        vlan.vlanpri = value;
+        vlan.vlanpri = (w_uint16_t)value;
         
         return wind_netdev_set_vlan(netdev,&vlan);
     }

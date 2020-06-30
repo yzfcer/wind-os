@@ -45,6 +45,7 @@ static w_err_t add_netdev(w_netdev_s *netdev)
         if(netdev_list[i] != W_NULL)
             continue;
         netdev_list[i] = netdev;
+        netdev->param.devid = i;
         err = W_ERR_OK;
         break;
     }
@@ -62,6 +63,7 @@ static w_err_t del_netdev(w_netdev_s *netdev)
         if(netdev_list[i] != netdev)
             continue;
         netdev_list[i] = netdev;
+        netdev->param.devid = 255;
         err = W_ERR_OK;
         break;
     }
@@ -89,6 +91,26 @@ w_netdev_s* wind_netdev_get(char *name)
         if(netdev_list[i] == W_NULL)
             continue;
         if(wind_strcmp(netdev_list[i]->netnode.obj.name,name) == 0)
+        {
+            netdev = netdev_list[i];
+            break;
+        }
+    }
+    wind_enable_switch();
+    return netdev;
+}
+
+
+w_netdev_s* wind_netdev_get_byid(w_uint16_t devid)
+{
+    w_int32_t i;
+    w_netdev_s *netdev = (w_netdev_s *)W_NULL;
+    wind_disable_switch();
+    for(i = 0;i < WIND_NETDEV_MAX_NUM;i ++)
+    {
+        if(netdev_list[i] == W_NULL)
+            continue;
+        if(netdev_list[i]->param.devid == devid)
         {
             netdev = netdev_list[i];
             break;
@@ -181,6 +203,14 @@ w_err_t wind_netdev_set_mac(w_netdev_s *netdev,w_uint8_t *mac)
     wind_memcpy(&netdev->param.mac,mac,MAC_ADDR_LEN);
     return W_ERR_OK;
 }
+
+w_err_t wind_netdev_set_iptype(w_netdev_s *netdev,ip_type_e iptype)
+{
+    WIND_ASSERT_RETURN(netdev != W_NULL,W_ERR_NULL_PTR);
+    netdev->param.iptype = iptype;
+    return W_ERR_OK;
+}
+
 
 static w_err_t print_netdev_detail(w_netdev_s *netdev)
 {

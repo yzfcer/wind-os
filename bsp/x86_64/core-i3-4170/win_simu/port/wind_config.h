@@ -306,6 +306,8 @@ extern "C" {
 #define CMD_ROUTE_SUPPORT       1   
 #define CMD_NETNODE_SUPPORT     1
 #define CMD_ARP_SUPPORT         1
+#define CMD_FDB_SUPPORT         1
+
 
 #define WIND_FDB_MAX_NUM 32
 #define WIND_ARP_TB_MAX_NUM 32

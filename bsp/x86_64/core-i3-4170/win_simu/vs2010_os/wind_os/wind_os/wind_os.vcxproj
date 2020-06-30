@@ -169,6 +169,7 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\lzio.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\module_lua.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\net\cmd_arp.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\net\cmd_fdb.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\net\cmd_ifconfig.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\net\cmd_netnode.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\net\cmd_route.c" />

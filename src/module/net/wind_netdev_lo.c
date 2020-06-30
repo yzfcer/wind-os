@@ -61,7 +61,11 @@ static w_err_t lo_deinit(w_netnode_s *netnode)
     netdev->param.ip = 0;
     netdev->param.mask = 0;
     netdev->param.gw = 0;
-    
+    CLR_F_NETDEV_UNICAST(netdev);
+    CLR_F_NETDEV_BROADCAST(netdev);
+    CLR_F_NETDEV_MULTCAST(netdev);
+    CLR_F_NETDEV_IP_READY(netdev);
+    CLR_F_NETDEV_ENABLE(netdev);
     return W_ERR_OK;
 }
 

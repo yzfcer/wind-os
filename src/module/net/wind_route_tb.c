@@ -27,6 +27,7 @@
 #include "wind_string.h"
 #include "wind_core.h"
 #include "wind_ip.h"
+#include "wind_netdev.h"
 //#include "wind_timer.h"
 #ifdef __cplusplus
 extern "C" {
@@ -74,12 +75,12 @@ w_err_t wind_route_tb_insert(w_route_tb_s *route_tb)
         }
         WIND_ASSERT_BREAK(tmp_routetb != W_NULL,W_ERR_MEM,"route_tb table full");
         wind_memcpy(tmp_routetb,route_tb,sizeof(w_route_tb_s));
-        route_tb_list[i].enable = 1;
-        if(route_tb_list[i].is_default)
+        tmp_routetb->enable = 1;
+        if(tmp_routetb->is_default)
         {
             if(default_routetb != W_NULL)
                 default_routetb->is_default = 0;
-            default_routetb = &route_tb_list[i];
+            default_routetb = tmp_routetb;
         }
     }while(0);
     wind_enable_switch();
@@ -108,6 +109,25 @@ w_err_t wind_route_tb_remove(w_route_tb_s *route_tb)
     }while(0);
     wind_enable_switch();
     return err;
+}
+
+
+w_err_t wind_route_tb_setdefault(char *dev_name)
+{
+    w_route_tb_s rtb;
+    w_netdev_s *netdev;
+    netdev = wind_netdev_get(dev_name);
+    WIND_ASSERT_RETURN(netdev != W_NULL,W_ERR_INVALID);
+    wind_disable_switch();
+    if(default_routetb != W_NULL)
+        default_routetb->is_default = 0;
+    wind_memset(&rtb,0,sizeof(w_route_tb_s));
+    rtb.dev_name = netdev->netnode.obj.name;
+    rtb.is_default = 1;
+    rtb.next_hop = netdev->param.gw;
+    wind_route_tb_insert(&rtb);//test here
+    wind_enable_switch();
+    return W_ERR_OK;
 }
 
 w_err_t wind_route_tb_clear(void)
@@ -165,17 +185,30 @@ w_route_tb_s *wind_route_tb_get(w_uint32_t destip)
 w_err_t wind_route_tb_print(void)
 {
     w_int32_t i;
+    w_route_tb_s *rtb;
     char destipstr[16];
     char gwipstr[16];
+    rtb = default_routetb;
     wind_printf("route table list:\r\n");
+    if(rtb != W_NULL)
+    {
+        wind_ip_to_str(rtb->destip,destipstr);
+        wind_ip_to_str(rtb->next_hop,gwipstr);
+        wind_printf("default %s/%d via %s dev %s\r\n",destipstr,
+            rtb->mask_bits,gwipstr,rtb->dev_name);
+    }
+
     for(i = 0;i < WIND_ROUTE_TB_MAX_NUM;i ++)
     {
-        if(!route_tb_list[i].enable)
+        rtb = &route_tb_list[i];
+        if(!rtb->enable)
             continue;
-        wind_ip_to_str(route_tb_list[i].destip,destipstr);
-        wind_ip_to_str(route_tb_list[i].next_hop,gwipstr);
-        wind_printf("%s/%d via %s dev %s\r\n",destipstr,
-            route_tb_list[i].mask_bits,gwipstr,route_tb_list[i].dev_name);
+        if(rtb->is_default)
+            continue;
+        wind_ip_to_str(rtb->destip,destipstr);
+        wind_ip_to_str(rtb->next_hop,gwipstr);
+        wind_printf("%s%s/%d via %s dev %s\r\n",destipstr,
+            rtb->mask_bits,gwipstr,rtb->dev_name);
     }
     return W_ERR_OK;
 }

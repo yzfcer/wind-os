@@ -29,6 +29,7 @@
 #include "wind_fdb.h"
 #include "wind_cmd.h"
 #include "wind_route_tb.h"
+//#include "wind_route_tb.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
@@ -151,6 +152,10 @@ COMMAND_DECLARE(netnode);
 #if CMD_ARP_SUPPORT
 COMMAND_DECLARE(arp);
 #endif
+#if CMD_FDB_SUPPORT
+COMMAND_DECLARE(fdb);
+#endif
+
 w_err_t wind_netcmd_regi(void)
 {
 #if CMD_IFCONFIG_SUPPORT
@@ -164,6 +169,9 @@ w_err_t wind_netcmd_regi(void)
 #endif
 #if CMD_ARP_SUPPORT
     wind_cmd_register(COMMAND(arp));
+#endif
+#if CMD_FDB_SUPPORT
+    wind_cmd_register(COMMAND(fdb));
 #endif
     return W_ERR_OK;
 }
@@ -182,8 +190,13 @@ w_err_t wind_netcmd_unregi(void)
 #if CMD_ARP_SUPPORT
     wind_cmd_unregister(COMMAND(arp));
 #endif
+#if CMD_FDB_SUPPORT
+    wind_cmd_unregister(COMMAND(fdb));
+#endif
     return W_ERR_OK;
 }
+
+
 
 w_err_t _wind_net_mod_init(void)
 {
@@ -197,6 +210,7 @@ w_err_t _wind_net_mod_init(void)
     WIND_ASSERT_RETURN(err == W_ERR_OK,err);
     err = wind_netcmd_regi();
     WIND_ASSERT_RETURN(err == W_ERR_OK,err);
+    wind_route_tb_setdefault("lo");
     return err;
 }
 
