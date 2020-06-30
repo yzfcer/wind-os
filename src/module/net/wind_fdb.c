@@ -26,6 +26,7 @@
 #include "wind_timer.h"
 #include "wind_string.h"
 #include "wind_core.h"
+#include "wind_netdev.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
@@ -168,7 +169,27 @@ w_fdb_s *wind_fdb_get(w_uint8_t *mac)
 
 w_err_t wind_fdb_print(void)
 {
-    
+    w_int32_t i;
+    w_fdb_s *fdb;
+    w_netdev_s *netdev;
+    char macstr[20];
+    //char ipstr[16];
+    wind_print_space(7);
+    wind_printf("%-20s %-8s %-8s %-12s\r\n","mac_addr","dev_id","vlanid","dev");
+    wind_print_space(7);
+    for(i = 0;i < WIND_FDB_MAX_NUM;i ++)
+    {
+        if(!fdb_list[i].enable)
+            continue;
+        fdb = &fdb_list[i];
+        wind_mac_to_str(fdb->mac,macstr,':');
+        netdev = wind_netdev_get_byid(fdb->dev_id);
+        WIND_ASSERT_RETURN(netdev != W_NULL,W_ERR_FAIL);
+        //wind_ip_to_str(fdb->ipaddr,ipstr);
+        wind_printf("%-20s %-8s %-8d %-12s",macstr,fdb->dev_id,fdb->vlanid,netdev->netnode.obj.name);
+    }
+    wind_print_space(7);
+    return W_ERR_OK;
 }
 
 

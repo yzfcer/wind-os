@@ -205,7 +205,7 @@ w_err_t wind_arp_tb_print(void)
     char macstr[20];
     char ipstr[16];
     wind_print_space(7);
-    wind_printf("%-20s %-16s %-6s %-12s","mac_addr","ip_addr","hwtype","dev");
+    wind_printf("%-20s %-16s %-6s %-12s\r\n","mac_addr","ip_addr","hwtype","dev");
     wind_print_space(7);
     for(i = 0;i < WIND_ARP_TB_MAX_NUM;i ++)
     {
