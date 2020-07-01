@@ -24,7 +24,7 @@
 #include "wind_string.h"
 #include "wind_queue.h"
 
-#if (WIND_MODULE_CUTEST_SUPPORT && TEST_PIPE_SUPPORT)
+#if  TEST_PIPE_SUPPORT
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus

@@ -22,7 +22,7 @@
 #include "wind_string.h"
 #include "listfs.h"
 #include "wind_memblk.h"
-#if (WIND_MODULE_CUTEST_SUPPORT && TEST_LISTFS_SUPPORT)
+#if  TEST_LISTFS_SUPPORT
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus

@@ -21,7 +21,7 @@
 
 #include "wind_cut.h"
 #include "wind_event.h"
-#if (WIND_MODULE_CUTEST_SUPPORT && TEST_EVENT_SUPPORT)
+#if  TEST_EVENT_SUPPORT
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus

@@ -21,7 +21,7 @@
 
 #include "wind_cut.h"
 #include "wind_mutex.h"
-#if (WIND_MODULE_CUTEST_SUPPORT && TEST_MUTEX_SUPPORT)
+#if  TEST_MUTEX_SUPPORT
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus

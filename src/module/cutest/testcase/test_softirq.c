@@ -22,7 +22,7 @@
 #include "wind_cut.h"
 #include "wind_softirq.h"
 #include "wind_core.h"
-#if (WIND_MODULE_CUTEST_SUPPORT && TEST_SOFTIRQ_SUPPORT)
+#if  TEST_SOFTIRQ_SUPPORT
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus

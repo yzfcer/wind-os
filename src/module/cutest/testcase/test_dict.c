@@ -21,7 +21,7 @@
 
 #include "wind_cut.h"
 #include "wind_dict.h"
-#if (WIND_MODULE_CUTEST_SUPPORT && TEST_DICT_SUPPORT)
+#if  TEST_DICT_SUPPORT
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus

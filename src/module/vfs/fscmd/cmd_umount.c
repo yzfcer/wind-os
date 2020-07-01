@@ -31,7 +31,7 @@ extern "C" {
 
 
 
-#if (CMD_FS_SUPPORT)
+#if (CMD_UMOUNT_SUPPORT)
 #include "wind_file.h"
 
 

@@ -21,7 +21,7 @@
 
 #include "wind_cut.h"
 #include "wind_sem.h"
-#if (WIND_MODULE_CUTEST_SUPPORT && TEST_SEM_SUPPORT)
+#if  TEST_SEM_SUPPORT
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus

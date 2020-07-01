@@ -23,7 +23,7 @@
 #include "wind_string.h"
 #include "wind_heap.h"
 #include "wind_filepath.h"
-#if (WIND_MODULE_CUTEST_SUPPORT && TEST_FILEPATH_SUPPORT)
+#if  TEST_FILEPATH_SUPPORT
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus

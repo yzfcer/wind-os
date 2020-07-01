@@ -22,7 +22,7 @@
 #include "wind_queue.h"
 #include "wind_string.h"
 #include "wind_queue.h"
-#if (WIND_MODULE_CUTEST_SUPPORT && TEST_QUEUE_SUPPORT)
+#if  TEST_QUEUE_SUPPORT
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus

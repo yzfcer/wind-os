@@ -21,7 +21,7 @@
 #include "wind_cut.h"
 #include "wind_string.h"
 
-#if (WIND_MODULE_CUTEST_SUPPORT && TEST_FS_SUPPORT)
+#if  TEST_FS_SUPPORT
 #include "wind_file.h"
 #include "wind_fs.h"
 #ifdef __cplusplus

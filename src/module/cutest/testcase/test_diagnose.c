@@ -21,7 +21,7 @@
 
 #include "wind_cut.h"
 #include "wind_diagnose.h"
-#if (WIND_MODULE_CUTEST_SUPPORT && TEST_DIAGNOSE_SUPPORT)
+#if  TEST_DIAGNOSE_SUPPORT
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus

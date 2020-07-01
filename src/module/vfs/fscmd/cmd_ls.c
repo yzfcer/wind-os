@@ -26,7 +26,7 @@
 extern "C" {
 #endif // #ifdef __cplusplus
 
-#if (CMD_FS_SUPPORT)
+#if (CMD_LS_SUPPORT)
 
 static w_err_t print_filename(w_file_s *file)
 {

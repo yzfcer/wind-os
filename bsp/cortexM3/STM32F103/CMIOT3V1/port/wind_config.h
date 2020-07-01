@@ -166,7 +166,6 @@ extern "C" {
 #define CMD_CHDEV_SUPPORT 0 //Whether character device operation command is supported
 #define CMD_DATETIME_SUPPORT 0 //Whether datetime command is supported
 #define CMD_ECHO_SUPPORT 1 //Whether echo command is supported
-#define CMD_FS_SUPPORT 0 //Whether file system command is supported
 #define CMD_LIST_SUPPORT 1 //Whether kernel object list command is supported
 #define CMD_DETAIL_SUPPORT 1 //Whether kernel object detail command is supported
 #define CMD_MEM_SUPPORT 1 //Whether memory value viewing command is supported
@@ -194,24 +193,24 @@ extern "C" {
 //framework and corresponding function modules
 //-------------------------------------------------------------------------------
 #if WIND_MODULE_CUTEST_SUPPORT
-#define TEST_HEAP_SUPPORT 0 //Whether memory heap test is supported
-#define TEST_MSGBOX_SUPPORT 1 //Whether message mailbox test is supported
-#define TEST_MUTEX_SUPPORT 1 //Whether mutual exclusion test is supported
-#define TEST_PIPE_SUPPORT 1 //Whether pipeline testing is supported
-#define TEST_POOL_SUPPORT 1 //Whether memory pool test is supported
-#define TEST_QUEUE_SUPPORT 1 //Whether queue test is supported
-#define TEST_SEM_SUPPORT 1 //Whether semaphore test is supported
-#define TEST_EVENT_SUPPORT 1 //Whether event test is supported
-#define TEST_SOFTIRQ_SUPPORT 1 //Whether soft interrupt test is supported
-#define TEST_TREE_SUPPORT 1 //Whether tree structure  test is supported
-#define TEST_TREEFS_SUPPORT 0 //Whether treefs file system  test is supported
-#define TEST_LISTFS_SUPPORT 0 //Whether listfs file system  test is supported
-#define TEST_HOSTFS_SUPPORT 0 //Whether hostfs file system  test is supported
-#define TEST_FS_SUPPORT 0 //Whether file system interface test is supported
+#define TEST_HEAP_SUPPORT     0 //Whether memory heap test is supported
+#define TEST_MSGBOX_SUPPORT   1 //Whether message mailbox test is supported
+#define TEST_MUTEX_SUPPORT    1 //Whether mutual exclusion test is supported
+#define TEST_PIPE_SUPPORT     1 //Whether pipeline testing is supported
+#define TEST_POOL_SUPPORT     1 //Whether memory pool test is supported
+#define TEST_QUEUE_SUPPORT    1 //Whether queue test is supported
+#define TEST_SEM_SUPPORT      1 //Whether semaphore test is supported
+#define TEST_EVENT_SUPPORT    1 //Whether event test is supported
+#define TEST_SOFTIRQ_SUPPORT  1 //Whether soft interrupt test is supported
+#define TEST_TREE_SUPPORT     1 //Whether tree structure  test is supported
+#define TEST_TREEFS_SUPPORT   0 //Whether treefs file system  test is supported
+#define TEST_LISTFS_SUPPORT   0 //Whether listfs file system  test is supported
+#define TEST_HOSTFS_SUPPORT   0 //Whether hostfs file system  test is supported
+#define TEST_FS_SUPPORT       0 //Whether file system interface test is supported
 #define TEST_FILEPATH_SUPPORT 0 //Whether file path function test is supported
 #define TEST_DIAGNOSE_SUPPORT 0 //Whether diagnostic function test is supported
-#define TEST_DICT_SUPPORT 0     //Whether parameter dictionary function test is supported
-#define TEST_XML_SUPPORT 1 //Whether XML function test is supported
+#define TEST_DICT_SUPPORT     0 //Whether parameter dictionary function test is supported
+#define TEST_XML_SUPPORT      1 //Whether XML function test is supported
 #endif
 
 
@@ -220,15 +219,29 @@ extern "C" {
 //virtual file system framework
 //-------------------------------------------------------------------------------
 #if WIND_MODULE_VFS_SUPPORT
-#define WIND_VFS_MAX_NUM 5 //Maximum number of file system objects allowed
-#define WIND_FILE_MAX_NUM 5 //Maximum number of files allowed to open at the same time
+#define WIND_VFS_MAX_NUM    5 //Maximum number of file system objects allowed
+#define WIND_FILE_MAX_NUM   5 //Maximum number of files allowed to open at the same time
 
 #define WIND_TREEFS_SUPPORT 1 //Whether memory file system treefs is supported
 #define WIND_TREEFS_MAX_NUM 2 //Maximum number of treefs objects supported
 
-#define WIND_LISTFS_SUPPORT 1//Whether listfs is supported
+#define WIND_LISTFS_SUPPORT 1 //Whether listfs is supported
 
-#define WIND_HOSTFS_SUPPORT 0//Whether hostfs is supported
+#define WIND_HOSTFS_SUPPORT 0 //Whether hostfs is supported
+
+
+#define CMD_FS_SUPPORT      1 //Whether file system command is supported
+#define CMD_MOUNT_SUPPORT   1
+#define CMD_UMOUNT_SUPPORT  1
+#define CMD_WRITE_SUPPORT   1
+#define CMD_CAT_SUPPORT     1
+#define CMD_CD_SUPPORT      1
+#define CMD_FORMAT_SUPPORT  1
+#define CMD_LS_SUPPORT      1
+#define CMD_MKDIR_SUPPORT   1
+#define CMD_PWD_SUPPORT     1
+#define CMD_RM_SUPPORT      1
+#define CMD_TOUCH_SUPPORT   1
 
 #endif
 
@@ -257,10 +270,10 @@ extern "C" {
 #define CMD_ARP_SUPPORT         1
 #define CMD_FDB_SUPPORT         1
 
-#define WIND_FDB_MAX_NUM 32
-#define WIND_ARP_TB_MAX_NUM 32
-#define WIND_ROUTE_TB_MAX_NUM 16
-#define WIND_NETDEV_MAX_NUM 8
+#define WIND_FDB_MAX_NUM        32
+#define WIND_ARP_TB_MAX_NUM     32
+#define WIND_ROUTE_TB_MAX_NUM   16
+#define WIND_NETDEV_MAX_NUM     8
 #endif
 
 #ifdef __cplusplus

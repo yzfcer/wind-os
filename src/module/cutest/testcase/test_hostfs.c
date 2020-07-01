@@ -22,7 +22,7 @@
 #include "wind_string.h"
 #include "hostfs.h"
 #include "wind_memblk.h"
-#if (WIND_MODULE_CUTEST_SUPPORT && TEST_HOSTFS_SUPPORT)
+#if  TEST_HOSTFS_SUPPORT
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus

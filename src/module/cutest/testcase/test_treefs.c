@@ -20,7 +20,7 @@
 *******************************************************************************************************/
 #include "wind_cut.h"
 #include "wind_string.h"
-#if (WIND_MODULE_CUTEST_SUPPORT && TEST_TREEFS_SUPPORT)
+#if  TEST_TREEFS_SUPPORT
 #include "treefs.h"
 #include "treefile.h"
 #ifdef __cplusplus

@@ -21,12 +21,12 @@
 #include "wind_cmd.h"
 #include "wind_heap.h"
 #include "wind_string.h"
+#include "wind_file.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
 
 #if (CMD_FS_SUPPORT)
-#include "wind_file.h"
 
 #define BUF_SIZE 128
 

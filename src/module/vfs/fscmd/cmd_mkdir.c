@@ -26,7 +26,7 @@
 extern "C" {
 #endif // #ifdef __cplusplus
 
-#if (CMD_FS_SUPPORT)
+#if (CMD_MKDIR_SUPPORT)
 
 
 static w_err_t mk_dir_file(w_int32_t argc,char **argv,w_uint16_t isdir)

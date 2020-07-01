@@ -24,7 +24,7 @@
 #include "wind_xml.h"
 //#include "wind_xml_fsm.h"
 #include "wind_core.h"
-#if (WIND_MODULE_CUTEST_SUPPORT && TEST_XML_SUPPORT)
+#if  TEST_XML_SUPPORT
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus

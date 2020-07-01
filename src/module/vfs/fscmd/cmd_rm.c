@@ -26,7 +26,7 @@
 extern "C" {
 #endif // #ifdef __cplusplus
 
-#if (CMD_FS_SUPPORT)
+#if (CMD_RM_SUPPORT)
 
 static w_err_t cmd_rm(w_int32_t argc,char **argv)
 {
