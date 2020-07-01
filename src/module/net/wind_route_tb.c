@@ -33,9 +33,24 @@
 extern "C" {
 #endif // #ifdef __cplusplus
 #if WIND_MODULE_NET_SUPPORT
-
+#define IS_DESTIP_EQ(destip,subnet,maskbits) ((destip & (destip & (32 - maskbits))) == subnet)
 w_route_tb_s *default_routetb = (w_route_tb_s *)W_NULL;
 w_route_tb_s route_tb_list[WIND_ROUTE_TB_MAX_NUM];
+
+static w_route_tb_s *route_tb_find_free(void)
+{
+    w_int32_t i;
+    w_route_tb_s *rtb = (w_route_tb_s*)W_NULL;
+    for(i = 0;i < WIND_ROUTE_TB_MAX_NUM;i ++)
+    {
+        if(route_tb_list[i].enable == 0)
+        {
+            rtb = &route_tb_list[i];
+            break;
+        }
+    }
+    return rtb;
+}
 
 w_err_t wind_route_tb_init(void)
 {
@@ -54,7 +69,6 @@ w_err_t wind_route_tb_deinit(void)
 
 w_err_t wind_route_tb_insert(w_route_tb_s *route_tb)
 {
-    w_int32_t i;
     w_err_t err;
     w_route_tb_s *tmp_routetb;
     wind_disable_switch();
@@ -63,19 +77,11 @@ w_err_t wind_route_tb_insert(w_route_tb_s *route_tb)
         err = W_ERR_OK;
         tmp_routetb = wind_route_tb_get(route_tb->destip);
         if(tmp_routetb == W_NULL)
-        {
-            for(i = 0;i < WIND_ROUTE_TB_MAX_NUM;i ++)
-            {
-                if(route_tb_list[i].enable == 0)
-                {
-                    tmp_routetb = &route_tb_list[i];
-                    break;
-                }
-            }
-        }
+            tmp_routetb = route_tb_find_free();
         WIND_ASSERT_BREAK(tmp_routetb != W_NULL,W_ERR_MEM,"route_tb table full");
         wind_memcpy(tmp_routetb,route_tb,sizeof(w_route_tb_s));
         tmp_routetb->enable = 1;
+        tmp_routetb->destip = (tmp_routetb->destip & (0xffffffff << (32 - tmp_routetb->mask_bits)));
         if(tmp_routetb->is_default)
         {
             if(default_routetb != W_NULL)
@@ -167,12 +173,13 @@ w_route_tb_s *wind_route_tb_get(w_uint32_t destip)
 {
     w_int32_t i;
     w_route_tb_s *route_tb = W_NULL;
+    //(destip & (0xffffffff << (32 - tmp_routetb->mask_bits)))
     wind_disable_switch();
     for(i = 0;i < WIND_ROUTE_TB_MAX_NUM;i ++)
     {
         if(!route_tb_list[i].enable)
             continue;
-        if(destip==route_tb_list[i].destip)
+        if(IS_DESTIP_EQ(destip,route_tb_list[i].destip,route_tb_list[i].mask_bits))
         {
             route_tb = &route_tb_list[i];
             break;
