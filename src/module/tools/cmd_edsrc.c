@@ -27,8 +27,8 @@ extern "C" {
 #if (CMD_EDSRC_SUPPORT)
 static w_err_t do_handle_file(w_file_s *file)
 {
-    w_file_s *newfile;
-    newfile = wind_fopen(const char * path,w_uint8_t fmode)
+    //w_file_s *newfile;
+    //newfile = wind_fopen(const char * path,w_uint8_t fmode)
     wind_printf("do_handle_file %s\r\n",file->obj.name);
     return W_ERR_OK;
 }
