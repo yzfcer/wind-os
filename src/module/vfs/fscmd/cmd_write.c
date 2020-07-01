@@ -28,13 +28,13 @@ extern "C" {
 #endif // #ifdef __cplusplus
 
 
-/*********************************************header file***********************************************/
+
 
 #if (CMD_FS_SUPPORT)
 #include "wind_file.h"
-/********************************************internal variables**********************************************/
 
-/********************************************internal functions**********************************************/
+
+
 static w_err_t cmd_write(w_int32_t argc,char **argv)
 {
     w_err_t err;
@@ -71,11 +71,11 @@ static w_err_t cmd_write(w_int32_t argc,char **argv)
 
 
 
-/********************************************global variables**********************************************/
 
 
 
-/********************************************global functions**********************************************/
+
+
 COMMAND_DISC(write)
 {
     wind_printf("to operate write file system.\r\n");

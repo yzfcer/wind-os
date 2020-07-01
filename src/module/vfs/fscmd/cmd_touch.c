@@ -25,13 +25,13 @@
 extern "C" {
 #endif // #ifdef __cplusplus
 
-/*********************************************header file***********************************************/
+
 
 #if (CMD_FS_SUPPORT)
 #include "wind_file.h"
-/********************************************internal variables**********************************************/
 
-/********************************************internal functions**********************************************/
+
+
 static w_err_t mk_dir_file(w_int32_t argc,char **argv,w_uint16_t isdir)
 {
     w_err_t err;
@@ -77,9 +77,9 @@ static w_err_t cmd_touch(w_int32_t argc,char **argv)
 }
 
 
-/********************************************global variables**********************************************/
 
-/********************************************global functions**********************************************/
+
+
 COMMAND_DISC(touch)
 {
     wind_printf("to make a new file \r\n");

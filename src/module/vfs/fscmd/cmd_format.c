@@ -24,21 +24,12 @@
 #include "wind_fs.h"
 #include "wind_fsops.h"
 #include "wind_blkdev.h"
-
-
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
 
-
-/*********************************************header file***********************************************/
-
 #if (CMD_FS_SUPPORT)
 #include "wind_file.h"
-/********************************************internal variables**********************************************/
-
-
-/********************************************internal functions**********************************************/
 
 static w_err_t cmd_format(w_int32_t argc,char **argv)
 {
@@ -68,11 +59,11 @@ static w_err_t cmd_format(w_int32_t argc,char **argv)
     return err;
 }
 
-/********************************************global variables**********************************************/
 
 
 
-/********************************************global functions**********************************************/
+
+
 COMMAND_DISC(format)
 {
     wind_printf("to format file system.\r\n");

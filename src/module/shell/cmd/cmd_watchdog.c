@@ -24,18 +24,18 @@ extern "C" {
 #endif // #ifdef __cplusplus
 
 
-/*********************************************header file***********************************************/
+
 
 #if (CMD_WATCHDOG_SUPPORT)
 #include "wind_watchdog.h"
 #include "wind_timer.h"
 
-/********************************************internal variables**********************************************/
 
 
 
 
-/********************************************internal functions**********************************************/
+
+
 static w_err_t enable_watchdog(w_int32_t argc,char **argv)
 {
     w_watchdog_s *watchdog;
@@ -70,11 +70,11 @@ static w_err_t disable_watchdog(w_int32_t argc,char **argv)
 
 
 
-/********************************************global variables**********************************************/
 
 
 
-/********************************************global functions**********************************************/
+
+
 COMMAND_DISC(wdog)
 {
     wind_printf("to manage watchdog module status.\r\n");

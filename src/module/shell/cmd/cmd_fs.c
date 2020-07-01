@@ -21,25 +21,14 @@
 #include "wind_cmd.h"
 #include "wind_heap.h"
 #include "wind_string.h"
-
-
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
 
-
-/*********************************************header file***********************************************/
-
 #if (CMD_FS_SUPPORT)
 #include "wind_file.h"
-/********************************************internal variables**********************************************/
+
 #define BUF_SIZE 128
-
-
-/********************************************internal functions**********************************************/
-
-
-
 
 static w_err_t fs_cmd_pwd(void)
 {
@@ -240,11 +229,11 @@ static w_err_t fs_cmd_write(w_int32_t argc,char **argv)
 
 
 
-/********************************************global variables**********************************************/
 
 
 
-/********************************************global functions**********************************************/
+
+
 COMMAND_DISC(fs)
 {
     wind_printf("to operate fs file system.\r\n");

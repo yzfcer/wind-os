@@ -25,19 +25,19 @@ extern "C" {
 #endif // #ifdef __cplusplus
 
 
-/*********************************************header file***********************************************/
+
 
 #if (CMD_YMODEM_SUPPORT)
 #include "wind_heap.h"
 #include "wind_std.h"
 #include "wind_ymodem.h"
 #include "wind_file.h"
-/********************************************internal variables**********************************************/
 
 
 
 
-/********************************************internal functions**********************************************/
+
+
 //extern w_int32_t wind_ymodem_send(w_uint8_t *src, w_int32_t srcsz);
 //extern w_int32_t ymodem_recv_bak(w_uint8_t *dest, w_int32_t destsz);
 ym_ctx_s ctx;
@@ -177,11 +177,11 @@ YM_PUT_END:
 
 }
 
-/********************************************global variables**********************************************/
 
 
 
-/********************************************global functions**********************************************/
+
+
 COMMAND_DISC(ymodem)
 {
     wind_printf("to translate file data via ymodem protocol.\r\n");

@@ -21,17 +21,12 @@
 #include "wind_cmd.h"
 #include "wind_heap.h"
 #include "wind_string.h"
-
-
+#include "wind_file.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
-/*********************************************header file***********************************************/
 
 #if (CMD_FS_SUPPORT)
-#include "wind_file.h"
-/********************************************internal variables**********************************************/
-/********************************************internal functions**********************************************/
 
 static w_err_t cmd_rm(w_int32_t argc,char **argv)
 {
@@ -53,9 +48,9 @@ static w_err_t cmd_rm(w_int32_t argc,char **argv)
     return err;
 }
 
-/********************************************global variables**********************************************/
 
-/********************************************global functions**********************************************/
+
+
 COMMAND_DISC(rm)
 {
     wind_printf("to operate rm file system.\r\n");

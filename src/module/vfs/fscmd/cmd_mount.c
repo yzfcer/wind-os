@@ -22,21 +22,13 @@
 #include "wind_heap.h"
 #include "wind_string.h"
 #include "wind_fs.h"
-
-
+#include "wind_file.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
 
-
-/*********************************************header file***********************************************/
-
 #if (CMD_FS_SUPPORT)
-#include "wind_file.h"
-/********************************************internal variables**********************************************/
 
-
-/********************************************internal functions**********************************************/
 
 static w_err_t cmd_mount(w_int32_t argc,char **argv)
 {
@@ -51,11 +43,11 @@ static w_err_t cmd_mount(w_int32_t argc,char **argv)
     return wind_vfs_mount(vfs->obj.name,argv[1],argv[2],argv[3]);
 }
 
-/********************************************global variables**********************************************/
 
 
 
-/********************************************global functions**********************************************/
+
+
 COMMAND_DISC(mount)
 {
     wind_printf("to mount a blkdev as a file system.\r\n");

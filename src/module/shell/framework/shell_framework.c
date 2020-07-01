@@ -32,15 +32,15 @@ extern "C" {
 #endif // #ifdef __cplusplus
 
 
-/*********************************************header file***********************************************/
+
 #define NODE_TO_CMD(node) NODEPTR_TO_ITEMPTR(node,w_cmd_s,cmdnode)
-/********************************************internal variables**********************************************/
+
 
 w_dlist_s g_cmdlist;
 w_shell_ctx_s g_shell_ctx[WIND_SHELL_CTX_COUNT];
 
 
-/********************************************internal functions**********************************************/
+
 static w_err_t get_cmd_ch(char *ch)
 {
     w_int32_t len;
@@ -273,11 +273,11 @@ static void shell_stat_init(w_shell_ctx_s *ctx)
 
 
 
-/********************************************global variables**********************************************/
 
 
 
-/********************************************global functions**********************************************/
+
+
 
 w_err_t  wind_cmd_init(void)
 {

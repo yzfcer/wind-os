@@ -23,7 +23,7 @@ extern "C" {
 #endif // #ifdef __cplusplus
 
 
-/*********************************************header file***********************************************/
+
 #include "wind_config.h"
 #include "wind_type.h"
 #include "wind_fsm.h"
@@ -39,12 +39,12 @@ extern "C" {
 #define NODE_TO_FSM(node) NODEPTR_TO_ITEMPTR(node,w_fsm_s,obj.objnode)
 #define NODE_TO_FSM_MODEL(node) NODEPTR_TO_ITEMPTR(node,w_fsm_model_s,obj.objnode)
 
-/********************************************internal variables**********************************************/
+
 static w_dlist_s modellist;
 static w_dlist_s fsmlist;
 static WIND_POOL(fsmpool,WIND_FSM_MAX_NUM,sizeof(w_fsm_s));
 
-/********************************************internal functions**********************************************/
+
 static w_fsm_s *fsm_malloc(void)
 {
     return (w_fsm_s *)wind_pool_malloc(fsmpool);
@@ -92,11 +92,11 @@ static w_err_t wind_fsm_run(w_fsm_s *fsm)
     return err;
 }
 
-/********************************************global variables**********************************************/
 
 
 
-/********************************************global functions**********************************************/
+
+
 w_err_t _wind_fsm_mod_init(void)
 {
     w_err_t err;

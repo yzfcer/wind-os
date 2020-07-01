@@ -21,17 +21,14 @@
 #include "wind_cmd.h"
 #include "wind_heap.h"
 #include "wind_string.h"
-
+#include "wind_file.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
 
-/*********************************************header file***********************************************/
-
 #if (CMD_FS_SUPPORT)
-#include "wind_file.h"
-/********************************************internal variables**********************************************/
-/********************************************internal functions**********************************************/
+
+
 static w_err_t mk_dir_file(w_int32_t argc,char **argv,w_uint16_t isdir)
 {
     w_err_t err;
@@ -75,8 +72,8 @@ static w_err_t cmd_mkdir(w_int32_t argc,char **argv)
     return mk_dir_file(argc,argv,1);
 }
 
-/********************************************global variables**********************************************/
-/********************************************global functions**********************************************/
+
+
 COMMAND_DISC(mkdir)
 {
     wind_printf("to make a new file \r\n");

@@ -21,22 +21,15 @@
 #include "wind_cmd.h"
 #include "wind_heap.h"
 #include "wind_string.h"
-
-
+#include "wind_file.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
 
-
-/*********************************************header file***********************************************/
-
 #if (CMD_FS_SUPPORT)
-#include "wind_file.h"
-/********************************************internal variables**********************************************/
+
 #define BUF_SIZE 128
 
-
-/********************************************internal functions**********************************************/
 static w_err_t cmd_cat(w_int32_t argc,char **argv)
 {
     w_err_t err;
@@ -78,11 +71,11 @@ static w_err_t cmd_cat(w_int32_t argc,char **argv)
     return err;
 }
 
-/********************************************global variables**********************************************/
 
 
 
-/********************************************global functions**********************************************/
+
+
 COMMAND_DISC(cat)
 {
     wind_printf("to operate cat file system.\r\n");

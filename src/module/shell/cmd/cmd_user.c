@@ -26,16 +26,16 @@ extern "C" {
 #endif // #ifdef __cplusplus
 
 
-/*********************************************header file***********************************************/
+
 
 #if (CMD_USER_SUPPORT)
 
-/********************************************internal variables**********************************************/
 
 
 
 
-/********************************************internal functions**********************************************/
+
+
 static w_err_t add_user(w_int32_t argc,char ** argv)
 {
     w_user_s *user;
@@ -103,11 +103,11 @@ static w_err_t modify_passwd(w_int32_t argc,char ** argv)
 }
 
 
-/********************************************global variables**********************************************/
 
 
 
-/********************************************global functions**********************************************/
+
+
 COMMAND_DISC(user)
 {
     wind_printf("to manage user account infomation.\r\n");

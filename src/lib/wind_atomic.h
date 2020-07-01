@@ -21,7 +21,7 @@
 #ifndef WIND_ATOMIC_H__
 #define WIND_ATOMIC_H__
 
-/*********************************************header file***********************************************/
+
 #include "wind_config.h"
 #include "wind_type.h"
 #ifdef __cplusplus

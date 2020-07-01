@@ -18,7 +18,7 @@
 ** 
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
-/*********************************************header file***********************************************/
+
 #include "wind_cut.h"
 #include "wind_pool.h"
 #include "wind_thread.h"
@@ -29,7 +29,7 @@ extern "C" {
 #endif // #ifdef __cplusplus
 
 
-/********************************************internal variables**********************************************/
+
 static w_msgbox_s *msgbox;
 static w_msgbox_s test_mb;
 typedef struct 
@@ -42,15 +42,15 @@ WIND_POOL(testmsg,6,sizeof(test_msg_s));
 WIND_POOL(testmsg_pool,4,sizeof(test_msg_s));
 #define MSG_TO_TEST_MSG(msg) (test_msg_s*)(((w_uint8_t*)(msg))-((w_addr_t)&(((test_msg_s*)0)->msg)))
 
-/********************************************internal functions**********************************************/
 
 
 
-/********************************************global variables**********************************************/
 
 
 
-/********************************************global functions**********************************************/
+
+
+
 
 CASE_SETUP(init) FUNC_EMPTY
 CASE_TEARDOWN(init) FUNC_EMPTY

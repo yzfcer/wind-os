@@ -23,16 +23,12 @@
 //#include <io.h>
 //#include "io.h"
 //#include "file.h"
-#if (CMD_MKFS_SUPPORT)
-#include "file_port.h"
-
-
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
 
-
-/*********************************************header file***********************************************/
+#if (CMD_MKFS_SUPPORT)
+#include "file_port.h"
 
 
 #define BUFF_LEN 0x10000
@@ -96,13 +92,6 @@ static int copy_dir(char *root_dir,char *path)
 }
 
 
-
-
-
-/********************************************internal variables**********************************************/
-
-
-
 extern w_err_t fat32_format(EmbeddedFileSystem *fs,char *blkname);
 //mkfs fat32 <dir> <fsfile> <fssize> 
 static w_err_t mkfs_fat32(w_int32_t argc,char **argv)
@@ -118,15 +107,7 @@ static w_err_t mkfs_fat32(w_int32_t argc,char **argv)
 }
 
 
-/********************************************internal functions**********************************************/
 
-
-
-/********************************************global variables**********************************************/
-
-
-
-/********************************************global functions**********************************************/
 COMMAND_DISC(mkfs)
 {
     wind_printf("[*PC*] to display mkfs string that you input.\r\n");

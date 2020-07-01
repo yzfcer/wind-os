@@ -31,16 +31,16 @@ extern "C" {
 #endif // #ifdef __cplusplus
 
 
-/*********************************************header file***********************************************/
 
-/********************************************internal variables**********************************************/
+
+
 #define NODE_TO_DICT(node) NODEPTR_TO_ITEMPTR(node,w_dict_s,dictnode)
 #define NODE_TO_DICTSET(node) NODEPTR_TO_ITEMPTR(node,w_dictset_s,obj.objnode)
 w_dlist_s g_dictlist;
 
 
 
-/********************************************internal functions**********************************************/
+
 static w_uint16_t calc_dict_key(const char *name)
 {
     w_uint16_t i,key = 0;
@@ -52,11 +52,11 @@ static w_uint16_t calc_dict_key(const char *name)
     return key;
 }
 
-/********************************************global variables**********************************************/
 
 
 
-/********************************************global functions**********************************************/
+
+
 w_err_t _wind_dict_mod_init(void)
 {
     DLIST_INIT(g_dictlist);

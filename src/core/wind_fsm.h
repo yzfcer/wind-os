@@ -25,7 +25,7 @@ extern "C" {
 #endif // #ifdef __cplusplus
 
 
-/*********************************************header file***********************************************/
+
 #include "wind_config.h"
 #include "wind_type.h"
 #include "wind_obj.h"

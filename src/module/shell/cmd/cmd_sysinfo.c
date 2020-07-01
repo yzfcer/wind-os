@@ -24,17 +24,8 @@
 extern "C" {
 #endif // #ifdef __cplusplus
 
-
-/*********************************************header file***********************************************/
-
 #if (CMD_SYSINFO_SUPPORT)
 
-/********************************************internal variables**********************************************/
-
-
-
-
-/********************************************internal functions**********************************************/
 static void print_byte_width(void)
 {
 	wind_printf("sizeof char:%d\r\n",sizeof(char));
@@ -45,11 +36,11 @@ static void print_byte_width(void)
 }
 
 
-/********************************************global variables**********************************************/
 
 
 
-/********************************************global functions**********************************************/
+
+
 COMMAND_DISC(sysinfo)
 {
     wind_printf("to display system infomation.\r\n");

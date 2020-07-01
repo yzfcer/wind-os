@@ -25,19 +25,19 @@ extern "C" {
 #endif // #ifdef __cplusplus
 
 
-/*********************************************header file***********************************************/
+
 
 #if (CMD_XMODEM_SUPPORT)
 #include "wind_heap.h"
 #include "wind_std.h"
 #include "wind_xmodem.h"
 #include "wind_file.h"
-/********************************************internal variables**********************************************/
 
 
 
 
-/********************************************internal functions**********************************************/
+
+
 //extern w_int32_t wind_xmodem_send(w_uint8_t *src, w_int32_t srcsz);
 //extern w_int32_t xmodem_recv_bak(w_uint8_t *dest, w_int32_t destsz);
 xm_ctx_s ctx;
@@ -178,11 +178,11 @@ XM_PUT_END:
 
 }
 
-/********************************************global variables**********************************************/
 
 
 
-/********************************************global functions**********************************************/
+
+
 COMMAND_DISC(xmodem)
 {
     wind_printf("to translate file data via xmodem protocol.\r\n");
