@@ -37,8 +37,9 @@ static w_err_t handle_file(w_file_s *file,char *suffix)
 {
     w_int32_t i;
     w_err_t err;
-    char *name;
-    w_file_s *sub,&dir;
+    char *filename;
+	char *fullname = (char *)W_NULL;
+    w_file_s *sub,*dir;
     err = W_ERR_OK;
     if(file->isdir == 0)
         return do_handle_file(file);
@@ -47,11 +48,12 @@ static w_err_t handle_file(w_file_s *file,char *suffix)
         sub = wind_freaddir(file);
         if(sub == W_NULL)
             break;
-        name = (char*)wind_obj_name(&sub->obj);
-        if(wind_strcpy(name,".") == 0 ||
-            wind_strcpy(name,"..") == 0)
+        filename = (char*)wind_obj_name(&sub->obj);
+        if(wind_strcpy(filename,".") == 0 ||
+            wind_strcpy(filename,"..") == 0)
             continue;
         err = handle_file(sub,suffix);
+        
         WIND_ASSERT_RETURN(err = W_ERR_OK,err);
     }
     
