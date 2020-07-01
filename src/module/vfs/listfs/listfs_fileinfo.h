@@ -44,19 +44,19 @@
 //Solidified file header information
 typedef struct __lfile_info_s
 {
-    w_uint32_t magic;                //Magic word
-    char       name[LFILE_NAME_LEN]; //file name
-    w_int32_t  filesize;             //file size
-    w_int32_t  spacesize;            //File space size
+    w_uint32_t   magic;                //Magic word
+    char         name[LFILE_NAME_LEN]; //file name
+    w_int32_t    filesize;             //file size
+    w_int32_t    spacesize;            //File space size
     w_uint32_t   parent_addr;          //Parent file address
     w_uint32_t   self_addr;            //Current address
     w_uint32_t   last_addr;            //Last block information address
     w_uint32_t   prevfile_addr;        //Next file address
     w_uint32_t   nextfile_addr;        //Next file address
-    w_int32_t  children_cnt;         //Number of sub files
+    w_int32_t    children_cnt;         //Number of sub files
     w_uint32_t   headchild_addr;       //First subfile address
     w_uint32_t   tailchild_addr;       //Last subfile address
-    w_uint8_t  attr;                 //Directory, readable, writable, hidden, and verified
+    w_uint8_t    attr;                 //Directory, readable, writable, hidden, and verified
 }lfile_info_s;
 
 void fileinfo_be2le(lfile_info_s *info);

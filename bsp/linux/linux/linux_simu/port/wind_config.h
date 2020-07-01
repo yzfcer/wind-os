@@ -203,11 +203,17 @@ extern "C" {
 #define WIND_MODULE_XMODEM_SUPPORT  1 //Whether xmodem protocol module is supported
 #define WIND_MODULE_NET_SUPPORT     1 //Whether TCP/IP NET protocol module is supported
 
-#define WIND_MODULE_TOOLS_SUPPORT   1 //Whether system tool module is supported
+#define WIND_MODULE_TOOLS_SUPPORT   0 //Whether system tool module is supported
 
 
 #endif
 
+#if WIND_MODULE_TOOLS_SUPPORT
+#define CMD_MKFS_SUPPORT      0 //Whether the command of creating file system image is supported,pc
+#define CMD_PACK_SUPPORT      0 //Whether the command to package firmware is supported,pc
+#define CMD_RCP_SUPPORT       0 //Whether the command to copy files between the host and wind-os is supported,pc
+#define CMD_EDSRC_SUPPORT     0 //Whether the command to edit source file and aligning is supported,pc
+#endif
 
 //-------------------------------------------------------------------------------
 //Debug command configuration if the kernel supports console functions
@@ -236,12 +242,13 @@ extern "C" {
 #define CMD_DB_SUPPORT        0 //Whether DB module operation command is supported
 #define CMD_LOG_SUPPORT       1 //Whether log operation command is supported
 
-#define CMD_BEEP_SUPPORT 0 //Whether beep command is supported
-#define CMD_LED_SUPPORT 0 //Whether LED operation command is supported
+#define CMD_BEEP_SUPPORT      0 //Whether beep command is supported
+#define CMD_LED_SUPPORT       0 //Whether LED operation command is supported
 
-#define CMD_MKFS_SUPPORT 0 //Whether the command of creating file system image is supported
-#define CMD_PACK_SUPPORT 0 //Whether the command to package firmware is supported
-#define CMD_RCP_SUPPORT 0 //Whether the command to copy files between the host and wind-os is supported
+#define CMD_MKFS_SUPPORT      0 //Whether the command of creating file system image is supported
+#define CMD_PACK_SUPPORT      0 //Whether the command to package firmware is supported
+#define CMD_RCP_SUPPORT       0 //Whether the command to copy files between the host and wind-os is supported
+#define CMD_EDSRC_SUPPORT     0 //Whether the command to edit source file and aligning is supported,pc
 
 #endif
 

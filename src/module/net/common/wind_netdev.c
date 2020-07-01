@@ -45,7 +45,7 @@ static w_err_t add_netdev(w_netdev_s *netdev)
         if(netdev_list[i] != W_NULL)
             continue;
         netdev_list[i] = netdev;
-        netdev->param.devid = i;
+		netdev->param.devid = (w_uint8_t)i;
         err = W_ERR_OK;
         break;
     }

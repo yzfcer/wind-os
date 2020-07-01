@@ -233,11 +233,16 @@ extern "C" {
 #define CMD_BEEP_SUPPORT      0 //Whether beep command is supported
 #define CMD_LED_SUPPORT       0 //Whether LED operation command is supported
 
+
+#endif
+
+#if WIND_MODULE_TOOLS_SUPPORT
 #define CMD_MKFS_SUPPORT      0 //Whether the command of creating file system image is supported,pc
 #define CMD_PACK_SUPPORT      0 //Whether the command to package firmware is supported,pc
 #define CMD_RCP_SUPPORT       0 //Whether the command to copy files between the host and wind-os is supported,pc
-
+#define CMD_EDSRC_SUPPORT     1 //Whether the command to edit source file and aligning is supported,pc
 #endif
+
 
 //-------------------------------------------------------------------------------
 //Unit test function configuration, provided that the kernel supports unit test 

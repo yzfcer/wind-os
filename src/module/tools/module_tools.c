@@ -22,6 +22,21 @@
 #include "wind_cmd.h"
 
 #if WIND_MODULE_TOOLS_SUPPORT
+#if CMD_SYSINFO_SUPPORT
+COMMAND_DECLARE(sysinfo);
+#endif
+#if CMD_MKFS_SUPPORT
+COMMAND_DECLARE(mkfs);
+#endif
+#if CMD_RCP_SUPPORT
+COMMAND_DECLARE(rcp);
+#endif
+#if CMD_PACK_SUPPORT
+COMMAND_DECLARE(pack);
+#endif
+#if CMD_EDSRC_SUPPORT
+COMMAND_DECLARE(edsrc);
+#endif
 
 
 MODULE_INIT(tools)
@@ -34,6 +49,9 @@ MODULE_INIT(tools)
 #endif
 #if CMD_PACK_SUPPORT
     wind_cmd_register(COMMAND(pack));
+#endif
+#if CMD_EDSRC_SUPPORT
+    wind_cmd_register(COMMAND(edsrc));
 #endif
     return W_ERR_OK;
 }
@@ -48,6 +66,9 @@ MODULE_EXIT(tools)
 #endif
 #if CMD_PACK_SUPPORT
    wind_cmd_unregister(COMMAND(pack));
+#endif
+#if CMD_EDSRC_SUPPORT
+   wind_cmd_unregister(COMMAND(edsrc));
 #endif
     return W_ERR_OK;
 }

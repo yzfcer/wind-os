@@ -221,6 +221,7 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\framework\cmd_history.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\framework\module_shell.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\shell\framework\shell_framework.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\module\tools\cmd_edsrc.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\tools\cmd_pack.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\tools\cmd_rcp.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\module\tools\module_tools.c" />
