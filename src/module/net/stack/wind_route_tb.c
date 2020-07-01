@@ -173,7 +173,6 @@ w_route_tb_s *wind_route_tb_get(w_uint32_t destip)
 {
     w_int32_t i;
     w_route_tb_s *route_tb = W_NULL;
-    //(destip & (0xffffffff << (32 - tmp_routetb->mask_bits)))
     wind_disable_switch();
     for(i = 0;i < WIND_ROUTE_TB_MAX_NUM;i ++)
     {
