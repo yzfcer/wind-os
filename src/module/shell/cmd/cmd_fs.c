@@ -141,7 +141,7 @@ static w_err_t fs_cmd_ls(w_int32_t argc,char **argv)
             sub = wind_freaddir(file);
             if(sub == W_NULL)
                 break;
-            wind_printf("%-24s ",sub->obj.name);
+            wind_printf("%-24s ",sub->filename);
             if(i % 4 == 3)
                 wind_printf("\r\n");
         }

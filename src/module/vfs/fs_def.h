@@ -90,6 +90,7 @@ struct __w_file_s
     w_obj_s obj;
     char *fullpath;//Full file system path
     char *realpath;//Actual file system path
+    char *filename;
     w_vfs_s *vfs;//Associated file system
     w_mutex_s *mutex;//File lock
     w_file_s *childfile;//Child files, used when traversing directories

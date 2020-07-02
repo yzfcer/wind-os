@@ -36,10 +36,10 @@ static w_err_t print_filename(w_file_s *file)
     do
     {
         err = W_ERR_OK;
-        len = wind_strlen(file->obj.name);
+        len = wind_strlen(file->filename);
         buf = wind_alloc(len + 2,HP_ALLOCID_VFS);
         WIND_ASSERT_BREAK(buf != W_NULL,W_ERR_MEM,"");
-        wind_memcpy(buf,file->obj.name,len);
+        wind_memcpy(buf,file->filename,len);
         if(file->isdir)
         {
             buf[len] = '/';
@@ -84,7 +84,7 @@ static w_err_t cmd_ls(w_int32_t argc,char **argv)
             sub = wind_freaddir(file);
             if(sub == W_NULL)
                 break;
-            //wind_printf("%-24s ",sub->obj.name);
+            //wind_printf("%-24s ",sub->filename);
             print_filename(sub);
             if(i % 4 == 3)
                 wind_printf("\r\n");

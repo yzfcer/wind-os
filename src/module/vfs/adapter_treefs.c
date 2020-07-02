@@ -121,14 +121,14 @@ static w_err_t treefs_op_readdir(w_file_s* dir,w_file_s* sub)
         WIND_ASSERT_BREAK(subtfile->magic == TREEFILE_MAGIC,W_ERR_INVALID,"invalid treefile dound");
         sub->fileobj = subtfile;
         sub->obj.magic = WIND_FILE_MAGIC;
-        if(sub->obj.name != W_NULL)
-            wind_free(sub->obj.name);
-        sub->obj.name = wind_salloc(subtfile->filename,HP_ALLOCID_VFS);
-        WIND_ASSERT_BREAK(sub->obj.name != W_NULL,W_ERR_MEM,"malloc filename failed");
+        if(sub->filename != W_NULL)
+            wind_free(sub->filename);
+        sub->filename = wind_salloc(subtfile->filename,HP_ALLOCID_VFS);
+        WIND_ASSERT_BREAK(sub->filename != W_NULL,W_ERR_MEM,"malloc filename failed");
         sub->isdir = subtfile->isdir;
         if(sub->fullpath)
             wind_filepath_release(sub->fullpath);
-        sub->fullpath = wind_filepath_generate(dir->fullpath,sub->obj.name,sub->isdir);
+        sub->fullpath = wind_filepath_generate(dir->fullpath,sub->filename,sub->isdir);
         WIND_ASSERT_BREAK(sub->fullpath != W_NULL,W_ERR_MEM,"malloc fullpath failed");
 
         len = wind_strlen(dir->vfs->mount_path);

@@ -275,17 +275,17 @@ extern "C" {
 //virtual file system framework
 //-------------------------------------------------------------------------------
 #if WIND_MODULE_VFS_SUPPORT
-#define WIND_VFS_MAX_NUM    5 //Maximum number of file system objects allowed
-#define WIND_FILE_MAX_NUM   5 //Maximum number of files allowed to open at the same time
+#define WIND_VFS_MAX_NUM    5  //Maximum number of file system objects allowed
+#define WIND_FILE_MAX_NUM   20 //Maximum number of files allowed to open at the same time
 
-#define WIND_TREEFS_SUPPORT 1 //Whether memory file system treefs is supported
-#define WIND_TREEFS_MAX_NUM 2 //Maximum number of treefs objects supported
+#define WIND_TREEFS_SUPPORT 1  //Whether memory file system treefs is supported
+#define WIND_TREEFS_MAX_NUM 2  //Maximum number of treefs objects supported
 
-#define WIND_LISTFS_SUPPORT 1 //Whether listfs is supported
+#define WIND_LISTFS_SUPPORT 1  //Whether listfs is supported
 
-#define WIND_HOSTFS_SUPPORT 1 //Whether hostfs is supported
+#define WIND_HOSTFS_SUPPORT 1  //Whether hostfs is supported
 
-#define CMD_FS_SUPPORT      1 //Whether file system command is supported
+#define CMD_FS_SUPPORT      1  //Whether file system command is supported
 #define CMD_MOUNT_SUPPORT   1
 #define CMD_UMOUNT_SUPPORT  1
 #define CMD_WRITE_SUPPORT   1

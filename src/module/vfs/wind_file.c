@@ -111,7 +111,7 @@ w_file_s *wind_file_get_bypath(const char *path)
     w_vfs_s *fs;
     w_int32_t len;
     WIND_ASSERT_RETURN(path != W_NULL,W_NULL);
-    wind_debug("open file:%s",path);
+    wind_debug("get file:%s",path);
     len = wind_strlen(path);
     WIND_ASSERT_RETURN(len > 0,W_NULL);
     fs = wind_vfs_get_bypath(path);
@@ -150,6 +150,7 @@ static w_file_s *wind_file_create(w_vfs_s *fs,const char *path,w_uint8_t fmode,w
         filename = wind_filepath_get_filename(file->fullpath);
         WIND_ASSERT_BREAK(filename != W_NULL,W_ERR_INVALID,"filename is invalid");
         file->vfs = fs;
+        file->filename = filename;
         
         mutex = wind_mutex_create(W_NULL);
         WIND_ASSERT_BREAK(mutex != W_NULL,W_ERR_MEM,"create mutex failed");
@@ -163,7 +164,8 @@ static w_file_s *wind_file_create(w_vfs_s *fs,const char *path,w_uint8_t fmode,w
         err = file->vfs->ops->open(file,file->fmode);
         WIND_CHECK_BREAK(err == W_ERR_OK,err);
         wind_disable_switch();
-        wind_obj_init(&file->obj,WIND_FILE_MAGIC,filename,&filelist);
+        wind_debug("insert fileobj:%s\r\n",file->fullpath);
+        wind_obj_init(&file->obj,WIND_FILE_MAGIC,W_NULL,&filelist);
         wind_enable_switch();
     }while(0);
 
@@ -194,8 +196,8 @@ static w_err_t wind_file_destroy(w_file_s *file)
     
     if(file->fullpath != W_NULL)
         wind_free(file->fullpath);
-    if(file->obj.name != W_NULL)
-        wind_filepath_release(file->obj.name);
+    if(file->filename != W_NULL)
+        wind_filepath_release(file->filename);
     if(file->mutex != W_NULL)
         wind_mutex_destroy(file->mutex);
     if(file->childfile != W_NULL)
@@ -220,7 +222,8 @@ w_file_s* wind_fopen(const char *path,w_uint8_t fmode)
         err = W_ERR_OK;
         wind_debug("open file:%s",path);
         file = wind_file_get_bypath(path);
-        WIND_ASSERT_BREAK(file == W_NULL,W_ERR_FILE_OPENED,"file has been opened.");
+        //WIND_ASSERT_BREAK(file == W_NULL,W_ERR_FILE_OPENED,"file %s has been opened.",file->fullpath);
+        WIND_CHECK_BREAK(file == W_NULL,W_ERR_OK);
         pathlen = wind_strlen(path);
         fs = wind_vfs_get_bypath(path);
         WIND_ASSERT_BREAK(fs != W_NULL,W_ERR_FAIL,"path is NOT exsit.");

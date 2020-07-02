@@ -303,7 +303,7 @@ w_err_t _wind_hostfs_mod_init(void)
 void *hostfs_mem_malloc(w_int32_t size)
 {
     void *ptr;
-    wind_notice("hostfs_mem_malloc:%d",size);
+    wind_trace("hostfs_mem_malloc:%d",size);
     ptr = wind_alloc(size,HP_ALLOCID_HOSTFS);
     return ptr;
 }

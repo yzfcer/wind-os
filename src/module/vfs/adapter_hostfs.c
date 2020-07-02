@@ -148,15 +148,15 @@ static w_err_t hostfs_op_readdir(w_file_s* dir,w_file_s* sub)
         sub->fileobj = subhfile;
         sub->obj.magic = WIND_FILE_MAGIC;
         
-        if(sub->obj.name != W_NULL)
-            wind_free((void*)sub->obj.name);
-        sub->obj.name = (char*)wind_salloc(subhfile->name,HP_ALLOCID_VFS);
-        WIND_ASSERT_BREAK(sub->obj.name != W_NULL,W_ERR_MEM,"malloc filename failed");
+        if(sub->filename != W_NULL)
+            wind_free((void*)sub->filename);
+        sub->filename = (char*)wind_salloc(subhfile->name,HP_ALLOCID_VFS);
+        WIND_ASSERT_BREAK(sub->filename != W_NULL,W_ERR_MEM,"malloc filename failed");
         sub->isdir = IS_HFILE_ATTR_DIR(subhfile->attr)?1:0;
         
         if(sub->fullpath)
             wind_filepath_release(sub->fullpath);
-        sub->fullpath = wind_filepath_generate(dir->fullpath,(char *)sub->obj.name,sub->isdir);
+        sub->fullpath = wind_filepath_generate(dir->fullpath,(char *)sub->filename,sub->isdir);
         WIND_ASSERT_BREAK(sub->fullpath != W_NULL,W_ERR_MEM,"malloc fullpath failed");
 
         len = wind_strlen(dir->vfs->mount_path);

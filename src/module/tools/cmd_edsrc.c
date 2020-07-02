@@ -27,9 +27,7 @@ extern "C" {
 #if (CMD_EDSRC_SUPPORT)
 static w_err_t do_handle_file(w_file_s *file)
 {
-    //w_file_s *newfile;
-    //newfile = wind_fopen(const char * path,w_uint8_t fmode)
-    wind_printf("do_handle_file %s\r\n",file->obj.name);
+    wind_printf("do_handle_file %s\r\n",file->fullpath);
     return W_ERR_OK;
 }
 
@@ -37,10 +35,10 @@ static w_err_t handle_file(w_file_s *file,char *suffix)
 {
     w_int32_t i;
     w_err_t err;
-    char *filename;
 	char *fullname = (char *)W_NULL;
     w_file_s *sub,*dir;
     err = W_ERR_OK;
+    wind_debug("handle_file path:%s\r\n",file->fullpath);
     if(file->isdir == 0)
         return do_handle_file(file);
     for(i = 0;;i ++)
@@ -48,15 +46,26 @@ static w_err_t handle_file(w_file_s *file,char *suffix)
         sub = wind_freaddir(file);
         if(sub == W_NULL)
             break;
-        filename = (char*)wind_obj_name(&sub->obj);
-        if(wind_strcpy(filename,".") == 0 ||
-            wind_strcpy(filename,"..") == 0)
+        if((wind_strcmp(sub->filename,".") == 0) ||
+            (wind_strcmp(sub->filename,"..") == 0))
             continue;
-        err = handle_file(sub,suffix);
+
+        fullname = wind_filepath_generate(file->fullpath,sub->filename,sub->isdir);
+        WIND_ASSERT_RETURN(fullname != W_NULL,W_ERR_FAIL);
         
-        WIND_ASSERT_RETURN(err = W_ERR_OK,err);
+        dir = wind_fopen(fullname,FMODE_R);
+        WIND_ASSERT_RETURN(dir != W_NULL,W_ERR_FAIL);
+        
+        err = handle_file(dir,suffix);
+        WIND_ASSERT_RETURN(err == W_ERR_OK,err);
+        
+        err = wind_fclose(dir);
+        WIND_ASSERT_RETURN(err == W_ERR_OK,err);
+        
+        err = wind_filepath_release(fullname);
+        WIND_ASSERT_RETURN(err == W_ERR_OK,err);
     }
-    
+    return W_ERR_OK;
     
 }
 

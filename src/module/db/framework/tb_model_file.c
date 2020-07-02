@@ -73,9 +73,9 @@ w_err_t tbmodel_file_load_all(char *dirpath)
         {
             sub = wind_freaddir(dir);
             WIND_CHECK_BREAK(sub != W_NULL,W_ERR_OK);
-            if(is_tbmodel_filename(sub->obj.name) != W_TRUE)
+            if(is_tbmodel_filename(sub->filename) != W_TRUE)
                 continue;
-            fullpath = wind_filepath_generate(dirpath,sub->obj.name,0);
+            fullpath = wind_filepath_generate(dirpath,sub->filename,0);
             WIND_ASSERT_BREAK(fullpath != W_NULL,W_ERR_FAIL,"gen file path failed");
             err = tbmodel_file_load(fullpath);
             WIND_ASSERT_BREAK(err == W_ERR_OK,err,"load file %s failed",fullpath);
