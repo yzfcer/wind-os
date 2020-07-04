@@ -26,17 +26,18 @@ fi
 mv ${DESTDIR}/wind_cmd_${CMDNAME}.c  ${DESTDIR}/cmd_${CMDNAME}.c
 sed -i "s/wind_cmd/cmd/g" ${DESTDIR}/cmd_${CMDNAME}.c
 
-sed -i "32i COMMAND_DISC($CMDNAME)" ${DESTDIR}/cmd_${CMDNAME}.c
-sed -i "33i {" ${DESTDIR}/cmd_${CMDNAME}.c
-sed -i "34i }" ${DESTDIR}/cmd_${CMDNAME}.c
+line=31
+sed -i "$[ line + 1 ]i COMMAND_DISC($CMDNAME)" ${DESTDIR}/cmd_${CMDNAME}.c
+sed -i "$[ line + 2 ]i {" ${DESTDIR}/cmd_${CMDNAME}.c
+sed -i "$[ line + 3 ]i }" ${DESTDIR}/cmd_${CMDNAME}.c
 
-sed -i "35i COMMAND_USAGE($CMDNAME)" ${DESTDIR}/cmd_${CMDNAME}.c
-sed -i "36i {" ${DESTDIR}/cmd_${CMDNAME}.c
-sed -i "37i }" ${DESTDIR}/cmd_${CMDNAME}.c
+sed -i "$[ line + 4 ]i COMMAND_USAGE($CMDNAME)" ${DESTDIR}/cmd_${CMDNAME}.c
+sed -i "$[ line + 5 ]i {" ${DESTDIR}/cmd_${CMDNAME}.c
+sed -i "$[ line + 6 ]i }" ${DESTDIR}/cmd_${CMDNAME}.c
 
-sed -i "38i COMMAND_MAIN($CMDNAME,argc,argv)" ${DESTDIR}/cmd_${CMDNAME}.c
-sed -i "39i {" ${DESTDIR}/cmd_${CMDNAME}.c
-sed -i "40i \ \ \ \ return W_ERR_OK;" ${DESTDIR}/cmd_${CMDNAME}.c
-sed -i "41i }" ${DESTDIR}/cmd_${CMDNAME}.c
-sed -i "42i COMMAND_DEF($CMDNAME);" ${DESTDIR}/cmd_${CMDNAME}.c
+sed -i "$[ line + 7 ]i COMMAND_MAIN($CMDNAME,argc,argv)" ${DESTDIR}/cmd_${CMDNAME}.c
+sed -i "$[ line + 8 ]i {" ${DESTDIR}/cmd_${CMDNAME}.c
+sed -i "$[ line + 9 ]i \ \ \ \ return W_ERR_OK;" ${DESTDIR}/cmd_${CMDNAME}.c
+sed -i "$[ line + 10 ]i }" ${DESTDIR}/cmd_${CMDNAME}.c
+sed -i "$[ line + 11 ]i COMMAND_DEF($CMDNAME);" ${DESTDIR}/cmd_${CMDNAME}.c
 

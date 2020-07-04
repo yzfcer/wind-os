@@ -31,24 +31,24 @@ sed -i "s/WIND_TEST/TEST/g" ${DESTDIR}/test_${TESTNAME}.c
 mv ${DESTDIR}/wind_test_${TESTNAME}.c  ${DESTDIR}/test_${TESTNAME}.c
 sed -i "s/wind_cmd/cmd/g" ${DESTDIR}/test_${TESTNAME}.c
 
-sed -i "32i CASE_SETUP(info) FUNC_EMPTY" ${DESTDIR}/test_${TESTNAME}.c
-sed -i "33i CASE_TEARDOWN(info) FUNC_EMPTY" ${DESTDIR}/test_${TESTNAME}.c
-sed -i "34i CASE_FUNC(info)" ${DESTDIR}/test_${TESTNAME}.c
-sed -i "35i {" ${DESTDIR}/test_${TESTNAME}.c
-sed -i "36i }" ${DESTDIR}/test_${TESTNAME}.c
+line=31
+sed -i "$[ line + 1 ]i CASE_SETUP(info) FUNC_EMPTY" ${DESTDIR}/test_${TESTNAME}.c
+sed -i "$[ line + 2 ]i CASE_TEARDOWN(info) FUNC_EMPTY" ${DESTDIR}/test_${TESTNAME}.c
+sed -i "$[ line + 3 ]i CASE_FUNC(info)" ${DESTDIR}/test_${TESTNAME}.c
+sed -i "$[ line + 4 ]i {" ${DESTDIR}/test_${TESTNAME}.c
+sed -i "$[ line + 5 ]i }" ${DESTDIR}/test_${TESTNAME}.c
 
-sed -i "37i CASE_SETUP(func) FUNC_EMPTY" ${DESTDIR}/test_${TESTNAME}.c
-sed -i "38i CASE_TEARDOWN(func) FUNC_EMPTY" ${DESTDIR}/test_${TESTNAME}.c
-sed -i "39i CASE_FUNC(func)" ${DESTDIR}/test_${TESTNAME}.c
-sed -i "40i {" ${DESTDIR}/test_${TESTNAME}.c
-sed -i "41i }" ${DESTDIR}/test_${TESTNAME}.c
+sed -i "$[ line + 6 ]i CASE_SETUP(func) FUNC_EMPTY" ${DESTDIR}/test_${TESTNAME}.c
+sed -i "$[ line + 7 ]i CASE_TEARDOWN(func) FUNC_EMPTY" ${DESTDIR}/test_${TESTNAME}.c
+sed -i "$[ line + 8 ]i CASE_FUNC(func)" ${DESTDIR}/test_${TESTNAME}.c
+sed -i "$[ line + 9 ]i {" ${DESTDIR}/test_${TESTNAME}.c
+sed -i "$[ line + 10 ]i }" ${DESTDIR}/test_${TESTNAME}.c
 
-sed -i "42i SUITE_SETUP(${TESTNAME}) FUNC_EMPTY" ${DESTDIR}/test_${TESTNAME}.c
-sed -i "43i SUITE_TEARDOWN(${TESTNAME}) FUNC_EMPTY" ${DESTDIR}/test_${TESTNAME}.c
+sed -i "$[ line + 11 ]i SUITE_SETUP(${TESTNAME}) FUNC_EMPTY" ${DESTDIR}/test_${TESTNAME}.c
+sed -i "$[ line + 12 ]i SUITE_TEARDOWN(${TESTNAME}) FUNC_EMPTY" ${DESTDIR}/test_${TESTNAME}.c
 
-sed -i "44i TEST_CASES_START(${TESTNAME})" ${DESTDIR}/test_${TESTNAME}.c
-sed -i "45i TEST_CASE(info)" ${DESTDIR}/test_${TESTNAME}.c
-sed -i "46i TEST_CASE(func)" ${DESTDIR}/test_${TESTNAME}.c
-sed -i "47i TEST_CASES_END" ${DESTDIR}/test_${TESTNAME}.c
-sed -i "48i TEST_SUITE(${TESTNAME})" ${DESTDIR}/test_${TESTNAME}.c
-
+sed -i "$[ line + 13 ]i TEST_CASES_START(${TESTNAME})" ${DESTDIR}/test_${TESTNAME}.c
+sed -i "$[ line + 14 ]i TEST_CASE(info)" ${DESTDIR}/test_${TESTNAME}.c
+sed -i "$[ line + 15 ]i TEST_CASE(func)" ${DESTDIR}/test_${TESTNAME}.c
+sed -i "$[ line + 16 ]i TEST_CASES_END" ${DESTDIR}/test_${TESTNAME}.c
+sed -i "$[ line + 17 ]i TEST_SUITE(${TESTNAME})" ${DESTDIR}/test_${TESTNAME}.c
