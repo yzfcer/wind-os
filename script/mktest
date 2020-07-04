@@ -4,7 +4,7 @@ usage()
 {
 	echo "mktest usage:"
 	echo "mktest  <testname> "
-	echo "      name: the command name need to create"
+	echo "      name: the testsuite name need to create"
 }
 
 if [ $# -lt 1 ]
