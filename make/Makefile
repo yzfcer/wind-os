@@ -80,6 +80,10 @@ WINDOS_INC += -I$(ROOTDIR)/src/module/log
 WINDOS_INC += -I$(ROOTDIR)/src/module/xdemom
 WINDOS_INC += -I$(ROOTDIR)/src/module/ydemom
 WINDOS_INC += -I$(ROOTDIR)/src/module/net
+WINDOS_INC += -I$(ROOTDIR)/src/module/net/common
+WINDOS_INC += -I$(ROOTDIR)/src/module/net/stack
+WINDOS_INC += -I$(ROOTDIR)/src/module/net/netcmd
+WINDOS_INC += -I$(ROOTDIR)/src/module/net/layer5
 
 CFLAGS = -g -Wall -rdynamic ${WINDOS_INC} ${CROSS_COMPILE_INCLUDE}
 CLIBFLAGS = -g -rdynamic -L/usr/lib/86_64-linux-gnu -lm 

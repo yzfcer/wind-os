@@ -2,12 +2,54 @@
 usage()
 {
 	echo "mksrc usage:"
-	echo "mksrc <dirname> <objname>"
+	echo "mksrc [options] <dirname> <objname>"
 	echo "      dirname: the storage path of C source and header file"
 	echo "      objname: the file name of C source and header file"
+	echo "options:"
+	echo "c : to make C source file"
+	echo "h : to make C header file"
+	echo "t : to make C unit test file"
+	echo "s : to make command file"
+	echo "d : use macro config flag"
+
 }
 
-
+parse_opt()
+{
+	opt=$1
+	if [[ $opt != "-"*  ]]
+	then
+		OFLAG=false
+		CFLAG=true
+		HFLAG=true
+		return
+	fi
+	if [[ $opt == *"c"*  ]]
+	then
+		CFLAG=true
+	fi
+	if [[ $opt == *"h"*  ]]
+	then
+		HFLAG=true
+	fi
+	if [[ $opt == *"t"*  ]]
+	then
+		TFLAG=true
+	fi
+	if [[ $opt == *"s"*  ]]
+	then
+		SFLAG=true
+	fi
+	if [[ $opt == *"d"*  ]]
+	then
+		DFLAG=true
+	fi
+	echo "DFLAG="$CFLAG
+	echo "HFLAG="$HFLAG
+	echo "TFLAG="$TFLAG
+	echo "SFLAG="$SFLAG
+	echo "DFLAG="$DFLAG
+}
 
 show_info()
 {
@@ -15,12 +57,47 @@ show_info()
 	echo "source_file:"${SOURCEFILE}
 }
 
+
+gen_macro_head()
+{
+	if [ $DFLAG != "true" ]
+	then
+		return
+	fi
+	echo "gen_macro_head"
+	filename=$1
+	defstr=`echo ${filename^^}`
+	defstr=$defstr"_SUPPORT"
+	#echo $defstr
+	PREINFO=""
+	PREINFO+="#if "$defstr"\r\n"
+	echo -e "${PREINFO}"
+	echo "gen_macro_head exit"
+}
+
+gen_macro_tail()
+{
+	if [ $DFLAG != "true"  ]
+	then
+		return
+	fi
+	echo "gen_macro_tail"
+	filename=$1
+	defstr=`echo ${filename^^}`
+	defstr=$defstr"_SUPPORT"
+	#echo $defstr
+	PREINFO=""
+	PREINFO+="#endif // #if "$defstr"\r\n"
+	echo -e "${PREINFO}"
+	echo "gen_macro_tail exit"
+}
+
 gen_file_head()
 {
 	filename=$1
 	defstr=`echo ${FILENAME^^}`
 	defstr=$defstr"_H__"
-	echo $defstr
+	#echo $defstr
 	PREINFO=""
 	PREINFO+="/****************************************Copyright (c)**************************************************\r\n"
 	PREINFO+="**                                       God's harbor\r\n"
@@ -52,13 +129,31 @@ gen_file_head()
 		PREINFO+="#define "$defstr"\r\n"
 		PREINFO+="#include \"wind_config.h\"\r\n"
 		PREINFO+="#include \"wind_type.h\"\r\n"
-	elif [[ $filename == *".c" ]]
+	elif [[ $filename == "wind_"*".c" ]]
 	then
 		PREINFO+="#include \""${FILENAME}".h\"\r\n"
+		PREINFO+="#include \"wind_obj.h\"\r\n"
 	fi
 	PREINFO+="#ifdef __cplusplus\r\n"
 	PREINFO+="extern \"C\" {\r\n"
-	PREINFO+="#endif // #ifdef __cplusplus\r\n\r\n\r\n\r\n\r\n"
+	PREINFO+="#endif // #ifdef __cplusplus\r\n\r\n"
+	#gen_macro_head $filename
+
+	#echo -e "${PREINFO}"
+
+}
+
+
+
+
+gen_file_tail()
+{
+	filename=$1
+	defstr=`echo ${FILENAME^^}`
+	defstr=$defstr"_H__"
+	#echo $defstr
+	PREINFO=""
+	#gen_macro_tail %filename
 	PREINFO+="#ifdef __cplusplus\r\n"
 	PREINFO+="}\r\n"
 	PREINFO+="#endif // #ifdef __cplusplus\r\n"
@@ -66,37 +161,81 @@ gen_file_head()
 	then
 		PREINFO+="#endif //#ifndef "$defstr"\r\n"
 	fi
-	
-	echo -e "${PREINFO}"
-
+	#echo -e "${PREINFO}"
 }
 
-if [ $# -lt 2 ]
-then
-	usage
-	exit 0
-fi
+
 CUR_PATH=$(cd $(dirname $0); pwd)
 STORPATH=$1
-FILENAME=$2
+FILENAME=wind_$2
 #DATETIME=`date + "%Y/%m/%D %H:%M:%S"`
 DATETIME=`date +%Y-%m-%d`
 AUTHOR="Jason Zhou"
 HEADERFILE=${STORPATH}/${FILENAME}.h
 SOURCEFILE=${STORPATH}/${FILENAME}.c
 PREINFO=""
+OFLAG=true
+CFLAG=false
+HFLAG=false
+TFLAG=false
+SFLAG=false
+DFLAG=false
 
+if [ $# -lt 2 ]
+then
+	usage
+	exit 0
+fi
+parse_opt $@
+if [ $OFLAG == "true"  ]
+then
+	STORPATH=$2
+	FILENAME=wind_$3
+	HEADERFILE=${STORPATH}/${FILENAME}.h
+	SOURCEFILE=${STORPATH}/${FILENAME}.c
+fi
 show_info
 
+if [ -f ${HEADERFILE} ]
+then
+	rm -f ${HEADERFILE}
+fi
+if [ -f ${SOURCEFILE} ]
+then
+	rm -f ${SOURCEFILE}
+fi
 touch ${HEADERFILE}
 touch ${SOURCEFILE}
 
-gen_file_head ${FILENAME}.h
-echo -e "${PREINFO}" > ${HEADERFILE}
-sed -i 's///g' ${HEADERFILE}
+if [ $CFLAG == "true" ]
+then
+	gen_file_head ${FILENAME}.h
+	echo -e "${PREINFO}" >> ${HEADERFILE}
+	gen_macro_head ${FILENAME}
+	echo -e "${PREINFO}" >> ${HEADERFILE}
+	
+	
+	gen_macro_tail ${FILENAME}
+	echo -e "${PREINFO}" >> ${HEADERFILE}
+	gen_file_tail ${FILENAME}.h
+	echo -e "${PREINFO}" >> ${HEADERFILE}
+	sed -i 's///g' ${HEADERFILE}
+fi
 
-gen_file_head ${FILENAME}.c
-echo -e "${PREINFO}" > ${SOURCEFILE}
-sed -i 's///g' ${SOURCEFILE}
+
+if [ $CFLAG == "true" ]
+then
+	gen_file_head ${FILENAME}.c
+	echo -e "${PREINFO}" >> ${SOURCEFILE}
+	gen_macro_head ${FILENAME}
+	echo -e "${PREINFO}" >> ${SOURCEFILE}
+	
+	
+	gen_macro_tail ${FILENAME}
+	echo -e "${PREINFO}" >> ${SOURCEFILE}
+	gen_file_tail ${FILENAME}.c
+	echo -e "${PREINFO}" >> ${SOURCEFILE}
+	sed -i 's///g' ${SOURCEFILE}
+fi
 
 
