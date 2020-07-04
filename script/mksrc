@@ -16,7 +16,7 @@ usage()
 
 parse_opt()
 {
-	opt=$1
+	local opt=$1
 	if [[ $opt != "-"*  ]]
 	then
 		OFLAG=false
@@ -51,11 +51,6 @@ parse_opt()
 	echo "DFLAG="$DFLAG
 }
 
-show_info()
-{
-	echo "header_file:"${HEADERFILE}
-	echo "source_file:"${SOURCEFILE}
-}
 
 
 gen_macro_head()
@@ -64,15 +59,16 @@ gen_macro_head()
 	then
 		return
 	fi
-	echo "gen_macro_head"
-	filename=$1
+	echo "gen_macro_head "$1
+	local filename=$1
+	echo ${filename^^}
 	defstr=`echo ${filename^^}`
 	defstr=$defstr"_SUPPORT"
 	#echo $defstr
 	PREINFO=""
 	PREINFO+="#if "$defstr"\r\n"
-	echo -e "${PREINFO}"
-	echo "gen_macro_head exit"
+	#echo -e "${PREINFO}"
+	#echo "gen_macro_head exit"
 }
 
 gen_macro_tail()
@@ -81,21 +77,22 @@ gen_macro_tail()
 	then
 		return
 	fi
-	echo "gen_macro_tail"
-	filename=$1
+	echo "gen_macro_tail "$1
+	local filename=$1
+	echo "filename:"${filename}
 	defstr=`echo ${filename^^}`
 	defstr=$defstr"_SUPPORT"
 	#echo $defstr
 	PREINFO=""
 	PREINFO+="#endif // #if "$defstr"\r\n"
-	echo -e "${PREINFO}"
-	echo "gen_macro_tail exit"
+	#echo -e "${PREINFO}"
+	#echo "gen_macro_tail exit"
 }
 
 gen_file_head()
 {
-	filename=$1
-	defstr=`echo ${FILENAME^^}`
+	local filename=$1
+	local defstr=`echo ${FILENAME^^}`
 	defstr=$defstr"_H__"
 	#echo $defstr
 	PREINFO=""
@@ -136,8 +133,7 @@ gen_file_head()
 	fi
 	PREINFO+="#ifdef __cplusplus\r\n"
 	PREINFO+="extern \"C\" {\r\n"
-	PREINFO+="#endif // #ifdef __cplusplus\r\n\r\n"
-	#gen_macro_head $filename
+	PREINFO+="#endif // #ifdef __cplusplus\r\n"
 
 	#echo -e "${PREINFO}"
 
@@ -148,12 +144,11 @@ gen_file_head()
 
 gen_file_tail()
 {
-	filename=$1
-	defstr=`echo ${FILENAME^^}`
+	local filename=$1
+	local defstr=`echo ${FILENAME^^}`
 	defstr=$defstr"_H__"
 	#echo $defstr
 	PREINFO=""
-	#gen_macro_tail %filename
 	PREINFO+="#ifdef __cplusplus\r\n"
 	PREINFO+="}\r\n"
 	PREINFO+="#endif // #ifdef __cplusplus\r\n"
@@ -164,15 +159,49 @@ gen_file_tail()
 	#echo -e "${PREINFO}"
 }
 
+# $1 destinational file with path
+# $2 destinational file 
+# $3 file suffix
+mkfile()
+{
+	local destfile=${1}.${3}
+	local filename=$2
+	local suffix=$3
+	if [ -f ${destfile} ]
+	then
+		#rm -f ${destfile}
+		echo ${destfile}" has been exist"
+		return
+	fi
+	echo "filename="${filename}
+	echo "make file:"${destfile}
+	touch ${destfile}
+	gen_file_head ${filename}.${suffix}
+	echo -e "${PREINFO}" >> ${destfile}
+	echo "1 filename="${filename}
+	gen_macro_head ${filename}
+	echo -e "${PREINFO}" >> ${destfile}
+	
+	
+	echo "2 filename="${filename}
+	gen_macro_tail ${filename}
+	echo -e "${PREINFO}" >> ${destfile}
+	gen_file_tail ${filename}.${suffix}
+	echo -e "${PREINFO}" >> ${destfile}
+	sed -i 's///g' ${destfile}
+
+}
+
+
 
 CUR_PATH=$(cd $(dirname $0); pwd)
 STORPATH=$1
+OBJNAME=$2
 FILENAME=wind_$2
 #DATETIME=`date + "%Y/%m/%D %H:%M:%S"`
 DATETIME=`date +%Y-%m-%d`
 AUTHOR="Jason Zhou"
-HEADERFILE=${STORPATH}/${FILENAME}.h
-SOURCEFILE=${STORPATH}/${FILENAME}.c
+PATHFILE=${STORPATH}/${FILENAME}
 PREINFO=""
 OFLAG=true
 CFLAG=false
@@ -190,52 +219,21 @@ parse_opt $@
 if [ $OFLAG == "true"  ]
 then
 	STORPATH=$2
+	OBJNAME=$3
 	FILENAME=wind_$3
-	HEADERFILE=${STORPATH}/${FILENAME}.h
-	SOURCEFILE=${STORPATH}/${FILENAME}.c
+	PATHFILE=${STORPATH}/${FILENAME}
 fi
-show_info
 
-if [ -f ${HEADERFILE} ]
+
+
+if [ $HFLAG == "true" ]
 then
-	rm -f ${HEADERFILE}
+	mkfile ${PATHFILE} ${FILENAME} h
 fi
-if [ -f ${SOURCEFILE} ]
-then
-	rm -f ${SOURCEFILE}
-fi
-touch ${HEADERFILE}
-touch ${SOURCEFILE}
 
 if [ $CFLAG == "true" ]
 then
-	gen_file_head ${FILENAME}.h
-	echo -e "${PREINFO}" >> ${HEADERFILE}
-	gen_macro_head ${FILENAME}
-	echo -e "${PREINFO}" >> ${HEADERFILE}
-	
-	
-	gen_macro_tail ${FILENAME}
-	echo -e "${PREINFO}" >> ${HEADERFILE}
-	gen_file_tail ${FILENAME}.h
-	echo -e "${PREINFO}" >> ${HEADERFILE}
-	sed -i 's///g' ${HEADERFILE}
-fi
-
-
-if [ $CFLAG == "true" ]
-then
-	gen_file_head ${FILENAME}.c
-	echo -e "${PREINFO}" >> ${SOURCEFILE}
-	gen_macro_head ${FILENAME}
-	echo -e "${PREINFO}" >> ${SOURCEFILE}
-	
-	
-	gen_macro_tail ${FILENAME}
-	echo -e "${PREINFO}" >> ${SOURCEFILE}
-	gen_file_tail ${FILENAME}.c
-	echo -e "${PREINFO}" >> ${SOURCEFILE}
-	sed -i 's///g' ${SOURCEFILE}
+	mkfile ${PATHFILE} ${FILENAME} c
 fi
 
 
