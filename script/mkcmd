@@ -25,8 +25,10 @@ fi
 ./mksrc -dc ${DESTDIR} cmd_${CMDNAME}
 mv ${DESTDIR}/wind_cmd_${CMDNAME}.c  ${DESTDIR}/cmd_${CMDNAME}.c
 sed -i "s/wind_cmd/cmd/g" ${DESTDIR}/cmd_${CMDNAME}.c
+sed -i "s/cmd_${CMDNAME}.h/wind_cmd.h/g" ${DESTDIR}/cmd_${CMDNAME}.c
+sed -i '26d' ${DESTDIR}/cmd_${CMDNAME}.c
 
-line=31
+line=30
 sed -i "$[ line + 1 ]i COMMAND_DISC($CMDNAME)" ${DESTDIR}/cmd_${CMDNAME}.c
 sed -i "$[ line + 2 ]i {" ${DESTDIR}/cmd_${CMDNAME}.c
 sed -i "$[ line + 3 ]i }" ${DESTDIR}/cmd_${CMDNAME}.c

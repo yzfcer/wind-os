@@ -14,24 +14,32 @@ then
 fi
 MODNAME=$1
 CUR_PATH=$(cd $(dirname $0); pwd)
-mkdir -p ${CUR_PATH}/../src/module/${MODNAME}
-if [ -f ${CUR_PATH}/../src/module/${MODNAME}/module_${MODNAME}.c ]
-then
-	#rm -f ${destfile}
-	echo ${CUR_PATH}/../src/module/${MODNAME}/module_${MODNAME}.c" has been exist"
-	exit 
-fi
-if [ -f ${CUR_PATH}/../src/module/${MODNAME}/module_${MODNAME}.h ]
-then
-	#rm -f ${destfile}
-	echo ${CUR_PATH}/../src/module/${MODNAME}/module_${MODNAME}.c" has been exist"
-	exit
-fi
-./mksrc -dch ${CUR_PATH}/../src/module/${MODNAME} module_${MODNAME}
-mv ${CUR_PATH}/../src/module/${MODNAME}/wind_module_${MODNAME}.c ${CUR_PATH}/../src/module/${MODNAME}/module_${MODNAME}.c
-mv ${CUR_PATH}/../src/module/${MODNAME}/wind_module_${MODNAME}.h ${CUR_PATH}/../src/module/${MODNAME}/module_${MODNAME}.h
-sed -i 's/wind_module/module/g' ${CUR_PATH}/../src/module/${MODNAME}/module_${MODNAME}.c
-sed -i 's/wind_module/module/g' ${CUR_PATH}/../src/module/${MODNAME}/module_${MODNAME}.h
+MODDIR=${CUR_PATH}/../src/module/${MODNAME}
+MODENTRY=${MODDIR}/${MODNAME}
+MODFILE=${MODDIR}/wind_${MODNAME}
 
-./mksrc -dch ${CUR_PATH}/../src/module/${MODNAME} ${MODNAME}
+mkdir -p ${MODDIR}
+if [ -f ${MODENTRY}.h ]
+then
+	echo ${MODENTRY}.h" has been exist"
+	exit -1
+fi
+
+mkdir -p ${CUR_PATH}/../src/module/${MODNAME}
+if [ -f ${MODENTRY}.c ]
+then
+	echo ${MODENTRY}.c" has been exist"
+	exit -2
+fi
+
+
+./mksrc -dch ${MODDIR} module_${MODNAME}
+mv ${MODDIR}/wind_module_${MODNAME}.c ${MODDIR}/module_${MODNAME}.c
+mv ${MODDIR}/wind_module_${MODNAME}.h ${MODDIR}/module_${MODNAME}.h
+sed -i 's/wind_module/module/g' ${MODDIR}/module_${MODNAME}.c
+sed -i 's/wind_module/module/g' ${MODDIR}/module_${MODNAME}.h
+
+./mksrc -dch ${MODDIR} ${MODNAME}
+
+ 
 

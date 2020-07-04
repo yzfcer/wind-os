@@ -29,9 +29,11 @@ sed -i "s/WIND_TEST/TEST/g" ${DESTDIR}/test_${TESTNAME}.c
 
 ./mksrc -dc ${DESTDIR} test_${TESTNAME}
 mv ${DESTDIR}/wind_test_${TESTNAME}.c  ${DESTDIR}/test_${TESTNAME}.c
-sed -i "s/wind_cmd/cmd/g" ${DESTDIR}/test_${TESTNAME}.c
+sed -i "s/wind_test/test/g" ${DESTDIR}/test_${TESTNAME}.c
+sed -i "s/test_${TESTNAME}.h/wind_cmd.h/g" ${DESTDIR}/test_${TESTNAME}.c
+sed -i '26d' ${DESTDIR}/test_${TESTNAME}.c
 
-line=31
+line=30
 sed -i "$[ line + 1 ]i CASE_SETUP(info) FUNC_EMPTY" ${DESTDIR}/test_${TESTNAME}.c
 sed -i "$[ line + 2 ]i CASE_TEARDOWN(info) FUNC_EMPTY" ${DESTDIR}/test_${TESTNAME}.c
 sed -i "$[ line + 3 ]i CASE_FUNC(info)" ${DESTDIR}/test_${TESTNAME}.c
