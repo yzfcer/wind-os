@@ -1,0 +1,28 @@
+
+
+usage()
+{
+	echo "mktest usage:"
+	echo "mktest  <testname> "
+	echo "      name: the command name need to create"
+}
+
+if [ $# -lt 1 ]
+then
+	usage
+	exit 0
+fi
+TESTNAME=$1
+CUR_PATH=$(cd $(dirname $0); pwd)
+DESTDIR=${CUR_PATH}/../src/module/cutest/testcase
+
+if [ -f ${DESTDIR}/test_{TESTNAME}.c ]
+then
+	echo ${DESTDIR}/test_{TESTNAME}.c " has been exist"
+	exit 
+fi
+
+./mksrc -dc ${DESTDIR} test_${TESTNAME}
+mv ${DESTDIR}/wind_test_${TESTNAME}.c  ${DESTDIR}/test_${TESTNAME}.c
+sed -i 's/wind_test/test/g' ${DESTDIR}/test_${TESTNAME}.c
+sed -i 's/WIND_TEST/TEST/g' ${DESTDIR}/test_${TESTNAME}.c

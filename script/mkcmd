@@ -1,0 +1,28 @@
+
+
+usage()
+{
+	echo "mkcmd usage:"
+	echo "mkcmd  <cmdname> "
+	echo "      name: the command name need to create"
+}
+
+if [ $# -lt 1 ]
+then
+	usage
+	exit 0
+fi
+CMDNAME=$1
+CUR_PATH=$(cd $(dirname $0); pwd)
+DESTDIR=${CUR_PATH}/../src/module/shell/cmd
+
+if [ -f ${DESTDIR}/cmd_{CMDNAME}.c ]
+then
+	echo ${DESTDIR}/cmd_{CMDNAME}.c " has been exist"
+	exit 
+fi
+
+./mksrc -dc ${DESTDIR} cmd_${CMDNAME}
+mv ${DESTDIR}/wind_cmd_${CMDNAME}.c  ${DESTDIR}/cmd_${CMDNAME}.c
+sed -i 's/wind_cmd/cmd/g' ${DESTDIR}/cmd_${CMDNAME}.c
+sed -i 's/WIND_CMD/CMD/g' ${DESTDIR}/cmd_${CMDNAME}.c
