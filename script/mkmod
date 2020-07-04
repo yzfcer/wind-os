@@ -1,0 +1,37 @@
+
+
+usage()
+{
+	echo "mkmod usage:"
+	echo "mkmod  <modname> "
+	echo "      modname: the module name need to create"
+}
+
+if [ $# -lt 1 ]
+then
+	usage
+	exit 0
+fi
+MODNAME=$1
+CUR_PATH=$(cd $(dirname $0); pwd)
+mkdir -p ${CUR_PATH}/../src/module/${MODNAME}
+if [ -f ${CUR_PATH}/../src/module/${MODNAME}/module_${MODNAME}.c ]
+then
+	#rm -f ${destfile}
+	echo ${CUR_PATH}/../src/module/${MODNAME}/module_${MODNAME}.c" has been exist"
+	exit 
+fi
+if [ -f ${CUR_PATH}/../src/module/${MODNAME}/module_${MODNAME}.h ]
+then
+	#rm -f ${destfile}
+	echo ${CUR_PATH}/../src/module/${MODNAME}/module_${MODNAME}.c" has been exist"
+	exit
+fi
+./mksrc -dch ${CUR_PATH}/../src/module/${MODNAME} module_${MODNAME}
+mv ${CUR_PATH}/../src/module/${MODNAME}/wind_module_${MODNAME}.c ${CUR_PATH}/../src/module/${MODNAME}/module_${MODNAME}.c
+mv ${CUR_PATH}/../src/module/${MODNAME}/wind_module_${MODNAME}.h ${CUR_PATH}/../src/module/${MODNAME}/module_${MODNAME}.h
+sed -i 's/wind_module/module/g' ${CUR_PATH}/../src/module/${MODNAME}/module_${MODNAME}.c
+sed -i 's/wind_module/module/g' ${CUR_PATH}/../src/module/${MODNAME}/module_${MODNAME}.h
+
+./mksrc -dch ${CUR_PATH}/../src/module/${MODNAME} ${MODNAME}
+
