@@ -21,6 +21,7 @@
 #include "tb_model.h"
 #include "db_demo.h"
 #include "db_entry.h"
+#if WIND_MODULE_DB_SUPPORT
 
 //Define database structure
 TBMODEL_START(tb_demo)
@@ -31,5 +32,5 @@ TBMODEL_ITEM(tb_demo,w_int16_t,cdemo)
 TBMODEL_END
 TBMODEL_DEF(tb_demo,DB_ATTR_SINGLE)
 
-
+#endif //#if WIND_MODULE_DB_SUPPORT
 

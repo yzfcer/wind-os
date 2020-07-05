@@ -31,7 +31,7 @@
 extern "C" {
 #endif //#ifdef __cplusplus
 
-#if WIND_XMODEM_SUPPORT
+#if WIND_MODULE_XMODEM_SUPPORT
 #define SOH  0x01
 #define STX  0x02
 #define EOT  0x04
@@ -535,5 +535,5 @@ w_err_t wind_xmodem_end(xm_ctx_s *ctx)
 #ifdef __cplusplus
 }
 #endif //#ifdef __cplusplus
-#endif //#if WIND_XMODEM_SUPPORT
+#endif //#if WIND_MODULE_XMODEM_SUPPORT
 

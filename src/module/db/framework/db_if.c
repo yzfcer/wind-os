@@ -22,11 +22,13 @@
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
+#include "wind_config.h"
 #include "db_def.h"
 #include "db_if.h"
 #include "db_entry.h"
 #include "tb_model.h"
 #include "wind_debug.h"
+#if WIND_MODULE_DB_SUPPORT
 
 void *db_malloc(w_int32_t size)
 {
@@ -133,3 +135,4 @@ w_err_t wind_tb_getdata(char * tbname,w_int32_t row_idx,void * data,w_int32_t da
     return tb_entry_get_data(tb,row_idx,data,data_size);
 }
 
+#endif //#if WIND_MODULE_DB_SUPPORT

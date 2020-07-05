@@ -29,20 +29,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
-
-
-
-
 #if (WIND_MODULE_DB_SUPPORT)
-
-
-
-
-
-
-
-
-
 
 
 #if CMD_DB_SUPPORT
@@ -81,7 +68,7 @@ MODULE_EXIT(db)
 
 MODULE_DEF(db, 0x0100,"");
 
-#endif
+#endif //#if WIND_MODULE_DB_SUPPORT
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

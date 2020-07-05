@@ -30,7 +30,7 @@
 extern "C" {
 #endif //#ifdef __cplusplus
 
-#if WIND_XMODEM_SUPPORT
+#if WIND_MODULE_XMODEM_SUPPORT
 #define XMODEM_BUFF_LEN 1030
 #define XMODEM_MIN_LEN 128
 typedef enum 
@@ -98,7 +98,7 @@ w_int32_t wind_xmodem_send(xm_ctx_s *ctx,w_uint8_t *data,w_int32_t size);
 
 w_err_t wind_xmodem_end(xm_ctx_s *ctx);
 
-#endif //#if WIND_XMODEM_SUPPORT
+#endif //#if WIND_MODULE_XMODEM_SUPPORT
 #ifdef __cplusplus
 }
 #endif //#ifdef __cplusplus

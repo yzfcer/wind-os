@@ -24,10 +24,12 @@
 *******************************************************************************************************/
 #ifndef DB_H__
 #define DB_H__
-
+#include "wind_config.h"
 #include "wind_type.h"
 #include "wind_dlist.h"
 #include "wind_mutex.h"
+#if WIND_MODULE_DB_SUPPORT
+
 #define DB_BLK_SIZE 512
 #define DB_NAME_LEN 20   //Database name length
 #define TB_NAME_LEN 20   //Data table name length
@@ -106,4 +108,6 @@ typedef struct
 
 #define db_get_addr(base,offset) (w_addr_t)((offset)+(w_addr_t)(base))
 #define db_get_offset(base,addr) (w_uint32_t)((w_addr_t)(addr)+(w_addr_t)(base))
-#endif
+
+#endif // #if WIND_MODULE_DB_SUPPORT
+#endif // #ifndef DB_H__

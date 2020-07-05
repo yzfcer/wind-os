@@ -22,6 +22,8 @@
 #define DB_demo1_H__
 #include "wind_type.h"
 #include "db_if.h"
+#if WIND_MODULE_DB_SUPPORT
+
 typedef struct 
 {
 	w_int32_t key;
@@ -34,6 +36,7 @@ typedef struct
 
 TBMODEL_DECLARE(demo1);
 
+#endif //#if WIND_MODULE_DB_SUPPORT
 #endif
 
 

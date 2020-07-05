@@ -20,10 +20,12 @@
 *******************************************************************************************************/
 #ifndef DB_IF_H__
 #define DB_IF_H__
+#include "wind_config.h"
 #include "wind_type.h"
 #include "db_def.h"
 #include "tb_model.h"
 #include "wind_heap.h"
+#if WIND_MODULE_DB_SUPPORT
 
 void *db_malloc(w_int32_t size);
 w_err_t db_free(void* ptr);
@@ -53,5 +55,6 @@ w_err_t wind_tb_query_cond_count(char *tbname,char *cond,w_int32_t *idxlist,w_in
 w_err_t wind_tb_query_count(char *tbname,w_int32_t *count);
 w_err_t wind_tb_getdata(char * tbname,w_int32_t row_idx,void * data,w_int32_t data_size);
 
+#endif //#if WIND_MODULE_DB_SUPPORT
 #endif
 

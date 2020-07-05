@@ -24,10 +24,14 @@
 *******************************************************************************************************/
 #ifndef DB_ENTRY_H_
 #define DB_ENTRY_H_
+#include "wind_config.h"
 #include "wind_type.h"
 #include "db_def.h"
 #include "wind_dlist.h"
 #include "tb_entry.h"
+
+#if WIND_MODULE_DB_SUPPORT
+
 #define DB_MAGIC 0xa5253867a16725b6
 
 #define DB_NEXT(dbinfo) (w_db_s*)(dbinfo->base+dbinfo->next_offset)
@@ -46,7 +50,7 @@ w_err_t db_entry_print_info(w_db_s *db);
 w_err_t db_entry_print_data(w_db_s *db);
 w_err_t db_entry_print_all(void);
 
-
+#endif //#if WIND_MODULE_DB_SUPPORT
 #endif
 
 

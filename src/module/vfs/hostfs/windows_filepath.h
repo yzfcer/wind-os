@@ -26,6 +26,8 @@
 #define WINDOWS_FILEPATH_H__
 #include "wind_config.h"
 #include "wind_type.h"
+#if WIND_HOSTFS_SUPPORT
+
 #if (HOST_OS_TYPE == HOST_OS_WINDOWS)
 
 hfileattr_e host_file_type(char *path);
@@ -46,6 +48,7 @@ char* host_filepath_get_filename(char *path);
 char* host_filepath_to_directory(char *path);
 
 
+#endif
 #endif
 #endif
 

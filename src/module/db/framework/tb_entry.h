@@ -24,10 +24,12 @@
 *******************************************************************************************************/
 #ifndef DB_TABLE__ENTRY_H_
 #define DB_TABLE__ENTRY_H_
+#include "wind_config.h"
 #include "wind_type.h"
 #include "db_def.h"
 #include "db_if.h"
 #include "db_entry.h"
+#if WIND_MODULE_DB_SUPPORT
 #define NODE_TO_TBENTRY(node) NODEPTR_TO_ITEMPTR(node,w_tb_s,tbnode)
 
 w_err_t tb_entry_create(char *tbname,tbmodel_item_s *info,w_uint16_t item_cnt);
@@ -51,6 +53,7 @@ w_err_t tb_entry_print_data(w_tb_s *tb);
 w_err_t tb_entry_print_table(w_tb_s *tb);
 void tb_print_data(w_tb_s *tb,w_uint8_t *data,w_int32_t idx);
 
+#endif //#if WIND_MODULE_DB_SUPPORT
 #endif
 
 

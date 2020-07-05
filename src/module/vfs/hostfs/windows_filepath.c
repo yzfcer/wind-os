@@ -23,6 +23,7 @@
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
 #include "wind_config.h"
+#if WIND_HOSTFS_SUPPORT
 
 #if (HOST_OS_TYPE == HOST_OS_WINDOWS)
 #include "wind_file.h"
@@ -342,4 +343,5 @@ char* host_filepath_to_directory(char *path)
 }
 
 
+#endif
 #endif

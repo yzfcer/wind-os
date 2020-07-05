@@ -29,6 +29,8 @@
 #include "wind_debug.h"
 #include "tb_model.h"
 #include "tb_model_file.h"
+#if WIND_MODULE_DB_SUPPORT
+
 #define NODE_TO_TBMODEL(node) NODEPTR_TO_ITEMPTR(node,tb_model_s,obj.objnode)
 static w_dlist_s tbmodellist;
 typedef struct
@@ -187,3 +189,5 @@ w_err_t wind_tbmodels_unregister(void)
     wind_tbmodel_unregister(TBMODEL(tb_demo));
     return W_ERR_OK;
 }
+
+#endif //#if WIND_MODULE_DB_SUPPORT

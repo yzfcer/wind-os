@@ -26,9 +26,10 @@
 *******************************************************************************************************/
 #ifndef TB_MODEL_H__
 #define TB_MODEL_H__
-
+#include "wind_config.h"
 #include "wind_type.h"
 #include "wind_obj.h"
+#if WIND_MODULE_DB_SUPPORT
 
 #define TB_MODEL_MAGIC 0x236F79AC
 
@@ -109,5 +110,5 @@ w_err_t wind_tbmodel_print_list(void);
 w_err_t wind_tbmodel_print(tb_model_s *tbmodel);
 w_err_t wind_tbmodel_print_all(void);
 
-
+#endif //#if WIND_MODULE_DB_SUPPORT
 #endif

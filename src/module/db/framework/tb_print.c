@@ -25,6 +25,7 @@
 #include "wind_type.h"
 #include "wind_debug.h"
 #include "db_def.h"
+#if WIND_MODULE_DB_SUPPORT
 
 static void print_int8_arr(void *data,w_int32_t count)
 {
@@ -169,3 +170,4 @@ void tb_print_data(w_tb_s *entry,w_uint8_t *data,w_int32_t idx)
     wind_printf("|   |   |---</row index=%d>\r\n",idx);
 }
 
+#endif //#if WIND_MODULE_DB_SUPPORT

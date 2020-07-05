@@ -168,8 +168,6 @@ extern "C" {
 
 #define HARD_STACK_SIZE 40 //The amount of space reserved for the hardware stack, which may not be needed in some hardware
 
-#define WIND_XMODEM_SUPPORT 1 //Whether XMODEM protocol is supported
-
 //-------------------------------------------------------------------------------
 //Thread stack space size configuration
 //-------------------------------------------------------------------------------
@@ -227,8 +225,6 @@ extern "C" {
 #define CMD_DAEMON_SUPPORT    1 //Whether thread daemon command is supported
 #define CMD_DIAGNOSE_SUPPORT  1 //Whether system diagnostic command is supported
 #define CMD_TIMER_SUPPORT     1 //Whether timer operation command is supported
-#define CMD_DB_SUPPORT        1 //Whether DB module operation command is supported
-#define CMD_LOG_SUPPORT       1 //Whether log operation command is supported
 
 #define CMD_BEEP_SUPPORT      0 //Whether beep command is supported
 #define CMD_LED_SUPPORT       0 //Whether LED operation command is supported
@@ -269,6 +265,13 @@ extern "C" {
 #define TEST_XML_SUPPORT      1 //Whether XML function test is supported
 #endif
 
+#if WIND_MODULE_DB_SUPPORT
+#define CMD_DB_SUPPORT        1 //Whether DB module operation command is supported
+#endif
+
+#if WIND_MODULE_LOG_SUPPORT
+#define CMD_LOG_SUPPORT       1 //Whether log operation command is supported
+#endif
 
 //-------------------------------------------------------------------------------
 //File system function configuration, provided that the system supports the 

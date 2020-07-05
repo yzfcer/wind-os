@@ -22,12 +22,15 @@
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
+#include "wind_config.h"
 #include "db_def.h"
 #include "db_entry.h"
 #include "tb_entry.h"
 #include "wind_string.h"
 #include "wind_debug.h"
 #include "wind_debug.h"
+#if WIND_MODULE_DB_SUPPORT
+
 #define NODE_TO_DBENTRY(node) NODEPTR_TO_ITEMPTR(node,w_db_s,dbnode)
 
 static w_dlist_s db_list = {W_NULL,W_NULL};
@@ -212,6 +215,6 @@ w_err_t db_entry_print_all(void)
     return W_ERR_OK;
 }
 
-
+#endif //#if WIND_MODULE_DB_SUPPORT
 
 

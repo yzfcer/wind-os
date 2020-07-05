@@ -22,11 +22,12 @@
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
+#ifndef TB_MODEL_FILE_H__
+#define TB_MODEL_FILE_H__
 #include "wind_type.h"
 #include "db_if.h"
 #include "wind_debug.h"
-#ifndef TB_MODEL_FILE_H__
-#define TB_MODEL_FILE_H__
+#if WIND_MODULE_DB_SUPPORT
 
 w_err_t tbmodel_file_init(void);
 w_err_t tbmodel_file_load(char *filepath);
@@ -35,5 +36,6 @@ w_err_t tbmodel_file_load_all(char *dirpath);
 w_err_t tbmodel_file_save(char *filepath);
 w_err_t tbmodel_file_save_all(char *dirpath);
 
+#endif //#if WIND_MODULE_DB_SUPPORT
 #endif
 

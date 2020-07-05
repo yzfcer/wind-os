@@ -25,7 +25,7 @@
 #include "tb_entry.h"
 #include "wind_string.h"
 #include "wind_debug.h"
-//#include "db_adapter.h"
+#if WIND_MODULE_DB_SUPPORT
 #define TB_MAGIC 0xa527e397a167e268
 
 static w_int32_t get_tb_hash(char *tbname)
@@ -417,3 +417,4 @@ w_err_t tb_entry_print_table(w_tb_s *tb)
     return W_ERR_OK;
 }
 
+#endif //#if WIND_MODULE_DB_SUPPORT

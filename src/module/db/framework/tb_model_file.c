@@ -22,7 +22,7 @@
 **
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
-
+#include "wind_config.h"
 #include "wind_type.h"
 #include "wind_debug.h"
 #include "wind_string.h"
@@ -30,6 +30,7 @@
 #include "wind_file.h"
 #include "wind_filepath.h"
 #include "db_if.h"
+#if WIND_MODULE_DB_SUPPORT
 
 #define MAX_TBM_FILENAME_LEN 128
 #define NODE_TO_TBMODEL(node) NODEPTR_TO_ITEMPTR(node,tb_model_s,obj.objnode)
@@ -132,4 +133,4 @@ w_err_t tbmodel_file_save_all(char *dirpath)
     return err;
 }
 
-
+#endif //#if WIND_MODULE_DB_SUPPORT
