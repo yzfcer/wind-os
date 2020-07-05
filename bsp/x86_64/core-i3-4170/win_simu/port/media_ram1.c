@@ -11,10 +11,10 @@
 ** Author      :
 ** Modify      :
 **********************************************************************************/
-#include "boot_media.h"
+//#include "boot_media.h"
 #include "wind_string.h"
 #include "wind_debug.h"
-//硬件RAM数量和基地址和空间大小定义
+
 #define RAM1_BASE 0x20000000
 #define RAM1_SIZE 0x100000
 #define RAM1_BLKSIZE 512

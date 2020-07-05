@@ -17,7 +17,7 @@
 #include "boot_port.h"
 #include "boot_share_param.h"
 #include "boot_part.h"
-#include "boot_media.h"
+//#include "boot_media.h"
 #include "wind_debug.h"
 #include "boot_img.h"
 #include "boot_hw_if.h"
@@ -57,7 +57,7 @@ void print_boot_info(void)
 static w_err_t boot_init(void)
 {
     boot_param_init();
-    boot_media_init();
+    //boot_media_init();
     boot_part_init();
     share_param_init();
     boot_status_go_next();
@@ -155,7 +155,7 @@ static w_err_t  boot_upgrade_check(void)
     WIND_ASSERT_RETURN(part[0] != W_NULL,W_ERR_FAIL);
     part[1] = boot_img_get_old_part();
     count = part[1] == W_NULL?1:2;
-    err = boot_img_flush_cache_to_part(&part,count);
+    err = boot_img_flush_cache_to_part((w_part_s**)&part,count);
     if(0 != err)
     {
         wind_warn("flush upgrade img failed.");
@@ -236,7 +236,7 @@ static w_err_t boot_load_img(void)
         return W_ERR_FAIL;
     }
     tmp = boot_part_get(PART_SYSRUN);
-    if(MEDIA_TYPE_ROM == tmp->mtype)
+    if(BLKDEV_RAM != tmp->mtype)
     {
         if(MEM_NORMAL == tmp->status)
         {
@@ -258,7 +258,7 @@ static w_err_t boot_load_img(void)
         return W_ERR_FAIL;
     }
 
-    if(MEDIA_TYPE_ROM == part->mtype)
+    if(BLKDEV_RAM != part->mtype)
     {
         wind_notice("need not load image to ROM.");
         boot_status_set(BOOT_SET_SHARE_PARAM);
@@ -351,12 +351,13 @@ void boot_main(w_int32_t argc,char **argv)
     }
 }
 
-
+#if 0
 w_int32_t main(w_int32_t argc,char **argv)
 {
     boot_main(argc,argv);
     return 0;
 }
+#endif
 
 #ifdef __cplusplus
 }

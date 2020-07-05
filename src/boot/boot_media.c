@@ -21,10 +21,12 @@
 extern "C" {
 #endif
 static w_media_s *g_media[MEDIA_COUNT];
-static char *get_mtype_name(w_media_type_e mtype)
+static char *get_mtype_name(w_uint8_t mtype)
 {
-    char *name[2] = {"RAM","ROM"};
-    return name[mtype];
+    if(mtype == BLKDEV_RAM)
+        return "RAM";
+    else
+        return "ROM";
 }
 
 w_err_t boot_media_init(void)

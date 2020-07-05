@@ -792,9 +792,6 @@
     <ClInclude Include="..\..\..\port\wind_board_port.h">
       <Filter>os_port</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\port\wind_config.h">
-      <Filter>os_port</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\port\wind_std.h">
       <Filter>os_port</Filter>
     </ClInclude>
@@ -1151,6 +1148,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\..\src\module\net\wind_net.h">
       <Filter>module_net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\wind_config.h">
+      <Filter>os_port</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

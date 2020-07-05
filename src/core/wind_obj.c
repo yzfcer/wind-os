@@ -132,8 +132,14 @@ w_obj_s *wind_obj_get(const char *name,w_dlist_s *list)
 
 w_err_t wind_obj_init(w_obj_s *obj,w_uint32_t magic,const char *name,w_dlist_s *list)
 {
+    w_int32_t len;
     WIND_ASSERT_RETURN(obj != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(list != W_NULL,W_ERR_NULL_PTR);
+    if(name != W_NULL)
+    {
+        len = wind_strlen(name);
+        WIND_ASSERT_RETURN(len < WIND_OBJ_NAME_LEN,W_ERR_INVALID);
+    }
     obj->name = (char*)name;
     DNODE_INIT(obj->objnode);
     obj->key = name == W_NULL?0:calc_obj_key(name);
@@ -185,9 +191,13 @@ w_err_t wind_obj_clrflag(w_obj_s *obj,w_uint8_t flag)
 w_err_t wind_obj_register(w_obj_s *obj,w_dlist_s *dlist)
 {
     w_obj_s *tmpobj;
+    w_int32_t len;
     WIND_ASSERT_RETURN(obj != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(dlist != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(obj->name != W_NULL,W_ERR_NULL_PTR);
+
+    len = wind_strlen(obj->name);
+    WIND_ASSERT_RETURN(len < WIND_OBJ_NAME_LEN,W_ERR_INVALID);
     tmpobj = wind_obj_get(obj->name,dlist);
     WIND_ASSERT_RETURN(tmpobj == W_NULL,W_ERR_REPEAT);
 

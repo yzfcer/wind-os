@@ -29,7 +29,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
-
+#define WIND_OBJ_NAME_LEN 12
 #define F_OBJ_ENABLE (0x01 << 0) //Mark whether the object is enable
 #define IS_F_OBJ_ENABLE(obj) ((obj.objflag & F_OBJ_ENABLE) == F_OBJ_ENABLE)
 #define SET_F_OBJ_ENABLE(obj) (obj.objflag |= F_OBJ_ENABLE)

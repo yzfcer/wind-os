@@ -337,7 +337,7 @@ w_err_t boot_img_clear_all(void)
     {
         if(!code[i])
             continue;
-        wind_notice("erase base 0x%x,lenth %d.",code[i]->base,code[i]->datalen);
+        wind_notice("erase base 0x%x,lenth %d.",code[i]->blkdev.blkaddr,code[i]->datalen);
         boot_part_erase(code[i]);
     }
     wind_printf("clear program OK.\r\n");
@@ -374,7 +374,7 @@ w_err_t boot_img_check(void)
     code[1] = boot_part_get(PART_IMG2);
 
     code[2] = boot_part_get(PART_SYSRUN);
-    if(code[2]->mtype == MEDIA_TYPE_RAM)
+    if(code[2]->mtype == BLKDEV_RAM)
         code[2] = W_NULL;
     for(i = 0;i < sizeof(code)/sizeof(w_part_s*);i ++)
     {

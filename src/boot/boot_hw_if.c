@@ -25,16 +25,19 @@ extern "C" {
 
 //General purpose buffer, which can cache or receive command characters when copying data
 
+#if 0
 void boot_delay(w_uint32_t ms)
 {
     w_uint32_t tick = boot_get_sys_ms();
     while(boot_get_sys_ms() - tick < ms);
 }
+
 w_err_t wind_std_wait(w_int32_t ms)
 {
     boot_delay(ms);
     return W_ERR_OK;
 }
+#endif
 
 w_err_t wait_for_key_input(w_int32_t to_sec,char *ch,w_int32_t print_flag)
 {
@@ -74,13 +77,14 @@ w_err_t wait_for_key_input(w_int32_t to_sec,char *ch,w_int32_t print_flag)
     return err;
 }
 
+#if 0
 void wind_disable_switch(void)
 {
 }
 void wind_enable_switch(void)
 {
 }
-
+#endif
 
 
 w_err_t read_char_blocking(char *ch)
@@ -138,6 +142,7 @@ void init_recv_stat(recv_stat_s *stat)
     stat->mstick = boot_get_sys_ms();
     stat->stat = RECV_START;
 }
+
 static void wait_file_send_compete(void)
 {
     w_err_t err;
@@ -147,7 +152,7 @@ static void wait_file_send_compete(void)
     {
         //err = wait_for_key_input(3,&ch,0);
         boot_feed_watchdog();
-        boot_delay(100);
+        //boot_delay(100);
         if(0 < wind_std_input(&ch))
         {
             g_recvstat.stat = boot_get_sys_ms();
@@ -223,7 +228,18 @@ w_int32_t boot_receive_img(w_uint32_t addr,w_uint32_t maxlen)
 }
 #endif
 
+#if 0
+w_uint32_t boot_get_sys_ms(void)
+{
+    w_uint32_t tick;
+    tick = wind_get_tick();
+    return tick * (1000/WIND_TICK_PER_SEC);
+}
 
+void boot_feed_watchdog(void)
+{
+}
+#endif
 
 #ifdef __cplusplus
 }

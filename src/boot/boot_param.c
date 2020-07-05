@@ -87,7 +87,7 @@ w_err_t boot_param_reset(void)
     wind_strcpy(bp->cpu_name,CPU_NAME);
     wind_strcpy(bp->board_name,BOARD_NAME);
     wind_strcpy(bp->run_part,PART_SYSRUN);
-    boot_media_init();
+    //boot_media_init();
     boot_part_init();
     bp->part = boot_part_get_list();
     return W_ERR_OK;

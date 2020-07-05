@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "wind_os", "wind_os\wind_os.vcxproj", "{8C549474-B748-4DBA-A78E-EF939EA0746B}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "wind_boot", "wind_boot\wind_boot.vcxproj", "{8C549474-B748-4DBA-A78E-EF939EA0746B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

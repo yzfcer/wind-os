@@ -69,7 +69,7 @@ struct __w_blkdev_s
 };
 
 #define WIND_BLKDEV_DEF(name,devtype,devid,addr,blkcnt,blksize,ops) \
-{WIND_OBJ(WIND_BLKDEV_MAGIC,0,name),devtype,devid,addr,blkcnt,blksize,W_NULL,W_NULL,ops}
+{WIND_OBJ(WIND_BLKDEV_MAGIC,0,name),devtype,devid,addr,blkcnt,blksize,(w_mutex_s *)W_NULL,W_NULL,ops}
 
 struct __w_blkdev_ops_s
 {

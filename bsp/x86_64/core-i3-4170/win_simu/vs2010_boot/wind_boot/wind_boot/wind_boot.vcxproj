@@ -39,7 +39,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(ProjectDir)..\..\..\port;$(ProjectDir)..\..\..\vs2010_os;$(ProjectDir)..\..\..\..\..\..\..\src\common;$(ProjectDir)..\..\..\..\..\..\..\src\module\shell\cmd;$(ProjectDir)..\..\..\..\..\..\..\src\module\shell\framework;$(ProjectDir)..\..\..\..\..\..\..\src\core;$(ProjectDir)..\..\..\..\..\..\..\src\hal;$(ProjectDir)..\..\..\..\..\..\..\src\module;$(ProjectDir)..\..\..\..\..\..\..\src\module\cutest\framework;$(ProjectDir)..\..\..\..\..\..\..\src\module\cutest\port;$(ProjectDir)..\..\..\..\..\..\..\src\module\cutest\testcase;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs\treefs;$(ProjectDir)..\..\..\..\..\..\..\src\module\lua-5.3.4\src;$(ProjectDir)..\..\..\..\..\..\..\src\module\db\framework;$(ProjectDir)..\..\..\..\..\..\..\src\module\db\dbbase;$(ProjectDir)..\..\..\..\..\..\..\src\module\dict;$(ProjectDir)..\..\..\..\..\..\..\src\module\xml;$(ProjectDir)..\..\..\..\..\..\..\src\module\xmodem;$(ProjectDir)..\..\..\..\..\..\..\src\tools\pack;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs\listfs;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs\hostfs;$(ProjectDir)..\..\..\..\..\..\..\src\module\log;$(ProjectDir)..\..\..\..\..\..\..\src\module\net;$(ProjectDir)..\..\..\..\..\..\..\src\module\net\common;$(ProjectDir)..\..\..\..\..\..\..\src\module\net\stack;$(ProjectDir)..\..\..\..\..\..\..\src\module\net\layer5;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\..\..\port;$(ProjectDir)..\..\..\vs2010_boot;$(ProjectDir)..\..\..\..\..\..\..\src\common;$(ProjectDir)..\..\..\..\..\..\..\src\module\shell\cmd;$(ProjectDir)..\..\..\..\..\..\..\src\module\shell\framework;$(ProjectDir)..\..\..\..\..\..\..\src\core;$(ProjectDir)..\..\..\..\..\..\..\src\hal;$(ProjectDir)..\..\..\..\..\..\..\src\module;$(ProjectDir)..\..\..\..\..\..\..\src\module\cutest\framework;$(ProjectDir)..\..\..\..\..\..\..\src\module\cutest\port;$(ProjectDir)..\..\..\..\..\..\..\src\module\cutest\testcase;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs\treefs;$(ProjectDir)..\..\..\..\..\..\..\src\module\lua-5.3.4\src;$(ProjectDir)..\..\..\..\..\..\..\src\module\db\framework;$(ProjectDir)..\..\..\..\..\..\..\src\module\db\dbbase;$(ProjectDir)..\..\..\..\..\..\..\src\module\dict;$(ProjectDir)..\..\..\..\..\..\..\src\module\xml;$(ProjectDir)..\..\..\..\..\..\..\src\module\xmodem;$(ProjectDir)..\..\..\..\..\..\..\src\tools\pack;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs\listfs;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs\hostfs;$(ProjectDir)..\..\..\..\..\..\..\src\module\log;$(ProjectDir)..\..\..\..\..\..\..\src\module\net;$(ProjectDir)..\..\..\..\..\..\..\src\module\net\common;$(ProjectDir)..\..\..\..\..\..\..\src\module\net\stack;$(ProjectDir)..\..\..\..\..\..\..\src\module\net\layer5;$(ProjectDir)..\..\..\..\..\..\..\src\boot;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>$(ProjectDir)..\..\..\port;$(ProjectDir)..\..\..\..\..\..\..\src\common;$(ProjectDir)..\..\..\..\..\..\..\src\core;$(ProjectDir)..\..\..\..\..\..\..\src\hal;$(ProjectDir)..\..\..\..\..\..\..\src\module\shell\framework;$(ProjectDir)..\..\..\..\..\..\..\src\module\shell\cmd;$(ProjectDir)..\..\..\..\..\..\..\src\module\cutest\framework;$(ProjectDir)..\..\..\..\..\..\..\src\module\cutest\port;$(ProjectDir)..\..\..\..\..\..\..\src\module\cutest\testcase;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs\treefs;$(ProjectDir)..\..\..\..\..\..\..\src\module\vfs\listfs;$(ProjectDir)..\..\..\..\..\..\..\src\module\lua-5.3.4\src;$(ProjectDir)..\..\..\..\..\..\..\src\module\db\framework;$(ProjectDir)..\..\..\..\..\..\..\src\module\db\dbbase;$(ProjectDir)..\..\..\..\..\..\..\src\tools\pack;$(IncludePath)</IncludePath>
@@ -75,6 +75,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\..\..\..\src\application\win32_simu\user_entry.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\boot\boot_framework.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\boot\boot_hw_if.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\boot\boot_img.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\boot\boot_menu.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\boot\boot_param.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\boot\boot_part.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\boot\boot_share_param.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\src\boot\boot_test.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\common\wind_conv.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\common\wind_crc16.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\common\wind_crc32.c" />
@@ -297,6 +305,7 @@
     <ClCompile Include="..\..\..\device\blkdev_memblk.c" />
     <ClCompile Include="..\..\..\device\list_blkdev.c" />
     <ClCompile Include="..\..\..\device\list_dev.c" />
+    <ClCompile Include="..\..\..\port\boot_port.c" />
     <ClCompile Include="..\..\..\port\file_port.c" />
     <ClCompile Include="..\..\..\port\wind_board_port.c" />
     <ClCompile Include="..\..\..\port\wind_os_prelaunch.c" />
@@ -305,6 +314,14 @@
     <ClCompile Include="main.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\..\..\..\src\boot\boot_framework.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\boot\boot_hw_if.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\boot\boot_img.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\boot\boot_menu.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\boot\boot_param.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\boot\boot_part.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\boot\boot_share_param.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\src\boot\boot_test.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\common\wind_conv.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\common\wind_crc16.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\common\wind_crc32.h" />
@@ -432,6 +449,7 @@
     <ClInclude Include="..\..\..\..\..\..\..\src\module\xml\wind_xml_fsm.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\xmodem\wind_xmodem.h" />
     <ClInclude Include="..\..\..\..\..\..\..\src\module\ymodem\wind_ymodem.h" />
+    <ClInclude Include="..\..\..\port\boot_port.h" />
     <ClInclude Include="..\..\..\port\file_port.h" />
     <ClInclude Include="..\..\..\port\wind_board_port.h" />
     <ClInclude Include="..\..\..\port\wind_std.h" />
@@ -439,6 +457,7 @@
     <ClInclude Include="..\..\wind_config.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\..\..\..\..\src\boot\makefile" />
     <None Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\Makefile" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -30,18 +30,6 @@ extern "C" {
 static char *bak_path = (char *)W_NULL;
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 CASE_SETUP(current)
 {
     char *path;

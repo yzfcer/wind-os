@@ -14,21 +14,22 @@
 #ifndef BOOT_PART_H__
 #define BOOT_PART_H__
 #include "wind_type.h"
-#include "boot_media.h"
+#include "wind_blkdev.h"
+//#include "boot_media.h"
 
 #define PART_NAME_LEN 12
 #define INVALID_REAL_ADDR 0xffffffff
 
 //Standard partition name
 #define PART_BOOT     "boot"
-#define PART_PARAM1   "param1"
-#define PART_PARAM2   "param2"
-#define PART_IMG1     "img1"
-#define PART_IMG2     "img2"
+#define PART_PARAM1   "param0"
+#define PART_PARAM2   "param1"
+#define PART_IMG1     "app0"
+#define PART_IMG2     "app1"
 #define PART_SHARE    "share"
 #define PART_FS       "fs"
 #define PART_SYSRUN   "sysrun"
-#define PART_IMGPARA  "imgparam"
+#define PART_IMGPARA  "imgprm"
 #define PART_CACHE    "cache"
 
 
@@ -36,30 +37,30 @@ typedef enum
 {
     MEM_NULL = 0,
     MEM_NORMAL=1,
-    MEM_ERROR=2,      
+    MEM_ERROR=2,
 }w_mem_status_e;
 
 //Spatial partition table
 typedef struct 
 {
+    w_blkdev_s blkdev;
     char name[PART_NAME_LEN];
-    char media_name[MEDIA_NAME_LEN];
+    //char media_name[MEDIA_NAME_LEN];
     w_uint8_t mtype:1;
     w_uint8_t used:1;
     w_uint8_t encrypt:1;
     w_uint8_t status:2;
     w_uint16_t time_mark;
-    w_uint32_t base;
+    //w_uint32_t base;
     w_uint32_t size;
-    w_uint32_t blksize;
+    //w_uint32_t blksize;
     w_uint32_t datalen;
-    //w_uint32_t offset;
     w_uint32_t crc;
 }w_part_s;
-w_uint8_t *get_common_buffer(void);          
+w_uint8_t *get_common_buffer(void);
 
 w_err_t boot_part_init(void);
-w_bool_t  boot_part_create(const char *name,w_media_s *media,w_uint32_t size,w_uint8_t encrypt);
+w_bool_t  boot_part_create(const char *name,w_uint32_t size,w_uint8_t encrypt);
 w_part_s *boot_part_get(const char *name);
 w_err_t boot_part_calc_crc(w_part_s *part,w_int32_t offset,w_int32_t len,w_bool_t set);
 w_int32_t boot_part_read(w_part_s *part,w_int32_t offset,w_uint8_t *data,w_uint32_t datalen,w_bool_t read_space);

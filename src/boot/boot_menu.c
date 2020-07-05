@@ -99,7 +99,7 @@ static w_err_t download_to_img_part(void)
     WIND_ASSERT_RETURN(part[0] != W_NULL,W_ERR_FAIL);
     part[1] = boot_img_get_old_part();
     count = part[1] == W_NULL?1:2;
-    return boot_img_flush_cache_to_part(&part,count);
+	return boot_img_flush_cache_to_part((w_part_s**)&part,count);
 }
 
 static w_err_t download_to_fs_part(void)
@@ -203,7 +203,7 @@ static w_err_t set_debug_mode(void)
 
 static w_err_t show_media_map(void)
 {
-    boot_media_print();
+    //boot_media_print();
     return W_ERR_OK;
 }
 
