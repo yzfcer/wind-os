@@ -55,7 +55,7 @@ w_err_t boot_part_init(void)
     return W_ERR_OK;
 }
 
-static part_info_init(w_part_s *part)
+static void part_info_init(w_part_s *part)
 {
     part->used = 1;
     part->status = MEM_NULL;
@@ -78,18 +78,14 @@ w_bool_t  boot_part_create(const char *name,w_uint32_t size,w_uint8_t encrypt)
 
     wind_memcpy(&part->blkdev,blkdev,sizeof(w_blkdev_s));
     wind_strcpy(part->name,blkdev->obj.name);
-    //wind_strcpy(part->media_name,media->name);
     part->mtype = (w_uint8_t)blkdev->devtype;
     part->used = 1;
     part->encrypt = encrypt?1:0;
     part->status = MEM_NULL;
     part->time_mark = 0;
-    //part->base = blkdev->blkaddr;
     part->size = blkdev->blkcnt * blkdev->blksize;
-    //part->blksize = media->blksize;
     part->datalen = 0;
     part->crc = 0;
-    //media->offset += size;
     return W_TRUE;
 }
 
@@ -147,8 +143,10 @@ w_int32_t boot_part_read(w_part_s *part,w_int32_t offset,w_uint8_t *data,w_uint3
 {
     w_uint32_t blkcnt;
     w_uint32_t size;
-    //w_media_s *media;
+    w_err_t err;
+    w_blkdev_s *blkdev;
     WIND_ASSERT_RETURN(part != W_NULL,W_ERR_NULL_PTR);
+    blkdev = &part->blkdev;
     WIND_ASSERT_RETURN(offset < part->size,W_ERR_INVALID);
     if(!read_space)
         WIND_ASSERT_RETURN(offset < part->datalen,W_ERR_INVALID);
@@ -156,15 +154,17 @@ w_int32_t boot_part_read(w_part_s *part,w_int32_t offset,w_uint8_t *data,w_uint3
         WIND_ASSERT_RETURN(offset < part->size,W_ERR_INVALID);
     WIND_ASSERT_RETURN(data != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(datalen > 0,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(0 == (offset & (part->blkdev.blksize-1)),W_ERR_INVALID);
-    //wind_debug("read part:%s,offset:%d,lenth:%d",part->name,offset,datalen);
+    WIND_ASSERT_RETURN(0 == (offset & (blkdev->blksize-1)),W_ERR_INVALID);
     size = datalen;
     if(size + offset > part->size)
         size = part->datalen - offset;
-    //media = boot_media_get(part->media_name);
-    blkcnt = (size + part->blkdev.blksize - 1)/ part->blkdev.blksize;
-    blkcnt = wind_blkdev_read(&part->blkdev,offset,data,blkcnt);
-    //blkcnt = media->ops->read_blk(media,part->base + offset,data,blkcnt);
+    blkcnt = (size + blkdev->blksize - 1)/ blkdev->blksize;
+    if(!IS_F_BLKDEV_OPEN(blkdev))
+    {
+        err = wind_blkdev_open(blkdev);
+        WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_FAIL);
+    }
+    blkcnt = wind_blkdev_read(blkdev,offset,data,blkcnt);
     WIND_ASSERT_RETURN(blkcnt > 0,W_ERR_FAIL);
     if(!read_space)
         return offset + size > part->datalen?part->datalen - offset:size;
@@ -175,20 +175,24 @@ w_int32_t boot_part_write(w_part_s *part,w_int32_t offset,w_uint8_t *data,w_uint
 {
     w_uint32_t blkcnt;
     w_uint32_t size;
-    //w_media_s *media;
+    w_err_t err;
+    w_blkdev_s *blkdev;
     WIND_ASSERT_RETURN(part != W_NULL,W_ERR_NULL_PTR);
+    blkdev = &part->blkdev;
     WIND_ASSERT_RETURN(offset <= part->datalen,W_ERR_INVALID);
     WIND_ASSERT_RETURN(data != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(datalen > 0,W_ERR_INVALID);
     WIND_ASSERT_RETURN(datalen < part->size,W_ERR_INVALID);
     WIND_ASSERT_RETURN(datalen + offset < part->size,W_ERR_INVALID);
-    WIND_ASSERT_RETURN(0 == (offset&(part->blkdev.blksize-1)),W_ERR_INVALID);
-    //wind_debug("write part:%s,offset:%d,lenth:%d",part->name,offset,datalen);
+    WIND_ASSERT_RETURN(0 == (offset & (blkdev->blksize-1)),W_ERR_INVALID);
     size = datalen;
-    //media = boot_media_get(part->media_name);
-    blkcnt = (size + part->blkdev.blksize - 1)/ part->blkdev.blksize;
-    //blkcnt = media->ops->write_blk(media,part->base + offset,data,blkcnt);
-    blkcnt = wind_blkdev_write(&part->blkdev,offset,data,blkcnt);
+    blkcnt = (size + blkdev->blksize - 1)/ blkdev->blksize;
+    if(!IS_F_BLKDEV_OPEN(blkdev))
+    {
+        err = wind_blkdev_open(blkdev);
+        WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_FAIL);
+    }
+    blkcnt = wind_blkdev_write(blkdev,offset,data,blkcnt);
     WIND_ASSERT_RETURN(blkcnt > 0,W_ERR_FAIL);
     if(offset + size >= part->datalen)
         part->datalen = offset + size;
@@ -198,9 +202,16 @@ w_int32_t boot_part_write(w_part_s *part,w_int32_t offset,w_uint8_t *data,w_uint
 w_err_t boot_part_erase(w_part_s *part)
 {
     w_err_t err;
+    w_blkdev_s *blkdev;
     WIND_ASSERT_RETURN(part != NULL,W_ERR_NULL_PTR);
-    wind_notice("erase part:%s",wind_obj_name(&part->blkdev.obj));
-    err = wind_blkdev_eraseall(&part->blkdev);
+    blkdev = &part->blkdev;    
+    wind_notice("erase part:%s",wind_obj_name(&blkdev->obj));
+    if(!IS_F_BLKDEV_OPEN(blkdev))
+    {
+        err = wind_blkdev_open(blkdev);
+        WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_FAIL);
+    }
+    err = wind_blkdev_eraseall(blkdev);
     WIND_ASSERT_RETURN(err > W_ERR_OK,W_ERR_FAIL);
     part_info_init(part);
     return W_ERR_OK;
@@ -266,7 +277,7 @@ static void print_copy_percents(w_int32_t numerator, w_int32_t denominator,w_int
     static char stage[STATGE_LEN+3];
     w_int32_t i,cnt;
     w_int32_t persent;
-    WIND_ASSERT_RETURN(denominator > 0,W_ERR_INVALID);
+    WIND_ASSERT_RETURN_VOID(denominator > 0);
     persent = numerator*100/denominator;
     if(PRINT_LEVEL <= PRINT_LV_DEBUG)
         return;
@@ -313,7 +324,7 @@ w_err_t boot_part_copy_data(w_part_s *src,w_part_s *dest)
         for(times = 0;times < 3;times ++)
         {
             wind_memset(buff,0,COMMBUF_SIZE);
-            len1 = boot_part_read(src,offset,buff,COMMBUF_SIZE,0);
+			len1 = boot_part_read(src,offset,buff,COMMBUF_SIZE,W_FALSE);
             if(len1 > 0)
                 break;            
         }
