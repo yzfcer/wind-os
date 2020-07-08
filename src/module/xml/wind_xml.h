@@ -13,6 +13,7 @@
 **********************************************************************************/
 #ifndef WIND_XML_H__
 #define WIND_XML_H__
+#include "wind_config.h"
 #include "wind_dlist.h"
 #include "wind_tree.h"
 #ifdef __cplusplus

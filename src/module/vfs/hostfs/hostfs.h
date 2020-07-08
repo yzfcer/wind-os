@@ -124,11 +124,11 @@ struct __hostfile_s
     w_hostfile_s *subhfile;//Subfile (or subdirectory)
     FILE* fd;          //File handle
     w_subinfo_s subinfo;
-#if HOST_OS_TYPE == HOST_OS_WINDOWS)
+#if (HOST_OS_TYPE == HOST_OS_WINDOWS)
     intptr_t handle;  //Subfile handle (Windows system)
     _finddata_t finddata;//Subfile information
 #endif
-#if HOST_OS_TYPE == HOST_OS_LINUX)
+#if (HOST_OS_TYPE == HOST_OS_LINUX)
     DIR *dir;
     struct dirent *dirinfo;
 #endif

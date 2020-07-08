@@ -45,6 +45,10 @@ extern "C" {
 #define SET_F_OBJ_HEAP(obj) (obj.objflag |= F_OBJ_HEAP)
 #define CLR_F_OBJ_HEAP(obj) (obj.objflag &= (~F_OBJ_HEAP))
 
+#define F_OBJ_INLIST   (0x01 << 3) //Mark whether the object is in the list
+#define IS_F_OBJ_INLIST(obj) ((obj->objflag & F_OBJ_INLIST) == F_OBJ_INLIST)
+#define SET_F_OBJ_INLIST(obj) (obj->objflag |= F_OBJ_INLIST)
+#define CLR_F_OBJ_INLIST(obj) (obj->objflag &= (~F_OBJ_INLIST))
 
 //init an object struct
 #define WIND_OBJ(magic,flag,name) {(~magic),0,(w_uint8_t)F_OBJ_ENABLE,flag,{(w_dnode_s*)W_NULL,(w_dnode_s*)W_NULL},name}

@@ -88,6 +88,8 @@ static w_err_t insert_obj(w_dlist_s *list,w_obj_s *obj)
         if(dnode == W_NULL)
             dlist_insert_tail(list,&obj->objnode);
     }while(0);
+    if(err == W_ERR_OK)
+        SET_F_OBJ_INLIST(obj);
     wind_enable_switch();
     return err;
 }
@@ -156,6 +158,7 @@ w_err_t wind_obj_deinit(w_obj_s *obj,w_uint32_t magic,w_dlist_s *list)
     WIND_ASSERT_RETURN(obj != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(list != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(obj->magic == magic,W_ERR_INVALID);
+    WIND_ASSERT_RETURN(IS_F_OBJ_INLIST(obj),W_ERR_FAIL);
     wind_disable_switch();
     dnode = dlist_remove(list,&obj->objnode);
     wind_enable_switch();
@@ -190,16 +193,17 @@ w_err_t wind_obj_clrflag(w_obj_s *obj,w_uint8_t flag)
 
 w_err_t wind_obj_register(w_obj_s *obj,w_dlist_s *dlist)
 {
-    w_obj_s *tmpobj;
-    w_int32_t len;
+    //w_obj_s *tmpobj;
+    //w_int32_t len;
     WIND_ASSERT_RETURN(obj != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(dlist != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(obj->name != W_NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(!IS_F_OBJ_INLIST(obj),W_ERR_FAIL);
 
-    len = wind_strlen(obj->name);
-    WIND_ASSERT_RETURN(len < WIND_OBJ_NAME_LEN,W_ERR_INVALID);
-    tmpobj = wind_obj_get(obj->name,dlist);
-    WIND_ASSERT_RETURN(tmpobj == W_NULL,W_ERR_REPEAT);
+    //len = wind_strlen(obj->name);
+    //WIND_ASSERT_RETURN(len < WIND_OBJ_NAME_LEN,W_ERR_INVALID);
+    //tmpobj = wind_obj_get(obj->name,dlist);
+    //WIND_ASSERT_RETURN(tmpobj == W_NULL,W_ERR_REPEAT);
 
     DNODE_INIT(obj->objnode);
     obj->key = calc_obj_key(obj->name);
@@ -210,13 +214,14 @@ w_err_t wind_obj_register(w_obj_s *obj,w_dlist_s *dlist)
 }
 w_err_t wind_obj_unregister(w_obj_s *obj,w_dlist_s *dlist)
 {
-    w_obj_s *tmpobj;
+    //w_obj_s *tmpobj;
     w_dnode_s *dnode;
     WIND_ASSERT_RETURN(obj != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(dlist != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(obj->name != W_NULL,W_ERR_NULL_PTR);
-    tmpobj = wind_obj_get(obj->name,dlist);
-    WIND_ASSERT_RETURN(tmpobj != W_NULL,W_ERR_NO_OBJ);
+    WIND_ASSERT_RETURN(IS_F_OBJ_INLIST(obj),W_ERR_FAIL);
+    //tmpobj = wind_obj_get(obj->name,dlist);
+    //WIND_ASSERT_RETURN(tmpobj != W_NULL,W_ERR_NO_OBJ);
 
     wind_disable_switch();
     dnode = dlist_remove(dlist,&obj->objnode);
