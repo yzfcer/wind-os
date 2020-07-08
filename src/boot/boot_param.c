@@ -58,7 +58,7 @@ boot_param_s *boot_param_from_rom(void)
     err = boot_param_read();
     if(0 != err)
     {
-        wind_notice("get boot params failed.");
+        wind_error("get boot params failed.");
         return (boot_param_s *)NULL;
     }
     return &g_bootparam;
@@ -167,7 +167,7 @@ w_err_t boot_param_read(void)
     }
     if(err_cnt >= 2)
     {
-        wind_notice("read both params failed.");
+        wind_error("read both params failed.");
         return W_ERR_FAIL;
     }
     return W_ERR_OK;

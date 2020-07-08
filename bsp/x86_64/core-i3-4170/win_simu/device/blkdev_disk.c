@@ -30,6 +30,8 @@
 #define MEM_SEC_COUNT 20480
 #define MEM_SEC_SIZE 512
 #define FILE_NAME "disk.bin"
+FILE *file = (FILE*)W_NULL;
+
 static w_uint8_t buffer[MEM_SEC_SIZE];
 
 w_err_t   erase_virtual_disk(w_blkdev_s *dev,w_int32_t blkcnt)
@@ -37,8 +39,9 @@ w_err_t   erase_virtual_disk(w_blkdev_s *dev,w_int32_t blkcnt)
     w_int32_t i;
     w_int32_t start;
     w_int32_t size,len;
-    FILE *file;
     errno_t errno;
+    //FILE *file;
+    WIND_CHECK_RETURN(file == W_NULL,W_ERR_OK);
     
     start = 0;
     size = blkcnt * dev->blksize;
@@ -50,6 +53,7 @@ w_err_t   erase_virtual_disk(w_blkdev_s *dev,w_int32_t blkcnt)
     for(i = 0;i < blkcnt;i ++)
         len = fwrite(buffer,1,sizeof(buffer),file);
     fclose(file);
+    file = (FILE*)W_NULL;
     return W_ERR_OK;
 }
 
@@ -58,7 +62,8 @@ w_err_t   make_virtual_disk(w_blkdev_s *dev,w_int32_t blkcnt)
     errno_t errno;
     w_int32_t start;
     w_int32_t size;
-    FILE *file;
+    //FILE *file;
+    WIND_CHECK_RETURN(file == W_NULL,W_ERR_HARDFAULT);
     start = 0;
     size = blkcnt * dev->blksize;
 
@@ -66,6 +71,7 @@ w_err_t   make_virtual_disk(w_blkdev_s *dev,w_int32_t blkcnt)
     if(file != W_NULL)
     {
         fclose(file);
+        file = (FILE*)W_NULL;
         return W_ERR_OK;
     }
     return erase_virtual_disk(dev,blkcnt);
@@ -79,11 +85,12 @@ w_err_t   disk_init(w_blkdev_s *dev)
 w_err_t   disk_open(w_blkdev_s *dev)
 {
     errno_t errno;
-    FILE *file;
+    //FILE *file;
+    WIND_CHECK_RETURN(file == W_NULL,W_ERR_OK);
     errno = fopen_s(&file,FILE_NAME,"rb+");
     WIND_ASSERT_RETURN(errno == 0,W_ERR_FAIL);
     WIND_ASSERT_RETURN(file != W_NULL,W_ERR_FAIL);
-    dev->user_arg = file;
+    //dev->user_arg = file;
     return W_ERR_OK;
 }
 
@@ -102,11 +109,12 @@ w_int32_t disk_read(w_blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t blkcn
 {
     w_int32_t start;
     w_int32_t size,len;
-    FILE *file;
+    //FILE *file;
+    WIND_CHECK_RETURN(file != W_NULL,W_ERR_HARDFAULT);
     wind_debug("read addr 0x%08x,cnt %d",addr,blkcnt);
     start = (w_int32_t)((dev->blkaddr + addr) * dev->blksize);
     size = blkcnt * dev->blksize;
-	file = (FILE*)dev->user_arg;
+	//file = (FILE*)dev->user_arg;
     WIND_ASSERT_RETURN(file != W_NULL,0);
     wind_memset(buffer,0,sizeof(buffer));
     fseek(file,start,SEEK_SET); 
@@ -120,12 +128,13 @@ w_int32_t disk_write(w_blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t blkc
 {
     w_int32_t start;
     w_int32_t size,len;
-    FILE *file;
+    //FILE *file;
+    WIND_CHECK_RETURN(file != W_NULL,W_ERR_HARDFAULT);
     wind_debug("write addr 0x%08x,cnt %d",addr,blkcnt);
     start = (w_int32_t)((dev->blkaddr + addr) * dev->blksize);
     size = blkcnt * dev->blksize;
     
-    file = (FILE*)dev->user_arg;
+    //file = (FILE*)dev->user_arg;
     WIND_ASSERT_RETURN(file != W_NULL,0);
     wind_memset(buffer,0,sizeof(buffer));
     fseek(file,start,SEEK_SET); 
@@ -138,10 +147,12 @@ w_int32_t disk_write(w_blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t blkc
 
 w_err_t   disk_close(w_blkdev_s *dev)
 {
-    FILE *file;
-    file = (FILE*)dev->user_arg;
+    //FILE *file;
+    WIND_ASSERT_RETURN(file != W_NULL,W_ERR_HARDFAULT);
+    //file = (FILE*)dev->user_arg;
     WIND_ASSERT_RETURN(file != W_NULL, W_ERR_FAIL);
     fclose(file);
+    file = (FILE*)W_NULL;
     dev->user_arg = W_NULL;
     return W_ERR_OK;
 }

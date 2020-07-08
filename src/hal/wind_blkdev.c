@@ -117,6 +117,7 @@ w_err_t wind_blkdev_open(w_blkdev_s *blkdev)
     WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(blkdev->obj.magic == WIND_BLKDEV_MAGIC,W_ERR_INVALID);
     WIND_ASSERT_RETURN(blkdev->ops != W_NULL,W_ERR_INVALID);
+    WIND_CHECK_RETURN(!IS_F_BLKDEV_OPEN(blkdev),W_ERR_OK);
     if(IS_F_BLKDEV_OPEN(blkdev))
         return W_ERR_OK;
     wind_mutex_lock(blkdev->mutex);
@@ -203,8 +204,7 @@ w_err_t wind_blkdev_close(w_blkdev_s *blkdev)
     WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(blkdev->obj.magic == WIND_BLKDEV_MAGIC,W_ERR_INVALID);
     WIND_ASSERT_RETURN(blkdev->ops != W_NULL,W_ERR_INVALID);
-    if(!IS_F_BLKDEV_OPEN(blkdev))
-        return W_ERR_OK;
+    WIND_CHECK_RETURN(IS_F_BLKDEV_OPEN(blkdev),W_ERR_OK);
     wind_mutex_lock(blkdev->mutex);
     if(blkdev->ops->close != W_NULL)
     {
