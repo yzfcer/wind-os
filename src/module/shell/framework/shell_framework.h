@@ -96,6 +96,7 @@ w_cmd_s *wind_cmd_get(const char *name);
 w_err_t wind_cmd_register(w_cmd_s *cmd);
 w_err_t wind_cmd_unregister(w_cmd_s *cmd);
 w_err_t wind_cmd_print(void);
+w_err_t wind_cmd_print_list(void);
 void _wind_register_all_cmd(void);
 
 #endif

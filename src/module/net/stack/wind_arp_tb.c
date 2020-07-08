@@ -214,7 +214,7 @@ w_err_t wind_arp_tb_print(void)
         arpt = &arp_tb_list[i];
         wind_mac_to_str(arpt->mac,macstr,':');
         wind_ip_to_str(arpt->ipaddr,ipstr);
-        wind_printf("%-20s %-16s %-6d %-12s",macstr,ipstr,arpt->hwtype,arpt->dev_name);
+        wind_printf("%-20s %-16s %-6d %-12s\r\n",macstr,ipstr,arpt->hwtype,arpt->dev_name);
     }
     wind_print_space(7);
     return W_ERR_OK;

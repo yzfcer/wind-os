@@ -72,7 +72,6 @@ w_err_t wind_fdb_insert(w_fdb_s *fdb)
     do
     {
         err = W_ERR_OK;
-        wind_disable_switch();
         tmpfdb = wind_fdb_get(fdb->mac);
         if(tmpfdb == W_NULL)
         {
@@ -186,7 +185,7 @@ w_err_t wind_fdb_print(void)
         netdev = wind_netdev_get_byid(fdb->dev_id);
         WIND_ASSERT_RETURN(netdev != W_NULL,W_ERR_FAIL);
         //wind_ip_to_str(fdb->ipaddr,ipstr);
-        wind_printf("%-20s %-8s %-8d %-12s",macstr,fdb->dev_id,fdb->vlanid,netdev->netnode.obj.name);
+        wind_printf("%-20s %-8s %-8d %-12s\r\n",macstr,fdb->dev_id,fdb->vlanid,netdev->netnode.obj.name);
     }
     wind_print_space(7);
     return W_ERR_OK;

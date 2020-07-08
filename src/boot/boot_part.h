@@ -27,7 +27,7 @@
 #define PART_IMG1     "app0"
 #define PART_IMG2     "app1"
 #define PART_SHARE    "share"
-#define PART_FS       "fs"
+#define PART_FS       "rootfs"
 #define PART_SYSRUN   "sysrun"
 #define PART_IMGPARA  "imgprm"
 #define PART_CACHE    "cache"

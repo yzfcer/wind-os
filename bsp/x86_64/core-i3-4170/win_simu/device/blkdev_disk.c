@@ -166,7 +166,7 @@ w_blkdev_s disk_dev[7] =
     WIND_BLKDEV_DEF("param0",BLKDEV_ROM,3,8256, 16,  MEM_SEC_SIZE,&disk_ops),
     WIND_BLKDEV_DEF("param1",BLKDEV_ROM,4,8272, 16,  MEM_SEC_SIZE,&disk_ops),
     WIND_BLKDEV_DEF("imgprm",BLKDEV_ROM,4,8288, 16,  MEM_SEC_SIZE,&disk_ops),
-    WIND_BLKDEV_DEF("fs",    BLKDEV_ROM,4,8304, 8192,MEM_SEC_SIZE,&disk_ops),
+    WIND_BLKDEV_DEF("rootfs",BLKDEV_ROM,4,8304, 8192,MEM_SEC_SIZE,&disk_ops),
 };
 
 #endif

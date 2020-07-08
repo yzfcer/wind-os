@@ -123,7 +123,7 @@ void wind_netdevs_register(void)
 void _wind_fs_mount_init(void)
 {
     w_err_t err;
-    wind_vfs_mount("fs0","listfs","disk0","/");
+    wind_vfs_mount("fs0","listfs","rootfs","/");
     err = create_dirs();
     WIND_ASSERT_RETURN_VOID(err == W_ERR_OK);
     wind_vfs_mount("fs1","treefs","null0","/var");

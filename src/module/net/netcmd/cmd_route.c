@@ -98,8 +98,8 @@ COMMAND_DISC(route)
 COMMAND_USAGE(route)
 {
     wind_printf("route [show]:--to show route table info.\r\n");
-    wind_printf("route add [default] <destnet/maskbits> via <ip> dev <debname>:--to add a route table rule.\r\n");
-    wind_printf("route del <destnet/maskbits> via <ip> dev <debname>:--to delete a route table rule.\r\n");
+    wind_printf("route add [default] <destnet/maskbits> via <ip> dev <devname>:--to add a route table rule.\r\n");
+    wind_printf("route del <destnet/maskbits> via <ip> dev <devname>:--to delete a route table rule.\r\n");
 }
 
 COMMAND_MAIN(route,argc,argv)

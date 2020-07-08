@@ -368,6 +368,29 @@ w_err_t wind_cmd_print(void)
     return W_ERR_OK;
 }
 
+
+
+w_err_t wind_cmd_print_list(void)
+{
+    w_dnode_s *dnode;
+    w_cmd_s *cmd;
+    w_int32_t cnt = 0;
+    //wind_obj_print_list(w_dlist_s * dlist)
+    wind_printf("\r\n\r\ncommand list:\r\n");
+    foreach_node(dnode,&g_cmdlist)
+    {
+        cmd = NODE_TO_CMD(dnode);
+        wind_printf("%-12s ",cmd->name);
+        cnt ++;
+        if((cnt & 0x03) == 0)
+            wind_printf("\r\n");
+    }
+    return W_ERR_OK;
+}
+
+
+
+
 #if USER_AUTH_ENABLE
 #if WIND_USER_SUPPORT
 #include "wind_user.h"
@@ -570,6 +593,11 @@ static w_err_t execute_cmd(w_shell_ctx_s *ctx)
     if((err < 0) || (ctx->param.argc == 0))
         return err;
     if(wind_strcmp(ctx->param.argv[0],"?") == 0)
+    {
+        wind_cmd_print_list();
+        return W_ERR_OK;
+    }
+    if(wind_strcmp(ctx->param.argv[0],"??") == 0)
     {
         wind_cmd_print();
         return W_ERR_OK;

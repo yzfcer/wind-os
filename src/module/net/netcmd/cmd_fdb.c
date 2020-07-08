@@ -75,8 +75,8 @@ COMMAND_DISC(fdb)
 COMMAND_USAGE(fdb)
 {
     wind_printf("fdb [show]:--to show fdb table info.\r\n");
-    wind_printf("fdb add dev <debname> mac <macaddr>:--to add a fdb table rule.\r\n");
-    wind_printf("fdb del dev <debname> mac <macaddr>:--to delete a fdb table rule.\r\n");
+    wind_printf("fdb add dev <devname> mac <macaddr>:--to add a fdb table rule.\r\n");
+    wind_printf("fdb del dev <devname> mac <macaddr>:--to delete a fdb table rule.\r\n");
 }
 
 COMMAND_MAIN(fdb,argc,argv)

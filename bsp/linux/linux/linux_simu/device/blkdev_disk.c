@@ -161,12 +161,15 @@ const w_blkdev_ops_s disk_ops =
     disk_close
 };
 
-w_blkdev_s disk_dev[4] = 
+w_blkdev_s disk_dev[7] = 
 {
-    WIND_BLKDEV_DEF("disk0",BLKDEV_ROM,0,0,    4096,MEM_SEC_SIZE,&disk_ops),
-    WIND_BLKDEV_DEF("disk1",BLKDEV_ROM,1,4096, 4096,MEM_SEC_SIZE,&disk_ops),
-    WIND_BLKDEV_DEF("disk2",BLKDEV_ROM,2,8192, 4096,MEM_SEC_SIZE,&disk_ops),
-    WIND_BLKDEV_DEF("disktest",BLKDEV_ROM,3,12288,8192,MEM_SEC_SIZE,&disk_ops)
+    WIND_BLKDEV_DEF("boot",  BLKDEV_ROM,0,0,    64,  MEM_SEC_SIZE,&disk_ops),
+    WIND_BLKDEV_DEF("app0",  BLKDEV_ROM,1,64,   4096,MEM_SEC_SIZE,&disk_ops),
+    WIND_BLKDEV_DEF("app1",  BLKDEV_ROM,2,4160, 4096,MEM_SEC_SIZE,&disk_ops),
+    WIND_BLKDEV_DEF("param0",BLKDEV_ROM,3,8256, 16,  MEM_SEC_SIZE,&disk_ops),
+    WIND_BLKDEV_DEF("param1",BLKDEV_ROM,4,8272, 16,  MEM_SEC_SIZE,&disk_ops),
+    WIND_BLKDEV_DEF("imgprm",BLKDEV_ROM,4,8288, 16,  MEM_SEC_SIZE,&disk_ops),
+    WIND_BLKDEV_DEF("rootfs",BLKDEV_ROM,4,8304, 8192,MEM_SEC_SIZE,&disk_ops),
 };
 
 #endif
