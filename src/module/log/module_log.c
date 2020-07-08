@@ -22,7 +22,7 @@ extern "C" {
 
 
 
-#if (WIND_MODULE_LOG_SUPPORT)
+#if WIND_MODULE_LOG_SUPPORT
 
 
 

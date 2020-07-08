@@ -25,7 +25,7 @@
 #include "wind_cmd.h"
 #include "wind_board_port.h"
 #include "wind_thread.h"
-#if (CMD_RESET_SUPPORT)
+#if CMD_RESET_SUPPORT
 
 COMMAND_DISC(reset)
 {

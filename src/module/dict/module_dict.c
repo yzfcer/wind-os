@@ -28,7 +28,7 @@ extern "C" {
 
 
 
-#if (WIND_MODULE_DICT_SUPPORT)
+#if WIND_MODULE_DICT_SUPPORT
 
 
 

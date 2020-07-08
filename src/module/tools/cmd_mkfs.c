@@ -27,7 +27,7 @@
 extern "C" {
 #endif // #ifdef __cplusplus
 
-#if (CMD_MKFS_SUPPORT)
+#if CMD_MKFS_SUPPORT
 #include "file_port.h"
 
 

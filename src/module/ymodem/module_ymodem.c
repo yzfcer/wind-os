@@ -24,25 +24,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
-
-
-
-
-#if (WIND_MODULE_YMODEM_SUPPORT)
+#if WIND_MODULE_YMODEM_SUPPORT
 COMMAND_DECLARE(ymodem);
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

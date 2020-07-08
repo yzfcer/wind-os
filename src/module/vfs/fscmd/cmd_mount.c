@@ -27,7 +27,7 @@
 extern "C" {
 #endif // #ifdef __cplusplus
 
-#if (CMD_MOUNT_SUPPORT)
+#if CMD_MOUNT_SUPPORT
 
 
 static w_err_t cmd_mount(w_int32_t argc,char **argv)

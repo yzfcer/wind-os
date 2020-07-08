@@ -24,7 +24,7 @@
 extern "C" {
 #endif // #ifdef __cplusplus
 
-#if (CMD_EDSRC_SUPPORT)
+#if CMD_EDSRC_SUPPORT
 static w_err_t do_handle_file(w_file_s *file)
 {
     wind_printf("do_handle_file %s\r\n",file->fullpath);

@@ -28,7 +28,7 @@ extern "C" {
 
 
 
-#if (WIND_MODULE_XMODEM_SUPPORT)
+#if WIND_MODULE_XMODEM_SUPPORT
 COMMAND_DECLARE(xmodem);
 
 MODULE_INIT(xmodem)
@@ -47,7 +47,7 @@ MODULE_EXIT(xmodem)
 
 MODULE_DEF(xmodem, 0x0100,"");
 
-#endif // #if (WIND_MODULE_XMODEM_SUPPORT)
+#endif // #if WIND_MODULE_XMODEM_SUPPORT
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

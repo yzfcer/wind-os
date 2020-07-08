@@ -28,7 +28,7 @@ extern "C" {
 
 
 
-#if (WIND_MODULE_SHELL_SUPPORT)
+#if WIND_MODULE_SHELL_SUPPORT
 
 
 

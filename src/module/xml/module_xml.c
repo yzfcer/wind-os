@@ -24,27 +24,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
-
-
-
-
-#if (WIND_MODULE_XML_SUPPORT)
+#if WIND_MODULE_XML_SUPPORT
 FSM_MODEL_DELCARE(xml);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 MODULE_INIT(xml)
 {
@@ -62,7 +43,7 @@ MODULE_EXIT(xml)
 
 MODULE_DEF(xml, 0x0100,"");
 
-#endif
+#endif // #if WIND_MODULE_XML_SUPPORT
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

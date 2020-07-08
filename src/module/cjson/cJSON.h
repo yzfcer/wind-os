@@ -22,11 +22,12 @@
 
 #ifndef cJSON__h
 #define cJSON__h
-
+#include "wind_config.h"
 #ifdef __cplusplus
 extern "C"
 {
 #endif
+#if WIND_MODULE_CJSON_SUPPORT
 
 /* cJSON Types: */
 #define cJSON_False  (1 << 0)
@@ -143,6 +144,7 @@ extern void cJSON_Minify(char *json);
 /* Macro for iterating over an array */
 #define cJSON_ArrayForEach(pos, head)			for(pos = (head)->child; pos != NULL; pos = pos->next)
 
+#endif // #if WIND_MODULE_CJSON_SUPPORT
 #ifdef __cplusplus
 }
 #endif

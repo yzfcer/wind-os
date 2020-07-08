@@ -28,7 +28,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
-#if (CMD_DATETIME_SUPPORT)
+#if CMD_DATETIME_SUPPORT
 
 static w_err_t cmd_set_datetime(w_int32_t argc,char **argv)
 {

@@ -490,7 +490,7 @@ void _wind_datetime_tick_isr(void)
     if(tick_cnt_for_time >= WIND_TICK_PER_SEC)
     {
         tick_cnt_for_time = 0;
-#if (!WIND_RTC_SUPPORT)
+#if !WIND_RTC_SUPPORT
         systick64.second ++;
 #endif    
     }

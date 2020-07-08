@@ -24,7 +24,7 @@
 extern "C" {
 #endif // #ifdef __cplusplus
 
-#if (CMD_DIAGNOSE_SUPPORT)
+#if CMD_DIAGNOSE_SUPPORT
 
 
 COMMAND_DISC(diagnose)

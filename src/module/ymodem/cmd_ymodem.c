@@ -19,19 +19,15 @@
 **------------------------------------------------------------------------------------------------------
 *******************************************************************************************************/
 #include "wind_cmd.h"
-
-#ifdef __cplusplus
-extern "C" {
-#endif // #ifdef __cplusplus
-
-
-
-
-#if (CMD_YMODEM_SUPPORT)
 #include "wind_heap.h"
 #include "wind_std.h"
 #include "wind_ymodem.h"
 #include "wind_file.h"
+#ifdef __cplusplus
+extern "C" {
+#endif // #ifdef __cplusplus
+#if CMD_YMODEM_SUPPORT
+
 
 
 
@@ -205,7 +201,7 @@ COMMAND_MAIN(ymodem,argc,argv)
 
 COMMAND_DEF(ymodem);
 
-#endif
+#endif // #if CMD_YMODEM_SUPPORT
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

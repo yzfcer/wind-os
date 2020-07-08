@@ -1,4 +1,5 @@
 #include "cJSON.h"
+#if WIND_MODULE_CJSON_SUPPORT
 
 /* Implement RFC6901 (https://tools.ietf.org/html/rfc6901) JSON Pointer spec.	*/
 cJSON *cJSONUtils_GetPointer(cJSON *object,const char *pointer);
@@ -28,3 +29,4 @@ cJSON *cJSONUtils_GenerateMergePatch(cJSON *from,cJSON *to); /* generates a patc
 char *cJSONUtils_FindPointerFromObjectTo(cJSON *object,cJSON *target);	/* Given a root object and a target object, construct a pointer from one to the other.	*/
 
 void cJSONUtils_SortObject(cJSON *object);	/* Sorts the members of the object into alphabetical order.	*/
+#endif // #if WIND_MODULE_CJSON_SUPPORT

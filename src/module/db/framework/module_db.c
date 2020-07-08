@@ -29,7 +29,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
-#if (WIND_MODULE_DB_SUPPORT)
+#if WIND_MODULE_DB_SUPPORT
 
 
 #if CMD_DB_SUPPORT

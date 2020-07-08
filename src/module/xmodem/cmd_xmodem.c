@@ -27,7 +27,7 @@ extern "C" {
 
 
 
-#if (CMD_XMODEM_SUPPORT)
+#if CMD_XMODEM_SUPPORT
 #include "wind_heap.h"
 #include "wind_std.h"
 #include "wind_xmodem.h"

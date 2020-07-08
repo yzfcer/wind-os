@@ -21,6 +21,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
+#include <wind_config.h>
+#if WIND_MODULE_CJSON_SUPPORT
 
 typedef struct JSON_checker_struct {
     int valid;
@@ -35,3 +37,4 @@ JSON_checker *new_JSON_checker(int depth);
 int  JSON_checker_char(JSON_checker *jc, int next_char);
 int  JSON_checker_done(JSON_checker *jc);
 int  JSON_checker_handle(char *JSONstr);
+#endif // #if WIND_MODULE_CJSON_SUPPORT

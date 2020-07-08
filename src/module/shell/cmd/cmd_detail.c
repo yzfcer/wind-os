@@ -39,7 +39,7 @@
 #include "wind_module.h"
 #include "wind_fsm.h"
 
-#if (CMD_DETAIL_SUPPORT)
+#if CMD_DETAIL_SUPPORT
 
 COMMAND_DISC(detail)
 {

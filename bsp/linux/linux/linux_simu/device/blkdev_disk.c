@@ -164,8 +164,8 @@ const w_blkdev_ops_s disk_ops =
 w_blkdev_s disk_dev[7] = 
 {
     WIND_BLKDEV_DEF("boot",  BLKDEV_ROM,0,0,    64,  MEM_SEC_SIZE,&disk_ops),
-    WIND_BLKDEV_DEF("app0",  BLKDEV_ROM,1,64,   4096,MEM_SEC_SIZE,&disk_ops),
-    WIND_BLKDEV_DEF("app1",  BLKDEV_ROM,2,4160, 4096,MEM_SEC_SIZE,&disk_ops),
+    WIND_BLKDEV_DEF("img0",  BLKDEV_ROM,1,64,   4096,MEM_SEC_SIZE,&disk_ops),
+    WIND_BLKDEV_DEF("img1",  BLKDEV_ROM,2,4160, 4096,MEM_SEC_SIZE,&disk_ops),
     WIND_BLKDEV_DEF("param0",BLKDEV_ROM,3,8256, 16,  MEM_SEC_SIZE,&disk_ops),
     WIND_BLKDEV_DEF("param1",BLKDEV_ROM,4,8272, 16,  MEM_SEC_SIZE,&disk_ops),
     WIND_BLKDEV_DEF("imgprm",BLKDEV_ROM,4,8288, 16,  MEM_SEC_SIZE,&disk_ops),

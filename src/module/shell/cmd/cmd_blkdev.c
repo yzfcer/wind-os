@@ -26,7 +26,7 @@
 #include "wind_blkdev.h"
 #include "wind_conv.h"
 #include "wind_heap.h"
-#if (CMD_BLKDEV_SUPPORT)
+#if CMD_BLKDEV_SUPPORT
 
 COMMAND_DISC(blkdev)
 {

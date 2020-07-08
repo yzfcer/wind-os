@@ -26,7 +26,7 @@
 extern "C" {
 #endif // #ifdef __cplusplus
 
-#if (CMD_DAEMON_SUPPORT)
+#if CMD_DAEMON_SUPPORT
 
 
 

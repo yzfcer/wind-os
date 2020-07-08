@@ -23,7 +23,7 @@
 extern "C" {
 #endif // #ifdef __cplusplus
 
-#if (CMD_ECHO_SUPPORT)
+#if CMD_ECHO_SUPPORT
 
 
 COMMAND_DISC(echo)

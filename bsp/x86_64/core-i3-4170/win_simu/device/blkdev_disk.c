@@ -106,7 +106,7 @@ w_int32_t disk_read(w_blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t blkcn
     wind_debug("read addr 0x%08x,cnt %d",addr,blkcnt);
     start = (w_int32_t)((dev->blkaddr + addr) * dev->blksize);
     size = blkcnt * dev->blksize;
-    file = dev->user_arg;
+	file = (FILE*)dev->user_arg;
     WIND_ASSERT_RETURN(file != W_NULL,0);
     wind_memset(buffer,0,sizeof(buffer));
     fseek(file,start,SEEK_SET); 
@@ -125,7 +125,7 @@ w_int32_t disk_write(w_blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t blkc
     start = (w_int32_t)((dev->blkaddr + addr) * dev->blksize);
     size = blkcnt * dev->blksize;
     
-    file = dev->user_arg;
+    file = (FILE*)dev->user_arg;
     WIND_ASSERT_RETURN(file != W_NULL,0);
     wind_memset(buffer,0,sizeof(buffer));
     fseek(file,start,SEEK_SET); 
@@ -139,7 +139,7 @@ w_int32_t disk_write(w_blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t blkc
 w_err_t   disk_close(w_blkdev_s *dev)
 {
     FILE *file;
-    file = dev->user_arg;
+    file = (FILE*)dev->user_arg;
     WIND_ASSERT_RETURN(file != W_NULL, W_ERR_FAIL);
     fclose(file);
     dev->user_arg = W_NULL;
@@ -161,8 +161,8 @@ const w_blkdev_ops_s disk_ops =
 w_blkdev_s disk_dev[7] = 
 {
     WIND_BLKDEV_DEF("boot", BLKDEV_ROM,0,0,    64,  MEM_SEC_SIZE,&disk_ops),
-    WIND_BLKDEV_DEF("app0",  BLKDEV_ROM,1,64,   4096,MEM_SEC_SIZE,&disk_ops),
-    WIND_BLKDEV_DEF("app1",  BLKDEV_ROM,2,4160, 4096,MEM_SEC_SIZE,&disk_ops),
+    WIND_BLKDEV_DEF("img0",  BLKDEV_ROM,1,64,   4096,MEM_SEC_SIZE,&disk_ops),
+    WIND_BLKDEV_DEF("img1",  BLKDEV_ROM,2,4160, 4096,MEM_SEC_SIZE,&disk_ops),
     WIND_BLKDEV_DEF("param0",BLKDEV_ROM,3,8256, 16,  MEM_SEC_SIZE,&disk_ops),
     WIND_BLKDEV_DEF("param1",BLKDEV_ROM,4,8272, 16,  MEM_SEC_SIZE,&disk_ops),
     WIND_BLKDEV_DEF("imgprm",BLKDEV_ROM,4,8288, 16,  MEM_SEC_SIZE,&disk_ops),

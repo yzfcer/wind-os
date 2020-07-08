@@ -27,7 +27,7 @@ extern "C" {
 #endif // #ifdef __cplusplus
 
 
-#if (CMD_DBGPOINT_SUPPORT)
+#if CMD_DBGPOINT_SUPPORT
 
 
 COMMAND_DISC(dbgp)

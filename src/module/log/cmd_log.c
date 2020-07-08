@@ -18,7 +18,7 @@
 extern "C" {
 #endif // #ifdef __cplusplus
 
-#if (CMD_LOG_SUPPORT)
+#if CMD_LOG_SUPPORT
 
 
 COMMAND_DISC(log)

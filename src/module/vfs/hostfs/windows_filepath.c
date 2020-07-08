@@ -25,7 +25,7 @@
 #include "wind_config.h"
 #if WIND_HOSTFS_SUPPORT
 
-#if (HOST_OS_TYPE == HOST_OS_WINDOWS)
+#if HOST_OS_TYPE == HOST_OS_WINDOWS)
 #include "wind_file.h"
 #include "wind_string.h"
 #include "wind_heap.h"

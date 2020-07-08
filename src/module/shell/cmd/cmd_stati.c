@@ -29,7 +29,7 @@
 #include "wind_pool.h"
 #include "wind_heap.h"
 
-#if (CMD_STATI_SUPPORT)
+#if CMD_STATI_SUPPORT
 
 w_err_t cmd_stat_show_pool_main(w_int32_t argc,char **argv)
 {

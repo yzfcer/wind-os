@@ -25,7 +25,7 @@
 #include "wind_config.h"
 #include "wind_cmd.h"
 #include "db_entry.h"
-#if (CMD_DB_SUPPORT)
+#if CMD_DB_SUPPORT
 
 static w_err_t cmd_db_list(w_int32_t argc,char **argv)
 {

@@ -22,11 +22,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+#include <wind_config.h>
 #include "wind_string.h"
 #include "wind_heap.h"
 #include "wind_debug.h"
 #include "json_checker.h"
 #include "cJSON.h"
+#if WIND_MODULE_CJSON_SUPPORT
 
 #define TRUE  1
 #define FALSE 0
@@ -447,3 +449,4 @@ int  JSON_checker_handle(char *JSONstr)
     }
     return 0;
 }
+#endif // #if WIND_MODULE_CJSON_SUPPORT

@@ -28,7 +28,7 @@ extern "C" {
 
 
 
-#if (WIND_MODULE_LUA_SUPPORT)
+#if WIND_MODULE_LUA_SUPPORT
 
 
 

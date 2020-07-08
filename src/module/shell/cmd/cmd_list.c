@@ -43,7 +43,7 @@
 #include "wind_fsm.h"
 #include "wind_netnode.h"
 
-#if (CMD_LIST_SUPPORT)
+#if CMD_LIST_SUPPORT
 
 COMMAND_DISC(list)
 {

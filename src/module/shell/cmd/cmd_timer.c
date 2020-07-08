@@ -27,7 +27,7 @@ extern "C" {
 
 
 
-#if (CMD_TIMER_SUPPORT)
+#if CMD_TIMER_SUPPORT
 
 
 

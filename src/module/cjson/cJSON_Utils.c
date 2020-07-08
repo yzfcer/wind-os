@@ -1,3 +1,4 @@
+#include <wind_config.h>
 #include "wind_debug.h"
 #include "cJSON_Utils.h"
 #include "wind_heap.h"
@@ -5,6 +6,8 @@
 #include "wind_string.h"
 #include "wind_macro.h"
 #include "wind_conv.h"
+#if WIND_MODULE_CJSON_SUPPORT
+
 #define tolower(c) LOWERCASE(c)
 static int cJSONUtils_strcasecmp(const char *s1,const char *s2)
 {
@@ -428,3 +431,4 @@ cJSON *cJSONUtils_GenerateMergePatch(cJSON *from,cJSON *to)
 	if (!patch->child) {cJSON_Delete(patch);return 0;}
 	return patch;
 }
+#endif // #if WIND_MODULE_CJSON_SUPPORT

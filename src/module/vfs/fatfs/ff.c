@@ -190,7 +190,7 @@
 
 
 /* Definitions of sector size */
-#if (FF_MAX_SS < FF_MIN_SS) || (FF_MAX_SS != 512 && FF_MAX_SS != 1024 && FF_MAX_SS != 2048 && FF_MAX_SS != 4096) || (FF_MIN_SS != 512 && FF_MIN_SS != 1024 && FF_MIN_SS != 2048 && FF_MIN_SS != 4096)
+#if FF_MAX_SS < FF_MIN_SS) || (FF_MAX_SS != 512 && FF_MAX_SS != 1024 && FF_MAX_SS != 2048 && FF_MAX_SS != 4096) || (FF_MIN_SS != 512 && FF_MIN_SS != 1024 && FF_MIN_SS != 2048 && FF_MIN_SS != 4096)
 #error Wrong sector size configuration
 #endif
 #if FF_MAX_SS == FF_MIN_SS
@@ -2588,7 +2588,7 @@ static FRESULT find_volume (	/* FR_OK(0): successful, !=0: an error occurred */
 		/* Get FSInfo if available */
 		fs->last_clst = fs->free_clst = 0xFFFFFFFF;		/* Initialize cluster allocation information */
 		fs->fsi_flag = 0x80;
-#if (FF_FS_NOFSINFO & 3) != 3
+#if FF_FS_NOFSINFO & 3) != 3
 		if (fmt == FS_FAT32				/* Allow to update FSInfo only if BPB_FSInfo32 == 1 */
 			&& ld_word(fs->win + BPB_FSInfo32) == 1
 			&& move_window(fs, bsect + 1) == FR_OK)
@@ -2598,10 +2598,10 @@ static FRESULT find_volume (	/* FR_OK(0): successful, !=0: an error occurred */
 				&& ld_dword(fs->win + FSI_LeadSig) == 0x41615252
 				&& ld_dword(fs->win + FSI_StrucSig) == 0x61417272)
 			{
-#if (FF_FS_NOFSINFO & 1) == 0
+#if FF_FS_NOFSINFO & 1) == 0
 				fs->free_clst = ld_dword(fs->win + FSI_Free_Count);
 #endif
-#if (FF_FS_NOFSINFO & 2) == 0
+#if FF_FS_NOFSINFO & 2) == 0
 				fs->last_clst = ld_dword(fs->win + FSI_Nxt_Free);
 #endif
 			}

@@ -21,6 +21,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
+#if WIND_MODULE_XML_SUPPORT
+
 static w_bool_t is_xml_name_valid(char *name)
 {
     w_int32_t i;
@@ -457,6 +459,7 @@ w_err_t      wind_xmlnode_to_string(w_xmlnode_s *xnode,w_xmlout_fn xmlout)
 
 
 
+#endif // #if WIND_MODULE_XML_SUPPORT
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

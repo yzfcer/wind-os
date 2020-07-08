@@ -28,7 +28,7 @@ extern "C" {
 
 
 
-#if (WIND_MODULE_VFS_SUPPORT)
+#if WIND_MODULE_VFS_SUPPORT
 
 
 

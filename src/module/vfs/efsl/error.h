@@ -4,19 +4,19 @@
 #include "config.h"
 #include "interface.h"
 
-#if defined (FULL_ERROR_SUPPORT)
+#if defined (FULL_ERROR_SUPPORT
 	#define ERRSUP_IOMAN
 	#define ERRSUP_DISC
 	#define ERRSUP_PARTITION
 	#define ERRSUP_FAT_FILESYSTEM
 	#define ERRSUP_FAT_FILESYSTEM
-#elif defined (BASE_ERROR_SUPPORT)
+#elif defined (BASE_ERROR_SUPPORT
 	#define ERRSUP_IOMAN
 	#define ERRSUP_DISC
 	#define ERRSUP_PARTITION
 #endif
 
-#if defined (HWINT_HAS_ERROR_SUPPORT) && defined (INTERFACE_ERROR_SUPPORT)
+#if defined (HWINT_HAS_ERROR_SUPPORT && defined (INTERFACE_ERROR_SUPPORT)
 	#define ERRSUP_HWINTERFACE
 #endif
 

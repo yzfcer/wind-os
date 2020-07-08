@@ -25,7 +25,7 @@
 #include "wind_cmd.h"
 #include "wind_string.h"
 #include "wind_thread.h"
-#if (CMD_MEM_SUPPORT)
+#if CMD_MEM_SUPPORT
 
 static w_bool_t str2int64(const char *str,w_uint64_t *value)
 {

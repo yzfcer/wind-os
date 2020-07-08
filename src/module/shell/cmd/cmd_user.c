@@ -28,7 +28,7 @@ extern "C" {
 
 
 
-#if (CMD_USER_SUPPORT)
+#if CMD_USER_SUPPORT
 
 
 

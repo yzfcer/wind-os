@@ -28,7 +28,7 @@ extern "C" {
 
 
 
-#if (CMD_THREAD_SUPPORT)
+#if CMD_THREAD_SUPPORT
 
 
 

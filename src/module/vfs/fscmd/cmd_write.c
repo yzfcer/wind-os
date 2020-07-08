@@ -30,7 +30,7 @@ extern "C" {
 
 
 
-#if (CMD_WRITE_SUPPORT)
+#if CMD_WRITE_SUPPORT
 #include "wind_file.h"
 
 

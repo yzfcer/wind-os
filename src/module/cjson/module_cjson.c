@@ -23,26 +23,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
-
-
-
-
-#if (WIND_MODULE_CJSON_SUPPORT)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#if WIND_MODULE_CJSON_SUPPORT
 
 extern int cjson_enable;
 
@@ -60,7 +41,7 @@ MODULE_EXIT(cjson)
 
 MODULE_DEF(cjson, 0x0100,"");
 
-#endif
+#endif // #if WIND_MODULE_CJSON_SUPPORT
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

@@ -28,7 +28,7 @@ extern "C" {
 
 
 
-#if (WIND_MODULE_NET_SUPPORT)
+#if WIND_MODULE_NET_SUPPORT
 FSM_MODEL_DELCARE(net);
 
 

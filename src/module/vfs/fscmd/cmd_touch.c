@@ -27,7 +27,7 @@ extern "C" {
 
 
 
-#if (CMD_TOUCH_SUPPORT)
+#if CMD_TOUCH_SUPPORT
 #include "wind_file.h"
 
 

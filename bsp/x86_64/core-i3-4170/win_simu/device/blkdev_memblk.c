@@ -33,9 +33,24 @@ static w_uint8_t memblk[MEM_SEC_COUNT*MEM_SEC_SIZE];
 
 w_err_t   memblk_init(w_blkdev_s *blkdev)
 {
-    blkdev->blkaddr = (w_addr_t)0;
-    blkdev->blkcnt = MEM_SEC_COUNT;
-    blkdev->blksize = MEM_SEC_SIZE;
+    if(blkdev->devid == 0)
+    {
+        blkdev->blkaddr = (w_addr_t)0;
+        blkdev->blkcnt = 5120;
+        blkdev->blksize = MEM_SEC_SIZE;
+    }
+    else if(blkdev->devid == 1)
+    {
+        blkdev->blkaddr = (w_addr_t)5120;
+        blkdev->blkcnt = 5112;
+        blkdev->blksize = MEM_SEC_SIZE;
+    }
+    else if(blkdev->devid == 2)
+    {
+        blkdev->blkaddr = (w_addr_t)10232;
+        blkdev->blkcnt = 8;
+        blkdev->blksize = MEM_SEC_SIZE;
+    }
     return W_ERR_OK;
 }
 
@@ -110,8 +125,8 @@ const w_blkdev_ops_s memblk_ops =
 w_blkdev_s memblk_dev[3] = 
 {
     WIND_BLKDEV_DEF("sysrun",BLKDEV_RAM,0,0,0,0,&memblk_ops),
-    WIND_BLKDEV_DEF("share", BLKDEV_RAM,0,0,0,0,&memblk_ops),
-    WIND_BLKDEV_DEF("cache", BLKDEV_RAM,0,0,0,0,&memblk_ops),
+    WIND_BLKDEV_DEF("cache", BLKDEV_RAM,1,0,0,0,&memblk_ops),
+    WIND_BLKDEV_DEF("share", BLKDEV_RAM,2,0,0,0,&memblk_ops),
 };
 
 #endif

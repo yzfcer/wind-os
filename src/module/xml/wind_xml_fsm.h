@@ -18,6 +18,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
+#if WIND_MODULE_XML_SUPPORT
 
 #define XML_FSM_BUFLEN 512
 typedef struct __xml_fsm_s xml_fsm_s;
@@ -53,6 +54,7 @@ w_err_t wind_xml_fsm_init(w_xmlfsm_s *xfsm,char *name);
 w_err_t wind_xml_fsm_input(w_xmlfsm_s *xfsm,char *xstr,w_int32_t len);
 w_err_t wind_xml_fsm_deinit(w_xmlfsm_s *xfsm);
 
+#endif //#if WIND_MODULE_XML_SUPPORT
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

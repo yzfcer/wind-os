@@ -23,7 +23,7 @@
 extern "C" {
 #endif // #ifdef __cplusplus
 
-#if (CMD_RCP_SUPPORT)
+#if CMD_RCP_SUPPORT
 
 
 COMMAND_DISC(rcp)

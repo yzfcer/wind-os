@@ -18,6 +18,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
+#if WIND_MODULE_XML_SUPPORT
+
 #define PTR_OFFSET(ptr1,ptr2) (w_int32_t)(w_addr_t)(ptr2 - ptr1)
 #define IS_XML_BORDER(c) ((C) == '<' || (c) == '>')
 #define SEP_CHLIST "\r\n\t "
@@ -625,6 +627,7 @@ FSM_MODEL_DEF(xml)
 
 
 
+#endif //#if WIND_MODULE_XML_SUPPORT
 #ifdef __cplusplus
 }
 #endif // #ifdef __cplusplus

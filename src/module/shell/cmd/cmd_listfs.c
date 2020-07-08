@@ -26,7 +26,7 @@
 extern "C" {
 #endif // #ifdef __cplusplus
 
-#if (CMD_FS_SUPPORT)
+#if CMD_FS_SUPPORT
 
 #define BUF_SIZE 128
 

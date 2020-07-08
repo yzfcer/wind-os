@@ -131,7 +131,7 @@ extern "C" {
 #define WIND_SOFTIRQ_SUPPORT 1 //Whether software interrupt framework is supported
 #define WIND_SOFTINT_MAX_NUM 256 //Maximum number of software interrupts
 
-#define WIND_DAEMON_SUPPORT 1    //Whether thread daemon is supported
+#define WIND_DAEMON_SUPPORT 0    //Whether thread daemon is supported
 #define WIND_DAEMON_MAX_NUM 5    //Maximum number of thread daemons
 
 #define WIND_USER_SUPPORT 1 //Whether user account is supported
@@ -164,7 +164,7 @@ extern "C" {
 #define WIND_BLKDEV_SUPPORT 1  //Whether block device drive frame is supported
 #define WIND_NULLDEV_MAX_NUM 5  //Maximum number of block devices
 
-#define WIND_LUA_SUPPORT 1 //Whether Lua scripting language is supported
+#define WIND_LUA_SUPPORT 0 //Whether Lua scripting language is supported
 
 #define HARD_STACK_SIZE 40 //The amount of space reserved for the hardware stack, which may not be needed in some hardware
 
@@ -222,7 +222,7 @@ extern "C" {
 #define CMD_DBGPOINT_SUPPORT  1 //Whether the system debugging point function command is supported
 #define CMD_USER_SUPPORT      1 //Whether user management command is supported
 #define CMD_WATCHDOG_SUPPORT  1 //Whether the software watchdog command is supported
-#define CMD_DAEMON_SUPPORT    1 //Whether thread daemon command is supported
+#define CMD_DAEMON_SUPPORT    0 //Whether thread daemon command is supported
 #define CMD_DIAGNOSE_SUPPORT  1 //Whether system diagnostic command is supported
 #define CMD_TIMER_SUPPORT     1 //Whether timer operation command is supported
 

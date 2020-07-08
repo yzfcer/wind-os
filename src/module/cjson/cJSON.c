@@ -22,6 +22,7 @@
 
 /* cJSON */
 /* JSON parser in C. */
+#include <wind_config.h>
 #include <math.h>
 #include "cJSON.h"
 #include "json_checker.h"
@@ -29,6 +30,8 @@
 #include "wind_string.h"
 #include "wind_debug.h"
 #include "wind_macro.h"
+#if WIND_MODULE_CJSON_SUPPORT
+
 #ifndef INT_MAX
 #define INT_MAX 2147483647
 #endif
@@ -777,3 +780,4 @@ void cJSON_Minify(char *json)
 	}
 	*into=0;	/* and null-terminate. */
 }
+#endif // #if WIND_MODULE_CJSON_SUPPORT

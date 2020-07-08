@@ -28,7 +28,7 @@
 extern "C" {
 #endif // #ifdef __cplusplus
 
-#if (CMD_FORMAT_SUPPORT)
+#if CMD_FORMAT_SUPPORT
 #include "wind_file.h"
 
 static w_err_t cmd_format(w_int32_t argc,char **argv)

@@ -29,7 +29,7 @@ extern "C" {
 
 
 
-#if (WIND_MODULE_CUTEST_SUPPORT)
+#if WIND_MODULE_CUTEST_SUPPORT
 extern void test_suite_register_all(void);
 
 

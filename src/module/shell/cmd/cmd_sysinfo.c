@@ -24,7 +24,7 @@
 extern "C" {
 #endif // #ifdef __cplusplus
 
-#if (CMD_SYSINFO_SUPPORT)
+#if CMD_SYSINFO_SUPPORT
 
 static void print_byte_width(void)
 {
