@@ -71,7 +71,7 @@ static w_err_t boot_debug_mode_check(void)
     if(bp->debug_mode)
     {
         wind_notice("bootloader mode:DEBUG");
-        boot_status_set(BOOT_WAIT_KEY_PRESS);
+        boot_status_set(BOOT_WAIT_INPUT);
     }
     else
     {
@@ -261,7 +261,7 @@ static w_err_t boot_load_img(void)
     if(BLKDEV_RAM != part->mtype)
     {
         wind_notice("need not load image to ROM.");
-        boot_status_set(BOOT_SET_SHARE_PARAM);
+        boot_status_set(BOOT_SET_SHARE);
         return W_ERR_OK;
     }
     else
@@ -304,22 +304,20 @@ static w_err_t boot_run_system(void)
 }
 
 
-boot_step_s g_status_handTB[] = 
+boot_step_s g_status_hand_tb[] = 
 {
-    {BOOT_INIT,"boot init",boot_init},
-    {BOOT_FIRST_CHECK,"first run check",boot_first_check},   
-    {BOOT_DEBUG_MODE_CHECK,"debug mode check",boot_debug_mode_check},
-
-    {BOOT_CHIP_LOCK_CHECK,"chip lock status check",boot_chip_lock_check},
-    {BOOT_IMG_VALID_CHECK,"image valid check",boot_img_valid_check},
-    {BOOT_UPGRADE_CHECK,"upgrade status check",boot_upgrade_check},
-    
-    {BOOT_WAIT_KEY_PRESS,"wait for any key press",boot_wait_key_press},
-    {BOOT_MENU_LIST,"enter menu list",boot_enter_menu},
-    {BOOT_LOAD_IMG,"load image",boot_load_img},
-    {BOOT_SET_SHARE_PARAM,"set share param",boot_set_system_param},
-    {BOOT_RUN_SYSTEM,"run system",boot_run_system},
-    {BOOT_ERROR,"error",boot_error_handle},
+    {BOOT_INIT,      "boot init",            boot_init},
+    {BOOT_CHK_FIRST, "first run check",       boot_first_check},   
+    {BOOT_CHK_DEBUG, "debug mode check",      boot_debug_mode_check},
+    {BOOT_CHK_LOCK,  "chip lock status check",boot_chip_lock_check},
+    {BOOT_CHK_IMG,   "image valid check",     boot_img_valid_check},
+    {BOOT_CHK_UPG,   "upgrade status check",  boot_upgrade_check},
+    {BOOT_WAIT_INPUT,"wait for any key press",boot_wait_key_press},
+    {BOOT_MENU_LIST, "enter menu list",       boot_enter_menu},
+    {BOOT_LOAD_IMG,  "load image",            boot_load_img},
+    {BOOT_SET_SHARE, "set share param",       boot_set_system_param},
+    {BOOT_RUN_SYSTEM,"run system",            boot_run_system},
+    {BOOT_ERROR,     "error",                 boot_error_handle},
 };
 
 
@@ -328,26 +326,30 @@ void boot_main(w_int32_t argc,char **argv)
 {
     w_int32_t i;
     w_err_t err;
+    w_int32_t step_cnt;
+    boot_step_s *steplist;
     boot_enter_main_hook();
     print_boot_info();
+    steplist = g_status_hand_tb;
+    step_cnt = sizeof(g_status_hand_tb)/sizeof(boot_step_s);
     while(1)
     {
-        for(i = 0;i < sizeof(g_status_handTB)/sizeof(boot_step_s);i ++)
+        for(i = 0;i < step_cnt;i ++)
         {
-            if(g_boot_status == g_status_handTB[i].status)
-            {
-                wind_printf("[step%-2d] %-48s\r\n",g_status_handTB[i].status+1,
-                            g_status_handTB[i].stepname);
-                err = g_status_handTB[i].handle();
-                wind_notice("%-48s [%s]\r\n",g_status_handTB[i].stepname,err == W_ERR_OK?"OK":"ERROR");
-                break;
-            }
+            if(g_boot_status != steplist[i].status)
+                continue;
+            wind_printf("[step%-2d] %-48s\r\n",steplist[i].status+1,
+                        steplist[i].stepname);
+            err = steplist[i].handle();
+            wind_notice("%-48s [%s]\r\n",steplist[i].stepname,err == W_ERR_OK?"OK":"ERROR");
+            break;
         }
-        if(i >= sizeof(g_status_handTB)/sizeof(boot_step_s))
-        {
-            wind_error("unkown status %d.",g_boot_status);
-            boot_status_set(BOOT_ERROR);
-        }
+        
+        if(i < step_cnt)
+            continue;
+        wind_error("unkown status %d.",g_boot_status);
+        boot_status_set(BOOT_ERROR);
+
     }
 }
 

@@ -120,7 +120,7 @@ struct __hostfile_s
     w_uint8_t mode;    //Open mode
     w_uint8_t attr;    //File properties
     w_uint8_t isdir;   //Directory or not
-    //w_uint8_t has_sub;   //Whether there are sub files
+    //w_uint8_t has_sub;   // Whether there are sub files
     w_hostfile_s *subhfile;//Subfile (or subdirectory)
     FILE* fd;          //File handle
     w_subinfo_s subinfo;

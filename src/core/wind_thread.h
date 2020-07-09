@@ -35,7 +35,7 @@ extern "C" {
 
 #define WIND_THREAD_MAGIC 0x35BA6857
 #define WIND_THREAD_STK_MARK 0x24681357
-#define THREAD_NAME_LEN 20 //Maximum length of thread name, including '\ 0'
+#define THREAD_NAME_LEN 20 // Maximum length of thread name, including '\ 0'
 #define THREAD_FROM_MEMBER(ptr,type,mbr) (void*)(((char*)(ptr))-((w_addr_t)&(((type*)0)->mbr)))
 #define SLEEP_TIMEOUT_MAX 0x7fffffff
 

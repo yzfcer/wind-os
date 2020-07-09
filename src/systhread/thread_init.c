@@ -104,7 +104,10 @@ static w_err_t thread_init(w_int32_t argc,char **argv)
     _wind_module_mod_init();
 #endif
     _create_thread_idle();
+#if WIND_STATI_THREAD_SUPPORT
     set_idle_cnt();
+    _create_thread_stati();
+#endif
 #if WIND_SOFTIRQ_SUPPORT
     _wind_create_thread_softirq();
 #endif
@@ -112,9 +115,7 @@ static w_err_t thread_init(w_int32_t argc,char **argv)
     _create_thread_timer();
 #endif
 
-#if WIND_STATI_THREAD_SUPPORT
-    _create_thread_stati();
-#endif
+
 #if WIND_DAEMON_SUPPORT
     _create_thread_daemon();
 #endif
