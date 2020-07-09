@@ -33,6 +33,18 @@
 FILE *file = (FILE*)W_NULL;
 
 static w_uint8_t buffer[MEM_SEC_SIZE];
+static w_mutex_s diskmtx;
+static w_int32_t open_cnt = 0;
+
+w_err_t diskmtx_init(void)
+{
+    w_err_t err = W_ERR_OK;
+    if(diskmtx.obj.magic != WIND_MUTEX_MAGIC)
+    {
+        err = wind_mutex_init(&diskmtx,"diskmtx");
+    }
+    return err;
+}
 
 w_err_t   erase_virtual_disk(w_blkdev_s *dev,w_int32_t blkcnt)
 {
@@ -40,7 +52,6 @@ w_err_t   erase_virtual_disk(w_blkdev_s *dev,w_int32_t blkcnt)
     w_int32_t start;
     w_int32_t size,len;
     errno_t errno;
-    //FILE *file;
     WIND_CHECK_RETURN(file == W_NULL,W_ERR_OK);
     
     start = 0;
@@ -79,24 +90,40 @@ w_err_t   make_virtual_disk(w_blkdev_s *dev,w_int32_t blkcnt)
 
 w_err_t   disk_init(w_blkdev_s *dev)
 {
-    return make_virtual_disk(dev,MEM_SEC_COUNT);
+    w_err_t err = W_ERR_OK;
+    diskmtx_init();
+    wind_mutex_lock(&diskmtx);
+    err = make_virtual_disk(dev,MEM_SEC_COUNT);
+    wind_mutex_unlock(&diskmtx);
+    return err;
 }
 
 w_err_t   disk_open(w_blkdev_s *dev)
 {
+    w_err_t err = W_ERR_OK;
     errno_t errno;
-    //FILE *file;
-    WIND_CHECK_RETURN(file == W_NULL,W_ERR_OK);
-    errno = fopen_s(&file,FILE_NAME,"rb+");
-    WIND_ASSERT_RETURN(errno == 0,W_ERR_FAIL);
-    WIND_ASSERT_RETURN(file != W_NULL,W_ERR_FAIL);
-    //dev->user_arg = file;
+    WIND_CHECK_RETURN(!IS_F_BLKDEV_OPEN(dev),W_ERR_OK);
+    wind_mutex_lock(&diskmtx);
+    do
+    {
+        open_cnt ++;
+        WIND_CHECK_BREAK(file == W_NULL,W_ERR_OK);
+        errno = fopen_s(&file,FILE_NAME,"rb+");
+        WIND_ASSERT_BREAK(errno == 0,W_ERR_FAIL,"");
+        WIND_ASSERT_BREAK(file != W_NULL,W_ERR_FAIL,"");
+    }while(0);
+    wind_mutex_unlock(&diskmtx);
     return W_ERR_OK;
 }
 
 w_err_t   disk_erase(w_blkdev_s *dev,w_addr_t addr,w_int32_t blkcnt)
 {
-    return erase_virtual_disk(dev,MEM_SEC_COUNT);
+    w_err_t err = W_ERR_OK;
+    diskmtx_init();
+    wind_mutex_lock(&diskmtx);
+    err = erase_virtual_disk(dev,MEM_SEC_COUNT);
+    wind_mutex_unlock(&diskmtx);
+    return err;
 }
 
 w_err_t   disk_eraseall(w_blkdev_s *dev)
@@ -109,16 +136,18 @@ w_int32_t disk_read(w_blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t blkcn
 {
     w_int32_t start;
     w_int32_t size,len;
-    //FILE *file;
     WIND_CHECK_RETURN(file != W_NULL,W_ERR_HARDFAULT);
     wind_debug("read addr 0x%08x,cnt %d",addr,blkcnt);
     start = (w_int32_t)((dev->blkaddr + addr) * dev->blksize);
     size = blkcnt * dev->blksize;
-	//file = (FILE*)dev->user_arg;
     WIND_ASSERT_RETURN(file != W_NULL,0);
     wind_memset(buffer,0,sizeof(buffer));
+    
+    wind_mutex_lock(&diskmtx);
     fseek(file,start,SEEK_SET); 
     len = fread(buf,1,size,file);
+    wind_mutex_unlock(&diskmtx);
+    
     if(len > 0)
         return len / dev->blksize;
     return -1;
@@ -128,18 +157,18 @@ w_int32_t disk_write(w_blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t blkc
 {
     w_int32_t start;
     w_int32_t size,len;
-    //FILE *file;
     WIND_CHECK_RETURN(file != W_NULL,W_ERR_HARDFAULT);
     wind_debug("write addr 0x%08x,cnt %d",addr,blkcnt);
     start = (w_int32_t)((dev->blkaddr + addr) * dev->blksize);
     size = blkcnt * dev->blksize;
     
-    //file = (FILE*)dev->user_arg;
     WIND_ASSERT_RETURN(file != W_NULL,0);
     wind_memset(buffer,0,sizeof(buffer));
+    wind_mutex_lock(&diskmtx);
     fseek(file,start,SEEK_SET); 
     wind_debug("write offset : 0x%08x",start);
     len = fwrite(buf,1,size,file);
+    wind_mutex_unlock(&diskmtx);
     if(len > 0)
         return len / dev->blksize;
     return -1;
@@ -147,13 +176,21 @@ w_int32_t disk_write(w_blkdev_s *dev,w_addr_t addr,w_uint8_t *buf,w_int32_t blkc
 
 w_err_t   disk_close(w_blkdev_s *dev)
 {
-    //FILE *file;
+    w_err_t err = W_ERR_OK;
     WIND_ASSERT_RETURN(file != W_NULL,W_ERR_HARDFAULT);
-    //file = (FILE*)dev->user_arg;
     WIND_ASSERT_RETURN(file != W_NULL, W_ERR_FAIL);
-    fclose(file);
-    file = (FILE*)W_NULL;
-    dev->user_arg = W_NULL;
+    wind_mutex_lock(&diskmtx);
+    do
+    {
+        WIND_CHECK_BREAK(open_cnt > 0,W_ERR_OK);
+        open_cnt --;
+        if(open_cnt <= 0)
+        {
+            fclose(file);
+            file = (FILE*)W_NULL;
+        }
+    }while(0);
+    wind_mutex_unlock(&diskmtx);
     return W_ERR_OK;
 }
 
