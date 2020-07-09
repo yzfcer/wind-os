@@ -23,22 +23,6 @@
 extern "C" {
 #endif
 
-//General purpose buffer, which can cache or receive command characters when copying data
-
-#if 0
-void boot_delay(w_uint32_t ms)
-{
-    w_uint32_t tick = boot_get_sys_ms();
-    while(boot_get_sys_ms() - tick < ms);
-}
-
-w_err_t wind_std_wait(w_int32_t ms)
-{
-    boot_delay(ms);
-    return W_ERR_OK;
-}
-#endif
-
 w_err_t wait_for_key_input(w_int32_t to_sec,char *ch,w_int32_t print_flag)
 {
     w_int32_t second;
@@ -77,14 +61,6 @@ w_err_t wait_for_key_input(w_int32_t to_sec,char *ch,w_int32_t print_flag)
     return err;
 }
 
-#if 0
-void wind_disable_switch(void)
-{
-}
-void wind_enable_switch(void)
-{
-}
-#endif
 
 
 w_err_t read_char_blocking(char *ch)
@@ -225,19 +201,6 @@ w_int32_t boot_receive_img(w_uint32_t addr,w_uint32_t maxlen)
                 return g_recvstat.idx;
         }
     }
-}
-#endif
-
-#if 0
-w_uint32_t boot_get_sys_ms(void)
-{
-    w_uint32_t tick;
-    tick = wind_get_tick();
-    return tick * (1000/WIND_TICK_PER_SEC);
-}
-
-void boot_feed_watchdog(void)
-{
 }
 #endif
 

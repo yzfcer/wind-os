@@ -24,16 +24,6 @@ extern "C" {
 #define IS_XML_BORDER(c) ((C) == '<' || (c) == '>')
 #define SEP_CHLIST "\r\n\t "
 
-#if 0
-static w_int32_t is_valid_prefix(int c) 
-{ 
-    return (c >= 'A' && c <= 'Z') || 
-        (c >= 'a' && c <= 'z') || 
-        (c == '_');
-}
-#endif
-
-
 static void xmlfsm_change_step(w_xmlfsm_s *xfsm,w_int32_t new_step)
 {
     xfsm->fsm.sub_step = 0;

@@ -353,14 +353,6 @@ void boot_main(w_int32_t argc,char **argv)
     }
 }
 
-#if 0
-w_int32_t main(w_int32_t argc,char **argv)
-{
-    boot_main(argc,argv);
-    return 0;
-}
-#endif
-
 #ifdef __cplusplus
 }
 #endif

@@ -71,27 +71,9 @@ w_uint32_t boot_get_sys_ms(void)
     return GetTickCount();
 }
 
-#if 0
-extern w_media_s media_ram1;
-extern w_media_s media_ram2;
-extern w_media_s media_rom1;
-extern w_media_s media_rom2;
-#endif
-w_err_t boot_medias_register(void)
-{
-#if 0
-    boot_media_register(&media_ram1);
-    boot_media_register(&media_ram2);
-    boot_media_register(&media_rom1);
-    boot_media_register(&media_rom2);
-#endif
-	return W_ERR_OK;
-}
 
 w_err_t boot_parts_create(void)
 {
-    //w_media_s *media;
-    //media = boot_media_get("rom1");
     boot_part_create(PART_BOOT,BOOT_SIZE,0);
     boot_part_create(PART_PARAM1,PARAM1_SIZE,0);
     boot_part_create(PART_PARAM2,PARAM2_SIZE,0);
@@ -99,11 +81,9 @@ w_err_t boot_parts_create(void)
     boot_part_create(PART_SYSRUN,SYSRUN_SIZE,0);
     boot_part_create(PART_FS,FS_SIZE,0);
     
-    //media = boot_media_get("rom2");
     boot_part_create(PART_IMG1,IMG1_SIZE,1);
     boot_part_create(PART_IMG2,IMG2_SIZE,1);
     
-    //media = boot_media_get("ram1");
     boot_part_create(PART_CACHE,CACHE_SIZE,0);
     boot_part_create(PART_SHARE,SHARE_SIZE,0);
     
