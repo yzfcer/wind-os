@@ -64,7 +64,7 @@ static void part_info_init(w_part_s *part)
     part->crc = 0;
 }
 
-w_bool_t  boot_part_create(const char *name,w_uint32_t size,w_uint8_t encrypt)
+w_bool_t  boot_part_create(const char *name,w_uint8_t encrypt)
 {
     w_part_s *part;
     w_blkdev_s *blkdev;

@@ -74,18 +74,18 @@ w_uint32_t boot_get_sys_ms(void)
 
 w_err_t boot_parts_create(void)
 {
-    boot_part_create(PART_BOOT,BOOT_SIZE,0);
-    boot_part_create(PART_PARAM1,PARAM1_SIZE,0);
-    boot_part_create(PART_PARAM2,PARAM2_SIZE,0);
-    boot_part_create(PART_IMGPARA,IMG_PARA_SIZE,0);
-    boot_part_create(PART_SYSRUN,SYSRUN_SIZE,0);
-    boot_part_create(PART_FS,FS_SIZE,0);
+    boot_part_create(PART_BOOT,0);
+    boot_part_create(PART_PARAM1,0);
+    boot_part_create(PART_PARAM2,0);
+    boot_part_create(PART_IMGPARA,0);
+    boot_part_create(PART_SYSRUN,0);
+    boot_part_create(PART_FS,0);
     
-    boot_part_create(PART_IMG1,IMG1_SIZE,1);
-    boot_part_create(PART_IMG2,IMG2_SIZE,1);
+    boot_part_create(PART_IMG1,1);
+    boot_part_create(PART_IMG2,1);
     
-    boot_part_create(PART_CACHE,CACHE_SIZE,0);
-    boot_part_create(PART_SHARE,SHARE_SIZE,0);
+    boot_part_create(PART_CACHE,0);
+    boot_part_create(PART_SHARE,0);
     
     return W_ERR_OK;
 }

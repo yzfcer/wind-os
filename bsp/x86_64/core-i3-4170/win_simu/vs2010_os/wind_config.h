@@ -48,18 +48,6 @@ extern "C" {
 //-------------------------------------------------------------------------------
 //Bootloader parameter configuration
 //-------------------------------------------------------------------------------
-#define BOOT_SIZE 0xE000    //Bootloader program region size
-#define PARAM1_SIZE 0x1000  //Bootloader param region size
-#define PARAM2_SIZE 0x1000  //Bootloader param backup region size
-#define IMG1_SIZE 0x10000   //System program storage region size
-#define IMG2_SIZE 0x10000   //System program storage backup region size
-#define IMG_PARA_SIZE 0x1000  //System program parameter region size
-#define FS_SIZE 0x20000     //File system partition size
-
-#define SHARE_SIZE 0x1000   //Boot and system shared parameter area size
-#define CACHE_SIZE 0x40000  //System program download / upgrade cache size
-#define SYSRUN_SIZE 0x10000 //Size of system program running area (ROM or RAM)
-
 #define BOOT_DEBUG_ENABLE 0 //Debug information printing function enable
 #define BOOT_TEST_ENABLE 1 //Test function enable
 
@@ -83,9 +71,6 @@ extern "C" {
 #define RUN_IN_RAM 1
 #define RUN_IN_ROM 2
 #define RUN_SPACE_TYPE RUN_IN_RAM
-
-//Number of physical media
-#define MEDIA_COUNT 4
 
 //Number of memory logical partitions
 #define PART_COUNT 12

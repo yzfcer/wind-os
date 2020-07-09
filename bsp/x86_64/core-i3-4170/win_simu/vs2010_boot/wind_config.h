@@ -48,18 +48,6 @@ extern "C" {
 //-------------------------------------------------------------------------------
 //Bootloader parameter configuration
 //-------------------------------------------------------------------------------
-#define BOOT_SIZE 0xE000    //Bootloader program region size
-#define PARAM1_SIZE 0x1000  //Bootloader param region size
-#define PARAM2_SIZE 0x1000  //Bootloader param backup region size
-#define IMG1_SIZE 0x10000   //System program storage region size
-#define IMG2_SIZE 0x10000   //System program storage backup region size
-#define IMG_PARA_SIZE 0x1000  //System program parameter region size
-#define FS_SIZE 0x20000     //File system partition size
-
-#define SHARE_SIZE 0x1000   //Boot and system shared parameter area size
-#define CACHE_SIZE 0x40000  //System program download / upgrade cache size
-#define SYSRUN_SIZE 0x10000 //Size of system program running area (ROM or RAM)
-
 #define BOOT_DEBUG_ENABLE 0 //Debug information printing function enable
 #define BOOT_TEST_ENABLE 1 //Test function enable
 
@@ -84,9 +72,6 @@ extern "C" {
 #define RUN_IN_ROM 2
 #define RUN_SPACE_TYPE RUN_IN_RAM
 
-//Number of physical media
-#define MEDIA_COUNT 4
-
 //Number of memory logical partitions
 #define PART_COUNT 12
 
@@ -110,16 +95,16 @@ extern "C" {
 #define WIND_MUTEX_SUPPORT 1 // Whether mutex is supported
 #define WIND_MUTEX_MAX_NUM 20 // Maximum number of mutexes that can be supported
 
-#define WIND_SEM_SUPPORT 1 // Whether semaphore is supported
+#define WIND_SEM_SUPPORT 0 // Whether semaphore is supported
 #define WIND_SEM_MAX_NUM 8 // Maximum number of semaphores
 
-#define WIND_PIPE_SUPPORT 1  // Whether pipe is supported
+#define WIND_PIPE_SUPPORT 0  // Whether pipe is supported
 #define WIND_PIPE_MAX_NUM 2  // Maximum number of pipes
 
-#define WIND_MSGBOX_SUPPORT 1  // Whether message box is supported
+#define WIND_MSGBOX_SUPPORT 0  // Whether message box is supported
 #define WIND_MBOX_MAX_NUM 2// Maximum number of message boxes
 
-#define WIND_EVENT_SUPPORT 1  // Whether event is supported
+#define WIND_EVENT_SUPPORT 0  // Whether event is supported
 #define WIND_EVENT_MAX_NUM 5// Maximum number of events
 
 #define WIND_WATCHDOG_SUPPORT 1 // Whether thread level watchdog is supported
