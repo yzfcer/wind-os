@@ -1,0 +1,28 @@
+
+
+usage()
+{
+	echo "mkobj usage:"
+	echo "mkobj <dir> <objname> "
+	echo "      dir : the directory in which to create file"
+	echo "      name: the command name need to create"
+}
+
+if [ $# -lt 2 ]
+then
+	usage
+	exit 0
+fi
+DESTDIR=$1
+OBJNAME=$2
+CUR_PATH=$(cd $(dirname $0); pwd)
+
+if [ -f ${DESTDIR}/obj_{OBJNAME}.c ]
+then
+	echo ${DESTDIR}/wind_{OBJNAME}.c " has been exist"
+	exit 
+fi
+
+./mksrc -dhc ${DESTDIR} ${OBJNAME}
+
+

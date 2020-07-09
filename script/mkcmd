@@ -3,18 +3,20 @@
 usage()
 {
 	echo "mkcmd usage:"
-	echo "mkcmd  <cmdname> "
+	echo "mkcmd <dir> <cmdname> "
+	echo "      dir : the directory in which to create file"
 	echo "      name: the command name need to create"
 }
 
-if [ $# -lt 1 ]
+if [ $# -lt 2 ]
 then
 	usage
 	exit 0
 fi
-CMDNAME=$1
+DESTDIR=$1
+CMDNAME=$2
 CUR_PATH=$(cd $(dirname $0); pwd)
-DESTDIR=${CUR_PATH}/../src/module/shell/cmd
+#DESTDIR=${CUR_PATH}/../src/module/shell/cmd
 
 if [ -f ${DESTDIR}/cmd_{CMDNAME}.c ]
 then

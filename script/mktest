@@ -3,18 +3,19 @@
 usage()
 {
 	echo "mktest usage:"
-	echo "mktest  <testname> "
-	echo "      name: the testsuite name need to create"
+	echo "mktest <dir> <testname> "
+	echo "      dir : the directory in which to create file"
+	echo "      testname: the testsuite name need to create"
 }
 
-if [ $# -lt 1 ]
+if [ $# -lt 2 ]
 then
 	usage
 	exit 0
 fi
-TESTNAME=$1
+DESTDIR=$1
+TESTNAME=$2
 CUR_PATH=$(cd $(dirname $0); pwd)
-DESTDIR=${CUR_PATH}/../src/module/cutest/testcase
 
 if [ -f ${DESTDIR}/test_{TESTNAME}.c ]
 then

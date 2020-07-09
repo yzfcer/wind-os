@@ -128,7 +128,7 @@ gen_file_head()
 		PREINFO+="#include \"wind_type.h\"\r\n"
 	elif [[ $filename == "wind_"*".c" ]]
 	then
-		PREINFO+="#include \""${FILENAME}".h\"\r\n"
+		#PREINFO+="#include \""${FILENAME}".h\"\r\n"
 		PREINFO+="#include \"wind_obj.h\"\r\n"
 	fi
 	PREINFO+="#ifdef __cplusplus\r\n"
