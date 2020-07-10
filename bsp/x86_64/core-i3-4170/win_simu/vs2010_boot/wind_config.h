@@ -105,16 +105,16 @@ extern "C" {
 #define WIND_MBOX_MAX_NUM 2// Maximum number of message boxes
 
 #define WIND_EVENT_SUPPORT 0  // Whether event is supported
-#define WIND_EVENT_MAX_NUM 5// Maximum number of events
+#define WIND_EVENT_MAX_NUM 5 // Maximum number of events
 
-#define WIND_WATCHDOG_SUPPORT 1 // Whether thread level watchdog is supported
+#define WIND_WATCHDOG_SUPPORT 0 // Whether thread level watchdog is supported
 #define WIND_WATCHDOG_MAX_NUM 5// Maximum number of watchdogs
 
 #define WIND_TIMER_SUPPORT 1  // Whether software timer is supported
 #define WIND_TIMER_MAX_NUM 5  // Maximum number of software timers
 
 #define WIND_SOFTIRQ_SUPPORT 1 // Whether software interrupt framework is supported
-#define WIND_SOFTINT_MAX_NUM 256 // Maximum number of software interrupts
+#define WIND_SOFTINT_MAX_NUM 64 // Maximum number of software interrupts
 
 #define WIND_DAEMON_SUPPORT 0    // Whether thread daemon is supported
 #define WIND_DAEMON_MAX_NUM 5    // Maximum number of thread daemons
@@ -125,7 +125,7 @@ extern "C" {
 #define WIND_FSM_SUPPORT 0 // Whether finite state machine framework is supported
 #define WIND_FSM_MAX_NUM 5 // Maximum number of finite state machines
 
-#define WIND_DBGPOINT_SUPPORT 1// Whether debugging point is supported
+#define WIND_DBGPOINT_SUPPORT 0// Whether debugging point is supported
 
 #define WIND_TICK_PER_SEC 100 //The number of tick beats in a second
 
@@ -142,12 +142,12 @@ extern "C" {
 
 #define WIND_DEBUG_SUPPORT 1 // Whether debugging output function is supported
 
-#define WIND_DIAGNOSE_SUPPORT 1 // Whether diagnosis function is supported
+#define WIND_DIAGNOSE_SUPPORT 0 // Whether diagnosis function is supported
 
 #define WIND_CHDEV_SUPPORT 1  // Whether character device driver frame is supported
 
 #define WIND_BLKDEV_SUPPORT 1  // Whether block device drive frame is supported
-#define WIND_NULLDEV_MAX_NUM 5  // Maximum number of block devices
+#define WIND_NULLDEV_MAX_NUM 1  // Maximum number of block devices
 
 #define WIND_LUA_SUPPORT 0 // Whether Lua scripting language is supported
 
@@ -204,11 +204,11 @@ extern "C" {
 #define CMD_XMODEM_SUPPORT    0 // Whether XMODEM command is supported
 #define CMD_SYSINFO_SUPPORT   1 // Whether system information command is supported
 #define CMD_CUTEST_SUPPORT    1 // Whether unit test command is supported
-#define CMD_DBGPOINT_SUPPORT  1 // Whether the system debugging point function command is supported
+#define CMD_DBGPOINT_SUPPORT  0 // Whether the system debugging point function command is supported
 #define CMD_USER_SUPPORT      1 // Whether user management command is supported
-#define CMD_WATCHDOG_SUPPORT  1 // Whether the software watchdog command is supported
+#define CMD_WATCHDOG_SUPPORT  0 // Whether the software watchdog command is supported
 #define CMD_DAEMON_SUPPORT    0 // Whether thread daemon command is supported
-#define CMD_DIAGNOSE_SUPPORT  1 // Whether system diagnostic command is supported
+#define CMD_DIAGNOSE_SUPPORT  0 // Whether system diagnostic command is supported
 #define CMD_TIMER_SUPPORT     1 // Whether timer operation command is supported
 
 #define CMD_BEEP_SUPPORT      0 // Whether beep command is supported

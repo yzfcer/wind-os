@@ -50,6 +50,7 @@ static w_part_s *get_null_part(void)
 w_err_t boot_part_init(void)
 {
     w_err_t err;
+    wind_notice("boot part init");
     wind_memset(g_part,0,sizeof(g_part));
     err = boot_parts_create();
     return W_ERR_OK;
@@ -212,7 +213,7 @@ w_err_t boot_part_erase(w_part_s *part)
         WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_FAIL);
     }
     err = wind_blkdev_eraseall(blkdev);
-    WIND_ASSERT_RETURN(err > W_ERR_OK,W_ERR_FAIL);
+    WIND_ASSERT_RETURN(err == W_ERR_OK,W_ERR_FAIL);
     part_info_init(part);
     return W_ERR_OK;
 }
@@ -269,7 +270,19 @@ w_part_s *boot_part_get_list(void)
     return g_part;
 }
 
-
+w_err_t boot_part_update_rom(w_part_s *ptlist)
+{
+    w_int32_t i;
+    for(i = 0;i < PART_COUNT;i ++)
+    {
+        if(!g_part[i].used)
+            break;
+        g_part[i].datalen = ptlist[i].datalen;
+        g_part[i].crc = ptlist[i].crc;
+        g_part[i].time_mark = ptlist[i].time_mark;
+    }
+    return W_ERR_OK;
+}
 
 static void print_copy_percents(w_int32_t numerator, w_int32_t denominator,w_int32_t del)
 {

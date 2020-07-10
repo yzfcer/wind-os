@@ -201,12 +201,6 @@ static w_err_t set_debug_mode(void)
 }
 
 
-static w_err_t show_media_map(void)
-{
-    //boot_media_print();
-    return W_ERR_OK;
-}
-
 static w_err_t lock_mcu(void)
 {
     if(boot_is_chip_lock())
@@ -281,9 +275,8 @@ static w_menu_tb_s g_menu_list[] =
     {'2',0,0,"download file system",download_to_fs_part},
     {'3',0,0,"download to sysrun",download_to_sysrun},
     {'4',0,0,"download to any part",download_to_any_part},
-    {'5',0,0,"show media map",show_media_map},
-    {'6',0,0,"show part status",show_part_status},
-    {'7',2,2,"set debug mode",set_debug_mode},
+    {'5',0,0,"show part status",show_part_status},
+    {'6',2,2,"set debug mode",set_debug_mode},
     {'k',0,0,"lock MCU chip",lock_mcu},
     {'r',2,2,"clear boot params",clear_boot_param},
 #if BOOT_TEST_ENABLE

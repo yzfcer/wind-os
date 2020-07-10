@@ -39,7 +39,7 @@ extern "C" {
 static w_dlist_s heaplist;
 
 #define OFFSET_ADDR(base,offset) (((w_addr_t)(base))+(offset))
-#define ITEM_FROM_PTR(ptr) (void*)((w_addr_t)ptr - WIND_HEAP_ITEM_SIZE)
+#define ITEM_FROM_PTR(ptr) (w_heapitem_s*)(void*)((w_addr_t)ptr - WIND_HEAP_ITEM_SIZE)
 
 #define NEXT_HEAPITEM(item) NODE_TO_HEAPITEM(item->itemnode.dnode.next)
 #define PREV_HEAPITEM(item) NODE_TO_HEAPITEM(item->itemnode.dnode.prev)
@@ -126,6 +126,9 @@ static w_err_t heap_diagnose_init(void)
 }
 #else
 #define heap_diagnose_init() W_ERR_OK
+#define print_heapitem_info(tmpitem)
+#define wind_diagnose_check()
+
 #endif
 
 w_err_t _wind_heap_mod_init(void)
@@ -606,7 +609,7 @@ void *wind_alloc(w_uint32_t size,w_uint8_t allocid)
     ptr = wind_malloc(size);
     if(ptr != W_NULL)
     {
-        item = ITEM_FROM_PTR(ptr);
+        item = (w_heapitem_s*)ITEM_FROM_PTR(ptr);
         item->allocid = allocid;
     }
     return ptr;
@@ -669,8 +672,8 @@ void *wind_realloc(void *ptr, w_uint32_t newsize)
 		{
 			break;
 		}
-		olditm = ITEM_FROM_PTR(ptr);
-		newitm = ITEM_FROM_PTR(pnew);
+		olditm = (w_heapitem_s*)ITEM_FROM_PTR(ptr);
+		newitm = (w_heapitem_s*)ITEM_FROM_PTR(pnew);
 		cpsize = olditm->size < newitm->size?olditm->size : newitm->size;
 		cpsize -= WIND_HEAP_ITEM_SIZE;
 		wind_memcpy(pnew,ptr,cpsize);

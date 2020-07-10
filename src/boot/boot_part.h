@@ -45,15 +45,12 @@ typedef struct
 {
     w_blkdev_s blkdev;
     char name[PART_NAME_LEN];
-    //char media_name[MEDIA_NAME_LEN];
-    w_uint8_t mtype:1;
     w_uint8_t used:1;
     w_uint8_t encrypt:1;
     w_uint8_t status:2;
+    w_uint8_t mtype;
     w_uint16_t time_mark;
-    //w_uint32_t base;
     w_uint32_t size;
-    //w_uint32_t blksize;
     w_uint32_t datalen;
     w_uint32_t crc;
 }w_part_s;
@@ -62,6 +59,7 @@ w_uint8_t *get_common_buffer(void);
 w_err_t boot_part_init(void);
 w_bool_t  boot_part_create(const char *name,w_uint8_t encrypt);
 w_part_s *boot_part_get(const char *name);
+w_err_t boot_part_update_rom(w_part_s *ptlist);
 w_err_t boot_part_calc_crc(w_part_s *part,w_int32_t offset,w_int32_t len,w_bool_t set);
 w_int32_t boot_part_read(w_part_s *part,w_int32_t offset,w_uint8_t *data,w_uint32_t datalen,w_bool_t read_space);
 w_int32_t boot_part_write(w_part_s *part,w_int32_t offset,w_uint8_t *data,w_uint32_t datalen);

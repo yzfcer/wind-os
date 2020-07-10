@@ -57,7 +57,6 @@ void print_boot_info(void)
 static w_err_t boot_init(void)
 {
     boot_param_init();
-    //boot_media_init();
     boot_part_init();
     share_param_init();
     boot_status_go_next();
@@ -207,9 +206,9 @@ static w_err_t boot_enter_menu(void)
 static w_err_t boot_load_img(void)
 {
     w_mem_status_e mem_stat = MEM_ERROR;
-    w_part_s *part = W_NULL;
+    w_part_s *part = (w_part_s *)W_NULL;
     w_part_s *tmp;
-    boot_param_s *bp = W_NULL; 
+    boot_param_s *bp = (boot_param_s *)W_NULL; 
 
     wind_notice("load image to running space...");
     bp = (boot_param_s *)boot_param_get();

@@ -113,7 +113,7 @@ w_err_t _wind_pool_diagnose_init(void)
 #else
 w_err_t _wind_pool_diagnose_init(void)
 {
-    return W_ERR_OK
+    return W_ERR_OK;
 }
 #endif
 
@@ -166,7 +166,7 @@ w_err_t wind_pool_create(const char *name,void *mem,w_uint32_t memsize,w_uint32_
         if(i < pm->itemnum - 1)
             item = item->head.next;
         else
-            item->head.next = W_NULL;
+            item->head.next = (w_poolitem_s*)W_NULL;
     }
     WIND_STATI_INIT(pm->stati,pm->itemnum);
 
@@ -206,7 +206,7 @@ void *wind_pool_malloc(void *mem)
     item = pm->free_head;
     pm->free_head = pm->free_head->head.next;
     if(pm->free_head == W_NULL)
-        pm->free_end = W_NULL;
+        pm->free_end = (w_poolitem_s*)W_NULL;
     
     if(IS_F_POOLITEM_USED(item))
     {
@@ -218,7 +218,7 @@ void *wind_pool_malloc(void *mem)
     WIND_STATI_INC(pm->stati);
     item->head.magic = WIND_POOLITEM_MAGIC;
     SET_F_POOLITEM_USED(item);
-    item->head.next = W_NULL;
+    item->head.next = (w_poolitem_s*)W_NULL;
     p = (void*)(item->buff);
     wind_enable_interrupt();
     return p;
@@ -238,7 +238,7 @@ w_err_t wind_pool_free(void *mem,void *block)
     wind_disable_interrupt();
     item->head.magic = (w_uint16_t)(~WIND_POOLITEM_MAGIC);
     CLR_F_POOLITEM_USED(item);
-    item->head.next = W_NULL;
+    item->head.next = (w_poolitem_s*)W_NULL;
     if(pm->free_end == W_NULL)
     {
         pm->free_head = (w_poolitem_s*)item;

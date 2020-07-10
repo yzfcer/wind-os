@@ -29,6 +29,7 @@
 #include "wind_type.h"
 #include "wind_obj.h"
 #include "wind_stati.h"
+#include "wind_mutex.h"
 #ifdef __cplusplus
 extern "C" {
 #endif // #ifdef __cplusplus
@@ -92,7 +93,7 @@ struct __w_heap_s
     w_stati_s stati;     //Memory allocation statistics
     w_dlist_s used_list; //List of allocated memory blocks
     w_dlist_s free_list; //List of unallocated memory blocks
-    void *mutex;         //Heap mutex
+    w_mutex_s *mutex;         //Heap mutex
 };
 
 

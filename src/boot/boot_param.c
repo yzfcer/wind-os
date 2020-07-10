@@ -87,7 +87,6 @@ w_err_t boot_param_reset(void)
     wind_strcpy(bp->cpu_name,CPU_NAME);
     wind_strcpy(bp->board_name,BOARD_NAME);
     wind_strcpy(bp->run_part,PART_SYSRUN);
-    //boot_media_init();
     boot_part_init();
     bp->part = boot_part_get_list();
     return W_ERR_OK;
@@ -154,8 +153,7 @@ w_err_t boot_param_read(void)
         if(0 == err)
         {
             wind_memcpy(&g_bootparam,buff,sizeof(boot_param_s));
-            pt = boot_part_get_list();
-            wind_memcpy((void*)pt,&buff[sizeof(boot_param_s)],PART_COUNT*sizeof(w_part_s));
+            boot_part_update_rom((w_part_s*)&buff[sizeof(boot_param_s)]);
             boot_part_reset_ram();
             break;
         }
