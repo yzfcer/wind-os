@@ -2,7 +2,16 @@ CUR_DIR=$(shell pwd)
 #Read the subdirectory of the current directory
 SUBDIRS=$(shell ls -l | grep ^d | awk '{print $$9}')
 #Export all source and target files
-CUR_SOURCE=${wildcard *.c}
+#CUR_SOURCE=${wildcard *.c}
+
+CUR_SOURCE=file_port.c
+CUR_SOURCE+=wind_board_port.c
+CUR_SOURCE+=wind_os_prelaunch.c
+CUR_SOURCE+=wind_os_switch.c
+CUR_SOURCE+=wind_std.c
+ifeq ($(TARGET),wind-boot)
+	CUR_SOURCE+=boot_port.c
+endif
 CUR_OBJS=${patsubst %.c, %.o, $(CUR_SOURCE)}
 profile:$(SUBDIRS) $(CUR_OBJS) install
 $(SUBDIRS):ECHO

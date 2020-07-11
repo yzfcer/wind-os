@@ -4,8 +4,6 @@ TARGET=wind-boot
 export WIND_INC_DIR TARGET
 CFLAGS = -g -Wall -rdynamic ${WIND_INC_DIR} ${CROSS_COMPILE_INCLUDE}
 export CFLAGS
-#WIND_SRC_DIR += $(ROOTDIR)/src/boot
-export WIND_SRC_DIR
 
 all: wind-boot build clean
 .PHONY:wind-boot
