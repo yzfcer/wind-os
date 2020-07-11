@@ -44,108 +44,76 @@ export BOARD=linux_simu
 
 
 #source directory
-WIND_OS_SRC = bsp
-#WIND_OS_SRC += bsp/$(ARCH)/$(CPU)
-#WIND_OS_SRC += bsp/$(ARCH)/$(CPU)/$(BOARD)
-WIND_OS_SRC += src
-export WIND_OS_SRC
+WIND_SRC_DIR = bsp
+#WIND_SRC_DIR += bsp/$(ARCH)/$(CPU)
+#WIND_SRC_DIR += bsp/$(ARCH)/$(CPU)/$(BOARD)
+WIND_SRC_DIR += src
+export WIND_SRC_DIR
 export OBJS_DIR = ${ROOTDIR}/objs
 
 
 #include directory
-WINDOS_INC += -I$(ROOTDIR)/bsp/$(ARCH)
-WINDOS_INC += -I$(ROOTDIR)/bsp/$(ARCH)/$(CPU)
-WINDOS_INC += -I$(ROOTDIR)/bsp/$(ARCH)/$(CPU)/$(BOARD)
-WINDOS_INC += -I$(ROOTDIR)/bsp/$(ARCH)/$(CPU)/$(BOARD)/port
-WINDOS_INC += -I$(ROOTDIR)/src/application
-WINDOS_INC += -I$(ROOTDIR)/src/common
-WINDOS_INC += -I$(ROOTDIR)/src/core
-WINDOS_INC += -I$(ROOTDIR)/src/hal
-WINDOS_INC += -I$(ROOTDIR)/src/lib
-WINDOS_INC += -I$(ROOTDIR)/src/systhread
-WINDOS_INC += -I$(ROOTDIR)/src/module
-WINDOS_INC += -I$(ROOTDIR)/src/module/cjson
-WINDOS_INC += -I$(ROOTDIR)/src/module/cutest/framework
-WINDOS_INC += -I$(ROOTDIR)/src/module/db/framework
-WINDOS_INC += -I$(ROOTDIR)/src/module/db/dbbase
-WINDOS_INC += -I$(ROOTDIR)/src/module/dict
-WINDOS_INC += -I$(ROOTDIR)/src/module/lua-5.3.4/src
-WINDOS_INC += -I$(ROOTDIR)/src/module/shell/framework
-WINDOS_INC += -I$(ROOTDIR)/src/module/vfs
-WINDOS_INC += -I$(ROOTDIR)/src/module/vfs/hostfs
-WINDOS_INC += -I$(ROOTDIR)/src/module/vfs/listfs
-WINDOS_INC += -I$(ROOTDIR)/src/module/vfs/treefs
-WINDOS_INC += -I$(ROOTDIR)/src/module/xml
-WINDOS_INC += -I$(ROOTDIR)/src/module/log
-WINDOS_INC += -I$(ROOTDIR)/src/module/xdemom
-WINDOS_INC += -I$(ROOTDIR)/src/module/ydemom
-WINDOS_INC += -I$(ROOTDIR)/src/module/net
-WINDOS_INC += -I$(ROOTDIR)/src/module/net/common
-WINDOS_INC += -I$(ROOTDIR)/src/module/net/stack
-WINDOS_INC += -I$(ROOTDIR)/src/module/net/netcmd
-WINDOS_INC += -I$(ROOTDIR)/src/module/net/layer5
+WIND_INC_DIR += -I$(ROOTDIR)/bsp/$(ARCH)
+WIND_INC_DIR += -I$(ROOTDIR)/bsp/$(ARCH)/$(CPU)
+WIND_INC_DIR += -I$(ROOTDIR)/bsp/$(ARCH)/$(CPU)/$(BOARD)
+WIND_INC_DIR += -I$(ROOTDIR)/bsp/$(ARCH)/$(CPU)/$(BOARD)/port
+WIND_INC_DIR += -I$(ROOTDIR)/src/application
+WIND_INC_DIR += -I$(ROOTDIR)/src/common
+WIND_INC_DIR += -I$(ROOTDIR)/src/core
+WIND_INC_DIR += -I$(ROOTDIR)/src/hal
+WIND_INC_DIR += -I$(ROOTDIR)/src/lib
+WIND_INC_DIR += -I$(ROOTDIR)/src/systhread
+WIND_INC_DIR += -I$(ROOTDIR)/src/module
+WIND_INC_DIR += -I$(ROOTDIR)/src/module/cjson
+WIND_INC_DIR += -I$(ROOTDIR)/src/module/cutest/framework
+WIND_INC_DIR += -I$(ROOTDIR)/src/module/db/framework
+WIND_INC_DIR += -I$(ROOTDIR)/src/module/db/dbbase
+WIND_INC_DIR += -I$(ROOTDIR)/src/module/dict
+WIND_INC_DIR += -I$(ROOTDIR)/src/module/lua-5.3.4/src
+WIND_INC_DIR += -I$(ROOTDIR)/src/module/shell/framework
+WIND_INC_DIR += -I$(ROOTDIR)/src/module/vfs
+WIND_INC_DIR += -I$(ROOTDIR)/src/module/vfs/hostfs
+WIND_INC_DIR += -I$(ROOTDIR)/src/module/vfs/listfs
+WIND_INC_DIR += -I$(ROOTDIR)/src/module/vfs/treefs
+WIND_INC_DIR += -I$(ROOTDIR)/src/module/xml
+WIND_INC_DIR += -I$(ROOTDIR)/src/module/log
+WIND_INC_DIR += -I$(ROOTDIR)/src/module/xdemom
+WIND_INC_DIR += -I$(ROOTDIR)/src/module/ydemom
+WIND_INC_DIR += -I$(ROOTDIR)/src/module/net
+WIND_INC_DIR += -I$(ROOTDIR)/src/module/net/common
+WIND_INC_DIR += -I$(ROOTDIR)/src/module/net/stack
+WIND_INC_DIR += -I$(ROOTDIR)/src/module/net/netcmd
+WIND_INC_DIR += -I$(ROOTDIR)/src/module/net/layer5
 
 OSCFG_INC = -I$(ROOTDIR)/bsp/$(ARCH)/$(CPU)/$(BOARD)/os
 BOOTCFG_INC = -I$(ROOTDIR)/bsp/$(ARCH)/$(CPU)/$(BOARD)/os
 
-CFLAGS = -g -Wall -rdynamic ${WINDOS_INC} ${CROSS_COMPILE_INCLUDE}
+CFLAGS = -g -Wall -rdynamic ${WIND_INC_DIR} ${CROSS_COMPILE_INCLUDE}
 CLIBFLAGS = -g -rdynamic -L/usr/lib/86_64-linux-gnu -lm 
 
-export WINDOS_INC CFLAGS CLIBFLAGS
+export WIND_INC_DIR CFLAGS CLIBFLAGS
 
 OBJLIST=$(shell find $(ROOTDIR) -name *.o | tr ' ' '\ ' | tr '\n' ' ')
-#OBJLIST=${OBJS_DIR}/*.o
 
 export OBJLIST
 
-TARGET=
+
 
 
 all: boot os
 .PHONY:boot
-boot:wind-boot build clean
-wind-os build
+boot:
+	@echo "make wind-boot"
+	make -f mkboot
+
 .PHONY:os
-os:wind-os build clean
+os:
+	@echo "make wind-os"
+	make -f mkos
 
-.PHONY:wind-boot
-wind-boot:
-	export TARGET=wind-os
-	export WINDOS_INC+=$(OSCFG_INC)
-	@echo "WIND_OS_SRC="$(WIND_OS_SRC)
-	@echo "ROOTDIR="${ROOTDIR}
-	if [ ! -d ${OBJS_DIR} ]; \
-	then \
-		mkdir -p ${OBJS_DIR}; \
-	fi
-	for dir in $(WIND_OS_SRC); do \
-		make -C $(ROOTDIR)/$$dir profile || exit 1; \
-	done
-
-
-
-.PHONY:wind-os
-wind-os:
-	export TARGET=wind-boot
-	export WINDOS_INC+=$(BOOtCFG_INC)
-	@echo "WIND_OS_SRC="$(WIND_OS_SRC)
-	@echo "ROOTDIR="${ROOTDIR}
-	if [ ! -d ${OBJS_DIR} ]; \
-	then \
-		mkdir -p ${OBJS_DIR}; \
-	fi
-	for dir in $(WIND_OS_SRC); do \
-		make -C $(ROOTDIR)/$$dir profile || exit 1; \
-	done
-
-
-
-.PHONY:build
-build:
-	$(CC) $$OBJLIST $(CLIBFLAGS) -o $(TARGET)
 .PHONY:clean
 clean: 
-	for dir in $(WIND_OS_SRC); do \
+	for dir in $(WIND_SRC_DIR); do \
 		echo "enter dir:"$$dir; \
 		cd $(ROOTDIR)/$$dir && make clean || exit 1; \
 	done
