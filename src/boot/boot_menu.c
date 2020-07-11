@@ -67,7 +67,7 @@ static w_bool_t make_sure_input(char *info)
     while(1)
     {
         wind_printf("%s?[y/n]\r\n",info);
-        if(W_ERR_OK != read_char_blocking(&ch))
+        if(W_ERR_OK != boot_read_char_blocking(&ch))
         {
             exit_menu();
             return W_FALSE;
@@ -147,7 +147,7 @@ static w_err_t download_to_any_part(void)
         if(part[i].used)
             wind_printf("[%c] %s\r\n",get_key(i+1),part[i].name);
     }
-    err = wait_for_key_input(20,&ch,0);
+    err = boot_wait_input(20,&ch,0);
     if(err != 0)
     {
         wind_notice("wait for input timeout.\r\n");
@@ -183,7 +183,7 @@ static w_err_t set_debug_mode(void)
         {
             wind_printf("[%d] %s\r\n",i+1,mode[i]);
         }
-        if(W_ERR_OK != read_char_blocking(&ch))
+        if(W_ERR_OK != boot_read_char_blocking(&ch))
         {
             exit_menu();
             return W_ERR_FAIL;
@@ -324,7 +324,7 @@ w_err_t open_super_prio(void)
     char *prio1 = "test";
     char *prio2 = "sudo";
     w_uint8_t *buff = get_common_buffer();
-    len = read_line_blockig((char*)buff,COMMBUF_SIZE);
+    len = boot_read_line_blockig((char*)buff,COMMBUF_SIZE);
     if(wind_strcmp((char*)buff,prio1) == 0)
     {
         prio = 1;
@@ -358,7 +358,7 @@ w_err_t run_menu(void)
     while(0 == exit_menu_flag)
     {
         print32_t_menu_list();
-        if(W_ERR_OK != read_char_blocking(&ch))
+        if(W_ERR_OK != boot_read_char_blocking(&ch))
         {
             exit_menu();
             if(get_menu_go_direction())

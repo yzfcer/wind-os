@@ -124,52 +124,44 @@ w_err_t boot_param_check_valid(w_uint8_t *buff)
     return W_ERR_OK;
 }
 
+static w_err_t read_param(w_part_s *part)
+{
+    w_int32_t i,len;
+    w_uint8_t *buff;
+    w_err_t err = W_ERR_OK;
+    buff = get_common_buffer();
+    for(i = 0;i < 3;i ++)
+    {
+        len = boot_part_read(part,0,buff,param_lenth()+4,W_TRUE);
+        WIND_CHECK_BREAK(len < sizeof(boot_param_s),W_ERR_OK);
+    }
+    WIND_ASSERT_RETURN(len >= sizeof(boot_param_s),W_ERR_FAIL);
+    err = boot_param_check_valid(buff);
+    WIND_ASSERT_RETURN(W_ERR_OK == err,W_ERR_FAIL);
 
+    wind_memcpy(&g_bootparam,buff,sizeof(boot_param_s));
+    boot_part_update_rom((w_part_s*)&buff[sizeof(boot_param_s)]);
+    boot_part_reset_ram();
+    return W_ERR_OK;
+}
 
 w_err_t boot_param_read(void)
 {
-    w_err_t err = 0;
-    w_int32_t i,j,len,err_cnt = 0;
-    w_part_s *part[2],*pt;
-    w_uint8_t *buff;
+    w_err_t err = W_ERR_OK;
+    w_int32_t i;
+    w_part_s *part[2];
+    
     part[0] = boot_part_get(PART_PARAM1);
     part[1] = boot_part_get(PART_PARAM2);
-    buff = get_common_buffer();
+    
     for(i = 0;i < 2;i ++)
     {
-        for(j = 0;j < 3;j ++)
-        {
-            len = boot_part_read(part[i],0,buff,param_lenth()+4,W_TRUE);
-            if(len >= sizeof(boot_param_s))
-                break;
-        }
-        if(len <= 0)
-        {
-            err_cnt ++;
-            continue;
-        }
-            
-        err = boot_param_check_valid(buff);
-        if(0 == err)
-        {
-            wind_memcpy(&g_bootparam,buff,sizeof(boot_param_s));
-            boot_part_update_rom((w_part_s*)&buff[sizeof(boot_param_s)]);
-            boot_part_reset_ram();
+        err = read_param(part[1]);
+        if(W_ERR_OK == err)
             break;
-        }
-        else
-        {
-            wind_warn("read param %d fail.",i + 1);
-            err_cnt ++;
-        }
     }
-    if(err_cnt >= 2)
-    {
-        wind_error("read both params failed.");
-        return W_ERR_FAIL;
-    }
+    WIND_ASSERT_RETURN(i < 2,W_ERR_FAIL);
     return W_ERR_OK;
-    
 }
 
 w_err_t boot_param_flush(void)

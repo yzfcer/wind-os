@@ -26,7 +26,7 @@ w_err_t boot_enter_main_hook(void)
     return W_ERR_OK;
 }
 
-w_err_t boot_exit_hook(void)
+w_err_t boot_run_system_hook(void)
 {
     return W_ERR_OK;
 }
@@ -66,10 +66,7 @@ w_int32_t boot_receive_img(w_part_s *part)
     return part->datalen;
 }
 
-w_uint32_t boot_get_sys_ms(void)
-{
-    return GetTickCount();
-}
+
 
 
 w_err_t boot_parts_create(void)
@@ -112,7 +109,7 @@ w_bool_t boot_is_chip_lock()
     return W_FALSE;
 }
 
-void boot_set_chip_lock(w_uint8_t lock_enable)
+void boot_set_chip_lock(w_uint8_t lockflag)
 {
 
 }

@@ -140,7 +140,7 @@ w_err_t test_entry(void)
     while(1)
     {
         print32_t_boottest();
-        if(W_ERR_OK != read_char_blocking(&ch))
+        if(W_ERR_OK != boot_read_char_blocking(&ch))
             return W_ERR_FAIL;
         for(i = 0;i < sizeof(g_boottest)/sizeof(boot_test_s);i ++)
         {

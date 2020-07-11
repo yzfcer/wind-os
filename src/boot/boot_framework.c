@@ -181,7 +181,7 @@ static w_err_t boot_wait_key_press(void)
 
     boot_param_s *bp = (boot_param_s *)boot_param_get();
     wind_printf("press any key to enter menu list:");
-    if(W_ERR_OK == wait_for_key_input(bp->wait_sec,&ch,1))
+    if(W_ERR_OK == boot_wait_input(bp->wait_sec,&ch,1))
     {
         boot_status_go_next();
         wind_printf("\r\n");
@@ -287,7 +287,7 @@ static w_err_t boot_error_handle(void)
     w_err_t err;
     while(1)
     {
-        err = read_char_blocking(&ch);
+        err = boot_read_char_blocking(&ch);
         if((err == W_ERR_OK) && (ch == '\n'))
             wind_error("Some error occured in bootloader and system boot failed.");
     }
@@ -296,7 +296,7 @@ static w_err_t boot_error_handle(void)
 
 static w_err_t boot_run_system(void)
 {
-    boot_exit_hook();
+    boot_run_system_hook();
     wind_notice("jump to system running space\r\n\r\n\r\n");
     boot_jump_to_system();
     return W_ERR_OK;

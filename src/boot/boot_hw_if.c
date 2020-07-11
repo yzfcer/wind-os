@@ -14,6 +14,7 @@
 #include "wind_config.h"
 #include "boot_port.h"
 #include "wind_std.h"
+#include "wind_core.h"
 #include "wind_debug.h"
 #include "boot_hw_if.h"
 #include "boot_param.h"
@@ -23,39 +24,40 @@
 extern "C" {
 #endif
 
-w_err_t wait_for_key_input(w_int32_t to_sec,char *ch,w_int32_t print_flag)
+w_uint32_t boot_get_sys_ms(void)
 {
-    w_int32_t second;
-    w_uint32_t tick;
+    w_uint32_t ms;
+    ms = wind_get_tick() * (1000 / WIND_TICK_PER_SEC);
+    return ms;
+    //return GetTickCount();
+}
+
+
+w_err_t boot_wait_input(w_int32_t timeout_sec,char *ch,w_int32_t print_flag)
+{
+    w_int32_t second,cnt,sleep_cnt;
+    w_uint32_t time_ms;
     w_err_t err = W_ERR_FAIL;
-    if(to_sec <= 0)
-        return W_ERR_OK;
-    second = to_sec > 99?99:to_sec;
-    tick = boot_get_sys_ms();
+    WIND_CHECK_RETURN(timeout_sec > 0,W_ERR_OK)
+    second = timeout_sec > 99?99:timeout_sec;
     if(print_flag)
         wind_printf("\r\nwaiting:%ds",second);
+    time_ms = boot_get_sys_ms();
     while(1)
     {
         boot_feed_watchdog();
-        if(wind_std_input((w_uint8_t*)ch,1) > 0)
+        cnt = wind_std_input((w_uint8_t*)ch,1);
+        WIND_CHECK_BREAK(cnt <= 0,W_ERR_OK)
+        if(boot_get_sys_ms() - time_ms >= 1000)
         {
-            err = W_ERR_OK;
-            break;
-        }
-        if(boot_get_sys_ms() - tick >= 1000)
-        {
-            tick = boot_get_sys_ms();
+            time_ms = boot_get_sys_ms();
             second --;
-            if(second <= 0)
-            {
-                break;
-            }
+            WIND_CHECK_BREAK(second > 0,W_ERR_FAIL);
             if(print_flag)
-            {
-                wind_printf("%c%c%c",8,8,8);
-                wind_printf("%2ds",second);
-            }
+                wind_printf("%c%c%c%2ds",8,8,8,second);
         }
+        else
+            wind_thread_sleep(10);
     }
     wind_printf("\r\n");
     return err;
@@ -63,17 +65,17 @@ w_err_t wait_for_key_input(w_int32_t to_sec,char *ch,w_int32_t print_flag)
 
 
 
-w_err_t read_char_blocking(char *ch)
+w_err_t boot_read_char_blocking(char *ch)
 {
-    if(0 == wait_for_key_input(60,ch,0))
+    if(0 == boot_wait_input(60,ch,0))
         return W_ERR_OK;
     wind_printf("you have NOT input any key in a 60 seconds,boot exit the menu list.\r\n");
-    if(0 == wait_for_key_input(30,ch,1))
+    if(0 == boot_wait_input(30,ch,1))
         return W_ERR_OK;
     return W_ERR_FAIL;
 }
 
-w_int32_t read_line_blockig(char *buff,w_int32_t len)
+w_int32_t boot_read_line_blockig(char *buff,w_int32_t len)
 {
     w_int32_t idx = 0;
     char ch;
@@ -126,7 +128,7 @@ static void wait_file_send_compete(void)
     g_recvstat.stat = boot_get_sys_ms();
     while(1)
     {
-        //err = wait_for_key_input(3,&ch,0);
+        //err = boot_wait_input(3,&ch,0);
         boot_feed_watchdog();
         //boot_delay(100);
         if(0 < wind_std_input(&ch))
@@ -149,7 +151,7 @@ w_int32_t boot_receive_img(w_uint32_t addr,w_uint32_t maxlen)
         switch(g_recvstat.stat)
         {
             case RECV_START:
-                err = wait_for_key_input(30,&buf[0],1);
+                err = boot_wait_input(30,&buf[0],1);
                 if(0 == err)
                 {
                     
