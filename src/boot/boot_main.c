@@ -1,6 +1,6 @@
 /*********************************************************************************
 ** Copyright(C),2017-2020,yzfcer@163.com
-** FileName    : boot_framework.c
+** FileName    : boot_main.c
 ** Author      : Jason Zhou
 ** Version     : 1.0
 ** Date        : 2017/04/08
@@ -11,7 +11,7 @@
 ** Author      :
 ** Modify      :
 **********************************************************************************/
-#include "boot_framework.h"
+#include "boot_main.h"
 #include "boot_param.h"
 #include "boot_menu.h"
 #include "boot_port.h"
@@ -195,7 +195,7 @@ static w_err_t boot_wait_key_press(void)
 static w_err_t boot_enter_menu(void)
 {
     w_err_t err;
-    err = run_menu();
+    err = boot_run_menu();
     if(err == W_ERR_OK)
         boot_status_go_next();
     else

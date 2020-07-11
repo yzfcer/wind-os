@@ -31,13 +31,13 @@ extern "C" {
 //which is not backed up in memory and read out from flash when necessary
 typedef struct 
 {
-    w_uint32_t magic;//Magic word 
-    w_uint32_t lenth;//Length of the structure of this parameter
+    w_uint32_t magic;      //Magic word 
+    w_uint32_t lenth;      //Length of the structure of this parameter
     
     w_uint32_t version;    //bootloader version
-    w_uint8_t debug_mode; //Debug mode flag
-    w_uint8_t wait_sec;   //Seconds to wait for keyboard events
-    w_uint8_t run_type;   //Running in RAM or Flash
+    w_uint8_t debug_mode;  //Debug mode flag
+    w_uint8_t wait_sec;    //Seconds to wait for keyboard events
+    w_uint8_t run_type;    //Running in RAM or Flash
     w_uint8_t encrypt_type;//Program encryption method
     w_uint8_t lock_en;     //Chip lock enable
     w_int8_t part_cnt;     //Partition count

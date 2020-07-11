@@ -347,7 +347,7 @@ w_err_t open_super_prio(void)
     return W_ERR_OK;
 }
 
-w_err_t run_menu(void)
+w_err_t boot_run_menu(void)
 {
     char ch;
     w_int32_t i;

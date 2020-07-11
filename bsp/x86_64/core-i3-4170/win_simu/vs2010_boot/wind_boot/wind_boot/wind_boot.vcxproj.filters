@@ -683,9 +683,6 @@
     <ClCompile Include="..\..\..\..\..\..\..\src\module\tools\cmd_edsrc.c">
       <Filter>module_tools</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\src\boot\boot_framework.c">
-      <Filter>boot</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\..\src\boot\boot_hw_if.c">
       <Filter>boot</Filter>
     </ClCompile>
@@ -712,6 +709,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\..\src\application\boot\user_entry.c">
       <Filter>application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\src\boot\boot_main.c">
+      <Filter>boot</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1182,9 +1182,6 @@
     <ClInclude Include="..\..\wind_config.h">
       <Filter>os_port</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\..\src\boot\boot_framework.h">
-      <Filter>boot</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\..\src\boot\boot_hw_if.h">
       <Filter>boot</Filter>
     </ClInclude>
@@ -1208,6 +1205,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\port\boot_port.h">
       <Filter>os_port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\src\boot\boot_main.h">
+      <Filter>boot</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

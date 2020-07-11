@@ -31,7 +31,7 @@ typedef struct
     menu_handle_fn handle;//Menu processing handle
 }w_menu_tb_s;
 
-w_err_t run_menu(void);
+w_err_t boot_run_menu(void);
 
 #ifdef __cplusplus
 }
