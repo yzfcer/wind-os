@@ -226,7 +226,7 @@ extern "C" {
 
 #if WIND_MODULE_TOOLS_SUPPORT
 #define CMD_MKFS_SUPPORT      0 // Whether the command of creating file system image is supported,pc
-#define CMD_PACK_SUPPORT      0 // Whether the command to package firmware is supported,pc
+#define CMD_PACK_SUPPORT      1 // Whether the command to package firmware is supported,pc
 #define CMD_RCP_SUPPORT       0 // Whether the command to copy files between the host and wind-os is supported,pc
 #define CMD_EDSRC_SUPPORT     1 // Whether the command to edit source file and aligning is supported,pc
 #endif

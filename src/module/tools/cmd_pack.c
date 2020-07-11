@@ -31,6 +31,7 @@
 #include "wind_encrypt.h"
 #include "wind_crc32.h"
 #include "wind_macro.h"
+#include "wind_cmd.h"
 #include <stdio.h>
 #include <malloc.h>
 #include <stdlib.h>
@@ -118,7 +119,7 @@ static w_err_t get_cfginfo(char *boradname,char *buff,w_int32_t size)
     w_uint32_t len;
     pack_info_s *pkinfo = &pack_info;
     wind_strcpy(pkinfo->cfgname,boradname);
-    wind_strcat(pkinfo->cfgname,".cfg");
+    //wind_strcat(pkinfo->cfgname,".cfg");
     wind_notice("read config file:%s",pkinfo->cfgname);
     len = read_file(pkinfo->cfgname,0,buff,size);
     WIND_ASSERT_RETURN(len > 0,W_ERR_FAIL);
@@ -425,12 +426,12 @@ static w_err_t pack_files_to_img(w_int32_t argc,char **argv)
         WIND_ASSERT_BREAK(err == W_ERR_OK,err,"parse cfg filr fail");
         sort_input_file();
         err = check_file_space();
-        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"");
+        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"check file space fail");
         err = read_bin_files();
-        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"");
+        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"read bin files fail");
         err = pack_files(&pack_info);
-        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"");
-        release_file_buff();   
+        WIND_ASSERT_BREAK(err == W_ERR_OK,err,"pack files fail");
+        release_file_buff();
     }while(0);
     if(err != W_ERR_OK)
         release_file_buff();
@@ -443,10 +444,13 @@ w_int32_t pack_main(w_int32_t argc,char **argv)
     pack_info_s *pkinfo = &pack_info;
     wind_notice("pack firmware start.\r\n");
     WIND_ASSERT_RETURN(argc >= 3,W_ERR_INVALID);
-    if(wind_strcmp(argv[1],"cfg") == 0)
-        pack_files_to_img(argc,argv);
-    else
+        
+    if(wind_strcmp(argv[1],"cfg") != 0)
+    {
         wind_error("error parameter");
+        return 0;
+    }
+    pack_files_to_img(argc,argv);
     return 0;
 }
 
@@ -460,7 +464,9 @@ COMMAND_DISC(pack)
 
 COMMAND_USAGE(pack)
 {
-    wind_printf("pack cfg <boardname>:--to pack binary files with configuration defined by boardname.cfg.\r\n");
+    wind_printf("pack cfg <pathname>:--to pack binary files by configuration file.\r\n");
+    wind_printf("    pathname : the url of the configuration file.\r\n");
+    
 }
 extern w_int32_t pack_main(w_int32_t argc,char **argv);
 

@@ -17,7 +17,6 @@
 #include "boot_port.h"
 #include "boot_share_param.h"
 #include "boot_part.h"
-//#include "boot_media.h"
 #include "wind_debug.h"
 #include "boot_img.h"
 #include "boot_hw_if.h"

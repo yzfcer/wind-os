@@ -15,7 +15,6 @@
 #define BOOT_PART_H__
 #include "wind_type.h"
 #include "wind_blkdev.h"
-//#include "boot_media.h"
 
 #define PART_NAME_LEN 12
 #define INVALID_REAL_ADDR 0xffffffff

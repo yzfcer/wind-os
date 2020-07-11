@@ -31,12 +31,6 @@ w_err_t boot_run_system_hook(void)
     return W_ERR_OK;
 }
 
-
-
-
-
-
-
 w_err_t boot_parts_create(void)
 {
     boot_part_create(PART_BOOT,0);
