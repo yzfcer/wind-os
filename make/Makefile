@@ -104,14 +104,14 @@ TARGET=
 all: boot os
 .PHONY:boot
 boot:wind-boot build clean
-wind-os build
+#wind-os build
 .PHONY:os
 os:wind-os build clean
 
 .PHONY:wind-boot
 wind-boot:
 	export TARGET=wind-os
-	export WINDOS_INC+=$(OSCFG_INC)
+	WINDOS_INC+=$(OSCFG_INC)
 	@echo "WIND_OS_SRC="$(WIND_OS_SRC)
 	@echo "ROOTDIR="${ROOTDIR}
 	if [ ! -d ${OBJS_DIR} ]; \

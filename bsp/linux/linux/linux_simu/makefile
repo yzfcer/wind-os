@@ -1,6 +1,8 @@
 CUR_DIR=$(shell pwd)
 #Read the subdirectory of the current directory
-SUBDIRS=$(shell ls -l | grep ^d | awk '{print $$9}')
+#SUBDIRS=$(shell ls -l | grep ^d | awk '{print $$9}')
+SUBDIRS=device
+SUBDIRS+=port
 #Export all source and target files
 CUR_SOURCE=${wildcard *.c}
 CUR_OBJS=${patsubst %.c, %.o, $(CUR_SOURCE)}
