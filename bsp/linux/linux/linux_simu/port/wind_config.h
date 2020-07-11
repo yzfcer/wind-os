@@ -61,6 +61,13 @@ extern "C" {
 #define ENCRYPT_DES 3
 #define ENCRYPT_TYPE ENCRYPT_RC4//ENCRYPT_NONE//
 
+//mode of downloading image file
+#define DOWNLOAD_MODE_FILE   1
+#define DOWNLOAD_MODE_BIN    1
+#define DOWNLOAD_MODE_XMODEM 1
+#define DOWNLOAD_MODE_TFTP   1
+#define DOWNLOAD_MODE DOWNLOAD_MODE_FILE
+
 //Imge file encryption key
 #define ENCRYPT_KEY {0x23,0x34,0x56,0x78,0x90,0xab,0xcd,0xef,0x01,0x23,0x45,0x67}
 

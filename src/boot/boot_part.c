@@ -270,7 +270,7 @@ w_part_s *boot_part_get_list(void)
     return g_part;
 }
 
-w_err_t boot_part_update_rom(w_part_s *ptlist)
+w_err_t boot_part_update_var(w_part_s *ptlist)
 {
     w_int32_t i;
     for(i = 0;i < PART_COUNT;i ++)
@@ -375,6 +375,7 @@ w_err_t boot_part_copy_data(w_part_s *src,w_part_s *dest)
     return W_ERR_OK;    
 }
 
+#if 0
 w_bool_t boot_part_equal(w_part_s *src,w_part_s *dest)
 {
     if(src->blkdev.devtype != dest->blkdev.devtype)
@@ -389,7 +390,7 @@ w_bool_t boot_part_equal(w_part_s *src,w_part_s *dest)
         return W_FALSE;
     return W_TRUE;
 }
-
+#endif
 
 
 w_bool_t boot_part_check(w_part_s *part)

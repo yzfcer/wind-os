@@ -54,11 +54,8 @@ static w_int32_t is_string_equal(char *str1,char *str2,w_int32_t len)
     }
     return 1;
 }
-//退出菜单标记，如果只为有效，回到菜单时将退出菜单
 static w_uint8_t exit_menu_flag = 0;
-//高级权限标志，拥有高级权限可以使用更多功能
 static w_int32_t super_prio_flag = 0;
-//退出菜单的的运行方向，如果不为0，则向下执行，否则重新初始化
 static w_int32_t g_go_ahead = 0;
 static w_err_t exit_menu(void);
 static w_bool_t make_sure_input(char *info)
@@ -315,7 +312,6 @@ void print32_t_menu_list(void)
     }
 }
 
-//开启超级权限，可以删除程序，修改重要参数等
 w_err_t open_super_prio(void)
 {
     w_int32_t i;

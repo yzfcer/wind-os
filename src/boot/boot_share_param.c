@@ -131,12 +131,6 @@ share_param_s *share_param_get(void)
     return sp;      
 }
 
-
-
-
-
-
-
 #ifdef __cplusplus
 }
 #endif

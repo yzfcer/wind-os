@@ -59,19 +59,19 @@ w_uint8_t *get_common_buffer(void);
 w_err_t   boot_part_init(void);
 w_bool_t  boot_part_create(const char *name,w_uint8_t encrypt);
 w_part_s *boot_part_get(const char *name);
-w_err_t   boot_part_update_rom(w_part_s *ptlist);
+w_err_t   boot_part_update_var(w_part_s *ptlist);
 w_err_t   boot_part_calc_crc(w_part_s *part,w_int32_t offset,w_int32_t len,w_bool_t set);
 w_int32_t boot_part_read(w_part_s *part,w_int32_t offset,w_uint8_t *data,w_uint32_t datalen,w_bool_t read_space);
 w_int32_t boot_part_write(w_part_s *part,w_int32_t offset,w_uint8_t *data,w_uint32_t datalen);
 w_err_t   boot_part_erase(w_part_s *part);
 void      boot_part_reset_ram(void);
 
-void boot_part_print(void);
+void      boot_part_print(void);
 w_int32_t boot_part_get_count(void);
 w_part_s *boot_part_get_list(void);
-w_err_t boot_part_copy_data(w_part_s *src,w_part_s *dest);
-w_bool_t boot_part_equal(w_part_s *src,w_part_s *dest);
-w_bool_t boot_part_check(w_part_s *part);
+w_err_t   boot_part_copy_data(w_part_s *src,w_part_s *dest);
+//w_bool_t  boot_part_equal(w_part_s *src,w_part_s *dest);
+w_bool_t  boot_part_check(w_part_s *part);
 
 
  

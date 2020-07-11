@@ -51,11 +51,11 @@ static w_err_t do_read_boot_param(w_part_s *part)
         WIND_CHECK_BREAK(len < sizeof(boot_param_s),W_ERR_OK);
     }
     WIND_ASSERT_RETURN(len >= sizeof(boot_param_s),W_ERR_FAIL);
-    err = boot_param_check_valid(buff);
+    err = boot_param_check(buff);
     WIND_ASSERT_RETURN(W_ERR_OK == err,W_ERR_FAIL);
 
     wind_memcpy(&g_bootparam,buff,sizeof(boot_param_s));
-    boot_part_update_rom((w_part_s*)&buff[sizeof(boot_param_s)]);
+    boot_part_update_var((w_part_s*)&buff[sizeof(boot_param_s)]);
     boot_part_reset_ram();
     return W_ERR_OK;
 }
@@ -115,7 +115,7 @@ w_err_t boot_param_reset(void)
 
 
 //Check whether the parameter is valid, valid return 1, invalid return 0
-w_err_t boot_param_check_valid(w_uint8_t *buff)
+w_err_t boot_param_check(w_uint8_t *buff)
 {
     w_int32_t index;
     w_uint32_t *crc;

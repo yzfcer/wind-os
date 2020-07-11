@@ -31,7 +31,6 @@ typedef struct
     w_uint32_t lenth;
     w_uint32_t share_version;
     w_uint32_t upgrade_flag;
-
     w_part_s part[PART_COUNT];        
 }share_param_s;
 

@@ -140,7 +140,7 @@ static void wait_file_send_compete(void)
     }
 }
 
-w_int32_t boot_receive_img(w_uint32_t addr,w_uint32_t maxlen)
+w_int32_t boot_img_receive(w_uint32_t addr,w_uint32_t maxlen)
 {
     w_err_t err;
     w_int32_t i,end;

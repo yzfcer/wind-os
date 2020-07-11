@@ -33,6 +33,83 @@ w_img_head_s img_head;
 static w_encypt_ctx_s ctx;
 static w_uint8_t keys[] = ENCRYPT_KEY;
 
+static w_int32_t boot_img_receive_bin(w_part_s *part)
+{
+    return -1;
+}
+#if WIND_MODULE_XMODEM_SUPPORT
+static w_int32_t boot_img_receive_xmodem(w_part_s *part)
+{
+    return -1;
+}
+#endif
+
+#if WIND_NET_TFTP_SUPPORT
+static w_int32_t boot_img_receive_tftp(w_part_s *part)
+{
+    return -1;
+}
+#endif
+
+#if (HOST_OS_TYPE != HOST_OS_NONE)
+#include <stdio.h>
+static w_int32_t boot_img_receive_from_file(w_part_s *part)
+{
+    FILE *file;
+    errno_t errno;
+    w_err_t err;
+    w_int32_t len,offset;
+    w_uint8_t *buff;
+    do
+    {
+        err = W_ERR_OK;
+        buff = get_common_buffer();
+        errno = fopen_s(&file,"imgfile.none.img","rb");
+        WIND_ASSERT_RETURN(errno == 0,-1);
+        WIND_ASSERT_RETURN(file != W_NULL,-1);
+        offset = 0;
+        while(1)
+        {
+            len = fread((w_uint8_t*)buff,1,COMMBUF_SIZE,file);
+            if(len > 0)
+            {
+                len = boot_part_write(part,offset,buff,len);
+                WIND_ASSERT_BREAK(len > 0,W_ERR_FAIL,"write part fail");
+                offset += len;
+            }
+            else
+                break;
+        }
+        fclose(file);
+    }while(0);
+    if(err != W_ERR_OK)
+        return -1;
+    return part->datalen;
+}
+#endif
+
+w_int32_t boot_img_receive(w_part_s *part)
+{
+    boot_param_s *bp;
+    bp = boot_param_get();
+    WIND_ASSERT_RETURN(bp != W_NULL,-1);
+    if(bp->down_mode == DOWNLOAD_MODE_BIN)
+        return boot_img_receive_bin(part);
+#if WIND_MODULE_XMODEM_SUPPORT
+    else if(bp->down_mode == DOWNLOAD_MODE_XMODEM)
+        return boot_img_receive_xmodem(part);
+#endif
+#if (HOST_OS_TYPE != HOST_OS_NONE)
+    else if(bp->down_mode == DOWNLOAD_MODE_FILE)
+        return boot_img_receive_from_file(part);
+#endif
+#if WIND_NET_TFTP_SUPPORT
+    else if(bp->down_mode == DOWNLOAD_MODE_TFTP)
+        return boot_img_receive_bin(part);
+#endif
+    wind_error("download mode %d is NOT supported");
+    return -1;
+}
 
 
 w_part_s * boot_img_get_old_part(void)
@@ -304,7 +381,7 @@ w_err_t boot_img_download(void)
     cache = boot_part_get(PART_CACHE);
     wind_notice("receive file data,please wait.\r\n");
     boot_part_erase(cache);
-    len = boot_receive_img(cache);
+    len = boot_img_receive(cache);
     if(len <= 0)
     {
         wind_error("receive cache data failed.");

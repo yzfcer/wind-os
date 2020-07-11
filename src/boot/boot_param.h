@@ -40,7 +40,8 @@ typedef struct
     w_uint8_t run_type;    //Running in RAM or Flash
     w_uint8_t encrypt_type;//Program encryption method
     w_uint8_t lock_en;     //Chip lock enable
-    w_int8_t part_cnt;     //Partition count
+    w_uint8_t down_mode;   //Partition count
+    w_uint8_t part_cnt;    //Partition count
     char arch_name[ARCH_NAME_LEN];
     char cpu_name[CPU_NAME_LEN];
     char board_name[BOARD_NAME_LEN];
@@ -52,7 +53,7 @@ boot_param_s *boot_param_get(void);
 boot_param_s *boot_param_from_rom(void);
 void    boot_param_init(void);
 w_err_t boot_param_reset(void);
-w_err_t boot_param_check_valid(w_uint8_t *prmbuf);
+w_err_t boot_param_check(w_uint8_t *prmbuf);
 w_err_t boot_param_read(void);
 w_err_t boot_param_flush(void);
 
