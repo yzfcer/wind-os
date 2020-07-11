@@ -85,6 +85,9 @@ WINDOS_INC += -I$(ROOTDIR)/src/module/net/stack
 WINDOS_INC += -I$(ROOTDIR)/src/module/net/netcmd
 WINDOS_INC += -I$(ROOTDIR)/src/module/net/layer5
 
+OSCFG_INC = -I$(ROOTDIR)/bsp/$(ARCH)/$(CPU)/$(BOARD)/os
+BOOTCFG_INC = -I$(ROOTDIR)/bsp/$(ARCH)/$(CPU)/$(BOARD)/os
+
 CFLAGS = -g -Wall -rdynamic ${WINDOS_INC} ${CROSS_COMPILE_INCLUDE}
 CLIBFLAGS = -g -rdynamic -L/usr/lib/86_64-linux-gnu -lm 
 
@@ -95,12 +98,20 @@ OBJLIST=$(shell find $(ROOTDIR) -name *.o | tr ' ' '\ ' | tr '\n' ' ')
 
 export OBJLIST
 
-TARGET = wind-os
+TARGET=
 
 
-all: wind-os build
-.PHONY:wind-os
-wind-os:
+all: boot os
+.PHONY:boot
+boot:wind-boot build clean
+wind-os build
+.PHONY:os
+os:wind-os build clean
+
+.PHONY:wind-boot
+wind-boot:
+	export TARGET=wind-os
+	export WINDOS_INC+=$(OSCFG_INC)
 	@echo "WIND_OS_SRC="$(WIND_OS_SRC)
 	@echo "ROOTDIR="${ROOTDIR}
 	if [ ! -d ${OBJS_DIR} ]; \
@@ -110,7 +121,24 @@ wind-os:
 	for dir in $(WIND_OS_SRC); do \
 		make -C $(ROOTDIR)/$$dir profile || exit 1; \
 	done
-	
+
+
+
+.PHONY:wind-os
+wind-os:
+	export TARGET=wind-boot
+	export WINDOS_INC+=$(BOOtCFG_INC)
+	@echo "WIND_OS_SRC="$(WIND_OS_SRC)
+	@echo "ROOTDIR="${ROOTDIR}
+	if [ ! -d ${OBJS_DIR} ]; \
+	then \
+		mkdir -p ${OBJS_DIR}; \
+	fi
+	for dir in $(WIND_OS_SRC); do \
+		make -C $(ROOTDIR)/$$dir profile || exit 1; \
+	done
+
+
 
 .PHONY:build
 build:
@@ -121,7 +149,7 @@ clean:
 		echo "enter dir:"$$dir; \
 		cd $(ROOTDIR)/$$dir && make clean || exit 1; \
 	done
-	-rm -f $(TARGET)
+	#-rm -f $(TARGET)
 	-rm -rf $$OBJLIST
 
 
