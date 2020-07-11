@@ -9,7 +9,7 @@ profile:$(SUBDIRS) $(CUR_OBJS) install
 $(SUBDIRS):ECHO
 	make -C $@
 $(CUR_OBJS):%.o:%.c
-	$(CC) -c $^ $(CFLAGS) -o $@
+	@$(CC) -c $^ $(CFLAGS) -o $@
 ECHO:
 	@echo $(SUBDIRS)
 .PHONY:install
