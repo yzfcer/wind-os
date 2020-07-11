@@ -457,7 +457,6 @@
     <ClInclude Include="..\..\wind_config.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\..\..\..\..\src\boot\makefile" />
     <None Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\Makefile" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

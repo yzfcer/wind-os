@@ -1214,8 +1214,5 @@
     <None Include="..\..\..\..\..\..\..\src\module\lua-5.3.4\src\Makefile">
       <Filter>module_lua</Filter>
     </None>
-    <None Include="..\..\..\..\..\..\..\src\boot\makefile">
-      <Filter>boot</Filter>
-    </None>
   </ItemGroup>
 </Project>

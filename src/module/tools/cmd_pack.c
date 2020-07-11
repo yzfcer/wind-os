@@ -94,7 +94,7 @@ static void release_file_buff(void)
         if(pkinfo->fileinfo[i].buff)
         {
             wind_free(pkinfo->fileinfo[i].buff);
-            pkinfo->fileinfo[i].buff = W_NULL;
+            pkinfo->fileinfo[i].buff = (w_uint8_t*)W_NULL;
         }
     }    
 }
@@ -121,7 +121,7 @@ static w_err_t get_cfginfo(char *boradname,char *buff,w_int32_t size)
     wind_strcpy(pkinfo->cfgname,boradname);
     //wind_strcat(pkinfo->cfgname,".cfg");
     wind_notice("read config file:%s",pkinfo->cfgname);
-    len = read_file(pkinfo->cfgname,0,buff,size);
+	len = read_file(pkinfo->cfgname,0,(w_uint8_t*)buff,size);
     WIND_ASSERT_RETURN(len > 0,W_ERR_FAIL);
     wind_notice("config file:%s",pkinfo->cfgname);
     return W_ERR_OK;    
@@ -132,10 +132,10 @@ char *get_line_from_buff(char *buff)
     char *ch = buff;
     char charr[] = {'\r','\n','\t',' '};
     if(*buff == '\0')
-        return W_NULL;
+        return (char *)W_NULL;
     buff = wind_strskip(buff,charr,sizeof(charr));
     if(buff == W_NULL)
-        return W_NULL;
+        return (char *)W_NULL;
     ch = buff;
     for(;;)
     {
@@ -147,7 +147,7 @@ char *get_line_from_buff(char *buff)
         ch ++;
     }
     if(buff[0] == '\0')
-        return W_NULL;
+        return (char *)W_NULL;
     return buff;    
 }
 
@@ -321,7 +321,7 @@ static w_err_t pack_files(pack_info_s *info)
 
     infile_info_s *finfo;
     w_int32_t imglen = calc_img_lenth();
-    buff = wind_malloc(imglen);
+    buff = (w_uint8_t*)wind_malloc(imglen);
     WIND_ASSERT_RETURN(buff != W_NULL,W_ERR_MEM);
     wind_memset(buff, 0, imglen);
     WIND_ASSERT_RETURN(info->fileinfo[0].offset >= IMG_HEAD_LEN,W_ERR_FAIL);
