@@ -12,13 +12,8 @@
 ** Modify      :
 **********************************************************************************/
 #include "boot_port.h"
-#include <stdio.h>
-#include <windows.h>
-#include <winbase.h>
 #include "boot_param.h"
 #include "boot_part.h"
-//#include "boot_media.h"
-#include <conio.h>
 #include "wind_debug.h"
 
 w_err_t boot_enter_main_hook(void)

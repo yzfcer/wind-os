@@ -15,7 +15,6 @@
 #define BOOT_PORT_H__
 #include "wind_type.h"
 #include "boot_part.h"
-#include <stdio.h>
 
 w_err_t    boot_enter_main_hook(void);
 w_err_t    boot_run_system_hook(void);
