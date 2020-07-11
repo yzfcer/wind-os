@@ -85,8 +85,6 @@ WIND_INC_DIR += -I$(ROOTDIR)/src/module/net/stack
 WIND_INC_DIR += -I$(ROOTDIR)/src/module/net/netcmd
 WIND_INC_DIR += -I$(ROOTDIR)/src/module/net/layer5
 
-OSCFG_INC = -I$(ROOTDIR)/bsp/$(ARCH)/$(CPU)/$(BOARD)/os
-BOOTCFG_INC = -I$(ROOTDIR)/bsp/$(ARCH)/$(CPU)/$(BOARD)/os
 
 CFLAGS = -g -Wall -rdynamic ${WIND_INC_DIR} ${CROSS_COMPILE_INCLUDE}
 CLIBFLAGS = -g -rdynamic -L/usr/lib/86_64-linux-gnu -lm 

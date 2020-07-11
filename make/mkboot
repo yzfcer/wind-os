@@ -1,6 +1,8 @@
 WIND_INC_DIR += -I$(ROOTDIR)/bsp/$(ARCH)/$(CPU)/$(BOARD)/boot
 TARGET=wind-boot
 export WIND_INC_DIR TARGET
+CFLAGS = -g -Wall -rdynamic ${WIND_INC_DIR} ${CROSS_COMPILE_INCLUDE}
+export CFLAGS
 
 all: wind-boot build clean
 .PHONY:wind-boot
