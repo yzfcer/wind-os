@@ -43,7 +43,7 @@ extern "C" {
 #define HOST_OS_NONE    1
 #define HOST_OS_WINDOWS 2
 #define HOST_OS_LINUX   3
-#define HOST_OS_TYPE HOST_OS_WINDOWS
+#define HOST_OS_TYPE HOST_OS_LINUX
 
 //-------------------------------------------------------------------------------
 //Bootloader parameter configuration

@@ -7,6 +7,9 @@ SUBDIRS+=hal
 #SUBDIRS+=lib
 SUBDIRS+=module
 SUBDIRS+=systhread
+ifeq ($(TARGET),wind-boot)
+	SUBDIRS+=boot
+endif
 
 #Export all source and target files
 CUR_SOURCE=${wildcard *.c}

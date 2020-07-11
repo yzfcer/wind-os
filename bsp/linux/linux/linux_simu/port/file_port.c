@@ -20,11 +20,9 @@
 
 w_int32_t read_file(char *filename,w_int32_t offset,w_uint8_t *buff,w_int32_t size)
 {
-    errno_t errno;
     FILE *file;
     w_uint32_t len;
-    errno = fopen_s(&file,filename,"rb");
-    WIND_ASSERT_RETURN(errno == 0,0);
+    file = fopen(filename,"rb");
     WIND_ASSERT_RETURN(file != W_NULL,0);
 
     fseek(file,offset,SEEK_SET); 
@@ -36,11 +34,9 @@ w_int32_t read_file(char *filename,w_int32_t offset,w_uint8_t *buff,w_int32_t si
 
 w_int32_t read_long_file(char *path,w_int32_t offset,w_uint8_t **buff)
 {
-    errno_t errno;
-    FILE*file;
+    FILE *file;
     w_int32_t flen;
-    errno = fopen_s(&file,path,"rb");
-    WIND_ASSERT_RETURN(errno == 0,0);
+    file = fopen(path,"rb");
     WIND_ASSERT_RETURN(file != W_NULL,0);
 
     fseek(file,offset,SEEK_END); 
@@ -56,10 +52,8 @@ w_int32_t read_long_file(char *path,w_int32_t offset,w_uint8_t **buff)
 
 w_int32_t write_file(char *filename,w_int32_t offset,w_uint8_t *data,w_int32_t len)
 {
-    errno_t errno;
     FILE *file;
-    errno = fopen_s(&file,filename,"wb");
-    WIND_ASSERT_RETURN(errno == 0,0);
+    file = fopen(filename,"wb");
     WIND_ASSERT_RETURN(file != W_NULL,0);
     
     fseek(file,offset,SEEK_SET); 

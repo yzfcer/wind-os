@@ -70,7 +70,7 @@ boot_param_s *boot_param_get(void)
 {
     if(g_bootparam.magic == BOOT_PARAM_MAGIC)
         return &g_bootparam;
-    return NULL;
+    return W_NULL;
 }
 
 boot_param_s *boot_param_from_rom(void)
@@ -80,7 +80,7 @@ boot_param_s *boot_param_from_rom(void)
     if(0 != err)
     {
         wind_error("get boot params failed.");
-        return (boot_param_s *)NULL;
+        return (boot_param_s *)W_NULL;
     }
     return &g_bootparam;
 }

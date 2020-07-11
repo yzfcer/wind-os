@@ -56,7 +56,6 @@ static w_int32_t boot_img_receive_tftp(w_part_s *part)
 static w_int32_t boot_img_receive_from_file(w_part_s *part)
 {
     FILE *file;
-    errno_t errno;
     w_err_t err;
     w_int32_t len,offset;
     w_uint8_t *buff;
@@ -64,8 +63,7 @@ static w_int32_t boot_img_receive_from_file(w_part_s *part)
     {
         err = W_ERR_OK;
         buff = get_common_buffer();
-        errno = fopen_s(&file,"imgfile.none.img","rb");
-        WIND_ASSERT_RETURN(errno == 0,-1);
+        file = fopen("imgfile.none.img","rb");
         WIND_ASSERT_RETURN(file != W_NULL,-1);
         offset = 0;
         while(1)

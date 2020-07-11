@@ -44,7 +44,7 @@ static w_part_s *get_null_part(void)
         if(!g_part[i].used)
             return &g_part[i];
     }
-    return NULL;
+    return W_NULL;
 }
 
 w_err_t boot_part_init(void)
@@ -99,7 +99,7 @@ w_part_s *boot_part_get(const char *name)
         if(g_part[i].used && (wind_strcmp(name,g_part[i].name) == 0))
             return &g_part[i];
     }
-    return NULL;
+    return W_NULL;
 }
 
 
@@ -204,7 +204,7 @@ w_err_t boot_part_erase(w_part_s *part)
 {
     w_err_t err;
     w_blkdev_s *blkdev;
-    WIND_ASSERT_RETURN(part != NULL,W_ERR_NULL_PTR);
+    WIND_ASSERT_RETURN(part != W_NULL,W_ERR_NULL_PTR);
     blkdev = &part->blkdev;    
     wind_notice("erase part:%s",wind_obj_name(&blkdev->obj));
     if(!IS_F_BLKDEV_OPEN(blkdev))

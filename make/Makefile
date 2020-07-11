@@ -57,7 +57,6 @@ WIND_INC_DIR += -I$(ROOTDIR)/bsp/$(ARCH)
 WIND_INC_DIR += -I$(ROOTDIR)/bsp/$(ARCH)/$(CPU)
 WIND_INC_DIR += -I$(ROOTDIR)/bsp/$(ARCH)/$(CPU)/$(BOARD)
 WIND_INC_DIR += -I$(ROOTDIR)/bsp/$(ARCH)/$(CPU)/$(BOARD)/port
-WIND_INC_DIR += -I$(ROOTDIR)/src/application
 WIND_INC_DIR += -I$(ROOTDIR)/src/common
 WIND_INC_DIR += -I$(ROOTDIR)/src/core
 WIND_INC_DIR += -I$(ROOTDIR)/src/hal

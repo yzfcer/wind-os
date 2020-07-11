@@ -1,8 +1,11 @@
 WIND_INC_DIR += -I$(ROOTDIR)/bsp/$(ARCH)/$(CPU)/$(BOARD)/os
+WIND_INC_DIR += -I$(ROOTDIR)/src/application
 TARGET=wind-os
 export WIND_INC_DIR TARGET
 CFLAGS = -g -Wall -rdynamic ${WIND_INC_DIR} ${CROSS_COMPILE_INCLUDE}
 export CFLAGS
+WIND_SRC_DIR += $(ROOTDIR)/src/application
+export WIND_SRC_DIR
 
 all: wind-os build
 .PHONY:wind-os
