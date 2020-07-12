@@ -193,8 +193,7 @@ w_int32_t wind_vsprintf(char *buf,const char *fmt,wind_va_list args)
     const char *s;
     w_int32_t flags;      /* flags to wind_number() */
     w_int32_t field_width;    /* width of output field */
-    w_int32_t precision;      /* min. # of digits for integers; max
-                   wind_number of chars for from string */
+    w_int32_t precision;      /* min. # of digits for integers; max wind_number of chars for from string */
     w_int32_t qualifier;      /* 'h','l',or 'L' for integer fields */
 
     for (str = buf; *fmt; ++fmt) {

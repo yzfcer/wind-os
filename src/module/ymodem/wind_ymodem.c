@@ -527,7 +527,7 @@ w_err_t wind_ymodem_end(ym_ctx_s *ctx)
         ym_write_cancel(ctx);
     }
     ctx->stat = YM_IDLE;
-    ctx->frbuff = W_NULL;
+    ctx->frbuff = (w_uint8_t*)W_NULL;
     ctx->dir = YM_DIR_INIT;
     wind_log_close();
     return W_ERR_OK;

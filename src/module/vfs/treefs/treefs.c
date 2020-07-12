@@ -123,7 +123,7 @@ w_err_t wind_treefs_init(w_treefs_s *treefs,const char *name)
     wind_obj_init(&treefs->obj,TREEFS_MAGIC,objname,&treefslist);
     CLR_F_OBJ_POOL(treefs->obj);
     treefs->fs_size = 0;
-    treefs->root = W_NULL;       
+    treefs->root = (w_treefs_s *)W_NULL;       
     
     return W_ERR_OK;
 }
@@ -156,7 +156,7 @@ w_err_t wind_treefs_destroy(w_treefs_s *treefs)
     err = treefile_remove(treefs->root);
     WIND_ASSERT_RETURN(err == W_ERR_OK, W_ERR_FAIL);
     tfs_mem_free(treefs->obj.name);
-    treefs->obj.name = W_NULL;
+    treefs->obj.name = (char *)W_NULL;
     if(IS_F_OBJ_POOL(treefs->obj))
         wind_pool_free(&treefspool,treefs);
     return W_ERR_OK;

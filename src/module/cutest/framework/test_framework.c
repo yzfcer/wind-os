@@ -75,9 +75,9 @@ static void test_stati_init(w_test_stati_s *tst)
     {
         fail = &tst->fail_obj[i];
         fail->line = 0;
-        fail->next = W_NULL;
-        fail->suite = W_NULL;
-        fail->tcase = W_NULL;
+        fail->next = (w_fail_info_s*)W_NULL;
+        fail->suite = (w_test_suite_s*)W_NULL;
+        fail->tcase = (w_test_case_s*)W_NULL;
     }
 }
 
@@ -85,11 +85,11 @@ static void stati_info_init(w_stati_info_s *sti)
 {
     test_stati_init(&sti->stat);
     
-    sti->failhead = W_NULL;
-    sti->lastfail = W_NULL;
+    sti->failhead = (w_fail_info_s*)W_NULL;
+    sti->lastfail = (w_fail_info_s*)W_NULL;
     sti->failcnt = 0;
-    sti->suite = W_NULL;
-    sti->tcase = W_NULL;
+    sti->suite = (w_test_suite_s*)W_NULL;
+    sti->tcase = (w_test_case_s*)W_NULL;
     sti->case_err = 0;
     sti->suite_err = 0;
     
@@ -98,8 +98,8 @@ static void stati_info_init(w_stati_info_s *sti)
 void test_suite_list_init(void)
 {
     w_suite_list_s *tsl = &suite_list;
-    tsl->head = W_NULL;
-    tsl->tail = W_NULL;
+    tsl->head = (w_test_suite_s*)W_NULL;
+    tsl->tail = (w_test_suite_s*)W_NULL;
     tsl->cnt = 0;
 }
 
@@ -118,7 +118,7 @@ err_t test_suite_register(w_test_suite_s *test_suite)
         tsl->tail->next = test_suite;
         tsl->tail = test_suite;
     }
-    test_suite->next = W_NULL;
+    test_suite->next = (w_test_suite_s*)W_NULL;
     tsl->cnt ++;
     return W_ERR_OK;
 }
@@ -172,7 +172,7 @@ static void save_fail_info(w_uint32_t line)
         sti->lastfail->next = fail;
         sti->lastfail = fail;
     }
-    fail->next = W_NULL;
+    fail->next = (w_fail_info_s*)W_NULL;
 }
 
 void test_suite_err(w_uint32_t line)

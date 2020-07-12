@@ -150,7 +150,7 @@ w_err_t wind_fdb_flush(void)
 w_fdb_s *wind_fdb_get(w_uint8_t *mac)
 {
     w_int32_t i;
-    w_fdb_s *fdb = W_NULL;
+    w_fdb_s *fdb = (w_fdb_s*)W_NULL;
     wind_disable_switch();
     for(i = 0;i < WIND_FDB_MAX_NUM;i ++)
     {

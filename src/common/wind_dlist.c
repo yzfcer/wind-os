@@ -58,7 +58,7 @@ w_dnode_s *dnode_prev(w_dnode_s *dnode)
 //Insert a node in the head of the list
 void dlist_insert_head(w_dlist_s *dlist,w_dnode_s *dnode)
 {
-    dnode->prev = W_NULL;
+    dnode->prev = (w_dnode_s*)W_NULL;
     dnode->next = dlist->head;
     if(dlist->head)
         dlist->head->prev = dnode;
@@ -70,7 +70,7 @@ void dlist_insert_head(w_dlist_s *dlist,w_dnode_s *dnode)
 //Insert a node at the end of the list
 void dlist_insert_tail(w_dlist_s *dlist,w_dnode_s *dnode)
 {
-    dnode->next = W_NULL;
+    dnode->next = (w_dnode_s*)W_NULL;
     dnode->prev = dlist->tail;
     if(dlist->tail)
         dlist->tail->next = dnode;
@@ -105,16 +105,16 @@ w_dnode_s *dlist_remove_head(w_dlist_s *dlist)
     {
         w_dnode_s *dnode = dlist->head;
         if(dlist->head->next)
-            dlist->head->next->prev = W_NULL;
+            dlist->head->next->prev = (w_dnode_s*)W_NULL;
         else
-            dlist->tail = W_NULL;
+            dlist->tail = (w_dnode_s*)W_NULL;
         dlist->head = dlist->head->next;
-        dnode->prev = dnode->next = W_NULL;
+        dnode->prev = dnode->next = (w_dnode_s*)W_NULL;
         return dnode;
     }
     else 
     {
-        return W_NULL;
+        return (w_dnode_s*)W_NULL;
     }
 }
 
@@ -125,16 +125,16 @@ w_dnode_s *dlist_remove_tail(w_dlist_s *dlist)
     {
         w_dnode_s *dnode = dlist->tail;
         if(dlist->tail->prev)
-            dlist->tail->prev->next = W_NULL;
+            dlist->tail->prev->next = (w_dnode_s*)W_NULL;
         else
-            dlist->head = W_NULL;
+            dlist->head = (w_dnode_s*)W_NULL;
         dlist->tail = dlist->tail->prev;
-        dnode->prev = dnode->next = W_NULL;
+        dnode->prev = dnode->next = (w_dnode_s*)W_NULL;
         return dnode;
     }
     else 
     {
-        return W_NULL;
+        return (w_dnode_s*)W_NULL;
     }
 }
 
@@ -190,8 +190,8 @@ w_dlist_s *dlist_combine(w_dlist_s *dlist1,w_dlist_s *dlist2)
             dlist1->head = dlist2->head;
             dlist1->tail = dlist2->tail;
         }
-        dlist2->head = W_NULL;
-        dlist2->tail = W_NULL;
+        dlist2->head = (w_dnode_s*)W_NULL;
+        dlist2->tail = (w_dnode_s*)W_NULL;
     }
     return dlist1;
 }
@@ -199,7 +199,7 @@ w_dlist_s *dlist_combine(w_dlist_s *dlist1,w_dlist_s *dlist2)
 //Insert a node with priority in the linked list
 void dlist_insert_prio(w_dlist_s *dlist,w_prinode_s *prinode,w_uint32_t prio)
 {
-    w_prinode_s *prin = W_NULL;
+    w_prinode_s *prin = (w_prinode_s *)W_NULL;
     w_dnode_s *dnode;
     prinode->prio = prio;
     dnode = dlist_head(dlist);

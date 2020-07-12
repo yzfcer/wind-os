@@ -31,7 +31,7 @@ extern "C" {
 #endif // #ifdef __cplusplus
 #if WIND_MODULE_NET_SUPPORT
 static w_dlist_s skb_list;
-static w_netnode_s *ether_node = W_NULL;
+static w_netnode_s *ether_node = (w_netnode_s *)W_NULL;
 WIND_NETDEV_DECLARE(lo);
 
 static w_err_t lo_init(w_netnode_s *netnode)
@@ -81,7 +81,7 @@ static w_err_t lo_input(w_netnode_s *netnode,w_skb_s *skb)
     WIND_CHECK_RETURN(skb1 != W_NULL,W_ERR_FAIL);
     wind_memcpy(skb,skb1,sizeof(w_skb_s));
     skb->indev = WIND_NETDEV(lo);
-    skb1->packbuf = W_NULL;
+    skb1->packbuf = (w_uint8_t*)W_NULL;
     wind_skb_free(skb1);
     if(ether_node != W_NULL)
         wind_netnode_recv(ether_node,skb);

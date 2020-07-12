@@ -79,7 +79,7 @@ static w_err_t xmlfsm_copy_until(w_xmlfsm_s *xfsm,char *chlist)
 static w_err_t xmlfsm_open_xnode(w_xmlfsm_s *xfsm,char *name)
 {
     w_err_t err;
-    w_xmlnode_s *newnode = W_NULL;
+    w_xmlnode_s *newnode = (w_xmlnode_s *)W_NULL;
     do
     {
         err = W_ERR_OK;
@@ -118,13 +118,13 @@ static w_err_t xmlfsm_close_xnode(w_xmlfsm_s *xfsm,char *name)
     wind_debug("close node name:%s",name);
     if(xfsm->xhead_flag)
     {
-        xfsm->newnode = W_NULL;
+        xfsm->newnode = (w_xmlnode_s *)W_NULL;
         xfsm->xhead_flag = 0;
         return W_ERR_OK;
     }
     if(xfsm->newnode && (wind_strcmp(name,xfsm->newnode->name) == 0))
     {
-        xfsm->newnode = W_NULL;
+        xfsm->newnode = (w_xmlnode_s *)W_NULL;
         return W_ERR_OK;
     }
     else if(xfsm->parent && (wind_strcmp(name,xfsm->parent->name) == 0))
@@ -422,7 +422,7 @@ static w_err_t xmlfsm_handle_attr_value(w_fsm_s *fsm)
                 wind_debug("xattr value:%s",xfsm->buff);
                 WIND_ASSERT_RETURN(xfsm->newattr != W_NULL,W_ERR_MEM);
                 wind_xmlattr_modify(xfsm->newattr,xfsm->buff);
-                xfsm->newattr = W_NULL;
+                xfsm->newattr = (w_xmlattr_s*)W_NULL;
                 xmlfsm_change_step(xfsm,XML_STEP_ATTR_NAME);
                 return W_ERR_OK;
             default:

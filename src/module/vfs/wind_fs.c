@@ -87,7 +87,7 @@ static w_bool_t is_dev_match(w_vfs_s *vfs,char *blkdev_name)
 static w_err_t check_dir_path_valid(char *path)
 {
     w_err_t err;
-    w_file_s *file = W_NULL;
+    w_file_s *file = (w_file_s *)W_NULL;
     do
     {
         err = W_ERR_OK;
@@ -165,7 +165,8 @@ w_vfs_s *wind_vfs_get(char *name)
 
 w_vfs_s *wind_vfs_get_free(void)
 {
-    w_vfs_s *vfs,*retfs = W_NULL;
+    w_vfs_s *vfs;
+    w_vfs_s *retfs = (w_vfs_s*)W_NULL;
     w_dnode_s *dnode;
     wind_disable_switch();
     foreach_node(dnode,&fslist)
@@ -192,7 +193,8 @@ w_vfs_s *wind_vfs_get_byidx(w_int32_t index)
 
 w_vfs_s *wind_vfs_get_bypath(const char *path)
 {
-    w_vfs_s *vfs,*retfs = W_NULL;
+    w_vfs_s *vfs;
+    w_vfs_s *retfs = (w_vfs_s*)W_NULL;
     w_dnode_s *dnode;
     w_int32_t len;
     wind_disable_switch();
@@ -317,15 +319,15 @@ w_err_t wind_vfs_unmount(char *fsname)
     CLR_F_VFS_MOUNT(vfs);
     if(vfs->mount_path != W_NULL)
         wind_free(vfs->mount_path);
-    vfs->mount_path = W_NULL;
+    vfs->mount_path = (char*)W_NULL;
     if(vfs->fstype != W_NULL)
         wind_free(vfs->fstype);
-    vfs->fstype = W_NULL;
+    vfs->fstype = (char*)W_NULL;
     if(vfs->usr_arg != W_NULL)
         wind_free(vfs->usr_arg);
     vfs->usr_arg = W_NULL;
-    vfs->blkdev = W_NULL;
-    vfs->ops = W_NULL;
+    vfs->blkdev = (w_blkdev_s*)W_NULL;
+    vfs->ops = (w_fsops_s*)W_NULL;
     return W_ERR_OK;
 }
 

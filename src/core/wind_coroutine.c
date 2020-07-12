@@ -71,7 +71,7 @@ static w_coroutine_s *get_coroutint_ready(void)
 w_err_t _wind_coroutine_mod_init(void)
 {
     w_err_t err;
-    curcorout = W_NULL;
+    curcorout = (w_coroutine_s*)W_NULL;
     DLIST_INIT(coroutinelist);
     err = wind_pool_create("coroutine",coroutinepool,sizeof(coroutinepool),sizeof(w_coroutine_s));
     WIND_ASSERT_RETURN(err == W_ERR_OK,err);

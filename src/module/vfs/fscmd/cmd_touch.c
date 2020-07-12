@@ -36,7 +36,7 @@ static w_err_t mk_dir_file(w_int32_t argc,char **argv,w_uint16_t isdir)
 {
     w_err_t err;
     w_bool_t isexist;
-    w_file_s *file = W_NULL;
+    w_file_s *file = (w_file_s *)W_NULL;
     char * fullpath;
     w_int32_t i;
     char *curpath = wind_filepath_get_current();
@@ -54,10 +54,10 @@ static w_err_t mk_dir_file(w_int32_t argc,char **argv,w_uint16_t isdir)
             file = wind_fopen(fullpath,FMODE_CRT);
             WIND_ASSERT_BREAK(file != W_NULL,W_ERR_FAIL,"make directory failed.")
             wind_fclose(file); 
-            file = W_NULL;
+            file = (w_file_s *)W_NULL;
             if(fullpath != W_NULL)
                 wind_filepath_release(fullpath);
-            fullpath = W_NULL;
+            fullpath = (char*)W_NULL;
         }
         WIND_CHECK_BREAK(err == W_ERR_OK,err);
     }while(0);

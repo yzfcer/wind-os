@@ -32,7 +32,7 @@ static w_err_t print_filename(w_file_s *file)
 {
     w_err_t err;
     w_int32_t len;
-    char *buf = W_NULL;
+    char *buf = (char *)W_NULL;
     do
     {
         err = W_ERR_OK;
@@ -75,7 +75,7 @@ static w_err_t cmd_ls(w_int32_t argc,char **argv)
         path1 = wind_salloc(fullpath,0);
         wind_filepath_release(fullpath);
         fullpath = path1;
-        path1 = W_NULL;
+        path1 = (char *)W_NULL;
         file = wind_fopen(fullpath,FMODE_R);
         WIND_ASSERT_BREAK(file != W_NULL,W_ERR_NOFILE,"open directory error");
 

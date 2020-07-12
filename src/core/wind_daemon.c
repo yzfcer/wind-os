@@ -101,8 +101,8 @@ w_err_t wind_daemon_init(w_daemon_s *daemon,const char *name,w_daemon_fn daemon_
 w_daemon_s *wind_daemon_create(const char *name,w_daemon_fn daemon_func)
 {
     w_err_t err;
-    w_daemon_s *new_daemon = W_NULL;
-    w_daemon_s *old_daemon = W_NULL;
+    w_daemon_s *new_daemon = (w_daemon_s *)W_NULL;
+    w_daemon_s *old_daemon = (w_daemon_s *)W_NULL;
     do
     {
         err = W_ERR_OK;
@@ -118,7 +118,7 @@ w_daemon_s *wind_daemon_create(const char *name,w_daemon_fn daemon_func)
     {
         if(new_daemon != W_NULL)
             daemon_free(new_daemon);
-        new_daemon = W_NULL;
+        new_daemon = (w_daemon_s *)W_NULL;
     }
     return new_daemon;
 }

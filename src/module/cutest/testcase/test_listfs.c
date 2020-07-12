@@ -167,7 +167,7 @@ CASE_FUNC(readdir)
 {
     w_err_t err;
     w_listfile_s *file;
-    w_listfile_s *sub = W_NULL;
+    w_listfile_s *sub = (w_listfile_s *)W_NULL;
 
     file = listfile_open(&g_lfs,"/readdir_test/",LFMODE_CRT);
     EXPECT_NE(file,W_NULL);

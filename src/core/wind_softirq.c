@@ -41,7 +41,7 @@ extern "C" {
 #define SOFT_FLAG_ARR_CNT ((WIND_SOFTINT_MAX_NUM + 31) >> 5)
 
 static w_stack_t softirq_stk[THREAD_SOFTINT_STKSIZE];
-static w_thread_s *softirq_thread = W_NULL;
+static w_thread_s *softirq_thread = (w_thread_s*)W_NULL;
 w_softirq_fn softirq_vectors[WIND_SOFTINT_MAX_NUM];
 w_uint32_t softirq_flag[SOFT_FLAG_ARR_CNT];
 
@@ -69,7 +69,7 @@ w_err_t wind_softirq_unreg(w_int32_t irqid)
 {
     WIND_ASSERT_RETURN(irqid < WIND_SOFTINT_MAX_NUM,W_ERR_OVERFLOW);
 	wind_notice("unregister softirq %d",irqid);
-    softirq_vectors[irqid] = W_NULL;
+    softirq_vectors[irqid] = (w_softirq_fn)W_NULL;
     return W_ERR_OK;
 }
 

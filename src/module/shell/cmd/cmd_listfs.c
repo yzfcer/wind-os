@@ -114,7 +114,7 @@ static w_err_t listfs_cmd_ls(w_int32_t argc,char **argv)
     w_int32_t i;
     w_file_s *file = (w_file_s *)W_NULL;
     w_err_t err;
-    char *fullpath = W_NULL;
+    char *fullpath = (char *)W_NULL;
     w_file_s *sub = (w_file_s *)W_NULL;
     char *curpath = wind_filepath_get_current();
     do 

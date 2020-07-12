@@ -64,8 +64,8 @@ static w_err_t module_check_depend(w_module_s *module)
     int i,cnt;
     w_err_t err;
     w_module_s *dmod;
-    char *depend = W_NULL;
-    char **dependlist = W_NULL;
+    char *depend = (char*)W_NULL;
+    char **dependlist = (char**)W_NULL;
     if(module->depend == W_NULL)
         return W_ERR_OK;
     do

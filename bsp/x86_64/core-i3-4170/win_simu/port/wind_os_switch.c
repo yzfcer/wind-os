@@ -41,7 +41,7 @@ extern volatile w_bool_t gwind_start_flag;
 extern w_stack_t **gwind_high_stack;
 extern w_stack_t **gwind_cur_stack;
 extern void wind_tick_isr(void);
-w_thread_s *curthread = W_NULL;
+w_thread_s *curthread = (w_thread_s *)W_NULL;
 w_thread_s mainthr;
 w_stack_t mainstk[2048];
 void wind_interrupt_switch(void);

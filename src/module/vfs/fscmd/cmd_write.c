@@ -39,7 +39,7 @@ static w_err_t cmd_write(w_int32_t argc,char **argv)
 {
     w_err_t err;
     w_file_s *file = (w_file_s *)W_NULL;
-    char * fullpath = W_NULL;
+    char * fullpath = (char*)W_NULL;
     w_int32_t len,filelen;
     char *curpath;
     WIND_ASSERT_RETURN(argc >= 3,W_ERR_INVALID);

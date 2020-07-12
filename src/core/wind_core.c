@@ -154,7 +154,7 @@ void wind_enter_irq(void)
 static w_thread_s *wind_search_highthread(void)
 {
     w_dnode_s *dnode;
-    w_thread_s *thread = W_NULL;
+    w_thread_s *thread = (w_thread_s *)W_NULL;
     w_dlist_s *threadlist;
     threadlist = _wind_thread_list();
     wind_disable_interrupt();

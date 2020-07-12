@@ -450,7 +450,7 @@ w_err_t boot_img_check(void)
 
     code[2] = boot_part_get(PART_SYSRUN);
     if(code[2]->mtype == BLKDEV_RAM)
-        code[2] = W_NULL;
+        code[2] = (w_part_s *)W_NULL;
     for(i = 0;i < sizeof(code)/sizeof(w_part_s*);i ++)
     {
         if(!code[i])

@@ -47,7 +47,7 @@ COMMAND_MAIN(blkdev,argc,argv)
 {
     w_bool_t res;
     w_blkdev_s *dev;
-    w_uint8_t *buff = W_NULL;
+    w_uint8_t *buff = (w_uint8_t *)W_NULL;
     w_addr_t addr;
     w_int32_t cnt;
     w_err_t err;

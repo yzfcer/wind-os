@@ -154,7 +154,7 @@ static void host_release_subfile(w_hostfile_s *hfile)
     if(hfile && hfile->dir)
     {
         closedir(hfile->dir);
-        hfile->dir = W_NULL;
+        hfile->dir = (DIR *)W_NULL;
     }
 }
 

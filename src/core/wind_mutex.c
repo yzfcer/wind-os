@@ -206,7 +206,7 @@ w_err_t wind_mutex_unlock(w_mutex_s *mutex)
     if (dnode == W_NULL)
     {
         CLR_F_MUTEX_LOCKED(mutex);
-        mutex->owner = W_NULL;
+        mutex->owner = (w_thread_s*)W_NULL;
         wind_enable_switch();
         return W_ERR_OK; 
     }

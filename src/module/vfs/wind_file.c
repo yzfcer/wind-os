@@ -65,7 +65,7 @@ w_err_t _wind_file_mod_init(void)
 
 w_file_s *wind_file_get(w_vfs_s *fs,const char *path)
 {
-    w_file_s *file = W_NULL;
+    w_file_s *file = (w_file_s *)W_NULL;
     w_dnode_s *dnode;
     wind_disable_switch();
     foreach_node(dnode,&filelist)
@@ -84,7 +84,7 @@ w_file_s *wind_file_get(w_vfs_s *fs,const char *path)
 w_bool_t wind_fexist(const char *path)
 {
     w_err_t err;
-    w_file_s *file = W_NULL;
+    w_file_s *file = (w_file_s *)W_NULL;
     w_bool_t exist = W_FALSE;
     WIND_ASSERT_RETURN(path != W_NULL,W_FALSE);
     do
@@ -129,10 +129,10 @@ static w_file_s *wind_file_create(w_vfs_s *fs,const char *path,w_uint8_t fmode,w
     w_err_t err;
     //w_int32_t fullpathlen;
     w_int32_t mountlen;
-    w_file_s *file = W_NULL;
-    char *fullpath = W_NULL;
-    char *filename = W_NULL;
-    w_mutex_s *mutex = W_NULL;
+    w_file_s *file = (w_file_s *)W_NULL;
+    char *fullpath = (char*)W_NULL;
+    char *filename = (char*)W_NULL;
+    w_mutex_s *mutex = (w_mutex_s *)W_NULL;
     do
     {
         err = W_ERR_OK;
@@ -156,7 +156,7 @@ static w_file_s *wind_file_create(w_vfs_s *fs,const char *path,w_uint8_t fmode,w
         WIND_ASSERT_BREAK(mutex != W_NULL,W_ERR_MEM,"create mutex failed");
         file->mutex = mutex;
         
-        file->childfile = W_NULL;
+        file->childfile = (w_file_s *)W_NULL;
         file->fmode = fmode;
         file->fileobj = W_NULL;
         file->offset = 0;
@@ -180,7 +180,7 @@ static w_file_s *wind_file_create(w_vfs_s *fs,const char *path,w_uint8_t fmode,w
             wind_mutex_destroy(mutex);
         if(file != W_NULL)
             file_free(file);
-        file = W_NULL;
+        file = (w_file_s *)W_NULL;
     }
     return file;
     
@@ -212,7 +212,7 @@ w_file_s* wind_fopen(const char *path,w_uint8_t fmode)
     w_vfs_s *fs;
     w_uint8_t isdir;
     w_int32_t pathlen;
-    w_file_s *file = W_NULL;
+    w_file_s *file = (w_file_s *)W_NULL;
 	WIND_ASSERT_RETURN(path != W_NULL,W_NULL);
     WIND_ASSERT_RETURN(path[0] != 0,W_NULL);
     err = wind_filepath_check_valid(path);
@@ -312,7 +312,7 @@ w_file_s *wind_freaddir(w_file_s *dir)
     {
         if(dir->childfile != W_NULL)
             wind_file_destroy(dir->childfile);
-        dir->childfile = W_NULL;
+        dir->childfile = (w_file_s *)W_NULL;
         return W_NULL;
     }
     return dir->childfile;

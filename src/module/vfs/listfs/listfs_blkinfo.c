@@ -184,7 +184,7 @@ w_err_t blkinfo_get_tail(lfile_blkinfo_s *info,w_blkdev_s *blkdev)
 w_err_t blkinfo_get_byoffset(lfile_blkinfo_s *info,w_blkdev_s *blkdev,w_uint32_t offset)
 {
     w_err_t err;
-    lfile_blkinfo_s *tmpinfo = W_NULL;
+    lfile_blkinfo_s *tmpinfo = (lfile_blkinfo_s *)W_NULL;
     
     WIND_ASSERT_RETURN(info != W_NULL,W_ERR_NULL_PTR);
     WIND_ASSERT_RETURN(blkdev != W_NULL,W_ERR_NULL_PTR);

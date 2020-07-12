@@ -41,7 +41,7 @@ static w_err_t fs_cmd_cd(w_int32_t argc,char **argv)
 {
     w_err_t err;
     w_bool_t isexist;
-    char *fullpath = W_NULL;
+    char *fullpath = (char *)W_NULL;
     char *curpath = wind_filepath_get_current();
     do
     {
@@ -63,7 +63,7 @@ static w_err_t mk_dir_file(w_int32_t argc,char **argv,w_uint16_t isdir)
     w_err_t err;
     w_bool_t isexist;
     w_file_s *file = (w_file_s *)W_NULL;
-    char * fullpath = W_NULL;
+    char * fullpath = (char *)W_NULL;
     char *curpath;
     if(argc < 3)
         return W_ERR_INVALID;
@@ -117,7 +117,7 @@ static w_err_t fs_cmd_ls(w_int32_t argc,char **argv)
     w_int32_t i;
     w_file_s *file = (w_file_s *)W_NULL;
     w_err_t err;
-    char *fullpath = W_NULL;
+    char *fullpath = (char *)W_NULL;
     char *path1;
     w_file_s *sub = (w_file_s *)W_NULL;
     char *curpath = wind_filepath_get_current();
@@ -132,7 +132,7 @@ static w_err_t fs_cmd_ls(w_int32_t argc,char **argv)
         path1 = wind_salloc(fullpath,0);
         wind_filepath_release(fullpath);
         fullpath = path1;
-        path1 = W_NULL;
+        path1 = (char *)W_NULL;
         file = wind_fopen(fullpath,FMODE_R);
         WIND_ASSERT_BREAK(file != W_NULL,W_ERR_NOFILE,"open directory error");
 

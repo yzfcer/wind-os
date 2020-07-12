@@ -32,7 +32,7 @@ extern "C" {
 
 
 static w_rbt_node_s __nil;
-static w_rbt_node_s *nil = W_NULL; 
+static w_rbt_node_s *nil = (w_rbt_node_s *)W_NULL; 
 
 #define rbt_set_black(node) (node)->color=TREE_BLACK
 #define rbt_set_red(node) (node)->color=TREE_RED
@@ -225,7 +225,8 @@ w_rbt_node_s* successor(w_rbtree_s *tree, w_rbt_node_s *rbnode)
 //After deleting the nodes, the invariance of four properties of the red black tree should be maintained
 w_int32_t rbt_delete_fixup(w_rbt_node_s **root, w_rbt_node_s *rbnode)
 { 
-    w_rbt_node_s *parent = W_NULL, *brother = W_NULL;  
+    w_rbt_node_s *parent = (w_rbt_node_s *)W_NULL;
+    w_rbt_node_s *brother = (w_rbt_node_s *)W_NULL;  
 
     while(rbt_is_black(rbnode)&& ((*root)!= rbnode))
     {           /* Set parent and brother */     
@@ -302,7 +303,8 @@ w_int32_t rbt_delete_fixup(w_rbt_node_s **root, w_rbt_node_s *rbnode)
 
 w_int32_t _rb_delete(w_rbt_node_s **root, w_rbt_node_s *rbnode)
 {   
-    w_rbt_node_s *next = W_NULL, *refer = W_NULL; 
+    w_rbt_node_s *next = (w_rbt_node_s *)W_NULL;
+    w_rbt_node_s *refer = (w_rbt_node_s *)W_NULL; 
 
     if((nil == rbnode->left)|| (nil == rbnode->right))
     {   
@@ -507,7 +509,7 @@ w_int32_t rbt_delete(w_rbtree_s *tree, w_rbt_node_s *rbnode)
 
 w_rbt_node_s* wind_rbtree_search(w_rbtree_s *tree,w_rbt_node_s *rbnode,rbt_access_fn access,void *arg)
 {
-    w_rbt_node_s *node = W_NULL;
+    w_rbt_node_s *node = (w_rbt_node_s *)W_NULL;
     w_rbt_node_s **root = &tree->root;
 
     RB_TREE_LOCK(tree->lock);
@@ -535,7 +537,7 @@ void access(w_rbt_node_s *node,void *arg)
 w_rbtree_s tree;
 void rbt_test(void)
 {
-    //w_rbt_node_s *tree = W_NULL;
+    //w_rbt_node_s *tree = (w_rbt_node_s *)W_NULL;
     w_rbt_node_s tnode[20];
     w_int32_t i;
 

@@ -46,7 +46,7 @@ COMMAND_MAIN(dbgp,argc,argv)
 {
     w_int32_t len;
     w_dbgpoint_s *dbgp;
-    w_uint8_t *buff = W_NULL;
+    w_uint8_t *buff = (w_uint8_t *)W_NULL;
    WIND_ASSERT_RETURN(argc >= 2,W_ERR_INVALID);
     if(wind_strcmp(argv[1],"list") == 0)
     {

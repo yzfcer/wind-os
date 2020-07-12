@@ -64,8 +64,9 @@ static w_err_t cmd_ymodem_get(int argc,char **argv)
 {
     w_err_t err = W_ERR_OK;
     w_int32_t len;
-    w_file_s *file = W_NULL;
-    w_uint8_t *buff = W_NULL,*xbuff = W_NULL;
+    w_file_s *file = (w_file_s *)W_NULL;
+    w_uint8_t *buff = (w_uint8_t *)W_NULL;
+    w_uint8_t *xbuff = (w_uint8_t *)W_NULL;
     if(argv[2][0] != '/')
     {
         wind_error("unknown file path.");
@@ -119,8 +120,9 @@ static w_err_t cmd_ymodem_put(int argc,char **argv)
 {
     w_err_t err = W_ERR_OK;
     w_int32_t len;
-    w_file_s *file = W_NULL;
-    w_uint8_t *buff = W_NULL,*xbuff = W_NULL;
+    w_file_s *file = (w_file_s *)W_NULL;
+    w_uint8_t *buff = (w_uint8_t *)W_NULL;
+    w_uint8_t *xbuff = (w_uint8_t *)W_NULL;
     if(argv[2][0] != '/')
     {
         wind_error("unknown file path.");

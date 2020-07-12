@@ -18,7 +18,7 @@
 
 #if WIND_MODULE_LOG_SUPPORT
 #define LOG_FILE "/sys.log"
-static w_file_s *s_logfile = W_NULL;
+static w_file_s *s_logfile = (w_file_s *)W_NULL;
 static w_int32_t s_loglevel = WIND_LOG_NOTICE;
 w_err_t wind_log_set_level(w_int32_t level)
 {
@@ -74,7 +74,7 @@ w_err_t wind_log_close(void)
 {
     WIND_ASSERT_RETURN(s_logfile != W_NULL,W_ERR_FAIL);
     wind_fclose(s_logfile);
-    s_logfile = W_NULL;
+    s_logfile = (w_file_s*)W_NULL;
     return W_ERR_OK;
 }
 #endif //#if WIND_MODULE_LOG_SUPPORT

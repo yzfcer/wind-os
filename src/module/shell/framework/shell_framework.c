@@ -544,7 +544,7 @@ static w_err_t spit_cmd(w_shell_ctx_s *ctx)
     prm->argc = 0;
     for(i = 0;i < CMD_PARAM_CNT;i ++)
     {
-        prm->argv[i] = W_NULL;
+        prm->argv[i] = (char*)W_NULL;
         idx = get_string(ctx->buf,idx,&prm->argv[i]);
         if(idx > 0)
             prm->argc ++;

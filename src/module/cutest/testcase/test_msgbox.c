@@ -124,7 +124,7 @@ CASE_FUNC(func)
     err = wind_msgbox_wait(msgbox,&msg,100);
     EXPECT_EQ(err,W_ERR_TIMEOUT);
     wind_pool_free(testmsg_pool,tmsg1);
-    tmsg1 = W_NULL;
+    tmsg1 = (test_msg_s *)W_NULL;
     err = wind_msgbox_destroy(msgbox);
     EXPECT_EQ(W_ERR_OK,err);
 }

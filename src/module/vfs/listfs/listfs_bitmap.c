@@ -202,7 +202,7 @@ w_err_t listfs_bitmap_deinit(lfs_bitmap_s *bm)
     if(bm->blk != W_NULL)
     {
         listfs_mem_free(bm->blk);
-        bm->blk = W_NULL;
+        bm->blk = (w_uint8_t *)W_NULL;
     }
     return W_ERR_OK;
 }
@@ -321,7 +321,7 @@ static w_uint32_t bm_calc_blkused(w_uint8_t *blk,w_int32_t blksize)
 w_int32_t listfs_bitmap_calc_usedblk(lfs_bitmap_s *bm)
 {
     w_int32_t i,cnt;
-    w_uint8_t *blk = W_NULL;
+    w_uint8_t *blk = (w_uint8_t *)W_NULL;
     w_blkdev_s *blkdev;
     w_uint32_t blkused = 0;
     WIND_ASSERT_RETURN(bm != W_NULL,W_ERR_NULL_PTR);

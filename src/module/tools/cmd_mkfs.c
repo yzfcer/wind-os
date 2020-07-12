@@ -34,7 +34,7 @@ extern "C" {
 #define BUFF_LEN 0x10000
 
 static EmbeddedFileSystem efs;
-static w_uint8_t *buff = W_NULL;
+static w_uint8_t *buff = (w_uint8_t *)W_NULL;
 static w_err_t mk_fat32_file(char *root_dir,struct _finddata_t *fileinfo,char *newfile)
 {
     File *fw;
@@ -137,7 +137,7 @@ COMMAND_MAIN(mkfs,argc,argv)
     else
         wind_printf("mkfs command invalid.\r\n");
     wind_free(buff);
-    buff = W_NULL;
+    buff = (w_uint8_t *)W_NULL;
     return err;
 }
 

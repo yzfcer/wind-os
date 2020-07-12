@@ -77,7 +77,7 @@ w_err_t wind_chdev_unregister(w_chdev_s *chdev)
     if(chdev->ops->deinit)
         chdev->ops->deinit(chdev);
     wind_mutex_destroy(chdev->mutex);
-    chdev->mutex = W_NULL;
+    chdev->mutex = (w_mutex_s*)W_NULL;
     return W_ERR_OK;
 }
 

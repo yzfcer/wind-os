@@ -237,7 +237,6 @@ w_err_t wind_thread_init(w_thread_s *thread,
     thread->cause = CAUSE_COMMON;
     thread->sleep_ticks = 0;
     DLIST_INIT(thread->coroutlist);
-    thread->corout = W_NULL;
     wind_disable_interrupt();
     dlist_insert_prio(&threadlist,&thread->validnode,thread->prio);
     wind_enable_interrupt();
@@ -421,7 +420,7 @@ w_err_t wind_thread_exit(w_err_t exitcode)
 w_err_t wind_thread_sleep(w_int32_t ms)
 {
     w_uint32_t stcnt;
-    w_thread_s *thread = W_NULL;
+    w_thread_s *thread = (w_thread_s *)W_NULL;
     stcnt = ms *WIND_TICK_PER_SEC / 1000;
     if(0 == stcnt)
         stcnt = 1;

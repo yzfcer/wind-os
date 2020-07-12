@@ -93,7 +93,7 @@ w_err_t wind_blkdev_unregister(w_blkdev_s *blkdev)
     if(blkdev->ops->deinit)
         blkdev->ops->deinit(blkdev);
     wind_mutex_destroy(blkdev->mutex);
-    blkdev->mutex = W_NULL;
+    blkdev->mutex = (w_mutex_s*)W_NULL;
     return W_ERR_OK;
 }
 

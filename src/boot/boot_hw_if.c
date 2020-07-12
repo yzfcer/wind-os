@@ -35,7 +35,7 @@ w_uint32_t boot_get_sys_ms(void)
 
 w_err_t boot_wait_input(w_int32_t timeout_sec,char *ch,w_int32_t print_flag)
 {
-    w_int32_t second,cnt,sleep_cnt;
+    w_int32_t second,cnt;
     w_uint32_t time_ms;
     w_err_t err = W_ERR_FAIL;
     WIND_CHECK_RETURN(timeout_sec > 0,W_ERR_OK)
@@ -81,7 +81,7 @@ w_int32_t boot_read_line_blockig(char *buff,w_int32_t len)
     char ch;
     while(1)
     {
-        if(0 < wind_std_input(&ch,1))
+		if(0 < wind_std_input((w_uint8_t*)&ch,1))
         {
             if((ch == '\r') || 
                 (ch == '\n') ||

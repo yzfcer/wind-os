@@ -51,7 +51,7 @@ w_err_t wind_stack_create(void *mem,
     w_stack_s* pstk;
     if ((mem != W_NULL) && (size >= sizeof(w_stack_s)))
     {
-        pstk = (w_stack_s* )mem;
+        pstk = (w_stack_s*)mem;
 
         wind_disable_interrupt();
         if(ReadEmpty)
@@ -127,7 +127,7 @@ w_err_t wind_stack_write(void *mem, void *Data)
     err = STACK_ERR;
     if (mem != W_NULL)
     {
-        pstk = (w_stack_s* )mem;
+        pstk = (w_stack_s*)mem;
         wind_disable_interrupt();
         if (pstk->item_cnt <= pstk->item_max - pstk->item_size)
         {
@@ -161,7 +161,7 @@ w_uint16_t wind_stack_datalen(void *mem)
     if (mem != W_NULL)
     {
         wind_disable_interrupt();
-        temp = ((w_stack_s* )mem)->item_cnt / ((w_stack_s* )mem)->item_size;
+        temp = ((w_stack_s*)mem)->item_cnt / ((w_stack_s* )mem)->item_size;
         wind_enable_interrupt();
     }
     return temp;
@@ -176,7 +176,7 @@ w_uint16_t wind_stack_size(void *mem)
     if (mem != W_NULL)
     {
         wind_disable_interrupt();
-        temp = ((w_stack_s* )mem)->item_max / ((w_stack_s* )mem)->item_size;
+        temp = ((w_stack_s*)mem)->item_max / ((w_stack_s* )mem)->item_size;
         wind_enable_interrupt();
     }
     return temp;

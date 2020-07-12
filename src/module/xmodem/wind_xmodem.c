@@ -526,7 +526,7 @@ w_err_t wind_xmodem_end(xm_ctx_s *ctx)
         xm_write_cancel(ctx);
     }
     ctx->stat = XM_IDLE;
-    ctx->frbuff = W_NULL;
+    ctx->frbuff = (w_uint8_t *)W_NULL;
     ctx->dir = XM_DIR_INIT;
     wind_log_close();
     return W_ERR_OK;

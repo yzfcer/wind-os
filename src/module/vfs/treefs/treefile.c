@@ -56,7 +56,7 @@ w_treefile_s *treefs_mk_subnode(w_treefile_s *parent,char *nodename,w_uint8_t is
 {
     int len;
     w_err_t err;
-    w_treefile_s *treefile = W_NULL;
+    w_treefile_s *treefile = (w_treefile_s *)W_NULL;
     WIND_ASSERT_RETURN(nodename != W_NULL,W_NULL);
     do
     {
@@ -90,7 +90,7 @@ w_treefile_s *treefs_mk_subnode(w_treefile_s *parent,char *nodename,w_uint8_t is
             tfs_mem_free(treefile->filename);
         if(treefile)
             tfs_mem_free(treefile);
-        treefile = W_NULL;
+        treefile = (w_treefile_s *)W_NULL;
     }
     return treefile;
 }
@@ -109,16 +109,16 @@ static w_treefile_s *treefs_get_childnode(w_tree_s *parent,char *childname)
             return treefile;
         }
     }
-    return W_NULL;
+    return (w_treefile_s *)W_NULL;
 }
 
 static w_treefile_s *treefs_search_node(w_treefs_s *tfs,const char *path)
 {
     w_err_t err;
     w_int32_t len,cnt,i;
-    w_treefile_s *file = W_NULL;
-    char **nameseg = W_NULL;
-    char *pathname = W_NULL;
+    w_treefile_s *file = (w_treefile_s *)W_NULL;
+    char **nameseg = (char**)W_NULL;
+    char *pathname = (char *)W_NULL;
     wind_debug("search node path:%s",path);
     do
     {
@@ -158,7 +158,7 @@ static w_treefile_s *treefs_make_node(w_treefs_s *tfs,const char *path)
     w_uint8_t isdir = 0;
     char *nodename;
     w_treefile_s *treefile;
-    char *dirname = W_NULL;
+    char *dirname = (char *)W_NULL;
     len = wind_strlen(path);
 
     do
@@ -195,7 +195,7 @@ static w_treefile_s *treefs_make_node(w_treefs_s *tfs,const char *path)
 w_treefile_s *treefile_create(w_treefs_s *tfs,const char *path)
 {
     w_int32_t len;
-    w_treefile_s *treefile = W_NULL;
+    w_treefile_s *treefile = (w_treefile_s *)W_NULL;
     treefile = treefs_search_node(tfs,path);
     if(treefile != W_NULL)
     {
@@ -244,7 +244,7 @@ w_treefile_s* treefile_open(w_treefs_s *tfs,const char *path,w_uint16_t mode)
     file = treefs_search_node(tfs,path);
     if((file == W_NULL) && (!is_crt))
     {
-        return W_NULL;
+        return (w_treefile_s *)W_NULL;
     }
         
     if(file == W_NULL)
@@ -422,7 +422,7 @@ w_err_t treefile_readdir(w_treefile_s* dir,w_treefile_s **sub)
     if(err == W_ERR_OK)
         *sub = subfile;
     else
-        *sub = W_NULL;
+        *sub = (w_treefile_s *)W_NULL;
     return err;
 }
 

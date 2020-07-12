@@ -137,7 +137,6 @@ struct _w_thread_s
     w_int32_t sleep_ticks;  //Tick value when thread sleep
     w_suscause_e cause;     //Causes of state changes
     w_dlist_s coroutlist;   //Coroutine list
-    w_obj_s *corout;        //Current Coroutine
 
 };
 

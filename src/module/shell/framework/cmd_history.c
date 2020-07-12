@@ -49,9 +49,9 @@ w_err_t cmd_history_init(w_cmd_his_s *his)
     his->hiscnt = 0;
     his->buf_used = 0;
     his->curidx = -1;
-    his->curcmd = W_NULL;
+    his->curcmd = (char *)W_NULL;
     for(i =0 ;i < CMD_HISTORY_COUNT;i ++)
-        his->hiscmd[i] = W_NULL;
+        his->hiscmd[i] = (char *)W_NULL;
     wind_memset(his->cmdbuf,0,CMD_HISBUF_LENTH);
     return W_ERR_OK;
 }
@@ -79,7 +79,7 @@ static w_err_t remove_cmd_index(w_cmd_his_s *his,w_int32_t index)
     wind_memcpy(his->hiscmd[index],his->hiscmd[index]+cmdlen,mvlen);
     for(i = index;i < his->hiscnt - 1 ;i ++)
         his->hiscmd[i] = his->hiscmd[i+1] - cmdlen;
-    his->hiscmd[his->hiscnt-1] = W_NULL;
+    his->hiscmd[his->hiscnt-1] = (char *)W_NULL;
     his->hiscnt -= 1;
     his->buf_used -= cmdlen;
     wind_memset(&his->cmdbuf[his->buf_used],0,cmdlen);
@@ -154,7 +154,7 @@ w_err_t cmd_history_get_next(w_cmd_his_s *his,char *cmd)
     if(his->curidx >= his->hiscnt)
     {
         his->curidx = his->hiscnt;
-        his->curcmd = W_NULL;
+        his->curcmd = (char *)W_NULL;
         cmd[0] = 0; 
         return W_ERR_FAIL;
     }
@@ -172,7 +172,7 @@ w_err_t cmd_history_get_prev(w_cmd_his_s *his,char *cmd)
     if(his->curidx < 0)
     {
         his->curidx = -1;
-        his->curcmd = W_NULL;
+        his->curcmd = (char *)W_NULL;
         cmd[0] = 0; 
         return W_ERR_FAIL;
     }
