@@ -65,6 +65,7 @@ int main(int argc,char *argv[])
 {
     //HANDLE hproc;
     //system("mode con cols=100 lines=50");//设置窗口大小
+    system("stty erase ^H");
     save_argv(argc,argv);
     //hproc = GetModuleHandle(NULL);
     //SetPriorityClass(hproc,REALTIME_PRIORITY_CLASS);

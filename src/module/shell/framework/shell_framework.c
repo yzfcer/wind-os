@@ -32,7 +32,6 @@ extern "C" {
 #endif // #ifdef __cplusplus
 
 
-
 #define NODE_TO_CMD(node) NODEPTR_TO_ITEMPTR(node,w_cmd_s,cmdnode)
 
 
@@ -64,9 +63,7 @@ static w_bool_t insert_ch(w_shell_ctx_s *ctx,char ch,w_int32_t len)
 static w_bool_t handle_LF(w_shell_ctx_s *ctx)
 {
     ctx->buf[ctx->index] = 0;
-#ifndef SHELL_NO_ECHO_BACK
     wind_printf("\r\n");
-#endif
     return W_TRUE;
 }
 
@@ -183,10 +180,8 @@ key_evt_ret:
 
 static w_bool_t handle_default(w_shell_ctx_s *ctx,char ch)
 {
-#ifndef SHELL_NO_ECHO_BACK
     if(ctx->stat != CSLSTAT_PWD)
         wind_printf("%c",ch);
-#endif
     return W_FALSE;
 }
 
@@ -195,11 +190,13 @@ static w_bool_t handle_default(w_shell_ctx_s *ctx,char ch)
 static w_bool_t shell_prehandle_char(w_shell_ctx_s *ctx,w_uint8_t ch,w_int32_t len)
 {
     w_bool_t ret;
+    
     ret = handle_key_evt(ctx,ch);
     if(W_TRUE == ret)
         return W_FALSE;
     if(ch == WVK_BACKSPACE)
     {
+        //printf("pre:%02x\r\n",ch);
         return handle_BKSPACE(ctx);
     }
     else if((ch == WVK_ENTER) || (ch == WVK_LINEFEED))

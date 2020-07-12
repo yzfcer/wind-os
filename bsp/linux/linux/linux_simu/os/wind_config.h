@@ -209,7 +209,6 @@ extern "C" {
 //Debug command configuration if the kernel supports console functions
 //-------------------------------------------------------------------------------
 #if WIND_MODULE_SHELL_SUPPORT
-#define SHELL_NO_ECHO_BACK 
 #define CMD_BLKDEV_SUPPORT    1 // Whether block device operation command is supported
 #define CMD_CHDEV_SUPPORT     1 // Whether character device operation command is supported
 #define CMD_DATETIME_SUPPORT  0 // Whether datetime command is supported

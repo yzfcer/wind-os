@@ -38,8 +38,10 @@ static int kbhit(void)
 	int ch;
 	int oldf;
 	tcgetattr(STDIN_FILENO, &oldt);
-	newt = oldt;
-	newt.c_lflag &= ~(ICANON | ECHO);
+	//newt = oldt;
+    newt.c_lflag &= (~ICANON);
+    newt.c_lflag &= ~ECHO;
+	newt.c_cc[VERASE] = '\b';
 	//newt.c_lflag &= ~(ICANON);
 	tcsetattr(STDIN_FILENO, TCSANOW, &newt);
 	oldf = fcntl(STDIN_FILENO, F_GETFL, 0);
@@ -67,8 +69,9 @@ w_err_t _wind_std_init(void)
 		printf("tcgetattr error\n");
 		return W_ERR_FAIL;
 	}
-
-	term.c_cc[VERASE] = '\b';  /* ??'\b' ????? ASCII ?*/
+    term.c_lflag &= (~ICANON);
+    term.c_lflag &= ~ECHO;
+	term.c_cc[VERASE] = '\b';
 
 	if ( tcsetattr(STDIN_FILENO, TCSANOW, &term) == -1 )
 	{
