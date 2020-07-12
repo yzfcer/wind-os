@@ -91,7 +91,7 @@ w_err_t wind_treefs_format(w_treefs_s *tfs)
     w_treefile_s *root = tfs->root;
     if(root != W_NULL)
         treefile_remove(root);
-    root = treefs_mk_subnode(W_NULL,"",1);
+    root = treefs_mk_subnode((w_treefile_s*)W_NULL,"",1);
     if(!root)
     {
         wind_error("make treefs root failed");
@@ -117,13 +117,13 @@ w_err_t wind_treefs_init(w_treefs_s *treefs,const char *name)
     WIND_ASSERT_RETURN(name != W_NULL,W_ERR_NULL_PTR);
 
     len = wind_strlen(name) + 1;
-    objname = tfs_mem_malloc(len);
+    objname = (char*)tfs_mem_malloc(len);
     WIND_ASSERT_RETURN(objname != W_NULL,W_ERR_MEM);
     wind_strcpy(objname,name);
     wind_obj_init(&treefs->obj,TREEFS_MAGIC,objname,&treefslist);
     CLR_F_OBJ_POOL(treefs->obj);
     treefs->fs_size = 0;
-    treefs->root = (w_treefs_s *)W_NULL;       
+    treefs->root = (w_treefile_s *)W_NULL;       
     
     return W_ERR_OK;
 }
