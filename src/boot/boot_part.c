@@ -236,6 +236,7 @@ void boot_part_print(void)
 {
     w_int32_t i;
     w_blkdev_s *blkdev;
+    w_uint32_t size;
     w_int32_t count = boot_part_get_count();
     w_part_s *part = boot_part_get_list();
     wind_printf("system part infomation:\r\n");
@@ -245,8 +246,9 @@ void boot_part_print(void)
     for(i = 0;i < count;i ++)
     {
         blkdev = &part[i].blkdev;
-        wind_printf("%-12s %-8s 0x%-8x 0x%-8x 0x%-8x %4d%%\r\n",wind_obj_name(&blkdev->obj),get_mtype_name(part[i].mtype),blkdev->blkaddr,blkdev->blksize,\
-                part[i].datalen,blkdev->blkcnt?(part[i].datalen*100)/(blkdev->blkcnt * blkdev->blksize):0);
+        size = blkdev->blkcnt * blkdev->blksize;
+        wind_printf("%-12s %-8s 0x%-8x 0x%-8x 0x%-8x %4d%%\r\n",wind_obj_name(&blkdev->obj),get_mtype_name(part[i].mtype),blkdev->blkaddr,size,\
+                part[i].datalen,blkdev->blkcnt?(part[i].datalen*100)/size:0);
     }
     wind_print_space(9);
 }

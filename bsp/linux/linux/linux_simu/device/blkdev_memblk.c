@@ -42,7 +42,7 @@ w_err_t   memblk_init(w_blkdev_s *blkdev)
     else if(blkdev->devid == 1)
     {
         blkdev->blkaddr = (w_addr_t)5120;
-        blkdev->blkcnt = 5112;
+        blkdev->blkcnt = 512;
         blkdev->blksize = MEM_SEC_SIZE;
     }
     else if(blkdev->devid == 2)
