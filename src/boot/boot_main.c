@@ -319,8 +319,20 @@ boot_step_s g_status_hand_tb[] =
 };
 
 
+/*
+This file is the entry of the user program. The user program is created by wind_main function starts to execute, 
+but the thread of this function has a high priority. Therefore, it is not recommended that the user program 
+execute directly here. It is better for the user to create a thread with medium priority here and transfer it 
+to a new thread to execute the user program. At the same time, this program does not need a dead cycle and can exit,
+but if a new thread is not created at the time of exit, the user program will not be executed again. 
+*/
 
-void boot_main(w_int32_t argc,char **argv)
+#include "wind_type.h"
+#include "wind_debug.h"
+
+
+
+void wind_main(w_int32_t argc,char **argv)
 {
     w_int32_t i;
     w_err_t err;

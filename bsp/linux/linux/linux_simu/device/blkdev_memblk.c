@@ -123,7 +123,7 @@ const w_blkdev_ops_s memblk_ops =
     memblk_close
 };
 
-w_blkdev_s memblk_dev[1] = 
+w_blkdev_s memblk_dev[3] = 
 {
     WIND_BLKDEV_DEF("sysrun",BLKDEV_RAM,0,0,0,0,&memblk_ops),
     WIND_BLKDEV_DEF("cache", BLKDEV_RAM,1,0,0,0,&memblk_ops),

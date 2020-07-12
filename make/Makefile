@@ -96,6 +96,7 @@ export OBJLIST
 
 
 all: boot os
+.PHONY:boot
 boot:
 	@echo "make wind-boot"
 	make -f mkboot

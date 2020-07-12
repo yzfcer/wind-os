@@ -1,6 +1,6 @@
 CUR_DIR=$(shell pwd)
 #Read the subdirectory of the current directory
-SUBDIRS=application
+#SUBDIRS=application
 SUBDIRS+=core
 SUBDIRS+=common
 SUBDIRS+=hal
@@ -9,6 +9,9 @@ SUBDIRS+=module
 SUBDIRS+=systhread
 ifeq ($(TARGET),wind-boot)
 	SUBDIRS+=boot
+else
+	SUBDIRS+=application
+
 endif
 
 #Export all source and target files
