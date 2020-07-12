@@ -2,13 +2,22 @@ WIND_INC_DIR += -I$(ROOTDIR)/bsp/$(ARCH)/$(CPU)/$(BOARD)/boot
 WIND_INC_DIR += -I$(ROOTDIR)/src/boot
 TARGET=wind-boot
 export WIND_INC_DIR TARGET
+
+
 CFLAGS = -g -Wall -rdynamic ${WIND_INC_DIR} ${CROSS_COMPILE_INCLUDE}
-export CFLAGS
+CLIBFLAGS = -g -rdynamic -L/usr/lib/86_64-linux-gnu -lm 
+export WIND_INC_DIR CFLAGS CLIBFLAGS
+
+
+OBJLIST=$(shell find $(ROOTDIR) -name *.o | tr ' ' '\ ' | tr '\n' ' ')
+export OBJLIST
+
 
 all: wind-boot build clean
 .PHONY:wind-boot
 wind-boot:
 	@echo "WIND_SRC_DIR="$(WIND_SRC_DIR)
+	@echo "WIND_INC_DIR="$(WIND_INC_DIR)
 	@echo "ROOTDIR="${ROOTDIR}
 	if [ ! -d ${OBJS_DIR} ]; \
 	then \

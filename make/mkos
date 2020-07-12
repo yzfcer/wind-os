@@ -3,8 +3,17 @@ WIND_INC_DIR += -I$(ROOTDIR)/src/application
 WIND_INC_DIR += -I$(ROOTDIR)/src/application/$(BOARD)
 TARGET=wind-os
 export WIND_INC_DIR TARGET
+
+
 CFLAGS = -g -Wall -rdynamic ${WIND_INC_DIR} ${CROSS_COMPILE_INCLUDE}
-export CFLAGS
+CLIBFLAGS = -g -rdynamic -L/usr/lib/86_64-linux-gnu -lm 
+export WIND_INC_DIR CFLAGS CLIBFLAGS
+
+
+
+OBJLIST=$(shell find $(ROOTDIR) -name *.o | tr ' ' '\ ' | tr '\n' ' ')
+export OBJLIST
+
 
 all: wind-os build
 .PHONY:wind-os

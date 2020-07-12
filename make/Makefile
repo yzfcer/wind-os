@@ -87,11 +87,9 @@ WIND_INC_DIR += -I$(ROOTDIR)/src/module/net/layer5
 
 CFLAGS = -g -Wall -rdynamic ${WIND_INC_DIR} ${CROSS_COMPILE_INCLUDE}
 CLIBFLAGS = -g -rdynamic -L/usr/lib/86_64-linux-gnu -lm 
-
 export WIND_INC_DIR CFLAGS CLIBFLAGS
 
 OBJLIST=$(shell find $(ROOTDIR) -name *.o | tr ' ' '\ ' | tr '\n' ' ')
-
 export OBJLIST
 
 
@@ -113,7 +111,7 @@ clean:
 		echo "enter dir:"$$dir; \
 		cd $(ROOTDIR)/$$dir && make clean || exit 1; \
 	done
-	#-rm -f $(TARGET)
+	-rm -f wind-os wind-boot
 	-rm -rf $$OBJLIST
 
 
