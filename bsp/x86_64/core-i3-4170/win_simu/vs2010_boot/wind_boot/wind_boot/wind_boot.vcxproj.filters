@@ -707,9 +707,6 @@
     <ClCompile Include="..\..\..\port\boot_port.c">
       <Filter>os_port</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\src\application\boot\user_entry.c">
-      <Filter>application</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\..\src\boot\boot_main.c">
       <Filter>boot</Filter>
     </ClCompile>
@@ -732,9 +729,6 @@
     </Filter>
     <Filter Include="os_hal">
       <UniqueIdentifier>{8aece0bd-8e91-4ede-a049-0cc4bbfac904}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="application">
-      <UniqueIdentifier>{3eab9536-725f-47ab-ac5d-e19288a05de8}</UniqueIdentifier>
     </Filter>
     <Filter Include="module_shell">
       <UniqueIdentifier>{79c294d0-a592-4a7c-950a-6ff76114da59}</UniqueIdentifier>

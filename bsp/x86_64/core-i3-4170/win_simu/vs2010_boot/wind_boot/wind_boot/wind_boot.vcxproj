@@ -74,7 +74,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\..\..\src\application\boot\user_entry.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\boot\boot_hw_if.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\boot\boot_img.c" />
     <ClCompile Include="..\..\..\..\..\..\..\src\boot\boot_main.c" />
