@@ -129,7 +129,7 @@ gen_file_head()
 	elif [[ $filename == "wind_"*".c" ]]
 	then
 		#PREINFO+="#include \""${FILENAME}".h\"\r\n"
-		PREINFO+="#include \"wind_obj.h\"\r\n"
+		PREINFO+="#include \"wind_"${OBJNAME}".h\"\r\n"
 	fi
 	PREINFO+="#ifdef __cplusplus\r\n"
 	PREINFO+="extern \"C\" {\r\n"

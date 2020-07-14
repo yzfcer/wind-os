@@ -39,6 +39,25 @@ mv ${MODDIR}/wind_module_${MODNAME}.h ${MODDIR}/module_${MODNAME}.h
 sed -i 's/wind_module/module/g' ${MODDIR}/module_${MODNAME}.c
 sed -i 's/wind_module/module/g' ${MODDIR}/module_${MODNAME}.h
 
+line=25
+sed -i "$[ line + 1 ]i #include \"wind_module.h\"" ${MODDIR}/module_${MODNAME}.c
+
+line=31
+sed -i "$[ line + 1 ]i MODULE_INIT($MODNAME)" ${MODDIR}/module_${MODNAME}.c
+sed -i "$[ line + 2 ]i {" ${MODDIR}/module_${MODNAME}.c
+sed -i "$[ line + 3 ]i \ \ \ \ w_err_t err;" ${MODDIR}/module_${MODNAME}.c
+sed -i "$[ line + 4 ]i \ \ \ \ err = W_ERR_OK;" ${MODDIR}/module_${MODNAME}.c
+sed -i "$[ line + 5 ]i \ \ \ \ return err;" ${MODDIR}/module_${MODNAME}.c
+sed -i "$[ line + 6 ]i }" ${MODDIR}/module_${MODNAME}.c
+
+sed -i "$[ line + 7 ]i MODULE_EXIT($MODNAME)" ${MODDIR}/module_${MODNAME}.c
+sed -i "$[ line + 8 ]i {" ${MODDIR}/module_${MODNAME}.c
+sed -i "$[ line + 9 ]i \ \ \ \ w_err_t err;" ${MODDIR}/module_${MODNAME}.c
+sed -i "$[ line + 10 ]i \ \ \ \ err = W_ERR_OK;" ${MODDIR}/module_${MODNAME}.c
+sed -i "$[ line + 11 ]i \ \ \ \ return err;" ${MODDIR}/module_${MODNAME}.c
+sed -i "$[ line + 12 ]i }" ${MODDIR}/module_${MODNAME}.c
+sed -i "$[ line + 13 ]i MODULE_DEF($MODNAME,0x0100,\"\");" ${MODDIR}/module_${MODNAME}.c
+
 ./mksrc -dch ${MODDIR} ${MODNAME}
 
  
