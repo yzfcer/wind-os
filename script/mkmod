@@ -3,8 +3,111 @@
 usage()
 {
 	echo "mkmod usage:"
-	echo "mkmod  <modname> "
+	echo "mkmod  [option] <modname> "
 	echo "      modname: the module name need to create"
+	echo "options:"
+	echo "      m: make module file"
+	echo "      c: make command file for module"
+	echo "      t: make test file for module"
+	echo "      e: make entry file for module"
+}
+
+parse_opt()
+{
+	local opt=$1
+	if [[ $opt != "-"*  ]]
+	then
+		MFLAG=false
+		CFLAG=false
+		TFLAG=false
+		EFLAG=false
+		return
+	fi
+	if [[ $opt == *"m"*  ]]
+	then
+		MFLAG=true
+	fi
+	if [[ $opt == *"c"*  ]]
+	then
+		CFLAG=true
+	fi
+	if [[ $opt == *"t"*  ]]
+	then
+		HFLAG=true
+	fi
+	if [[ $opt == *"e"*  ]]
+	then
+		TFLAG=true
+	fi
+	echo "CFLAG="$CFLAG
+	echo "TFLAG="$TFLAG
+	echo "EFLAG="$EFLAG
+}
+
+
+check_file()
+{
+	mkdir -p ${MODDIR}
+	if [ -f ${MODENTRY}.h ]
+	then
+		echo ${MODENTRY}.h" has been exist"
+		exit -1
+	fi
+	if [ -d ${CUR_PATH}/../src/module/${MODNAME} ]
+	then
+		echo "module directory has been exist"
+		exit -1
+	fi
+	mkdir -p ${CUR_PATH}/../src/module/${MODNAME}
+	if [ -f ${MODENTRY}.c ]
+	then
+		echo ${MODENTRY}.c" has been exist"
+		exit -2
+	fi
+}
+
+
+mk_mod_file()
+{
+	./mksrc -dch ${MODDIR} module_${MODNAME}
+	mv ${MODDIR}/wind_module_${MODNAME}.c ${MODDIR}/module_${MODNAME}.c
+	mv ${MODDIR}/wind_module_${MODNAME}.h ${MODDIR}/module_${MODNAME}.h
+	sed -i 's/wind_module/module/g' ${MODDIR}/module_${MODNAME}.c
+	sed -i 's/wind_module/module/g' ${MODDIR}/module_${MODNAME}.h
+
+	line=25
+	idx=1
+	sed -i "$[ line + idx ]i #include \"wind_module.h\"" ${MODDIR}/module_${MODNAME}.c
+
+	line=31
+	idx=1
+	sed -i "$[ line + idx ]i MODULE_INIT($MODNAME)" ${MODDIR}/module_${MODNAME}.c
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i {" ${MODDIR}/module_${MODNAME}.c
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i \ \ \ \ w_err_t err;" ${MODDIR}/module_${MODNAME}.c
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i \ \ \ \ err = W_ERR_OK;" ${MODDIR}/module_${MODNAME}.c
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i \ \ \ \ return err;" ${MODDIR}/module_${MODNAME}.c
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i }" ${MODDIR}/module_${MODNAME}.c
+	idx=$[ idx + 1 ]
+
+	sed -i "$[ line + idx ]i MODULE_EXIT($MODNAME)" ${MODDIR}/module_${MODNAME}.c
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i {" ${MODDIR}/module_${MODNAME}.c
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i \ \ \ \ w_err_t err;" ${MODDIR}/module_${MODNAME}.c
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i \ \ \ \ err = W_ERR_OK;" ${MODDIR}/module_${MODNAME}.c
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i \ \ \ \ return err;" ${MODDIR}/module_${MODNAME}.c
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i }" ${MODDIR}/module_${MODNAME}.c
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i MODULE_DEF($MODNAME,0x0100,\"\");" ${MODDIR}/module_${MODNAME}.c
+	idx=$[ idx + 1 ]
 }
 
 if [ $# -lt 1 ]
@@ -12,70 +115,41 @@ then
 	usage
 	exit 0
 fi
-MODNAME=$1
 CUR_PATH=$(cd $(dirname $0); pwd)
+MODNAME=$1
+if [ $# -eq 2 ]
+then
+	parse_opt $@
+	MODNAME=$2
+fi
+MFLAG=true
+CFLAG=false
+TFLAG=false
+EFLAG=false
+
+
 MODDIR=${CUR_PATH}/../src/module/${MODNAME}
 MODENTRY=${MODDIR}/${MODNAME}
 MODFILE=${MODDIR}/wind_${MODNAME}
 
-mkdir -p ${MODDIR}
-if [ -f ${MODENTRY}.h ]
+check_file
+if [ $MFLAG == true ]
 then
-	echo ${MODENTRY}.h" has been exist"
-	exit -1
-fi
-if [ -d ${CUR_PATH}/../src/module/${MODNAME} ]
-then
-	echo "module directory has been exist"
-	exit -1
-fi
-mkdir -p ${CUR_PATH}/../src/module/${MODNAME}
-if [ -f ${MODENTRY}.c ]
-then
-	echo ${MODENTRY}.c" has been exist"
-	exit -2
+	mk_mod_file
 fi
 
 
-./mksrc -dch ${MODDIR} module_${MODNAME}
-mv ${MODDIR}/wind_module_${MODNAME}.c ${MODDIR}/module_${MODNAME}.c
-mv ${MODDIR}/wind_module_${MODNAME}.h ${MODDIR}/module_${MODNAME}.h
-sed -i 's/wind_module/module/g' ${MODDIR}/module_${MODNAME}.c
-sed -i 's/wind_module/module/g' ${MODDIR}/module_${MODNAME}.h
+if [ $EFLAG == true ]
+then
+	./mksrc -dch ${MODDIR} ${MODNAME}
+fi
 
-line=25
-idx=1
-sed -i "$[ line + idx ]i #include \"wind_module.h\"" ${MODDIR}/module_${MODNAME}.c
+if [ $TFLAG == true ]
+then
+	./mktest ${MODDIR} ${MODNAME}
+fi
 
-line=31
-idx=1
-sed -i "$[ line + idx ]i MODULE_INIT($MODNAME)" ${MODDIR}/module_${MODNAME}.c
-idx=$[ idx + 1 ]
-sed -i "$[ line + idx ]i {" ${MODDIR}/module_${MODNAME}.c
-idx=$[ idx + 1 ]
-sed -i "$[ line + idx ]i \ \ \ \ w_err_t err;" ${MODDIR}/module_${MODNAME}.c
-idx=$[ idx + 1 ]
-sed -i "$[ line + idx ]i \ \ \ \ err = W_ERR_OK;" ${MODDIR}/module_${MODNAME}.c
-idx=$[ idx + 1 ]
-sed -i "$[ line + idx ]i \ \ \ \ return err;" ${MODDIR}/module_${MODNAME}.c
-idx=$[ idx + 1 ]
-sed -i "$[ line + idx ]i }" ${MODDIR}/module_${MODNAME}.c
-idx=$[ idx + 1 ]
-
-sed -i "$[ line + idx ]i MODULE_EXIT($MODNAME)" ${MODDIR}/module_${MODNAME}.c
-idx=$[ idx + 1 ]
-sed -i "$[ line + idx ]i {" ${MODDIR}/module_${MODNAME}.c
-idx=$[ idx + 1 ]
-sed -i "$[ line + idx ]i \ \ \ \ w_err_t err;" ${MODDIR}/module_${MODNAME}.c
-idx=$[ idx + 1 ]
-sed -i "$[ line + idx ]i \ \ \ \ err = W_ERR_OK;" ${MODDIR}/module_${MODNAME}.c
-idx=$[ idx + 1 ]
-sed -i "$[ line + idx ]i \ \ \ \ return err;" ${MODDIR}/module_${MODNAME}.c
-idx=$[ idx + 1 ]
-sed -i "$[ line + idx ]i }" ${MODDIR}/module_${MODNAME}.c
-idx=$[ idx + 1 ]
-sed -i "$[ line + idx ]i MODULE_DEF($MODNAME,0x0100,\"\");" ${MODDIR}/module_${MODNAME}.c
-idx=$[ idx + 1 ]
-
-./mksrc -dch ${MODDIR} ${MODNAME}
-
+if [ $CFLAG == true ]
+then
+	./mkcmd ${MODDIR} ${MODNAME}
+fi
