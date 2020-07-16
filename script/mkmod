@@ -19,6 +19,7 @@ parse_opt()
 	then
 		MFLAG=false
 		CFLAG=false
+		DFLAG=false
 		TFLAG=false
 		EFLAG=false
 		return
@@ -30,6 +31,10 @@ parse_opt()
 	if [[ $opt == *"c"*  ]]
 	then
 		CFLAG=true
+	fi
+	if [[ $opt == *"d"*  ]]
+	then
+		DFLAG=true
 	fi
 	if [[ $opt == *"t"*  ]]
 	then
@@ -123,6 +128,7 @@ then
 	MODNAME=$2
 fi
 MFLAG=true
+DFLAG=false
 CFLAG=false
 TFLAG=false
 EFLAG=false
@@ -138,6 +144,10 @@ then
 	mk_mod_file
 fi
 
+if [ $EFLAG == true ]
+then
+	rm -rf ${MODDIR}
+fi
 
 if [ $EFLAG == true ]
 then
