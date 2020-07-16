@@ -6,6 +6,7 @@ usage()
 	echo "mkmod  [option] <modname> "
 	echo "      modname: the module name need to create"
 	echo "options:"
+	echo "      d: deleteold  module directory"
 	echo "      m: make module file"
 	echo "      c: make command file for module"
 	echo "      t: make test file for module"
@@ -38,12 +39,14 @@ parse_opt()
 	fi
 	if [[ $opt == *"t"*  ]]
 	then
-		HFLAG=true
+		TFLAG=true
 	fi
 	if [[ $opt == *"e"*  ]]
 	then
-		TFLAG=true
+		EFLAG=true
 	fi
+	echo "MFLAG="$MFLAG
+	echo "DFLAG="$DFLAG
 	echo "CFLAG="$CFLAG
 	echo "TFLAG="$TFLAG
 	echo "EFLAG="$EFLAG
@@ -52,7 +55,6 @@ parse_opt()
 
 check_file()
 {
-	mkdir -p ${MODDIR}
 	if [ -f ${MODENTRY}.h ]
 	then
 		echo ${MODENTRY}.h" has been exist"
@@ -63,12 +65,13 @@ check_file()
 		echo "module directory has been exist"
 		exit -1
 	fi
-	mkdir -p ${CUR_PATH}/../src/module/${MODNAME}
+	#mkdir -p ${CUR_PATH}/../src/module/${MODNAME}
 	if [ -f ${MODENTRY}.c ]
 	then
 		echo ${MODENTRY}.c" has been exist"
 		exit -2
 	fi
+	mkdir -p ${MODDIR}
 }
 
 
@@ -120,34 +123,35 @@ then
 	usage
 	exit 0
 fi
-CUR_PATH=$(cd $(dirname $0); pwd)
 MODNAME=$1
+MFLAG=false
+DFLAG=false
+CFLAG=false
+TFLAG=false
+EFLAG=false
 if [ $# -eq 2 ]
 then
 	parse_opt $@
 	MODNAME=$2
 fi
-MFLAG=true
-DFLAG=false
-CFLAG=false
-TFLAG=false
-EFLAG=false
 
 
+CUR_PATH=$(cd $(dirname $0); pwd)
 MODDIR=${CUR_PATH}/../src/module/${MODNAME}
 MODENTRY=${MODDIR}/${MODNAME}
 MODFILE=${MODDIR}/wind_${MODNAME}
 
+if [ $DFLAG == true ]
+then
+	echo "remove old module files"
+	rm -rf ${MODDIR}
+fi
 check_file
 if [ $MFLAG == true ]
 then
 	mk_mod_file
 fi
 
-if [ $EFLAG == true ]
-then
-	rm -rf ${MODDIR}
-fi
 
 if [ $EFLAG == true ]
 then

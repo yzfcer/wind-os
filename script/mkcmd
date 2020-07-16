@@ -13,7 +13,7 @@ then
 	usage
 	exit 0
 fi
-DESTDIR=$(pwd $1)
+DESTDIR=$1
 CMDNAME=$2
 CUR_PATH=$(cd $(dirname $0); pwd)
 #cd ${CUR_PATH}
