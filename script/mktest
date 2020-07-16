@@ -35,23 +35,43 @@ sed -i "s/test_${TESTNAME}.h/wind_cmd.h/g" ${DESTDIR}/test_${TESTNAME}.c
 sed -i '26d' ${DESTDIR}/test_${TESTNAME}.c
 
 line=30
-sed -i "$[ line + 1 ]i CASE_SETUP(info) FUNC_EMPTY" ${DESTDIR}/test_${TESTNAME}.c
-sed -i "$[ line + 2 ]i CASE_TEARDOWN(info) FUNC_EMPTY" ${DESTDIR}/test_${TESTNAME}.c
-sed -i "$[ line + 3 ]i CASE_FUNC(info)" ${DESTDIR}/test_${TESTNAME}.c
-sed -i "$[ line + 4 ]i {" ${DESTDIR}/test_${TESTNAME}.c
-sed -i "$[ line + 5 ]i }" ${DESTDIR}/test_${TESTNAME}.c
+idx=1
+sed -i "$[ line + idx ]i CASE_SETUP(info) FUNC_EMPTY" ${DESTDIR}/test_${TESTNAME}.c
+idx=$[ idx + 1 ]
+sed -i "$[ line + idx ]i CASE_TEARDOWN(info) FUNC_EMPTY" ${DESTDIR}/test_${TESTNAME}.c
+idx=$[ idx + 1 ]
+sed -i "$[ line + idx ]i CASE_FUNC(info)" ${DESTDIR}/test_${TESTNAME}.c
+idx=$[ idx + 1 ]
+sed -i "$[ line + idx ]i {" ${DESTDIR}/test_${TESTNAME}.c
+idx=$[ idx + 1 ]
+sed -i "$[ line + idx ]i }" ${DESTDIR}/test_${TESTNAME}.c
+idx=$[ idx + 1 ]
 
-sed -i "$[ line + 6 ]i CASE_SETUP(func) FUNC_EMPTY" ${DESTDIR}/test_${TESTNAME}.c
-sed -i "$[ line + 7 ]i CASE_TEARDOWN(func) FUNC_EMPTY" ${DESTDIR}/test_${TESTNAME}.c
-sed -i "$[ line + 8 ]i CASE_FUNC(func)" ${DESTDIR}/test_${TESTNAME}.c
-sed -i "$[ line + 9 ]i {" ${DESTDIR}/test_${TESTNAME}.c
-sed -i "$[ line + 10 ]i }" ${DESTDIR}/test_${TESTNAME}.c
+sed -i "$[ line + idx ]i CASE_SETUP(func) FUNC_EMPTY" ${DESTDIR}/test_${TESTNAME}.c
+idx=$[ idx + 1 ]
+sed -i "$[ line + idx ]i CASE_TEARDOWN(func) FUNC_EMPTY" ${DESTDIR}/test_${TESTNAME}.c
+idx=$[ idx + 1 ]
+sed -i "$[ line + idx ]i CASE_FUNC(func)" ${DESTDIR}/test_${TESTNAME}.c
+idx=$[ idx + 1 ]
+sed -i "$[ line + idx ]i {" ${DESTDIR}/test_${TESTNAME}.c
+idx=$[ idx + 1 ]
+sed -i "$[ line + idx ]i }" ${DESTDIR}/test_${TESTNAME}.c
+idx=$[ idx + 1 ]
 
-sed -i "$[ line + 11 ]i SUITE_SETUP(${TESTNAME}) FUNC_EMPTY" ${DESTDIR}/test_${TESTNAME}.c
-sed -i "$[ line + 12 ]i SUITE_TEARDOWN(${TESTNAME}) FUNC_EMPTY" ${DESTDIR}/test_${TESTNAME}.c
+sed -i "$[ line + idx ]i SUITE_SETUP(${TESTNAME}) FUNC_EMPTY" ${DESTDIR}/test_${TESTNAME}.c
+idx=$[ idx + 1 ]
+sed -i "$[ line + idx ]i SUITE_TEARDOWN(${TESTNAME}) FUNC_EMPTY" ${DESTDIR}/test_${TESTNAME}.c
+idx=$[ idx + 1 ]
 
-sed -i "$[ line + 13 ]i TEST_CASES_START(${TESTNAME})" ${DESTDIR}/test_${TESTNAME}.c
-sed -i "$[ line + 14 ]i TEST_CASE(info)" ${DESTDIR}/test_${TESTNAME}.c
-sed -i "$[ line + 15 ]i TEST_CASE(func)" ${DESTDIR}/test_${TESTNAME}.c
-sed -i "$[ line + 16 ]i TEST_CASES_END" ${DESTDIR}/test_${TESTNAME}.c
-sed -i "$[ line + 17 ]i TEST_SUITE(${TESTNAME})" ${DESTDIR}/test_${TESTNAME}.c
+sed -i "$[ line + idx ]i TEST_CASES_START(${TESTNAME})" ${DESTDIR}/test_${TESTNAME}.c
+idx=$[ idx + 1 ]
+sed -i "$[ line + idx ]i TEST_CASE(info)" ${DESTDIR}/test_${TESTNAME}.c
+idx=$[ idx + 1 ]
+sed -i "$[ line + idx ]i TEST_CASE(func)" ${DESTDIR}/test_${TESTNAME}.c
+idx=$[ idx + 1 ]
+sed -i "$[ line + idx ]i TEST_CASES_END" ${DESTDIR}/test_${TESTNAME}.c
+idx=$[ idx + 1 ]
+sed -i "$[ line + idx ]i TEST_SUITE(${TESTNAME})" ${DESTDIR}/test_${TESTNAME}.c
+
+
+
