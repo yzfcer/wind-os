@@ -8,6 +8,153 @@ usage()
 	echo "      name: the command name need to create"
 }
 
+modify_header()
+{
+	DESTFILE=${DESTDIR}/wind_${OBJNAME}.h
+	line=33
+	idx=1
+	sed -i "$[ line + idx ]i typedef struct __w_${OBJNAME}_s w_${OBJNAME}_s;" ${DESTFILE} 
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i struct __w_${OBJNAME}_s " ${DESTFILE} 
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i {" ${DESTFILE} 
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i \ \ \ \ w_obj_s obj;" ${DESTFILE} 
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i };" ${DESTFILE} 
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i w_err_t _wind_${OBJNAME}_mod_init(void);" ${DESTFILE} 
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i w_err_t wind_${OBJNAME}_init(w_${OBJNAME}_s *${OBJNAME},char *name);" ${DESTFILE} 
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i w_${OBJNAME}_s *wind_${OBJNAME}_create(char *name);" ${DESTFILE} 
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i w_${OBJNAME}_s *wind_${OBJNAME}_get(char *name);" ${DESTFILE} 
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i w_err_t wind_${OBJNAME}_destroy(w_${OBJNAME}_s *${OBJNAME});" ${DESTFILE} 
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i w_err_t wind_${OBJNAME}_register(w_${OBJNAME}_s *${OBJNAME});" ${DESTFILE} 
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i w_err_t wind_${OBJNAME}_unregister(w_${OBJNAME}_s *${OBJNAME});" ${DESTFILE} 
+	idx=$[ idx + 1 ]
+}
+
+
+modify_source()
+{
+	DESTFILE=${DESTDIR}/wind_${OBJNAME}.c
+	line=32
+	idx=1
+	UPOBJNAME=`echo ${OBJNAME^^}`
+
+	sed -i "$[ line + idx ]i #define NODE_TO_${UPOBJNAME}(node) NODEPTR_TO_ITEMPTR(node,w_${OBJNAME}_s,obj.objnode)" ${DESTFILE} 
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i static w_dlist_t ${OBJNAME}_list" ${DESTFILE} 
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i WIND_POOL(${OBJNAME}pool,WIND_${UPOBJNAME}_MAX_NUM,sizeof(w_${OBJNAME}_s));" ${DESTFILE} 
+	idx=$[ idx + 1 ]
+
+	sed -i "$[ line + idx ]i w_${OBJNAME}_s *${OBJNAME}_malloc(void)" ${DESTFILE} 
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i {" ${DESTFILE} 
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i \ \ \ \ return (w_${OBJNAME}_s *)wind_pool_malloc(${OBJNAME}pool);" ${DESTFILE} 
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i }" ${DESTFILE} 
+	idx=$[ idx + 1 ]
+
+	sed -i "$[ line + idx ]i w_err_t ${OBJNAME}_free(w_${OBJNAME}_s *${OBJNAME})" ${DESTFILE} 
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i {" ${DESTFILE} 
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i \ \ \ \ return wind_pool_free(${OBJNAME}pool,${OBJNAME});" ${DESTFILE} 
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i }" ${DESTFILE} 
+	idx=$[ idx + 1 ]
+
+
+
+	sed -i "$[ line + idx ]i w_err_t _wind_${OBJNAME}_mod_init(void)" ${DESTFILE} 
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i {" ${DESTFILE} 
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i \ \ \ \ w_err_t err;" ${DESTFILE} 
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i \ \ \ \ DLIST_INIT(${OBJNAME}_list);" ${DESTFILE} 
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i \ \ \ \ err = wind_pool_create(\"${OBJNAME}\",${OBJNAME}pool,sizeof(${OBJNAME}pool),sizeof(w_${OBJNAME}_s));" ${DESTFILE} 
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i \ \ \ \ return W_ERR_OK;" ${DESTFILE} 
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i }" ${DESTFILE} 
+	idx=$[ idx + 1 ]
+
+
+	sed -i "$[ line + idx ]i w_err_t wind_${OBJNAME}_init(w_${OBJNAME}_s *${OBJNAME},char *name)" ${DESTFILE} 
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i {" ${DESTFILE} 
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i \ \ \ \ return W_ERR_OK;" ${DESTFILE} 
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i }" ${DESTFILE} 
+	idx=$[ idx + 1 ]
+
+
+
+
+	sed -i "$[ line + idx ]i w_${OBJNAME}_s *wind_${OBJNAME}_create(char *name);" ${DESTFILE} 
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i {" ${DESTFILE} 
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i \ \ \ \ return W_NULL;" ${DESTFILE} 
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i }" ${DESTFILE} 
+	idx=$[ idx + 1 ]
+
+
+
+
+	sed -i "$[ line + idx ]i w_${OBJNAME}_s *wind_${OBJNAME}_get(char *name);" ${DESTFILE} 
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i {" ${DESTFILE} 
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i \ \ \ \ return (w_${OBJNAME}_s *)wind_obj_get(name));" ${DESTFILE} 
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i }" ${DESTFILE} 
+	idx=$[ idx + 1 ]
+
+
+	sed -i "$[ line + idx ]i w_err_t wind_${OBJNAME}_destroy(w_${OBJNAME}_s *${OBJNAME});" ${DESTFILE} 
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i {" ${DESTFILE} 
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i \ \ \ \ return W_ERR_OK;" ${DESTFILE} 
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i }" ${DESTFILE} 
+	idx=$[ idx + 1 ]
+
+	sed -i "$[ line + idx ]i w_err_t wind_${OBJNAME}_register(w_${OBJNAME}_s *${OBJNAME});" ${DESTFILE} 
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i {" ${DESTFILE} 
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i \ \ \ \ return wind_obj_register(&${OBJNAME}->obj,&${OBJNAME}_list);" ${DESTFILE} 
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i }" ${DESTFILE} 
+	idx=$[ idx + 1 ]
+
+	sed -i "$[ line + idx ]i w_err_t wind_${OBJNAME}_unregister(w_${OBJNAME}_s *${OBJNAME});" ${DESTFILE} 
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i {" ${DESTFILE} 
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i \ \ \ \ return wind_obj_unregister(&${OBJNAME}->obj,&${OBJNAME}_list);" ${DESTFILE} 
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i }" ${DESTFILE} 
+	idx=$[ idx + 1 ]
+
+}
+
+
+
 if [ $# -lt 2 ]
 then
 	usage
@@ -24,5 +171,7 @@ then
 fi
 
 ./mksrc -dhc ${DESTDIR} ${OBJNAME}
+modify_header
+modify_source
 
 

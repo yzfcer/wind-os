@@ -83,10 +83,6 @@ mk_mod_file()
 	sed -i 's/wind_module/module/g' ${MODDIR}/module_${MODNAME}.c
 	sed -i 's/wind_module/module/g' ${MODDIR}/module_${MODNAME}.h
 
-	line=25
-	idx=1
-	sed -i "$[ line + idx ]i #include \"wind_module.h\"" ${MODDIR}/module_${MODNAME}.c
-
 	line=31
 	idx=1
 	sed -i "$[ line + idx ]i MODULE_INIT($MODNAME)" ${MODDIR}/module_${MODNAME}.c
@@ -116,6 +112,10 @@ mk_mod_file()
 	idx=$[ idx + 1 ]
 	sed -i "$[ line + idx ]i MODULE_DEF($MODNAME,0x0100,\"\");" ${MODDIR}/module_${MODNAME}.c
 	idx=$[ idx + 1 ]
+
+	line=24
+	idx=1
+	sed -i "$[ line + idx ]i #include \"wind_module.h\"" ${MODDIR}/module_${MODNAME}.c
 }
 
 if [ $# -lt 1 ]
