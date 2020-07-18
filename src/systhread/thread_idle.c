@@ -24,7 +24,7 @@
 #include "wind_debug.h"
 #include "wind_thread.h"
 
-static w_stack_t idlestk[THREAD_IDLE_STKSIZE];//���������ջ
+static w_stack_t idlestk[THREAD_IDLE_STKSIZE];
 static w_err_t thread_idle(w_int32_t argc,char **argv)
 {    
     while(1)

@@ -43,7 +43,7 @@ modify_header()
 modify_source()
 {
 	DESTFILE=${DESTDIR}/wind_${OBJNAME}.c
-	line=32
+	line=31
 	idx=1
 	UPOBJNAME=`echo ${OBJNAME^^}`
 

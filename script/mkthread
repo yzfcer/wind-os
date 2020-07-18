@@ -15,6 +15,7 @@ then
 fi
 DESTDIR=$1
 THREADNAME=$2
+UPTHREADNAME=$(echo ${THREADNAME^^})
 CUR_PATH=$(cd $(dirname $0); pwd)
 DESTFILE=${DESTDIR}/thread_${THREADNAME}.c
 
@@ -32,27 +33,40 @@ sed -i '26d' ${DESTFILE}
 
 line=30
 idx=1
-sed -i "$[ line + idx ]i COMMAND_DISC($THREADNAME)" ${DESTFILE}
+sed -i "$[ line + idx ]i static w_stack_t ${THREADNAME}stk[THREAD_${UPTHREADNAME}_STKSIZE];" ${DESTFILE}
+idx=$[ idx + 1 ]
+sed -i "$[ line + idx ]i static w_err_t thread_${THREADNAME}(w_int32_t argc,char **argv)" ${DESTFILE}
 idx=$[ idx + 1 ]
 sed -i "$[ line + idx ]i {" ${DESTFILE}
+idx=$[ idx + 1 ]
+sed -i "$[ line + idx ]i \ \ \ \ while(1)" ${DESTFILE}
+idx=$[ idx + 1 ]
+sed -i "$[ line + idx ]i \ \ \ \ {" ${DESTFILE}
+idx=$[ idx + 1 ]
+sed -i "$[ line + idx ]i \ \ \ \ \ \ \ \ wind_printf(\"exec thread ${THREADNAME}\");" ${DESTFILE}
+idx=$[ idx + 1 ]
+sed -i "$[ line + idx ]i \ \ \ \ \ \ \ \ wind_thread_sleep(5000);" ${DESTFILE}
+idx=$[ idx + 1 ]
+sed -i "$[ line + idx ]i \ \ \ \ }" ${DESTFILE}
 idx=$[ idx + 1 ]
 sed -i "$[ line + idx ]i }" ${DESTFILE}
 idx=$[ idx + 1 ]
+sed -i "$[ line + idx ]i \ " ${DESTFILE}
+idx=$[ idx + 1 ]
+sed -i "$[ line + idx ]i \ " ${DESTFILE}
+idx=$[ idx + 1 ]
 
-sed -i "$[ line + idx ]i COMMAND_USAGE($THREADNAME)" ${DESTFILE}
+sed -i "$[ line + idx ]i w_err_t _create_thread_${THREADNAME}(void)" ${DESTFILE}
 idx=$[ idx + 1 ]
 sed -i "$[ line + idx ]i {" ${DESTFILE}
 idx=$[ idx + 1 ]
-sed -i "$[ line + idx ]i }" ${DESTFILE}
+sed -i "$[ line + idx ]i \ \ \ \ thread = wind_thread_create(\"${THREADNAME}\",thread_${THREADNAME}," ${DESTFILE}
 idx=$[ idx + 1 ]
-
-sed -i "$[ line + idx ]i COMMAND_MAIN($THREADNAME,argc,argv)" ${DESTFILE}
+sed -i "$[ line + idx ]i \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0,W_NULL,${THREADNAME}stk,THREAD_${UPTHREADNAME}_STKSIZE);" ${DESTFILE}
 idx=$[ idx + 1 ]
-sed -i "$[ line + idx ]i {" ${DESTFILE}
+sed -i "$[ line + idx ]i \ \ \ \ WIND_ASSERT_RETURN(thread != W_NULL,W_ERR_FAIL);" ${DESTFILE}
 idx=$[ idx + 1 ]
 sed -i "$[ line + idx ]i \ \ \ \ return W_ERR_OK;" ${DESTFILE}
 idx=$[ idx + 1 ]
 sed -i "$[ line + idx ]i }" ${DESTFILE}
 idx=$[ idx + 1 ]
-sed -i "$[ line + idx ]i COMMAND_DEF($THREADNAME);" ${DESTFILE}
-

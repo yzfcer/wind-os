@@ -1,0 +1,26 @@
+
+usage()
+{
+	echo "cfgmacro usage:"
+	echo "cfgmacro <option> <macro> <depend_macro> "
+	echo "      macro        : the macro need to be insert"
+	echo "      depend_macro : the macro which depended on"
+	echo "option:"
+	echo "      A : add a macro"
+	echo "      D : delete a macro"
+}
+
+
+if [ $# -lt 2 ]
+then
+	usage
+	exit 0
+fi
+ACTION=$1
+MACRO=$2
+DEPENDMACRO=$3
+CUR_PATH=$(cd $(dirname $0); pwd)
+BSPDIR=$(cd ../bsp; pwd)
+echo CUR_PATH=${CUR_PATH}
+echo BSPDIR=${BSPDIR}
+

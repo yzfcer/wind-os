@@ -1,58 +1,276 @@
-
+#!/usr/bin/bash
 
 usage()
 {
 	echo "mkfsm usage:"
-	echo "mkfsm <dir> <fsmname> "
+	echo "mkfsm <dir> <fsmname> [step1 [step2 [...]]]"
 	echo "      dir : the directory in which to create file"
 	echo "      name: the fsm name need to create"
 }
 
-if [ $# -lt 2 ]
+modify_header()
+{
+	line=30
+	idx=1
+	local index=2
+	local param=( "$@" )
+	UPFSMNAME=$(echo ${FSMNAME^^})
+	DESTFILE=${DESTDIR}/wind_fsm_${FSMNAME}.h
+	echo "modify_header:"${DESTFILE}
+	echo $param
+	
+
+
+	sed -i "$[ line + idx ]i typedef struct __${FSMNAME}_fsm_s w_${FSMNAME}fsm_s;" ${DESTFILE}
+	idx=$[ idx + 1 ]
+	
+	#add step enum 
+	sed -i "$[ line + idx ]i typedef enum" ${DESTFILE}
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i {" ${DESTFILE}
+	idx=$[ idx + 1 ]
+	
+	
+	
+	while (($index < $#))
+	do
+		local stepname=${param[$index]}
+		echo stepname=${stepname}
+		local upstepname=$(echo ${stepname^^})
+		sed -i "$[ line + idx ]i \ \ \ \ ${UPFSMNAME}_STEP_${upstepname}," ${DESTFILE}
+		idx=$[ idx + 1 ]
+		index=$[ index + 1 ]
+	done
+	sed -i "$[ line + idx ]i }${FSMNAME}_step_e;" ${DESTFILE}
+	idx=$[ idx + 1 ]
+
+	sed -i "$[ line + idx ]i struct __${FSMNAME}_fsm_s" ${DESTFILE}
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i {" ${DESTFILE}
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i \ \ \ \ w_fsm_s fsm;" ${DESTFILE}
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i };" ${DESTFILE}
+	idx=$[ idx + 1 ]
+
+	sed -i "$[ line + idx ]i w_err_t wind_${FSMNAME}_fsm_init(w_${FSMNAME}fsm_s *${FSMNAME}fsm,char *name);" ${DESTFILE}
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i w_err_t wind_${FSMNAME}_fsm_input(w_${FSMNAME}fsm_s *${FSMNAME}fsm,void *date,w_int32_t len);" ${DESTFILE}
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i w_err_t wind_${FSMNAME}_fsm_deinit(w_${FSMNAME}fsm_s *${FSMNAME}fsm);" ${DESTFILE}
+	idx=$[ idx + 1 ]
+
+
+}
+
+insert_step_body()
+{
+	idx=$1
+	sed -i "$[ line + idx ]i {" ${DESTFILE}
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i \ \ \ \ w_err_s err;" ${DESTFILE}
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i \ \ \ \ w_${FSMNAME}fsm_s *${FSMNAME}fsm;" ${DESTFILE}
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i \ \ \ \ WIND_ASSERT_RETURN(fsm != W_NULL,W_ERR_NULL_PTR);" ${DESTFILE}
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i \ \ \ \ ${FSMNAME}fsm = (w_${FSMNAME}fsm_s*)fsm;" ${DESTFILE}
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i \ \ \ \ return W_ERR_OK;" ${DESTFILE}
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i };" ${DESTFILE}
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i \ " ${DESTFILE}
+	idx=$[ idx + 1 ]
+	return $idx;	
+}
+
+insert_init_func()
+{
+	idx=$1
+	sed -i "$[ line + idx ]i \ \ \ \ char *fsmname;" ${DESTFILE}
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i \ \ \ \ static w_int32_t xfsm_id = 0;" ${DESTFILE}
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i \ \ \ \ WIND_ASSERT_RETURN(${FSMNAME}fsm != W_NULL,W_ERR_NULL_PTR);" ${DESTFILE}
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i \ \ \ \ WIND_ASSERT_RETURN(name != W_NULL,W_ERR_NULL_PTR);" ${DESTFILE}
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i \ \ \ \ fsmname = (char*)wind_malloc(16);" ${DESTFILE}
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i \ \ \ \ WIND_ASSERT_RETURN(fsmname != W_NULL,W_ERR_MEM);" ${DESTFILE}
+	idx=$[ idx + 1 ]
+
+
+
+	sed -i "$[ line + idx ]i \ \ \ \ wind_memset(fsmname,0,16);" ${DESTFILE}
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i \ \ \ \ wind_sprintf(fsmname,\"${FSMNAME}%d\",fsm_id);" ${DESTFILE}
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i \ \ \ \ wind_memset(${FSMNAME}fsm,0,sizeof(w_${FSMNAME}fsm_s));" ${DESTFILE}
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i \ \ \ \ err = wind_fsm_init(&${FSMNAME}fsm->fsm,fsmname,fsm_id,name);" ${DESTFILE}
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i \ \ \ \ WIND_ASSERT_RETURN(err == W_ERR_OK,err);" ${DESTFILE}
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i \ \ \ \ //do some other init things here" ${DESTFILE}
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i \ \ \ \ fsm_id ++;" ${DESTFILE}
+	idx=$[ idx + 1 ]
+
+
+	sed -i "$[ line + idx ]i \ \ \ \ if(fsm_id < 0)" ${DESTFILE}
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i \ \ \ \ \ \ \ \ fsm_id = 0;" ${DESTFILE}
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i \ \ \ \ wind_fsm_start(&${FSMNAME}fsm->fsm);" ${DESTFILE}
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i \ \ \ \ wind_fsm_wait(&${FSMNAME}fsm->fsm);" ${DESTFILE}
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i \ \ \ \ return W_ERR_OK;" ${DESTFILE}
+	idx=$[ idx + 1 ]
+	return $idx;
+}
+
+insert_input_func()
+{
+	idx=$1
+	sed -i "$[ line + idx ]i \ \ \ \ WIND_ASSERT_RETURN(${FSMNAME}fsm != W_NULL,W_ERR_NULL_PTR);" ${DESTFILE}
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i \ \ \ \ err = wind_fsm_input(&${FSMNAME}fsm->fsm,data,len);" ${DESTFILE}
+	idx=$[ idx + 1 ]
+	return $idx;
+}
+
+insert_deinit_func()
+{
+	idx=$1
+	sed -i "$[ line + idx ]i \ \ \ \ WIND_ASSERT_RETURN(${FSMNAME}fsm != W_NULL,W_ERR_NULL_PTR);" ${DESTFILE}
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i \ \ \ \ wind_free(${FSMNAME}fsm->fsm.obj.name);" ${DESTFILE}
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i \ \ \ \ wind_fsm_destroy(&${FSMNAME}fsm->fsm);" ${DESTFILE}
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i \ \ \ \ //do some other init things here" ${DESTFILE}
+	idx=$[ idx + 1 ]
+
+	return $idx;
+
+}
+
+insert_extfunc_body()
+{
+	idx=$1
+	functype=$2
+	sed -i "$[ line + idx ]i {" ${DESTFILE}
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i \ \ \ \ w_err_s err;" ${DESTFILE}
+	idx=$[ idx + 1 ]
+	if [ $functype == "init" ];then
+		insert_init_func $idx
+	elif [ $functype == "input" ];then
+		insert_input_func $idx
+	elif [ $functype == "deinit" ];then
+		insert_deinit_func $idx
+	fi
+	idx=$?
+
+	sed -i "$[ line + idx ]i \ \ \ \ return W_ERR_OK;" ${DESTFILE}
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i };" ${DESTFILE}
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i \ " ${DESTFILE}
+	idx=$[ idx + 1 ]
+	return $idx;	
+}
+
+modify_source()
+{
+	line=33
+	idx=1
+	local index=2
+	local param=( "$@" )
+	UPFSMNAME=$(echo ${FSMNAME^^})
+	DESTFILE=${DESTDIR}/wind_fsm_${FSMNAME}.c
+	echo "modify_source:"${DESTFILE}
+	echo $param
+
+	while (($index < $#))
+	do
+		local stepname=${param[$index]}
+		echo stepname=${stepname}
+		local upstepname=$(echo ${stepname^^})
+		sed -i "$[ line + idx ]i static w_err_t ${FSMNAME}fsm_handle_${stepname}(w_fsm_s *fsm)" ${DESTFILE}
+		idx=$[ idx + 1 ]
+		insert_step_body $idx
+		idx=$?
+		index=$[ index + 1 ]
+	done
+
+	sed -i "$[ line + idx ]i w_err_t wind_${FSMNAME}_fsm_init(w_${FSMNAME}fsm_s *${FSMNAME}fsm,char *name)" ${DESTFILE}
+	idx=$[ idx + 1 ]
+	insert_extfunc_body $idx init
+	idx=$?
+
+	sed -i "$[ line + idx ]i w_err_t wind_${FSMNAME}_fsm_input(w_${FSMNAME}fsm_s *${FSMNAME}fsm,void *date,w_int32_t len)" ${DESTFILE}
+	idx=$[ idx + 1 ] 
+	insert_extfunc_body $idx input
+	idx=$?
+
+	sed -i "$[ line + idx ]i w_err_t wind_${FSMNAME}_fsm_deinit(w_${FSMNAME}fsm_s *${FSMNAME}fsm)" ${DESTFILE}
+	idx=$[ idx + 1 ]
+	insert_extfunc_body $idx deinit
+	idx=$?
+
+	sed -i "$[ line + idx ]i FSM_STEP_START(${FSMNAME)" ${DESTFILE}
+	idx=$[ idx + 1 ]
+	while (($index < $#))
+	do
+		local stepname=${param[$index]}
+		echo stepname=${stepname}
+		local upstepname=$(echo ${stepname^^})
+		sed -i "$[ line + idx ]i FSM_STEP(${UPFSMNAME}_STEP_${upstepname},${FSMNAME}fsm_handle_${upstepname}" ${DESTFILE}
+		idx=$[ idx + 1 ]
+		insert_step_body $idx
+		idx=$?
+		index=$[ index + 1 ]
+	done
+	sed -i "$[ line + idx ]i FSM_STEP_END" ${DESTFILE}
+	idx=$[ idx + 1 ]
+	sed -i "$[ line + idx ]i FSM_MODEL_DEF(xml)" ${DESTFILE}
+	idx=$[ idx + 1 ]
+
+
+
+}
+
+check_file()
+{
+	if [ -f ${DESTDIR}/wind_fsm_${FSMNAME}.c ]
+	then
+		echo ${DESTDIR}/wind_fsm_${FSMNAME}.c " has been exist"
+		exit 0
+	fi
+	if [ -f ${DESTDIR}/wind_fsm_${FSMNAME}.h ]
+	then
+		echo ${DESTDIR}/wind_fsm_${FSMNAME}.h " has been exist"
+		exit 0
+	fi
+}
+
+
+if [ $# -lt 3 ]
 then
 	usage
 	exit 0
 fi
 DESTDIR=$1
 FSMNAME=$2
+check_file
+STEPCNT=$[ $# - 2 ]
 CUR_PATH=$(cd $(dirname $0); pwd)
-DESTFILE=${DESTDIR}/fsm_${FSMNAME}.c
-
-if [ -f ${DESTFILE} ]
-then
-	echo ${DESTFILE} " has been exist"
-	exit 
-fi
-
-./mksrc -dc ${DESTDIR} fsm_${FSMNAME}
-mv ${DESTDIR}/wind_fsm_${FSMNAME}.c  ${DESTFILE}
-sed -i "s/wind_fsm/fsm/g" ${DESTFILE}
-sed -i "s/fsm_${FSMNAME}.h/wind_fsm.h/g" ${DESTFILE}
-sed -i '26d' ${DESTFILE}
-
-line=30
-idx=1
-sed -i "$[ line + idx ]i COMMAND_DISC($FSMNAME)" ${DESTFILE}
-idx=$[ idx + 1 ]
-sed -i "$[ line + idx ]i {" ${DESTFILE}
-idx=$[ idx + 1 ]
-sed -i "$[ line + idx ]i }" ${DESTFILE}
-idx=$[ idx + 1 ]
-
-sed -i "$[ line + idx ]i COMMAND_USAGE($FSMNAME)" ${DESTFILE}
-idx=$[ idx + 1 ]
-sed -i "$[ line + idx ]i {" ${DESTFILE}
-idx=$[ idx + 1 ]
-sed -i "$[ line + idx ]i }" ${DESTFILE}
-idx=$[ idx + 1 ]
-
-sed -i "$[ line + idx ]i COMMAND_MAIN($FSMNAME,argc,argv)" ${DESTFILE}
-idx=$[ idx + 1 ]
-sed -i "$[ line + idx ]i {" ${DESTFILE}
-idx=$[ idx + 1 ]
-sed -i "$[ line + idx ]i \ \ \ \ return W_ERR_OK;" ${DESTFILE}
-idx=$[ idx + 1 ]
-sed -i "$[ line + idx ]i }" ${DESTFILE}
-idx=$[ idx + 1 ]
-sed -i "$[ line + idx ]i COMMAND_DEF($FSMNAME);" ${DESTFILE}
+DESTFILE=${DESTDIR}/wind_fsm_${FSMNAME}.c
+./mksrc -dhc ${DESTDIR} fsm_${FSMNAME}
+modify_header $@
+modify_source $@
 
