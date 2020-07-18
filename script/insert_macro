@@ -1,0 +1,58 @@
+
+
+usage()
+{
+	echo "insert_macro usage:"
+	echo "insert_macro <macro> <depend_macro>"
+	echo "      macro        : the macro which need to insert into configure file"
+	echo "      depend_macro : the macro which is depended"
+}
+
+if [ $# -lt 2 ]
+then
+	usage
+	exit 0
+fi
+DESTDIR=$1
+FSMNAME=$2
+CUR_PATH=$(cd $(dirname $0); pwd)
+DESTFILE=${DESTDIR}/fsm_${FSMNAME}.c
+
+if [ -f ${DESTFILE} ]
+then
+	echo ${DESTFILE} " has been exist"
+	exit 
+fi
+
+./mksrc -dc ${DESTDIR} fsm_${FSMNAME}
+mv ${DESTDIR}/wind_fsm_${FSMNAME}.c  ${DESTFILE}
+sed -i "s/wind_fsm/fsm/g" ${DESTFILE}
+sed -i "s/fsm_${FSMNAME}.h/wind_fsm.h/g" ${DESTFILE}
+sed -i '26d' ${DESTFILE}
+
+line=30
+idx=1
+sed -i "$[ line + idx ]i COMMAND_DISC($FSMNAME)" ${DESTFILE}
+idx=$[ idx + 1 ]
+sed -i "$[ line + idx ]i {" ${DESTFILE}
+idx=$[ idx + 1 ]
+sed -i "$[ line + idx ]i }" ${DESTFILE}
+idx=$[ idx + 1 ]
+
+sed -i "$[ line + idx ]i COMMAND_USAGE($FSMNAME)" ${DESTFILE}
+idx=$[ idx + 1 ]
+sed -i "$[ line + idx ]i {" ${DESTFILE}
+idx=$[ idx + 1 ]
+sed -i "$[ line + idx ]i }" ${DESTFILE}
+idx=$[ idx + 1 ]
+
+sed -i "$[ line + idx ]i COMMAND_MAIN($FSMNAME,argc,argv)" ${DESTFILE}
+idx=$[ idx + 1 ]
+sed -i "$[ line + idx ]i {" ${DESTFILE}
+idx=$[ idx + 1 ]
+sed -i "$[ line + idx ]i \ \ \ \ return W_ERR_OK;" ${DESTFILE}
+idx=$[ idx + 1 ]
+sed -i "$[ line + idx ]i }" ${DESTFILE}
+idx=$[ idx + 1 ]
+sed -i "$[ line + idx ]i COMMAND_DEF($FSMNAME);" ${DESTFILE}
+
